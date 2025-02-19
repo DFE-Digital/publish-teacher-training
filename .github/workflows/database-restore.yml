@@ -5,21 +5,43 @@ on:
     - cron: "0 1 * * *"
   workflow_dispatch:
     inputs:
-      overwriteThisMorningsBackup:
+      environment:
+        description: Environment to backup. No sanitised backup or restore will occur.
         required: true
-        type: boolean
-        default: false
+        default: qa
+        type: choice
+        options:
+          - qa
+          - staging
+          - sandbox
+          - production
+      backup-file:
+        description: |
+          Backup file name (without extension). Default is ptt_[env]_adhoc_YYYY-MM-DD. Set it explicitly when backing up a point-in-time (PTR) server. (Optional)
+        required: false
+        type: string
+        default: default
+      db-server:
+        description: |
+          Name of the database server. Default is the live server. When backing up a point-in-time (PTR) server, use the full name of the PTR server. (Optional)
+
+env:
+  SERVICE_NAME: publish
+  SERVICE_SHORT: ptt
+  TF_VARS_PATH: terraform/aks/workspace_variables
 
 permissions:
   id-token: write
 
 jobs:
   backup:
-    name: Sanitise Production Database Backup
-    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.overwriteThisMorningsBackup == 'true') }}
+    name: Database Backup
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: ${{ inputs.environment || 'production' }}
+    env:
+      DEPLOY_ENV: ${{ inputs.environment || 'production'  }}
+      BACKUP_FILE: ${{ inputs.backup-file || 'schedule'  }}
     services:
       postgres:
         image: postgres:14.7
@@ -37,58 +59,48 @@ jobs:
 
       - name: Set KV environment variables
         run: |
-          tf_vars_file=terraform/aks/workspace_variables/production.tfvars.json
+          source global_config/${DEPLOY_ENV}.sh
+          tf_vars_file=${TF_VARS_PATH}/${DEPLOY_ENV}.tfvars.json
           echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
           echo "NAMESPACE=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "CLUSTER=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "RESOURCE_GROUP_NAME=${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" >> $GITHUB_ENV
+          echo "STORAGE_ACCOUNT_NAME=${RESOURCE_NAME_PREFIX}${SERVICE_SHORT}dbbkp${CONFIG_SHORT}sa" >> $GITHUB_ENV
+          TODAY=$(date +"%F")
+          echo "DB_SERVER=${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-psql" >> $GITHUB_ENV
+          if [ "${BACKUP_FILE}" == "schedule" ]; then
+            BACKUP_FILE=${SERVICE_SHORT}_${CONFIG_SHORT}_${TODAY}
+          elif [ "${BACKUP_FILE}" == "default" ]; then
+            BACKUP_FILE=${SERVICE_SHORT}_${CONFIG_SHORT}_adhoc_${TODAY}
+          else
+            BACKUP_FILE=${BACKUP_FILE}
+          fi
+          echo "BACKUP_FILE=${BACKUP_FILE}" >> $GITHUB_ENV
 
-      - uses: azure/login@v2
+      - name: Backup ${{ env.DEPLOY_ENV }} postgres
+        uses: DFE-Digital/github-actions/backup-postgres@master
         with:
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-
-      - name: Install kubectl
-        uses: DFE-Digital/github-actions/set-kubectl@master
-
-      - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
-        with:
+          storage-account: ${{ env.STORAGE_ACCOUNT_NAME }}
+          resource-group: ${{ env.RESOURCE_GROUP_NAME }}
+          app-name: ${{ env.SERVICE_NAME }}-${{ env.DEPLOY_ENV }}
+          namespace: ${{ env.NAMESPACE }}
+          cluster: ${{ env.CLUSTER }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-
-      - name: K8 & konduit setup
-        shell: bash
-        run: |
-          make ci production get-cluster-credentials
-          make install-konduit
-
-      - name: Backup Publish Teacher Training Prod Database
-        run: |
-          now=$(date +"%F")
-          PROD_BACKUP=prod_backup-$now.sql
-          bin/konduit.sh -n ${NAMESPACE} publish-production -- pg_dump -E utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
-          tar -cvzf ${PROD_BACKUP}.tar.gz ${PROD_BACKUP}
-          echo "PROD_BACKUP=$PROD_BACKUP" >> $GITHUB_ENV
-
-      - name: Set Connection String
-        run: |
-          STORAGE_CONN_STR="$(az keyvault secret show --name PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION --vault-name ${{ env.key_vault_name }} | jq -r .value)"
-          echo "::add-mask::$STORAGE_CONN_STR"
-          echo "STORAGE_CONN_STR=$STORAGE_CONN_STR" >> $GITHUB_ENV
-
-      - name: Upload Backup to Azure Storage
-        run: |
-          az storage blob upload --container-name database-backup \
-          --file ${PROD_BACKUP}.tar.gz --name ${PROD_BACKUP}.tar.gz \
-          --connection-string '${{ env.STORAGE_CONN_STR }}' --overwrite
+          backup-file: ${{ env.BACKUP_FILE }}.sql
+          db-server-name: ${{ inputs.db-server }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Set env variable
+        if: github.event_name == 'schedule'
         run: echo "SANITISED_FILE_NAME=publish_sanitised_$(date +"%F")" >> $GITHUB_ENV
 
       - name: Sanitise the Database backup
+        if: github.event_name == 'schedule'
         run: |
           echo "::group::Restore backup to intermediate database"
-          createdb ${DATABASE_NAME} && psql -f ${{ env.PROD_BACKUP }} -d ${DATABASE_NAME}
+          createdb ${DATABASE_NAME} && gzip -d --to-stdout ${{ env.BACKUP_FILE }}.sql.gz | psql -d ${DATABASE_NAME}
           echo "::endgroup::"
 
           echo "::group::Clear user data"
@@ -99,8 +111,8 @@ jobs:
           psql -d ${DATABASE_NAME} -f db/scripts/integration_setup.sql
           echo "::endgroup::"
 
-          echo "::debug::Remove ${{ env.PROD_BACKUP }}"
-          rm ${{ env.PROD_BACKUP }}
+          echo "::debug::Remove ${{ env.BACKUP_FILE }}.sql.gz"
+          rm ${{ env.BACKUP_FILE }}.sql.gz
 
           echo "::group::Backup Sanitised Database"
           pg_dump --compress=1 --encoding utf8 --clean --no-owner --if-exists -d ${DATABASE_NAME} -f ${SANITISED_FILE_NAME}.sql.gz
@@ -113,6 +125,7 @@ jobs:
           PGPORT: 5432
 
       - name: Upload Backup to Azure Storage
+        if: github.event_name == 'schedule'
         run: |
           az storage blob upload --container-name database-backup \
           --file ${SANITISED_FILE_NAME}.sql.gz --name ${SANITISED_FILE_NAME}.sql.gz --overwrite \
@@ -121,6 +134,7 @@ jobs:
 
   restore:
     needs: [backup]
+    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     environment:
       name: ${{ matrix.environment }}
