@@ -7,7 +7,8 @@ export default class extends Controller {
   static targets = ['input']
   static values = {
     path: String,
-    minLength: { type: Number, default: 3 }
+    minLength: { type: Number, default: 3 },
+    debounce: { type: Number, default: 200 }
   }
 
   connect () {
@@ -54,7 +55,7 @@ export default class extends Controller {
         .catch(() => {
           populateResults([])
         })
-    }, 900)
+    }, this.debounceValue)
   }
 
   suggestionTemplate (result) {
