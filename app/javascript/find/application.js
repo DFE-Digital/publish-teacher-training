@@ -5,7 +5,7 @@ import { initAll } from 'govuk-frontend'
 
 import { FilterToggleButton } from './filter-toggle-button'
 import initAutocomplete from './autocomplete'
-import dfeAutocomplete from './dfe-autocomplete'
+import dfeAutocomplete from 'dfe-autocomplete'
 import '@hotwired/turbo-rails'
 
 // eslint-disable-next-line no-undef
