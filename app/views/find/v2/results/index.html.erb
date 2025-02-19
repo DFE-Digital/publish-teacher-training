@@ -29,7 +29,7 @@
           <% end %>
 
           <%= form.govuk_check_boxes_fieldset :primary_subjects, legend: { text: t("helpers.legend.courses_search_form.primary_html"), size: "s" }, hint: { text: t("helpers.hint.courses_search_form.primary"), class: "govuk-!-font-size-16" }, class: "govuk-checkboxes--small", hidden: false, multiple: false, form_group: { class: "app-filter__group" } do %>
-            <div class="scrollable-filter">
+            <div class="scrollable-filter primary-scrollable-filter">
               <% form.object.primary_subjects.each do |subject| %>
                 <%= form.govuk_check_box :subjects,
                 subject.subject_code,
@@ -39,7 +39,7 @@
           <% end %>
 
           <%= form.govuk_check_boxes_fieldset :secondary_subjects, legend: { text: t("helpers.legend.courses_search_form.secondary_html"), size: "s" }, hint: { text: t("helpers.hint.courses_search_form.secondary"), class: "govuk-!-font-size-16" }, class: "govuk-checkboxes--small", hidden: false, multiple: false, form_group: { class: "app-filter__group", data: { controller: "filter-search" } } do %>
-            <div class="filter-search scrollable-filter" data-filter-search-target="optionsList">
+            <div class="filter-search scrollable-filter secondary-scrollable-filter" data-filter-search-target="optionsList">
               <% form.object.secondary_subjects.each do |subject| %>
                 <%= form.govuk_check_box :subjects,
                 subject.subject_code,
