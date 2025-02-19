@@ -3,9 +3,16 @@
     .govuk-checkboxes {
       .scrollable-filter {
         margin-left: -10px;
-        max-height: 196px;
         overflow-y: auto;
         padding-left: 10px;
+      }
+
+      .primary-scrollable-filter {
+        max-height: 165px;
+      }
+
+      .secondary-scrollable-filter {
+        max-height: 155px;
       }
     }
   }
