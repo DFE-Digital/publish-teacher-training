@@ -3,7 +3,7 @@ import jQuery from 'jquery'
 import { initAll } from 'govuk-frontend'
 
 import initAutocomplete from './autocomplete'
-import dfeAutocomplete from './dfe-autocomplete'
+import dfeAutocomplete from 'dfe-autocomplete'
 import '@hotwired/turbo-rails'
 
 // eslint-disable-next-line no-undef
