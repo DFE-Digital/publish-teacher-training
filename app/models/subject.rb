@@ -32,7 +32,10 @@ class Subject < ApplicationRecord
   end
 
   def self.secondary_subjects_with_subject_groups
-    secondary.where.not(subject_group: nil)
+    secondary
+      .where.not(subject_group: nil)
+      .includes(:subject_group)
+      .reorder('subject_group.created_at ASC, subject.subject_name ASC')
   end
 
   def secondary_subject?
