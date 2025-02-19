@@ -13,6 +13,7 @@ export default class extends Controller {
       this.element,
       {
         minLength: this.minLengthValue,
+        displayMenu: 'overlay',
         name: 'provider_name'
       }
     )
