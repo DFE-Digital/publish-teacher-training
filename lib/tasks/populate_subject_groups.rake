@@ -7,7 +7,7 @@ task create_and_populate_subject_groups: :environment do
       'Biology', 'Chemistry', 'Computing', 'Design and technology', 'Mathematics', 'Physics', 'Science'
     ],
     'Languages and literature' => [
-      'English', 'Ancient Greek', 'Ancient Hebrew', 'French', 'German', 'Italian', 'Japanese', 'Latin', 'Mandarin', 'Russian', 'Spanish'
+      'English', 'Ancient Greek', 'Ancient Hebrew', 'French', 'German', 'Italian', 'Japanese', 'Latin', 'Mandarin', 'Russian', 'Spanish', 'Modern languages (other)'
     ],
     'Art, humanities and social sciences' => [
       'Art and design', 'Business studies', 'Citizenship', 'Classics', 'Communication and media studies', 'Dance', 'Drama', 'Economics', 'Geography', 'History', 'Music', 'Philosophy', 'Psychology', 'Religious education', 'Social sciences'
