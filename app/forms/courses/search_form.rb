@@ -2,14 +2,9 @@
 
 module Courses
   class SearchForm < ApplicationForm
-    class ProviderOption
-      include ActiveModel::Model
-
-      attr_accessor :id, :name, :code, :value
-    end
-
     include ActiveModel::Attributes
 
+    # Search parameters #
     attribute :applications_open, :boolean
     attribute :can_sponsor_visa, :boolean
     attribute :funding
@@ -19,28 +14,42 @@ module Courses
     attribute :longitude
     attribute :minimum_degree_required
     attribute :engineers_teach_physics
+    attribute :start_date
     attribute :order
     attribute :provider_code
     attribute :provider_name
     attribute :qualifications
     attribute :radius
     attribute :send_courses, :boolean
-    attribute :start_date
     attribute :study_types
     attribute :subject_code
     attribute :subject_name
     attribute :subjects
 
-    attribute :formatted_address
+    # Coordinates #
     attribute :country
+    attribute :formatted_address
     attribute :types
 
-    attribute :age_group
-    attribute :qualification
-    attribute :degree_required
-    attribute :university_degree_status, :boolean
+    # Old parameters #
     attribute :'provider.provider_name'
+    attribute :age_group
+    attribute :degree_required
+    attribute :qualification
     attribute :sortby
+    attribute :university_degree_status, :boolean
+
+    attr_accessor :providers_cache, :subjects_cache
+
+    delegate :primary_subjects, :primary_subject_codes, :secondary_subjects, :secondary_subject_codes, :all_subjects, to: :subjects_cache
+    delegate :providers_list, to: :providers_cache
+
+    def initialize(attributes = {})
+      super
+
+      @subjects_cache = SubjectsCache.new
+      @providers_cache = ProvidersCache.new
+    end
 
     def search_params
       attributes
@@ -71,23 +80,6 @@ module Courses
       return super if degree_required.nil? && university_degree_status.nil?
 
       university_degree_status_transformation || degree_required_transformation || super
-    end
-
-    def secondary_subjects
-      Subject
-        .where(type: %w[SecondarySubject ModernLanguagesSubject])
-        .where.not(subject_name: ['Modern Languages'])
-        .order(:subject_name)
-    end
-
-    def primary_subjects
-      Subject.where(type: 'PrimarySubject').order(:subject_name)
-    end
-
-    SubjectSuggestion = Struct.new(:name, :value, keyword_init: true)
-
-    def all_subjects
-      Subject.active.map { |subject| SubjectSuggestion.new(name: subject.subject_name, value: subject.subject_code) }
     end
 
     OrderingOption = Struct.new(:id, :name, keyword_init: true)
@@ -128,14 +120,6 @@ module Courses
 
     def radius
       super.presence || DEFAULT_RADIUS
-    end
-
-    def providers_list
-      Rails.cache.fetch('find:search:providers-list', expires_in: 1.hour) do
-        RecruitmentCycle.current.providers.by_name_ascending.select(:id, :provider_name, :provider_code).map do |provider|
-          ProviderOption.new(id: provider.id, name: provider.name_and_code, code: provider.provider_code, value: provider.provider_code)
-        end
-      end
     end
 
     PHYSICS_SUBJECT_CODE = 'F3'

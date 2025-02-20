@@ -38,6 +38,7 @@ module Courses
       @scope = funding_scope
       @scope = start_date_scope
       @scope = provider_scope
+      @scope = optimisation_scope
       @scope = location_scope
 
       if @applied_scopes[:location].blank?
@@ -51,6 +52,19 @@ module Courses
       log_query_info
 
       @scope
+    end
+
+    def optimisation_scope
+      @scope.preload(
+        :site_statuses,
+        :latest_published_enrichment,
+        :provider,
+        subjects: [:financial_incentive]
+      )
+    end
+
+    def count
+      @scope.unscope(:order, :group).distinct.count(:id)
     end
 
     def visa_sponsorship_scope
