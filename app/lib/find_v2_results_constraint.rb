@@ -2,6 +2,6 @@
 
 class FindV2ResultsConstraint
   def self.matches?(_request)
-    Settings.features.v2_results.present?
+    FeatureFlag.active?(:prefiltering_find_redesign)
   end
 end
