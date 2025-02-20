@@ -32,7 +32,9 @@ Rails.application.configure do
                        "https://www.google.com",
                        *all_domains
 
-    policy.style_src   :self, *all_domains
+    policy.style_src   :self,
+                       'https://unpkg.com',
+                       *all_domains
 
     policy.frame_src   :self,
                        *local_domains
