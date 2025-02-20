@@ -239,7 +239,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :drama)
             ],
             funding:,
-            enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: 17_900)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 9250, fee_international: 17_900)]
           )
         end
 
@@ -259,7 +259,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :drama)
             ],
             funding:,
-            enrichments: [create(:course_enrichment, fee_uk_eu: 6000, fee_international: 11_000)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6000, fee_international: 11_000)]
           )
         end
 
@@ -279,7 +279,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :drama)
             ],
             funding:,
-            enrichments: [create(:course_enrichment, fee_uk_eu: 7000, fee_international: 7000)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 7000, fee_international: 7000)]
           )
         end
 
@@ -299,7 +299,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :drama),
               build(:secondary_subject, :physics, bursary_amount: 9000, scholarship: 10_000)
             ],
-            enrichments: [create(:course_enrichment, fee_uk_eu: 8000, fee_international: 8000)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 8000, fee_international: 8000)]
           )
         end
 
@@ -323,7 +323,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :drama)
             ],
             funding:,
-            enrichments: [create(:course_enrichment, fee_uk_eu: 10_000, fee_international: nil)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 10_000, fee_international: nil)]
           )
         end
 
@@ -342,7 +342,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :drama),
               build(:secondary_subject, :physics, bursary_amount: 9000, scholarship: 10_000)
             ],
-            enrichments: [create(:course_enrichment, fee_uk_eu: 6250, fee_international: 6900)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6250, fee_international: 6900)]
           )
         end
 
@@ -366,7 +366,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :history, bursary_amount: 9000, scholarship: 10_000),
               build(:secondary_subject, :drama)
             ],
-            enrichments: [create(:course_enrichment, fee_uk_eu: 6250, fee_international: nil)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6250, fee_international: nil)]
           )
         end
         let(:search_params) { { can_sponsor_visa: true } }
@@ -411,7 +411,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :dance, bursary_amount: 9000),
               build(:secondary_subject, :drama)
             ],
-            enrichments: [create(:course_enrichment, fee_uk_eu: 6250, fee_international: 6900)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6250, fee_international: 6900)]
           )
         end
 
@@ -431,7 +431,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :dance, scholarship: 9000),
               build(:secondary_subject, :drama)
             ],
-            enrichments: [create(:course_enrichment, fee_uk_eu: 6250, fee_international: 6900)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6250, fee_international: 6900)]
           )
         end
 
@@ -451,7 +451,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :dance, bursary_amount: 7000, scholarship: 9000),
               build(:secondary_subject, :drama)
             ],
-            enrichments: [create(:course_enrichment, fee_uk_eu: 7250, fee_international: 6900)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 7250, fee_international: 6900)]
           )
         end
 
@@ -471,7 +471,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :drama),
               build(:secondary_subject, :dance, bursary_amount: 7000, scholarship: 9000)
             ],
-            enrichments: [create(:course_enrichment, fee_uk_eu: 7500, fee_international: 6900)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 7500, fee_international: 6900)]
           )
         end
 
@@ -495,7 +495,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
               build(:secondary_subject, :dance),
               build(:secondary_subject, :drama)
             ],
-            enrichments: [create(:course_enrichment, fee_uk_eu: 8500, fee_international: 8500)]
+            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 8500, fee_international: 8500)]
           )
         end
 
@@ -512,7 +512,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
 
   shared_examples 'course length row' do |course_length, course_study_mode, expected_output|
     let(:course) do
-      create(:course, study_mode:, enrichments: [build(:course_enrichment, course_length: length)])
+      create(:course, study_mode:, enrichments: [build(:course_enrichment, :published, course_length: length)])
     end
     let(:length) { course_length }
     let(:study_mode) { course_study_mode }

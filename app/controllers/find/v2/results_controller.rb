@@ -3,7 +3,7 @@
 module Find
   module V2
     class ResultsController < Find::ApplicationController
-      after_action :store_result_fullpath_for_backlinks, only: [:index]
+      after_action :store_result_fullpath_for_backlinks, :send_analytics_event, only: [:index]
 
       def index
         coordinates = Geolocation::CoordinatesQuery.new(params[:location]).call
@@ -12,9 +12,13 @@ module Find
         @search_params = @search_courses_form.search_params
         @courses_query = ::Courses::Query.new(params: @search_params.dup)
         @courses = @courses_query.call
-        @courses_count = @courses.unscope(:order, :group).distinct.count(:id)
+        @courses_count = @courses_query.count
         @pagy, @results = pagy(@courses, count: @courses_count)
+      end
 
+      private
+
+      def send_analytics_event
         Find::Analytics::SearchResultsEvent.new(
           request:,
           total: @courses_count,
@@ -24,8 +28,6 @@ module Find
           results: @results
         ).send_event
       end
-
-      private
 
       def search_courses_params
         params.permit(

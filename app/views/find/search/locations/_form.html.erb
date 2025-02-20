@@ -200,8 +200,32 @@
 
         <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.send.title"), class: "govuk-heading-m")) do %>
           <p class="govuk-body"><%= t("find.search.send.send_specialism") %></p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.search.send.browse_primary_send"), find_results_path({ send_courses: true, subjects: Subject.primary_subject_codes, utm_source: "home", utm_medium: "send_primary_courses" })) %></p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.search.send.browse_secondary_send"), find_results_path({ send_courses: true, subjects: Subject.secondary_subject_codes_with_incentives, utm_source: "home", utm_medium: "send_secondary_courses" })) %></p>
+          <p class="govuk-body">
+          <%= govuk_link_to(
+            t("find.search.send.browse_primary_send"),
+            find_results_path(
+              {
+                send_courses: true,
+                subjects: @search_courses_form.primary_subject_codes,
+                utm_source: "home",
+                utm_medium: "send_primary_courses"
+              }
+            )
+          ) %>
+          </p>
+          <p class="govuk-body">
+          <%= govuk_link_to(
+            t("find.search.send.browse_secondary_send"),
+            find_results_path(
+              {
+                send_courses: true,
+                subjects: @search_courses_form.secondary_subject_codes,
+                utm_source: "home",
+                utm_medium: "send_secondary_courses"
+              }
+            )
+          ) %>
+          </p>
           <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.send.teaching_pupils"), t("find.get_into_teaching.url_send")) %></p>
         <% end %>
 
