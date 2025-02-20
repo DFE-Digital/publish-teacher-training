@@ -201,8 +201,8 @@ module Courses
         .where(
           <<~SQL.squish, longitude, latitude, radius_in_meters
             ST_DistanceSphere(
-              ST_MakePoint(site.longitude::float, site.latitude::float),
-              ST_MakePoint(?::float, ?::float)
+              ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
+              ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
             ) <= ?
           SQL
         )
@@ -212,8 +212,8 @@ module Courses
               <<~SQL.squish,
                 course.*,
                 MIN(ST_DistanceSphere(
-                  ST_MakePoint(site.longitude::float, site.latitude::float),
-                  ST_MakePoint(?::float, ?::float)
+                  ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
+                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
                 ) / 1609.344) AS minimum_distance_to_search_location
               SQL
               longitude, latitude
