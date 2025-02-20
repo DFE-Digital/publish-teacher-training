@@ -46,9 +46,20 @@ module Courses
         @scope = provider_name_descending_order_scope
       end
 
+      @scope = @scope.includes(
+        :latest_published_enrichment,
+        :provider,
+        :site_statuses,
+        subjects: [:financial_incentive]
+      )
+
       log_query_info
 
       @scope
+    end
+
+    def total
+      @scope.unscope(:order, :group).distinct.count(:id)
     end
 
     def visa_sponsorship_scope

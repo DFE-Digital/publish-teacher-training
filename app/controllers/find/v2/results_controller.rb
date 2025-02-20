@@ -10,7 +10,7 @@ module Find
         @search_params = @search_courses_form.search_params
         @courses_query = ::Courses::Query.new(params: @search_params.dup)
         @courses = @courses_query.call
-        @courses_count = @courses.unscope(:order, :group).distinct.count(:id)
+        @courses_count = @courses_query.total
         @pagy, @results = pagy(@courses, count: @courses_count)
 
         Find::Analytics::SearchResultsEvent.new(
