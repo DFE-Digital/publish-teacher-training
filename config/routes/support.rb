@@ -23,6 +23,10 @@ namespace :support do
 
       resources :courses do
         resource :revert_withdrawal, only: %i[edit update], path: 'revert-withdrawal', controller: 'revert_withdrawal'
+
+        member do
+          get :schools
+        end
       end
 
       resource :check_school, only: %i[show update], controller: 'providers/schools_check', path: 'schools/check'
