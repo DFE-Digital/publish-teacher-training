@@ -527,6 +527,7 @@ en:
         special_education_needs_html: Special educational needs<span class="govuk-visually-hidden"> filter</span>
         funding_html: Fee or salary<span class="govuk-visually-hidden"> filter</span>
         applications_open_html: Applications open<span class="govuk-visually-hidden"> filter</span>
+        start_date_html: Start date<span class="govuk-visually-hidden"> filter</span>
     hint:
       courses_search_form:
         primary: (ages 3 to 11)
@@ -564,6 +565,9 @@ en:
           fee: Fee - no salary
           salary: Salary
           apprenticeship: Teaching apprenticeship - with salary
+        start_date_options:
+          september: 'September %{recruitment_cycle_year}'
+          all_other_dates: All other dates
         ordering:
           location: Sorted by distance
           non_location: Sorted by

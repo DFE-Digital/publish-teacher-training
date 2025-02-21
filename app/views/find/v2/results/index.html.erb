@@ -84,6 +84,11 @@
             <%= form.govuk_check_box :applications_open, "true", multiple: false, label: { text: t("helpers.label.courses_search_form.applications_open"), size: "s" } %>
           <% end %>
 
+          <%= form.govuk_check_boxes_fieldset :start_date, legend: { text: t("helpers.legend.courses_search_form.start_date_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_check_box :start_date, "september", label: { text: t("helpers.label.courses_search_form.start_date_options.september", recruitment_cycle_year: Settings.current_recruitment_cycle_year), size: "s" }, include_hidden: false %>
+            <%= form.govuk_check_box :start_date, "all_other_dates", label: { text: t("helpers.label.courses_search_form.start_date_options.all_other_dates"), size: "s" }, include_hidden: false %>
+          <% end %>
+
           <div class="govuk-!-margin-top-4">
             <%= form.govuk_submit t("helpers.submit.courses_search_form.filters"), name: "utm_medium", value: "apply_filters_bottom" %>
           </div>
