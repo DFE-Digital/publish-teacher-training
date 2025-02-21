@@ -10,24 +10,25 @@ module Courses
 
     include ActiveModel::Attributes
 
-    attribute :can_sponsor_visa, :boolean
-    attribute :subjects
-    attribute :subject_code
-    attribute :subject_name
-    attribute :send_courses, :boolean
     attribute :applications_open, :boolean
-    attribute :study_types
-    attribute :minimum_degree_required
-    attribute :qualifications
-    attribute :level
+    attribute :can_sponsor_visa, :boolean
     attribute :funding
-    attribute :provider_code
-    attribute :provider_name
+    attribute :latitude
+    attribute :level
     attribute :location
     attribute :longitude
-    attribute :latitude
-    attribute :radius
+    attribute :minimum_degree_required
     attribute :order
+    attribute :provider_code
+    attribute :provider_name
+    attribute :qualifications
+    attribute :radius
+    attribute :send_courses, :boolean
+    attribute :start_date
+    attribute :study_types
+    attribute :subject_code
+    attribute :subject_name
+    attribute :subjects
 
     attribute :formatted_address
     attribute :country

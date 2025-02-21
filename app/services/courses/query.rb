@@ -35,6 +35,7 @@ module Courses
       @scope = applications_open_scope
       @scope = special_education_needs_scope
       @scope = funding_scope
+      @scope = start_date_scope
       @scope = provider_scope
       @scope = location_scope
 
@@ -159,6 +160,24 @@ module Courses
       @applied_scopes[:funding] = params[:funding]
 
       @scope.where(funding: params[:funding])
+    end
+
+    def start_date_scope
+      return @scope if params[:start_date].blank?
+
+      @applied_scopes[:start_date] = params[:start_date]
+
+      current_recruitment_cycle_year = Settings.current_recruitment_cycle_year
+      september_range = Date.new(current_recruitment_cycle_year, 9, 1)..Date.new(current_recruitment_cycle_year, 9, 30)
+
+      case params[:start_date]
+      when ['september']
+        @scope = @scope.where(start_date: september_range)
+      when ['all_other_dates']
+        @scope = @scope.where.not(start_date: september_range)
+      else
+        @scope
+      end
     end
 
     def provider_scope

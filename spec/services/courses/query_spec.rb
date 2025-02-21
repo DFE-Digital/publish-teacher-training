@@ -1137,5 +1137,93 @@ RSpec.describe Courses::Query do
         end
       end
     end
+
+    context 'when searching by start date' do
+      let(:current_recruitment_cycle_year) { RecruitmentCycle.current.year.to_i }
+      let!(:january_course) do
+        create(:course, :with_full_time_sites, name: 'Art and design', start_date: DateTime.new(current_recruitment_cycle_year, 1, 1))
+      end
+      let!(:august_course) do
+        create(:course, :with_full_time_sites, name: 'Biology', start_date: DateTime.new(current_recruitment_cycle_year, 8, 1))
+      end
+      let!(:beginning_of_september_course) do
+        create(:course, :with_full_time_sites, name: 'Computing', start_date: DateTime.new(current_recruitment_cycle_year, 9, 1))
+      end
+      let!(:middle_of_september_course) do
+        create(:course, :with_full_time_sites, name: 'English', start_date: DateTime.new(current_recruitment_cycle_year, 9, 15))
+      end
+      let!(:end_of_september_course) do
+        create(:course, :with_full_time_sites, name: 'Primary with english', start_date: DateTime.new(current_recruitment_cycle_year, 9, 30))
+      end
+      let!(:october_course) do
+        create(:course, :with_full_time_sites, name: 'Spanish', start_date: DateTime.new(current_recruitment_cycle_year, 10, 1))
+      end
+
+      context 'when searching for only september courses' do
+        let(:params) { { start_date: ['september'] } }
+
+        it 'returns courses that starts in september' do
+          expect(results).to match_collection(
+            [
+              beginning_of_september_course,
+              middle_of_september_course,
+              end_of_september_course
+            ],
+            attribute_names: %w[id name start_date]
+          )
+        end
+      end
+
+      context 'when searching for all other course start dates' do
+        let(:params) { { start_date: ['all_other_dates'] } }
+
+        it 'returns courses that starts in all other months except september' do
+          expect(results).to match_collection(
+            [
+              january_course,
+              august_course,
+              october_course
+            ],
+            attribute_names: %w[id name start_date]
+          )
+        end
+      end
+
+      context 'when searching for all options' do
+        let(:params) { { start_date: %w[september all_other_dates] } }
+
+        it 'returns all courses' do
+          expect(results).to match_collection(
+            [
+              january_course,
+              august_course,
+              beginning_of_september_course,
+              middle_of_september_course,
+              end_of_september_course,
+              october_course
+            ],
+            attribute_names: %w[id name start_date]
+          )
+        end
+      end
+
+      context 'when searching for invalid start date value' do
+        let(:params) { { start_date: ['something'] } }
+
+        it 'returns all courses' do
+          expect(results).to match_collection(
+            [
+              january_course,
+              august_course,
+              beginning_of_september_course,
+              middle_of_september_course,
+              end_of_september_course,
+              october_course
+            ],
+            attribute_names: %w[id name start_date]
+          )
+        end
+      end
+    end
   end
 end
