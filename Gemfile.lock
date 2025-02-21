@@ -723,6 +723,10 @@ GEM
     timecop (0.9.10)
     timeout (0.4.3)
     trailblazer-option (0.1.2)
+    turbo-rails (2.0.6)
+      actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
+      railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -838,6 +842,7 @@ DEPENDENCIES
   rails_semantic_logger
   rb-readline
   redcarpet
+  redis (~> 4.0)
   request_store
   rspec-its
   rspec-rails (= 7.1.1)
@@ -862,6 +867,7 @@ DEPENDENCIES
   skylight
   super_diff
   timecop
+  turbo-rails (~> 2.0)
   tzinfo-data
   uk_postcode
   webmock

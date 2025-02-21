@@ -7,7 +7,16 @@ class Course < ApplicationRecord
   include TouchProvider
   include Courses::EditOptions
   include TimeFormat
+  include PgSearch::Model
 
+  pg_search_scope :keyword_search,
+                  against: %i[name level],
+                  associated_against: {
+                    subjects: [:subject_name]
+                  },
+                  using: {
+                    tsearch: { dictionary: 'english', any_word: true }
+                  }
   A_LEVEL_ATTRIBUTES = %i[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency additional_a_level_equivalencies].freeze
 
   TRAINING_ROUTE_MAP = {
@@ -163,6 +172,7 @@ class Course < ApplicationRecord
   has_many :study_site_placements, dependent: :destroy
   accepts_nested_attributes_for :site_statuses
 
+  # has_many :school_placements
   has_many :sites,
            -> { distinct.joins(:site_statuses).where(site_statuses: { status: %i[new_status running] }) },
            through: :site_statuses
@@ -496,6 +506,42 @@ class Course < ApplicationRecord
     else
       site_statuses.findable.with_vacancies.any?
     end
+  end
+
+  def new_or_running_sites_with_vacancies
+    sites = site_statuses
+            .select(&:new_or_running?)
+            .select(&:has_vacancies?)
+            .map(&:site)
+            .reject do |site|
+      # Sites that have no address details whatsoever are not to be considered
+      # when calculating '#nearest_address' or '#site_distance'
+      [site.address1, site.address2, site.address3, site.town, site.address4, site.postcode].all?(&:blank?)
+    end
+
+    sites.reject do |site|
+      site.latitude.blank? || site.longitude.blank?
+    end
+  end
+
+  def min_site_distance_from(latitude:, longitude:)
+    lat_long = Geokit::LatLng.new(latitude.to_f, longitude.to_f)
+
+    distances = new_or_running_sites_with_vacancies.map do |site|
+      lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
+    end
+
+    [0, distances.min].compact.max.ceil
+  end
+
+  def min_study_site_distance_from(latitude:, longitude:)
+    lat_long = Geokit::LatLng.new(latitude.to_f, longitude.to_f)
+
+    distances = study_sites.map do |site|
+      lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
+    end
+
+    [0, distances.min].compact.max.ceil
   end
 
   def has_multiple_running_sites_or_study_modes?
