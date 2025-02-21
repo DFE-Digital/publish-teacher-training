@@ -4,7 +4,7 @@ module API
   module Public
     module V1
       module Providers
-        class CoursesController < API::Public::V1::ApplicationController
+        class CoursesController < ApplicationController
           def index
             render jsonapi: paginate(courses),
                    include: include_param,
