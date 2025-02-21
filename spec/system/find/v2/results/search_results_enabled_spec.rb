@@ -15,7 +15,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     and_i_filter_by_courses_that_sponsor_visa
     then_i_see_only_courses_that_sponsor_visa
     and_the_visa_sponsorship_filter_is_checked
-    and_i_see_that_there_are_three_courses_are_found
+    and_i_see_that_three_courses_are_found
   end
 
   scenario 'when I filter by study type' do
@@ -48,7 +48,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     and_i_filter_by_qts_with_pgce_or_pgde_courses
     then_i_see_only_qts_with_pgce_or_pgde_courses
     and_the_qts_with_pgce_or_pgde_filter_is_checked
-    and_i_see_that_there_are_two_courses_found
+    and_i_see_that_two_courses_are_found
   end
 
   context 'when I filter by further education only courses' do
@@ -89,7 +89,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       and_i_filter_courses_requiring_two_one_degree
       then_courses_with_two_one_or_lower_degree_requirement_are_visible
       and_the_two_one_filter_is_checked
-      and_i_see_that_there_are_four_courses_are_found
+      and_i_see_that_four_courses_are_found
     end
 
     scenario 'when 2:2 degree requirement shows courses requiring 2:2, third-class, or pass degrees' do
@@ -97,7 +97,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       and_i_filter_courses_requiring_two_two_degree
       then_courses_with_two_two_or_lower_degree_requirement_are_visible
       and_the_two_two_filter_is_checked
-      and_i_see_that_there_are_three_courses_are_found
+      and_i_see_that_three_courses_are_found
     end
 
     scenario 'when "Third class" shows courses requiring third-class or an ordinary degree' do
@@ -105,7 +105,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       and_i_filter_courses_requiring_third_class_grade
       then_courses_with_third_class_or_lower_degree_requirement_are_visible
       and_the_third_class_filter_is_checked
-      and_i_see_that_there_are_two_courses_found
+      and_i_see_that_two_courses_are_found
     end
 
     scenario 'when "Pass" shows courses requiring an ordinary degree' do
@@ -128,21 +128,21 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       when_i_visit_the_find_results_page_using_old_two_one_parameter
       then_courses_with_two_one_or_lower_degree_requirement_are_visible
       and_the_two_one_filter_is_checked
-      and_i_see_that_there_are_four_courses_are_found
+      and_i_see_that_four_courses_are_found
     end
 
     scenario 'legacy parameters for 2:2 degree requirements shows relevant courses' do
       when_i_visit_the_find_results_page_using_old_two_two_parameter
       then_courses_with_two_two_or_lower_degree_requirement_are_visible
       and_the_two_two_filter_is_checked
-      and_i_see_that_there_are_three_courses_are_found
+      and_i_see_that_three_courses_are_found
     end
 
     scenario 'legacy parameters for third class degree requirements shows relevant courses' do
       when_i_visit_the_find_results_page_using_old_third_class_parameter
       then_courses_with_third_class_or_lower_degree_requirement_are_visible
       and_the_third_class_filter_is_checked
-      and_i_see_that_there_are_two_courses_found
+      and_i_see_that_two_courses_are_found
     end
 
     scenario 'legacy parameters for pass degree requirements shows relevant courses' do
@@ -206,7 +206,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       then_i_see_fee_and_salaried_courses
       and_the_fee_filter_is_checked
       and_the_salary_filter_is_checked
-      and_i_see_that_there_are_two_courses_found
+      and_i_see_that_two_courses_are_found
     end
 
     scenario 'when I use the old funding parameter' do
@@ -242,7 +242,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       then_i_see_primary_and_primary_with_science_courses
       and_the_primary_option_is_checked
       and_the_primary_with_science_option_is_checked
-      and_i_see_that_there_are_two_courses_found
+      and_i_see_that_two_courses_are_found
     end
 
     scenario 'filter by specific secondary subjects' do
@@ -268,7 +268,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       then_i_see_mathematics_and_chemistry_courses
       and_the_mathematics_secondary_option_is_checked
       and_the_chemistry_secondary_option_is_checked
-      and_i_see_that_there_are_two_courses_found
+      and_i_see_that_two_courses_are_found
     end
 
     scenario 'passing subjects on the parameters' do
@@ -276,6 +276,34 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       then_i_see_only_mathematics_courses
       and_the_mathematics_secondary_option_is_checked
       and_i_see_that_there_is_one_course_found
+    end
+  end
+
+  context 'when filtering by start date' do
+    before do
+      given_courses_exist_with_varied_start_dates
+      when_i_visit_the_find_results_page
+    end
+
+    scenario 'filtering by September start date' do
+      when_i_filter_by_september_start_date
+      and_i_apply_the_filters
+      then_i_see_only_courses_starting_in_september
+      and_i_see_that_three_courses_are_found
+    end
+
+    scenario 'filtering by all other start dates' do
+      when_i_filter_by_non_september_start_dates
+      and_i_apply_the_filters
+      then_i_see_only_courses_not_starting_in_september
+      and_i_see_that_three_courses_are_found
+    end
+
+    scenario 'filtering by all available start dates' do
+      when_i_filter_by_all_start_date_options
+      and_i_apply_the_filters
+      then_i_see_all_courses_regardless_of_start_date
+      and_i_see_that_six_courses_are_found
     end
   end
 
@@ -740,17 +768,17 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     expect(page).to have_title('1 course found')
   end
 
-  def and_i_see_that_there_are_two_courses_found
+  def and_i_see_that_two_courses_are_found
     expect(page).to have_content('2 courses found')
     expect(page).to have_title('2 courses found')
   end
 
-  def and_i_see_that_there_are_three_courses_are_found
+  def and_i_see_that_three_courses_are_found
     expect(page).to have_content('3 courses found')
     expect(page).to have_title('3 courses found')
   end
 
-  def and_i_see_that_there_are_four_courses_are_found
+  def and_i_see_that_four_courses_are_found
     expect(page).to have_content('4 courses found')
     expect(page).to have_title('4 courses found')
   end
@@ -822,6 +850,92 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     expect(page).to have_title('No courses found')
   end
 
+  def given_courses_exist_with_varied_start_dates
+    @january_course = create(
+      :course,
+      :with_full_time_sites,
+      name: 'Art and design',
+      start_date: DateTime.new(current_recruitment_cycle_year, 1, 1)
+    )
+    @august_course = create(
+      :course,
+      :with_full_time_sites,
+      name: 'Biology',
+      start_date: DateTime.new(current_recruitment_cycle_year, 8, 1)
+    )
+    @beginning_of_september_course = create(
+      :course,
+      :with_full_time_sites,
+      name: 'Computing',
+      start_date: DateTime.new(current_recruitment_cycle_year, 9, 1)
+    )
+    @middle_of_september_course = create(
+      :course,
+      :with_full_time_sites,
+      name: 'English',
+      start_date: DateTime.new(current_recruitment_cycle_year, 9, 15)
+    )
+    @end_of_september_course = create(
+      :course,
+      :with_full_time_sites,
+      name: 'Primary with english',
+      start_date: DateTime.new(current_recruitment_cycle_year, 9, 30)
+    )
+    @october_course = create(
+      :course,
+      :with_full_time_sites,
+      name: 'Spanish',
+      start_date: DateTime.new(current_recruitment_cycle_year, 10, 1)
+    )
+  end
+
+  def when_i_filter_by_september_start_date
+    check "September #{current_recruitment_cycle_year}", visible: :all
+  end
+
+  def then_i_see_only_courses_starting_in_september
+    expect(results).to have_content(@beginning_of_september_course.name)
+    expect(results).to have_content(@middle_of_september_course.name)
+    expect(results).to have_content(@end_of_september_course.name)
+
+    expect(results).to have_no_content(@january_course.name)
+    expect(results).to have_no_content(@august_course.name)
+    expect(results).to have_no_content(@october_course.name)
+  end
+
+  def then_i_see_only_courses_not_starting_in_september
+    expect(results).to have_content(@january_course.name)
+    expect(results).to have_content(@august_course.name)
+    expect(results).to have_content(@october_course.name)
+
+    expect(results).to have_no_content(@beginning_of_september_course.name)
+    expect(results).to have_no_content(@middle_of_september_course.name)
+    expect(results).to have_no_content(@end_of_september_course.name)
+  end
+
+  def when_i_filter_by_non_september_start_dates
+    check 'All other dates', visible: :all
+  end
+
+  def when_i_filter_by_all_start_date_options
+    when_i_filter_by_september_start_date
+    when_i_filter_by_non_september_start_dates
+  end
+
+  def then_i_see_all_courses_regardless_of_start_date
+    expect(results).to have_content(@january_course.name)
+    expect(results).to have_content(@august_course.name)
+    expect(results).to have_content(@october_course.name)
+    expect(results).to have_content(@beginning_of_september_course.name)
+    expect(results).to have_content(@middle_of_september_course.name)
+    expect(results).to have_content(@end_of_september_course.name)
+  end
+
+  def and_i_see_that_six_courses_are_found
+    expect(page).to have_content('6 courses found')
+    expect(page).to have_title('6 courses found')
+  end
+
   private
 
   def secondary_options
@@ -832,5 +946,9 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
 
   def results
     page.first('.app-search-results')
+  end
+
+  def current_recruitment_cycle_year
+    RecruitmentCycle.current.year.to_i
   end
 end
