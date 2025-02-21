@@ -35,7 +35,7 @@ module Publish
       end
 
       def interview_process_params
-        params.require(:publish_course_interview_process_form).permit(*CourseInterviewProcessForm::FIELDS)
+        params.expect(publish_course_interview_process_form: [*CourseInterviewProcessForm::FIELDS])
       end
 
       def course_to_authorise

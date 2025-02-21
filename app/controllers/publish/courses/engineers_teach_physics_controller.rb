@@ -113,11 +113,10 @@ module Publish
 
       def form_params
         params
-          .require(:publish_engineers_teach_physics_form)
-          .permit(
-            :campaign_name,
-            :skip_languages_goto_confirmation,
-            subjects_ids: []
+          .expect(
+            publish_engineers_teach_physics_form: [:campaign_name,
+                                                   :skip_languages_goto_confirmation,
+                                                   { subjects_ids: [] }]
           )
       end
 

@@ -39,8 +39,7 @@ module Publish
 
       def fees_and_financial_support_params
         params
-          .require(:publish_course_fees_and_financial_support_form)
-          .permit(*CourseFeesAndFinancialSupportForm::FIELDS)
+          .expect(publish_course_fees_and_financial_support_form: [*CourseFeesAndFinancialSupportForm::FIELDS])
       end
 
       def authorise_with_pundit

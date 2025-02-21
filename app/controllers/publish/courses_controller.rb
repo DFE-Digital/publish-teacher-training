@@ -92,14 +92,14 @@ module Publish
 
     def course_params
       if params.key? :course
-        params.require(:course)
-              .permit(
-                policy(Course.new).permitted_new_course_attributes,
-                study_mode: [],
-                sites_ids: [],
-                subjects_ids: [],
-                study_sites_ids: []
-              )
+        params
+          .expect(
+            course: [policy(Course.new).permitted_new_course_attributes,
+                     { study_mode: [],
+                       sites_ids: [],
+                       subjects_ids: [],
+                       study_sites_ids: [] }]
+          )
       else
         ActionController::Parameters.new({}).permit(:course)
       end
