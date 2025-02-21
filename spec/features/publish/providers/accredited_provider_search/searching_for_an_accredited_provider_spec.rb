@@ -4,8 +4,8 @@ require 'rails_helper'
 
 feature 'Searching for an accredited provider' do
   before do
-    allow(Settings.features).to receive_messages(provider_partnerships: false)
-    given_i_am_authenticated_as_an_admin_user
+    allow(Settings.features).to receive_messages(provider_partnerships: true)
+    given_i_am_a_lead_school_provider_user
     and_there_are_accredited_providers_in_the_database
   end
 
@@ -54,8 +54,9 @@ feature 'Searching for an accredited provider' do
 
   private
 
-  def given_i_am_authenticated_as_an_admin_user
-    given_i_am_authenticated(user: create(:user, :admin))
+  def given_i_am_a_lead_school_provider_user
+    given_i_am_authenticated(user: create(:user, :with_provider))
+    @provider = @current_user.providers.first
   end
 
   def and_there_are_accredited_providers_in_the_database
@@ -65,9 +66,9 @@ feature 'Searching for an accredited provider' do
   end
 
   def when_i_visit_the_accredited_provider_search_page
-    visit search_support_recruitment_cycle_provider_accredited_providers_path(
+    visit search_publish_provider_recruitment_cycle_accredited_providers_path(
       recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-      provider_id: provider.id
+      provider_code: provider.provider_code
     )
   end
 
@@ -89,9 +90,9 @@ feature 'Searching for an accredited provider' do
 
   def then_i_am_taken_to_the_index_page
     expect(page).to have_current_path(
-      support_recruitment_cycle_provider_accredited_providers_path(
+      publish_provider_recruitment_cycle_accredited_partnerships_path(
         recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-        provider_id: provider.id
+        provider_code: provider.provider_code
       )
     )
   end
@@ -152,30 +153,30 @@ feature 'Searching for an accredited provider' do
     end
   end
 
-  def then_i_am_taken_to_the_accredited_provider_search_page_with_confirmation
+  def then_i_am_taken_to_the_accredited_provider_search_page
     expect(page).to have_current_path(
-      search_support_recruitment_cycle_provider_accredited_providers_path(
+      search_publish_provider_recruitment_cycle_accredited_providers_path(
         recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-        provider_id: provider.id,
-        goto_confirmation: true
+        provider_code: provider.provider_code
       )
     )
   end
 
-  def then_i_am_taken_to_the_accredited_provider_search_page
+  def then_i_am_taken_to_the_accredited_provider_search_page_with_confirmation
     expect(page).to have_current_path(
-      search_support_recruitment_cycle_provider_accredited_providers_path(
+      search_publish_provider_recruitment_cycle_accredited_providers_path(
         recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-        provider_id: provider.id
+        provider_code: provider.provider_code,
+        goto_confirmation: true
       )
     )
   end
 
   def then_i_am_taken_to_the_accredited_provider_description_page
     expect(page).to have_current_path(
-      new_support_recruitment_cycle_provider_accredited_provider_path(
+      new_publish_provider_recruitment_cycle_accredited_partnership_path(
         recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-        provider_id: provider.id,
+        provider_code: provider.provider_code,
         goto_confirmation: true
       )
     )
@@ -187,9 +188,9 @@ feature 'Searching for an accredited provider' do
 
   def then_i_am_taken_back_to_the_confirm_page
     expect(page).to have_current_path(
-      check_support_recruitment_cycle_provider_accredited_providers_path(
+      check_publish_provider_recruitment_cycle_accredited_partnerships_path(
         recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-        provider_id: provider.id
+        provider_code: provider.provider_code
       )
     )
   end

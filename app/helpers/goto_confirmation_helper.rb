@@ -22,8 +22,8 @@ module GotoConfirmationHelper
   def back_link_for_adding_accredited_partner_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
     with_partnerships = if goto_confirmation?(param_form_key:, params:)
                           check_support_recruitment_cycle_provider_accredited_partnerships_path(recruitment_cycle_year, provider)
-                        elsif param_form_key == :support_accredited_provider_form
-                          search_support_recruitment_cycle_provider_accredited_partnerships_path
+                        elsif param_form_key == :provider_partnership_form
+                          search_support_recruitment_cycle_provider_accredited_providers_path
                         else
                           support_recruitment_cycle_provider_accredited_partnerships_path(recruitment_cycle_year, provider)
                         end
@@ -32,7 +32,7 @@ module GotoConfirmationHelper
 
     if goto_confirmation?(param_form_key:, params:)
       check_support_recruitment_cycle_provider_accredited_providers_path(recruitment_cycle_year, provider)
-    elsif param_form_key == :support_accredited_provider_form
+    elsif param_form_key == :accredited_provider_form
       search_support_recruitment_cycle_provider_accredited_providers_path
     else
       support_recruitment_cycle_provider_accredited_providers_path(recruitment_cycle_year, provider)
@@ -42,7 +42,7 @@ module GotoConfirmationHelper
   def publish_back_link_for_adding_provider_partnership_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
     with_partnerships = if goto_confirmation?(param_form_key:, params:)
                           check_publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, recruitment_cycle_year)
-                        elsif param_form_key == :publish_accredited_provider_form
+                        elsif param_form_key == :provider_partnership_form
                           search_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
                         else
                           publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, recruitment_cycle_year)
@@ -52,8 +52,8 @@ module GotoConfirmationHelper
 
     if goto_confirmation?(param_form_key:, params:)
       check_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
-    elsif param_form_key == :publish_accredited_provider_form
-      search_publish_provider_accredited_providers_recruitment_cycles_path(provider.provider_code, recruitment_cycle_year)
+    elsif param_form_key == :accredited_provider_form
+      search_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
     else
       publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
     end
