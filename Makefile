@@ -170,21 +170,6 @@ deploy: deploy-init
 destroy: deploy-init
 	terraform -chdir=terraform/aks destroy -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS} $(AUTO_APPROVE)
 
-delete_sanitised_backup_file:
-	@if [ -f backup_sanitised/backup_sanitised.sql ]; then \
-		rm backup_sanitised/backup_sanitised.sql; \
-		echo "Backup file deleted."; \
-	else \
-		echo "Backup file does not exist."; \
-	fi
-
-restore-sanitised-data-to-review-app: read-cluster-config set-azure-account delete_sanitised_backup_file install-konduit # download and extract sanitised database to backup_sanitsed folder and restore
-	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER", Please specify a pr number for your review app))
-	$(eval export sanitised_backup_workflow_run_id=$(shell gh run list -w "Database Backup and Restore" -s completed --json databaseId --jq '.[].databaseId' -L 1))
-	@echo Download latest artifact for Database Backup and Restore workflow with run ID: ${sanitised_backup_workflow_run_id}
-	gh run download ${sanitised_backup_workflow_run_id}
-	bin/konduit.sh -i backup_sanitised/backup_sanitised.sql -t 7200 publish-review-$(PR_NUMBER) -- psql
-
 publish:
 	$(eval include global_config/publish-domain.sh)
 

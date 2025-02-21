@@ -73,12 +73,12 @@ To seed the database with a sanitised production dump:
 - Request a PIM approval for the production environment.
 - In the Azure portal, go to 'Storage Accounts' -> 's189p01pttdbbkpsanpdsa' -> 'Containers' -> 'database-backup'
 - Download the latest sanitised backup.
-- Unzip the file and you should see a file called `backup_sanitised.sql`.
+- Unzip the file and you should see a file called `publish_sanitised_YYYY-MM-DD.sql`.
 
 Then run the following command to populate the database:
 
 ```bash
-psql manage_courses_backend_development < ~/Downloads/backup_sanitised.sql
+psql manage_courses_backend_development < ~/Downloads/publish_sanitised_YYYY-MM-DD.sql
 ```
 
 ## Seeding GiasSchool Data
