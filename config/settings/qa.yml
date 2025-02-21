@@ -29,7 +29,6 @@ basic_auth:
 features:
   send_request_data_to_bigquery: true
   api_summary_content_change: true
-  v2_results: true
 
 find_valid_referers:
   - https://qa.find-teacher-training-courses.service.gov.uk

@@ -1,6 +1,6 @@
 <%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
 
-<% if Settings.features.v2_results.present? %>
+<% if FeatureFlag.active?(:prefiltering_find_redesign) %>
   <% if permitted_referrer? %>
     <%= content_for(:before_content) do %>
       <%= govuk_back_link(

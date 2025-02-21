@@ -7,7 +7,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
 
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    allow(Settings.features).to receive_messages(v2_results: true)
+    FeatureFlag.activate(:prefiltering_find_redesign)
     allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache.lookup_store(:memory_store))
 
     given_courses_exist_in_various_locations

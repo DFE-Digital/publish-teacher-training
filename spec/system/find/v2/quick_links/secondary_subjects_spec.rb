@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Secondary subjects quick link', service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    allow(Settings.features).to receive_messages(v2_results: true)
+    FeatureFlag.activate(:prefiltering_find_redesign)
   end
 
   context 'when filter by subjects' do

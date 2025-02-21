@@ -1,6 +1,6 @@
 <%= content_for :page_title, title_with_error_prefix("Find courses by location or by training provider", flash[:error].present?) %>
 
-<% if Settings.features.v2_results.present? %>
+<% if FeatureFlag.active?(:prefiltering_find_redesign) %>
   <div class="app-homepage-search-container">
     <div class="app-homepage-search-content">
       <h1 class="govuk-heading-l">Find teacher training courses in England</h1>
@@ -172,7 +172,7 @@
   </div>
 <% end %>
 
-<% if Settings.features.v2_results.present? %>
+<% if FeatureFlag.active?(:prefiltering_find_redesign) %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       <div class="quick-link-card">
