@@ -1,5 +1,6 @@
 $govuk-fonts-path: "/";
 $govuk-images-path: "/";
+$govuk-new-typography-scale: true;
 
 @import "govuk-frontend/dist/govuk/all";
 @import "@ministryofjustice/frontend/moj/all";
