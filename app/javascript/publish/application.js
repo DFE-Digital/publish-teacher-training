@@ -1,6 +1,6 @@
 // Entry point for the build script in your package.json
 
-import 'babel-polyfill'
+import "core-js/stable"
 import jQuery from 'jquery'
 import { initAll } from 'govuk-frontend'
 
