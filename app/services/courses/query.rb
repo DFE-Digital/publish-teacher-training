@@ -27,6 +27,7 @@ module Courses
 
     def call
       @scope = visa_sponsorship_scope
+      @scope = engineers_teach_physics_scope
       @scope = subjects_scope
       @scope = study_modes_scope
       @scope = qualifications_scope
@@ -66,6 +67,14 @@ module Courses
             can_sponsor_skilled_worker_visa: true
           )
         )
+    end
+
+    def engineers_teach_physics_scope
+      return @scope if params[:engineers_teach_physics].blank?
+
+      @applied_scopes[:engineers_teach_physics] = params[:engineers_teach_physics]
+
+      @scope.where(campaign_name: Course.campaign_names[:engineers_teach_physics])
     end
 
     def subjects_scope

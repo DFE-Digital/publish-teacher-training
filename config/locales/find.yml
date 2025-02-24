@@ -518,6 +518,7 @@ en:
     legend:
       courses_search_form:
         can_sponsor_visa_html: Visa sponsorship<span class="govuk-visually-hidden"> filter</span>
+        engineers_teach_physics_html: Engineers teach physics<span class="govuk-visually-hidden"> filter</span>
         primary_html: Primary<span class="govuk-visually-hidden"> filter</span>
         secondary_html: Secondary<span class="govuk-visually-hidden"> filter</span>
         study_type_html: Study type<span class="govuk-visually-hidden"> filter</span>
@@ -546,6 +547,7 @@ en:
         provider: Enter a provider name
         can_sponsor_visa: Only show courses with visa sponsorship
         visa_sponsorship: Only show courses that offer visa sponsorship
+        engineers_teach_physics: Only show Engineers teach physics courses
         special_education_needs: Only show courses with a SEND specialism
         applications_open: Only show courses open for applications
         study_type_options:

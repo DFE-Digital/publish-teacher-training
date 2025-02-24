@@ -18,6 +18,7 @@ module Courses
     attribute :location
     attribute :longitude
     attribute :minimum_degree_required
+    attribute :engineers_teach_physics
     attribute :order
     attribute :provider_code
     attribute :provider_name
@@ -137,6 +138,18 @@ module Courses
       end
     end
 
+    PHYSICS_SUBJECT_CODE = 'F3'
+
+    def search_for_physics?
+      PHYSICS_SUBJECT_CODE.in?(Array(subjects)) || subject_code == PHYSICS_SUBJECT_CODE
+    end
+
+    def engineers_teach_physics
+      return unless search_for_physics?
+
+      super
+    end
+
     private
 
     def transform_old_parameters(params)
@@ -151,6 +164,8 @@ module Courses
     def inject_defaults(params)
       params.tap do
         params[:radius] = (radius if location.present?)
+
+        params[:engineers_teach_physics] = nil unless search_for_physics?
       end
     end
 
