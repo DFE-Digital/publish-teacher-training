@@ -29,7 +29,7 @@
   <% table.with_body do |body| %>
     <% @courses.each do |course| %>
       <% body.with_row classes: ["course-row"] do |row| %>
-        <% row.with_cell text: govuk_link_to(course.name_and_code, publish_provider_recruitment_cycle_course_url(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code)), classes: ["name"] %>
+        <% row.with_cell text: govuk_link_to(course.name_and_code, support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider.id, course.id)), classes: ["name"] %>
         <% row.with_cell text: course.decorate.status_tag, classes: ["status"] %>
 
         <% row.with_cell do %>
