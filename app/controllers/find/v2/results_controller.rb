@@ -42,6 +42,7 @@ module Find
           :provider_code,
           :provider_name,
           :radius,
+          :engineers_teach_physics,
           :send_courses,
           :sortby,
           :subject_code,

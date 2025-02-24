@@ -53,6 +53,49 @@ RSpec.describe Courses::Query do
       end
     end
 
+    context 'when filter for engineers teach physics' do
+      let!(:biology_course) do
+        create(
+          :course,
+          :with_full_time_sites,
+          :secondary,
+          name: 'Biology',
+          course_code: 'S872',
+          subjects: [find_or_create(:secondary_subject, :biology)]
+        )
+      end
+      let!(:physics_course) do
+        create(
+          :course,
+          :with_full_time_sites,
+          :secondary,
+          name: 'Physics',
+          course_code: 'P45D',
+          subjects: [find_or_create(:secondary_subject, :physics)]
+        )
+      end
+      let!(:engineers_teach_physics_course) do
+        create(
+          :course,
+          :with_full_time_sites,
+          :secondary,
+          :engineers_teach_physics,
+          name: 'Engineers teach physics',
+          course_code: 'ETP1',
+          subjects: [find_or_create(:secondary_subject, :physics)]
+        )
+      end
+
+      let(:params) { { engineers_teach_physics: true } }
+
+      it 'returns courses that sponsor visa' do
+        expect(results).to match_collection(
+          [engineers_teach_physics_course],
+          attribute_names: %w[id name campaign_name]
+        )
+      end
+    end
+
     context 'when filter by subject code' do
       let!(:biology) do
         create(:course, :with_full_time_sites, :secondary, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])

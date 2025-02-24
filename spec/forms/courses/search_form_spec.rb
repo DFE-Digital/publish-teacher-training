@@ -298,4 +298,72 @@ RSpec.describe Courses::SearchForm do
       end
     end
   end
+
+  describe '#search_for_physics?' do
+    context 'when subjects include physics subject' do
+      let(:form) { described_class.new(subjects: ['F3']) }
+
+      it 'returns true' do
+        expect(form.search_for_physics?).to be true
+      end
+    end
+
+    context 'when subjects include physics subject code' do
+      let(:form) { described_class.new(subject_code: 'F3') }
+
+      it 'returns true' do
+        expect(form.search_for_physics?).to be true
+      end
+    end
+
+    context 'when engineers_teach_physics is present only without physics' do
+      let(:form) { described_class.new(engineers_teach_physics: 'true') }
+
+      it 'returns false' do
+        expect(form.search_for_physics?).to be false
+      end
+    end
+
+    context 'when neither subjects include physics nor engineers_teach_physics is present' do
+      let(:form) { described_class.new(subjects: ['01']) }
+
+      it 'returns false' do
+        expect(form.search_for_physics?).to be false
+      end
+    end
+  end
+
+  describe '#engineers_teach_physics' do
+    context 'when subjects include physics subject' do
+      let(:form) { described_class.new(subjects: ['F3'], engineers_teach_physics: true) }
+
+      it 'returns true' do
+        expect(form.engineers_teach_physics).to be true
+      end
+    end
+
+    context 'when subjects include physics subject code' do
+      let(:form) { described_class.new(subject_code: 'F3', engineers_teach_physics: true) }
+
+      it 'returns true' do
+        expect(form.engineers_teach_physics).to be true
+      end
+    end
+
+    context 'when engineers_teach_physics is present only without physics' do
+      let(:form) { described_class.new(engineers_teach_physics: true) }
+
+      it 'returns false' do
+        expect(form.engineers_teach_physics).to be_nil
+      end
+    end
+
+    context 'when neither subjects include physics nor engineers_teach_physics is present' do
+      let(:form) { described_class.new(subjects: ['01']) }
+
+      it 'returns false' do
+        expect(form.engineers_teach_physics).to be_nil
+      end
+    end
+  end
 end
