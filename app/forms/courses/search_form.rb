@@ -160,6 +160,7 @@ module Courses
       'third_class' => 'third_class',
       'not_required' => 'pass'
     }.freeze
+    private_constant :DEGREE_REQUIRED_OLD_VALUES_TO_NEW_VALUES
 
     def degree_required_transformation
       DEGREE_REQUIRED_OLD_VALUES_TO_NEW_VALUES[degree_required]
@@ -171,6 +172,7 @@ module Courses
       'provider_asc' => 'provider_name_ascending',
       'provider_desc' => 'provider_name_descending'
     }.freeze
+    private_constant :SORT_BY_OLD_VALUES_TO_NEW_VALUES
 
     def sort_by_transformation
       SORT_BY_OLD_VALUES_TO_NEW_VALUES[sortby]

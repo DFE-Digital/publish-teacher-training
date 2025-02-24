@@ -175,6 +175,7 @@ module Courses
     end
 
     PHYSICS_SUBJECT = 'Physics'
+    private_constant :PHYSICS_SUBJECT
 
     def physics?
       main_subject&.subject_name == PHYSICS_SUBJECT
@@ -196,6 +197,7 @@ module Courses
       'Russian',
       'Spanish'
     ].freeze
+    private_constant :LANGUAGE_SUBJECTS
 
     def languages?
       main_subject&.subject_name.in?(LANGUAGE_SUBJECTS)

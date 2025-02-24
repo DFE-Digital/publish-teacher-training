@@ -31,6 +31,7 @@ module Shared
             'Ancient Greek',
             'Ancient Hebrew'
           ].freeze
+          private_constant :ELIGIBLE_SUBJECTS
 
           def eligible_subjects
             ELIGIBLE_SUBJECTS

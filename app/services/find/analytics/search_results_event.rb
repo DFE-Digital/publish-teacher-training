@@ -32,6 +32,7 @@ module Find
       end
 
       DEFAULT_TRACK_PARAMS = { utm_source: 'results', utm_medium: 'no_referer' }.freeze
+      private_constant :DEFAULT_TRACK_PARAMS
 
       def track_params
         return DEFAULT_TRACK_PARAMS if request.referer.blank?
