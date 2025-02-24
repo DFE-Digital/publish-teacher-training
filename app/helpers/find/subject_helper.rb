@@ -29,6 +29,7 @@ module Find
     private
 
     PrimarySubjectInput = Struct.new(:code, :name)
+    private_constant :PrimarySubjectInput
 
     def primary_subjects
       Subject.where(type: 'PrimarySubject')
@@ -36,6 +37,7 @@ module Find
     end
 
     SecondarySubjectInput = Struct.new(:code, :name, :financial_info)
+    private_constant :SecondarySubjectInput
 
     def secondary_subjects
       Subject.includes(:financial_incentive)

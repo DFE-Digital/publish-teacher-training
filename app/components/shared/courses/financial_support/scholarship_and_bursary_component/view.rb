@@ -47,6 +47,7 @@ module Shared
             %w[17 german],
             %w[22 spanish]
           ].freeze
+          private_constant :SUBJECT_WITH_SCHOLARSHIPS, :ELIGIBLE_SUBJECTS
 
           def eligible_subjects
             ELIGIBLE_SUBJECTS

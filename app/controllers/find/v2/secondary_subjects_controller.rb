@@ -27,6 +27,7 @@ module Find
       end
 
       SecondarySubjectInput = Struct.new(:code, :name, :financial_info, :subject_group, keyword_init: true)
+      private_constant :SecondarySubjectInput
 
       def formatted_secondary_subject_options
         Subject.secondary_subjects_with_subject_groups.map do |subject|
