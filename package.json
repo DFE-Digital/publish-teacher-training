@@ -41,6 +41,7 @@
     "set-value": "^4.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.18.9",
     "@testing-library/dom": "^8.16.0",
     "babel-jest": "^28.1.3",
