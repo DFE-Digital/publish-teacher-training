@@ -11,7 +11,7 @@ describe FlashBanner do
       let(:message) { "Provider #{type}" }
       let(:flash) { ActionDispatch::Flash::FlashHash.new(type => message) }
       let(:expected_title) do
-        { success: 'Success', warning: 'Important', info: 'Important' }[type]
+        { success: 'Success', warning: 'Important', info: 'Important' }[type.to_sym]
       end
 
       before do
