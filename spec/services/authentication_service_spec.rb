@@ -77,8 +77,8 @@ describe AuthenticationService do
           expect { subject }.to(change { user.reload.email }.to(email))
         end
 
-        Timecop.freeze do # TODO: possible race condition here
-          it 'updates the existing users email to example email' do
+        it 'updates the existing users email to example email' do
+          Timecop.freeze do
             expect { subject }.to(change { existing_user.reload.email }.to("bob_#{Time.now.to_i}_gmail.com@example.com"))
           end
         end
