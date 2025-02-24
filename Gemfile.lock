@@ -174,7 +174,7 @@ GEM
     bindata (2.5.0)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
-    blazer (3.1.0)
+    blazer (3.2.0)
       activerecord (>= 6.1)
       chartkick (>= 5)
       csv
@@ -200,7 +200,7 @@ GEM
       xpath (~> 3.2)
     case_transform (0.2)
       activesupport
-    chartkick (5.1.0)
+    chartkick (5.1.4)
     childprocess (5.1.0)
       logger (~> 1.5)
     choice (0.2.0)
