@@ -1,4 +1,5 @@
-js: yarn build:js --watch
+js-find: yarn build:js:find --watch
+js-publish: yarn build:js:publish --watch
 css: yarn build:css --watch
 web: bin/rails server -p 3001
 worker: bundle exec sidekiq -t 25 -C config/sidekiq.yml
