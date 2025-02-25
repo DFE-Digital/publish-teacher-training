@@ -70,3 +70,11 @@ Rails/Output:
 Rails/ApplicationRecord:
   Exclude:
     - config/initializers/blazer.rb
+
+# We don't want this enforced in systems specs
+# where the order of method definitions is normally
+# specific to the flow of the spec
+Rails/Delegate:
+  Exclude:
+    - "spec/**/*"
+
