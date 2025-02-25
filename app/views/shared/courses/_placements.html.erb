@@ -8,9 +8,9 @@
 <ul class="govuk-list govuk-list--spaced" id="course_school_placements">
   <% course.preview_site_statuses.each do |site_status| %>
     <li>
-      <strong><%= smart_quotes(site_status.site.location_name) %></strong>
+      <strong><%= site_status.site.location_name %></strong>
       <br>
-      <%= smart_quotes(site_status.site.decorate.full_address) %>
+      <%= site_status.site.decorate.full_address %>
     </li>
   <% end %>
 </ul>

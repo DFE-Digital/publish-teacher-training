@@ -47,8 +47,8 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
 
       it 'renders the study site names and addresses' do
-        expect(subject).to have_css('.govuk-hint strong', text: study_site.location_name)
-        expect(subject).to have_css('.govuk-hint', text: study_site.full_address)
+        expect(subject).to have_css('.govuk-hint strong', text: study_site.decorate.location_name)
+        expect(subject).to have_css('.govuk-hint', text: study_site.decorate.full_address)
       end
     end
   end
