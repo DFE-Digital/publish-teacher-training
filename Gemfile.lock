@@ -218,7 +218,7 @@ GEM
     cronex (0.15.0)
       tzinfo
       unicode (>= 0.4.4.5)
-    cssbundling-rails (1.4.1)
+    cssbundling-rails (1.4.2)
       railties (>= 6.0.0)
     csv (3.3.2)
     data_migrate (11.2.0)
@@ -712,7 +712,7 @@ GEM
     skylight (6.0.4)
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
-    stringio (3.1.2)
+    stringio (3.1.5)
     super_diff (0.15.0)
       attr_extras (>= 6.2.4)
       diff-lcs
@@ -759,7 +759,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.7.1)
+    zeitwerk (2.7.2)
 
 PLATFORMS
   arm64-darwin
