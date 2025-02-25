@@ -156,9 +156,9 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         course.define_singleton_method(:minimum_distance_to_search_location) { 0.2 }
       end
 
-      it_behaves_like 'school location row', :fee, 3, '0.2 miles from London'
-      it_behaves_like 'school location row', :salary, 3, '0.2 miles from London'
-      it_behaves_like 'school location row', :apprenticeship, 3, '0.2 miles from London'
+      it_behaves_like 'school location row', :fee, 3, '1 mile from London'
+      it_behaves_like 'school location row', :salary, 3, '1 mile from London'
+      it_behaves_like 'school location row', :apprenticeship, 3, '1 mile from London'
 
       it_behaves_like 'school location row', :fee, 1, 'Nearest of 1 potential placement school'
       it_behaves_like 'school location row', :fee, 3, 'Nearest of 3 potential placement schools'
@@ -177,7 +177,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
 
         it 'sanitizes user input by striping html tags' do
           expect(summary_card_content).to include(
-            '0.2 miles from alert("XSS") Nearest of 2 potential placement schools'
+            '1 mile from alert("XSS") Nearest of 2 potential placement schools'
           )
         end
       end
