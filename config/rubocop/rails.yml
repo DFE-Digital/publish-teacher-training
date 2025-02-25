@@ -1,6 +1,6 @@
 # https://docs.rubocop.org/rubocop-rails/cops.html
 
-require: rubocop-rails
+plugins: rubocop-rails
 
 Rails/SkipsModelValidations:
   Enabled: false
