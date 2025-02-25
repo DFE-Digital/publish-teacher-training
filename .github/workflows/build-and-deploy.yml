@@ -329,7 +329,12 @@ jobs:
         with:
           header: aks
           message: |
-            Review app deployed to ${{ steps.deploy_review.outputs.deploy-url }}
+            ### Deployments
+
+            | App               | URL                                                                                      |
+            | ----------------- | ---------------------------------------------------------------------------------------- |
+            | Publish           | <https://publish-review-${{ github.event.number }}.test.teacherservices.cloud>           |
+            | Find              | <https://find-review-${{ github.event.number }}.test.teacherservices.cloud>              |
 
   deploy-aks-before-production:
     name: Parallel deployment before production
