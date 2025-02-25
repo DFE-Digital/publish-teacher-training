@@ -15,8 +15,8 @@
         <% course.study_sites.each do |study_site| %>
           <li>
             <p class="govuk-hint govuk-!-font-size-16">
-              <strong><%= smart_quotes(study_site.location_name) %></strong><br>
-              <%= smart_quotes(study_site.decorate.full_address) %>
+              <strong><%= study_site.decorate.location_name %></strong><br>
+              <%= study_site.decorate.full_address %>
             </p>
           </li>
         <% end %>
