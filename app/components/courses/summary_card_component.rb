@@ -35,7 +35,7 @@ module Courses
         t(
           '.location_value.distance',
           school_term:,
-          distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil(2), 'mile'), class: 'govuk-!-font-weight-bold'),
+          distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, 'mile'), class: 'govuk-!-font-weight-bold'),
           location: content_tag(:span, sanitize(@location), class: 'govuk-!-font-weight-bold')
         ).html_safe
       else
