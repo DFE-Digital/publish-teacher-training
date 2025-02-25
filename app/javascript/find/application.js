@@ -39,7 +39,7 @@ initAutocomplete({
 
 const filterToggleButton = new FilterToggleButton({
   bigModeMediaQuery: '(min-width: 48.063em)',
-  startHidden: false,
+  startHidden: true,
   toggleButton: {
     container: $('.app-filter-toggle'),
     showText: 'Filter results',

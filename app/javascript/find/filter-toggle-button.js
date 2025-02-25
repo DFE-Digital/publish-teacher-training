@@ -100,8 +100,8 @@ export const FilterToggleButton = class {
 
   init () {
     this.setupResponsiveChecks()
-    if (this.options.startHidden) {
-      this.hideMenu()
+    if (!this.options.startHidden) {
+      this.showMenu()
     }
   }
 }
