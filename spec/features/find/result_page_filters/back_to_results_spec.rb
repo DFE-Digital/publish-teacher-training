@@ -83,6 +83,7 @@ RSpec.feature 'Back to results back button' do
 
   def and_i_see_the_number_of_courses
     expect(find_results_page.courses.count).to eq(2)
+    @request_uri = URI(page.current_url).request_uri
   end
 
   def i_select_a_course
@@ -102,6 +103,6 @@ RSpec.feature 'Back to results back button' do
   end
 
   def and_then_i_am_taken_back_to_the_results_page
-    expect(page).to have_current_path(find_results_path)
+    expect(page).to have_current_path(@request_uri)
   end
 end

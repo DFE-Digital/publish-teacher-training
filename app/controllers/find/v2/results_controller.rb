@@ -3,6 +3,8 @@
 module Find
   module V2
     class ResultsController < Find::ApplicationController
+      after_action :store_result_fullpath_for_backlinks, only: [:index]
+
       def index
         coordinates = Geolocation::CoordinatesQuery.new(params[:location]).call
 
@@ -55,6 +57,10 @@ module Find
           qualification: [],
           funding: []
         )
+      end
+
+      def store_result_fullpath_for_backlinks
+        session[:results_path] = request.fullpath
       end
     end
   end

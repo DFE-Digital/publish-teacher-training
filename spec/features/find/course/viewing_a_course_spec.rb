@@ -417,11 +417,8 @@ feature 'Viewing a findable course' do
   end
 
   def then_i_should_be_on_the_course_page
-    expect(page.current_url).to eq(
-      URI.join(
-        Settings.find_url,
-        "/course/#{@course.provider_code}/#{@course.course_code}"
-      ).to_s
+    expect(page).to have_current_path(
+      find_course_path(provider_code: @course.provider_code, course_code: @course.course_code)
     )
   end
 

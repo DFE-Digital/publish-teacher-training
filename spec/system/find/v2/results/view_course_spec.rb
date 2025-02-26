@@ -10,22 +10,37 @@ RSpec.describe 'V2 results - view a course', :js, service: :find do
     FeatureFlag.activate(:prefiltering_find_redesign)
 
     given_courses_exist
-    when_i_visit_the_results_page
   end
 
   scenario 'viewing a course from the search results' do
+    when_i_visit_the_results_page
     when_i_filter_for_send_courses
     and_i_search_for_art_and_design_subject
     and_i_click_search
-    and_i_click_on_the_first_result
-    and_i_am_on_the_course_page
+    when_i_click_on_the_first_result
+    then_i_am_on_the_course_page
 
+    when_i_click_on_the_provider_link
+    and_i_click_back_to_course
     when_i_click_back_to_results
     then_i_am_on_search_results_page_with_the_applied_search
   end
 
+  scenario 'navigating directly to a course' do
+    when_i_visit_a_course_page_directly
+    then_i_am_on_the_course_page
+
+    when_i_click_on_the_provider_link
+    and_i_click_back_to_course
+    then_there_is_no_back_link
+  end
+
+  def when_i_visit_a_course_page_directly
+    visit(find_course_path(provider_code: @course.provider.provider_code, course_code: @course.course_code))
+  end
+
   def given_courses_exist
-    create(
+    @course = create(
       :course,
       :with_full_time_sites,
       :secondary,
@@ -60,17 +75,29 @@ RSpec.describe 'V2 results - view a course', :js, service: :find do
     click_link_or_button 'Search'
   end
 
-  def and_i_click_on_the_first_result
+  def when_i_click_on_the_first_result
     page.first('.app-search-results').first('a').click
   end
 
-  def and_i_am_on_the_course_page
+  def when_i_click_on_the_provider_link
+    page.find_link(@course.provider.provider_name).click
+  end
+
+  def then_i_am_on_the_course_page
     expect(page).to have_current_path(
       find_course_path(
         provider_code: 'RO1',
         course_code: 'F314'
       )
     )
+  end
+
+  def and_i_click_back_to_course
+    click_link_or_button "Back to #{@course.name_and_code}"
+  end
+
+  def then_there_is_no_back_link
+    expect(page).to have_no_link('Back to search results')
   end
 
   def when_i_click_back_to_results
