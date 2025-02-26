@@ -131,6 +131,12 @@ module Publish
       def section_key
         'Subject'.pluralize(selected_subject_ids.count)
       end
+
+      def build_course
+        @course = provider.courses.find_by!(course_code: params[:code])
+
+        @course.assign_positioned_subjects!
+      end
     end
   end
 end
