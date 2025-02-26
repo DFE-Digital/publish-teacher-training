@@ -779,6 +779,29 @@ class Course < ApplicationRecord
     end
   end
 
+  def assign_positioned_subjects!
+    if is_primary?
+      assign_positioned_master_subject!(subjects_list: course_subjects) if master_subject_id.blank?
+    else
+      positioned_subjects = course_subjects.select(&:position)
+
+      self.master_subject_id ||= assign_positioned_master_subject!(subjects_list: positioned_subjects)
+      self.subordinate_subject_id ||= assign_positioned_secondary_subject!(subjects_list: positioned_subjects)
+    end
+  end
+
+  def assign_positioned_master_subject!(subjects_list:)
+    subjects_list.first&.subject_id
+  end
+
+  def assign_positioned_secondary_subject!(subjects_list:)
+    subjects_list.second&.subject&.id
+  end
+
+  def subordinate_subject_id
+    super || (is_primary? ? nil : assign_positioned_secondary_subject!(subjects_list: course_subjects.select(&:position)))
+  end
+
   def assignable_master_subjects
     services[:assignable_master_subjects].execute(course: self)
   end
