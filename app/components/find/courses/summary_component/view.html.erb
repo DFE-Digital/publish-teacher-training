@@ -70,36 +70,72 @@
               Over 80%
             </strong>
             </p>
-            <span class="govuk-hint govuk-!-font-size-16">
-              54 of 66 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
-            </span>
+            <details class="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                More about this success rate
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              54 of 66 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023.<br>
+              The average success rate for all accredited providers was 93% in 2023.<br>
+              Please contact <%= @course.accrediting_provider.provider_name %> for more information on their success rate.
+            </div>
+          </details>
           <% when "R480" %>
             <p class="govuk-body">
               <strong class="govuk-tag govuk-tag--blue">
                 Over 95%
               </strong>
             </p>
-            <span class="govuk-hint govuk-!-font-size-16">
-              192 of 200 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
-            </span>
+            <details class="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                More about this success rate
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              192 of 200 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023.<br>
+              The average success rate for all accredited providers was 93% in 2023.<br>
+              Please contact <%= @course.accrediting_provider.provider_name %> for more information on their success rate.
+            </div>
+          </details>
           <% when "H971" %>
             <p class="govuk-body">
               <strong class="govuk-tag govuk-tag--blue">
                 100%
               </strong>
             </p>
-            <span class="govuk-hint govuk-!-font-size-16">
-              All 35 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
-            </span>
+            <details class="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                More about this success rate
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              All 35 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023.<br>
+              The average success rate for all accredited providers was 93% in 2023.<br>
+              Please contact <%= @course.accrediting_provider.provider_name %> for more information on their success rate.
+            </div>
+          </details>
           <% when "36P4" %>
             <p class="govuk-body">
               <strong class="govuk-tag govuk-tag--blue">
                 Under 80%
               </strong>
             </p>
-            <span class="govuk-hint govuk-!-font-size-16">
-              7 of 10 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
-            </span>
+            <details class="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                More about this success rate
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              7 of 10 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023.<br>
+              The average success rate for all accredited providers was 93% in 2023.<br>
+              Please contact <%= @course.accrediting_provider.provider_name %> for more information on their success rate.
+            </div>
+          </details>
           <% when "Y404" %>
             <details class="govuk-details">
               <summary class="govuk-details__summary">
@@ -108,7 +144,8 @@
                 </span>
               </summary>
               <div class="govuk-details__text">
-                We use data from 2022 to 2023 to calculate the success rate. <%= @course.accrediting_provider.provider_name %> did not run courses that year.
+                We use data from 2022 to 2023 to calculate the success rate. <%= @course.accrediting_provider.provider_name %> did not run courses that year.<br>
+                Please contact <%= @course.accrediting_provider.provider_name %> for more information on their success rate.
               </div>
             </details>
         <% end %>
