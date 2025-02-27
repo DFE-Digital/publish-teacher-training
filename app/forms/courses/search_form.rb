@@ -7,20 +7,20 @@ module Courses
     # Search parameters #
     attribute :applications_open, :boolean
     attribute :can_sponsor_visa, :boolean
+    attribute :engineers_teach_physics
     attribute :funding
     attribute :latitude
     attribute :level
     attribute :location
     attribute :longitude
     attribute :minimum_degree_required
-    attribute :engineers_teach_physics
-    attribute :start_date
     attribute :order
     attribute :provider_code
     attribute :provider_name
     attribute :qualifications
     attribute :radius
     attribute :send_courses, :boolean
+    attribute :start_date
     attribute :study_types
     attribute :subject_code
     attribute :subject_name
@@ -32,9 +32,9 @@ module Courses
     attribute :types
 
     # Old parameters #
-    attribute :'provider.provider_name'
     attribute :age_group
     attribute :degree_required
+    attribute :'provider.provider_name'
     attribute :qualification
     attribute :sortby
     attribute :university_degree_status, :boolean
