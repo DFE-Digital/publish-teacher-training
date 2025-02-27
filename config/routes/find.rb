@@ -36,7 +36,6 @@ namespace :find, path: '/' do
     get '/results', to: 'results#index', as: 'results'
   end
 
-  get '/results', to: 'results#index', as: 'results'
   get '/results/count', to: 'results#count', as: 'results_count'
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
