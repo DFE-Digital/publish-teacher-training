@@ -14,7 +14,7 @@ class SecondaryNavigationComponent < ViewComponent::Base
 
     def call
       content_tag(:li, class: 'app-secondary-navigation__item') do
-        link_to name, url, class: 'app-secondary-navigation__link', aria: { current: current? && 'page' }
+        link_to name, url, class: 'app-secondary-navigation__link', aria: { current: current? }
       end
     end
 
