@@ -18,7 +18,9 @@ module Find
         let(:bursary_amount) { 2000 }
 
         it 'returns formatted bursary and scholarship information' do
-          expect(helper.financial_information(financial_incentive)).to eq('Scholarships of £3,000 or bursaries of £2,000 are available')
+          expect(helper.financial_information(financial_incentive)).to have_css(
+            'p.govuk-hint', text: 'Scholarships of £3,000 or bursaries of £2,000 are available'
+          )
         end
       end
 
@@ -26,7 +28,9 @@ module Find
         let(:bursary_amount) { 5000 }
 
         it 'returns formatted bursary information' do
-          expect(helper.financial_information(financial_incentive)).to eq('Bursaries of £5,000 are available')
+          expect(helper.financial_information(financial_incentive)).to have_css(
+            'p.govuk-hint', text: 'Bursaries of £5,000 are available'
+          )
         end
       end
 
@@ -34,7 +38,9 @@ module Find
         let(:scholarship) { 5000 }
 
         it 'returns formatted scholarship information' do
-          expect(helper.financial_information(financial_incentive)).to eq('Scholarships of £5,000 are available')
+          expect(helper.financial_information(financial_incentive)).to have_css(
+            'p.govuk-hint', text: 'Scholarships of £5,000 are available'
+          )
         end
       end
 

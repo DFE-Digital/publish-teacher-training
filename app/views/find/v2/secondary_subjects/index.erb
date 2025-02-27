@@ -18,9 +18,9 @@
 
       <%= render Shared::AdviceComponent::View.new(title: t(".financial_support.title")) do %>
         <h4 class="govuk-heading-s"><%= t(".financial_support.bursaries_and_scholarship_heading") %></h4>
-        <p><%= govuk_link_to(t(".financial_support.eligible_for_bursaries_and_scholarship"), find_track_click_path(utm_content: "secondary_bursaries_and_scholarship", url: t("find.get_into_teaching.url_bursaries_and_scholarships_support"))) %></p>
+        <p class="govuk-body"><%= govuk_link_to(t(".financial_support.eligible_for_bursaries_and_scholarship"), find_track_click_path(utm_content: "secondary_bursaries_and_scholarship", url: t("find.get_into_teaching.url_bursaries_and_scholarships_support"))) %></p>
         <h4 class="govuk-heading-s"><%= t(".financial_support.student_loans") %></h4>
-        <p><%= govuk_link_to(t(".financial_support.loans_text"), find_track_click_path(utm_content: "secondary_subjects_loans", url: t("find.get_into_teaching.url_maintenance_loans"))) %></p>
+        <p class="govuk-body"><%= govuk_link_to(t(".financial_support.loans_text"), find_track_click_path(utm_content: "secondary_subjects_loans", url: t("find.get_into_teaching.url_maintenance_loans"))) %></p>
       <% end %>
     </div>
   </div>
