@@ -9,6 +9,8 @@ export default class extends Controller {
   }
 
   connect () {
+    const selectEl = this.element.querySelector('select')
+
     dfeAutocompleteField(
       this.element,
       {
@@ -17,5 +19,13 @@ export default class extends Controller {
         name: 'provider_name'
       }
     )
+
+    this.element.querySelector('input').addEventListener('input', this.clearSelect.bind(this, selectEl))
+  }
+
+  clearSelect (selectEl, event) {
+    if (event.target.value === '') {
+      selectEl.value = ''
+    }
   }
 }
