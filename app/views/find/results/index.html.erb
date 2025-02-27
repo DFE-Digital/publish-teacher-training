@@ -6,34 +6,38 @@
   <%= "#{@number_of_courses_string} found" %>
 </h1>
 
-<div class="app-filter-toggle"></div>
+<div data-controller="visibility" data-visibility-visible-class="app-filter-layout__filter--open">
+  <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
+    Filter results
+  </button>
 
-<div class="app-filter-layout">
-  <div class="app-filter-layout__filter">
-    <%= render Find::Results::FilterComponent.new(results: @results_view) %>
-  </div>
-  <div class="app-filter-layout__content">
-
-    <div class="app-promoted-link">
-      <%= govuk_link_to "Talk to teacher training providers at an event near you",
-                        t("find.get_into_teaching.url_teacher_training_events") %>.
+  <div class="app-filter-layout">
+    <div class="app-filter-layout__filter" data-visibility-target="container">
+      <%= render Find::Results::FilterComponent.new(results: @results_view) %>
     </div>
 
-    <%= render Find::Results::NoResultsComponent.new(results: @results_view) %>
-    <%= render Find::Results::SortByComponent.new(results: @results_view) %>
+    <div class="app-filter-layout__content">
+      <div class="app-promoted-link">
+        <%= govuk_link_to "Talk to teacher training providers at an event near you",
+                          t("find.get_into_teaching.url_teacher_training_events") %>.
+      </div>
 
-    <% if @results_view.has_results? %>
-      <ul class="app-search-results">
-        <% @courses.each do |course| %>
-          <%= render Find::Results::SearchResultComponent.new(
-            course:,
-            filtered_by_location: @results_view.location_filter?,
-            results_view: @results_view
-          ) %>
-        <% end %>
-      </ul>
-    <% end %>
+      <%= render Find::Results::NoResultsComponent.new(results: @results_view) %>
+      <%= render Find::Results::SortByComponent.new(results: @results_view) %>
 
-    <%= govuk_pagination(pagy: @pagy) %>
+      <% if @results_view.has_results? %>
+        <ul class="app-search-results">
+          <% @courses.each do |course| %>
+            <%= render Find::Results::SearchResultComponent.new(
+              course:,
+              filtered_by_location: @results_view.location_filter?,
+              results_view: @results_view
+            ) %>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <%= govuk_pagination(pagy: @pagy) %>
+    </div>
   </div>
 </div>
