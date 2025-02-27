@@ -15,7 +15,7 @@
     position: static;
   }
 
-  [class^=govuk-heading-] {
+  [class^="govuk-heading-"] {
     margin-bottom: 0;
   }
 }
@@ -39,7 +39,9 @@
   &:focus {
     background-color: $govuk-focus-colour;
     color: $govuk-focus-text-colour;
-    box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+    box-shadow:
+      0 -2px $govuk-focus-colour,
+      0 4px $govuk-focus-text-colour;
     outline: none;
   }
 
@@ -50,7 +52,7 @@
   }
 
   &::before {
-    background-image: url('icon-cross.svg');
+    background-image: url("icon-cross.svg");
     content: "";
     display: inline-block;
     height: 14px;
