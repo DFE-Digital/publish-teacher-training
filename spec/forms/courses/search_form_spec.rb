@@ -228,6 +228,14 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context 'when location is provided with administrative_area_level type and no radius' do
+      let(:form) { described_class.new(location: 'Cornwall, UK', latitude: 51.53328, longitude: -0.1734435, types: %w[administrative_area_level_2]) }
+
+      it 'returns the large area radius' do
+        expect(form.search_params).to eq(location: 'Cornwall, UK', latitude: 51.53328, longitude: -0.1734435, radius: 50, types: %w[administrative_area_level_2])
+      end
+    end
+
     context 'when ordering is provided' do
       context 'when new params' do
         let(:form) { described_class.new(order: 'course_name_ascending') }
