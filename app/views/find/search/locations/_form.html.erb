@@ -195,7 +195,7 @@
         <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.tda.title"), class: "govuk-heading-m")) do %>
           <p class="govuk-body"><%= t("find.search.tda.degree") %></p>
           <p class="govuk-body"><%= govuk_link_to(t("find.search.tda.browse_tda_courses"), find_results_path({ minimum_degree_required: "no_degree_required", utm_source: "home", utm_medium: "teacher_degree_apprenticeship_courses" })) %></p>
-          <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.tda.teacher_degree_apprenticeships"), t("find.get_into_teaching.url_tda")) %></p>
+          <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.tda.teacher_degree_apprenticeships"), t("find.get_into_teaching.url_tda")) %>.</p>
         <% end %>
 
         <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.send.title"), class: "govuk-heading-m")) do %>
