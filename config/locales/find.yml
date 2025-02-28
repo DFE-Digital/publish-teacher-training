@@ -219,18 +219,18 @@ en:
         send_specialism: All initial teacher training courses cover teaching pupils with SEND, but some courses have a SEND specialism.
         browse_primary_send: Browse primary courses with a SEND specialism.
         browse_secondary_send: Browse secondary courses with a SEND specialism.
-        teaching_pupils: teaching pupils with special educational needs and disabilities.
+        teaching_pupils: teaching pupils with special educational needs and disabilities
       other_stages:
         title: Teaching other stages
         nursery:
           title: Nursery or pre-school
           help: Help young children under 5 years old to develop by becoming an early years teacher.
-          route_to_early_years: the routes to become an early years teacher.
+          route_to_early_years: the routes to become an early years teacher
         further_ed:
           title: Further education
           teach_young_people: Teach young people and adults over 16 who are not studying for a degree.
           browse_further_ed: Browse further education courses.
-          teaching_further_ed: teaching in further education.
+          teaching_further_ed: teaching in further education
     subjects:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
