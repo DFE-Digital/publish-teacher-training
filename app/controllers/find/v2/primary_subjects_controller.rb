@@ -13,7 +13,7 @@ module Find
 
       def submit
         if @form.valid?
-          redirect_to find_results_path({ subjects: @form.subjects }.merge(track_params))
+          redirect_to find_results_path({ subjects: @form.subjects, applications_open: true }.merge(track_params))
         else
           @primary_subject_options = Subject.primary
           render :index

@@ -142,6 +142,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     @london_primary_course = create(
       :course,
       :primary,
+      :open,
       name: 'Primary - London',
       provider: create(:provider, provider_name: 'First university'),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
@@ -151,6 +152,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     @romford_primary_course = create(
       :course,
       :primary,
+      :open,
       name: 'Primary - Romford',
       provider: create(:provider, provider_name: 'Second university'),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
@@ -160,6 +162,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     @watford_primary_course = create(
       :course,
       :primary,
+      :open,
       name: 'Primary - Watford',
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
       subjects: [primary_subject]
@@ -169,6 +172,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       :course,
       :primary,
       :can_not_sponsor_visa,
+      :open,
       name: 'Primary - Edinburgh',
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
       subjects: [primary_subject]
@@ -177,6 +181,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     @london_mathematics_course = create(
       :course,
       :secondary,
+      :open,
       name: 'Mathematics - London',
       can_sponsor_student_visa: true,
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
@@ -187,6 +192,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       :course,
       :secondary,
       :can_not_sponsor_visa,
+      :open,
       name: 'Mathematics - Romford',
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
       subjects: [mathematics_subject]
@@ -196,6 +202,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       :course,
       :secondary,
       :can_not_sponsor_visa,
+      :open,
       name: 'Mathematics - Watford',
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
       subjects: [mathematics_subject]
@@ -205,6 +212,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       :course,
       :secondary,
       :can_not_sponsor_visa,
+      :open,
       name: 'Mathematics - Edinburgh',
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
       subjects: [mathematics_subject]
@@ -391,13 +399,14 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   def and_i_am_on_the_results_page_with_london_location_as_parameter
     and_i_am_on_the_results_page
 
-    expect(search_params).to eq(subject_name: '', subject_code: '', location: 'London, UK')
+    expect(search_params).to eq(applications_open: 'true', subject_name: '', subject_code: '', location: 'London, UK')
   end
 
   def and_i_am_on_the_results_page_with_mathematics_subject_and_london_location_and_sponsor_visa_as_parameter
     and_i_am_on_the_results_page
 
     expect(search_params).to eq(
+      applications_open: 'true',
       subject_name: 'Mathematics',
       subject_code: 'G1',
       location: 'London, UK',
