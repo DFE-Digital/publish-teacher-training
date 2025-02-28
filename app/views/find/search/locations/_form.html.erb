@@ -226,20 +226,20 @@
             )
           ) %>
           </p>
-          <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.send.teaching_pupils"), t("find.get_into_teaching.url_send")) %></p>
+          <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.send.teaching_pupils"), t("find.get_into_teaching.url_send")) %>.</p>
         <% end %>
 
         <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.other_stages.title"), class: "govuk-heading-m")) do %>
           <h4 class="govuk-heading-s"><%= t("find.search.other_stages.nursery.title") %></h4>
 
           <p class="govuk-body"><%= t("find.search.other_stages.nursery.help") %></p>
-          <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.other_stages.nursery.route_to_early_years"), t("find.get_into_teaching.early_years")) %></p>
+          <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.other_stages.nursery.route_to_early_years"), t("find.get_into_teaching.early_years")) %>.</p>
 
           <h4 class="govuk-heading-s"><%= t("find.search.other_stages.further_ed.title") %></h4>
 
           <p class="govuk-body"><%= t("find.search.other_stages.further_ed.teach_young_people") %></p>
           <p class="govuk-body"><%= govuk_link_to(t("find.search.other_stages.further_ed.browse_further_ed"), find_results_path({ level: "further_education", utm_source: "home", utm_medium: "further_education_courses" })) %></p>
-          <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.other_stages.further_ed.teaching_further_ed"), t("find.get_into_teaching.further_ed")) %></p>
+          <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.other_stages.further_ed.teaching_further_ed"), t("find.get_into_teaching.further_ed")) %>.</p>
         <% end %>
       <% end %>
     </div>
