@@ -87,6 +87,14 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     then_i_see_mathematics_courses_in_15_miles_from_london_that_sponsors_visa
   end
 
+  scenario 'when searching using old location parameters' do
+    when_i_search_courses_in_london_using_old_parameters
+    then_i_see_only_courses_within_selected_location_within_default_radius
+    and_the_default_radius_is_selected
+    and_the_location_search_for_coordinates_is_cached
+    and_london_is_displayed_in_text_field
+  end
+
   context 'searching from the homepage' do
     before { when_i_visit_the_homepage }
 
@@ -274,24 +282,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_i_click_to_search_courses_in_london
-    stub_request(
-      :get,
-      'https://maps.googleapis.com/maps/api/geocode/json?address=London,%20UK&components=country:UK&key=replace_me&language=en'
-    )
-      .with(
-        headers: {
-          'Accept' => '*/*',
-          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Connection' => 'keep-alive',
-          'Keep-Alive' => '30',
-          'User-Agent' => 'Faraday v2.12.2'
-        }
-      )
-      .to_return(
-        status: 200,
-        body: file_fixture('google_old_places_api_client/geocode/london.json').read,
-        headers: { 'Content-Type' => 'application/json' }
-      )
+    stub_london_location_search
 
     and_i_click_search
   end
@@ -458,6 +449,18 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     expect(page).to have_css('details.govuk-details[open]')
   end
 
+  def when_i_search_courses_in_london_using_old_parameters
+    stub_london_location_search
+
+    visit find_results_path(lq: 'London, UK')
+  end
+
+  def and_london_is_displayed_in_text_field
+    expect(
+      page.find_field('City, town or postcode').value
+    ).to eq('London, UK')
+  end
+
   private
 
   def results
@@ -466,5 +469,26 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
 
   def search_params
     query_params(URI(page.current_url)).symbolize_keys.except(:utm_source, :utm_medium)
+  end
+
+  def stub_london_location_search
+    stub_request(
+      :get,
+      'https://maps.googleapis.com/maps/api/geocode/json?address=London,%20UK&components=country:UK&key=replace_me&language=en'
+    )
+      .with(
+        headers: {
+          'Accept' => '*/*',
+          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Connection' => 'keep-alive',
+          'Keep-Alive' => '30',
+          'User-Agent' => 'Faraday v2.12.2'
+        }
+      )
+      .to_return(
+        status: 200,
+        body: file_fixture('google_old_places_api_client/geocode/london.json').read,
+        headers: { 'Content-Type' => 'application/json' }
+      )
   end
 end
