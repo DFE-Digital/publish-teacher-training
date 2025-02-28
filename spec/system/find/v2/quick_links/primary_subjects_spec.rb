@@ -34,10 +34,10 @@ RSpec.describe 'Primary subjects quick link', service: :find do
   end
 
   def given_there_are_courses_with_primary_subjects
-    create(:course, :with_full_time_sites, :primary, name: 'Primary', course_code: 'S872', subjects: [find_or_create(:primary_subject, :primary)])
-    create(:course, :with_full_time_sites, :primary, name: 'Primary with english', course_code: 'K592', subjects: [find_or_create(:primary_subject, :primary_with_english)])
-    create(:course, :with_full_time_sites, :primary, name: 'Primary with mathematics', course_code: 'L364', subjects: [find_or_create(:primary_subject, :primary_with_mathematics)])
-    create(:course, :with_full_time_sites, :primary, name: 'Primary with science', course_code: '4RTU', subjects: [find_or_create(:primary_subject, :primary_with_science)])
+    create(:course, :open, :with_full_time_sites, :primary, name: 'Primary', course_code: 'S872', subjects: [find_or_create(:primary_subject, :primary)])
+    create(:course, :open, :with_full_time_sites, :primary, name: 'Primary with english', course_code: 'K592', subjects: [find_or_create(:primary_subject, :primary_with_english)])
+    create(:course, :open, :with_full_time_sites, :primary, name: 'Primary with mathematics', course_code: 'L364', subjects: [find_or_create(:primary_subject, :primary_with_mathematics)])
+    create(:course, :open, :with_full_time_sites, :primary, name: 'Primary with science', course_code: '4RTU', subjects: [find_or_create(:primary_subject, :primary_with_science)])
   end
 
   def when_i_visit_the_find_homepage

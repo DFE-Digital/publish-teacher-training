@@ -35,10 +35,10 @@ RSpec.describe 'Secondary subjects quick link', service: :find do
   end
 
   def given_there_are_courses_with_secondary_subjects
-    create(:course, :with_full_time_sites, :secondary, name: 'Biology', course_code: 'S872', subjects: [find_or_create(:secondary_subject, :biology)])
-    create(:course, :with_full_time_sites, :secondary, name: 'Chemistry', course_code: 'K592', subjects: [find_or_create(:secondary_subject, :chemistry)])
-    create(:course, :with_full_time_sites, :secondary, name: 'Computing', course_code: 'L364', subjects: [find_or_create(:secondary_subject, :computing)])
-    create(:course, :with_full_time_sites, :secondary, name: 'Mathematics', course_code: '4RTU', subjects: [find_or_create(:secondary_subject, :mathematics)])
+    create(:course, :open, :with_full_time_sites, :secondary, name: 'Biology', course_code: 'S872', subjects: [find_or_create(:secondary_subject, :biology)])
+    create(:course, :open, :with_full_time_sites, :secondary, name: 'Chemistry', course_code: 'K592', subjects: [find_or_create(:secondary_subject, :chemistry)])
+    create(:course, :open, :with_full_time_sites, :secondary, name: 'Computing', course_code: 'L364', subjects: [find_or_create(:secondary_subject, :computing)])
+    create(:course, :open, :with_full_time_sites, :secondary, name: 'Mathematics', course_code: '4RTU', subjects: [find_or_create(:secondary_subject, :mathematics)])
   end
 
   def when_subjects_are_grouped_by_subject_groups
