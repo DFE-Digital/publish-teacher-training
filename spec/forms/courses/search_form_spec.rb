@@ -36,6 +36,15 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context 'when study_types is an old parameter' do
+      let(:form) { described_class.new(study_type: %w[full_time part_time]) }
+
+      it 'returns the correct search params with study_types as an array' do
+        expect(form.search_params).to eq({ study_types: %w[full_time part_time] })
+        expect(form.study_types).to eq(%w[full_time part_time])
+      end
+    end
+
     context 'when further education is provided' do
       context 'when new level params' do
         let(:form) { described_class.new(level: 'further_education') }
@@ -53,11 +62,21 @@ RSpec.describe Courses::SearchForm do
         end
       end
 
-      context 'when old qualification params is used as string' do
+      context 'when old qualification params is used as array' do
         let(:form) { described_class.new(qualification: ['pgce pgde']) }
 
         it 'returns level search params' do
           expect(form.search_params).to eq({ level: 'further_education' })
+        end
+      end
+
+      context 'when all old qualification params is used' do
+        let(:form) { described_class.new(qualification: ['qts', 'pgce_with_qts', 'pgce pgde']) }
+
+        it 'returns level search params' do
+          expect(form.search_params).to eq({ qualifications: %w[qts qts_with_pgce_or_pgde], level: 'further_education' })
+          expect(form.qualifications).to eq(%w[qts qts_with_pgce_or_pgde])
+          expect(form.level).to eq('further_education')
         end
       end
     end
@@ -371,6 +390,24 @@ RSpec.describe Courses::SearchForm do
 
       it 'returns false' do
         expect(form.engineers_teach_physics).to be_nil
+      end
+    end
+  end
+
+  describe '#location' do
+    context 'when location is the old parameter' do
+      let(:form) { described_class.new(lq: 'London NW9, UK') }
+
+      it 'returns the correct search params with location details' do
+        expect(form.location).to eq('London NW9, UK')
+      end
+    end
+
+    context 'when location is set' do
+      let(:form) { described_class.new(location: 'London NW9, UK') }
+
+      it 'returns the correct search params with location details' do
+        expect(form.location).to eq('London NW9, UK')
       end
     end
   end

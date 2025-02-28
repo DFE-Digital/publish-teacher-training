@@ -34,9 +34,11 @@ module Courses
     # Old parameters #
     attribute :age_group
     attribute :degree_required
+    attribute :lq
     attribute :'provider.provider_name'
     attribute :qualification
     attribute :sortby
+    attribute :study_type
     attribute :university_degree_status, :boolean
 
     attr_accessor :providers_cache, :subjects_cache
@@ -137,14 +139,30 @@ module Courses
       super
     end
 
+    def location
+      lq.presence || super
+    end
+
+    def study_types
+      study_type.presence || super
+    end
+
+    def qualifications
+      return old_qualification_transformation if qualification.present?
+
+      super
+    end
+
     private
 
     def transform_old_parameters(params)
       params.tap do
         params[:level] = level
         params[:minimum_degree_required] = minimum_degree_required
-        params[:provider_name] = provider_name
         params[:order] = order
+        params[:provider_name] = provider_name
+        params[:study_types] = study_types
+        params[:qualifications] = qualifications
       end
     end
 
@@ -180,6 +198,19 @@ module Courses
       SORT_BY_OLD_VALUES_TO_NEW_VALUES[sortby]
     end
 
+    OLD_QUALIFICATION_VALUES_TO_NEW_VALUES = {
+      'pgce_with_qts' => 'qts_with_pgce_or_pgde'
+    }.freeze
+    private_constant :OLD_QUALIFICATION_VALUES_TO_NEW_VALUES
+
+    def old_qualification_transformation
+      Array(qualification)
+        .reject { |old_qualification_param| old_qualification_param == 'pgce pgde' }
+        .map do |old_qualification_param|
+          OLD_QUALIFICATION_VALUES_TO_NEW_VALUES[old_qualification_param] || old_qualification_param
+        end
+    end
+
     def university_degree_status_transformation
       return if university_degree_status.nil?
 
@@ -187,7 +218,8 @@ module Courses
     end
 
     def old_further_education_parameters?
-      age_group == 'further_education' || qualification == ['pgce pgde']
+      age_group == 'further_education' ||
+        qualification&.include?('pgce pgde')
     end
 
     def old_provider_name_parameter
@@ -195,7 +227,16 @@ module Courses
     end
 
     def old_parameters
-      %i[age_group qualification degree_required university_degree_status provider.provider_name sortby]
+      %i[
+        age_group
+        degree_required
+        lq
+        provider.provider_name
+        qualification
+        sortby
+        study_type
+        university_degree_status
+      ]
     end
   end
 end
