@@ -130,6 +130,10 @@
         <%= render partial: "find/v2/results/courses_guidance/show" %>
         <%= govuk_pagination(pagy: @pagy) %>
       <% else %>
+        <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
+          Filter results
+        </button>
+
         <%= render Courses::NoResultsComponent.new(
           country: @search_params[:country],
           minimum_degree_required: @search_params[:minimum_degree_required],
