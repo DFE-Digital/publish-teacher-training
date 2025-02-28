@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+# Use Procfile.dev unless Procfile.local exists
+if test -e Procfile.local; then
+  procfile=Procfile.local
+else
+  procfile=Procfile.dev
+fi
+
 if ! command -v foreman &> /dev/null
 then
   echo "Installing foreman..."
   gem install foreman
 fi
 
-foreman start -f Procfile.dev "$@"
+foreman start -f $procfile "$@"
