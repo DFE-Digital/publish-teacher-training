@@ -20,6 +20,9 @@
 .env.local
 .env.*.local
 
+# Developer config
+Procfile.local
+
 .byebug_history
 .node-version
 coverage/
