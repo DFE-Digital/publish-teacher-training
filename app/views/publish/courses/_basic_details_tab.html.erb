@@ -74,7 +74,7 @@
 
      summary_list.with_row(html_attributes: { data: { qa: "course__funding" } }) do |row|
        row.with_key { "Funding type" }
-       row.with_value { course.funding }
+       row.with_value { Course.human_attribute_name("funding.#{course.funding}") }
 
        if course.cannot_change_funding_type?
          row.with_action

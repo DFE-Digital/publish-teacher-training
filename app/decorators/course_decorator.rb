@@ -74,14 +74,6 @@ class CourseDecorator < ApplicationDecorator
     object.is_send? ? 'Yes' : 'No'
   end
 
-  def funding
-    {
-      'salary' => 'Salary',
-      'apprenticeship' => 'Teaching apprenticeship - with salary',
-      'fee' => 'Fee - no salary'
-    }[object.funding]
-  end
-
   def subject_name
     if object.subjects.size == 1
       object.course_subjects.first.subject.subject_name

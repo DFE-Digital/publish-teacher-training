@@ -154,13 +154,11 @@ module Courses
     end
 
     def uk_fees(fee_uk = enrichment.fee_uk_eu)
-      t('.fee_value.fee.uk_fees_html', value: content_tag(:b, number_to_currency(fee_uk.to_f)))
+      t('.fee_value.fee.uk_fees_html', value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
     end
 
     def international_fees(fee_international = enrichment.fee_international)
-      return if fee_international.blank?
-
-      t('.fee_value.fee.international_fees_html', value: content_tag(:b, number_to_currency(fee_international.to_f)))
+      t('.fee_value.fee.international_fees_html', value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
     end
 
     def hide_fee_hint?

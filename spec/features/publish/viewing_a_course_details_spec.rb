@@ -143,7 +143,7 @@ feature 'Course show' do
     )
 
     expect(publish_provider_courses_details_page.funding).to have_content(
-      'Teaching apprenticeship - with salary'
+      'Salary (apprenticeship)'
     )
     expect(publish_provider_courses_details_page.accredited_provider).to have_content(
       course.accrediting_provider.provider_name

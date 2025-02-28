@@ -20,6 +20,7 @@ feature 'Viewing a findable course' do
       Timecop.freeze(Find::CycleTimetable.apply_deadline - 1.hour) do
         when_i_visit_the_course_page
         then_i_should_see_the_course_information
+        and_i_should_see_funding_options
       end
     end
 
@@ -232,10 +233,6 @@ feature 'Viewing a findable course' do
     )
 
     expect(find_course_show_page).to have_content(
-      @course.decorate.funding_option
-    )
-
-    expect(find_course_show_page).to have_content(
       '1 year - full time'
     )
 
@@ -319,6 +316,10 @@ feature 'Viewing a findable course' do
     expect(find_course_show_page).not_to have_end_of_cycle_notice
 
     expect(find_course_show_page.feedback_link[:href]).to eq("https://www.apply-for-teacher-training.service.gov.uk/candidate/find-feedback?path=/course/#{provider.provider_code}/#{@course.course_code}&find_controller=find/courses")
+  end
+
+  def and_i_should_see_funding_options
+    expect(find_course_show_page).to have_content('Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.')
   end
 
   def then_i_should_not_see_the_apply_button

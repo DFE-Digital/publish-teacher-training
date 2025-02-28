@@ -81,7 +81,7 @@
 
         <% summary_list.with_row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
           <% row.with_key { "Funding type" } %>
-          <% row.with_value { course.funding } %>
+          <% row.with_value { Course.human_attribute_name("funding.#{course.funding}") if course.funding.present? } %>
           <% unless course.teacher_degree_apprenticeship?
                row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
