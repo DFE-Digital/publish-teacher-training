@@ -99,6 +99,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
       :course,
       :with_full_time_sites,
       :secondary,
+      :open,
       name: 'Biology',
       course_code: '2DTK',
       provider: build(:provider, provider_name: 'London university', provider_code: '19S')
@@ -108,6 +109,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
       :with_full_time_sites,
       :published_teacher_degree_apprenticeship,
       :secondary,
+      :open,
       name: 'Mathematics',
       course_code: 'TDA1',
       provider: build(:provider, provider_name: 'Bristol university', provider_code: '23T'),
@@ -117,6 +119,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
       :course,
       :with_full_time_sites,
       :primary,
+      :open,
       :with_special_education_needs,
       name: 'Primary (SEND)',
       course_code: 'P123',
@@ -126,6 +129,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
       :course,
       :with_full_time_sites,
       :secondary,
+      :open,
       :with_special_education_needs,
       name: 'Art and design (SEND)',
       course_code: 'F314',
@@ -135,6 +139,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
     create(
       :course,
       :with_full_time_sites,
+      :open,
       name: 'Further Education',
       course_code: 'F3D',
       provider: build(:provider, provider_name: 'Birmingham university', provider_code: 'JL1'),
@@ -144,6 +149,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
       :course,
       :with_full_time_sites,
       :primary,
+      :open,
       name: 'Primary',
       course_code: 'Y565',
       provider: build(:provider, provider_name: 'Brighton university', provider_code: '1UR')
@@ -166,7 +172,11 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
       {
         total: 6,
         page: 1,
-        search_params: [{}],
+        search_params: [
+          {
+            applications_open: true
+          }
+        ],
         track_params: [
           {
             utm_source: 'home',
@@ -226,6 +236,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            applications_open: true,
             subjects: [
               '00'
             ]
@@ -270,6 +281,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            applications_open: true,
             subjects: [
               'W1'
             ]
@@ -307,6 +319,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            applications_open: true,
             minimum_degree_required: 'no_degree_required'
           }
         ],
@@ -343,6 +356,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            applications_open: true,
             subjects: Subject.primary_subject_codes,
             send_courses: true
           }
@@ -370,6 +384,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            applications_open: true,
             subjects: Subject.secondary_subject_codes_with_incentives,
             send_courses: true
           }
@@ -402,6 +417,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            applications_open: true,
             level: 'further_education'
           }
         ],
