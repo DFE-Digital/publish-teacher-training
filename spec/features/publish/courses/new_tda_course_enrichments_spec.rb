@@ -376,7 +376,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   def and_i_can_not_change_funding_type
     expect(
       publish_course_confirmation_page.details.funding_type.value.text
-    ).to eq('Teaching apprenticeship - with salary')
+    ).to eq('Salary (apprenticeship)')
 
     expect(
       publish_course_confirmation_page.details.funding_type.text

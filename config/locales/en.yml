@@ -855,6 +855,10 @@ en:
     attributes:
       course:
         name: "Title"
+      course/funding:
+        salary: Salary
+        apprenticeship: Salary (apprenticeship)
+        fee: Fee - no salary
       provider:
         scitt: "SCITT"
         lead_school: "Lead school"

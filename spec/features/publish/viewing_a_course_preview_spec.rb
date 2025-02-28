@@ -211,10 +211,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
 
     expect(publish_course_preview_page).to have_content(
-      decorated_course.funding_option
-    )
-
-    expect(publish_course_preview_page).to have_content(
       'Up to 2 years - full time'
     )
     expect(publish_course_preview_page).to have_content(
@@ -469,7 +465,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_do_not_see_financial_support
-    expect(publish_course_preview_page).not_to have_scholarship_amount
+    expect(publish_course_preview_page).to have_no_content('Bursaries')
+    expect(publish_course_preview_page).to have_no_content('Scholarships')
   end
 
   def then_i_should_be_on_the_school_placements_page

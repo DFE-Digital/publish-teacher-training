@@ -12,7 +12,7 @@ module Find
 
           result = render_inline(described_class.new(course))
           expect(result.text).to include(
-            'Course fee',
+            'Fee or salary',
             'Course length',
             'Age range',
             'Qualification',
@@ -28,9 +28,8 @@ module Find
 
             result = render_inline(described_class.new(course))
             expect(result.text).not_to include('£9,250')
-            expect(result.text).to include('Course fee')
-            expect(result.text).to include('This course pays a salary')
-            expect(result.text).to include('It is a teaching apprenticeship')
+            expect(result.text).to include('Fee or salary')
+            expect(result.text).to include('Salary (apprenticeship)')
           end
         end
 
@@ -142,8 +141,8 @@ module Find
             course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
             result = render_inline(described_class.new(course))
+            expect(result.text).to include('Fee or salary')
             expect(result.text).to include('£9,250 for UK citizens')
-            expect(result.text).to include('Course fee')
           end
         end
 
@@ -186,7 +185,7 @@ module Find
 
             expect(result.text).not_to include('for UK citizens')
             expect(result.text).not_to include('£14,000 for Non-UK citizens')
-            expect(result.text).to include('Course fee')
+            expect(result.text).to include('Fee or salary')
           end
         end
       end
