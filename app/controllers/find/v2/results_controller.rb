@@ -6,7 +6,7 @@ module Find
       after_action :store_result_fullpath_for_backlinks, :send_analytics_event, only: [:index]
 
       def index
-        coordinates = Geolocation::CoordinatesQuery.new(params[:location]).call
+        coordinates = Geolocation::CoordinatesQuery.new(location_params).call
 
         @search_courses_form = ::Courses::SearchForm.new(search_courses_params.merge(coordinates))
         @search_params = @search_courses_form.search_params
@@ -41,6 +41,7 @@ module Find
           :level,
           :location,
           :longitude,
+          :lq,
           :minimum_degree_required,
           :order,
           :provider_code,
@@ -54,11 +55,16 @@ module Find
           :university_degree_status,
           subjects: [],
           start_date: [],
+          study_type: [],
           study_types: [],
           qualifications: [],
           qualification: [],
           funding: []
         )
+      end
+
+      def location_params
+        params[:location] || params[:lq]
       end
 
       def store_result_fullpath_for_backlinks
