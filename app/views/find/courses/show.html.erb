@@ -345,10 +345,10 @@
             <a class="govuk-link" href="#section-financial-support">Fees and financial support</a>
           <% end %>
         </li>
-        <li><a class="govuk-link" href="#section-about">About the course</a></li>
-        <% if @course.published_interview_process.present? %>
-          <li><a class="govuk-link" href="#section-interviews">Interview process</a></li>
-        <% end %>
+        <!--<li><a class="govuk-link" href="#section-about">About the course</a></li>-->
+        <%# if @course.published_interview_process.present? %>
+          <!--<li><a class="govuk-link" href="#section-interviews">Interview process</a></li>-->
+        <%# end %>
         <li><a class="govuk-link" href="#section-train-with-disabilities">Training with disabilities</a></li>
       <li><a class="govuk-link" href="#section-advice">Support and advice</a></li>
       <li><a class="govuk-link" href="#section-apply">Apply</a></li>
@@ -396,6 +396,8 @@
     <% end %>
 
     <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+    <%= render partial: "find/courses/advice", locals: { course: @course } %>
 
     <div class="govuk-notification-banner govuk-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
       <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
