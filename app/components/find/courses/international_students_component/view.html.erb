@@ -22,7 +22,7 @@
     <% unless visa_type == :student_visa && sponsorship_availability != :available %>
       <%= t(
         "find.international_candidates.#{visa_type}.#{sponsorship_availability}.html",
-        provider_url: x_provider_url
+        provider_url: x_provider_url(course)
       ) %>
     <% end %>
 

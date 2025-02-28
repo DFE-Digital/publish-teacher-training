@@ -9,7 +9,6 @@ module Find
     before_action -> { render_not_found if provider.nil? }
 
     before_action :render_feedback_component, only: :show
-    before_action :set_search_params, only: :show
 
     def show
       @course = provider.courses.includes(
@@ -18,64 +17,42 @@ module Find
         site_statuses: [:site]
       ).find_by!(course_code: params[:course_code]&.upcase).decorate
 
+      matched_params = MatchOldParams.call(request.query_parameters)
+                                     .merge(
+                                       keywords: request.query_parameters[:keywords],
+                                       **geocode_params_for(request.query_parameters[:lq])
+                                     )
+
+      @filters_view = ResultFilters::FiltersView.new(params: matched_params)
+
       render_not_found unless @course.is_published?
     end
 
-    def legacy_paramater_keys
-      %i[
-        fulltime
-        hasvacancies
-        lat
-        lng
-        parttime
-        prev_l
-        prev_lat
-        prev_lng
-        prev_loc
-        prev_lq
-        prev_query
-        prev_rad
-        qualifications
-        query
-        rad
-        senCourses
-      ]
+    private
+
+    def geocode_params_for(query)
+      return {} if query.blank?
+
+      results = Geocoder.search(query, components: 'country:UK').first
+      return {} unless results
+
+      {
+        l: '1',
+        latitude: results.latitude,
+        longitude: results.longitude,
+        loc: results.address,
+        lq: query,
+        c: country(results),
+        sortby: ResultsView::DISTANCE,
+        radius: request.query_parameters.fetch(:radius, ResultsView::MILES)
+      }
     end
 
-    def set_search_params
-      return if params[:search_params].blank?
+    def country(results)
+      flattened_results = results.address_components.map(&:values).flatten
+      countries = [*DEVOLVED_NATIONS, 'England'].flatten
 
-      session[:search_params] = ActionController::Parameters.new(
-        Rack::Utils.parse_nested_query(params[:search_params])
-      ).permit(
-        *legacy_paramater_keys,
-        :visa_status,
-        :age_group,
-        :c,
-        :can_sponsor_visa,
-        :degree_required,
-        :engineers_teach_physics,
-        :funding,
-        :has_vacancies,
-        :university_degree_status,
-        :applications_open,
-        :l,
-        :latitude,
-        :loc,
-        :long,
-        :longitude,
-        :lq,
-        :radius,
-        :send_courses,
-        :sortby,
-        'provider.provider_name',
-        c: [],
-        qualification: [],
-        qualifications: [], # Legacy
-        study_type: [],
-        subjects: [],
-        subject_codes: [] # Legacy
-      )
+      countries.each { |country| return country if flattened_results.include?(country) }
     end
   end
 end

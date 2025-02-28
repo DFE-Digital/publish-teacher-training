@@ -1,27 +1,29 @@
 <%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
 
-<% if FeatureFlag.active?(:prefiltering_find_redesign) %>
-  <% if permitted_referrer? && course_back_link %>
-    <%= content_for(:before_content) do %>
-      <%= govuk_back_link(
-        text: t("find.courses.show.back_to_search"),
-        href: course_back_link
-      ) %>
-    <% end %>
-  <% end %>
-<% else %>
-  <% if permitted_referrer? %>
-    <%= content_for(:before_content) do %>
-      <%= govuk_back_link(
-        text: t("find.courses.show.back_to_search"),
-        href: find_results_path(session[:search_params]),
-        html_attributes: {
-          data: { qa: "page-back" }
-        }
-      ) %>
-    <% end %>
-  <% end %>
-<% end %>
+      <% case @course.course_code %>
+        <% when "E026" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "R480" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "H971" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "36P4" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "Y404" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% else %>
+          <% if permitted_referrer? %>
+            <%= content_for(:before_content) do %>
+              <%= govuk_back_link(
+                text: t("find.courses.show.back_to_search"),
+                href: find_results_path(session[:search_params]),
+                html_attributes: {
+                  data: { qa: "page-back" }
+                }
+              ) %>
+            <% end %>
+          <% end %>
+        <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -31,6 +33,29 @@
       </span>
       <%= @course.name_and_code %>
     </h1>
+
+    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+
+        <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+        <p class="govuk-body govuk-!-font-size-16">
+          <% case @course.course_code %>
+            <% when "E026" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
+            <% when "R480" %>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
+            <% when "H971" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
+            <% when "36P4" %>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
+            <% when "Y404" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
+          <% end %>
+        </p>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -44,30 +69,52 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
-    <%= render Find::Courses::ContentsComponent::View.new(@course) %>
+     <h3 class="govuk-heading-m">
+     Contents
+    </h3>
+    <ul class="govuk-list app-list--dash course-contents">
+      <li><a class="govuk-link" href="#training-locations">Where you will train</a></li>
+        <%# if @course.salaried? %>
+          <!--<li><a class="govuk-link" href="#section-salary">Salary</a></li>-->
+        <%# end %>
+        <li>
+          <% if @course.salaried? %>
+            <a class="govuk-link" href="#section-financial-support">Salary and financial support</a>
+          <% else %>
+            <a class="govuk-link" href="#section-financial-support">Fees and financial support</a>
+          <% end %>
+        </li>
+        <!--<li><a class="govuk-link" href="#section-about">About the course</a></li>-->
+        <%# if @course.published_interview_process.present? %>
+          <!--<li><a class="govuk-link" href="#section-interviews">Interview process</a></li>-->
+        <%# end %>
+        <li><a class="govuk-link" href="#section-train-with-disabilities">Training with disabilities</a></li>
+      <li><a class="govuk-link" href="#section-advice">Support and advice</a></li>
+      <li><a class="govuk-link" href="#section-apply">Apply</a></li>
+    </ul>
 
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params), filters_view: @filters_view) %>
 
-    <% if @course.salaried? %>
-      <%= render partial: "find/courses/salary", locals: { course: @course } %>
-    <% end %>
+    <%# if @course.salaried? %>
+      <%#= render partial: "find/courses/salary", locals: { course: @course } %>
+    <%# end %>
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <% if @course.published_about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <% end %>
+    <%# if @course.published_about_course.present? %>
+      <%#= render partial: "find/courses/about_course", locals: { course: @course } %>
+    <%# end %>
 
-    <% if @course.published_interview_process.present? %>
-      <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
-    <% end %>
+     <%# if @course.published_interview_process.present? %>
+      <%#= render partial: "find/courses/interview_process", locals: { course: @course } %>
+     <%# end %>
 
     <% if @provider.train_with_disability.present? %>
       <h2 class="govuk-heading-m" id="section-train-with-disabilities">
         <%= t(".training_with_disabilities") %>
       </h2>
 
-      <p class="govuk-body govuk-!-margin-bottom-8">
+      <p class="govuk-body">
         <%= govuk_link_to(
           t(".training_with_disabilities_link", provider_name: @course.provider_name),
           find_training_with_disabilities_path(
@@ -78,16 +125,35 @@
       </p>
     <% end %>
 
-    <% if @course.teacher_degree_apprenticeship? %>
-      <%= render partial: "find/courses/tda_advice" %>
-    <% else %>
-      <%= render partial: "find/courses/advice", locals: { course: @course } %>
-    <% end %>
 
     <% if @course.application_status_closed? %>
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <%= render partial: "find/courses/advice", locals: { course: @course } %>
+
+
+    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+
+        <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+        <p class="govuk-body govuk-!-font-size-16">
+          <% case @course.course_code %>
+            <% when "E026" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
+            <% when "R480" %>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
+            <% when "H971" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
+            <% when "36P4" %>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
+            <% when "Y404" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
+          <% end %>
+        </p>
+      </div>
+    </div>
+
   </div>
 </div>
