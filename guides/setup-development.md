@@ -69,8 +69,19 @@ The commands from the previous section will seed the database with some test dat
 
 To seed the database with a sanitised production dump:
 
-### Download the sanitised production dump from the Azure Storage Account.
 - Request a PIM approval for the production environment.
+
+
+### Use the script to reset your local development db directly
+
+Make sure there are no connections to your database
+
+```shell
+az login # select the production subscription
+bin/restore-backup
+```
+
+### Download the sanitised production dump from the Azure Storage Account.
 - In the Azure portal, go to 'Storage Accounts' -> 's189p01pttdbbkpsanpdsa' -> 'Containers' -> 'database-backup'
 - Download the latest sanitised backup.
 - Unzip the file and you should see a file called `publish_sanitised_YYYY-MM-DD.sql`.
