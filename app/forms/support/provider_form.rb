@@ -37,6 +37,7 @@ module Support
 
     validates :provider_type, presence: true
     validate :provider_type_school_is_an_invalid_accredited_provider
+    validate :provider_cannot_be_demoted_with_open_courses
 
     validates :urn, presence: true, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :invalid }, if: -> { !accredited? && lead_school? }
 
@@ -69,6 +70,10 @@ module Support
 
     def provider_code_taken
       errors.add(:provider_code, :taken) if providers.exists?(provider_code:)
+    end
+
+    def provider_cannot_be_demoted_with_open_courses
+      errors.add(:provider_type, :provider_cannot_be_demoted_with_open_courses) if !accredited? && provider.accredited? && provider.courses.published.exists?
     end
 
     def provider_type_school_is_an_invalid_accredited_provider
