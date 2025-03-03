@@ -440,6 +440,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            order: 'course_name_ascending',
             subjects: ['00']
           }
         ],
@@ -474,6 +475,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            order: 'course_name_ascending',
             subjects: ['00']
           }
         ],
@@ -522,6 +524,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
         page: 1,
         search_params: [
           {
+            order: 'course_name_ascending',
             subject_code: 'W1',
             subject_name: 'Art and design',
             send_courses: true
