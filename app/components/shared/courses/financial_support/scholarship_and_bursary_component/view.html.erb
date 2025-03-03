@@ -1,39 +1,20 @@
-<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--orange" }) do %>
-    <div data-qa="course__scholarship_and_bursary_details">
-      <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
-        <h4 class="govuk-heading-s"><%= t("find.financial_support.bursary_and_scholarships") %></h4>
-
-        <p class="govuk-body" data-qa="course__scholarship_and_bursary_amount"><%= t("find.financial_support.bursary_and_scholarship_amount", scholarship_amount: number_to_currency(scholarship_amount), bursary_amount: number_to_currency(bursary_amount)) %> </p>
-        <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary_or_scholarship"), find_track_click_path(utm_content: "uk_citizens_bursary_and_scholarship_bursaries_and_scholarships", url: t("find.get_into_teaching.url_bursaries_and_scholarships_support"))) %></p>
-      <% end %>
-
-      <h4 class="govuk-heading-s"><%= t("find.financial_support.student_loans") %></h4>
-
-      <p class="govuk-body"><%= t("find.financial_support.eligible_for_student_loan") %></p>
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.find_out_more_student_loans"), find_track_click_path(utm_content: "uk_citizens_bursary_and_scholarship_maintenance_loans", url: t("find.get_into_teaching.url_maintenance_loans"))) %></p>
-    </div>
-  <% end %>
-<% end %>
-
-<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.non_uk_citizens.title"), class: "govuk-heading-m")) do %>
-    <div data-qa="course__scholarship_and_bursary_details_non_uk">
-
-      <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
-        <% if bursary_and_scholarship_eligible_subjects %>
-          <h4 class="govuk-heading-s"><%= t("find.financial_support.bursary_and_scholarships") %></h4>
-
-          <p class="govuk-body" data-qa="course__scholarship_and_bursary_amount"><%= t("find.financial_support.bursary_and_scholarship_amount", scholarship_amount: number_to_currency(scholarship_amount), bursary_amount: number_to_currency(bursary_amount)) %> </p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary_or_scholarship"), find_track_click_path(utm_content: "non_uk_citizens_bursary_and_scholarship_bursaries_and_scholarships", url: t("find.get_into_teaching.url_bursaries_and_scholarships_support"))) %></p>
-        <% else %>
-          <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_bursary_and_scholarship_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
-        <% end %>
-      <% else %>
-        <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
-        <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_bursary_and_scholarship_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
-      <% end %>
-    </div>
-  <% end %>
-<% end %>
+<div data-qa="course__scholarship_and_bursary_details">
+  <p class="govuk-heading-s">
+    Bursaries and scholarships
+  </p>
+  <p class="govuk-body">
+    Bursaries of <%= number_to_currency(bursary_amount) %> and scholarships of <%= number_to_currency(scholarship_amount) %> are available to eligible trainees.
+  </p>
+  <p class="govuk-body">
+    <%= govuk_link_to("Find out whether you are eligible for a bursary or scholarship", "https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries") %>.
+  </p>
+  <p class="govuk-heading-s">
+    Student loans
+  </p>
+  <p class="govuk-body">
+    You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.
+  </p>
+  <p class="govuk-body">
+    <%= govuk_link_to("Find out more about student loans for teacher training", "https://getintoteaching.education.gov.uk/funding-and-support/tuition-fee-and-maintenance-loans") %>.
+  </p>
+</div>

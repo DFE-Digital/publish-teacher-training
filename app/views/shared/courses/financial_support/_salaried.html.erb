@@ -1,24 +1,19 @@
-<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.salaried_courses.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--orange" }) do %>
-
-    <div data-qa="course__salary_details">
-      <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.paid_salary") %></p>
-
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.pay_scale"), find_track_click_path(utm_content: "uk_citizens_salaried_national_pay_scales", url: t("find.links.national_pay_scales"))) %></p>
-
-      <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.competitive") %></p>
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.find_out_more"), find_track_click_path(utm_content: "uk_citizens_salaried_teacher_salaries", url: t("find.get_into_teaching.url_teacher_salaries"))) %></p>
-    </div>
-  <% end %>
-<% end %>
-
-<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.non_uk_citizens.salaried_courses.title"), class: "govuk-heading-m")) do %>
-    <div data-qa="course__salary_details_non_uk">
-      <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.competitive") %></p>
-      <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.entry_requirements") %></p>
-
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_salaried_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
-    </div>
-  <% end %>
-<% end %>
+<div data-qa="course__salary_details">
+  <p class="govuk-body">
+    You will be paid a salary during this course. Financial support such as bursaries, scholarships and student loans is not available.
+  </p>
+  <p class="govuk-body">
+  Most salaried courses do not charge fees, but some do. Contact the training provider for more information.
+  </p>
+  <p class="govuk-body">
+    <%= govuk_link_to "Find out more about national pay scales for unqualified teachers.", t("find.links.national_pay_scales") %>
+  </p>
+  <p class="govuk-body">
+    Places on salaried courses are limited and very competitive. Check your eligibility with the training provider and apply as soon as possible.
+  </p>
+  <p class="govuk-body">
+    <a href="https://getintoteaching.education.gov.uk/funding-and-support/salaried-teacher-training" class="govuk-link govuk govuk-link--no-visited-state">
+      Find out more about salaried courses.
+    </a>
+  </p>
+</div>
