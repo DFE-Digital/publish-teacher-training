@@ -115,6 +115,14 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       and_i_am_on_the_results_page_with_london_location_as_parameter
     end
 
+    scenario 'when I search for a specific provider from the homepage' do
+      when_i_search_for_a_provider
+      and_i_choose_the_first_provider_suggestion
+      and_i_click_search
+      then_i_see_only_courses_from_that_provider
+      and_the_provider_field_is_visible
+    end
+
     scenario 'when I search all filters from the homepage' do
       when_i_search_for_math
       and_i_choose_the_first_subject_suggestion
@@ -399,7 +407,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   def and_i_am_on_the_results_page_with_london_location_as_parameter
     and_i_am_on_the_results_page
 
-    expect(search_params).to eq(applications_open: 'true', subject_name: '', subject_code: '', location: 'London, UK')
+    expect(search_params).to eq(applications_open: 'true', subject_name: '', subject_code: '', location: 'London, UK', provider_name: '', provider_code: '')
   end
 
   def and_i_am_on_the_results_page_with_mathematics_subject_and_london_location_and_sponsor_visa_as_parameter
@@ -410,7 +418,9 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       subject_name: 'Mathematics',
       subject_code: 'G1',
       location: 'London, UK',
-      can_sponsor_visa: 'true'
+      can_sponsor_visa: 'true',
+      provider_name: '',
+      provider_code: ''
     )
   end
 
