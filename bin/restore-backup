@@ -1,0 +1,43 @@
+#!/bin/env bash
+
+# Download today's sanitized backup of the publish database to the Downloads directory
+# Drop and recreate the development and test databases
+# Restore the development database with today's sanitized backup.
+
+set -e
+
+log() {
+  echo "$(date +'%Y-%m-%d %H:%M:%S') - $1"
+}
+
+log "Starting backup download..."
+
+az storage blob download \
+  --account-name s189p01pttdbbkpsanpdsa \
+  --container-name database-backup \
+  --name "publish_sanitised_$(date +%Y-%m-%d).sql.gz" \
+  --file  ~/Downloads/sanitised_backup.sql.gz \
+  --connection-string "$(az storage account show-connection-string -g s189p01-ptt-pd-rg -n s189p01pttdbbkpsanpdsa --query 'connectionString')"
+
+RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:drop db:create 
+
+[[ -e ~/Downloads/sanitised_backup.sql.gz ]] && gunzip -fd ~/Downloads/sanitised_backup.sql.gz  
+
+log "Checking if backup file exists..."
+if [[ -e ~/Downloads/sanitised_backup.sql.gz ]]; then
+  log "Decompressing backup file..."
+  gunzip -fd ~/Downloads/sanitised_backup.sql.gz
+  log "Backup file decompressed."
+else
+  log "Backup file not found!"
+  exit 1
+fi
+
+log "Restoring development database..."
+if [[ -x pv ]];then
+  pv ~/Downloads/sanitised_backup.sql | psql manage_courses_backend_development > /dev/null 2>&1
+else
+  psql manage_courses_backend_development < ~/Downloads/sanitised_backup.sql
+fi
+
+log "Development database restored."
