@@ -19,9 +19,9 @@ module Geolocation
     def cached_suggestions
       @cache.read(cache_key).tap do |cached_data|
         if cached_data
-          @logger.info("CACHE HIT suggestion for: #{@query}")
+          @logger.info("CACHE HIT '#{cache_key}' suggestion for: #{@query}")
         else
-          @logger.info("CACHE MISS suggestion for: #{@query}")
+          @logger.info("CACHE MISS '#{cache_key}' suggestion for: #{@query}")
         end
       end
     end

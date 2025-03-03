@@ -28,9 +28,9 @@ module Geolocation
     def cached_coordinates
       @cache.read(cache_key).tap do |cached_data|
         if cached_data
-          logger.info("Cache HIT for: #{query}")
+          logger.info("Cache HIT '#{cache_key}' for: #{query}")
         else
-          logger.info("Cache MISS for: #{query}")
+          logger.info("Cache MISS '#{cache_key}' for: #{query}")
         end
       end
     end

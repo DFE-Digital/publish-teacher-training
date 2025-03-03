@@ -43,7 +43,7 @@ RSpec.describe Geolocation::Suggestions do
       end
 
       it 'logs a cache hit' do
-        expect(Rails.logger).to receive(:info).with("CACHE HIT suggestion for: #{query}")
+        expect(Rails.logger).to receive(:info).with("CACHE HIT 'geolocation:suggestions:london' suggestion for: #{query}")
         suggestions
       end
     end
@@ -63,7 +63,7 @@ RSpec.describe Geolocation::Suggestions do
       end
 
       it 'logs a cache miss' do
-        expect(Rails.logger).to receive(:info).with("CACHE MISS suggestion for: #{query}")
+        expect(Rails.logger).to receive(:info).with("CACHE MISS 'geolocation:suggestions:london' suggestion for: #{query}")
         suggestions
       end
     end

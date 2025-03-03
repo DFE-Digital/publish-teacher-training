@@ -53,7 +53,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
       end
 
       it 'logs a cache hit' do
-        expect(Rails.logger).to receive(:info).with("Cache HIT for: #{query}")
+        expect(Rails.logger).to receive(:info).with("Cache HIT 'geolocation:query:london' for: #{query}")
         coordinates
       end
     end
@@ -76,7 +76,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
       end
 
       it 'logs a cache miss' do
-        expect(Rails.logger).to receive(:info).with("Cache MISS for: #{query}")
+        expect(Rails.logger).to receive(:info).with("Cache MISS 'geolocation:query:london' for: #{query}")
         coordinates
       end
     end
@@ -124,7 +124,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
       end
 
       it 'logs the cache miss when coordinates are fetched' do
-        expect(Rails.logger).to receive(:info).with("Cache MISS for: #{query}")
+        expect(Rails.logger).to receive(:info).with("Cache MISS 'geolocation:query:london' for: #{query}")
         coordinates
       end
     end

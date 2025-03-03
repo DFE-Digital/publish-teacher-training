@@ -236,6 +236,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       [
         {
           name: 'London, UK',
+          formatted_name: 'London',
           place_id: 'ChIJdd4hrwug2EcRmSrV3Vo6llI',
           types: %w[locality political]
         }
@@ -244,7 +245,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read('geolocation:query:london-uk')).to eq(
+    expect(Rails.cache.read('geolocation:query:london')).to eq(
       {
         formatted_address: 'London, UK',
         latitude: 51.5072178,
@@ -274,7 +275,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
 
   def then_i_see_location_suggestions
     expect(page).to have_css('#location-field__listbox', visible: :visible)
-    expect(page.find_by_id('location-field__listbox')).to have_content('London, UK')
+    expect(page.find_by_id('location-field__listbox')).to have_content('London')
   end
 
   def when_i_select_the_first_suggestion
@@ -391,7 +392,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   def and_i_am_on_the_results_page_with_london_location_as_parameter
     and_i_am_on_the_results_page
 
-    expect(search_params).to eq(subject_name: '', subject_code: '', location: 'London, UK')
+    expect(search_params).to eq(subject_name: '', subject_code: '', location: 'London')
   end
 
   def and_i_am_on_the_results_page_with_mathematics_subject_and_london_location_and_sponsor_visa_as_parameter
@@ -400,7 +401,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     expect(search_params).to eq(
       subject_name: 'Mathematics',
       subject_code: 'G1',
-      location: 'London, UK',
+      location: 'London',
       can_sponsor_visa: 'true'
     )
   end
@@ -452,13 +453,13 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   def when_i_search_courses_in_london_using_old_parameters
     stub_london_location_search
 
-    visit find_results_path(lq: 'London, UK')
+    visit find_results_path(lq: 'London')
   end
 
   def and_london_is_displayed_in_text_field
     expect(
       page.find_field('City, town or postcode').value
-    ).to eq('London, UK')
+    ).to eq('London')
   end
 
   private
@@ -474,7 +475,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   def stub_london_location_search
     stub_request(
       :get,
-      'https://maps.googleapis.com/maps/api/geocode/json?address=London,%20UK&components=country:UK&key=replace_me&language=en'
+      'https://maps.googleapis.com/maps/api/geocode/json?address=London&components=country:UK&key=replace_me&language=en'
     )
       .with(
         headers: {

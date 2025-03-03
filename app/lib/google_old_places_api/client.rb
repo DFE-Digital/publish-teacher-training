@@ -30,6 +30,7 @@ module GoogleOldPlacesAPI
       Array(response['predictions']).map do |prediction|
         {
           name: prediction['description'],
+          formatted_name: format_prediction(prediction['description']),
           place_id: prediction['place_id'],
           types: prediction['types']
         }
@@ -74,6 +75,12 @@ module GoogleOldPlacesAPI
       address_components = Array(result['address_components']).pluck('long_name')
 
       (address_components & (DEVOLVED_NATIONS + ['England'])).first
+    end
+
+    def format_prediction(description)
+      uk_suffix = /, UK$/
+
+      description.to_s.sub(uk_suffix, '')
     end
   end
 end
