@@ -13,7 +13,7 @@ task create_and_populate_subject_groups: :environment do
       'Art and design', 'Business studies', 'Citizenship', 'Classics', 'Communication and media studies', 'Dance', 'Drama', 'Economics', 'Geography', 'History', 'Music', 'Philosophy', 'Psychology', 'Religious education', 'Social sciences'
     ],
     'Health and physical education' => [
-      'Health and social care', 'Physical education'
+      'Health and social care', 'Physical education', 'Physical education with an EBacc subject'
     ]
   }
 
