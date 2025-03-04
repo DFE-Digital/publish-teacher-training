@@ -958,6 +958,18 @@ RSpec.describe Courses::Query do
         end
       end
 
+      context 'when radius is invalid default radius to 10 miles' do
+        it_behaves_like 'location search results', radius: '10ºdegree' do
+          let(:expected) do
+            [
+              course_london_result,
+              course_canary_wharf_result,
+              course_lewisham_result
+            ]
+          end
+        end
+      end
+
       context 'when radius is blank default radius to 10 miles' do
         it_behaves_like 'location search results', radius: '' do
           let(:expected) do
@@ -1058,9 +1070,7 @@ RSpec.describe Courses::Query do
         malicious_radius = "10; DELETE FROM #{Course.table_name} WHERE 1=1; --"
         params = { latitude: valid_latitude, longitude: valid_longitude, radius: malicious_radius }
 
-        expect { described_class.call(params: params) }.to raise_error(
-          ArgumentError, "invalid value for Float(): \"#{malicious_radius}\""
-        )
+        expect(described_class.new(params:).radius_in_miles).to be(10)
       end
     end
 

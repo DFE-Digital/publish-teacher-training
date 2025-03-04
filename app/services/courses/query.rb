@@ -226,7 +226,6 @@ module Courses
     def location_scope
       return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
 
-      radius_in_miles = Float(params[:radius].presence || DEFAULT_RADIUS_IN_MILES)
       radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
       longitude = Float(params[:longitude])
@@ -340,6 +339,12 @@ module Courses
             courses_table[:course_code] => :asc
           }
         )
+    end
+
+    def radius_in_miles
+      Float(params[:radius].presence || DEFAULT_RADIUS_IN_MILES)
+    rescue StandardError
+      DEFAULT_RADIUS_IN_MILES
     end
 
     private
