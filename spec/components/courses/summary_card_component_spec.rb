@@ -243,8 +243,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£9,250 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£17,900 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£9,250 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£17,900 fee for Non-UK citizens'
         it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, 'Bursaries of £10,000 are available'
       end
 
@@ -263,8 +263,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£6,000 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£11,000 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£6,000 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£11,000 fee for Non-UK citizens'
         it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, 'Scholarships of £10,000 are available'
       end
 
@@ -283,8 +283,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£7,000 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£7,000 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£7,000 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£7,000 fee for Non-UK citizens'
         it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, 'Scholarships of £10,000 or bursaries of £9,000 are available'
       end
 
@@ -303,8 +303,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£8,000 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£8,000 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£8,000 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£8,000 fee for Non-UK citizens'
 
         it 'does not show bursaries or scholarship' do
           expect(summary_card_content).not_to include('Bursaries')
@@ -327,7 +327,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£10,000 for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£10,000 fee for UK citizens'
         it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, 'Scholarships of £5,000 or bursaries of £6,000 are available'
       end
 
@@ -346,8 +346,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£6,250 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£6,900 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£6,250 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£6,900 fee for Non-UK citizens'
 
         it 'does not show bursaries or scholarship' do
           expect(summary_card_content).not_to include('Bursaries')
@@ -415,8 +415,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, {}, '£6,250 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, {}, '£6,900 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£6,250 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£6,900 fee for Non-UK citizens'
         it_behaves_like 'fee or salary row', :fee, {}, 'Bursaries of £9,000 are available'
       end
 
@@ -435,8 +435,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, {}, '£6,250 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, {}, '£6,900 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£6,250 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£6,900 fee for Non-UK citizens'
         it_behaves_like 'fee or salary row', :fee, {}, 'Scholarships of £9,000 are available'
       end
 
@@ -455,8 +455,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, {}, '£7,250 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, {}, '£6,900 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£7,250 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£6,900 fee for Non-UK citizens'
         it_behaves_like 'fee or salary row', :fee, {}, 'Scholarships of £9,000 or bursaries of £7,000 are available'
       end
 
@@ -475,8 +475,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, {}, '£7,500 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, {}, '£6,900 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£7,500 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£6,900 fee for Non-UK citizens'
 
         it 'does not show bursaries or scholarship' do
           expect(summary_card_content).not_to include('Bursaries')
@@ -499,8 +499,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it_behaves_like 'fee or salary row', :fee, {}, '£8,500 for UK citizens'
-        it_behaves_like 'fee or salary row', :fee, {}, '£8,500 for Non-UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£8,500 fee for UK citizens'
+        it_behaves_like 'fee or salary row', :fee, {}, '£8,500 fee for Non-UK citizens'
 
         it 'does not show bursaries or scholarship' do
           expect(summary_card_content).not_to include('Bursaries')

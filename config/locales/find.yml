@@ -28,8 +28,8 @@ en:
         salary: Salary
         apprenticeship: Salary (apprenticeship)
         fee:
-          uk_fees_html: "%{value} for UK citizens"
-          international_fees_html: "%{value} for Non-UK citizens"
+          uk_fees_html: "%{value} <b>fee</b> for UK citizens"
+          international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"
           hint:
             bursaries_and_scholarship_html: "Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available"
             bursaries_only_html: "Bursaries of %{bursary_amount} are available"
@@ -321,8 +321,8 @@ en:
             salary: Salary
             apprenticeship: Salary (apprenticeship)
             fee:
-              uk_fees_html: "%{value} for UK citizens"
-              international_fees_html: "%{value} for Non-UK citizens"
+              uk_fees_html: "%{value} <b>fee</b> for UK citizens"
+              international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"
               hint:
                 bursaries_and_scholarship_html: "Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available"
                 bursaries_only_html: "Bursaries of %{bursary_amount} are available"
