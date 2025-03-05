@@ -40,6 +40,9 @@ class BackfillProviderPartnerships < ActiveRecord::Migration[8.0]
 
       accredited_codes.each do |accredited_code|
         accredited_provider = Provider.in_current_cycle.find_by(provider_code: accredited_code)
+
+        next if accredited_provider.nil?
+
         train_with_us = accredited_provider.train_with_us || ''
 
         # If train_with_us is more than 100 words, it will be invalid.
