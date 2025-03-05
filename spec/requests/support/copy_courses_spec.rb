@@ -27,7 +27,7 @@ RSpec.describe 'Support::CopyCourses' do
 
       expect(response).to redirect_to(support_recruitment_cycle_provider_courses_path(year, target_provider.id))
       follow_redirect!
-      expect(response.parsed_body.css('.govuk-notification-banner--success').text).to match(format('Courses copied: %s', source_provider.courses.map(&:course_code).to_sentence))
+      expect(response.parsed_body.css('.govuk-notification-banner--success').text).to match(format('Courses copied: %s', source_provider.courses.map(&:course_code).sort.to_sentence))
     end
 
     context 'with schools' do

@@ -27,7 +27,7 @@ module Support
 
           @courses_copied = copier.courses_copied
           @courses_not_copied = copier.courses_not_copied
-          flash[:success] = "Courses copied: #{@courses_copied.map(&:course_code).to_sentence}"
+          flash[:success] = "Courses copied: #{@courses_copied.map(&:course_code).sort.to_sentence}"
           flash[:warning] = "Courses not copied: #{@courses_not_copied.map(&:course_code).to_sentence}"
 
           redirect_to support_recruitment_cycle_provider_courses_path(recruitment_cycle.year, @copy_courses_form.target_provider.id)
