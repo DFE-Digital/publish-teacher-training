@@ -218,7 +218,7 @@ GEM
     cronex (0.15.0)
       tzinfo
       unicode (>= 0.4.4.5)
-    cssbundling-rails (1.4.2)
+    cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     csv (3.3.2)
     data_migrate (11.2.0)
@@ -736,7 +736,7 @@ GEM
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
     uniform_notifier (1.16.0)
-    uri (1.0.2)
+    uri (1.0.3)
     useragent (0.16.11)
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
