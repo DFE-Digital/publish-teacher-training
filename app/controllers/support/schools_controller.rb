@@ -23,7 +23,7 @@ module Support
     def create
       @school_form = SchoolForm.new(provider, @site, params: site_params(:support_school_form))
       if @school_form.stash
-        redirect_to support_recruitment_cycle_provider_check_school_path
+        redirect_to support_recruitment_cycle_provider_schools_check_path
       else
         render(:new)
       end

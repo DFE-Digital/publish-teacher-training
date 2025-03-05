@@ -25,7 +25,9 @@ namespace :support do
         resource :revert_withdrawal, only: %i[edit update], path: 'revert-withdrawal', controller: 'revert_withdrawal'
       end
 
-      resource :check_school, only: %i[show update], controller: 'providers/schools_check', path: 'schools/check'
+      namespace :schools, module: 'providers/schools' do
+        resource :check, only: %i[show update]
+      end
       resources :schools do
         member do
           get :delete
