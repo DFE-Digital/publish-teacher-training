@@ -44,6 +44,7 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
         allow(request).to receive(:referer).and_return('/')
 
         expect(subject.event_data).to eq(
+          namespace: 'find',
           total: 1360,
           page: 2,
           visible_courses: [
@@ -69,6 +70,7 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
 
       it 'returns a hash with all the results information and no referer' do
         expect(subject.event_data).to eq(
+          namespace: 'find',
           total: 1360,
           page: 2,
           visible_courses: [
@@ -94,6 +96,7 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
 
       it 'returns a hash with all the results information and course referer' do
         expect(subject.event_data).to eq(
+          namespace: 'find',
           total: 1360,
           page: 2,
           visible_courses: [

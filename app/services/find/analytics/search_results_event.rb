@@ -12,6 +12,7 @@ module Find
 
       def event_data
         {
+          namespace: 'find',
           total:,
           page:,
           search_params:,

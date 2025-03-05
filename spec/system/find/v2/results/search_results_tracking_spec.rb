@@ -170,6 +170,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_one_search_result_is_tracked_from_homepage_form
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 6,
         page: 1,
         search_params: [
@@ -232,6 +233,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_one_search_result_is_tracked_from_primary_courses_form
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 2,
         page: 1,
         search_params: [
@@ -277,6 +279,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_one_search_result_is_tracked_from_secondary_courses_form
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 1,
         page: 1,
         search_params: [
@@ -315,6 +318,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_one_search_result_is_tracked_from_teacher_degree_apprenticeship_link
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 1,
         page: 1,
         search_params: [
@@ -352,6 +356,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_one_search_result_is_tracked_from_send_primary_link
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 1,
         page: 1,
         search_params: [
@@ -380,6 +385,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_one_search_result_is_tracked_from_send_secondary_link
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 1,
         page: 1,
         search_params: [
@@ -413,6 +419,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_one_search_result_is_tracked_from_further_education_link
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 1,
         page: 1,
         search_params: [
@@ -452,6 +459,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_search_result_is_tracked_with_applied_filters_with_top_applied_filter
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 2,
         page: 1,
         search_params: [
@@ -487,6 +495,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_search_result_is_tracked_with_applied_filters_with_bottom_applied_filter
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 2,
         page: 1,
         search_params: [
@@ -536,6 +545,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_search_result_is_tracked_with_new_search
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 1,
         page: 1,
         search_params: [
@@ -573,6 +583,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_search_result_order_is_tracked
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 6,
         page: 1,
         search_params: [
@@ -623,6 +634,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   def then_search_result_is_tracked_with_new_search_using_results_as_utm_medium
     expect(search_results_enqueued_data).to eq(
       {
+        namespace: 'find',
         total: 6,
         page: 1,
         search_params: [{}],
