@@ -1,10 +1,8 @@
 <% content_for :page_title, title_with_error_prefix("#{course.name_and_code} - Courses", @errors.present?) %>
 
-
 <h1 class="govuk-heading-l <%= "govuk-!-margin-bottom-2" if (course.is_published? && course.is_running?) || course.is_withdrawn? %>">
   <%= course.name_and_code %> <span data-qa="course__content-status"><%= course.status_tag %></span>
 </h1>
-
 
 <div class="govuk-caption-l"><%= Provider.human_attribute_name(@provider.provider_type) %></div>
 <h1 class="govuk-heading-l">
