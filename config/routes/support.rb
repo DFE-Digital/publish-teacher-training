@@ -28,7 +28,7 @@ namespace :support do
       namespace :schools, module: 'providers/schools' do
         resource :check, only: %i[show update]
       end
-      resources :schools do
+      resources :schools, module: 'providers' do
         member do
           get :delete
           delete :delete, to: 'schools#destroy'
