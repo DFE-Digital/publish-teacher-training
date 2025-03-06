@@ -14,7 +14,9 @@ module Support
       redirect_to support_providers_path
     end
 
-    def show; end
+    def show
+      @courses = Course.distinct.joins(:sites).where(sites: { id: params[:id] }, course: { provider_id: params[:provider_id] })
+    end
 
     def new; end
 
