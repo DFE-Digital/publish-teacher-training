@@ -46,3 +46,4 @@ jobs:
           environment: ${{ github.event.inputs.environment }}
           sha: ${{ github.event.inputs.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
