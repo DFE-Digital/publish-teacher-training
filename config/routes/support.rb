@@ -34,14 +34,11 @@ namespace :support do
           delete :delete, to: 'schools#destroy'
         end
       end
-      resource :schools do
-        scope module: :providers do
-          scope module: :schools do
-            resource :multiple, only: %i[new create], on: :member, controller: 'multiple' do
-              resources :new, param: :position, only: %i[show update], controller: 'new_multiple'
-              resource :check, only: %i[show update], controller: 'check_multiple'
-            end
-          end
+
+      namespace :schools, module: 'providers/schools' do
+        resource :multiple, only: %i[new create], on: :member, controller: 'multiple' do
+          resources :new, param: :position, only: %i[show update], controller: 'new_multiple'
+          resource :check, only: %i[show update], controller: 'check_multiple'
         end
       end
 
