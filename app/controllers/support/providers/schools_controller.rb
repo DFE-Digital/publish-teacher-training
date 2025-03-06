@@ -10,9 +10,6 @@ module Support
 
       def index
         @pagy, @sites = pagy(provider.sites.order(:location_name))
-      rescue ActiveRecord::RecordNotFound
-        flash[:warning] = 'Provider not found'
-        redirect_to support_providers_path
       end
 
       def show; end
