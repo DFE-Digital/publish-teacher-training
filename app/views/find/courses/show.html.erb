@@ -34,14 +34,14 @@
 
     <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
 
-    <% if @course.salaried? %>
-      <%= render partial: "find/courses/salary", locals: { course: @course } %>
-    <% end %>
-
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
     <% if @course.published_about_course.present? %>
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
+    <% end %>
+
+    <% if @course.salaried? %>
+      <%= render partial: "find/courses/salary", locals: { course: @course } %>
     <% end %>
 
     <% if @course.published_interview_process.present? %>
