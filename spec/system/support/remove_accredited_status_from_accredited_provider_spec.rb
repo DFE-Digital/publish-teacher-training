@@ -9,9 +9,9 @@ RSpec.describe 'Support::UpdateProviders', service: :publish do
     sign_in_system_test(user:)
   end
 
-  let(:user) { create(:user, :admin, providers: [provider]) }
+  let(:user) { create(:user, :admin, providers: [build(:provider)]) }
   let(:accredited_provider) { create(:accredited_provider, provider_name: 'MyAccredited') }
-  let!(:providers) { [provider, accredited_provider] }
+  let!(:providers) { [build(:provider), accredited_provider] }
 
   it 'Remove accredited status from accredited provider' do
     visit "/support/#{RecruitmentCycle.current.year}/providers"

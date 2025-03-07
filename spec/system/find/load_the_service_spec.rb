@@ -7,6 +7,6 @@ RSpec.describe 'Find - Root path', service: :find do
 
   it 'shows the find page' do
     visit '/'
-    expect(page).to have_content('Find courses by location or by training provider')
+    expect(page).to have_content('Find teacher training courses in England')
   end
 end

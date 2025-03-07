@@ -22,17 +22,11 @@ namespace :find, path: '/' do
 
   get '/geolocation-suggestions', to: 'geolocation_suggestions#index'
 
-  constraints(FindV2ResultsConstraint) do
-    get '/results', to: 'v2/results#index', as: 'v2_results'
-    get '/primary', to: 'v2/primary_subjects#index'
-    post '/primary', to: 'v2/primary_subjects#submit'
-    get '/secondary', to: 'v2/secondary_subjects#index'
-    post '/secondary', to: 'v2/secondary_subjects#submit'
-  end
-
-  constraints(FindV1ResultsConstraint) do
-    get '/results', to: 'results#index', as: 'results'
-  end
+  get '/results', to: 'v2/results#index', as: 'results'
+  get '/primary', to: 'v2/primary_subjects#index'
+  post '/primary', to: 'v2/primary_subjects#submit'
+  get '/secondary', to: 'v2/secondary_subjects#index'
+  post '/secondary', to: 'v2/secondary_subjects#submit'
 
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
@@ -56,16 +50,6 @@ namespace :find, path: '/' do
 
   scope module: :search do
     root to: 'locations#start'
-    get '/age-groups' => 'age_groups#new', as: :age_groups
-    get '/age-groups-submit' => 'age_groups#create', as: :age_groups_create
-    get '/subjects' => 'subjects#new', as: :subjects
-    get '/subjects-submit' => 'subjects#create', as: :subjects_create
-    get '/university-degree-status' => 'university_degree_status#new', as: :university_degree_status
-    get '/university-degree-status-create' => 'university_degree_status#create', as: :university_degree_status_create
-    get '/visa-status' => 'visa_status#new', as: :visa_status
-    get '/visa-status-submit' => 'visa_status#create', as: :visa_status_create
-    get '/no-degree-and-requires-visa-sponsorship' => 'no_degree_and_requires_visa_sponsorship#new', as: :no_degree_and_requires_visa_sponsorship
-    resources :locations, only: %i[new create], path: '/'
   end
 
   scope module: :result_filters, path: '/results/filter' do

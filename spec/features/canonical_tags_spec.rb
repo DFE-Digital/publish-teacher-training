@@ -14,7 +14,7 @@ feature 'Canonical tags', :with_find_constraint do
     end
 
     scenario 'with query parameters' do
-      and_i_select_the_across_england_radio_button
+      and_i_select_the_primary_courses
       then_the_page_contains_canonical_tags_without_query_params
     end
 
@@ -57,9 +57,9 @@ feature 'Canonical tags', :with_find_constraint do
     visit '/sign-in/'
   end
 
-  def and_i_select_the_across_england_radio_button
-    choose 'Across England'
-    click_link_or_button 'Continue'
+  def and_i_select_the_primary_courses
+    select 'Primary', from: 'Subject'
+    click_link_or_button 'Search'
   end
 
   def and_i_click_an_anchor_tag
@@ -82,8 +82,8 @@ feature 'Canonical tags', :with_find_constraint do
   end
 
   def then_the_page_contains_canonical_tags_without_query_params
-    expect(page).to have_css("link[rel='canonical'][href='http://www.example.com/age-groups/']", visible: :all)
-    expect(page).to have_css("meta[property='og:url'][content='http://www.example.com/age-groups/']", visible: :all)
+    expect(page).to have_css("link[rel='canonical'][href='http://www.example.com/results/']", visible: :all)
+    expect(page).to have_css("meta[property='og:url'][content='http://www.example.com/results/']", visible: :all)
   end
 
   def then_the_publish_page_contains_canonical_tags

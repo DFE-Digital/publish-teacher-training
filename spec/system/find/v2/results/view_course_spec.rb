@@ -7,7 +7,6 @@ RSpec.describe 'V2 results - view a course', :js, service: :find do
 
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    FeatureFlag.activate(:prefiltering_find_redesign)
 
     given_courses_exist
   end
