@@ -11,13 +11,6 @@ module Find
     def update
       FeatureFlag.send(action, feature_name)
 
-      if Rails.env.production?
-        SlackNotificationJob.perform_now(
-          ":flags: Feature ‘#{feature_name}‘ was #{action}d",
-          find_feature_flags_path
-        )
-      end
-
       flash[:success] = "Feature ‘#{feature_name.humanize}’ #{action}d"
       redirect_to find_feature_flags_path
     end
