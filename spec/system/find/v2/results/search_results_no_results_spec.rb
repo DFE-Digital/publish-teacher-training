@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe 'V2 results - enabled', :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    FeatureFlag.activate(:prefiltering_find_redesign)
 
     given_courses_exist
     visit find_results_path
