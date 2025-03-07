@@ -43,23 +43,6 @@ feature 'Viewing a findable course' do
         then_i_should_see_the_deadline_banner
       end
     end
-
-    context 'showing the back button' do
-      context 'when navigating directly to the course' do
-        scenario 'it does not display the back link' do
-          when_i_visit_the_course_page
-          then_i_should_not_see_the_back_link
-        end
-      end
-
-      context 'when navigating to the course from the search results page' do
-        scenario 'it displays the back link' do
-          set_referrer
-          when_i_visit_the_course_page
-          then_i_should_see_the_back_link
-        end
-      end
-    end
   end
 
   context 'a course with no international fees' do

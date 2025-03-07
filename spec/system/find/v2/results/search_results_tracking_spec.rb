@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe 'V2 results - tracking', :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    FeatureFlag.activate(:prefiltering_find_redesign)
     allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
 
     Rails.application.config.active_job.queue_adapter = :test
