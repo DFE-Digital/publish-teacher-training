@@ -12,6 +12,15 @@ updates:
     ignore:
       - dependency-name: audited
       - dependency-name: sidekiq
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    labels:
+      - deploy
+      - dependencies
+      - javascript
   - package-ecosystem: bundler
     directory: "/docs"
     schedule:
