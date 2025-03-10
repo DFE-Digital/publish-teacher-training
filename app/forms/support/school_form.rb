@@ -3,6 +3,7 @@
 module Support
   class SchoolForm < Form
     FIELDS = %i[
+      gias_school_id
       location_name
       urn
       code
@@ -56,6 +57,10 @@ module Support
 
     def compute_fields
       model.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+    end
+
+    def fields_to_ignore_before_save
+      [:gias_school_id]
     end
   end
 end

@@ -650,7 +650,7 @@ en:
           add_school: &add_school "Add school"
         new: *add_school
         update: &update_school "Update school"
-        added: &scool_added "School added"
+        added: &school_added "School added"
         location_name: &school_name "School Name"
         code: &school_code "School code"
         urn: &school_urn "Unique reference number (URN)"
@@ -753,11 +753,25 @@ en:
     providers:
       add: "Add organisation"
       schools:
-        added: *scool_added
-        location_name: *school_name
-        code: *school_code
-        urn: *school_urn
-        address: *school_address
+        show:
+          new: *add_school
+          update: *update_school
+          location_name: *school_name
+          code: *school_code
+          urn: *school_urn
+          address: *school_address
+        search:
+          new:
+            title: &new_search Enter a school, university, college, URN or postcode
+            caption: *add_school
+            help_finding_school: Help with finding a school
+            cannot_find_html: |
+              <p class="govuk-body">If you cannot find the school you’re looking for, you can <a href="%{link}" target="_blank">search for a school in Get Information About Schools (GIAS) (opens in a new tab)</a></p>
+              <p class="govuk-body govuk-!-margin-bottom-0">
+              <span class="govuk-!-font-weight-bold">If the school is not on GIAS</span>
+              </br>
+              If the school you’re looking for is not on GIAS, or the information is not correct, contact the school and ask them to update their information on GIAS.
+              </p>
       users:
         first_name: "First name"
         last_name: "Last name"
