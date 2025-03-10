@@ -1,5 +1,8 @@
 <h1 class="govuk-heading-xl">
-<%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
+<span class="govuk-caption-xl" data-qa="course__provider_name">
+  <%= smart_quotes(@course.provider.provider_name) %>
+</span>
+<%= @course.name_and_code %>
 </h1>
 
 <p class="govuk-body"><%= t(".schools_to_be_placed") %></p>
