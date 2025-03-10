@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@ministryofjustice/frontend": "2.0.0",
+    "@ministryofjustice/frontend": "3.6.0",
     "accessible-autocomplete": "^2.0.4",
     "core-js": "^3.9.1",
     "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#v0.2.0",
