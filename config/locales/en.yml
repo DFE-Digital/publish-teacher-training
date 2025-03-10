@@ -754,20 +754,11 @@ en:
     providers:
       add: "Add organisation"
       schools:
-        new: *add_school
-        update: *update_school
         added: *scool_added
-        another: "Save school and add another"
         location_name: *school_name
         code: *school_code
         urn: *school_urn
         address: *school_address
-        address1: *school_address_1
-        address2: *school_address_2
-        address3: *school_town
-        town: *school_town
-        address4: *school_county
-        postcode: *school_postcode
       users:
         first_name: "First name"
         last_name: "Last name"
