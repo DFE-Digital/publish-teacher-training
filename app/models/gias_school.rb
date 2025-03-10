@@ -24,7 +24,6 @@ class GiasSchool < ApplicationRecord
     {
       location_name: name,
       urn:,
-      code: urn,
       address1:,
       address2:,
       address3:,
