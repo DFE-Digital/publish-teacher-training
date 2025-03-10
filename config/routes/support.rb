@@ -33,6 +33,12 @@ namespace :support do
           get :delete
           delete :delete, to: 'schools#destroy'
         end
+
+        collection do
+          get '/search', to: 'schools/search#new'
+          post '/search', to: 'schools/search#create'
+          put '/search', to: 'schools/search#update'
+        end
       end
 
       namespace :schools, module: 'providers/schools' do
