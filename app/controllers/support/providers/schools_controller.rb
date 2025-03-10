@@ -3,10 +3,10 @@
 module Support
   module Providers
     class SchoolsController < ApplicationController
-      before_action :build_site, only: %i[index new create]
-      before_action :new_form, only: %i[index new]
+      before_action :build_site, only: %i[index create]
+      before_action :new_form, only: %i[index]
       before_action :reset_csv_schools_forms, only: %i[index]
-      before_action :site, only: %i[edit show delete]
+      before_action :site, only: %i[show delete]
 
       def index
         @pagy, @sites = pagy(provider.sites.order(:location_name))
@@ -14,24 +14,12 @@ module Support
 
       def show; end
 
-      def new; end
-
-      def edit; end
-
       def create
         @school_form = SchoolForm.new(provider, @site, params: site_params(:support_school_form))
         if @school_form.stash
           redirect_to support_recruitment_cycle_provider_schools_check_path
         else
           render(:new)
-        end
-      end
-
-      def update
-        if site.update(site_params(:site))
-          redirect_to support_recruitment_cycle_provider_school_path(provider.recruitment_cycle_year, provider, site)
-        else
-          render(:edit)
         end
       end
 
