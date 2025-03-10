@@ -1237,6 +1237,13 @@ en:
             urn:
               blank: "Enter a unique reference number (URN)"
               invalid: "Enter a valid unique reference number (URN)"
+        support/providers/schools/search_form:
+          attributes:
+            school:
+              school_already_exists: "This school has already been added"
+            query:
+              blank: Enter a school, university, college, URN or postcode
+              too_short: Enter at least two characters
         support/school_form:
           attributes:
             location_name:
