@@ -1,10 +1,10 @@
 plugins:
   - rubocop-rails
   - rubocop-rspec
+  - rubocop-factory_bot
 
 require:
   - rubocop-capybara
-  - rubocop-factory_bot
   - rubocop-rspec_rails
 
 inherit_from:
@@ -67,20 +67,20 @@ Rails/I18nLocaleTexts:
 
 Style/HashSyntax:
   Exclude:
-    - 'docs/lib/govuk_tech_docs/open_api/renderer.rb'
+    - "docs/lib/govuk_tech_docs/open_api/renderer.rb"
 
 Style/MapIntoArray:
   Exclude:
-    - 'docs/lib/govuk_tech_docs/open_api/renderer.rb'
+    - "docs/lib/govuk_tech_docs/open_api/renderer.rb"
 
 Naming/BlockForwarding:
   Exclude:
-    - 'docs/lib/govuk_tech_docs/open_api/extension.rb'
+    - "docs/lib/govuk_tech_docs/open_api/extension.rb"
 
 RSpec/NoExpectationExample:
   Exclude:
-    - 'spec/features/**/*'
-    - 'spec/system/**/*'
+    - "spec/features/**/*"
+    - "spec/system/**/*"
 
 RSpec/MultipleMemoizedHelpers:
   Max: 29
