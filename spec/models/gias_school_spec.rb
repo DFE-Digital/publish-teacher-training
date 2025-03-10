@@ -32,7 +32,6 @@ describe GiasSchool do
       expect(school.school_attributes).to eq(
         location_name: school.name,
         urn: school.urn,
-        code: school.urn,
         address1: school.address1,
         address2: school.address2,
         address3: school.address3,

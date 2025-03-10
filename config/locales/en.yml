@@ -235,6 +235,7 @@ en:
           singular: Please check it and make your changes before saving
         changes_not_saved: Your changes are not yet saved
     page_titles:
+      check: "Check your answers"
       sign_in:
         index: "Sign in"
         new: "User not found"
@@ -650,7 +651,7 @@ en:
           add_school: &add_school "Add school"
         new: *add_school
         update: &update_school "Update school"
-        added: &scool_added "School added"
+        added: &school_added "School added"
         location_name: &school_name "School Name"
         code: &school_code "School code"
         urn: &school_urn "Unique reference number (URN)"
@@ -753,20 +754,37 @@ en:
     providers:
       add: "Add organisation"
       schools:
-        new: *add_school
-        update: *update_school
-        added: *scool_added
-        another: "Save school and add another"
-        location_name: *school_name
-        code: *school_code
-        urn: *school_urn
-        address: *school_address
-        address1: *school_address_1
-        address2: *school_address_2
-        address3: *school_town
-        town: *school_town
-        address4: *school_county
-        postcode: *school_postcode
+        checks:
+          update:
+            added: *school_added
+          show:
+            new: *add_school
+            update: *update_school
+            location_name: *school_name
+            code: *school_code
+            urn: *school_urn
+            address: *school_address
+            inset_text_html: |
+              If this information is not correct, contact the school and ask them to update their information on <a href="%{link}" target="_blank">Get Information About Schools (GIAS) (opens in a new tab)</a>
+        show:
+          new: *add_school
+          update: *update_school
+          location_name: *school_name
+          code: *school_code
+          urn: *school_urn
+          address: *school_address
+        search:
+          new:
+            title: &new_search Enter a school, university, college, URN or postcode
+            caption: *add_school
+            help_finding_school: Help with finding a school
+            cannot_find_html: |
+              <p class="govuk-body">If you cannot find the school you’re looking for, you can <a href="%{link}" target="_blank">search for a school in Get Information About Schools (GIAS) (opens in a new tab)</a></p>
+              <p class="govuk-body govuk-!-margin-bottom-0">
+              <span class="govuk-!-font-weight-bold">If the school is not on GIAS</span>
+              </br>
+              If the school you’re looking for is not on GIAS, or the information is not correct, contact the school and ask them to update their information on GIAS.
+              </p>
       users:
         first_name: "First name"
         last_name: "Last name"
@@ -1231,6 +1249,13 @@ en:
             urn:
               blank: "Enter a unique reference number (URN)"
               invalid: "Enter a valid unique reference number (URN)"
+        support/providers/schools/search_form:
+          attributes:
+            school:
+              school_already_exists: "This school has already been added"
+            query:
+              blank: Enter a school, university, college, URN or postcode
+              too_short: Enter at least two characters
         support/school_form:
           attributes:
             location_name:

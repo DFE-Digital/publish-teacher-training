@@ -28,10 +28,16 @@ namespace :support do
       namespace :schools, module: 'providers/schools' do
         resource :check, only: %i[show update]
       end
-      resources :schools, module: 'providers' do
+      resources :schools, except: %i[new edit update], module: 'providers' do
         member do
           get :delete
           delete :delete, to: 'schools#destroy'
+        end
+
+        collection do
+          get '/search', to: 'schools/search#new'
+          post '/search', to: 'schools/search#create'
+          put '/search', to: 'schools/search#update'
         end
       end
 
