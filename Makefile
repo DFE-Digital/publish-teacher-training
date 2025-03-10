@@ -222,32 +222,68 @@ vendor-domain-infra-modules:
 	TERRAFORM_MODULES_TAG=stable
 	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/custom_domains/infrastructure/vendor/modules/domains
 
-domains-infra-init: set-production-subscription set-azure-account vendor-domain-infra-modules
+find-domains-infra-init: set-production-subscription set-azure-account vendor-domain-infra-modules
+	$(eval include global_config/find-domain.sh)
 	terraform -chdir=terraform/custom_domains/infrastructure init -reconfigure -upgrade \
 		-backend-config=workspace_variables/${DOMAINS_ID}_backend.tfvars
 
-domains-infra-plan: domains-infra-init # make publish domains-infra-plan
+find-domains-infra-plan: domains-infra-init # make publish domains-infra-plan
 	terraform -chdir=terraform/custom_domains/infrastructure plan -var-file workspace_variables/${DOMAINS_ID}.tfvars.json
 
-domains-infra-apply: domains-infra-init # make publish domains-infra-apply
+find-domains-infra-apply: domains-infra-init # make publish domains-infra-apply
 	terraform -chdir=terraform/custom_domains/infrastructure apply -var-file workspace_variables/${DOMAINS_ID}.tfvars.json ${AUTO_APPROVE}
+
+publish-domains-infra-init: set-production-subscription set-azure-account vendor-domain-infra-modules
+	$(eval include global_config/publish-domain.sh)
+	terraform -chdir=terraform/custom_domains/infrastructure init -reconfigure -upgrade \
+		-backend-config=workspace_variables/${DOMAINS_ID}_backend.tfvars
+
+publish-domains-infra-plan: domains-infra-init # make publish domains-infra-plan
+	terraform -chdir=terraform/custom_domains/infrastructure plan -var-file workspace_variables/${DOMAINS_ID}.tfvars.json
+
+publish-domains-infra-apply: domains-infra-init # make publish domains-infra-apply
+	terraform -chdir=terraform/custom_domains/infrastructure apply -var-file workspace_variables/${DOMAINS_ID}.tfvars.json ${AUTO_APPROVE}
+
+domains-infra-init: find-domains-infra-init publish-domains-infra-init
+domains-infra-plan: find-domains-infra-init find-domains-infra-plan publish-domains-infra-init publish-domains-infra-plan
+domains-infra-apply: find-domains-infra-init find-domains-infra-apply publish-domains-infra-init publish-domains-infra-apply
 
 .PHONY: vendor-domain-modules
 vendor-domain-modules:
 	rm -rf terraform/custom_domains/environment_domains/vendor/modules/domains
 	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/custom_domains/environment_domains/vendor/modules/domains
 
-domains-init: set-production-subscription set-azure-account vendor-domain-modules
+find-domains-init: set-production-subscription set-azure-account vendor-domain-modules
+	$(eval include global_config/find-domain.sh)
 	terraform -chdir=terraform/custom_domains/environment_domains init -upgrade -reconfigure -backend-config=workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}_backend.tfvars
 
-domains-plan: domains-init  # make publish qa domains-plan
+find-domains-plan: find-domains-init  # make publish qa domains-plan
+	terraform -chdir=terraform/custom_domains/environment_domains plan -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
+	$(if $(AUTO_APPROVE), bin/domains-hc.sh , )
+
+find-domains-apply: find-domains-init # make publish qa domains-apply
+	terraform -chdir=terraform/custom_domains/environment_domains apply -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json ${AUTO_APPROVE}
+	$(if $(AUTO_APPROVE), bin/domains-hc.sh , )
+
+find-domains-destroy: find-domains-init # make publish qa domains-destroy
+	terraform -chdir=terraform/custom_domains/environment_domains destroy -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
+
+publish-domains-init: set-production-subscription set-azure-account vendor-domain-modules
+	$(eval include global_config/publish-domain.sh)
+	terraform -chdir=terraform/custom_domains/environment_domains init -upgrade -reconfigure -backend-config=workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}_backend.tfvars
+
+publish-domains-plan: publish-domains-init  # make publish qa domains-plan
 	terraform -chdir=terraform/custom_domains/environment_domains plan -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
 
-domains-apply: domains-init # make publish qa domains-apply
+publish-domains-apply: publish-domains-init # make publish qa domains-apply
 	terraform -chdir=terraform/custom_domains/environment_domains apply -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json ${AUTO_APPROVE}
 
-domains-destroy: domains-init # make publish qa domains-destroy
+publish-domains-destroy: publish-domains-init # make publish qa domains-destroy
 	terraform -chdir=terraform/custom_domains/environment_domains destroy -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
+
+domains-init: find-domains-init publish-domains-init
+domains-plan: find-domains-init find-domains-plan publish-domains-init publish-domains-plan
+domains-apply: find-domains-init find-domains-apply publish-domains-init publish-domains-apply
 
 action-group-resources: set-azure-account # make env action-group-resources ACTION_GROUP_EMAIL=notificationemail@domain.com . Must be run before setting enable_monitoring=true for each subscription
 	$(if $(ACTION_GROUP_EMAIL), , $(error Please specify a notification email for the action group))
