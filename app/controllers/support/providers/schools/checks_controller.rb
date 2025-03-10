@@ -10,11 +10,6 @@ module Support
 
         def update
           if @school_form.save!
-            if params.keys.include?('another')
-              redirect_to new_support_recruitment_cycle_provider_school_path
-            else
-              redirect_to support_recruitment_cycle_provider_schools_path
-            end
             flash[:success] = t('support.providers.schools.added')
           else
             render template: 'support/schools/new'
