@@ -236,6 +236,7 @@ en:
           singular: Please check it and make your changes before saving
         changes_not_saved: Your changes are not yet saved
     page_titles:
+      check: "Check your answers"
       sign_in:
         index: "Sign in"
         new: "User not found"
@@ -754,6 +755,18 @@ en:
     providers:
       add: "Add organisation"
       schools:
+        checks:
+          update:
+            added: *school_added
+          show:
+            new: *add_school
+            update: *update_school
+            location_name: *school_name
+            code: *school_code
+            urn: *school_urn
+            address: *school_address
+            inset_text_html: |
+              If this information is not correct, contact the school and ask them to update their information on <a href="%{link}" target="_blank">Get Information About Schools (GIAS) (opens in a new tab)</a>.
         show:
           new: *add_school
           update: *update_school
