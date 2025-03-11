@@ -1,8 +1,8 @@
 <h1 class="govuk-heading-xl">
-<span class="govuk-caption-xl" data-qa="course__provider_name">
-  <%= smart_quotes(@course.provider.provider_name) %>
-</span>
-<%= @course.name_and_code %>
+ <span class="govuk-caption-xl" data-qa="course__provider_name"> 
+  <%= t(".heading", name_and_code: course.name_and_code) %>
+ </span>
+ <%= t(".heading", provider_name: course.provider_name) %>
 </h1>
 
 <p class="govuk-body"><%= t(".schools_to_be_placed") %></p>
