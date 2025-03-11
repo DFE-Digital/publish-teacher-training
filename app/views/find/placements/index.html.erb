@@ -1,7 +1,7 @@
 <%= content_for :page_title do %>
   <%= t(
     "find.courses.placements.heading",
-    provider_name: @course.provider_name
+    name_and_code: @course.name_and_code
   ) %>
 <% end %>
 <% content_for :before_content do %>
