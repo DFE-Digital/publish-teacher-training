@@ -23,9 +23,9 @@ class SearchResultTitleComponent < ViewComponent::Base
 
   def results_text
     return many_results_text if results_count > results_limit
-    return "#{change_your_search_link}.".html_safe if results_count.zero?
+    return govuk_link_to('Change your search.', return_path).html_safe if results_count.zero?
 
-    "#{change_your_search_link} if the #{search_resource.humanize(capitalize: false)} you’re looking for is not listed.".html_safe
+    "#{govuk_link_to('Change your search', return_path)} if the #{search_resource.humanize(capitalize: false)} you’re looking for is not listed.".html_safe
   end
 
   private
@@ -52,9 +52,5 @@ class SearchResultTitleComponent < ViewComponent::Base
 
   def many_results_text
     t('.many_results_html', results_limit:, link: govuk_link_to('Try narrowing down your search', return_path), search_resource:)
-  end
-
-  def change_your_search_link
-    govuk_link_to('Change your search', return_path)
   end
 end
