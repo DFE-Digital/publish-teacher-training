@@ -19,7 +19,7 @@ module Publish
         if @study_site_search_form.valid?
 
           @study_site_select_form = Publish::StudySites::SelectForm.new
-          @study_site_search = Schools::SearchService.call(query:)
+          @study_site_search = Publish::Schools::SearchService.call(query:)
 
           render :results
         else
@@ -33,7 +33,7 @@ module Publish
         if @study_site_select_form.valid?
           redirect_to new_publish_provider_recruitment_cycle_study_site_path(provider_code: provider.provider_code, school_id: @study_site_select_form.school_id)
         else
-          @study_site_search = Schools::SearchService.call(query:)
+          @study_site_search = Publish::Schools::SearchService.call(query:)
           render :results
         end
       end
@@ -54,9 +54,9 @@ module Publish
       end
 
       def study_site_search_params
-        return {} unless params.key?(:publish_schools_search_form)
+        return {} unless params.key?(:publish_providers_schools_search_form)
 
-        params.expect(publish_schools_search_form: [*Schools::SearchForm::FIELDS, :school_id])
+        params.expect(publish_providers_schools_search_form: [*Schools::SearchForm::FIELDS, :school_id])
       end
 
       def study_site_select_params
