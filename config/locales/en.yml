@@ -763,7 +763,7 @@ en:
             update: *update_school
             location_name: *school_name
             code: *school_code
-            urn: *school_urn
+            urn: URN
             address: *school_address
             inset_text_html: |
               If this information is not correct, contact the school and ask them to update their information on <a href="%{link}" target="_blank">Get Information About Schools (GIAS) (opens in a new tab)</a>.
@@ -772,7 +772,7 @@ en:
           update: *update_school
           location_name: *school_name
           code: *school_code
-          urn: *school_urn
+          urn: URN
           address: *school_address
         search:
           new:
