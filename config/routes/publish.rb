@@ -332,9 +332,11 @@ namespace :publish, as: :publish do
             delete :delete, to: 'schools#destroy'
           end
 
-          get '/search', on: :collection, to: 'school_search#new'
-          post '/search', on: :collection, to: 'school_search#create'
-          put '/search', on: :collection, to: 'school_search#update'
+          collection do
+            get '/search', to: 'schools/search#new'
+            post '/search', to: 'schools/search#create'
+            put '/search', to: 'schools/search#update'
+          end
         end
 
         resource :check_study_site, only: %i[show update], controller: 'study_sites_check', path: 'study-sites/check'
