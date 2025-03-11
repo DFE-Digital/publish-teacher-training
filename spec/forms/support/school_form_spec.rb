@@ -106,7 +106,7 @@ describe Support::SchoolForm, type: :model do
 
       it 'is invalid' do
         expect(subject).not_to be_valid
-        expect(subject.errors[:location_name]).to include('Name is in use by another location')
+        expect(subject.errors[:location_name]).to include('This school has already been added')
       end
     end
   end
