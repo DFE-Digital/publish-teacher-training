@@ -48,7 +48,7 @@ module Support
                       else
                         provider.sites - [site]
                       end
-      errors.add(:location_name, 'Name is in use by another location') if location_name.in?(sibling_sites.pluck(:location_name))
+      errors.add(:location_name, 'This school has already been added') if location_name.in?(sibling_sites.pluck(:location_name))
     end
 
     def form_store_key
