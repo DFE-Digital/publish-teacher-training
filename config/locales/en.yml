@@ -30,7 +30,6 @@ en:
       provider:
         heading: Contact %{provider_name}
       placements:
-        course_provider: %{provider_name}
         heading: School placements for %{course_name_and_code}
         schools_to_be_placed: You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.
         schools_you_can_choose: 'The schools you can choose from are:'
