@@ -776,8 +776,9 @@ en:
           address: *school_address
         search:
           new:
-            title: &new_search Enter a school, university, college, URN or postcode
+            title: Enter URN or school
             caption: *add_school
+            hint: Enter a unique reference number (URN) or a school name. You can also enter a university, college or postcode.
             help_finding_school: Help with finding a school
             cannot_find_html: |
               <p class="govuk-body">If you cannot find the school you’re looking for, you can <a href="%{link}" target="_blank">search for a school in Get Information About Schools (GIAS) (opens in a new tab)</a>.</p>

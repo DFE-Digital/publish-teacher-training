@@ -22,6 +22,7 @@
       <%= f.label :query, { class: "govuk-label govuk-label--l", for: "support-providers-schools-search-form-query-field" } do %>
         <span class="govuk-caption-l"><%= t(".caption") %> - <%= @provider.name_and_code %></span>
         <%= t(".title") %>
+        <p class="govuk-hint"><%= t(".hint") %></p>
         <% if f.object.errors.present? %>
           <span class="govuk-error-message" id="support-providers-schools-search-form-query-field-error" data-qa="provider-error">
             <%= f.object.errors.first.message %>

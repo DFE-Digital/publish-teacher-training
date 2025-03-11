@@ -67,7 +67,7 @@ feature 'Adding school to provider as an admin', :with_publish_constraint, { can
   def then_i_should_see_an_error_message
     within('.govuk-error-summary') do
       expect(page).to have_content('There is a problem')
-      expect(page).to have_content('Enter a school, university, college, URN or postcode')
+      expect(page).to have_content('Enter a URN (unique reference number) or school name')
     end
   end
 
