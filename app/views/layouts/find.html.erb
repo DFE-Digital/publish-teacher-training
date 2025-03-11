@@ -28,6 +28,8 @@
   </head>
 
   <body class="govuk-template__body">
+    <%= govuk_skip_link %>
+
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
     <%= render HeaderComponent.new(service_name: I18n.t("service_name.find")) do |header| %>
