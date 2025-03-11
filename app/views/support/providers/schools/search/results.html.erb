@@ -1,4 +1,3 @@
-
 <% content_for :page_title, search_result_title_component.title %>
 
 <% content_for :before_content do %>
@@ -18,7 +17,7 @@
 
       <%= render search_result_title_component %>
 
-      <% unless @school_search.schools.empty? %>
+      <% if @school_search.schools.present? %>
         <%= f.govuk_radio_buttons_fieldset(:school_id, legend: { text: "School", size: "m" }) do %>
           <% @school_search.schools.each_with_index do |school, index| %>
             <%= f.govuk_radio_button :school_id, school.id, label: { text: school.name }, link_errors: index.zero?, hint: { text: school_urn_and_location(school) } %>
