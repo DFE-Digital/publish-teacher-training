@@ -43,12 +43,13 @@ module Support
     private
 
     def location_name_unique_to_provider
-      sibling_sites = if site.study_site?
-                        provider.study_sites - [site]
-                      else
-                        provider.sites - [site]
-                      end
-      errors.add(:location_name, 'This school has already been added') if location_name.in?(sibling_sites.pluck(:location_name))
+      sibling_sites, location = if site.study_site?
+                                  [provider.study_sites - [site], 'site']
+                                else
+                                  [provider.sites - [site], 'school']
+                                end
+
+      errors.add(:location_name, "This #{location} has already been added") if location_name.in?(sibling_sites.pluck(:location_name))
     end
 
     def form_store_key
