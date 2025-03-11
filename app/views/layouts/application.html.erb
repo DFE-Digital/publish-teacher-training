@@ -28,9 +28,9 @@
   </head>
 
   <body class="govuk-template__body <%= yield :body_class %>">
-    <%= render "layouts/add_js_enabled_class_to_body" %>
-
     <%= govuk_skip_link %>
+
+    <%= render "layouts/add_js_enabled_class_to_body" %>
 
     <%= render Header.new(service_name: I18n.t("service_name.publish"), current_user:) %>
 
