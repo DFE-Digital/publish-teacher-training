@@ -323,7 +323,9 @@ namespace :publish, as: :publish do
           put '/search', on: :collection, to: 'accredited_provider_search#update'
         end
 
-        resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
+        namespace :schools, module: 'providers/schools' do
+          resource :check, only: %i[show update]
+        end
         resources :schools do
           member do
             get :delete
