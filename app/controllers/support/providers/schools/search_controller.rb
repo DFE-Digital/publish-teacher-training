@@ -92,7 +92,8 @@ module Support
             results_limit: @school_search.limit,
             results_count: @school_search.schools.unscope(:limit).count,
             return_path: search_support_recruitment_cycle_provider_schools_path,
-            search_resource: 'school'
+            search_resource: 'school',
+            caption_text: "Add school - #{provider.name_and_code}"
           )
         end
 
