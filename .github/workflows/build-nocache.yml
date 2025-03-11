@@ -2,6 +2,15 @@ name: Build No Cache
 
 on:
   workflow_dispatch:
+    inputs:
+      level:
+        description: Snyk scan level
+        type: choice
+        default: low
+        options:
+        - low
+        - high
+        required: false
 
   schedule:
     - cron: '0 13 * * 0'
@@ -19,6 +28,7 @@ jobs:
       name: review
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
+      SNYK_LEVEL: ${{ inputs.level || 'low'  }}
 
     steps:
       - name: Checkout
@@ -91,7 +101,7 @@ jobs:
           SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
         with:
           image: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
-          args: --file=Dockerfile --exclude-app-vulns
+          args: --file=Dockerfile --exclude-app-vulns --severity-threshold=${SNYK_LEVEL}
 
       - name: Push ${{ env.DOCKER_IMAGE }} images
         if: ${{ success() }}
