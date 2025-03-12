@@ -448,33 +448,6 @@ describe Course do
         expect(subject).to eq([course])
       end
     end
-
-    context 'by name' do
-      let(:course_a) do
-        create(:course, name: 'Course A')
-      end
-
-      let(:course_b) do
-        create(:course, name: 'Course B')
-      end
-
-      before do
-        course_a
-        course_b
-      end
-
-      describe '#by_name_ascending' do
-        it 'sorts in ascending order of provider name' do
-          expect(described_class.by_name_ascending).to eq([course_a, course_b])
-        end
-      end
-
-      describe '#by_name_descending' do
-        it 'sorts in descending order of provider name' do
-          expect(described_class.by_name_descending).to eq([course_b, course_a])
-        end
-      end
-    end
   end
 
   describe '#modern_languages_subjects' do
@@ -867,6 +840,60 @@ describe Course do
   end
 
   describe 'scopes' do
+    describe '.accredited_provider_order' do
+      subject { described_class.accredited_provider_order(provider.provider_name) }
+
+      let(:provider) { create(:provider) }
+      let(:delivered_course) { create(:course, provider:) }
+      let(:accredited_course) { create(:course, accrediting_provider: provider) }
+
+      before do
+        accredited_course
+        delivered_course
+      end
+
+      it 'returns courses accredited after courses delivered' do
+        expect(subject).to eq([delivered_course, accredited_course])
+      end
+    end
+
+    describe 'case_insensitive_search' do
+      subject { described_class.case_insensitive_search('2vVZ') }
+
+      let(:course) { create(:course, course_code: '2VvZ') }
+
+      it 'returns correct course with incorrect' do
+        expect(subject).to eq([course])
+      end
+    end
+
+    describe '.by_name_(ascending|descending)' do
+      let(:course_a) do
+        create(:course, name: 'Course A')
+      end
+
+      let(:course_b) do
+        create(:course, name: 'Course B')
+      end
+
+      before do
+        course_a
+        course_b
+      end
+
+      describe '.by_name_ascending' do
+        it 'sorts in ascending order of provider name' do
+          expect(described_class.by_name_ascending).to eq([course_a, course_b])
+        end
+      end
+
+      describe '.by_name_descending' do
+        it 'sorts in descending order of provider name' do
+          expect(described_class.by_name_descending).to eq([course_b, course_a])
+        end
+      end
+    end
+
     describe '.within' do
       let(:published_enrichment) { build(:course_enrichment, :published) }
       let(:enrichments) { [published_enrichment] }
