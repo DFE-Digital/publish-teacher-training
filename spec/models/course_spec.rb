@@ -176,6 +176,13 @@ describe Course do
         expect(subjects.second).to eq(english)
       end
     end
+
+    describe '#modern_languages_subjects' do
+      it 'gets modern language subjects' do
+        course = create(:course, level: 'secondary', subjects: [modern_languages, french])
+        expect(course.modern_languages_subjects).to contain_exactly(french)
+      end
+    end
   end
 
   describe '#find_a_level_subject_requirement!' do
@@ -447,13 +454,6 @@ describe Course do
       it 'returns correct course with incorrect' do
         expect(subject).to eq([course])
       end
-    end
-  end
-
-  describe '#modern_languages_subjects' do
-    it 'gets modern language subjects' do
-      course = create(:course, level: 'secondary', subjects: [modern_languages, french])
-      expect(course.modern_languages_subjects).to contain_exactly(french)
     end
   end
 
