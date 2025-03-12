@@ -894,6 +894,48 @@ describe Course do
       end
     end
 
+    describe '.changed_since' do
+      context 'with no parameters' do
+        subject { described_class.changed_since(nil) }
+
+        let!(:old_course) { create(:course, age: 1.hour.ago) }
+        let!(:course) { create(:course, age: 1.hour.ago) }
+
+        it { is_expected.to include course }
+        it { is_expected.to include old_course }
+      end
+
+      context 'with a course that was just updated' do
+        subject { described_class.changed_since(10.minutes.ago) }
+
+        let(:course) { create(:course, age: 1.hour.ago) }
+        let!(:old_course) { create(:course, age: 1.hour.ago) }
+
+        before { course.touch }
+
+        it { is_expected.to include course }
+        it { is_expected.not_to include old_course }
+      end
+
+      context 'with a course that has been changed less than a second after the given timestamp' do
+        subject { described_class.changed_since(timestamp) }
+
+        let(:timestamp) { 5.minutes.ago }
+        let(:course) { create(:course, changed_at: timestamp + 0.001.seconds) }
+
+        it { is_expected.to include course }
+      end
+
+      context 'with a course that has been changed exactly at the given timestamp' do
+        subject { described_class.changed_since(timestamp) }
+
+        let(:timestamp) { 10.minutes.ago }
+        let(:course) { create(:course, changed_at: timestamp) }
+
+        it { is_expected.not_to include course }
+      end
+    end
+
     describe '.within' do
       let(:published_enrichment) { build(:course_enrichment, :published) }
       let(:enrichments) { [published_enrichment] }
@@ -1959,48 +2001,6 @@ describe Course do
     its(:findable?) { is_expected.to be false }
     its(:open_for_applications?) { is_expected.to be false }
     its(:has_vacancies?) { is_expected.to be false }
-  end
-
-  describe '#changed_since' do
-    context 'with no parameters' do
-      subject { described_class.changed_since(nil) }
-
-      let!(:old_course) { create(:course, age: 1.hour.ago) }
-      let!(:course) { create(:course, age: 1.hour.ago) }
-
-      it { is_expected.to include course }
-      it { is_expected.to include old_course }
-    end
-
-    context 'with a course that was just updated' do
-      subject { described_class.changed_since(10.minutes.ago) }
-
-      let(:course) { create(:course, age: 1.hour.ago) }
-      let!(:old_course) { create(:course, age: 1.hour.ago) }
-
-      before { course.touch }
-
-      it { is_expected.to include course }
-      it { is_expected.not_to include old_course }
-    end
-
-    context 'with a course that has been changed less than a second after the given timestamp' do
-      subject { described_class.changed_since(timestamp) }
-
-      let(:timestamp) { 5.minutes.ago }
-      let(:course) { create(:course, changed_at: timestamp + 0.001.seconds) }
-
-      it { is_expected.to include course }
-    end
-
-    context 'with a course that has been changed exactly at the given timestamp' do
-      subject { described_class.changed_since(timestamp) }
-
-      let(:timestamp) { 10.minutes.ago }
-      let(:course) { create(:course, changed_at: timestamp) }
-
-      it { is_expected.not_to include course }
-    end
   end
 
   describe '#study_mode_description' do
