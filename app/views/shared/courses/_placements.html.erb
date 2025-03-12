@@ -2,7 +2,7 @@
   <span class="govuk-caption-xl">
     <%= t(".thing", provider_name: course.provider_name) %>
     </span>
-  <%= t(".heading", course_name: course.course_name) %>
+  <%= t(".heading", course_name_and_code: @course.name_and_code) %>
 </h1>
 
 <p class="govuk-body"><%= t(".schools_to_be_placed") %></p>
