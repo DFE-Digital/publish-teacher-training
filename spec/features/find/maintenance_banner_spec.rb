@@ -19,6 +19,7 @@ feature 'Maintenance banner' do
 
       visit find_path
 
+      expect(page).to have_content 'Find teacher training courses'
       expect(page).to have_no_content 'This service will be unavailable on'
     end
   end
