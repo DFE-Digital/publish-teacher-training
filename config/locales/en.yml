@@ -1251,6 +1251,10 @@ en:
             urn:
               blank: "Enter a unique reference number (URN)"
               invalid: "Enter a valid unique reference number (URN)"
+        support/providers/schools/select_form:
+          attributes:
+            school_id:
+              blank: "Select the school to continue. If this school is not correct you can change your search."
         support/providers/schools/search_form:
           attributes:
             school:
