@@ -25,7 +25,7 @@ module Publish
         @site = provider.sites.build
         @school_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
         if @school_form.stash
-          redirect_to publish_provider_recruitment_cycle_check_school_path
+          redirect_to publish_provider_recruitment_cycle_schools_check_path
         else
           render :new
         end
