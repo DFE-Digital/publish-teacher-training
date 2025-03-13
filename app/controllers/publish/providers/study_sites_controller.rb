@@ -18,7 +18,7 @@ module Publish
       end
 
       def edit
-        @study_site_form = SchoolForm.new(site)
+        @study_site_form = ::Publish::SchoolForm.new(site)
       end
 
       def create
@@ -31,7 +31,7 @@ module Publish
       end
 
       def update
-        @study_site_form = SchoolForm.new(site, params: site_params(:publish_school_form))
+        @study_site_form = ::Publish::SchoolForm.new(site, params: site_params(:publish_school_form))
 
         if @study_site_form.save!
           course_updated_message('Study site')
@@ -63,7 +63,7 @@ module Publish
       end
 
       def site_params(param_form_key)
-        params.expect(param_form_key => SchoolForm::FIELDS)
+        params.expect(param_form_key => ::Publish::SchoolForm::FIELDS)
       end
 
       def gias_school_params

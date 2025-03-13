@@ -1336,12 +1336,12 @@ en:
             email:
               blank: "Enter an email adddress"
               invalid: "Enter a valid email address"
-        publish/schools/search_form:
+        publish/providers/schools/search_form:
           attributes:
             query:
               blank: Enter a school, university, college, URN or postcode
               too_short: Enter at least two characters
-        publish/schools/select_form:
+        publish/providers/schools/select_form:
           attributes:
             school_id:
               blank: Select a school
