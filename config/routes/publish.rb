@@ -323,7 +323,7 @@ namespace :publish, as: :publish do
           put '/search', on: :collection, to: 'accredited_provider_search#update'
         end
 
-        namespace :schools, module: 'providers/schools' do
+        namespace :schools do
           resource :check, only: %i[show update]
         end
         resources :schools do
