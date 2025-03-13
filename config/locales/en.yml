@@ -1256,7 +1256,7 @@ en:
             school:
               school_already_exists: "This school has already been added"
             query:
-              blank: Enter a school, university, college, URN or postcode
+              blank: Enter a URN (unique reference number) or school name
               too_short: Enter at least two characters
         support/school_form:
           attributes:
