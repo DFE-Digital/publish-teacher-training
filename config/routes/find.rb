@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-root to: 'find/search/locations#start', as: :find
+root to: 'find/homepage#index', as: :find
 
 scope via: :all do
   match '/404', to: 'find/errors#not_found'
@@ -47,12 +47,4 @@ namespace :find, path: '/' do
 
   resource :cookie_preferences, only: %i[show update], path: '/cookies', as: :cookies
   resource :sitemap, only: :show
-
-  scope module: :search do
-    root to: 'locations#start'
-  end
-
-  scope module: :result_filters, path: '/results/filter' do
-    get 'provider', to: 'provider#new'
-  end
 end
