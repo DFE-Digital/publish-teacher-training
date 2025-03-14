@@ -28,7 +28,6 @@ namespace :find, path: '/' do
   get '/secondary', to: 'v2/secondary_subjects#index'
   post '/secondary', to: 'v2/secondary_subjects#submit'
 
-  get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
 
   scope module: :courses, path: '/courses' do
