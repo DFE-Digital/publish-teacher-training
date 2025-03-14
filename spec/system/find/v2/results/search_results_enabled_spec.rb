@@ -357,7 +357,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
 
   context 'when viewing results via the primary subjects quick link' do
     before do
-      visit find_root_path
+      visit find_path
       and_there_are_courses_with_primary_subjects
     end
 
