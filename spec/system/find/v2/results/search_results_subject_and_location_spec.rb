@@ -424,7 +424,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def when_i_visit_the_homepage
-    visit find_root_path
+    visit find_path
   end
 
   def and_i_check_visa_sponsorship_filter_in_the_homepage
@@ -433,7 +433,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_i_am_on_the_homepage
-    expect(page).to have_current_path(find_root_path)
+    expect(page).to have_current_path(find_path)
   end
 
   def and_i_am_on_the_results_page
