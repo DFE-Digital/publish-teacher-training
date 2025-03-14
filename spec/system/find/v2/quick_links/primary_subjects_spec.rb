@@ -40,7 +40,7 @@ RSpec.describe 'Primary subjects quick link', service: :find do
   end
 
   def when_i_visit_the_find_homepage
-    visit find_root_path
+    visit find_path
   end
 
   def when_i_select_primary_with_english
