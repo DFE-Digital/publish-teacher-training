@@ -43,7 +43,6 @@ namespace :support do
 
       namespace :schools, module: 'providers/schools' do
         resource :multiple, only: %i[new create], on: :member, controller: 'multiple' do
-          resources :new, param: :position, only: %i[show update], controller: 'new_multiple'
           resource :check, only: %i[show update], controller: 'check_multiple'
         end
       end
