@@ -3,7 +3,7 @@
 module API
   module Public
     module V1
-      class SubjectsController < API::Public::V1::ApplicationController
+      class SubjectsController < ApplicationController
         def index
           subjects = Subject.active.includes(:financial_incentive)
 
