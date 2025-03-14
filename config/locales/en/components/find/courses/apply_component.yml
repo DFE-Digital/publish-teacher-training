@@ -1,0 +1,6 @@
+en:
+  find:
+    courses:
+      apply_component:
+        view:
+          not_accepting_applications: This course is not accepting applications at the moment. You can contact the provider for more information.

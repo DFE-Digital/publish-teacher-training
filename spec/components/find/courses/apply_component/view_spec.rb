@@ -34,7 +34,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('You cannot apply for this course as it is closed for applications.')
+      expect(result.text).to include('This course is not accepting applications at the moment.')
     end
   end
 

@@ -1,0 +1,5 @@
+en:
+    find:
+       courses:
+         course_closed:
+            applications_closed_currently: This course is not accepting applications at the moment. You can contact the provider for more information.

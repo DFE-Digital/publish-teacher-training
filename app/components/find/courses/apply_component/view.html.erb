@@ -11,7 +11,7 @@
             ) %>
       </p>
     <% else %>
-      <%= govuk_warning_text(text: "You cannot apply for this course as it is closed for applications. To find courses open for applications, change your search to ‘Only show courses open for applications’.") %>
+      <%= govuk_warning_text(text: t(".not_accepting_applications")) %>
     <% end %>
   <% else %>
     <div data-qa="course__end_of_cycle_notice">
