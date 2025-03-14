@@ -1264,6 +1264,10 @@ en:
             query:
               blank: Enter a URN (unique reference number) or school name
               too_short: Enter at least two characters
+        support/providers/schools/urn_form:
+          attributes:
+            values:
+              blank: "Enter URNs"
         support/school_form:
           attributes:
             location_name:
