@@ -157,9 +157,9 @@ jobs:
               docker compose exec -T web /bin/sh -c 'bundle exec rake dfe:analytics:check'
           - tests: yarn_lint_and_test
             command: |
-              docker compose exec -T web /bin/sh -c "yarn add jest@28.1.3"
+              docker compose exec -T web /bin/sh -c "yarn add standard"
               docker compose exec -T web /bin/sh -c "yarn run standard $(git ls-files '**.js' | tr '\n' ' ')"
-              docker compose exec -T web /bin/sh -c 'yarn run test'
+              docker compose exec -T web /bin/sh -c 'yarn run test --run'
 
     steps:
       - name: Checkout
@@ -220,11 +220,7 @@ jobs:
         # Pass Settings compatible env vars to runs tests with
         # feature flag(s) enables
         # Separate mutliple flags with a space
-        feature-flags:
-          [
-            "",
-            "SETTINGS__FEATURES__PROVIDER_PARTNERSHIPS=true"
-          ]
+        feature-flags: ["", "SETTINGS__FEATURES__PROVIDER_PARTNERSHIPS=true"]
         include:
           - tests: unit_models
             include-pattern: spec/models/.*_spec.rb
@@ -424,9 +420,9 @@ jobs:
       - name: Deploy Domains Infrastructure
         uses: DFE-Digital/github-actions/deploy-domains-infra@master
         with:
-          azure-client-id:  ${{ secrets.AZURE_CLIENT_ID  }}
-          azure-tenant-id:  ${{ secrets.AZURE_TENANT_ID   }}
-          azure-subscription-id:  ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID  }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID   }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
           terraform-base: terraform/custom_domains/infrastructure
 
@@ -449,9 +445,9 @@ jobs:
       - name: Deploy Domains Environment
         uses: DFE-Digital/github-actions/deploy-domains-env@master
         with:
-          azure-client-id:  ${{ secrets.AZURE_CLIENT_ID  }}
-          azure-tenant-id:  ${{ secrets.AZURE_TENANT_ID   }}
-          azure-subscription-id:  ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID  }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID   }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
           environment: ${{ matrix.domain_environment }}
           healthcheck: healthcheck
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
