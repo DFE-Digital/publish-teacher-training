@@ -83,26 +83,26 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       given_there_are_courses_with_various_degree_requirements
     end
 
-    scenario 'when 2:1 degree requirement shows courses requiring 2:1, 2:2, third-class, or pass degrees' do
+    scenario 'when 2:1 degree requirement shows courses requiring 2:1 degree' do
       when_i_visit_the_find_results_page
       and_i_filter_courses_requiring_two_one_degree
-      then_courses_with_two_one_degree_requirement_are_visible
+      then_only_courses_with_two_one_degree_requirement_are_visible
       and_the_two_one_filter_is_checked
       and_i_see_that_four_courses_are_found
     end
 
-    scenario 'when 2:2 degree requirement shows courses requiring 2:2, third-class, or pass degrees' do
+    scenario 'when 2:2 degree requirement shows courses requiring 2:2 degree' do
       when_i_visit_the_find_results_page
       and_i_filter_courses_requiring_two_two_degree
-      then_courses_with_two_two_degree_requirement_are_visible
+      then_only_courses_with_two_two_degree_requirement_are_visible
       and_the_two_two_filter_is_checked
       and_i_see_that_three_courses_are_found
     end
 
-    scenario 'when "Third class" shows courses requiring third-class or an ordinary degree' do
+    scenario 'when "Third class" shows courses requiring third-class degree' do
       when_i_visit_the_find_results_page
       and_i_filter_courses_requiring_third_class_grade
-      then_courses_with_third_class_degree_requirement_are_visible
+      then_only_courses_with_third_class_degree_requirement_are_visible
       and_the_third_class_filter_is_checked
       and_i_see_that_two_courses_are_found
     end
@@ -125,21 +125,21 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
 
     scenario 'legacy parameters for 2:1 degree requirements shows relevant courses' do
       when_i_visit_the_find_results_page_using_old_two_one_parameter
-      then_courses_with_two_one_or_lower_degree_requirement_are_visible
+      then_only_courses_with_two_one_degree_requirement_are_visible
       and_the_two_one_filter_is_checked
       and_i_see_that_four_courses_are_found
     end
 
     scenario 'legacy parameters for 2:2 degree requirements shows relevant courses' do
       when_i_visit_the_find_results_page_using_old_two_two_parameter
-      then_courses_with_two_two_or_lower_degree_requirement_are_visible
+      then_only_courses_with_two_two_degree_requirement_are_visible
       and_the_two_two_filter_is_checked
       and_i_see_that_three_courses_are_found
     end
 
     scenario 'legacy parameters for third class degree requirements shows relevant courses' do
       when_i_visit_the_find_results_page_using_old_third_class_parameter
-      then_courses_with_third_class_or_lower_degree_requirement_are_visible
+      then_only_courses_with_third_class_degree_requirement_are_visible
       and_the_third_class_filter_is_checked
       and_i_see_that_two_courses_are_found
     end
