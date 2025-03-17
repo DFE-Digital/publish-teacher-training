@@ -4,6 +4,8 @@ require 'rails_helper'
 
 describe Find::Courses::AboutSchoolsComponent::View, type: :component do
   include Rails.application.routes.url_helpers
+  coordinates = { latitude: 51.509865, longitude: -0.118092, formatted_address: 'London, UK' }
+  distance_from_location = 10
 
   context 'invalid program type' do
     it 'renders the component' do
@@ -11,7 +13,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       course = build(:course,
                      provider:).decorate
 
-      result = render_inline(described_class.new(course))
+      result = render_inline(described_class.new(course, coordinates, distance_from_location))
       expect(result.text).to include('Enter details about how placements work')
     end
   end
@@ -25,12 +27,12 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
         provider:
       ).decorate
 
-      result = render_inline(described_class.new(course))
+      result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
       expect(result.text).to include('You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.')
       expect(result).to have_css('.app-advice__title', text: 'How school placements work')
       expect(result.text).to include('You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.')
-      expect(result.text).to include('Find out more about how school placements work')
+      expect(result.text).not_to include('Find out more about how school placements work')
     end
   end
 
@@ -39,7 +41,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       course = build(:course,
                      funding: 'apprenticeship').decorate
 
-      result = render_inline(described_class.new(course))
+      result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
       expect(result.text).to include('You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.')
     end
@@ -54,7 +56,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
         provider:
       ).decorate
 
-      result = render_inline(described_class.new(course))
+      result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
       expect(result.text).to include('You should get 120 days of classroom experience in schools. You will also spend time at a location where you will study.')
       expect(result).to have_css('.app-advice__title', text: 'How school placements work')
@@ -68,10 +70,10 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       provider = build(:provider, selectable_school: true)
       course = build(:course, provider:).decorate
 
-      result = render_inline(described_class.new(course))
+      result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
       expect(result.text).not_to include('Advice from Get Into Teaching')
-      expect(result.text).to include('You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen.')
+      expect(result.text).to include('You will be able to select a preferred placement school, but there is no guarantee you will be placed in the school you have chosen.')
       expect(result.text).to include('Find out more about how school placements work')
       expect(result.text).to include('The training provider will contact you to discuss your choice to help them select a location that suits you.')
     end
@@ -85,7 +87,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
                      site_statuses: [
                        build(:site_status, site: build(:site))
                      ]).decorate
-      result = render_inline(described_class.new(course))
+      result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
       expect(result.text).to include('Enter details about how placements work')
     end

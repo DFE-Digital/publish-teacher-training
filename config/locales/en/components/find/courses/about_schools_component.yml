@@ -1,0 +1,7 @@
+en:
+  find:
+    courses:
+      about_schools_component:
+        view:
+          fee_based: You should get 120 days of classroom experience in schools. You will also spend time at a location where you will study.
+          non_fee_based: You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.

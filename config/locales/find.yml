@@ -2,15 +2,9 @@ en:
   courses:
     summary_card_component:
       location_key:
-        fee:
-          one: Placement schools
-          other: Placement schools
-        salary:
-          one: Employing school
-          other: Employing schools
-        apprenticeship:
-          one: Employing school
-          other: Employing schools
+        fee: Nearest placement school
+        salary: Nearest employing school
+        apprenticeship: Nearest employing schools
       location_value:
         not_listed: Not listed yet
         school_term:
@@ -20,9 +14,7 @@ en:
           one: "1 potential %{school_term} school"
           other: "%{count} potential %{school_term} schools"
         distance: "%{distance} from %{location}"
-        distance_hint_html:
-          one: "Nearest of %{count} potential %{school_term} school"
-          other: "Nearest of %{count} potential %{school_term} schools"
+        placement_hint_html: Search by city, town or postcode to find the nearest potential %{school_term} school
       fee_key: Fee or salary
       fee_value:
         salary: Salary

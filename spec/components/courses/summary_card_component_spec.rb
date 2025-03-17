@@ -65,18 +65,18 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
 
     context "when funding is 'fee'" do
-      it_behaves_like 'school location row', :fee, 1, 'Placement school'
-      it_behaves_like 'school location row', :fee, 3, 'Placement schools'
+      it_behaves_like 'school location row', :fee, 1, 'Nearest placement school'
+      it_behaves_like 'school location row', :fee, 3, 'Nearest placement school'
     end
 
     context "when funding is 'salary'" do
-      it_behaves_like 'school location row', :salary, 1, 'Employing school'
-      it_behaves_like 'school location row', :salary, 5, 'Employing schools'
+      it_behaves_like 'school location row', :salary, 1, 'Nearest employing school'
+      it_behaves_like 'school location row', :salary, 5, 'Nearest employing school'
     end
 
     context "when funding is 'apprenticeship'" do
-      it_behaves_like 'school location row', :apprenticeship, 1, 'Employing school'
-      it_behaves_like 'school location row', :apprenticeship, 7, 'Employing schools'
+      it_behaves_like 'school location row', :apprenticeship, 1, 'Nearest employing school'
+      it_behaves_like 'school location row', :apprenticeship, 7, 'Nearest employing school'
     end
   end
 
@@ -95,12 +95,9 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
 
     context 'when there are placements and is not a location search' do
-      it_behaves_like 'school location row', :fee, 1, '1 potential placement school'
-      it_behaves_like 'school location row', :fee, 2, '2 potential placement schools'
-      it_behaves_like 'school location row', :salary, 1, '1 potential employing school'
-      it_behaves_like 'school location row', :salary, 2, '2 potential employing schools'
-      it_behaves_like 'school location row', :apprenticeship, 1, '1 potential employing school'
-      it_behaves_like 'school location row', :apprenticeship, 3, '3 potential employing schools'
+      it_behaves_like 'school location row', :fee, 1, 'Search by city, town or postcode to find the nearest potential placement school'
+      it_behaves_like 'school location row', :salary, 1, 'Search by city, town or postcode to find the nearest potential employing school'
+      it_behaves_like 'school location row', :apprenticeship, 1, 'Search by city, town or postcode to find the nearest potential employing school'
     end
 
     describe '#search_by_location?' do
@@ -160,12 +157,9 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       it_behaves_like 'school location row', :salary, 3, '1 mile from London'
       it_behaves_like 'school location row', :apprenticeship, 3, '1 mile from London'
 
-      it_behaves_like 'school location row', :fee, 1, 'Nearest of 1 potential placement school'
-      it_behaves_like 'school location row', :fee, 3, 'Nearest of 3 potential placement schools'
-      it_behaves_like 'school location row', :salary, 1, 'Nearest of 1 potential employing school'
-      it_behaves_like 'school location row', :salary, 3, 'Nearest of 3 potential employing schools'
-      it_behaves_like 'school location row', :apprenticeship, 1, 'Nearest of 1 potential employing school'
-      it_behaves_like 'school location row', :apprenticeship, 3, 'Nearest of 3 potential employing schools'
+      it_behaves_like 'school location row', :fee, 1, '1 mile from London'
+      it_behaves_like 'school location row', :salary, 1, '1 mile from London'
+      it_behaves_like 'school location row', :apprenticeship, 1, '1 mile from London'
 
       context 'sanitize dangerous user input' do
         let(:funding) { :fee }
@@ -177,7 +171,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
 
         it 'sanitizes user input by striping html tags' do
           expect(summary_card_content).to include(
-            '1 mile from alert("XSS") Nearest of 2 potential placement schools'
+            'Nearest placement school 1 mile from alert("XSS")'
           )
         end
       end

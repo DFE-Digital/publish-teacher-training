@@ -3,10 +3,12 @@
 require 'rails_helper'
 
 describe Find::Courses::TrainingLocations::View, type: :component do
-  subject { render_inline(described_class.new(course:, preview:)) }
+  subject { render_inline(described_class.new(course:, preview:, coordinates:, distance_from_location:)) }
 
+  let(:coordinates) { { latitude: 51.509865, longitude: -0.118092, formatted_address: 'Some Address' } }
+  let(:distance_from_location) { 10 }
   let(:preview) { false }
-  let(:component) { described_class.new(course:, preview:) }
+  let(:component) { described_class.new(course:, preview:, coordinates:, distance_from_location:) }
 
   describe '#render' do
     let(:study_site) { course.study_sites.first.decorate }
@@ -15,7 +17,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, :with_full_time_sites, funding: 'fee', study_sites: [build(:site, :study_site)]) }
 
       it "renders the 'Placement schools' heading" do
-        expect(subject).to have_css('.govuk-summary-list__key', text: 'Placement schools')
+        expect(subject).to have_css('.govuk-summary-list__key', text: 'Nearest placement school')
       end
 
       it 'renders the link to school placements' do
@@ -31,7 +33,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, :with_full_time_sites, funding: 'salary', study_sites: [build(:site, :study_site)]) }
 
       it "renders the 'Employing schools' heading" do
-        expect(subject).to have_css('.govuk-summary-list__key', text: 'Employing schools')
+        expect(subject).to have_css('.govuk-summary-list__key', text: 'Nearest employing school')
       end
 
       it 'renders the link to employing schools' do
@@ -89,7 +91,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, :with_full_time_sites, funding: 'fee', study_sites: [build(:site, :study_site)]) }
 
       it 'returns the correct text for one potential placement location' do
-        expect(component.potential_placements_text).to eq('1 potential placement school')
+        expect(component.potential_placements_text).to eq('<span class="govuk-!-font-weight-bold">10 miles</span> from <span class="govuk-!-font-weight-bold">Some Address</span>')
       end
     end
 
@@ -97,7 +99,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, :with_full_time_sites, funding: 'salary', study_sites: [build(:site, :study_site)]) }
 
       it 'returns the correct text for one potential employing school' do
-        expect(component.potential_placements_text).to eq('1 potential employing school')
+        expect(component.potential_placements_text).to eq('<span class="govuk-!-font-weight-bold">10 miles</span> from <span class="govuk-!-font-weight-bold">Some Address</span>')
       end
     end
 
@@ -105,7 +107,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, funding: 'fee', sites: [create(:site), create(:site), create(:site)]) }
 
       it 'returns the correct text for multiple placements' do
-        expect(component.potential_placements_text).to eq('3 potential placement schools')
+        expect(component.potential_placements_text).to eq('<span class="govuk-!-font-weight-bold">10 miles</span> from <span class="govuk-!-font-weight-bold">Some Address</span>')
       end
     end
   end
@@ -117,7 +119,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, :with_full_time_sites, study_sites: [build(:site, :study_site)]) }
 
       it 'returns the correct text for one study site' do
-        expect(component.potential_study_sites_text).to eq('1 study site')
+        expect(component.potential_placements_text).to eq('<span class="govuk-!-font-weight-bold">10 miles</span> from <span class="govuk-!-font-weight-bold">Some Address</span>')
       end
     end
 
@@ -125,7 +127,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, :with_full_time_sites, study_sites: [build(:site, :study_site), build(:site, :study_site)]) }
 
       it 'returns the correct text for multiple study sites' do
-        expect(component.potential_study_sites_text).to eq('2 potential study sites')
+        expect(component.potential_placements_text).to eq('<span class="govuk-!-font-weight-bold">10 miles</span> from <span class="govuk-!-font-weight-bold">Some Address</span>')
       end
     end
 
