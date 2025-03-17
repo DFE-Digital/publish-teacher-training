@@ -2,19 +2,22 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
-    attr_reader :course, :location, :visa_sponsorship, :available_placements_count
+    attr_reader :course, :location, :visa_sponsorship
 
     def initialize(course:, location: nil, visa_sponsorship: nil)
       @course = course
-      @available_placements_count = course.available_placements_count
       @location = location
       @visa_sponsorship = visa_sponsorship
-
       super
     end
 
     def title
-      govuk_link_to(find_course_path(provider_code: course.provider_code, course_code: course.course_code), class: 'govuk-link govuk-!-font-size-24') do
+      govuk_link_to(find_course_path(
+                      provider_code: course.provider_code,
+                      course_code: course.course_code,
+                      location: @location,
+                      distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil
+                    ), class: 'govuk-link govuk-!-font-size-24') do
         safe_join(
           [
             content_tag(:span, course.provider_name, class: 'app-search-result__provider-name'),
@@ -24,37 +27,23 @@ module Courses
       end
     end
 
-    def location_key
-      t(".location_key.#{course.funding}", count: @available_placements_count)
-    end
-
     def location_value
-      return t('.location_value.not_listed') if @available_placements_count.zero?
+      return t('.location_value.not_listed') if course.available_placements_count.zero?
 
-      if search_by_location?
-        t(
-          '.location_value.distance',
-          school_term:,
-          distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, 'mile'), class: 'govuk-!-font-weight-bold'),
-          location: content_tag(:span, sanitize(@location), class: 'govuk-!-font-weight-bold')
-        ).html_safe
-      else
-        t(
-          '.location_value.potential_schools',
-          count: @available_placements_count,
-          school_term:
-        )
-      end
-    end
-
-    def location_hint
       return unless search_by_location?
 
       t(
-        '.location_value.distance_hint_html',
+        '.location_value.distance',
         school_term:,
-        count: @available_placements_count
-      )
+        distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, 'mile'), class: 'govuk-!-font-weight-bold'),
+        location: content_tag(:span, sanitize(@location), class: 'govuk-!-font-weight-bold')
+      ).html_safe
+    end
+
+    def location_hint
+      return if search_by_location?
+
+      t('.location_value.placement_hint_html', school_term:)
     end
 
     def fee_key

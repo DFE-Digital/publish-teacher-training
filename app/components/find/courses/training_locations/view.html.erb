@@ -4,13 +4,14 @@
     <%= row.with_value do %>
       <p class="govuk-body"><%= potential_placements_text %></p>
       <%= govuk_link_to(t("view_list_of_school_placements"), placements_url) if show_school_placements_link? %>
-      <p class="govuk-hint govuk-!-font-size-16">Schools can change and are not guaranteed</p>
+      <p class="govuk-hint govuk-!-font-size-16"><%= guaranteed_text %></p>
     <% end %>
   <% end %>
   <%= summary_list.with_row do |row| %>
     <%= row.with_key { bottom_heading } %>
     <%= row.with_value do %>
       <p class="govuk-body"><%= potential_study_sites_text %></p>
+      <p class="govuk-body"><%= potential_study_sites_hint_text %></p>
       <ul class="govuk-list govuk-list--spaced">
         <% course.study_sites.each do |study_site| %>
           <li>

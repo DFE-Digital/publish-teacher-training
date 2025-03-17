@@ -18,7 +18,7 @@ describe Shared::Courses::SchoolPlacementsAdvice::View, type: :component do
 
       expect(result).to have_css('.app-advice__title', text: 'How school placements work')
       expect(result.text).to include('You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.')
-      expect(result.text).to include('Find out more about how school placements work')
+      expect(result.text).not_to include('Find out more about how school placements work')
     end
   end
 
@@ -46,7 +46,7 @@ describe Shared::Courses::SchoolPlacementsAdvice::View, type: :component do
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen.')
+      expect(result.text).to include('You will be able to select a preferred placement school, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.')
       expect(result.text).to include('Find out more about how school placements work')
       expect(result.text).to include('The training provider will contact you to discuss your choice to help them select a location that suits you.')
       expect(result.text).not_to include('Advice from Get Into Teaching')

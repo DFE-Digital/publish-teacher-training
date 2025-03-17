@@ -151,7 +151,7 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     expect(page).to have_content(
       'You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.'
     )
-    expect(page).to have_content('Find out more about how school placements work')
+    expect(page).to have_no_content('Find out more about how school placements work')
   end
 
   def then_i_see_fee_based_course_school_placement_guidance

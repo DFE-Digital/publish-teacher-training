@@ -32,7 +32,7 @@
 
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
 
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 

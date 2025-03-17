@@ -18,7 +18,18 @@ module Find
         site_statuses: [:site]
       ).find_by!(course_code: params[:course_code]&.upcase).decorate
 
+      distance_from_location if params[:location]
+
       render_not_found unless @course.is_published?
+    end
+
+    def distance_from_location
+      @coordinates = Geolocation::CoordinatesQuery.new(params[:location]).call
+      @distance_from_location ||= ::Courses::NearestSchoolQuery.new(
+        courses: [@course],
+        latitude: @coordinates[:latitude],
+        longitude: @coordinates[:longitude]
+      ).call.first.distance_to_search_location.ceil
     end
 
     def legacy_paramater_keys

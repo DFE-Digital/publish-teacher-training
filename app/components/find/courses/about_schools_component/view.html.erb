@@ -1,19 +1,20 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
   <div data-qa="course__about_schools">
-    <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
 
     <% if course.fee_based? %>
       <p class="govuk-body">
-        You should get 120 days of classroom experience in schools. You will also spend time at a location where you will study.
+        <%= t(".fee_based") %>
       </p>
     <% else %>
       <p class="govuk-body">
-        You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
+        <%= t(".non_fee_based") %>
       </p>
     <% end %>
 
-    <%= render Find::Courses::TrainingLocations::View.new(course:, preview: preview?(params)) %>
+    <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
+
+    <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
 
     <% if course.published_how_school_placements_work.present? %>
       <%= markdown(course.published_how_school_placements_work) %>
