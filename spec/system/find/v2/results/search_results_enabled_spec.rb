@@ -86,7 +86,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     scenario 'when 2:1 degree requirement shows courses requiring 2:1, 2:2, third-class, or pass degrees' do
       when_i_visit_the_find_results_page
       and_i_filter_courses_requiring_two_one_degree
-      then_courses_with_two_one_or_lower_degree_requirement_are_visible
+      then_courses_with_two_one_requirement_are_visible
       and_the_two_one_filter_is_checked
       and_i_see_that_four_courses_are_found
     end
@@ -94,7 +94,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     scenario 'when 2:2 degree requirement shows courses requiring 2:2, third-class, or pass degrees' do
       when_i_visit_the_find_results_page
       and_i_filter_courses_requiring_two_two_degree
-      then_courses_with_two_two_or_lower_degree_requirement_are_visible
+      then_courses_with_two_two_requirement_are_visible
       and_the_two_two_filter_is_checked
       and_i_see_that_three_courses_are_found
     end
@@ -102,7 +102,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     scenario 'when "Third class" shows courses requiring third-class or an ordinary degree' do
       when_i_visit_the_find_results_page
       and_i_filter_courses_requiring_third_class_grade
-      then_courses_with_third_class_or_lower_degree_requirement_are_visible
+      then_courses_with_third_class_degree_requirement_are_visible
       and_the_third_class_filter_is_checked
       and_i_see_that_two_courses_are_found
     end

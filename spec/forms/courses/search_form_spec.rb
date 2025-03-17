@@ -102,7 +102,7 @@ RSpec.describe Courses::SearchForm do
 
       context 'when old 2:1 params is used' do
         include_examples 'minimum degree required in search params',
-                         from: { degree_required: 'show_all_courses' },
+                         from: { degree_required: 'two_one' },
                          to: { minimum_degree_required: 'two_one' }
       end
 
