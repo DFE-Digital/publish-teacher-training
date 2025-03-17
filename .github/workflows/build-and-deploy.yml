@@ -17,8 +17,6 @@ permissions:
 
 jobs:
   build:
-    environment:
-      name: review
     name: Build
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
@@ -49,32 +47,12 @@ jobs:
           # This is the latest commit on the actual PR branch
           echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
-      - name: Set KV environment variables
-        run: |
-          # tag build to the review env for vars and secrets
-          tf_vars_file=terraform/aks/workspace_variables/review.tfvars.json
-          echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "KEY_VAULT_INFRA_SECRET_NAME=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: azure/login@v2
-        with:
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-
-      - uses: DFE-Digital/keyvault-yaml-secret@v1
-        id: get-secret
-        with:
-          keyvault: ${{ env.KEY_VAULT_NAME }}
-          secret: ${{ env.KEY_VAULT_INFRA_SECRET_NAME }}
-          key: SNYK_TOKEN
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -114,7 +92,7 @@ jobs:
       - name: Run Snyk to check Docker image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
-          SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
           args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
