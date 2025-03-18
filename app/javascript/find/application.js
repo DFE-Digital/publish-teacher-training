@@ -19,8 +19,6 @@ Stimulus.register('subjects-autocomplete', SubjectsAutocompleteController)
 Stimulus.register('remote-autocomplete', RemoteAutocompleteController)
 Stimulus.register('locations-autocomplete', LocationsAutocompleteController)
 Stimulus.register('visibility', VisibilityController)
-
-// V2
 Stimulus.register('v2-provider-autocomplete', ProviderAutocompleteController)
 
 window.jQuery = jQuery
