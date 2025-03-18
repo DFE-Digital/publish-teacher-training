@@ -1,4 +1,4 @@
-ruby      3.3.5
+ruby      3.4.2
 kubelogin 1.32.2
 kubectl   1.32.2
 yarn      1.22.22
