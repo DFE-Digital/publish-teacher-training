@@ -1,1 +1,163 @@
-<%= render "form", submit_button_text: "Continue" %>
+<%= content_for :page_title, title_with_error_prefix("Find courses by location or by training provider", flash[:error].present?) %>
+
+<div class="app-homepage-search-container">
+  <div class="app-homepage-search-content">
+    <h1 class="govuk-heading-l">Find teacher training courses in England</h1>
+
+    <%= form_with model: @search_courses_form, scope: "", url: find_results_path, method: :get, class: "app-homepage-search-form-container" do |form| %>
+      <%= form.hidden_field :utm_source, value: "home" %>
+      <%= form.hidden_field :utm_medium, value: "main_search" %>
+      <%= form.hidden_field :applications_open, value: "true" %>
+
+      <div class="app-homepage-search-input-container">
+        <div class="app-homepage-search-input" data-controller="subjects-autocomplete">
+          <%= render DfE::Autocomplete::View.new(
+             form,
+             attribute_name: :subject_code,
+             form_field: form.govuk_select(
+               :subject_code,
+               options_for_select(
+                 dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code]),
+                 form.object.subject_code
+               ),
+               label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" }
+             )
+           ) %>
+        </div>
+
+        <div class="app-homepage-search-input">
+          <%= form.govuk_text_field :location,
+            label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
+            form_group: {
+              "data-controller" => "locations-autocomplete",
+              "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path
+            },
+            autocomplete: "off",
+            data: { locations_autocomplete_target: "input" } %>
+        </div>
+
+        <div class="govuk-!-width-full">
+          <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: nil, class: "govuk-checkboxes--small", hidden: false do %>
+            <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t("helpers.label.courses_search_form.visa_sponsorship") } %>
+          <% end %>
+        </div>
+
+        <div class="govuk-!-width-full">
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Search by training provider
+              </span>
+            </summary>
+
+            <div class="govuk-details__text">
+              <div class="govuk-form-group" data-controller="v2-provider-autocomplete">
+                <%= render Find::AutocompleteComponent.new(
+                  form_field: form.govuk_select(
+                    :provider_code,
+                    dfe_autocomplete_options(form.object.providers_list, synonyms_fields: %i[code]),
+                    label: { text: t("helpers.label.courses_search_form.provider"), size: "s" }
+                  )
+                ) %>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div>
+        <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), class: "govuk-button--start app-homepage-search-button" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <div class="quick-link-card">
+      <h2 class="govuk-heading-m"><%= t("find.search.primary") %></h2>
+      <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_primary"), find_track_click_path(utm_content: "primary-quick-link", url: find_primary_path)) %></p>
+    </div>
+  </div>
+
+  <div class="govuk-grid-column-one-half">
+    <div class="quick-link-card">
+      <h2 class="govuk-heading-m"><%= t("find.search.secondary") %></h2>
+      <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_secondary"), find_track_click_path(utm_content: "secondary-quick-link", url: find_secondary_path)) %></p>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-top-6">
+  <div class="govuk-grid-column-full">
+    <%= govuk_accordion(html_attributes: { class: "accordion-without-controls" }) do |accordion| %>
+      <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.tda.title"), class: "govuk-heading-m")) do %>
+        <p class="govuk-body"><%= t("find.search.tda.degree") %></p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.tda.browse_tda_courses"), find_results_path({ minimum_degree_required: "no_degree_required", utm_source: "home", utm_medium: "teacher_degree_apprenticeship_courses", applications_open: true })) %></p>
+        <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.tda.teacher_degree_apprenticeships"), t("find.get_into_teaching.url_tda")) %>.</p>
+      <% end %>
+
+      <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.send.title"), class: "govuk-heading-m")) do %>
+        <p class="govuk-body"><%= t("find.search.send.send_specialism") %></p>
+        <p class="govuk-body">
+        <%= govuk_link_to(
+          t("find.search.send.browse_primary_send"),
+          find_results_path(
+            {
+              applications_open: true,
+              send_courses: true,
+              subjects: @search_courses_form.primary_subject_codes,
+              utm_source: "home",
+              utm_medium: "send_primary_courses"
+            }
+          )
+        ) %>
+        </p>
+        <p class="govuk-body">
+        <%= govuk_link_to(
+          t("find.search.send.browse_secondary_send"),
+          find_results_path(
+            {
+              applications_open: true,
+              send_courses: true,
+              subjects: @search_courses_form.secondary_subject_codes,
+              utm_source: "home",
+              utm_medium: "send_secondary_courses"
+            }
+          )
+        ) %>
+        </p>
+        <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.send.teaching_pupils"), t("find.get_into_teaching.url_send")) %>.</p>
+      <% end %>
+
+      <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.other_stages.title"), class: "govuk-heading-m")) do %>
+        <h4 class="govuk-heading-s"><%= t("find.search.other_stages.nursery.title") %></h4>
+
+        <p class="govuk-body"><%= t("find.search.other_stages.nursery.help") %></p>
+        <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.other_stages.nursery.route_to_early_years"), t("find.get_into_teaching.early_years")) %>.</p>
+
+        <h4 class="govuk-heading-s"><%= t("find.search.other_stages.further_ed.title") %></h4>
+
+        <p class="govuk-body"><%= t("find.search.other_stages.further_ed.teach_young_people") %></p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.other_stages.further_ed.browse_further_ed"), find_results_path({ level: "further_education", utm_source: "home", utm_medium: "further_education_courses", applications_open: true })) %></p>
+        <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.other_stages.further_ed.teaching_further_ed"), t("find.get_into_teaching.further_ed")) %>.</p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <%= govuk_inset_text classes: "app-callout app-callout--pink" do %>
+      <h3><%= t("find.search.become_a_teacher") %></h3>
+      <%= t("find.search.become_a_teacher_html", link: govuk_link_to(t("find.search.become_a_teacher_link_text"), find_track_click_path(utm_content: "become_a_teacher", url: t("get_into_teaching.url_become_a_teacher")))) %>
+    <% end %>
+  </div>
+
+  <div class="govuk-grid-column-one-half">
+    <%= govuk_inset_text classes: "app-callout app-callout--pink" do %>
+      <h3><%= t("find.search.get_help_and_support") %></h3>
+      <%= t("find.search.get_help_and_support_html", link: govuk_link_to(t("find.search.get_help_and_support_link_text"), find_track_click_path(utm_content: "get_help_and_support", url: t("get_into_teaching.url_help_and_support")))) %>
+    <% end %>
+  </div>
+</div>
