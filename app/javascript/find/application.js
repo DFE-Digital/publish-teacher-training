@@ -2,8 +2,6 @@
 import jQuery from 'jquery'
 import { initAll } from 'govuk-frontend'
 
-import initAutocomplete from './autocomplete'
-
 import { Application } from '@hotwired/stimulus'
 import FilterSearchController from './controllers/filter_search_controller'
 import SubjectsAutocompleteController from './controllers/subjects_autocomplete_controller'
