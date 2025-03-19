@@ -17,7 +17,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 FROM ruby:3.4.2-alpine3.20
 
-RUN apk add --no-cache libxml2
+RUN apk add --no-cache libxml2 yaml-dev
 
 RUN apk add --update --no-cache tzdata && \
   cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
