@@ -44,7 +44,7 @@ describe AuthenticationService do
         expect(logger_spy).to have_received(:info) do |*_args, &block|
           message = block.call
           expect(message).to start_with('User found from sign_in_user_id in token')
-          expect(message).to include("sign_in_user_id=>\"#{sign_in_user_id}\"")
+          expect(message).to include("sign_in_user_id: \"#{sign_in_user_id}\"")
           expect(message).not_to include(user.email)
         end
       end
