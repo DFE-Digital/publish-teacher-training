@@ -5,7 +5,7 @@ module Support
     class SchoolsController < ApplicationController
       before_action :build_site, only: %i[index create]
       before_action :new_form, only: %i[index]
-      before_action :reset_csv_schools_forms, only: %i[index]
+      before_action :reset_urn_form, only: %i[index]
       before_action :site, only: %i[show delete]
 
       def index
@@ -60,8 +60,8 @@ module Support
         @site ||= provider.sites.find(params[:id])
       end
 
-      def reset_csv_schools_forms
-        [ParsedCSVSchoolsForm.new(provider), RawCSVSchoolsForm.new(provider)].each(&:clear_stash)
+      def reset_urn_form
+        Schools::URNForm.new(provider).clear_stash
       end
     end
   end
