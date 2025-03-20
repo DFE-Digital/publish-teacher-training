@@ -23,4 +23,10 @@
   word-spacing: normal;
   hyphens: none;
   tab-size: 2;
+
+}
+.preformatted-text--no-overflow {
+  @extend .preformatted-text;
+
+  overflow: hidden;
 }
