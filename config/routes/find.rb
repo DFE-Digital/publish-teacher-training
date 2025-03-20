@@ -21,6 +21,7 @@ namespace :find, path: '/' do
   get '/course/:provider_code/:course_code/provider/website', to: 'courses#provider_website', as: :provider_website
 
   get '/geolocation-suggestions', to: 'geolocation_suggestions#index'
+  get '/landing', to: 'pages#landing', as: :landing
 
   get '/results', to: 'v2/results#index', as: 'results'
   get '/primary', to: 'v2/primary_subjects#index'

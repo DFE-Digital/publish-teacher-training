@@ -308,12 +308,13 @@ en:
           no_fee: There is no fee
           course_summary: Course summary
           course_length: Course length
-          age_range: Age range
+          age_range: Age group
           date_can_apply: Date you can apply from
           start_date: Start date
           qualification: Qualification
-          provider: Provider
-          accredited_by: Accredited by
+          provider: Training provider
+          accredited_by: Accredited provider
+          success_rate: Success rate
           for_uk_citizens: for UK citizens
           for_non_uk_citizens: for Non-UK citizens
           fee_key: Fee or salary

@@ -62,11 +62,7 @@ module Find
         end
 
         def age_range_in_years_row
-          if secondary_course?
-            "#{age_range_in_years.humanize} - #{level}"
-          else
-            age_range_in_years.humanize
-          end
+          "#{level.titleize} - #{age_range_in_years.humanize}"
         end
 
         def course_length_with_study_mode_row

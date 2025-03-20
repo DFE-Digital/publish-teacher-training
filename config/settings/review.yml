@@ -5,9 +5,9 @@ environment:
   label: "Review"
   name: "review"
 
-publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
-find_url: https://qa.find-teacher-training-courses.service.gov.uk
-extra_find_url: https://qa.find-teacher-training-courses.service.gov.uk
+publish_url: https://publish-review-5066.test.teacherservices.cloud/
+find_url: https://find-review-5066.test.teacherservices.cloud/
+extra_find_url: https://find-review-5066.test.teacherservices.cloud/
 apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 
 authentication:

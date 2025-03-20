@@ -10,6 +10,12 @@ module Find
       redirect_to root_path unless CycleTimetable.find_down?
     end
 
+    def landing
+      @courses = RecruitmentCycle.current.courses
+                                 .where(course_code: %w[E026 R480 H971 Y404 36P4], master_subject_id: 10)
+                                 .order(created_at: :desc)
+    end
+
     def accessibility; end
 
     def privacy; end

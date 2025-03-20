@@ -1,0 +1,9 @@
+<h1 class="govuk-heading-l">Courses</h1>
+
+<% @courses.each do |course| %>
+  <h2 class="govuk-heading-m">
+    <%= govuk_link_to find_course_path(provider_code: course.provider_code, course_code: course.course_code, **request.query_parameters), no_visited_state: true do %>
+      <%= "#{course.provider.provider_name} - #{course.name_and_code}" %>
+    <% end %>
+  </h2>
+<% end %>
