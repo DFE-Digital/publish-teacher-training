@@ -6,6 +6,6 @@ require_relative 'shared_examples/store'
 
 module Stores
   describe ProviderStore do
-    include_examples 'store', :provider, %i[location_details]
+    include_examples 'store', :provider, %i[urn location_details]
   end
 end
