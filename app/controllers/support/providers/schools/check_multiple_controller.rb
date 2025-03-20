@@ -7,12 +7,29 @@ module Support
         include SuccessMessage
 
         def show
-          school_details
+          schools
+          unfound_urns
+          duplicate_urns
         end
 
         def update
           save
+
           redirect_to support_recruitment_cycle_provider_schools_path
+        end
+
+        def remove_school
+          if urn_form.values.present?
+            updated_values = urn_form.values - [params[:urn]]
+            @urn_form = URNForm.new(provider, params: { values: updated_values })
+            @urn_form.stash
+          end
+          schools
+          unfound_urns
+          duplicate_urns
+
+          flash.now[:success] = t('.school_removed')
+          render :show
         end
 
         private
@@ -22,24 +39,34 @@ module Support
         end
 
         def save
-          school_details.each(&:save!)
+          schools.each(&:save!)
 
-          parsed_csv_school_form.clear_stash
-          raw_csv_school_form.clear_stash
-
-          schools_added_message(school_details)
+          schools_added_message(schools)
         end
 
-        def parsed_csv_school_form
-          @parsed_csv_school_form ||= ParsedCSVSchoolsForm.new(provider)
+        def urn_form
+          @urn_form ||= URNForm.new(provider)
         end
 
-        def raw_csv_school_form
-          @raw_csv_school_form ||= RawCSVSchoolsForm.new(provider)
+        def urn_service
+          @urn_service ||= ProviderURNIdentificationService.new(provider, urn_form.values || []).call
         end
 
-        def school_details
-          @school_details ||= parsed_csv_school_form.school_details.map { |s| Site.new(s) }
+        def schools
+          @schools = begin
+            gias_schools = GiasSchool.where(urn: urn_service[:new_urns])
+            gias_schools.map do |gias_school|
+              provider.sites.build(gias_school.school_attributes)
+            end
+          end
+        end
+
+        def unfound_urns
+          @unfound_urns = urn_service[:unfound_urns]
+        end
+
+        def duplicate_urns
+          @duplicate_urns = urn_service[:duplicate_urns]
         end
       end
     end

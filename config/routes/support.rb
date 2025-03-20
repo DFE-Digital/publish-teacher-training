@@ -43,8 +43,9 @@ namespace :support do
 
       namespace :schools, module: 'providers/schools' do
         resource :multiple, only: %i[new create], on: :member, controller: 'multiple' do
-          resources :new, param: :position, only: %i[show update], controller: 'new_multiple'
-          resource :check, only: %i[show update], controller: 'check_multiple'
+          resource :check, only: %i[show update], controller: 'check_multiple' do
+            get 'remove_school/:urn', action: 'remove_school', as: :remove_school
+          end
         end
       end
 

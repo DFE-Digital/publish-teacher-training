@@ -755,6 +755,7 @@ en:
     providers:
       add: "Add organisation"
       schools:
+        check_multiple: # file
         multiple: # file
         checks:
           update:
