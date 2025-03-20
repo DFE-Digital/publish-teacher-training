@@ -86,4 +86,71 @@ describe SubjectsCache do
       )
     end
   end
+
+  describe '#all_subjects' do
+    it 'returns all active subjects excluding Modern Languages' do
+      create(:secondary_subject, subject_name: 'Biology', subject_code: 'C1')
+      create(:secondary_subject, subject_name: 'Chemistry', subject_code: 'F1')
+      create(:secondary_subject, subject_name: 'Modern Languages', subject_code: nil)
+      create(:secondary_subject, subject_name: 'Physics', subject_code: 'F3')
+      create(:secondary_subject, subject_name: 'History', subject_code: 'V1')
+
+      subjects = cache.all_subjects
+
+      expect(subjects.map(&:name)).to contain_exactly('Primary', 'Primary with English', 'Primary with geography and history', 'Primary with mathematics', 'Primary with modern languages', 'Primary with physical education', 'Primary with science', 'Art and design', 'Science', 'Biology', 'Business studies', 'Chemistry', 'Citizenship', 'Classics', 'Communication and media studies', 'Computing', 'Dance', 'Design and technology', 'Drama', 'Economics', 'English', 'Geography', 'Health and social care', 'History', 'Mathematics', 'Music', 'Philosophy', 'Physical education', 'Physics', 'Psychology', 'Religious education', 'Social sciences', 'Latin', 'Ancient Greek', 'Ancient Hebrew', 'Physical education with an EBacc subject', 'French', 'German', 'Italian', 'Japanese', 'Mandarin', 'Russian', 'Spanish', 'Modern languages (other)', 'Further education', 'Biology', 'Chemistry', 'Physics', 'History')
+      expect(subjects.map(&:value)).to match_array(
+        %w[
+          00
+          01
+          02
+          03
+          04
+          06
+          07
+          W1
+          F0
+          C1
+          08
+          F1
+          09
+          Q8
+          P3
+          11
+          12
+          DT
+          13
+          L1
+          Q3
+          F8
+          L5
+          V1
+          G1
+          W3
+          P1
+          C6
+          F3
+          C8
+          V6
+          14
+          A0
+          A1
+          A2
+          C7
+          15
+          17
+          18
+          19
+          20
+          21
+          22
+          24
+          41
+          C1
+          F1
+          F3
+          V1
+        ]
+      )
+    end
+  end
 end

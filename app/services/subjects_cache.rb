@@ -31,7 +31,7 @@ class SubjectsCache
 
   def all_subjects
     Rails.cache.fetch('subjects:all', expires_in: expires_in) do
-      Subject.active.map do |subject|
+      Subject.active.where.not(subject_name: ['Modern Languages']).map do |subject|
         SubjectSuggestion.new(name: subject.subject_name, value: subject.subject_code)
       end
     end
