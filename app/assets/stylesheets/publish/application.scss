@@ -51,3 +51,19 @@
 .govuk-tag-no-max-width {
   max-width: none;
 }
+
+.app-action-group {
+  display: block;
+  gap: govuk-spacing(2);
+  @include govuk-media-query($until: tablet) {
+    :not(:first-child) {
+      margin-top: govuk-spacing(2);
+    }
+  }
+
+  @include govuk-media-query($from: tablet) {
+    display: flex;
+    align-items: center;
+    column-gap: govuk-spacing(4);
+  }
+}
