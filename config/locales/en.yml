@@ -1276,8 +1276,6 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "URN must be 5 or 6 numbers"
-        support/raw_csv_schools_form:
-          blank: "Enter school details"
         publish/school_form:
           attributes:
             location_name:
