@@ -14,7 +14,7 @@ describe 'creates providers partnerships from enrichments' do
 
   Rails.application.load_tasks if Rake::Task.tasks.empty?
 
-  it 'calls Courses::PublishService service' do
+  it 'creates accredited partnerships for training partners from their enrichments' do
     expect { subject }.to change(training_provider.accredited_partnerships, :count).by(1)
     expect(training_provider.accredited_partnerships.last).to have_attributes(
       description: 'The Description',
