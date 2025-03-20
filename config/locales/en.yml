@@ -794,10 +794,6 @@ en:
         new: "Add user"
         edit: "Update user"
         check: "Check your answers"
-      multiple_schools:
-        new: "Add schools"
-        show: "Add school (%{position} of %{max})"
-        check: "Check your answers"
       accredited_provider_search:
         new:
           title: *accredited_provider_title
