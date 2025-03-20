@@ -5,16 +5,16 @@ module Support
     module Schools
       class MultipleController < ApplicationController
         def new
-          @raw_csv_schools_form = RawCSVSchoolsForm.new(provider)
+          @urn_form = URNForm.new(provider)
         end
 
         def create
-          @raw_csv_schools_form = RawCSVSchoolsForm.new(provider, params: form_params)
-          if @raw_csv_schools_form.stash
+          parsed_urns = URNParser.new(form_params[:values]).call
 
-            school_details = CSVImports::SchoolsService.call(csv_content: @raw_csv_schools_form.school_details, provider:)
-            ParsedCSVSchoolsForm.new(provider, params: { school_details: }).stash
-            redirect_to support_recruitment_cycle_provider_schools_multiple_new_path(position: 1)
+          @urn_form = URNForm.new(provider, params: { values: parsed_urns.presence })
+
+          if @urn_form.stash
+            redirect_to support_recruitment_cycle_provider_schools_multiple_check_path
           else
             render(:new)
           end
@@ -27,7 +27,7 @@ module Support
         end
 
         def form_params
-          params.expect(support_raw_csv_schools_form: [:school_details])
+          params.expect(support_providers_schools_urn_form: [:values])
         end
       end
     end
