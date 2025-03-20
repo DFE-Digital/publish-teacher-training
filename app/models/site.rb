@@ -75,6 +75,10 @@ class Site < ApplicationRecord
     address.compact_blank.join(', ')
   end
 
+  def address
+    [address1, address2, address3, town, address4, postcode]
+  end
+
   def address_changed?
     saved_change_to_location_name? ||
       saved_change_to_address1? ||
