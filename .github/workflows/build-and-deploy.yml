@@ -19,152 +19,200 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ needs.build.outputs.image_tag }}
-
     strategy:
       fail-fast: false
       matrix:
-        tests: [rubocop, erb_lint, dfe_analytics, yarn_lint_and_test]
-        include:
-          - tests: rubocop
-            command: docker compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
-          - tests: erb_lint
-            command: docker compose exec -T web /bin/sh -c 'bundle exec erb_lint app'
-          - tests: dfe_analytics
-            command: |
-              docker compose exec -T web /bin/sh -c "bundle exec rails db:setup"
-              docker compose exec -T web /bin/sh -c 'bundle exec rake dfe:analytics:check'
-          - tests: yarn_lint_and_test
-            command: |
-              docker compose exec -T web /bin/sh -c "yarn add standard"
-              docker compose exec -T web /bin/sh -c "yarn run standard $(git ls-files '**.js' | tr '\n' ' ')"
-              docker compose exec -T web /bin/sh -c 'yarn run test --run'
+        tests:
+          - name: rubocop
+            command: bundle exec rubocop --format github
+          - name: erb_lint
+            command: bundle exec erb_lint app
+          - name: yarn lint
+            command: yarn run standard $(git ls-files '**.js' | tr '\n' ' ')
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set environment variables
-        run: |
-          echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+      - uses: ruby/setup-ruby@v1
 
-      - name: Pull docker images
-        run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
+      - run: bundle install
 
-      - name: Setup container
-        run: |
-          docker compose up --no-build -d
-          docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-          docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+      - uses: actions/setup-node@v3
 
-      - name: ${{ matrix.tests }}
+      - run: yarn install
+
+      - name: ${{ matrix.tests.name }}
         run: ${{ env.COMMAND }}
         env:
-          COMMAND: ${{ matrix.command }}
+          COMMAND: ${{ matrix.tests.command }}
+
       - name: Notify Slack channel on job failure
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_CHANNEL: twd_findpub_tech
           SLACK_USERNAME: Publish Teacher Training CI
           SLACK_TITLE: Lint failure
-          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training ${{ matrix.tests }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }} :sadparrot:"
+          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training ${{ matrix.tests.name }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }} :sadparrot:"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_COLOR: failure
           SLACK_FOOTER: Sent from lint job in build workflow
 
-  test:
-    name: Test
+  javascript-tests:
+    name: JavaScript Tests
     needs: [lint]
-    outputs:
-      image_tag: ${{ needs.build.outputs.image_tag }}
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: yarn test
+        run: yarn run test --run
+
+      - name: Notify Slack channel on job failure
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_USERNAME: Publish Teacher Training CI
+          SLACK_TITLE: Lint failure
+          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training ${{ matrix.name }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }} :sadparrot:"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: failure
+          SLACK_FOOTER: Sent from lint job in build workflow
+
+  analytics-checks:
+    name: Analytics checks
+    needs: [lint]
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgres://postgres:developmentpassword@localhost:5432
+
+    services:
+      postgres:
+        image: postgis/postgis:14-3.2-alpine
+        env:
+          POSTGRES_PASSWORD: developmentpassword
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Setup database
+        run: bundle exec rails db:prepare
+
+      - name: Run tests
+        run: bundle exec rails dfe:analytics:check
+
+  rails-tests:
+    name: Rails Tests
+    needs: [lint]
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgres://postgres:developmentpassword@localhost:5432
+
+    services:
+      postgres:
+        image: postgis/postgis:14-3.2-alpine
+        env:
+          POSTGRES_PASSWORD: developmentpassword
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     strategy:
       fail-fast: false
       matrix:
         tests:
-          [
-            unit_models,
-            unit_services,
-            unit_forms,
-            unit_components,
-            unit_other,
-            integration_auth,
-            integration_find,
-            integration_publish,
-            integration_support,
-            integration_other,
-          ]
+          - name: Unit - Models
+            include-pattern: spec/models/.*_spec.rb
+          - name: Unit - Services
+            include-pattern: spec/services/.*_spec.rb
+          - name: Unit - Forms
+            include-pattern: spec/forms/.*_spec.rb
+          - name: Unit - Components
+            include-pattern: spec/components/.*_spec.rb
+          - name: Unit - Other
+            include-pattern: spec/.*_spec.rb
+            exclude-pattern: spec/(system|features|smoke|models|services|forms|components)/.*_spec.rb
+
+          - name: Integration - Auth
+            include-pattern: spec/features/auth/.*_spec.rb
+          - name: Integration - Find
+            include-pattern: spec/features/find/.*_spec.rb
+          - name: Integration - Publish
+            include-pattern: spec/features/publish/.*_spec.rb
+          - name: Integration - Support
+            include-pattern: spec/features/support/.*_spec.rb
+          - name: Integration - Other
+            include-pattern: spec/features/.*_spec.rb
+            exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
+
+          - name: System
+            include-pattern: spec/system/.*_spec.rb
         # Pass Settings compatible env vars to runs tests with
         # feature flag(s) enables
         # Separate mutliple flags with a space
         feature-flags: ["", "SETTINGS__FEATURES__PROVIDER_PARTNERSHIPS=true"]
-        include:
-          - tests: unit_models
-            include-pattern: spec/models/.*_spec.rb
-          - tests: unit_services
-            include-pattern: spec/services/.*_spec.rb
-          - tests: unit_forms
-            include-pattern: spec/forms/.*_spec.rb
-          - tests: unit_components
-            include-pattern: spec/components/.*_spec.rb
-          - tests: unit_other
-            include-pattern: spec/.*_spec.rb
-            exclude-pattern: spec/(system|features|smoke|models|services|forms|components)/.*_spec.rb
-          - tests: integration_auth
-            include-pattern: spec/features/auth/.*_spec.rb
-          - tests: integration_find
-            include-pattern: spec/features/find/.*_spec.rb
-          - tests: integration_publish
-            include-pattern: spec/features/publish/.*_spec.rb
-          - tests: integration_support
-            include-pattern: spec/features/support/.*_spec.rb
-          - tests: integration_other
-            include-pattern: spec/features/.*_spec.rb
-            exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set environment variables
-        run: |
-          echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+      - uses: ruby/setup-ruby@v1
+      - run: bundle install
 
-      - name: Pull docker images
-        run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
+      - uses: actions/setup-node@v3
+      - run: yarn install
 
-      - name: Setup tests
-        run: |
-          docker compose up --no-build -d
-          docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-          docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
-          docker compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+      - run: bundle exec rails parallel:setup
+      - run: bundle exec rails spec:prepare
 
-      - name: ${{ matrix.tests }} tests with feature flags
+      # - name: Setup tests
+      #   run: |
+      #     docker compose up --no-build -d
+      #     docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+      #     docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+      #     docker compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+
+      - name: ${{ matrix.tests.name }} tests with feature flags
         run: |
-          docker compose exec -T web /bin/sh -c '${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}"'
+          ${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}"
         env:
-          IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
-          INCLUDE_PATTERN: ${{ matrix.include-pattern }}
-          EXCLUDE_PATTERN: ${{ matrix.exclude-pattern || ' ' }}
-          TEST_MATRIX_NODE_NAME: ${{ matrix.tests }}
+          INCLUDE_PATTERN: ${{ matrix.tests.include-pattern }}
+          EXCLUDE_PATTERN: ${{ matrix.tests.exclude-pattern || ' ' }}
           FEATURE_FLAGS: ${{ matrix.feature-flags }}
 
-      - name: Upload coverage results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Coverage_report
-          path: ${{ github.workspace }}/out/*
+      # - name: Upload coverage results
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Coverage_report
+      #     path: ${{ github.workspace }}/out/*
 
       - name: Alert Test Failures
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_CHANNEL: twd_findpub_tech
           SLACK_COLOR: "#ef5343"
           SLACK_ICON_EMOJI: ":github-logo:"
           SLACK_USERNAME: Publish Teacher Training CI
@@ -174,7 +222,7 @@ jobs:
 
   build:
     name: Build
-    needs: [lint, test]
+    needs: [lint, analytics-checks, javascript-tests, rails-tests]
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
