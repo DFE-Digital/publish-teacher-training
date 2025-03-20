@@ -1,0 +1,21 @@
+en:
+  support:
+    providers:
+      schools:
+        check_multiple:
+          show:
+            check: Check your answers
+            caption: Add multiple schools - %{provider}
+            urn: URN
+            address: Address
+            add_schools: Add schools
+            remove_school: Remove school
+            duplicate_urns: Schools with these URNs have already been added
+            unfound_urns: Some URNs could not be found
+            enter_new_urns_button: Enter new URNs
+            find_school_html: or <a class="govuk-link" href="%{link}">find a school’s URN on Get Information About Schools (GIAS) (opens in a new tab)</a>.
+            gias_link_text: Get Information About Schools (GIAS) (opens in a new tab)
+            inset_html: |
+              If this information is not correct, contact the school(s) and ask them to update their information on %{link}.
+          remove_school:
+            school_removed: School removed
