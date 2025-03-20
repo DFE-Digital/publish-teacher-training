@@ -221,7 +221,7 @@ GEM
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     csv (3.3.2)
-    data_migrate (11.2.0)
+    data_migrate (11.3.0)
       activerecord (>= 6.1)
       railties (>= 6.1)
     database_cleaner (2.1.0)
@@ -794,7 +794,7 @@ DEPENDENCIES
   config
   cssbundling-rails (~> 1.4)
   custom_error_message!
-  data_migrate (= 11.2.0)
+  data_migrate (= 11.3.0)
   database_cleaner
   dfe-analytics!
   dfe-autocomplete!
