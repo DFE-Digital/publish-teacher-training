@@ -45,13 +45,10 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
   end
 
-  shared_examples 'school location row' do |funding_type, count, expected_output|
+  shared_examples 'school location row' do |funding_type, expected_output|
     let(:funding) { funding_type }
-    let(:available_placements_count) { count }
 
-    before { allow(course).to receive(:available_placements_count).and_return(count) }
-
-    it "returns the correct content for #{funding_type} when course has #{count} school(s)" do
+    it "returns the correct content for #{funding_type} when course has school(s)" do
       expect(summary_card_content).to include(expected_output)
     end
   end
@@ -65,18 +62,15 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
 
     context "when funding is 'fee'" do
-      it_behaves_like 'school location row', :fee, 1, 'Nearest placement school'
-      it_behaves_like 'school location row', :fee, 3, 'Nearest placement school'
+      it_behaves_like 'school location row', :fee, 'Nearest placement school'
     end
 
     context "when funding is 'salary'" do
-      it_behaves_like 'school location row', :salary, 1, 'Nearest employing school'
-      it_behaves_like 'school location row', :salary, 5, 'Nearest employing school'
+      it_behaves_like 'school location row', :salary, 'Nearest employing school'
     end
 
     context "when funding is 'apprenticeship'" do
-      it_behaves_like 'school location row', :apprenticeship, 1, 'Nearest employing school'
-      it_behaves_like 'school location row', :apprenticeship, 7, 'Nearest employing school'
+      it_behaves_like 'school location row', :apprenticeship, 'Nearest employing school'
     end
   end
 
@@ -88,16 +82,10 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       )
     end
 
-    context 'when no placements' do
-      it_behaves_like 'school location row', :fee, 0, 'Not listed yet'
-      it_behaves_like 'school location row', :salary, 0, 'Not listed yet'
-      it_behaves_like 'school location row', :apprenticeship, 0, 'Not listed yet'
-    end
-
     context 'when there are placements and is not a location search' do
-      it_behaves_like 'school location row', :fee, 1, 'Search by city, town or postcode to find the nearest potential placement school'
-      it_behaves_like 'school location row', :salary, 1, 'Search by city, town or postcode to find the nearest potential employing school'
-      it_behaves_like 'school location row', :apprenticeship, 1, 'Search by city, town or postcode to find the nearest potential employing school'
+      it_behaves_like 'school location row', :fee, 'Search by city, town or postcode to find the nearest potential placement school'
+      it_behaves_like 'school location row', :salary, 'Search by city, town or postcode to find the nearest potential employing school'
+      it_behaves_like 'school location row', :apprenticeship, 'Search by city, town or postcode to find the nearest potential employing school'
     end
 
     describe '#search_by_location?' do
@@ -153,21 +141,15 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         course.define_singleton_method(:minimum_distance_to_search_location) { 0.2 }
       end
 
-      it_behaves_like 'school location row', :fee, 3, '1 mile from London'
-      it_behaves_like 'school location row', :salary, 3, '1 mile from London'
-      it_behaves_like 'school location row', :apprenticeship, 3, '1 mile from London'
-
-      it_behaves_like 'school location row', :fee, 1, '1 mile from London'
-      it_behaves_like 'school location row', :salary, 1, '1 mile from London'
-      it_behaves_like 'school location row', :apprenticeship, 1, '1 mile from London'
+      it_behaves_like 'school location row', :fee, '1 mile from London'
+      it_behaves_like 'school location row', :salary, '1 mile from London'
+      it_behaves_like 'school location row', :apprenticeship, '1 mile from London'
 
       context 'sanitize dangerous user input' do
         let(:funding) { :fee }
         let(:search_params) do
           { location: '<script>alert("XSS")</script>', latitude: 1, longitude: 1 }
         end
-
-        before { allow(course).to receive(:available_placements_count).and_return(2) }
 
         it 'sanitizes user input by striping html tags' do
           expect(summary_card_content).to include(
@@ -181,8 +163,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
   shared_examples 'fee or salary row' do |funding_type, params, expected_output|
     let(:funding) { funding_type }
     let(:search_params) { params }
-
-    before { allow(course).to receive(:available_placements_count).and_return(2) }
 
     it "returns the correct fee or salary row for #{funding_type}" do
       expect(summary_card_content).to include(expected_output)
@@ -511,8 +491,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     let(:length) { course_length }
     let(:study_mode) { course_study_mode }
 
-    before { allow(course).to receive(:available_placements_count).and_return(2) }
-
     it "returns the correct course length row for #{course_length} and #{course_study_mode}" do
       expect(summary_card_content).to include("Course length#{expected_output}")
     end
@@ -542,8 +520,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     let(:course) { create(:course, level:, age_range_in_years:) }
     let(:level) { course_level.downcase }
     let(:age_range_in_years) { course_age_group }
-
-    before { allow(course).to receive(:available_placements_count).and_return(2) }
 
     it "returns the correct age group row for #{course_level} and #{course_age_group}" do
       expect(summary_card_content).to include("Age group#{expected_output}")
@@ -585,8 +561,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
   shared_examples 'course qualification row' do |course_qualification, expected_output|
     let(:course) { create(:course, qualification: course_qualification) }
 
-    before { allow(course).to receive(:available_placements_count).and_return(2) }
-
     it "returns the correct qualification row for #{course_qualification}" do
       expect(summary_card_content).to include("Qualification awarded#{expected_output}")
     end
@@ -605,8 +579,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     let(:course) { create(:course, degree_type:, degree_grade:) }
     let(:degree_type) { course_degree_type }
     let(:degree_grade) { course_degree_grade_required }
-
-    before { allow(course).to receive(:available_placements_count).and_return(2) }
 
     it "returns the correct degree requirements row for #{course_degree_type} and #{course_degree_grade_required}" do
       expect(summary_card_content).to include("Degree required #{expected_output}")

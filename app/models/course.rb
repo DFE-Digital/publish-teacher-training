@@ -917,10 +917,6 @@ class Course < ApplicationRecord
     "#{name} (#{course_code})"
   end
 
-  def available_placements_count
-    @available_placements_count ||= site_statuses.size
-  end
-
   def visa_sponsorship
     if fee? && can_sponsor_student_visa?
       :can_sponsor_student_visa
