@@ -25,7 +25,7 @@
 
           <%= form.govuk_check_boxes_fieldset :sites_ids, legend: nil do %>
             <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
-                <%= form.govuk_check_box :sites_ids,
+              <%= form.govuk_check_box :sites_ids,
                     site.id,
                     label: { text: site.location_name },
                     hint: { text: site.full_address },
