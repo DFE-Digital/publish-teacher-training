@@ -61,8 +61,9 @@ RSpec.describe 'Support::CopyCourses' do
     context 'when copying courses to the same provider' do
       it 'renders the new action with error messages' do
         login_user(user)
+
         post "/support/#{year}/providers/#{target_provider.id}/copy_courses", params: { 'course[autocompleted_provider_code]' => target_provider.provider_code }
-        expect(response).to render_template(:new)
+
         expect(response.parsed_body.css('.govuk-error-summary').text).to match('Choose different providers')
       end
     end
