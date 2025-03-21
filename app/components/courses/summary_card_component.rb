@@ -28,8 +28,6 @@ module Courses
     end
 
     def location_value
-      return t('.location_value.not_listed') if course.available_placements_count.zero?
-
       return unless search_by_location?
 
       t(
