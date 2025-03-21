@@ -41,6 +41,8 @@ RSpec.describe Publish::Courses::OutcomeController do
     end
 
     context 'when teacher degree apprenticeship draft course' do
+      render_views
+
       it 'renders the edit outcome' do
         course = create(
           :course,
@@ -58,7 +60,7 @@ RSpec.describe Publish::Courses::OutcomeController do
           code: course.course_code
         }
 
-        expect(response).to render_template(:edit)
+        expect(response.body).to have_content "Qualification – #{course.name_and_code}"
       end
     end
   end

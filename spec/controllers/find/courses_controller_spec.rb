@@ -69,7 +69,7 @@ module Find
           course_code: '123'
         }
 
-        expect(response).to render_template('errors/not_found')
+        expect(response).to be_not_found
       end
     end
   end

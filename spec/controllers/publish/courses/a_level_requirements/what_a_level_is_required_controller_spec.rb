@@ -34,7 +34,7 @@ module Publish
             end
 
             it 'assign the existing subject requirement to current step' do
-              current_step = assigns(:wizard).current_step
+              current_step = @controller.instance_variable_get(:@wizard).current_step
               expect(current_step.uuid).to eq('a-uuid')
               expect(current_step.subject).to eq('any_subject')
             end
@@ -49,9 +49,11 @@ module Publish
           end
 
           context 'when uuid is not provided' do
+            render_views
+
             it 'renders the :new template' do
               get :new, params: { provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code }
-              expect(response).to render_template(:new)
+              expect(response.body).to have_content 'What A level or equivalent qualification is required?'
             end
           end
 
@@ -73,13 +75,15 @@ module Publish
           end
 
           context 'when uuid is provided and maximum A level subject requirements' do
+            render_views
+
             let(:a_level_subject_requirements) do
               4.times.map { |number| { uuid: "a-uuid-#{number}", subject: 'any_subject' } }
             end
 
             it 'renders the page so user can edit the A level subject requirement' do
               get :new, params: { provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code, uuid: 'a-uuid-1' }
-              expect(response).to render_template(:new)
+              expect(response.body).to have_content 'What A level or equivalent qualification is required?'
             end
           end
         end
