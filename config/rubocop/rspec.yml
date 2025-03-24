@@ -174,7 +174,6 @@ RSpec/RepeatedDescription:
 
 RSpec/IndexedLet:
   Exclude:
-    - 'spec/view_objects/find/results_view_spec.rb'
     - 'spec/support/shared_contexts/copy_courses.rb'
     - 'spec/services/user_associations_service/delete_spec.rb'
     - 'spec/services/support/data_exports/users_export_spec.rb'

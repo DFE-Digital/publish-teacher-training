@@ -122,16 +122,6 @@ en:
       pgde: "PGDE"
       pgde_with_qts: "QTS with PGDE"
       undergraduate_degree_with_qts: Teacher degree apprenticeship with QTS
-    location_filter:
-      errors:
-        no_option: Select find courses by location or by training provider
-        unknown_location: Enter a real city, town or postcode
-        missing_location: Enter a city, town or postcode
-        missing_provider: Enter a real school, university or training provider
-        blank_provider: Enter a provider name or code
-    fields:
-      location: "Postcode, town or city"
-      provider: "Training provider"
     homepage:
       title: Find courses by location or by training provider
       radio_options:
@@ -144,18 +134,6 @@ en:
           radio: By university or other training provider
           text_field: University or other training provider
           hint_text: Enter the name or provider code
-    age_groups:
-      title: Which age group do you want to teach?
-      further_education:
-        hint: For example, teaching A levels or vocational courses
-      radio_options:
-        primary:
-          radio: Primary
-        secondary:
-          radio: Secondary
-        further_education:
-          radio: Further education
-          hint_text: For example, teaching A levels or vocational courses
     financial_support:
       bursaries: Bursaries
       bursary_and_scholarships: Bursaries and scholarships
@@ -182,9 +160,6 @@ en:
           entry_requirements: Before you apply, contact the teacher training provider to check you meet the entry requirements.
         unlikely_to_get_help: If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan.
         what_support: Find out what financial support is available to non-UK citizens.
-    visa_status:
-      primary_title: Visa sponsorship
-      secondary_title: Do you need visa sponsorship?
     search:
       primary: Primary (ages 3 to 11)
       browse_primary: Browse primary courses
@@ -221,20 +196,6 @@ en:
           teach_young_people: Teach young people and adults over 16 who are not studying for a degree.
           browse_further_ed: Browse further education courses.
           teaching_further_ed: teaching in further education
-    subjects:
-      primary_title: Primary courses with subject specialisms
-      secondary_title: Which secondary subjects do you want to teach?
-    subjects_page:
-      title: Select a subject -
-      primary_title: Primary courses with subject specialisms
-      secondary_title: Which secondary subjects do you want to teach?
-    university_degree_status_page:
-      title: Do you have a university degree
-      content: You need a bachelor’s degree or equivalent to do postgraduate teacher training. You do not need a degree to apply for a teacher degree apprenticeship (TDA).
-    no_degree_and_requires_visa_sponsorship_page:
-      title: You are not eligible for teacher training courses on this service
-      content: You do not have a university degree, and you require visa sponsorship, so you are not eligible for postgraduate teacher training or teacher degree apprenticeships.
-      explanation: You may be eligible for %{link}, which are not on this service.
     courses:
       fees_component:
         view:
@@ -361,25 +322,6 @@ en:
         back_to_search: Back to search results
         training_with_disabilities: Training with disabilities
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
-    results:
-      search_result_component:
-        pays_salary_html: This course pays a <strong>salary</strong>
-        teaching_apprenticeship: It is a teaching apprenticeship
-        no_fee: There is no fee
-        no_degree_required: No degree required
-        fee_based:
-          location: Placement schools
-        salary_based:
-          location:
-            one: Employing school
-            other: Employing schools
-        nearest_location: Nearest location
-        fee_or_salary: Fee or salary
-        course_fee: Course fee
-        qualification: Qualification
-        degree_required: Degree required
-        visa_sponsorship: Visa sponsorship
-        course_title_html: <a class="govuk-link govuk-!-font-size-24" data-qa="course__link" href=%{course_path}><span class="app-search-result__provider-name" data-qa="course__provider_name">%{provider_name}</span><span class="app-search-result__course-name" data-qa="course__name">%{course_name}</span></a>
     scholarships:
       physics:
         body: Institute of Physics
@@ -469,11 +411,6 @@ en:
           html: Teacher degree apprenticeship with <abbr title='Qualified teacher status'>QTS</abbr>
     links:
       national_pay_scales: https://www.gov.uk/government/publications/national-pay-scales-for-eligible-teaching-and-education-jobs/national-pay-scales-for-eligible-teaching-and-education-leadership-occupation-codes
-    result_filters_filters_view:
-      radius_options_for_select:
-        label:
-          one: "%{count} mile"
-          other: "%{count} miles"
     v2:
       results:
         index:
@@ -584,24 +521,6 @@ en:
   activemodel:
     errors:
       models:
-        find/university_degree_status_form:
-          attributes:
-            university_degree_status:
-              blank: Select whether you have a university degree
-        find/age_groups_form:
-          attributes:
-            age_group:
-              blank: "Select which age group you want to teach"
-        find/visa_status_form:
-          attributes:
-            visa_status:
-              blank: "Select if you have the right to work or study in the UK"
-        find/subjects_form:
-          blank: "Select at least one subject you want to teach"
-          attributes:
-            subjects:
-              primary_subject: "Select at least one primary subject you want to teach"
-              secondary_subject: "Select at least one secondary subject you want to teach"
         find/v2/subjects/secondary_form:
           blank: "Select at least one type of secondary course"
         find/v2/subjects/primary_form:
