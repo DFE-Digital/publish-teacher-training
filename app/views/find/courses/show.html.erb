@@ -1,11 +1,24 @@
 <%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
 
-<% if permitted_referrer? && course_back_link %>
-  <%= content_for(:before_content) do %>
-    <%= govuk_back_link(
-      text: t("find.courses.show.back_to_search"),
-      href: course_back_link
-    ) %>
+<% case @course.course_code %>
+<% when "E026" %>
+  <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+<% when "R480" %>
+  <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+<% when "H971" %>
+  <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+<% when "36P4" %>
+  <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+<% when "Y404" %>
+  <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+<% else %>
+  <% if permitted_referrer? && course_back_link %>
+    <%= content_for(:before_content) do %>
+      <%= govuk_back_link(
+        text: t("find.courses.show.back_to_search"),
+        href: course_back_link
+      ) %>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -22,6 +35,27 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+        <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+        <p class="govuk-body govuk-!-font-size-16">
+          <% case @course.course_code %>
+            <% when "E026" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
+            <% when "R480" %>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
+            <% when "H971" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
+            <% when "36P4" %>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
+            <% when "Y404" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
+          <% end %>
+        </p>
+      </div>
+    </div>
+
     <%= render Find::Courses::SummaryComponent::View.new(@course) %>
 
     <% if @course.application_status_closed? %>
@@ -74,6 +108,25 @@
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+        <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+        <p class="govuk-body govuk-!-font-size-16">
+          <% case @course.course_code %>
+            <% when "E026" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
+            <% when "R480" %>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
+            <% when "H971" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
+            <% when "36P4" %>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
+            <% when "Y404" %>
+              <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
+          <% end %>
+        </p>
+      </div>
+    </div>
   </div>
 </div>
