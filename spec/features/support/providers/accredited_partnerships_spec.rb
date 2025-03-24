@@ -67,6 +67,15 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     then_i_see_the_cannot_remove_text
   end
 
+  scenario 'i edit the description of a partnership' do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    and_i_click_change_description
+    and_i_delete_all_the_text
+    and_i_click_update_description
+    then_i_see_an_error_message('Enter details about the accredited provider')
+  end
+
   scenario 'i can delete accredited partnerships not attached to a course' do
     and_i_click_on_the_accredited_provider_tab
     and_i_click_add_accredited_provider
@@ -238,5 +247,17 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
       'h2.govuk-summary-card__title a.govuk-link',
       text: 'Accrediting provider name'
     )
+  end
+
+  def and_i_click_change_description
+    page.click_link_or_button 'Change description'
+  end
+
+  def and_i_delete_all_the_text
+    fill_in 'About the accredited provider', with: ''
+  end
+
+  def and_i_click_update_description
+    click_link_or_button 'Update description'
   end
 end
