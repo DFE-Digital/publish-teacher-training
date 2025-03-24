@@ -5,8 +5,10 @@ const providerSuggestionTemplate = (result) => result && `${result.provider_name
 const onConfirm = (input) => (option) => (input.value = option ? option.id : '')
 
 function init () {
-  const recruitmentCycleYear = document.getElementById('accredited_provider_search_form_recruitment_cycle_year')?.value
-  if (!recruitmentCycleYear) return
+  const accreditedProviderSearchForm = document.querySelector('form[data-recruitment-cycle-year]')
+  if (!accreditedProviderSearchForm) return
+
+  const recruitmentCycleYear = document.querySelector('form[data-recruitment-cycle-year]').dataset.recruitmentCycleYear
   const options = {
     path: `/api/${recruitmentCycleYear}/accredited_provider_suggestions`,
     template: {
