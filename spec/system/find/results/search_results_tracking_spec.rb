@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'V2 results - tracking', :js, service: :find do
+RSpec.describe 'Search results tracking', :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)

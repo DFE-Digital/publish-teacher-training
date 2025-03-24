@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'V2 results - enabled', :js, service: :find do
+RSpec.describe 'Search results by subject and location', :js, service: :find do
   include FiltersFeatureSpecsHelper
 
   before do
