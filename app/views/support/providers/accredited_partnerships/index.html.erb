@@ -21,7 +21,7 @@
 <% else %>
   <% @partnerships.each do |partnership| %>
     <%= render AccreditedProviderComponent.new(
-      provider_name: govuk_link_to(partnership.accredited_provider.provider_name, support_recruitment_cycle_providers_path(partnership.accredited_provider.recruitment_cycle_year, partnership.accredited_provider)),
+      provider_name: govuk_link_to(partnership.accredited_provider.provider_name, support_recruitment_cycle_provider_path(partnership.accredited_provider.recruitment_cycle_year, partnership.accredited_provider)),
       remove_path: delete_support_recruitment_cycle_provider_accredited_partnership_path(
         accredited_provider_code: partnership.accredited_provider.provider_code
       ),

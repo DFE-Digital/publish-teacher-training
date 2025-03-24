@@ -18,6 +18,9 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
     then_i_see_the_accredited_provider_name_displayed
+
+    when_i_click_the_accredited_provider_link
+    then_i_am_on_the_accredited_providers_page
   end
 
   scenario 'i can create a new provider partnership' do
@@ -226,10 +229,10 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
   end
 
   def and_my_provider_has_accrediting_providers
-    course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting provider name'))
+    @course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting provider name'))
 
-    @provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider, description: 'Description')
-    @provider.courses << course
+    @provider.accredited_partnerships.create(accredited_provider: @course.accrediting_provider, description: 'Description')
+    @provider.courses << @course
   end
 
   def and_i_see_the_accredited_partnership
@@ -259,5 +262,13 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
 
   def and_i_click_update_description
     click_link_or_button 'Update description'
+  end
+
+  def when_i_click_the_accredited_provider_link
+    page.click_link_or_button @course.accrediting_provider.provider_name
+  end
+
+  def then_i_am_on_the_accredited_providers_page
+    expect(page).to have_current_path(support_recruitment_cycle_provider_path(@course.accrediting_provider.recruitment_cycle_year, @course.accrediting_provider))
   end
 end
