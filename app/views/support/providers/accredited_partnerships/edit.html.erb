@@ -18,6 +18,7 @@
         url: support_recruitment_cycle_provider_accredited_partnership_path,
         method: :put
       ) do |f| %>
+      <%= f.govuk_error_summary %>
 
       <%= f.govuk_text_area(
           :description,
