@@ -6,7 +6,9 @@
     <%= form_with(
         model: @accredited_provider_search_form,
         url: search_support_recruitment_cycle_provider_accredited_providers_path,
-        method: :post
+        html: {
+          data: { recruitment_cycle_year: @recruitment_cycle.year }
+        }
       ) do |f| %>
 
       <%= content_for(:breadcrumbs) do %>
