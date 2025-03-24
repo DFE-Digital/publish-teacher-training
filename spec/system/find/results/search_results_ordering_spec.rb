@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'V2 results ordering', :js, service: :find do
+RSpec.describe 'Search results ordering', :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
 

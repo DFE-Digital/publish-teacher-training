@@ -26,11 +26,11 @@
         </button>
       </div>
 
-      <%= render "find/v2/results/filters/all", form: %>
+      <%= render "find/results/filters/all", form: %>
     </div>
 
     <div class="app-filter-layout__content">
-      <%= render partial: "find/v2/results/courses_guidance/show" %>
+      <%= render partial: "find/results/courses_guidance/show" %>
 
       <div class="app-search-results-controls">
         <div class="govuk-form-group" data-controller="subjects-autocomplete">
@@ -68,7 +68,7 @@
           </summary>
 
           <div class="govuk-details__text">
-            <div class="govuk-form-group" data-controller="v2-provider-autocomplete">
+            <div class="govuk-form-group" data-controller="provider-autocomplete">
               <%= render Find::AutocompleteComponent.new(
                 form_field: form.govuk_select(
                   :provider_code,
@@ -126,7 +126,7 @@
           <% end %>
         </ul>
 
-        <%= render partial: "find/v2/results/courses_guidance/show" %>
+        <%= render partial: "find/results/courses_guidance/show" %>
         <%= govuk_pagination(pagy: @pagy) %>
       <% else %>
         <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">

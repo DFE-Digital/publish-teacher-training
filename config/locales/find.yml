@@ -411,45 +411,43 @@ en:
           html: Teacher degree apprenticeship with <abbr title='Qualified teacher status'>QTS</abbr>
     links:
       national_pay_scales: https://www.gov.uk/government/publications/national-pay-scales-for-eligible-teaching-and-education-jobs/national-pay-scales-for-eligible-teaching-and-education-leadership-occupation-codes
-    v2:
-      results:
-        index:
-          page_title:
-            zero: "No courses found"
-            one: "1 course found"
-            other: "%{formatted_count} courses found"
-        courses_guidance:
-          show:
-            heading: "Not sure which course is right for you?"
-            links:
-              choose_course: "Find out how to choose a course"
-              training_adviser: "Get a free teacher training adviser"
-              events: "Talk to teacher training providers at an event near you"
-      subjects:
-        fee_value:
-          fee:
-            hint:
-              bursaries_and_scholarship_html: "Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available"
-              bursaries_only_html: "Bursaries of %{bursary_amount} are available"
-              scholarship_only_html: "Scholarships of %{scholarship_amount} are available"
-      primary_subjects:
-        index:
-          page_title: Browse primary courses
-          find_courses_button: Find primary courses
-          how_primary_specialism_works: How primary specialisms work
-          how_primary_specialism_works_para_one: As a trainee primary teacher you’ll learn to teach all subjects across the national curriculum.
-          how_primary_specialism_works_para_two: Some courses also enable you to develop your knowledge of a particular subject. This means that when you're a teacher, you might be able to influence the way this subject is taught in your school. For example, you might mentor your colleagues to teach that subject better.
-      secondary_subjects:
-        index:
-          page_title: Browse secondary courses
-          find_courses_button: Find secondary courses
-          financial_support:
-            title: Financial support
-            bursaries_and_scholarship_heading: Bursaries and scholarships
-            eligible_for_bursaries_and_scholarship: Find out whether you are eligible for a bursary or scholarship
-            student_loans: Student loans
-            loans_text: Find out more about student loans for teacher training
-
+    results:
+      index:
+        page_title:
+          zero: "No courses found"
+          one: "1 course found"
+          other: "%{formatted_count} courses found"
+      courses_guidance:
+        show:
+          heading: "Not sure which course is right for you?"
+          links:
+            choose_course: "Find out how to choose a course"
+            training_adviser: "Get a free teacher training adviser"
+            events: "Talk to teacher training providers at an event near you"
+    subjects:
+      fee_value:
+        fee:
+          hint:
+            bursaries_and_scholarship_html: "Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available"
+            bursaries_only_html: "Bursaries of %{bursary_amount} are available"
+            scholarship_only_html: "Scholarships of %{scholarship_amount} are available"
+    primary_subjects:
+      index:
+        page_title: Browse primary courses
+        find_courses_button: Find primary courses
+        how_primary_specialism_works: How primary specialisms work
+        how_primary_specialism_works_para_one: As a trainee primary teacher you’ll learn to teach all subjects across the national curriculum.
+        how_primary_specialism_works_para_two: Some courses also enable you to develop your knowledge of a particular subject. This means that when you're a teacher, you might be able to influence the way this subject is taught in your school. For example, you might mentor your colleagues to teach that subject better.
+    secondary_subjects:
+      index:
+        page_title: Browse secondary courses
+        find_courses_button: Find secondary courses
+        financial_support:
+          title: Financial support
+          bursaries_and_scholarship_heading: Bursaries and scholarships
+          eligible_for_bursaries_and_scholarship: Find out whether you are eligible for a bursary or scholarship
+          student_loans: Student loans
+          loans_text: Find out more about student loans for teacher training
   helpers:
     legend:
       courses_search_form:
@@ -521,7 +519,7 @@ en:
   activemodel:
     errors:
       models:
-        find/v2/subjects/secondary_form:
+        find/subjects/secondary_form:
           blank: "Select at least one type of secondary course"
-        find/v2/subjects/primary_form:
+        find/subjects/primary_form:
           blank: "Select at least one type of primary course"

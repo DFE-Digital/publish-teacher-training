@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'V2 results - enabled', :js, service: :find do
+RSpec.describe 'No search results', :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
 
