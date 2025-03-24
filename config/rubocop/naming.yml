@@ -28,8 +28,6 @@ Naming/PredicateName:
     - 'spec/components/find/courses/financial_support/fees_and_financial_support_component/view_preview.rb'
     - 'spec/components/find/courses/contents_component/view_preview.rb'
     - 'spec/components/find/courses/contents_component/view_preview.rb'
-    - 'app/view_objects/find/results_view.rb'
-    - 'app/view_objects/find/result_filters/filters_view.rb'
     - 'app/validators/phone_validator.rb'
     - 'app/services/courses/generate_course_name_service.rb'
     - 'app/services/course_search_service.rb'
@@ -46,6 +44,5 @@ Naming/PredicateName:
     - 'app/controllers/publish/courses/engineers_teach_physics_controller.rb'
     - 'app/controllers/api/public/v1/providers_controller.rb'
     - 'app/components/gcse_requirements.rb'
-    - 'app/components/find/results/search_result_component.rb'
     - 'app/components/degree_row_content.rb'
 
