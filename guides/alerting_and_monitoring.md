@@ -26,3 +26,17 @@ skylight:
   authentication: "auth_token_goes_here"
   enable: true
 ```
+
+### Logit
+
+
+We use `rails_semantic_logger` to collect our logs and send them to logit.io in every environment.
+
+You can access Logit here https://dashboard.logit.io/
+
+It is recommended to use email and password rather than SSO.
+
+
+To learn more about how you can access the logs for our services watch this workshop recorded in 2024
+
+[Logging workshop](https://educationgovuk.sharepoint.com/:v:/r/sites/TeacherServices/Shared%20Documents/Learning/Logging%20workshop-20240918_160320-Meeting%20Recording.mp4?csf=1&web=1&e=wmf6XB&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
