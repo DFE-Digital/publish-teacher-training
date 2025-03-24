@@ -50,7 +50,6 @@ module Support
           ), flash: { success: t('.updated') }
 
         else
-          accredited_provider
           render(:edit)
         end
       end
