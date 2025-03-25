@@ -48,6 +48,7 @@ shared:
     - additional_a_level_equivalencies
     - degree_type
     - funding
+    - visa_sponsorship_application_deadline_at
   course_site:
     - id
     - course_id
