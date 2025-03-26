@@ -67,7 +67,7 @@ class WorkflowStepService
   end
 
   def workflow_removed_steps
-    return [] unless course.provider.accredited_bodies.length == 1
+    return [] unless course.provider.accredited_partners.length == 1
 
     %i[accredited_provider]
   end
@@ -139,7 +139,7 @@ class WorkflowStepService
   end
 
   def school_direct_workflow_steps_with_accredited_provider_check
-    if course.provider.accredited_bodies.length == 1
+    if course.provider.accredited_partners.length == 1
       school_direct_workflow_steps - [:accredited_provider]
     else
       school_direct_workflow_steps
