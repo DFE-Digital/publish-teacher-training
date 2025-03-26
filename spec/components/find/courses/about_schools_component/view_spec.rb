@@ -31,7 +31,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
       expect(result.text).to include('You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.')
       expect(result).to have_css('.app-advice__title', text: 'How school placements work')
-      expect(result.text).to include('You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.')
+      expect(result.text).to include('Check with the provider before applying. They may require you to find your own school or want to discuss your situation to help them choose a school you can travel to.')
       expect(result.text).not_to include('Find out more about how school placements work')
     end
   end
