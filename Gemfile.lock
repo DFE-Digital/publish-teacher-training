@@ -150,7 +150,7 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     aes_key_wrap (1.1.0)
     amazing_print (1.7.2)
-    ast (2.4.2)
+    ast (2.4.3)
     attr_extras (7.1.0)
     attr_required (1.0.2)
     audited (5.8.0)
@@ -182,8 +182,7 @@ GEM
       safely_block (>= 0.4)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
-    brakeman (7.0.0)
-      racc
+    brakeman (5.4.1)
     builder (3.3.0)
     bullet (8.0.1)
       activesupport (>= 3.0.0)
@@ -488,7 +487,7 @@ GEM
     parallel (1.26.3)
     parallel_tests (5.1.0)
       parallel
-    parser (3.3.7.1)
+    parser (3.3.7.2)
       ast (~> 2.4.1)
       racc
     patience_diff (1.2.0)
@@ -638,8 +637,8 @@ GEM
       rubocop-ast (>= 1.38.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.38.1)
-      parser (>= 3.3.1.0)
+    rubocop-ast (1.41.0)
+      parser (>= 3.3.7.2)
     rubocop-capybara (2.22.1)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
