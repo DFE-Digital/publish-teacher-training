@@ -7,9 +7,7 @@ module Publish
       before_action :build_provider, only: %i[edit update]
       helper_method :accredited_partners
 
-      def accredited_partners
-        provider.accredited_bodies
-      end
+      delegate :accredited_partners, to: :provider
 
       def show
         @course = build_course&.decorate
