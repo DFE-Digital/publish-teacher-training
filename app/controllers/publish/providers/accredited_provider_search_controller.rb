@@ -11,19 +11,11 @@ module Publish
 
       def create
         if accredited_provider_id.present?
-          if Settings.features.provider_partnerships
-            redirect_to new_publish_provider_recruitment_cycle_accredited_partnership_path(
-              provider_code: provider.provider_code,
-              recruitment_cycle_year: provider.recruitment_cycle_year,
-              accredited_provider_id:
-            )
-          else
-            redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(
-              provider_code: provider.provider_code,
-              recruitment_cycle_year: provider.recruitment_cycle_year,
-              accredited_provider_id:
-            )
-          end
+          redirect_to new_publish_provider_recruitment_cycle_accredited_partnership_path(
+            provider_code: provider.provider_code,
+            recruitment_cycle_year: provider.recruitment_cycle_year,
+            accredited_provider_id:
+          )
         else
 
           @accredited_provider_search_form = AccreditedProviderSearchForm.new(query:)
@@ -42,19 +34,11 @@ module Publish
         @accredited_provider_select_form = AccreditedProviderSelectForm.new(provider_id: accredited_provider_select_params[:provider_id])
 
         if @accredited_provider_select_form.valid?
-          if Settings.features.provider_partnerships
-            redirect_to new_publish_provider_recruitment_cycle_accredited_partnership_path(
-              provider_code: provider.provider_code,
-              recruitment_cycle_year: provider.recruitment_cycle_year,
-              accredited_provider_id: accredited_provider_select_params[:provider_id]
-            )
-          else
-            redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(
-              provider_code: provider.provider_code,
-              recruitment_cycle_year: provider.recruitment_cycle_year,
-              accredited_provider_id: accredited_provider_select_params[:provider_id]
-            )
-          end
+          redirect_to new_publish_provider_recruitment_cycle_accredited_partnership_path(
+            provider_code: provider.provider_code,
+            recruitment_cycle_year: provider.recruitment_cycle_year,
+            accredited_provider_id: accredited_provider_select_params[:provider_id]
+          )
         else
           @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:, recruitment_cycle_year: params[:recruitment_cycle_year])
           render :results

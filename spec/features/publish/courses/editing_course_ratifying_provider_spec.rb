@@ -65,16 +65,7 @@ feature 'Editing course ratifying provider', { can_edit_current_and_next_cycles:
 
   def and_there_is_a_second_provider_partnership
     @new_ratifying_provider = create(:accredited_provider) do |accredited_provider|
-      if Settings.features.provider_partnerships
-        create(:provider_partnership, training_provider: provider, accredited_provider:)
-      else
-        provider.accrediting_provider_enrichments ||= []
-        provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
-          UcasProviderCode: accredited_provider.provider_code,
-          Description: ''
-        )
-        provider.save
-      end
+      create(:provider_partnership, training_provider: provider, accredited_provider:)
     end
   end
 
