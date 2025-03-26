@@ -3,7 +3,7 @@ kubelogin 0.2.6
 kubectl   1.32.2
 yarn      1.22.22
 nodejs    20.10.0
-terraform 1.11.2
+terraform 1.4.5
 azure-cli 2.70.0
 jq        1.7.1
 make      4.4.1
