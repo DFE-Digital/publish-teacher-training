@@ -36,9 +36,9 @@ describe Provider do
         provider = create(:provider, :accredited_provider)
 
         expect do
-          provider.update(ukprn: '12345678', provider_name: "St Leo's and Southmead/Provider", postcode: 'sw1a 1aa')
+          provider.update(ukprn: '12345678', provider_name: 'St Leo and Southmead/Provider', postcode: 'sw1a 1aa')
         end.to change { provider.reload.searchable }.to(
-          "'12345678':1 '1aa':13 'and':5,9 'leo':3 'leos':8 'provider':11 's':4 'southmead':10 'southmead/provider':6 'st':2,7 'sw1a':12 'sw1a1aa':14"
+          "'12345678':1 '1aa':12 'and':4,8 'leo':3,7 'provider':10 'southmead':9 'southmead/provider':5 'st':2,6 'sw1a':11 'sw1a1aa':13"
         )
       end
     end
@@ -128,6 +128,9 @@ describe Provider do
 
   describe 'normalizations' do
     it { is_expected.to normalize(:provider_name).from('  ACME  SCITT  ').to('ACME SCITT') }
+    it { is_expected.to normalize(:provider_name).from('regular "quotes" used').to('regular “quotes” used') }
+    it { is_expected.to normalize(:provider_name).from("it's a 'quoted' word").to('it’s a ‘quoted’ word') }
+    it { is_expected.to normalize(:provider_name).from("  'single' and \"double\" quotes  with  spaces  ").to('‘single’ and “double” quotes with spaces') }
   end
 
   describe 'organisation' do
