@@ -149,7 +149,7 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
 
   def then_i_see_salaried_course_school_placement_guidance
     expect(page).to have_content(
-      'You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.'
+      'Check with the provider before applying. They may require you to find your own school or want to discuss your situation to help them choose a school you can travel to.'
     )
     expect(page).to have_no_content('Find out more about how school placements work')
   end
