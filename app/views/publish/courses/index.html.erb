@@ -2,11 +2,7 @@
 <%= content_for :before_content, render_breadcrumbs(:courses) %>
 
 <h1 class="govuk-heading-l">Courses</h1>
-<% if Settings.features.provider_partnerships %>
 <%= render AddCourseButton.new(provider: @provider) %>
-<% else %>
-<%= render AddCourseButtonEnrichments.new(provider: @provider) %>
-<% end %>
 
 <% if @self_accredited_courses %>
   <section data-qa="courses__table-section">
