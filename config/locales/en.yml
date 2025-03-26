@@ -145,7 +145,6 @@ en:
     users: "Users"
     training_partners: "Training partners"
     organisation_details: "Organisation details"
-    accredited_provider: "Accredited providers"
     accredited_partnerships: "Accredited providers"
   secondary_navigation:
     description: Description
@@ -300,8 +299,6 @@ en:
             check: "Check your answers"
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
-          accredited_providers:
-            index: Accredited providers
           onboardings:
             new: "Organisation details"
           onboarding:
@@ -720,24 +717,6 @@ en:
             warning: All users at %{provider_name} will be sent an email to let them know they’ve been added.
           update:
             added: Accredited provider added
-      accredited_providers:
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_provider Add accredited provider
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          updated: About the accredited provider updated
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
-        checks:
-          show:
-            title:  *add_accredited_provider
-            caption: *add_accredited_provider
-            add: *add_accredited_provider
       training_partners:
         index:
           title: Training partners
@@ -750,7 +729,7 @@ en:
       accredited_provider_search:
         new:
           title: &accredited_provider_title Enter a provider name, UKPRN or postcode
-          caption: *add_accredited_provider
+          caption: *add_accredited_partnership
   search_result_title_component:
     add_school: *add_school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
