@@ -47,7 +47,7 @@ module ViewHelper
   def enrichment_error_url(provider_code:, course:, field:, message: nil)
     base = "/publish/organisations/#{provider_code}/#{course.recruitment_cycle_year}/courses/#{course.course_code}"
     provider_base = "/publish/organisations/#{provider_code}/#{course.recruitment_cycle_year}"
-    accrediting_provider = Settings.features.provider_partnerships ? ratifying_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code) : accredited_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)
+    accrediting_provider = ratifying_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)
 
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
@@ -166,30 +166,18 @@ module ViewHelper
 
   def x_accrediting_provider_url
     if preview?(params)
-      if Settings.features.provider_partnerships
-        ratified_by_publish_provider_recruitment_cycle_course_path(
-          course.provider_code,
-          course.recruitment_cycle_year,
-          course.course_code
-        )
-      else
-        accredited_by_publish_provider_recruitment_cycle_course_path(
-          course.provider_code,
-          course.recruitment_cycle_year,
-          course.course_code
-        )
-      end
+      ratified_by_publish_provider_recruitment_cycle_course_path(
+        course.provider_code,
+        course.recruitment_cycle_year,
+        course.course_code
+      )
     else
       find_accrediting_provider_path(course.provider_code, course.course_code)
     end
   end
 
   def x_accredited_partnerships_navigation_item_link_path(provider)
-    if Settings.features.provider_partnerships
-      support_recruitment_cycle_provider_accredited_partnerships_path(provider.recruitment_cycle_year, provider)
-    else
-      support_recruitment_cycle_provider_accredited_providers_path(provider.recruitment_cycle_year, provider)
-    end
+    support_recruitment_cycle_provider_accredited_partnerships_path(provider.recruitment_cycle_year, provider)
   end
 
   private

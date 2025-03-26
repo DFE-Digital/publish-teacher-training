@@ -208,11 +208,7 @@ module Publish
       when :applications_open
         new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
       when :accredited_provider, :ratifying_provider
-        if Settings.features.provider_partnerships
-          new_publish_provider_recruitment_cycle_courses_ratifying_provider_path(path_params)
-        else
-          new_publish_provider_recruitment_cycle_courses_accredited_provider_path(path_params)
-        end
+        new_publish_provider_recruitment_cycle_courses_ratifying_provider_path(path_params)
       when :can_sponsor_student_visa
         new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
       when :can_sponsor_skilled_worker_visa
