@@ -33,11 +33,7 @@
 
      <% unless @accredited_provider_search.providers.empty? %>
       <p class="govuk-body">
-        <% if Settings.features.provider_partnerships %>
-          <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_partnerships_path) %>
-        <% else %>
-        <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_providers_path) %>
-        <% end %>
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_partnerships_path) %>
       </p>
     <% end %>
   </div>
