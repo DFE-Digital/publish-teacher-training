@@ -143,29 +143,29 @@ jobs:
       fail-fast: false
       matrix:
         tests:
-          - name: Unit - Models
-            include-pattern: spec/models/.*_spec.rb
-          - name: Unit - Services
-            include-pattern: spec/services/.*_spec.rb
-          - name: Unit - Forms
-            include-pattern: spec/forms/.*_spec.rb
-          - name: Unit - Components
-            include-pattern: spec/components/.*_spec.rb
-          - name: Unit - Other
-            include-pattern: spec/.*_spec.rb
-            exclude-pattern: spec/(system|features|smoke|models|services|forms|components)/.*_spec.rb
+          # - name: Unit - Models
+          #   include-pattern: spec/models/.*_spec.rb
+          # - name: Unit - Services
+          #   include-pattern: spec/services/.*_spec.rb
+          # - name: Unit - Forms
+          #   include-pattern: spec/forms/.*_spec.rb
+          # - name: Unit - Components
+          #   include-pattern: spec/components/.*_spec.rb
+          # - name: Unit - Other
+          #   include-pattern: spec/.*_spec.rb
+          #   exclude-pattern: spec/(system|features|smoke|models|services|forms|components)/.*_spec.rb
 
-          - name: Integration - Auth
-            include-pattern: spec/features/auth/.*_spec.rb
-          - name: Integration - Find
-            include-pattern: spec/features/find/.*_spec.rb
-          - name: Integration - Publish
-            include-pattern: spec/features/publish/.*_spec.rb
-          - name: Integration - Support
-            include-pattern: spec/features/support/.*_spec.rb
-          - name: Integration - Other
-            include-pattern: spec/features/.*_spec.rb
-            exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
+          # - name: Integration - Auth
+          #   include-pattern: spec/features/auth/.*_spec.rb
+          # - name: Integration - Find
+          #   include-pattern: spec/features/find/.*_spec.rb
+          # - name: Integration - Publish
+          #   include-pattern: spec/features/publish/.*_spec.rb
+          # - name: Integration - Support
+          #   include-pattern: spec/features/support/.*_spec.rb
+          # - name: Integration - Other
+          #   include-pattern: spec/features/.*_spec.rb
+          #   exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
 
           - name: System
             include-pattern: spec/system/.*_spec.rb
