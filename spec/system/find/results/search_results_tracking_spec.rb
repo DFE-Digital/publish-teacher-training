@@ -12,6 +12,11 @@ RSpec.describe 'Search results tracking', :js, service: :find do
     given_some_courses_exist
   end
 
+  after do
+    ActiveJob::Base.queue_adapter.enqueued_jobs.clear
+    ActiveJob::Base.queue_adapter.performed_jobs.clear
+  end
+
   context 'from homepage' do
     before { when_i_visit_the_homepage }
 
@@ -77,7 +82,7 @@ RSpec.describe 'Search results tracking', :js, service: :find do
     scenario 'when searching within the results page' do
       when_i_filter_for_send_courses
       and_i_search_for_art_and_design_subject
-      and_i_click_searchn
+      and_i_click_search
       then_search_result_is_tracked_with_new_search
     end
 
@@ -537,7 +542,7 @@ RSpec.describe 'Search results tracking', :js, service: :find do
     page.find('input[name="subject_name"]').native.send_keys(:return)
   end
 
-  def and_i_click_searchn
+  def and_i_click_search
     click_link_or_button 'Search'
   end
 

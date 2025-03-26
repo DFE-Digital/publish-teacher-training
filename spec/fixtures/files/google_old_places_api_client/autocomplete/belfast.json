@@ -1,0 +1,11 @@
+{
+  "predictions": [
+    {
+      "description": "Edinburgh, UK",
+      "place_id": "ChIJdd4hrwug2EcRmSrV3Vo6llI",
+      "types": ["locality", "political"]
+    }
+  ],
+  "status": "OK"
+}
+
