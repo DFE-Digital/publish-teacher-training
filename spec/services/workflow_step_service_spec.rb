@@ -11,7 +11,6 @@ describe WorkflowStepService do
 
   before do
     FeatureFlag.activate(:visa_sponsorship_deadline)
-    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
   end
 
   describe '#call' do

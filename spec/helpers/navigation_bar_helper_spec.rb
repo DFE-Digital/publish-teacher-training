@@ -25,20 +25,8 @@ RSpec.describe NavigationBarHelper do
         expect(accredited_provider_item).not_to be_nil
       end
 
-      context 'provider_partnerships' do
-        before { allow(Settings.features).to receive_messages(provider_partnerships: true) }
-
-        it 'includes the correct link to accredited providers' do
-          expect(accredited_provider_item[:url]).to eq publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle.year)
-        end
-      end
-
-      context 'provider enrichments' do
-        before { allow(Settings.features).to receive_messages(provider_partnerships: false) }
-
-        it 'includes the correct link to accredited providers' do
-          expect(accredited_provider_item[:url]).to eq publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle.year)
-        end
+      it 'includes the correct link to accredited providers' do
+        expect(accredited_provider_item[:url]).to eq publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle.year)
       end
     end
   end
