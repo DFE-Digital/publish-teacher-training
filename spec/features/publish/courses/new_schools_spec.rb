@@ -4,7 +4,6 @@ require 'rails_helper'
 
 feature 'selection schools', { can_edit_current_and_next_cycles: false } do
   before do
-    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
     given_i_am_authenticated_as_a_provider_user
     and_that_sites_exist
     when_i_visit_the_publish_courses_new_schools_page

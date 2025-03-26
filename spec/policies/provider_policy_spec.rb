@@ -30,33 +30,7 @@ describe ProviderPolicy do
     it { is_expected.to permit(admin, provider) }
   end
 
-  context 'provider enrichments' do
-    before { allow(Settings.features).to receive_messages(provider_partnerships: false) }
-
-    permissions :can_show_training_provider? do
-      let(:accrediting_provider_enrichments) { [{ UcasProviderCode: course.accredited_provider_code }] }
-
-      let(:allowed_user) { create(:user, providers: [provider]) }
-      let(:not_allowed_user) { create(:user) }
-
-      let(:course) { create(:course, :with_accrediting_provider) }
-
-      let(:provider) { course.accrediting_provider }
-      let(:training_provider) do
-        course.provider
-        course.provider.accrediting_provider_enrichments = accrediting_provider_enrichments
-        course.provider
-      end
-
-      it { is_expected.to permit(admin, training_provider) }
-      it { is_expected.to permit(allowed_user, training_provider) }
-      it { is_expected.not_to permit(not_allowed_user, training_provider) }
-    end
-  end
-
   context 'provider partnerships' do
-    before { allow(Settings.features).to receive_messages(provider_partnerships: true) }
-
     permissions :can_show_training_provider? do
       let(:allowed_user) { create(:user, providers: [provider]) }
       let(:not_allowed_user) { create(:user) }
