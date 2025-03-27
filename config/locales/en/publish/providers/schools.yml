@@ -1,0 +1,15 @@
+en:
+  publish:
+    providers:
+      schools:
+        index:
+          title: Schools
+          add_school: Add school
+          name: School name
+          code: School code
+          urn: URN
+        show:
+          code: School code
+          urn: URN
+          address: Address
+          remove: Remove school
