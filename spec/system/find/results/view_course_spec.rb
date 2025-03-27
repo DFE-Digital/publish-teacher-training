@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'V2 results - view a course', :js, service: :find do
+RSpec.describe 'Results - view a course', :js, service: :find do
   include FiltersFeatureSpecsHelper
 
   before do
