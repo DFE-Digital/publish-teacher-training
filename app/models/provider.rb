@@ -155,8 +155,6 @@ class Provider < ApplicationRecord
 
   scope :with_can_sponsor_student_visa, ->(can_sponsor_student_visa) { where(can_sponsor_student_visa:) }
 
-  serialize :accrediting_provider_enrichments, coder: AccreditingProviderEnrichment::ArraySerializer
-
   validates :train_with_us, words_count: { maximum: 250, message: '^Reduce the word count for training with you' }
   validates :train_with_disability, words_count: { maximum: 250, message: '^Reduce the word count for training with disabilities and other needs' }
 
@@ -176,8 +174,6 @@ class Provider < ApplicationRecord
 
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
-
-  validate :add_enrichment_errors
 
   validates :accredited_provider_number, accredited_provider_number_format: true, if: :accredited?
 
@@ -379,11 +375,6 @@ class Provider < ApplicationRecord
     end
   end
 
-  def accredited_provider_codes
-    accrediting_provider_enrichments&.map(&:UcasProviderCode) || []
-  end
-  scope :course_code_search, ->(course_code) { joins(:courses).merge(Course.case_insensitive_search(course_code)) }
-
   def searchable_vector_value
     [
       ukprn,
@@ -395,19 +386,6 @@ class Provider < ApplicationRecord
   end
 
   def name_normalised = StripPunctuationService.call(string: provider_name)
-
-  def add_enrichment_errors
-    accrediting_provider_enrichments&.each do |item|
-      provider_code = item.UcasProviderCode
-
-      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
-
-      if accredited_provider.present? && item.invalid?
-        message = "^Reduce the word count for #{accredited_provider.provider_name}"
-        errors.add :accredited_bodies, message
-      end
-    end
-  end
 
   def set_defaults
     self.year_code ||= recruitment_cycle.year
