@@ -302,7 +302,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       :course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000
     )
 
-    accrediting_provider = build(:provider)
+    accrediting_provider = build(:accredited_provider)
 
     course_subject = find_or_create(:secondary_subject, :mathematics)
 
@@ -319,13 +319,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       degree_subject_requirements: 'Maths A level',
       subjects: [course_subject]
     )
-    accrediting_provider_enrichment = {
-      'UcasProviderCode' => accrediting_provider.provider_code,
-      'Description' => Faker::Lorem.sentence
-    }
 
     provider = build(
-      :provider, sites:, study_sites: [study_site], courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
+      :provider, sites:, study_sites: [study_site], courses: [course], accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider)]
     )
 
     create(
@@ -345,9 +341,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       :course, :secondary, :with_accrediting_provider, provider:, degree_grade: nil, funding: 'fee', additional_degree_subject_requirements: nil
     )
 
-    accredited_provider_code = course.accredited_provider_code
-
-    provider.accrediting_provider_enrichments = [{ UcasProviderCode: accredited_provider_code }]
+    provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider)
 
     create(
       :user,

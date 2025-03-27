@@ -139,13 +139,8 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
     @provider = @user.providers.first
     create(:provider, :accredited_provider, provider_code: '1BJ')
     @accredited_provider = create(:provider, :accredited_provider, provider_code: '1BK')
-    @provider.accrediting_provider_enrichments = []
-    @provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
-      {
-        UcasProviderCode: @accredited_provider.provider_code,
-        Description: 'description'
-      }
-    )
+
+    @provider.accredited_partnerships.create(accredited_provider: @accredited_provider)
 
     given_i_am_authenticated(user: @user)
   end
