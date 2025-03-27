@@ -4,7 +4,12 @@ FactoryBot.define do
   factory :provider do
     provider_name { "ACME SCITT#{rand(1_000_000)}" }
 
-    sequence(:provider_code) { |n| format("#{('A'..'Z').to_a.sample}%02d", n % 100) }
+    sequence(:provider_code) do |n|
+      loop do
+        code = format("#{('A'..'Z').to_a.sample}%02d", n % 100)
+        break code unless Provider.exists?(provider_code: code)
+      end
+    end
 
     trait :with_anonymised_data do
       sequence(:provider_code) do |n|
