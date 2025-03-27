@@ -1,0 +1,17 @@
+en:
+  publish:
+    providers:
+      schools:
+        search:
+          new:
+            title: Enter URN or school
+            caption: Add school
+            hint: Enter a unique reference number (URN) or a school name. You can also enter a university, college or postcode.
+            help_finding_school: Help with finding a school
+            cannot_find_html: |
+              <p class="govuk-body">If you cannot find the school you’re looking for, you can <a class="govuk-link" href="%{link}" target="_blank">search for a school in Get Information About Schools (GIAS) (opens in a new tab)</a>.</p>
+              <p class="govuk-body govuk-!-margin-bottom-0">
+              <span class="govuk-!-font-weight-bold">If the school is not on GIAS</span>
+              </br>
+              If the school you’re looking for is not on GIAS, or the information is not correct, contact the school and ask them to update their information on GIAS.
+              </p>
