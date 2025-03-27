@@ -76,17 +76,17 @@ feature 'Searching for a study site from the GIAS list' do
   end
 
   def when_i_search_for_a_school_with_a_partial_query
-    fill_in 'publish-schools-search-form-query-field', with: 'sch'
+    fill_in 'publish-providers-schools-search-form-query-field', with: 'sch'
     click_continue
   end
 
   def when_i_search_for_a_school_with_a_valid_query
-    fill_in 'publish-schools-search-form-query-field', with: @school.name
+    fill_in 'publish-providers-schools-search-form-query-field', with: @school.name
     click_continue
   end
 
   def and_i_search_with_an_invalid_query
-    fill_in 'publish-schools-search-form-query-field', with: ''
+    fill_in 'publish-providers-schools-search-form-query-field', with: ''
     click_continue
   end
 

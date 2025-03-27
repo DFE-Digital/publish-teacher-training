@@ -32,7 +32,7 @@ module Publish
           @school_select_form = SelectForm.new(school_id: school_select_params[:school_id])
 
           if @school_select_form.valid?
-            redirect_to new_publish_provider_recruitment_cycle_school_path(provider_code: provider.provider_code, school_id: @school_select_form.school_id)
+            redirect_to publish_provider_recruitment_cycle_schools_check_path(provider_code: provider.provider_code, school_id: @school_select_form.school_id)
           else
             @school_search = Publish::Schools::SearchService.call(query:)
             render :results
@@ -77,7 +77,7 @@ module Publish
         end
 
         def redirect_to_next_step
-          redirect_to new_publish_provider_recruitment_cycle_school_path(
+          redirect_to publish_provider_recruitment_cycle_schools_check_path(
             provider_code: provider.provider_code,
             school_id:
           )

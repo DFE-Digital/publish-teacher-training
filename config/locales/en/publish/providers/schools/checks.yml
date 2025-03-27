@@ -1,0 +1,15 @@
+en:
+  publish:
+    providers:
+      schools:
+        checks:
+          update:
+            added: School added
+          show:
+            new: Add school
+            check: Check your answers
+            name: School Name
+            urn: URN
+            address: Address
+            inset_text_html: |
+              If this information is not correct, contact the school and ask them to update their information on <a class="govuk-link" href="%{link}" target="_blank">Get Information About Schools (GIAS) (opens in a new tab)</a>.
