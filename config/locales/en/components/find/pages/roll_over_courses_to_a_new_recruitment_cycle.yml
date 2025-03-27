@@ -1,4 +1,5 @@
 en:
   pages:
     roll_over_courses_to_a_new_recruitment_cycle:
-      roll_over_recruitment_content: From this year, we will copy your courses from one recruitment cycle to the next in early September. This means you can update courses from the previous cycle, rather than having to create new ones.
+      roll_over_recruitment_content_this_year:  From this year, we will copy your courses from one recruitment cycle to the next in early September. This means you can update courses from the previous cycle, rather than having to create new ones.
+      roll_over_recruitment_content_previous_year: Previously, this happened in July, however, we have found that vast majority of providers did not interact with those courses until the middle of September.
