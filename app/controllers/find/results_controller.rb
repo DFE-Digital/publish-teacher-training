@@ -12,7 +12,8 @@ module Find
       @courses_query = ::Courses::Query.new(params: @search_params.dup)
       @courses = @courses_query.call
       @courses_count = @courses_query.count
-      @pagy, @results = pagy(@courses, count: @courses_count)
+
+      @pagy, @results = pagy(@courses, count: @courses_count, page:)
     end
 
     private
@@ -68,6 +69,10 @@ module Find
 
     def store_result_fullpath_for_backlinks
       session[:results_path] = request.fullpath
+    end
+
+    def page
+      params[:page].to_i.clamp(1..)
     end
   end
 end
