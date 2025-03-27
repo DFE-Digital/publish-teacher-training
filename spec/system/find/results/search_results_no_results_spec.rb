@@ -54,6 +54,7 @@ RSpec.describe 'No search results', :js, service: :find do
   def when_i_search_courses_in_northern_ireland
     fill_in 'City, town or postcode', with: 'Belfast'
     stub_geocode_request('Belfast')
+    stub_autocomplete_request('Belfast')
     and_i_click_search
   end
 
@@ -69,6 +70,7 @@ RSpec.describe 'No search results', :js, service: :find do
   def when_i_search_courses_in_scotland
     fill_in 'City, town or postcode', with: 'Edinburgh'
     stub_geocode_request('Edinburgh')
+    stub_autocomplete_request('Edinburgh')
     and_i_click_search
   end
 
@@ -84,6 +86,7 @@ RSpec.describe 'No search results', :js, service: :find do
   def when_i_search_courses_in_wales
     fill_in 'City, town or postcode', with: 'Cardiff'
     stub_geocode_request('Cardiff')
+    stub_autocomplete_request('Cardiff')
     and_i_click_search
   end
 

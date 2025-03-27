@@ -185,6 +185,9 @@ group :development, :test do
   # Enable shorter notation for rspec one-liners
   gem 'rspec-its'
 
+  # Enables us to repeatedly evaluate until the underlying matcher passes or the configured timeout elapses
+  gem 'rspec-wait'
+
   # Test framework
   gem 'rspec-rails', '7.1.1'
 
