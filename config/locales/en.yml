@@ -651,20 +651,7 @@ en:
         town: "Town or city"
         address4: "County"
         postcode: "Postcode"
-      schools:
-        index:
-          title: Schools
-          add_school: &add_school "Add school"
-          name: &school_name "School name"
-          code: &school_code "School code"
-          urn: URN
-        show:
-          name: School name
-          code: School code
-          urn: URN
-          address: Address
-          remove: Remove school
-        new: *add_school
+      schools: # file
       study_site_search:
         new:
           title: Enter a school, university, college, URN or postcode
@@ -741,7 +728,7 @@ en:
           title: &accredited_provider_title Enter a provider name, UKPRN or postcode
           caption: *add_accredited_provider
   search_result_title_component:
-    add_school: *add_school
+    add_school: Add school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
   support:
     data_exports:
@@ -758,25 +745,25 @@ en:
           update:
             added: School added
           show:
-            new: *add_school
+            new: Add school
             update: &update_school "Update school"
-            location_name: *school_name
-            code: *school_code
+            location_name: School name
+            code: School code
             urn: URN
             address: Address
             inset_text_html: |
               If this information is not correct, contact the school and ask them to update their information on <a href="%{link}" target="_blank">Get Information About Schools (GIAS) (opens in a new tab)</a>.
         show:
-          new: *add_school
+          new: Add school
           update: *update_school
-          location_name: *school_name
-          code: *school_code
+          location_name: School name
+          code: School code
           urn: URN
           address: Address
         search:
           new:
             title: Enter URN or school
-            caption: *add_school
+            caption: Add school
             hint: Enter a unique reference number (URN) or a school name. You can also enter a university, college or postcode.
             help_finding_school: Help with finding a school
             cannot_find_html: |
