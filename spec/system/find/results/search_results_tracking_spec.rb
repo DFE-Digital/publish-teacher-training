@@ -4,14 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Search results tracking', :js, service: :find do
   before do
-    ActiveJob::Base.queue_adapter.enqueued_jobs.clear
-    ActiveJob::Base.queue_adapter.performed_jobs.clear
-
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
-
-    Rails.application.config.active_job.queue_adapter = :test
-
     given_some_courses_exist
   end
 
@@ -19,7 +13,6 @@ RSpec.describe 'Search results tracking', :js, service: :find do
     before { when_i_visit_the_homepage }
 
     scenario 'when searching from the homepage form' do
-      when_i_click_search
       then_one_search_result_is_tracked_from_homepage_form
       and_i_am_on_the_results_page
     end
@@ -170,50 +163,35 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_one_search_result_is_tracked_from_homepage_form
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    event_spy = instance_double(Find::Analytics::SearchResultsEvent)
+
+    allow(Find::Analytics::SearchResultsEvent).to receive(:new).and_return(event_spy)
+
+    when_i_click_search
+
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 6,
         page: 1,
-        search_params: [
-          {
-            applications_open: true
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'home',
-            utm_medium: 'main_search'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'F314',
-            provider_code: 'RO1'
-          },
-          {
-            code: '2DTK',
-            provider_code: '19S'
-          },
-          {
-            code: 'F3D',
-            provider_code: 'JL1'
-          },
-          {
-            code: 'TDA1',
-            provider_code: '23T'
-          },
-          {
-            code: 'Y565',
-            provider_code: '1UR'
-          },
-          {
-            code: 'P123',
-            provider_code: 'PO1'
-          }
-        ]
-      }
+        search_params: hash_including(
+          applications_open: true
+        ),
+        track_params: hash_including(
+          utm_source: 'home',
+          utm_medium: 'main_search'
+        ),
+        visible_courses: array_including(
+          hash_including(code: 'F314', provider_code: 'RO1'),
+          hash_including(code: '2DTK', provider_code: '19S'),
+          hash_including(code: 'F3D', provider_code: 'JL1'),
+          hash_including(code: 'TDA1', provider_code: '23T'),
+          hash_including(code: 'Y565', provider_code: '1UR'),
+          hash_including(code: 'P123', provider_code: 'PO1')
+        )
+      )
     )
+
+    expect(event_spy).to have_received(:send_event).once
   end
 
   def and_i_am_on_the_results_page
