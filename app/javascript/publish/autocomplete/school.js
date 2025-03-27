@@ -15,7 +15,7 @@ const options = {
 }
 
 function init () {
-  initAutocomplete('school-autocomplete', 'publish-schools-search-form-query-field', options)
+  initAutocomplete('school-autocomplete', 'publish-providers-schools-search-form-query-field', options)
   initAutocomplete('school-autocomplete', 'support-providers-schools-search-form-query-field', options)
 }
 

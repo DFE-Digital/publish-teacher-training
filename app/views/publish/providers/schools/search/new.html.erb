@@ -1,4 +1,3 @@
-
 <% content_for :page_title, title_with_error_prefix(t(".title"), @school_search_form.errors.any?) %>
 
 <% content_for :before_content do %>
@@ -14,35 +13,38 @@
     html: { data: { module: "app-schools-autocomplete" } }
   ) do |f| %>
 
-  <div class="govuk-grid-column-full">
-  <%= f.govuk_error_summary %>
-  </div>
+    <div class="govuk-grid-column-full">
+      <%= f.govuk_error_summary %>
+    </div>
 
-  <div class="govuk-grid-column-two-thirds">
-    <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
-      <%= f.label :query, { class: "govuk-label govuk-label--l", for: "publish-schools-search-form-query-field" } do %>
-        <span class="govuk-caption-l">Add school</span>
-        <%= t(".title") %>
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
+        <span class="govuk-caption-l"><%= t(".caption") %></span>
+        <%= f.label :query, { class: "govuk-label govuk-label--l", for: "publish-providers-schools-search-form-query-field" } do %>
+          <%= t(".title") %>
+        <% end %>
+        <div class="govuk-hint"><%= t(".hint") %></div>
         <% if f.object.errors.present? %>
-          <span class="govuk-error-message" id="publish-schools-search-form-query-field-error" data-qa="provider-error">
+          <span class="govuk-error-message" id="publish-providers-schools-search-form-query-field-error" data-qa="provider-error">
             <%= f.object.errors.first.message %>
           </span>
         <% end %>
-      <% end %>
-      <%= f.text_field :query,
-        id: "publish-schools-search-form-query-field",
+        <%= f.text_field :query,
+        id: "publish-providers-schools-search-form-query-field",
         value: params[:query],
         class: "govuk-input",
         data: { qa: "schools-search" } %>
-      <div id="school-autocomplete"></div>
-    </div>
+        <div id="school-autocomplete"></div>
+      </div>
 
-    <p class="govuk-body govuk-!-margin-bottom-7">
-    <%= govuk_link_to(t(".cannot_find"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code)) %>
-    </p>
+      <p class="govuk-body govuk-!-margin-bottom-7">
+        <%= govuk_details(summary_text: t(".help_finding_school")) do %>
+          <%= t(".cannot_find_html", link: t("links.get_information_schools_search")) %>
+        <% end %>
+      </p>
 
-    <%= f.govuk_submit t("continue") %>
-  <% end %>
+      <%= f.govuk_submit t("continue") %>
+    <% end %>
   </div>
 </div>
 

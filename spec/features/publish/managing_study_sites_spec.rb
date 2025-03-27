@@ -142,7 +142,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def and_i_click_the_link_to_enter_a_school_manually
-    click_link_or_button 'I cannot find the school - enter manually'
+    click_link_or_button 'I cannot find the site - enter manually'
   end
 
   def and_i_set_valid_new_details

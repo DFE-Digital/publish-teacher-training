@@ -656,11 +656,6 @@ en:
         address4: "County"
         postcode: "Postcode"
       schools:
-        search:
-          new:
-            title: &new_search Enter a school, university, college, URN or postcode
-            caption: "Add school"
-            cannot_find: &cannot_find I cannot find the school - enter manually
         index:
           title: Schools
           add_school: &add_school "Add school"
@@ -676,8 +671,8 @@ en:
         new: *add_school
       study_site_search:
         new:
-          title: *new_search
-          cannot_find: *cannot_find
+          title: Enter a school, university, college, URN or postcode
+          cannot_find: I cannot find the site - enter manually
       accredited_partnerships:
         new:
           title: About the accredited provider
@@ -1376,7 +1371,7 @@ en:
         publish/providers/schools/search_form:
           attributes:
             query:
-              blank: Enter a school, university, college, URN or postcode
+              blank: Enter a URN (unique reference number) or school name
               too_short: Enter at least two characters
         publish/providers/schools/select_form:
           attributes:

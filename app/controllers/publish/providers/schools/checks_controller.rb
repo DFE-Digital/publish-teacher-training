@@ -4,27 +4,31 @@ module Publish
   module Providers
     module Schools
       class ChecksController < ApplicationController
-        before_action :new_form
+        before_action :site
 
         def show; end
 
         def update
-          if @school_form.save!
-            redirect_to publish_provider_recruitment_cycle_schools_path
-            flash[:success] = t('publish.providers.schools.added')
+          if @site.save
+            redirect_to publish_provider_recruitment_cycle_schools_path, flash: { success: t('.added') }
           else
-            render template: 'publish/providers/schools/new'
+            render :show
           end
         end
 
         private
 
-        def new_form
-          @school_form = ::Support::SchoolForm.new(provider, site)
+        def site
+          @site ||= begin
+            gias_school = GiasSchool.find(school_id)
+            @provider.sites.school.build(gias_school.school_attributes)
+          end
         end
 
-        def site
-          @site ||= provider.sites.build
+        def school_id
+          # params[:school_id] comes from the school search
+          # site: school_id comes from the checks#show form
+          params[:school_id] || params.expect(site: [:school_id])[:school_id]
         end
       end
     end

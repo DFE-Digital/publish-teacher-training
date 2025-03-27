@@ -26,7 +26,6 @@ feature 'Searching for a school from the GIAS list' do
 
     when_i_select_the_school
     then_i_should_be_taken_to_the_add_school_page
-    and_the_school_form_should_be_prefilled(@school_two)
   end
 
   private
@@ -55,7 +54,7 @@ feature 'Searching for a school from the GIAS list' do
   end
 
   def when_i_search_for_a_school_with_a_partial_query
-    fill_in 'publish-schools-search-form-query-field', with: 'sch'
+    fill_in 'Enter URN or school', with: 'sch'
     click_continue
   end
 
@@ -72,7 +71,7 @@ feature 'Searching for a school from the GIAS list' do
   end
 
   def when_i_search_for_a_school_with_a_valid_query
-    fill_in 'publish-schools-search-form-query-field', with: @school.name
+    fill_in 'Enter URN or school', with: @school.name
     click_continue
   end
 
@@ -82,28 +81,15 @@ feature 'Searching for a school from the GIAS list' do
   end
 
   def then_i_should_be_taken_to_the_add_school_page
-    URI(current_url).then do |uri|
-      expect(uri.path).to eq("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/schools/new")
-      expect(uri.query).to eq("school_id=#{@school_two.id}")
-    end
-    expect(page.current_url).to include("school_id=#{@school_two.id}")
-  end
-
-  def and_the_school_form_should_be_prefilled(school)
-    expect(page).to have_field('School name', with: school.name)
-    expect(page).to have_field('URN', with: school.urn)
-
-    expect(page).to have_field('Address line 1', with: school.address1)
-    expect(page).to have_field('Town or city', with: school.town)
-    expect(page).to have_field('Postcode', with: school.postcode)
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/schools/check?school_id=#{@school_two.id}")
   end
 
   def and_i_search_with_an_invalid_query
-    fill_in 'publish-schools-search-form-query-field', with: ''
+    fill_in 'Enter URN or school', with: ''
     click_continue
   end
 
-  def then_i_should_see_an_error_message(error_message = 'Enter a school, university, college, URN or postcode')
+  def then_i_should_see_an_error_message(error_message = 'Enter a URN (unique reference number) or school name')
     expect(page).to have_content(error_message)
   end
 
