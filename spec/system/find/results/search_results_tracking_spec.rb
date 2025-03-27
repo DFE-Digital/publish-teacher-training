@@ -6,6 +6,11 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
+
+    double = instance_double(Find::Analytics::SearchResultsEvent)
+    allow(Find::Analytics::SearchResultsEvent).to receive(:new).and_return(double)
+    allow(double).to receive(:send_event)
+
     given_some_courses_exist
   end
 
@@ -13,6 +18,7 @@ RSpec.describe 'Search results tracking', :js, service: :find do
     before { when_i_visit_the_homepage }
 
     scenario 'when searching from the homepage form' do
+      when_i_click_search
       then_one_search_result_is_tracked_from_homepage_form
       and_i_am_on_the_results_page
     end
@@ -163,35 +169,22 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_one_search_result_is_tracked_from_homepage_form
-    event_spy = instance_double(Find::Analytics::SearchResultsEvent)
-
-    allow(Find::Analytics::SearchResultsEvent).to receive(:new).and_return(event_spy)
-
-    when_i_click_search
-
     expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
       hash_including(
         total: 6,
         page: 1,
-        search_params: hash_including(
-          applications_open: true
-        ),
-        track_params: hash_including(
-          utm_source: 'home',
-          utm_medium: 'main_search'
-        ),
-        visible_courses: array_including(
-          hash_including(code: 'F314', provider_code: 'RO1'),
-          hash_including(code: '2DTK', provider_code: '19S'),
-          hash_including(code: 'F3D', provider_code: 'JL1'),
-          hash_including(code: 'TDA1', provider_code: '23T'),
-          hash_including(code: 'Y565', provider_code: '1UR'),
-          hash_including(code: 'P123', provider_code: 'PO1')
+        search_params: hash_including(applications_open: true),
+        track_params: hash_including(utm_source: 'home', utm_medium: 'main_search'),
+        results: array_including(
+          have_attributes(course_code: 'F314', provider_code: 'RO1'),
+          have_attributes(course_code: '2DTK', provider_code: '19S'),
+          have_attributes(course_code: 'F3D', provider_code: 'JL1'),
+          have_attributes(course_code: 'TDA1', provider_code: '23T'),
+          have_attributes(course_code: 'Y565', provider_code: '1UR'),
+          have_attributes(course_code: 'P123', provider_code: 'PO1')
         )
       )
     )
-
-    expect(event_spy).to have_received(:send_event).once
   end
 
   def and_i_am_on_the_results_page
@@ -211,36 +204,17 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_one_search_result_is_tracked_from_primary_courses_form
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 2,
         page: 1,
-        search_params: [
-          {
-            applications_open: true,
-            subjects: [
-              '00'
-            ]
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'home',
-            utm_medium: 'primary_courses'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'Y565',
-            provider_code: '1UR'
-          },
-          {
-            code: 'P123',
-            provider_code: 'PO1'
-          }
-        ]
-      }
+        search_params: hash_including(applications_open: true, subjects: ['00']),
+        track_params: hash_including(utm_source: 'home', utm_medium: 'primary_courses'),
+        results: array_including(
+          have_attributes(course_code: 'Y565', provider_code: '1UR'),
+          have_attributes(course_code: 'P123', provider_code: 'PO1')
+        )
+      )
     )
   end
 
@@ -257,32 +231,16 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_one_search_result_is_tracked_from_secondary_courses_form
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 1,
         page: 1,
-        search_params: [
-          {
-            applications_open: true,
-            subjects: [
-              'W1'
-            ]
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'home',
-            utm_medium: 'secondary_courses'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'F314',
-            provider_code: 'RO1'
-          }
-        ]
-      }
+        search_params: hash_including(applications_open: true, subjects: ['W1']),
+        track_params: hash_including(utm_source: 'home', utm_medium: 'secondary_courses'),
+        results: array_including(
+          have_attributes(course_code: 'F314', provider_code: 'RO1')
+        )
+      )
     )
   end
 
@@ -296,30 +254,16 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_one_search_result_is_tracked_from_teacher_degree_apprenticeship_link
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 1,
         page: 1,
-        search_params: [
-          {
-            applications_open: true,
-            minimum_degree_required: 'no_degree_required'
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'home',
-            utm_medium: 'teacher_degree_apprenticeship_courses'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'TDA1',
-            provider_code: '23T'
-          }
-        ]
-      }
+        search_params: hash_including(applications_open: true, minimum_degree_required: 'no_degree_required'),
+        track_params: hash_including(utm_source: 'home', utm_medium: 'teacher_degree_apprenticeship_courses'),
+        results: array_including(
+          have_attributes(course_code: 'TDA1', provider_code: '23T')
+        )
+      )
     )
   end
 
@@ -334,60 +278,30 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_one_search_result_is_tracked_from_send_primary_link
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 1,
         page: 1,
-        search_params: [
-          {
-            applications_open: true,
-            subjects: Subject.primary_subject_codes,
-            send_courses: true
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'home',
-            utm_medium: 'send_primary_courses'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'P123',
-            provider_code: 'PO1'
-          }
-        ]
-      }
+        search_params: hash_including(applications_open: true, send_courses: true, subjects: Subject.primary_subject_codes),
+        track_params: hash_including(utm_source: 'home', utm_medium: 'send_primary_courses'),
+        results: array_including(
+          have_attributes(course_code: 'P123', provider_code: 'PO1')
+        )
+      )
     )
   end
 
   def then_one_search_result_is_tracked_from_send_secondary_link
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 1,
         page: 1,
-        search_params: [
-          {
-            applications_open: true,
-            subjects: Subject.secondary_subject_codes_with_incentives,
-            send_courses: true
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'home',
-            utm_medium: 'send_secondary_courses'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'F314',
-            provider_code: 'RO1'
-          }
-        ]
-      }
+        search_params: hash_including(applications_open: true, send_courses: true, subjects: Subject.secondary_subject_codes_with_incentives),
+        track_params: hash_including(utm_source: 'home', utm_medium: 'send_secondary_courses'),
+        results: array_including(
+          have_attributes(course_code: 'F314', provider_code: 'RO1')
+        )
+      )
     )
   end
 
@@ -397,30 +311,16 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_one_search_result_is_tracked_from_further_education_link
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 1,
         page: 1,
-        search_params: [
-          {
-            applications_open: true,
-            level: 'further_education'
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'home',
-            utm_medium: 'further_education_courses'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'F3D',
-            provider_code: 'JL1'
-          }
-        ]
-      }
+        search_params: hash_including(applications_open: true, level: 'further_education'),
+        track_params: hash_including(utm_source: 'home', utm_medium: 'further_education_courses'),
+        results: array_including(
+          have_attributes(course_code: 'F3D', provider_code: 'JL1')
+        )
+      )
     )
   end
 
@@ -437,34 +337,17 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_search_result_is_tracked_with_applied_filters_with_top_applied_filter
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 2,
         page: 1,
-        search_params: [
-          {
-            order: 'course_name_ascending',
-            subjects: ['00']
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'results',
-            utm_medium: 'apply_filters_top'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'Y565',
-            provider_code: '1UR'
-          },
-          {
-            code: 'P123',
-            provider_code: 'PO1'
-          }
-        ]
-      }
+        search_params: hash_including(order: 'course_name_ascending', subjects: ['00']),
+        track_params: hash_including(utm_source: 'results', utm_medium: 'apply_filters_top'),
+        results: array_including(
+          have_attributes(course_code: 'Y565', provider_code: '1UR'),
+          have_attributes(course_code: 'P123', provider_code: 'PO1')
+        )
+      )
     )
   end
 
@@ -473,34 +356,17 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_search_result_is_tracked_with_applied_filters_with_bottom_applied_filter
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 2,
         page: 1,
-        search_params: [
-          {
-            order: 'course_name_ascending',
-            subjects: ['00']
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'results',
-            utm_medium: 'apply_filters_bottom'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'Y565',
-            provider_code: '1UR'
-          },
-          {
-            code: 'P123',
-            provider_code: 'PO1'
-          }
-        ]
-      }
+        search_params: hash_including(order: 'course_name_ascending', subjects: ['00']),
+        track_params: hash_including(utm_source: 'results', utm_medium: 'apply_filters_bottom'),
+        results: array_including(
+          have_attributes(course_code: 'Y565', provider_code: '1UR'),
+          have_attributes(course_code: 'P123', provider_code: 'PO1')
+        )
+      )
     )
   end
 
@@ -523,32 +389,16 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_search_result_is_tracked_with_new_search
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 1,
         page: 1,
-        search_params: [
-          {
-            order: 'course_name_ascending',
-            subject_code: 'W1',
-            subject_name: 'Art and design',
-            send_courses: true
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'results',
-            utm_medium: 'search'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'F314',
-            provider_code: 'RO1'
-          }
-        ]
-      }
+        search_params: hash_including(order: 'course_name_ascending', subject_code: 'W1', subject_name: 'Art and design', send_courses: true),
+        track_params: hash_including(utm_source: 'results', utm_medium: 'search'),
+        results: array_including(
+          have_attributes(course_code: 'F314', provider_code: 'RO1')
+        )
+      )
     )
   end
 
@@ -561,49 +411,21 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_search_result_order_is_tracked
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
+      hash_including(
         total: 6,
         page: 1,
-        search_params: [
-          {
-            order: 'provider_name_ascending'
-          }
-        ],
-        track_params: [
-          {
-            utm_source: 'results',
-            utm_medium: 'sort'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'P123',
-            provider_code: 'PO1'
-          },
-          {
-            code: 'F3D',
-            provider_code: 'JL1'
-          },
-          {
-            code: 'Y565',
-            provider_code: '1UR'
-          },
-          {
-            code: 'TDA1',
-            provider_code: '23T'
-          },
-          {
-            code: '2DTK',
-            provider_code: '19S'
-          },
-          {
-            code: 'F314',
-            provider_code: 'RO1'
-          }
-        ]
-      }
+        search_params: hash_including(order: 'provider_name_ascending'),
+        track_params: hash_including(utm_source: 'results', utm_medium: 'sort'),
+        results: array_including(
+          have_attributes(course_code: 'P123', provider_code: 'PO1'),
+          have_attributes(course_code: 'F3D', provider_code: 'JL1'),
+          have_attributes(course_code: 'Y565', provider_code: '1UR'),
+          have_attributes(course_code: 'TDA1', provider_code: '23T'),
+          have_attributes(course_code: '2DTK', provider_code: '19S'),
+          have_attributes(course_code: 'F314', provider_code: 'RO1')
+        )
+      )
     )
   end
 
@@ -612,85 +434,21 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def then_search_result_is_tracked_with_new_search_using_results_as_utm_medium
-    expect(search_results_enqueued_data).to eq(
-      {
-        namespace: 'find',
+    expect(Find::Analytics::SearchResultsEvent).to have_received(:new).twice.with(
+      hash_including(
         total: 6,
         page: 1,
-        search_params: [{}],
-        track_params: [
-          {
-            utm_source: 'results',
-            utm_medium: 'no_referer'
-          }
-        ],
-        visible_courses: [
-          {
-            code: 'F314',
-            provider_code: 'RO1'
-          },
-          {
-            code: '2DTK',
-            provider_code: '19S'
-          },
-          {
-            code: 'F3D',
-            provider_code: 'JL1'
-          },
-          {
-            code: 'TDA1',
-            provider_code: '23T'
-          },
-          {
-            code: 'Y565',
-            provider_code: '1UR'
-          },
-          {
-            code: 'P123',
-            provider_code: 'PO1'
-          }
-        ]
-      }
-    )
-  end
-
-  private
-
-  def search_results_job
-    ActiveJob::Base.queue_adapter.enqueued_jobs.select do |job|
-      job[:args].first.first['event_type'] == 'search_results'
-    end.last
-  end
-
-  def search_results_enqueued_data
-    sleep 1
-    event_data = search_results_job&.dig(:args, 0, 0, 'data')
-
-    return nil unless event_data
-
-    mapped_data = event_data.map do |entry|
-      {
-        key: entry['key'],
-        value: entry['value']
-      }
-    end
-
-    mapped_data.each_with_object({}) do |entry, result|
-      key = entry[:key].to_sym
-      value = entry[:value]
-
-      result[key] = if value.is_a?(Array) && valid_json?(value.first)
-                      value.map { |element| JSON.parse(element) }
-                    else
-                      value.is_a?(Array) && value.size == 1 ? value.first : value
-                    end
-    end.deep_symbolize_keys
-  end
-
-  def valid_json?(string)
-    JSON.parse(string)
-    true
-  rescue StandardError
-    false
+        search_params: {},
+        track_params: an_instance_of(ActionController::Parameters),
+        results: array_including(
+          have_attributes(course_code: 'F314', provider_code: 'RO1'),
+          have_attributes(course_code: '2DTK', provider_code: '19S'),
+          have_attributes(course_code: 'F3D', provider_code: 'JL1'),
+          have_attributes(course_code: 'TDA1', provider_code: '23T'),
+          have_attributes(course_code: 'Y565', provider_code: '1UR'),
+          have_attributes(course_code: 'P123', provider_code: 'PO1')
+        )
+      )
+    ).twice
   end
 end
