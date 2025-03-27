@@ -1,12 +1,10 @@
-<% page_title = "Schools" %>
-
-<% content_for :page_title, page_title %>
+<% content_for :page_title, t(".title") %>
 <%= content_for :before_content, render_breadcrumbs(:sites) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <%= page_title %>
+      <%= t(".title") %>
     </h1>
 
     <%= govuk_button_link_to t(".add_school"), search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
@@ -17,12 +15,12 @@
       <table class="govuk-table app-table--vertical-align-middle">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Name</th>
-            <th class="govuk-table__header" scope="col">School code</th>
+            <th class="govuk-table__header" scope="col"><%= t(".name") %></th>
+            <th class="govuk-table__header" scope="col"><%= t(".code") %></th>
             <% if urn_required?(@recruitment_cycle.year.to_i) %>
               <th class="govuk-table__header" scope="col">
-                <abbr class="app-!-text-decoration-underline-dotted" title="Unique reference number">
-                  URN
+                <abbr class="app-!-text-decoration-underline-dotted" title="Unique Reference Number">
+                  <%= t(".urn") %>
                 </abbr>
               </th>
             <% end %>
