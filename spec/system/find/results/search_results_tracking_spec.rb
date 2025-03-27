@@ -4,17 +4,15 @@ require 'rails_helper'
 
 RSpec.describe 'Search results tracking', :js, service: :find do
   before do
+    ActiveJob::Base.queue_adapter.enqueued_jobs.clear
+    ActiveJob::Base.queue_adapter.performed_jobs.clear
+
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
 
     Rails.application.config.active_job.queue_adapter = :test
 
     given_some_courses_exist
-  end
-
-  after do
-    ActiveJob::Base.queue_adapter.enqueued_jobs.clear
-    ActiveJob::Base.queue_adapter.performed_jobs.clear
   end
 
   context 'from homepage' do
@@ -687,6 +685,7 @@ RSpec.describe 'Search results tracking', :js, service: :find do
   end
 
   def search_results_enqueued_data
+    sleep 1
     event_data = search_results_job&.dig(:args, 0, 0, 'data')
 
     return nil unless event_data
