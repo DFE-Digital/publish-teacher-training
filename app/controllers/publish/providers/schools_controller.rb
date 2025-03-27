@@ -11,16 +11,6 @@ module Publish
 
       def show; end
 
-      def new
-        @site = provider.sites.build
-        @school_form = ::Support::SchoolForm.new(provider, @site, params: gias_school_params)
-        @school_form.clear_stash
-      end
-
-      def edit
-        @school_form = SchoolForm.new(site)
-      end
-
       def create
         @site = provider.sites.build
         @school_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
@@ -28,20 +18,6 @@ module Publish
           redirect_to publish_provider_recruitment_cycle_schools_check_path
         else
           render :new
-        end
-      end
-
-      def update
-        @school_form = SchoolForm.new(site, params: site_params(:publish_school_form))
-
-        if @school_form.save!
-          course_updated_message('School')
-
-          redirect_to publish_provider_recruitment_cycle_school_path(
-            @school_form.provider_code, @school_form.recruitment_cycle_year, site.id
-          )
-        else
-          render :edit
         end
       end
 
