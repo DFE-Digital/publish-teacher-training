@@ -10,11 +10,6 @@
       </legend>
       <%= render GovukComponent::SummaryListComponent.new do |component|
             component.with_row do |row|
-              row.with_key { t(".location_name") }
-              row.with_value(text: @site.location_name)
-            end
-
-            component.with_row do |row|
               row.with_key { t(".code") }
               row.with_value(text: @site.code)
               row.with_action

@@ -21,11 +21,6 @@
       <%= f.govuk_fieldset legend: { text: fieldset_legend.call, size: "l" } do %>
         <%= render GovukComponent::SummaryListComponent.new do |component|
               component.with_row do |row|
-                row.with_key { t(".location_name") }
-                row.with_value(text: @school_form.location_name)
-              end
-
-              component.with_row do |row|
                 row.with_key { t(".urn") }
                 row.with_value(text: @school_form.urn)
               end

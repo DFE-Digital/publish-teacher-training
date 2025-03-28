@@ -747,7 +747,6 @@ en:
           show:
             new: Add school
             update: &update_school "Update school"
-            location_name: School name
             code: School code
             urn: URN
             address: Address
@@ -756,7 +755,6 @@ en:
         show:
           new: Add school
           update: *update_school
-          location_name: School name
           code: School code
           urn: URN
           address: Address
