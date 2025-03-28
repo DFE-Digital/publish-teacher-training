@@ -58,7 +58,24 @@ class Provider < ApplicationRecord
   has_many :accredited_partnerships, foreign_key: :training_provider_id, class_name: 'ProviderPartnership', inverse_of: :training_provider
   has_many :accredited_partners, through: :accredited_partnerships, class_name: 'Provider', source: :accredited_provider
 
-  normalizes :provider_name, with: ->(value) { value.gsub(/\s+/, ' ').strip }
+  normalizes :provider_name, with: lambda { |value|
+    value
+      .gsub(/\s+/, ' ')        # Normalize spaces
+      .strip                   # Remove leading/trailing spaces
+      .then do |string|
+        RubyPants.new(
+          string,
+          [2, :dashes],
+          double_left_quote: '“',
+          double_right_quote: '”',
+          single_left_quote: '‘',
+          single_right_quote: '’',
+          ellipsis: '…',
+          em_dash: '—',
+          en_dash: '–'
+        ).to_html
+      end
+  }
 
   def accredited_providers
     if Settings.features.provider_partnerships
