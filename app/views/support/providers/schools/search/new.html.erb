@@ -25,7 +25,7 @@
         <% end %>
         <div class="govuk-hint"><%= t(".hint") %></div>
         <% if f.object.errors.present? %>
-          <span class="govuk-error-message" id="support-providers-schools-search-form-query-field-error" data-qa="provider-error">
+          <span class="govuk-error-message" id="support-providers-schools-search-form-query-field-error">
             <%= f.object.errors.first.message %>
           </span>
         <% end %>
