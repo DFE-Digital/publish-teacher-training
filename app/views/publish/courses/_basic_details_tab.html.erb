@@ -152,18 +152,6 @@
        end
      end
 
-     if Settings.features.provider_partnerships
-       partners = @provider.accredited_partners
-       add_provider_link = publish_provider_recruitment_cycle_accredited_partnerships_path(@course.provider_code, @course.recruitment_cycle_year)
-       select_partner_link = ratifying_provider_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code)
-       change_partner_link = ratifying_provider_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
-     else
-       partners = @provider.accredited_providers
-       add_provider_link = publish_provider_recruitment_cycle_accredited_providers_path(@course.provider_code, @course.recruitment_cycle_year)
-       select_partner_link = accredited_provider_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code)
-       change_partner_link = accredited_provider_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
-     end
-
      unless @provider.accredited?
        summary_list.with_row(html_attributes: { data: { qa: "course__ratifying_provider" } }) do |row|
          row.with_key { t(".ratifying_provider") }
@@ -171,15 +159,15 @@
          if course.is_published? || course.is_withdrawn?
            row.with_action
          elsif !course.accrediting_provider.nil?
-           row.with_action(href: change_partner_link,
+           row.with_action(href: ratifying_provider_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
                            visually_hidden_text: "accredited provider")
-         elsif partners.any?
+         elsif @provider.accredited_partners.any?
            row.with_value do
-             "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select an accredited provider', select_partner_link)}</div>".html_safe
+             "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select an accredited provider', ratifying_provider_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code))}</div>".html_safe
            end
          else
            row.with_value do
-             "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add at least one accredited provider', add_provider_link)}</div>".html_safe
+             "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add at least one accredited provider', publish_provider_recruitment_cycle_accredited_partnerships_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe
            end
          end
        end
