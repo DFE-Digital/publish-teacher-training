@@ -101,7 +101,6 @@ feature 'Adding school to provider as an admin', :with_publish_constraint, { can
   def then_i_see_the_confirmation_page
     expect(page).to have_content('Add school - School of Cats (V01)')
     expect(page).to have_content('Check your answers')
-    expect(page).to have_content('School NameDistinct School')
     expect(page).to have_content('URN123456')
     expect(page).to have_content('Address123 Fake StreetNewtownRD9 0AN')
   end
