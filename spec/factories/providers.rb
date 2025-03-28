@@ -5,10 +5,7 @@ FactoryBot.define do
     provider_name { "ACME SCITT#{rand(1_000_000)}" }
 
     sequence(:provider_code) do |n|
-      loop do
-        code = format("#{('A'..'Z').to_a.sample}%02d", n % 100)
-        break code unless Provider.exists?(provider_code: code)
-      end
+      ProviderCodeGenerator.new(n).call
     end
 
     trait :with_anonymised_data do
