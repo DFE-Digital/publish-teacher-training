@@ -16,7 +16,7 @@ module Publish
 
         @study_site_search_form = Schools::SearchForm.new(query:)
 
-        if @study_site_search_form.valid?
+        if @study_site_search_form.valid?(:query)
 
           @study_site_select_form = Publish::StudySites::SelectForm.new
           @study_site_search = Publish::Schools::SearchService.call(query:)

@@ -7,6 +7,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with(model: @site, url: publish_provider_recruitment_cycle_schools_check_path(recruitment_cycle_year: @provider.recruitment_cycle_year), method: :put, local: true) do |f| %>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <%= f.govuk_error_summary %>
+        </div>
+      </div>
 
       <% fieldset_legend = proc do
            tag.span(t(".new"), class: "govuk-caption-l")
@@ -31,7 +36,7 @@
               end
             end %>
       <% end %>
-      <%= f.hidden_field :school_id, value: params[:school_id] %>
+      <%= f.hidden_field :school_id, value: school_id %>
 
       <%= govuk_inset_text do %>
         <%= t(".inset_text_html", link: t("links.get_information_schools_search")) %>

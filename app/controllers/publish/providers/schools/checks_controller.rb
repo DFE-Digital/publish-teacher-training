@@ -4,6 +4,7 @@ module Publish
   module Providers
     module Schools
       class ChecksController < ApplicationController
+        helper_method :school_id
         before_action :site
 
         def show; end
