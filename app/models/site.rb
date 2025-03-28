@@ -27,7 +27,10 @@ class Site < ApplicationRecord
     study_site: 1
   }
 
-  validates :location_name, uniqueness: { scope: %i[provider_id site_type] }
+  validates :location_name, uniqueness: { scope: %i[provider_id site_type],
+                                          message: lambda { |object, _data|
+                                            "This #{object.site_type.humanize.downcase} has already been added"
+                                          } }
   validates :location_name,
             :address1,
             :postcode,

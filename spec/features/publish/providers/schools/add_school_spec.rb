@@ -7,16 +7,26 @@ feature "Adding a provider's schools", { can_edit_current_and_next_cycles: false
   include ProviderSchoolHelper
   before do
     given_i_am_authenticated_as_a_provider_user
-    and_there_is_a_gias_school
+    and_there_are_gias_schools
     when_i_visit_the_schools_page
     then_i_should_see_a_list_of_schools
-  end
 
-  scenario 'with valid details' do
     given_i_see_the_schools_guidance_text
     when_i_click_add_a_school
     then_i_am_on_the_school_search_page
+  end
 
+  scenario 'with duplicate school' do
+    when_i_search_with_an_duplicate_query
+    then_i_should_see_duplicate_school_options
+
+    when_i_choose_the_duplicate_school_i_want_to_add
+    and_i_click_add_school
+
+    then_i_see_the_school_is_added_message
+  end
+
+  scenario 'with new school' do
     when_i_search_with_an_empty_query
     then_i_should_see_an_error_message
 
@@ -35,7 +45,7 @@ feature "Adding a provider's schools", { can_edit_current_and_next_cycles: false
     then_i_see_a_confirmation_message
   end
 
-  def and_there_is_a_gias_school
+  def and_there_are_gias_schools
     @gias_school = create(:gias_school, {
                             urn: '123456',
                             name: 'Distinct School',
@@ -72,6 +82,13 @@ feature "Adding a provider's schools", { can_edit_current_and_next_cycles: false
     end
   end
 
+  def then_i_see_the_school_is_added_message
+    within('.govuk-error-summary') do
+      expect(page).to have_content('There is a problem')
+      expect(page).to have_content('This school has already been added')
+    end
+  end
+
   def when_i_search_with_an_unmatched_query
     fill_in 'Enter URN or school', with: 'zzz'
     click_link_or_button 'Continue'
@@ -79,6 +96,11 @@ feature "Adding a provider's schools", { can_edit_current_and_next_cycles: false
 
   def then_i_should_see_a_no_results_message
     expect(page).to have_content('No results found for ‘zzz’')
+  end
+
+  def when_i_search_with_an_duplicate_query
+    fill_in 'Enter URN or school', with: provider.sites.first.location_name
+    click_link_or_button 'Continue'
   end
 
   def then_i_click_change_your_search
@@ -92,6 +114,15 @@ feature "Adding a provider's schools", { can_edit_current_and_next_cycles: false
 
   def then_i_should_see_school_options
     expect(page).to have_content('1 result found for ‘Dis’')
+  end
+
+  def then_i_should_see_duplicate_school_options
+    expect(page).to have_content("1 result found for ‘#{provider.sites.first.location_name}’")
+  end
+
+  def when_i_choose_the_duplicate_school_i_want_to_add
+    choose provider.sites.first.location_name
+    click_link_or_button 'Continue'
   end
 
   def when_i_choose_the_school_i_want_to_add
