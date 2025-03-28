@@ -738,39 +738,11 @@ en:
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
     providers:
       add: "Add organisation"
-      schools:
+      schools: # file
         check_multiple: # file
         multiple: # file
-        checks:
-          update:
-            added: School added
-          show:
-            new: Add school
-            update: &update_school "Update school"
-            code: School code
-            urn: URN
-            address: Address
-            inset_text_html: |
-              If this information is not correct, contact the school and ask them to update their information on <a href="%{link}" target="_blank">Get Information About Schools (GIAS) (opens in a new tab)</a>.
-        show:
-          new: Add school
-          update: *update_school
-          code: School code
-          urn: URN
-          address: Address
-        search:
-          new:
-            title: Enter URN or school
-            caption: Add school
-            hint: Enter a unique reference number (URN) or a school name. You can also enter a university, college or postcode.
-            help_finding_school: Help with finding a school
-            cannot_find_html: |
-              <p class="govuk-body">If you cannot find the school you’re looking for, you can <a href="%{link}" target="_blank">search for a school in Get Information About Schools (GIAS) (opens in a new tab)</a>.</p>
-              <p class="govuk-body govuk-!-margin-bottom-0">
-              <span class="govuk-!-font-weight-bold">If the school is not on GIAS</span>
-              </br>
-              If the school you’re looking for is not on GIAS, or the information is not correct, contact the school and ask them to update their information on GIAS.
-              </p>
+        checks: # file
+        search: # file
       users:
         first_name: "First name"
         last_name: "Last name"
