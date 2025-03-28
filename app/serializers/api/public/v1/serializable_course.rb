@@ -54,11 +54,7 @@ module API
                    :degree_type
 
         attribute :about_accredited_body do
-          if Settings.features.provider_partnerships
-            @object.ratifying_provider_description
-          else
-            @object.accrediting_provider_description
-          end
+          @object.ratifying_provider_description
         end
 
         attribute :accredited_body_code do

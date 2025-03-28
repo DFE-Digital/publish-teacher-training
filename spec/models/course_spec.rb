@@ -622,28 +622,10 @@ describe Course do
       end
 
       describe 'training provider must have partnership with accrediting provider' do
-        context 'with accredited enrichments' do
-          before do
-            allow(Settings.features).to receive(:provider_partnerships).and_return(false)
-          end
+        let(:course) { create(:course, :publishable, accredited: false) }
 
-          let(:course) { create(:course, :publishable, accredited: false) }
-
-          it 'is invalid to publish when accrediting provider has no relationship with training provider' do
-            expect(subject).to be_publishable
-          end
-        end
-
-        context 'with accredited partnerships' do
-          before do
-            allow(Settings.features).to receive(:provider_partnerships).and_return(true)
-          end
-
-          let(:course) { create(:course, :publishable, accredited: false) }
-
-          it 'is invalid to publish when accrediting provider has no relationship with training provider' do
-            expect(subject).to be_publishable
-          end
+        it 'is invalid to publish when accrediting provider has no relationship with training provider' do
+          expect(subject).to be_publishable
         end
       end
     end
@@ -2334,44 +2316,6 @@ describe Course do
         let(:provider) { create(:provider, accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider, description: 'one two three')]) }
 
         it { is_expected.to match 'one two three' }
-      end
-    end
-  end
-
-  describe '#accrediting_provider_description' do
-    subject { course.accrediting_provider_description }
-
-    let(:accrediting_provider) { nil }
-    let(:course) { create(:course, accrediting_provider:) }
-
-    context 'for courses without accrediting provider' do
-      it { is_expected.to be_nil }
-    end
-
-    context 'for courses with accrediting provider' do
-      let(:accrediting_provider) { build(:provider) }
-      let(:course) { create(:course, provider:, accrediting_provider:) }
-
-      let(:provider) { build(:provider, accrediting_provider_enrichments:) }
-
-      context 'without any accrediting_provider_enrichments' do
-        let(:accrediting_provider_enrichments) { nil }
-
-        it { is_expected.to be_nil }
-      end
-
-      context 'with accrediting_provider_enrichments' do
-        let(:accrediting_provider_enrichment_description) { Faker::Lorem.sentence.to_s }
-        let(:accrediting_provider_enrichment) do
-          {
-            'UcasProviderCode' => accrediting_provider.provider_code,
-            'Description' => accrediting_provider_enrichment_description
-          }
-        end
-
-        let(:accrediting_provider_enrichments) { [accrediting_provider_enrichment] }
-
-        it { is_expected.to match accrediting_provider_enrichment_description }
       end
     end
   end

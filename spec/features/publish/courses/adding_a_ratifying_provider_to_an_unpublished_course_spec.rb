@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 feature 'unpublished course without accredited provider', { can_edit_current_and_next_cycles: false } do
-  before do
-    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
-  end
-
   scenario 'adding and changing an accredited provider' do
     given_i_am_authenticated_as_a_provider_user
     and_i_visit_the_course_details_page_of_a_course_without_an_accredited_provider

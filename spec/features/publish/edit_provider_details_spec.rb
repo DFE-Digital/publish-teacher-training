@@ -15,8 +15,7 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
     @provider = create(:provider)
     course = create(:course, :with_accrediting_provider, provider: @provider)
 
-    accredited_provider_code = course.accredited_provider_code
-    @provider.accrediting_provider_enrichments = [{ UcasProviderCode: accredited_provider_code }]
+    @provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider)
 
     given_i_am_authenticated(user: create(:user, providers: [@provider]))
     @accrediting_provider = @provider.accrediting_providers.first

@@ -139,10 +139,7 @@ feature 'financial incentives call out boxes content' do
       :provider,
       :scitt,
       provider_name: 'Provider 1',
-      accrediting_provider_enrichments: [{
-        'Description' => 'Something great about the accredited provider',
-        'UcasProviderCode' => accrediting_provider.provider_code
-      }]
+      accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider)]
     )
   end
 
