@@ -69,8 +69,19 @@ The commands from the previous section will seed the database with some test dat
 
 To seed the database with a sanitised production dump:
 
-### Download the sanitised production dump from the Azure Storage Account.
 - Request a PIM approval for the production environment.
+
+
+### Use the script to reset your local development db directly
+
+Make sure there are no connections to your database
+
+```shell
+az login # select the production subscription
+bin/restore-backup
+```
+
+### Download the sanitised production dump from the Azure Storage Account.
 - In the Azure portal, go to 'Storage Accounts' -> 's189p01pttdbbkpsanpdsa' -> 'Containers' -> 'database-backup'
 - Download the latest sanitised backup.
 - Unzip the file and you should see a file called `publish_sanitised_YYYY-MM-DD.sql`.
@@ -79,38 +90,6 @@ Then run the following command to populate the database:
 
 ```bash
 psql manage_courses_backend_development < ~/Downloads/publish_sanitised_YYYY-MM-DD.sql
-```
-
-## Seeding GiasSchool Data
-
-The `rails gias_update` command takes an optional filename, the default is set in lib/tasks/gias_update.rake.
-
-1. With existing csv file e.g 'csv/edubasealldata20230306.csv'. Check the default `CSV_PATH` in lib/tasks/gias_update.rake matches the name of the csv file.
-
-You can then run `rails gias_update` or `rails 'gias_update[csv/<file_name>]'` where <file_name> is the csv filename.
-
-2. You can obtain an updated csv from https://www.get-information-schools.service.gov.uk/Downloads the `establishment fields CSV` checkbox. This can be uploaded to the `csv` directory as a local commit and pushed to main.
-
-Ensure the default `CSV_PATH` in lib/tasks/gias_update.rake matches the name of the new csv file if required.
-
-Test the import function locally with `rails 'gias_update[csv/<file_name>]'`
-You should see console output on completion similar to:
-
-```
-I, [2023-03-10T13:35:43.050939 #7966]  INFO -- : Done! 22843 schools upserted
-I, [2023-03-10T13:35:43.051021 #7966]  INFO -- : Failures 483
-I, [2023-03-10T13:35:43.052223 #7966]  INFO -- : Errors - [{:town=>["can't be blank"]} ...
-```
-
-You can check the `GiasSchool.count` in the database is correct.
-
-Once the file is merged to main, you can run the process in the required environment.
-Use the following sequence to allow the above console output to display, chaining the commands does update the database but does not display the console ouptut.
-
-```
-make <environment> console
-cd /app
-/usr/local/bin/bundle exec rails 'gias_update[csv/<file_name>]'
 ```
 
 ## Configuring local domains

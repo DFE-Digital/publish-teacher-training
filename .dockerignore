@@ -6,6 +6,8 @@ coverage
 .git
 .github
 terraform
+# Better safe than sorry
+bin/restore-backup
 
 # work is my local project-specific non-committed workspace --Misha
 work
