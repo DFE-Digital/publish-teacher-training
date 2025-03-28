@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
+# Extend BaseForm to accept an ActiveRecord object
+#
+# When calling save on the form, we assign the
+# form attributes to the model and save the model
 class Form < BaseForm
-  include ActiveModel::Model
-  include ActiveModel::AttributeAssignment
-  include ActiveModel::Validations::Callbacks
-
   attr_accessor :model
 
   def initialize(identifier_model, model, params: {})
