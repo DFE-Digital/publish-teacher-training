@@ -8,9 +8,9 @@ module Publish
       describe SearchForm, type: :model do
         subject { described_class.new }
 
-        it { is_expected.to validate_presence_of(:query) }
+        it { is_expected.to validate_presence_of(:query).on(:query) }
 
-        it { is_expected.to validate_length_of(:query).is_at_least(2) }
+        it { is_expected.to validate_length_of(:query).on(:query).is_at_least(2) }
       end
     end
   end
