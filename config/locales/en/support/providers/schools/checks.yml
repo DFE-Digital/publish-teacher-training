@@ -1,0 +1,15 @@
+en:
+  support:
+    providers:
+      schools:
+        checks:
+          update:
+            added: School added
+          show:
+            new: Add school
+            update: Update school
+            code: School code
+            urn: URN
+            address: Address
+            inset_text_html: |
+              If this information is not correct, contact the school and ask them to update their information on <a href="%{link}" target="_blank">Get Information About Schools (GIAS) (opens in a new tab)</a>.

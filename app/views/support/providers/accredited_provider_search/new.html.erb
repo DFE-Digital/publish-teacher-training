@@ -25,7 +25,7 @@
           <span class="govuk-caption-l"><%= t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code) %></span>
           <%= t(".title") %>
           <% if f.object.errors.present? %>
-            <span class="govuk-error-message" id="accredited-provider-search-form-query-field-error" data-qa="provider-error">
+            <span class="govuk-error-message" id="accredited-provider-search-form-query-field-error">
               <%= f.object.errors.first.message %>
             </span>
           <% end %>

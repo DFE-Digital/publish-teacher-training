@@ -13,11 +13,21 @@ module Publish
         end
 
         def create
-          redirect_to_next_step and return if school_id.present?
+          if school_id.present?
+            @school_search_form = Schools::SearchForm.new(school:)
+
+            if @school_search_form.valid?(:school)
+              redirect_to_next_step
+            else
+              render :new
+            end
+
+            return
+          end
 
           @school_search_form = SearchForm.new(query:)
 
-          if @school_search_form.valid?
+          if @school_search_form.valid?(:query)
 
             @school_select_form = SelectForm.new
             @school_search = Publish::Schools::SearchService.call(query:)
@@ -32,7 +42,7 @@ module Publish
           @school_select_form = SelectForm.new(school_id: school_select_params[:school_id])
 
           if @school_select_form.valid?
-            redirect_to new_publish_provider_recruitment_cycle_school_path(provider_code: provider.provider_code, school_id: @school_select_form.school_id)
+            redirect_to publish_provider_recruitment_cycle_schools_check_path(provider_code: provider.provider_code, school_id: @school_select_form.school_id)
           else
             @school_search = Publish::Schools::SearchService.call(query:)
             render :results
@@ -47,6 +57,13 @@ module Publish
 
         def school_id
           params[:school_id]
+        end
+
+        def school
+          @school ||= begin
+            gias_school = GiasSchool.find(school_id)
+            @provider.sites.school.build(gias_school.school_attributes)
+          end
         end
 
         def query
@@ -77,7 +94,7 @@ module Publish
         end
 
         def redirect_to_next_step
-          redirect_to new_publish_provider_recruitment_cycle_school_path(
+          redirect_to publish_provider_recruitment_cycle_schools_check_path(
             provider_code: provider.provider_code,
             school_id:
           )

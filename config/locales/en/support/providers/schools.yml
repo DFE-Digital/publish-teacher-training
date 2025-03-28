@@ -1,0 +1,11 @@
+en:
+  support:
+    providers:
+      schools:
+        show:
+          new: Add school
+          update: Update school
+          code: School code
+          urn: URN
+          address: Address
+

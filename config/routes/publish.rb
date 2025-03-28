@@ -326,7 +326,7 @@ namespace :publish, as: :publish do
         namespace :schools do
           resource :check, only: %i[show update]
         end
-        resources :schools do
+        resources :schools, only: %i[index create show destroy] do
           member do
             get :delete
             delete :delete, to: 'schools#destroy'
