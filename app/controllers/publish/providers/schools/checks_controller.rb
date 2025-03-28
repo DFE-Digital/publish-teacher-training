@@ -11,7 +11,7 @@ module Publish
 
         def update
           if @site.save
-            redirect_to publish_provider_recruitment_cycle_schools_path, flash: { success: t('.added') }
+            redirect_to publish_provider_recruitment_cycle_schools_path, flash: { success_with_body: { title: t('.added'), body: @site.location_name } }
           else
             render :show
           end
