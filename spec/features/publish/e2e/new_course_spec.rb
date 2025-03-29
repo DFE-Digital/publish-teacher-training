@@ -3,11 +3,12 @@
 require 'rails_helper'
 
 feature 'new course', { can_edit_current_and_next_cycles: false } do
-  scenario 'creates the correct course in the 2023 cycle' do
+  scenario 'creates the correct course in the next cycle' do
     # This is intended to be a test which will go through the entire flow
     # and ensure that the correct page gets displayed at the end
     # with the correct course being created
     given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+    and_the_visa_sponsor_deadline_feature_flag_is_on
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     then_i_can_create_the_course
@@ -27,26 +28,9 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     course_creation_params = select_study_mode(course_creation_params, next_page: publish_courses_new_schools_page)
     course_creation_params = select_school(course_creation_params, next_page: publish_courses_new_study_sites_page)
     course_creation_params = select_study_site(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
-    course_creation_params = select_visa_settings(course_creation_params, next_page: publish_courses_new_applications_open_page)
-    course_creation_params = select_applications_open_from(course_creation_params, next_page: publish_courses_new_start_date_page)
-    select_start_date(course_creation_params)
-
-    save_course
-  end
-
-  def then_i_can_create_the_course_with_funding_type
-    expect(publish_courses_new_level_page).to be_displayed
-    course_creation_params = select_level({}, level: 'primary', level_selection: publish_courses_new_level_page.level_fields.primary, next_page: publish_courses_new_subjects_page)
-    course_creation_params = select_subjects(course_creation_params, level: 'primary', next_page: publish_courses_new_age_range_page)
-
-    course_creation_params = select_age_range(course_creation_params, next_page: publish_courses_new_outcome_page)
-
-    course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: publish_courses_new_outcome_page.qualification_fields.qts, next_page: publish_courses_new_funding_type_page)
-    course_creation_params = select_apprenticeship_funding_type(course_creation_params, next_page: publish_courses_new_study_mode_page)
-    course_creation_params = select_study_mode(course_creation_params, next_page: publish_courses_new_schools_page)
-    course_creation_params = select_school(course_creation_params, next_page: publish_courses_new_study_sites_page)
-    course_creation_params = select_study_site(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
-    course_creation_params = select_visa_settings(course_creation_params, next_page: publish_courses_new_applications_open_page)
+    course_creation_params = select_visa_settings(course_creation_params)
+    course_creation_params = select_sponsorship_application_deadline_required(course_creation_params)
+    course_creation_params = select_sponsorship_application_deadline_date(course_creation_params, next_page: publish_courses_new_applications_open_page)
     course_creation_params = select_applications_open_from(course_creation_params, next_page: publish_courses_new_start_date_page)
     select_start_date(course_creation_params)
 
@@ -62,6 +46,10 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
         ]
       )
     )
+  end
+
+  def and_the_visa_sponsor_deadline_feature_flag_is_on
+    FeatureFlag.activate(:visa_sponsorship_deadline)
   end
 
   def when_i_visit_the_courses_page
@@ -212,11 +200,50 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     course_creation_params
   end
 
-  def select_visa_settings(course_creation_params, next_page:)
+  def select_visa_settings(course_creation_params)
     course_creation_params[:can_sponsor_student_visa] = 'true'
 
     publish_courses_new_student_visa_sponsorship_page.yes.click
     publish_courses_new_student_visa_sponsorship_page.continue.click
+
+    expect_path_and_params(
+      expected_path: new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_required_path(
+        provider_code: @provider.provider_code,
+        recruitment_cycle_year: @provider.recruitment_cycle_year
+      ),
+      expected_query_params: course_creation_params
+    )
+
+    course_creation_params
+  end
+
+  def select_sponsorship_application_deadline_required(course_creation_params)
+    course_creation_params[:visa_sponsorship_application_deadline_required] = 'true'
+    choose 'Yes'
+    click_on 'Continue'
+
+    expect_path_and_params(
+      expected_path: new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_date_path(
+        provider_code: @provider.provider_code,
+        recruitment_cycle_year: @provider.recruitment_cycle_year
+      ),
+      expected_query_params: course_creation_params
+    )
+
+    course_creation_params
+  end
+
+  def select_sponsorship_application_deadline_date(course_creation_params, next_page:)
+    year = @provider.recruitment_cycle_year
+    course_creation_params[:'visa_sponsorship_application_deadline_at(1i)'] = year.to_s
+    course_creation_params[:'visa_sponsorship_application_deadline_at(2i)'] = '9'
+    course_creation_params[:'visa_sponsorship_application_deadline_at(3i)'] = '1'
+
+    fill_in 'Year', with: year
+    fill_in 'Month', with: 9
+    fill_in 'Day', with: 1
+
+    click_on 'Continue'
 
     expect_page_to_be_displayed_with_query(
       page: next_page,

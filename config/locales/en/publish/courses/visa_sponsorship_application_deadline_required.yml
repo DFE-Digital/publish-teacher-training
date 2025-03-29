@@ -1,0 +1,10 @@
+en:
+  publish:
+    courses:
+      visa_sponsorship_application_deadline_required:
+        new:
+          title: Is there a deadline for applications that require visa sponsorship?
+          caption: Add course
+          legend: Is there a deadline for applications that require visa sponsorship?
+          inset_text: You have told us that you can sponsor visas for this course.
+          cancel: Cancel

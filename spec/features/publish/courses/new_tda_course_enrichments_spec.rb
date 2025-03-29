@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_next_cycles do
   before do
+    FeatureFlag.activate(:visa_sponsorship_deadline)
     allow(Settings.features).to receive_messages(provider_partnerships: false)
   end
 
@@ -189,7 +190,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
     when_i_click_continue
     and_i_click_continue
-    and_i_choose_to_sponsor_a_student_visa
+    and_i_choose_to_sponsor_a_student_visa_without_a_visa_deadline
     when_i_click_on_add_a_course
     then_i_see_the_correct_attributes_in_the_database_for_fee_paying
   end
@@ -212,7 +213,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     when_i_click_continue
     and_i_click_continue
 
-    and_i_choose_to_sponsor_a_skilled_worker_visa
+    and_i_choose_to_sponsor_a_skilled_worker_visa_without_a_visa_deadline
     when_i_click_on_add_a_course
     then_i_see_the_correct_attributes_in_the_database_for_salaried
   end
@@ -580,13 +581,19 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_click_continue
   end
 
-  def and_i_choose_to_sponsor_a_student_visa
+  def and_i_choose_to_sponsor_a_student_visa_without_a_visa_deadline
     choose 'Yes'
+    and_i_click_continue
+
+    choose('course-visa-sponsorship-application-deadline-required-field')
     and_i_click_continue
   end
 
-  def and_i_choose_to_sponsor_a_skilled_worker_visa
+  def and_i_choose_to_sponsor_a_skilled_worker_visa_without_a_visa_deadline
     choose('course_can_sponsor_skilled_worker_visa_true')
+    and_i_click_continue
+
+    choose('course-visa-sponsorship-application-deadline-required-field')
     and_i_click_continue
   end
 

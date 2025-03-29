@@ -361,6 +361,8 @@ class Course < ApplicationRecord
   validate :validate_subject_count
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
+  validate :visa_sponsorship_application_deadline_in_recruitment_cycle_year, if: -> { provider.present? }
+
   validates_with UniqueCourseValidator, on: :new
   validates_with ALevelCourseValidator, on: :publish, if: :teacher_degree_apprenticeship?
 
@@ -927,6 +929,10 @@ class Course < ApplicationRecord
     end
   end
 
+  def no_visa_sponsorship?
+    visa_sponsorship == :no_sponsorship
+  end
+
   private
 
   def update_vac_status(study_mode, site_status)
@@ -1156,6 +1162,21 @@ class Course < ApplicationRecord
 
   def validate_custom_age_range
     Courses::ValidateCustomAgeRangeService.new.execute(age_range_in_years, self)
+  end
+
+  def visa_sponsorship_application_deadline_in_recruitment_cycle_year
+    return if visa_sponsorship_application_deadline_at.nil?
+
+    if visa_sponsorship_application_deadline_at.respond_to?(:to_datetime)
+      start_date = provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9)
+      end_date = provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18)
+
+      return if visa_sponsorship_application_deadline_at.between?(start_date, end_date)
+
+      errors.add(:visa_sponsorship_application_deadline_at, :within_range)
+    else
+      errors.add(:visa_sponsorship_application_deadline_at, :not_a_date)
+    end
   end
 
   def valid_date_range

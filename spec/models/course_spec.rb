@@ -291,6 +291,40 @@ describe Course do
         .on(%i[create update])
     end
 
+    describe 'validates visa_sponsorship_application_deadline_at within recruitment cycle' do
+      let(:provider) { create(:provider) }
+      let(:course) { create(:course, provider:) }
+      let(:start_of_cycle) { provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9) }
+      let(:end_of_cycle) { provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18) }
+
+      it 'is invalid if date is before the recruitment cycle starts' do
+        course.visa_sponsorship_application_deadline_at = start_of_cycle - 1.hour
+        course.validate
+        expect(course.errors[:visa_sponsorship_application_deadline_at]).to eq ['Enter a date within the recruitment cycle']
+      end
+
+      it 'is invalid if date is after the recruitment cycle ends' do
+        course.visa_sponsorship_application_deadline_at = end_of_cycle + 1.hour
+        course.validate
+        expect(course.errors[:visa_sponsorship_application_deadline_at]).to eq ['Enter a date within the recruitment cycle']
+      end
+
+      it 'is valid if within cycle' do
+        course.visa_sponsorship_application_deadline_at = end_of_cycle - 1.hour
+        course.validate
+        expect(course.errors[:visa_sponsorship_application_deadline_at].blank?).to be true
+      end
+    end
+
+    describe 'validates that the visa_sponsorship_application_deadline_at is a date' do
+      it 'is invalid if a struct' do
+        bad_date = Struct.new(:year, :month, :day).new(2026, 50, 1)
+        course = build(:course, :can_sponsor_skilled_worker_visa, visa_sponsorship_application_deadline_at: bad_date)
+        course.validate
+        expect(course.errors[:visa_sponsorship_application_deadline_at]).to eq ['Enter a date']
+      end
+    end
+
     describe 'valid?' do
       context 'A new course' do
         let(:provider) { build(:provider) }

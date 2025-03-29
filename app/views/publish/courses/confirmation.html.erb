@@ -195,6 +195,32 @@
           <% end %>
         <% end %>
 
+        <% if course.show_sponsorship_deadline_required_row? %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { t(".is_there_a_visa_sponsorship_deadline") } %>
+            <% row.with_value { course.visa_sponsorship_deadline_required } %>
+            <% row.with_action(
+                 href: new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_required_path(
+                   course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)
+                 ),
+                 visually_hidden_text: t(".visa_sponsorship_deadline_required_visually_hidden")
+               ) %>
+          <% end %>
+        <% end %>
+
+        <% if course.show_sponsorship_deadline_date_row? %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { t(".visa_sponsorship_application_deadline_date") } %>
+            <% row.with_value { course.visa_sponsorship_application_deadline_at.to_fs(:govuk_date) } %>
+            <% row.with_action(
+                 href: new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_date_path(
+                   course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)
+                 ),
+                 visually_hidden_text: t(".date_for_applications_requiring_visa_sponsorship_visually_hidden")
+               ) %>
+          <% end %>
+        <% end %>
+
         <% summary_list.with_row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
           <% row.with_key { "Applications open date" } %>
           <% row.with_value do %>

@@ -24,7 +24,7 @@ module Courses
 
     def build_new_course
       course = provider.courses.new
-      course.assign_attributes(course_attributes.except(:subjects_ids, :study_mode))
+      course.assign_attributes(course_attributes.except(:subjects_ids, :study_mode, :visa_sponsorship_application_deadline_required))
 
       if course_attributes[:master_subject_id].blank? && course_attributes[:subordinate_subject_id].present?
         course.errors.add(:subjects, :course_creation)
@@ -40,7 +40,8 @@ module Courses
 
       Publish::Courses::AssignTdaAttributesService.new(course).call if course.undergraduate_degree_with_qts?
       Courses::AssignProgramTypeService.new.execute(course.funding, course)
-      clean_up_visa_properies(course)
+      clean_up_visa_properties(course)
+      Courses::AssignVisaSponsorshipApplicationDeadlineService.execute(course_params, course)
       course.valid?(:new) if course.errors.blank?
 
       course.remove_carat_from_error_messages
@@ -48,7 +49,7 @@ module Courses
       course
     end
 
-    def clean_up_visa_properies(course)
+    def clean_up_visa_properties(course)
       if course.fee?
         course.can_sponsor_skilled_worker_visa = false
       else

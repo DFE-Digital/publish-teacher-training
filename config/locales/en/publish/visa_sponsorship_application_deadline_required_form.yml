@@ -1,0 +1,8 @@
+en:
+  activemodel:
+    errors:
+      models:
+        publish/visa_sponsorship_application_deadline_required_form:
+          attributes:
+            visa_sponsorship_application_deadline_required:
+              inclusion: Select if there is a deadline for applications that require visa sponsorship

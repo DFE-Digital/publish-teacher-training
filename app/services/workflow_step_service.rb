@@ -3,8 +3,9 @@
 class WorkflowStepService
   include ServicePattern
 
-  def initialize(course)
+  def initialize(course, params)
     @course = course
+    @params = params
   end
 
   def call
@@ -13,9 +14,9 @@ class WorkflowStepService
     if course.is_further_education?
       further_education_workflow_steps
     elsif course.is_school_direct?
-      school_direct_workflow_steps_with_accredited_provider_check - visas_to_remove(course)
+      school_direct_workflow_steps_with_accredited_provider_check - visas_to_remove(course) - sponsorship_application_steps_to_remove
     elsif course.is_uni_or_scitt?
-      uni_or_scitt_workflow_steps - visas_to_remove(course)
+      uni_or_scitt_workflow_steps - visas_to_remove(course) - sponsorship_application_steps_to_remove
     end
   end
 
@@ -103,6 +104,8 @@ class WorkflowStepService
       accredited_provider
       can_sponsor_student_visa
       can_sponsor_skilled_worker_visa
+      visa_sponsorship_application_deadline_required
+      visa_sponsorship_application_deadline_at
       applications_open
       start_date
       confirmation
@@ -124,6 +127,8 @@ class WorkflowStepService
       study_site
       can_sponsor_student_visa
       can_sponsor_skilled_worker_visa
+      visa_sponsorship_application_deadline_required
+      visa_sponsorship_application_deadline_at
       applications_open
       start_date
       confirmation
@@ -136,6 +141,22 @@ class WorkflowStepService
     else
       [:can_sponsor_student_visa]
     end
+  end
+
+  def sponsorship_application_steps_to_remove
+    if !FeatureFlag.active?(:visa_sponsorship_deadline) || course.no_visa_sponsorship?
+      %i[visa_sponsorship_application_deadline_required visa_sponsorship_application_deadline_at]
+    elsif visa_sponsorship_application_deadline_required_param == false
+      [:visa_sponsorship_application_deadline_at]
+    else
+      []
+    end
+  end
+
+  def visa_sponsorship_application_deadline_required_param
+    ActiveModel::Type::Boolean.new.cast(
+      @params[:visa_sponsorship_application_deadline_required]
+    )
   end
 
   def school_direct_workflow_steps_with_accredited_provider_check

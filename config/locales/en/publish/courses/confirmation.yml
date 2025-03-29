@@ -1,0 +1,10 @@
+en:
+  publish:
+    courses:
+      confirmation:
+        is_there_a_visa_sponsorship_deadline: Is there a visa sponsorship deadline?
+        visa_sponsorship_application_deadline_date: Visa sponsorship deadline
+        ratifying_provider: Accredited provider
+        visa_sponsorship_deadline_required_visually_hidden: visa sponsorship deadline required
+        date_for_applications_requiring_visa_sponsorship_visually_hidden: date for applications requiring visa sponsorship
+
