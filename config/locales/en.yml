@@ -1038,6 +1038,19 @@ en:
           attributes:
             campaign_name:
               inclusion: "Select if this course is part of the Engineers teach physics programme"
+        publish/visa_sponsorship_application_deadline_required_form:
+          attributes:
+            visa_sponsorship_application_deadline_required:
+              inclusion: Select if there is a deadline for applications that require visa sponsorship
+        publish/visa_sponsorship_application_deadline_date_form:
+          attributes:
+            visa_sponsorship_application_deadline_at:
+              blank: Enter a date that courses which require visa sponsorship will close
+              invalid_date: Enter a date that courses which require visa sponsorship will close
+              blank_year: Enter a year that courses which require visa sponsorship will close
+              blank_month: Enter a month that courses which require visa sponsorship will close
+              blank_day: Enter a day that courses which require visa sponsorship will close
+              not_in_range: The date that courses which require visa sponsorship will close must be between %{earliest_date} and the end of the recruitment cycle, %{apply_deadline}
         publish/subject_requirement_form:
           attributes:
             degree_subject_requirements:
