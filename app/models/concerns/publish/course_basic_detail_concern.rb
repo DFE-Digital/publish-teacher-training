@@ -115,11 +115,23 @@ module Publish
     end
 
     def continue_step
-      if go_to_confirmation_params && %i[subjects apprenticeship funding_type].none?(current_step)
-        :confirmation
+      if !go_to_confirmation_params || more_visa_information_required? || %i[subjects apprenticeship funding_type].any?(current_step)
+        CourseCreationStepService.new.execute(current_step:, course: @course, params: course_params)[:next]
       else
-        CourseCreationStepService.new.execute(current_step:, course: @course)[:next]
+        :confirmation
       end
+    end
+
+    def more_visa_information_required?
+      return false unless FeatureFlag.active?(:visa_sponsorship_deadline)
+
+      # If they have changed course to allow sponsorship, we need to ask if a visa deadline is required
+      (current_step.in?(%i[can_sponsor_skilled_worker_visa can_sponsor_student_visa]) &&
+        course.visa_sponsorship != :no_sponsorship) ||
+
+        # If they have selected that visa deadline is required, we need to show them the deadline date page
+        (current_step == :visa_sponsorship_application_deadline_required &&
+          course_params[:visa_sponsorship_application_deadline_required] == 'true')
     end
 
     def next_step
@@ -130,7 +142,7 @@ module Publish
       continue_path
     end
 
-    def addtional_params
+    def additional_params
       {
         goto_confirmation: go_to_confirmation_params,
         goto_visa: params[:goto_visa]
@@ -138,7 +150,7 @@ module Publish
     end
 
     def path_params
-      { course: course_params }.merge(addtional_params)
+      { course: course_params }.merge(additional_params)
     end
 
     def back_step
@@ -152,7 +164,11 @@ module Publish
           can_sponsor_skilled_worker_visa: (@course.is_uni_or_scitt? ? :apprenticeship : :funding_type)
         }[current_step] || :confirmation
       else
-        CourseCreationStepService.new.execute(current_step:, course: @course)[:previous]
+        CourseCreationStepService.new.execute(
+          current_step:,
+          course: @course,
+          params: course_params
+        )[:previous]
       end
     end
 
@@ -217,6 +233,10 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
       when :can_sponsor_skilled_worker_visa
         new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
+      when :visa_sponsorship_application_deadline_required
+        new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_required_path(path_params)
+      when :visa_sponsorship_application_deadline_at
+        new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_date_path(path_params)
       when :start_date
         new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
       when :age_range

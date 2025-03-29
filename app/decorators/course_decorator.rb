@@ -460,8 +460,23 @@ class CourseDecorator < ApplicationDecorator
       teacher_degree_apprenticeship?
   end
 
+  def show_sponsorship_deadline_required_row?
+    FeatureFlag.active?(:visa_sponsorship_deadline) &&
+      visa_sponsorship.in?(%i[can_sponsor_student_visa can_sponsor_skilled_worker_visa])
+  end
+
+  def show_sponsorship_deadline_date_row?
+    FeatureFlag.active?(:visa_sponsorship_deadline) &&
+      show_sponsorship_deadline_required_row? &&
+      visa_sponsorship_application_deadline_at.respond_to?(:to_fs)
+  end
+
   def show_degree_requirements_row?
     !teacher_degree_apprenticeship?
+  end
+
+  def visa_sponsorship_deadline_required
+    visa_sponsorship_application_deadline_at.respond_to?(:to_fs) ? 'Yes' : 'No'
   end
 
   def equivalent_qualification

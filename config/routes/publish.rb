@@ -151,6 +151,14 @@ namespace :publish, as: :publish do
           get 'continue'
         end
 
+        resource :visa_sponsorship_application_deadline_required, on: :member, only: %i[new], controller: 'courses/visa_sponsorship_application_deadline_required', path: 'visa-sponsorship-application-deadline-required' do
+          get 'continue'
+        end
+
+        resource :visa_sponsorship_application_deadline_date, on: :member, only: %i[new], controller: 'courses/visa_sponsorship_application_deadline_date', path: 'visa-sponsorship-application-deadline-date' do
+          get 'continue'
+        end
+
         get 'confirmation'
       end
 

@@ -1,0 +1,7 @@
+en:
+  publish:
+    courses:
+      basic_details_tab:
+        ratifying_provider: Accredited provider
+        is_there_a_visa_sponsorship_deadline: Is there a visa sponsorship deadline?
+        visa_sponsorship_deadline: Visa sponsorship deadline

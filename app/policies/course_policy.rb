@@ -76,6 +76,8 @@ class CoursePolicy
       study_mode
       can_sponsor_student_visa
       can_sponsor_skilled_worker_visa
+      visa_sponsorship_application_deadline_required
+      visa_sponsorship_application_deadline_at
       campaign_name
       master_subject_id
       subordinate_subject_id

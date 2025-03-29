@@ -4,10 +4,13 @@ require 'rails_helper'
 
 describe WorkflowStepService do
   subject do
-    described_class.call(course)
+    described_class.call(course, params)
   end
 
+  let(:params) { {} }
+
   before do
+    FeatureFlag.activate(:visa_sponsorship_deadline)
     allow(Settings.features).to receive(:provider_partnerships).and_return(false)
   end
 
@@ -213,6 +216,35 @@ describe WorkflowStepService do
         school
         study_site
         can_sponsor_skilled_worker_visa
+        applications_open
+        start_date
+        confirmation
+      ]
+
+      expect(subject).to eq(expected_steps)
+    end
+  end
+
+  context 'when course can sponsor visas' do
+    let(:provider) { create(:provider, :accredited_provider) }
+    let(:course) { create(:course, :salary, :can_sponsor_skilled_worker_visa, provider:) }
+
+    it 'returns the expected workflow steps' do
+      expected_steps = %i[
+        courses_list
+        level
+        subjects
+        engineers_teach_physics
+        modern_languages
+        age_range
+        outcome
+        funding_type
+        full_or_part_time
+        school
+        study_site
+        can_sponsor_skilled_worker_visa
+        visa_sponsorship_application_deadline_required
+        visa_sponsorship_application_deadline_at
         applications_open
         start_date
         confirmation

@@ -213,6 +213,20 @@
        end
      end
 
+     if course.show_sponsorship_deadline_required_row?
+       summary_list.with_row do |row|
+         row.with_key { t(".is_there_a_visa_sponsorship_deadline") }
+         row.with_value { course.visa_sponsorship_deadline_required }
+       end
+     end
+
+     if course.show_sponsorship_deadline_date_row?
+       summary_list.with_row do |row|
+         row.with_key { t(".visa_sponsorship_deadline") }
+         row.with_value { course.visa_sponsorship_application_deadline_at.to_fs(:govuk_date) }
+       end
+     end
+
      summary_list.with_row(html_attributes: { data: { qa: "course__applications_open" } }) do |row|
        row.with_key { "Applications open date" }
        row.with_value { l(course.applications_open_from&.to_date) }

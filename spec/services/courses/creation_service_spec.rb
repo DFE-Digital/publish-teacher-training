@@ -300,5 +300,38 @@ describe Courses::CreationService do
         expect(subject.study_mode).to eq 'full_time_or_part_time'
       end
     end
+
+    context 'when course sponsors visa' do
+      context 'but does not require separate application deadline' do
+        let(:valid_course_params) do
+          { 'funding' => 'fee',
+            'can_sponsor_student_visa' => 'true',
+            'visa_sponsorship_application_deadline_required' => 'false',
+            'visa_sponsorship_application_deadline_at(1i)' => recruitment_cycle.year,
+            'visa_sponsorship_application_deadline_at(2i)' => '8',
+            'visa_sponsorship_application_deadline_at(3i)' => '1' }
+        end
+
+        it 'does not save the visa sponsorship application deadline date' do
+          expect(subject.visa_sponsorship_application_deadline_at).to be_nil
+        end
+      end
+
+      context 'and requires a separate application deadline' do
+        let(:valid_course_params) do
+          { 'funding' => 'fee',
+            'can_sponsor_student_visa' => 'true',
+            'visa_sponsorship_application_deadline_required' => 'true',
+            'visa_sponsorship_application_deadline_at(1i)' => recruitment_cycle.year,
+            'visa_sponsorship_application_deadline_at(2i)' => '8',
+            'visa_sponsorship_application_deadline_at(3i)' => '1' }
+        end
+
+        it 'saves the visa sponsorship application deadline at from the params' do
+          deadline = DateTime.new(recruitment_cycle.year.to_i, 8, 1, 11, 59)
+          expect(subject.visa_sponsorship_application_deadline_at).to eq deadline
+        end
+      end
+    end
   end
 end

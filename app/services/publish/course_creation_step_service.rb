@@ -2,8 +2,8 @@
 
 module Publish
   class CourseCreationStepService
-    def execute(current_step:, course:)
-      workflow_steps = WorkflowStepService.call(course)
+    def execute(current_step:, course:, params:)
+      workflow_steps = WorkflowStepService.call(course, params)
       {
         next: get_next_step(workflow_steps, current_step),
         previous: get_previous_step(workflow_steps, current_step)

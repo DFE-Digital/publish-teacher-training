@@ -1,0 +1,15 @@
+en:
+  activemodel:
+    errors:
+      models:
+        publish/visa_sponsorship_application_deadline_date_form:
+          attributes:
+            visa_sponsorship_application_deadline_at:
+              blank: Enter a date that courses which require visa sponsorship will close
+              invalid_date: Enter a date that courses which require visa sponsorship will close
+              blank_year: Enter a year that courses which require visa sponsorship will close
+              blank_month: Enter a month that courses which require visa sponsorship will close
+              blank_day: Enter a day that courses which require visa sponsorship will close
+              not_in_range: >
+                The date that courses which require visa sponsorship will close must be between %{earliest_date} and
+                the end of the recruitment cycle, %{apply_deadline}
