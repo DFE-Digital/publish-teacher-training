@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } do
   before do
+    FeatureFlag.activate(:visa_sponsorship_deadline)
     and_i_am_authenticated_as_a_lead_school_provider_user
   end
 
@@ -12,9 +13,13 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
       given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
       when_i_visit_the_course_publish_courses_student_visa_sponsorship_edit_page
       and_i_choose_yes_to_the_student_sponsorship_question
-      and_i_continue_for("Student")
+      and_i_continue
+      then_i_see_the_visa_sponsorship_deadline_required_page
+
+      when_i_continue_with_no_deadline
       and_i_click_on_basic_details
-      then_i_should_see_that_the_student_visa_can_be_sponsored
+      then_i_see_that_the_student_visa_can_be_sponsored
+      and_i_see_there_is_no_deadline_required
     end
   end
 
@@ -23,9 +28,16 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
       given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
       when_i_visit_the_course_publish_courses_skilled_worker_visa_sponsorship_edit_page
       and_i_choose_yes_to_the_skilled_worker_sponsorship_question
-      and_i_continue_for("Skilled Worker")
+      and_i_continue
+      then_i_see_the_visa_sponsorship_deadline_required_page
+
+      when_i_continue_with_yes_deadline
+      then_i_see_the_visa_sponsorship_deadline_date_page
+
+      when_i_add_a_date_and_continue
       and_i_click_on_basic_details
       then_i_should_see_that_the_skilled_worker_visa_can_be_sponsored
+      and_i_see_the_visa_sponsorship_deadline_date
     end
   end
 
@@ -44,7 +56,17 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_click_on_basic_details
-    publish_provider_courses_show_page.basic_details_link.click
+    click_on "Basic details"
+  end
+
+  def when_i_continue_with_no_deadline
+    choose "No"
+    click_on "Update"
+  end
+
+  def when_i_continue_with_yes_deadline
+    choose "Yes"
+    click_on "Update"
   end
 
   def when_i_visit_the_course_publish_courses_student_visa_sponsorship_edit_page
@@ -67,20 +89,46 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
     publish_courses_skilled_worker_visa_sponsorship_edit_page.yes.choose
   end
 
-  def and_i_continue_for(visa_type)
-    click_link_or_button "Update #{visa_type} visas"
+  def and_i_continue
+    click_link_or_button "Update visa sponsorship"
   end
 
   def provider
     @current_user.providers.first
   end
 
-  def then_i_should_see_that_the_student_visa_can_be_sponsored
+  def then_i_see_that_the_student_visa_can_be_sponsored
     expect(page).to have_text "Student visasYes - can sponsor"
+  end
+
+  def and_i_see_there_is_no_deadline_required
+    expect(page).to have_text "Is there a visa sponsorship deadline?No"
+  end
+
+  def and_i_see_the_visa_sponsorship_deadline_date
+    expect(page).to have_text "Is there a visa sponsorship deadline?Yes"
+    expect(page).to have_text "Visa sponsorship deadline#{@valid_date.to_fs(:govuk_date)}"
+  end
+
+  def then_i_see_the_visa_sponsorship_deadline_required_page
+    expect(page).to have_content "Is there a deadline for applications that require visa sponsorship?"
   end
 
   def then_i_should_see_that_the_skilled_worker_visa_can_be_sponsored
     expect(page).to have_text "Skilled Worker visasYes - can sponsor"
+  end
+
+  def then_i_see_the_visa_sponsorship_deadline_date_page
+    expect(page).to have_text("Date that applications close for visa sponsored candidates")
+  end
+
+  def when_i_add_a_date_and_continue
+    @valid_date = accrediting_provider.recruitment_cycle.application_end_date - 1.day
+    fill_in "Year", with: @valid_date.year
+    fill_in "Month", with: @valid_date.month
+    fill_in "Day", with: @valid_date.day
+
+    click_on "Update date"
   end
 
   def accrediting_provider

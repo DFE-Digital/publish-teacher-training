@@ -1,0 +1,41 @@
+<% content_for :page_title, title_with_error_prefix(t(".title"), @errors && @errors.any?) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(@back_link_path) %>
+<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <%= form_with(
+          url: visa_sponsorship_application_deadline_required_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+            @course.course_code
+          ),
+          model: @deadline_required_form,
+          scope: :course,
+          method: :put,
+          local: true
+        ) do |form| %>
+      <%= form.govuk_error_summary %>
+      <%= render CaptionText.new(text: course.name_and_code) %>
+      <%= form.govuk_collection_radio_buttons(
+            :visa_sponsorship_application_deadline_required,
+            @deadline_required_form.options, :id, :name,
+            legend: {  text: t(".legend"), size: "l" },
+            hint: -> { tag.div(t(".inset_text"), class: "govuk-inset-text") }
+          ) %>
+      <%= form.hidden_field(:origin) %>
+      <%= form.submit t(".update"), class: "govuk-button" %>
+    <% end %>
+    <p class="govuk-body">
+      <%= govuk_link_to(
+            t(".cancel"),
+            details_publish_provider_recruitment_cycle_course_path(
+              course.provider_code,
+              course.recruitment_cycle_year,
+              course.course_code,
+              origin: @deadline_required_form.origin
+            )
+          ) %>
+    </p>
+  </div>
+</div>

@@ -5,6 +5,19 @@ en:
         new:
           title: Date that applications close for visa sponsored candidates
           legend: What date will applications that require visa sponsorship close?
+        edit:
+          title: Date that applications close for visa sponsored candidates
+          legend: What date will applications that require visa sponsorship close?
+          update: Update date
+          cancel: Cancel
+        update:
+          success:
+            funding: You have updated funding type and visa sponsorship, deadline and date
+            apprenticeship: You have updated Teaching apprenticeship and visa sponsorship, deadline and date
+            visa_sponsorship: You have updated visa sponsorship, deadline and date
+            visa_sponsorship_deadline_required: You have updated visa sponsorship deadline and date
+            visa_sponsorship_deadline_date: You have updated the date that courses which require visa sponsorship should close
+        deadline_advice:
           it_takes_around_90_days: It takes around 90 days between a candidate that needs visa sponsorship accepting an offer and being recruited.
           choose_a_deadline_date: Choose a deadline date that gives you at least 3 months to process applications that require a visa so that candidates can start the course on time
           if_you_need_more_time: If you need more time to process these applications, set an earlier date.

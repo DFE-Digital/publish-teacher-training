@@ -3,67 +3,141 @@
 require "rails_helper"
 
 feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
-  before do
-    and_i_am_authenticated_as_a_lead_school_provider_user
+  context "with visa sponsorship deadline feature flag activated" do
+    before do
+      FeatureFlag.activate(:visa_sponsorship_deadline)
+      and_i_am_authenticated_as_a_lead_school_provider_user
+    end
+
+    context "fee paying to salaried course" do
+      scenario "i am taken to the skilled worker visa step" do
+        given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
+        when_i_visit_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:salary)
+        and_i_continue
+        then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+        when_i_go_back
+        then_i_should_be_on_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:salary)
+        and_i_continue
+        then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+        when_i_update_the_skilled_worker_visa_to_be_sponsored
+        then_i_should_be_on_the_visa_deadline_required_page
+        when_i_select_no_deadline
+        then_i_see_the_no_deadline_success_message
+        and_the_course_should_have_updated_to_salaried_and_sponsor_skilled_worker_visa
+
+        when_i_update_funding_type_back_to_fee_paying_and_student_visa_to_sponsored
+        then_the_previously_updated_skilled_worker_visa_should_be_false
+      end
+
+      scenario "i cancel after changing funding type and changes are not retained" do
+        given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
+        when_i_visit_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:salary)
+        and_i_continue
+        and_i_cancel
+        then_the_course_should_should_still_be_fee_paying
+      end
+    end
+
+    context "salaried to fee paying course" do
+      scenario "i am taken to the student visa step" do
+        given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
+        when_i_visit_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:fee)
+        and_i_continue
+        then_i_should_be_on_the_student_visa_edit_page
+        when_i_go_back
+        then_i_should_be_on_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:fee)
+        and_i_continue
+        then_i_should_be_on_the_student_visa_edit_page
+        when_i_update_the_student_visa_to_be_sponsored
+        then_i_should_be_on_the_visa_deadline_required_page
+        when_i_select_no_deadline
+        then_i_see_the_no_deadline_success_message
+        and_the_course_should_have_updated_to_fee_and_sponsor_student_visa
+
+        when_i_update_funding_type_back_to_salaried_and_skilled_worker_to_sponsored
+        then_the_previously_updated_student_visa_should_be_false
+      end
+
+      scenario "i cancel after changing funding type and changes are not retained" do
+        given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
+        when_i_visit_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:fee)
+        and_i_continue
+        and_i_cancel
+        then_the_course_should_should_still_be_salaried
+      end
+    end
   end
 
-  context "fee paying to salaried course" do
-    scenario "i am taken to the skilled worker visa step" do
-      given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
-      when_i_visit_the_publish_courses_funding_type_edit_page
-      when_i_select_a_funding_type(:salary)
-      and_i_continue
-      then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
-      when_i_go_back
-      then_i_should_be_on_the_publish_courses_funding_type_edit_page
-      when_i_select_a_funding_type(:salary)
-      and_i_continue
-      then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
-      when_i_update_the_skilled_worker_visa_to_be_sponsored
-      then_i_should_see_a_success_message_for("Skilled Worker")
-      and_the_course_should_have_updated_to_salaried_and_sponsor_skilled_worker_visa
-
-      when_i_update_funding_type_back_to_fee_paying_and_student_visa_to_sponsored
-      then_the_previously_updated_skilled_worker_visa_should_be_false
+  context "with visa sponsorship deadline feature flag deactivated" do
+    before do
+      FeatureFlag.deactivate(:visa_sponsorship_deadline)
+      and_i_am_authenticated_as_a_lead_school_provider_user
     end
 
-    scenario "i cancel after changing funding type and changes are not retained" do
-      given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
-      when_i_visit_the_publish_courses_funding_type_edit_page
-      when_i_select_a_funding_type(:salary)
-      and_i_continue
-      and_i_cancel
-      then_the_course_should_should_still_be_fee_paying
+    context "fee paying to salaried course" do
+      scenario "i am taken to the skilled worker visa step" do
+        given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
+        when_i_visit_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:salary)
+        and_i_continue
+        then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+        when_i_go_back
+        then_i_should_be_on_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:salary)
+        and_i_continue
+        then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+        when_i_update_the_skilled_worker_visa_to_be_sponsored
+        then_i_should_see_a_success_message_for("Skilled Worker")
+        and_the_course_should_have_updated_to_salaried_and_sponsor_skilled_worker_visa
+
+        when_i_update_funding_type_back_to_fee_paying_and_student_visa_to_sponsored
+        then_the_previously_updated_skilled_worker_visa_should_be_false
+      end
+
+      scenario "i cancel after changing funding type and changes are not retained" do
+        given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
+        when_i_visit_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:salary)
+        and_i_continue
+        and_i_cancel
+        then_the_course_should_should_still_be_fee_paying
+      end
     end
-  end
 
-  context "salaried to fee paying course" do
-    scenario "i am taken to the student visa step" do
-      given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
-      when_i_visit_the_publish_courses_funding_type_edit_page
-      when_i_select_a_funding_type(:fee)
-      and_i_continue
-      then_i_should_be_on_the_student_visa_edit_page
-      when_i_go_back
-      then_i_should_be_on_the_publish_courses_funding_type_edit_page
-      when_i_select_a_funding_type(:fee)
-      and_i_continue
-      then_i_should_be_on_the_student_visa_edit_page
-      when_i_update_the_student_visa_to_be_sponsored
-      then_i_should_see_a_success_message_for("Student")
-      and_the_course_should_have_updated_to_fee_and_sponsor_student_visa
+    context "salaried to fee paying course" do
+      scenario "i am taken to the student visa step" do
+        given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
+        when_i_visit_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:fee)
+        and_i_continue
+        then_i_should_be_on_the_student_visa_edit_page
+        when_i_go_back
+        then_i_should_be_on_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:fee)
+        and_i_continue
+        then_i_should_be_on_the_student_visa_edit_page
+        when_i_update_the_student_visa_to_be_sponsored
+        then_i_should_see_a_success_message_for("Student")
+        and_the_course_should_have_updated_to_fee_and_sponsor_student_visa
 
-      when_i_update_funding_type_back_to_salaried_and_skilled_worker_to_sponsored
-      then_the_previously_updated_student_visa_should_be_false
-    end
+        when_i_update_funding_type_back_to_salaried_and_skilled_worker_to_sponsored
+        then_the_previously_updated_student_visa_should_be_false
+      end
 
-    scenario "i cancel after changing funding type and changes are not retained" do
-      given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
-      when_i_visit_the_publish_courses_funding_type_edit_page
-      when_i_select_a_funding_type(:fee)
-      and_i_continue
-      and_i_cancel
-      then_the_course_should_should_still_be_salaried
+      scenario "i cancel after changing funding type and changes are not retained" do
+        given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
+        when_i_visit_the_publish_courses_funding_type_edit_page
+        when_i_select_a_funding_type(:fee)
+        and_i_continue
+        and_i_cancel
+        then_the_course_should_should_still_be_salaried
+      end
     end
   end
 
@@ -184,6 +258,21 @@ private
   def when_i_update_the_skilled_worker_visa_to_be_sponsored
     publish_courses_skilled_worker_visa_sponsorship_edit_page.yes.choose
     publish_courses_skilled_worker_visa_sponsorship_edit_page.update.click
+  end
+
+  def then_i_should_be_on_the_visa_deadline_required_page
+    expect(page).to have_content "Is there a deadline for applications that require visa sponsorship?"
+  end
+
+  def when_i_select_no_deadline
+    choose "No"
+    click_on "Update"
+  end
+
+  def then_i_see_the_no_deadline_success_message
+    within(".govuk-notification-banner__content") do
+      expect(page).to have_content "You have updated funding type and visa sponsorship and deadline"
+    end
   end
 
   def when_i_update_the_student_visa_to_be_sponsored

@@ -8,7 +8,7 @@ module PageObjects
       element :can_sponsor_student_visa, "#publish-provider-student-visa-form-can-sponsor-student-visa-true-field"
       element :cant_sponsor_student_visa, "#publish-provider-student-visa-form-can-sponsor-student-visa-field"
 
-      element :update_student_visas, ".govuk-button", text: "Update Student visas"
+      element :update_student_visas, ".govuk-button", text: "Update visa sponsorship"
     end
   end
 end

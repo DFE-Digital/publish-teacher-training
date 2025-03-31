@@ -42,22 +42,25 @@ feature "Entering a deadline for candidates who need visa sponsorship", { can_ed
 
     when_i_select_yes_deadline_and_continue
     and_i_click_continue_without_adding_a_date
-    then_i_see_an_error("Enter a date that courses which require visa sponsorship will close")
+    then_i_see_an_error("Enter a date that applications close for visa sponsored candidates")
 
     when_i_enter_a_date_before_the_start_of_cycle
     then_i_see_the_out_of_range_error
 
     when_i_enter_a_date(@provider.recruitment_cycle_year, 2, 31)
-    then_i_see_an_error("Enter a date that courses which require visa sponsorship will close")
+    then_i_see_an_error("Enter a real date that applications close for visa sponsored candidates")
 
     when_i_enter_a_date(2021, 2, "")
-    then_i_see_an_error("Enter a day that courses which require visa sponsorship will close")
+    then_i_see_an_error("The date that applications which require visa sponsorship will close must contain a day, a month and a year")
 
-    when_i_enter_a_date(2021, "", 2)
-    then_i_see_an_error("Enter a month that courses which require visa sponsorship will close")
+    when_i_enter_a_date(2021, "", "")
+    then_i_see_an_error("The date that applications which require visa sponsorship will close must contain a day, a month and a year")
 
     when_i_enter_a_date("", "2", 2)
-    then_i_see_an_error("Enter a year that courses which require visa sponsorship will close")
+    then_i_see_an_error("The date that applications which require visa sponsorship will close must contain a day, a month and a year")
+
+    when_i_enter_a_date("year", "a", "14")
+    then_i_see_an_error("The date that applications which require visa sponsorship will close can only contain numbers 0 to 9")
   end
 
   scenario "changing my answers at the review page and saving with new date" do
@@ -129,7 +132,7 @@ private
   def then_i_see_the_out_of_range_error
     start_of_cycle = @provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9).to_fs(:govuk_date_and_time)
     end_of_cycle = @provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18).to_fs(:govuk_date_and_time)
-    error_message = "The date that courses which require visa sponsorship will close must be between #{start_of_cycle} and the end of the recruitment cycle, #{end_of_cycle}"
+    error_message = "The date that applications which require visa sponsorship will close must be between #{start_of_cycle} and the end of the recruitment cycle, #{end_of_cycle}"
     then_i_see_an_error(error_message)
   end
 

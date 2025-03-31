@@ -293,7 +293,7 @@ describe Course do
 
     describe "validates visa_sponsorship_application_deadline_at within recruitment cycle" do
       let(:provider) { create(:provider) }
-      let(:course) { create(:course, provider:) }
+      let(:course) { create(:course, :salary_type_based, :can_sponsor_skilled_worker_visa, provider:) }
       let(:start_of_cycle) { provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9) }
       let(:end_of_cycle) { provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18) }
 
@@ -319,9 +319,23 @@ describe Course do
     describe "validates that the visa_sponsorship_application_deadline_at is a date" do
       it "is invalid if a struct" do
         bad_date = Struct.new(:year, :month, :day).new(2026, 50, 1)
-        course = build(:course, :can_sponsor_skilled_worker_visa, visa_sponsorship_application_deadline_at: bad_date)
+        course = build(:course, :salary_type_based, :can_sponsor_skilled_worker_visa, visa_sponsorship_application_deadline_at: bad_date)
         course.validate
         expect(course.errors[:visa_sponsorship_application_deadline_at]).to eq ["Enter a date"]
+      end
+    end
+
+    describe "validates that the visa_sponsorship_application_deadline_at is nil if course does not sponsor visas" do
+      let(:provider) { create(:provider) }
+      let(:course) { create(:course, :can_not_sponsor_visa, provider:) }
+      let(:visa_sponsorship_application_deadline_at) do
+        provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 17)
+      end
+
+      it "returns error when deadline exists and course does not sponsor visas" do
+        course.visa_sponsorship_application_deadline_at = visa_sponsorship_application_deadline_at
+        course.validate
+        expect(course.errors[:visa_sponsorship_application_deadline_at]).to eq ["Courses that do not sponsor visas cannot have a visa application deadline"]
       end
     end
 
