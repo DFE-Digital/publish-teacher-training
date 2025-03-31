@@ -18,7 +18,7 @@ module Publish
         validate :valid_school, on: :school
 
         def valid_school
-          errors.add(:school, :school_already_exists) unless school.valid?
+          errors.add(:query, :school_already_exists) unless school.valid?
         end
       end
     end

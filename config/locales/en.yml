@@ -1326,11 +1326,10 @@ en:
               invalid: "Enter a valid email address"
         publish/providers/schools/search_form:
           attributes:
-            school:
-              school_already_exists: "This school has already been added"
             query:
               blank: Enter a URN (unique reference number) or school name
               too_short: Enter at least two characters
+              school_already_exists: "This school has already been added"
         publish/providers/schools/select_form:
           attributes:
             school_id:
