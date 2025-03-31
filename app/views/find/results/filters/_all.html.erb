@@ -41,10 +41,6 @@
     <%= form.govuk_check_box :qualifications, "qts_with_pgce_or_pgde", label: { text: t("helpers.label.courses_search_form.qualification_options.qts_with_pgce_or_pgde"), size: "s" }, include_hidden: false %>
   <% end %>
 
-  <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t("helpers.legend.courses_search_form.further_education_html"), size: "s" }, hint: { text: t("helpers.hint.courses_search_form.further_education"), class: "govuk-!-font-size-16" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
-    <%= form.govuk_check_box :level, "further_education", label: { text: t("helpers.label.courses_search_form.further_education"), size: "s" }, multiple: false %>
-  <% end %>
-
   <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t("helpers.legend.courses_search_form.minimum_degree_required_html"), size: "s" }, class: "app-filter__group govuk-radios--small", multiple: false, form_group: { class: "app-filter__group" } do %>
     <%= form.govuk_radio_button :minimum_degree_required, "two_one", label: { text: t("helpers.label.courses_search_form.minimum_degree_required_options.two_one"), size: "s" } %>
     <%= form.govuk_radio_button :minimum_degree_required, "two_two", label: { text: t("helpers.label.courses_search_form.minimum_degree_required_options.two_two"), size: "s" } %>
@@ -70,6 +66,10 @@
   <%= form.govuk_check_boxes_fieldset :start_date, legend: { text: t("helpers.legend.courses_search_form.start_date_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
     <%= form.govuk_check_box :start_date, "september", label: { text: t("helpers.label.courses_search_form.start_date_options.september", recruitment_cycle_year: Settings.current_recruitment_cycle_year), size: "s" }, include_hidden: false %>
     <%= form.govuk_check_box :start_date, "all_other_dates", label: { text: t("helpers.label.courses_search_form.start_date_options.all_other_dates"), size: "s" }, include_hidden: false %>
+  <% end %>
+
+  <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t("helpers.legend.courses_search_form.further_education_html"), size: "s" }, hint: { text: t("helpers.hint.courses_search_form.further_education"), class: "govuk-!-font-size-16" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+    <%= form.govuk_check_box :level, "further_education", label: { text: t("helpers.label.courses_search_form.further_education"), size: "s" }, multiple: false %>
   <% end %>
 
   <div class="govuk-!-margin-top-4">
