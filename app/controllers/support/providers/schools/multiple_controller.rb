@@ -27,7 +27,7 @@ module Support
         end
 
         def form_params
-          params.expect(support_providers_schools_urn_form: [:values])
+          params.expect(urn_form: [:values])
         end
       end
     end
