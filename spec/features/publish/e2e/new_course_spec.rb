@@ -253,41 +253,6 @@ private
     course_creation_params
   end
 
-  def select_sponsorship_application_deadline_required(course_creation_params)
-    course_creation_params[:visa_sponsorship_application_deadline_required] = 'true'
-    choose 'Yes'
-    click_on 'Continue'
-
-    expect_path_and_params(
-      expected_path: new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_date_path(
-        provider_code: @provider.provider_code,
-        recruitment_cycle_year: @provider.recruitment_cycle_year
-      ),
-      expected_query_params: course_creation_params
-    )
-
-    course_creation_params
-  end
-
-  def select_sponsorship_application_deadline_date(course_creation_params, next_page:)
-    course_creation_params[:'visa_sponsorship_application_deadline_at(1i)'] = '2026'
-    course_creation_params[:'visa_sponsorship_application_deadline_at(2i)'] = '9'
-    course_creation_params[:'visa_sponsorship_application_deadline_at(3i)'] = '1'
-
-    fill_in 'Year', with: 2026
-    fill_in 'Month', with: 9
-    fill_in 'Day', with: 1
-
-    click_on 'Continue'
-
-    expect_page_to_be_displayed_with_query(
-      page: next_page,
-      expected_query_params: course_creation_params
-    )
-
-    course_creation_params
-  end
-
   def select_school(course_creation_params, next_page:)
     course_creation_params[:sites_ids] = [sites.first.id.to_s, sites.second.id.to_s]
 

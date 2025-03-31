@@ -10,6 +10,7 @@ module Publish
       can_sponsor_skilled_worker_visa
       can_sponsor_student_visa
       previous_tda_course
+      visa_sponsorship_application_deadline_at
     ].freeze
 
     attr_accessor(*FIELDS)
@@ -112,8 +113,21 @@ module Publish
       }
     end
 
+    def assign_attributes_to_model
+      self.fields = compute_fields
+      super
+    end
+
     def compute_fields
-      original_fields_values.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+      computed = original_fields_values.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+      computed[:visa_sponsorship_application_deadline_at] = nil if cannot_sponsor_visas?(computed)
+
+      computed
+    end
+
+    def cannot_sponsor_visas?(computed)
+      (skilled_worker_visa? && computed[:can_sponsor_skilled_worker_visa].in?(["false", false])) ||
+        (student_visa? && computed[:can_sponsor_student_visa].in?(["false", false]))
     end
 
     def form_store_key

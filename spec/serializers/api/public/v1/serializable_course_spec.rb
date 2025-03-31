@@ -47,7 +47,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
         :course,
         :open,
         :published,
-        :can_sponsor_skilled_worker_visa,
+        :can_sponsor_student_visa,
         provider:,
         visa_sponsorship_application_deadline_at: deadline,
       )

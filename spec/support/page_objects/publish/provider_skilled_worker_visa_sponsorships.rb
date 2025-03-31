@@ -8,7 +8,7 @@ module PageObjects
       element :can_sponsor_skilled_worker_visa, "#publish-provider-skilled-worker-visa-form-can-sponsor-skilled-worker-visa-true-field"
       element :cant_sponsor_skilled_worker_visa, "#publish-provider-skilled-worker-visa-form-can-sponsor-skilled-worker-visa-field"
 
-      element :update_skilled_worker_visas, ".govuk-button", text: "Update Skilled Worker visas"
+      element :update_skilled_worker_visas, ".govuk-button", text: "Update visa sponsorship"
     end
   end
 end

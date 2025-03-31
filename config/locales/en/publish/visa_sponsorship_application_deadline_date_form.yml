@@ -5,11 +5,10 @@ en:
         publish/visa_sponsorship_application_deadline_date_form:
           attributes:
             visa_sponsorship_application_deadline_at:
-              blank: Enter a date that courses which require visa sponsorship will close
-              invalid_date: Enter a date that courses which require visa sponsorship will close
-              blank_year: Enter a year that courses which require visa sponsorship will close
-              blank_month: Enter a month that courses which require visa sponsorship will close
-              blank_day: Enter a day that courses which require visa sponsorship will close
+              all_blank: Enter a date that applications close for visa sponsored candidates
+              some_blank: The date that applications which require visa sponsorship will close must contain a day, a month and a year
+              not_integers: The date that applications which require visa sponsorship will close can only contain numbers 0 to 9
+              invalid_date: Enter a real date that applications close for visa sponsored candidates
               not_in_range: >
-                The date that courses which require visa sponsorship will close must be between %{earliest_date} and
+                The date that applications which require visa sponsorship will close must be between %{earliest_date} and
                 the end of the recruitment cycle, %{apply_deadline}
