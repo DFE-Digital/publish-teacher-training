@@ -182,7 +182,8 @@ GEM
       safely_block (>= 0.4)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
-    brakeman (5.4.1)
+    brakeman (7.0.0)
+      racc
     builder (3.3.0)
     bullet (8.0.1)
       activesupport (>= 3.0.0)
