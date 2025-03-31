@@ -78,8 +78,11 @@ describe AuthenticationService do
         end
 
         it 'updates the existing users email to example email' do
-          Timecop.freeze do
-            expect { subject }.to(change { existing_user.reload.email }.to("bob_#{Time.now.to_i}_gmail.com@example.com"))
+          time = Time.zone.now
+
+          Timecop.freeze(time) do
+            expect { subject }.to change { existing_user.reload.email }
+              .to("bob_#{time.to_i}_gmail.com@example.com")
           end
         end
       end
