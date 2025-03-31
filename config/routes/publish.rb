@@ -234,6 +234,14 @@ namespace :publish, as: :publish do
 
         get "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#edit"
         put "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#update"
+        get "/visa-sponsorship-application-deadline-required", on: :member, to: "courses/visa_sponsorship_application_deadline_required#edit"
+        put "/visa-sponsorship-application-deadline-required", on: :member, to: "courses/visa_sponsorship_application_deadline_required#update"
+
+        get "/visa-sponsorship-application-deadline-date", on: :member, to: "courses/visa_sponsorship_application_deadline_date#edit"
+        put "/visa-sponsorship-application-deadline-date", on: :member, to: "courses/visa_sponsorship_application_deadline_date#update"
+
+        get "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#edit"
+        put "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#update"
 
         get "/funding-type", on: :member, to: "courses/funding_type#edit"
         put "/funding-type", on: :member, to: "courses/funding_type#update"

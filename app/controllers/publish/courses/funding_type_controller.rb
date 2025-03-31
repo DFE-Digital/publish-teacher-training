@@ -73,7 +73,7 @@ module Publish
           @course_funding_form.stash
           visa_page_path
         else
-          course_updated_message(section_key)
+          flash[:success] = I18n.t("funding_type.updated")
           course_page_path
         end
       end
@@ -112,10 +112,6 @@ module Publish
 
       def course_page_path
         details_publish_provider_recruitment_cycle_course_path(course_values)
-      end
-
-      def section_key
-        "Funding type"
       end
 
       def handle_redirect

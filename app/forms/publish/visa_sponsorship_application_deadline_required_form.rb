@@ -6,6 +6,8 @@ module Publish
     include ActiveRecord::AttributeAssignment
 
     attribute :visa_sponsorship_application_deadline_required, :boolean
+    attribute :course
+    attribute :origin
 
     validates :visa_sponsorship_application_deadline_required, inclusion: { in: [true, false] }
 
@@ -16,6 +18,12 @@ module Publish
         option.new(id: true, name: "Yes"),
         option.new(id: false, name: "No"),
       ]
+    end
+
+    def update!
+      return true if visa_sponsorship_application_deadline_required
+
+      course.update!(visa_sponsorship_application_deadline_at: nil)
     end
   end
 end

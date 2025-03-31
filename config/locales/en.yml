@@ -101,6 +101,8 @@ en:
     generate_course_name_service:
       further_education_title: "Further education"
       etp_title: "Engineers teach physics"
+  funding_type:
+    updated: 'You have updated funding type'
   visa_sponsorships:
     student: "Student"
     skilled_worker: "Skilled Worker"
@@ -108,10 +110,10 @@ en:
       funding: "You’re being shown this page because you changed your answer to funding type."
       funding_type: "You’re being shown this page because you changed your answer to funding type."
       apprenticeship: "You’re being shown this page because you changed your answer to whether this is a teaching apprenticeship."
-      funding_and_visa: "Funding type and %{visa_type} visas updated"
-      funding_type_and_visa: "Funding type and %{visa_type} visas updated"
-      apprenticeship_and_visa: "Teaching apprenticeship and %{visa_type} visas updated"
-      visa: "%{visa_type} visas updated"
+      funding_and_visa: "You have updated funding type and visa sponsorship"
+      funding_type_and_visa: "You have updated funding type and visa sponsorship"
+      apprenticeship_and_visa: "You have updated teaching apprenticeship and visa sponsorship"
+      visa: "You have updated %{visa_type} visas"
   page_titles:
     study_mode:
       edit: Study pattern
@@ -886,6 +888,7 @@ en:
             visa_sponsorship_application_deadline_at:
               within_range: Enter a date within the recruitment cycle
               not_a_date: Enter a date
+              only_available_if_course_sponsors_visas: Courses that do not sponsor visas cannot have a visa application deadline
             base:
               duplicate: "This course already exists. You should add further schools for this course to the existing profile in Publish"
               visa_sponsorship_not_publishable: "Select if visas can be sponsored"

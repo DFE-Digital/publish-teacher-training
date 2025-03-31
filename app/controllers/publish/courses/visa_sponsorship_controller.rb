@@ -15,19 +15,32 @@ module Publish
 
       def update
         if visa_sponsorship_form.save!
-          flash[:success] = success_message
-
-          redirect_to details_publish_provider_recruitment_cycle_course_path(
-            provider.provider_code,
-            recruitment_cycle.year,
-            course.course_code,
-          )
+          update_redirect_action
         else
           render :edit
         end
       end
 
     private
+
+      def update_redirect_action
+        redirect_params = [provider.provider_code, recruitment_cycle.year, course.course_code]
+        if course.reload.no_visa_sponsorship? || !FeatureFlag.active?(:visa_sponsorship_deadline)
+          flash[:success] = success_message
+
+          redirect_to(
+            details_publish_provider_recruitment_cycle_course_path(*redirect_params),
+          )
+        else
+          origin = visa_sponsorship_form.origin_step || "visa_sponsorship"
+          redirect_to(
+            visa_sponsorship_application_deadline_required_publish_provider_recruitment_cycle_course_path(
+              *redirect_params,
+              origin:,
+            ),
+          )
+        end
+      end
 
       def visa_sponsorship_form
         @visa_sponsorship_form ||= CourseFundingForm.new(@course, params: visa_sponsorship_params)

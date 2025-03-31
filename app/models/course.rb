@@ -362,6 +362,7 @@ class Course < ApplicationRecord
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
   validate :visa_sponsorship_application_deadline_in_recruitment_cycle_year, if: -> { provider.present? }
+  validate :visa_sponsorship_application_deadline_when_no_sponsorship
 
   validates_with UniqueCourseValidator, on: :new
   validates_with ALevelCourseValidator, on: :publish, if: :teacher_degree_apprenticeship?
@@ -1159,6 +1160,12 @@ private
 
   def validate_custom_age_range
     Courses::ValidateCustomAgeRangeService.new.execute(age_range_in_years, self)
+  end
+
+  def visa_sponsorship_application_deadline_when_no_sponsorship
+    return unless visa_sponsorship_application_deadline_at.present? && visa_sponsorship == :no_sponsorship
+
+    errors.add(:visa_sponsorship_application_deadline_at, :only_available_if_course_sponsors_visas)
   end
 
   def visa_sponsorship_application_deadline_in_recruitment_cycle_year
