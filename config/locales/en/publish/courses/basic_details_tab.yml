@@ -4,4 +4,6 @@ en:
       basic_details_tab:
         ratifying_provider: Accredited provider
         is_there_a_visa_sponsorship_deadline: Is there a visa sponsorship deadline?
+        sponsorship_deadline_required_visually_hidden: visa sponsorship required
         visa_sponsorship_deadline: Visa sponsorship deadline
+        sponsorship_deadline_visually_hidden: deadline for candidates requiring sponsorship
