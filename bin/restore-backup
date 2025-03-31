@@ -43,5 +43,7 @@ if [[ -x pv ]];then
 else
   psql manage_courses_backend_development < ~/Downloads/sanitised_backup.sql
 fi
+psql manage_courses_backend_development -c 'CREATE EXTENSION IF NOT EXISTS postgis;' > /dev/null 2>&1
+psql manage_courses_backend_test -c 'CREATE EXTENSION IF NOT EXISTS postgis;' > /dev/null 2>&1
 
 log "Development database restored."
