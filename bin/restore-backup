@@ -19,9 +19,13 @@ az storage blob download \
   --file  ~/Downloads/sanitised_backup.sql.gz \
   --connection-string "$(az storage account show-connection-string -g s189p01-ptt-pd-rg -n s189p01pttdbbkpsanpdsa --query 'connectionString')"
 
+log "Backup download completed."
+
+log "Dropping and recreating development database..."
+
 RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:drop db:create 
 
-[[ -e ~/Downloads/sanitised_backup.sql.gz ]] && gunzip -fd ~/Downloads/sanitised_backup.sql.gz  
+log "Development database recreated."
 
 log "Checking if backup file exists..."
 if [[ -e ~/Downloads/sanitised_backup.sql.gz ]]; then
