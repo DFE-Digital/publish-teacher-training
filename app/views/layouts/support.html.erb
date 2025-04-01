@@ -36,7 +36,7 @@
     <%= render HeaderComponent.new(service_name: I18n.t("service_name.support"), service_url: support_root_path, current_user:) do |header| %>
       <% header.with_navigation_item "Providers", support_recruitment_cycle_providers_path(params[:recruitment_cycle_year] || Settings.current_recruitment_cycle_year) %>
       <% header.with_navigation_item "Users", support_recruitment_cycle_users_path(params[:recruitment_cycle_year] || Settings.current_recruitment_cycle_year) %>
-      <% header.with_navigation_item "Feature Flags", x_find_url(find_feature_flags_path) %>
+      <% header.with_navigation_item "Feature Flags", support_feature_flags_path %>
       <% header.with_navigation_item "View Components", support_view_components_path %>
       <% header.with_phase_banner_text "This is a new service – your #{govuk_link_to('feedback', '#', new_tab: true)} will help us to improve it." %>
     <% end %>

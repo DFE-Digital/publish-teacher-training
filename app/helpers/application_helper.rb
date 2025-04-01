@@ -67,6 +67,14 @@ module ApplicationHelper
     user && !user.admin? && user.providers.where(recruitment_cycle: RecruitmentCycle.current).one? && !FeatureService.enabled?('rollover.can_edit_current_and_next_cycles')
   end
 
+  def protect_against_mistakes
+    if session[:confirmed_environment_at] && session[:confirmed_environment_at] > 5.minutes.ago
+      yield
+    else
+      govuk_link_to 'Confirm environment to make changes', new_support_environment_confirmations_path(from: request.fullpath)
+    end
+  end
+
   private
 
   def render_action(action_path, action_visually_hidden_text)
