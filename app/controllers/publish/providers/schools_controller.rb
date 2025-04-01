@@ -4,6 +4,7 @@ module Publish
   module Providers
     class SchoolsController < ApplicationController
       before_action :site, only: %i[show delete]
+      before_action :reset_urn_form, only: %i[index]
 
       def index
         @pagy, @schools = pagy(provider.sites.order(:location_name))
@@ -47,6 +48,10 @@ module Publish
 
       def gias_school
         @gias_school ||= GiasSchool.find(params[:school_id])
+      end
+
+      def reset_urn_form
+        URNForm.new(provider).clear_stash
       end
     end
   end
