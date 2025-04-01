@@ -1,0 +1,11 @@
+en:
+  publish:
+    providers:
+      schools:
+        multiple:
+          new:
+            page_title: Add multiple schools
+            title: Enter URNs
+            caption: Add multiple schools
+            hint_html: |
+              Enter each unique reference number (URN) on a new line. You can enter a maximum of 50 URNs. If you do not know a school’s URN, you can <a class="govuk-link" href="%{url}">add a school using the school name or postcode</a>.
