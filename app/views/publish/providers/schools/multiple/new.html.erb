@@ -1,0 +1,57 @@
+<%= render PageTitle.new(title: t(".page_title")) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_schools_path) %>
+<% end %>
+
+<%= form_with(model: @urn_form, url: publish_provider_recruitment_cycle_schools_multiple_path, local: true) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= f.govuk_error_summary %>
+    </div>
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <span class="govuk-caption-l"><%= t(".caption") %></span>
+        <%= f.govuk_text_area(
+          :values,
+          hint: {
+            text: t(".hint_html",
+                    url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year))
+          },
+          value: @urn_form.values&.join("\n").presence,
+          label: { text: t(".title"), class: "govuk-label--l" }
+        ) %>
+        <%= f.govuk_submit %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+    </p>
+
+    <%= govuk_details(summary_text: "How to copy URNs from a CSV or spreadsheet") do %>
+      <h2 class="govuk-heading-m">Copying from a <abbr title="comma separated values">CSV</abbr></h2>
+
+      <p class="govuk-body">
+        Each URN should be on a new line. For example:
+      </p>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <pre class="preformatted-text--no-overflow">
+          <code class="app-code--style">
+  139735
+  106376
+  111229</code>
+          </pre>
+        </div>
+      </div>
+
+      <h2 class="govuk-heading-m"> Copying from a spreadsheet </h2>
+      <p class="govuk-body">
+        You can also copy and paste directly from a spreadsheet.
+      </p>
+      <p class="govuk-body">
+        When copying the spreadsheet, ignore the first line if it contains headings.
+      </p>
+    </div>
+  </div>
+<% end %>
