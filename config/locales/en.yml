@@ -1,16 +1,16 @@
 en:
   find:
-      courses:
-        training_locations:
-          view:
-            distance: "%{distance} from %{location}"
-            search_help_fee: Search by city, town or postcode to find the nearest potential placement school
-            search_help_apprenticeship: Search by city, town or postcode to find the nearest potential employing school
-            search_help_salary: Search by city, town or postcode to find the nearest potential employing school
-            potential_study_sites_hint_text: Contact the training provider for more information
-            guaranteed: Schools can change and are not guaranteed
-            nearest_placement_school: Nearest placement school
-            nearest_employing_school: Nearest employing school
+    courses:
+      training_locations:
+        view:
+          distance: "%{distance} from %{location}"
+          search_help_fee: Search by city, town or postcode to find the nearest potential placement school
+          search_help_apprenticeship: Search by city, town or postcode to find the nearest potential employing school
+          search_help_salary: Search by city, town or postcode to find the nearest potential employing school
+          potential_study_sites_hint_text: Contact the training provider for more information
+          guaranteed: Schools can change and are not guaranteed
+          nearest_placement_school: Nearest placement school
+          nearest_employing_school: Nearest employing school
   shared:
     decorators:
       course:
@@ -18,25 +18,22 @@ en:
         two_two_degree: 2:2 bachelor’s degree
         third_class_degree: Bachelor’s degree
         degree_not_required: Bachelor’s degree
-        above_or_equivalent_qualification_html:
-          <br>
+        above_or_equivalent_qualification_html: <br>
           <span class="govuk-hint govuk-!-font-size-16">
-            or above or equivalent qualification
+          or above or equivalent qualification
           </span>
-        equivalent_qualification_html:
-          <br>
+        equivalent_qualification_html: <br>
           <span class="govuk-hint govuk-!-font-size-16">
-            or equivalent qualification
+          or equivalent qualification
           </span>
-        third_or_above_html:
-          <br>
+        third_or_above_html: <br>
           <span class="govuk-hint govuk-!-font-size-16">
-            or equivalent qualification
+          or equivalent qualification
           </span>
           <br>
           <br>
           <span class="govuk-hint govuk-!-font-size-16">
-            This should be an honours degree (Third or above), or equivalent
+          This should be an honours degree (Third or above), or equivalent
           </span>
     courses:
       provider:
@@ -45,7 +42,7 @@ en:
         caption: "%{provider_name}"
         heading: School placements for %{course_name_and_code}
         schools_to_be_placed: You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.
-        schools_you_can_choose: 'The schools you can choose from are:'
+        schools_you_can_choose: "The schools you can choose from are:"
       school_placements_advice:
         view:
           heading: How school placements work
@@ -96,11 +93,111 @@ en:
   continue: "Continue"
   change_organisation: "Change organisation"
   flash:
-      updated: "%{resource} updated"
+    updated: "%{resource} updated"
   courses:
     generate_course_name_service:
       further_education_title: "Further education"
       etp_title: "Engineers teach physics"
+    summary_card_component:
+      location_key:
+        fee:
+          one: Placement schools
+          other: Placement schools
+        salary:
+          one: Employing school
+          other: Employing schools
+        apprenticeship:
+          one: Employing school
+          other: Employing schools
+      location_value:
+        not_listed: Not listed yet
+        school_term:
+          fee: "placement"
+          default: "employing"
+        potential_schools:
+          one: "1 potential %{school_term} school"
+          other: "%{count} potential %{school_term} schools"
+        distance: "%{distance} from %{location}"
+        distance_hint_html:
+          one: "Nearest of %{count} potential %{school_term} school"
+          other: "Nearest of %{count} potential %{school_term} schools"
+      fee_key: Fee or salary
+      fee_value:
+        salary: Salary
+        apprenticeship: Salary (apprenticeship)
+        fee:
+          uk_fees_html: "%{value} <b>fee</b> for UK citizens"
+          international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"
+          hint:
+            bursaries_and_scholarship_html: "Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available"
+            bursaries_only_html: "Bursaries of %{bursary_amount} are available"
+            scholarship_only_html: "Scholarships of %{scholarship_amount} are available"
+      length_key: Course length
+      length_value:
+        OneYear: 1 year
+        TwoYears: Up to 2 years
+      age_group_key: Age group
+      qualification_key: Qualification awarded
+      qualification_value:
+        qts_html: <abbr title='Qualified teacher status'>QTS</abbr> only
+        pgce_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate certificate in education'>PGCE</abbr>
+        pgde_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate diploma in education'>PGDE</abbr>
+        pgce_html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
+        pgde_html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
+        undergraduate_degree_with_qts_html: Teacher degree apprenticeship with <abbr title='Qualified teacher status'>QTS</abbr>
+      degree_requirements_key: Degree required
+      degree_requirements_value:
+        postgraduate:
+          two_one: "2:1 bachelor’s degree"
+          two_two: "2:2 bachelor’s degree"
+          third_class: "Bachelor’s degree"
+          not_required: "Bachelor’s degree"
+        undergraduate:
+          not_required: No degree required
+      degree_requirements_hint:
+        two_one: &two_one_html
+          html: "<br><span class='govuk-hint govuk-!-font-size-16'>or above or equivalent qualification</span>"
+        two_two:
+          <<: *two_one_html
+        third_class:
+          html: <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+            or equivalent qualification
+            </span>
+            <br>
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+            This should be an honours degree (Third or above), or equivalent
+            </span>
+        not_required:
+          html: <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+            or equivalent qualification
+            </span>
+      visa_sponsorship_key: Visa sponsorship
+      visa_sponsorship_value:
+        no_sponsorship: Visas cannot be sponsored
+        can_sponsor_student_visa: Student visas can be sponsored
+        can_sponsor_skilled_worker_visa: Skilled Worker visas can be sponsored
+    no_results_component:
+      try_another_search_content:
+        zero: You can try another search, for example by changing subject or location
+        one: You can try another search, for example by changing subject or location
+        other: You can try another search, for example by changing subjects or location
+      devolved_nation:
+        heading: This service is for courses in England
+        northern_ireland:
+          link_content: "Learn more about teacher training in Northern Ireland"
+          link: https://www.education-ni.gov.uk/articles/initial-teacher-education-courses-northern-ireland
+        scotland:
+          link_content: "Learn more about teacher training in Scotland"
+          link: https://teachinscotland.scot
+        wales:
+          link_content: "Learn more about teacher training in Wales"
+          link: https://educators.wales/teacher
+      undergraduate:
+        message_html: There are not many teacher degree apprenticeship (TDA) courses on the service at the moment. You can try again soon when there may be more courses, or get in touch with us at %{contact}.
+        find_out_more_about_tda: Find out more about teacher degree apprenticeship (TDA) courses.
   visa_sponsorships:
     student: "Student"
     skilled_worker: "Skilled Worker"
@@ -165,75 +262,6 @@ en:
       pgde_with_qts: PGDE with QTS
       pgce: PGCE
       pgde: PGDE
-  edit_options:
-    entry_requirements:
-      must_have_qualification_at_application_time:
-        label: "1. Must have the GCSE (least flexible)"
-        help: "You won’t receive applications from anyone without the GCSE, or from anyone who needs to take an equivalency test - UCAS will block these applications."
-        details_label: "Must have the GCSE (least flexible)"
-      expect_to_achieve_before_training_begins:
-        label: "2: Taking the GCSE"
-        help: "You will consider applicants with a pending GCSE. But UCAS will block applications from anyone who needs to take an equivalency test."
-        details_label: "Taking the GCSE"
-      equivalence_test:
-        label: "3: Equivalency test (most flexible)"
-        help: "You will consider applicants who need to take an equivalency test, as well as those with a pending GCSE."
-        details_label: "Equivalency test (most flexible)"
-      not_required:
-        details_label: "No requirement"
-        help: "You will receive applications from candidates who will not have a grade C (or 4) or above."
-    qualifications:
-      qts:
-        label: "QTS"
-        help: "Qualified teacher status"
-      pgce:
-        label: "PGCE only (without QTS)"
-        help: "Postgraduate certificate in education"
-      pgce_with_qts:
-        label: "QTS with PGCE"
-        help: "Qualified teacher status with a postgraduate certificate in education"
-      pgde:
-        label: "PGDE only (without QTS)"
-        help: "Postgraduate diploma in education"
-      pgde_with_qts:
-        label: "QTS with PGDE"
-        help: "Qualified teacher status with a postgraduate diploma in education"
-    age_range_in_years:
-      other:
-        label: "Another age range"
-      3_to_7:
-        label: "3 to 7"
-      5_to_11:
-        label: "5 to 11"
-      7_to_11:
-        label: "7 to 11"
-      7_to_14:
-        label: "7 to 14 (middle years)"
-      11_to_16:
-        label: "11 to 16"
-      11_to_18:
-        label: "11 to 18"
-      14_to_19:
-        label: "14 to 19"
-    study_modes:
-      part_time:
-        label: "Part time"
-      full_time:
-        label: "Full time"
-    apprenticeship:
-      pg_teaching_apprenticeship:
-        label: "Yes"
-      higher_education_programme:
-        label: "No"
-      scitt_programme:
-        label: "No"
-    funding_type:
-      pg_teaching_apprenticeship:
-        label: "Teaching apprenticeship (with salary)"
-      school_direct_training_programme:
-        label: "Fee paying (no salary)"
-      school_direct_salaried_training_programme:
-        label: "Salaried"
   components:
     add_course_button:
       before_adding: "Before adding a course, you need to:"
@@ -473,410 +501,9 @@ en:
     email: "Email address"
     add: "Add user"
     update: "Update user"
-  publish:
-    courses:
-      basic_details_tab:
-        ratifying_provider: Accredited provider
-      index:
-        ratifying_provider: Accredited provider
-      confirmation:
-        ratifying_provider: Accredited provider
-      training_with_disabilities:
-        show:
-          heading: Training with disabilities and other needs at %{provider_name}
-          back: Back to %{course_name} (%{course_code})
-          contact: Contact %{provider_name}
-      preview:
-        training_with_disabilities: Training with disabilities
-        training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
-      ratifying_provider:
-        new:
-          title: Accredited provider – %{name_and_code}
-        edit:
-          title: Accredited provider
-          add: Add accredited provider
-          update: Update accredited provider
-        show:
-          back: Back to %{course_name} (%{course_code})
-          heading: About %{provider_name}
-    providers:
-      details:
-        page_title: Organisation details
-        about: About your organisation
-        school_placements: School placements
-        contact_details: Contact details
-        visa_sponsorship: Visa sponsorship
-        selectable_school_label: Show locations and allow candidates to select a preferred school
-      courses:
-        accredited_provider:
-          show:
-            back: Back to %{course_name} (%{course_code})
-            heading: About %{provider_name}
-        providers:
-          show:
-            back: Back to %{course_name} (%{course_code})
-            heading: Contact %{provider_name}
-        placements:
-          heading: School placements at %{provider_name}
-          back: Back to %{course_name} (%{course_code})
-        description_content:
-          course_information_heading: Course information
-          about_course_label: About this course
-          about_course_hidden_text: details about this course
-          interview_process_label: Interview process (optional)
-          interview_process_hidden_text: details about the interview process
-          how_school_placements_work_label: How placements work
-          how_school_placements_work_hidden_text: details about how placements work
-          course_length_and_fees_heading: Course length and fees
-          course_length_and_salary_heading: Course length and salary
-          course_length_label: Course length
-          course_length_hidden_text: course length
-          fee_for_uk_students_label: Fee for UK students
-          fee_for_uk_students_hidden_text: fee for UK students
-          fee_for_international_students_label: Fee for international students
-          fee_details_label: Fees and financial support (optional)
-          fee_details_hidden_text: fees and financial support
-          financial_incentive_details_label: Financial support from the government
-          salary_label: Salary
-          requirements_heading: Requirements and eligibility
-          degree_label: Degree
-          gcse_label: GCSEs
-          enter_a_levels: Enter A levels and equivalency test requirements
-          a_levels_heading: A levels and equivalency tests
-          a_levels_label: A levels
-      course_length:
-        edit:
-          course_length: Course length
-          page_title: Course length - %{course_name_and_code}
-          one_year:
-            label: 1 year
-            value: OneYear
-          two_years:
-            label: Up to 2 years
-            value: TwoYears
-          other:
-            label: Other
-            value: Other
-          custom_length:
-            label: Course length
-          update_course_length: Update course length
-      course_salary:
-        edit:
-          course_salary: Course salary
-      course_fees:
-        edit:
-          course_fees: Course fees
-      fees_and_financial_support:
-        edit:
-          heading: Fees and financial support (optional)
-          label: Fees and financial support (optional)
-          page_title: Fees and financial support (optional) - %{course_name_and_code}
-          submit_button: Update fees and financial support
-          summary_link: See what we include in this section
-          guidance_html:
-            <p class="govuk-body">Candidates find it helpful to know when fees are due, payment schedules, top up fees
-              and other costs like books and transport.</p>
-            <p class="govuk-body">You can also tell them about any financial support your institution offers.</p>
-            <p class="govuk-body">Do not include information about financial support available from the government
-              like student loans or bursaries.</p>
-      interview_process:
-        edit:
-          interview_process_heading: Interview process (optional)
-          interview_process_label: Interview process (optional)
-          interview_process_success: Interview process
-          page_title: Interview process (optional) - %{course_name_and_code}
-          submit_button: Update interview process
-          include_information_about_html:
-            <p class="govuk-body">Include information about:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>how many interview candidates will have</li>
-              <li>the format of interviews, for example could they interview online</li>
-              <li>who will be interviewing them</li>
-              <li>any tests needed - if so, how they can prepare</li>
-            </ul>
-      school_placements:
-        edit:
-          page_title: How placements work - %{course_name_and_code}
-          submit_button: Update how placements work
-          selectable_school_label: Do you want to show placement schools to candidates?
-          selectable_school_hint: Candidates will see a list of placement schools on your course pages and be able to select a preference when they apply.
-          guidance_text_html:
-            <p class="govuk-body">Give candidates information about the schools they will be training in</p>
-            <p class="govuk-body">Tell them:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>how many placements they will have</li>
-              <li>how much time they will spend in each school</li>
-              <li>if mentors are available within the schools</li>
-            </ul>
-          where_you_will_train: Where you will train
-          summary_text: See what we include in this section
-      about_course:
-        edit:
-          about_this_course: About this course
-          page_title: About this course - %{course_name_and_code}
-          submit_button: Update about this course
-          description: >
-            The course summary appears at the top of the page on Find. Use it to show how this course is different from
-            others, this helps candidates understand whether it is right for them.
-          candidates_say_section_html:
-            <p class="govuk-body">Candidates say the most important information is:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>how and where they will spend their time</li>
-              <li>how the course is structured, for example which specific modules or areas are taught</li>
-              <li>how they will be supported, for example tutors and mentoring</li>
-              <li>the qualification and experience they will have at the end of the course</li>
-            <ul>
-          remember_to_section_html:
-            <p class="govuk-body">Remember to:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>keep it brief and to the point, people struggle with long blocks of writing online</li>
-              <li>use bullet points, headings and paragraphs to make your writing easy to read</li>
-              <li>spell out acronyms the first time you use them, for example, ITT, NQT, SCITT</li>
-              <li>link to your organisation's website for people who want more detail about who you are and what you do</li>
-            </ul>
-          view_examples: View examples of great course summaries
-      study_mode:
-        form:
-          select_all_that_apply: Select all that apply
-          study_pattern: Study pattern
-      study_sites:
-        index:
-          add_study_site: &add_study_site "Add study site"
-        new: *add_study_site
-        update: Update study site
-        added: "Study site added"
-        removed: "Study site removed"
-        location_name: Study site name
-        urn: "Unique reference number (URN)"
-        address: Address
-        address1: "Address line 1"
-        address2: "Address line 2"
-        address3: "Town or city"
-        town: "Town or city"
-        address4: "County"
-        postcode: "Postcode"
-      schools:
-        search:
-          new:
-            title: &new_search Enter a school, university, college, URN or postcode
-            caption: "Add school"
-            cannot_find: &cannot_find I cannot find the school - enter manually
-        index:
-          add_school: &add_school "Add school"
-        new: *add_school
-        update: &update_school "Update school"
-        added: &school_added "School added"
-        location_name: &school_name "School Name"
-        code: &school_code "School code"
-        urn: &school_urn "Unique reference number (URN)"
-        address: &school_address Address
-        address1: &school_address_1 "Address line 1"
-        address2: &school_address_2 "Address line 2"
-        address3: &school_town "Town or city"
-        town: &school_town "Town or city"
-        address4: &school_county "County"
-        postcode: &school_postcode "Postcode"
-      study_site_search:
-        new:
-          title: *new_search
-          cannot_find: *cannot_find
-      accredited_partnerships:
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_partnership Add accredited provider
-        index:
-          title: Accredited providers
-          add: Add accredited provider
-          no_providers: There are no accredited providers for %{provider_name}.
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_partnership Add accredited provider
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          updated: About the accredited provider updated
-          update_description: Update description
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          warning: You cannot remove this accredited provider
-          remove: Remove accredited provider
-        destroy:
-          removed: Accredited provider removed
-        can_remove:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-        cannot_remove:
-          warning: You cannot remove this accredited provider
-          reason: "%{ratifying_provider_name} is an accredited provider for courses run by %{training_provider_name}. At least one of these courses is currently published on Find."
-          need_to_change_html: If you need to change an accredited provider for a course which is published, please contact us at %{email}
-        checks:
-          show:
-            title:  *add_accredited_partnership
-            caption: *add_accredited_partnership
-            add: *add_accredited_partnership
-            check_answers: Check your answers
-            about: About the accredited provider
-            accredited_provider: Accredited provider
-            warning: All users at %{provider_name} will be sent an email to let them know they’ve been added.
-          update:
-            added: Accredited provider added
-      accredited_providers:
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_provider Add accredited provider
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          updated: About the accredited provider updated
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
-        checks:
-          show:
-            title:  *add_accredited_provider
-            caption: *add_accredited_provider
-            add: *add_accredited_provider
-      training_partners:
-        index:
-          title: Training partners
-          download: Download
-          download_file: Download as a CSV file
-          export: Export all the courses you’re the accredited provider for.
-        courses:
-          index:
-            title: Training partner
-      accredited_provider_search:
-        new:
-          title: &accredited_provider_title Enter a provider name, UKPRN or postcode
-          caption: *add_accredited_provider
   search_result_title_component:
-    add_school: *add_school
+    add_school: Add school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
-  support:
-    data_exports:
-      index:
-        users:
-          name: "Only users affiliated with a provider"
-          description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
-    providers:
-      add: "Add organisation"
-      schools:
-        check_multiple: # file
-        multiple: # file
-        checks:
-          update:
-            added: *school_added
-          show:
-            new: *add_school
-            update: *update_school
-            location_name: *school_name
-            code: *school_code
-            urn: URN
-            address: *school_address
-            inset_text_html: |
-              If this information is not correct, contact the school and ask them to update their information on <a href="%{link}" target="_blank">Get Information About Schools (GIAS) (opens in a new tab)</a>.
-        show:
-          new: *add_school
-          update: *update_school
-          location_name: *school_name
-          code: *school_code
-          urn: URN
-          address: *school_address
-        search:
-          new:
-            title: Enter URN or school
-            caption: *add_school
-            hint: Enter a unique reference number (URN) or a school name. You can also enter a university, college or postcode.
-            help_finding_school: Help with finding a school
-            cannot_find_html: |
-              <p class="govuk-body">If you cannot find the school you’re looking for, you can <a href="%{link}" target="_blank">search for a school in Get Information About Schools (GIAS) (opens in a new tab)</a>.</p>
-              <p class="govuk-body govuk-!-margin-bottom-0">
-              <span class="govuk-!-font-weight-bold">If the school is not on GIAS</span>
-              </br>
-              If the school you’re looking for is not on GIAS, or the information is not correct, contact the school and ask them to update their information on GIAS.
-              </p>
-      users:
-        first_name: "First name"
-        last_name: "Last name"
-        email: "Email address"
-        new: "Add user"
-        edit: "Update user"
-        check: "Check your answers"
-      accredited_provider_search:
-        new:
-          title: *accredited_provider_title
-          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
-      accredited_partnerships:
-        index:
-          title: About the accredited provider
-          add: Add accredited provider
-          no_providers: There are no accredited providers for %{provider_name}.
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "Add accredited provider - %{provider_name} (%{code})"
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "%{provider_name}"
-          updated: Accredited provider updated
-          update_description: Update description
-        update:
-          updated: Accredited provider updated
-        destroy:
-          removed: Accredited provider removed
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-        can_remove:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-        cannot_remove:
-          warning: You cannot remove this accredited provider
-          reason: "%{ratifying_provider_name} is an accredited provider for courses run by %{training_provider_name}. At least one of these courses is currently published on Find."
-        checks:
-          show:
-            caption: "Add accredited provider - %{provider_name} (%{code})"
-            add: Add accredited provider
-          update:
-            added: Accredited provider added
-
-      accredited_providers:
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "Add accredited provider - %{provider_name} (%{code})"
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "%{provider_name}"
-          updated: About the accredited provider updated
-          update_description: Update description
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
-        checks:
-          show:
-            caption: *accredited_provider_caption
-            add: Add accredited provider
-      provider_type:
-        lead_school: "School"
-        scitt: "School centred initial teacher training (SCITT)"
-        university: "Higher education institution (HEI)"
-    flash:
-      created: "%{resource} successfully created"
-      updated: "%{resource} successfully updated"
-      deleted: "%{resource} successfully deleted"
-    actions:
-      delete: "Delete this %{resource}"
-      remove_school: "Remove school"
-      remove_study_site: "Remove study site"
-    update_record: "Update"
-    update_resource: "Update %{resource}"
-    create_record: "Create"
   activerecord:
     attributes:
       course:
@@ -1026,8 +653,8 @@ en:
               blank: "Provider type can't be blank"
               format: Accredited provider cannot be a school
             accredited:
-              format: '%{message}'
-              invalid_provider_type: 'Accredited provider must not have Provider type school'
+              format: "%{message}"
+              invalid_provider_type: "Accredited provider must not have Provider type school"
             email:
               blank: "^Enter email address"
             website:
