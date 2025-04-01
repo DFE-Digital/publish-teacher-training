@@ -1,0 +1,67 @@
+<%= content_for :page_title, t(".check") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(new_publish_provider_recruitment_cycle_schools_multiple_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <%= form_with(model: @urn_form, url: publish_provider_recruitment_cycle_schools_multiple_check_path(provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year), method: :put, local: true) do |f| %>
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= t(".caption", provider: @provider.decorate.name_and_code) %></span>
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t(".check") %> </h1>
+      </legend>
+
+      <% if @schools.present? %>
+        <%= govuk_inset_text do %>
+          <span>
+            <%= t(".inset_html", link: govuk_link_to(t(".gias_link_text"), t("links.get_information_schools_search"), new_tab: true)) %>
+          </span>
+        <% end %>
+      <% end %>
+      <% @schools.each do |school| %>
+        <%= govuk_summary_card(title: school.location_name, actions: [govuk_link_to(t(".remove_school"), remove_school_publish_provider_recruitment_cycle_schools_multiple_check_path(urn: school.urn))]) do |card|
+              card.with_summary_list(rows: [{ key: { text: t(".urn") }, value: { text: school.urn } },
+                                            { key: { text: t(".address") }, value: { text: simple_format(school.address.compact_blank.join("\n")) } }])
+            end %>
+      <% end %>
+
+      <% if @unfound_urns.present? %>
+        <%= govuk_warning_text(text: t(".unfound_urns")) do |warning| %>
+          <%= warning.text %>
+
+          <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-4">
+            <% @unfound_urns.each do |urn| %>
+              <li><%= urn %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+
+      <% if @duplicate_urns.present? %>
+        <%= govuk_warning_text(text: t(".duplicate_urns")) do |warning| %>
+          <%= warning.text %>
+
+          <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-4">
+            <% @duplicate_urns.each do |urn| %>
+              <li><%= urn %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="govuk-grid-column-full">
+      <% if @schools.present? %>
+        <%= f.govuk_submit(t(".add_schools")) %>
+      <% else %>
+        <div class="govuk-body govuk-!-font-size-20 app-action-group">
+          <%= govuk_link_to(t(".enter_new_urns_button"), new_publish_provider_recruitment_cycle_schools_multiple_path, class: "govuk-button govuk-!-margin-bottom-0") %>
+          <div><%= t(".find_school_html", link: t("links.get_information_schools")) %></div>
+        </div>
+      <% end %>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+      </p>
+    </div>
+  <% end %>
+</div>
