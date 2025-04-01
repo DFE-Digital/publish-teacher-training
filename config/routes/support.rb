@@ -83,7 +83,9 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
 
   resources :user_permissions, only: %i[destroy]
 
-  resources :view_components, only: %i[index]
   resources :settings, only: %i[index]
+  resources :feature_flags, path: "feature-flags", only: %i[index update], param: :feature_name
+  resource :environment_confirmations, path: "confirm-environment", only: %i[new create]
+  resources :view_components, only: %i[index]
   resources :recruitment_cycles
 end
