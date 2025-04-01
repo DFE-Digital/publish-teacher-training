@@ -1,0 +1,35 @@
+<%= render PageTitle.new(title: "Feature flags") %>
+
+<h1 class="govuk-heading-l">Feature flags</h1>
+
+<% FeatureFlag.features.each do |feature_name, feature_flag| %>
+  <%= govuk_summary_card(title: feature_name.to_s.humanize, classes: %w[app-summary-card]) do |summary_card| %>
+    <% summary_card.with_action do %>
+      <% protect_against_mistakes do %>
+        <%= govuk_button_to FeatureFlag.active?(feature_name) ? "Deactivate" : "Activate", support_feature_flag_path(feature_name, state: FeatureFlag.active?(feature_name) ? :deactivate : :activate), method: :put, class: "govuk-!-margin-bottom-0" %>
+      <% end %>
+    <% end %>
+
+    <% summary_card.with_summary_list do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key text: "Description" %>
+        <% row.with_value text: feature_flag.description %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key text: "Status" %>
+        <% row.with_value text: feature_flag_tag(feature_name) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key text: "Owner" %>
+        <% row.with_value text: feature_flag.owner %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key text: "History" %>
+        <% row.with_value text: feature_flag_last_updated(feature_name) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

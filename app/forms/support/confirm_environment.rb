@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Find
+module Support
   class ConfirmEnvironment
     include ActiveModel::Model
     attr_accessor :from, :environment

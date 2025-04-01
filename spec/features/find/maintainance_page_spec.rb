@@ -33,9 +33,9 @@ feature "Maintenance mode" do
     scenario "sends me to the feature flags page" do
       FeatureFlag.activate(:maintenance_mode)
 
-      visit find_feature_flags_path
+      visit support_feature_flags_path
 
-      expect(page).to have_current_path find_feature_flags_path
+      expect(page).to have_current_path support_feature_flags_path
     end
   end
 end

@@ -30,10 +30,6 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
     get "/:provider_code/:course_code/training-with-disabilities", to: "training_with_disabilities#show", as: :training_with_disabilities
   end
 
-  get "/feature-flags", to: "feature_flags#index"
-  post "/feature-flags" => "feature_flags#update"
-  get "/confirm-environment" => "confirm_environment#new"
-  post "/confirm-environment" => "confirm_environment#create"
   get "/maintenance", to: "pages#maintenance", as: "maintenance"
   get "/cycles", to: "switcher#cycles", as: :cycles
   post "/cycles", to: "switcher#update", as: :switch_cycle_schedule
