@@ -78,11 +78,7 @@ class Provider < ApplicationRecord
   }
 
   def accredited_providers
-    if Settings.features.provider_partnerships
-      accredited_partners
-    else
-      recruitment_cycle.providers.where(provider_code: accredited_provider_codes)
-    end
+    accredited_partners
   end
 
   alias accrediting_providers accredited_providers
@@ -159,8 +155,6 @@ class Provider < ApplicationRecord
 
   scope :with_can_sponsor_student_visa, ->(can_sponsor_student_visa) { where(can_sponsor_student_visa:) }
 
-  serialize :accrediting_provider_enrichments, coder: AccreditingProviderEnrichment::ArraySerializer
-
   validates :train_with_us, words_count: { maximum: 250, message: '^Reduce the word count for training with you' }
   validates :train_with_disability, words_count: { maximum: 250, message: '^Reduce the word count for training with disabilities and other needs' }
 
@@ -180,8 +174,6 @@ class Provider < ApplicationRecord
 
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
-
-  validate :add_enrichment_errors
 
   validates :accredited_provider_number, accredited_provider_number_format: true, if: :accredited?
 
@@ -336,39 +328,6 @@ class Provider < ApplicationRecord
     "#{provider_name} (#{provider_code})"
   end
 
-  def accredited_body(provider_code)
-    accrediting_provider_enrichment = accrediting_provider_enrichments&.find { |enrichment| enrichment.UcasProviderCode == provider_code }
-
-    return unless accrediting_provider_enrichment
-
-    accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
-
-    return if accredited_provider.blank?
-
-    {
-      accredited_provider_id: accredited_provider.id,
-      description: accrediting_provider_enrichment.Description || ''
-    }
-  end
-
-  def accredited_bodies
-    return accredited_partners if Settings.features.provider_partnerships
-
-    accrediting_provider_enrichments&.filter_map do |accrediting_provider_enrichment|
-      provider_code = accrediting_provider_enrichment.UcasProviderCode
-
-      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
-
-      if accredited_provider.present?
-        {
-          provider_name: accredited_provider.provider_name,
-          provider_code: accredited_provider.provider_code,
-          description: accrediting_provider_enrichment.Description || ''
-        }
-      end
-    end || []
-  end
-
   def next_available_course_code
     services[:generate_unique_course_code].execute(
       existing_codes: courses.order(:course_code).pluck(:course_code)
@@ -416,11 +375,6 @@ class Provider < ApplicationRecord
     end
   end
 
-  def accredited_provider_codes
-    accrediting_provider_enrichments&.map(&:UcasProviderCode) || []
-  end
-  scope :course_code_search, ->(course_code) { joins(:courses).merge(Course.case_insensitive_search(course_code)) }
-
   def searchable_vector_value
     [
       ukprn,
@@ -432,19 +386,6 @@ class Provider < ApplicationRecord
   end
 
   def name_normalised = StripPunctuationService.call(string: provider_name)
-
-  def add_enrichment_errors
-    accrediting_provider_enrichments&.each do |item|
-      provider_code = item.UcasProviderCode
-
-      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
-
-      if accredited_provider.present? && item.invalid?
-        message = "^Reduce the word count for #{accredited_provider.provider_name}"
-        errors.add :accredited_bodies, message
-      end
-    end
-  end
 
   def set_defaults
     self.year_code ||= recruitment_cycle.year

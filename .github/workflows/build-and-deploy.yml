@@ -172,7 +172,7 @@ jobs:
         # Pass Settings compatible env vars to runs tests with
         # feature flag(s) enables
         # Separate mutliple flags with a space
-        feature-flags: ["", "SETTINGS__FEATURES__PROVIDER_PARTNERSHIPS=true"]
+        feature-flags: [""]
 
     steps:
       - name: Checkout

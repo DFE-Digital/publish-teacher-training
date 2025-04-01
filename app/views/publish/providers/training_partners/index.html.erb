@@ -12,7 +12,6 @@
       <% @training_partners.each do |training_partner| %>
         <li data-qa="training_partner">
           <h3 class="govuk-heading-s">
-            <% if Settings.features.provider_partnerships %>
             <%= govuk_link_to(
               training_partner.provider_name,
               publish_provider_recruitment_cycle_training_partner_courses_path(
@@ -23,18 +22,6 @@
               class: "govuk-!-font-weight-bold",
               data: { qa: "training_partner_name" }
             ) %>
-          <% else %>
-            <%= govuk_link_to(
-              training_partner.provider_name,
-              publish_provider_recruitment_cycle_training_provider_courses_path(
-                @provider.provider_code,
-                @provider.recruitment_cycle_year,
-                training_partner.provider_code
-              ),
-              class: "govuk-!-font-weight-bold",
-              data: { qa: "training_partner_name" }
-            ) %>
-            <% end %>
             <span class="govuk-hint govuk-!-display-inline" data-qa="course_count">
               <%= pluralize(@course_counts[training_partner.provider_code], "course") %>
             </span>
