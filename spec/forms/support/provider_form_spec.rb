@@ -94,11 +94,11 @@ module Support
           .with_message('Enter a provider name that is 100 characters or fewer')
       }
 
-      it {
+      it 'shows the error messages for invalid provider code length' do
         expect(subject).to validate_length_of(:provider_code)
           .is_equal_to(3)
-          .with_message('Enter a valid provider code')
-      }
+          .with_message('Provider code should be 3 characters')
+      end
 
       include_examples 'blank validation', :provider_name, 'Enter a provider name'
       include_examples 'blank validation', :provider_code, 'Enter a provider code'

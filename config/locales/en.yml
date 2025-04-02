@@ -1191,6 +1191,7 @@ en:
               blank: "Enter a provider code"
               invalid: "Enter a valid provider code"
               taken: "Provider code already taken"
+              wrong_length: Provider code should be %{count} characters
             ukprn:
               blank: Enter a UK provider reference number (UKPRN)
               contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678

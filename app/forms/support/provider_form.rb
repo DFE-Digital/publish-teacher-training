@@ -27,7 +27,7 @@ module Support
 
     validates :provider_name, presence: true, length: { maximum: 100 }
 
-    validates :provider_code, presence: true, length: { is: 3, message: :invalid }
+    validates :provider_code, presence: true, length: { is: 3 }
 
     validate :provider_code_taken
 
