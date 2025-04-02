@@ -3,7 +3,7 @@
 namespace :support do
   root to: 'recruitment_cycle#index'
 
-  resources :recruitment_cycle, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '' do
+  resources :recruitment_cycle, only: %i[index], param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '' do
     namespace :providers do
       namespace :onboarding do
         resource :contacts, only: %i[new create]
