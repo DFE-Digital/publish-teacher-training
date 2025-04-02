@@ -1,0 +1,7 @@
+en:
+  layouts:
+    support:
+      providers: Providers
+      users: Users
+      settings: Settings
+      phase_banner_text: "This is a new service – your %{feedback_link} will help us to improve it."
