@@ -60,7 +60,7 @@ describe Courses::AssignSubjectsService do
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
 
     it 'sets the subjects' do
-      expect(subject.course_subjects.map { _1.subject.id }).to eq(subject_ids)
+      expect(subject.course_subjects.map { it.subject.id }).to eq(subject_ids)
     end
 
     it 'sets the name' do
@@ -78,7 +78,7 @@ describe Courses::AssignSubjectsService do
     let(:secondary_subject) { find_or_create(:secondary_subject, :biology) }
 
     it 'sets the subjects' do
-      expect(subject.course_subjects.map { _1.subject.id }).to eq([secondary_subject.id])
+      expect(subject.course_subjects.map { it.subject.id }).to eq([secondary_subject.id])
     end
 
     it 'sets the name' do
@@ -94,7 +94,7 @@ describe Courses::AssignSubjectsService do
       let(:subject_ids) { [secondary_subject2.id, secondary_subject.id] }
 
       it 'sets the subjects' do
-        expect(subject.course_subjects.map { _1.subject.id }).to eq(subject_ids)
+        expect(subject.course_subjects.map { it.subject.id }).to eq(subject_ids)
       end
 
       it 'sets the course subjects position' do
@@ -116,7 +116,7 @@ describe Courses::AssignSubjectsService do
       let(:subject_ids) { [secondary_english.id, secondary_subject.id, language_subject.id] }
 
       it 'sets the subjects' do
-        expect(subject.course_subjects.map { _1.subject.id }).to eq(subject_ids)
+        expect(subject.course_subjects.map { it.subject.id }).to eq(subject_ids)
       end
 
       it 'sets the course subjects position' do
@@ -139,7 +139,7 @@ describe Courses::AssignSubjectsService do
     let(:further_education_subject) { find_or_create(:further_education_subject) }
 
     it 'sets the subjects' do
-      expect(subject.course_subjects.map { _1.subject.id }).to eq([further_education_subject.id])
+      expect(subject.course_subjects.map { it.subject.id }).to eq([further_education_subject.id])
     end
 
     it 'sets the name' do

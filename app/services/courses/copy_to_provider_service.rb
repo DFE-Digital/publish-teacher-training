@@ -36,7 +36,7 @@ module Courses
         copy_schools(course:, new_provider:, new_course:)
         copy_study_sites(course:, new_provider:, new_course:)
       end
-      new_course.tap { @courses_copied << _1 }
+      new_course.tap { @courses_copied << it }
     end
 
     private

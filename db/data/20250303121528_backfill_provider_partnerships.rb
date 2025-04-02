@@ -53,7 +53,7 @@ class BackfillProviderPartnerships < ActiveRecord::Migration[8.0]
         first_line        = train_with_us.split("\r\n").first
         first_sentence    = train_with_us[/[^.]*\./]
         text              = [train_with_us, first_paragraph, first_line, first_sentence]
-        description       = text.find { _1.scan(/\S+/).size <= 100 } || ''
+        description       = text.find { it.scan(/\S+/).size <= 100 } || ''
 
         training_provider.accrediting_provider_enrichments ||= []
 

@@ -17,9 +17,8 @@ module Courses
     def render?
       @debug.present? && (
         @environment_name.qa? || @environment_name.development? || @environment_name.review?
-      ) && (
+      ) &&
         @latitude.present? && @longitude.present?
-      )
     end
 
     def schools
