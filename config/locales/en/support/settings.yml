@@ -1,0 +1,8 @@
+en:
+  support:
+    settings:
+      index:
+        page_title: Settings
+        feature_flag: Feature Flags
+        view_components: View Components
+        recruitment_cycles: Recruitment Cycles
