@@ -1189,7 +1189,7 @@ en:
               too_long: "Enter a provider name that is 100 characters or fewer"
             provider_code:
               blank: "Enter a provider code"
-              invalid: "Enter a valid provider code"
+              invalid: "Enter a valid provider code (One number, at least, with numbers or uppercase letters)"
               taken: "Provider code already taken"
               wrong_length: Provider code should be %{count} characters
             ukprn:
