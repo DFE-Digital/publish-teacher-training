@@ -12,7 +12,9 @@ module Support
         @pagy, @sites = pagy(provider.sites.order(:location_name))
       end
 
-      def show; end
+      def show
+        @courses = Course.distinct.joins(:sites).where(sites: { id: params[:id] }, course: { provider_id: params[:provider_id] })
+      end
 
       def create
         @school_form = SchoolForm.new(provider, @site, params: site_params(:support_school_form))
