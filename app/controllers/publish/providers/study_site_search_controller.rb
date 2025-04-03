@@ -38,7 +38,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def authorize_provider
         authorize provider, :can_create_sites?
@@ -71,14 +71,14 @@ module Publish
           results_limit: @study_site_search.limit,
           results_count: @study_site_search.schools.unscope(:limit).count,
           return_path: search_publish_provider_recruitment_cycle_study_sites_path,
-          search_resource: 'study_site'
+          search_resource: "study_site",
         )
       end
 
       def redirect_to_next_step
         redirect_to new_publish_provider_recruitment_cycle_study_site_path(
           provider_code: provider.provider_code,
-          study_site_id: school_id
+          study_site_id: school_id,
         )
       end
     end

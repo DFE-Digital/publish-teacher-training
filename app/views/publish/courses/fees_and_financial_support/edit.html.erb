@@ -1,13 +1,13 @@
 <% content_for :page_title, title_with_error_prefix(
   t("publish.providers.fees_and_financial_support.edit.page_title", course_name_and_code: @course.name_and_code),
-  @course_fees_and_financial_support_form.errors.any?
+  @course_fees_and_financial_support_form.errors.any?,
 ) %>
 
 <% if params[:copy_from].present? && @copied_fields.any? %>
   <%= render Providers::CopyCourseContentWarningComponent.new(
     @copied_fields,
     "publish-course-fees-and-financial-support-form",
-    @source_course
+    @source_course,
   ) %>
 <% end %>
 
@@ -18,11 +18,11 @@
           url: fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code
+            @course.course_code,
           ),
           data: { qa: "enrichment-form", module: "form-check-leave" },
           method: :patch,
-          local: true
+          local: true,
         ) do |f| %>
 
       <% content_for :before_content do %>
@@ -45,7 +45,7 @@
             value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
             rows: 15,
             max_words: 250,
-            data: { qa: "course_fee_details" }
+            data: { qa: "course_fee_details" },
           ) %>
       <%= f.govuk_submit t("publish.providers.fees_and_financial_support.edit.submit_button") %>
     <% end %>
@@ -55,8 +55,8 @@
             publish_provider_recruitment_cycle_course_path(
               @provider.provider_code,
               @provider.recruitment_cycle.year,
-              @course.course_code
-            )
+              @course.course_code,
+            ),
           ) %>
     </p>
   </div>
@@ -68,9 +68,9 @@
         page_path: fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
           @course.recruitment_cycle_year,
-          @course.course_code
-        )
-      }
+          @course.course_code,
+        ),
+      },
     ) %>
   </aside>
 </div>

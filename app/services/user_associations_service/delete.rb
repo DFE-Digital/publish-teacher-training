@@ -23,7 +23,7 @@ module UserAssociationsService
 
     private_class_method :new
 
-    private
+  private
 
     def send_remove_user_from_provider_email
       providers.each do |provider|
@@ -39,8 +39,8 @@ module UserAssociationsService
       user_notification_preferences = UserNotificationPreferences.new(user_id: user.id)
       return if user_notification_preferences.updated_at.nil?
 
-      user_notification_preferences.update(
-        enable_notifications: user_notification_preferences.enabled
+      user_notification_preferences.update!(
+        enable_notifications: user_notification_preferences.enabled,
       )
     end
   end

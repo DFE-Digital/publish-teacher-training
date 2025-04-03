@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module CoursePreview
   describe MissingInformationComponent, type: :component do
     include Rails.application.routes.url_helpers
 
-    context 'when the course is incomplete' do
+    context "when the course is incomplete" do
       let(:provider) { build(:provider) }
       let(:accrediting_provider) { build(:provider) }
       let(:course) { Course.new(provider:, course_code:, accrediting_provider:) }
       let(:provider_code) { provider.provider_code }
       let(:recruitment_cycle_year) { provider.recruitment_cycle_year }
-      let(:course_code) { '4GET' }
+      let(:course_code) { "4GET" }
 
       let(:hrefs) do
         {
@@ -32,11 +32,11 @@ module CoursePreview
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_provider: true)}#train-with-us",
           about_accrediting_provider:
           publish_provider_recruitment_cycle_accredited_providers_path(provider_code,
-                                                                       recruitment_cycle_year)
+                                                                       recruitment_cycle_year),
         }
       end
 
-      shared_examples 'course with missing information' do |information_type, text|
+      shared_examples "course with missing information" do |information_type, text|
         it "renders link for missing #{information_type}" do
           render_inline(described_class.new(course:, information_type:, is_preview: true))
 
@@ -44,15 +44,15 @@ module CoursePreview
         end
       end
 
-      include_examples 'course with missing information', :about_this_course, 'Enter course details'
-      include_examples 'course with missing information', :degree, 'Enter degree requirements'
-      include_examples 'course with missing information', :fee_uk_eu, 'Enter details about fees and financial support'
-      include_examples 'course with missing information', :gcse, 'Enter GCSE and equivalency test requirements'
-      include_examples 'course with missing information', :how_school_placements_work, 'Enter details about how placements work'
-      include_examples 'course with missing information', :train_with_disability, 'Enter details about training with disabilities and other needs'
+      include_examples "course with missing information", :about_this_course, "Enter course details"
+      include_examples "course with missing information", :degree, "Enter degree requirements"
+      include_examples "course with missing information", :fee_uk_eu, "Enter details about fees and financial support"
+      include_examples "course with missing information", :gcse, "Enter GCSE and equivalency test requirements"
+      include_examples "course with missing information", :how_school_placements_work, "Enter details about how placements work"
+      include_examples "course with missing information", :train_with_disability, "Enter details about training with disabilities and other needs"
 
-      include_examples 'course with missing information', :train_with_us, 'Enter details about the training provider'
-      include_examples 'course with missing information', :about_accrediting_provider, 'Enter details about the accredited provider'
+      include_examples "course with missing information", :train_with_us, "Enter details about the training provider"
+      include_examples "course with missing information", :about_accrediting_provider, "Enter details about the accredited provider"
     end
   end
 end

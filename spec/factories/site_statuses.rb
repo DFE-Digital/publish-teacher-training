@@ -2,11 +2,11 @@
 
 FactoryBot.define do
   factory :site_status do
-    association :course, study_mode: :full_time
-    association(:site)
-    publish { 'N' }
+    course { { study_mode: :full_time } }
+    site
+    publish { "N" }
     vac_status { :full_time_vacancies }
-    status { 'running' }
+    status { "running" }
 
     transient do
       any_vancancy { false }

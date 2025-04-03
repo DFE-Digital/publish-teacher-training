@@ -4,7 +4,7 @@ module Publish
   class CourseFeeForm < BaseModelForm
     include RecruitmentCycleHelper
 
-    alias course_enrichment model
+    alias_method :course_enrichment, :model
 
     include FundingTypeFormMethods
 
@@ -35,7 +35,7 @@ module Publish
     validates :fee_details, words_count: { maximum: 250, message: :too_long }
     validates :financial_support, words_count: { maximum: 250, message: :too_long }
 
-    private
+  private
 
     def declared_fields
       FIELDS

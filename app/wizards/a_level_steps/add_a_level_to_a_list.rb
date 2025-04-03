@@ -12,7 +12,7 @@ module ALevelSteps
     def self.permitted_params
       [
         :add_another_a_level,
-        { subjects: %i[uuid subject minimum_grade_required other_subject] }
+        { subjects: %i[uuid subject minimum_grade_required other_subject] },
       ]
     end
 
@@ -25,7 +25,7 @@ module ALevelSteps
     end
 
     def next_step
-      if add_another_a_level == 'yes'
+      if add_another_a_level == "yes"
         :what_a_level_is_required
       else
         :consider_pending_a_level

@@ -6,11 +6,11 @@ class StudySitePlacement < ApplicationRecord
 
   validate :site_type_cannot_be_school
 
-  private
+private
 
   def site_type_cannot_be_school
     return unless site.present? && site.school?
 
-    errors.add(:site, 'cannot be a school')
+    errors.add(:site, "cannot be a school")
   end
 end

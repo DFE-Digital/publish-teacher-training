@@ -8,27 +8,27 @@ FactoryBot.define do
     qualification { :pgce_with_qts }
     accrediting_provider { nil }
     with_apprenticeship
-    funding { 'fee' }
+    funding { "fee" }
 
-    association :provider
+    provider
 
     study_mode { :full_time }
     maths { :must_have_qualification_at_application_time }
     english { :must_have_qualification_at_application_time }
     science { :must_have_qualification_at_application_time }
     level { :primary }
-    age_range_in_years { '3_to_7' }
+    age_range_in_years { "3_to_7" }
     resulting_in_pgce_with_qts
-    start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
+    start_date { Time.zone.local(provider.recruitment_cycle.year.to_i, 9, 1) }
     applications_open_from do
       Faker::Time.between(
-        from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 10, 1),
-        to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29)
+        from: Time.zone.local(provider.recruitment_cycle.year.to_i - 1, 10, 1),
+        to: Time.zone.local(provider.recruitment_cycle.year.to_i, 9, 29),
       )
     end
     degree_grade { :two_one }
     additional_degree_subject_requirements { true }
-    degree_subject_requirements { 'Completed at least one programming module.' }
+    degree_subject_requirements { "Completed at least one programming module." }
     is_send { false }
 
     trait :with_gcse_equivalency do
@@ -41,10 +41,10 @@ FactoryBot.define do
     end
 
     trait :with_a_level_requirements do
-      a_level_subject_requirements { [{ uuid: SecureRandom.uuid, subject: 'any_subject', minimum_grade_required: 'A' }] }
+      a_level_subject_requirements { [{ uuid: SecureRandom.uuid, subject: "any_subject", minimum_grade_required: "A" }] }
       accept_pending_a_level { true }
       accept_a_level_equivalency { true }
-      additional_a_level_equivalencies { 'Some text' }
+      additional_a_level_equivalencies { "Some text" }
     end
 
     trait :without_validation do
@@ -53,11 +53,11 @@ FactoryBot.define do
 
     trait :primary do
       level { :primary }
-      age_range_in_years { '3_to_7' }
+      age_range_in_years { "3_to_7" }
     end
 
     trait :secondary do
-      age_range_in_years { '11_to_18' }
+      age_range_in_years { "11_to_18" }
       level { :secondary }
     end
 
@@ -76,26 +76,26 @@ FactoryBot.define do
 
       if evaluator.infer_subjects? && course.subjects.empty?
         case course.level
-        when 'primary'
+        when "primary"
           course.subjects << find_or_create(:primary_subject, :primary)
-        when 'secondary'
+        when "secondary"
           course.subjects << find_or_create(:secondary_subject, :drama)
-        when 'further_education'
+        when "further_education"
           course.subjects << find_or_create(:further_education_subject)
         end
       end
 
       if evaluator.infer_level? && course.subjects.present?
         subjects = course.subjects
-                         .reject { |s| s.type == 'DiscontinuedSubject' }
-                         .reject { |s| s.type == 'MordernLanguagesSubject' }
+                         .reject { |s| s.type == "DiscontinuedSubject" }
+                         .reject { |s| s.type == "MordernLanguagesSubject" }
 
-        if subjects.all? { |subject| subject.type == 'PrimarySubject' }
-          course.level = 'primary'
-        elsif subjects.all? { |subject| subject.type == 'SecondarySubject' }
-          course.level = 'secondary'
-        elsif subjects.all? { |subject| subject.type == 'FurtherEducationSubject' }
-          course.level = 'further_education'
+        if subjects.all? { |subject| subject.type == "PrimarySubject" }
+          course.level = "primary"
+        elsif subjects.all? { |subject| subject.type == "SecondarySubject" }
+          course.level = "secondary"
+        elsif subjects.all? { |subject| subject.type == "FurtherEducationSubject" }
+          course.level = "further_education"
         end
       end
 
@@ -157,14 +157,14 @@ FactoryBot.define do
     end
 
     trait :self_accredited do
-      association(:provider, factory: %i[provider accredited_provider])
+      provider factory: %i[provider accredited_provider]
     end
 
     trait :with_accrediting_provider do
       accrediting_provider { association(:accredited_provider) }
 
       after(:create) do |course|
-        create(:provider_partnership, training_provider: course.provider, accredited_provider: course.accrediting_provider, description: 'EnrichmentDescription')
+        create(:provider_partnership, training_provider: course.provider, accredited_provider: course.accrediting_provider, description: "EnrichmentDescription")
       end
     end
 
@@ -200,22 +200,23 @@ FactoryBot.define do
 
     trait :fee_type_based do
       program_type do
-        %i[higher_education_programme school_direct_training_programme
+        %i[higher_education_programme
+           school_direct_training_programme
            scitt_programme].sample
       end
       funding { :fee }
     end
 
     trait :fee do
-      funding { 'fee' }
+      funding { "fee" }
     end
 
     trait :salary do
-      funding { 'salary' }
+      funding { "salary" }
     end
 
     trait :apprenticeship do
-      funding { 'apprenticeship' }
+      funding { "apprenticeship" }
     end
 
     trait :salary_type_based do
@@ -250,7 +251,7 @@ FactoryBot.define do
     # Assumes a self accredited training provider
     trait :unpublished do
       transient do
-        identifier { 'unpublished' }
+        identifier { "unpublished" }
         accredited { false }
       end
 
@@ -267,22 +268,22 @@ FactoryBot.define do
     end
 
     trait :with_full_time_sites do
-      site_statuses { [build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: '1 Foo Street', postcode: 'BN1 1AA'))] }
+      site_statuses { [build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
     end
 
     trait :with_part_time_sites do
-      site_statuses { [build(:site_status, :findable, vac_status: :part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: '1 Foo Street', postcode: 'BN1 1AA'))] }
+      site_statuses { [build(:site_status, :findable, vac_status: :part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
     end
 
     trait :with_full_time_or_part_time_sites do
-      site_statuses { [build(:site_status, :findable, vac_status: :both_full_time_and_part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: '1 Foo Street', postcode: 'BN1 1AA'))] }
+      site_statuses { [build(:site_status, :findable, vac_status: :both_full_time_and_part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
     end
 
     trait :with_2_full_time_sites do
       site_statuses do
         [
-          build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: '1 Foo Street', postcode: 'BN1 1AA')),
-          build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0897, address1: '1 Bar Street', postcode: 'BN1 1DD'))
+          build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA")),
+          build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0897, address1: "1 Bar Street", postcode: "BN1 1DD")),
         ]
       end
     end
@@ -330,11 +331,11 @@ FactoryBot.define do
           build(
             :course_enrichment,
             :published,
-            course_length: '4 years',
+            course_length: "4 years",
             fee_uk_eu: nil,
             fee_international: nil,
-            required_qualifications: nil
-          )
+            required_qualifications: nil,
+          ),
         ]
       end
       open

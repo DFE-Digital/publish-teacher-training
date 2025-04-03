@@ -11,7 +11,7 @@ class ProviderCodeGenerator
     possible_code = nil
 
     until possible_code && @existing_codes.exclude?(possible_code)
-      possible_code = format("#{('A'..'Z').to_a.sample}%02d", @sequence_number % 100)
+      possible_code = sprintf("#{('A'..'Z').to_a.sample}%02d", @sequence_number % 100)
 
       if @existing_codes.include?(possible_code)
         attempt_count += 1

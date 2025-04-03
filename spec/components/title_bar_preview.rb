@@ -5,17 +5,17 @@ class TitleBarPreview < ViewComponent::Preview
     render(TitleBar.new(title:, provider: provider_code, current_user:))
   end
 
-  private
+private
 
   def title
-    'BAT School'
+    "BAT School"
   end
 
   def provider_code
-    '1BJ'
+    "1BJ"
   end
 
   def current_user
-    User.new(email: 'foo@live.com', first_name: 'foo', last_name: 'bar', admin: true)
+    User.new(email: "foo@live.com", first_name: "foo", last_name: "bar", admin: true)
   end
 end

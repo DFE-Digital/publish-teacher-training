@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'blazer'
+require "blazer"
 
 module Blazer
-  class Record < ActiveRecord::Base
+  class Record < ApplicationRecord
     self.abstract_class = true
 
     self.pluralize_table_names = true

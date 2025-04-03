@@ -25,7 +25,7 @@ module UserAssociationsService
 
     private_class_method :new
 
-    private
+  private
 
     def add_user_to_providers
       if all_providers
@@ -71,8 +71,8 @@ module UserAssociationsService
       user_notification_preferences = UserNotificationPreferences.new(user_id: user.id)
       return if user_notification_preferences.updated_at.nil?
 
-      user_notification_preferences.update(
-        enable_notifications: user_notification_preferences.enabled
+      user_notification_preferences.update!(
+        enable_notifications: user_notification_preferences.enabled,
       )
     end
   end

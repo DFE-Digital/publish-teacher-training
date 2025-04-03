@@ -29,7 +29,7 @@ module Shared
             course.course_subjects.any? { |subject| eligible_subjects.include?(subject.subject.subject_name) }
           end
 
-          private
+        private
 
           ELIGIBLE_SUBJECTS = %w[
             Physics
@@ -45,7 +45,7 @@ module Shared
             %w[F3 physics],
             %w[15 french],
             %w[17 german],
-            %w[22 spanish]
+            %w[22 spanish],
           ].freeze
           private_constant :SUBJECT_WITH_SCHOLARSHIPS, :ELIGIBLE_SUBJECTS
 
@@ -54,11 +54,11 @@ module Shared
           end
 
           def subject_with_scholarship
-            @subject_with_scholarship ||= SUBJECT_WITH_SCHOLARSHIPS.detect do |subject_code, _subject_name|
+            @subject_with_scholarship ||= SUBJECT_WITH_SCHOLARSHIPS.detect { |subject_code, _subject_name|
               course.subjects.any? do |subject|
                 subject.subject_code == subject_code
               end
-            end&.second
+            }&.second
           end
         end
       end

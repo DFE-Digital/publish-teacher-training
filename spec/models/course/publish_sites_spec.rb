@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe '#publish_sites' do
+RSpec.describe "#publish_sites" do
   let(:published_new_site)            { create(:site_status, :published, :new_status) }
   let(:published_running_site)        { create(:site_status, :published, :running) }
   let(:published_discontinued_site)   { create(:site_status, :published, :discontinued) }
@@ -16,29 +16,29 @@ RSpec.describe '#publish_sites' do
     course.publish_sites
   end
 
-  context 'on an old course with a site' do
+  context "on an old course with a site" do
     let(:course) { create(:course, site_statuses: [published_new_site], age: 5.days.ago) }
 
-    it 'updates course.changed_at' do
-      expect(course.changed_at).to be_within(1.second).of Time.now.utc
+    it "updates course.changed_at" do
+      expect(course.changed_at).to be_within(1.second).of Time.zone.now.utc
     end
   end
 
-  context 'on a course with many sites' do
+  context "on a course with many sites" do
     let(:course) do
       create(:course, site_statuses: [
-               published_new_site,
-               published_running_site,
-               published_discontinued_site,
-               published_suspended_site,
-               unpublished_new_site,
-               unpublished_running_site,
-               unpublished_discontinued_site,
-               unpublished_suspended_site
-             ])
+        published_new_site,
+        published_running_site,
+        published_discontinued_site,
+        published_suspended_site,
+        unpublished_new_site,
+        unpublished_running_site,
+        unpublished_discontinued_site,
+        unpublished_suspended_site,
+      ])
     end
 
-    it 'sets all the sites to the right published/status states' do
+    it "sets all the sites to the right published/status states" do
       expect(published_new_site.reload).to be_published_on_ucas
       expect(published_new_site).to be_status_running
       expect(published_running_site.reload).to be_published_on_ucas

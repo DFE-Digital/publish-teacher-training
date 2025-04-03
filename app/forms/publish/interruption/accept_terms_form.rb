@@ -3,7 +3,7 @@
 module Publish
   module Interruption
     class AcceptTermsForm < BaseModelForm
-      alias user model
+      alias_method :user, :model
 
       FIELDS = %i[
         terms_accepted
@@ -13,7 +13,7 @@ module Publish
 
       validates :terms_accepted, acceptance: true
 
-      private
+    private
 
       def compute_fields
         { terms_accepted: user.accepted_terms? }.merge(new_attributes).symbolize_keys

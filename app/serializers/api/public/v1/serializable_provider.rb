@@ -6,7 +6,7 @@ module API
       class SerializableProvider < JSONAPI::Serializable::Resource
         extend JSONAPI::Serializable::Resource::ConditionalFields
 
-        type 'providers'
+        type "providers"
 
         belongs_to :recruitment_cycle
 

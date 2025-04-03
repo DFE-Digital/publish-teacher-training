@@ -31,7 +31,7 @@ module Publish
     validates :postcode, postcode: true
     validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :format }
 
-    private
+  private
 
     def assign_attributes_to_site
       site.assign_attributes(fields.except(*fields_to_ignore_before_save))
@@ -47,7 +47,7 @@ module Publish
                       else
                         provider.sites - [site]
                       end
-      errors.add(:location_name, 'Name is in use by another location') if location_name.in?(sibling_sites.pluck(:location_name))
+      errors.add(:location_name, "Name is in use by another location") if location_name.in?(sibling_sites.pluck(:location_name))
     end
   end
 end

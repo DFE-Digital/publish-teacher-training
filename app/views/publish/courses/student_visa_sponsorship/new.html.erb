@@ -12,10 +12,10 @@
     <%= form_with(
           url: continue_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(
             @provider.provider_code,
-            @provider.recruitment_cycle_year
+            @provider.recruitment_cycle_year,
           ),
           method: :get,
-          local: true
+          local: true,
         ) do |form| %>
 
       <%= render "publish/courses/new_fields_holder", form:, except_keys: [:can_sponsor_student_visa] do |fields| %>

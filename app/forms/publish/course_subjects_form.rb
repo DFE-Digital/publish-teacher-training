@@ -2,7 +2,7 @@
 
 module Publish
   class CourseSubjectsForm < BaseCourseForm
-    alias subject_ids params
+    alias_method :subject_ids, :params
 
     def initialize(model, params: {})
       @previous_subject_names = model.course_subjects.map { |cs| cs.subject.subject_name }
@@ -10,7 +10,7 @@ module Publish
       super
     end
 
-    private
+  private
 
     attr_reader :previous_subject_names, :previous_course_name
 
@@ -28,7 +28,7 @@ module Publish
       NotificationService::CourseSubjectsUpdated.call(
         course:,
         previous_subject_names:,
-        previous_course_name:
+        previous_course_name:,
       )
     end
 

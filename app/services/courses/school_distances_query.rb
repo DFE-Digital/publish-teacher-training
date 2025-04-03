@@ -30,13 +30,13 @@ module Courses
       Course
         .joins(site_statuses: :site)
         .where(id: @courses.map(&:id))
-        .where('site.longitude IS NOT NULL AND site.latitude IS NOT NULL')
+        .where("site.longitude IS NOT NULL AND site.latitude IS NOT NULL")
         .select(select_sql)
-        .order('course.id, distance_to_search_location ASC')
-        .group('course.id, site.id')
+        .order("course.id, distance_to_search_location ASC")
+        .group("course.id, site.id")
     end
 
-    private
+  private
 
     def select_sql
       <<~SQL.squish

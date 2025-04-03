@@ -4,25 +4,25 @@ module Gias
   class Transformer < Service
     COLUMNS =
       {
-        'URN' => 'urn',
-        'EstablishmentName' => 'name',
-        'TypeOfEstablishment (code)' => 'type_code',
-        'EstablishmentTypeGroup (code)' => 'group_code',
-        'EstablishmentStatus (code)' => 'status_code',
-        'PhaseOfEducation (code)' => 'phase_code',
-        'StatutoryLowAge' => 'minimum_age',
-        'StatutoryHighAge' => 'maximum_age',
-        'UKPRN' => 'ukprn',
-        'Street' => 'address1',
-        'Locality' => 'address2',
-        'Address3' => 'address3',
-        'Town' => 'town',
-        'County (name)' => 'county',
-        'Postcode' => 'postcode',
-        'SchoolWebsite' => 'website',
-        'TelephoneNum' => 'telephone',
-        'Latitude' => 'latitude',
-        'Longitude' => 'longitude'
+        "URN" => "urn",
+        "EstablishmentName" => "name",
+        "TypeOfEstablishment (code)" => "type_code",
+        "EstablishmentTypeGroup (code)" => "group_code",
+        "EstablishmentStatus (code)" => "status_code",
+        "PhaseOfEducation (code)" => "phase_code",
+        "StatutoryLowAge" => "minimum_age",
+        "StatutoryHighAge" => "maximum_age",
+        "UKPRN" => "ukprn",
+        "Street" => "address1",
+        "Locality" => "address2",
+        "Address3" => "address3",
+        "Town" => "town",
+        "County (name)" => "county",
+        "Postcode" => "postcode",
+        "SchoolWebsite" => "website",
+        "TelephoneNum" => "telephone",
+        "Latitude" => "latitude",
+        "Longitude" => "longitude",
       }.freeze
 
     def initialize(input_file)
@@ -31,7 +31,7 @@ module Gias
     end
 
     def call
-      Log.log('Gias::Transformer', 'Starting transformation of GIAS schools download...')
+      Log.log("Gias::Transformer", "Starting transformation of GIAS schools download...")
       output_csv = CSV.new(output_file)
 
       CSV.new(input_file, headers: true, return_headers: true).each do |row|
@@ -42,7 +42,7 @@ module Gias
         end
       end
 
-      Log.log('Gias::Transformer', 'Transformation of GIAS schools download complete!')
+      Log.log("Gias::Transformer", "Transformation of GIAS schools download complete!")
 
       FileUtils.rm_f(input_file)
       # Rewind the file so it's ready for reading
@@ -50,7 +50,7 @@ module Gias
       output_file
     end
 
-    private
+  private
 
     attr_reader :input_file, :output_file
 
@@ -67,14 +67,14 @@ module Gias
       attr_reader :northing, :easting
 
       def call
-        result = ActiveRecord::Base.connection.execute(format(<<~SQL.squish, easting, northing))
+        result = ActiveRecord::Base.connection.execute(sprintf(<<~SQL.squish, easting, northing))
           WITH point as (
             SELECT ST_AsText(ST_Transform(ST_SetSRID(ST_MakePoint(%f, %f), 27700), 4327)) as text
           )
           SELECT ST_Y(text) as latitude, ST_X(text) as longitude from point;
         SQL
 
-        [result.first['latitude'], result.first['longitude']]
+        [result.first["latitude"], result.first["longitude"]]
       end
     end
 
@@ -100,25 +100,25 @@ module Gias
       end
 
       def transformed_row
-        coords = CoordinateTransformer.new(row.fetch('Northing'), row.fetch('Easting')).call
+        coords = CoordinateTransformer.new(row.fetch("Northing"), row.fetch("Easting")).call
 
         row.to_h.slice(*COLUMNS.keys).values + coords
       end
 
-      private
+    private
 
       def open?
-        OPEN_SCHOOL_CODES.include? row.fetch('EstablishmentStatus (code)')
+        OPEN_SCHOOL_CODES.include? row.fetch("EstablishmentStatus (code)")
       end
 
       def in_england?
-        NON_ENGLISH_ESTABLISHMENTS.exclude?(row.fetch('TypeOfEstablishment (code)'))
+        NON_ENGLISH_ESTABLISHMENTS.exclude?(row.fetch("TypeOfEstablishment (code)"))
       end
 
       def northing_and_easting_present?
-        return true if row['Northing'].present? && row['Easting'].present?
+        return true if row["Northing"].present? && row["Easting"].present?
 
-        Log.log('Gias::Transformer', 'row has no coordinates')
+        Log.log("Gias::Transformer", "row has no coordinates")
         false
       end
     end

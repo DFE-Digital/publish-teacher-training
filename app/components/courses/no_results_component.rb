@@ -21,11 +21,11 @@ module Courses
     end
 
     def try_another_search_content
-      t('.try_another_search_content', count: @subjects.size)
+      t(".try_another_search_content", count: @subjects.size)
     end
 
     def undergraduate_courses?
-      @minimum_degree_required == 'no_degree_required'
+      @minimum_degree_required == "no_degree_required"
     end
   end
 end

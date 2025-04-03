@@ -17,13 +17,13 @@ module Find
 
         def qualification_required
           if course.teacher_degree_apprenticeship?
-            t('.a_levels')
+            t(".a_levels")
           else
-            t('.degree')
+            t(".degree")
           end
         end
 
-        private
+      private
 
         def subject_knowledge_enhancement_content?
           if course.subjects.first.subject_code.nil?
@@ -35,18 +35,18 @@ module Find
 
         def required_gcse_content(course)
           case course.level
-          when 'primary'
+          when "primary"
             "Grade #{course.gcse_grade_required} (C) in English, maths and science"
-          when 'secondary'
+          when "secondary"
             "Grade #{course.gcse_grade_required} (C) in English and maths"
           end
         end
 
         def pending_gcse_content(course)
           if course.accept_pending_gcse
-            'We’ll consider candidates with pending GCSEs.'
+            "We’ll consider candidates with pending GCSEs."
           else
-            'We will not consider candidates with pending GCSEs.'
+            "We will not consider candidates with pending GCSEs."
           end
         end
 
@@ -54,17 +54,17 @@ module Find
           if course.accept_gcse_equivalency?
             "We’ll consider candidates who need to take a GCSE equivalency test in #{equivalencies}."
           else
-            'We will not consider candidates who need to take a GCSE equivalency test.'
+            "We will not consider candidates who need to take a GCSE equivalency test."
           end
         end
 
         def equivalencies
           subjects = []
-          subjects << 'English' if course.accept_english_gcse_equivalency.present?
-          subjects << 'maths' if course.accept_maths_gcse_equivalency.present?
-          subjects << 'science' if course.accept_science_gcse_equivalency.present?
+          subjects << "English" if course.accept_english_gcse_equivalency.present?
+          subjects << "maths" if course.accept_maths_gcse_equivalency.present?
+          subjects << "science" if course.accept_science_gcse_equivalency.present?
 
-          subjects.to_sentence(last_word_connector: ' or ', two_words_connector: ' or ')
+          subjects.to_sentence(last_word_connector: " or ", two_words_connector: " or ")
         end
       end
     end

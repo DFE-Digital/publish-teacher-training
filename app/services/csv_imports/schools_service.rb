@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'csv'
+require "csv"
 
 module CSVImports
   class SchoolsService
@@ -19,7 +19,7 @@ module CSVImports
       end
     end
 
-    private
+  private
 
     attr_reader :csv_content, :provider
 

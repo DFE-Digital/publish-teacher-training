@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :study_site_placement do
-    association(:course)
-    association(:site)
+    course
+    site
   end
 end

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'editing course start date', { can_edit_current_and_next_cycles: false } do
+feature "editing course start date", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     then_i_visit_the_start_date_page
   end
 
-  scenario 'choosing december' do
+  scenario "choosing december" do
     given_i_choose_december
     when_i_click_update
     then_i_should_see_the_december_start_date
@@ -20,9 +20,7 @@ feature 'editing course start date', { can_edit_current_and_next_cycles: false }
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
 
-  def current_recruitment_cycle_year
-    Settings.current_recruitment_cycle_year
-  end
+  delegate :current_recruitment_cycle_year, to: :Settings
 
   def and_there_is_a_course_i_want_to_edit
     given_a_course_exists
@@ -30,7 +28,7 @@ feature 'editing course start date', { can_edit_current_and_next_cycles: false }
 
   def then_i_visit_the_start_date_page
     visit start_date_publish_provider_recruitment_cycle_course_path(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, code: course.course_code,
     )
   end
 
@@ -47,7 +45,7 @@ feature 'editing course start date', { can_edit_current_and_next_cycles: false }
   end
 
   def when_i_click_update
-    page.click_link_or_button('Update course start date')
+    page.click_link_or_button("Update course start date")
   end
 
   def then_i_should_see_the_december_start_date
@@ -57,6 +55,6 @@ feature 'editing course start date', { can_edit_current_and_next_cycles: false }
   end
 
   def and_i_should_see_the_success_flash_message
-    expect(page).to have_css('.govuk-notification-banner__heading', text: 'Course start date updated')
+    expect(page).to have_css(".govuk-notification-banner__heading", text: "Course start date updated")
   end
 end

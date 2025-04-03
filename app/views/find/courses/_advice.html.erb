@@ -9,8 +9,8 @@
               find_get_into_teaching_redirect_path(
                 @course.provider_code,
                 @course.course_code,
-                "teacher_training_advisers"
-              )
+                "teacher_training_advisers",
+              ),
             ),
             contact_git_link:
               govuk_link_to(
@@ -18,9 +18,9 @@
                 find_get_into_teaching_redirect_path(
                   @course.provider_code,
                   @course.course_code,
-                  "help_and_support"
-                )
-              )
+                  "help_and_support",
+                ),
+              ),
           ) %>
     <% else %>
       <%= t(
@@ -31,9 +31,9 @@
               find_get_into_teaching_redirect_path(
                 @course.provider_code,
                 @course.course_code,
-                "help_and_support"
-              )
-            )
+                "help_and_support",
+              ),
+            ),
           ) %>
     <% end %>
   </span>

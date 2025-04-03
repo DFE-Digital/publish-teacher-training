@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
+feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'i can publish a course' do
+  scenario "i can publish a course" do
     and_there_is_a_draft_course_i_want_to_publish
     when_i_visit_the_course_page
     and_i_click_the_publish_link
@@ -17,7 +17,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
     and_the_course_is_open
   end
 
-  scenario 'i can publish a rolled over course' do
+  scenario "i can publish a rolled over course" do
     and_there_is_a_rolled_over_course_i_want_to_publish
     when_i_visit_the_course_page
     and_i_click_the_publish_link
@@ -26,7 +26,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
     and_the_course_is_open
   end
 
-  scenario 'i can re-publish a course' do
+  scenario "i can re-publish a course" do
     and_i_have_previously_published_a_course
     when_i_make_some_new_changes
     then_i_should_see_the_unpublished_changes_message
@@ -38,7 +38,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
     then_i_see_the_content_on_find
   end
 
-  scenario 'attempting to publish with errors' do
+  scenario "attempting to publish with errors" do
     and_there_is_a_draft_course
     when_i_visit_the_course_page
     and_i_click_the_publish_link
@@ -49,7 +49,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def given_i_am_authenticated_as_a_provider_user
-    provider = create(:provider, provider_name: 'Cup')
+    provider = create(:provider, provider_name: "Cup")
     @user = create(:user, :with_provider, provider:)
     given_i_am_authenticated(user: @user)
   end
@@ -73,8 +73,8 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
       :closed,
       accrediting_provider:,
       enrichments: [build(:course_enrichment, :initial_draft)],
-      sites: [build(:site, location_name: 'location 1')],
-      study_sites: [build(:site, :study_site)]
+      sites: [build(:site, location_name: "location 1")],
+      study_sites: [build(:site, :study_site)],
     )
   end
 
@@ -85,8 +85,8 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
       :closed,
       accrediting_provider:,
       enrichments: [create(:course_enrichment, :rolled_over)],
-      sites: [create(:site, location_name: 'location 1')],
-      study_sites: [create(:site, :study_site)]
+      sites: [create(:site, location_name: "location 1")],
+      study_sites: [create(:site, :study_site)],
     )
   end
 
@@ -95,8 +95,8 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
       :with_accrediting_provider,
       accrediting_provider:,
       enrichments: [create(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: 'location 1')],
-      study_sites: [create(:site, :study_site)]
+      sites: [create(:site, location_name: "location 1")],
+      study_sites: [create(:site, :study_site)],
     )
   end
 
@@ -106,7 +106,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_course_page
     publish_provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
@@ -115,7 +115,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content('Your course has been published.')
+    expect(page).to have_content("Your course has been published.")
   end
 
   def and_the_course_is_published
@@ -130,36 +130,36 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
     visit school_placements_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
-      course.course_code
+      course.course_code,
     )
-    fill_in 'How placements work', with: 'some new information about school placements'
-    click_on 'Update how placements work'
+    fill_in "How placements work", with: "some new information about school placements"
+    click_on "Update how placements work"
   end
 
   def then_i_should_see_the_unpublished_changes_message
-    expect(page).to have_content('* Unpublished changes')
+    expect(page).to have_content("* Unpublished changes")
   end
 
   def and_i_visit_the_course_page
-    page.driver.header 'Host', 'find'
+    page.driver.header "Host", "find"
     visit "/course/#{provider.provider_code}/#{course.course_code}"
   end
 
   def and_i_do_not_see_the_unpublished_content_on_find
-    expect(page).to have_no_content('some new information about school placements')
+    expect(page).to have_no_content("some new information about school placements")
   end
 
   def then_i_see_the_content_on_find
-    page.driver.header 'Host', 'find'
+    page.driver.header "Host", "find"
     visit "/course/#{provider.provider_code}/#{course.course_code}"
-    expect(page).to have_content('some new information about school placements')
+    expect(page).to have_content("some new information about school placements")
   end
 
   def when_i_return_to_publish
-    page.driver.header 'Host', 'publish'
+    page.driver.header "Host", "publish"
     and_i_am_authed_again
     publish_provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
@@ -168,7 +168,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_an_error_message_for_the_gcses
-    expect(publish_provider_courses_show_page.error_messages).to include('Enter GCSE requirements')
+    expect(publish_provider_courses_show_page.error_messages).to include("Enter GCSE requirements")
   end
 
   def when_i_click_the_error_message_link

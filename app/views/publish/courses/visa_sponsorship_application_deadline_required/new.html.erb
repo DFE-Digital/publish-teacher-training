@@ -8,12 +8,12 @@
     <%= form_with(
         url: continue_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_required_path(
           @provider.provider_code,
-          @provider.recruitment_cycle_year
+          @provider.recruitment_cycle_year,
         ),
         model: @deadline_required_form,
         scope: :course,
         method: :get,
-        local: true
+        local: true,
       ) do |form| %>
         <%= render CaptionText.new(text: t(".caption")) %>
         <%= form.govuk_error_summary %>
@@ -31,8 +31,8 @@
           t(".cancel"),
           publish_provider_recruitment_cycle_courses_path(
             @provider.provider_code,
-            @provider.recruitment_cycle_year
-          )
+            @provider.recruitment_cycle_year,
+          ),
         ) %>
   </p>
   </div>

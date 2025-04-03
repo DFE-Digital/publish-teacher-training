@@ -23,7 +23,7 @@ class Form < BaseForm
     end
   end
 
-  private
+private
 
   def after_save; end
 

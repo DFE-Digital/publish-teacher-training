@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Search results by subject and location', :js, service: :find do
+RSpec.describe "Search results by subject and location", :js, service: :find do
   include FiltersFeatureSpecsHelper
 
   before do
@@ -13,7 +13,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
     when_i_visit_the_results_page
   end
 
-  scenario 'when I filter by location' do
+  scenario "when I filter by location" do
     when_i_start_typing_an_invalid_location
     then_i_see_no_autocomplete_suggestions
 
@@ -38,7 +38,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
     and_the_20_miles_radius_is_selected
   end
 
-  scenario 'when I filter by location and subject' do
+  scenario "when I filter by location and subject" do
     when_i_start_typing_an_invalid_location
     then_i_see_no_autocomplete_suggestions
 
@@ -54,14 +54,14 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
     then_i_see_only_courses_within_selected_location_and_primary_subject_within_default_radius
   end
 
-  scenario 'when I filter by subject' do
+  scenario "when I filter by subject" do
     when_i_search_for_math
     and_i_choose_the_first_subject_suggestion
     and_i_click_search
     then_i_see_only_mathematics_courses
   end
 
-  scenario 'when I search by provider' do
+  scenario "when I search by provider" do
     when_i_search_for_a_provider
     and_i_choose_the_first_provider_suggestion
     and_i_click_search
@@ -69,7 +69,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
     and_the_provider_field_is_visible
   end
 
-  scenario 'when search results update after filter changes' do
+  scenario "when search results update after filter changes" do
     when_i_search_for_math
     and_i_choose_the_first_subject_suggestion
 
@@ -86,7 +86,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
     then_i_see_mathematics_courses_in_15_miles_from_london_that_sponsors_visa
   end
 
-  scenario 'when searching using old location parameters' do
+  scenario "when searching using old location parameters" do
     when_i_search_courses_in_london_using_old_parameters
     then_i_see_only_courses_within_selected_location_within_default_radius
     and_the_default_radius_is_selected
@@ -94,10 +94,10 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
     and_london_is_displayed_in_text_field
   end
 
-  context 'searching from the homepage' do
+  context "searching from the homepage" do
     before { when_i_visit_the_homepage }
 
-    scenario 'when I search from the homepage' do
+    scenario "when I search from the homepage" do
       when_i_start_typing_an_invalid_location
       then_i_see_no_autocomplete_suggestions
 
@@ -114,7 +114,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
       and_i_am_on_the_results_page_with_london_location_as_parameter
     end
 
-    scenario 'when I search for a specific provider from the homepage' do
+    scenario "when I search for a specific provider from the homepage" do
       when_i_search_for_a_provider
       and_i_choose_the_first_provider_suggestion
       and_i_click_search
@@ -122,7 +122,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
       and_the_provider_field_is_visible
     end
 
-    scenario 'when I search all filters from the homepage' do
+    scenario "when I search all filters from the homepage" do
       when_i_search_for_math
       and_i_choose_the_first_subject_suggestion
 
@@ -150,29 +150,29 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
       :course,
       :primary,
       :open,
-      name: 'Primary - London',
-      provider: create(:provider, provider_name: 'First university'),
+      name: "Primary - London",
+      provider: create(:provider, provider_name: "First university"),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
-      subjects: [primary_subject]
+      subjects: [primary_subject],
     )
 
     @romford_primary_course = create(
       :course,
       :primary,
       :open,
-      name: 'Primary - Romford',
-      provider: create(:provider, provider_name: 'Second university'),
+      name: "Primary - Romford",
+      provider: create(:provider, provider_name: "Second university"),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
-      subjects: [primary_subject]
+      subjects: [primary_subject],
     )
 
     @watford_primary_course = create(
       :course,
       :primary,
       :open,
-      name: 'Primary - Watford',
+      name: "Primary - Watford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
-      subjects: [primary_subject]
+      subjects: [primary_subject],
     )
 
     @edinburgh_mathematics_course = create(
@@ -180,19 +180,19 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
       :primary,
       :can_not_sponsor_visa,
       :open,
-      name: 'Primary - Edinburgh',
+      name: "Primary - Edinburgh",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
-      subjects: [primary_subject]
+      subjects: [primary_subject],
     )
 
     @london_mathematics_course = create(
       :course,
       :secondary,
       :open,
-      name: 'Mathematics - London',
+      name: "Mathematics - London",
       can_sponsor_student_visa: true,
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
-      subjects: [mathematics_subject]
+      subjects: [mathematics_subject],
     )
 
     @romford_mathematics_course = create(
@@ -200,9 +200,9 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
       :secondary,
       :can_not_sponsor_visa,
       :open,
-      name: 'Mathematics - Romford',
+      name: "Mathematics - Romford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
-      subjects: [mathematics_subject]
+      subjects: [mathematics_subject],
     )
 
     @watford_mathematics_course = create(
@@ -210,9 +210,9 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
       :secondary,
       :can_not_sponsor_visa,
       :open,
-      name: 'Mathematics - Watford',
+      name: "Mathematics - Watford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
-      subjects: [mathematics_subject]
+      subjects: [mathematics_subject],
     )
 
     @edinburgh_mathematics_course = create(
@@ -220,18 +220,18 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
       :secondary,
       :can_not_sponsor_visa,
       :open,
-      name: 'Mathematics - Edinburgh',
+      name: "Mathematics - Edinburgh",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
-      subjects: [mathematics_subject]
+      subjects: [mathematics_subject],
     )
   end
 
   def when_i_filter_by_courses_that_sponsor_visa
-    check 'Only show courses with visa sponsorship', visible: :all
+    check "Only show courses with visa sponsorship", visible: :all
   end
 
   def and_i_click_apply_filters
-    click_link_or_button 'Apply filters', match: :first
+    click_link_or_button "Apply filters", match: :first
   end
 
   def when_i_visit_the_results_page
@@ -245,72 +245,72 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
   def when_i_start_typing_non_existent_city_location
     stub_request(
       :get,
-      'https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=NonExistentCity&key=replace_me&language=en&types=geocode'
+      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=NonExistentCity&key=replace_me&language=en&types=geocode",
     ).with(
       headers: {
-        'Accept' => '*/*',
-        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Connection' => 'keep-alive',
-        'Keep-Alive' => '30',
-        'User-Agent' => "Faraday v#{Faraday::VERSION}"
-      }
-    ).to_return(status: 200, body: file_fixture('google_old_places_api_client/autocomplete/non_existent_city.json'), headers: { 'Content-Type' => 'application/json' })
+        "Accept" => "*/*",
+        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "Connection" => "keep-alive",
+        "Keep-Alive" => "30",
+        "User-Agent" => "Faraday v#{Faraday::VERSION}",
+      },
+    ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/non_existent_city.json"), headers: { "Content-Type" => "application/json" })
 
-    fill_in 'City, town or postcode', with: 'NonExistentCity'
+    fill_in "City, town or postcode", with: "NonExistentCity"
   end
 
   def then_i_see_no_autocomplete_suggestions
-    expect(page).to have_css('#location-field__listbox', visible: :hidden)
+    expect(page).to have_css("#location-field__listbox", visible: :hidden)
   end
 
   def and_the_location_suggestions_for_london_is_cached
-    expect(Rails.cache.read('geolocation:suggestions:lon')).to eq(
+    expect(Rails.cache.read("geolocation:suggestions:lon")).to eq(
       [
         {
-          name: 'London, UK',
-          place_id: 'ChIJdd4hrwug2EcRmSrV3Vo6llI',
-          types: %w[locality political]
-        }
-      ]
+          name: "London, UK",
+          place_id: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
+          types: %w[locality political],
+        },
+      ],
     )
   end
 
   def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read('geolocation:query:london-uk')).to eq(
+    expect(Rails.cache.read("geolocation:query:london-uk")).to eq(
       {
-        formatted_address: 'London, UK',
+        formatted_address: "London, UK",
         latitude: 51.5072178,
         longitude: -0.1275862,
-        country: 'England',
-        types: %w[locality political]
-      }
+        country: "England",
+        types: %w[locality political],
+      },
     )
   end
 
   def when_i_start_typing_london_location
     stub_request(
       :get,
-      'https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=Lon&key=replace_me&language=en&types=geocode'
+      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=Lon&key=replace_me&language=en&types=geocode",
     ).with(
       headers: {
-        'Accept' => '*/*',
-        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Connection' => 'keep-alive',
-        'Keep-Alive' => '30',
-        'User-Agent' => "Faraday v#{Faraday::VERSION}"
-      }
-    ).to_return(status: 200, body: file_fixture('google_old_places_api_client/autocomplete/london.json'), headers: { 'Content-Type' => 'application/json' })
+        "Accept" => "*/*",
+        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "Connection" => "keep-alive",
+        "Keep-Alive" => "30",
+        "User-Agent" => "Faraday v#{Faraday::VERSION}",
+      },
+    ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/london.json"), headers: { "Content-Type" => "application/json" })
 
-    fill_in 'City, town or postcode', with: 'Lon'
+    fill_in "City, town or postcode", with: "Lon"
   end
 
   def then_i_see_location_suggestions
-    expect(page).to have_css('#location-field__listbox', visible: :visible)
-    expect(page.find_by_id('location-field__listbox')).to have_content('London, UK')
+    expect(page).to have_css("#location-field__listbox", visible: :visible)
+    expect(page.find_by_id("location-field__listbox")).to have_content("London, UK")
   end
 
   def when_i_select_the_first_suggestion
-    page.find_by_id('location-field__option--0').click
+    page.find_by_id("location-field__option--0").click
   end
 
   def and_i_click_to_search_courses_in_london
@@ -330,23 +330,23 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
   end
 
   def and_the_default_radius_is_selected
-    expect(page).to have_select('Search radius', selected: '10 miles')
+    expect(page).to have_select("Search radius", selected: "10 miles")
   end
 
   def and_the_15_miles_radius_is_selected
-    expect(page).to have_select('Search radius', selected: '15 miles')
+    expect(page).to have_select("Search radius", selected: "15 miles")
   end
 
   def and_the_20_miles_radius_is_selected
-    expect(page).to have_select('Search radius', selected: '20 miles')
+    expect(page).to have_select("Search radius", selected: "20 miles")
   end
 
   def and_i_click_search
-    click_link_or_button 'Search'
+    click_link_or_button "Search"
   end
 
   def when_i_increase_the_radius_to_15_miles
-    select '15 miles', from: 'radius'
+    select "15 miles", from: "radius"
   end
   alias_method :and_i_increase_the_radius_to_15_miles, :when_i_increase_the_radius_to_15_miles
 
@@ -361,7 +361,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
   end
 
   def when_i_increase_the_radius_to_20_miles
-    select '20 miles', from: 'radius'
+    select "20 miles", from: "radius"
   end
 
   def then_i_see_courses_up_to_20_miles_distance
@@ -374,7 +374,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
   end
 
   def and_select_primary_subject
-    fill_in 'Subject', with: 'Pri'
+    fill_in "Subject", with: "Pri"
 
     and_i_choose_the_first_subject_suggestion
   end
@@ -393,11 +393,11 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
   end
 
   def and_i_click_search
-    click_link_or_button 'Search'
+    click_link_or_button "Search"
   end
 
   def when_i_search_for_math
-    fill_in 'Subject', with: 'Mat'
+    fill_in "Subject", with: "Mat"
   end
 
   def then_i_see_only_mathematics_courses
@@ -423,20 +423,20 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
   def and_i_am_on_the_results_page_with_london_location_as_parameter
     and_i_am_on_the_results_page
 
-    expect(search_params).to eq(applications_open: 'true', subject_name: '', subject_code: '', location: 'London, UK', provider_name: '', provider_code: '')
+    expect(search_params).to eq(applications_open: "true", subject_name: "", subject_code: "", location: "London, UK", provider_name: "", provider_code: "")
   end
 
   def and_i_am_on_the_results_page_with_mathematics_subject_and_london_location_and_sponsor_visa_as_parameter
     and_i_am_on_the_results_page
 
     expect(search_params).to eq(
-      applications_open: 'true',
-      subject_name: 'Mathematics',
-      subject_code: 'G1',
-      location: 'London, UK',
-      can_sponsor_visa: 'true',
-      provider_name: '',
-      provider_code: ''
+      applications_open: "true",
+      subject_name: "Mathematics",
+      subject_code: "G1",
+      location: "London, UK",
+      can_sponsor_visa: "true",
+      provider_name: "",
+      provider_code: "",
     )
   end
 
@@ -446,7 +446,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
 
   def and_i_check_visa_sponsorship_filter_in_the_homepage
     and_i_am_on_the_homepage
-    check 'Only show courses that offer visa sponsorship', visible: :all
+    check "Only show courses that offer visa sponsorship", visible: :all
   end
 
   def and_i_am_on_the_homepage
@@ -459,21 +459,21 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
 
   def when_i_search_for_a_provider
     page.find(
-      'summary.govuk-details__summary',
-      text: 'Search by training provider'
+      "summary.govuk-details__summary",
+      text: "Search by training provider",
     ).click
 
-    fill_in 'Enter a provider name', with: 'uni'
+    fill_in "Enter a provider name", with: "uni"
   end
 
   def and_i_choose_the_first_provider_suggestion
-    page.find_by_id('provider-code-field__option--0').click
+    page.find_by_id("provider-code-field__option--0").click
   end
 
   def then_i_see_only_courses_from_that_provider
-    expect(results).to have_content('First university')
+    expect(results).to have_content("First university")
 
-    providers = Provider.where.not(provider_name: 'First university')
+    providers = Provider.where.not(provider_name: "First university")
 
     providers.each do |provider|
       expect(results).to have_no_content(provider.provider_name)
@@ -481,25 +481,25 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
   end
 
   def and_the_provider_field_is_visible
-    expect(page).to have_css('details.govuk-details[open]')
+    expect(page).to have_css("details.govuk-details[open]")
   end
 
   def when_i_search_courses_in_london_using_old_parameters
     stub_london_location_search
 
-    visit find_results_path(lq: 'London, UK')
+    visit find_results_path(lq: "London, UK")
   end
 
   def and_london_is_displayed_in_text_field
     expect(
-      page.find_field('City, town or postcode').value
-    ).to eq('London, UK')
+      page.find_field("City, town or postcode").value,
+    ).to eq("London, UK")
   end
 
-  private
+private
 
   def results
-    page.first('.app-search-results')
+    page.first(".app-search-results")
   end
 
   def search_params
@@ -509,21 +509,21 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
   def stub_london_location_search
     stub_request(
       :get,
-      'https://maps.googleapis.com/maps/api/geocode/json?address=London,%20UK&components=country:UK&key=replace_me&language=en'
+      "https://maps.googleapis.com/maps/api/geocode/json?address=London,%20UK&components=country:UK&key=replace_me&language=en",
     )
       .with(
         headers: {
-          'Accept' => '*/*',
-          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Connection' => 'keep-alive',
-          'Keep-Alive' => '30',
-          'User-Agent' => "Faraday v#{Faraday::VERSION}"
-        }
+          "Accept" => "*/*",
+          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Connection" => "keep-alive",
+          "Keep-Alive" => "30",
+          "User-Agent" => "Faraday v#{Faraday::VERSION}",
+        },
       )
       .to_return(
         status: 200,
-        body: file_fixture('google_old_places_api_client/geocode/london.json').read,
-        headers: { 'Content-Type' => 'application/json' }
+        body: file_fixture("google_old_places_api_client/geocode/london.json").read,
+        headers: { "Content-Type" => "application/json" },
       )
   end
 end

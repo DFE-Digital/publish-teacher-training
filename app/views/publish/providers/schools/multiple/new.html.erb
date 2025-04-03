@@ -14,11 +14,10 @@
         <%= f.govuk_text_area(
           :values,
           hint: {
-            text: t(".hint_html",
-                    url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year))
+            text: t(".hint_html", url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year)),
           },
           value: @urn_form.values&.join("\n").presence,
-          label: { text: t(".title"), class: "govuk-label--l" }
+          label: { text: t(".title"), class: "govuk-label--l" },
         ) %>
         <%= f.govuk_submit %>
     <% end %>

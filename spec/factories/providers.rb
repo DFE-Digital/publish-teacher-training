@@ -28,8 +28,8 @@ FactoryBot.define do
     urn { Faker::Number.number(digits: [5, 6].sample) }
     ukprn { Faker::Number.within(range: 10_000_000..19_999_999) }
     accredited { false }
-    region_code { 'london' }
-    association :recruitment_cycle, strategy: :find_or_create
+    region_code { "london" }
+    recruitment_cycle { { strategy: :find_or_create } }
 
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }
@@ -40,7 +40,7 @@ FactoryBot.define do
     selectable_school { true }
 
     trait :with_name do
-      provider_name { 'Test Name' }
+      provider_name { "Test Name" }
     end
 
     trait :university do
@@ -74,7 +74,7 @@ FactoryBot.define do
       # updated_at does. Maybe this is because we've added changed_at to
       # timestamp_attributes_for_update but FactoryBot doesn't actually
       # recognise it.
-      provider.update changed_at: evaluator.changed_at if evaluator.changed_at.present?
+      provider.update! changed_at: evaluator.changed_at if evaluator.changed_at.present?
     end
 
     trait :next_recruitment_cycle do
@@ -82,7 +82,7 @@ FactoryBot.define do
     end
 
     trait :discarded do
-      discarded_at { Time.now.utc }
+      discarded_at { Time.zone.now.utc }
     end
 
     trait :previous_recruitment_cycle do
@@ -92,7 +92,7 @@ FactoryBot.define do
     trait :published_scitt do
       scitt
       transient do
-        identifier { 'published_scitt' }
+        identifier { "published_scitt" }
       end
 
       provider_name { "#{identifier} provider name" }

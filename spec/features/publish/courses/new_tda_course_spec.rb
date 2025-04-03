@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_next_cycles do
-  scenario 'creating a degree awarding course from school direct provider' do
+feature "Adding a teacher degree apprenticeship course", :can_edit_current_and_next_cycles do
+  scenario "creating a degree awarding course from school direct provider" do
     given_i_am_authenticated_as_a_school_direct_provider_user
     when_i_visit_the_courses_page
     and_i_click_on_add_course
@@ -48,7 +48,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     then_the_course_is_published
   end
 
-  scenario 'creating a degree awarding course from scitt provider' do
+  scenario "creating a degree awarding course from scitt provider" do
     given_i_am_authenticated_as_a_scitt_provider_user
     when_i_visit_the_courses_page
     and_i_click_on_add_course
@@ -88,7 +88,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     then_the_course_is_published
   end
 
-  scenario 'when choosing primary course' do
+  scenario "when choosing primary course" do
     given_i_am_authenticated_as_a_school_direct_provider_user
     when_i_visit_the_courses_page
     and_i_click_on_add_course
@@ -127,7 +127,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     then_the_course_is_published
   end
 
-  scenario 'do not show teacher degree apprenticeship for further education' do
+  scenario "do not show teacher degree apprenticeship for further education" do
     given_i_am_authenticated_as_a_school_direct_provider_user
     when_i_visit_the_courses_page
     and_i_click_on_add_course
@@ -136,7 +136,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_do_not_see_the_degree_awarding_option
   end
 
-  scenario 'back links when choosing a teacher degree apprenticeship' do
+  scenario "back links when choosing a teacher degree apprenticeship" do
     given_i_am_authenticated_as_a_school_direct_provider_user
     when_i_visit_the_courses_page
     and_i_click_on_add_course
@@ -163,7 +163,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     then_i_am_on_the_check_your_answers_page
   end
 
-  scenario 'creating a tda course then changing it to a non tda fee paying course' do
+  scenario "creating a tda course then changing it to a non tda fee paying course" do
     given_i_am_on_the_check_answers_page_of_a_new_tda_course
     when_i_visit_the_course_outcome_page
     and_the_back_link_points_to_the_confirm_page
@@ -190,7 +190,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     then_i_see_the_correct_attributes_in_the_database_for_fee_paying
   end
 
-  scenario 'creating a tda course then changing it to a non tda salaried course' do
+  scenario "creating a tda course then changing it to a non tda salaried course" do
     given_i_am_on_the_check_answers_page_of_a_new_tda_course
     when_i_visit_the_course_outcome_page
     and_i_choose_qts
@@ -216,9 +216,9 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   def given_i_am_authenticated_as_a_school_direct_provider_user
     @user = create(:user, providers: [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     @provider = @user.providers.first
-    create(:accredited_provider, provider_code: '1BJ')
-    @accredited_provider = create(:accredited_provider, provider_code: '1BK')
-    @provider.accredited_partnerships.create(accredited_provider: @accredited_provider, description: 'description')
+    create(:accredited_provider, provider_code: "1BJ")
+    @accredited_provider = create(:accredited_provider, provider_code: "1BK")
+    @provider.accredited_partnerships.create!(accredited_provider: @accredited_provider, description: "description")
 
     given_i_am_authenticated(user: @user)
   end
@@ -227,71 +227,71 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     @user = create(
       :user,
       providers: [
-        create(:accredited_provider, :scitt, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
-      ]
+        create(:accredited_provider, :scitt, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)]),
+      ],
     )
     given_i_am_authenticated(
-      user: @user
+      user: @user,
     )
   end
 
   def when_i_visit_the_courses_page
     publish_provider_courses_index_page.load(
       provider_code: provider.provider_code,
-      recruitment_cycle_year: provider.recruitment_cycle_year
+      recruitment_cycle_year: provider.recruitment_cycle_year,
     )
   end
 
   def and_i_click_on_add_course
-    click_on 'Add course'
+    click_on "Add course"
     and_i_click_continue
   end
 
   def and_i_choose_a_secondary_course
-    choose 'Secondary'
+    choose "Secondary"
     and_i_select_no_send
     and_i_click_continue
   end
 
   def and_i_choose_a_further_education_course
-    choose 'Further education'
+    choose "Further education"
     and_i_select_no_send
     and_i_click_continue
   end
 
   def and_i_choose_a_primary_course
-    choose 'Primary'
+    choose "Primary"
     and_i_select_no_send
     and_i_click_continue
-    choose 'Primary with English'
+    choose "Primary with English"
     and_i_click_continue
   end
 
   def and_i_select_a_subject
-    select 'Dance', from: 'First subject'
+    select "Dance", from: "First subject"
     and_i_click_continue
   end
 
   def and_i_choose_an_age_range
-    choose '14 to 19'
+    choose "14 to 19"
     and_i_click_continue
   end
 
   def and_i_choose_a_primary_age_range
-    choose '3 to 7'
+    choose "3 to 7"
     and_i_click_continue
   end
 
   def and_i_click_continue
-    click_on 'Continue'
+    click_on "Continue"
   end
 
   def then_i_see_the_degree_awarding_option
     expect(
-      publish_courses_new_outcome_page.qualification_fields.has_undergraduate_degree_with_qts?
+      publish_courses_new_outcome_page.qualification_fields.has_undergraduate_degree_with_qts?,
     ).to be true
     expect(publish_courses_new_outcome_page.qualification_fields.text).to include(
-      'Teacher degree apprenticeship (TDA) with QTS'
+      "Teacher degree apprenticeship (TDA) with QTS",
     )
   end
 
@@ -301,12 +301,12 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def and_i_do_not_see_the_degree_awarding_option
     expect(
-      publish_courses_new_outcome_page.qualification_fields.has_undergraduate_degree_with_qts?
+      publish_courses_new_outcome_page.qualification_fields.has_undergraduate_degree_with_qts?,
     ).to be false
   end
 
   def when_i_choose_a_degree_awarding_qualification
-    choose 'Teacher degree apprenticeship (TDA) with QTS'
+    choose "Teacher degree apprenticeship (TDA) with QTS"
     and_i_click_continue
   end
 
@@ -345,12 +345,12 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def when_i_choose_the_applications_open_date
-    first('input.govuk-radios__input').set(true)
+    first("input.govuk-radios__input").set(true)
     and_i_click_continue
   end
 
   def and_i_choose_the_first_start_date
-    first('input.govuk-radios__input').set(true)
+    first("input.govuk-radios__input").set(true)
     and_i_click_continue
   end
 
@@ -364,36 +364,36 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def and_i_can_not_change_funding_type
     expect(
-      publish_course_confirmation_page.details.funding_type.value.text
-    ).to eq('Salary (apprenticeship)')
+      publish_course_confirmation_page.details.funding_type.value.text,
+    ).to eq("Salary (apprenticeship)")
 
     expect(
-      publish_course_confirmation_page.details.funding_type.text
-    ).not_to include('Change')
+      publish_course_confirmation_page.details.funding_type.text,
+    ).not_to include("Change")
   end
 
   def and_i_can_not_change_study_mode
     expect(
-      publish_course_confirmation_page.details.study_mode.value.text
-    ).to eq('Full time')
+      publish_course_confirmation_page.details.study_mode.value.text,
+    ).to eq("Full time")
 
     expect(
-      publish_course_confirmation_page.details.study_mode.text
-    ).not_to include('Change')
+      publish_course_confirmation_page.details.study_mode.text,
+    ).not_to include("Change")
   end
 
   def and_i_can_not_change_visa_requirements
     expect(
-      publish_course_confirmation_page.details.skilled_visa_requirements.value.text
-    ).to eq('No - cannot sponsor')
+      publish_course_confirmation_page.details.skilled_visa_requirements.value.text,
+    ).to eq("No - cannot sponsor")
 
     expect(
-      publish_course_confirmation_page.details.skilled_visa_requirements.text
-    ).not_to include('Change')
+      publish_course_confirmation_page.details.skilled_visa_requirements.text,
+    ).not_to include("Change")
   end
 
   def when_i_click_on_add_a_course
-    click_on 'Add course'
+    click_on "Add course"
   end
 
   def then_the_tda_course_is_created
@@ -401,15 +401,15 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def and_the_tda_defaults_are_saved
-    expect(course.program_type).to eq('teacher_degree_apprenticeship')
-    expect(course.funding).to eq('apprenticeship')
+    expect(course.program_type).to eq("teacher_degree_apprenticeship")
+    expect(course.funding).to eq("apprenticeship")
     expect(course.can_sponsor_student_visa?).to be false
     expect(course.can_sponsor_skilled_worker_visa?).to be false
     expect(course.additional_degree_subject_requirements).to be false
     expect(course.degree_subject_requirements).to be_nil
-    expect(course.degree_grade).to eq('not_required')
+    expect(course.degree_grade).to eq("not_required")
     expect(course.enrichments.last).to be_present
-    expect(course.enrichments.last.course_length).to eq('4 years')
+    expect(course.enrichments.last.course_length).to eq("4 years")
   end
 
   def and_i_select_no_send
@@ -418,35 +418,35 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
     within('[data-qa="course__study_mode"]') do
-      expect(page).to have_no_link('Change')
+      expect(page).to have_no_link("Change")
     end
 
     within('[data-qa="course__funding_type"]') do
-      expect(page).to have_no_link('Change')
+      expect(page).to have_no_link("Change")
     end
 
     within('[data-qa="course__skilled_worker_visa_sponsorship"]') do
-      expect(page).to have_no_link('Change')
+      expect(page).to have_no_link("Change")
     end
   end
 
   def then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship_on_basic_details
     within('[data-qa="course__study_mode"]') do
-      expect(page).to have_no_link('Change')
+      expect(page).to have_no_link("Change")
     end
 
     within('[data-qa="course__funding"]') do
-      expect(page).to have_no_link('Change')
+      expect(page).to have_no_link("Change")
     end
 
     within('[data-qa="course__can_sponsor_skilled_worker_visa"]') do
-      expect(page).to have_no_link('Change')
+      expect(page).to have_no_link("Change")
     end
   end
 
   def and_i_do_not_see_the_change_link_for_course_length
     within('[data-qa="enrichment__course_length"]') do
-      expect(page).to have_no_link('Change')
+      expect(page).to have_no_link("Change")
     end
   end
 
@@ -475,36 +475,36 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def and_i_add_course_details
     publish_provider_courses_show_page.about_course.find_link(
-      text: 'Change details about this course'
+      text: "Change details about this course",
     ).click
 
-    fill_in 'About this course', with: 'Details about this course'
-    click_on 'Update about this course'
+    fill_in "About this course", with: "Details about this course"
+    click_on "Update about this course"
 
     publish_provider_courses_show_page.how_school_placements_work.find_link(
-      text: 'Change details about how placements work'
+      text: "Change details about how placements work",
     ).click
 
-    fill_in 'How placements work', with: 'School placements information'
-    click_on 'Update how placements work'
+    fill_in "How placements work", with: "School placements information"
+    click_on "Update how placements work"
   end
 
   def and_i_add_salary_information
-    publish_provider_courses_show_page.salary_details.find_link(text: 'Change salary').click
-    publish_course_salary_edit_page.salary_details.set('Some salary details')
+    publish_provider_courses_show_page.salary_details.find_link(text: "Change salary").click
+    publish_course_salary_edit_page.salary_details.set("Some salary details")
     publish_course_salary_edit_page.submit.click
   end
 
   def and_i_add_gcse_requirements
     publish_provider_courses_show_page.gcse.find_link(
-      text: 'Enter GCSE and equivalency test requirements'
+      text: "Enter GCSE and equivalency test requirements",
     ).click
     publish_courses_gcse_requirements_page.pending_gcse_yes_radio.click
     publish_courses_gcse_requirements_page.gcse_equivalency_yes_radio.click
     publish_courses_gcse_requirements_page.english_equivalency.check
     publish_courses_gcse_requirements_page.maths_equivalency.check
-    publish_courses_gcse_requirements_page.additional_requirements.set('Some Proficiency')
-    publish_courses_gcse_requirements_page.save.click
+    publish_courses_gcse_requirements_page.additional_requirements.set("Some Proficiency")
+    publish_courses_gcse_requirements_page.save!.click
   end
 
   def when_i_publish_the_course
@@ -513,7 +513,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def then_the_course_is_published
     expect(publish_provider_courses_show_page.errors.map(&:text)).to eq([])
-    expect(page).to have_content('Your course has been published.')
+    expect(page).to have_content("Your course has been published.")
     expect(course.content_status).to be :published
   end
 
@@ -554,77 +554,77 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def and_i_choose_fee
-    choose 'Fee - no salary'
+    choose "Fee - no salary"
     and_i_click_continue
   end
 
   def and_i_choose_salaried
-    choose 'Salary'
+    choose "Salary"
     and_i_click_continue
   end
 
   def and_i_choose_part_time
-    uncheck 'Full time'
-    check 'Part time'
+    uncheck "Full time"
+    check "Part time"
     and_i_click_continue
   end
 
   def and_i_choose_to_sponsor_a_student_visa
-    choose 'Yes'
+    choose "Yes"
     and_i_click_continue
   end
 
   def and_i_choose_to_sponsor_a_skilled_worker_visa
-    choose('course_can_sponsor_skilled_worker_visa_true')
+    choose("course_can_sponsor_skilled_worker_visa_true")
     and_i_click_continue
   end
 
   def then_i_see_the_correct_attributes_in_the_database_for_fee_paying
     course.reload
     expect(course.part_time?).to be(true)
-    expect(course.funding == 'fee').to be(true)
+    expect(course.funding == "fee").to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(false)
     expect(course.can_sponsor_student_visa).to be(true)
   end
 
   def then_i_see_the_correct_attributes_in_the_database_for_salaried
     course.reload
-    expect(course.study_mode == 'part_time').to be(true)
-    expect(course.funding == 'salary').to be(true)
+    expect(course.study_mode == "part_time").to be(true)
+    expect(course.funding == "salary").to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(true)
     expect(course.can_sponsor_student_visa).to be(false)
   end
 
   def and_the_back_link_points_to_the_confirm_page
-    expect(URI.parse(find_link('Back')[:href]).path).to eq(confirmation_publish_provider_recruitment_cycle_courses_path(
+    expect(URI.parse(find_link("Back")[:href]).path).to eq(confirmation_publish_provider_recruitment_cycle_courses_path(
                                                              provider_code: provider.provider_code,
-                                                             recruitment_cycle_year:
+                                                             recruitment_cycle_year:,
                                                            ))
   end
 
   def and_the_back_link_points_to_the_qualification_page
-    expect(URI.parse(find_link('Back')[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_outcome_path(
+    expect(URI.parse(find_link("Back")[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_outcome_path(
                                                              provider_code: provider.provider_code,
-                                                             recruitment_cycle_year:
+                                                             recruitment_cycle_year:,
                                                            ))
   end
 
   def and_the_back_link_points_to_the_funding_type_page
-    expect(URI.parse(find_link('Back')[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_funding_type_path(
+    expect(URI.parse(find_link("Back")[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_funding_type_path(
                                                              provider_code: provider.provider_code,
-                                                             recruitment_cycle_year:
+                                                             recruitment_cycle_year:,
                                                            ))
   end
 
   def and_the_back_link_points_to_the_study_mode_page
-    expect(URI.parse(find_link('Back')[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_study_mode_path(
+    expect(URI.parse(find_link("Back")[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_study_mode_path(
                                                              provider_code: provider.provider_code,
-                                                             recruitment_cycle_year:
+                                                             recruitment_cycle_year:,
                                                            ))
   end
 
   def when_i_click_back
-    click_on 'Back'
+    click_on "Back"
   end
 
   def then_i_am_on_the_study_mode_page
@@ -636,15 +636,15 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def and_i_add_a_level_requirements
-    click_on 'Enter A levels and equivalency test requirements'
-    choose 'Any subject'
+    click_on "Enter A levels and equivalency test requirements"
+    choose "Any subject"
     and_i_click_continue
-    choose 'No'
+    choose "No"
     and_i_click_continue
-    choose 'Yes'
+    choose "Yes"
     and_i_click_continue
-    choose 'Yes'
-    click_on 'Update A levels'
+    choose "Yes"
+    click_on "Update A levels"
   end
 
   def recruitment_cycle_year

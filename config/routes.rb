@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get :reporting, controller: :reporting
 
   constraints(APIConstraint.new) do
-    get '/', to: redirect('/docs/')
+    get "/", to: redirect("/docs/")
   end
 
   constraints(FindConstraint.new) do

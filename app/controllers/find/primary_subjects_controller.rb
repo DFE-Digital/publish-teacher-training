@@ -19,7 +19,7 @@ module Find
       end
     end
 
-    private
+  private
 
     def initialize_form
       @form = Find::Subjects::PrimaryForm.new(subject_params)

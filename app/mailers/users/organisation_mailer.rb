@@ -8,7 +8,7 @@ module Users
       set_personalisation(
         email_address: recipient.email,
         provider_name: provider.provider_name,
-        accredited_provider_name: accredited_provider.provider_name
+        accredited_provider_name: accredited_provider.provider_name,
       )
 
       mail(to: recipient.email)

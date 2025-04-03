@@ -5,13 +5,13 @@
     <%= govuk_back_link_to(
       details_publish_provider_recruitment_cycle_course_path(
         course.provider_code, course.recruitment_cycle_year, course.course_code
-      )
+      ),
     ) %>
   <% else %>
     <%= govuk_back_link_to(
       subjects_publish_provider_recruitment_cycle_course_path(
         course.provider_code, course.recruitment_cycle_year, course.course_code
-      )
+      ),
     ) %>
   <% end %>
 <% end %>

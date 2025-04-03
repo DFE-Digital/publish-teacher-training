@@ -16,13 +16,13 @@ module Courses
                       provider_code: course.provider_code,
                       course_code: course.course_code,
                       location: @location,
-                      distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil
-                    ), class: 'govuk-link govuk-!-font-size-24') do
+                      distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
+                    ), class: "govuk-link govuk-!-font-size-24") do
         safe_join(
           [
-            content_tag(:span, course.provider_name, class: 'app-search-result__provider-name'),
-            content_tag(:span, course.name_and_code, class: 'app-search-result__course-name')
-          ]
+            content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
+            content_tag(:span, course.name_and_code, class: "app-search-result__course-name"),
+          ],
         )
       end
     end
@@ -31,21 +31,21 @@ module Courses
       return unless search_by_location?
 
       t(
-        '.location_value.distance',
+        ".location_value.distance",
         school_term:,
-        distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, 'mile'), class: 'govuk-!-font-weight-bold'),
-        location: content_tag(:span, sanitize(@location), class: 'govuk-!-font-weight-bold')
+        distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
+        location: content_tag(:span, sanitize(@location), class: "govuk-!-font-weight-bold"),
       ).html_safe
     end
 
     def location_hint
       return if search_by_location?
 
-      t('.location_value.placement_hint_html', school_term:)
+      t(".location_value.placement_hint_html", school_term:)
     end
 
     def fee_key
-      t('.fee_key')
+      t(".fee_key")
     end
 
     def fee_value
@@ -61,31 +61,31 @@ module Courses
 
       if financial_incentive.bursary_amount.present? && financial_incentive.scholarship.present?
         t(
-          '.fee_value.fee.hint.bursaries_and_scholarship_html',
+          ".fee_value.fee.hint.bursaries_and_scholarship_html",
           bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-          scholarship_amount: number_to_currency(financial_incentive.scholarship)
+          scholarship_amount: number_to_currency(financial_incentive.scholarship),
         )
       elsif financial_incentive.bursary_amount.present?
         t(
-          '.fee_value.fee.hint.bursaries_only_html',
-          bursary_amount: number_to_currency(financial_incentive.bursary_amount)
+          ".fee_value.fee.hint.bursaries_only_html",
+          bursary_amount: number_to_currency(financial_incentive.bursary_amount),
         )
       elsif financial_incentive.scholarship.present?
         t(
-          '.fee_value.fee.hint.scholarship_only_html',
-          scholarship_amount: number_to_currency(financial_incentive.scholarship)
+          ".fee_value.fee.hint.scholarship_only_html",
+          scholarship_amount: number_to_currency(financial_incentive.scholarship),
         )
       end
     end
 
     def length_key
-      t('.length_key')
+      t(".length_key")
     end
 
     def length_value(course_length = enrichment.course_length)
       translated_course_length = t(".length_value.#{course_length}", default: course_length)
 
-      [translated_course_length, course.study_mode.humanize.downcase].join(' - ')
+      [translated_course_length, course.study_mode.humanize.downcase].join(" - ")
     end
 
     def show_age_group_row?
@@ -93,7 +93,7 @@ module Courses
     end
 
     def age_group_key
-      t('.age_group_key')
+      t(".age_group_key")
     end
 
     def age_group_value
@@ -101,7 +101,7 @@ module Courses
     end
 
     def qualification_key
-      t('.qualification_key')
+      t(".qualification_key")
     end
 
     def qualification_value
@@ -109,7 +109,7 @@ module Courses
     end
 
     def degree_requirements_key
-      t('.degree_requirements_key')
+      t(".degree_requirements_key")
     end
 
     def degree_requirements_value
@@ -123,7 +123,7 @@ module Courses
     end
 
     def visa_sponsorship_key
-      t('.visa_sponsorship_key')
+      t(".visa_sponsorship_key")
     end
 
     def visa_sponsorship_value
@@ -134,18 +134,18 @@ module Courses
       @location.present? && course.respond_to?(:minimum_distance_to_search_location)
     end
 
-    private
+  private
 
     def school_term
-      t(".location_value.school_term.#{course.funding}", default: t('.location_value.school_term.default'))
+      t(".location_value.school_term.#{course.funding}", default: t(".location_value.school_term.default"))
     end
 
     def uk_fees(fee_uk = enrichment.fee_uk_eu)
-      t('.fee_value.fee.uk_fees_html', value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
+      t(".fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
     end
 
     def international_fees(fee_international = enrichment.fee_international)
-      t('.fee_value.fee.international_fees_html', value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
+      t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
     end
 
     def hide_fee_hint?
@@ -158,7 +158,7 @@ module Courses
       @visa_sponsorship.present?
     end
 
-    PHYSICS_SUBJECT = 'Physics'
+    PHYSICS_SUBJECT = "Physics"
     private_constant :PHYSICS_SUBJECT
 
     def physics?
@@ -166,20 +166,20 @@ module Courses
     end
 
     LANGUAGE_SUBJECTS = [
-      'Ancient Greek',
-      'Ancient Hebrew',
-      'English',
-      'English as a second or other language',
-      'French',
-      'German',
-      'Italian',
-      'Japanese',
-      'Latin',
-      'Mandarin',
-      'Modern Languages',
-      'Modern languages (other)',
-      'Russian',
-      'Spanish'
+      "Ancient Greek",
+      "Ancient Hebrew",
+      "English",
+      "English as a second or other language",
+      "French",
+      "German",
+      "Italian",
+      "Japanese",
+      "Latin",
+      "Mandarin",
+      "Modern Languages",
+      "Modern languages (other)",
+      "Russian",
+      "Spanish",
     ].freeze
     private_constant :LANGUAGE_SUBJECTS
 
@@ -195,10 +195,7 @@ module Courses
       @main_subject ||= course.subjects.find { |subject| subject.id == course.master_subject_id }
     end
 
-    # rubocop:disable Lint/UselessConstantScoping
     NullEnrichment = Struct.new(:course_length, :fee_uk_eu, :fee_international, keyword_init: true)
-    # rubocop:enable Lint/UselessConstantScoping
-
     def enrichment
       @enrichment ||= course.latest_published_enrichment || NullEnrichment.new
     end

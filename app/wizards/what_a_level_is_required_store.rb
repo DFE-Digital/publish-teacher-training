@@ -11,10 +11,10 @@ class WhatALevelIsRequiredStore < DfE::Wizard::Store
       add_a_level_subject_requirement
     end
 
-    course.save
+    course.save!
   end
 
-  private
+private
 
   def update_existing_a_level_subject_requirement
     course.a_level_subject_requirements[existing_a_level_subject_index] = a_level_subject_requirements
@@ -26,7 +26,7 @@ class WhatALevelIsRequiredStore < DfE::Wizard::Store
 
   def existing_a_level_subject_index
     @existing_a_level_subject_index ||= course.a_level_subject_requirements.find_index do |a_level_subject_requirement|
-      a_level_subject_requirement['uuid'] == uuid
+      a_level_subject_requirement["uuid"] == uuid
     end
   end
 
@@ -38,9 +38,9 @@ class WhatALevelIsRequiredStore < DfE::Wizard::Store
     {
       uuid:,
       subject:,
-      minimum_grade_required: minimum_grade_required.presence
-    }.tap do |requirements|
-      requirements[:other_subject] = other_subject if subject == 'other_subject'
-    end.compact
+      minimum_grade_required: minimum_grade_required.presence,
+    }.tap { |requirements|
+      requirements[:other_subject] = other_subject if subject == "other_subject"
+    }.compact
   end
 end

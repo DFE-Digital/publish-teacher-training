@@ -18,13 +18,13 @@ module Support
     def update
       update_form = UpdateProviderForm.new(provider, attributes: update_provider_params)
       if update_form.save
-        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: 'Provider') }
+        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.updated", resource: "Provider") }
       else
         render :edit
       end
     end
 
-    private
+  private
 
     def filtered_providers
       @filtered_providers ||= Support::Filter.call(model_data_scope: find_providers, filter_params:)
@@ -59,16 +59,17 @@ module Support
                                :recruitment_cycle_id,
                                :email,
                                :ukprn,
-                               :telephone, { sites_attributes: %i[code
-                                                                  urn
-                                                                  location_name
-                                                                  address1
-                                                                  address2
-                                                                  address3
-                                                                  town
-                                                                  address4
-                                                                  postcode],
-                                             organisations_attributes: %i[name] }]).merge(recruitment_cycle:)
+                               :telephone,
+                               { sites_attributes: %i[code
+                                                      urn
+                                                      location_name
+                                                      address1
+                                                      address2
+                                                      address3
+                                                      town
+                                                      address4
+                                                      postcode],
+                                 organisations_attributes: %i[name] }]).merge(recruitment_cycle:)
     end
   end
 end

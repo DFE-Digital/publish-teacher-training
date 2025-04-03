@@ -4,7 +4,7 @@ module DfESignInUserHelper
   def sign_in_system_test(user:)
     user_exists_in_dfe_sign_in(user:)
     visit sign_in_path
-    click_on 'Sign in using DfE Sign-in'
+    click_on "Sign in using DfE Sign-in"
   end
 
   def user_exists_in_dfe_sign_in(user:)
@@ -13,46 +13,46 @@ module DfESignInUserHelper
         email: user.email,
         sign_in_user_id: user.sign_in_user_id,
         first_name: user.first_name,
-        last_name: user.last_name
-      )
+        last_name: user.last_name,
+      ),
     )
   end
 
   # Helper to login user for request specs
   def login_user(user)
-    get '/auth/dfe/callback', headers: { 'omniauth.auth' => user_exists_in_dfe_sign_in(user:) }
+    get "/auth/dfe/callback", headers: { "omniauth.auth" => user_exists_in_dfe_sign_in(user:) }
   end
 
-  private
+private
 
   def fake_dfe_sign_in_auth_hash(email:, sign_in_user_id:, first_name:, last_name:)
     {
-      'provider' => 'dfe',
-      'uid' => sign_in_user_id,
-      'info' => {
-        'name' => "#{first_name} #{last_name}",
-        'email' => email,
-        'nickname' => nil,
-        'first_name' => first_name,
-        'last_name' => last_name,
-        'gender' => nil,
-        'image' => nil,
-        'phone' => nil,
-        'urls' => { 'website' => nil }
+      "provider" => "dfe",
+      "uid" => sign_in_user_id,
+      "info" => {
+        "name" => "#{first_name} #{last_name}",
+        "email" => email,
+        "nickname" => nil,
+        "first_name" => first_name,
+        "last_name" => last_name,
+        "gender" => nil,
+        "image" => nil,
+        "phone" => nil,
+        "urls" => { "website" => nil },
       },
-      'credentials' => {
-        'id_token' => 'id_token',
-        'token' => 'DFE_SIGN_IN_TOKEN',
-        'refresh_token' => nil,
-        'expires_in' => 3600,
-        'scope' => 'email openid'
+      "credentials" => {
+        "id_token" => "id_token",
+        "token" => "DFE_SIGN_IN_TOKEN",
+        "refresh_token" => nil,
+        "expires_in" => 3600,
+        "scope" => "email openid",
       },
-      'extra' => {
-        'raw_info' => {
-          'email' => email,
-          'sub' => sign_in_user_id
-        }
-      }
+      "extra" => {
+        "raw_info" => {
+          "email" => email,
+          "sub" => sign_in_user_id,
+        },
+      },
     }
   end
 end

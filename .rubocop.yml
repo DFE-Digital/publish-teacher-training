@@ -1,19 +1,15 @@
 plugins:
-  - rubocop-rails
-  - rubocop-rspec
   - rubocop-factory_bot
-  - rubocop-capybara
   - rubocop-rspec_rails
 
 inherit_from:
-  - ./config/rubocop/layout.yml
-  - ./config/rubocop/lint.yml
-  - ./config/rubocop/metrics.yml
-  - ./config/rubocop/naming.yml
-  - ./config/rubocop/rails.yml
-  - ./config/rubocop/rspec.yml
-  - ./config/rubocop/style.yml
-  - ./config/rubocop/factory_bot.yml
+  - .rubocop_todo.yml
+
+inherit_gem:
+  rubocop-govuk:
+    - config/default.yml
+    - config/rails.yml
+    - config/rspec.yml
 
 inherit_mode:
   merge:
@@ -21,64 +17,3 @@ inherit_mode:
 
 AllCops:
   NewCops: enable
-
-RSpec/AnyInstance:
-  Enabled: false
-
-RSpec/NestedGroups:
-  Max: 4
-
-# Remove after migration
-Naming/PredicateName:
-  Enabled: false
-
-# Remove after we fix offences
-Rails/I18nLocaleTexts:
-  Exclude:
-    - "app/controllers/publish/access_requests_controller.rb"
-    - "app/controllers/publish/courses/draft_rollover_controller.rb"
-    - "app/controllers/publish/courses_controller.rb"
-    - "app/controllers/publish/providers/schools_controller.rb"
-    - "app/controllers/publish/users_check_controller.rb"
-    - "app/controllers/support/providers/users_controller.rb"
-    - "app/forms/publish/about_your_organisation_form.rb"
-    - "app/forms/publish/degree_grade_form.rb"
-    - "app/forms/publish/degree_start_form.rb"
-    - "app/forms/publish/gcse_requirements_form.rb"
-    - "app/forms/publish/initial_request_form.rb"
-    - "app/forms/publish/school_form.rb"
-    - "app/forms/publish/notification_form.rb"
-    - "app/forms/publish/provider_contact_form.rb"
-    - "app/forms/publish/provider_skilled_worker_visa_form.rb"
-    - "app/forms/publish/provider_student_visa_form.rb"
-    - "app/forms/publish/provider_visa_form.rb"
-    - "app/forms/publish/repeat_request_form.rb"
-    - "app/forms/publish/subject_requirement_form.rb"
-    - "app/models/provider.rb"
-    - "app/models/site.rb"
-    - "app/models/site.rb"
-    - "app/models/user.rb"
-    - "spec/validators/reference_number_format_validator_spec.rb"
-    - "app/controllers/publish/users_edit_check_controller.rb"
-    - "app/controllers/support/courses_controller.rb"
-    - "app/controllers/support/providers/users_check_controller.rb"
-
-Style/HashSyntax:
-  Exclude:
-    - "docs/lib/govuk_tech_docs/open_api/renderer.rb"
-
-Style/MapIntoArray:
-  Exclude:
-    - "docs/lib/govuk_tech_docs/open_api/renderer.rb"
-
-Naming/BlockForwarding:
-  Exclude:
-    - "docs/lib/govuk_tech_docs/open_api/extension.rb"
-
-RSpec/NoExpectationExample:
-  Exclude:
-    - "spec/features/**/*"
-    - "spec/system/**/*"
-
-RSpec/MultipleMemoizedHelpers:
-  Max: 29

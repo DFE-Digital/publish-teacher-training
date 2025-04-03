@@ -44,7 +44,7 @@
             title_text: "Success",
             success: true,
             title_id: "success-message",
-            html_attributes: { role: "alert" }
+            html_attributes: { role: "alert" },
           ) do |notification_banner| %>
             <% notification_banner.with_heading(text: flash[:success]) %>
           <% end %>
@@ -61,8 +61,8 @@
       <%= render(
         Find::FeedbackComponent.new(
           path: request.env["PATH_INFO"],
-          controller: params[:controller]
-        )
+          controller: params[:controller],
+        ),
       ) %>
     <% end %>
 

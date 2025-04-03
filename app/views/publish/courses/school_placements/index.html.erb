@@ -1,7 +1,7 @@
 <%= content_for :page_title do %>
   <%= t(
     "publish.providers.courses.placements.heading",
-    provider_name: @course.provider_name
+    provider_name: @course.provider_name,
   ) %>
 <% end %>
 <% content_for :before_content do %>
@@ -9,13 +9,13 @@
     href: preview_publish_provider_recruitment_cycle_course_path(
       @course.provider_code,
       @course.recruitment_cycle_year,
-      @course.course_code
+      @course.course_code,
     ),
     text: t(
       "publish.providers.courses.placements.back",
       course_name: @course.name,
-      course_code: @course.course_code
-    )
+      course_code: @course.course_code,
+    ),
   ) %>
 <% end %>
 

@@ -8,9 +8,9 @@ class AuthenticationService
   end
 
   class << self
-    DFE_SIGNIN = 'dfe_signin'
-    PERSONA = 'persona'
-    MAGIC_LINK = 'magic_link'
+    DFE_SIGNIN = "dfe_signin"
+    PERSONA = "persona"
+    MAGIC_LINK = "magic_link"
 
     def mode
       case Settings.authentication.mode
@@ -43,7 +43,7 @@ class AuthenticationService
     user
   end
 
-  private
+private
 
   attr_reader :logger
 
@@ -54,24 +54,24 @@ class AuthenticationService
       algorithm: Settings.authentication.algorithm,
       audience: Settings.authentication.audience,
       issuer: Settings.authentication.issuer,
-      subject: Settings.authentication.subject
+      subject: Settings.authentication.subject,
     )
   end
 
   def email_from_token
-    decoded_token['email']&.downcase
+    decoded_token["email"]&.downcase
   end
 
   def sign_in_user_id_from_token
-    decoded_token['sign_in_user_id']
+    decoded_token["sign_in_user_id"]
   end
 
   def first_name_from_token
-    decoded_token['first_name']
+    decoded_token["first_name"]
   end
 
   def last_name_from_token
-    decoded_token['last_name']
+    decoded_token["last_name"]
   end
 
   def update_user_information
@@ -84,12 +84,12 @@ class AuthenticationService
 
   def find_user_by_email
     if email_from_token.blank?
-      log_message(:debug, user, 'No email in token')
+      log_message(:debug, user, "No email in token")
       return
     end
 
-    if (user = User.find_by('lower(email) = ?', email_from_token))
-      log_message(:info, user, 'User found by email address')
+    if (user = User.find_by("lower(email) = ?", email_from_token))
+      log_message(:info, user, "User found by email address")
     end
 
     user
@@ -97,12 +97,12 @@ class AuthenticationService
 
   def find_user_by_sign_in_user_id
     if sign_in_user_id_from_token.blank?
-      log_message(:debug, user, 'No sign_in_user_id in token')
+      log_message(:debug, user, "No sign_in_user_id in token")
       return
     end
 
     if (user = User.find_by(sign_in_user_id: sign_in_user_id_from_token))
-      log_message(:info, user, 'User found from sign_in_user_id in token', { sign_in_user_id: sign_in_user_id_from_token })
+      log_message(:info, user, "User found from sign_in_user_id in token", { sign_in_user_id: sign_in_user_id_from_token })
     end
 
     user
@@ -123,12 +123,12 @@ class AuthenticationService
 
     if (duplicate_user = find_user_by_email)
       # Change: bob@gmail.com => bob_1634828853_gmail.com@example.com
-      new_email = "#{duplicate_user.email.gsub(/@/, "_#{Time.now.to_i}_")}@example.com"
+      new_email = "#{duplicate_user.email.gsub(/@/, "_#{Time.zone.now.to_i}_")}@example.com"
 
       duplicate_user.update!(email: new_email)
     end
 
-    log_message(:debug, user, 'Updating user email for', { new_email_md5: "MD5:#{obfuscate_email(email_from_token)}" })
+    log_message(:debug, user, "Updating user email for", { new_email_md5: "MD5:#{obfuscate_email(email_from_token)}" })
     user.email = email_from_token
   end
 
@@ -140,7 +140,7 @@ class AuthenticationService
 
   def update_user_first_name
     if first_name_from_token.blank?
-      log_message(:debug, user, 'No first name in token')
+      log_message(:debug, user, "No first name in token")
       return
     end
 
@@ -149,7 +149,7 @@ class AuthenticationService
 
   def update_user_last_name
     if last_name_from_token.blank?
-      log_message(:debug, user, 'No last name in token')
+      log_message(:debug, user, "No last name in token")
       return
     end
 
@@ -158,15 +158,15 @@ class AuthenticationService
 
   def log_safe_user(user)
     user.slice(
-      'id',
-      'state',
-      'first_login_date_utc',
-      'last_login_date_utc',
-      'sign_in_user_id',
-      'welcome_email_date_utc',
-      'invite_date_utc',
-      'accept_terms_date_utc'
-    ).merge('email_md5' => obfuscate_email(user.email))
+      "id",
+      "state",
+      "first_login_date_utc",
+      "last_login_date_utc",
+      "sign_in_user_id",
+      "welcome_email_date_utc",
+      "invite_date_utc",
+      "accept_terms_date_utc",
+    ).merge("email_md5" => obfuscate_email(user.email))
   end
 
   def obfuscate_email(email)

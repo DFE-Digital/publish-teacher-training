@@ -1,37 +1,37 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Canonical tags', :with_find_constraint do
+feature "Canonical tags", :with_find_constraint do
   before do
     given_i_have_courses
     and_i_visit_the_home_page
   end
 
-  describe 'Canonical tags on Find pages' do
-    scenario 'without query params' do
+  describe "Canonical tags on Find pages" do
+    scenario "without query params" do
       then_the_page_contains_canonical_tags_with_no_query_params
     end
 
-    scenario 'with query parameters' do
+    scenario "with query parameters" do
       and_i_select_the_primary_courses
       then_the_page_contains_canonical_tags_without_query_params
     end
 
-    scenario 'when visiting a course' do
+    scenario "when visiting a course" do
       when_i_visit_the_course_page
       then_the_page_contains_canonical_tags_for_a_course
     end
 
-    scenario 'when visiting a course and selecting an anchor tag' do
+    scenario "when visiting a course and selecting an anchor tag" do
       when_i_visit_the_course_page
       and_i_click_an_anchor_tag
       then_the_page_contains_canonical_tags_for_a_course
     end
   end
 
-  describe 'Canonical tags on Publish pages', :with_publish_constraint do
-    scenario 'Publish page contains canonical tags' do
+  describe "Canonical tags on Publish pages", :with_publish_constraint do
+    scenario "Publish page contains canonical tags" do
       and_i_visit_the_publish_page
       then_the_publish_page_contains_canonical_tags
     end
@@ -40,30 +40,30 @@ feature 'Canonical tags', :with_find_constraint do
   def when_i_visit_the_course_page
     visit find_course_path(
       provider_code: @mathematics_course.provider.provider_code,
-      course_code: @mathematics_course.course_code
+      course_code: @mathematics_course.course_code,
     )
   end
 
   def given_i_have_courses
     provider = create(:provider)
-    @mathematics_course = create(:course, :published_postgraduate, :secondary, provider:, name: 'Mathematics', subjects: [find_or_create(:secondary_subject, :mathematics)])
+    @mathematics_course = create(:course, :published_postgraduate, :secondary, provider:, name: "Mathematics", subjects: [find_or_create(:secondary_subject, :mathematics)])
   end
 
   def and_i_visit_the_home_page
-    visit '/'
+    visit "/"
   end
 
   def and_i_visit_the_publish_page
-    visit '/sign-in/'
+    visit "/sign-in/"
   end
 
   def and_i_select_the_primary_courses
-    select 'Primary', from: 'Subject'
-    click_link_or_button 'Search'
+    select "Primary", from: "Subject"
+    click_link_or_button "Search"
   end
 
   def and_i_click_an_anchor_tag
-    click_link_or_button 'Where you will train'
+    click_link_or_button "Where you will train"
   end
 
   def then_the_page_contains_canonical_tags_for_a_course

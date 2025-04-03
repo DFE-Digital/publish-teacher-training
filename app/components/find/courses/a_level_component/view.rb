@@ -19,17 +19,17 @@ module Find
 
         def pending_a_level_summary_content
           if course.accept_pending_a_level?
-            I18n.t('find.courses.a_level.consider_pending_a_level')
+            I18n.t("find.courses.a_level.consider_pending_a_level")
           else
-            I18n.t('find.courses.a_level.not_consider_pending_a_level')
+            I18n.t("find.courses.a_level.not_consider_pending_a_level")
           end
         end
 
         def a_level_equivalency_summary_content
           if course.accept_a_level_equivalency?
-            I18n.t('find.courses.a_level.consider_a_level_equivalency')
+            I18n.t("find.courses.a_level.consider_a_level_equivalency")
           else
-            I18n.t('find.courses.a_level.not_consider_a_level_equivalency')
+            I18n.t("find.courses.a_level.not_consider_a_level_equivalency")
           end
         end
       end

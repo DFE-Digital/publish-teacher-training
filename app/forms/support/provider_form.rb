@@ -46,7 +46,7 @@ module Support
 
     validates :urn, presence: true, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :invalid }, if: -> { !accredited? && lead_school? }
 
-    alias compute_fields new_attributes
+    alias_method :compute_fields, :new_attributes
 
     def attributes_to_save
       new_attributes.merge(organisations_attributes: [{ name: provider_name }])
@@ -61,7 +61,7 @@ module Support
       provider_type&.to_sym == :lead_school
     end
 
-    private
+  private
 
     delegate :providers, to: :recruitment_cycle
 

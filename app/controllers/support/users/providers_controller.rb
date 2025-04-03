@@ -8,7 +8,7 @@ module Support
         @pagy, @providers = pagy(providers.order(:provider_name))
       end
 
-      private
+    private
 
       def user
         @user ||= User.find(params[:user_id])

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Opting into notifications', { can_edit_current_and_next_cycles: false } do
+feature "Opting into notifications", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_an_accredited_provider_user
     when_i_visit_accredited_provider_page
@@ -12,14 +12,14 @@ feature 'Opting into notifications', { can_edit_current_and_next_cycles: false }
     then_neither_radio_button_is_selected
   end
 
-  scenario 'user sets notification preferences for the first time' do
+  scenario "user sets notification preferences for the first time" do
     and_i_select_yes
     then_i_should_see_my_preferences_have_been_saved
     and_the_users_preference_is_set
     then_i_should_be_redirected_to_the_courses_index_path
   end
 
-  scenario 'user is shown an error if they submit without selection' do
+  scenario "user is shown an error if they submit without selection" do
     and_i_submit
     then_i_should_see_an_error_message
   end
@@ -73,7 +73,7 @@ feature 'Opting into notifications', { can_edit_current_and_next_cycles: false }
 
   def then_i_should_see_an_error_message
     expect(publish_course_study_mode_edit_page.error_messages).to include(
-      'Please select one option'
+      "Please select one option",
     )
   end
 

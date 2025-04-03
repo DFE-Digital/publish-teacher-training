@@ -4,7 +4,7 @@
 
 RSpec.configure do |config|
   config.around do |example|
-    magic_link = Settings.authentication.mode == 'magic_link'
+    magic_link = Settings.authentication.mode == "magic_link"
 
     if magic_link == true
       old_value = Settings.authentication.mode

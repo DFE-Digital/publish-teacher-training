@@ -5,8 +5,8 @@
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
         @provider.recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     ) %>
 <% end %>
 
@@ -17,7 +17,7 @@
           @provider.provider_code,
           @provider.recruitment_cycle_year,
           @course.course_code,
-          uuid: @wizard.current_step.uuid
+          uuid: @wizard.current_step.uuid,
         ), method: :delete do |form| %>
         <%= form.govuk_error_summary %>
 

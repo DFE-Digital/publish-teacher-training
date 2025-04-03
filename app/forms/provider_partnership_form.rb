@@ -12,13 +12,13 @@ class ProviderPartnershipForm < Form
 
   validates :description, presence: true, words_count: { maximum: 100, message: :too_long }
 
-  alias compute_fields new_attributes
+  alias_method :compute_fields, :new_attributes
 
   def accredited_provider
     @accredited_provider ||= Provider.find(accredited_provider_id)
   end
 
-  private
+private
 
   def assign_attributes_to_model
     if model.persisted?

@@ -11,21 +11,21 @@ module Find
 
     def history
       if last_updated
-        formatted_date = DateTime.parse(last_updated).to_fs(:govuk_date_and_time)
+        formatted_date = Time.zone.parse(last_updated).to_fs(:govuk_date_and_time)
         "Changed to #{status} at #{formatted_date}"
       else
-        'This flag has not been updated'
+        "This flag has not been updated"
       end
     end
 
-    private
+  private
 
     def last_updated
       FeatureFlag.last_updated(@feature_name)
     end
 
     def status
-      FeatureFlag.active?(@feature_name) ? 'active' : 'inactive'
+      FeatureFlag.active?(@feature_name) ? "active" : "inactive"
     end
   end
 end

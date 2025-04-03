@@ -5,13 +5,13 @@
   <%= govuk_back_link(
     href: x_find_course_page_url(
       provider_code: @course.provider_code,
-      course_code: @course.course_code
+      course_code: @course.course_code,
     ),
     text: t(
       ".back",
       course_name: @course.name,
-      course_code: @course.course_code
-    )
+      course_code: @course.course_code,
+    ),
   ) %>
 <% end %>
 
@@ -22,7 +22,7 @@
     <p class="govuk-body">
       <%= govuk_link_to(
         t(".contact", provider_name: @course.provider_name),
-        find_provider_path(@course.provider_code, @course.course_code)
+        find_provider_path(@course.provider_code, @course.course_code),
       ) %>
     </p>
   </div>

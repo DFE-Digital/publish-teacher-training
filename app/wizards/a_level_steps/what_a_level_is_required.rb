@@ -9,7 +9,7 @@ module ALevelSteps
     Subject = Struct.new(:name, keyword_init: true)
 
     validates :subject, presence: true
-    validates :other_subject, presence: true, if: -> { subject == 'other_subject' }
+    validates :other_subject, presence: true, if: -> { subject == "other_subject" }
     validates :minimum_grade_required, chars_count: { maximum: MAXIMUM_GRADE_CHARACTERS }, allow_blank: true
 
     def self.permitted_params

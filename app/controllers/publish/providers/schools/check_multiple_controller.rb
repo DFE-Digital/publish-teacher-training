@@ -33,11 +33,11 @@ module Publish
 
           removed_school_name = GiasSchool.find_by(urn: params[:urn]).name
 
-          flash.now[:success_with_body] = { 'title' => t('.school_removed'), 'body' => removed_school_name }
+          flash.now[:success_with_body] = { "title" => t(".school_removed"), "body" => removed_school_name }
           render :show
         end
 
-        private
+      private
 
         def set_urns_and_schools
           load_schools
@@ -65,7 +65,7 @@ module Publish
             end
           end
         end
-        alias load_schools schools
+        alias_method :load_schools, :schools
 
         def unfound_urns
           @unfound_urns = urn_service[:unfound_urns]
