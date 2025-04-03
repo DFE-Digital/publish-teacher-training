@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View providers" do
+RSpec.describe "View providers" do
   let(:user) { create(:user, :admin) }
 
   before do

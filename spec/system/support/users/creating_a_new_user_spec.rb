@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Creating a new user" do
+RSpec.describe "Creating a new user" do
   let(:user) { create(:user, :admin) }
 
   before do
