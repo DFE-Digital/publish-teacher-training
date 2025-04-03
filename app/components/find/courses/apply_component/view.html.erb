@@ -1,7 +1,7 @@
 <div class="govuk-!-margin-bottom-8" id="section-apply">
   <% if Find::CycleTimetable.mid_cycle? %>
     <% if application_status_open? %>
-      <p class="govuk-body">
+      <p class="govuk-body govuk-!-margin-0">
         <%= govuk_start_button(
               text: "Apply for this course",
               href: apply_path,
@@ -10,6 +10,11 @@
               }
             ) %>
       </p>
+      <% if show_application_deadline? %>
+        <p class="govuk-body">
+          <%= t(".visa_sponsorship_deadline_notice_html", application_deadline:) %>
+        </p>
+      <% end %>
     <% else %>
       <%= govuk_warning_text(text: t(".not_accepting_applications")) %>
     <% end %>
