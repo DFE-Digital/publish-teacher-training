@@ -7,9 +7,10 @@
       <%= t(".title") %>
     </h1>
 
-    <%= govuk_button_link_to t(".add_school"), search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
-
-    <%= govuk_link_to("Add multiple schools", new_publish_provider_recruitment_cycle_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") %>
+    <div class="govuk-button-group">
+      <%= govuk_button_link_to t(".add_school"), search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
+      <%= govuk_link_to("Add multiple schools", new_publish_provider_recruitment_cycle_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") %>
+    </div>
 
     <%= render Publish::Providers::SchoolPlacements::ExplainerComponent.new %>
 
