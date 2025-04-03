@@ -9,7 +9,7 @@ module CopyCourseContent
     end
   end
 
-  private
+private
 
   def copy_content_check(fields)
     fetch_course_list_to_copy_from
@@ -33,7 +33,7 @@ module CopyCourseContent
     @source_course = ::Courses::Fetch.by_code(
       provider_code: params[:provider_code],
       course_code: params[:copy_from],
-      recruitment_cycle_year: params[:recruitment_cycle_year]
+      recruitment_cycle_year: params[:recruitment_cycle_year],
     )
   end
 

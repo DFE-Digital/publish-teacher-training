@@ -6,7 +6,7 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    private
+  private
 
     def compute_fields
       { study_site_ids: course.study_site_ids }.merge(new_attributes)

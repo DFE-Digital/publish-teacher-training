@@ -9,10 +9,10 @@ FactoryBot.define do
     town { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
-    region_code { 'london' }
+    region_code { "london" }
     urn { Faker::Number.number(digits: [5, 6].sample) }
     uuid { Faker::Internet.uuid }
-    site_type { 'school' }
+    site_type { "school" }
 
     sequence(:code) { |n| "A#{n}" }
 
@@ -23,7 +23,7 @@ FactoryBot.define do
     end
 
     trait :study_site do
-      site_type { 'study_site' }
+      site_type { "study_site" }
     end
 
     after(:build) do |site, evaluator|

@@ -30,17 +30,17 @@ module Support
       def destroy
         site.destroy!
 
-        redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.deleted', resource: flash_resource) }
+        redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
       end
 
-      private
+    private
 
       def provider
         @provider ||= recruitment_cycle.providers.find(params[:provider_id])
       end
 
       def flash_resource
-        @flash_resource ||= 'School'
+        @flash_resource ||= "School"
       end
 
       def site_params(param_form_key)

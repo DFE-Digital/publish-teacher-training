@@ -13,7 +13,7 @@ module PagyPagination
     pagy_results.second
   end
 
-  private
+private
 
   attr_accessor :pagy_results
 
@@ -24,7 +24,7 @@ module PagyPagination
       first: meta[:first_url],
       last: meta[:last_url],
       prev: meta[:prev].nil? ? nil : meta[:prev_url],
-      next: meta[:next].nil? ? nil : meta[:next_url]
+      next: meta[:next].nil? ? nil : meta[:next_url],
     }
   end
 

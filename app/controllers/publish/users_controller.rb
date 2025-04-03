@@ -45,11 +45,11 @@ module Publish
 
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
-      flash[:success] = I18n.t('success.user_removed')
+      flash[:success] = I18n.t("success.user_removed")
       redirect_to publish_provider_users_path(params[:provider_code])
     end
 
-    private
+  private
 
     def cycle_year
       session[:cycle_year] || params[:recruitment_cycle_year] || params[:year] || Settings.current_recruitment_cycle_year

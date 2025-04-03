@@ -19,7 +19,7 @@ module Publish
         @about_this_course_form = CourseAboutThisCourseForm.new(course_enrichment, params: about_params)
 
         if @about_this_course_form.save!
-          course_updated_message I18n.t('publish.providers.about_course.edit.about_this_course') unless goto_preview?
+          course_updated_message I18n.t("publish.providers.about_course.edit.about_this_course") unless goto_preview?
 
           redirect_to redirect_path
         else
@@ -28,7 +28,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def about_params
         params.require(param_form_key)
@@ -49,13 +49,13 @@ module Publish
           preview_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
         else
           publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
         end
       end

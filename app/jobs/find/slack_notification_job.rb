@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'http'
+require "http"
 
 module Find
   class SlackNotificationJob < ApplicationJob
-    SLACK_CHANNEL = '#twd_findpub_tech'
+    SLACK_CHANNEL = "#twd_findpub_tech"
 
     def perform(text, url = nil)
       @webhook_url = Settings.STATE_CHANGE_SLACK_URL
@@ -14,7 +14,7 @@ module Find
       post_to_slack message
     end
 
-    private
+  private
 
     def hyperlink(text, url)
       "<#{url}|#{text}>"
@@ -22,11 +22,11 @@ module Find
 
     def post_to_slack(text)
       payload = {
-        username: 'Find teacher training courses',
+        username: "Find teacher training courses",
         channel: SLACK_CHANNEL,
         text:,
         mrkdwn: true,
-        icon_emoji: ':livecanary:'
+        icon_emoji: ":livecanary:",
       }
 
       response = HTTP.post(@webhook_url, body: payload.to_json)

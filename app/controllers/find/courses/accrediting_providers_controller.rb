@@ -7,7 +7,7 @@ module Find
         @course = provider.courses.includes(
           :enrichments,
           subjects: [:financial_incentive],
-          site_statuses: [:site]
+          site_statuses: [:site],
         ).find_by!(course_code: params[:course_code]&.upcase).decorate
 
         render_not_found if @course.accrediting_provider.blank? || !@course.is_published?

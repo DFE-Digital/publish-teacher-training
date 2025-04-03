@@ -4,7 +4,7 @@ class ProviderDecorator < ApplicationDecorator
   delegate_all
 
   def accredited_bodies
-    object.accredited_bodies.sort_by { |provider| provider['provider_name'] }.map do |provider|
+    object.accredited_bodies.sort_by { |provider| provider["provider_name"] }.map do |provider|
       Struct.new(:provider_name, :provider_code, :description, keyword_init: true).new(provider)
     end
   end
@@ -12,11 +12,11 @@ class ProviderDecorator < ApplicationDecorator
   def website
     return if object.website.blank?
 
-    object.website.start_with?('http') ? object.website : "http://#{object.website}"
+    object.website.start_with?("http") ? object.website : "http://#{object.website}"
   end
 
   def full_address
-    address_lines.map { |line| ERB::Util.html_escape(line) }.join('<br> ').html_safe
+    address_lines.map { |line| ERB::Util.html_escape(line) }.join("<br> ").html_safe
   end
 
   def name_and_code
@@ -27,7 +27,7 @@ class ProviderDecorator < ApplicationDecorator
     "#{object.provider_name_was} (#{object.provider_code})"
   end
 
-  private
+private
 
   def address_lines
     [
@@ -36,7 +36,7 @@ class ProviderDecorator < ApplicationDecorator
       object.address3,
       object.town,
       object.address4,
-      object.postcode
+      object.postcode,
     ].compact_blank
   end
 end

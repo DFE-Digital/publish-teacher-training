@@ -4,7 +4,7 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
   attr_reader :a_level_subject_requirement
 
   MINIMUM_GRADES = %w[A B C D E].freeze
-  MAX_GRADE = 'A*'
+  MAX_GRADE = "A*"
   IN_WORDS = %w[zero one two three four].freeze # Avoiding the need to add a gem number.in_words for a simple conversion
 
   def initialize(a_level_subject_requirement)
@@ -46,18 +46,18 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
   end
 
   def grade(short_description: false)
-    return '' if minimum_grade.blank?
+    return "" if minimum_grade.blank?
 
     " - #{grade_description(short_description:)}"
   end
 
   def grade_description(short_description:)
-    return I18n.t('a_level_grades.max_grade').to_s if max_grade?
+    return I18n.t("a_level_grades.max_grade").to_s if max_grade?
 
     if minimum_grade? && short_description.present?
-      I18n.t('a_level_grades.minimum_grade', minimum_grade:).to_s
+      I18n.t("a_level_grades.minimum_grade", minimum_grade:).to_s
     elsif minimum_grade? && short_description.blank?
-      I18n.t('a_level_grades.minimum_grade_or_above', minimum_grade:).to_s
+      I18n.t("a_level_grades.minimum_grade_or_above", minimum_grade:).to_s
     else
       minimum_grade.to_s
     end
@@ -72,18 +72,18 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
   end
 
   def other_subject?
-    subject == 'other_subject'
+    subject == "other_subject"
   end
 
   def grade_hint
     if minimum_grade?
       "#{I18n.t('course.a_level_steps/a_level_equivalencies.or_above')} #{I18n.t('course.a_level_steps/a_level_equivalencies.suffix')}"
     else
-      I18n.t('course.a_level_steps/a_level_equivalencies.suffix')
+      I18n.t("course.a_level_steps/a_level_equivalencies.suffix")
     end
   end
 
-  private
+private
 
   def minimum_grade
     a_level_subject_requirement[:minimum_grade_required]

@@ -3,10 +3,10 @@
 module Publish
   module Courses
     class ApprenticeshipController < FundingTypeController
-      private
+    private
 
       def errors
-        params.dig(:course, :funding_type) ? {} : { funding_type: ['Select if this is a teaching apprenticeship'] }
+        params.dig(:course, :funding_type) ? {} : { funding_type: ["Select if this is a teaching apprenticeship"] }
       end
 
       def current_step
@@ -14,7 +14,7 @@ module Publish
       end
 
       def section_key
-        'Teaching apprenticeship'
+        "Teaching apprenticeship"
       end
     end
   end

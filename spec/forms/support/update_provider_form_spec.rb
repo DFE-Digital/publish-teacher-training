@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Support
   describe UpdateProviderForm, type: :model do
@@ -10,11 +10,11 @@ module Support
 
     subject { update_provider_form }
 
-    describe '#save' do
-      context 'provider is changed from accredited_provider to not accredited_provider' do
+    describe "#save" do
+      context "provider is changed from accredited_provider to not accredited_provider" do
         let(:attributes) { { accredited: false } }
 
-        it 'removes the accredited_provider_number' do
+        it "removes the accredited_provider_number" do
           expect { subject.save }.to change(provider.reload, :accredited_provider_number).from(provider.accredited_provider_number).to(nil)
         end
       end

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Editing how placements work', { can_edit_current_and_next_cycles: false } do
-  scenario 'I can update some information about the course' do
+feature "Editing how placements work", { can_edit_current_and_next_cycles: false } do
+  scenario "I can update some information about the course" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_publish_course_information_edit_page
@@ -15,7 +15,7 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     and_the_course_information_is_updated
   end
 
-  scenario 'I see errors when updating with invalid data' do
+  scenario "I see errors when updating with invalid data" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_publish_course_information_edit_page
@@ -26,7 +26,7 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     then_i_see_an_error_message_about_entering_data
   end
 
-  scenario 'I can view additional guidance for this section when provider has selectable school toggle active' do
+  scenario "I can view additional guidance for this section when provider has selectable school toggle active" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     and_school_placement_is_selectable
@@ -35,7 +35,7 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     then_i_see_selectable_school_placement_guidance
   end
 
-  scenario 'I can view additional guidance for this section when course is salaried' do
+  scenario "I can view additional guidance for this section when course is salaried" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_salaried_course_i_want_to_edit
     and_school_placement_is_not_selectable
@@ -44,7 +44,7 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     then_i_see_salaried_course_school_placement_guidance
   end
 
-  scenario 'I can view additional guidance for this section when course is fee based' do
+  scenario "I can view additional guidance for this section when course is fee based" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_fee_based_course_i_want_to_edit
     and_school_placement_is_not_selectable
@@ -53,17 +53,17 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     then_i_see_fee_based_course_school_placement_guidance
   end
 
-  private
+private
 
   def and_i_click_to_see_more_guidance
-    page.find('span', text: 'See what we include in this section').click
+    page.find("span", text: "See what we include in this section").click
   end
 
   def then_i_see_markdown_formatting_guidance
-    page.find('span', text: 'Help formatting your text')
-    expect(page).to have_content 'How to format your text'
-    expect(page).to have_content 'How to create a link'
-    expect(page).to have_content 'How to create bullet points'
+    page.find("span", text: "Help formatting your text")
+    expect(page).to have_content "How to format your text"
+    expect(page).to have_content "How to create a link"
+    expect(page).to have_content "How to create bullet points"
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -98,32 +98,32 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     visit school_placements_publish_provider_recruitment_cycle_course_path(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
-      code: @course.course_code
+      code: @course.course_code,
     )
   end
 
   def when_i_enter_school_placements_information
-    @school_placements = 'This is a new school placements'
+    @school_placements = "This is a new school placements"
 
-    fill_in 'How placements work', with: @school_placements
+    fill_in "How placements work", with: @school_placements
   end
 
   def and_i_submit_with_too_many_words
-    fill_in 'How placements work', with: Faker::Lorem.sentence(word_count: 351)
+    fill_in "How placements work", with: Faker::Lorem.sentence(word_count: 351)
     and_i_submit
   end
 
   def and_i_submit_without_any_data
-    fill_in 'How placements work', with: ''
+    fill_in "How placements work", with: ""
     and_i_submit
   end
 
   def and_i_submit
-    click_on 'Update how placements work'
+    click_on "Update how placements work"
   end
 
   def then_i_see_a_success_message
-    expect(page).to have_content 'How placements work updated'
+    expect(page).to have_content "How placements work updated"
   end
 
   def and_the_course_information_is_updated
@@ -133,32 +133,32 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
   end
 
   def then_i_see_an_error_message_about_reducing_word_count
-    expect(page).to have_content('Reduce the word count for how placements work').twice
+    expect(page).to have_content("Reduce the word count for how placements work").twice
   end
 
   def then_i_see_an_error_message_about_entering_data
-    expect(page).to have_content('Enter details about how placements work').twice
+    expect(page).to have_content("Enter details about how placements work").twice
   end
 
   def then_i_see_selectable_school_placement_guidance
     expect(page).to have_content(
-      'The training provider will contact you to discuss your choice to help them select a location that suits you.'
+      "The training provider will contact you to discuss your choice to help them select a location that suits you.",
     )
-    expect(page).to have_content('Find out more about how school placements work')
+    expect(page).to have_content("Find out more about how school placements work")
   end
 
   def then_i_see_salaried_course_school_placement_guidance
     expect(page).to have_content(
-      'Check with the provider before applying. They may require you to find your own school or want to discuss your situation to help them choose a school you can travel to.'
+      "Check with the provider before applying. They may require you to find your own school or want to discuss your situation to help them choose a school you can travel to.",
     )
-    expect(page).to have_no_content('Find out more about how school placements work')
+    expect(page).to have_no_content("Find out more about how school placements work")
   end
 
   def then_i_see_fee_based_course_school_placement_guidance
     expect(page).to have_content(
-      'The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.'
+      "The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.",
     )
-    expect(page).to have_content('Find out more about how school placements work')
+    expect(page).to have_content("Find out more about how school placements work")
   end
 
   def provider

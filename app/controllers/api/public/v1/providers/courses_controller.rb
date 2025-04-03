@@ -8,7 +8,7 @@ module API
           def index
             render jsonapi: paginate(courses),
                    include: include_param,
-                   meta: { count: courses.count('course.id') },
+                   meta: { count: courses.count("course.id") },
                    class: API::Public::V1::SerializerService.call
           end
 
@@ -18,7 +18,7 @@ module API
                    class: API::Public::V1::SerializerService.call
           end
 
-          private
+        private
 
           def courses
             @courses ||= APICourseSearchService.call(filter: params[:filter],
@@ -34,7 +34,7 @@ module API
           end
 
           def include_param
-            params.fetch(:include, '')
+            params.fetch(:include, "")
           end
         end
       end

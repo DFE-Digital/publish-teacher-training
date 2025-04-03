@@ -9,7 +9,7 @@ class AccreditingProviderEnrichment
   validates :Description, words_count: { maximum: 100 }
 
   def initialize(attributes = {})
-    super(attributes.with_indifferent_access.slice('UcasProviderCode', 'Description'))
+    super(attributes.with_indifferent_access.slice("UcasProviderCode", "Description"))
   end
 
   class ArraySerializer

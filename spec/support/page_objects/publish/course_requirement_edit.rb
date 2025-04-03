@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_relative '../sections/error_link'
-require_relative '../sections/copy_content'
+require_relative "../sections/error_link"
+require_relative "../sections/copy_content"
 
 module PageObjects
   module Publish
     class CourseRequirementEdit < PageObjects::Base
-      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/requirements'
+      set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/requirements"
 
-      sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
+      sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
 
       element :copy_content_warning, '[data-qa="copy-course-warning"]'
       element :use_content, '[data-qa="course__use_content"]'

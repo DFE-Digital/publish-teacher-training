@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Site < ApplicationRecord
-  MAIN_SITE = 'main site'
+  MAIN_SITE = "main site"
   URN_2022_REQUIREMENTS_REQUIRED_FROM = 2022
 
   include PostcodeNormalize
@@ -9,7 +9,7 @@ class Site < ApplicationRecord
   include TouchProvider
   include Discard::Model
 
-  POSSIBLE_CODES = (('A'..'Z').to_a + ('0'..'9').to_a + ['-']).freeze
+  POSSIBLE_CODES = (("A".."Z").to_a + ("0".."9").to_a + ["-"]).freeze
   EASILY_CONFUSED_CODES = %w[1 I 0 O -].freeze # these ought to be assigned last
   DESIRABLE_CODES = (POSSIBLE_CODES - EASILY_CONFUSED_CODES).freeze
 
@@ -24,7 +24,7 @@ class Site < ApplicationRecord
 
   enum :site_type, {
     school: 0,
-    study_site: 1
+    study_site: 1,
   }
 
   validates :location_name, uniqueness: { scope: %i[provider_id site_type],
@@ -41,7 +41,7 @@ class Site < ApplicationRecord
 
   validates :postcode, postcode: true
 
-  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'Site URN must be 5 or 6 numbers' }
+  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "Site URN must be 5 or 6 numbers" }
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 
@@ -59,7 +59,7 @@ class Site < ApplicationRecord
   end
 
   def geocode_site
-    GeocodeJob.perform_later('Site', id) if needs_geolocation?
+    GeocodeJob.perform_later("Site", id) if needs_geolocation?
   end
 
   def needs_geolocation?
@@ -73,9 +73,9 @@ class Site < ApplicationRecord
 
     address.unshift(location_name) unless location_name.downcase == MAIN_SITE
 
-    return '' if address.all?(&:blank?)
+    return "" if address.all?(&:blank?)
 
-    address.compact_blank.join(', ')
+    address.compact_blank.join(", ")
   end
 
   def address

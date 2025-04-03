@@ -2,14 +2,14 @@
 
 module GoogleOldPlacesAPI
   class Client
-    BASE_URL = 'https://maps.googleapis.com/maps/api/'
+    BASE_URL = "https://maps.googleapis.com/maps/api/"
 
     def initialize(api_key: Settings.google.gcp_api_key, logger: Rails.logger, log_level: Rails.logger.level)
       @api_key = api_key
       @connection = Faraday.new(BASE_URL) do |f|
         f.adapter :net_http_persistent
         f.response(:logger, logger, { headers: false, bodies: true, formatter: Faraday::Logging::Formatter, log_level: }) do |log|
-          log.filter(@api_key, '[FILTERED]')
+          log.filter(@api_key, "[FILTERED]")
         end
         f.response :json
       end
@@ -17,49 +17,49 @@ module GoogleOldPlacesAPI
 
     def autocomplete(query)
       response = get(
-        endpoint: 'place/autocomplete/json',
+        endpoint: "place/autocomplete/json",
         params: {
           key: @api_key,
-          language: 'en',
+          language: "en",
           input: query,
-          components: 'country:uk',
-          types: 'geocode'
-        }
+          components: "country:uk",
+          types: "geocode",
+        },
       )
 
-      Array(response['predictions']).map do |prediction|
+      Array(response["predictions"]).map do |prediction|
         {
-          name: prediction['description'],
-          place_id: prediction['place_id'],
-          types: prediction['types']
+          name: prediction["description"],
+          place_id: prediction["place_id"],
+          types: prediction["types"],
         }
       end
     end
 
     def geocode(location_name)
       response = get(
-        endpoint: 'geocode/json',
+        endpoint: "geocode/json",
         params: {
           key: @api_key,
           address: location_name,
-          components: 'country:UK',
-          language: 'en'
-        }
+          components: "country:UK",
+          language: "en",
+        },
       )
 
-      result = response.dig('results', 0)
+      result = response.dig("results", 0)
       return if result.blank?
 
       {
-        formatted_address: result['formatted_address'],
-        latitude: result.dig('geometry', 'location', 'lat'),
-        longitude: result.dig('geometry', 'location', 'lng'),
+        formatted_address: result["formatted_address"],
+        latitude: result.dig("geometry", "location", "lat"),
+        longitude: result.dig("geometry", "location", "lng"),
         country: extract_country(result),
-        types: result['types']
+        types: result["types"],
       }
     end
 
-    private
+  private
 
     def get(endpoint:, params:)
       response = @connection.get(endpoint, params)
@@ -71,9 +71,9 @@ module GoogleOldPlacesAPI
     end
 
     def extract_country(result)
-      address_components = Array(result['address_components']).pluck('long_name')
+      address_components = Array(result["address_components"]).pluck("long_name")
 
-      (address_components & (DEVOLVED_NATIONS + ['England'])).first
+      (address_components & (DEVOLVED_NATIONS + %w[England])).first
     end
   end
 end

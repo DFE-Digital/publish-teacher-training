@@ -9,7 +9,7 @@ module Find
         first_deadline_banner: Time.zone.local(2021, 7, 12, 9),
         apply_1_deadline: Time.zone.local(2021, 9, 7, 18),
         apply_deadline: Time.zone.local(2021, 9, 21, 18),
-        find_closes: Time.zone.local(2021, 10, 4, 23, 59, 59)
+        find_closes: Time.zone.local(2021, 10, 4, 23, 59, 59),
       },
       2022 => {
         find_opens: Time.zone.local(2021, 10, 5, 9),
@@ -17,7 +17,7 @@ module Find
         first_deadline_banner: Time.zone.local(2022, 8, 2, 9),
         apply_1_deadline: Time.zone.local(2022, 9, 6, 18),
         apply_deadline: Time.zone.local(2022, 9, 20, 18),
-        find_closes: Time.zone.local(2022, 10, 3, 23, 59, 59)
+        find_closes: Time.zone.local(2022, 10, 3, 23, 59, 59),
       },
       2023 => {
         find_opens: Time.zone.local(2022, 10, 4, 9),
@@ -26,29 +26,29 @@ module Find
         first_deadline_banner: Time.zone.local(2023, 8, 1, 9), # 5 weeks before Apply 1 deadline
         apply_1_deadline: Time.zone.local(2023, 9, 5, 18), # First Tuesday of September
         apply_deadline: Time.zone.local(2023, 9, 19, 18), # 2 weeks after Apply 1 deadline
-        find_closes: Time.zone.local(2023, 10, 2, 23, 59, 59) # The evening before Find opens in the new cycle
+        find_closes: Time.zone.local(2023, 10, 2, 23, 59, 59), # The evening before Find opens in the new cycle
       },
       2024 => {
         find_opens: Time.zone.local(2023, 10, 3, 9), # First Tuesday of October
         apply_opens: Time.zone.local(2023, 10, 10, 9), # Second Tuesday of October
         first_deadline_banner: Time.zone.local(2024, 7, 30, 9),
         apply_deadline: Time.zone.local(2024, 9, 17, 18),
-        find_closes: Time.zone.local(2024, 9, 30, 23, 59, 59) # The evening before Find opens in the new cycle
+        find_closes: Time.zone.local(2024, 9, 30, 23, 59, 59), # The evening before Find opens in the new cycle
       },
       2025 => {
         find_opens: Time.zone.local(2024, 10, 1, 9), # CONFIRMED
         apply_opens: Time.zone.local(2024, 10, 8, 9), # CONFIRMED
         first_deadline_banner: Time.zone.local(2025, 7, 12, 9), # TBC
         apply_deadline: Time.zone.local(2025, 9, 16, 18), # CONFIRMED
-        find_closes: Time.zone.local(2025, 9, 30, 23, 59, 59) # CONFIRMED
+        find_closes: Time.zone.local(2025, 9, 30, 23, 59, 59), # CONFIRMED
       },
       2026 => {
         find_opens: Time.zone.local(2025, 10, 1, 9), # CONFIRMED
         apply_opens: Time.zone.local(2025, 10, 8, 9), # CONFIRMED
         first_deadline_banner: Time.zone.local(2026, 7, 12, 9), # TBC
         apply_deadline: Time.zone.local(2026, 9, 16, 18), # CONFIRMED
-        find_closes: Time.zone.local(2026, 9, 30, 23, 59, 59) # TBC
-      }
+        find_closes: Time.zone.local(2026, 9, 30, 23, 59, 59), # TBC
+      },
     }.freeze
 
     def self.current_year
@@ -130,11 +130,11 @@ module Find
 
     def self.phases_in_time
       {
-        today_is_after_find_closes: Time.zone.now.between?((find_closes.in_time_zone('London') - 1.hour), (find_reopens.in_time_zone('London') - 1.hour)),
-        today_is_after_find_opens: Time.zone.now.between?((find_opens.in_time_zone('London') - 1.hour), apply_deadline),
+        today_is_after_find_closes: Time.zone.now.between?((find_closes.in_time_zone("London") - 1.hour), (find_reopens.in_time_zone("London") - 1.hour)),
+        today_is_after_find_opens: Time.zone.now.between?((find_opens.in_time_zone("London") - 1.hour), apply_deadline),
         today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_deadline),
         today_is_after_apply_deadline_passed: Time.zone.now.between?(apply_deadline, find_closes),
-        today_is_between_find_opening_and_apply_opening: Time.zone.now.between?(find_opens, apply_opens)
+        today_is_between_find_opening_and_apply_opening: Time.zone.now.between?(find_opens, apply_opens),
       }
     end
 

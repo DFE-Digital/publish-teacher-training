@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'updating study sites on a course', { can_edit_current_and_next_cycles: false } do
-  scenario 'provider has no study sites' do
+feature "updating study sites on a course", { can_edit_current_and_next_cycles: false } do
+  scenario "provider has no study sites" do
     and_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_details_page
     then_i_see_the_add_a_study_site_link
   end
 
-  scenario 'user can add and remove study sites from a course' do
+  scenario "user can add and remove study sites from a course" do
     when_i_am_authenticated_as_a_provider_user_with_study_sites
     and_visit_the_course_details_page
     and_i_click_add_study_site
@@ -25,15 +25,15 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def then_i_see_the_success_message
-    expect(page).to have_text('Study sites updated')
+    expect(page).to have_text("Study sites updated")
   end
 
   def then_i_see_the_add_a_study_site_link
-    expect(page).to have_link('Add a study site')
+    expect(page).to have_link("Add a study site")
   end
 
   def then_i_see_the_error_message_add_one_study_site
-    expect(page).to have_link('Add at least one study site')
+    expect(page).to have_link("Add at least one study site")
   end
 
   def and_i_am_authenticated_as_a_provider_user
@@ -41,9 +41,9 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
       user: create(
         :user,
         providers: [
-          create(:provider, sites: [build(:site)], courses: [build(:course)])
-        ]
-      )
+          create(:provider, sites: [build(:site)], courses: [build(:course)]),
+        ],
+      ),
     )
   end
 
@@ -53,13 +53,13 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
 
   def when_i_visit_the_publish_course_study_sites_edit_page
     visit study_sites_publish_provider_recruitment_cycle_course_path(
-      provider_code: provider.provider_code, code: @course.course_code, recruitment_cycle_year: provider.recruitment_cycle_year
+      provider_code: provider.provider_code, code: @course.course_code, recruitment_cycle_year: provider.recruitment_cycle_year,
     )
   end
 
   def when_i_visit_the_course_details_page
     publish_provider_courses_details_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
@@ -71,7 +71,7 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
 
   def and_visit_the_course_details_page
     publish_provider_courses_details_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
@@ -80,17 +80,17 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def and_i_click_add_study_site
-    click_link_or_button 'Select a study site'
+    click_link_or_button "Select a study site"
   end
 
   def and_i_check_the_first_study_site_and_submit
     check(provider.study_sites.first.location_name)
-    click_link_or_button 'Update study sites'
+    click_link_or_button "Update study sites"
   end
 
   def and_i_uncheck_the_first_study_site_and_submit
     uncheck(provider.study_sites.first.location_name)
-    click_link_or_button 'Update study sites'
+    click_link_or_button "Update study sites"
   end
 
   def then_i_should_see_the_study_site_location_name
@@ -98,7 +98,7 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def given_i_click_change_study_sites
-    click_link_or_button 'Change study sites'
+    click_link_or_button "Change study sites"
   end
 
   def and_the_previously_selected_study_site_is_still_checked
@@ -110,15 +110,15 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def given_i_click_cancel
-    click_link_or_button 'Cancel'
+    click_link_or_button "Cancel"
   end
 
   def given_i_publish_the_course
-    click_link_or_button 'Publish course'
+    click_link_or_button "Publish course"
   end
 
   def when_i_click_add_at_lease_one_study_site
-    click_link_or_button 'Add at least one study site'
+    click_link_or_button "Add at least one study site"
   end
 
   def then_i_should_be_on_the_study_sites_page

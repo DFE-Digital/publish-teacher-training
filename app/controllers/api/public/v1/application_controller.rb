@@ -6,7 +6,7 @@ module API
       class ApplicationController < PublicAPIController
         include PagyPagination
 
-        private
+      private
 
         def recruitment_cycle
           year = params[:recruitment_cycle_year]

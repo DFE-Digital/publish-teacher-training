@@ -16,7 +16,7 @@ module Support
       provider.save!
     end
 
-    private
+  private
 
     attr_reader :provider, :attributes
 

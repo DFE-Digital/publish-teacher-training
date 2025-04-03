@@ -40,12 +40,12 @@ module Publish
       @course = ::Courses::CreationService.call(course_params:, provider:, next_available_course_code: true)
 
       if @course.save
-        flash[:success_with_body] = { title: 'Your course has been created', body: 'Add the rest of your details and publish the course, so that candidates can find and apply to it.' }
+        flash[:success_with_body] = { title: "Your course has been created", body: "Add the rest of your details and publish the course, so that candidates can find and apply to it." }
         redirect_to(
           publish_provider_recruitment_cycle_courses_path(
             @course.provider_code,
-            @course.recruitment_cycle.year
-          )
+            @course.recruitment_cycle.year,
+          ),
         )
       else
         @errors = @course.errors.messages
@@ -73,12 +73,12 @@ module Publish
       authorize @course
 
       if ::Courses::PublishService.new(course: @course, user: @current_user).call
-        flash[:success] = 'Your course has been published.'
+        flash[:success] = "Your course has been published."
 
         redirect_to publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
           @course.recruitment_cycle_year,
-          @course.course_code
+          @course.course_code,
         )
       else
         @errors = format_publish_error_messages
@@ -88,7 +88,7 @@ module Publish
       end
     end
 
-    private
+  private
 
     def course_params
       if params.key? :course
@@ -98,7 +98,7 @@ module Publish
                      { study_mode: [],
                        sites_ids: [],
                        subjects_ids: [],
-                       study_sites_ids: [] }]
+                       study_sites_ids: [] }],
           )
       else
         ActionController::Parameters.new({}).permit(:course)
@@ -106,7 +106,7 @@ module Publish
     end
 
     def render_schools_messages
-      flash[:error] = { id: 'schools-error', message: 'You need to create at least one school before creating a course' }
+      flash[:error] = { id: "schools-error", message: "You need to create at least one school before creating a course" }
 
       redirect_to new_publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle_year)
     end
@@ -131,7 +131,7 @@ module Publish
 
     def format_publish_error_messages
       @course.errors.messages.transform_values do |error_messages|
-        error_messages.map { |message| message.gsub(/^\^/, '') }
+        error_messages.map { |message| message.gsub(/^\^/, "") }
       end
     end
   end

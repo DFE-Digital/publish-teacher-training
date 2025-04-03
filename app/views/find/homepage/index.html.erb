@@ -18,10 +18,10 @@
                :subject_code,
                options_for_select(
                  dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code]),
-                 form.object.subject_code
+                 form.object.subject_code,
                ),
-               label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" }
-             )
+               label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" },
+             ),
            ) %>
         </div>
 
@@ -30,7 +30,7 @@
             label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
             form_group: {
               "data-controller" => "locations-autocomplete",
-              "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path
+              "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path,
             },
             autocomplete: "off",
             data: { locations_autocomplete_target: "input" } %>
@@ -56,8 +56,8 @@
                   form_field: form.govuk_select(
                     :provider_code,
                     dfe_autocomplete_options(form.object.providers_list, synonyms_fields: %i[code]),
-                    label: { text: t("helpers.label.courses_search_form.provider"), size: "s" }
-                  )
+                    label: { text: t("helpers.label.courses_search_form.provider"), size: "s" },
+                  ),
                 ) %>
               </div>
             </div>
@@ -108,9 +108,9 @@
               send_courses: true,
               subjects: @search_courses_form.primary_subject_codes,
               utm_source: "home",
-              utm_medium: "send_primary_courses"
-            }
-          )
+              utm_medium: "send_primary_courses",
+            },
+          ),
         ) %>
         </p>
         <p class="govuk-body">
@@ -122,9 +122,9 @@
               send_courses: true,
               subjects: @search_courses_form.secondary_subject_codes,
               utm_source: "home",
-              utm_medium: "send_secondary_courses"
-            }
-          )
+              utm_medium: "send_secondary_courses",
+            },
+          ),
         ) %>
         </p>
         <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.send.teaching_pupils"), t("find.get_into_teaching.url_send")) %>.</p>

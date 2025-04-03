@@ -11,7 +11,7 @@ module Publish
           params
         end
 
-        private
+      private
 
         def add_flash_message
           flash[:success] = t("course.#{@wizard.current_step.model_name.i18n_key}.success_message")
@@ -23,7 +23,7 @@ module Publish
           redirect_to publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
             provider.provider_code,
             provider.recruitment_cycle_year,
-            @course.course_code
+            @course.course_code,
           )
         end
 

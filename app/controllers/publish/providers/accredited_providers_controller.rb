@@ -32,7 +32,7 @@ module Publish
         if @accredited_provider_form.save!
           redirect_to publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle_year)
 
-          flash[:success] = t('publish.providers.accredited_providers.edit.updated')
+          flash[:success] = t("publish.providers.accredited_providers.edit.updated")
         else
           accredited_provider
           render(:edit)
@@ -47,14 +47,14 @@ module Publish
         return if cannot_delete
 
         provider.accrediting_provider_enrichments = accrediting_provider_enrichments
-        provider.save
+        provider.save!
 
-        flash[:success] = t('publish.providers.accredited_providers.delete.updated')
+        flash[:success] = t("publish.providers.accredited_providers.delete.updated")
 
         redirect_to publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle_year)
       end
 
-      private
+    private
 
       def cannot_delete
         @cannot_delete ||= provider.courses.exists?(accredited_provider_code: accredited_provider.provider_code)
@@ -79,7 +79,7 @@ module Publish
       end
 
       def accrediting_provider_enrichments
-        provider.accrediting_provider_enrichments.reject { |enrichment| enrichment.UcasProviderCode == params['accredited_provider_code'] }
+        provider.accrediting_provider_enrichments.reject { |enrichment| enrichment.UcasProviderCode == params["accredited_provider_code"] }
       end
     end
   end

@@ -13,7 +13,7 @@ class CustomLogFormatter < SemanticLogger::Formatters::Json
     hash.to_json
   end
 
-  private
+private
 
   def format_job_data
     hash[:job_id] = RequestStore.store[:job_id] if RequestStore.store[:job_id].present?
@@ -29,7 +29,7 @@ class CustomLogFormatter < SemanticLogger::Formatters::Json
 
   def format_json_message_context
     if hash[:message].present?
-      context = JSON.parse(hash[:message])['context']
+      context = JSON.parse(hash[:message])["context"]
       hash[:sidekiq_job_context] = hash[:message]
       hash[:message] = context
     end
@@ -38,10 +38,10 @@ class CustomLogFormatter < SemanticLogger::Formatters::Json
   end
 
   def format_backtrace
-    return unless hash[:message]&.start_with?('/')
+    return unless hash[:message]&.start_with?("/")
 
     message_lines = hash[:message].split("\n")
-    return unless message_lines.all? { |line| line.start_with?('/') }
+    return unless message_lines.all? { |line| line.start_with?("/") }
 
     hash[:backtrace] = hash[:message]
     hash[:message] = "Exception occured: #{message_lines.first}"

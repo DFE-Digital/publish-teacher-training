@@ -2,7 +2,7 @@
 
 module PublishHelper
   def markdown(source)
-    return '' if source.blank?
+    return "" if source.blank?
 
     render = Govuk::MarkdownRenderer
     # Options: https://github.com/vmg/redcarpet#and-its-like-really-simple-to-use
@@ -18,12 +18,12 @@ module PublishHelper
   end
 
   def smart_quotes(string)
-    return '' if string.blank?
+    return "" if string.blank?
 
     RubyPants.new(string, [2, :dashes], ruby_pants_options).to_html
   end
 
-  private
+private
 
   # Use characters rather than HTML entities for smart quotes this matches how
   # we write smart quotes in templates and allows us to use them in <title>
@@ -31,13 +31,13 @@ module PublishHelper
   # https://github.com/jmcnevin/rubypants/blob/master/lib/rubypants.rb
   def ruby_pants_options
     {
-      double_left_quote: '“',
-      double_right_quote: '”',
-      single_left_quote: '‘',
-      single_right_quote: '’',
-      ellipsis: '…',
-      em_dash: '—',
-      en_dash: '–'
+      double_left_quote: "“",
+      double_right_quote: "”",
+      single_left_quote: "‘",
+      single_right_quote: "’",
+      ellipsis: "…",
+      em_dash: "—",
+      en_dash: "–",
     }
   end
 end

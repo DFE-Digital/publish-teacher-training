@@ -39,13 +39,13 @@ module VectorSearchable
     before_create :update_searchable
   end
 
-  private
+private
 
   def update_searchable
     to_tsvector = Arel::Nodes::NamedFunction.new(
-      'TO_TSVECTOR', [
-        Arel::Nodes::Quoted.new('pg_catalog.simple'),
-        Arel::Nodes::Quoted.new(searchable_vector_value)
+      "TO_TSVECTOR", [
+        Arel::Nodes::Quoted.new("pg_catalog.simple"),
+        Arel::Nodes::Quoted.new(searchable_vector_value),
       ]
     )
 
@@ -59,6 +59,6 @@ module VectorSearchable
   end
 
   def searchable_vector_value
-    raise NotImplementedError('#searchable_vector_value must be implemented in the including model')
+    raise NotImplementedError("#searchable_vector_value must be implemented in the including model")
   end
 end

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Searching for a study site from the GIAS list' do
+feature "Searching for a study site from the GIAS list" do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_are_schools_in_the_database
   end
 
-  scenario 'i can search for a study site by query' do
+  scenario "i can search for a study site by query" do
     when_i_visit_the_school_search_page
     and_i_search_with_an_invalid_query
     then_i_should_see_an_error_message
@@ -21,7 +21,7 @@ feature 'Searching for a study site from the GIAS list' do
     then_i_should_see_a_radio_list
 
     when_i_continue_without_selecting_a_school
-    then_i_should_see_an_error_message('Select a study site')
+    then_i_should_see_an_error_message("Select a study site")
     and_i_should_still_see_the_school_i_searched_for
 
     when_i_select_the_school
@@ -30,12 +30,12 @@ feature 'Searching for a study site from the GIAS list' do
   end
 
   def and_the_study_site_form_should_be_prefilled(site)
-    expect(page).to have_field('Study site name', with: site.name)
-    expect(page).to have_field('URN', with: site.urn)
+    expect(page).to have_field("Study site name", with: site.name)
+    expect(page).to have_field("URN", with: site.urn)
 
-    expect(page).to have_field('Address line 1', with: site.address1)
-    expect(page).to have_field('Town or city', with: site.town)
-    expect(page).to have_field('Postcode', with: site.postcode)
+    expect(page).to have_field("Address line 1", with: site.address1)
+    expect(page).to have_field("Town or city", with: site.town)
+    expect(page).to have_field("Postcode", with: site.postcode)
   end
 
   def when_i_select_the_school
@@ -60,7 +60,7 @@ feature 'Searching for a study site from the GIAS list' do
   end
 
   def click_continue
-    click_link_or_button 'Continue'
+    click_link_or_button "Continue"
   end
 
   def then_i_should_see_a_radio_list
@@ -76,41 +76,41 @@ feature 'Searching for a study site from the GIAS list' do
   end
 
   def when_i_search_for_a_school_with_a_partial_query
-    fill_in 'publish-providers-schools-search-form-query-field', with: 'sch'
+    fill_in "publish-providers-schools-search-form-query-field", with: "sch"
     click_continue
   end
 
   def when_i_search_for_a_school_with_a_valid_query
-    fill_in 'publish-providers-schools-search-form-query-field', with: @school.name
+    fill_in "publish-providers-schools-search-form-query-field", with: @school.name
     click_continue
   end
 
   def and_i_search_with_an_invalid_query
-    fill_in 'publish-providers-schools-search-form-query-field', with: ''
+    fill_in "publish-providers-schools-search-form-query-field", with: ""
     click_continue
   end
 
-  def then_i_should_see_an_error_message(error_message = 'Enter a school, university, college, URN or postcode')
+  def then_i_should_see_an_error_message(error_message = "Enter a school, university, college, URN or postcode")
     expect(page).to have_content(error_message)
   end
 
   def when_i_visit_the_school_search_page
     visit search_publish_provider_recruitment_cycle_study_sites_path(
       provider_code: provider.provider_code,
-      recruitment_cycle_year: provider.recruitment_cycle_year
+      recruitment_cycle_year: provider.recruitment_cycle_year,
     )
   end
 
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
-      user: create(:user, providers: [create(:provider, sites: [build(:site)])])
+      user: create(:user, providers: [create(:provider, sites: [build(:site)])]),
     )
   end
 
   def and_there_are_schools_in_the_database
-    @school = create(:gias_school, name: 'Bernard')
-    @school_two = create(:gias_school, name: 'School Two')
-    @school_three = create(:gias_school, name: 'School Three')
+    @school = create(:gias_school, name: "Bernard")
+    @school_two = create(:gias_school, name: "School Two")
+    @school_three = create(:gias_school, name: "School Three")
   end
 
   def provider

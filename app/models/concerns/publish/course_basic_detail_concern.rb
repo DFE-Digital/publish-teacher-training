@@ -36,8 +36,8 @@ module Publish
           details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code
-          )
+            @course.course_code,
+          ),
         )
       else
         @errors = @course.errors.messages
@@ -56,10 +56,10 @@ module Publish
       end
     end
 
-    private
+  private
 
     def build_new_course
-      add_custom_age_range_into_params if params.dig('course', 'age_range_in_years') == 'other'
+      add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
 
       @course = ::Courses::CreationService.call(course_params:, provider:)
     end
@@ -69,7 +69,7 @@ module Publish
     end
 
     def add_custom_age_range_into_params
-      params['course']['age_range_in_years'] = "#{age_from_param}_to_#{age_to_param}"
+      params["course"]["age_range_in_years"] = "#{age_from_param}_to_#{age_to_param}"
     end
 
     def errors
@@ -93,13 +93,13 @@ module Publish
                 :skip_languages_goto_confirmation,
                 :goto_visa,
                 :language_ids,
-                :previous_tda_course
+                :previous_tda_course,
               ).permit(
                 policy(Course.new).permitted_new_course_attributes,
                 study_mode: [],
                 sites_ids: [],
                 subjects_ids: [],
-                study_sites_ids: []
+                study_sites_ids: [],
               )
       else
         ActionController::Parameters.new({}).permit(:course)
@@ -131,7 +131,7 @@ module Publish
 
         # If they have selected that visa deadline is required, we need to show them the deadline date page
         (current_step == :visa_sponsorship_application_deadline_required &&
-          course_params[:visa_sponsorship_application_deadline_required] == 'true')
+          course_params[:visa_sponsorship_application_deadline_required] == "true")
     end
 
     def next_step
@@ -145,7 +145,7 @@ module Publish
     def additional_params
       {
         goto_confirmation: go_to_confirmation_params,
-        goto_visa: params[:goto_visa]
+        goto_visa: params[:goto_visa],
       }.compact
     end
 
@@ -161,13 +161,13 @@ module Publish
         {
           modern_languages: :subjects,
           can_sponsor_student_visa: (@course.is_uni_or_scitt? ? :apprenticeship : :funding_type),
-          can_sponsor_skilled_worker_visa: (@course.is_uni_or_scitt? ? :apprenticeship : :funding_type)
+          can_sponsor_skilled_worker_visa: (@course.is_uni_or_scitt? ? :apprenticeship : :funding_type),
         }[current_step] || :confirmation
       else
         CourseCreationStepService.new.execute(
           current_step:,
           course: @course,
-          params: course_params
+          params: course_params,
         )[:previous]
       end
     end
@@ -255,7 +255,7 @@ module Publish
     end
 
     def previous_course_tda?
-      params[:previous_tda_course] == 'true'
+      params[:previous_tda_course] == "true"
     end
 
     def step_back_through_previously_defaulted_questions

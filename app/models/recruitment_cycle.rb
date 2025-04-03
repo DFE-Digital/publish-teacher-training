@@ -18,12 +18,12 @@ class RecruitmentCycle < ApplicationRecord
     def current_recruitment_cycle
       find_by(year: Settings.current_recruitment_cycle_year)
     end
-    alias current current_recruitment_cycle
+    alias_method :current, :current_recruitment_cycle
 
     def next_recruitment_cycle
       current_recruitment_cycle.next
     end
-    alias next next_recruitment_cycle
+    alias_method :next, :next_recruitment_cycle
   end
 
   def previous
@@ -43,7 +43,7 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def current_and_open?
-    current? && FeatureService.enabled?('rollover.has_current_cycle_started?')
+    current? && FeatureService.enabled?("rollover.has_current_cycle_started?")
   end
 
   def to_s

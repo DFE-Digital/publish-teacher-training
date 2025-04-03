@@ -1,4 +1,4 @@
-<%= govuk_accordion(classes: ["app-courses-guidance"]) do |accordion| %>
+<%= govuk_accordion(classes: %w[app-courses-guidance]) do |accordion| %>
   <% accordion.with_section heading_text: t(".heading") do %>
     <p class="govuk-body">
       <%= govuk_link_to t(".links.choose_course"), find_track_click_path(url: t("find.get_into_teaching.url_choose_course")) %>

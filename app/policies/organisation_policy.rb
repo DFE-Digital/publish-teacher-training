@@ -12,5 +12,5 @@ class OrganisationPolicy
     @user.admin?
   end
 
-  alias index? add_user?
+  alias_method :index?, :add_user?
 end

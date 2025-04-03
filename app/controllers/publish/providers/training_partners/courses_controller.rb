@@ -10,7 +10,7 @@ module Publish
           @courses = fetch_courses
         end
 
-        private
+      private
 
         def training_partner
           @training_partner ||= provider.training_partners.find_by(provider_code: params[:training_partner_code])

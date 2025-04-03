@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
-  scenario 'i can update the course outcome' do
+feature "Editing course outcome", { can_edit_current_and_next_cycles: false } do
+  scenario "i can update the course outcome" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_qts_course_i_want_to_edit
     when_i_visit_the_course_outcome_page
@@ -14,8 +14,8 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     and_i_should_be_on_the_course_details_page
   end
 
-  context 'a course offering QTS' do
-    scenario 'shows the correct outcome options to choose from' do
+  context "a course offering QTS" do
+    scenario "shows the correct outcome options to choose from" do
       given_i_am_authenticated_as_a_provider_user
       and_there_is_a_qts_course_i_want_to_edit
       when_i_visit_the_course_outcome_page
@@ -23,8 +23,8 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  context 'a further education course not offering QTS' do
-    scenario 'shows the correct outcome options to choose from' do
+  context "a further education course not offering QTS" do
+    scenario "shows the correct outcome options to choose from" do
       given_i_am_authenticated_as_a_provider_user
       and_there_is_a_non_qts_course_i_want_to_edit
       when_i_visit_the_course_outcome_page
@@ -32,8 +32,8 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  context 'TDA course' do
-    scenario 'changing the outcome from non TDA to TDA' do
+  context "TDA course" do
+    scenario "changing the outcome from non TDA to TDA" do
       given_i_am_authenticated_as_a_provider_user
       and_there_is_a_qts_course_i_want_to_edit
       when_i_visit_the_course_outcome_page
@@ -43,8 +43,8 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
       then_the_default_options_for_a_tda_course_should_be_applied
     end
 
-    context 'fee course' do
-      scenario 'changing the outcome from TDA to non TDA' do
+    context "fee course" do
+      scenario "changing the outcome from TDA to non TDA" do
         given_i_am_authenticated_as_a_provider_user
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page
@@ -71,8 +71,8 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
       end
     end
 
-    context 'salaried course' do
-      scenario 'changing the outcome from TDA to non TDA' do
+    context "salaried course" do
+      scenario "changing the outcome from TDA to non TDA" do
         given_i_am_authenticated_as_a_provider_user
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page
@@ -99,20 +99,20 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_there_is_a_tda_course_i_want_to_edit
-    given_a_course_exists(:undergraduate_degree_with_qts, degree_type: 'undergraduate')
+    given_a_course_exists(:undergraduate_degree_with_qts, degree_type: "undergraduate")
   end
 
   def course_enrichment
-    @course_enrichment ||= build(:course_enrichment, :draft, course_length: :FourYears, salary_details: 'foobar')
+    @course_enrichment ||= build(:course_enrichment, :draft, course_length: :FourYears, salary_details: "foobar")
   end
 
   def and_there_is_a_non_qts_course_i_want_to_edit
-    given_a_course_exists(:resulting_in_pgde, level: 'further_education')
+    given_a_course_exists(:resulting_in_pgde, level: "further_education")
   end
 
   def when_i_visit_the_course_outcome_page
     publish_courses_outcome_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
@@ -129,11 +129,11 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_update
-    click_on 'Update'
+    click_on "Update"
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t('success.saved', value: 'Qualification'))
+    expect(page).to have_content(I18n.t("success.saved", value: "Qualification"))
   end
 
   def and_the_course_outcome_is_updated
@@ -141,11 +141,11 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_shown_the_correct_qts_options
-    expect(publish_courses_outcome_edit_page.qualification_names).to contain_exactly('QTS', 'QTS with PGCE', 'QTS with PGDE', 'Teacher degree apprenticeship (TDA) with QTS')
+    expect(publish_courses_outcome_edit_page.qualification_names).to contain_exactly("QTS", "QTS with PGCE", "QTS with PGDE", "Teacher degree apprenticeship (TDA) with QTS")
   end
 
   def then_i_am_shown_the_correct_non_qts_options
-    expect(publish_courses_outcome_edit_page.qualification_names).to contain_exactly('PGCE only (without QTS)', 'PGDE only (without QTS)')
+    expect(publish_courses_outcome_edit_page.qualification_names).to contain_exactly("PGCE only (without QTS)", "PGDE only (without QTS)")
   end
 
   def and_i_choose_undergraduate_degree_with_qts
@@ -158,18 +158,18 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_choose_the_fee_paying
-    choose 'Fee - no salary'
+    choose "Fee - no salary"
     and_i_update
   end
 
   def and_i_choose_to_sponsor_a_student_visa
-    choose 'Yes'
+    choose "Yes"
     and_i_update
   end
 
   def and_i_choose_part_time
-    uncheck 'Full time'
-    check 'Part time'
+    uncheck "Full time"
+    check "Part time"
     and_i_update
   end
 
@@ -178,7 +178,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_there_is_a_qts_course_i_want_to_edit
-    given_a_course_exists(:resulting_in_qts, study_mode: 'part_time', funding: 'fee', can_sponsor_skilled_worker_visa: true)
+    given_a_course_exists(:resulting_in_qts, study_mode: "part_time", funding: "fee", can_sponsor_skilled_worker_visa: true)
   end
 
   def and_the_degree_type_is_undergraduate
@@ -193,7 +193,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     course.reload
     expect(course.undergraduate_degree_type?).to be(true)
     expect(course.full_time?).to be(true)
-    expect(course.funding == 'apprenticeship').to be(true)
+    expect(course.funding == "apprenticeship").to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be false
     expect(course.can_sponsor_student_visa).to be false
   end
@@ -201,20 +201,20 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   def then_i_see_the_correct_attributes_in_the_database_for_fee_paying
     course.reload
     expect(course.part_time?).to be(true)
-    expect(course.funding == 'fee').to be(true)
+    expect(course.funding == "fee").to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(false)
     expect(course.can_sponsor_student_visa).to be(true)
   end
 
   def and_i_choose_salaried
-    choose 'Salary'
+    choose "Salary"
     and_i_update
   end
 
   def then_i_see_the_correct_attributes_in_the_database_for_salaried
     course.reload
-    expect(course.study_mode == 'part_time').to be(true)
-    expect(course.funding == 'salary').to be(true)
+    expect(course.study_mode == "part_time").to be(true)
+    expect(course.funding == "salary").to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(true)
     expect(course.can_sponsor_student_visa).to be(false)
 
@@ -227,31 +227,31 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_the_back_link_points_to_the_outcome_page
-    expect(URI.parse(find_link('Back')[:href]).path).to eq(outcome_publish_provider_recruitment_cycle_course_path(
+    expect(URI.parse(find_link("Back")[:href]).path).to eq(outcome_publish_provider_recruitment_cycle_course_path(
                                                              provider_code: provider.provider_code,
                                                              recruitment_cycle_year:,
-                                                             code: course.course_code
+                                                             code: course.course_code,
                                                            ))
   end
 
   def and_the_back_link_points_to_the_funding_type_page
-    expect(URI.parse(find_link('Back')[:href]).path).to eq(funding_type_publish_provider_recruitment_cycle_course_path(
+    expect(URI.parse(find_link("Back")[:href]).path).to eq(funding_type_publish_provider_recruitment_cycle_course_path(
                                                              provider_code: provider.provider_code,
                                                              recruitment_cycle_year:,
-                                                             code: course.course_code
+                                                             code: course.course_code,
                                                            ))
   end
 
   def and_the_back_link_points_to_the_study_mode_page
-    expect(URI.parse(find_link('Back')[:href]).path).to eq(full_part_time_publish_provider_recruitment_cycle_course_path(
+    expect(URI.parse(find_link("Back")[:href]).path).to eq(full_part_time_publish_provider_recruitment_cycle_course_path(
                                                              provider_code: provider.provider_code,
                                                              recruitment_cycle_year:,
-                                                             code: course.course_code
+                                                             code: course.course_code,
                                                            ))
   end
 
   def and_i_click_back
-    click_on 'Back'
+    click_on "Back"
   end
 
   def then_i_am_on_the_study_mode_page
@@ -259,7 +259,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
                                         provider_code: provider.provider_code,
                                         recruitment_cycle_year:,
                                         code: course.course_code,
-                                        previous_tda_course: true
+                                        previous_tda_course: true,
                                       ))
   end
 
@@ -268,7 +268,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
                                         provider_code: provider.provider_code,
                                         recruitment_cycle_year:,
                                         code: course.course_code,
-                                        previous_tda_course: true
+                                        previous_tda_course: true,
                                       ))
   end
 

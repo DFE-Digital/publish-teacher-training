@@ -9,14 +9,14 @@ class SearchResultTitlePreview < ViewComponent::Preview
 
   def with_no_results = render_component(0)
 
-  def with_custom_caption = render_component(10_000, 'Some custom caption text')
+  def with_custom_caption = render_component(10_000, "Some custom caption text")
 
-  private
+private
 
-  def query = 'test'
-  def return_path = '/test'
+  def query = "test"
+  def return_path = "/test"
   def results_limit = 15
-  def search_resource = 'model'
+  def search_resource = "model"
 
   def render_component(results_count = 10, caption_text = nil)
     render(
@@ -26,8 +26,8 @@ class SearchResultTitlePreview < ViewComponent::Preview
         results_count:,
         return_path:,
         search_resource:,
-        caption_text:
-      )
+        caption_text:,
+      ),
     )
   end
 end

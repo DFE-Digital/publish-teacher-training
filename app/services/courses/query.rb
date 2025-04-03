@@ -20,8 +20,8 @@ module Courses
                .where(
                  site_statuses: {
                    status: SiteStatus.statuses[:running],
-                   publish: SiteStatus.publishes[:published]
-                 }
+                   publish: SiteStatus.publishes[:published],
+                 },
                )
     end
 
@@ -59,7 +59,7 @@ module Courses
         :site_statuses,
         :latest_published_enrichment,
         :provider,
-        subjects: [:financial_incentive]
+        subjects: [:financial_incentive],
       )
     end
 
@@ -74,12 +74,12 @@ module Courses
 
       @scope
         .where(
-          can_sponsor_student_visa: true
+          can_sponsor_student_visa: true,
         )
         .or(
           @scope.where(
-            can_sponsor_skilled_worker_visa: true
-          )
+            can_sponsor_skilled_worker_visa: true,
+          ),
         )
     end
 
@@ -107,9 +107,9 @@ module Courses
       @applied_scopes[:study_modes] = params[:study_types]
 
       case params[:study_types]
-      when ['full_time']
+      when %w[full_time]
         @scope.where(study_mode: [Course.study_modes[:full_time], Course.study_modes[:full_time_or_part_time]])
-      when ['part_time']
+      when %w[part_time]
         @scope.where(study_mode: [Course.study_modes[:part_time], Course.study_modes[:full_time_or_part_time]])
       else
         @scope
@@ -122,9 +122,9 @@ module Courses
       @applied_scopes[:qualifications_scope] = params[:qualifications]
 
       case params[:qualifications]
-      when ['qts']
+      when %w[qts]
         @scope.where(qualification: [Course.qualifications[:qts]])
-      when ['qts_with_pgce_or_pgde'], ['qts_with_pgce']
+      when %w[qts_with_pgce_or_pgde], %w[qts_with_pgce]
         @scope.where(qualification: [Course.qualifications[:pgce_with_qts], Course.qualifications[:pgde_with_qts]])
       else
         @scope
@@ -132,7 +132,7 @@ module Courses
     end
 
     def further_education_scope
-      return @scope if params[:level] != 'further_education'
+      return @scope if params[:level] != "further_education"
 
       @applied_scopes[:level] = params[:level]
 
@@ -146,16 +146,16 @@ module Courses
       @applied_scopes[:minimum_degree_required] = minimum_degree_required
 
       case minimum_degree_required
-      when 'two_one'
+      when "two_one"
         @scope.where(degree_grade: %w[two_one two_two third_class not_required], degree_type: :postgraduate)
-      when 'two_two'
+      when "two_two"
         @scope.where(degree_grade: %w[two_two third_class not_required], degree_type: :postgraduate)
-      when 'third_class'
+      when "third_class"
         @scope.where(degree_grade: %w[third_class not_required], degree_type: :postgraduate)
-      when 'pass'
-        @scope.where(degree_grade: 'not_required', degree_type: :postgraduate)
-      when 'no_degree_required'
-        @scope.where(degree_grade: 'not_required', degree_type: :undergraduate)
+      when "pass"
+        @scope.where(degree_grade: "not_required", degree_type: :postgraduate)
+      when "no_degree_required"
+        @scope.where(degree_grade: "not_required", degree_type: :undergraduate)
       else
         @scope
       end
@@ -194,9 +194,9 @@ module Courses
       september_range = Date.new(current_recruitment_cycle_year, 9, 1)..Date.new(current_recruitment_cycle_year, 9, 30)
 
       case params[:start_date]
-      when ['september']
+      when %w[september]
         @scope = @scope.where(start_date: september_range)
-      when ['all_other_dates']
+      when %w[all_other_dates]
         @scope = @scope.where.not(start_date: september_range)
       else
         @scope
@@ -215,11 +215,11 @@ module Courses
                   end
 
       @scope.where(
-        provider_id: providers.select(:id)
+        provider_id: providers.select(:id),
       ).or(
         @scope.where(
-          accredited_provider_code: providers.select(:provider_code)
-        )
+          accredited_provider_code: providers.select(:provider_code),
+        ),
       )
     end
 
@@ -233,12 +233,12 @@ module Courses
       @applied_scopes[:location] = {
         latitude: latitude,
         longitude: longitude,
-        radius: radius_in_miles
+        radius: radius_in_miles,
       }
 
       @scope
         .joins(site_statuses: :site)
-        .where('(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)')
+        .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
         .where(
           <<~SQL.squish, longitude, latitude, radius_in_meters
             ST_DistanceSphere(
@@ -257,87 +257,88 @@ module Courses
                   ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
                 ) / 1609.344) AS minimum_distance_to_search_location
               SQL
-              longitude, latitude
-            ]
-          )
+              longitude,
+              latitude,
+            ],
+          ),
         )
         .group(:id)
-        .order('minimum_distance_to_search_location ASC')
+        .order("minimum_distance_to_search_location ASC")
     end
 
     def default_ordering_scope
       return @scope if params[:order].present?
 
-      params[:order] = 'course_name_ascending'
+      params[:order] = "course_name_ascending"
 
       @scope
     end
 
     def course_name_ascending_order_scope
-      return @scope unless params[:order] == 'course_name_ascending'
+      return @scope unless params[:order] == "course_name_ascending"
 
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select('course.*, provider.provider_name')
+        .select("course.*, provider.provider_name")
         .joins(:provider)
         .order(
           {
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :asc,
-            courses_table[:course_code] => :asc
-          }
+            courses_table[:course_code] => :asc,
+          },
         )
     end
 
     def course_name_descending_order_scope
-      return @scope unless params[:order] == 'course_name_descending'
+      return @scope unless params[:order] == "course_name_descending"
 
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select('course.*, provider.provider_name')
+        .select("course.*, provider.provider_name")
         .joins(:provider)
         .order(
           {
             courses_table[:name] => :desc,
             providers_table[:provider_name] => :asc,
-            courses_table[:course_code] => :asc
-          }
+            courses_table[:course_code] => :asc,
+          },
         )
     end
 
     def provider_name_ascending_order_scope
-      return @scope unless params[:order] == 'provider_name_ascending'
+      return @scope unless params[:order] == "provider_name_ascending"
 
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select('course.*, provider.provider_name')
+        .select("course.*, provider.provider_name")
         .joins(:provider)
         .order(
           {
             providers_table[:provider_name] => :asc,
             courses_table[:name] => :asc,
-            courses_table[:course_code] => :asc
-          }
+            courses_table[:course_code] => :asc,
+          },
         )
     end
 
     def provider_name_descending_order_scope
-      return @scope unless params[:order] == 'provider_name_descending'
+      return @scope unless params[:order] == "provider_name_descending"
 
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select('course.*, provider.provider_name')
+        .select("course.*, provider.provider_name")
         .joins(:provider)
         .order(
           {
             providers_table[:provider_name] => :desc,
             courses_table[:name] => :asc,
-            courses_table[:course_code] => :asc
-          }
+            courses_table[:course_code] => :asc,
+          },
         )
     end
 
@@ -347,7 +348,7 @@ module Courses
       DEFAULT_RADIUS_IN_MILES
     end
 
-    private
+  private
 
     def log_query_info
       Courses::QueryLogger.new(self).call

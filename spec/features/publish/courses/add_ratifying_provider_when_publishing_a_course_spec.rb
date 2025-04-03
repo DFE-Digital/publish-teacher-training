@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Publishing a course when course ratifying provider is invalid', { can_edit_current_and_next_cycles: false } do
+feature "Publishing a course when course ratifying provider is invalid", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'Add accredited partner to provider and provider has no accredited partners, change ratifying provider of course then publish' do
+  scenario "Add accredited partner to provider and provider has no accredited partners, change ratifying provider of course then publish" do
     and_the_provider_has_no_accredited_partners
     and_there_is_a_draft_course_with_an_unaccredited_ratifying_provider
 
@@ -37,7 +37,7 @@ feature 'Publishing a course when course ratifying provider is invalid', { can_e
     then_i_should_see_a_success_message
   end
 
-  scenario 'Select valid ratifying provider to course and publish' do
+  scenario "Select valid ratifying provider to course and publish" do
     and_the_provider_has_a_valid_accrediting_provider
     and_there_is_a_draft_course_without_accrediting_provider
     and_an_accredited_provider_exists
@@ -61,7 +61,7 @@ feature 'Publishing a course when course ratifying provider is invalid', { can_e
 
   def and_the_provider_has_a_valid_accrediting_provider
     provider = @user.providers.first
-    provider.accredited_partnerships.create(accredited_provider: accredited_provider, description: 'Description')
+    provider.accredited_partnerships.create!(accredited_provider: accredited_provider, description: "Description")
   end
 
   def and_the_provider_has_no_accredited_partners
@@ -72,8 +72,8 @@ feature 'Publishing a course when course ratifying provider is invalid', { can_e
     given_a_course_exists(
       :with_gcse_equivalency,
       enrichments: [create(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: 'location 1')],
-      study_sites: [create(:site, :study_site)]
+      sites: [create(:site, location_name: "location 1")],
+      study_sites: [create(:site, :study_site)],
     )
   end
 
@@ -82,8 +82,8 @@ feature 'Publishing a course when course ratifying provider is invalid', { can_e
       :with_gcse_equivalency,
       accrediting_provider: provider,
       enrichments: [create(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: 'location 1')],
-      study_sites: [create(:site, :study_site)]
+      sites: [create(:site, location_name: "location 1")],
+      study_sites: [create(:site, :study_site)],
     )
   end
 
@@ -91,20 +91,20 @@ feature 'Publishing a course when course ratifying provider is invalid', { can_e
     publish_provider_courses_show_page.load(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
-      course_code: course.course_code
+      course_code: course.course_code,
     )
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content('Your course has been published.')
+    expect(page).to have_content("Your course has been published.")
   end
 
   def then_i_should_see_an_error_message_that_ratifying_provider_is_not_accredited
-    expect(publish_provider_courses_show_page.error_messages).to include('Update the accredited provider')
+    expect(publish_provider_courses_show_page.error_messages).to include("Update the accredited provider")
   end
 
   def then_i_should_see_an_error_message_for_the_ratifying_provider
-    expect(publish_provider_courses_show_page.error_messages).to include('Select an accredited provider')
+    expect(publish_provider_courses_show_page.error_messages).to include("Select an accredited provider")
   end
 
   def when_i_click_the_error_message_link
@@ -128,7 +128,7 @@ feature 'Publishing a course when course ratifying provider is invalid', { can_e
   end
 
   def and_i_fill_in_the_accredited_provider_form
-    publish_new_accredited_provider_page.about_section_input.set('About course')
+    publish_new_accredited_provider_page.about_section_input.set("About course")
 
     publish_new_accredited_provider_page.submit.click
   end
@@ -138,7 +138,7 @@ feature 'Publishing a course when course ratifying provider is invalid', { can_e
   end
 
   def then_i_see_that_the_accredited_partnership_has_been_added
-    expect(page).to have_content('Accredited provider added')
+    expect(page).to have_content("Accredited provider added")
   end
 
   def and_i_click_the_publish_button
@@ -146,13 +146,13 @@ feature 'Publishing a course when course ratifying provider is invalid', { can_e
   end
 
   def when_i_click_the_select_accredited_partners_error_message_link
-    page.click_link_or_button('Select an accredited provider')
+    page.click_link_or_button("Select an accredited provider")
   end
 
   def and_i_choose_the_new_ratifying_provider
     choose accredited_provider.provider_name
-    page.click_link_or_button('Update accredited provider')
-    expect(page).to have_content('Accredited provider updated')
+    page.click_link_or_button("Update accredited provider")
+    expect(page).to have_content("Accredited provider updated")
   end
 
   def and_an_accredited_provider_exists

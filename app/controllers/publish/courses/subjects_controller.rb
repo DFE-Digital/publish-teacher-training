@@ -10,47 +10,43 @@ module Publish
 
       def edit; end
 
-      def continue
-        super
-      end
-
       def update
         if validate_subject_ids
           if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s
-            course.update(master_subject_id: params[:course][:master_subject_id])
+            course.update!(master_subject_id: params[:course][:master_subject_id])
             redirect_to(
               engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
                 @course.provider_code,
                 @course.recruitment_cycle_year,
                 @course.course_code,
-                course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids }
-              )
+                course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids },
+              ),
             )
 
           elsif selected_subject_ids.include?(modern_languages_subject_id.to_s)
-            course.update(master_subject_id: params[:course][:master_subject_id])
+            course.update!(master_subject_id: params[:course][:master_subject_id])
             redirect_to(
               modern_languages_publish_provider_recruitment_cycle_course_path(
                 @course.provider_code,
                 @course.recruitment_cycle_year,
                 @course.course_code,
-                course: { subjects_ids: selected_subject_ids }
-              )
+                course: { subjects_ids: selected_subject_ids },
+              ),
             )
 
           elsif course.errors.none? && course_subjects_form.save!
             course_updated_message(section_key)
             # TODO: move this to the form?
-            course.update(master_subject_id: params[:course][:master_subject_id])
-            course.update(name: course.generate_name)
-            course.update(campaign_name: nil) unless course.master_subject_id == SecondarySubject.physics.id
+            course.update!(master_subject_id: params[:course][:master_subject_id])
+            course.update!(name: course.generate_name)
+            course.update!(campaign_name: nil) unless course.master_subject_id == SecondarySubject.physics.id
 
             redirect_to(
               details_publish_provider_recruitment_cycle_course_path(
                 @course.provider_code,
                 @course.recruitment_cycle_year,
-                @course.course_code
-              )
+                @course.course_code,
+              ),
             )
           end
         else
@@ -61,7 +57,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def validate_subject_ids
         if selected_master.blank?
@@ -75,7 +71,7 @@ module Publish
       end
 
       def campaign_name_check
-        params[:course][:campaign_name] = '' unless @course.master_subject_id == SecondarySubject.physics.id
+        params[:course][:campaign_name] = "" unless @course.master_subject_id == SecondarySubject.physics.id
       end
 
       def course_subjects_form
@@ -129,7 +125,7 @@ module Publish
       end
 
       def section_key
-        'Subject'.pluralize(selected_subject_ids.count)
+        "Subject".pluralize(selected_subject_ids.count)
       end
 
       def build_course

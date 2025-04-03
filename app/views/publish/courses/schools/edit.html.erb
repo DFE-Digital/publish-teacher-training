@@ -9,7 +9,7 @@
   model: @course_school_form,
   url: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
   method: :put,
-  local: true
+  local: true,
 ) do |f| %>
 
   <%= f.govuk_error_summary %>

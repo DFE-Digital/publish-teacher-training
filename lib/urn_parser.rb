@@ -6,8 +6,8 @@ class URNParser
   end
 
   def call
-    processed = @urns.tr(',', "\n")
-    processed = processed.tr("\t\r\s", '')
+    processed = @urns.tr(",", "\n")
+    processed = processed.tr("\t\r\s", "")
     processed.split("\n").compact_blank.uniq
   end
 end

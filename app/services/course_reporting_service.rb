@@ -19,11 +19,11 @@ class CourseReportingService
       total: {
         all: @courses.count,
         non_findable: @courses.count - @findable_courses.count,
-        all_findable: @findable_courses.count
+        all_findable: @findable_courses.count,
       },
       findable_total: {
         open: @open_courses.count,
-        closed: @closed_courses.count
+        closed: @closed_courses.count,
       },
       provider_type: { **group_by_count(:provider_type) },
       program_type: { **group_by_count(:program_type) },
@@ -32,29 +32,29 @@ class CourseReportingService
       qualification: { **group_by_count(:qualification) },
       is_send: { **group_by_count(:is_send) },
 
-      subject: { **group_by_subject_count }
+      subject: { **group_by_subject_count },
     }
   end
 
   private_class_method :new
 
-  private
+private
 
   def group_by_subject_count
     open = CourseSubject.where(course_id: @open_courses).group(:subject_id).count
     closed = CourseSubject.where(course_id: @closed_courses).group(:subject_id).count
 
     {
-      open: Subject.active.map do |sub|
+      open: Subject.active.map { |sub|
               x = {}
               x[sub.subject_name] = open[sub.id] || 0
               x
-            end.reduce({}, :merge),
-      closed: Subject.active.map do |sub|
+            }.reduce({}, :merge),
+      closed: Subject.active.map { |sub|
                 x = {}
                 x[sub.subject_name] = closed[sub.id] || 0
                 x
-              end.reduce({}, :merge)
+              }.reduce({}, :merge),
     }
   end
 
@@ -65,34 +65,34 @@ class CourseReportingService
     case column
     when :provider_type
       {
-        open: Provider.provider_types.map do |key, value|
+        open: Provider.provider_types.map { |key, value|
                 x = {}
                 x[key.to_sym] = open[value] || 0
                 x
-              end.reduce({}, :merge),
-        closed: Provider.provider_types.map do |key, value|
+              }.reduce({}, :merge),
+        closed: Provider.provider_types.map { |key, value|
                   x = {}
                   x[key.to_sym] = closed[value] || 0
                   x
-                end.reduce({}, :merge)
+                }.reduce({}, :merge),
       }
     when :program_type, :study_mode, :qualification
       {
-        open: Course.send(column.to_s.pluralize).map do |key, _value|
+        open: Course.send(column.to_s.pluralize).map { |key, _value|
                 x = {}
                 x[key.to_sym] = open[key] || 0
                 x
-              end.reduce({}, :merge),
-        closed: Course.send(column.to_s.pluralize).map do |key, _value|
+              }.reduce({}, :merge),
+        closed: Course.send(column.to_s.pluralize).map { |key, _value|
                   x = {}
                   x[key.to_sym] = closed[key] || 0
                   x
-                end.reduce({}, :merge)
+                }.reduce({}, :merge),
       }
     when :is_send
       {
         open: { yes: open[true] || 0, no: open[false] || 0 },
-        closed: { yes: closed[true] || 0, no: closed[false] || 0 }
+        closed: { yes: closed[true] || 0, no: closed[false] || 0 },
       }
     end
   end

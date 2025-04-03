@@ -20,7 +20,7 @@ class WorkflowStepService
     end
   end
 
-  private
+private
 
   attr_reader :course
 
@@ -155,7 +155,7 @@ class WorkflowStepService
 
   def visa_sponsorship_application_deadline_required_param
     ActiveModel::Type::Boolean.new.cast(
-      @params[:visa_sponsorship_application_deadline_required]
+      @params[:visa_sponsorship_application_deadline_required],
     )
   end
 

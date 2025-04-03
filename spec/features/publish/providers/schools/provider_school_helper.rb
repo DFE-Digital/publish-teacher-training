@@ -4,13 +4,13 @@ module ProviderSchoolHelper
   def given_i_am_authenticated_as_a_provider_user
     gias_school = create(:gias_school)
     given_i_am_authenticated(
-      user: create(:user, providers: [create(:provider, sites: [build(:site, **gias_school.school_attributes)])])
+      user: create(:user, providers: [create(:provider, sites: [build(:site, **gias_school.school_attributes)])]),
     )
   end
 
   def when_i_visit_the_schools_page
     publish_schools_index_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
     )
   end
 
@@ -27,7 +27,7 @@ module ProviderSchoolHelper
   end
 
   def then_i_see_an_error_message
-    expect(page).to have_text('Enter a name')
+    expect(page).to have_text("Enter a name")
   end
 
   def provider

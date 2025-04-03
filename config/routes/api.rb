@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-mount OpenApi::Rswag::Ui::Engine => '/api-docs'
-mount OpenApi::Rswag::Api::Engine => '/api-docs'
+mount OpenApi::Rswag::Ui::Engine => "/api-docs"
+mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
 namespace :api do
   namespace :public do
@@ -22,13 +22,13 @@ namespace :api do
       resources :subjects, only: %i[index]
       resources :subject_areas, only: :index
 
-      get 'provider_suggestions', to: 'provider_suggestions#index'
-      get '/courses', to: 'courses#index'
+      get "provider_suggestions", to: "provider_suggestions#index"
+      get "/courses", to: "courses#index"
     end
   end
-  get '/school_suggestions', to: 'school_suggestions#index'
-  get ':recruitment_cycle_year/accredited_provider_suggestions', to: 'accredited_provider_suggestions#index'
+  get "/school_suggestions", to: "school_suggestions#index"
+  get ":recruitment_cycle_year/accredited_provider_suggestions", to: "accredited_provider_suggestions#index"
 end
 
-get 'error_500', to: 'api_error#error500'
-get 'error_nodb', to: 'api_error#error_nodb'
+get "error_500", to: "api_error#error500"
+get "error_nodb", to: "api_error#error_nodb"

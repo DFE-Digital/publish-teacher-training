@@ -15,10 +15,10 @@
           :values,
           hint: {
             text: t(".hint_html",
-                    url: search_support_recruitment_cycle_provider_schools_path(@recruitment_cycle.year, @provider))
+                    url: search_support_recruitment_cycle_provider_schools_path(@recruitment_cycle.year, @provider)),
           },
           value: @urn_form.values&.join("\n").presence,
-          label: { text: t(".title"), class: "govuk-label--l" }
+          label: { text: t(".title"), class: "govuk-label--l" },
         ) %>
         <%= f.govuk_submit %>
     <% end %>

@@ -29,7 +29,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def study_mode_params
         return { study_mode: nil } if params[:publish_course_study_mode_form].blank?
@@ -41,17 +41,17 @@ module Publish
         if previous_tda_course?
           redirect_to appropriate_visa_path
         else
-          course_updated_message I18n.t('publish.providers.study_mode.form.study_pattern')
+          course_updated_message I18n.t("publish.providers.study_mode.form.study_pattern")
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
         end
       end
 
       def previous_tda_course?
-        params.dig(:publish_course_study_mode_form, :previous_tda_course) == 'true'
+        params.dig(:publish_course_study_mode_form, :previous_tda_course) == "true"
       end
 
       def appropriate_visa_path
@@ -81,11 +81,11 @@ module Publish
       end
 
       def errors
-        params.dig(:course, :study_mode) ? {} : { study_mode: [I18n.t('activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank')] }
+        params.dig(:course, :study_mode) ? {} : { study_mode: [I18n.t("activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank")] }
       end
 
       def previous_tda_course_path?
-        params[:previous_tda_course] == 'true'
+        params[:previous_tda_course] == "true"
       end
 
       def sponsorship_path_with_previous_tda_course

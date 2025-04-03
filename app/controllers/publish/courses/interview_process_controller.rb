@@ -19,7 +19,7 @@ module Publish
         @interview_process_form = CourseInterviewProcessForm.new(course_enrichment, params: interview_process_params)
 
         if @interview_process_form.save!
-          course_updated_message I18n.t('publish.providers.interview_process.edit.interview_process_success')
+          course_updated_message I18n.t("publish.providers.interview_process.edit.interview_process_success")
 
           redirect_to redirect_path
         else
@@ -28,7 +28,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def authorise_with_pundit
         authorize course_to_authorise
@@ -54,7 +54,7 @@ module Publish
         publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           recruitment_cycle.year,
-          course.course_code
+          course.course_code,
         )
       end
     end

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
+feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'i can withdraw a course' do
+  scenario "i can withdraw a course" do
     and_there_is_a_course_i_want_to_withdraw
     when_i_visit_the_course_publish_courses_withdrawal_page
     and_i_submit
@@ -15,28 +15,28 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
     and_the_course_is_withdrawn
   end
 
-  scenario 'course already withdrawn' do
+  scenario "course already withdrawn" do
     and_there_is_a_course_already_withdrawn
     when_i_visit_the_course_publish_courses_withdrawal_page
     then_i_am_redirected_to_the_courses_page
     and_i_see_the(already_withdrawn_message)
   end
 
-  scenario 'attempting to withdraw a non published course' do
+  scenario "attempting to withdraw a non published course" do
     and_there_is_a_draft_course
     when_i_visit_the_course_publish_courses_withdrawal_page
     then_i_am_redirected_to_the_courses_page
     and_i_see_the(course_should_be_deleted_message)
   end
 
-  scenario 'i can close the course instead' do
+  scenario "i can close the course instead" do
     and_there_is_a_course_i_want_to_withdraw
     when_i_visit_the_course_publish_courses_withdrawal_page
-    and_i_click_link_or_button('close the course instead')
+    and_i_click_link_or_button("close the course instead")
     then_i_should_be_on_the_close_confirmation_page
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
@@ -57,7 +57,7 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_course_publish_courses_withdrawal_page
     publish_courses_withdrawal_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
@@ -73,7 +73,7 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
     enrichment = course.reload.enrichments.max_by(&:created_at)
 
     expect(enrichment).to be_withdrawn
-    expect(course.site_statuses.pluck(:vac_status)).to all(eq('no_vacancies'))
+    expect(course.site_statuses.pluck(:vac_status)).to all(eq("no_vacancies"))
   end
 
   def then_i_am_redirected_to_the_courses_page
@@ -97,7 +97,7 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def course_should_be_deleted_message
-    'Courses that have not been published should be deleted not withdrawn'
+    "Courses that have not been published should be deleted not withdrawn"
   end
 
   def course_name_and_code
@@ -105,7 +105,7 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_be_on_the_close_confirmation_page
-    expect(page.title).to have_content('Are you sure you want to close this course?')
+    expect(page.title).to have_content("Are you sure you want to close this course?")
 
     expect(page.current_url).to end_with("publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/application_status?goto=withdraw")
   end

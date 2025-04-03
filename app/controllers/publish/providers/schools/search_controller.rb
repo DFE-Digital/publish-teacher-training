@@ -49,7 +49,7 @@ module Publish
           end
         end
 
-        private
+      private
 
         def authorize_provider
           authorize provider, :can_create_sites?
@@ -89,14 +89,14 @@ module Publish
             results_limit: @school_search.limit,
             results_count: @school_search.schools.unscope(:limit).count,
             return_path: search_publish_provider_recruitment_cycle_schools_path,
-            search_resource: 'school'
+            search_resource: "school",
           )
         end
 
         def redirect_to_next_step
           redirect_to publish_provider_recruitment_cycle_schools_check_path(
             provider_code: provider.provider_code,
-            school_id:
+            school_id:,
           )
         end
       end

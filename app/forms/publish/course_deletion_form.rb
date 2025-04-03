@@ -2,7 +2,7 @@
 
 module Publish
   class CourseDeletionForm < BaseModelForm
-    alias course model
+    alias_method :course, :model
 
     FIELDS = %i[
       confirm_course_code
@@ -14,13 +14,13 @@ module Publish
 
     def destroy!
       if valid?
-        course.recruitment_cycle.next? ? course.destroy : course.discard!
+        course.recruitment_cycle.next? ? course.destroy! : course.discard!
       else
         false
       end
     end
 
-    private
+  private
 
     def compute_fields
       course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)

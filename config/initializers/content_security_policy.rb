@@ -10,9 +10,9 @@ Rails.application.configure do
   config.content_security_policy do |policy|
     local_domains = %w[https://publish.localhost https://find.localhost]
     prod_domains = [
-      'https://*.find-teacher-training-courses.service.gov.uk',
-      'https://*.find-postgraduate-teacher-training.service.gov.uk',
-      'https://*.publish-teacher-training-courses.service.gov.uk'
+      "https://*.find-teacher-training-courses.service.gov.uk",
+      "https://*.find-postgraduate-teacher-training.service.gov.uk",
+      "https://*.publish-teacher-training-courses.service.gov.uk",
     ]
     all_domains = local_domains + prod_domains
 
@@ -28,8 +28,8 @@ Rails.application.configure do
                        *all_domains
 
     policy.connect_src :self,
-                       'https://*.sentry.io',
-                       'https://www.google.com',
+                       "https://*.sentry.io",
+                       "https://www.google.com",
                        *all_domains
 
     policy.style_src   :self, *all_domains

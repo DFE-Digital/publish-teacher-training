@@ -27,7 +27,7 @@ module Stores
       JSON.parse(value) if value.present?
     end
 
-    private
+  private
 
     def identifier_id
       "#{self.class.name}_#{identifier_model.id}"

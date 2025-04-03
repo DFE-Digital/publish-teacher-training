@@ -11,10 +11,10 @@
   url: study_sites_publish_provider_recruitment_cycle_course_path(
     course.provider_code,
     course.recruitment_cycle_year,
-    course.course_code
+    course.course_code,
   ),
   method: :put,
-  local: true
+  local: true,
 ) do |f| %>
 
   <%= f.govuk_error_summary %>
@@ -37,7 +37,7 @@
           <%= govuk_link_to(
             "Add study site",
             search_publish_provider_recruitment_cycle_study_sites_path(course.provider_code, course.recruitment_cycle_year),
-            class: "govuk-!-margin-bottom-6 govuk-!-margin-top-0"
+            class: "govuk-!-margin-bottom-6 govuk-!-margin-top-0",
           ) %>
         </div>
       <% end %>

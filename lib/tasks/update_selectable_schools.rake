@@ -9,7 +9,7 @@ module DataMigrations
   end
 end
 
-desc 'Set Selectable Schools on 11 providers'
+desc "Set Selectable Schools on 11 providers"
 task set_selectable_schools: :environment do |_, _args|
   DataMigrations::SetSelectableSchoolsOnProviders.new.change
 end

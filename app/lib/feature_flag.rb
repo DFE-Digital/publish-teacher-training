@@ -7,7 +7,7 @@ class FeatureFlag
 
       return false unless feature
 
-      JSON.parse(feature)['state']
+      JSON.parse(feature)["state"]
     end
 
     def activate(feature_name)
@@ -23,9 +23,9 @@ class FeatureFlag
     end
 
     def features
-      FeatureFlags.all.to_h do |name, description, owner|
+      FeatureFlags.all.to_h { |name, description, owner|
         [name, FeatureFlag.new(name:, description:, owner:)]
-      end.with_indifferent_access
+      }.with_indifferent_access
     end
 
     def last_updated(feature_name)
@@ -33,10 +33,10 @@ class FeatureFlag
 
       return unless feature
 
-      JSON.parse(feature)['updated_at']
+      JSON.parse(feature)["updated_at"]
     end
 
-    private
+  private
 
     def sync_with_redis(feature_name, feature_state)
       RedisClient.current.set(

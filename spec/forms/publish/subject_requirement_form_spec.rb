@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Publish
   describe SubjectRequirementForm, type: :model do
@@ -8,11 +8,11 @@ module Publish
 
     subject { described_class.new(params) }
 
-    describe 'validations' do
+    describe "validations" do
       before { subject.valid? }
 
-      it 'validates :degree_subject_requirements does not exceed 250 words' do
-        expect(subject.errors[:degree_subject_requirements]).to include('Reduce the word count for degree subject requirements')
+      it "validates :degree_subject_requirements does not exceed 250 words" do
+        expect(subject.errors[:degree_subject_requirements]).to include("Reduce the word count for degree subject requirements")
       end
     end
   end

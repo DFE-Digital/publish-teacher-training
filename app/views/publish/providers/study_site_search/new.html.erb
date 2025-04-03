@@ -9,7 +9,7 @@
     model: @study_site_search_form,
     url: search_publish_provider_recruitment_cycle_study_sites_path(@provider.provider_code),
     method: :post,
-    html: { data: { module: "app-schools-autocomplete" } }
+    html: { data: { module: "app-schools-autocomplete" } },
   ) do |f| %>
 
   <%= f.govuk_error_summary %>

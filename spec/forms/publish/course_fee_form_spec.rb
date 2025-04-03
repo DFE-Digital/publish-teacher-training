@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Publish
   describe CourseFeeForm, type: :model do
@@ -10,10 +10,10 @@ module Publish
 
     subject { described_class.new(enrichment, params:) }
 
-    describe 'validations' do
+    describe "validations" do
       it { is_expected.to validate_presence_of(:fee_uk_eu) }
 
-      it 'validates UK/EU Fee' do
+      it "validates UK/EU Fee" do
         expect(subject).to validate_numericality_of(:fee_uk_eu)
           .only_integer
           .is_greater_than_or_equal_to(1)
@@ -21,7 +21,7 @@ module Publish
           .allow_nil
       end
 
-      it 'validates International Fee' do
+      it "validates International Fee" do
         expect(subject).to validate_numericality_of(:fee_international)
           .only_integer
           .is_greater_than_or_equal_to(1)
@@ -29,7 +29,7 @@ module Publish
           .allow_nil
       end
 
-      context 'after 2023 recruitment cycle and if can_sponsor_student_visa' do
+      context "after 2023 recruitment cycle and if can_sponsor_student_visa" do
         let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
         let(:provider) { build(:provider, recruitment_cycle:) }
         let(:course) { build(:course, :fee_type_based, can_sponsor_student_visa: true, provider:) }
@@ -38,14 +38,14 @@ module Publish
       end
     end
 
-    describe '#save!' do
+    describe "#save!" do
       let(:params) { { fee_uk_eu: 12_000 } }
 
       before do
         enrichment.fee_uk_eu = 9500
       end
 
-      it 'saves the provider with any new attributes' do
+      it "saves the provider with any new attributes" do
         expect { subject.save! }.to change(enrichment, :fee_uk_eu).from(9500).to(12_000)
       end
     end

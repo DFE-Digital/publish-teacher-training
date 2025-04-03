@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: false } do
+feature "updating engineers teach physics", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'updating subject to physics' do
+  scenario "updating subject to physics" do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:physics)
@@ -18,10 +18,10 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     and_i_select_an_option
     and_i_click_continue
     then_i_am_met_with_course_details_page
-    and_i_should_see_a_success_message('Engineers Teach Physics')
+    and_i_should_see_a_success_message("Engineers Teach Physics")
   end
 
-  scenario 'back links return to correct pages' do
+  scenario "back links return to correct pages" do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:physics)
@@ -37,7 +37,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     then_i_return_to_the_edit_course_subject_page
   end
 
-  scenario 'updating subject to physics with modern languages' do
+  scenario "updating subject to physics with modern languages" do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:physics)
@@ -50,10 +50,10 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     and_i_select_a_language
     and_i_click_continue
     then_i_am_met_with_course_details_page
-    and_i_should_see_a_success_message('Subjects')
+    and_i_should_see_a_success_message("Subjects")
   end
 
-  scenario 'updating subject from physics to another subject resets campaign_name' do
+  scenario "updating subject from physics to another subject resets campaign_name" do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:physics)
@@ -74,10 +74,10 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     then_i_see_an_error_message
   end
 
-  private
+private
 
   def then_i_see_an_error_message
-    expect(page).to have_content('Select if this course is part of the Engineers teach physics programme')
+    expect(page).to have_content("Select if this course is part of the Engineers teach physics programme")
   end
 
   def and_i_select_an_option
@@ -89,7 +89,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
   end
 
   def and_i_should_see_a_success_message(value)
-    expect(page).to have_content(I18n.t('success.saved', value:))
+    expect(page).to have_content(I18n.t("success.saved", value:))
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -114,7 +114,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
   end
 
   def when_i_go_back
-    click_link_or_button('Back')
+    click_link_or_button("Back")
   end
 
   def provider
@@ -139,21 +139,21 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
 
   def then_i_am_met_with_the_publish_courses_edit_engineers_teach_physics_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/engineers_teach_physics?#{params_with_subject}")
-    expect(page).to have_content('Engineers Teach Physics')
+    expect(page).to have_content("Engineers Teach Physics")
   end
 
   def then_i_am_met_with_the_edit_engineers_teach_physics_with_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/engineers_teach_physics?#{modern_languages_with_form_params}")
-    expect(page).to have_content('Engineers Teach Physics')
+    expect(page).to have_content("Engineers Teach Physics")
   end
 
   def then_i_am_met_with_the_edit_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/modern-languages?#{modern_languages_subject_ids}")
-    expect(page).to have_content('Languages')
+    expect(page).to have_content("Languages")
   end
 
   def and_i_select_a_language
-    publish_courses_new_modern_languages_page.language_checkbox('German').click
+    publish_courses_new_modern_languages_page.language_checkbox("German").click
   end
 
   def course_subject(subject_type)

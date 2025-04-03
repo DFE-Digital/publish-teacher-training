@@ -5,7 +5,7 @@ module Publish
     include SuccessMessage
 
     before_action :check_interrupt_redirects
-    before_action :clear_previous_cycle_year_in_session, unless: -> { FeatureService.enabled?('rollover.can_edit_current_and_next_cycles') }
+    before_action :clear_previous_cycle_year_in_session, unless: -> { FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") }
 
     # Protect every action of a provider
     before_action :authorize_provider
@@ -14,10 +14,10 @@ module Publish
 
     # DFE Analytics namespace
     def current_namespace
-      'publish'
+      "publish"
     end
 
-    private
+  private
 
     def provider
       @provider ||= recruitment_cycle.providers.find_by!(provider_code: provider_code_param)

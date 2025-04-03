@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative '../sections/error_link'
+require_relative "../sections/error_link"
 
 module PageObjects
   module Publish
     class DegreeStart < PageObjects::Base
-      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/degrees/start'
+      set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/degrees/start"
 
-      sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
+      sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
 
       element :radio_yes, '[data-qa="start__yes_radio"]'
       element :radio_no, '[data-qa="start__no_radio"]'

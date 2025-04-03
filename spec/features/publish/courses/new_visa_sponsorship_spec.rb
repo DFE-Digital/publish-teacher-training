@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'visa sponsorship (add course summary page)', { can_edit_current_and_next_cycles: false } do
-  context 'for lead school' do
+feature "visa sponsorship (add course summary page)", { can_edit_current_and_next_cycles: false } do
+  context "for lead school" do
     before do
       given_i_am_authenticated_as_a_provider_user
       when_i_visit_the_publish_course_confirmation_page
     end
 
-    scenario 'changing funding_type to fee shows the student question' do
+    scenario "changing funding_type to fee shows the student question" do
       when_i_change_funding_type
       and_i_choose_fee
       and_i_click_continue
@@ -20,7 +20,7 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
       then_i_should_be_back_on_the_publish_course_confirmation_page
     end
 
-    scenario 'changing funding_type to salaried shows the skilled worker question' do
+    scenario "changing funding_type to salaried shows the skilled worker question" do
       when_i_change_funding_type
       and_i_choose_salary
       and_i_click_continue
@@ -32,7 +32,7 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
     end
   end
 
-  private
+private
 
   def lead_school_provider
     build(:provider, sites: [build(:site)], study_sites: [build(:site, :study_site)])
@@ -56,7 +56,7 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
     publish_course_confirmation_page.load(
       provider_code: provider.provider_code,
       recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-      query: confirmation_params(provider)
+      query: confirmation_params(provider),
     )
   end
 
@@ -85,15 +85,15 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
   end
 
   def and_i_click_continue
-    click_link_or_button 'Continue'
+    click_link_or_button "Continue"
   end
 
   def then_i_should_see_the_student_visas_title
-    expect(publish_courses_new_student_visa_sponsorship_page.title).to have_text('Student visas')
+    expect(publish_courses_new_student_visa_sponsorship_page.title).to have_text("Student visas")
   end
 
   def then_i_should_see_the_skilled_worker_visas_title
-    expect(publish_courses_new_skilled_worker_visa_sponsorship_page.title).to have_text('Skilled Worker visas')
+    expect(publish_courses_new_skilled_worker_visa_sponsorship_page.title).to have_text("Skilled Worker visas")
   end
 
   def when_i_choose_yes_for_student_visa
@@ -105,6 +105,6 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
   end
 
   def then_i_should_be_back_on_the_publish_course_confirmation_page
-    expect(page).to have_text('Check your answers')
+    expect(page).to have_text("Check your answers")
   end
 end

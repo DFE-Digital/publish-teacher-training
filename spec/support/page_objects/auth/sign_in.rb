@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require_relative '../base'
+require_relative "../base"
 
 module PageObjects
   module Auth
     class SignIn < PageObjects::Base
-      set_url '/sign-in'
+      set_url "/sign-in"
 
-      element :page_heading, '.govuk-heading-l'
+      element :page_heading, ".govuk-heading-l"
 
-      element :email_field, '#user-email-field'
+      element :email_field, "#user-email-field"
 
-      element :sign_in_button, '.qa-sign_in_button'
+      element :sign_in_button, ".qa-sign_in_button"
     end
   end
 end

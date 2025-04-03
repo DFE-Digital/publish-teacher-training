@@ -11,7 +11,7 @@
        if course.edit_course_options[:show_is_send] && !course.is_withdrawn?
          row.with_action(
            # href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-           visually_hidden_text: "SEND"
+           visually_hidden_text: "SEND",
          )
        else
          row.with_action
@@ -27,7 +27,7 @@
          else
            row.with_action(
              href: subjects_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-             visually_hidden_text: "subjects"
+             visually_hidden_text: "subjects",
            )
          end
        end
@@ -39,7 +39,7 @@
          row.with_value { course.engineers_teach_physics? ? "Yes" : "No" }
          row.with_action(
            href: engineers_teach_physics_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, course: { subjects_ids: course.subject_ids }, skip_languages_goto_confirmation: true),
-           visually_hidden_text: "Engineers Teach Physics"
+           visually_hidden_text: "Engineers Teach Physics",
          )
        end
      end
@@ -53,7 +53,7 @@
          else
            row.with_action(
              href: age_range_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-             visually_hidden_text: "age range"
+             visually_hidden_text: "age range",
            )
          end
        end
@@ -65,7 +65,7 @@
        if policy(course).can_update_qualification?
          row.with_action(
            href: outcome_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-           visually_hidden_text: "outcome"
+           visually_hidden_text: "outcome",
          )
        else
          row.with_action
@@ -81,7 +81,7 @@
        else
          row.with_action(
            href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
-           visually_hidden_text: "funding type"
+           visually_hidden_text: "funding type",
          )
        end
      end
@@ -95,7 +95,7 @@
        else
          row.with_action(
            href: full_part_time_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-           visually_hidden_text: "if full or part time"
+           visually_hidden_text: "if full or part time",
          )
        end
      end
@@ -120,7 +120,7 @@
        else
          row.with_action(
            href: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-           visually_hidden_text: "schools"
+           visually_hidden_text: "schools",
          )
        end
      end
@@ -182,7 +182,7 @@
          else
            row.with_action(
              href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
-             visually_hidden_text: "can sponsor student visa"
+             visually_hidden_text: "can sponsor student visa",
            )
          end
        end
@@ -195,7 +195,7 @@
          else
            row.with_action(
              href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
-             visually_hidden_text: "can sponsor skilled_worker visa"
+             visually_hidden_text: "can sponsor skilled_worker visa",
            )
          end
        end

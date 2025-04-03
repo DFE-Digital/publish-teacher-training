@@ -33,14 +33,14 @@ module Publish
 
       def update
         if @course.update(update_params)
-          course_updated_message('Accredited provider')
+          course_updated_message("Accredited provider")
 
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
-              @course.course_code
-            )
+              @course.course_code,
+            ),
           )
         else
           @errors = @course.errors.messages
@@ -48,7 +48,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def build_provider
         @provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
@@ -70,7 +70,7 @@ module Publish
       end
 
       def set_error_messages
-        @errors = { accredited_provider_code: ['Select an accredited provider'] }
+        @errors = { accredited_provider_code: ["Select an accredited provider"] }
       end
 
       def update_course_params
@@ -79,7 +79,7 @@ module Publish
 
       def update_params
         {
-          accredited_provider_code: update_course_params[:accredited_provider_code]
+          accredited_provider_code: update_course_params[:accredited_provider_code],
         }
       end
     end

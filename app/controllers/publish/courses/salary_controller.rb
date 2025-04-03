@@ -12,19 +12,19 @@ module Publish
         @course_salary_form = CourseSalaryForm.new(course_enrichment, params: formatted_params)
 
         if @course_salary_form.save!
-          course_updated_message I18n.t('publish.providers.course_salary.edit.course_salary')
+          course_updated_message I18n.t("publish.providers.course_salary.edit.course_salary")
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
         else
           render :edit
         end
       end
 
-      private
+    private
 
       def funding_type
         :publish_course_salary_form

@@ -11,13 +11,13 @@ module Support
 
       if @provider_contact_form.save!
 
-        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: 'Provider') }
+        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.updated", resource: "Provider") }
       else
         render :edit
       end
     end
 
-    private
+  private
 
     def provider
       @provider ||= recruitment_cycle.providers.find(params[:provider_id])

@@ -18,19 +18,19 @@ module Publish
           @grade_form = DegreeGradeForm.new(grade: grade_params)
 
           if course.is_primary? && @grade_form.valid? && !goto_preview?
-            @grade_form.save(course)
-            course_updated_message('Minimum degree classification')
+            @grade_form.save!(course)
+            course_updated_message("Minimum degree classification")
 
             redirect_to publish_provider_recruitment_cycle_course_path
 
           elsif course.is_primary? && @grade_form.valid? && goto_preview?
-            @grade_form.save(course)
+            @grade_form.save!(course)
             redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
           elsif @grade_form.valid? && !goto_preview?
-            @grade_form.save(course)
+            @grade_form.save!(course)
             redirect_to degrees_subject_requirements_publish_provider_recruitment_cycle_course_path
           elsif @grade_form.valid? && goto_preview?
-            @grade_form.save(course)
+            @grade_form.save!(course)
             redirect_to degrees_subject_requirements_publish_provider_recruitment_cycle_course_path(goto_preview: true)
           else
             @errors = @grade_form.errors.messages
@@ -38,7 +38,7 @@ module Publish
           end
         end
 
-        private
+      private
 
         def course
           @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))

@@ -35,18 +35,18 @@ module Support
     def full_address
       address = [address1, address2, address3, town, address4, postcode]
 
-      return '' if address.all?(&:blank?)
+      return "" if address.all?(&:blank?)
 
-      address.compact_blank.join('<br>').html_safe
+      address.compact_blank.join("<br>").html_safe
     end
 
-    private
+  private
 
     def location_name_unique_to_provider
       sibling_sites, location = if site.study_site?
-                                  [provider.study_sites - [site], 'site']
+                                  [provider.study_sites - [site], "site"]
                                 else
-                                  [provider.sites - [site], 'school']
+                                  [provider.sites - [site], "school"]
                                 end
 
       errors.add(:location_name, "This #{location} has already been added") if location_name.in?(sibling_sites.pluck(:location_name))

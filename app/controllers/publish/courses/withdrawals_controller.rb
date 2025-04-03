@@ -18,27 +18,27 @@ module Publish
 
           redirect_to publish_provider_recruitment_cycle_courses_path(
             provider.provider_code,
-            recruitment_cycle.year
+            recruitment_cycle.year,
           )
         else
           render :edit
         end
       end
 
-      private
+    private
 
       def redirect_to_courses
         message = if course_withdrawn?
                     "#{course.name} (#{course.course_code}) has already been withdrawn"
                   else
-                    'Courses that have not been published should be deleted not withdrawn'
+                    "Courses that have not been published should be deleted not withdrawn"
                   end
 
-        flash[:error] = { id: 'withdraw-error', message: }
+        flash[:error] = { id: "withdraw-error", message: }
 
         redirect_to publish_provider_recruitment_cycle_courses_path(
           provider.provider_code,
-          course.recruitment_cycle_year
+          course.recruitment_cycle_year,
         )
       end
 

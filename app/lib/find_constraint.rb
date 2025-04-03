@@ -2,6 +2,6 @@
 
 class FindConstraint
   def matches?(request)
-    request.host.include?('find')
+    request.host.include?("find")
   end
 end

@@ -3,8 +3,15 @@
 module Support
   class ContactDetailsForm < ::Publish::BaseProviderForm
     FIELDS = %i[
-      email telephone website
-      address1 address2 address3 town address4 postcode
+      email
+      telephone
+      website
+      address1
+      address2
+      address3
+      town
+      address4
+      postcode
     ].freeze
 
     attr_accessor(*FIELDS)
@@ -15,7 +22,7 @@ module Support
     validates :address1, :town, presence: true
     validates :postcode, presence: true, postcode: true
 
-    private
+  private
 
     def compute_fields
       provider.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)

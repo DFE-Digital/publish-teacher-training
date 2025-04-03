@@ -3,7 +3,7 @@
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
     text: "All user records",
-    href: support_recruitment_cycle_users_path(params[:recruitment_cycle_year])
+    href: support_recruitment_cycle_users_path(params[:recruitment_cycle_year]),
   ) %>
 <% end %>
 
@@ -11,7 +11,7 @@
 
 <%= render TabNavigation.new(items: [
   { name: "Details", url: support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user) },
-  { name: "Providers", url: support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) }
+  { name: "Providers", url: support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) },
 ]) %>
 
 <%= render GovukComponent::SummaryListComponent.new do |component|

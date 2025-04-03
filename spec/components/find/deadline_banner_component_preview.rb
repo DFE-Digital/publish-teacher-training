@@ -6,8 +6,8 @@ module Find
       render(
         Find::DeadlineBannerComponent.new(
           flash_empty: true,
-          cycle_timetable: ShowApplyDeadlineBannerCycleTimetable
-        )
+          cycle_timetable: ShowApplyDeadlineBannerCycleTimetable,
+        ),
       )
     end
 
@@ -15,8 +15,8 @@ module Find
       render(
         Find::DeadlineBannerComponent.new(
           flash_empty: true,
-          cycle_timetable: ShowCycleClosedBannerTimetable
-        )
+          cycle_timetable: ShowCycleClosedBannerTimetable,
+        ),
       )
     end
 
@@ -24,8 +24,8 @@ module Find
       render(
         Find::DeadlineBannerComponent.new(
           flash_empty: true,
-          cycle_timetable: ShowApplyOpensSoonBannerTimetable
-        )
+          cycle_timetable: ShowApplyOpensSoonBannerTimetable,
+        ),
       )
     end
   end
