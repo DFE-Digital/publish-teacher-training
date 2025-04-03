@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Authentication with magic links" do
+RSpec.describe "Authentication with magic links" do
   include ActiveJob::TestHelper
 
   before do
