@@ -696,24 +696,6 @@ en:
             warning: All users at %{provider_name} will be sent an email to let them know they’ve been added.
           update:
             added: Accredited provider added
-      accredited_providers:
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_provider Add accredited provider
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          updated: About the accredited provider updated
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
-        checks:
-          show:
-            title:  *add_accredited_provider
-            caption: *add_accredited_provider
-            add: *add_accredited_provider
       training_partners:
         index:
           title: Training partners
