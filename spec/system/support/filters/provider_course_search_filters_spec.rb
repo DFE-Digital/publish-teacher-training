@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Filter providers by type" do
+RSpec.describe "Filter providers by type" do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_there_are_providers_with_different_types

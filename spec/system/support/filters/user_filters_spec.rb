@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Filter users" do
+RSpec.describe "Filter users" do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_there_are_users
