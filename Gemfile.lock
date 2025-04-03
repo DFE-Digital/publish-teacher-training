@@ -851,6 +851,7 @@ DEPENDENCIES
   parallel_tests
   pg
   pg_search
+  prism
   propshaft
   pry
   pry-byebug

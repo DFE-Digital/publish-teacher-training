@@ -17,3 +17,5 @@ inherit_mode:
 
 AllCops:
   NewCops: enable
+  ParserEngine: parser_prism
+  TargetRubyVersion: 3.4
