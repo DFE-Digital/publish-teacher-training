@@ -1,0 +1,23 @@
+en:
+  activemodel:
+    attributes:
+      support/recruitment_cycle_form:
+        year: Recruitment cycle year
+        application_start_date: Application start date
+        application_end_date: Application end date
+    errors:
+      models:
+        support/recruitment_cycle_form:
+          attributes:
+            year:
+              blank: Enter a year
+              not_a_number: Enter a number
+              taken: Year has already been taken
+            application_start_date:
+              blank: Enter an application start date
+              application_end_date_after_start_date: Start date must be before the application end date
+              invalid_date: Enter a valid date
+            application_end_date:
+              blank: Enter an application end date
+              application_end_date_after_start_date: End date must be after the application start date
+              invalid_date: Enter a valid date
