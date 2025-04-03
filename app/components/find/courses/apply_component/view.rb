@@ -18,6 +18,14 @@ module Find
 
           apply_publish_provider_recruitment_cycle_course_path(provider_code: course.provider.provider_code, code: course.course_code, recruitment_cycle_year: provider.recruitment_cycle.year)
         end
+
+        def show_application_deadline?
+          course.visa_sponsorship_application_deadline_at.present? && FeatureFlag.active?(:visa_sponsorship_deadline)
+        end
+
+        def application_deadline
+          course.visa_sponsorship_application_deadline_at.to_fs(:govuk_date)
+        end
       end
     end
   end
