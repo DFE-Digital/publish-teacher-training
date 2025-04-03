@@ -35,8 +35,6 @@ module ManageCoursesBackend
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    config.active_record.pluralize_table_names = false
-
     config.action_dispatch.rescue_responses = {
       "Pundit::NotAuthorizedError" => :forbidden,
       "PG::ConnectionBad" => :service_unavailable,
