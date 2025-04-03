@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_25_151829) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_03_144601) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -25,7 +25,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_25_151829) do
     t.string "ProductVersion", limit: 32, null: false
   end
 
-  create_table "audit", force: :cascade do |t|
+  create_table "audits", force: :cascade do |t|
     t.integer "auditable_id"
     t.string "auditable_type"
     t.integer "associated_id"
@@ -42,8 +42,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_25_151829) do
     t.datetime "created_at", precision: nil
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index"
-    t.index ["created_at"], name: "index_audit_on_created_at"
-    t.index ["request_uuid"], name: "index_audit_on_request_uuid"
+    t.index ["created_at"], name: "index_audits_on_created_at"
+    t.index ["request_uuid"], name: "index_audits_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
   end
 

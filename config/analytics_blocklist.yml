@@ -48,7 +48,7 @@
     - id
     - provider_id
     - organisation_id
-  :audit:
+  :audits:
     - id
     - auditable_id
     - auditable_type
