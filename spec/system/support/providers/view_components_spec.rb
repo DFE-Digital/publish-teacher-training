@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "view components" do
+RSpec.describe "view components" do
   shared_examples "navigate to" do |link|
     scenario "navigate to #{link}" do
       visit link
