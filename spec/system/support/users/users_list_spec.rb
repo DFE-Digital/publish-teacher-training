@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View users" do
+RSpec.describe "View users" do
   let(:user) { create(:user, :admin) }
 
   scenario "i can view users" do
