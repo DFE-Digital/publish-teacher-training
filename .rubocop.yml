@@ -14,3 +14,7 @@ inherit_gem:
 inherit_mode:
   merge:
     - Exclude
+
+AllCops:
+  ParserEngine: parser_prism
+  TargetRubyVersion: 3.4
