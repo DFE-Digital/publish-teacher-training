@@ -2,13 +2,13 @@
 
 require "rails_helper"
 
-feature "Canonical tags", :with_find_constraint do
+RSpec.describe "Canonical tags" do
   before do
     given_i_have_courses
     and_i_visit_the_home_page
   end
 
-  describe "Canonical tags on Find pages" do
+  describe "Canonical tags on Find pages", service: :find do
     scenario "without query params" do
       then_the_page_contains_canonical_tags_with_no_query_params
     end
@@ -30,7 +30,7 @@ feature "Canonical tags", :with_find_constraint do
     end
   end
 
-  describe "Canonical tags on Publish pages", :with_publish_constraint do
+  describe "Canonical tags on Publish pages", service: :publish do
     scenario "Publish page contains canonical tags" do
       and_i_visit_the_publish_page
       then_the_publish_page_contains_canonical_tags
@@ -67,7 +67,7 @@ feature "Canonical tags", :with_find_constraint do
   end
 
   def then_the_page_contains_canonical_tags_for_a_course
-    canonical_url = "http://www.example.com/course/#{@mathematics_course.provider.provider_code}/#{@mathematics_course.course_code}/"
+    canonical_url = "http://www.find-test.lvh.me/course/#{@mathematics_course.provider.provider_code}/#{@mathematics_course.course_code}/"
 
     link_tag = page.find("link[rel='canonical']", visible: :all)
     expect(link_tag[:href]).to eq(canonical_url)
@@ -77,17 +77,17 @@ feature "Canonical tags", :with_find_constraint do
   end
 
   def then_the_page_contains_canonical_tags_with_no_query_params
-    expect(page).to have_css("link[rel='canonical'][href='http://www.example.com/']", visible: :all)
-    expect(page).to have_css("meta[property='og:url'][content='http://www.example.com/']", visible: :all)
+    expect(page).to have_css("link[rel='canonical'][href='http://www.find-test.lvh.me/']", visible: :all)
+    expect(page).to have_css("meta[property='og:url'][content='http://www.find-test.lvh.me/']", visible: :all)
   end
 
   def then_the_page_contains_canonical_tags_without_query_params
-    expect(page).to have_css("link[rel='canonical'][href='http://www.example.com/results/']", visible: :all)
-    expect(page).to have_css("meta[property='og:url'][content='http://www.example.com/results/']", visible: :all)
+    expect(page).to have_css("link[rel='canonical'][href='http://www.find-test.lvh.me/results/']", visible: :all)
+    expect(page).to have_css("meta[property='og:url'][content='http://www.find-test.lvh.me/results/']", visible: :all)
   end
 
   def then_the_publish_page_contains_canonical_tags
-    expect(page).to have_css("link[rel='canonical'][href='http://www.example.com/sign-in/']", visible: :all)
-    expect(page).to have_css("meta[property='og:url'][content='http://www.example.com/sign-in/']", visible: :all)
+    expect(page).to have_css("link[rel='canonical'][href='http://www.publish-test.lvh.me/sign-in/']", visible: :all)
+    expect(page).to have_css("meta[property='og:url'][content='http://www.publish-test.lvh.me/sign-in/']", visible: :all)
   end
 end

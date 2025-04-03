@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View pages", :with_publish_constraint do
+RSpec.describe "View pages", :with_publish_constraint do
   scenario "Environment label and class are read from settings" do
     visit "/cookies"
 
