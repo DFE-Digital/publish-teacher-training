@@ -3,3 +3,11 @@ en:
     recruitment_cycles:
       index:
         page_title: Recruitment Cycles
+        add_recruitment_cycle: Add recruitment cycle
+      new:
+        page_title: Recruitment cycle details
+        page_caption: Add recruitment cycle
+        submit: Continue
+        cancel: Cancel
+      create:
+        added: Recruitment cycle added

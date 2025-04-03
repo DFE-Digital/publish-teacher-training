@@ -3,5 +3,33 @@
 module Support
   class RecruitmentCyclesController < ApplicationController
     def index; end
+
+    def new
+      @support_recruitment_cycle_form = Support::RecruitmentCycleForm.new
+    end
+
+    def create
+      @support_recruitment_cycle_form = Support::RecruitmentCycleForm.new(
+        params
+          .fetch(:support_recruitment_cycle_form, {})
+          .permit(
+            :year,
+            :application_start_date,
+            :application_end_date
+          )
+      )
+
+      if @support_recruitment_cycle_form.valid?
+        RecruitmentCycleCreationService.call(
+          year: @support_recruitment_cycle_form.year,
+          application_start_date: @support_recruitment_cycle_form.application_start_date,
+          application_end_date: @support_recruitment_cycle_form.application_end_date
+        )
+
+        redirect_to support_recruitment_cycles_path, flash: { success: t('.added') }
+      else
+        render :new
+      end
+    end
   end
 end
