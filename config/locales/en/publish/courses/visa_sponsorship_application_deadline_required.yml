@@ -8,3 +8,17 @@ en:
           legend: Is there a deadline for applications that require visa sponsorship?
           inset_text: You have told us that you can sponsor visas for this course.
           cancel: Cancel
+        edit:
+          title: Is there a deadline for applications that require visa sponsorship?
+          caption: Edit course
+          legend: Is there a deadline for applications that require visa sponsorship?
+          inset_text: You have told us that you can sponsor visas for this course.
+          update: Update visa sponsorship application deadline
+          cancel: Cancel
+        update:
+            success:
+              funding: You have updated funding type and visa sponsorship and deadline
+              apprenticeship: You have updated Teaching apprenticeship and visa sponsorship and deadline
+              visa_sponsorship: You have updated visa sponsorship and deadline
+              visa_sponsorship_deadline_required: You have updated visa sponsorship deadline
+
