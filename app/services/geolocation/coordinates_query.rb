@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module Geolocation
+  # Geocode a place name to get coordinates
+  #
+  # @see GoogleOldPlacesAPI::Client
+  #
   class CoordinatesQuery
     attr_reader :query, :logger, :cache, :client, :cache_expiration
 
