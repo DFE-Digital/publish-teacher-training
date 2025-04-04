@@ -423,8 +423,7 @@ class Course < ApplicationRecord
   def ratifying_provider_description
     return nil unless accrediting_provider
 
-    subquery = RecruitmentCycle.current.providers.where(provider_code: accrediting_provider.provider_code).select(:id)
-    provider.accredited_partnerships.find_by(accredited_provider_id: subquery)&.description
+    Provider.in_current_cycle.find_by(provider_code: accrediting_provider.provider_code).train_with_us
   end
 
   def accrediting_provider_description
