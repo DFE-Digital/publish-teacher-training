@@ -308,3 +308,5 @@ enable-maintenance: maintenance-image-push maintenance-fail-over ## Enable the m
 disable-maintenance: get-cluster-credentials ## Disable the maintainence page
 	$(eval export CONFIG)
 	./maintenance_page/scripts/failback.sh
+
+#### end
