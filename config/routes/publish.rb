@@ -332,6 +332,12 @@ namespace :publish, as: :publish do
         end
 
         namespace :schools do
+          resource :multiple, only: %i[new create], on: :member, controller: 'multiple' do
+            resource :check, only: %i[show update], controller: 'check_multiple' do
+              get 'remove_school/:urn', action: 'remove_school', as: :remove_school
+            end
+          end
+
           resource :check, only: %i[show update]
         end
         resources :schools, only: %i[index create show destroy] do

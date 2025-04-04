@@ -9,6 +9,8 @@
 
     <%= govuk_button_link_to t(".add_school"), search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
 
+    <%= govuk_link_to("Add multiple schools", new_publish_provider_recruitment_cycle_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") %>
+
     <%= render Publish::Providers::SchoolPlacements::ExplainerComponent.new %>
 
     <% if @schools.any? %>
@@ -19,7 +21,7 @@
             <th class="govuk-table__header" scope="col"><%= t(".code") %></th>
             <% if urn_required?(@recruitment_cycle.year.to_i) %>
               <th class="govuk-table__header" scope="col">
-                <abbr class="app-!-text-decoration-underline-dotted" title="Unique Reference Number">
+                <abbr class="app-!-text-decoration-underline-dotted" title="<%= t(".urn_abbr") %>">
                   <%= t(".urn") %>
                 </abbr>
               </th>

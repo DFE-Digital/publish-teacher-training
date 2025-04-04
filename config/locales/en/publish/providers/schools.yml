@@ -5,9 +5,11 @@ en:
         index:
           title: Schools
           add_school: Add school
+          add_multiple_school: Add multiple school
           name: School name
           code: School code
           urn: URN
+          urn_abbr: Unique Reference Number
         show:
           code: School code
           urn: URN

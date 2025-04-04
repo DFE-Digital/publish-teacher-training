@@ -61,7 +61,7 @@ module Support
       end
 
       def reset_urn_form
-        Schools::URNForm.new(provider).clear_stash
+        URNForm.new(provider).clear_stash
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Support
+module Publish
   module Providers
     module Schools
       class MultipleController < ApplicationController
@@ -14,7 +14,7 @@ module Support
           @urn_form = URNForm.new(provider, params: { values: parsed_urns.presence })
 
           if @urn_form.stash
-            redirect_to support_recruitment_cycle_provider_schools_multiple_check_path
+            redirect_to publish_provider_recruitment_cycle_schools_multiple_check_path
           else
             render(:new)
           end
@@ -23,7 +23,7 @@ module Support
         private
 
         def provider
-          @provider ||= recruitment_cycle.providers.find(params[:provider_id])
+          @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
         end
 
         def form_params
