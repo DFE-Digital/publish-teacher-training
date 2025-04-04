@@ -39,6 +39,23 @@ RSpec.describe API::Public::V1::SerializableCourse do
     it { is_expected.to have_attribute(:bursary_amount).with_value('24000') }
   end
 
+  context 'when course sponsors visas and has a visa sponsorship application deadline' do
+    let(:provider) { create(:provider) }
+    let(:deadline) { (provider.recruitment_cycle.application_end_date - 1.day).end_of_day }
+    let(:course) do
+      create(
+        :course,
+        :open,
+        :published,
+        :can_sponsor_skilled_worker_visa,
+        provider:,
+        visa_sponsorship_application_deadline_at: deadline
+      )
+    end
+
+    it { is_expected.to have_attribute(:visa_sponsorship_application_deadline_at).with_value(deadline.iso8601) }
+  end
+
   it { is_expected.to have_attribute(:bursary_requirements).with_value(course.bursary_requirements) }
   it { is_expected.to have_attribute(:changed_at).with_value(course.changed_at.iso8601) }
   it { is_expected.to have_attribute(:code).with_value(course.course_code) }
