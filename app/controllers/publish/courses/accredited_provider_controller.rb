@@ -19,7 +19,7 @@ module Publish
         authorize(@provider, :can_create_course?)
 
         if course_params[:accredited_provider_code].blank?
-          @errors = { accredited_provider_code: ['Select an accredited provider'] }
+          @errors = { accredited_provider_code: ["Select an accredited provider"] }
           render :new
         else
           super
@@ -30,12 +30,12 @@ module Publish
         begin
           code = update_course_params[:accredited_provider_code]
         rescue ActionController::ParameterMissing
-          @errors = { accredited_provider_code: ['Select an accredited provider'] } if code.blank?
+          @errors = { accredited_provider_code: ["Select an accredited provider"] } if code.blank?
           return render :edit if @errors.present?
         end
 
         if @course.update(update_params)
-          course_updated_message('Accredited provider')
+          course_updated_message("Accredited provider")
           redirect_to_update_successful
         else
           @errors = @course.errors.messages
@@ -43,7 +43,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def build_provider
         @provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
@@ -60,8 +60,8 @@ module Publish
           details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code
-          )
+            @course.course_code,
+          ),
         )
       end
 
@@ -72,13 +72,13 @@ module Publish
       def update_course_params
         params.expect(
           course: %i[accredited_provider_code
-                     accredited_provider]
+                     accredited_provider],
         )
       end
 
       def update_params
         {
-          accredited_provider_code: update_course_params[:accredited_provider_code]
+          accredited_provider_code: update_course_params[:accredited_provider_code],
         }
       end
 

@@ -11,7 +11,7 @@ class Program
         scitt_programme: SCITTProgramme,
         scitt_salaried_programme: SCITTSalariedProgramme,
         pg_teaching_apprenticeship: PostgraduateTeachingApprenticeship,
-        teacher_degree_apprenticeship: TeacherDegreeApprenticeship
+        teacher_degree_apprenticeship: TeacherDegreeApprenticeship,
       }
     end
 
@@ -44,7 +44,7 @@ class Program
     def sponsors_skilled_worker_visa? = false
 
     def visa_type
-      type = fee_based? ? 'student' : 'skilled_worker'
+      type = fee_based? ? "student" : "skilled_worker"
       ActiveSupport::StringInquirer.new(type)
     end
 

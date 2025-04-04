@@ -12,13 +12,13 @@ class AccreditedProviderForm < Form
 
   validates :description, presence: true, words_count: { maximum: 100, message: :too_long }
 
-  alias compute_fields new_attributes
+  alias_method :compute_fields, :new_attributes
 
   def accredited_provider
     @accredited_provider ||= Provider.find(accredited_provider_id)
   end
 
-  private
+private
 
   def assign_attributes_to_model
     model.accrediting_provider_enrichments = [] if model.accrediting_provider_enrichments.nil?
@@ -36,8 +36,8 @@ class AccreditedProviderForm < Form
     AccreditingProviderEnrichment.new(
       {
         UcasProviderCode: accredited_provider.provider_code,
-        Description: description
-      }
+        Description: description,
+      },
     )
   end
 
@@ -46,7 +46,7 @@ class AccreditedProviderForm < Form
       ::Users::OrganisationMailer.added_as_an_organisation_to_training_partner(
         recipient: user,
         provider: model,
-        accredited_provider:
+        accredited_provider:,
       ).deliver_later
     end
   end

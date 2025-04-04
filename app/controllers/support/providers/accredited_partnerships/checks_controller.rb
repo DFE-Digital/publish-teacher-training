@@ -18,13 +18,13 @@ module Support
 
             redirect_to support_recruitment_cycle_provider_accredited_partnerships_path(
               recruitment_cycle.year, provider.id
-            ), flash: { success: t('.added') }
+            ), flash: { success: t(".added") }
           else
             render :show
           end
         end
 
-        private
+      private
 
         def accredited_provider_form
           @accredited_provider_form ||= ProviderPartnershipForm.new(current_user, new_partnership)
@@ -47,7 +47,7 @@ module Support
             ::Users::OrganisationMailer.added_as_an_organisation_to_training_partner(
               recipient: user,
               provider: provider,
-              accredited_provider: @partnership.accredited_provider
+              accredited_provider: @partnership.accredited_provider,
             ).deliver_later
           end
         end

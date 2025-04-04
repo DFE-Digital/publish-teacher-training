@@ -34,7 +34,7 @@ module Courses
       course
     end
 
-    private
+  private
 
     def subjects
       @subjects ||= Subject.find(@subject_ids)
@@ -54,7 +54,7 @@ module Courses
           subject_ids.each do |subject_id|
             course.course_subjects.create(subject_id:)
           end
-          course.save
+          course.save!
         end
       else
         subject_ids.each do |subject_id|
@@ -68,10 +68,10 @@ module Courses
     end
 
     def update_further_education_fields
-      course.funding_type = 'fee'
-      course.english = 'not_required'
-      course.maths = 'not_required'
-      course.science = 'not_required'
+      course.funding_type = "fee"
+      course.english = "not_required"
+      course.maths = "not_required"
+      course.science = "not_required"
     end
   end
 end

@@ -6,7 +6,7 @@
     <%= form_with(
         model: @study_site_select_form,
         url: search_publish_provider_recruitment_cycle_study_sites_path(@provider.provider_code),
-        method: :put
+        method: :put,
       ) do |f| %>
 
       <%= f.govuk_error_summary %>

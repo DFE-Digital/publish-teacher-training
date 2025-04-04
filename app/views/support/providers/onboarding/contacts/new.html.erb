@@ -4,7 +4,7 @@
   <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(
       text: "Back",
-      href: back_link_for_onboarding_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year)
+      href: back_link_for_onboarding_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year),
     ) %>
   <% end %>
 

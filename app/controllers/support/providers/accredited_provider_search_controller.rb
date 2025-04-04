@@ -37,7 +37,7 @@ module Support
         end
       end
 
-      private
+    private
 
       def accredited_provider_id
         params[:accredited_provider_id]
@@ -70,8 +70,8 @@ module Support
           results_limit: @accredited_provider_search.limit,
           results_count: @accredited_provider_search.providers.unscope(:limit).count,
           return_path: search_support_recruitment_cycle_provider_accredited_providers_path,
-          search_resource: 'accredited provider',
-          caption_text: "Add accredited provider - #{provider.name_and_code}"
+          search_resource: "accredited provider",
+          caption_text: "Add accredited provider - #{provider.name_and_code}",
         )
       end
 

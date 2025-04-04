@@ -19,7 +19,7 @@ module ALevelSteps
     def subject
       ALevelSubjectRequirementRowComponent.new(
         subject: @subject,
-        other_subject:
+        other_subject:,
       ).subject_name
     end
 
@@ -32,14 +32,14 @@ module ALevelSteps
     end
 
     def deletion_confirmed?
-      confirmation == 'yes'
+      confirmation == "yes"
     end
 
     def no_a_level_subject_requirements?
       a_level_subject_requirements.empty?
     end
 
-    private
+  private
 
     def a_level_subject_requirements
       Array(course.a_level_subject_requirements)

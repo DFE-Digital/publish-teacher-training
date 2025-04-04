@@ -13,7 +13,7 @@ class ALevelsWizard < DfE::Wizard::Base
       { add_a_level_to_a_list: ALevelSteps::AddALevelToAList },
       { remove_a_level_subject_confirmation: ALevelSteps::RemoveALevelSubjectConfirmation },
       { consider_pending_a_level: ALevelSteps::ConsiderPendingALevel },
-      { a_level_equivalencies: ALevelSteps::ALevelEquivalencies }
+      { a_level_equivalencies: ALevelSteps::ALevelEquivalencies },
     ]
   end
 
@@ -40,14 +40,14 @@ class ALevelsWizard < DfE::Wizard::Base
   # what_a_level_is_required - WhatALevelIsRequired step
   #
   def default_path_prefix
-    'publish_provider_recruitment_cycle_course'
+    "publish_provider_recruitment_cycle_course"
   end
 
   def exit_path
     url_helpers.publish_provider_recruitment_cycle_course_path(
       provider_code:,
       recruitment_cycle_year:,
-      code: course_code
+      code: course_code,
     )
   end
 

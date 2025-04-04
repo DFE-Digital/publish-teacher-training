@@ -11,7 +11,7 @@
     <%= form_with(
         model: @school_select_form,
         url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
-        method: :put
+        method: :put,
       ) do |f| %>
 
       <%= f.govuk_error_summary %>

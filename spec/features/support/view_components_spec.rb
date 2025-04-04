@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.feature 'view components' do
-  shared_examples 'navigate to' do |link|
+RSpec.feature "view components" do
+  shared_examples "navigate to" do |link|
     scenario "navigate to #{link}" do
       visit link
 
@@ -18,6 +18,6 @@ RSpec.feature 'view components' do
   end).flatten
 
   all_links.each do |link|
-    include_examples 'navigate to', link
+    include_examples "navigate to", link
   end
 end

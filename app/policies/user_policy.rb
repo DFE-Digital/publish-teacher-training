@@ -16,9 +16,9 @@ class UserPolicy
     user.admin? || user == accessed_user
   end
 
-  alias update? show?
-  alias accept_transition_screen? update?
-  alias accept_terms? update?
-  alias index? show?
-  alias create? update?
+  alias_method :update?, :show?
+  alias_method :accept_transition_screen?, :update?
+  alias_method :accept_terms?, :update?
+  alias_method :index?, :show?
+  alias_method :create?, :update?
 end

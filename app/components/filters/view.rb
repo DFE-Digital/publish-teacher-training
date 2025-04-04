@@ -10,7 +10,7 @@ module Filters
       super
     end
 
-    private
+  private
 
     def filter_attributes
       "::Filters::#{filter_model}Attributes::View".constantize.new(filters:)
@@ -22,7 +22,7 @@ module Filters
 
     def title_html(filter, value)
       value = value.keys.first if value.respond_to?(:keys)
-      tag.span('Remove ', class: 'govuk-visually-hidden') + value + tag.span(" #{filter.humanize.downcase} filter", class: 'govuk-visually-hidden')
+      tag.span("Remove ", class: "govuk-visually-hidden") + value + tag.span(" #{filter.humanize.downcase} filter", class: "govuk-visually-hidden")
     end
 
     ### Tags are links you can click to remove the search property and reload the page

@@ -6,7 +6,7 @@ module Courses
       extend ActiveSupport::Concern
       included do
         def qualification_options
-          if level == 'further_education'
+          if level == "further_education"
             qualifications_without_qts
           else
             qualifications_with_qts
@@ -27,7 +27,7 @@ module Courses
 
         def qualifications_without_qts
           Course.qualifications.keys.reject do |qualification|
-            qualification.include?('qts')
+            qualification.include?("qts")
           end
         end
       end

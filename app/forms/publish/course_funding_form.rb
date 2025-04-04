@@ -2,7 +2,7 @@
 
 module Publish
   class CourseFundingForm < Form
-    alias course model
+    alias_method :course, :model
 
     FIELDS = %i[
       funding
@@ -15,8 +15,8 @@ module Publish
     attr_accessor(*FIELDS)
 
     validates :funding, presence: true
-    validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { skilled_worker_visa? }
-    validates :can_sponsor_student_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { student_visa? }
+    validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false, "true", "false"] }, if: -> { skilled_worker_visa? }
+    validates :can_sponsor_student_visa, inclusion: { in: [true, false, "true", "false"] }, if: -> { student_visa? }
 
     def initialize(model, params: {})
       super(model, model, params:)
@@ -31,7 +31,7 @@ module Publish
 
     def origin_step
       @origin_step ||= if funding_updated?
-                         if [course.funding, new_attributes[:funding]].include?('apprenticeship')
+                         if [course.funding, new_attributes[:funding]].include?("apprenticeship")
                            :apprenticeship
                          else
                            :funding
@@ -40,7 +40,7 @@ module Publish
     end
 
     def is_fee_based?
-      funding == 'fee'
+      funding == "fee"
     end
 
     def visa_type
@@ -59,7 +59,7 @@ module Publish
       super + [:previous_tda_course]
     end
 
-    private
+  private
 
     def reset_enrichment_attributes
       {
@@ -67,22 +67,22 @@ module Publish
           fee_details: nil,
           fee_international: nil,
           fee_uk_eu: nil,
-          financial_support: nil
+          financial_support: nil,
         },
         student: {
-          salary_details: nil
-        }
+          salary_details: nil,
+        },
       }[visa_type]
     end
 
     def reset_course_attributes
       {
         skilled_worker: {
-          can_sponsor_student_visa: false
+          can_sponsor_student_visa: false,
         },
         student: {
-          can_sponsor_skilled_worker_visa: false
-        }
+          can_sponsor_skilled_worker_visa: false,
+        },
       }[visa_type]
     end
 
@@ -108,7 +108,7 @@ module Publish
       {
         funding: course.funding,
         can_sponsor_skilled_worker_visa: course.can_sponsor_skilled_worker_visa,
-        can_sponsor_student_visa: course.can_sponsor_student_visa
+        can_sponsor_student_visa: course.can_sponsor_student_visa,
       }
     end
 

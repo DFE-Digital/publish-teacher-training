@@ -17,16 +17,16 @@ module Publish
       def update
         @course_fees_and_financial_support_form = CourseFeesAndFinancialSupportForm.new(
           course_enrichment,
-          params: fees_and_financial_support_params
+          params: fees_and_financial_support_params,
         )
 
         if @course_fees_and_financial_support_form.save!
-          course_updated_message CourseEnrichment.human_attribute_name('fee_details')
+          course_updated_message CourseEnrichment.human_attribute_name("fee_details")
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
 
         else
@@ -35,7 +35,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def fees_and_financial_support_params
         params

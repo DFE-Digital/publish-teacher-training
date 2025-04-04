@@ -5,7 +5,7 @@ module Publish
     class StartDateController < ApplicationController
       include CourseBasicDetailConcern
 
-      private
+    private
 
       def current_step
         :start_date
@@ -16,7 +16,7 @@ module Publish
       end
 
       def section_key
-        'Course start date'
+        "Course start date"
       end
     end
   end

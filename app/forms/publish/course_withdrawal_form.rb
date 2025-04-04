@@ -2,7 +2,7 @@
 
 module Publish
   class CourseWithdrawalForm < BaseCourseForm
-    alias course model
+    alias_method :course, :model
 
     def save!
       if valid?
@@ -14,7 +14,7 @@ module Publish
       end
     end
 
-    private
+  private
 
     def after_successful_save_action
       NotificationService::CourseWithdrawn.call(course:)

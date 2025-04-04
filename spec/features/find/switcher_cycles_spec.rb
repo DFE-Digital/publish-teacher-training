@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'switcher cycle' do
+feature "switcher cycle" do
   before do
     Timecop.freeze(2022, 10, 12)
   end
 
-  scenario 'Navigate to /cycle' do
+  scenario "Navigate to /cycle" do
     when_i_visit_switcher_cycle_page
     then_i_should_see_the_page_title
     and_i_should_see_the_page_heading
   end
 
-  scenario 'Mid cycle and deadlines should be displayed' do
+  scenario "Mid cycle and deadlines should be displayed" do
     when_i_visit_switcher_cycle_page
-    and_i_choose('Mid cycle and deadlines should be displayed')
+    and_i_choose("Mid cycle and deadlines should be displayed")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_find_results_page
@@ -25,38 +25,38 @@ feature 'switcher cycle' do
     and_i_do_not_see_the_apply_opens_soon_banner
   end
 
-  scenario 'Update to Apply deadline has passed' do
+  scenario "Update to Apply deadline has passed" do
     when_i_visit_switcher_cycle_page
-    and_i_choose('Apply deadline has passed')
+    and_i_choose("Apply deadline has passed")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_find_results_page
-    and_i_see_deadline_banner('The application deadline has passed')
+    and_i_see_deadline_banner("The application deadline has passed")
 
     and_i_do_not_see_mid_cycle_banner
     and_i_do_not_see_the_apply_opens_soon_banner
   end
 
-  scenario 'Find has closed' do
+  scenario "Find has closed" do
     when_i_visit_switcher_cycle_page
-    and_i_choose('Find has closed')
+    and_i_choose("Find has closed")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_the_find_homepage
     then_i_should_see_the_applications_closed_text
   end
 
-  scenario 'Find has reopened' do
+  scenario "Find has reopened" do
     when_i_visit_switcher_cycle_page
-    and_i_choose('Find has reopened')
+    and_i_choose("Find has reopened")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_should_see_the_correct_previous_recruitment_cycle_year
   end
 
-  scenario 'Find has reopened, but Apply has not' do
+  scenario "Find has reopened, but Apply has not" do
     when_i_visit_switcher_cycle_page
-    and_i_choose('Find has reopened, but Apply has not')
+    and_i_choose("Find has reopened, but Apply has not")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_should_see_the_correct_previous_recruitment_cycle_year
@@ -68,15 +68,15 @@ feature 'switcher cycle' do
   end
 
   def when_i_visit_switcher_cycle_page
-    visit '/cycles'
+    visit "/cycles"
   end
 
   def then_i_should_see_the_page_title
-    expect(page.title).to have_content 'Recruitment cycles'
+    expect(page.title).to have_content "Recruitment cycles"
   end
 
   def and_i_should_see_the_page_heading
-    expect(find_courses_by_location_or_training_provider_page.heading).to have_content 'Recruitment cycles'
+    expect(find_courses_by_location_or_training_provider_page.heading).to have_content "Recruitment cycles"
   end
 
   def and_i_choose(option)
@@ -84,19 +84,19 @@ feature 'switcher cycle' do
   end
 
   def then_i_click_on_update_button
-    page.click_link_or_button('Update point in recruitment cycle')
+    page.click_link_or_button("Update point in recruitment cycle")
   end
 
   def and_i_should_see_the_success_banner
-    expect(page).to have_css('h2', text: 'Success')
+    expect(page).to have_css("h2", text: "Success")
   end
 
   def and_i_visit_find_results_page
-    visit '/results'
+    visit "/results"
   end
 
   def and_i_visit_the_find_homepage
-    visit '/'
+    visit "/"
   end
 
   def and_i_see_mid_cycle_banner
@@ -114,30 +114,30 @@ feature 'switcher cycle' do
   end
 
   def and_i_see_deadline_banner(banner_text)
-    expect(page).to have_css('.govuk-notification-banner__heading', text: banner_text)
+    expect(page).to have_css(".govuk-notification-banner__heading", text: banner_text)
   end
 
   def and_i_do_not_see_deadline_banner(banner_text)
-    expect(page).to have_no_css('.govuk-notification-banner__heading', text: banner_text)
+    expect(page).to have_no_css(".govuk-notification-banner__heading", text: banner_text)
   end
 
   def then_i_should_see_the_applications_closed_text
-    expect(page).to have_text('Applications are currently closed but you can get ready to apply')
+    expect(page).to have_text("Applications are currently closed but you can get ready to apply")
   end
 
   def then_i_see_the_apply_opens_soon_banner
-    and_i_see_deadline_banner('Apply for courses from 10 October')
+    and_i_see_deadline_banner("Apply for courses from 10 October")
   end
 
   def and_i_do_not_see_the_apply_opens_soon_banner
-    and_i_do_not_see_deadline_banner('Apply for courses from 10 October')
+    and_i_do_not_see_deadline_banner("Apply for courses from 10 October")
   end
 
   def and_i_do_not_see_the_cycle_has_closed_banner
-    and_i_do_not_see_deadline_banner('The application deadline has passed')
+    and_i_do_not_see_deadline_banner("The application deadline has passed")
   end
 
   def and_i_should_see_the_correct_previous_recruitment_cycle_year
-    expect(page).to have_text('Previous cycle year2023') # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
+    expect(page).to have_text("Previous cycle year2023") # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
   end
 end

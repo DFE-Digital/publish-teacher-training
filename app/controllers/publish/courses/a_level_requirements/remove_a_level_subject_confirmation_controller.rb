@@ -11,11 +11,11 @@ module Publish
             current_step:,
             provider: @provider,
             course: @course,
-            step_params:
+            step_params:,
           )
 
           if @wizard.valid_step?
-            @wizard.destroy
+            @wizard.destroy!
             redirect_to @wizard.next_step_path
           else
             render :new

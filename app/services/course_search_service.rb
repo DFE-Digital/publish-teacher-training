@@ -13,9 +13,9 @@ class CourseSearchService
     @course_scope = course_scope
     @sort = sort
     @degree_type_answer_determiner = degree_type_answer_determiner.new(
-      university_degree_status: @filter['university_degree_status'],
-      age_group: @filter['age_group'],
-      visa_status: @filter['visa_status']
+      university_degree_status: @filter["university_degree_status"],
+      age_group: @filter["age_group"],
+      visa_status: @filter["visa_status"],
     )
   end
 
@@ -46,7 +46,7 @@ class CourseSearchService
       :financial_incentives,
       course_subjects: [:subject],
       site_statuses: [:site],
-      provider: %i[recruitment_cycle ucas_preferences]
+      provider: %i[recruitment_cycle ucas_preferences],
     ).where(id: scope.select(:id))
 
     if provider_name.present?
@@ -55,10 +55,10 @@ class CourseSearchService
                     .ascending_provider_canonical_order
     elsif sort_by_provider_ascending?
       outer_scope = outer_scope.ascending_provider_canonical_order
-      outer_scope = outer_scope.select('provider.provider_name', 'course.*')
+      outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_provider_descending?
       outer_scope = outer_scope.descending_provider_canonical_order
-      outer_scope = outer_scope.select('provider.provider_name', 'course.*')
+      outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_course_ascending?
       outer_scope = outer_scope.ascending_course_canonical_order
     elsif sort_by_course_descending?
@@ -83,7 +83,7 @@ class CourseSearchService
 
   private_class_method :new
 
-  private
+private
 
   # This method can be overridden in subclasses to apply different ordering logic
   # for various contexts, such as the API.
@@ -102,13 +102,13 @@ class CourseSearchService
   end
 
   def expand_university?
-    filter[:expand_university].to_s.downcase == 'true'
+    filter[:expand_university].to_s.downcase == "true"
   end
 
   def distance_with_university_area_adjustment
     university_provider_type = Provider.provider_types[:university]
     university_location_area_radius = 10
-    <<~EOSQL.gsub(/\s+/m, ' ').strip
+    <<~EOSQL.gsub(/\s+/m, " ").strip
       (CASE
         WHEN provider.provider_type = '#{university_provider_type}'
           THEN (distance - #{university_location_area_radius})
@@ -137,10 +137,10 @@ class CourseSearchService
       running_and_published_criteria
         .and(site_statuses[:vac_status])
         .eq_any([
-                  SiteStatus.vac_statuses[:full_time_vacancies],
-                  SiteStatus.vac_statuses[:part_time_vacancies],
-                  SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies]
-                ])
+          SiteStatus.vac_statuses[:full_time_vacancies],
+          SiteStatus.vac_statuses[:part_time_vacancies],
+          SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies],
+        ])
     else
       running_and_published_criteria
     end
@@ -156,7 +156,7 @@ class CourseSearchService
     # there are some sites with no address1 or postcode that cannot be
     # accurately geocoded. We don't want to return these as the closest site.
     # This should be removed once the data is fixed
-    sites[:address1].not_eq('').or(sites[:postcode].not_eq(''))
+    sites[:address1].not_eq("").or(sites[:postcode].not_eq(""))
   end
 
   def course_id_with_lowest_locatable_distance
@@ -172,8 +172,8 @@ class CourseSearchService
     # form a temporary table with results
     Arel::Nodes::TableAlias.new(
       Arel.sql(
-        format('(%s)', course_id_with_lowest_locatable_distance.to_sql)
-      ), 'distances'
+        sprintf("(%s)", course_id_with_lowest_locatable_distance.to_sql),
+      ), "distances"
     )
   end
 
@@ -192,23 +192,23 @@ class CourseSearchService
   end
 
   def sort_by_course_ascending?
-    sort == 'course_asc' || course_asc_requirement
+    sort == "course_asc" || course_asc_requirement
   end
 
   def sort_by_course_descending?
-    sort == 'course_desc' || course_desc_requirement
+    sort == "course_desc" || course_desc_requirement
   end
 
   def sort_by_provider_ascending?
-    sort == 'provider_asc' || provider_asc_requirement
+    sort == "provider_asc" || provider_asc_requirement
   end
 
   def sort_by_provider_descending?
-    sort == 'provider_desc' || provider_desc_requirement
+    sort == "provider_desc" || provider_desc_requirement
   end
 
   def sort_by_distance?
-    sort == 'distance'
+    sort == "distance"
   end
 
   def origin
@@ -218,35 +218,35 @@ class CourseSearchService
   attr_reader :sort, :filter, :course_scope
 
   def funding_filter_salary?
-    filter[:funding] == 'salary'
+    filter[:funding] == "salary"
   end
 
   def qualifications
     return [] if filter[:qualification].blank? || degree_type == :undergraduate
 
     filter[:qualification] = filter[:qualification].values if filter[:qualification].is_a?(Hash)
-    filter[:qualification] = filter[:qualification].split(',') if filter[:qualification].is_a?(String)
+    filter[:qualification] = filter[:qualification].split(",") if filter[:qualification].is_a?(String)
 
-    if filter[:qualification].include?('pgce pgde')
-      filter[:qualification] -= ['pgce pgde']
+    if filter[:qualification].include?("pgce pgde")
+      filter[:qualification] -= ["pgce pgde"]
       filter[:qualification] |= %w[pgce pgde]
     end
 
-    filter[:qualification] |= %w[pgde_with_qts] if filter[:qualification].is_a?(Array) && filter[:qualification].include?('pgce_with_qts')
+    filter[:qualification] |= %w[pgde_with_qts] if filter[:qualification].is_a?(Array) && filter[:qualification].include?("pgce_with_qts")
 
     filter[:qualification]
   end
 
   def has_vacancies?
-    filter[:has_vacancies].to_s.downcase == 'true'
+    filter[:has_vacancies].to_s.downcase == "true"
   end
 
   def applications_open?
-    filter[:applications_open].to_s.downcase == 'true'
+    filter[:applications_open].to_s.downcase == "true"
   end
 
   def findable?
-    filter[:findable].to_s.downcase == 'true'
+    filter[:findable].to_s.downcase == "true"
   end
 
   def study_types
@@ -256,13 +256,13 @@ class CourseSearchService
 
     filter[:study_type] = filter[:study_type].values if filter[:study_type].is_a?(Hash)
 
-    filter[:study_type].split(',')
+    filter[:study_type].split(",")
   end
 
   def funding_types
     return [] if filter[:funding_type].blank?
 
-    filter[:funding_type].split(',')
+    filter[:funding_type].split(",")
   end
 
   def degrees_accepted?
@@ -275,20 +275,20 @@ class CourseSearchService
     degree_required_parameter = filter[:degree_required].to_sym
 
     accepted_degrees = {
-      show_all_courses: 'two_one,two_two,third_class,not_required',
-      two_two: 'two_two,third_class,not_required',
-      third_class: 'third_class,not_required',
-      not_required: 'not_required'
+      show_all_courses: "two_one,two_two,third_class,not_required",
+      two_two: "two_two,third_class,not_required",
+      third_class: "third_class,not_required",
+      not_required: "not_required",
     }
 
-    (accepted_degrees[degree_required_parameter] || accepted_degrees[:show_all_courses]).split(',')
+    (accepted_degrees[degree_required_parameter] || accepted_degrees[:show_all_courses]).split(",")
   end
 
   def degree_grades
     return [] if filter[:degree_grade].blank?
     return [] unless filter[:degree_grade].is_a?(String)
 
-    filter[:degree_grade].split(',')
+    filter[:degree_grade].split(",")
   end
 
   def subject_codes
@@ -296,7 +296,7 @@ class CourseSearchService
     return filter[:subjects] if filter[:subjects].is_a? Array
     return filter[:subjects].values if filter[:subjects].is_a?(Hash)
 
-    filter[:subjects].split(',')
+    filter[:subjects].split(",")
   end
 
   def provider_name
@@ -306,7 +306,7 @@ class CourseSearchService
   end
 
   def send_courses_filter?
-    filter[:send_courses].to_s.downcase == 'true'
+    filter[:send_courses].to_s.downcase == "true"
   end
 
   def updated_since_filter?
@@ -314,26 +314,26 @@ class CourseSearchService
   end
 
   def can_sponsor_visa_filter?
-    filter[:can_sponsor_visa].to_s.downcase == 'true'
+    filter[:can_sponsor_visa].to_s.downcase == "true"
   end
 
   def engineers_teach_physics_filter?
-    filter[:engineers_teach_physics].to_s.downcase == 'true' || filter[:campaign_name] == 'engineers_teach_physics'
+    filter[:engineers_teach_physics].to_s.downcase == "true" || filter[:campaign_name] == "engineers_teach_physics"
   end
 
   def course_asc_requirement
-    sort == 'name,provider.provider_name'
+    sort == "name,provider.provider_name"
   end
 
   def course_desc_requirement
-    sort == '-name,provider.provider_name'
+    sort == "-name,provider.provider_name"
   end
 
   def provider_asc_requirement
-    sort == 'provider.provider_name,name'
+    sort == "provider.provider_name,name"
   end
 
   def provider_desc_requirement
-    sort == '-provider.provider_name,name'
+    sort == "-provider.provider_name,name"
   end
 end

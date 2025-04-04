@@ -15,7 +15,7 @@ module ErrorHandlers
       rescue_from(ActiveRecord::RecordNotFound) { render_json_error(status: 404) }
     end
 
-    private
+  private
 
     def render_json_error(status:, resource: nil, message: nil)
       if resource.nil?
@@ -31,9 +31,9 @@ module ErrorHandlers
           {
             status:,
             title: I18n.t("errors.#{status}.title"),
-            detail: I18n.t("errors.#{status}.detail", message:)
-          }
-        ]
+            detail: I18n.t("errors.#{status}.detail", message:),
+          },
+        ],
       }
     end
   end

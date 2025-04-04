@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Publish
   describe CourseSalaryForm, type: :model do
@@ -10,30 +10,30 @@ module Publish
 
     subject { described_class.new(enrichment, params:) }
 
-    describe 'validations' do
-      context 'salary details' do
+    describe "validations" do
+      context "salary details" do
         before do
           enrichment.salary_details = Faker::Lorem.sentence(word_count: 251)
           subject.valid?
         end
 
-        it 'validates the word count for fee details' do
+        it "validates the word count for fee details" do
           expect(subject).not_to be_valid
           expect(subject.errors[:salary_details])
-            .to include(I18n.t('activemodel.errors.models.publish/course_salary_form.attributes.salary_details.too_long'))
+            .to include(I18n.t("activemodel.errors.models.publish/course_salary_form.attributes.salary_details.too_long"))
         end
       end
     end
 
-    describe '#save!' do
-      let(:params) { { salary_details: 'some text' } }
+    describe "#save!" do
+      let(:params) { { salary_details: "some text" } }
 
       before do
         enrichment.salary_details = Faker::Lorem.sentence(word_count: 249)
       end
 
-      it 'saves the provider with any new attributes' do
-        expect { subject.save! }.to change(enrichment, :salary_details).to('some text')
+      it "saves the provider with any new attributes" do
+        expect { subject.save! }.to change(enrichment, :salary_details).to("some text")
       end
     end
   end

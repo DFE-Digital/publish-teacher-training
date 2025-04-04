@@ -4,7 +4,7 @@ class GiasSchool < ApplicationRecord
   include PgSearch::Model
   include VectorSearchable
 
-  ESTABLISHMENT_OPEN_STATUS_CODE = '1'
+  ESTABLISHMENT_OPEN_STATUS_CODE = "1"
 
   validates :urn, :name, :address1, :town, :postcode, presence: true
   validates :urn, uniqueness: { case_sensitive: false }
@@ -14,8 +14,8 @@ class GiasSchool < ApplicationRecord
                   using: {
                     tsearch: {
                       prefix: true,
-                      tsvector_column: 'searchable'
-                    }
+                      tsvector_column: "searchable",
+                    },
                   }
 
   scope :open, -> { where(status_code: ESTABLISHMENT_OPEN_STATUS_CODE) }
@@ -29,11 +29,11 @@ class GiasSchool < ApplicationRecord
       address3:,
       town:,
       address4: county,
-      postcode:
+      postcode:,
     }
   end
 
-  private
+private
 
   def searchable_vector_value
     [
@@ -41,9 +41,9 @@ class GiasSchool < ApplicationRecord
       name,
       name_normalised,
       postcode,
-      postcode&.delete(' '),
-      town
-    ].join(' ')
+      postcode&.delete(" "),
+      town,
+    ].join(" ")
   end
 
   def name_normalised = StripPunctuationService.call(string: name)

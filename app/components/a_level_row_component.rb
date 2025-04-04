@@ -47,7 +47,7 @@ class ALevelRowComponent < ViewComponent::Base
     {
       a_level_subject_requirements: :what_a_level_is_required,
       accept_pending_a_level: :consider_pending_a_level,
-      accept_a_level_equivalency: :a_level_equivalencies
+      accept_a_level_equivalency: :a_level_equivalencies,
     }.with_indifferent_access[a_level_error]
   end
 

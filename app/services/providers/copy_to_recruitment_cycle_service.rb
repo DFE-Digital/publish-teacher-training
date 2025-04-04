@@ -41,11 +41,11 @@ module Providers
         providers: providers_count,
         sites: sites_count,
         study_sites: study_sites_count,
-        courses: courses_count
+        courses: courses_count,
       }
     end
 
-    private
+  private
 
     attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service, :force
 
@@ -53,7 +53,7 @@ module Providers
       courses = []
       if force
         if course_codes.nil?
-          Rails.logger.info 'no courses will be roll overed'
+          Rails.logger.info "no courses will be roll overed"
         else
           courses = courses_from_course_codes(provider, course_codes)
         end

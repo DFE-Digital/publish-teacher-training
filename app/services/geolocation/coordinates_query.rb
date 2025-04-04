@@ -71,7 +71,7 @@ module Geolocation
     def coordinates_on_error
       { latitude: nil, longitude: nil, formatted_address: nil, country: nil, types: [] }
     end
-    alias blank_coordinates coordinates_on_error
+    alias_method :blank_coordinates, :coordinates_on_error
 
     # Validates whether the response from the API contains valid coordinates.
     # @param response [Hash] The response to validate.
@@ -90,7 +90,7 @@ module Geolocation
 
       Sentry.capture_exception(
         error,
-        message:
+        message:,
       )
     end
 

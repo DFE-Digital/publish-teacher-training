@@ -5,7 +5,7 @@ module FeatureHelpers
     attr_reader :course
 
     def given_a_course_exists(*traits, **overrides)
-      @course ||= create(:course, *traits, **overrides, provider: overrides.delete(:provider) || current_user.providers.first)
+      @given_a_course_exists ||= create(:course, *traits, **overrides, provider: overrides.delete(:provider) || current_user.providers.first)
     end
 
     def given_a_site_exists(*traits, **overrides)

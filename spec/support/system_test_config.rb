@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 # Use different Capybara ports when running tests in parallel
-Capybara.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i if ENV['TEST_ENV_NUMBER']
+Capybara.server_port = 9887 + ENV["TEST_ENV_NUMBER"].to_i if ENV["TEST_ENV_NUMBER"]
 
 # Cannot use puma, we may need to upgrade rackup > 3
 Capybara.server = :webrick
 
 Capybara.register_driver :selenium_chrome_headless do |app|
   options = Selenium::WebDriver::Chrome::Options.new.tap do |opts|
-    opts.add_argument('--headless=new')
-    opts.add_argument('--no-sandbox')
-    opts.add_argument('--disable-dev-shm-usage')
-    opts.add_argument('--disable-gpu')
-    opts.add_argument('--window-size=1400,1400')
+    opts.add_argument("--headless=new")
+    opts.add_argument("--no-sandbox")
+    opts.add_argument("--disable-dev-shm-usage")
+    opts.add_argument("--disable-gpu")
+    opts.add_argument("--window-size=1400,1400")
   end
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options:)

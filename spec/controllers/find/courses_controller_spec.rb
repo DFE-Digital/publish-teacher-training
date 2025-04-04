@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Find
   describe CoursesController do
@@ -16,57 +16,57 @@ module Find
         :course,
         :with_gcse_equivalency,
         enrichments: [build(:course_enrichment, :initial_draft)],
-        sites: [create(:site, location_name: 'location 1')],
-        provider:
+        sites: [create(:site, location_name: "location 1")],
+        provider:,
       )
     end
 
-    describe '#apply' do
-      it 'redirects' do
+    describe "#apply" do
+      it "redirects" do
         expect(Rails.logger).to receive(:info).with("Course apply conversion. Provider: #{course.provider.provider_code}. Course: #{course.course_code}").once
         expect(Rails.logger).to receive(:info)
 
         get :apply, params: {
           provider_code: provider.provider_code,
-          course_code: course.course_code
+          course_code: course.course_code,
         }
 
         expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
       end
 
-      it 'redirects when downcase provider and course code' do
+      it "redirects when downcase provider and course code" do
         get :apply, params: {
           provider_code: provider.provider_code.downcase,
-          course_code: course.course_code.downcase
+          course_code: course.course_code.downcase,
         }
 
         expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
       end
 
-      it 'raises a not found error when the provider does not exist' do
+      it "raises a not found error when the provider does not exist" do
         get :apply, params: {
-          provider_code: 'ABCD',
-          course_code: course.course_code.downcase
+          provider_code: "ABCD",
+          course_code: course.course_code.downcase,
         }
 
         expect(response).to be_not_found
       end
 
-      it 'raises a not found error when the course does not exist' do
+      it "raises a not found error when the course does not exist" do
         get :apply, params: {
           provider_code: provider.provider_code,
-          course_code: 'ABCD'
+          course_code: "ABCD",
         }
 
         expect(response).to be_not_found
       end
     end
 
-    describe '#show' do
-      it 'renders the not found page' do
+    describe "#show" do
+      it "renders the not found page" do
         get :show, params: {
-          provider_code: 'ABC',
-          course_code: '123'
+          provider_code: "ABC",
+          course_code: "123",
         }
 
         expect(response).to be_not_found

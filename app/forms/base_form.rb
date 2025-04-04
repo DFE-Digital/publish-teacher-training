@@ -47,7 +47,7 @@ class BaseForm
     store.stash(form_store_key, fields.except(*fields_to_ignore_before_stash)) if valid?
   end
 
-  private
+private
 
   def store
     @store ||= identifier_store.new(identifier_model)
@@ -58,7 +58,7 @@ class BaseForm
       provider: Stores::ProviderStore,
       user: Stores::UserStore,
       course: Stores::CourseStore,
-      course_decorator: Stores::CourseStore
+      course_decorator: Stores::CourseStore,
     }[identifier_model.class.name.underscore.to_sym]
   end
 
@@ -85,6 +85,6 @@ class BaseForm
   end
 
   def form_store_key
-    self.class.name.underscore.chomp('_form').split('/').last.to_sym
+    self.class.name.underscore.chomp("_form").split("/").last.to_sym
   end
 end

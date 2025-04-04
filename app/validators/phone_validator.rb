@@ -13,17 +13,17 @@ class PhoneValidator < ActiveModel::EachValidator
     end
   end
 
-  private
+private
 
   def invalid_phone_number_format?(value)
     value.match?(/[^ext\-()+.\s 0-9]/)
   end
 
   def not_enough_digits?(value)
-    value.gsub(/[^0-9]/, '').length < 8
+    value.gsub(/[^0-9]/, "").length < 8
   end
 
   def too_many_digits?(value)
-    value.gsub(/[^0-9]/, '').length > 15
+    value.gsub(/[^0-9]/, "").length > 15
   end
 end

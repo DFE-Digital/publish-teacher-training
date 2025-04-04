@@ -19,7 +19,7 @@ module Find
       end
     end
 
-    private
+  private
 
     def initialize_form
       @form = Find::Subjects::SecondaryForm.new(subject_params)
@@ -34,7 +34,7 @@ module Find
           code: subject.subject_code,
           name: subject.subject_name,
           financial_info: financial_information(subject.financial_incentive),
-          subject_group: subject.subject_group.name
+          subject_group: subject.subject_group.name,
         )
       end
     end

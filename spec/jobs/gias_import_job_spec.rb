@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe GiasImportJob do
   include ActiveJob::TestHelper
@@ -8,8 +8,8 @@ describe GiasImportJob do
   subject(:job) { described_class.perform_later }
 
   before do
-    stub_request(:get, 'https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata20250130.csv')
-      .to_return(status: 200, headers: {}, body: file_fixture('lib/gias/downloaded.csv'))
+    stub_request(:get, "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata20250130.csv")
+      .to_return(status: 200, headers: {}, body: file_fixture("lib/gias/downloaded.csv"))
   end
 
   around do |example|
@@ -21,15 +21,15 @@ describe GiasImportJob do
     clear_performed_jobs
   end
 
-  it 'queues the job' do
+  it "queues the job" do
     expect { job }
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
-  it 'runs the job' do
-    expect do
+  it "runs the job" do
+    expect {
       job
       perform_enqueued_jobs
-    end.to change(GiasSchool, :count).by(1)
+    }.to change(GiasSchool, :count).by(1)
   end
 end

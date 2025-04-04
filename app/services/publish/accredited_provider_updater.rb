@@ -33,20 +33,20 @@ module Publish
       courses.each { |c| c.update!(accredited_provider_code: new_accredited_provider.provider_code) }
     end
 
-    private
+  private
 
     def new_accrediting_provider_enrichments
       existing_accrediting_provider_enrichments = provider.accrediting_provider_enrichments || []
 
       return existing_accrediting_provider_enrichments if new_accredited_provider_code_in_enrichments?(
-        existing_accrediting_provider_enrichments
+        existing_accrediting_provider_enrichments,
       )
 
       accredited_provider_enrichment = AccreditingProviderEnrichment.new(
         {
           UcasProviderCode: new_accredited_provider.provider_code,
-          Description: ''
-        }
+          Description: "",
+        },
       )
 
       existing_accrediting_provider_enrichments << accredited_provider_enrichment

@@ -16,7 +16,7 @@ module Courses
       build_new_course
     end
 
-    private
+  private
 
     def new_course
       @new_course ||= provider.courses.new
@@ -28,7 +28,7 @@ module Courses
 
       if course_attributes[:master_subject_id].blank? && course_attributes[:subordinate_subject_id].present?
         course.errors.add(:subjects, :course_creation)
-      elsif subject_ids.present? || course_attributes[:level] == 'further_education'
+      elsif subject_ids.present? || course_attributes[:level] == "further_education"
         AssignSubjectsService.call(course:, subject_ids:)
       end
 
@@ -74,23 +74,23 @@ module Courses
     end
 
     def subject_ids
-      @subject_ids ||= course_params['subjects_ids']
+      @subject_ids ||= course_params["subjects_ids"]
     end
 
     def site_ids
-      @site_ids ||= course_params['sites_ids']
+      @site_ids ||= course_params["sites_ids"]
     end
 
     def study_mode
-      @study_mode ||= if course_params['study_mode'].nil?
+      @study_mode ||= if course_params["study_mode"].nil?
                         nil
                       else
-                        Array(course_params['study_mode'])&.flatten&.compact&.uniq
+                        Array(course_params["study_mode"])&.flatten&.compact&.uniq
                       end
     end
 
     def study_site_ids
-      @study_site_ids ||= course_params['study_sites_ids']
+      @study_site_ids ||= course_params["study_sites_ids"]
     end
 
     def update_study_mode(course)
@@ -99,10 +99,10 @@ module Courses
       if study_mode.empty?
         course.errors.add(
           :study_mode,
-          I18n.t('activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank')
+          I18n.t("activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank"),
         )
       else
-        course.study_mode = study_mode.sort.join('_or_')
+        course.study_mode = study_mode.sort.join("_or_")
       end
     end
 
@@ -111,7 +111,7 @@ module Courses
 
       course.sites = sites if site_ids.any?
 
-      course.errors.add(:sites, message: 'Select at least one school') if site_ids.empty?
+      course.errors.add(:sites, message: "Select at least one school") if site_ids.empty?
     end
 
     def update_study_sites(course)
@@ -119,7 +119,7 @@ module Courses
 
       course.study_sites = study_sites if study_site_ids.any?
 
-      course.errors.add(:study_sites, message: 'Select at least one study site') if study_site_ids.empty?
+      course.errors.add(:study_sites, message: "Select at least one study site") if study_site_ids.empty?
     end
   end
 end

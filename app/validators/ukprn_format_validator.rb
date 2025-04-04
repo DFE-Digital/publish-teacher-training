@@ -6,7 +6,7 @@ class UkprnFormatValidator < ActiveModel::EachValidator
 
     if value.blank?
       record.errors.add(attribute, :blank)
-    elsif value[0] != '1' || !value.match?(/\A\d{8}\Z/)
+    elsif value[0] != "1" || !value.match?(/\A\d{8}\Z/)
       record.errors.add(attribute, :contains_eight_numbers_starting_with_one)
     end
   end

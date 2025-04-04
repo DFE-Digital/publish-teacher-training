@@ -4,11 +4,11 @@
       classes: "govuk-notification-banner--warning",
       html_attributes: {
         data: { qa: "copy-course-warning" },
-        role: "alert"
-      }
+        role: "alert",
+      },
     ) do |notification_banner| %>
     <% notification_banner.with_heading(
-         text: t("components.providers.copy_course_content_warning_component.changes_not_saved")
+         text: t("components.providers.copy_course_content_warning_component.changes_not_saved"),
        ) %>
     <p class="govuk-body">
       <%= copied_fields_from %>

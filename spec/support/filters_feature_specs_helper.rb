@@ -11,6 +11,6 @@ module FiltersFeatureSpecsHelper
   end
 
   def query_params(uri)
-    ActionDispatch::Request.new({ 'QUERY_STRING' => uri.query }).query_parameters
+    ActionDispatch::Request.new({ "QUERY_STRING" => uri.query }).query_parameters
   end
 end

@@ -8,10 +8,10 @@ class StripPunctuationService
   end
 
   def call
-    string&.gsub(/['’.“”"]/, '')&.gsub(/[^0-9A-Za-z\s]/, ' ')
+    string&.gsub(/['’.“”"]/, "")&.gsub(/[^0-9A-Za-z\s]/, " ")
   end
 
-  private
+private
 
   attr_reader :string
 end

@@ -5,7 +5,7 @@ module Publish
     class LevelController < ApplicationController
       include CourseBasicDetailConcern
 
-      private
+    private
 
       def error_keys
         %i[level is_send]

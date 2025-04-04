@@ -7,7 +7,7 @@ module Find
     end
 
     def goto_preview?(param_form_key:, params:)
-      goto_preview_value(param_form_key:, params:) == 'true'
+      goto_preview_value(param_form_key:, params:) == "true"
     end
 
     def goto_provider_value(param_form_key:, params:)

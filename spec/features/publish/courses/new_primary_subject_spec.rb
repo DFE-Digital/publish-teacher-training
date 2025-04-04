@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
+feature "selecting a subject", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'selecting a subject' do
+  scenario "selecting a subject" do
     when_i_visit_the_new_primary_course_subject_page
-    when_i_select_a_primary_subject('Primary with English')
+    when_i_select_a_primary_subject("Primary with English")
     and_i_click_continue
     then_i_am_met_with_the_age_range_page
   end
 
-  scenario 'invalid entries' do
+  scenario "invalid entries" do
     when_i_visit_the_new_primary_course_subject_page
     and_i_click_continue
     then_i_am_met_with_errors
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, :with_provider)
@@ -45,12 +45,12 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_the_age_range_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{params_with_subject}")
-    expect(page).to have_content('Age range')
+    expect(page).to have_content("Age range")
   end
 
   def then_i_am_met_with_errors
-    expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select a subject')
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("Select a subject")
   end
 
   def primary_subject

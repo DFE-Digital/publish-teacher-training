@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
-  private
+private
 
   def enforce_basic_auth
     authenticate_or_request_with_http_basic do |username, password|
@@ -23,6 +23,6 @@ class ApplicationController < ActionController::Base
   end
 
   def render_not_found
-    render 'errors/not_found', status: :not_found, formats: :html
+    render "errors/not_found", status: :not_found, formats: :html
   end
 end

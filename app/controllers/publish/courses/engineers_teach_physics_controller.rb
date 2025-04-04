@@ -28,36 +28,36 @@ module Publish
           if @engineers_teach_physics_form.save!
             course_updated_message(section_key)
 
-            course.update(name: course.generate_name)
+            course.update!(name: course.generate_name)
             redirect_to(
               details_publish_provider_recruitment_cycle_course_path(
                 provider.provider_code,
                 recruitment_cycle.year,
-                course.course_code
-              )
+                course.course_code,
+              ),
             )
           else
             render :edit
           end
 
         elsif form_params[:subjects_ids]&.include?(modern_languages_id)
-          course.update(campaign_name: form_params[:campaign_name])
+          course.update!(campaign_name: form_params[:campaign_name])
           redirect_to(
             modern_languages_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
-              course: { subjects_ids: form_params[:subjects_ids] }
-            )
+              course: { subjects_ids: form_params[:subjects_ids] },
+            ),
           )
         elsif @engineers_teach_physics_form.save!
           course_updated_message(section_key)
-          course.update(name: course.generate_name)
+          course.update!(name: course.generate_name)
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
         else
           @errors = @engineers_teach_physics_form.errors.messages
@@ -76,7 +76,7 @@ module Publish
 
       def continue
         authorize(@provider, :can_create_course?)
-        @errors = { campaign_name: ['Select if this course is part of the Engineers teach physics programme'] } if params[:course][:campaign_name].blank?
+        @errors = { campaign_name: ["Select if this course is part of the Engineers teach physics programme"] } if params[:course][:campaign_name].blank?
 
         if @errors.present?
           render :new
@@ -89,7 +89,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def modern_languages_present?
         params[:course][:subjects_ids]&.include?(modern_languages_id)
@@ -116,12 +116,12 @@ module Publish
           .expect(
             publish_engineers_teach_physics_form: [:campaign_name,
                                                    :skip_languages_goto_confirmation,
-                                                   { subjects_ids: [] }]
+                                                   { subjects_ids: [] }],
           )
       end
 
       def section_key
-        'Engineers Teach Physics'
+        "Engineers Teach Physics"
       end
     end
   end

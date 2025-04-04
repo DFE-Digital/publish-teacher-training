@@ -13,12 +13,12 @@ class Header < ApplicationComponent
 
   def colour
     {
-      development: 'grey',
-      production: 'blue',
-      review: 'purple',
-      sandbox: 'purple',
-      staging: 'red',
-      qa: 'orange'
-    }.fetch(Settings.environment.name.to_sym, 'grey')
+      development: "grey",
+      production: "blue",
+      review: "purple",
+      sandbox: "purple",
+      staging: "red",
+      qa: "orange",
+    }.fetch(Settings.environment.name.to_sym, "grey")
   end
 end

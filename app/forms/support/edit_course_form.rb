@@ -36,7 +36,7 @@ module Support
     def save
       return false unless valid?
 
-      @course.save
+      @course.save!
     end
 
     def valid?
@@ -55,7 +55,7 @@ module Support
       @applications_open_from ||= check_date(:applications_open_from)
     end
 
-    private
+  private
 
     def check_date(date_type)
       date_args = date_array(date_type).map(&:to_i)
@@ -69,7 +69,7 @@ module Support
       Struct.new(:day, :month, :year).new(
         send("#{date_type}_day"),
         send("#{date_type}_month"),
-        send("#{date_type}_year")
+        send("#{date_type}_year"),
       )
     end
 
@@ -86,7 +86,7 @@ module Support
         is_send: send?,
         can_sponsor_student_visa:,
         can_sponsor_skilled_worker_visa:,
-        accredited_provider_code:
+        accredited_provider_code:,
       }
 
       course.assign_attributes(attributes)

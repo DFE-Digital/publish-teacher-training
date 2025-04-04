@@ -30,7 +30,7 @@ module Support
 
     def update
       if user.update(update_user_params)
-        redirect_to support_recruitment_cycle_user_path(params[:recruitment_cycle_year], user), flash: { success: t('support.flash.updated', resource: 'User') }
+        redirect_to support_recruitment_cycle_user_path(params[:recruitment_cycle_year], user), flash: { success: t("support.flash.updated", resource: "User") }
       else
         render :edit
       end
@@ -38,16 +38,16 @@ module Support
 
     def destroy
       if user.discard
-        redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: 'User successfully deleted' }
+        redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: "User successfully deleted" }
       else
-        redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: 'This user has already been deleted' }
+        redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: "This user has already been deleted" }
       end
     end
 
-    private
+  private
 
     def user_params
-      params.expect(user: %i[first_name last_name email]).merge(state: 'new')
+      params.expect(user: %i[first_name last_name email]).merge(state: "new")
     end
 
     def update_user_params

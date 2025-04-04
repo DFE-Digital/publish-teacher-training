@@ -2,7 +2,7 @@
 
 module Publish
   module FundingTypeFormMethods
-    private
+  private
 
     def compute_fields
       course_enrichment

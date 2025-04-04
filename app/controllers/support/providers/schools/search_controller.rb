@@ -51,7 +51,7 @@ module Support
           if @school_select_form.valid?
             redirect_to support_recruitment_cycle_provider_schools_check_path(
               provider_id: provider.id,
-              school_id: school_select_params[:school_id]
+              school_id: school_select_params[:school_id],
             )
           else
             @school_search = Schools::SearchService.call(query:)
@@ -59,7 +59,7 @@ module Support
           end
         end
 
-        private
+      private
 
         def authorize_provider
           authorize provider, :can_create_sites?
@@ -92,8 +92,8 @@ module Support
             results_limit: @school_search.limit,
             results_count: @school_search.schools.unscope(:limit).count,
             return_path: search_support_recruitment_cycle_provider_schools_path,
-            search_resource: 'school',
-            caption_text: "Add school - #{provider.name_and_code}"
+            search_resource: "school",
+            caption_text: "Add school - #{provider.name_and_code}",
           )
         end
 
@@ -103,7 +103,7 @@ module Support
 
         def redirect_to_next_step
           redirect_to support_recruitment_cycle_provider_schools_check_path(
-            school_id:
+            school_id:,
           )
         end
       end

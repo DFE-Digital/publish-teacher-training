@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Support
   describe CopyCoursesForm, type: :model do
@@ -8,20 +8,20 @@ module Support
 
     let(:provider) { create(:provider) }
 
-    describe 'validations' do
+    describe "validations" do
       let(:target_provider) { provider }
 
-      context 'unique provider' do
-        it 'is not valid' do
+      context "unique provider" do
+        it "is not valid" do
           expect(subject).not_to be_valid
-          expect(subject.errors.messages[:provider]).to include('Choose different providers')
+          expect(subject.errors.messages[:provider]).to include("Choose different providers")
         end
       end
 
-      context 'provider must be present' do
+      context "provider must be present" do
         let(:target_provider) { nil }
 
-        it 'is not valid' do
+        it "is not valid" do
           expect(subject).not_to be_valid
           expect(subject.errors.messages[:target_provider]).to include("Provider can't be blank")
         end

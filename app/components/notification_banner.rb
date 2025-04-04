@@ -3,13 +3,13 @@
 class NotificationBanner < ApplicationComponent
   attr_reader :text, :title_id
 
-  SUCCESS_TITLE = 'Success'
-  DEFAULT_TITLE = 'Important'
+  SUCCESS_TITLE = "Success"
+  DEFAULT_TITLE = "Important"
 
-  SUCCESS_ROLE = 'alert'
-  DEFAULT_ROLE = 'region'
+  SUCCESS_ROLE = "alert"
+  DEFAULT_ROLE = "region"
 
-  DEFAULT_CLASS = 'govuk-notification-banner'
+  DEFAULT_CLASS = "govuk-notification-banner"
 
   def initialize(
     title_text: nil,
@@ -30,7 +30,7 @@ class NotificationBanner < ApplicationComponent
     @disable_auto_focus = disable_auto_focus
   end
 
-  private
+private
 
   attr_reader :title_text, :role, :type, :disable_auto_focus
 

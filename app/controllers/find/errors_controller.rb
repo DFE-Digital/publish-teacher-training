@@ -4,6 +4,6 @@ module Find
   class ErrorsController < ApplicationController
     include Errorable
 
-    layout 'find'
+    layout "find"
   end
 end

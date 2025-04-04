@@ -18,7 +18,7 @@ module AccreditedProviders
       Result.new(providers:, limit:)
     end
 
-    private
+  private
 
     attr_reader :query, :limit, :recruitment_cycle_year
 

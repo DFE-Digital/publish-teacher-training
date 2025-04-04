@@ -20,16 +20,16 @@ module Shared
             course.course_subjects.any? { |subject| eligible_subjects.include?(subject.subject.subject_name) }
           end
 
-          private
+        private
 
           ELIGIBLE_SUBJECTS = [
-            'Italian',
-            'Japanese',
-            'Mandarin',
-            'Russian',
-            'Modern languages (other)',
-            'Ancient Greek',
-            'Ancient Hebrew'
+            "Italian",
+            "Japanese",
+            "Mandarin",
+            "Russian",
+            "Modern languages (other)",
+            "Ancient Greek",
+            "Ancient Hebrew",
           ].freeze
           private_constant :ELIGIBLE_SUBJECTS
 

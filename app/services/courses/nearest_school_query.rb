@@ -14,16 +14,16 @@ module Courses
       subquery = Course
                  .joins(site_statuses: :site)
                  .where(id: @courses.map(&:id))
-                 .where('site.longitude IS NOT NULL AND site.latitude IS NOT NULL')
+                 .where("site.longitude IS NOT NULL AND site.latitude IS NOT NULL")
                  .select(select_sql)
-                 .order('course.id, distance_to_search_location ASC')
+                 .order("course.id, distance_to_search_location ASC")
 
       Course
         .from(subquery, :course)
-        .order('distance_to_search_location ASC')
+        .order("distance_to_search_location ASC")
     end
 
-    private
+  private
 
     def select_sql
       <<~SQL.squish

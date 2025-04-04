@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
-  context 'lead school' do
+feature "course confirmation", { can_edit_current_and_next_cycles: false } do
+  context "lead school" do
     before do
       given_i_am_authenticated_as_a_provider_user
       when_i_visit_the_publish_course_confirmation_page
     end
 
-    scenario 'creating course' do
+    scenario "creating course" do
       and_i_click_continue
 
       then_i_am_met_with_the_publish_provider_courses_index_page
     end
 
-    scenario 'it displays the correct information' do
+    scenario "it displays the correct information" do
       then_it_displays_correctly
     end
 
-    scenario 'updating a section returns to confirmation' do
+    scenario "updating a section returns to confirmation" do
       and_i_click_to_update_the_schools
       and_i_am_met_with_the_publish_courses_new_schools_page
       and_i_update_the_schools
@@ -27,7 +27,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
       then_i_am_met_with_the_publish_course_confirmation_page
     end
 
-    scenario 'changing subject to modern languages' do
+    scenario "changing subject to modern languages" do
       when_i_click_change_subject
       and_i_select_modern_languages_and_maths
       and_i_click_continue
@@ -36,36 +36,36 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
       then_subjects_list_correctly_on_confirmation_page
     end
 
-    scenario 'changing funding_type to fee' do
+    scenario "changing funding_type to fee" do
       when_i_click_change_funding_type
       and_i_select_funding_type(:fee)
       and_i_click_continue
-      and_i_should_see_the_title_as('Student visas')
+      and_i_should_see_the_title_as("Student visas")
       and_i_click_continue
       then_i_should_be_on_the_confirmation_page
     end
 
-    scenario 'changing funding_type to apprenticeship' do
+    scenario "changing funding_type to apprenticeship" do
       when_i_click_change_funding_type
       and_i_select_funding_type(:apprenticeship)
       and_i_click_continue
-      and_i_should_see_the_title_as('Skilled Worker visas')
+      and_i_should_see_the_title_as("Skilled Worker visas")
       and_i_click_continue
       then_i_should_be_on_the_confirmation_page
     end
 
-    scenario 'changing funding_type to salary' do
+    scenario "changing funding_type to salary" do
       when_i_click_change_funding_type
       and_i_select_funding_type(:salary)
       and_i_click_continue
-      and_i_should_see_the_title_as('Skilled Worker visas')
+      and_i_should_see_the_title_as("Skilled Worker visas")
       and_i_click_continue
       then_i_should_be_on_the_confirmation_page
     end
   end
 
-  context 'study sites' do
-    scenario 'changing to none' do
+  context "study sites" do
+    scenario "changing to none" do
       given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
       when_i_visit_the_publish_course_confirmation_page_in_the_next_cycle
       and_i_click_select_a_study_site
@@ -74,18 +74,18 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  private
+private
 
   def then_i_should_be_back_on_the_confirmation_page
     expect(page).to have_current_path(%r{/publish/organisations/#{next_cycle_provider.provider_code}/#{next_cycle_provider.recruitment_cycle_year}/courses/confirmation})
   end
 
   def and_i_submit_without_selecting_a_study_site
-    click_link_or_button 'Continue'
+    click_link_or_button "Continue"
   end
 
   def and_i_click_select_a_study_site
-    click_link_or_button 'Select a study site'
+    click_link_or_button "Select a study site"
   end
 
   def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
@@ -105,7 +105,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     publish_course_confirmation_page.load(
       provider_code: next_cycle_provider.provider_code,
       recruitment_cycle_year: next_cycle_provider.recruitment_cycle_year,
-      query: confirmation_params(next_cycle_provider)
+      query: confirmation_params(next_cycle_provider),
     )
   end
 
@@ -130,8 +130,8 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_select_modern_languages_and_maths
-    publish_courses_new_subjects_page.master_subject_fields.select('Modern Languages').click
-    publish_courses_new_subjects_page.subordinate_subjects_fields.select('Mathematics').click
+    publish_courses_new_subjects_page.master_subject_fields.select("Modern Languages").click
+    publish_courses_new_subjects_page.subordinate_subjects_fields.select("Mathematics").click
   end
 
   def and_i_should_see_the_title_as(title)
@@ -143,8 +143,8 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_select_some_languages
-    publish_courses_new_modern_languages_page.language_checkbox('German').click
-    publish_courses_new_modern_languages_page.language_checkbox('Italian').click
+    publish_courses_new_modern_languages_page.language_checkbox("German").click
+    publish_courses_new_modern_languages_page.language_checkbox("Italian").click
   end
 
   def and_i_click_continue
@@ -152,7 +152,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_subjects_list_correctly_on_confirmation_page
-    expect(publish_course_confirmation_page.details.subjects.value).to have_content('MathematicsModern LanguagesGermanItalian')
+    expect(publish_course_confirmation_page.details.subjects.value).to have_content("MathematicsModern LanguagesGermanItalian")
   end
 
   def given_i_am_authenticated_as_a_provider_user(provider_trait = nil)
@@ -171,7 +171,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     publish_course_confirmation_page.load(
       provider_code: provider.provider_code,
       recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-      query: confirmation_params(provider)
+      query: confirmation_params(provider),
     )
   end
 
@@ -189,18 +189,18 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_the_publish_provider_courses_index_page
     expect(publish_provider_courses_index_page).to be_displayed
-    expect(publish_provider_courses_index_page.success_summary).to have_content('Your course has been created')
+    expect(publish_provider_courses_index_page.success_summary).to have_content("Your course has been created")
   end
 
   def then_it_displays_correctly
-    expect(page.title).to start_with('Check your answers')
+    expect(page.title).to start_with("Check your answers")
 
-    expect(publish_course_confirmation_page.title).to have_content('Check your answers')
-    expect(publish_course_confirmation_page.details.level.value.text).to eq('Secondary')
-    expect(publish_course_confirmation_page.details.is_send.value.text).to eq('No')
-    expect(publish_course_confirmation_page.details.subjects.value.text).to include('Psychology')
-    expect(publish_course_confirmation_page.details.age_range.value.text).to eq('14 to 19')
-    expect(publish_course_confirmation_page.details.study_mode.value.text).to eq('Full time or part time')
+    expect(publish_course_confirmation_page.title).to have_content("Check your answers")
+    expect(publish_course_confirmation_page.details.level.value.text).to eq("Secondary")
+    expect(publish_course_confirmation_page.details.is_send.value.text).to eq("No")
+    expect(publish_course_confirmation_page.details.subjects.value.text).to include("Psychology")
+    expect(publish_course_confirmation_page.details.age_range.value.text).to eq("14 to 19")
+    expect(publish_course_confirmation_page.details.study_mode.value.text).to eq("Full time or part time")
     expect(publish_course_confirmation_page.details.schools.value.text).to have_content(site.location_name)
     # expect(publish_course_confirmation_page.details.study_sites.value.text).to have_content(study_site.location_name) # this can be uncommented when the 2023 cycle is over
     expect(publish_course_confirmation_page.details.applications_open.value.text).to eq("12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")

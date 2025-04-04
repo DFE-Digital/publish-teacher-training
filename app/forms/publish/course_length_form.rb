@@ -2,7 +2,7 @@
 
 module Publish
   class CourseLengthForm < BaseModelForm
-    alias course_enrichment model
+    alias_method :course_enrichment, :model
 
     FIELDS = %i[course_length course_length_other_length].freeze
 
@@ -10,7 +10,7 @@ module Publish
 
     validates :course_length, presence: true
 
-    private
+  private
 
     def compute_fields
       course_enrichment
@@ -30,7 +30,7 @@ module Publish
     end
 
     def custom_length_provided?
-      new_attributes[:course_length] == 'Other' && new_attributes[:course_length_other_length].present?
+      new_attributes[:course_length] == "Other" && new_attributes[:course_length_other_length].present?
     end
 
     def fields_to_ignore_before_save

@@ -2,6 +2,6 @@
 
 module Publish
   class BaseProviderForm < BaseModelForm
-    alias provider model
+    alias_method :provider, :model
   end
 end

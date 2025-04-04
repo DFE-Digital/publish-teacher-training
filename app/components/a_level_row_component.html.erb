@@ -7,7 +7,7 @@
       <p class="govuk-body">
       <%= govuk_link_to(
             @errors[a_level_error],
-            enrichment_error_url(course:, provider_code:, field: a_level_error.to_s, message: @errors[a_level_error])
+            enrichment_error_url(course:, provider_code:, field: a_level_error.to_s, message: @errors[a_level_error]),
           ) %>
       </p>
     <% end %>
@@ -50,7 +50,7 @@
        publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
           course.provider.provider_code,
           course.provider.recruitment_cycle_year,
-          course.course_code
+          course.course_code,
         ) %>
     </p>
   <% end %>

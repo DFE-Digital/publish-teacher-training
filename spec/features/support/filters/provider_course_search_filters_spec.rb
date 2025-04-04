@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Filter providers by type' do
+feature "Filter providers by type" do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_there_are_providers_with_different_types
@@ -10,28 +10,28 @@ feature 'Filter providers by type' do
     i_see_all_the_providers
   end
 
-  context 'filter by' do
-    scenario 'scitt provider' do
+  context "filter by" do
+    scenario "scitt provider" do
       when_i_filter_scitt_providers
       and_when_i_click_apply_filters
       i_see_only_the_scitt_providers
     end
 
-    scenario 'university provider' do
+    scenario "university provider" do
       when_i_filter_university_providers
       and_when_i_click_apply_filters
       i_see_only_the_university_providers
     end
 
-    scenario 'lead school provider' do
+    scenario "lead school provider" do
       when_i_filter_lead_school_providers
       and_when_i_click_apply_filters
       i_see_only_the_lead_school_providers
     end
   end
 
-  context 'removing filters' do
-    scenario 'removing selected filters' do
+  context "removing filters" do
+    scenario "removing selected filters" do
       when_i_filter_university_providers
       and_when_i_click_apply_filters
 
@@ -40,7 +40,7 @@ feature 'Filter providers by type' do
     end
   end
 
-  private
+private
 
   def i_see_all_the_providers
     expect(page).to have_content(@provider_hei.provider_name)

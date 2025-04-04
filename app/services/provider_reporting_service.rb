@@ -21,23 +21,23 @@ class ProviderReportingService
       total: {
         all: @providers.count,
         non_training_providers: @providers.count - @training_providers.count,
-        training_providers: @training_providers.count
+        training_providers: @training_providers.count,
       },
       training_providers: {
         findable_total: {
           open: @open_providers.count,
-          closed: @closed_providers.count
+          closed: @closed_providers.count,
         },
         accredited_provider: { **group_by_count(:accredited) },
         provider_type: { **group_by_count(:provider_type) },
-        region_code: { **group_by_count(:region_code) }
-      }
+        region_code: { **group_by_count(:region_code) },
+      },
     }
   end
 
   private_class_method :new
 
-  private
+private
 
   def group_by_count(column)
     open = @open_providers.group(column).count
@@ -45,16 +45,16 @@ class ProviderReportingService
     column_name = column.to_s.pluralize
 
     {
-      open: Provider.send(column_name).map do |key, _value|
+      open: Provider.send(column_name).map { |key, _value|
               x = {}
               x[key.to_sym] = open[key] || 0
               x
-            end.reduce({}, :merge),
-      closed: Provider.send(column_name).map do |key, _value|
+            }.reduce({}, :merge),
+      closed: Provider.send(column_name).map { |key, _value|
                 x = {}
                 x[key.to_sym] = closed[key] || 0
                 x
-              end.reduce({}, :merge)
+              }.reduce({}, :merge),
     }
   end
 end

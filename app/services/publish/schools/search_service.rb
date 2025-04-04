@@ -18,7 +18,7 @@ module Publish
         Result.new(schools: specified_schools, limit:)
       end
 
-      private
+    private
 
       attr_reader :query, :limit
 

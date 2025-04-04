@@ -13,8 +13,8 @@ module Publish
       option = Struct.new(:id, :name)
 
       [
-        option.new(id: true, name: 'Yes'),
-        option.new(id: false, name: 'No')
+        option.new(id: true, name: "Yes"),
+        option.new(id: false, name: "No"),
       ]
     end
   end

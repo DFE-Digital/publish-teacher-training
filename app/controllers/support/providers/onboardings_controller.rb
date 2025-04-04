@@ -19,7 +19,7 @@ module Support
         end
       end
 
-      private
+    private
 
       def redirect_path
         if goto_confirmation?(param_form_key:, params:)

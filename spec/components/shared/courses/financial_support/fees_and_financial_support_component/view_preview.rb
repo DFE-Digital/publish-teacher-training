@@ -29,7 +29,7 @@ module Shared
             render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(financial_support_course)
           end
 
-          private
+        private
 
           def salaried_with_no_fees_course
             FakeCourse.new(salaried: true,
@@ -39,8 +39,8 @@ module Shared
                            financial_support: false,
                            fee_uk_eu: 99_999,
                            fee_international: 9_000_000_000,
-                           cycle_range: '2022 to 2023',
-                           fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.')
+                           cycle_range: "2022 to 2023",
+                           fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.")
           end
 
           def salaried_with_fees_course
@@ -52,8 +52,8 @@ module Shared
                            financial_support: false,
                            fee_uk_eu: 99_999,
                            fee_international: 9_000_000_000,
-                           cycle_range: '2022 to 2023',
-                           fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.')
+                           cycle_range: "2022 to 2023",
+                           fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.")
           end
 
           def excluded_from_bursary_course
@@ -65,8 +65,8 @@ module Shared
                            financial_support: false,
                            fee_uk_eu: 99_999,
                            fee_international: 9_000_000_000,
-                           cycle_range: '2022 to 2023',
-                           fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.')
+                           cycle_range: "2022 to 2023",
+                           fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.")
           end
 
           def bursary_only_course
@@ -78,8 +78,8 @@ module Shared
                            financial_support: false,
                            fee_uk_eu: 99_999,
                            fee_international: 9_000_000_000,
-                           cycle_range: '2022 to 2023',
-                           fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.',
+                           cycle_range: "2022 to 2023",
+                           fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
                            bursary_amount: 99_999_999)
           end
 
@@ -92,12 +92,12 @@ module Shared
                            financial_support: false,
                            fee_uk_eu: 99_999,
                            fee_international: 9_000_000_000,
-                           cycle_range: '2022 to 2023',
-                           fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.',
+                           cycle_range: "2022 to 2023",
+                           fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
                            bursary_amount: 99_999_999,
                            scholarship_amount: 1,
                            has_early_career_payments: true,
-                           subject_name: 'foobar',
+                           subject_name: "foobar",
                            subjects: [])
           end
 
@@ -107,15 +107,15 @@ module Shared
                            excluded_from_bursary: false,
                            bursary_only: false,
                            has_scholarship_and_bursary: false,
-                           financial_support: 'Much support available',
+                           financial_support: "Much support available",
                            fee_uk_eu: 99_999,
                            fee_international: 9_000_000_000,
-                           cycle_range: '2022 to 2023',
-                           fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.',
+                           cycle_range: "2022 to 2023",
+                           fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
                            bursary_amount: 99_999_999,
                            scholarship_amount: 1,
                            has_early_career_payments: false,
-                           subject_name: 'foobar')
+                           subject_name: "foobar")
           end
 
           class FakeCourse

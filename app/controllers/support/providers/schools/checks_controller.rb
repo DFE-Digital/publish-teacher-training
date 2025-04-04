@@ -11,13 +11,13 @@ module Support
         def update
           if @school_form.save!
             redirect_to support_recruitment_cycle_provider_schools_path
-            flash[:success] = t('.added')
+            flash[:success] = t(".added")
           else
             render :show
           end
         end
 
-        private
+      private
 
         def new_form
           @school_form = SchoolForm.new(provider, site, params: { gias_school_id: params[:school_id] })

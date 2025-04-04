@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe CourseReportingService do
   let(:closed_courses_scope) { class_double(Course) }
@@ -36,11 +36,11 @@ describe CourseReportingService do
       total: {
         all: courses_count,
         non_findable: courses_count - findable_courses_count,
-        all_findable: findable_courses_count
+        all_findable: findable_courses_count,
       },
       findable_total: {
         open: open_courses_count,
-        closed: closed_courses_count
+        closed: closed_courses_count,
       },
       provider_type: {
         open: {
@@ -48,27 +48,33 @@ describe CourseReportingService do
         },
         closed: {
           scitt: 0, lead_school: 0, university: 0
-        }
+        },
       },
       program_type: {
         open: {
-          higher_education_programme: 1, school_direct_training_programme: 2,
+          higher_education_programme: 1,
+          school_direct_training_programme: 2,
           higher_education_salaried_programme: 0,
-          school_direct_salaried_training_programme: 3, scitt_programme: 4,
+          school_direct_salaried_training_programme: 3,
+          scitt_programme: 4,
           scitt_salaried_programme: 0,
           pg_teaching_apprenticeship: 5,
-          teacher_degree_apprenticeship: 0
+          teacher_degree_apprenticeship: 0,
         },
         closed: {
-          higher_education_programme: 0, higher_education_salaried_programme: 0, school_direct_training_programme: 0,
-          school_direct_salaried_training_programme: 0, scitt_programme: 0, scitt_salaried_programme: 0,
+          higher_education_programme: 0,
+          higher_education_salaried_programme: 0,
+          school_direct_training_programme: 0,
+          school_direct_salaried_training_programme: 0,
+          scitt_programme: 0,
+          scitt_salaried_programme: 0,
           pg_teaching_apprenticeship: 0,
-          teacher_degree_apprenticeship: 0
-        }
+          teacher_degree_apprenticeship: 0,
+        },
       },
       study_mode: {
         open: { full_time: 1, part_time: 2, full_time_or_part_time: 3 },
-        closed: { full_time: 0, part_time: 0, full_time_or_part_time: 0 }
+        closed: { full_time: 0, part_time: 0, full_time_or_part_time: 0 },
       },
       qualification: {
         open: {
@@ -76,32 +82,32 @@ describe CourseReportingService do
         },
         closed: {
           qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0, undergraduate_degree_with_qts: 0
-        }
+        },
       },
       is_send: {
         open: { yes: 1, no: 2 },
-        closed: { yes: 0, no: 0 }
+        closed: { yes: 0, no: 0 },
       },
       subject: {
-        open: Subject.active.each_with_index.map do |sub, i|
+        open: Subject.active.each_with_index.map { |sub, i|
                 x = {}
                 x[sub.subject_name] = (i + 1) * 3
                 x
-              end.reduce({}, :merge),
-        closed: Subject.active.each_with_index.map do |sub, _i|
+              }.reduce({}, :merge),
+        closed: Subject.active.each_with_index.map { |sub, _i|
                   x = {}
                   x[sub.subject_name] = 0
                   x
-                end.reduce({}, :merge)
-      }
+                }.reduce({}, :merge),
+      },
     }
   end
 
-  describe '.call' do
-    describe 'when scope is passed' do
+  describe ".call" do
+    describe "when scope is passed" do
       subject { described_class.call(courses_scope:) }
 
-      it 'applies the scopes' do
+      it "applies the scopes" do
         expect(courses_scope).to receive(:distinct).and_return(distinct_courses_scope)
         expect(distinct_courses_scope).to receive(:count).and_return(courses_count)
         expect(distinct_courses_scope).to receive(:count).and_return(courses_count)
@@ -117,27 +123,29 @@ describe CourseReportingService do
         expect(open_courses_scope).to receive(:group).with(:provider_type).and_return(open_courses_provider_type_scope)
         expect(open_courses_provider_type_scope).to receive(:count)
           .and_return(
-            { 'B' => 1, 'Y' => 2, 'O' => 3, '' => 4, '0' => 5 }
+            { "B" => 1, "Y" => 2, "O" => 3, "" => 4, "0" => 5 },
           )
 
         expect(open_courses_scope).to receive(:group).with(:program_type).and_return(open_courses_program_type_scope)
         expect(open_courses_program_type_scope).to receive(:count)
           .and_return(
-            { 'higher_education_programme' => 1, 'school_direct_training_programme' => 2,
-              'school_direct_salaried_training_programme' => 3, 'scitt_programme' => 4,
-              'pg_teaching_apprenticeship' => 5 }
+            { "higher_education_programme" => 1,
+              "school_direct_training_programme" => 2,
+              "school_direct_salaried_training_programme" => 3,
+              "scitt_programme" => 4,
+              "pg_teaching_apprenticeship" => 5 },
           )
 
         expect(open_courses_scope).to receive(:group).with(:study_mode).and_return(open_courses_study_mode_scope)
         expect(open_courses_study_mode_scope).to receive(:count)
           .and_return(
-            { 'full_time' => 1, 'part_time' => 2, 'full_time_or_part_time' => 3 }
+            { "full_time" => 1, "part_time" => 2, "full_time_or_part_time" => 3 },
           )
 
         expect(open_courses_scope).to receive(:group).with(:qualification).and_return(open_courses_qualification_scope)
         expect(open_courses_qualification_scope).to receive(:count)
           .and_return(
-            { 'qts' => 1, 'pgce_with_qts' => 2, 'pgde_with_qts' => 3, 'pgce' => 4, 'pgde' => 5, 'undergraduate_degree_with_qts' => 6 }
+            { "qts" => 1, "pgce_with_qts" => 2, "pgde_with_qts" => 3, "pgce" => 4, "pgde" => 5, "undergraduate_degree_with_qts" => 6 },
           )
 
         expect(open_courses_scope).to receive(:group).with(:is_send).and_return(open_courses_is_send_scope)
@@ -152,7 +160,7 @@ describe CourseReportingService do
             x = {}
             x[sub.id] = (i + 1) * 3
             x
-          end.reduce({}, :merge)
+          end.reduce({}, :merge),
         )
 
         expect(closed_courses_scope).to receive(:count).and_return(closed_courses_count)

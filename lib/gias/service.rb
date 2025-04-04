@@ -5,7 +5,7 @@ module Gias
     private_class_method :new
 
     def call
-      raise NoMethodError, '#call must be implemented'
+      raise NoMethodError, "#call must be implemented"
     end
 
     def self.call(...)

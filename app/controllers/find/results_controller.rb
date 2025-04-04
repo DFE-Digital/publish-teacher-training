@@ -16,7 +16,7 @@ module Find
       @pagy, @results = pagy(@courses, count: @courses_count, page:)
     end
 
-    private
+  private
 
     def send_analytics_event
       Find::Analytics::SearchResultsEvent.new(
@@ -25,7 +25,7 @@ module Find
         page: @pagy.page,
         search_params: @search_params,
         track_params: params.permit(:utm_source, :utm_medium),
-        results: @results
+        results: @results,
       ).send_event
     end
 
@@ -59,7 +59,7 @@ module Find
         study_types: [],
         qualifications: [],
         qualification: [],
-        funding: []
+        funding: [],
       )
     end
 

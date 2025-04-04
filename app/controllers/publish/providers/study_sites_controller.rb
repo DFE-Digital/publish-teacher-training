@@ -34,7 +34,7 @@ module Publish
         @study_site_form = ::Publish::SchoolForm.new(site, params: site_params(:publish_school_form))
 
         if @study_site_form.save!
-          course_updated_message('Study site')
+          course_updated_message("Study site")
 
           redirect_to publish_provider_recruitment_cycle_study_site_path(
             @study_site_form.provider_code, @study_site_form.recruitment_cycle_year, site.id
@@ -48,11 +48,11 @@ module Publish
 
       def destroy
         site.destroy!
-        flash[:success] = t('publish.providers.study_sites.removed')
+        flash[:success] = t("publish.providers.study_sites.removed")
         redirect_to publish_provider_recruitment_cycle_study_sites_path
       end
 
-      private
+    private
 
       def site
         @site ||= provider.study_sites.find(params[:id])

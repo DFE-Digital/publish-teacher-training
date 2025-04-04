@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require "active_support/core_ext/integer/time"
-require_dependency Rails.root.join('app/lib/custom_log_formatter')
+require_dependency Rails.root.join("app/lib/custom_log_formatter")
 
 Rails.application.configure do
-  config.x.read_only_database_url = ENV.fetch('DATABASE_URL', nil)
+  config.x.read_only_database_url = ENV.fetch("DATABASE_URL", nil)
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -25,7 +25,7 @@ Rails.application.configure do
   # config.require_master_key = true
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
@@ -55,7 +55,7 @@ Rails.application.configure do
     io: $stdout,
     level: config.log_level,
     formatter: CustomLogFormatter.new,
-    filter: config.rails_semantic_logger.filter
+    filter: config.rails_semantic_logger.filter,
   )
 
   config.active_record.logger = nil # Don't log SQL in production
@@ -69,7 +69,7 @@ Rails.application.configure do
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Use a different cache store in production.
-  config.cache_store = :redis_cache_store, { url: ENV.fetch('REDIS_CACHE_URL') }
+  config.cache_store = :redis_cache_store, { url: ENV.fetch("REDIS_CACHE_URL") }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
@@ -93,7 +93,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.authentication_token = ENV.fetch('AUTHENTICATION_TOKEN', nil)
+  config.authentication_token = ENV.fetch("AUTHENTICATION_TOKEN", nil)
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [

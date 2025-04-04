@@ -14,13 +14,13 @@ module PublishConsole
 
   def show_warning_message_about_environments
     if Rails.env.production?
-      puts ('*' * 50).red
-      puts '** You are in the Rails console for PRODUCTION! **'.red
-      puts ('*' * 50).red
+      Rails.logger.debug ("*" * 50).red
+      Rails.logger.debug "** You are in the Rails console for PRODUCTION! **".red
+      Rails.logger.debug ("*" * 50).red
     else
-      puts ('-' * 65).blue
-      puts "-- This is the Rails console for the #{Rails.env} environment. --".blue
-      puts ('-' * 65).blue
+      Rails.logger.debug ("-" * 65).blue
+      Rails.logger.debug "-- This is the Rails console for the #{Rails.env} environment. --".blue
+      Rails.logger.debug ("-" * 65).blue
     end
   end
 end

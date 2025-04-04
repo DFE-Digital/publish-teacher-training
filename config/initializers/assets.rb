@@ -13,8 +13,8 @@ Rails.application.config.assets.version = "1.0"
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 # govuk-frontend related assets
-Rails.application.config.assets.paths << Rails.root.join('node_modules/govuk-frontend/dist/govuk/assets/images')
-Rails.application.config.assets.paths << Rails.root.join('node_modules/govuk-frontend/dist/govuk/assets/fonts')
+Rails.application.config.assets.paths << Rails.root.join("node_modules/govuk-frontend/dist/govuk/assets/images")
+Rails.application.config.assets.paths << Rails.root.join("node_modules/govuk-frontend/dist/govuk/assets/fonts")
 # This pulls in all assets from this directory. There is no way to filter single files yet.
 # https://github.com/rails/propshaft/issues/178
-Rails.application.config.assets.paths << Rails.root.join('node_modules/accessible-autocomplete/dist')
+Rails.application.config.assets.paths << Rails.root.join("node_modules/accessible-autocomplete/dist")

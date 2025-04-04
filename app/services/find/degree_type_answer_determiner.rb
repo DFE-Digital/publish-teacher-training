@@ -18,14 +18,14 @@ module Find
       !further_education? && university_degree_question_answered? && no_degrees? && require_visa_sponsorship?
     end
 
-    private
+  private
 
     def university_degree_question_answered?
       university_degree_status.present?
     end
 
     def further_education?
-      age_group == 'further_education'
+      age_group == "further_education"
     end
 
     def require_visa_sponsorship?

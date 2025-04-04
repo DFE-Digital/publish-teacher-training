@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FilterParameters
-  PREVIOUS_PARAMETER_PREFIX = 'prev_'
+  PREVIOUS_PARAMETER_PREFIX = "prev_"
 
   def filter_params
     parameters.reject do |param|
@@ -15,7 +15,7 @@ module FilterParameters
 
   def merge_previous_parameters(all_parameters)
     previous_parameters.each do |key, value|
-      next if value == 'none'
+      next if value == "none"
 
       all_parameters[key.delete_prefix(PREVIOUS_PARAMETER_PREFIX)] = value
     end
@@ -23,7 +23,7 @@ module FilterParameters
     remove_previous_parameters(all_parameters)
   end
 
-  private
+private
 
   def parameters
     return request.query_parameters if %w[GET HEAD].include?(request.method)
@@ -84,13 +84,13 @@ module FilterParameters
                       :radius,
                       :send_courses,
                       :sortby,
-                      'provider.provider_name',
+                      "provider.provider_name",
                       { c: [],
                         qualification: [],
                         qualifications: [], # Legacy
                         study_type: [],
                         subjects: [],
-                        subject_codes: [] }] # Legacy
+                        subject_codes: [] }], # Legacy
       )
   end
 end

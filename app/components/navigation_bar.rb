@@ -11,8 +11,8 @@ class NavigationBar < ApplicationComponent
   end
 
   def item_link(item)
-    link_params = { class: 'moj-primary-navigation__link' }
-    link_params.merge!(aria: { current: 'page' }) if show_current_link?(item)
+    link_params = { class: "moj-primary-navigation__link" }
+    link_params.merge!(aria: { current: "page" }) if show_current_link?(item)
     govuk_link_to(item[:name], item[:url], **link_params)
   end
 
@@ -20,7 +20,7 @@ class NavigationBar < ApplicationComponent
     @current_user.present?
   end
 
-  private
+private
 
   def show_current_link?(item)
     item.fetch(:current, false) || [item.fetch(:url), item[:additional_url]].compact.any? { |url| current_path.include?(url) }

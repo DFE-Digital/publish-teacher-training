@@ -14,14 +14,14 @@ module Publish
           if @partnership.save
             notify_accredited_provider_users
 
-            redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: t('.added') }
+            redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: t(".added") }
           else
-            flash[:error] = { 'message' => @partnership.errors[:accredited_provider].first }
+            flash[:error] = { "message" => @partnership.errors[:accredited_provider].first }
             render :show
           end
         end
 
-        private
+      private
 
         def provider_partnership_form
           @provider_partnership_form ||= ProviderPartnershipForm.new(current_user, provider)
@@ -32,7 +32,7 @@ module Publish
             ::Users::OrganisationMailer.added_as_an_organisation_to_training_partner(
               recipient: user,
               provider: provider,
-              accredited_provider: @partnership.accredited_provider
+              accredited_provider: @partnership.accredited_provider,
             ).deliver_later
           end
         end

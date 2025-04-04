@@ -10,7 +10,7 @@ module Find
         attr_reader :course
 
         delegate :find_outcome, to: :course
-        alias summary_text find_outcome
+        alias_method :summary_text, :find_outcome
 
         def initialize(course:)
           super

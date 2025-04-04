@@ -30,7 +30,7 @@ class CharsCountValidator < ActiveModel::EachValidator
       i18n_key,
       maximum: options[:maximum],
       count: excess_characters,
-      default: 'is too long (maximum is %<maximum>s characters, excess characters: %<count>s)'
+      default: "is too long (maximum is %<maximum>s characters, excess characters: %<count>s)",
     )
     record.errors.add(attribute, custom_message)
   end

@@ -13,7 +13,7 @@ module Support
         end
 
         def update
-          save
+          save!
 
           redirect_to support_recruitment_cycle_provider_schools_path
         end
@@ -28,11 +28,11 @@ module Support
           unfound_urns
           duplicate_urns
 
-          flash.now[:success] = t('.school_removed')
+          flash.now[:success] = t(".school_removed")
           render :show
         end
 
-        private
+      private
 
         def provider
           @provider ||= recruitment_cycle.providers.find(params[:provider_id])

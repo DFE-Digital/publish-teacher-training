@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'factory_bot'
+require "factory_bot"
 
 module FactoryBot
   module Strategy
@@ -13,7 +13,7 @@ module FactoryBot
         build_class(evaluation).where(get_match_attributes(evaluation)).first
       end
 
-      private
+    private
 
       def build_class(evaluation)
         @build_class ||= evaluation

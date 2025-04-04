@@ -22,12 +22,12 @@ module Publish
           if goto_preview?
             redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, recruitment_cycle.year, course.course_code)
           else
-            course_updated_message I18n.t('publish.providers.course_fees.edit.course_fees')
+            course_updated_message I18n.t("publish.providers.course_fees.edit.course_fees")
 
             redirect_to publish_provider_recruitment_cycle_course_path(
               provider.provider_code,
               recruitment_cycle.year,
-              course.course_code
+              course.course_code,
             )
           end
 
@@ -36,7 +36,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def funding_type
         :publish_course_fee_form

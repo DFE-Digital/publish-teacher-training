@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Edit provider course details' do
+feature "Edit provider course details" do
   around do |example|
     Timecop.freeze(2021, 8, 1, 12) do
       example.run
@@ -17,8 +17,8 @@ feature 'Edit provider course details' do
     then_i_am_on_the_support_provider_course_edit_page
   end
 
-  context 'valid details' do
-    scenario 'I can edit a course details' do
+  context "valid details" do
+    scenario "I can edit a course details" do
       when_i_fill_in_course_code_with valid_course_code
       and_i_fill_in_course_title_with valid_course_name
       and_i_fill_in_course_start_date_with valid_date_month, valid_date_year
@@ -36,8 +36,8 @@ feature 'Edit provider course details' do
     end
   end
 
-  context 'invalid details' do
-    scenario 'I cannot use invalid course details' do
+  context "invalid details" do
+    scenario "I cannot use invalid course details" do
       when_i_fill_in_course_code_with existing_course_code
       and_i_fill_in_course_title_with valid_course_name
       and_i_fill_in_course_start_date_with valid_date_month, invalid_date_year
@@ -47,7 +47,7 @@ feature 'Edit provider course details' do
       and_it_contains_invalid_value_errors
     end
 
-    scenario 'I cannot use invalid date format' do
+    scenario "I cannot use invalid date format" do
       when_i_fill_in_course_start_date_with invalid_date_month, valid_date_year
       and_i_fill_in_course_application_open_from_with invalid_date_day, invalid_date_month, valid_date_year
       and_i_click_the_continue_button
@@ -56,7 +56,7 @@ feature 'Edit provider course details' do
       and_it_contains_applications_open_from_format_error
     end
 
-    scenario 'I cannot use a blank course details' do
+    scenario "I cannot use a blank course details" do
       when_i_fill_in_course_code_with blank_value
       and_i_fill_in_course_title_with blank_value
       and_i_fill_in_course_start_date_with blank_value, blank_value
@@ -67,7 +67,7 @@ feature 'Edit provider course details' do
     end
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_an_admin_user
     Timecop.travel(1.second.from_now)
@@ -75,15 +75,15 @@ feature 'Edit provider course details' do
   end
 
   def ratifying_provider
-    @accredited_provider ||= create(:accredited_provider)
+    @ratifying_provider ||= create(:accredited_provider)
   end
 
   def provider
     ratifying_provider
     @provider ||= create(:provider, courses: [
-                           build(:course, :published, :with_accrediting_provider, accrediting_provider: ratifying_provider),
-                           build(:course, :published, :with_accrediting_provider, accrediting_provider: ratifying_provider)
-                         ]) do |provider|
+      build(:course, :published, :with_accrediting_provider, accrediting_provider: ratifying_provider),
+      build(:course, :published, :with_accrediting_provider, accrediting_provider: ratifying_provider),
+    ]) do |provider|
       create(:provider_partnership, training_provider: provider, accredited_provider: ratifying_provider)
     end
   end
@@ -115,11 +115,11 @@ feature 'Edit provider course details' do
   end
 
   def course_code
-    @course_code ||= 'D0N3'
+    @course_code ||= "D0N3"
   end
 
   def course_name
-    @course_name ||= 'Geography'
+    @course_name ||= "Geography"
   end
 
   def ratifying_provider_name
@@ -127,19 +127,19 @@ feature 'Edit provider course details' do
   end
 
   def valid_date_day
-    @valid_date_day ||= '1'
+    @valid_date_day ||= "1"
   end
 
   def invalid_date_day
-    @invalid_date_day ||= '111'
+    @invalid_date_day ||= "111"
   end
 
   def valid_date_month
-    @valid_date_month ||= '10'
+    @valid_date_month ||= "10"
   end
 
   def invalid_date_month
-    @invalid_date_month ||= '90'
+    @invalid_date_month ||= "90"
   end
 
   def valid_course_code
@@ -163,7 +163,7 @@ feature 'Edit provider course details' do
   end
 
   def blank_value
-    @blank_value ||= ''
+    @blank_value ||= ""
   end
 
   def when_i_fill_in_course_code_with(course_code)
@@ -222,7 +222,7 @@ feature 'Edit provider course details' do
   end
 
   def then_i_see_the_updated_ratifying_provider
-    radio_button = support_provider_course_edit_page.find(:label, text: ratifying_provider_name).sibling('input')
+    radio_button = support_provider_course_edit_page.find(:label, text: ratifying_provider_name).sibling("input")
 
     expect(radio_button).to be_checked
   end
@@ -232,22 +232,22 @@ feature 'Edit provider course details' do
   end
 
   def and_it_contains_invalid_value_errors
-    expect(support_provider_course_edit_page.error_summary.text).to include('Course code is already taken')
+    expect(support_provider_course_edit_page.error_summary.text).to include("Course code is already taken")
     expect(support_provider_course_edit_page.error_summary.text).to include("October #{Settings.current_recruitment_cycle_year + 3} is not in the #{Settings.current_recruitment_cycle_year} cycle")
   end
 
   def and_it_contains_start_date_format_error
-    expect(support_provider_course_edit_page.error_summary.text).to include('Start date format is invalid')
+    expect(support_provider_course_edit_page.error_summary.text).to include("Start date format is invalid")
   end
 
   def and_it_contains_applications_open_from_format_error
-    expect(support_provider_course_edit_page.error_summary.text).to include('Applications open from date format is invalid')
+    expect(support_provider_course_edit_page.error_summary.text).to include("Applications open from date format is invalid")
   end
 
   def and_it_contains_blank_errors
-    expect(support_provider_course_edit_page.error_summary.text).to include('Course code cannot be blank')
-    expect(support_provider_course_edit_page.error_summary.text).to include('Course title cannot be blank')
-    expect(support_provider_course_edit_page.error_summary.text).to include('Select a course start date')
-    expect(support_provider_course_edit_page.error_summary.text).to include('Select an applications open date')
+    expect(support_provider_course_edit_page.error_summary.text).to include("Course code cannot be blank")
+    expect(support_provider_course_edit_page.error_summary.text).to include("Course title cannot be blank")
+    expect(support_provider_course_edit_page.error_summary.text).to include("Select a course start date")
+    expect(support_provider_course_edit_page.error_summary.text).to include("Select an applications open date")
   end
 end

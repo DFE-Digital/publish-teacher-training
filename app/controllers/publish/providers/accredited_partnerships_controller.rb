@@ -41,7 +41,7 @@ module Publish
         @provider_partnership_form = ProviderPartnershipForm.new(current_user, @provider_partnership, params: partnership_params)
 
         if @provider_partnership_form.save!
-          flash[:success] = t('.edit.updated')
+          flash[:success] = t(".edit.updated")
           redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, recruitment_cycle.year)
         else
           render :edit
@@ -57,14 +57,14 @@ module Publish
         @partnership = provider.accredited_partnerships.find_by(accredited_provider_id: partner.id)
 
         if @partnership.destroy
-          flash[:success] = t('.removed')
+          flash[:success] = t(".removed")
           redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, recruitment_cycle.year)
         else
           render :delete
         end
       end
 
-      private
+    private
 
       def cannot_delete
         @cannot_delete ||= provider.courses.exists?(accredited_provider_code: params[:accredited_provider_code])

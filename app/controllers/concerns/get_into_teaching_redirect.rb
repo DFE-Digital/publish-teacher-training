@@ -7,7 +7,7 @@ module GetIntoTeachingRedirect
     redirect_to I18n.t("get_into_teaching.#{git_url_locale_key}"), allow_other_host: true
   end
 
-  private
+private
 
   def git_path_param
     params[:git_path]

@@ -4,11 +4,11 @@ module Publish
   class AboutYourOrganisationForm < BaseProviderForm
     include Rails.application.routes.url_helpers
 
-    validates :train_with_us, presence: { message: 'Enter details about training with you' }, if: :train_with_us_changed?
-    validates :train_with_disability, presence: { message: 'Enter details about training with a disability' }, if: :train_with_disability_changed?
+    validates :train_with_us, presence: { message: "Enter details about training with you" }, if: :train_with_us_changed?
+    validates :train_with_disability, presence: { message: "Enter details about training with a disability" }, if: :train_with_disability_changed?
 
-    validates :train_with_us, words_count: { maximum: 250, message: 'Reduce the word count for training with you' }
-    validates :train_with_disability, words_count: { maximum: 250, message: 'Reduce the word count for training with disabilities and other needs' }
+    validates :train_with_us, words_count: { maximum: 250, message: "Reduce the word count for training with you" }
+    validates :train_with_disability, words_count: { maximum: 250, message: "Reduce the word count for training with disabilities and other needs" }
 
     def initialize(model, params: {}, redirect_params: {}, course_code: nil)
       super(model, params:)
@@ -26,34 +26,34 @@ module Publish
 
     def update_success_path
       case redirection_key
-      when 'goto_preview'
+      when "goto_preview"
         preview_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           provider.recruitment_cycle_year,
-          course_code
+          course_code,
         )
-      when 'goto_provider'
+      when "goto_provider"
         provider_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           provider.recruitment_cycle_year,
-          course_code
+          course_code,
         )
-      when 'goto_training_with_disabilities'
+      when "goto_training_with_disabilities"
         training_with_disabilities_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           provider.recruitment_cycle_year,
-          course_code
+          course_code,
         )
       else
         details_publish_provider_recruitment_cycle_path(
           provider.provider_code,
-          provider.recruitment_cycle_year
+          provider.recruitment_cycle_year,
         )
       end
     end
-    alias back_path update_success_path
+    alias_method :back_path, :update_success_path
 
-    private
+  private
 
     def train_with_us_changed?
       changed?(:train_with_us)
@@ -76,7 +76,7 @@ module Publish
     end
 
     def redirection_key
-      redirect_params.select { |_k, v| v == 'true' }&.keys&.first
+      redirect_params.select { |_k, v| v == "true" }&.keys&.first
     end
   end
 end

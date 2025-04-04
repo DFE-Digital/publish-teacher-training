@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Publish::Courses::OutcomeController do
   let(:user) { create(:user, providers: [build(:provider)]) }
@@ -11,9 +11,9 @@ RSpec.describe Publish::Courses::OutcomeController do
     controller.instance_variable_set(:@current_user, user)
   end
 
-  describe '#edit' do
-    context 'when teacher degree apprenticeship published course' do
-      it 'redirects to the course page' do
+  describe "#edit" do
+    context "when teacher degree apprenticeship published course" do
+      it "redirects to the course page" do
         course = create(
           :course,
           :resulting_in_undergraduate_degree_with_qts,
@@ -21,29 +21,29 @@ RSpec.describe Publish::Courses::OutcomeController do
           :published,
           provider:,
           study_mode: :part_time,
-          site_statuses: [build(:site_status, :part_time_vacancies, :findable)]
+          site_statuses: [build(:site_status, :part_time_vacancies, :findable)],
         )
 
         get :edit, params: {
           provider_code: provider.provider_code,
           recruitment_cycle_year: provider.recruitment_cycle_year,
-          code: course.course_code
+          code: course.course_code,
         }
 
         expect(response).to redirect_to(
           publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             provider.recruitment_cycle_year,
-            course.course_code
-          )
+            course.course_code,
+          ),
         )
       end
     end
 
-    context 'when teacher degree apprenticeship draft course' do
+    context "when teacher degree apprenticeship draft course" do
       render_views
 
-      it 'renders the edit outcome' do
+      it "renders the edit outcome" do
         course = create(
           :course,
           :resulting_in_undergraduate_degree_with_qts,
@@ -51,13 +51,13 @@ RSpec.describe Publish::Courses::OutcomeController do
           :draft_enrichment,
           provider:,
           study_mode: :part_time,
-          site_statuses: [build(:site_status, :part_time_vacancies, :findable)]
+          site_statuses: [build(:site_status, :part_time_vacancies, :findable)],
         )
 
         get :edit, params: {
           provider_code: provider.provider_code,
           recruitment_cycle_year: provider.recruitment_cycle_year,
-          code: course.course_code
+          code: course.course_code,
         }
 
         expect(response.body).to have_content "Qualification – #{course.name_and_code}"
@@ -65,54 +65,54 @@ RSpec.describe Publish::Courses::OutcomeController do
     end
   end
 
-  describe '#update' do
-    context 'when changing from a QTS to teacher degree apprenticeship course' do
-      it 'assigns teacher degree apprenticeship course defaults' do
+  describe "#update" do
+    context "when changing from a QTS to teacher degree apprenticeship course" do
+      it "assigns teacher degree apprenticeship course defaults" do
         course = create(
           :course,
           :resulting_in_qts,
           provider:,
           study_mode: :part_time,
-          site_statuses: [build(:site_status, :part_time_vacancies, :findable)]
+          site_statuses: [build(:site_status, :part_time_vacancies, :findable)],
         )
         create(:course_enrichment, :initial_draft, course_length: :TwoYears, course:)
 
         put :update, params: {
-          course: { qualification: 'undergraduate_degree_with_qts' },
+          course: { qualification: "undergraduate_degree_with_qts" },
           provider_code: provider.provider_code,
           recruitment_cycle_year: provider.recruitment_cycle_year,
-          code: course.course_code
+          code: course.course_code,
         }
 
         course.reload
 
-        expect(course.funding).to eq('apprenticeship')
+        expect(course.funding).to eq("apprenticeship")
         expect(course.can_sponsor_skilled_worker_visa).to be(false)
         expect(course.can_sponsor_student_visa).to be(false)
         expect(course.additional_degree_subject_requirements).to be(false)
         expect(course.degree_subject_requirements).to be_nil
-        expect(course.degree_grade).to eq('not_required')
-        expect(course.study_mode).to eq('full_time')
-        expect(course.site_statuses.map(&:vac_status).uniq.first).to eq('full_time_vacancies')
-        expect(course.enrichments.max_by(&:created_at).course_length).to eq('4 years')
+        expect(course.degree_grade).to eq("not_required")
+        expect(course.study_mode).to eq("full_time")
+        expect(course.site_statuses.map(&:vac_status).uniq.first).to eq("full_time_vacancies")
+        expect(course.enrichments.max_by(&:created_at).course_length).to eq("4 years")
       end
     end
 
-    context 'when changing from teacher degree apprenticeship to a QTS course' do
-      it 'clear teacher degree specific defaults' do
+    context "when changing from teacher degree apprenticeship to a QTS course" do
+      it "clear teacher degree specific defaults" do
         course = create(
           :course,
           :with_teacher_degree_apprenticeship,
           :resulting_in_undergraduate_degree_with_qts,
           :with_a_level_requirements,
-          provider:
+          provider:,
         )
 
         put :update, params: {
-          course: { qualification: 'qts' },
+          course: { qualification: "qts" },
           provider_code: provider.provider_code,
           recruitment_cycle_year: provider.recruitment_cycle_year,
-          code: course.course_code
+          code: course.course_code,
         }
 
         course.reload

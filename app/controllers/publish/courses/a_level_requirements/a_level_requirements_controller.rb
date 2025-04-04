@@ -11,7 +11,7 @@ module Publish
             current_step:,
             provider: @provider,
             course: @course,
-            step_params:
+            step_params:,
           )
 
           @wizard.valid_step? if params[:display_errors].present?
@@ -22,7 +22,7 @@ module Publish
             current_step:,
             provider: @provider,
             course: @course,
-            step_params:
+            step_params:,
           )
 
           if @wizard.save
@@ -33,7 +33,7 @@ module Publish
           end
         end
 
-        private
+      private
 
         def add_flash_message; end
 

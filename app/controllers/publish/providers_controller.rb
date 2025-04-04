@@ -13,7 +13,7 @@ module Publish
       per_page = 30
       @pagy, @providers = pagy(providers.order(:provider_name), page:, items: per_page)
 
-      render 'publish/providers/no_providers', status: :forbidden if @providers.blank?
+      render "publish/providers/no_providers", status: :forbidden if @providers.blank?
       redirect_to publish_provider_path(@providers.first.provider_code) if @providers.count == 1
     end
 
@@ -31,7 +31,7 @@ module Publish
       @cycle_year = session[:cycle_year] if session[:cycle_year].present?
 
       if rollover_active?
-        if session[:cycle_year].present? && params[:switcher] != 'true'
+        if session[:cycle_year].present? && params[:switcher] != "true"
           redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
         else
           :show?
@@ -51,7 +51,7 @@ module Publish
       @about_form = AboutYourOrganisationForm.new(
         provider,
         redirect_params:,
-        course_code: params[:course_code]
+        course_code: params[:course_code],
       )
     end
 
@@ -62,12 +62,12 @@ module Publish
         provider,
         params: provider_params,
         redirect_params:,
-        course_code: params.dig(param_form_key, :course_code)
+        course_code: params.dig(param_form_key, :course_code),
       )
 
       if @about_form.save!
         redirect_to @about_form.update_success_path
-        flash[:success] = I18n.t('success.published') if redirect_params.all? { |_k, v| v.blank? }
+        flash[:success] = I18n.t("success.published") if redirect_params.all? { |_k, v| v.blank? }
       else
         @errors = @about_form.errors.messages
         render :about
@@ -80,19 +80,19 @@ module Publish
       provider_query = params[:query]
 
       if provider_query.blank?
-        flash[:error] = { id: 'provider-error', message: 'Name or provider code' }
+        flash[:error] = { id: "provider-error", message: "Name or provider code" }
         return redirect_to publish_root_path
       end
 
       provider_code = provider_query
                       .split
                       .last
-                      .gsub(/[()]/, '')
+                      .gsub(/[()]/, "")
 
       redirect_to publish_provider_path(provider_code)
     end
 
-    private
+  private
 
     def providers
       @providers ||= if current_user.admin?
@@ -103,7 +103,7 @@ module Publish
     end
 
     def redirect_to_contact_page_with_ukprn_error
-      flash[:error] = { id: 'publish-provider-contact-form-ukprn-field', message: 'Please enter a UKPRN before continuing' }
+      flash[:error] = { id: "publish-provider-contact-form-ukprn-field", message: "Please enter a UKPRN before continuing" }
 
       redirect_to contact_publish_provider_recruitment_cycle_path(provider.provider_code, provider.recruitment_cycle_year)
     end
@@ -114,7 +114,7 @@ module Publish
         .except(:goto_preview, :course_code, :goto_provider, :goto_training_with_disabilities)
         .permit(
           *AboutYourOrganisationForm::FIELDS,
-          accredited_bodies: %i[provider_name provider_code description]
+          accredited_bodies: %i[provider_name provider_code description],
         )
     end
 
@@ -124,7 +124,7 @@ module Publish
       params.fetch(param_form_key, params).slice(
         :goto_preview,
         :goto_provider,
-        :goto_training_with_disabilities
+        :goto_training_with_disabilities,
       ).permit!.to_h
     end
   end

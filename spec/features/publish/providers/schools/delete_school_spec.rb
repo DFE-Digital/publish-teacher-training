@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require_relative 'provider_school_helper'
+require "rails_helper"
+require_relative "provider_school_helper"
 
 feature "Delete a provider's schools", { can_edit_current_and_next_cycles: false } do
   include ProviderSchoolHelper
@@ -11,7 +11,7 @@ feature "Delete a provider's schools", { can_edit_current_and_next_cycles: false
     then_i_should_see_a_list_of_schools
   end
 
-  scenario 'with no associated courses' do
+  scenario "with no associated courses" do
     when_i_visit_the_publish_school_show_page
     and_i_click_remove_school_link
     then_i_am_on_the_school_delete_page
@@ -24,7 +24,7 @@ feature "Delete a provider's schools", { can_edit_current_and_next_cycles: false
     and_the_school_is_deleted
   end
 
-  scenario 'with associated course' do
+  scenario "with associated course" do
     given_there_is_an_associated_course
     when_i_visit_the_publish_school_show_page
     and_i_click_remove_school_link
@@ -32,7 +32,7 @@ feature "Delete a provider's schools", { can_edit_current_and_next_cycles: false
     and_i_cannot_delete_the_school
   end
 
-  scenario 'with discarded associated course' do
+  scenario "with discarded associated course" do
     given_there_is_an_associated_course
     and_i_delete_the_course
     when_i_visit_the_publish_school_show_page
@@ -50,7 +50,7 @@ feature "Delete a provider's schools", { can_edit_current_and_next_cycles: false
   end
 
   def and_i_click_remove_school_link
-    click_link_or_button 'Remove school'
+    click_link_or_button "Remove school"
   end
 
   def then_i_am_on_the_school_delete_page
@@ -58,11 +58,11 @@ feature "Delete a provider's schools", { can_edit_current_and_next_cycles: false
   end
 
   def when_i_click_cancel
-    click_link_or_button 'Cancel'
+    click_link_or_button "Cancel"
   end
 
   def and_i_click_remove_school_button
-    click_link_or_button 'Remove school'
+    click_link_or_button "Remove school"
   end
   alias_method :when_i_click_remove_school_button, :and_i_click_remove_school_button
 
@@ -76,7 +76,7 @@ feature "Delete a provider's schools", { can_edit_current_and_next_cycles: false
   end
 
   def and_i_cannot_delete_the_school
-    expect(publish_school_delete_page).to have_text('You cannot remove this school')
+    expect(publish_school_delete_page).to have_text("You cannot remove this school")
     expect(publish_school_delete_page).not_to have_remove_school_button
   end
 
@@ -84,13 +84,13 @@ feature "Delete a provider's schools", { can_edit_current_and_next_cycles: false
     visit delete_publish_provider_recruitment_cycle_course_path(
       provider_code: @course.provider.provider_code,
       recruitment_cycle_year: @course.recruitment_cycle.year,
-      code: @course.course_code
+      code: @course.course_code,
     )
-    fill_in 'Enter the course code to confirm', with: @course.course_code
-    click_link_or_button 'Yes I’m sure – delete this course'
+    fill_in "Enter the course code to confirm", with: @course.course_code
+    click_link_or_button "Yes I’m sure – delete this course"
   end
 
   def and_i_am_able_to_remove_the_school
-    expect(page).to have_content('Remove school')
+    expect(page).to have_content("Remove school")
   end
 end

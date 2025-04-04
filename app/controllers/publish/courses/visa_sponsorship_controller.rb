@@ -20,14 +20,14 @@ module Publish
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
         else
           render :edit
         end
       end
 
-      private
+    private
 
       def visa_sponsorship_form
         @visa_sponsorship_form ||= CourseFundingForm.new(@course, params: visa_sponsorship_params)
@@ -48,7 +48,7 @@ module Publish
       end
 
       def success_message
-        success_message_key = visa_sponsorship_form.funding_updated? ? "visa_sponsorships.updated.#{visa_sponsorship_form.origin_step}_and_visa" : 'visa_sponsorships.updated.visa'
+        success_message_key = visa_sponsorship_form.funding_updated? ? "visa_sponsorships.updated.#{visa_sponsorship_form.origin_step}_and_visa" : "visa_sponsorships.updated.visa"
 
         visa_type = t("visa_sponsorships.#{visa_sponsorship_form.visa_type}")
         t(success_message_key, visa_type:)

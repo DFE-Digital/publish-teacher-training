@@ -8,12 +8,12 @@ class ALevelEquivalenciesStore < DfE::Wizard::Store
     if accept_a_level_equivalency?
       course.update!(
         accept_a_level_equivalency: true,
-        additional_a_level_equivalencies: additional_a_level_equivalencies.presence
+        additional_a_level_equivalencies: additional_a_level_equivalencies.presence,
       )
     else
       course.update!(
         accept_a_level_equivalency: false,
-        additional_a_level_equivalencies: nil
+        additional_a_level_equivalencies: nil,
       )
     end
   end

@@ -7,22 +7,22 @@ class TabNavigationPreview < ViewComponent::Preview
 
   def with_current_item_highlited
     with_current = items.prepend(
-      { name: 'Training details', url: mock_link, current: true }
+      { name: "Training details", url: mock_link, current: true },
     )
 
     render(TabNavigation.new(items: with_current))
   end
 
-  private
+private
 
   def items
     [
-      { name: 'Personal details', url: mock_link },
-      { name: 'Timeline', url: mock_link }
+      { name: "Personal details", url: mock_link },
+      { name: "Timeline", url: mock_link },
     ]
   end
 
   def mock_link
-    'https://www.gov.uk'
+    "https://www.gov.uk"
   end
 end

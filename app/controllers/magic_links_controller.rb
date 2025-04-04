@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MagicLinksController < ApplicationController
-  layout 'application'
+  layout "application"
 
   skip_before_action :authenticate
 
@@ -21,7 +21,7 @@ class MagicLinksController < ApplicationController
 
   def magic_link_sent; end
 
-  private
+private
 
   def magic_link_params
     params.expect(publish_authentication_magic_link_form: [:email])
