@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module GoogleOldPlacesAPI
+  # Wrapper around Google REST APIs for Geocoding and Autocomplete
+  #
   class Client
     BASE_URL = 'https://maps.googleapis.com/maps/api/'
 
@@ -15,6 +17,7 @@ module GoogleOldPlacesAPI
       end
     end
 
+    # @see https://developers.google.com/maps/documentation/places/web-service/autocomplete
     def autocomplete(query)
       response = get(
         endpoint: 'place/autocomplete/json',
@@ -36,6 +39,7 @@ module GoogleOldPlacesAPI
       end
     end
 
+    # @see https://developers.google.com/maps/documentation/geocoding/start
     def geocode(location_name)
       response = get(
         endpoint: 'geocode/json',

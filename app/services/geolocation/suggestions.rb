@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Geolocation
+  # Query Google autocomplete API with a text query to get GooglePlaces API response json
+  #
+  # @see GoogleOldPlacesAPI::Client
   class Suggestions
     def initialize(query, cache: Rails.cache, cache_expiration: 30.days, logger: Rails.logger, client: GoogleOldPlacesAPI::Client.new)
       @query = query
