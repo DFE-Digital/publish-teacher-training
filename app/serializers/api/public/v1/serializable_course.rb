@@ -150,9 +150,7 @@ module API
         end
 
         attribute :visa_sponsorship_application_deadline_at do
-          # A date_time attribute is required for Apply to block candidates who require visa sponsorship from applying to
-          # courses with early deadlines. The value is nil until the UI is built to collect the data. (4/2/2025)
-          nil
+          @object.visa_sponsorship_application_deadline_at&.iso8601
         end
 
         enrichment_attribute :about_course
