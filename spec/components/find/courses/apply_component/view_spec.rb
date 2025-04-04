@@ -36,6 +36,25 @@ describe Find::Courses::ApplyComponent::View, type: :component do
 
       expect(result.text).to include('This course is not accepting applications at the moment.')
     end
+
+    context 'when the course has a deadline for candidates who require visa sponsorship' do
+      before { FeatureFlag.activate(:visa_sponsorship_deadline) }
+
+      it 'renders the deadline' do
+        deadline = 2.days.from_now.change(hour: 11, min: 59)
+        course = build(
+          :course,
+          :open,
+          :can_sponsor_student_visa,
+          visa_sponsorship_application_deadline_at: deadline,
+          provider:
+        )
+
+        result = render_inline(described_class.new(course))
+
+        expect(result.text).to include "Non-UK citizens, apply by #{deadline.to_fs(:govuk_date)}"
+      end
+    end
   end
 
   context 'it is not mid cycle' do
