@@ -3,7 +3,7 @@
 module API
   module Public
     module V1
-      class SubjectAreasController < API::Public::V1::ApplicationController
+      class SubjectAreasController < ApplicationController
         def index
           render(
             jsonapi: SubjectArea.active.includes(subjects: [:financial_incentive]),
