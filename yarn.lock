@@ -232,10 +232,10 @@
   resolved "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.0.tgz#3188bcb273a414b0d215fd22a58540b989b9409a"
   integrity sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==
 
-"@ministryofjustice/frontend@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@ministryofjustice/frontend/-/frontend-2.0.0.tgz#79a855416f309080fbad210427569123ebab7773"
-  integrity sha512-JbYtMKjbR3fe8l5y/cgWXHFPJbLg2y0nlRuibM6Vdn9WYWayB8VJkoCoeAh04Jz20QBhzL4lag7KpcP7xQjbqw==
+"@ministryofjustice/frontend@3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@ministryofjustice/frontend/-/frontend-3.6.0.tgz#012a3729102877bcfef4d7131250d83a01b223af"
+  integrity sha512-wIFY6N5iEM/VZS4vV5xXYPdf1mfL8ERu+PIIzZrX+hNOYZtMgj/vrhnQ7QxrQPIHsywbWAl8bSpLmvQ5kSm3TQ==
   dependencies:
     govuk-frontend "^5.0.0"
     moment "^2.27.0"
