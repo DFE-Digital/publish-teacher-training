@@ -38,6 +38,7 @@ module Support
 
       @course.save!
     end
+    alias_method :save!, :save
 
     def valid?
       super

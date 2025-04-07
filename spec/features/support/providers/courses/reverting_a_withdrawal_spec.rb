@@ -46,7 +46,7 @@ feature "Reverting a withdrawal" do
   end
 
   def and_there_is_a_provider_with_a_withdrawn_course
-    @provider ||= create(:provider, courses: [build(:course, :withdrawn)])
-    @and_there_is_a_provider_with_a_withdrawn_course ||= @provider.courses.first
+    @provider = create(:provider, courses: [build(:course, :withdrawn)])
+    @course = @provider.courses.first
   end
 end

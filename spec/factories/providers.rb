@@ -29,7 +29,7 @@ FactoryBot.define do
     ukprn { Faker::Number.within(range: 10_000_000..19_999_999) }
     accredited { false }
     region_code { "london" }
-    recruitment_cycle { { strategy: :find_or_create } }
+    recruitment_cycle { association :recruitment_cycle, strategy: :find_or_create }
 
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }

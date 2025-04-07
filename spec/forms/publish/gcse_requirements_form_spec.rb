@@ -60,7 +60,7 @@ module Publish
 
       context "all values marked as true and completed" do
         it "returns true if valid" do
-          allow(course).to receive(:update).and_return(true)
+          allow(course).to receive(:update!).and_return(true)
 
           form = described_class.new(
             accept_pending_gcse: true, accept_gcse_equivalency: true, accept_english_gcse_equivalency: true,
@@ -73,7 +73,7 @@ module Publish
 
       context "essential values marked as false" do
         it "returns true if valid" do
-          allow(course).to receive(:update).and_return(true)
+          allow(course).to receive(:update!).and_return(true)
 
           form = described_class.new(
             accept_pending_gcse: false, accept_gcse_equivalency: false, accept_english_gcse_equivalency: nil,

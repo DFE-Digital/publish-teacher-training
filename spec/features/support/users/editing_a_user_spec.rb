@@ -50,7 +50,7 @@ private
   end
 
   def and_click_update
-    support_user_edit_page.update!.click
+    support_user_edit_page.update_button.click
   end
 
   def i_am_met_with_error_messages

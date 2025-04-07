@@ -21,6 +21,7 @@ module Publish
         degree_subject_requirements: additional_degree_subject_requirements.present? ? degree_subject_requirements : nil,
       )
     end
+    alias_method :save!, :save
 
     def self.build_from_course(course)
       new(

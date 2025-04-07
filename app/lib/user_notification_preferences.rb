@@ -40,6 +40,7 @@ class UserNotificationPreferences
 
     self
   end
+  alias_method :update!, :update
 
   alias_method :enabled?, :enabled
 

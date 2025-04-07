@@ -4,21 +4,8 @@ require "rails_helper"
 
 describe UserNotification do
   describe "validations" do
-    before do
-      subject.valid?
-    end
-
-    it "requires course_publish" do
-      subject.course_publish = nil
-      subject.save!
-      expect(subject.errors["course_publish"]).to include("is not included in the list")
-    end
-
-    it "requires course_update" do
-      subject.course_update = nil
-      subject.save!
-      expect(subject.errors["course_update"]).to include("is not included in the list")
-    end
+    it { is_expected.to validate_presence_of(:course_publish).with_message("is not included in the list") }
+    it { is_expected.to validate_presence_of(:course_update).with_message("is not included in the list") }
   end
 
   describe "associations" do

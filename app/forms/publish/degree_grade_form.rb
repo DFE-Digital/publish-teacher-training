@@ -14,6 +14,7 @@ module Publish
 
       course.update!(degree_grade: grade)
     end
+    alias_method :save!, :save
 
     def self.build_from_course(course)
       new(grade: course.degree_grade)

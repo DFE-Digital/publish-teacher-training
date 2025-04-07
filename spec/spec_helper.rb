@@ -46,6 +46,7 @@ Dir["./spec/support/**/*.rb"].each { |file| require file }
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 RSpec::Matchers.define_negated_matcher :not_change, :change
+RSpec::Matchers.define_negated_matcher :not_have_enqueued_mail, :have_enqueued_mail
 
 RSpec.configure do |config|
   config.filter_run_excluding smoke: true

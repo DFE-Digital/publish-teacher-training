@@ -121,7 +121,7 @@ feature "Viewing a findable course" do
 private
 
   def given_there_is_a_findable_course
-    @given_there_is_a_findable_course ||= create(
+    @course = create(
       :course,
       :secondary,
       :with_scitt,
@@ -174,7 +174,7 @@ private
   end
 
   def given_there_is_a_findable_course_with_no_international_fees
-    @given_there_is_a_findable_course_with_no_international_fees ||= create(
+    @course = create(
       :course,
       :secondary,
       :with_scitt,

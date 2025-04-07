@@ -17,6 +17,7 @@ module Publish
 
       course.update!(degree_grade: "not_required")
     end
+    alias_method :save!, :save
 
     def build_from_course(course)
       self.degree_grade_required = handle_degree_grade_required(course)

@@ -34,7 +34,7 @@ feature "viewing courses in various states" do
   end
 
   def given_there_is_a_published_course
-    @given_there_is_a_published_course ||= create(
+    @course = create(
       :course,
       enrichments: [
         build(
@@ -62,7 +62,7 @@ feature "viewing courses in various states" do
   end
 
   def given_there_is_a_draft_course
-    @given_there_is_a_draft_course ||= create(
+    @course = create(
       :course,
       enrichments: [
         build(
@@ -74,7 +74,7 @@ feature "viewing courses in various states" do
   end
 
   def given_there_is_a_rolled_over_course
-    @given_there_is_a_rolled_over_course ||= create(
+    @course = create(
       :course,
       enrichments: [
         build(
@@ -86,7 +86,7 @@ feature "viewing courses in various states" do
   end
 
   def given_there_is_a_published_with_unpublished_changes_course
-    @given_there_is_a_published_with_unpublished_changes_course ||= create(
+    @course = create(
       :course,
       enrichments: [
         build(
@@ -98,7 +98,7 @@ feature "viewing courses in various states" do
   end
 
   def given_there_is_a_withdrawn_course
-    @given_there_is_a_withdrawn_course ||= create(
+    @course = create(
       :course,
       enrichments: [
         build(

@@ -92,6 +92,18 @@ RSpec.configure do |config|
     end
   end
 
+  config.around(:each, :freeze) do |example|
+    if example.metadata[:freeze].is_a?(String)
+      Timecop.freeze(example.metadata[:freeze]) do
+        example.run
+      end
+    else
+      Timecop.freeze do
+        example.run
+      end
+    end
+  end
+
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.

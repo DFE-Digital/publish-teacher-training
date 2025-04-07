@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_03_144601) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_07_100800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -332,7 +332,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_03_144601) do
     t.boolean "accredited", default: false, null: false
     t.index ["accredited"], name: "index_provider_on_accredited"
     t.index ["can_sponsor_student_visa"], name: "index_provider_on_can_sponsor_student_visa"
-    t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
     t.index ["provider_code"], name: "index_provider_on_provider_code", using: :gin
