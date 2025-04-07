@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    attributes:
+      recruitment_cycle:
+        year: Year
+        start_date: Start date
+        end_date: End date
+        status: Status

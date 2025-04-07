@@ -4,6 +4,8 @@ en:
       index:
         page_title: Recruitment Cycles
         add_recruitment_cycle: Add recruitment cycle
+        status_current: Current
+        status_inactive: Past
       new:
         page_title: Recruitment cycle details
         page_caption: Add recruitment cycle
