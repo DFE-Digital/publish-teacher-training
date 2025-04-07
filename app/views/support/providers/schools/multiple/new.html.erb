@@ -24,7 +24,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_schools_path) %>
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_schools_path, no_visited_state: true) %>
     </p>
 
     <%= govuk_details(summary_text: "How to copy URNs from a CSV or spreadsheet") do %>
