@@ -103,7 +103,8 @@ module Support
       it 'shows the error message for invalid provider code format' do
         expect(subject).not_to allow_values(
           'ggg',
-          '11g',
+          '11&',
+          '11!',
           'GGG'
         )
           .for(:provider_code)
