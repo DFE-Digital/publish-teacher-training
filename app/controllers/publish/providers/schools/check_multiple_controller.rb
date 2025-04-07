@@ -5,15 +5,14 @@ module Publish
     module Schools
       class CheckMultipleController < ApplicationController
         include SuccessMessage
+        before_action :set_urns_and_schools, only: %i[show]
 
-        def show
-          schools
-          unfound_urns
-          duplicate_urns
-        end
+        def show; end
 
         def update
-          save
+          schools.each(&:save!)
+
+          schools_added_message(schools)
 
           redirect_to publish_provider_recruitment_cycle_schools_path
         end
@@ -22,6 +21,7 @@ module Publish
           if urn_form.values.present?
             updated_values = urn_form.values - [params[:urn]]
             @urn_form = URNForm.new(provider, params: { values: updated_values })
+
             if updated_values.blank?
               @urn_form.clear_stash
             else
@@ -29,9 +29,8 @@ module Publish
             end
           end
 
-          schools
-          unfound_urns
-          duplicate_urns
+          set_urns_and_schools
+
           removed_school_name = GiasSchool.find_by(urn: params[:urn]).name
 
           flash.now[:success_with_body] = { 'title' => t('.school_removed'), 'body' => removed_school_name }
@@ -40,14 +39,14 @@ module Publish
 
         private
 
-        def provider
-          @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
+        def set_urns_and_schools
+          load_schools
+          unfound_urns
+          duplicate_urns
         end
 
-        def save
-          schools.each(&:save!)
-
-          schools_added_message(schools)
+        def provider
+          @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
         end
 
         def urn_form
@@ -66,6 +65,7 @@ module Publish
             end
           end
         end
+        alias load_schools schools
 
         def unfound_urns
           @unfound_urns = urn_service[:unfound_urns]
