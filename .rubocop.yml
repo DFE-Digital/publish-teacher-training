@@ -15,12 +15,12 @@ inherit_from:
   - ./config/rubocop/style.yml
   - ./config/rubocop/factory_bot.yml
 
+inherit_mode:
+  merge:
+    - Exclude
+
 AllCops:
   NewCops: enable
-  Exclude:
-    - "bin/*"
-    - "db/schema.rb"
-    - "node_modules/**/*"
 
 RSpec/AnyInstance:
   Enabled: false
