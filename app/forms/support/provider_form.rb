@@ -17,12 +17,12 @@ module Support
     UNIVERSITY_ACCREDITED_PROVIDER_NUMBER_FORMAT = /\A1\d{3}\z/
     SCITT_ACCREDITED_PROVIDER_NUMBER_FORMAT = /\A5\d{3}\z/
     ACCREDITED_PROVIDER_NUMBER_FORMAT = /\A[15]\d{3}\z/
-    # Provider code must have at least one number and the rest are numbers or uppercase letters in any order
+    # Provider code must have at least one number and the rest are numbers or letters in any order
     #
-    # ^(?=[A-Z0-9]{3}$): Ensures the string is exactly three characters long and consists of uppercase letters or digits.
+    # ^(?=[a-zA-Z0-9]{3}$): Ensures the string is exactly three characters long and consists of letters or digits.
     # (?=.*\d): Ensures there is at least one digit.
-    # [A-Z\d]{3}$: Matches exactly three characters that are either uppercase letters or digits.
-    PROVIDER_CODE_FORMAT = /\A(?=[A-Z0-9]{3}$)(?=.*\d)[A-Z\d]{3}\z/
+    # [a-zA-Z\d]{3}$: Matches exactly three characters that are either letters or digits.
+    PROVIDER_CODE_FORMAT = /\A(?=[a-zA-Z0-9]{3}$)(?=.*\d)[a-zA-Z\d]{3}\z/
 
     attr_accessor(*FIELDS, :recruitment_cycle)
 
