@@ -6,6 +6,30 @@
       <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
 
       <%= govuk_button_link_to t(".add_recruitment_cycle"), new_support_recruitment_cycle_path %>
+
+      <%= govuk_table do |table| %>
+        <% table.with_head do |head| %>
+          <% head.with_row do |row| %>
+            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:year) %>
+            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:start_date) %>
+            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:end_date) %>
+            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:status) %>
+          <% end %>
+        <% end %>
+
+        <% table.with_body do |body| %>
+          <% @recruitment_cycles.each do |recruitment_cycle| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell text: recruitment_cycle.year %>
+              <% row.with_cell text: recruitment_cycle.application_start_date.strftime("%-d %B %Y") %>
+              <% row.with_cell text: recruitment_cycle.application_end_date.strftime("%-d %B %Y") %>
+              <% row.with_cell do %>
+                <%= govuk_tag(text: (recruitment_cycle.current? ? t(".status_current") : t(".status_inactive")), colour: (recruitment_cycle.current? ? "green" : "grey")) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>

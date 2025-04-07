@@ -2,7 +2,9 @@
 
 module Support
   class RecruitmentCyclesController < ApplicationController
-    def index; end
+    def index
+      @recruitment_cycles = RecruitmentCycle.order(year: :desc)
+    end
 
     def new
       @support_recruitment_cycle_form = RecruitmentCycleForm.new
