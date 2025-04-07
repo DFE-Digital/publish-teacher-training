@@ -41,6 +41,8 @@ jobs:
             command: bundle exec rubocop --format github
           - name: erb_lint
             command: bundle exec erb_lint app
+          - name: brakeman
+            command: bundle exec brakeman --quiet
           - name: JS standard
             command: yarn run standard $(git ls-files '**.js' | tr '\n' ' ')
           - name: Stylelint
