@@ -770,26 +770,6 @@ en:
             add: Add accredited provider
           update:
             added: Accredited provider added
-
-      accredited_providers:
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "Add accredited provider - %{provider_name} (%{code})"
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "%{provider_name}"
-          updated: About the accredited provider updated
-          update_description: Update description
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
-        checks:
-          show:
-            caption: *accredited_provider_caption
-            add: Add accredited provider
       provider_type:
         lead_school: "School"
         scitt: "School centred initial teacher training (SCITT)"
