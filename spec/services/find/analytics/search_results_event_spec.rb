@@ -33,8 +33,8 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
           utm_medium: 'search-form'
         },
         results: [
-          create(:course, course_code: 'abc', provider: build(:provider, provider_code: 'rst')),
-          create(:course, course_code: 'def', provider: build(:provider, provider_code: 'uvw'))
+          create(:course, course_code: 'abc', provider: build(:provider, provider_code: 'RST')),
+          create(:course, course_code: 'def', provider: build(:provider, provider_code: 'UVW'))
         ]
       }
     end
@@ -48,8 +48,8 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
           total: 1360,
           page: 2,
           visible_courses: [
-            { code: 'abc', provider_code: 'rst' },
-            { code: 'def', provider_code: 'uvw' }
+            { code: 'abc', provider_code: 'RST' },
+            { code: 'def', provider_code: 'UVW' }
           ],
           search_params: {
             send_courses: true,
@@ -74,8 +74,8 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
           total: 1360,
           page: 2,
           visible_courses: [
-            { code: 'abc', provider_code: 'rst' },
-            { code: 'def', provider_code: 'uvw' }
+            { code: 'abc', provider_code: 'RST' },
+            { code: 'def', provider_code: 'UVW' }
           ],
           search_params: {
             send_courses: true,
@@ -100,8 +100,8 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
           total: 1360,
           page: 2,
           visible_courses: [
-            { code: 'abc', provider_code: 'rst' },
-            { code: 'def', provider_code: 'uvw' }
+            { code: 'abc', provider_code: 'RST' },
+            { code: 'def', provider_code: 'UVW' }
           ],
           search_params: {
             send_courses: true,

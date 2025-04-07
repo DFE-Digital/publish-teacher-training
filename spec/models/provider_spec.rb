@@ -126,11 +126,16 @@ describe Provider do
     end
   end
 
-  describe 'normalizations' do
+  describe 'provider name normalizations' do
     it { is_expected.to normalize(:provider_name).from('  ACME  SCITT  ').to('ACME SCITT') }
     it { is_expected.to normalize(:provider_name).from('regular "quotes" used').to('regular “quotes” used') }
     it { is_expected.to normalize(:provider_name).from("it's a 'quoted' word").to('it’s a ‘quoted’ word') }
     it { is_expected.to normalize(:provider_name).from("  'single' and \"double\" quotes  with  spaces  ").to('‘single’ and “double” quotes with spaces') }
+  end
+
+  describe 'provider code normalizations' do
+    it { is_expected.to normalize(:provider_code).from('u2u').to('U2U') }
+    it { is_expected.to normalize(:provider_code).from('ab1').to('AB1') }
   end
 
   describe 'organisation' do
