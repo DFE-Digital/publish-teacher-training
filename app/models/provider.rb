@@ -172,8 +172,6 @@ class Provider < ApplicationRecord
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
 
-  validate :add_enrichment_errors
-
   validates :accredited_provider_number, accredited_provider_number_format: true, if: :accredited?
 
   validate :accredited_provider_type
@@ -390,19 +388,6 @@ private
   end
 
   def name_normalised = StripPunctuationService.call(string: provider_name)
-
-  def add_enrichment_errors
-    accrediting_provider_enrichments&.each do |item|
-      provider_code = item.UcasProviderCode
-
-      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
-
-      if accredited_provider.present? && item.invalid?
-        message = "^Reduce the word count for #{accredited_provider.provider_name}"
-        errors.add :accredited_bodies, message
-      end
-    end
-  end
 
   def set_defaults
     self.year_code ||= recruitment_cycle.year
