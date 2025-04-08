@@ -372,9 +372,6 @@ private
     end
   end
 
-  def accredited_provider_codes
-    accrediting_provider_enrichments&.map(&:UcasProviderCode) || []
-  end
   scope :course_code_search, ->(course_code) { joins(:courses).merge(Course.case_insensitive_search(course_code)) }
 
   def searchable_vector_value
