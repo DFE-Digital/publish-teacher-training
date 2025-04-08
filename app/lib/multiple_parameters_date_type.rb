@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 class MultipleParametersDateType < ActiveModel::Type::Value
-  class PotentialDate
-    include ActiveModel::Model
-    attr_accessor :year, :month, :day
-  end
-
   def self.process(params)
     params.keys.select { |key| key.to_s.match?(/\(\d+i\)$/) }.each do |key|
       attribute_name = key.to_s.split('(').first
