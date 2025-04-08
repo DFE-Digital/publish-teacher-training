@@ -5,13 +5,11 @@ require "rails_helper"
 describe Provider do
   subject { provider }
 
-  let(:accrediting_provider_enrichments) { [] }
   let(:courses) { [] }
   let(:provider) do
     create(:provider,
            provider_name: "ACME SCITT",
            provider_code: "A01",
-           accrediting_provider_enrichments:,
            courses:)
   end
 

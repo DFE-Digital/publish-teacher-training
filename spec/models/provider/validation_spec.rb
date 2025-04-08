@@ -3,7 +3,6 @@
 require "rails_helper"
 
 describe "validation" do
-  let(:accrediting_provider_enrichments) { [] }
   let(:courses) { [] }
   let(:provider) do
     create(:provider,
