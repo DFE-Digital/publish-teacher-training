@@ -35,7 +35,7 @@ module Courses
       update_study_mode(course)
       update_sites(course)
       update_study_sites(course)
-      course.accrediting_provider = course.provider.accrediting_providers.first if course.provider.accredited_bodies.length == 1
+      course.accrediting_provider = course.provider.accredited_partners.first if course.provider.accredited_bodies.length == 1
       course.course_code = provider.next_available_course_code if next_available_course_code
 
       Publish::Courses::AssignTdaAttributesService.new(course).call if course.undergraduate_degree_with_qts?

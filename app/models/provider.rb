@@ -82,8 +82,6 @@ class Provider < ApplicationRecord
     accredited_partners
   end
 
-  alias_method :accrediting_providers, :accredited_providers
-
   delegate :year, to: :recruitment_cycle, prefix: true
 
   def rollable_courses?
