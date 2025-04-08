@@ -15,11 +15,7 @@
     <%= course.status_tag %>
   </td>
   <td class="govuk-table__cell" data-qa="courses-table__findable">
-    <% if @training_provider.present? %>
-      <%= course.on_find(@training_provider) %>
-    <% else %>
-      <%= course.on_find(@provider) %>
-    <% end %>
+    <%= course.on_find(course.provider) %>
   </td>
   <td class="govuk-table__cell" data-qa="courses-table__applications">
     <% if course.is_running? || course.is_withdrawn? %>
