@@ -327,21 +327,6 @@ class Provider < ApplicationRecord
     "#{provider_name} (#{provider_code})"
   end
 
-  def accredited_body(provider_code)
-    accrediting_provider_enrichment = accrediting_provider_enrichments&.find { |enrichment| enrichment.UcasProviderCode == provider_code }
-
-    return unless accrediting_provider_enrichment
-
-    accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
-
-    return if accredited_provider.blank?
-
-    {
-      accredited_provider_id: accredited_provider.id,
-      description: accrediting_provider_enrichment.Description || "",
-    }
-  end
-
   def next_available_course_code
     services[:generate_unique_course_code].execute(
       existing_codes: courses.order(:course_code).pluck(:course_code),
