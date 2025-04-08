@@ -2,8 +2,6 @@
 
 module Courses
   class SearchForm < ApplicationForm
-    include ActiveModel::Attributes
-
     # Search parameters #
     attribute :applications_open, :boolean
     attribute :can_sponsor_visa, :boolean
