@@ -2,8 +2,6 @@
 
 module Support
   class RecruitmentCycleForm < ApplicationForm
-    include ActiveModel::Attributes
-
     attribute :year, :string
     attribute :application_start_date, :multiple_parameters_date
     attribute :application_end_date, :multiple_parameters_date
