@@ -18,7 +18,7 @@ feature "About Your Organisation section", { can_edit_current_and_next_cycles: f
     @provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider)
 
     given_i_am_authenticated(user: create(:user, providers: [@provider]))
-    @accrediting_provider = @provider.accrediting_providers.first
+    @accrediting_provider = @provider.accredited_partners.first
   end
 
   def when_i_visit_the_details_page

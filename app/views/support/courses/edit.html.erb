@@ -24,7 +24,7 @@
         <%= tag.div class: "govuk-form-group" do %>
           <%= f.govuk_fieldset legend: { text: "Ratifying provider", size: "m" } do %>
             <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__accredited_provider">
-              <%= render partial: "publish/courses/ratifying_provider/provider_suggestion", collection: @provider.accrediting_providers, locals: { form: f } %>
+              <%= render partial: "publish/courses/ratifying_provider/provider_suggestion", collection: @provider.accredited_partners, locals: { form: f } %>
             </div>
           <% end %>
         <% end %>

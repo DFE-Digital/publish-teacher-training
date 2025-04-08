@@ -371,28 +371,6 @@ describe Provider do
     end
   end
 
-  describe "#accrediting_providers" do
-    let(:provider) { create(:provider, accrediting_provider_enrichments:) }
-    let!(:partnership) { create(:provider_partnership, training_provider: provider, accredited_provider:) }
-
-    let(:accrediting_provider) { create(:accredited_provider) }
-    let(:accredited_provider) { accrediting_provider }
-    let!(:course1) { create(:course, accrediting_provider:, provider:) }
-    let!(:course2) { create(:course, accrediting_provider:, provider:) }
-
-    it "returns the course's accrediting provider" do
-      expect(provider.accrediting_providers.first).to eq(accrediting_provider)
-    end
-
-    it "is aliased" do
-      expect(provider.accrediting_providers).to eq(provider.accredited_providers)
-    end
-
-    it "does not duplicate data" do
-      expect(provider.accrediting_providers.count).to eq(1)
-    end
-  end
-
   describe "training_providers" do
     subject { accredited_provider.training_providers }
 
