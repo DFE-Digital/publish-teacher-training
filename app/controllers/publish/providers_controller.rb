@@ -114,7 +114,7 @@ module Publish
         .except(:goto_preview, :course_code, :goto_provider, :goto_training_with_disabilities)
         .permit(
           *AboutYourOrganisationForm::FIELDS,
-          accredited_bodies: %i[provider_name provider_code description],
+          accredited_partners: %i[provider_name provider_code description],
         )
     end
 
