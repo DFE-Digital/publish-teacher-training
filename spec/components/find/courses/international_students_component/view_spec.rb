@@ -75,7 +75,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it 'does not show the content if visa cannont be sponsored' do
-      expect(page).to have_no_text('If you do not already have the right to work in the UK, you may need to')
+      expect(page).to have_no_text('If you do not already have the right to study or work in the UK, you can')
     end
   end
 
