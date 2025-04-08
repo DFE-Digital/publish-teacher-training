@@ -33,7 +33,6 @@ FactoryBot.define do
 
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }
-    accrediting_provider_enrichments { nil }
     can_sponsor_student_visa { [true, false].sample }
     can_sponsor_skilled_worker_visa { [true, false].sample }
     synonyms { Faker::Lorem.words(number: 0..3) }
