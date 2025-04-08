@@ -65,14 +65,15 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 
 ## Seeding Data
 
+> _Choose **either** the download script (1) or the manual download (2) instructions below_
+
 The commands from the previous section will seed the database with some test data, but you must seed the database with a sanitised production dump to run the application locally using the personas.
 
 To seed the database with a sanitised production dump:
 
 - Request a PIM approval for the production environment.
 
-
-### Use the script to reset your local development db directly
+### Option 1) Use the script to reset your local development db directly
 
 Make sure there are no connections to your database
 
@@ -81,7 +82,7 @@ az login # select the production subscription
 bin/restore-backup
 ```
 
-### Download the sanitised production dump from the Azure Storage Account.
+### Option 2) Download the sanitised production dump from the Azure Storage Account.
 - In the Azure portal, go to 'Storage Accounts' -> 's189p01pttdbbkpsanpdsa' -> 'Containers' -> 'database-backup'
 - Download the latest sanitised backup.
 - Unzip the file and you should see a file called `publish_sanitised_YYYY-MM-DD.sql`.
