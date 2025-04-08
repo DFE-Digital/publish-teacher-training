@@ -444,7 +444,7 @@ class Course < ApplicationRecord
   def validate_accredited_provider_partnership_exists
     return if accredited_provider_code.blank?
 
-    errors.add(:accrediting_provider, :partnership_missing) unless provider.accredited_providers.include?(accrediting_provider)
+    errors.add(:accrediting_provider, :partnership_missing) unless provider.accredited_partners.include?(accrediting_provider)
   end
 
   def update_valid?

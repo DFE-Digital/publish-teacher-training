@@ -78,10 +78,6 @@ class Provider < ApplicationRecord
       end
   }
 
-  def accredited_providers
-    accredited_partners
-  end
-
   delegate :year, to: :recruitment_cycle, prefix: true
 
   def rollable_courses?
