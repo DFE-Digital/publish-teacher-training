@@ -2,13 +2,13 @@
 
 require "rails_helper"
 
-feature "selection accredited_bodies", { can_edit_current_and_next_cycles: false } do
+feature "selection accredited_partners", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_new_ratifying_providers_page
   end
 
-  scenario "selecting multiple accredited_bodies" do
+  scenario "selecting multiple accredited_partners" do
     when_i_select_an_accredited_provider
     and_i_click_continue
     then_i_am_met_with_the_applications_open_page

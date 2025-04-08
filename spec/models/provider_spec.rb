@@ -923,26 +923,6 @@ describe Provider do
     end
   end
 
-  describe "#accredited_bodies" do
-    it "returns empty array" do
-      expect(subject.accredited_bodies).to match([])
-    end
-
-    context "with accredited provider" do
-      let(:accredited_provider_one) { create(:accredited_provider, provider_code: "AP1") }
-      let(:accredited_provider_two) { create(:accredited_provider, provider_code: "AP2") }
-
-      let!(:accredited_partnerships) do
-        [create(:provider_partnership, training_provider: provider, accredited_provider: accredited_provider_one, description: "about the accredited provider"),
-         create(:provider_partnership, training_provider: provider, accredited_provider: accredited_provider_two)]
-      end
-
-      it "returns the current recruitment accredited bodies" do
-        expect(subject.accredited_bodies.map(&:id)).to match_array(accredited_partnerships.map(&:accredited_provider_id))
-      end
-    end
-  end
-
   describe "#study_sites" do
     let(:school) { build(:site, :school) }
     let(:study_site) { build(:site, :study_site) }

@@ -14,7 +14,7 @@ describe WorkflowStepService do
   end
 
   describe "#call" do
-    context "when course.is_school_direct? && when course.provider.accredited_bodies.length == 0 && course.no_visa_sponsorship?" do
+    context "when course.is_school_direct? && when course.provider.accredited_partners.length == 0 && course.no_visa_sponsorship?" do
       let(:provider) { build(:provider) }
       let(:course) { create(:course, :salary, accrediting_provider: accredited_provider, provider:) }
       let(:accredited_partnerships) { [] }
@@ -44,7 +44,7 @@ describe WorkflowStepService do
       end
     end
 
-    context "when course.is_school_direct? && when course.provider.accredited_bodies.length == 0 && course.visa_sponsorship != :no_sponsorship" do
+    context "when course.is_school_direct? && when course.provider.accredited_partners.length == 0 && course.visa_sponsorship != :no_sponsorship" do
       let(:provider) { build(:provider) }
       let(:course) do
         create(:course, :salary, :can_sponsor_skilled_worker_visa,
@@ -116,7 +116,7 @@ describe WorkflowStepService do
       end
     end
 
-    context "when course.is_school_direct? && course.provider.accredited_bodies.length == 1" do
+    context "when course.is_school_direct? && course.provider.accredited_partners.length == 1" do
       let(:provider) { build(:provider) }
       let(:course) { create(:course, :salary, accrediting_provider: accredited_provider, provider:) }
       let(:accredited_provider) { build(:accredited_provider) }
