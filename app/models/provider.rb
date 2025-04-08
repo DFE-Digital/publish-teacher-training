@@ -342,24 +342,6 @@ class Provider < ApplicationRecord
     }
   end
 
-  def accredited_bodies
-    return accredited_partners if Settings.features.provider_partnerships
-
-    accrediting_provider_enrichments&.filter_map do |accrediting_provider_enrichment|
-      provider_code = accrediting_provider_enrichment.UcasProviderCode
-
-      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
-
-      if accredited_provider.present?
-        {
-          provider_name: accredited_provider.provider_name,
-          provider_code: accredited_provider.provider_code,
-          description: accrediting_provider_enrichment.Description || "",
-        }
-      end
-    end || []
-  end
-
   def next_available_course_code
     services[:generate_unique_course_code].execute(
       existing_codes: courses.order(:course_code).pluck(:course_code),
