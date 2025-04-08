@@ -343,17 +343,17 @@ en:
     international_candidates:
       skilled_worker_visa:
         not_available:
-          html: <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
+          html: <p class="govuk-body">If you do not already have the right to study or work in the UK, you can <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees">find out more about the types of visa you can apply for</a>.</p>
         available:
           html:
-            <p class="govuk-body">If you do not already have the right to work in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
-            <p class="govuk-body">To do this, you’ll need to be sponsored by your employer.</p>
+            <p class="govuk-body">If you do not already have the right to study or work in the UK, you can <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees">find out more about the types of visa you can apply for</a>.</p>
+            <p class="govuk-body">To get a Skilled Worker visa, you’ll need to be sponsored by your employer.</p>
             <p class="govuk-body">Before you apply for this course, <a class="govuk-link" href=%{provider_url}>contact the training provider</a> to check Skilled Worker visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.</p>
       student_visa:
         available:
           html:
-            <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
-            <p class="govuk-body">To do this, you’ll need to be sponsored by your training provider.</p>
+            <p class="govuk-body">If you do not already have the right to study or work in the UK, you can <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees">find out more about the types of visa you can apply for</a>.</p>
+            <p class="govuk-body">To get a Student visa, you’ll need to be sponsored by your training provider.</p>
             <p class="govuk-body">Before you apply for this course, <a class="govuk-link" href=%{provider_url}>contact the training provider</a> to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.</p>
       entitlement:
         html: <p class="govuk-body">You may be entitled to £10,000 from the UK government to help with the financial costs of moving to England.</p>
