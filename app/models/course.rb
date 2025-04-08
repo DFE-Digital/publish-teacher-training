@@ -421,9 +421,7 @@ class Course < ApplicationRecord
   end
 
   def ratifying_provider_description
-    return nil unless accrediting_provider
-
-    Provider.in_current_cycle.find_by(provider_code: accrediting_provider.provider_code).train_with_us
+    accrediting_provider&.train_with_us
   end
 
   def accrediting_provider_description
