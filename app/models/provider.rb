@@ -150,8 +150,6 @@ class Provider < ApplicationRecord
 
   scope :with_can_sponsor_student_visa, ->(can_sponsor_student_visa) { where(can_sponsor_student_visa:) }
 
-  serialize :accrediting_provider_enrichments, coder: AccreditingProviderEnrichment::ArraySerializer
-
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
   validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
 
