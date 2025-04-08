@@ -65,7 +65,7 @@ feature "Publishing a course when course ratifying provider is invalid", { can_e
   end
 
   def and_the_provider_has_no_accredited_partners
-    expect(provider.accredited_providers).to be_empty
+    expect(provider.accredited_partners).to be_empty
   end
 
   def and_there_is_a_draft_course_without_accrediting_provider

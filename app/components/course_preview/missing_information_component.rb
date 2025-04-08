@@ -26,7 +26,7 @@ module CoursePreview
     end
 
     def accrediting_provider_present?(course)
-      course.provider.accredited_providers.include?(course.accrediting_provider)
+      course.provider.accredited_partners.include?(course.accrediting_provider)
     end
 
   private
