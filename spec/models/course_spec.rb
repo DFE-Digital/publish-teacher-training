@@ -2382,44 +2382,6 @@ describe Course do
     end
   end
 
-  describe "#accrediting_provider_description" do
-    subject { course.accrediting_provider_description }
-
-    let(:accrediting_provider) { nil }
-    let(:course) { create(:course, accrediting_provider:) }
-
-    context "for courses without accrediting provider" do
-      it { is_expected.to be_nil }
-    end
-
-    context "for courses with accrediting provider" do
-      let(:accrediting_provider) { build(:provider) }
-      let(:course) { create(:course, provider:, accrediting_provider:) }
-
-      let(:provider) { build(:provider, accrediting_provider_enrichments:) }
-
-      context "without any accrediting_provider_enrichments" do
-        let(:accrediting_provider_enrichments) { nil }
-
-        it { is_expected.to be_nil }
-      end
-
-      context "with accrediting_provider_enrichments" do
-        let(:accrediting_provider_enrichment_description) { Faker::Lorem.sentence.to_s }
-        let(:accrediting_provider_enrichment) do
-          {
-            "UcasProviderCode" => accrediting_provider.provider_code,
-            "Description" => accrediting_provider_enrichment_description,
-          }
-        end
-
-        let(:accrediting_provider_enrichments) { [accrediting_provider_enrichment] }
-
-        it { is_expected.to match accrediting_provider_enrichment_description }
-      end
-    end
-  end
-
   describe "#enrichments" do
     describe "#find_or_initialize_draft" do
       copyable_enrichment_attributes =
