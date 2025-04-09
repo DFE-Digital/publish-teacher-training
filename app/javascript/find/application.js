@@ -6,6 +6,7 @@ import { Application } from '@hotwired/stimulus'
 import FilterSearchController from './controllers/filter_search_controller'
 import SubjectsAutocompleteController from './controllers/subjects_autocomplete_controller'
 import ProviderAutocompleteController from './controllers/provider_autocomplete_controller'
+import RadiusQuickLinkSuggestionsController from './controllers/radius_quick_link_suggestions_controller'
 import RemoteAutocompleteController from './controllers/remote_autocomplete_controller'
 import LocationsAutocompleteController from './controllers/locations_autocomplete_controller'
 import VisibilityController from './controllers/visibility_controller'
@@ -18,6 +19,7 @@ Stimulus.register('remote-autocomplete', RemoteAutocompleteController)
 Stimulus.register('locations-autocomplete', LocationsAutocompleteController)
 Stimulus.register('visibility', VisibilityController)
 Stimulus.register('provider-autocomplete', ProviderAutocompleteController)
+Stimulus.register('radius-quick-link-suggestions', RadiusQuickLinkSuggestionsController)
 
 window.jQuery = jQuery
 window.$ = jQuery

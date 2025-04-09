@@ -1,0 +1,15 @@
+en:
+  api:
+    radius_query_link_suggestions:
+      radius_in_miles: "%{count} %{miles} (%{course_count})"
+      over_100_courses: more than 100 courses
+      course_count: "%{course_count} %{course_word}"
+      errors:
+        bad_request: "Search parameters missing"
+      course_word:
+        one: "course"
+        other: "courses"
+      miles:
+        one: "mile"
+        other: "miles"
+

@@ -133,11 +133,7 @@
           Filter results
         </button>
 
-        <%= render Courses::NoResultsComponent.new(
-          country: @search_params[:country],
-          minimum_degree_required: @search_params[:minimum_degree_required],
-          subjects: @search_params[:subjects],
-        ) %>
+        <%= render Courses::NoResultsComponent.new(search_params: @search_params) %>
       <% end %>
     </div>
   </div>
