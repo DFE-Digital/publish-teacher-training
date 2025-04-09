@@ -58,7 +58,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
       result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
-      expect(result.text).to include('You should get 120 days of classroom experience in schools. You will also spend time at a location where you will study.')
+      expect(result.text).to include('You will spend a minimum of 24 weeks on school placements. This time is spread across at least 2 schools. You will also spend time in a location to study.')
       expect(result).to have_css('.app-advice__title', text: 'How school placements work')
       expect(result.text).to include('Find out more about how school placements work')
       expect(result.text).to include('The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.')
