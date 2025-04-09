@@ -1,23 +1,36 @@
-<div class="app-search-results">
-  <% if devolved_nation? %>
-    <h2 class="govuk-heading-m"><%= t(".devolved_nation.heading") %></h2>
+<div
+  class="app-search-results"
+  data-controller="radius-quick-link-suggestions"
+  data-radius-quick-link-suggestions-search-value="<%= @search_params.to_json %>">
 
-    <p class="govuk-body">
-      <%= govuk_link_to t(".devolved_nation.#{devolved_nation}.link_content"), find_track_click_path(url: t(".devolved_nation.#{devolved_nation}.link")) %>
-    </p>
+<% if devolved_nation? %>
+  <h2 class="govuk-heading-m"><%= t(".devolved_nation.heading") %></h2>
+
+  <p class="govuk-body">
+    <%= govuk_link_to t(".devolved_nation.#{devolved_nation}.link_content"), find_track_click_path(url: t(".devolved_nation.#{devolved_nation}.link")) %>
+  </p>
+<% else %>
+  <p class="govuk-body">
+    <%= try_another_search_content %>.
+  </p>
+<% end %>
+
+<% if undergraduate_courses? %>
+  <p class="govuk-body">
+    <%= t(".undergraduate.message_html", contact: govuk_mail_to(Settings.support_email)) %>
+  </p>
+
+  <p class="govuk-body">
+    <%= govuk_link_to(t(".undergraduate.find_out_more_about_tda"), find_track_click_path(url: t("find.get_into_teaching.url_tda"))) %>
+  </p>
+<% end %>
+
+<h3 class="govuk-heading-m">
+  <% if @search_params[:subject_name].present? %>
+    <%= t(".try_browsing", subject_name: @search_params[:subject_name]) %>
   <% else %>
-    <p class="govuk-body">
-      <%= try_another_search_content %>.
-    </p>
+    <%= t(".try_browsing_without_subject") %>
   <% end %>
+</h3>
 
-  <% if undergraduate_courses? %>
-    <p class="govuk-body">
-      <%= t(".undergraduate.message_html", contact: govuk_mail_to(Settings.support_email)) %>
-    </p>
-
-    <p class="govuk-body">
-      <%= govuk_link_to(t(".undergraduate.find_out_more_about_tda"), find_track_click_path(url: t("find.get_into_teaching.url_tda"))) %>
-    </p>
-  <% end %>
-</div>
+<div data-radius-quick-link-suggestions-target="container"></div>

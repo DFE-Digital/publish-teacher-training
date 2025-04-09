@@ -7,13 +7,14 @@ RSpec.describe Courses::NoResultsComponent, type: :component do
 
   subject(:component) do
     render_inline(
-      described_class.new(country:, minimum_degree_required:, subjects:),
+      described_class.new(country:, minimum_degree_required:, subjects:, search_params:),
     )
   end
 
   let(:country) { nil }
   let(:minimum_degree_required) { nil }
   let(:subjects) { [] }
+  let(:search_params) { {} }
 
   context "when the search is in Scotland" do
     let(:country) { "Scotland" }

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   constraints(FindConstraint.new) do
     draw(:find)
+    draw(:find_api)
   end
 
   constraints(PublishConstraint.new) do
