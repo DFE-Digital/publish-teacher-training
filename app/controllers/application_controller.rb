@@ -11,6 +11,11 @@ class ApplicationController < ActionController::Base
   include Pagy::Backend
 
   before_action :enforce_basic_auth, if: -> { BasicAuthenticable.required? }
+  before_action :log_session
+
+  def log_session
+    Rails.logger.push_tags({ session_id: session.id })
+  end
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
