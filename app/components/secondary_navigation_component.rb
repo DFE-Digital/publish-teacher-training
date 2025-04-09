@@ -23,7 +23,7 @@ class SecondaryNavigationComponent < ViewComponent::Base
     attr_reader :name, :url, :current
 
     def current?
-      current || current_page?(url)
+      (current || current_page?(url)) && 'page'
     end
   end
 end
