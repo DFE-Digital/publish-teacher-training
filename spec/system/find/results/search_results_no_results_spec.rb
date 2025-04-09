@@ -38,16 +38,30 @@ RSpec.describe "No search results", :js, service: :find do
     then_i_see_teacher_degree_apprenticeship_no_results_content
   end
 
+  scenario "when there are no results for the given radius, a selection of wider search options are given" do
+    when_i_search_for_maths_in_london
+    then_i_see_radius_quick_links
+    then_i_click_on_radius_quick_link
+  end
+
   def given_courses_exist
     romford = build(:location, :romford)
-    primary_subject = find_or_create(:primary_subject, :primary)
+    bristol = build(:location, :bristol)
 
     create(
       :course,
       :primary,
       name: "Primary - London",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
-      subjects: [primary_subject],
+      subjects: [find_or_create(:primary_subject, :primary)],
+    )
+
+    create(
+      :course,
+      :secondary,
+      name: "Mathematics - Bristol",
+      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: bristol.latitude, longitude: bristol.longitude))],
+      subjects: [find_or_create(:secondary_subject, :mathematics)],
     )
   end
 
@@ -108,6 +122,27 @@ RSpec.describe "No search results", :js, service: :find do
     expect(page).to have_content("This service is for courses in England")
   end
 
+  def when_i_search_for_maths_in_london
+    stub_autocomplete_request("London")
+
+    fill_in "Subject", with: "Mathematics"
+    fill_in "City, town or postcode", with: "London"
+    stub_geocode_request("London")
+    and_i_click_search
+  end
+
+  def then_i_see_radius_quick_links
+    expect(page).to have_content("No courses found")
+    expect(page).to have_content("Try browsing for 'Mathematics' in a wider location search")
+    expect(page).to have_content("200 miles (1 course)")
+  end
+
+  def then_i_click_on_radius_quick_link
+    click_link "200 miles (1 course)"
+    expect(page).to have_content("1 course found")
+    expect(page).to have_content("Mathematics - Bristol")
+  end
+
   def when_i_search_courses_in_england
     stub_autocomplete_request("London")
 
@@ -118,7 +153,7 @@ RSpec.describe "No search results", :js, service: :find do
 
   def then_i_see_no_results_content
     expect(page).to have_content(
-      "You can try another search, for example by changing subject or location.",
+      "You can try another search, for example by changing subject, location or radius.",
     )
   end
 
@@ -131,7 +166,7 @@ RSpec.describe "No search results", :js, service: :find do
 
   def then_i_see_no_results_for_subjects_content
     expect(page).to have_content(
-      "You can try another search, for example by changing subjects or location.",
+      "You can try another search, for example by changing subjects, location or radius.",
     )
   end
 

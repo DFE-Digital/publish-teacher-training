@@ -7,16 +7,14 @@ RSpec.describe Courses::NoResultsComponent, type: :component do
 
   subject(:component) do
     render_inline(
-      described_class.new(country:, minimum_degree_required:, subjects:),
+      described_class.new(search_params:),
     )
   end
 
-  let(:country) { nil }
-  let(:minimum_degree_required) { nil }
-  let(:subjects) { [] }
+  let(:search_params) { {} }
 
   context "when the search is in Scotland" do
-    let(:country) { "Scotland" }
+    let(:search_params) { { country: "Scotland" } }
 
     it "renders the devolved nation heading" do
       expect(component).to have_css("h2.govuk-heading-m", text: I18n.t("courses.no_results_component.devolved_nation.heading"))
@@ -31,7 +29,7 @@ RSpec.describe Courses::NoResultsComponent, type: :component do
   end
 
   context "when the search is in Wales" do
-    let(:country) { "Wales" }
+    let(:search_params) { { country: "Wales" } }
 
     it "renders the devolved nation heading" do
       expect(component).to have_css("h2.govuk-heading-m", text: I18n.t("courses.no_results_component.devolved_nation.heading"))
@@ -46,7 +44,7 @@ RSpec.describe Courses::NoResultsComponent, type: :component do
   end
 
   context "when the search is in Northern Ireland" do
-    let(:country) { "Northern Ireland" }
+    let(:search_params) { { country: "Northern Ireland" } }
 
     it "renders the devolved nation heading" do
       expect(component).to have_css("h2.govuk-heading-m", text: I18n.t("courses.no_results_component.devolved_nation.heading"))
@@ -61,7 +59,7 @@ RSpec.describe Courses::NoResultsComponent, type: :component do
   end
 
   context "when there are no results in England" do
-    let(:country) { "England" }
+    let(:search_params) { { country: "England", subjects: [] } }
 
     it "renders the try another search message" do
       expect(component).to have_content(
@@ -70,7 +68,7 @@ RSpec.describe Courses::NoResultsComponent, type: :component do
     end
 
     context "when searching by multiple subjects" do
-      let(:subjects) { [1, 2] }
+      let(:search_params) { { country: "England", subjects: [1, 2] } }
 
       it "renders the try another search message" do
         expect(component).to have_content(
@@ -81,7 +79,7 @@ RSpec.describe Courses::NoResultsComponent, type: :component do
   end
 
   context "when searching for teacher degree apprenticeship courses" do
-    let(:minimum_degree_required) { "no_degree_required" }
+    let(:search_params) { { minimum_degree_required: "no_degree_required" } }
 
     it "renders the undergraduate message with contact support email" do
       expect(component).to have_content(
