@@ -193,13 +193,6 @@ jobs:
       - run: bundle exec rails parallel:setup
       - run: bundle exec rails spec:prepare
 
-      # - name: Setup tests
-      #   run: |
-      #     docker compose up --no-build -d
-      #     docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-      #     docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
-      #     docker compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
-
       - name: ${{ matrix.tests.name }} tests with feature flags
         run: |
           ${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}"
@@ -229,6 +222,7 @@ jobs:
   build:
     name: Build
     needs: [lint, analytics-checks, javascript-tests, rails-tests]
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
