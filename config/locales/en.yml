@@ -1467,10 +1467,14 @@ en:
     label: Course length
   privacy_information:
     base_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/privacy-information-education-providers-workforce-including-teachers"
+    section_1: "#using-your-data-to-fund-learning-including-apprenticeships"
     section_6: "#using-your-data-so-we-can-support-your-teaching-career"
     section_14: "#using-your-data-to-contact-you-for-research-or-feedbackon-services-we-provide-to-you"
     section_15: "#gather-evidence"
+    section_16: "#using-your-data-to-take-part-in-our-stakeholder-or-user-groups"
+    section_22: "#using-your-data-to-maintain-lists-of-education-sector-contact-details"
     section_25: "#list-of-teachers"
     section_29: "#using-your-data-when-you-contact-us-to-make-an-enquiry"
     section_30: "#using-your-data-to-use-our-websites"
+    section_37: "#using-your-data-when-you-usedfesign-in"
     section_43: "#how-to-contact-us-and-how-to-make-a-complaint"
