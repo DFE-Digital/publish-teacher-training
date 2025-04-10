@@ -252,7 +252,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
         'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
         'Connection' => 'keep-alive',
         'Keep-Alive' => '30',
-        'User-Agent' => 'Faraday v2.12.2'
+        'User-Agent' => "Faraday v#{Faraday::VERSION}"
       }
     ).to_return(status: 200, body: file_fixture('google_old_places_api_client/autocomplete/non_existent_city.json'), headers: { 'Content-Type' => 'application/json' })
 
@@ -297,7 +297,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
         'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
         'Connection' => 'keep-alive',
         'Keep-Alive' => '30',
-        'User-Agent' => 'Faraday v2.12.2'
+        'User-Agent' => "Faraday v#{Faraday::VERSION}"
       }
     ).to_return(status: 200, body: file_fixture('google_old_places_api_client/autocomplete/london.json'), headers: { 'Content-Type' => 'application/json' })
 
@@ -517,7 +517,7 @@ RSpec.describe 'Search results by subject and location', :js, service: :find do
           'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'Connection' => 'keep-alive',
           'Keep-Alive' => '30',
-          'User-Agent' => 'Faraday v2.12.2'
+          'User-Agent' => "Faraday v#{Faraday::VERSION}"
         }
       )
       .to_return(
