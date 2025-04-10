@@ -33,8 +33,10 @@
     "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#v0.2.0",
     "govuk-frontend": "^5.9.0",
     "jquery": "^3.6.0",
+    "leaflet": "^1.9.4",
     "lodash.debounce": "^4.0.8",
-    "lodash.throttle": "^4.1.1"
+    "lodash.throttle": "^4.1.1",
+    "set-value": "^4.0.1"
   },
   "devDependencies": {
     "esbuild": "^0.25.2",
