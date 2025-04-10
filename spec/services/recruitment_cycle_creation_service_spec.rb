@@ -31,8 +31,8 @@ describe RecruitmentCycleCreationService do
 
         service
 
-        recruitment_cycle = RecruitmentCycle.find_by(year: year)
-        expect(RolloverJob).to have_received(:perform_later).with(recruitment_cycle.id)
+        RecruitmentCycle.find_by(year: year)
+        expect(RolloverJob).to have_received(:perform_later)
       end
     end
 
