@@ -1465,3 +1465,12 @@ en:
   google_privacy_policy_url: "https://policies.google.com/technologies/cookies?hl=en-US#types-of-cookies"
   course_length_with_study_mode:
     label: Course length
+  privacy_information:
+    base_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/privacy-information-education-providers-workforce-including-teachers"
+    section_6: "#using-your-data-so-we-can-support-your-teaching-career"
+    section_14: "#using-your-data-to-contact-you-for-research-or-feedbackon-services-we-provide-to-you"
+    section_15: "#gather-evidence"
+    section_25: "#list-of-teachers"
+    section_29: "#using-your-data-when-you-contact-us-to-make-an-enquiry"
+    section_30: "#using-your-data-to-use-our-websites"
+    section_43: "#how-to-contact-us-and-how-to-make-a-complaint"
