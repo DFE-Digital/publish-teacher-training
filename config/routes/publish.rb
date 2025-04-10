@@ -265,7 +265,6 @@ namespace :publish, as: :publish do
           resources :courses, only: [:index], controller: "training_partners/courses"
         end
 
-        get "/accredited-providers", to: redirect("/publish/organisations/%{provider_code}/%{recruitment_cycle_year}/accredited-partnerships")
         resources :accredited_partnerships, param: :accredited_provider_code, except: %i[show], path: "accredited-partnerships", controller: "accredited_partnerships" do
           member do
             get :delete

@@ -73,7 +73,7 @@ module Publish
           query:,
           results_limit: @accredited_provider_search.limit,
           results_count: @accredited_provider_search.providers.unscope(:limit).count,
-          return_path: publish_provider_recruitment_cycle_accredited_providers_path,
+          return_path: search_publish_provider_recruitment_cycle_accredited_providers_path,
           search_resource: "accredited provider",
           caption_text: "Add accredited provider",
         )
