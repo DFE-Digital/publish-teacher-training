@@ -1,0 +1,21 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= t(".page_title", service_name: t("service_name.#{service_name}")) %>
+    </h1>
+    <p class="govuk-body-l">
+      <%= t(
+        ".read_info_html",
+        link: govuk_link_to(
+          t(".read_info_link_text"),
+          t("privacy_information.base_url"),
+        ),
+      ) %>
+    </p>
+    <% t(".sections_for.#{service_name}").each do |section_number| %>
+      <p class="govuk-body">
+        <%= sanitize t(".sections.#{section_number}.body_html", link: govuk_link_to(t(".sections.#{section_number}.link_text"), t("privacy_information.base_url") + t(".sections.#{section_number}.anchor"))) %>
+      </p>
+    <% end %>
+  </div>
+</div>

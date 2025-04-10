@@ -56,6 +56,62 @@ en:
             fee_and_placement: You will be able to select a preferred placement school, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.
             salary: Check with the provider before applying. They may require you to find your own school or want to discuss your situation to help them choose a school you can travel to.
             salary_and_placement: You will be able to select a preferred employing school, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.
+    privacy_notice:
+      page_title: "%{service_name} privacy notice"
+      read_info_html: "Read the Privacy information: %{link}"
+      read_info_link_text: "education providers' workforce, including teachers."
+      sections_for:
+        find: [6, 14, 15, 25, 29, 30, 43]
+        publish: [1, 6, 14, 16, 22, 29, 30, 37, 43]
+      sections: 
+        1: 
+          link_text: Section 1
+          body_html: "%{link} tells you what we do with your data to provide funding."
+          anchor: "#using-your-data-to-fund-learning-including-apprenticeships"
+        6:
+          link_text: Section 6
+          body_html: "%{link} tells you what we do with your data to help support teaching as a career."
+          anchor: "#using-your-data-so-we-can-support-your-teaching-career"
+        14:
+          link_text: Section 14
+          body_html: "%{link} tells you how we use data to contact you for research or feedback on services we provide to you."
+          anchor: "#using-your-data-to-contact-you-for-research-or-feedbackon-services-we-provide-to-you"
+        15:
+          link_text: Section 15
+          body_html: "%{link} tells you how we use your data to gather evidence for policy development, evaluation and delivery."
+          anchor: "#gather-evidence"
+        16:
+          link_text: Section 16
+          body_html: "%{link} tells you how we use your data to take part in our stakeholder or user groups."
+          anchor: "#using-your-data-to-take-part-in-our-stakeholder-or-user-groups"
+        22:
+          link_text: Section 22
+          body_html: "%{link} tells you how we use your data to maintain lists of education sector contact details."
+          anchor: "#using-your-data-to-maintain-lists-of-education-sector-contact-details"
+        25:
+          link_text: Section 25
+          body_html: "%{link} tells you how we use your data to maintain a list of teachers."
+          anchor: "#list-of-teachers"
+        29:
+          link_text: Section 29
+          body_html: "%{link} tells you how we use your data when you contact us to make an enquiry."
+          anchor: "#using-your-data-when-you-contact-us-to-make-an-enquiry"
+        30:
+          link_text: Section 30
+          body_html: "%{link} tells you how we use your data to use our websites."
+          anchor: "#using-your-data-to-use-our-websites"
+        37:
+          link_text: Section 37
+          body_html: "%{link} tells you how we use your data when you use DfE Sign-In."
+          anchor: "#using-your-data-when-you-usedfesign-in"
+        43:
+          link_text: Section 43
+          body_html: "%{link} tells you how to contact us to make a complaint."
+          anchor: "#how-to-contact-us-and-how-to-make-a-complaint"
+  privacy_notice:
+    page_title: "%{service_name} privacy notice"   
+  privacy_information:
+    base_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/privacy-information-education-providers-workforce-including-teachers"
   markdown_formatting:
     summary_text: Help formatting your text
     title: How to format your text
