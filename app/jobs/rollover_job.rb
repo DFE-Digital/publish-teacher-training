@@ -5,7 +5,7 @@ class RolloverJob < ApplicationJob
 
   BATCH_SIZE = 10
 
-  def perform(_recruitment_cycle_id)
+  def perform
     relation = RecruitmentCycle.current_recruitment_cycle.providers
 
     BatchDelivery.new(relation:, stagger_over: 1.hour, batch_size: BATCH_SIZE).each do |batch_time, providers|

@@ -18,7 +18,7 @@ RSpec.describe RolloverJob do
     it 'enqueues jobs with correct staggered timings' do
       Timecop.freeze do
         current_time = Time.zone.now
-        subject.perform(recruitment_cycle.id)
+        subject.perform
 
         expect(Sidekiq::Queues['default'].size).to eq(15)
 
@@ -46,7 +46,7 @@ RSpec.describe RolloverJob do
 
     it 'handles empty provider lists gracefully' do
       Provider.delete_all
-      expect { subject.perform(recruitment_cycle.id) }.not_to change(Sidekiq::Queues['default'], :size)
+      expect { subject.perform }.not_to change(Sidekiq::Queues['default'], :size)
     end
   end
 
