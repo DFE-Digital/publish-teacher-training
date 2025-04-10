@@ -18,7 +18,7 @@ module Publish
         Result.new(providers:, limit:)
       end
 
-      private
+    private
 
       attr_reader :query, :limit
 

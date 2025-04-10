@@ -11,12 +11,12 @@ module Publish
     validate :within_range
 
     def self.build(attributes, recruitment_cycle:)
-      year = attributes['visa_sponsorship_application_deadline_at(1i)']
-      month = attributes['visa_sponsorship_application_deadline_at(2i)']
-      day = attributes['visa_sponsorship_application_deadline_at(3i)']
-      attributes['visa_sponsorship_application_deadline_at'] = Struct.new(:year, :month, :day).new(year, month, day)
+      year = attributes["visa_sponsorship_application_deadline_at(1i)"]
+      month = attributes["visa_sponsorship_application_deadline_at(2i)"]
+      day = attributes["visa_sponsorship_application_deadline_at(3i)"]
+      attributes["visa_sponsorship_application_deadline_at"] = Struct.new(:year, :month, :day).new(year, month, day)
 
-      attributes = attributes.except('visa_sponsorship_application_deadline_at(1i)', 'visa_sponsorship_application_deadline_at(2i)', 'visa_sponsorship_application_deadline_at(3i)')
+      attributes = attributes.except("visa_sponsorship_application_deadline_at(1i)", "visa_sponsorship_application_deadline_at(2i)", "visa_sponsorship_application_deadline_at(3i)")
       new(attributes, recruitment_cycle:)
     end
 
@@ -47,7 +47,7 @@ module Publish
           :visa_sponsorship_application_deadline_at,
           :not_in_range,
           earliest_date: formatted_first_valid_datetime,
-          apply_deadline: last_valid_datetime.to_fs(:govuk_date_and_time)
+          apply_deadline: last_valid_datetime.to_fs(:govuk_date_and_time),
         )
       end
     rescue Date::Error
@@ -76,7 +76,7 @@ module Publish
 
     def formatted_first_valid_datetime
       if Time.zone.now.after? start_of_cycle
-        'today'
+        "today"
       else
         start_of_cycle.to_fs(:govuk_date_and_time)
       end

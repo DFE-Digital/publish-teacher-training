@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 PG_DETAIL_REGEX = /^DETAIL:.*$/
-PG_DETAIL_FILTERED = '[PG DETAIL FILTERED]'
+PG_DETAIL_FILTERED = "[PG DETAIL FILTERED]"
 
 def filter_record_not_unique_exception_messages!(event, hint)
   return unless hint[:exception].is_a?(ActiveRecord::RecordNotUnique)
@@ -18,7 +18,7 @@ Sentry.init do |config|
     filter.filter(event.to_hash)
   end
 
-  config.release = ENV.fetch('COMMIT_SHA', nil)
+  config.release = ENV.fetch("COMMIT_SHA", nil)
 
   config.excluded_exceptions += %w[
     ActiveRecord::RecordNotFound

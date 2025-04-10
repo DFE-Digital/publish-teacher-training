@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe API::Public::V1::SerializableCourse do
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
   let(:enrichment) { build(:course_enrichment, :published) }
-  let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], funding: 'apprenticeship') }
+  let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], funding: "apprenticeship") }
   let(:resource) { described_class.new(object: course) }
 
-  it 'sets type to courses' do
+  it "sets type to courses" do
     expect(resource.jsonapi_type).to eq(:courses)
   end
 
-  it { is_expected.to have_type('courses') }
+  it { is_expected.to have_type("courses") }
 
-  context 'when there is a ratifying provider with description' do
+  context "when there is a ratifying provider with description" do
     before do
-      course.provider.accredited_partnerships.create(description: 'foo', accredited_provider: course.accrediting_provider)
+      course.provider.accredited_partnerships.create(description: "foo", accredited_provider: course.accrediting_provider)
     end
 
     it { is_expected.to have_attribute(:about_accredited_body).with_value(course.accrediting_provider.train_with_us) }
@@ -29,17 +29,17 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:age_minimum).with_value(3) }
   it { is_expected.to have_attribute(:age_maximum).with_value(7) }
   it { is_expected.to have_attribute(:applications_open_from).with_value(course.applications_open_from.iso8601) }
-  it { expect(subject['attributes']['applications_open_from']).to match(/\d{4}-\d{2}-\d{2}/) }
+  it { expect(subject["attributes"]["applications_open_from"]).to match(/\d{4}-\d{2}-\d{2}/) }
   it { is_expected.to have_attribute(:bursary_amount).with_value(nil) }
 
-  context 'when financial_incentives are present' do
-    let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], level: 'secondary', subjects: [find_or_create(:secondary_subject, :physics)]) }
+  context "when financial_incentives are present" do
+    let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], level: "secondary", subjects: [find_or_create(:secondary_subject, :physics)]) }
 
-    it { is_expected.to have_attribute(:scholarship_amount).with_value('26000') }
-    it { is_expected.to have_attribute(:bursary_amount).with_value('24000') }
+    it { is_expected.to have_attribute(:scholarship_amount).with_value("26000") }
+    it { is_expected.to have_attribute(:bursary_amount).with_value("24000") }
   end
 
-  context 'when course sponsors visas and has a visa sponsorship application deadline' do
+  context "when course sponsors visas and has a visa sponsorship application deadline" do
     let(:provider) { create(:provider) }
     let(:deadline) { (provider.recruitment_cycle.application_end_date - 1.day).end_of_day }
     let(:course) do
@@ -49,7 +49,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
         :published,
         :can_sponsor_skilled_worker_visa,
         provider:,
-        visa_sponsorship_application_deadline_at: deadline
+        visa_sponsorship_application_deadline_at: deadline,
       )
     end
 
@@ -65,7 +65,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:fee_international).with_value(course.latest_published_enrichment.fee_international) }
   it { is_expected.to have_attribute(:fee_domestic).with_value(course.latest_published_enrichment.fee_uk_eu) }
   it { is_expected.to have_attribute(:findable).with_value(course.findable?) }
-  it { is_expected.to have_attribute(:funding_type).with_value('apprenticeship') }
+  it { is_expected.to have_attribute(:funding_type).with_value("apprenticeship") }
   it { is_expected.to have_attribute(:gcse_subjects_required).with_value(%w[maths english science]) }
   it { is_expected.to have_attribute(:has_early_career_payments).with_value(false) }
   it { is_expected.to have_attribute(:financial_support).with_value(course.latest_published_enrichment.financial_support) }
@@ -83,9 +83,9 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:program_type).with_value(course.program_type) }
   it { is_expected.to have_attribute(:qualifications).with_value(%w[qts pgce]) }
   it { is_expected.to have_attribute(:required_qualifications).with_value(course.latest_published_enrichment.required_qualifications) }
-  it { is_expected.to have_attribute(:required_qualifications_english).with_value('must_have_qualification_at_application_time') }
-  it { is_expected.to have_attribute(:required_qualifications_maths).with_value('must_have_qualification_at_application_time') }
-  it { is_expected.to have_attribute(:required_qualifications_science).with_value('must_have_qualification_at_application_time') }
+  it { is_expected.to have_attribute(:required_qualifications_english).with_value("must_have_qualification_at_application_time") }
+  it { is_expected.to have_attribute(:required_qualifications_maths).with_value("must_have_qualification_at_application_time") }
+  it { is_expected.to have_attribute(:required_qualifications_science).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:running).with_value(course.findable?) }
   it { is_expected.to have_attribute(:salary_details).with_value(course.latest_published_enrichment.salary_details) }
   it { is_expected.to have_attribute(:scholarship_amount).with_value(nil) }
@@ -97,16 +97,16 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:degree_type) }
   it { is_expected.to have_attribute(:visa_sponsorship_application_deadline_at).with_value(nil) }
 
-  context 'when bursary amount is present' do
+  context "when bursary amount is present" do
     let(:course) { create(:course, :with_accrediting_provider, :secondary, enrichments: [enrichment], subjects: [find_or_create(:secondary_subject, :classics)]) }
 
-    it { is_expected.to have_attribute(:bursary_amount).with_value('10000') }
+    it { is_expected.to have_attribute(:bursary_amount).with_value("10000") }
   end
 
   it { is_expected.to have_attribute(:start_date).with_value("September #{course.provider.recruitment_cycle.year}") }
-  it { is_expected.to have_attribute(:state).with_value('published') }
-  it { is_expected.to have_attribute(:study_mode).with_value('full_time') }
-  it { is_expected.to have_attribute(:summary).with_value('QTS with PGCE full time teaching apprenticeship') }
+  it { is_expected.to have_attribute(:state).with_value("published") }
+  it { is_expected.to have_attribute(:study_mode).with_value("full_time") }
+  it { is_expected.to have_attribute(:summary).with_value("QTS with PGCE full time teaching apprenticeship") }
   it { is_expected.to have_attribute(:subject_codes).with_value(%w[00]) }
 
   it { is_expected.to have_attribute(:degree_grade).with_value(course.degree_grade) }

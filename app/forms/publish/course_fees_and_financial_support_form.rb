@@ -5,7 +5,7 @@ module Publish
     include RecruitmentCycleHelper
     include FundingTypeFormMethods
 
-    alias course_enrichment model
+    alias_method :course_enrichment, :model
 
     FIELDS = %i[fee_details].freeze
 
@@ -13,7 +13,7 @@ module Publish
 
     validates :fee_details, words_count: { maximum: 250, message: :too_long }
 
-    private
+  private
 
     def declared_fields
       FIELDS

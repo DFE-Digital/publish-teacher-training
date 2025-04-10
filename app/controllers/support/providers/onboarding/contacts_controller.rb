@@ -22,7 +22,7 @@ module Support
           end
         end
 
-        private
+      private
 
         def param_form_key = :support_provider_contact_form
 

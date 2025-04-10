@@ -12,7 +12,7 @@ class User < ApplicationRecord
   # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
   has_many :organisations, through: :organisation_users, dependent: :destroy
 
-  has_many :user_notifications, class_name: 'UserNotification'
+  has_many :user_notifications, class_name: "UserNotification"
 
   has_many :providers_via_organisations, through: :organisations, source: :providers
 
@@ -24,7 +24,7 @@ class User < ApplicationRecord
   scope :with_blazer_access, -> { where(blazer_access: true, admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
   scope :last_login_since, lambda { |timestamp|
-    where('last_login_date_utc > ?', timestamp)
+    where("last_login_date_utc > ?", timestamp)
   }
   scope :course_update_subscribers, lambda { |accredited_provider_code|
     joins(:user_notifications).merge(UserNotification.course_update_notification_requests(accredited_provider_code))
@@ -33,17 +33,17 @@ class User < ApplicationRecord
     joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_provider_code))
   }
 
-  scope :in_name_order, -> { order('LOWER(first_name), LOWER(last_name)') }
+  scope :in_name_order, -> { order("LOWER(first_name), LOWER(last_name)") }
 
   pg_search_scope :search, against: %i[first_name last_name email], using: { tsearch: { prefix: true } }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: 'must contain @' }, uniqueness: true
+  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }, uniqueness: true
 
   validates :email, if: :admin?, format: {
     with: /\A.*@(digital\.){0,1}education\.gov\.uk\z/,
-    message: 'must be an @[digital.]education.gov.uk domain'
+    message: "must be an @[digital.]education.gov.uk domain",
   }
 
   audited
@@ -101,7 +101,7 @@ class User < ApplicationRecord
     sign_in_user_id.present?
   end
 
-  private
+private
 
   def downcase_email
     email&.downcase!

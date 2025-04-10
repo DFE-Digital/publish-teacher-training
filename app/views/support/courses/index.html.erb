@@ -3,7 +3,7 @@
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
     text: "All provider records",
-    href: support_recruitment_cycle_providers_path
+    href: support_recruitment_cycle_providers_path,
   ) %>
 <% end %>
 
@@ -28,9 +28,9 @@
 
   <% table.with_body do |body| %>
     <% @courses.each do |course| %>
-      <% body.with_row classes: ["course-row"] do |row| %>
-        <% row.with_cell text: govuk_link_to(course.name_and_code, publish_provider_recruitment_cycle_course_url(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code)), classes: ["name"] %>
-        <% row.with_cell text: course.decorate.status_tag, classes: ["status"] %>
+      <% body.with_row classes: %w[course-row] do |row| %>
+        <% row.with_cell text: govuk_link_to(course.name_and_code, publish_provider_recruitment_cycle_course_url(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code)), classes: %w[name] %>
+        <% row.with_cell text: course.decorate.status_tag, classes: %w[status] %>
 
         <% row.with_cell do %>
           <% if course.accrediting_provider %>
@@ -38,7 +38,7 @@
           <% end %>
         <% end %>
 
-        <% row.with_cell text: govuk_link_to("Change", edit_support_recruitment_cycle_provider_course_url(@provider.recruitment_cycle_year, @provider, course)), classes: ["change"] %>
+        <% row.with_cell text: govuk_link_to("Change", edit_support_recruitment_cycle_provider_course_url(@provider.recruitment_cycle_year, @provider, course)), classes: %w[change] %>
       <% end %>
     <% end %>
   <% end %>

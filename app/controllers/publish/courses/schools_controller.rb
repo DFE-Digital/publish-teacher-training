@@ -31,7 +31,7 @@ module Publish
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
         else
           render :edit
@@ -47,7 +47,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def current_step
         :school
@@ -58,8 +58,8 @@ module Publish
       end
 
       def set_default_school
-        params['course'] ||= {}
-        params['course']['sites_ids'] = [@provider.sites.first.id]
+        params["course"] ||= {}
+        params["course"]["sites_ids"] = [@provider.sites.first.id]
       end
 
       def school_params
@@ -73,7 +73,7 @@ module Publish
       end
 
       def section_key
-        'School'.pluralize(school_params[:site_ids].compact_blank.count)
+        "School".pluralize(school_params[:site_ids].compact_blank.count)
       end
     end
   end

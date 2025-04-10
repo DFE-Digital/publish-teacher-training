@@ -11,7 +11,7 @@ module ALevelSteps
     validates :additional_a_level_equivalencies,
               words_count: {
                 maximum: MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS,
-                message: ->(object, error) { object.words_count_error_message(error) }
+                message: ->(object, error) { object.words_count_error_message(error) },
               },
               if: :accept_a_level_equivalency?,
               allow_blank: true
@@ -29,14 +29,14 @@ module ALevelSteps
       excess_words = word_count - MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS
 
       I18n.t(
-        'activemodel.errors.models.a_level_steps/a_level_equivalencies.attributes.additional_a_level_equivalencies.too_long',
+        "activemodel.errors.models.a_level_steps/a_level_equivalencies.attributes.additional_a_level_equivalencies.too_long",
         maximum: MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS,
-        count: excess_words
+        count: excess_words,
       )
     end
 
     def accept_a_level_equivalency?
-      accept_a_level_equivalency == 'yes'
+      accept_a_level_equivalency == "yes"
     end
   end
 end

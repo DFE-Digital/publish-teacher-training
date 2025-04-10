@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_examples 'store' do |identifier_model_type, form_store_keys|
+shared_examples "store" do |identifier_model_type, form_store_keys|
   let(:identifier_model) { create(identifier_model_type) }
   let(:store) { described_class.new(identifier_model) }
   let(:redis) { double }
@@ -10,17 +10,17 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
     allow(RedisClient).to receive(:current).and_return(redis)
   end
 
-  describe '#clear_stash' do
+  describe "#clear_stash" do
     subject do
       store.clear_stash(form_store_key)
     end
 
     let(:form_store_key) { nil }
 
-    context 'when form_store_key is nil' do
+    context "when form_store_key is nil" do
       let(:form_store_key) { nil }
 
-      it 'returns an error' do
+      it "returns an error" do
         expect { subject }.to raise_error(invalid_key_error)
       end
     end
@@ -38,15 +38,15 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
           allow(redis).to receive(:set)
         end
 
-        it 'does not return an error' do
+        it "does not return an error" do
           expect { subject }.not_to raise_error
         end
 
-        it 'returns true' do
+        it "returns true" do
           expect(subject).to be(true)
         end
 
-        it 'sets the redis value to nil' do
+        it "sets the redis value to nil" do
           subject
           expect(RedisClient).to have_received(:current)
           expect(redis).to have_received(:set).with(redis_key, value.to_json)
@@ -59,17 +59,17 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
     let(:form_store_key) { store_key }
     let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
 
-    describe '#stash' do
+    describe "#stash" do
       subject do
         store.stash(form_store_key, value)
       end
 
-      let(:value) { 'bob' }
+      let(:value) { "bob" }
 
-      context 'when form_store_key is nil' do
+      context "when form_store_key is nil" do
         let(:form_store_key) { nil }
 
-        it 'returns an error' do
+        it "returns an error" do
           expect { subject }.to raise_error(invalid_key_error)
         end
       end
@@ -79,15 +79,15 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
           allow(redis).to receive(:set)
         end
 
-        it 'does not return an error' do
+        it "does not return an error" do
           expect { subject }.not_to raise_error
         end
 
-        it 'returns true' do
+        it "returns true" do
           expect(subject).to be(true)
         end
 
-        it 'sets the redis value to bob' do
+        it "sets the redis value to bob" do
           subject
           expect(RedisClient).to have_received(:current)
           expect(redis).to have_received(:set).with(redis_key, value.to_json)
@@ -95,24 +95,24 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
       end
     end
 
-    describe '#get' do
+    describe "#get" do
       subject do
         store.get(form_store_key)
       end
 
       context "when form_store_key is #{store_key}" do
         let(:redis) { double }
-        let(:value) { 'builder'.to_json }
+        let(:value) { "builder".to_json }
 
         before do
           allow(redis).to receive(:get).and_return(value)
         end
 
-        it 'returns builder' do
+        it "returns builder" do
           expect(subject).to eq(JSON.parse(value))
         end
 
-        it 'sets the redis value to nil' do
+        it "sets the redis value to nil" do
           subject
           expect(RedisClient).to have_received(:current)
           expect(redis).to have_received(:get).with(redis_key)

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Editing course study mode', { can_edit_current_and_next_cycles: false } do
+feature "Editing course study mode", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'I can update the course study mode to both full time and part time' do
+  scenario "I can update the course study mode to both full time and part time" do
     and_there_is_a_part_time_course_i_want_to_edit
     when_i_visit_the_course_study_mode_page
     then_i_see_part_time_selected
@@ -21,7 +21,7 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
     then_i_see_both_part_time_and_full_time_selected
   end
 
-  scenario 'I can change the course study mode from part time to full time' do
+  scenario "I can change the course study mode from part time to full time" do
     and_there_is_a_part_time_course_i_want_to_edit
     when_i_visit_the_course_study_mode_page
     and_i_choose_a_full_time_study_mode
@@ -34,7 +34,7 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
     then_i_see_full_time_selected
   end
 
-  scenario 'updating with invalid data' do
+  scenario "updating with invalid data" do
     and_there_is_a_part_time_course_i_want_to_edit
     when_i_visit_the_course_study_mode_page
     and_i_uncheck_part_time_study_mode
@@ -58,7 +58,7 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
 
   def when_i_visit_the_course_study_mode_page
     publish_course_study_mode_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
@@ -75,7 +75,7 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t('success.saved', value: 'Study pattern'))
+    expect(page).to have_content(I18n.t("success.saved", value: "Study pattern"))
   end
 
   def then_i_see_part_time_selected
@@ -108,7 +108,7 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
 
   def then_i_should_see_an_error_message
     expect(publish_course_study_mode_edit_page.error_messages)
-      .to include('Select a study pattern')
+      .to include("Select a study pattern")
   end
 
   def provider

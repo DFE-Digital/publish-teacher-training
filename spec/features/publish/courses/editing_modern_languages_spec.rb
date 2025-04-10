@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
+feature "selecting a subject", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_secondary_course_i_want_to_edit
   end
 
-  scenario 'selecting language' do
+  scenario "selecting language" do
     when_i_visit_the_edit_course_modern_languages_page
     when_i_select_a_language
     and_i_click_continue
@@ -16,18 +16,18 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     and_i_should_see_a_success_message
   end
 
-  scenario 'redirect due to lacking modern languages id in query' do
+  scenario "redirect due to lacking modern languages id in query" do
     when_i_visit_the_edit_course_modern_languages_page(with_invalid_query: true)
     then_i_am_redirected_to_course_details_page
   end
 
-  scenario 'invalid entries' do
+  scenario "invalid entries" do
     when_i_visit_the_edit_course_modern_languages_page
     and_i_click_continue
     then_i_am_met_with_errors
   end
 
-  private
+private
 
   def and_there_is_a_secondary_course_i_want_to_edit
     given_a_course_exists(:secondary)
@@ -40,7 +40,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t('success.saved', value: 'Subjects'))
+    expect(page).to have_content(I18n.t("success.saved", value: "Subjects"))
   end
 
   def modern_languages_subject
@@ -69,8 +69,14 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
 
   def language
     @language ||= %i[
-      french german
-      italian japanese mandarin russian spanish modern_languages_other
+      french
+      german
+      italian
+      japanese
+      mandarin
+      russian
+      spanish
+      modern_languages_other
     ].sample
   end
 
@@ -95,12 +101,12 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_met_with_errors
-    expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select at least one language')
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("Select at least one language")
   end
 
   def selected_params(with_subjects: false)
-    params = ''
+    params = ""
     params += "?course%5Bsubjects_ids%5D%5B%5D=#{modern_languages_subject.id}" unless with_subjects
 
     params

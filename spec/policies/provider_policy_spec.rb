@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe ProviderPolicy do
   subject { described_class }
@@ -8,8 +8,8 @@ describe ProviderPolicy do
   let(:user) { build(:user) }
   let(:admin) { build(:user, :admin) }
 
-  describe 'scope' do
-    it 'limits the providers to those the user is assigned to' do
+  describe "scope" do
+    it "limits the providers to those the user is assigned to" do
       provider1 = create(:provider, users: [user])
       _provider2 = create(:provider)
 
@@ -30,7 +30,7 @@ describe ProviderPolicy do
     it { is_expected.to permit(admin, provider) }
   end
 
-  context 'provider partnerships' do
+  context "provider partnerships" do
     permissions :can_show_training_provider? do
       let(:allowed_user) { create(:user, providers: [provider]) }
       let(:not_allowed_user) { create(:user) }
@@ -40,7 +40,7 @@ describe ProviderPolicy do
       let(:provider) { course.accrediting_provider }
       let(:training_provider) do
         course.provider
-        course.provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider, description: 'description')
+        course.provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider, description: "description")
         course.provider
       end
 
@@ -50,27 +50,27 @@ describe ProviderPolicy do
     end
   end
 
-  describe '#permitted_provider_attributes' do
-    context 'when user' do
+  describe "#permitted_provider_attributes" do
+    context "when user" do
       subject { described_class.new(user, build(:provider)) }
 
-      it 'includes email' do
+      it "includes email" do
         expect(subject.permitted_provider_attributes).to include(:email)
       end
 
-      it 'excludes provider_name' do
+      it "excludes provider_name" do
         expect(subject.permitted_provider_attributes).not_to include(:provider_name)
       end
     end
 
-    context 'when admin' do
+    context "when admin" do
       subject { described_class.new(admin, build(:provider)) }
 
-      it 'includes email' do
+      it "includes email" do
         expect(subject.permitted_provider_attributes).to include(:email)
       end
 
-      it 'includes provider_name' do
+      it "includes provider_name" do
         expect(subject.permitted_provider_attributes).to include(:provider_name)
       end
     end

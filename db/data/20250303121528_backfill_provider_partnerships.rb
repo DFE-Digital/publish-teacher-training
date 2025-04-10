@@ -21,7 +21,7 @@ class BackfillProviderPartnerships < ActiveRecord::Migration[8.0]
       # Collect all the ratifying provider codes of this training provider
       ratifying_provider_codes = provider.courses.published.collect(&:accredited_provider_code).compact.uniq
       # Collect all the accredited partner provider codes of this training provider
-      partnership_codes = provider.accrediting_provider_enrichments&.map(&:UcasProviderCode)&.compact&.uniq # rubocop:disable Style/SafeNavigationChainLength
+      partnership_codes = provider.accrediting_provider_enrichments&.map(&:UcasProviderCode)&.compact&.uniq
 
       # # Ignore this provider if none of their published courses are ratified
       next if ratifying_provider_codes.blank?
@@ -43,7 +43,7 @@ class BackfillProviderPartnerships < ActiveRecord::Migration[8.0]
 
         next if accredited_provider.nil?
 
-        train_with_us = accredited_provider.train_with_us || ''
+        train_with_us = accredited_provider.train_with_us || ""
 
         # If train_with_us is more than 100 words, it will be invalid.
         # When it is more than 100 words we take the first paragraph.
@@ -53,7 +53,7 @@ class BackfillProviderPartnerships < ActiveRecord::Migration[8.0]
         first_line        = train_with_us.split("\r\n").first
         first_sentence    = train_with_us[/[^.]*\./]
         text              = [train_with_us, first_paragraph, first_line, first_sentence]
-        description       = text.find { it.scan(/\S+/).size <= 100 } || ''
+        description       = text.find { it.scan(/\S+/).size <= 100 } || ""
 
         training_provider.accrediting_provider_enrichments ||= []
 

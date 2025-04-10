@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class HeaderComponent < ApplicationComponent
-  renders_many :navigation_items, 'NavigationItemComponent'
+  renders_many :navigation_items, "NavigationItemComponent"
 
   renders_one :phase_banner_text, ->(text) { text }
 
@@ -13,7 +13,7 @@ class HeaderComponent < ApplicationComponent
     @current_user = current_user
   end
 
-  private
+private
 
   attr_reader :service_name, :current_user
 
@@ -24,19 +24,19 @@ class HeaderComponent < ApplicationComponent
   def phase_banner_tag
     {
       text: Settings.environment.label,
-      colour:
+      colour:,
     }
   end
 
   def colour
     {
-      development: 'grey',
-      production: 'blue',
-      review: 'purple',
-      sandbox: 'purple',
-      staging: 'red',
-      qa: 'orange'
-    }.fetch(Settings.environment.name.to_sym, 'grey')
+      development: "grey",
+      production: "blue",
+      review: "purple",
+      sandbox: "purple",
+      staging: "red",
+      qa: "orange",
+    }.fetch(Settings.environment.name.to_sym, "grey")
   end
 
   class NavigationItemComponent < ApplicationComponent

@@ -11,10 +11,10 @@ class Course < ApplicationRecord
   A_LEVEL_ATTRIBUTES = %i[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency additional_a_level_equivalencies].freeze
 
   TRAINING_ROUTE_MAP = {
-    %w[postgraduate fee] => 'fee_funded_initial_teacher_training',
-    %w[postgraduate salary] => 'school_direct_salaried',
-    %w[postgraduate apprenticeship] => 'postgraduate_teacher_apprenticeship',
-    %w[undergraduate apprenticeship] => 'teacher_degree_apprenticeship'
+    %w[postgraduate fee] => "fee_funded_initial_teacher_training",
+    %w[postgraduate salary] => "school_direct_salaried",
+    %w[postgraduate apprenticeship] => "postgraduate_teacher_apprenticeship",
+    %w[undergraduate apprenticeship] => "teacher_degree_apprenticeship",
   }.freeze
 
   after_initialize :set_defaults
@@ -35,53 +35,53 @@ class Course < ApplicationRecord
 
   enum :application_status, {
     closed: 0,
-    open: 1
+    open: 1,
   }, prefix: :application_status
 
   enum :degree_type, {
-    postgraduate: 'postgraduate',
-    undergraduate: 'undergraduate'
+    postgraduate: "postgraduate",
+    undergraduate: "undergraduate",
   }, suffix: :degree_type
 
   enum :funding, {
-    fee: 'fee',
-    salary: 'salary',
-    apprenticeship: 'apprenticeship'
+    fee: "fee",
+    salary: "salary",
+    apprenticeship: "apprenticeship",
   }
 
   enum :program_type, {
-    higher_education_programme: 'HE',
-    higher_education_salaried_programme: 'HES',
-    school_direct_training_programme: 'SD',
-    school_direct_salaried_training_programme: 'SS',
-    scitt_programme: 'SC',
-    scitt_salaried_programme: 'SSC',
-    pg_teaching_apprenticeship: 'TA',
-    teacher_degree_apprenticeship: 'TDA'
+    higher_education_programme: "HE",
+    higher_education_salaried_programme: "HES",
+    school_direct_training_programme: "SD",
+    school_direct_salaried_training_programme: "SS",
+    scitt_programme: "SC",
+    scitt_salaried_programme: "SSC",
+    pg_teaching_apprenticeship: "TA",
+    teacher_degree_apprenticeship: "TDA",
   }
 
   enum :study_mode, {
-    full_time: 'F',
-    part_time: 'P',
-    full_time_or_part_time: 'B'
+    full_time: "F",
+    part_time: "P",
+    full_time_or_part_time: "B",
   }
 
   enum :level, {
-    primary: 'Primary',
-    secondary: 'Secondary',
-    further_education: 'Further education'
+    primary: "Primary",
+    secondary: "Secondary",
+    further_education: "Further education",
   }, suffix: :course
 
   enum :degree_grade, {
     two_one: 0,
     two_two: 1,
     third_class: 2,
-    not_required: 9
+    not_required: 9,
   }
 
   enum :campaign_name, {
     no_campaign: 0,
-    engineers_teach_physics: 1
+    engineers_teach_physics: 1,
   }
 
   ENTRY_REQUIREMENT_OPTIONS = {
@@ -89,7 +89,7 @@ class Course < ApplicationRecord
     expect_to_achieve_before_training_begins: 2,
     equivalence_test: 3,
     not_required: 9,
-    not_set: nil
+    not_set: nil,
   }.freeze
 
   STRUCTURED_REQUIREMENTS_REQUIRED_FROM = 2022
@@ -113,7 +113,7 @@ class Course < ApplicationRecord
 
   belongs_to :accrediting_provider,
              ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
-             class_name: 'Provider',
+             class_name: "Provider",
              foreign_key: :accredited_provider_code,
              primary_key: :provider_code,
              inverse_of: :accredited_courses,
@@ -161,9 +161,9 @@ class Course < ApplicationRecord
   has_many :modern_languages_subjects,
            through: :course_subjects,
            source: :subject,
-           class_name: 'ModernLanguagesSubject'
+           class_name: "ModernLanguagesSubject"
 
-  has_many :enrichments, class_name: 'CourseEnrichment', dependent: :destroy do
+  has_many :enrichments, class_name: "CourseEnrichment", dependent: :destroy do
     def find_or_initialize_draft
       # This is a ruby search as opposed to an AR search, because calling `draft`
       # will return a new instance of a CourseEnrichment object which is different
@@ -188,13 +188,13 @@ class Course < ApplicationRecord
                                   end
 
       new_enrichment_attributes.merge(
-        { status: :draft, last_published_timestamp_utc: nil }
+        { status: :draft, last_published_timestamp_utc: nil },
       )
     end
   end
 
   has_one :latest_published_enrichment, -> { published.most_recent },
-          class_name: 'CourseEnrichment', inverse_of: :course
+          class_name: "CourseEnrichment", inverse_of: :course
 
   scope :within, lambda { |range, origin:|
     joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin:))
@@ -225,7 +225,7 @@ class Course < ApplicationRecord
   }
 
   scope :case_insensitive_search, lambda { |course_code|
-    where('lower(course.course_code) = ?', course_code.downcase)
+    where("lower(course.course_code) = ?", course_code.downcase)
   }
 
   scope :changed_since, lambda { |timestamp|
@@ -237,11 +237,11 @@ class Course < ApplicationRecord
   }
 
   scope :changed_at_since, lambda { |timestamp|
-    where('course.changed_at > ?', timestamp)
+    where("course.changed_at > ?", timestamp)
   }
 
   scope :created_at_since, lambda { |timestamp|
-    where('course.created_at > ?', timestamp)
+    where("course.created_at > ?", timestamp)
   }
 
   scope :not_new, lambda {
@@ -262,10 +262,10 @@ class Course < ApplicationRecord
     where(program_type: program_types)
   }
   scope :with_study_modes, lambda { |study_modes|
-    if study_modes.include? 'full_time_or_part_time'
+    if study_modes.include? "full_time_or_part_time"
       where(study_mode: study_modes)
     else
-      where(study_mode: Array(study_modes) << 'full_time_or_part_time')
+      where(study_mode: Array(study_modes) << "full_time_or_part_time")
     end
   }
 
@@ -283,12 +283,12 @@ class Course < ApplicationRecord
 
   scope :with_provider_name, lambda { |provider_name|
     where(
-      provider_id: Provider.where(provider_name:)
+      provider_id: Provider.where(provider_name:),
     ).or(
       where(
         accredited_provider_code: Provider.where(provider_name:)
-                                       .select(:provider_code)
-      )
+                                       .select(:provider_code),
+      ),
     )
   }
 
@@ -309,13 +309,13 @@ class Course < ApplicationRecord
   scope :can_sponsor_visa, lambda {
     where(
       program_type: Program.where_sponsor_student_visa,
-      can_sponsor_student_visa: true
+      can_sponsor_student_visa: true,
     )
       .or(
         where(
           program_type: Program.where_sponsor_skilled_worker_visa,
-          can_sponsor_skilled_worker_visa: true
-        )
+          can_sponsor_skilled_worker_visa: true,
+        ),
       )
   }
 
@@ -377,7 +377,7 @@ class Course < ApplicationRecord
   end
 
   def university_based?
-    provider.provider_type == 'university'
+    provider.provider_type == "university"
   end
 
   def academic_year
@@ -465,11 +465,11 @@ class Course < ApplicationRecord
   def syncable_subjects
     if subjects.loaded?
       subjects
-        .reject { |s| s.type == 'DiscontinuedSubject' }
+        .reject { |s| s.type == "DiscontinuedSubject" }
         .select { |s| s.subject_code.present? }
     else
       subjects
-        .where.not(type: 'DiscontinuedSubject')
+        .where.not(type: "DiscontinuedSubject")
         .where.not(subject_code: nil)
     end
   end
@@ -503,14 +503,14 @@ class Course < ApplicationRecord
   end
 
   def study_mode_description
-    study_mode.to_s.tr('_', ' ')
+    study_mode.to_s.tr("_", " ")
   end
 
   def program_type_description
-    if salary? then ' with salary'
-    elsif apprenticeship? then ' teaching apprenticeship'
+    if salary? then " with salary"
+    elsif apprenticeship? then " teaching apprenticeship"
     else
-      ''
+      ""
     end
   end
 
@@ -527,7 +527,7 @@ class Course < ApplicationRecord
   end
 
   def study_mode_string
-    (full_time_or_part_time? ? ', ' : ' ') +
+    (full_time_or_part_time? ? ", " : " ") +
       study_mode_description
   end
 
@@ -557,7 +557,7 @@ class Course < ApplicationRecord
   end
 
   def visa_type
-    type = fee_based? ? 'student' : 'skilled_worker'
+    type = fee_based? ? "student" : "skilled_worker"
     ActiveSupport::StringInquirer.new(type)
   end
 
@@ -566,16 +566,16 @@ class Course < ApplicationRecord
   end
 
   def funding_type
-    ActiveSupport::Deprecation.new.warn('`funding_type` is deprecated and will be removed. Please use `funding` instead.')
+    ActiveSupport::Deprecation.new.warn("`funding_type` is deprecated and will be removed. Please use `funding` instead.")
     funding
   end
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
   def gcse_subjects_required
     case level
-    when 'primary'
+    when "primary"
       %w[maths english science]
-    when 'secondary'
+    when "secondary"
       %w[maths english]
     else
       []
@@ -583,7 +583,7 @@ class Course < ApplicationRecord
   end
 
   def gcse_science_required?
-    gcse_subjects_required.include?('science')
+    gcse_subjects_required.include?("science")
   end
 
   def gcse_grade_required
@@ -663,7 +663,7 @@ class Course < ApplicationRecord
     # Ignore "modern languages" as financial incentives
     # differ based on the language selected
 
-    subjects.reject { |subject| subject.subject_name == 'Modern Languages' }.first&.financial_incentive
+    subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first&.financial_incentive
   end
 
   def is_further_education?
@@ -757,7 +757,7 @@ class Course < ApplicationRecord
   end
 
   def training_route
-    TRAINING_ROUTE_MAP.fetch([degree_type, funding], 'unknown_training_route')
+    TRAINING_ROUTE_MAP.fetch([degree_type, funding], "unknown_training_route")
   end
 
   def ensure_site_statuses_match_study_mode
@@ -774,7 +774,7 @@ class Course < ApplicationRecord
 
       withdraw_latest_enrichment
     else
-      errors.add(:withdraw, 'Courses that have not been published should be deleted not withdrawn')
+      errors.add(:withdraw, "Courses that have not been published should be deleted not withdrawn")
     end
   end
 
@@ -816,22 +816,22 @@ class Course < ApplicationRecord
   def age_minimum
     return if age_range_in_years.blank?
 
-    age_range_in_years.split('_').first.to_i
+    age_range_in_years.split("_").first.to_i
   end
 
   def age_maximum
     return if age_range_in_years.blank?
 
-    age_range_in_years.split('_').last.to_i
+    age_range_in_years.split("_").last.to_i
   end
 
   def bursary_requirements
     return [] unless has_bursary?
 
-    requirements = [I18n.t('course.values.bursary_requirements.second_degree')]
-    mathematics_requirement = I18n.t('course.values.bursary_requirements.maths')
+    requirements = [I18n.t("course.values.bursary_requirements.second_degree")]
+    mathematics_requirement = I18n.t("course.values.bursary_requirements.maths")
 
-    requirements.push(mathematics_requirement) if subjects.any? { |subject| subject.subject_name == 'Primary with mathematics' }
+    requirements.push(mathematics_requirement) if subjects.any? { |subject| subject.subject_name == "Primary with mathematics" }
 
     requirements
   end
@@ -860,7 +860,7 @@ class Course < ApplicationRecord
 
   def remove_carat_from_error_messages
     new_errors = errors.map do |error|
-      message = error.message.start_with?('^') ? error.message[1..] : error.message
+      message = error.message.start_with?("^") ? error.message[1..] : error.message
       [error.attribute, message]
     end
 
@@ -873,9 +873,9 @@ class Course < ApplicationRecord
 
   def modern_language_subjects
     if persisted? && course_subjects.all?(&:persisted?)
-      subjects.where(type: 'ModernLanguagesSubject')
+      subjects.where(type: "ModernLanguagesSubject")
     else
-      course_subjects.select { |cs| cs.subject.type == 'ModernLanguagesSubject' }.map(&:subject)
+      course_subjects.select { |cs| cs.subject.type == "ModernLanguagesSubject" }.map(&:subject)
     end
   end
 
@@ -884,15 +884,15 @@ class Course < ApplicationRecord
   end
 
   def has_any_modern_language_subject_type?
-    course_subjects.any? { |cs| cs.subject.type == 'ModernLanguagesSubject' }
+    course_subjects.any? { |cs| cs.subject.type == "ModernLanguagesSubject" }
   end
 
   def current_published_enrichment
-    enrichments.where(status: 'published').order(last_published_timestamp_utc: :desc).first
+    enrichments.where(status: "published").order(last_published_timestamp_utc: :desc).first
   end
 
   def find_a_level_subject_requirement!(uuid)
-    requirement = a_level_subject_requirements.find { |req| req['uuid'] == uuid }
+    requirement = a_level_subject_requirements.find { |req| req["uuid"] == uuid }
     raise ActiveRecord::RecordNotFound unless requirement
 
     requirement.with_indifferent_access
@@ -900,7 +900,7 @@ class Course < ApplicationRecord
 
   def ensure_site_statuses_match_full_time
     site_statuses.each do |site_status|
-      update_vac_status('full_time', site_status)
+      update_vac_status("full_time", site_status)
     end
   end
 
@@ -930,15 +930,15 @@ class Course < ApplicationRecord
     visa_sponsorship == :no_sponsorship
   end
 
-  private
+private
 
   def update_vac_status(study_mode, site_status)
     case study_mode
-    when 'full_time'
+    when "full_time"
       site_status.update(vac_status: :full_time_vacancies)
-    when 'part_time'
+    when "part_time"
       site_status.update(vac_status: :part_time_vacancies)
-    when 'full_time_or_part_time'
+    when "full_time_or_part_time"
       site_status.update(vac_status: :both_full_time_and_part_time_vacancies)
     else
       raise "Unexpected study mode #{study_mode}"
@@ -986,7 +986,7 @@ class Course < ApplicationRecord
     return true if relevant_params.empty? || !is_published?
 
     relevant_params.each_key do |field|
-      errors.add(field.to_sym, 'cannot be changed after publish')
+      errors.add(field.to_sym, "cannot be changed after publish")
     end
     false
   end
@@ -998,7 +998,7 @@ class Course < ApplicationRecord
       value && !ENTRY_REQUIREMENT_OPTIONS.key?(value.to_sym)
     end
     invalid_params.each_key do |subject|
-      errors.add(subject.to_sym, 'is invalid')
+      errors.add(subject.to_sym, "is invalid")
     end
 
     invalid_params.empty?
@@ -1006,7 +1006,7 @@ class Course < ApplicationRecord
 
   def qualification_assignable(course_params)
     assignable = course_params[:qualification].nil? || Course.qualifications.include?(course_params[:qualification].to_sym)
-    errors.add(:qualification, 'is invalid') unless assignable
+    errors.add(:qualification, "is invalid") unless assignable
 
     assignable
   end
@@ -1037,7 +1037,7 @@ class Course < ApplicationRecord
 
   def validate_enrichment_publishable
     if enrichments.blank?
-      temp_enrichment = CourseEnrichment.new(course: self, status: 'draft')
+      temp_enrichment = CourseEnrichment.new(course: self, status: "draft")
       temp_enrichment.valid?(:publish)
       add_enrichment_errors(temp_enrichment)
     else
@@ -1069,11 +1069,11 @@ class Course < ApplicationRecord
   end
 
   def set_defaults
-    self.modular ||= ''
+    self.modular ||= ""
   end
 
   def remove_unnecessary_enrichments_validation_message
-    errors.delete :enrichments if errors[:enrichments] == ['is invalid']
+    errors.delete :enrichments if errors[:enrichments] == ["is invalid"]
   end
 
   def validate_qualification
@@ -1102,22 +1102,22 @@ class Course < ApplicationRecord
     elsif valid_date_range.exclude?(applications_open_from)
       errors.add(
         :applications_open_from,
-        "The date when applications open must be between #{recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{recruitment_cycle.application_end_date.to_fs(:govuk_date)}"
+        "The date when applications open must be between #{recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{recruitment_cycle.application_end_date.to_fs(:govuk_date)}",
       )
     end
   end
 
   def validate_modern_languages
-    errors.add(:subjects, 'Modern languages subjects must also have the modern_languages subject') if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
+    errors.add(:subjects, "Modern languages subjects must also have the modern_languages subject") if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
   end
 
   def validate_site_status_findable
-    errors.add(:site_statuses, 'must be findable') unless findable?
+    errors.add(:site_statuses, "must be findable") unless findable?
   end
 
   def has_the_modern_languages_secondary_subject_type?
-    raise 'SecondarySubject not found' if SecondarySubject.nil?
-    raise 'SecondarySubject.modern_languages not found' if SecondarySubject.modern_languages.nil?
+    raise "SecondarySubject not found" if SecondarySubject.nil?
+    raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages.nil?
 
     course_subjects.any? { |cs| cs.subject&.id == SecondarySubject.modern_languages.id }
   end
@@ -1133,10 +1133,10 @@ class Course < ApplicationRecord
     end
 
     case level
-    when 'primary', 'further_education'
-      errors.add(:subjects, 'has too many subjects') if course_subjects.count > 1
-    when 'secondary'
-      errors.add(:subjects, 'has too many subjects') if course_subjects.count > 2 && !has_any_modern_language_subject_type?
+    when "primary", "further_education"
+      errors.add(:subjects, "has too many subjects") if course_subjects.count > 1
+    when "secondary"
+      errors.add(:subjects, "has too many subjects") if course_subjects.count > 2 && !has_any_modern_language_subject_type?
     end
   end
 
@@ -1148,12 +1148,12 @@ class Course < ApplicationRecord
     return if subjects_excluding_discontinued.empty?
 
     case level
-    when 'primary'
-      errors.add(:subjects, 'Subject must be primary') unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
-    when 'secondary'
-      errors.add(:subjects, 'Subject must be secondary') unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
-    when 'further_education'
-      errors.add(:subjects, 'Subject must be further education') unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+    when "primary"
+      errors.add(:subjects, "Subject must be primary") unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+    when "secondary"
+      errors.add(:subjects, "Subject must be secondary") unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+    when "further_education"
+      errors.add(:subjects, "Subject must be further education") unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
     end
   end
 

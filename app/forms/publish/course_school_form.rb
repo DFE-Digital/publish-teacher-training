@@ -22,7 +22,7 @@ module Publish
       end
     end
 
-    private
+  private
 
     attr_reader :previous_site_names
 
@@ -32,7 +32,7 @@ module Publish
       NotificationService::CourseSitesUpdated.call(
         course:,
         previous_site_names:,
-        updated_site_names:
+        updated_site_names:,
       )
     end
 

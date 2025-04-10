@@ -8,7 +8,7 @@ module Courses
     end
 
     def call
-      Rails.logger.tagged('Course::PublishService') do |l|
+      Rails.logger.tagged("Course::PublishService") do |l|
         l.info "publishing course uuid: #{course.uuid}"
       end
 
@@ -20,7 +20,7 @@ module Courses
       course
     end
 
-    private
+  private
 
     attr_reader :user, :course
 

@@ -8,9 +8,9 @@ module Publish
           if params[current_step].blank? && !@course.accept_a_level_equivalency.nil?
             ActionController::Parameters.new(
               current_step => {
-                accept_a_level_equivalency: @course.accept_a_level_equivalency? ? 'yes' : 'no',
-                additional_a_level_equivalencies: @course.additional_a_level_equivalencies
-              }
+                accept_a_level_equivalency: @course.accept_a_level_equivalency? ? "yes" : "no",
+                additional_a_level_equivalencies: @course.additional_a_level_equivalencies,
+              },
             )
           else
             params

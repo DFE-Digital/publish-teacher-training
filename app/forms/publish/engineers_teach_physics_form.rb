@@ -2,7 +2,7 @@
 
 module Publish
   class EngineersTeachPhysicsForm < BaseCourseForm
-    alias course model
+    alias_method :course, :model
 
     FIELDS = %i[campaign_name subjects_ids skip_languages_goto_confirmation].freeze
 
@@ -10,7 +10,7 @@ module Publish
 
     validates :campaign_name, inclusion: { in: Course.campaign_names.keys }
 
-    private
+  private
 
     def compute_fields
       course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes).symbolize_keys

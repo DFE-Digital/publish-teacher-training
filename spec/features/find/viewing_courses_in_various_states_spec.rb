@@ -1,33 +1,33 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'viewing courses in various states' do
-  scenario 'viewing a published course' do
+feature "viewing courses in various states" do
+  scenario "viewing a published course" do
     given_there_is_a_published_course
     when_i_visit_the_course_page
     then_i_should_see_the_course
   end
 
-  scenario 'viewing a published with unpublished changes course' do
+  scenario "viewing a published with unpublished changes course" do
     given_there_is_a_published_with_unpublished_changes_course
     when_i_visit_the_course_page
     then_i_should_see_the_course
   end
 
-  scenario 'viewing a draft course' do
+  scenario "viewing a draft course" do
     given_there_is_a_draft_course
     when_i_visit_the_course_page
     then_i_should_see_page_not_found
   end
 
-  scenario 'viewing a rolled over course' do
+  scenario "viewing a rolled over course" do
     given_there_is_a_rolled_over_course
     when_i_visit_the_course_page
     then_i_should_see_page_not_found
   end
 
-  scenario 'viewing a withdrawn course' do
+  scenario "viewing a withdrawn course" do
     given_there_is_a_withdrawn_course
     when_i_visit_the_course_page
     then_i_should_see_page_not_found
@@ -39,9 +39,9 @@ feature 'viewing courses in various states' do
       enrichments: [
         build(
           :course_enrichment,
-          :published
-        )
-      ]
+          :published,
+        ),
+      ],
     )
   end
 
@@ -67,9 +67,9 @@ feature 'viewing courses in various states' do
       enrichments: [
         build(
           :course_enrichment,
-          :draft
-        )
-      ]
+          :draft,
+        ),
+      ],
     )
   end
 
@@ -79,9 +79,9 @@ feature 'viewing courses in various states' do
       enrichments: [
         build(
           :course_enrichment,
-          :rolled_over
-        )
-      ]
+          :rolled_over,
+        ),
+      ],
     )
   end
 
@@ -91,9 +91,9 @@ feature 'viewing courses in various states' do
       enrichments: [
         build(
           :course_enrichment,
-          :subsequent_draft
-        )
-      ]
+          :subsequent_draft,
+        ),
+      ],
     )
   end
 
@@ -103,9 +103,9 @@ feature 'viewing courses in various states' do
       enrichments: [
         build(
           :course_enrichment,
-          :withdrawn
-        )
-      ]
+          :withdrawn,
+        ),
+      ],
     )
   end
 end

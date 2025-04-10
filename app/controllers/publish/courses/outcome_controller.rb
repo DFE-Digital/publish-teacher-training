@@ -16,10 +16,6 @@ module Publish
         end
       end
 
-      def new
-        super
-      end
-
       def edit
         authorize course, :can_update_qualification?
 
@@ -28,7 +24,7 @@ module Publish
         redirect_to publish_provider_recruitment_cycle_course_path(
           course.provider.provider_code,
           course.provider.recruitment_cycle_year,
-          course.course_code
+          course.course_code,
         )
       end
 
@@ -48,32 +44,32 @@ module Publish
         end
       end
 
-      private
+    private
 
       def current_step
         :outcome
       end
 
       def errors
-        params.dig(:course, :qualification) ? {} : { qualification: ['Select a qualification'] }
+        params.dig(:course, :qualification) ? {} : { qualification: ["Select a qualification"] }
       end
 
       def handle_qualification_update
         if undergraduate_to_other_qualification?
           @course.enrichments.find_or_initialize_draft.update(course_length: nil, salary_details: nil)
           @course.update(
-            degree_type: 'postgraduate',
+            degree_type: "postgraduate",
             a_level_subject_requirements: [],
             accept_pending_a_level: nil,
             accept_a_level_equivalency: nil,
-            additional_a_level_equivalencies: nil
+            additional_a_level_equivalencies: nil,
           )
 
           redirect_to funding_type_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
-            previous_tda_course: true
+            previous_tda_course: true,
           )
         else
           if undergraduate_degree_with_qts?
@@ -87,10 +83,10 @@ module Publish
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code
+            @course.course_code,
           )
 
-          course_updated_message('Qualification')
+          course_updated_message("Qualification")
         end
       end
 
@@ -100,11 +96,11 @@ module Publish
       end
 
       def undergraduate_degree_with_qts?
-        @updated_qualification == 'undergraduate_degree_with_qts'
+        @updated_qualification == "undergraduate_degree_with_qts"
       end
 
       def undergraduate_to_other_qualification?
-        @current_qualification == 'undergraduate_degree_with_qts' && @updated_qualification != 'undergraduate_degree_with_qts'
+        @current_qualification == "undergraduate_degree_with_qts" && @updated_qualification != "undergraduate_degree_with_qts"
       end
 
       def handle_redirect
@@ -116,7 +112,7 @@ module Publish
       end
 
       def previously_chosen_tda?
-        params[:current_qualification] == 'undergraduate_degree_with_qts' && params[:goto_confirmation] == 'true'
+        params[:current_qualification] == "undergraduate_degree_with_qts" && params[:goto_confirmation] == "true"
       end
     end
   end

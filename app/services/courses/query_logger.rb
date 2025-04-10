@@ -18,14 +18,14 @@ module Courses
       log_query
     end
 
-    private
+  private
 
     def log_filters
       if applied_scopes.blank?
-        logger.tagged(log_tag) { logger.debug('No filters applied'.colorize(:red)) }
+        logger.tagged(log_tag) { logger.debug("No filters applied".colorize(:red)) }
       else
         logger.tagged(log_tag) do
-          logger.debug('Applied Filters:'.colorize(:green))
+          logger.debug("Applied Filters:".colorize(:green))
           applied_scopes.each do |name, value|
             logger.debug("* #{name} => #{value}".colorize(:light_blue))
           end

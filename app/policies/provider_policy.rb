@@ -58,17 +58,17 @@ class ProviderPolicy
     !(accredited_bodies_codes & user_provider_codes).compact.empty?
   end
 
-  alias can_list_sites? show?
-  alias can_create_sites? show?
-  alias can_create_course? show?
-  alias edit? show?
-  alias update? show?
-  alias destroy? show?
-  alias build_new? show?
-  alias can_list_training_providers? show?
-  alias index? new?
-  alias create? show?
-  alias delete? show?
+  alias_method :can_list_sites?, :show?
+  alias_method :can_create_sites?, :show?
+  alias_method :can_create_course?, :show?
+  alias_method :edit?, :show?
+  alias_method :update?, :show?
+  alias_method :destroy?, :show?
+  alias_method :build_new?, :show?
+  alias_method :can_list_training_providers?, :show?
+  alias_method :index?, :new?
+  alias_method :create?, :show?
+  alias_method :delete?, :show?
 
   def permitted_provider_attributes
     if user.admin?
@@ -78,7 +78,7 @@ class ProviderPolicy
     end
   end
 
-  private
+private
 
   def user_provider_attributes
     base_attributes = %i[

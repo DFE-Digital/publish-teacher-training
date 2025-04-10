@@ -28,7 +28,7 @@ FactoryBot.define do
     urn { Faker::Number.number(digits: [5, 6].sample) }
     ukprn { Faker::Number.within(range: 10_000_000..19_999_999) }
     accredited { false }
-    region_code { 'london' }
+    region_code { "london" }
     association :recruitment_cycle, strategy: :find_or_create
 
     train_with_us { Faker::Lorem.sentence.to_s }
@@ -40,7 +40,7 @@ FactoryBot.define do
     selectable_school { true }
 
     trait :with_name do
-      provider_name { 'Test Name' }
+      provider_name { "Test Name" }
     end
 
     trait :university do
@@ -92,7 +92,7 @@ FactoryBot.define do
     trait :published_scitt do
       scitt
       transient do
-        identifier { 'published_scitt' }
+        identifier { "published_scitt" }
       end
 
       provider_name { "#{identifier} provider name" }

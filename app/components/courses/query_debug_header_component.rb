@@ -29,7 +29,7 @@ module Courses
       @nearest_school_for_each_result ||= ::Courses::NearestSchoolQuery.new(
         courses: @results,
         latitude:,
-        longitude:
+        longitude:,
       ).call
     end
 
@@ -37,7 +37,7 @@ module Courses
       nearest_school_for_each_result.uniq { |site| [site.latitude, site.longitude] }
     end
 
-    GOOGLE_MAPS_BASE_URL = 'https://www.google.com/maps/dir/'
+    GOOGLE_MAPS_BASE_URL = "https://www.google.com/maps/dir/"
 
     def google_maps_directions_path
       start_point = "#{@latitude},#{@longitude}"

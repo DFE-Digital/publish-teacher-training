@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'csv'
+require "csv"
 
-desc 'import provider synonyms with csv data'
+desc "import provider synonyms with csv data"
 task import_provider_synonyms_with_csv_data: :environment do
-  csv_filepath = Rails.root.join('csv/provider_synonyms_data.csv')
+  csv_filepath = Rails.root.join("csv/provider_synonyms_data.csv")
   CSV.foreach(csv_filepath, headers: true) do |row|
     provider_details = row.to_h.symbolize_keys
 

@@ -10,7 +10,7 @@
     <%= form_with(
       model: course,
       url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year),
-      method: :post
+      method: :post,
     ) do |f| %>
 
       <%= render "publish/shared/errors" %>
@@ -45,7 +45,7 @@
             <% row.with_value { course.chosen_subjects } %>
             <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_subjects_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "subjects"
+              visually_hidden_text: "subjects",
             ) %>
           <% end %>
 
@@ -55,7 +55,7 @@
               <% row.with_value { course.is_engineers_teach_physics? ? "Yes" : "No" } %>
               <% row.with_action(
                 href: new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(skip_languages_goto_confirmation: true)),
-                visually_hidden_text: "Engineers Teach Physics"
+                visually_hidden_text: "Engineers Teach Physics",
               ) %>
             <% end %>
           <% end %>
@@ -65,7 +65,7 @@
             <% row.with_value { course.age_range } %>
             <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_age_range_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "age range"
+              visually_hidden_text: "age range",
             ) %>
           <% end %>
         <% end %>
@@ -75,7 +75,7 @@
           <% row.with_value { course.outcome } %>
           <% row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_outcome_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-            visually_hidden_text: "outcome"
+            visually_hidden_text: "outcome",
           ) %>
         <% end %>
 
@@ -85,7 +85,7 @@
           <% unless course.teacher_degree_apprenticeship?
                row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
-            visually_hidden_text: "if funding type"
+            visually_hidden_text: "if funding type",
           )
              end %>
         <% end %>
@@ -96,7 +96,7 @@
           <% unless course.teacher_degree_apprenticeship?
                row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_study_mode_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-            visually_hidden_text: "if full or part time"
+            visually_hidden_text: "if full or part time",
           )
              end %>
         <% end %>
@@ -119,7 +119,7 @@
           <% if @course.provider.sites.count > 1 %>
             <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_schools_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "schools"
+              visually_hidden_text: "schools",
             ) %>
           <% else %>
             <% row.with_action %>
@@ -144,7 +144,7 @@
           <% if course.study_sites.any? %>
             <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "study sites"
+              visually_hidden_text: "study sites",
             ) %>
           <% else %>
             <% row.with_action %>
@@ -159,7 +159,7 @@
             <% if @provider.accredited_bodies.length > 1 %>
               <% row.with_action(
                 href: change_ratifying_provider_url,
-                visually_hidden_text: "ratifying provider"
+                visually_hidden_text: "ratifying provider",
               ) %>
             <% else %>
               <% row.with_action %>
@@ -173,7 +173,7 @@
             <% row.with_value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
             <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "student visa sponsorship"
+              visually_hidden_text: "student visa sponsorship",
             ) %>
           <% end %>
         <% end %>
@@ -185,7 +185,7 @@
             <% unless course.teacher_degree_apprenticeship?
                  row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "skilled worker visa sponsorship"
+              visually_hidden_text: "skilled worker visa sponsorship",
             )
                end %>
           <% end %>
@@ -199,7 +199,7 @@
                  href: new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_required_path(
                    course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)
                  ),
-                 visually_hidden_text: t(".visa_sponsorship_deadline_required_visually_hidden")
+                 visually_hidden_text: t(".visa_sponsorship_deadline_required_visually_hidden"),
                ) %>
           <% end %>
         <% end %>
@@ -212,7 +212,7 @@
                  href: new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_date_path(
                    course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)
                  ),
-                 visually_hidden_text: t(".date_for_applications_requiring_visa_sponsorship_visually_hidden")
+                 visually_hidden_text: t(".date_for_applications_requiring_visa_sponsorship_visually_hidden"),
                ) %>
           <% end %>
         <% end %>
@@ -228,7 +228,7 @@
           <% end %>
           <% row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_applications_open_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-            visually_hidden_text: "date applications open"
+            visually_hidden_text: "date applications open",
           ) %>
         <% end %>
 
@@ -237,7 +237,7 @@
           <% row.with_value { course.start_date.present? ? l(course.start_date&.to_date, format: :short) : nil } %>
           <% row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_start_date_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-            visually_hidden_text: "date course starts"
+            visually_hidden_text: "date course starts",
           ) %>
         <% end %>
       <% end %>

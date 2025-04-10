@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false } do
+feature "Publishing courses errors", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'The error links target the correct pages' do
+  scenario "The error links target the correct pages" do
     and_there_is_an_invalid_tda_course_i_want_to_publish
 
     when_i_visit_the_course_page
@@ -61,14 +61,14 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     then_the_course_is_published
   end
 
-  scenario 'when the TDA course is published and I try to change qualification' do
+  scenario "when the TDA course is published and I try to change qualification" do
     given_there_is_an_published_tda_course
     when_i_visit_the_course_page
     and_i_enter_the_basic_details_tab
     then_there_is_no_change_qualification_link
   end
 
-  scenario 'when the non TDA course is published and I try to change qualification' do
+  scenario "when the non TDA course is published and I try to change qualification" do
     given_there_is_an_published_qts_course
     when_i_visit_the_course_page
     and_i_enter_the_basic_details_tab
@@ -78,10 +78,10 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
   end
 
   def given_i_am_authenticated_as_a_provider_user
-    @user = create(:user, providers: [build(:provider, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
+    @user = create(:user, providers: [build(:provider, provider_type: "lead_school", sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     @provider = @user.providers.first
-    create(:provider, :accredited_provider, provider_code: '1BJ')
-    @accredited_provider = create(:provider, :accredited_provider, provider_code: '1BK')
+    create(:provider, :accredited_provider, provider_code: "1BJ")
+    @accredited_provider = create(:provider, :accredited_provider, provider_code: "1BK")
 
     given_i_am_authenticated(user: @user)
   end
@@ -97,7 +97,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
       accrediting_provider: @accredited_provider,
       a_level_subject_requirements: [],
       accept_pending_a_level: nil,
-      accept_a_level_equivalency: nil
+      accept_a_level_equivalency: nil,
     )
     @course.sites << build_list(:site, 1, provider: @provider)
   end
@@ -113,7 +113,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
       accrediting_provider: @accredited_provider,
       a_level_subject_requirements: [],
       accept_pending_a_level: nil,
-      accept_a_level_equivalency: nil
+      accept_a_level_equivalency: nil,
     )
     @course.sites << build_list(:site, 1, provider: @provider)
   end
@@ -125,7 +125,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
       :with_gcse_equivalency,
       :published,
       provider: @provider,
-      accrediting_provider: @accredited_provider
+      accrediting_provider: @accredited_provider,
     )
     @course.sites << build_list(:site, 1, provider: @provider)
   end
@@ -134,7 +134,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     publish_provider_courses_show_page.load(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year,
-      course_code: @course.course_code
+      course_code: @course.course_code,
     )
   end
 
@@ -143,8 +143,8 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
@@ -153,15 +153,15 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
   end
 
   def and_i_enter_the_basic_details_tab
-    click_on 'Basic details'
+    click_on "Basic details"
   end
 
   def and_i_click_change_qualification
-    publish_provider_courses_details_page.outcome.actions.find('a').click
+    publish_provider_courses_details_page.outcome.actions.find("a").click
   end
 
   def then_the_tda_option_is_not_available
-    expect(page).to have_no_field('Teacher degree apprenticeship (TDA) with QTS', type: 'radio')
+    expect(page).to have_no_field("Teacher degree apprenticeship (TDA) with QTS", type: "radio")
   end
 
   def and_i_on_the_change_qualification_page
@@ -169,8 +169,8 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
       outcome_publish_provider_recruitment_cycle_course_path(
         @course.provider.provider_code,
         @course.provider.recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
@@ -181,33 +181,33 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
 
   def then_i_see_a_level_subject_is_required
     and_i_see_that_i_need_to_enter_a_level_requirements
-    expect(page).to have_content('What A level or equivalent qualification is required?')
+    expect(page).to have_content("What A level or equivalent qualification is required?")
   end
 
   def and_i_see_that_i_need_to_enter_a_level_requirements
-    within '.govuk-error-summary' do
-      expect(page).to have_content('Enter A level requirements')
+    within ".govuk-error-summary" do
+      expect(page).to have_content("Enter A level requirements")
     end
   end
 
   def and_i_see_a_level_is_required_in_a_level_row
-    expect(page).to have_content('Enter A level requirements').twice
+    expect(page).to have_content("Enter A level requirements").twice
   end
 
   def when_i_click_on_the_a_level_is_required_error
-    click_on 'Enter A level requirements', match: :first
+    click_on "Enter A level requirements", match: :first
   end
 
   def and_i_see_a_level_required_error
-    expect(page).to have_content('Select if this course requires any A levels').twice
+    expect(page).to have_content("Select if this course requires any A levels").twice
   end
 
   def when_i_choose_yes
-    choose 'Yes'
+    choose "Yes"
   end
 
   def and_i_click_continue
-    click_on 'Continue'
+    click_on "Continue"
   end
 
   def then_i_am_on_the_what_a_levels_is_required_for_the_course_page
@@ -216,26 +216,26 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
         @provider.provider_code,
         recruitment_cycle_year,
         @course.course_code,
-        display_errors: true
-      )
+        display_errors: true,
+      ),
     )
   end
 
   def and_i_see_what_a_level_required_error
-    expect(page).to have_content('Select a subject').twice
+    expect(page).to have_content("Select a subject").twice
   end
 
   def when_i_choose_any_subject
-    choose 'Any subject'
+    choose "Any subject"
   end
 
   def then_i_see_pending_a_level_is_required
-    expect(page).to have_content('Enter information on pending A levels').twice
-    expect(page).to have_content('Will you consider candidates with pending A levels?')
+    expect(page).to have_content("Enter information on pending A levels").twice
+    expect(page).to have_content("Will you consider candidates with pending A levels?")
   end
 
   def when_i_click_on_the_pending_a_level_error
-    click_on 'Enter information on pending A levels', match: :first
+    click_on "Enter information on pending A levels", match: :first
   end
 
   def then_i_am_on_the_consider_pending_a_level_page
@@ -244,22 +244,22 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
         @provider.provider_code,
         @provider.recruitment_cycle_year,
         @course.course_code,
-        display_errors: true
-      )
+        display_errors: true,
+      ),
     )
   end
 
   def and_i_see_the_pending_a_level_error
-    expect(page).to have_content('Select if you will consider candidates with pending A levels').twice
+    expect(page).to have_content("Select if you will consider candidates with pending A levels").twice
   end
 
   def then_i_see_a_level_equivalencies_is_required
-    expect(page).to have_content('Will you consider candidates who need to take an equivalency test for their A levels?')
-    expect(page).to have_content('Enter A level equivalency test requirements').twice
+    expect(page).to have_content("Will you consider candidates who need to take an equivalency test for their A levels?")
+    expect(page).to have_content("Enter A level equivalency test requirements").twice
   end
 
   def when_i_click_on_the_a_level_equivalencies
-    click_on 'Enter A level equivalency test requirements', match: :first
+    click_on "Enter A level equivalency test requirements", match: :first
   end
 
   def then_i_am_on_the_a_level_equivalencies_page
@@ -268,44 +268,44 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
         @provider.provider_code,
         @provider.recruitment_cycle_year,
         @course.course_code,
-        display_errors: true
-      )
+        display_errors: true,
+      ),
     )
   end
 
   def and_i_click_update_a_levels
-    click_on 'Update A levels'
+    click_on "Update A levels"
   end
 
   def then_the_course_is_published
-    expect(page).to have_content('Your course has been published.')
+    expect(page).to have_content("Your course has been published.")
     expect(@course.reload.is_published?).to be true
   end
 
   def and_the_back_link_points_to_the_course_page
-    expect(page.find_link(text: 'Back')[:href]).to eq(
+    expect(page.find_link(text: "Back")[:href]).to eq(
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
   def then_i_see_that_a_partnership_does_not_exist
-    expect(page).to have_content('Training provider must have an accredited provider partnership')
+    expect(page).to have_content("Training provider must have an accredited provider partnership")
   end
 
   def when_i_click_on_the_provider_partnership_error_message
-    click_on 'Training provider must have an accredited provider partnership', match: :first
+    click_on "Training provider must have an accredited provider partnership", match: :first
   end
 
   def and_i_click_on_add_accredited_provider
-    click_on 'Add accredited provider'
+    click_on "Add accredited provider"
   end
 
   def and_i_search_for_the_accredited_provider
-    fill_in 'Enter a provider name, UKPRN or postcode', with: @accredited_provider.provider_name
+    fill_in "Enter a provider name, UKPRN or postcode", with: @accredited_provider.provider_name
     and_i_click_continue
   end
 
@@ -315,12 +315,12 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
   end
 
   def and_i_input_some_information
-    fill_in 'About the accredited provider', with: 'This is a description'
+    fill_in "About the accredited provider", with: "This is a description"
     and_i_click_continue
   end
 
   def and_i_click_add_accredited_provider_button
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button "Add accredited provider"
   end
 
   def then_i_see_success_message

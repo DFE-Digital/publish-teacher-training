@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
+feature "selecting a subject", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'selecting one subject' do
+  scenario "selecting one subject" do
     when_i_visit_the_new_course_subject_page
     when_i_select_one_subject(:business_studies)
     and_i_click_continue
@@ -16,7 +16,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     then_i_am_met_with_populated_dropdowns(:business_studies)
   end
 
-  scenario 'selecting two subjects' do
+  scenario "selecting two subjects" do
     when_i_visit_the_new_course_subject_page
     when_i_select_two_subjects(:business_studies, :physics)
     and_i_click_continue
@@ -25,44 +25,44 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     then_i_am_met_with_populated_dropdowns(:business_studies, :physics)
   end
 
-  scenario 'selecting secondary subject modern languages' do
+  scenario "selecting secondary subject modern languages" do
     when_i_visit_the_new_course_subject_page
     when_i_select_one_subject(:modern_languages)
     and_i_click_continue
     then_i_am_met_with_the_modern_languages_page
   end
 
-  scenario 'selecting subordinate subject but no master' do
+  scenario "selecting subordinate subject but no master" do
     when_i_visit_the_new_course_subject_page
     when_i_select_subordinate_subject(:business_studies)
     and_i_click_continue
     then_i_am_met_with_errors
   end
 
-  scenario 'selecting duplicate subject modern languages' do
+  scenario "selecting duplicate subject modern languages" do
     when_i_visit_the_new_course_subject_page
     when_i_select_two_subjects(:modern_languages, :modern_languages)
     and_i_click_continue
-    expect(page).to have_content('The second subject must be different to the first subject')
+    expect(page).to have_content("The second subject must be different to the first subject")
 
     then_i_am_met_with_populated_dropdowns(:modern_languages, :modern_languages)
   end
 
-  scenario 'selecting duplicate first and second subject' do
+  scenario "selecting duplicate first and second subject" do
     when_i_visit_the_new_course_subject_page
     when_i_select_two_subjects(:business_studies, :business_studies)
     and_i_click_continue
-    expect(page).to have_content('The second subject must be different to the first subject')
+    expect(page).to have_content("The second subject must be different to the first subject")
     then_i_am_met_with_populated_dropdowns(:business_studies, :business_studies)
   end
 
-  scenario 'invalid entries' do
+  scenario "invalid entries" do
     when_i_visit_the_new_course_subject_page
     and_i_click_continue
     then_i_am_met_with_errors
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, :with_provider)
@@ -99,23 +99,23 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_met_with_populated_dropdowns(master, subordinate = nil)
-    expect(publish_courses_new_subjects_page.master_subject_fields.find('option[selected]')).to have_content(course_subject(master))
-    expect(publish_courses_new_subjects_page.subordinate_subjects_fields.find('option[selected]')).to have_content(course_subject(subordinate)) if subordinate.present?
+    expect(publish_courses_new_subjects_page.master_subject_fields.find("option[selected]")).to have_content(course_subject(master))
+    expect(publish_courses_new_subjects_page.subordinate_subjects_fields.find("option[selected]")).to have_content(course_subject(subordinate)) if subordinate.present?
   end
 
   def then_i_am_met_with_the_age_range_page(master, subordinate = nil)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{params_with_subject(master, subordinate)}")
-    expect(page).to have_content('Age range')
+    expect(page).to have_content("Age range")
   end
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{params_with_subject(:modern_languages)}")
-    expect(page).to have_content('Languages')
+    expect(page).to have_content("Languages")
   end
 
   def then_i_am_met_with_errors
-    expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select a subject')
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("Select a subject")
   end
 
   def course_subject(subject_type)
@@ -134,23 +134,23 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     subordinate_subject = course_subject(subordinate_subject)
     if subordinate_subject
       [
-        'course%5Bcampaign_name%5D=',
-        'course%5Bis_send%5D=0',
-        'course%5Blevel%5D=secondary',
+        "course%5Bcampaign_name%5D=",
+        "course%5Bis_send%5D=0",
+        "course%5Blevel%5D=secondary",
         "course%5Bmaster_subject_id%5D=#{master_subject.id}",
         "course%5Bsubjects_ids%5D%5B%5D=#{master_subject.id}",
         "course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}",
-        "course%5Bsubordinate_subject_id%5D=#{subordinate_subject.id}"
-      ].join('&')
+        "course%5Bsubordinate_subject_id%5D=#{subordinate_subject.id}",
+      ].join("&")
     else
       [
-        'course%5Bcampaign_name%5D=',
-        'course%5Bis_send%5D=0',
-        'course%5Blevel%5D=secondary',
+        "course%5Bcampaign_name%5D=",
+        "course%5Bis_send%5D=0",
+        "course%5Blevel%5D=secondary",
         "course%5Bmaster_subject_id%5D=#{master_subject.id}",
         "course%5Bsubjects_ids%5D%5B%5D=#{master_subject.id}",
-        'course%5Bsubordinate_subject_id%5D='
-      ].join('&')
+        "course%5Bsubordinate_subject_id%5D=",
+      ].join("&")
     end
   end
 end

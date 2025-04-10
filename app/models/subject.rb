@@ -11,11 +11,11 @@ class Subject < ApplicationRecord
     where(subject_code: subject_codes)
   }
 
-  scope :active, -> { where.not(type: 'DiscontinuedSubject') }
-  scope :primary, -> { where(type: 'PrimarySubject').order(:subject_name) }
+  scope :active, -> { where.not(type: "DiscontinuedSubject") }
+  scope :primary, -> { where(type: "PrimarySubject").order(:subject_name) }
   scope :secondary, lambda {
     where(type: %w[SecondarySubject ModernLanguagesSubject])
-      .where.not(subject_name: ['Modern Languages'])
+      .where.not(subject_name: ["Modern Languages"])
       .order(:subject_name)
   }
 
@@ -35,11 +35,11 @@ class Subject < ApplicationRecord
     secondary
       .where.not(subject_group: nil)
       .includes(:subject_group)
-      .reorder('subject_group.created_at ASC, subject.subject_name ASC')
+      .reorder("subject_group.created_at ASC, subject.subject_name ASC")
   end
 
   def secondary_subject?
-    type == 'SecondarySubject'
+    type == "SecondarySubject"
   end
 
   def to_sym

@@ -14,12 +14,12 @@ class PaginatedFilter < ViewComponent::Base
     filter_params.slice(*allowed_search_params_keys)
   end
 
-  private
+private
 
   def allowed_search_params_keys
     {
       User: %i[text_search user_type],
-      Provider: %i[provider_search course_search accredited provider_type]
+      Provider: %i[provider_search course_search accredited provider_type],
     }[collection.klass.name.to_sym]
   end
 end

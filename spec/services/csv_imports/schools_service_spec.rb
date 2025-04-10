@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 module CSVImports
   describe SchoolsService do
     let(:csv_content) do
@@ -21,13 +21,13 @@ module CSVImports
 
     subject { described_class.call(csv_content:, provider:) }
 
-    it 'imported all the sites' do
+    it "imported all the sites" do
       expect(subject.size).to be(csv_content.lines.count)
     end
 
-    shared_examples 'attribute imported accross from csv' do |attribute_name, index|
+    shared_examples "attribute imported accross from csv" do |attribute_name, index|
       it "correctly mapped #{attribute_name} to #{index}" do
-        expect(subject.map(&attribute_name)).to eql(csv_content.lines.map { |line| line.split(',')[index].blank? ? nil : line.split(',')[index].gsub("\n", '') })
+        expect(subject.map(&attribute_name)).to eql(csv_content.lines.map { |line| line.split(",")[index].blank? ? nil : line.split(",")[index].gsub("\n", "") })
       end
     end
 
@@ -41,7 +41,7 @@ module CSVImports
       address4
       postcode
     ].each_with_index do |attribute_name, index|
-      include_examples 'attribute imported accross from csv', attribute_name, index
+      include_examples "attribute imported accross from csv", attribute_name, index
     end
   end
 end

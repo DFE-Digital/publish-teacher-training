@@ -16,7 +16,7 @@
 <div class="govuk-width-container">
   <div class="govuk-phase-banner">
     <p class="govuk-phase-banner__content">
-      <%= govuk_tag(**phase_banner_tag, classes: ["govuk-phase-banner__content__tag"]) %>
+      <%= govuk_tag(**phase_banner_tag, classes: %w[govuk-phase-banner__content__tag]) %>
 
       <% if phase_banner_text? %>
         <span class="govuk-phase-banner__text">

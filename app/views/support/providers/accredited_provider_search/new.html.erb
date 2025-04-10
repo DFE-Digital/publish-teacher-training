@@ -7,14 +7,14 @@
         model: @accredited_provider_search_form,
         url: search_support_recruitment_cycle_provider_accredited_providers_path,
         html: {
-          data: { recruitment_cycle_year: @recruitment_cycle.year }
-        }
+          data: { recruitment_cycle_year: @recruitment_cycle.year },
+        },
       ) do |f| %>
 
       <%= content_for(:breadcrumbs) do %>
         <%= render GovukComponent::BackLinkComponent.new(
           text: t("back"),
-          href: back_link_for_adding_accredited_partner_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)
+          href: back_link_for_adding_accredited_partner_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider),
         ) %>
       <% end %>
 

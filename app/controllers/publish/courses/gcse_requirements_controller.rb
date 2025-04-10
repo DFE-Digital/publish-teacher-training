@@ -22,7 +22,7 @@ module Publish
           @gcse_requirements_form.save(course)
           redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
         elsif @gcse_requirements_form.valid? && !goto_preview?
-          course_updated_message('GCSE requirements')
+          course_updated_message("GCSE requirements")
           @gcse_requirements_form.save(course)
           redirect_to publish_provider_recruitment_cycle_course_path
         else
@@ -32,7 +32,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def course
         @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))
@@ -47,9 +47,9 @@ module Publish
       end
 
       def gcse_requirements_form_params
-        translatable_params.index_with do |key|
+        translatable_params.index_with { |key|
           translate_params(publish_gcse_requirements_form_params[key])
-        end.merge(additional_gcse_equivalencies: helpers.raw(publish_gcse_requirements_form_params[:additional_gcse_equivalencies]))
+        }.merge(additional_gcse_equivalencies: helpers.raw(publish_gcse_requirements_form_params[:additional_gcse_equivalencies]))
       end
 
       def publish_gcse_requirements_form_params
@@ -63,7 +63,7 @@ module Publish
                                                      { accept_english_gcse_equivalency: [] },
                                                      { accept_maths_gcse_equivalency: [] },
                                                      { accept_science_gcse_equivalency: [] },
-                                                     :additional_gcse_equivalencies
+                                                     :additional_gcse_equivalencies,
                                                    )
       end
 
@@ -73,7 +73,7 @@ module Publish
         if value.is_a?(Array)
           %w[Maths English Science].intersect?(value)
         else
-          value == 'true'
+          value == "true"
         end
       end
 

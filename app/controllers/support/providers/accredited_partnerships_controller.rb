@@ -46,8 +46,8 @@ module Support
         if @accredited_provider_form.save!
           redirect_to support_recruitment_cycle_provider_accredited_partnerships_path(
             recruitment_cycle_year: @recruitment_cycle.year,
-            provider_id: @provider.id
-          ), flash: { success: t('.updated') }
+            provider_id: @provider.id,
+          ), flash: { success: t(".updated") }
 
         else
           render(:edit)
@@ -66,11 +66,11 @@ module Support
 
         redirect_to support_recruitment_cycle_provider_accredited_partnerships_path(
           recruitment_cycle_year: @recruitment_cycle.year,
-          provider_id: @provider.id
-        ), flash: { success: t('.removed') }
+          provider_id: @provider.id,
+        ), flash: { success: t(".removed") }
       end
 
-      private
+    private
 
       def cannot_delete
         @cannot_delete ||= provider.courses.exists?(accredited_provider_code: params[:accredited_provider_code])

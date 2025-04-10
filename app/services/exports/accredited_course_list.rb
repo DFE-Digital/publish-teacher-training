@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'csv'
+require "csv"
 
 module Exports
   class AccreditedCourseList
     CSV_HEADERS = [
-      'Provider code',
-      'Provider',
-      'Course code',
-      'Course',
-      'Study mode',
-      'Programme type',
-      'Qualification',
-      'Status',
-      'View on Find',
-      'Applications open from',
-      'Campus Codes'
+      "Provider code",
+      "Provider",
+      "Course code",
+      "Course",
+      "Study mode",
+      "Programme type",
+      "Qualification",
+      "Status",
+      "View on Find",
+      "Applications open from",
+      "Campus Codes",
     ].freeze
 
     def initialize(courses:)
@@ -38,7 +38,7 @@ module Exports
             decorated_course.content_status&.to_s&.humanize,
             decorated_course.find_url,
             I18n.l(decorated_course.applications_open_from&.to_date),
-            decorated_course.sites&.map(&:code)&.join(' ')
+            decorated_course.sites&.map(&:code)&.join(" "),
           ]
         end
       end
@@ -48,7 +48,7 @@ module Exports
       "courses-#{Time.zone.today}.csv"
     end
 
-    private
+  private
 
     attr_reader :courses
   end

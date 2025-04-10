@@ -11,7 +11,7 @@
       model: @provider,
       url: school_placements_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
       method: :put,
-      local: true
+      local: true,
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
@@ -24,7 +24,7 @@
       <%= f.govuk_radio_buttons_fieldset(
             :selectable_school,
             legend: { text: t(".selectable_school_label") },
-            hint: { text: t(".selectable_school_hint") }
+            hint: { text: t(".selectable_school_hint") },
           ) do %>
         <%= f.govuk_radio_button :selectable_school, true, label: { text: "Yes" }, link_errors: true %>
         <%= f.govuk_radio_button :selectable_school, false, label: { text: "No" } %>

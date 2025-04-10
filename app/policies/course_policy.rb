@@ -43,16 +43,16 @@ class CoursePolicy
     !(course.teacher_degree_apprenticeship? && course.is_published?) && !course.is_withdrawn?
   end
 
-  alias preview? show?
-  alias apply? show?
-  alias details? show?
-  alias update? show?
-  alias edit? show?
-  alias destroy? show?
-  alias publish? update?
-  alias publishable? update?
-  alias new? index?
-  alias withdraw? show?
+  alias_method :preview?, :show?
+  alias_method :apply?, :show?
+  alias_method :details?, :show?
+  alias_method :update?, :show?
+  alias_method :edit?, :show?
+  alias_method :destroy?, :show?
+  alias_method :publish?, :update?
+  alias_method :publishable?, :update?
+  alias_method :new?, :index?
+  alias_method :withdraw?, :show?
 
   def permitted_attributes
     if user.admin?
@@ -85,7 +85,7 @@ class CoursePolicy
     ]
   end
 
-  private
+private
 
   def permitted_user_attributes
     permitted_new_course_attributes + %i[

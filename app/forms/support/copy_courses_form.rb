@@ -15,7 +15,7 @@ module Support
     validate :different_providers
 
     def different_providers
-      errors.add(:provider, message: 'Choose different providers') if target_provider == provider
+      errors.add(:provider, message: "Choose different providers") if target_provider == provider
     end
   end
 end

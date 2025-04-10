@@ -1,191 +1,191 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Find
   module Courses
     module SummaryComponent
       describe View do
-        it 'renders sub sections' do
+        it "renders sub sections" do
           provider = build(:provider).decorate
           course = create(:course, :fee, :draft_enrichment, applications_open_from: Time.zone.tomorrow, provider:).decorate
 
           result = render_inline(described_class.new(course))
           expect(result.text).to include(
-            'Fee or salary',
-            'Course length',
-            'Age range',
-            'Qualification',
-            'Provider',
-            'Date you can apply from',
-            'Start date'
+            "Fee or salary",
+            "Course length",
+            "Age range",
+            "Qualification",
+            "Provider",
+            "Date you can apply from",
+            "Start date",
           )
         end
 
-        context 'when teacher degree apprenticeship course has incorrect fees' do
-          it 'does not render fees' do
+        context "when teacher degree apprenticeship course has incorrect fees" do
+          it "does not render fees" do
             course = create(:course, :apprenticeship, :published_teacher_degree_apprenticeship, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
             result = render_inline(described_class.new(course))
-            expect(result.text).not_to include('£9,250')
-            expect(result.text).to include('Fee or salary')
-            expect(result.text).to include('Salary (apprenticeship)')
+            expect(result.text).not_to include("£9,250")
+            expect(result.text).to include("Fee or salary")
+            expect(result.text).to include("Salary (apprenticeship)")
           end
         end
 
-        context 'applications open date has not passed' do
+        context "applications open date has not passed" do
           it "renders the 'Date you can apply from'" do
             course = build(
               :course,
               applications_open_from: Time.zone.tomorrow,
-              provider: build(:provider)
+              provider: build(:provider),
             ).decorate
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).to include('Date you can apply from')
+            expect(result.text).to include("Date you can apply from")
           end
         end
 
-        context 'applications open date has passed' do
+        context "applications open date has passed" do
           it "does not render the 'Date you can apply from'" do
             course = build(
               :course,
               applications_open_from: Time.zone.yesterday,
-              provider: build(:provider)
+              provider: build(:provider),
             ).decorate
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).not_to include('Date you can apply from')
+            expect(result.text).not_to include("Date you can apply from")
           end
         end
 
-        context 'applications open date is today' do
+        context "applications open date is today" do
           it "does not render the 'Date you can apply from'" do
             course = build(
               :course,
               applications_open_from: Time.zone.today,
-              provider: build(:provider)
+              provider: build(:provider),
             ).decorate
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).not_to include('Date you can apply from')
+            expect(result.text).not_to include("Date you can apply from")
           end
         end
 
-        context 'a course has an accrediting provider that is not the provider' do
-          it 'renders the accredited provider' do
+        context "a course has an accrediting provider that is not the provider" do
+          it "renders the accredited provider" do
             course = build(
               :course,
               provider: build(:provider),
-              accrediting_provider: build(:provider)
+              accrediting_provider: build(:provider),
             ).decorate
 
             result = render_inline(described_class.new(course))
 
             expect(result.text).to include(
-              'Accredited by'
+              "Accredited by",
             )
           end
         end
 
-        context 'the course provider and accrediting provider are the same' do
-          it 'does not render the accredited provider' do
+        context "the course provider and accrediting provider are the same" do
+          it "does not render the accredited provider" do
             provider = build(:provider)
 
             course = build(
               :course,
               provider:,
-              accrediting_provider: provider
+              accrediting_provider: provider,
             ).decorate
 
             result = render_inline(described_class.new(course))
 
             expect(result.text).not_to include(
-              'Accredited provider'
+              "Accredited provider",
             )
           end
         end
 
-        context 'secondary course' do
-          it 'renders the age range and level' do
+        context "secondary course" do
+          it "renders the age range and level" do
             course = build(
               :course,
               :secondary,
-              provider: build(:provider)
+              provider: build(:provider),
             ).decorate
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).to include('11 to 18 - secondary')
+            expect(result.text).to include("11 to 18 - secondary")
           end
         end
 
-        context 'non-secondary course' do
-          it 'render the age range only' do
+        context "non-secondary course" do
+          it "render the age range only" do
             course = build(
               :course,
-              provider: build(:provider)
+              provider: build(:provider),
             ).decorate
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).to include('3 to 7')
+            expect(result.text).to include("3 to 7")
           end
         end
 
-        context 'when there are UK fees' do
-          it 'renders the uk fees' do
+        context "when there are UK fees" do
+          it "renders the uk fees" do
             course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
             result = render_inline(described_class.new(course))
-            expect(result.text).to include('Fee or salary')
-            expect(result.text).to include('£9,250 fee for UK citizens')
+            expect(result.text).to include("Fee or salary")
+            expect(result.text).to include("£9,250 fee for UK citizens")
           end
         end
 
-        context 'when there are international fees' do
-          it 'renders the international fees' do
+        context "when there are international fees" do
+          it "renders the international fees" do
             course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
 
             result = render_inline(described_class.new(course))
-            expect(result.text).to include('£14,000 fee for Non-UK citizens')
+            expect(result.text).to include("£14,000 fee for Non-UK citizens")
           end
         end
 
-        context 'when there are uk fees but no international fees' do
-          it 'renders the uk fees and not the internation fee label' do
+        context "when there are uk fees but no international fees" do
+          it "renders the uk fees and not the internation fee label" do
             course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)]).decorate
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).to include('£9,250 fee for UK citizens')
-            expect(result.text).not_to include('fee for Non-UK citizens')
+            expect(result.text).to include("£9,250 fee for UK citizens")
+            expect(result.text).not_to include("fee for Non-UK citizens")
           end
         end
 
-        context 'when there are international fees but no uk fees' do
-          it 'renders the international fees but not the uk fee label' do
+        context "when there are international fees but no uk fees" do
+          it "renders the international fees but not the uk fee label" do
             course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)]).decorate
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).not_to include('fee for UK citizens')
-            expect(result.text).to include('£14,000 fee for Non-UK citizens')
+            expect(result.text).not_to include("fee for UK citizens")
+            expect(result.text).to include("£14,000 fee for Non-UK citizens")
           end
         end
 
-        context 'when there are no fees' do
-          it 'does not render the row' do
+        context "when there are no fees" do
+          it "does not render the row" do
             course = create(:course, :salary, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]).decorate
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).not_to include('for UK citizens')
-            expect(result.text).not_to include('£14,000 for Non-UK citizens')
-            expect(result.text).to include('Fee or salary')
+            expect(result.text).not_to include("for UK citizens")
+            expect(result.text).not_to include("£14,000 for Non-UK citizens")
+            expect(result.text).to include("Fee or salary")
           end
         end
       end

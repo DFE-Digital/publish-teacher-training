@@ -16,18 +16,18 @@ module Support
           .expect(
             support_recruitment_cycle_form: %i[year
                                                application_start_date
-                                               application_end_date]
-          )
+                                               application_end_date],
+          ),
       )
 
       if @support_recruitment_cycle_form.valid?
         RecruitmentCycleCreationService.call(
           year: @support_recruitment_cycle_form.year,
           application_start_date: @support_recruitment_cycle_form.application_start_date,
-          application_end_date: @support_recruitment_cycle_form.application_end_date
+          application_end_date: @support_recruitment_cycle_form.application_end_date,
         )
 
-        redirect_to support_recruitment_cycles_path, flash: { success: t('.added') }
+        redirect_to support_recruitment_cycles_path, flash: { success: t(".added") }
       else
         render :new
       end

@@ -23,12 +23,12 @@ class CourseAttributeFormatterService
 
   private_class_method :new
 
-  private
+private
 
   attr_reader :name, :value
 
   def age_range?
-    name == 'age_range_in_years'
+    name == "age_range_in_years"
   end
 
   def age_range_value
@@ -36,7 +36,7 @@ class CourseAttributeFormatterService
   end
 
   def qualification?
-    name == 'qualification'
+    name == "qualification"
   end
 
   def qualification_value
@@ -44,7 +44,7 @@ class CourseAttributeFormatterService
   end
 
   def study_mode?
-    name == 'study_mode'
+    name == "study_mode"
   end
 
   def study_mode_value
@@ -61,9 +61,9 @@ class CourseAttributeFormatterService
 
   def strip_underscores
     if value
-      value.tr('_', ' ')
+      value.tr("_", " ")
     else
-      'unknown'
+      "unknown"
     end
   end
 end

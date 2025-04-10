@@ -1,59 +1,59 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ALevelSteps::WhatALevelIsRequired, type: :model do
   subject(:wizard_step) { described_class.new }
 
-  describe 'validations' do
-    it 'is valid with a subject' do
-      wizard_step.subject = 'Any subject'
+  describe "validations" do
+    it "is valid with a subject" do
+      wizard_step.subject = "Any subject"
       expect(wizard_step).to be_valid
     end
 
-    it 'is not valid without a subject' do
+    it "is not valid without a subject" do
       wizard_step.subject = nil
       expect(wizard_step).not_to be_valid
       expect(wizard_step.errors.added?(:subject, :blank)).to be true
     end
 
-    context 'when minimum grade required is too long' do
+    context "when minimum grade required is too long" do
       let(:excess_characters) { 5 }
       let(:character_limit) { described_class::MAXIMUM_GRADE_CHARACTERS }
 
-      it 'adds an error message' do
-        wizard_step.minimum_grade_required = 'A' * (character_limit + excess_characters)
+      it "adds an error message" do
+        wizard_step.minimum_grade_required = "A" * (character_limit + excess_characters)
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors[:minimum_grade_required]).to include(
-          "Grade must be #{character_limit} characters or less. You have #{excess_characters} characters too many."
+          "Grade must be #{character_limit} characters or less. You have #{excess_characters} characters too many.",
         )
       end
     end
 
-    context 'when minimum grade required is too long by one character' do
+    context "when minimum grade required is too long by one character" do
       let(:excess_characters) { 1 }
       let(:character_limit) { described_class::MAXIMUM_GRADE_CHARACTERS }
 
-      it 'adds an error message' do
-        wizard_step.minimum_grade_required = 'A' * (character_limit + excess_characters)
+      it "adds an error message" do
+        wizard_step.minimum_grade_required = "A" * (character_limit + excess_characters)
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors[:minimum_grade_required]).to include(
-          "Grade must be #{character_limit} characters or less. You have #{excess_characters} character too many."
+          "Grade must be #{character_limit} characters or less. You have #{excess_characters} character too many.",
         )
       end
     end
 
     context 'when subject is "other_subject"' do
       before do
-        wizard_step.subject = 'other_subject'
+        wizard_step.subject = "other_subject"
       end
 
-      it 'is valid with other_subject present' do
-        wizard_step.other_subject = 'Physics'
+      it "is valid with other_subject present" do
+        wizard_step.other_subject = "Physics"
         expect(wizard_step).to be_valid
       end
 
-      it 'is not valid without other_subject' do
+      it "is not valid without other_subject" do
         wizard_step.other_subject = nil
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors.added?(:other_subject, :blank)).to be true
@@ -61,23 +61,23 @@ RSpec.describe ALevelSteps::WhatALevelIsRequired, type: :model do
     end
   end
 
-  describe '.permitted_params' do
-    it 'returns the correct permitted params' do
+  describe ".permitted_params" do
+    it "returns the correct permitted params" do
       expect(described_class.permitted_params).to eq(%i[uuid subject other_subject minimum_grade_required])
     end
   end
 
-  describe '#subjects_list' do
-    it 'returns a list of subjects' do
+  describe "#subjects_list" do
+    it "returns a list of subjects" do
       expect(wizard_step.subjects_list).to be_an(Array)
       expect(wizard_step.subjects_list.first).to be_an(Struct)
-      expect(wizard_step.subjects_list.first.name).to eq('Accounting')
-      expect(wizard_step.subjects_list.last.name).to eq('World Development')
+      expect(wizard_step.subjects_list.first.name).to eq("Accounting")
+      expect(wizard_step.subjects_list.last.name).to eq("World Development")
     end
   end
 
-  describe '#next_step' do
-    it 'returns the add a level to the list page' do
+  describe "#next_step" do
+    it "returns the add a level to the list page" do
       expect(wizard_step.next_step).to be :add_a_level_to_a_list
     end
   end

@@ -25,7 +25,7 @@ module Courses
       ::Courses::SchoolDistancesQuery.new(courses: [course], latitude:, longitude:).call
     end
 
-    GOOGLE_MAPS_BASE_URL = 'https://www.google.com/maps/dir/'
+    GOOGLE_MAPS_BASE_URL = "https://www.google.com/maps/dir/"
 
     def google_maps_direction_path(school_latitude:, school_longitude:)
       start_point = "#{@latitude},#{@longitude}"

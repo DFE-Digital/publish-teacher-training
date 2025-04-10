@@ -10,7 +10,7 @@
     model: @school_search_form,
     url: search_support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, @provider.id),
     method: :post,
-    html: { data: { module: "app-schools-autocomplete" } }
+    html: { data: { module: "app-schools-autocomplete" } },
   ) do |f| %>
 
     <div class="govuk-grid-column-full">

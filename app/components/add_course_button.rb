@@ -19,18 +19,18 @@ class AddCourseButton < ViewComponent::Base
     @incomplete_sections ||= [school, accredited_provider].compact
   end
 
-  private
+private
 
   def accredited_provider
     return if accredited_partner_present?
 
-    Section.new(text: t('components.add_course_button.add_accredited_provider'), path: publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle_year))
+    Section.new(text: t("components.add_course_button.add_accredited_provider"), path: publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle_year))
   end
 
   def school
     return if school_present?
 
-    Section.new(text: t('components.add_course_button.add_school'), path: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year))
+    Section.new(text: t("components.add_course_button.add_school"), path: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year))
   end
 
   def accredited_partner_present?

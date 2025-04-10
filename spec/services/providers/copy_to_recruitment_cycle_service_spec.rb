@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Providers::CopyToRecruitmentCycleService do
-  describe '#execute' do
+  describe "#execute" do
     let(:site) { build(:site, :school) }
     let(:study_site) { build(:site, :study_site) }
     let(:published_course_enrichment) { build(:course_enrichment, :published) }
@@ -16,7 +16,7 @@ describe Providers::CopyToRecruitmentCycleService do
         build(:contact, :utt_type),
         build(:contact, :web_link_type),
         build(:contact, :finance_type),
-        build(:contact, :fraud_type)
+        build(:contact, :fraud_type),
       ]
     end
     let(:provider) do
@@ -31,7 +31,7 @@ describe Providers::CopyToRecruitmentCycleService do
     let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
     let(:new_provider) do
       new_recruitment_cycle.reload.providers.find_by(
-        provider_code: provider.provider_code
+        provider_code: provider.provider_code,
       )
     end
     let(:mocked_copy_course_service) { double(execute: nil) }
@@ -40,7 +40,7 @@ describe Providers::CopyToRecruitmentCycleService do
       described_class.new(
         copy_course_to_provider_service: mocked_copy_course_service,
         copy_site_to_provider_service: mocked_copy_site_service,
-        force:
+        force:,
       )
     end
     let(:force) { false }
@@ -49,11 +49,11 @@ describe Providers::CopyToRecruitmentCycleService do
       course
     end
 
-    it 'makes a copy of the provider in the new recruitment cycle' do
+    it "makes a copy of the provider in the new recruitment cycle" do
       expect(
         new_recruitment_cycle.providers.find_by(
-          provider_code: provider.provider_code
-        )
+          provider_code: provider.provider_code,
+        ),
       ).to be_nil
 
       service.execute(provider:, new_recruitment_cycle:)
@@ -62,25 +62,25 @@ describe Providers::CopyToRecruitmentCycleService do
       expect(new_provider).not_to eq provider
     end
 
-    it 'leaves the existing provider alone' do
+    it "leaves the existing provider alone" do
       service.execute(provider:, new_recruitment_cycle:)
 
       expect(recruitment_cycle.reload.providers).to eq [provider]
     end
 
-    context 'an error occurs when copying the course' do
-      it 'logs a useful message to the provided logger' do
-        allow(mocked_copy_course_service).to receive(:execute).and_raise(StandardError.new('Nope'))
+    context "an error occurs when copying the course" do
+      it "logs a useful message to the provided logger" do
+        allow(mocked_copy_course_service).to receive(:execute).and_raise(StandardError.new("Nope"))
 
         expect(Rails.logger).to receive(:fatal).with("error trying to copy course #{course.course_code}")
 
-        expect do
+        expect {
           service.execute(provider:, new_recruitment_cycle:)
-        end.to raise_error(StandardError)
+        }.to raise_error(StandardError)
       end
     end
 
-    context 'the provider already exists in the new recruitment cycle' do
+    context "the provider already exists in the new recruitment cycle" do
       let(:old_recruitment_cycle) { create(:recruitment_cycle, :previous) }
       let(:new_provider) do
         create(:provider, recruitment_cycle: old_recruitment_cycle, provider_code: provider.provider_code)
@@ -90,37 +90,37 @@ describe Providers::CopyToRecruitmentCycleService do
                providers: [new_provider])
       end
 
-      it 'does not make a copy of the provider' do
+      it "does not make a copy of the provider" do
         expect { service.execute(provider:, new_recruitment_cycle:) }
           .not_to(change { new_recruitment_cycle.reload.providers.count })
       end
 
-      it 'copies over the sites' do
+      it "copies over the sites" do
         service.execute(provider:, new_recruitment_cycle:)
 
         expect(mocked_copy_site_service).to have_received(:execute).with(site:, new_provider:)
       end
 
-      it 'copies over the courses' do
+      it "copies over the courses" do
         service.execute(provider:, new_recruitment_cycle:)
 
         expect(mocked_copy_course_service).to have_received(:execute).with(course:, new_provider:)
       end
     end
 
-    it 'assigns the new provider to organisation' do
+    it "assigns the new provider to organisation" do
       service.execute(provider:, new_recruitment_cycle:)
 
       expect(new_provider.organisation).to eq provider.organisation
     end
 
-    it 'assigns the new provider to users' do
+    it "assigns the new provider to users" do
       service.execute(provider:, new_recruitment_cycle:)
 
       expect(new_provider.users).to eq provider.users
     end
 
-    it 'copies over the ucas_preferences' do
+    it "copies over the ucas_preferences" do
       service.execute(provider:, new_recruitment_cycle:)
 
       compare_attrs = %w[
@@ -133,7 +133,7 @@ describe Providers::CopyToRecruitmentCycleService do
         .to eq provider.ucas_preferences.attributes.slice(compare_attrs)
     end
 
-    it 'copies over the contacts' do
+    it "copies over the contacts" do
       service.execute(provider:, new_recruitment_cycle:)
 
       compare_attrs = %w[name email telephone]
@@ -141,19 +141,19 @@ describe Providers::CopyToRecruitmentCycleService do
         .to eq(provider.contacts.map { |c| c.attributes.slice(compare_attrs) })
     end
 
-    it 'copies over the sites' do
+    it "copies over the sites" do
       service.execute(provider:, new_recruitment_cycle:)
 
       expect(mocked_copy_site_service).to have_received(:execute).with(site:, new_provider:)
     end
 
-    it 'copies over the courses' do
+    it "copies over the courses" do
       service.execute(provider:, new_recruitment_cycle:)
 
       expect(mocked_copy_course_service).to have_received(:execute).with(course:, new_provider:)
     end
 
-    it 'returns a hash of the counts of copied objects' do
+    it "returns a hash of the counts of copied objects" do
       allow(mocked_copy_course_service).to receive(:execute).and_return(double)
       allow(mocked_copy_site_service).to receive(:execute).and_return(double)
 
@@ -163,11 +163,11 @@ describe Providers::CopyToRecruitmentCycleService do
         providers: 1,
         sites: 1,
         study_sites: 1,
-        courses: 1
+        courses: 1,
       )
     end
 
-    context 'provider is not rollable?' do
+    context "provider is not rollable?" do
       let(:provider) do
         create(:provider,
                :with_users,
@@ -178,17 +178,17 @@ describe Providers::CopyToRecruitmentCycleService do
       let(:draft_course_enrichment) { build(:course_enrichment) }
       let(:course_enrichments) { [draft_course_enrichment] }
 
-      it 'is not rollable' do
+      it "is not rollable" do
         expect(provider).not_to be_rollable
       end
 
-      it 'courses is not rollable' do
+      it "courses is not rollable" do
         provider.courses.each do |course|
           expect(course).not_to be_rollable
         end
       end
 
-      context 'with force as true' do
+      context "with force as true" do
         subject do
           service.execute(provider:, new_recruitment_cycle:, course_codes:)
         end
@@ -196,63 +196,63 @@ describe Providers::CopyToRecruitmentCycleService do
         let(:force) { true }
         let(:course_codes) { nil }
 
-        it 'still copies the provider' do
-          expect do
+        it "still copies the provider" do
+          expect {
             subject
-          end.to(change { new_recruitment_cycle.providers.count })
+          }.to(change { new_recruitment_cycle.providers.count })
         end
 
-        it 'does not copies the courses' do
+        it "does not copies the courses" do
           subject
 
           expect(mocked_copy_course_service).not_to have_received(:execute).with(course:, new_provider:)
         end
 
-        it 'logs info message' do
-          expect(Rails.logger).to receive(:info).with('no courses will be roll overed')
+        it "logs info message" do
+          expect(Rails.logger).to receive(:info).with("no courses will be roll overed")
 
           subject
         end
 
-        context 'with course_codes as empty array' do
+        context "with course_codes as empty array" do
           let(:course_codes) { [] }
 
-          it 'still copies the provider' do
-            expect do
+          it "still copies the provider" do
+            expect {
               subject
-            end.to(change { new_recruitment_cycle.providers.count })
+            }.to(change { new_recruitment_cycle.providers.count })
           end
 
-          it 'does not copies the courses' do
+          it "does not copies the courses" do
             subject
 
             expect(mocked_copy_course_service).not_to have_received(:execute)
           end
         end
 
-        context 'with specified course_codes' do
+        context "with specified course_codes" do
           let(:course_codes) { [course.course_code] }
 
-          it 'still copies the provider' do
-            expect do
+          it "still copies the provider" do
+            expect {
               subject
-            end.to(change { new_recruitment_cycle.providers.count })
+            }.to(change { new_recruitment_cycle.providers.count })
           end
 
-          it 'still copies the courses' do
+          it "still copies the courses" do
             subject
 
             expect(mocked_copy_course_service).to have_received(:execute).with(course:, new_provider:)
           end
         end
 
-        context 'with unknown specified course_codes' do
-          let(:course_codes) { ['B05S'] }
+        context "with unknown specified course_codes" do
+          let(:course_codes) { %w[B05S] }
 
-          it 'errors out with correct message' do
-            expect do
+          it "errors out with correct message" do
+            expect {
               subject
-            end.to raise_error('Error: discrepancy between courses found and provided course codes (0 vs 1)')
+            }.to raise_error("Error: discrepancy between courses found and provided course codes (0 vs 1)")
           end
         end
       end

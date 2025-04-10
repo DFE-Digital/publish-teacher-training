@@ -7,20 +7,20 @@ module Publish
         details_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
           course.recruitment_cycle_year,
-          course.course_code
+          course.course_code,
         )
       elsif previously_tda_course?
         full_part_time_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
           course.recruitment_cycle_year,
           course.course_code,
-          previous_tda_course: true
+          previous_tda_course: true,
         )
       else
         funding_type_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
           course.recruitment_cycle_year,
-          course.course_code
+          course.course_code,
         )
       end
     end
@@ -31,14 +31,14 @@ module Publish
           course.provider_code,
           course.recruitment_cycle_year,
           course.course_code,
-          previous_tda_course: true
+          previous_tda_course: true,
         )
       else
 
         details_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
           course.recruitment_cycle_year,
-          course.course_code
+          course.course_code,
         )
 
       end
@@ -48,10 +48,10 @@ module Publish
       publish_back_link_for_adding_provider_partnership_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
     end
 
-    private
+  private
 
     def previously_tda_course?
-      params[:previous_tda_course] == 'true'
+      params[:previous_tda_course] == "true"
     end
 
     def previously_basic_details?

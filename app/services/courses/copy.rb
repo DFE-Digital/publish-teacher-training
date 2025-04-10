@@ -3,47 +3,47 @@
 module Courses
   class Copy
     GCSE_FIELDS = [
-      ['Accept pending GCSE', 'accept_pending_gcse', 'accept-pending-gcse-true'],
-      ['Accept GCSE equivalency', 'accept_gcse_equivalency', 'accept-gcse-equivalency-true'],
-      ['Accept English GCSE equivalency', 'accept_english_gcse_equivalency', 'accept-english-gcse-equivalency-english'],
-      ['Accept Maths GCSE equivalency', 'accept_maths_gcse_equivalency', 'accept-maths-gcse-equivalency-maths'],
-      ['Additional GCSE equivalencies', 'additional_gcse_equivalencies', 'additional-gcse-equivalencies']
+      ["Accept pending GCSE", "accept_pending_gcse", "accept-pending-gcse-true"],
+      ["Accept GCSE equivalency", "accept_gcse_equivalency", "accept-gcse-equivalency-true"],
+      ["Accept English GCSE equivalency", "accept_english_gcse_equivalency", "accept-english-gcse-equivalency-english"],
+      ["Accept Maths GCSE equivalency", "accept_maths_gcse_equivalency", "accept-maths-gcse-equivalency-maths"],
+      ["Additional GCSE equivalencies", "additional_gcse_equivalencies", "additional-gcse-equivalencies"],
     ].freeze
 
     SUBJECT_REQUIREMENTS_FIELDS = [
-      ['Additional degree subject requirements', 'additional_degree_subject_requirements'],
-      ['Degree subject requirements', 'degree_subject_requirements']
+      ["Additional degree subject requirements", "additional_degree_subject_requirements"],
+      ["Degree subject requirements", "degree_subject_requirements"],
     ].freeze
 
     ABOUT_THIS_COURSE_FIELDS = [
-      ['About this course', 'about_course']
+      ["About this course", "about_course"],
     ].freeze
 
     INTERVIEW_PROCESS_FIELDS = [
-      ['Interview process', 'interview_process']
+      ["Interview process", "interview_process"],
     ].freeze
 
     SCHOOL_PLACEMENTS_FIELDS = [
-      ['How placements work', 'how_school_placements_work']
+      ["How placements work", "how_school_placements_work"],
     ].freeze
 
     FEES_FINANCIAL_SUPPORT_FIELDS = [
-      ['Fees and financial support', 'fee_details']
+      ["Fees and financial support", "fee_details"],
     ].freeze
 
     FEES_FIELDS = [
-      ['Fee for UK students', 'fee_uk_eu'],
-      ['Fee for international students', 'fee_international']
+      ["Fee for UK students", "fee_uk_eu"],
+      ["Fee for international students", "fee_international"],
     ].freeze
 
     SALARY_FIELDS = [
-      ['Salary details', 'salary_details']
+      ["Salary details", "salary_details"],
     ].freeze
 
     # TODO: This is to be utilised when we add these to a course form
     VISA_FIELDS = [
-      ['Can sponsor skilled worker visa', 'can_sponsor_skilled_worker_visa'],
-      ['Can sponsor student visa', 'can_sponsor_student_visa']
+      ["Can sponsor skilled worker visa", "can_sponsor_skilled_worker_visa"],
+      ["Can sponsor student visa", "can_sponsor_student_visa"],
     ].freeze
 
     def self.get_present_fields_in_source_course(fields, source_course, course)

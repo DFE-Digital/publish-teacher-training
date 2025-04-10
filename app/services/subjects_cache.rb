@@ -8,8 +8,8 @@ class SubjectsCache
   end
 
   def primary_subjects
-    Rails.cache.fetch('subjects:primary', expires_in: expires_in) do
-      Subject.where(type: 'PrimarySubject').order(:subject_name).to_a
+    Rails.cache.fetch("subjects:primary", expires_in: expires_in) do
+      Subject.where(type: "PrimarySubject").order(:subject_name).to_a
     end
   end
 
@@ -22,16 +22,16 @@ class SubjectsCache
   end
 
   def secondary_subjects
-    Rails.cache.fetch('subjects:secondary', expires_in: expires_in) do
+    Rails.cache.fetch("subjects:secondary", expires_in: expires_in) do
       Subject.where(type: %w[SecondarySubject ModernLanguagesSubject])
-             .where.not(subject_name: ['Modern Languages'])
+             .where.not(subject_name: ["Modern Languages"])
              .order(:subject_name).to_a
     end
   end
 
   def all_subjects
-    Rails.cache.fetch('subjects:all', expires_in: expires_in) do
-      Subject.active.where.not(subject_name: ['Modern Languages']).map do |subject|
+    Rails.cache.fetch("subjects:all", expires_in: expires_in) do
+      Subject.active.where.not(subject_name: ["Modern Languages"]).map do |subject|
         SubjectSuggestion.new(name: subject.subject_name, value: subject.subject_code)
       end
     end

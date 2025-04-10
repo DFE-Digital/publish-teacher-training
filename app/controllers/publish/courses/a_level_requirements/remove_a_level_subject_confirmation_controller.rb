@@ -11,7 +11,7 @@ module Publish
             current_step:,
             provider: @provider,
             course: @course,
-            step_params:
+            step_params:,
           )
 
           if @wizard.valid_step?
