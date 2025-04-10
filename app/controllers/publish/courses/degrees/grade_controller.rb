@@ -19,7 +19,7 @@ module Publish
 
           if course.is_primary? && @grade_form.valid? && !goto_preview?
             @grade_form.save(course)
-            course_updated_message('Minimum degree classification')
+            course_updated_message("Minimum degree classification")
 
             redirect_to publish_provider_recruitment_cycle_course_path
 
@@ -38,7 +38,7 @@ module Publish
           end
         end
 
-        private
+      private
 
         def course
           @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))

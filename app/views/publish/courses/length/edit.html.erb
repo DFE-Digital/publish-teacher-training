@@ -1,7 +1,7 @@
 <% content_for :page_title,
                title_with_error_prefix(
                  t("publish.providers.course_length.edit.page_title", course_name_and_code: @course.name_and_code),
-                 @course_length_form.errors.any?
+                 @course_length_form.errors.any?,
                ) %>
 
 <div class="govuk-grid-row">
@@ -13,7 +13,7 @@
                                                                      @course.course_code),
           data: { qa: "enrichment-form", module: "form-check-leave" },
           method: :patch,
-          local: true
+          local: true,
         ) do |f| %>
 
       <% content_for :before_content do %>
@@ -23,8 +23,8 @@
                 params:,
                 provider_code: @provider.provider_code,
                 recruitment_cycle_year: @course.recruitment_cycle_year,
-                course_code: @course.course_code
-              )
+                course_code: @course.course_code,
+              ),
             ) %>
       <% end %>
 

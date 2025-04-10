@@ -24,12 +24,12 @@ module Publish
       def update
         @course_school_placements_form = CourseSchoolPlacementsForm.new(
           course_enrichment,
-          params: school_placements_params
+          params: school_placements_params,
         )
 
         if @course_school_placements_form.valid?
           @course_school_placements_form.save!
-          course_updated_message(CourseEnrichment.human_attribute_name('how_school_placements_work')) unless goto_preview?
+          course_updated_message(CourseEnrichment.human_attribute_name("how_school_placements_work")) unless goto_preview?
 
           redirect_to preview_or_course_description
         else
@@ -38,7 +38,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def course_to_authorise
         @course_to_authorise ||= provider.courses.find_by!(course_code: params[:code])
@@ -73,13 +73,13 @@ module Publish
           preview_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
         else
           publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
+            course.course_code,
           )
 
         end

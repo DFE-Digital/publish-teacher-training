@@ -51,7 +51,7 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
-  config.authentication_token = 'bats'
+  config.authentication_token = "bats"
 
   # Check for N+1 queries
   config.after_initialize do

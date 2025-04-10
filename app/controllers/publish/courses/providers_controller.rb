@@ -9,7 +9,7 @@ module Publish
 
       def show; end
 
-      private
+    private
 
       def build_course
         super

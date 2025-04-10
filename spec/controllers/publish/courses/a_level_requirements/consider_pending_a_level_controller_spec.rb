@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Publish
   module Courses
     module ALevelRequirements
       describe ConsiderPendingALevelController do
-        it_behaves_like 'an A level requirements controller'
+        it_behaves_like "an A level requirements controller"
       end
     end
   end

@@ -8,9 +8,9 @@ module Support
 
     def index
       @previews = case params[:namespace]
-                  when 'find'
+                  when "find"
                     find_component_previews
-                  when 'publish'
+                  when "publish"
                     publish_component_previews
                   else
                     shared_component_previews
@@ -41,18 +41,18 @@ module Support
       end
     end
 
-    private
+  private
 
     def shared_component_previews
-      @shared_component_previews ||= ViewComponent::Preview.all.reject { |preview| preview.name.deconstantize.split('::')[0].in?(%w[Find Publish]) }
+      @shared_component_previews ||= ViewComponent::Preview.all.reject { |preview| preview.name.deconstantize.split("::")[0].in?(%w[Find Publish]) }
     end
 
     def find_component_previews
-      @find_component_previews ||= ViewComponent::Preview.all.filter { |preview| preview.name.deconstantize.split('::')[0] == 'Find' }
+      @find_component_previews ||= ViewComponent::Preview.all.filter { |preview| preview.name.deconstantize.split("::")[0] == "Find" }
     end
 
     def publish_component_previews
-      @publish_component_previews ||= ViewComponent::Preview.all.filter { |preview| preview.name.deconstantize.split('::')[0] == 'Publish' }
+      @publish_component_previews ||= ViewComponent::Preview.all.filter { |preview| preview.name.deconstantize.split("::")[0] == "Publish" }
     end
   end
 end

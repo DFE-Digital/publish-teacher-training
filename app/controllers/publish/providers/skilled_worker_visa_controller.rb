@@ -15,18 +15,18 @@ module Publish
         @provider_skilled_worker_visa_form = ProviderSkilledWorkerVisaForm.new(provider, params: provider_skilled_worker_visa_params)
 
         if @provider_skilled_worker_visa_form.save!
-          flash[:success] = I18n.t('success.visa_changes')
+          flash[:success] = I18n.t("success.visa_changes")
 
           redirect_to details_publish_provider_recruitment_cycle_path(
             provider.provider_code,
-            recruitment_cycle.year
+            recruitment_cycle.year,
           )
         else
           render :edit
         end
       end
 
-      private
+    private
 
       def provider_skilled_worker_visa_params
         return { can_sponsor_skilled_worker_visa: nil } if params[:publish_provider_skilled_worker_visa_form].blank?

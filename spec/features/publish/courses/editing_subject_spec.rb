@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
+feature "updating a subject", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'updating primary subject' do
+  scenario "updating primary subject" do
     and_there_is_a_primary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
-    when_i_select_a_primary_subject('Primary with English')
+    when_i_select_a_primary_subject("Primary with English")
     and_i_click_continue
     then_i_am_met_with_course_details_page
     and_i_should_see_subject_updated_success_message
   end
 
-  scenario 'updating secondary subject' do
+  scenario "updating secondary subject" do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_master_subject(:business_studies)
@@ -25,11 +25,11 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     and_i_should_see_subject_updated_success_message
   end
 
-  scenario 'updating a course with two secondary subjects' do
+  scenario "updating a course with two secondary subjects" do
     and_there_is_a_secondary_course_i_want_to_edit
     and_the_course_has_two_subjects
     when_i_visit_the_edit_course_subject_page
-    then_i_should_see_populated_selects('Drama', 'Latin')
+    then_i_should_see_populated_selects("Drama", "Latin")
     when_i_select_a_master_subject(:latin)
     when_i_select_a_subordinate_subject(:business_studies)
     and_i_click_continue
@@ -38,7 +38,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     and_i_see_the_subjects_on_the_details_page
   end
 
-  scenario 'updating secondary subject modern languages' do
+  scenario "updating secondary subject modern languages" do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_master_subject(:modern_languages)
@@ -46,17 +46,17 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     then_i_am_met_with_the_modern_languages_page
   end
 
-  scenario 'updating secondary subject modern languages with multiple languages' do
+  scenario "updating secondary subject modern languages with multiple languages" do
     and_there_is_a_secondary_course_i_want_to_edit
     and_the_course_has_two_languages
     when_i_visit_the_edit_course_subject_page
-    then_i_should_see_populated_selects('Drama', 'Modern Languages')
+    then_i_should_see_populated_selects("Drama", "Modern Languages")
     when_i_select_a_master_subject(:business_studies)
     and_i_click_continue
     then_i_am_met_with_the_modern_languages_page(:business_studies)
   end
 
-  scenario 'updating to no subjects' do
+  scenario "updating to no subjects" do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_blank_subject
@@ -64,17 +64,17 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     then_i_am_met_with_an_error
   end
 
-  private
+private
 
   def and_i_should_see_subjects_updated_success_message
-    within '.govuk-notification-banner' do
-      expect(page).to have_content(I18n.t('success.saved', value: 'Subjects'))
+    within ".govuk-notification-banner" do
+      expect(page).to have_content(I18n.t("success.saved", value: "Subjects"))
     end
   end
 
   def and_i_should_see_subject_updated_success_message
-    within '.govuk-notification-banner' do
-      expect(page).to have_content(I18n.t('success.saved', value: 'Subject'))
+    within ".govuk-notification-banner" do
+      expect(page).to have_content(I18n.t("success.saved", value: "Subject"))
     end
   end
 
@@ -98,8 +98,8 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_populated_selects(master_name, subordinate_name = nil)
-    expect(publish_courses_subjects_edit_page.master_subject_fields.find('option[selected]')).to have_text(master_name)
-    expect(publish_courses_subjects_edit_page.subordinate_subjects_fields.find('option[selected]')).to have_text(subordinate_name) if subordinate_name.present?
+    expect(publish_courses_subjects_edit_page.master_subject_fields.find("option[selected]")).to have_text(master_name)
+    expect(publish_courses_subjects_edit_page.subordinate_subjects_fields.find("option[selected]")).to have_text(subordinate_name) if subordinate_name.present?
   end
 
   def and_there_is_a_primary_course_i_want_to_edit
@@ -123,7 +123,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_select_a_blank_subject
-    publish_courses_new_subjects_page.master_subject_fields.select('').click
+    publish_courses_new_subjects_page.master_subject_fields.select("").click
   end
 
   def and_i_click_continue
@@ -131,7 +131,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_see_the_subjects_on_the_details_page
-    expect(page.find('[data-qa="course__subjects"]')).to have_content('LatinBusiness studies')
+    expect(page.find('[data-qa="course__subjects"]')).to have_content("LatinBusiness studies")
   end
 
   def provider
@@ -152,15 +152,15 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
         "/publish/organisations/#{provider.provider_code}/",
         "#{Settings.current_recruitment_cycle_year}/",
         "courses/#{course.course_code}/modern-languages?",
-        params_with_subject(extra_subject).to_s
-      ].join
+        params_with_subject(extra_subject).to_s,
+      ].join,
     )
-    expect(page).to have_content('Languages')
+    expect(page).to have_content("Languages")
   end
 
   def then_i_am_met_with_an_error
-    within('.govuk-error-summary') do
-      expect(page).to have_content('Select a subject')
+    within(".govuk-error-summary") do
+      expect(page).to have_content("Select a subject")
     end
   end
 
@@ -180,7 +180,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
   def params_with_subject(other = nil)
     course_subject = course_subject(:modern_languages)
     other_subject = course_subject(other)
-    param = ''
+    param = ""
     param += "course%5Bsubjects_ids%5D%5B%5D=#{other_subject.id}&" if other
     param += "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
     param

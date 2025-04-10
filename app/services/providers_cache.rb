@@ -8,7 +8,7 @@ class ProvidersCache
   end
 
   def providers_list
-    Rails.cache.fetch('providers:list', expires_in: expires_in) do
+    Rails.cache.fetch("providers:list", expires_in: expires_in) do
       RecruitmentCycle.current.providers
                       .by_name_ascending
                       .select(:id, :provider_name, :provider_code)
@@ -17,7 +17,7 @@ class ProvidersCache
           id: provider.id,
           name: provider.name_and_code,
           code: provider.provider_code,
-          value: provider.provider_code
+          value: provider.provider_code,
         )
       end
     end

@@ -7,14 +7,14 @@ module Publish
       decorates_assigned :course
 
       def edit
-        form_object.valid? if params[:display_errors] == 'true'
+        form_object.valid? if params[:display_errors] == "true"
 
         render locals: { form_object: }
       end
 
       def update
         if form_object.valid?
-          course_updated_message('Age range')
+          course_updated_message("Age range")
 
           update_age_range_param
 
@@ -23,8 +23,8 @@ module Publish
               details_publish_provider_recruitment_cycle_course_path(
                 @course.provider_code,
                 @course.recruitment_cycle_year,
-                @course.course_code
-              )
+                @course.course_code,
+              ),
             )
           end
         else
@@ -32,7 +32,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def form_object
         @form_object ||= AgeRangeForm.new(@course, params: permitted_params)
@@ -42,7 +42,7 @@ module Publish
         if params[:course]
           (params[:course] || ActionController::Parameters.new).permit(:age_range_in_years, :course_age_range_in_years_other_from, :course_age_range_in_years_other_to)
         else
-          @course.attributes.slice('age_range_in_years', 'course_age_range_in_years_other_from', 'course_age_range_in_years_other_to')
+          @course.attributes.slice("age_range_in_years", "course_age_range_in_years_other_from", "course_age_range_in_years_other_to")
         end
       end
 
@@ -71,7 +71,7 @@ module Publish
       end
 
       def age_range_is_other?
-        age_range_param == 'other'
+        age_range_param == "other"
       end
 
       def course_param

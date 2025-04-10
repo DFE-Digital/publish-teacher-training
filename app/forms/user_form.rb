@@ -25,9 +25,9 @@ class UserForm < Form
     model.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
   end
 
-  private
+private
 
   def email_unique_for_provider
-    errors.add(:email, 'Email address already in use') if @provider&.users&.exists?(email:)
+    errors.add(:email, "Email address already in use") if @provider&.users&.exists?(email:)
   end
 end

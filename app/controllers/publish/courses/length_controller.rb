@@ -15,7 +15,7 @@ module Publish
         @course_length_form = CourseLengthForm.new(course_enrichment, params: length_params)
 
         if @course_length_form.save!
-          course_updated_message I18n.t('publish.providers.course_length.edit.course_length')
+          course_updated_message I18n.t("publish.providers.course_length.edit.course_length")
 
           redirect_to redirect_path
         else
@@ -23,7 +23,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def length_params
         params.expect(publish_course_length_form: [*CourseLengthForm::FIELDS])
@@ -47,7 +47,7 @@ module Publish
         publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           recruitment_cycle.year,
-          course.course_code
+          course.course_code,
         )
       end
     end

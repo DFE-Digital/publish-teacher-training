@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Find
-  describe '/results' do
+  describe "/results" do
     before do
-      host! 'www.find-example.com'
+      host! "www.find-example.com"
     end
 
-    context 'when page parameter is invalid' do
+    context "when page parameter is invalid" do
       before do
-        get '/results', params: { page: 'some-site-.co.uk' }
+        get "/results", params: { page: "some-site-.co.uk" }
       end
 
-      it 'responds successfully' do
+      it "responds successfully" do
         expect(response).to have_http_status(:ok)
       end
     end

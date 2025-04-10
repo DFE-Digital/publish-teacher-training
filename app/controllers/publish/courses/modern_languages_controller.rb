@@ -15,10 +15,6 @@ module Publish
         redirect_to next_step
       end
 
-      def continue
-        super
-      end
-
       def edit
         authorize(provider)
 
@@ -28,8 +24,8 @@ module Publish
           details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code
-          )
+            @course.course_code,
+          ),
         )
       end
 
@@ -37,13 +33,13 @@ module Publish
         authorize(provider)
 
         if course_subjects_form.save!
-          course_updated_message('Subjects')
+          course_updated_message("Subjects")
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
-              @course.course_code
-            )
+              @course.course_code,
+            ),
           )
         else
           @errors = @course.errors.messages
@@ -64,7 +60,7 @@ module Publish
         :modern_languages
       end
 
-      private
+    private
 
       def updated_subject_list
         @updated_subject_list ||= selected_non_language_subjects_ids.concat(selected_language_subjects_ids)

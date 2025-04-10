@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SupportTitleBar < ViewComponent::Base
-  private
+private
 
   def title
     if current_recruitment_cycle?
@@ -12,7 +12,7 @@ class SupportTitleBar < ViewComponent::Base
   end
 
   def change_cycle_link
-    govuk_link_to t('page_titles.rollover.change_cycle'), support_root_path, class: 'title-bar__link govuk-link--no-visited-state'
+    govuk_link_to t("page_titles.rollover.change_cycle"), support_root_path, class: "title-bar__link govuk-link--no-visited-state"
   end
 
   def change_items
@@ -44,6 +44,6 @@ class SupportTitleBar < ViewComponent::Base
   end
 
   def support_index_page
-    request.path == '/support'
+    request.path == "/support"
   end
 end

@@ -21,7 +21,7 @@ module Courses
       Course.transaction do
         new_course                                 = course.dup
         new_course.uuid                            = nil
-        new_course.application_status              = 'closed'
+        new_course.application_status              = "closed"
         new_course.provider                        = new_provider
         year_differential                          = new_course.recruitment_cycle.year.to_i - course.recruitment_cycle.year.to_i
         new_course.applications_open_from          = adjusted_applications_open_from_date(course, year_differential)
@@ -39,7 +39,7 @@ module Courses
       new_course.tap { @courses_copied << it }
     end
 
-    private
+  private
 
     attr_reader :sites_copy_to_course, :enrichments_copy_to_course, :force
 
@@ -48,7 +48,7 @@ module Courses
     end
 
     def copy_latest_enrichment_to_course(course, new_course)
-      course.enrichments << CourseEnrichment.new(course:, status: 'draft') if course.enrichments.blank?
+      course.enrichments << CourseEnrichment.new(course:, status: "draft") if course.enrichments.blank?
 
       last_enrichment = course.enrichments.most_recent.first
 

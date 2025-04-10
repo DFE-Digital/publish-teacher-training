@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'unpublished course without accredited provider', { can_edit_current_and_next_cycles: false } do
-  scenario 'adding and changing an accredited provider' do
+feature "unpublished course without accredited provider", { can_edit_current_and_next_cycles: false } do
+  scenario "adding and changing an accredited provider" do
     given_i_am_authenticated_as_a_provider_user
     and_i_visit_the_course_details_page_of_a_course_without_an_accredited_provider
     and_i_click_the_add_accredited_provider_link
@@ -19,15 +19,15 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def given_i_click_change_accredited_provider
-    click_link_or_button 'Change accredited provider'
+    click_link_or_button "Change accredited provider"
   end
 
   def then_i_should_see_the_success_message
-    expect(page).to have_text('Accredited provider updated')
+    expect(page).to have_text("Accredited provider updated")
   end
 
   def and_i_click_update_accredited_provider
-    click_link_or_button 'Update accredited provider'
+    click_link_or_button "Update accredited provider"
   end
 
   def and_i_choose_the_new_accredited_provider
@@ -36,7 +36,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def when_i_click_select_an_accredited_provider
-    click_link_or_button 'Select an accredited provider'
+    click_link_or_button "Select an accredited provider"
   end
 
   def and_i_create_a_new_accredited_partnership
@@ -54,12 +54,12 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def and_i_input_some_information
-    fill_in 'About the accredited provider', with: 'This is a description'
+    fill_in "About the accredited provider", with: "This is a description"
     click_continue
   end
 
   def and_there_is_an_accredited_provider_in_the_database
-    @accredited_provider = create(:provider, :accredited_provider, provider_name: 'UCL')
+    @accredited_provider = create(:provider, :accredited_provider, provider_name: "UCL")
   end
 
   def and_i_search_for_an_accredited_provider_with_a_valid_query
@@ -68,23 +68,23 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def click_continue
-    click_link_or_button 'Continue'
+    click_link_or_button "Continue"
   end
 
   def form_title
-    'Enter a provider name, UKPRN or postcode'
+    "Enter a provider name, UKPRN or postcode"
   end
 
   def and_i_click_the_add_accredited_provider_link
-    click_link_or_button 'Add at least one accredited provider'
+    click_link_or_button "Add at least one accredited provider"
   end
 
   def and_i_click_add_accredited_provider_link
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button "Add accredited provider"
   end
 
   def and_i_click_add_accredited_provider_button
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button "Add accredited provider"
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -92,15 +92,15 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
       user: create(
         :user,
         providers: [
-          create(:provider, sites: [build(:site)], courses: [build(:course)])
-        ]
-      )
+          create(:provider, sites: [build(:site)], courses: [build(:course)]),
+        ],
+      ),
     )
   end
 
   def and_i_visit_the_course_details_page_of_a_course_without_an_accredited_provider
     publish_provider_courses_details_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 

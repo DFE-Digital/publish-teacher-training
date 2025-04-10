@@ -11,10 +11,10 @@ module Find
       end
 
       def border_css_class
-        @border ? '' : 'no-border'
+        @border ? "" : "no-border"
       end
 
-      private
+    private
 
       attr_reader :rows, :ignore_editable
 
@@ -32,7 +32,7 @@ module Find
         row_hash.map do |key, value|
           {
             key:,
-            value:
+            value:,
           }
         end
       end

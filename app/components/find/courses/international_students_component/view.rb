@@ -21,9 +21,9 @@ module Find
 
         def right_required
           if course.salaried?
-            'right to work'
+            "right to work"
           else
-            'right to study'
+            "right to study"
           end
         end
 
@@ -41,11 +41,11 @@ module Find
 
         def visa_sponsorship_summary
           if !salaried? && can_sponsor_student_visa
-            t('.student_visas_can_be_sponsored')
+            t(".student_visas_can_be_sponsored")
           elsif salaried? && can_sponsor_skilled_worker_visa
-            t('.skilled_worker_visas_can_be_sponsored')
+            t(".skilled_worker_visas_can_be_sponsored")
           else
-            t('.visas_cannot_be_sponsored')
+            t(".visas_cannot_be_sponsored")
           end
         end
       end

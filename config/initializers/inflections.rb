@@ -18,14 +18,14 @@
 # end
 
 ActiveSupport::Inflector.inflections do |inflect|
-  inflect.acronym 'API'
-  inflect.acronym 'CSV'
-  inflect.acronym 'URN'
-  inflect.acronym 'PGDE'
-  inflect.acronym 'UCAS'
-  inflect.acronym 'MFL' # Modern foreign languages
-  inflect.acronym 'DFE' # Department for Education
-  inflect.acronym 'DfE' # Department for Education
-  inflect.acronym 'SCITT' # School-Centred Initial Teacher Training
-  inflect.acronym 'QA'
+  inflect.acronym "API"
+  inflect.acronym "CSV"
+  inflect.acronym "URN"
+  inflect.acronym "PGDE"
+  inflect.acronym "UCAS"
+  inflect.acronym "MFL" # Modern foreign languages
+  inflect.acronym "DFE" # Department for Education
+  inflect.acronym "DfE" # Department for Education
+  inflect.acronym "SCITT" # School-Centred Initial Teacher Training
+  inflect.acronym "QA"
 end

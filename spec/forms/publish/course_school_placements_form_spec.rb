@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Publish::CourseSchoolPlacementsForm, type: :model do
-  describe 'validations' do
-    it 'validates length' do
+  describe "validations" do
+    it "validates length" do
       course = create(:course)
       enrichment = course.enrichments.find_or_initialize_draft
       valid_input = Faker::Lorem.sentence(word_count: 349)
@@ -14,7 +14,7 @@ describe Publish::CourseSchoolPlacementsForm, type: :model do
       expect(described_class.new(enrichment, params: { how_school_placements_work: invalid_input }).valid?).to be false
     end
 
-    it 'validates presence' do
+    it "validates presence" do
       course = create(:course)
       enrichment = course.enrichments.find_or_initialize_draft
 
@@ -22,8 +22,8 @@ describe Publish::CourseSchoolPlacementsForm, type: :model do
     end
   end
 
-  describe '#save!' do
-    it 'saves with valid input' do
+  describe "#save!" do
+    it "saves with valid input" do
       course = create(:course)
       enrichment = course.enrichments.find_or_initialize_draft
       valid_input = Faker::Lorem.sentence(word_count: 349)

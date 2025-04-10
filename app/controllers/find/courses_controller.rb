@@ -15,7 +15,7 @@ module Find
       @course = provider.courses.includes(
         :enrichments,
         subjects: [:financial_incentive],
-        site_statuses: [:site]
+        site_statuses: [:site],
       ).find_by!(course_code: params[:course_code]&.upcase).decorate
 
       distance_from_location if params[:location]
@@ -28,7 +28,7 @@ module Find
       @distance_from_location ||= ::Courses::NearestSchoolQuery.new(
         courses: [@course],
         latitude: @coordinates[:latitude],
-        longitude: @coordinates[:longitude]
+        longitude: @coordinates[:longitude],
       ).call.first.distance_to_search_location.ceil
     end
 
@@ -57,7 +57,7 @@ module Find
       return if params[:search_params].blank?
 
       session[:search_params] = ActionController::Parameters.new(
-        Rack::Utils.parse_nested_query(params[:search_params])
+        Rack::Utils.parse_nested_query(params[:search_params]),
       ).permit(
         *legacy_paramater_keys,
         :visa_status,
@@ -79,13 +79,13 @@ module Find
         :radius,
         :send_courses,
         :sortby,
-        'provider.provider_name',
+        "provider.provider_name",
         c: [],
         qualification: [],
         qualifications: [], # Legacy
         study_type: [],
         subjects: [],
-        subject_codes: [] # Legacy
+        subject_codes: [], # Legacy
       )
     end
   end

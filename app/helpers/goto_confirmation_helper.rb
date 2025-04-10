@@ -6,7 +6,7 @@ module GotoConfirmationHelper
   end
 
   def goto_confirmation?(param_form_key:, params:)
-    goto_confirmation_value(param_form_key:, params:) == 'true'
+    goto_confirmation_value(param_form_key:, params:) == "true"
   end
 
   def back_link_for_onboarding_path(param_form_key:, params:, recruitment_cycle_year:)

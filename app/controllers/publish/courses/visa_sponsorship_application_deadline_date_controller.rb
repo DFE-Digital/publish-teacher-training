@@ -9,7 +9,7 @@ module Publish
         authorize(@provider, :can_create_course?)
         @deadline_form = Publish::VisaSponsorshipApplicationDeadlineDateForm.build(
           deadline_params,
-          recruitment_cycle: @provider.recruitment_cycle
+          recruitment_cycle: @provider.recruitment_cycle,
         )
       end
 
@@ -20,13 +20,13 @@ module Publish
       def errors
         @deadline_form = Publish::VisaSponsorshipApplicationDeadlineDateForm.build(
           deadline_params,
-          recruitment_cycle: @provider.recruitment_cycle
+          recruitment_cycle: @provider.recruitment_cycle,
         )
         @deadline_form.validate
         @deadline_form.errors.messages
       end
 
-      private
+    private
 
       def deadline_params
         course_params.permit(:visa_sponsorship_application_deadline_at)

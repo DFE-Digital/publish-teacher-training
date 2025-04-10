@@ -6,7 +6,7 @@
     <%= form_with(
       model: @about_form,
       url: about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
-      method: :put
+      method: :put,
     ) do |f| %>
 
       <% content_for :before_content do %>

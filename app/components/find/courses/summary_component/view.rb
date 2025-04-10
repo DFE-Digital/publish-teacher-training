@@ -44,19 +44,19 @@ module Find
 
           if financial_incentive.bursary_amount.present? && financial_incentive.scholarship.present?
             t(
-              '.fee_value.fee.hint.bursaries_and_scholarship_html',
+              ".fee_value.fee.hint.bursaries_and_scholarship_html",
               bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-              scholarship_amount: number_to_currency(financial_incentive.scholarship)
+              scholarship_amount: number_to_currency(financial_incentive.scholarship),
             )
           elsif financial_incentive.bursary_amount.present?
             t(
-              '.fee_value.fee.hint.bursaries_only_html',
-              bursary_amount: number_to_currency(financial_incentive.bursary_amount)
+              ".fee_value.fee.hint.bursaries_only_html",
+              bursary_amount: number_to_currency(financial_incentive.bursary_amount),
             )
           elsif financial_incentive.scholarship.present?
             t(
-              '.fee_value.fee.hint.scholarship_only_html',
-              scholarship_amount: number_to_currency(financial_incentive.scholarship)
+              ".fee_value.fee.hint.scholarship_only_html",
+              scholarship_amount: number_to_currency(financial_incentive.scholarship),
             )
           end
         end
@@ -75,11 +75,11 @@ module Find
 
         def visa_sponsorship_row
           if !salaried? && can_sponsor_student_visa
-            'Student visas can be sponsored'
+            "Student visas can be sponsored"
           elsif salaried? && can_sponsor_skilled_worker_visa
-            'Skilled Worker visas can be sponsored'
+            "Skilled Worker visas can be sponsored"
           else
-            'Visas cannot be sponsored'
+            "Visas cannot be sponsored"
           end
         end
 
@@ -87,14 +87,14 @@ module Find
           course.applications_open_from&.future?
         end
 
-        private
+      private
 
         def uk_fees(fee_uk = course.enrichment_attribute(:fee_uk_eu))
-          t('.fee_value.fee.uk_fees_html', value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
+          t(".fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
         end
 
         def international_fees(fee_international = course.enrichment_attribute(:fee_international))
-          t('.fee_value.fee.international_fees_html', value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
+          t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
         end
 
         def hide_fee_hint?
@@ -115,7 +115,7 @@ module Find
           @main_subject ||= Subject.find_by(id: course.master_subject_id)
         end
 
-        PHYSICS_SUBJECT = 'Physics'
+        PHYSICS_SUBJECT = "Physics"
         private_constant :PHYSICS_SUBJECT
 
         def physics?
@@ -123,20 +123,20 @@ module Find
         end
 
         LANGUAGE_SUBJECTS = [
-          'Ancient Greek',
-          'Ancient Hebrew',
-          'English',
-          'English as a second or other language',
-          'French',
-          'German',
-          'Italian',
-          'Japanese',
-          'Latin',
-          'Mandarin',
-          'Modern Languages',
-          'Modern languages (other)',
-          'Russian',
-          'Spanish'
+          "Ancient Greek",
+          "Ancient Hebrew",
+          "English",
+          "English as a second or other language",
+          "French",
+          "German",
+          "Italian",
+          "Japanese",
+          "Latin",
+          "Mandarin",
+          "Modern Languages",
+          "Modern languages (other)",
+          "Russian",
+          "Spanish",
         ].freeze
         private_constant :LANGUAGE_SUBJECTS
 

@@ -17,7 +17,7 @@ module ApplyRedirect
     redirect_to "#{Settings.apply_base_url}/candidate/apply?providerCode=#{course.provider.provider_code}&courseCode=#{course.course_code}", allow_other_host: true
   end
 
-  private
+private
 
   def course_code_param
     if find?

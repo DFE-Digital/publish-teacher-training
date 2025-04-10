@@ -33,7 +33,7 @@ module Publish
         end
       end
 
-      private
+    private
 
       def funding_type_params
         return {} if params[:publish_course_funding_form].blank?
@@ -55,7 +55,7 @@ module Publish
       end
 
       def previous_tda_course?
-        params[:publish_course_funding_form][:previous_tda_course] == 'true'
+        params[:publish_course_funding_form][:previous_tda_course] == "true"
       end
 
       def process_previous_tda_course
@@ -64,7 +64,7 @@ module Publish
           provider_code: course.provider_code,
           recruitment_cycle_year: course.recruitment_cycle_year,
           course_code: course.course_code,
-          previous_tda_course: true
+          previous_tda_course: true,
         )
       end
 
@@ -98,7 +98,7 @@ module Publish
         {
           provider_code: course.provider_code,
           recruitment_cycle_year: course.recruitment_cycle_year,
-          course_code: course.course_code
+          course_code: course.course_code,
         }
       end
 
@@ -115,7 +115,7 @@ module Publish
       end
 
       def section_key
-        'Funding type'
+        "Funding type"
       end
 
       def handle_redirect
@@ -129,15 +129,15 @@ module Publish
       end
 
       def goto_visa_path?
-        params[:goto_visa] == 'true' && params.dig(:course, :previous_tda_course) != 'true'
+        params[:goto_visa] == "true" && params.dig(:course, :previous_tda_course) != "true"
       end
 
       def previous_tda_course_path?
-        params.dig(:course, :previous_tda_course) == 'true'
+        params.dig(:course, :previous_tda_course) == "true"
       end
 
       def previously_defaulted_attributes
-        path_params.merge(previous_tda_course: 'true')
+        path_params.merge(previous_tda_course: "true")
       end
     end
   end

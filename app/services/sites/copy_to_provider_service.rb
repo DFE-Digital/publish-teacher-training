@@ -11,7 +11,7 @@ module Sites
       new_site.provider_id = new_provider.id
       new_site.skip_geocoding = true
       new_site.uuid = SecureRandom.uuid
-      new_site.site_type = 'study_site' if site.study_site?
+      new_site.site_type = "study_site" if site.study_site?
       new_site.save(validate: false)
       new_provider.reload
 

@@ -8,15 +8,15 @@
       text: t("back"),
       href: support_recruitment_cycle_provider_accredited_partnerships_path(
         recruitment_cycle_year: @recruitment_cycle.year,
-        provider_id: @provider.id
-      )
+        provider_id: @provider.id,
+      ),
     ) %>
   <% end %>
 
     <%= form_with(
         model: @accredited_provider_form,
         url: support_recruitment_cycle_provider_accredited_partnership_path,
-        method: :put
+        method: :put,
       ) do |f| %>
       <%= f.govuk_error_summary %>
 
@@ -26,7 +26,7 @@
           hint: { text: t(".hint") },
           caption: { text: @accredited_provider_form.accredited_provider.provider_name, size: "l" },
           max_words: 100,
-          rows: 10
+          rows: 10,
         ) %>
       <%= f.hidden_field :accredited_provider_id, value: @accredited_provider_form.accredited_provider.id %>
 

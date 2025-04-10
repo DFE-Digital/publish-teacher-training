@@ -20,7 +20,7 @@ module Publish
           @start_form = DegreeStartForm.new(degree_grade_required: grade_required_params)
           if course.is_primary? && @start_form.valid? && !goto_preview? && @start_form.degree_grade_required.blank?
             @start_form.save(course)
-            course_updated_message('Minimum degree classification')
+            course_updated_message("Minimum degree classification")
             redirect_to publish_provider_recruitment_cycle_course_path
           elsif course.is_primary? && @start_form.valid? && goto_preview? && @start_form.degree_grade_required.blank?
             @start_form.save(course)
@@ -41,7 +41,7 @@ module Publish
           end
         end
 
-        private
+      private
 
         def param_form_key = :publish_degree_start_form
 

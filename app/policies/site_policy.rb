@@ -16,6 +16,6 @@ class SitePolicy
     user.admin? || user.providers.include?(site.provider)
   end
 
-  alias update? show?
-  alias create? show?
+  alias_method :update?, :show?
+  alias_method :create?, :show?
 end

@@ -1,103 +1,103 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ALevelRowComponent do
   include Rails.application.routes.url_helpers
 
-  it 'does render to enter A levels when not A levels are answered' do
+  it "does render to enter A levels when not A levels are answered" do
     course = create(:course, a_level_subject_requirements: nil)
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('publish.providers.courses.description_content.enter_a_levels'))
+    expect(rendered_component.text).to include(I18n.t("publish.providers.courses.description_content.enter_a_levels"))
   end
 
-  it 'renders the a_level_subject_row_content when a level requirements and subject requirements are present' do
-    a_level_subject_requirement = { 'subject' => 'other_subject', 'other_subject' => 'Math', 'minimum_grade_required' => 'A' }
+  it "renders the a_level_subject_row_content when a level requirements and subject requirements are present" do
+    a_level_subject_requirement = { "subject" => "other_subject", "other_subject" => "Math", "minimum_grade_required" => "A" }
     course = create(:course, a_level_subject_requirements: [a_level_subject_requirement])
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
     expect(
-      rendered_component.text.gsub(/\r?\n/, ' ').squeeze(' ').strip
-    ).to include('Math - Grade A or above')
+      rendered_component.text.gsub(/\r?\n/, " ").squeeze(" ").strip,
+    ).to include("Math - Grade A or above")
   end
 
-  it 'renders the pending a level summary content for acceptance when course accepts pending a levels' do
+  it "renders the pending a level summary content for acceptance when course accepts pending a levels" do
     course = create(:course, :with_a_level_requirements, accept_pending_a_level: true)
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('course.a_level_steps/consider_pending_a_level.row.true'))
+    expect(rendered_component.text).to include(I18n.t("course.a_level_steps/consider_pending_a_level.row.true"))
   end
 
-  it 'renders the pending a level summary content for non-acceptance when course does not accept pending a levels' do
+  it "renders the pending a level summary content for non-acceptance when course does not accept pending a levels" do
     course = create(:course, :with_a_level_requirements, accept_pending_a_level: false)
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('course.a_level_steps/consider_pending_a_level.row.false'))
+    expect(rendered_component.text).to include(I18n.t("course.a_level_steps/consider_pending_a_level.row.false"))
   end
 
-  it 'renders the a level equivalency summary content for acceptance when course accepts a level equivalencies' do
+  it "renders the a level equivalency summary content for acceptance when course accepts a level equivalencies" do
     course = create(:course, :with_a_level_requirements, accept_a_level_equivalency: true)
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('course.a_level_steps/a_level_equivalencies.row.true'))
+    expect(rendered_component.text).to include(I18n.t("course.a_level_steps/a_level_equivalencies.row.true"))
   end
 
-  it 'renders the a level equivalency summary content for non-acceptance when course does not accept a level equivalencies' do
+  it "renders the a level equivalency summary content for non-acceptance when course does not accept a level equivalencies" do
     course = create(:course, :with_a_level_requirements, accept_a_level_equivalency: false)
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('course.a_level_steps/a_level_equivalencies.row.false'))
+    expect(rendered_component.text).to include(I18n.t("course.a_level_steps/a_level_equivalencies.row.false"))
   end
 
-  it 'renders the additional a level equivalencies content when present' do
-    course = create(:course, :with_a_level_requirements, accept_a_level_equivalency: true, additional_a_level_equivalencies: 'Some additional information')
+  it "renders the additional a level equivalencies content when present" do
+    course = create(:course, :with_a_level_requirements, accept_a_level_equivalency: true, additional_a_level_equivalencies: "Some additional information")
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include('Some additional information')
+    expect(rendered_component.text).to include("Some additional information")
   end
 
-  it 'does not render the additional a level equivalencies when no equivalencies' do
-    course = create(:course, :with_a_level_requirements, accept_a_level_equivalency: false, additional_a_level_equivalencies: 'Some additional information')
+  it "does not render the additional a level equivalencies when no equivalencies" do
+    course = create(:course, :with_a_level_requirements, accept_a_level_equivalency: false, additional_a_level_equivalencies: "Some additional information")
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).not_to include('Some additional information')
+    expect(rendered_component.text).not_to include("Some additional information")
   end
 
-  it 'does not render the pending A level if the question is not answered' do
-    a_level_subject_requirement = { 'subject' => 'other_subject', 'other_subject' => 'Math', 'minimum_grade_required' => 'A' }
+  it "does not render the pending A level if the question is not answered" do
+    a_level_subject_requirement = { "subject" => "other_subject", "other_subject" => "Math", "minimum_grade_required" => "A" }
     course = create(:course, :with_a_level_requirements, accept_pending_a_level: nil, a_level_subject_requirements: [a_level_subject_requirement])
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).not_to include('Candidates with pending A levels will')
+    expect(rendered_component.text).not_to include("Candidates with pending A levels will")
   end
 
-  it 'does not render the equivalency A level if the question is not answered' do
-    a_level_subject_requirement = { 'subject' => 'other_subject', 'other_subject' => 'Math', 'minimum_grade_required' => 'A' }
+  it "does not render the equivalency A level if the question is not answered" do
+    a_level_subject_requirement = { "subject" => "other_subject", "other_subject" => "Math", "minimum_grade_required" => "A" }
     course = create(:course, :with_a_level_requirements, accept_a_level_equivalency: nil, a_level_subject_requirements: [a_level_subject_requirement])
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).not_to include('Equivalency tests will ')
+    expect(rendered_component.text).not_to include("Equivalency tests will ")
   end
 
-  it 'returns false for has_errors?' do
+  it "returns false for has_errors?" do
     course = create(:course)
     component = described_class.new(course: course.decorate)
 
     expect(component.has_errors?).to be(false)
   end
 
-  describe 'when course has errors on A levels' do
+  describe "when course has errors on A levels" do
     let(:rendered_component) { render_inline(component) }
     let(:component) do
       described_class.new(course: course.decorate, errors: course.errors.messages)
@@ -110,7 +110,7 @@ RSpec.describe ALevelRowComponent do
         :with_gcse_equivalency,
         :draft_enrichment,
         :with_a_level_requirements,
-        attributes
+        attributes,
       )
     end
     let(:attributes) { {} }
@@ -119,10 +119,10 @@ RSpec.describe ALevelRowComponent do
       course.valid?(:publish)
     end
 
-    context 'when accept_a_level_equivalency is nil' do
+    context "when accept_a_level_equivalency is nil" do
       let(:attributes) { {  accept_a_level_equivalency: nil } }
 
-      it 'renders the error message for accept_a_level_equivalency' do
+      it "renders the error message for accept_a_level_equivalency" do
         expect(rendered_component).to have_text(I18n.t("course.a_level_steps/#{component.wizard_step(:accept_a_level_equivalency)}.heading"))
         expect(rendered_component).to have_link(
           component.errors[:accept_a_level_equivalency].first,
@@ -130,16 +130,16 @@ RSpec.describe ALevelRowComponent do
             course.provider.provider_code,
             course.provider.recruitment_cycle_year,
             course.course_code,
-            display_errors: true
-          )
+            display_errors: true,
+          ),
         )
       end
     end
 
-    context 'when a_level_subject_requirements is blank' do
+    context "when a_level_subject_requirements is blank" do
       let(:attributes) { { a_level_subject_requirements: [] } }
 
-      it 'renders the error message for a_level_subject_requirements' do
+      it "renders the error message for a_level_subject_requirements" do
         expect(rendered_component).to have_text(I18n.t("course.a_level_steps/#{component.wizard_step(:a_level_subject_requirements)}.heading"))
         expect(rendered_component).to have_link(
           component.errors[:a_level_subject_requirements].first,
@@ -147,16 +147,16 @@ RSpec.describe ALevelRowComponent do
             course.provider.provider_code,
             course.provider.recruitment_cycle_year,
             course.course_code,
-            display_errors: true
-          )
+            display_errors: true,
+          ),
         )
       end
     end
 
-    context 'when accept_pending_a_level is nil' do
+    context "when accept_pending_a_level is nil" do
       let(:attributes) { { accept_pending_a_level: nil } }
 
-      it 'renders the error message for accept_pending_a_level' do
+      it "renders the error message for accept_pending_a_level" do
         expect(rendered_component).to have_text(I18n.t("course.a_level_steps/#{component.wizard_step(:accept_pending_a_level)}.heading"))
         expect(rendered_component).to have_link(
           component.errors[:accept_pending_a_level].first,
@@ -164,8 +164,8 @@ RSpec.describe ALevelRowComponent do
             course.provider.provider_code,
             course.provider.recruitment_cycle_year,
             course.course_code,
-            display_errors: true
-          )
+            display_errors: true,
+          ),
         )
       end
     end

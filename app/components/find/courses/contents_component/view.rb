@@ -20,7 +20,7 @@ module Find
         end
 
         def preview?
-          params[:action] == 'preview'
+          params[:action] == "preview"
         end
       end
     end

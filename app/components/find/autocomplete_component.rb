@@ -7,15 +7,15 @@ module Find
       super(classes:, html_attributes:)
     end
 
-    private
+  private
 
     attr_accessor :form_field
 
     def default_attributes
       {
-        'class' => %w[app-!-autocomplete--max-width-two-thirds suggestions],
-        'data-module' => 'app-dfe-autocomplete',
-        'data-default-value' => ''
+        "class" => %w[app-!-autocomplete--max-width-two-thirds suggestions],
+        "data-module" => "app-dfe-autocomplete",
+        "data-default-value" => "",
       }
     end
   end

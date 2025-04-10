@@ -19,8 +19,8 @@ module Find
             @event
               .with_type(event_name)
               .with_request_details(request)
-              .with_data(event_data)
-          ]
+              .with_data(event_data),
+          ],
         )
       end
     end

@@ -29,19 +29,19 @@ module CoursePreview
       course.provider.accredited_providers.include?(course.accrediting_provider)
     end
 
-    private
+  private
 
     def about_this_course_link = about_this_course_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def degree_link = degrees_start_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def fee_uk_eu_link = fees_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def gcse_link = gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def how_school_placements_work_link = school_placements_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
-    def train_with_disability_link = about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true, anchor: 'train-with-disability')
-    def train_with_us_link = about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_provider: true, anchor: 'train-with-us')
+    def train_with_disability_link = about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true, anchor: "train-with-disability")
+    def train_with_us_link = about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_provider: true, anchor: "train-with-us")
 
     def about_accrediting_provider_link
       if accrediting_provider_present?(course)
-        edit_publish_provider_recruitment_cycle_accredited_provider_path(provider_code, recruitment_cycle_year, accredited_provider_code: @course.accredited_provider_code, goto_preview: true, anchor: 'accredited-provider-form-description-field')
+        edit_publish_provider_recruitment_cycle_accredited_provider_path(provider_code, recruitment_cycle_year, accredited_provider_code: @course.accredited_provider_code, goto_preview: true, anchor: "accredited-provider-form-description-field")
       else
         publish_provider_recruitment_cycle_accredited_providers_path(provider_code,
                                                                      recruitment_cycle_year)

@@ -13,17 +13,19 @@ module Courses
       Russian
       Spanish
       French
-      Ancient Greek
-      Ancient Hebrew
+      Ancient
+      Greek
+      Ancient
+      Hebrew
       Latin
     ].freeze
 
-    ENGINEERS_TEACH_PHYSICS_TITLE = I18n.t('courses.generate_course_name_service.etp_title')
-    FURTHER_EDUCATION_TITLE = I18n.t('courses.generate_course_name_service.further_education_title')
+    ENGINEERS_TEACH_PHYSICS_TITLE = I18n.t("courses.generate_course_name_service.etp_title")
+    FURTHER_EDUCATION_TITLE = I18n.t("courses.generate_course_name_service.further_education_title")
 
     def initialize(course:)
       @course = course
-      @subjects = course.course_subjects.sort_by do |a, b|
+      @subjects = course.course_subjects.sort_by { |a, b|
         if a.nil? && b.nil?
           0
         elsif a.nil?
@@ -33,7 +35,7 @@ module Courses
         else
           a.position <=> b.position
         end
-      end.map(&:subject)
+      }.map(&:subject)
     end
 
     def call
@@ -43,16 +45,16 @@ module Courses
                 generated_title
               end
 
-      title += ' (SEND)' if course.is_send?
+      title += " (SEND)" if course.is_send?
       title
     end
 
-    private
+  private
 
     attr_reader :course, :subjects
 
     def generated_title
-      return '' if subjects.empty?
+      return "" if subjects.empty?
 
       return formatted_subjects.first if formatted_subjects.length == 1
 
@@ -77,7 +79,7 @@ module Courses
       return unless course.is_modern_language_course?
 
       title = SecondarySubject.modern_languages.to_s
-      official_languages = languages.reject { |language| language.subject_name.casecmp?('Modern languages (other)') }
+      official_languages = languages.reject { |language| language.subject_name.casecmp?("Modern languages (other)") }
 
       return title if official_languages.empty? || official_languages.length >= 4
 
@@ -87,7 +89,7 @@ module Courses
       when 1
         title + " (#{language_names[0]})"
       when 2
-        return language_names.join(' and ') unless main_subject_is_modern_languages?
+        return language_names.join(" and ") unless main_subject_is_modern_languages?
 
         title + " (#{language_names.join(' and ')})"
       when 3
@@ -97,13 +99,13 @@ module Courses
 
     def format_subject_name(subject)
       {
-        'communication and media studies' => 'Media studies',
-        'physics' => course.is_engineers_teach_physics? ? ENGINEERS_TEACH_PHYSICS_TITLE : subject.to_s
+        "communication and media studies" => "Media studies",
+        "physics" => course.is_engineers_teach_physics? ? ENGINEERS_TEACH_PHYSICS_TITLE : subject.to_s,
       }[subject.subject_name.downcase] || subject.to_s
     end
 
     def languages
-      @languages ||= subjects.select { |s| s.type == 'ModernLanguagesSubject' }
+      @languages ||= subjects.select { |s| s.type == "ModernLanguagesSubject" }
     end
 
     def main_subject_is_modern_languages?

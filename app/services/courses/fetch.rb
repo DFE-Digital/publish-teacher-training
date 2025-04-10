@@ -11,15 +11,16 @@ module Courses
       end
 
       def by_accrediting_provider(provider)
-        # rubocop:disable Style/MultilineBlockChain
         # rubocop:disable Style/HashTransformValues
         provider
           .courses
-          .group_by do |course|
-            course.accrediting_provider&.provider_name || provider.provider_name
-          rescue StandardError
-            provider.provider_name
-          end
+          .group_by { |course|
+            begin
+              course.accrediting_provider&.provider_name || provider.provider_name
+            rescue StandardError
+              provider.provider_name
+            end
+          }
           .sort_by { |accrediting_provider, _| accrediting_provider.downcase }
           .to_h do |provider_name, courses|
             [provider_name, courses.sort_by { |course| [course.name, course.course_code] }.map(&:decorate)]

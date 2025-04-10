@@ -15,12 +15,12 @@ module NotificationService
       users.each do |user|
         CoursePublishEmailMailer.course_publish_email(
           course,
-          user
+          user,
         ).deliver_later
       end
     end
 
-    private
+  private
 
     attr_reader :course
 

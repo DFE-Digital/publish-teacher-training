@@ -1,30 +1,30 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'editing applications open date', { can_edit_current_and_next_cycles: false } do
+feature "editing applications open date", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     then_i_visit_the_applications_open_page
   end
 
-  scenario 'choosing the default' do
+  scenario "choosing the default" do
     given_i_choose_as_soon_as_find_is_open
     when_i_click_update
     then_i_should_see_the_earliest_date_applications_can_open
   end
 
-  scenario 'choosing a custom' do
+  scenario "choosing a custom" do
     given_i_enter_a_custom_date
     when_i_click_update
     then_i_should_see_the_custom_date
   end
 
   def given_i_enter_a_custom_date
-    find_field('Day').set('12')
-    find_field('Month').set('12')
-    find_field('Year').set(last_recruitment_cycle_year)
+    find_field("Day").set("12")
+    find_field("Month").set("12")
+    find_field("Year").set(last_recruitment_cycle_year)
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -41,7 +41,7 @@ feature 'editing applications open date', { can_edit_current_and_next_cycles: fa
 
   def then_i_visit_the_applications_open_page
     visit applications_open_publish_provider_recruitment_cycle_course_path(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, code: course.course_code
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, code: course.course_code,
     )
   end
 
@@ -54,11 +54,11 @@ feature 'editing applications open date', { can_edit_current_and_next_cycles: fa
   end
 
   def given_i_choose_as_soon_as_find_is_open
-    page.choose('As soon as the course is on Find - recommended')
+    page.choose("As soon as the course is on Find - recommended")
   end
 
   def when_i_click_update
-    page.click_link_or_button('Update applications open date')
+    page.click_link_or_button("Update applications open date")
   end
 
   def then_i_should_see_the_earliest_date_applications_can_open

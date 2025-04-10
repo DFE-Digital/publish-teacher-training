@@ -15,14 +15,14 @@ module Sites
       copy_school
     end
 
-    private
+  private
 
     attr_reader :new_site, :new_course
 
     def copy_school
       new_course.site_statuses.create(
         site: new_site,
-        status: :new_status
+        status: :new_status,
       )
     end
 

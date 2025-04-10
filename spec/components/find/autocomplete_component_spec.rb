@@ -1,60 +1,60 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Find
   describe AutocompleteComponent, type: :component do
-    context 'when sending classes to parent container' do
+    context "when sending classes to parent container" do
       before do
         render_inline(
-          described_class.new(form_field:, classes: 'test-css-class')
+          described_class.new(form_field:, classes: "test-css-class"),
         )
       end
 
-      it 'supports custom classes on the parent container' do
-        expect(page).to have_css('.test-css-class')
+      it "supports custom classes on the parent container" do
+        expect(page).to have_css(".test-css-class")
       end
 
-      it 'includes default classes' do
-        expect(page).to have_css('.suggestions')
+      it "includes default classes" do
+        expect(page).to have_css(".suggestions")
       end
 
-      it 'adds the data module' do
+      it "adds the data module" do
         expect(page).to have_css('[data-module="app-dfe-autocomplete"]')
       end
     end
 
-    context 'when sending html attributes' do
+    context "when sending html attributes" do
       before do
         render_inline(
           described_class.new(
             form_field:,
-            html_attributes: { 'test-attribute' => 'my-custom-attribute' }
-          )
+            html_attributes: { "test-attribute" => "my-custom-attribute" },
+          ),
         )
       end
 
-      it 'supports custom html attributes on the parent container' do
+      it "supports custom html attributes on the parent container" do
         expect(page).to have_css('[test-attribute="my-custom-attribute"]')
       end
     end
 
-    context 'when not defining the raw attribute' do
+    context "when not defining the raw attribute" do
       before do
         render_inline(
           described_class.new(
             form_field:,
-            html_attributes: { 'test-attribute' => 'my-custom-attribute' }
-          )
+            html_attributes: { "test-attribute" => "my-custom-attribute" },
+          ),
         )
       end
 
-      it 'create empty default value' do
+      it "create empty default value" do
         expect(page).to have_css('[data-module="app-dfe-autocomplete"]')
       end
     end
 
-    private
+  private
 
     def form_field
       <<~HTML

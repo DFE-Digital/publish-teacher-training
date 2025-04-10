@@ -25,7 +25,7 @@
  <%= render Find::Utility::SummaryListComponent.new(rows: {
   "Previous cycle year" => Find::CycleTimetable.previous_year,
   "Current cycle year" => Find::CycleTimetable.current_year,
-  "Next cycle year" => Find::CycleTimetable.next_year
+  "Next cycle year" => Find::CycleTimetable.next_year,
 }) %>
 
 <h2 class="govuk-heading-m">Deadlines</h2>
@@ -33,5 +33,5 @@
 <%= render Find::Utility::SummaryListComponent.new(rows: {
   "Apply deadline" => Find::CycleTimetable.apply_deadline.to_fs(:govuk_date),
   "Find closes on" => Find::CycleTimetable.find_closes.to_fs(:govuk_date),
-  "Find reopens on" => Find::CycleTimetable.find_reopens.to_fs(:govuk_date)
+  "Find reopens on" => Find::CycleTimetable.find_reopens.to_fs(:govuk_date),
 }) %>

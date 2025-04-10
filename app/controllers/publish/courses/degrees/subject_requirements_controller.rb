@@ -25,7 +25,7 @@ module Publish
 
           if @subject_requirements_form.valid? && !goto_preview?
             @subject_requirements_form.save(@course)
-            course_updated_message('Degree requirements')
+            course_updated_message("Degree requirements")
             redirect_to publish_provider_recruitment_cycle_course_path
           elsif @subject_requirements_form.valid? && goto_preview?
             @subject_requirements_form.save(@course)
@@ -38,7 +38,7 @@ module Publish
           end
         end
 
-        private
+      private
 
         def param_form_key = :publish_subject_requirement_form
 
@@ -54,7 +54,7 @@ module Publish
         end
 
         def set_backlink
-          @backlink = if course.degree_grade == 'not_required'
+          @backlink = if course.degree_grade == "not_required"
                         degrees_start_publish_provider_recruitment_cycle_course_path
                       elsif gobackto_preview?
                         degrees_grade_publish_provider_recruitment_cycle_course_path(goto_preview: true)
@@ -64,7 +64,7 @@ module Publish
         end
 
         def gobackto_preview?
-          params[:goto_preview] == 'true' || params.dig(param_form_key, :goto_preview)
+          params[:goto_preview] == "true" || params.dig(param_form_key, :goto_preview)
         end
 
         def redirect_to_course_details_page_if_course_is_primary

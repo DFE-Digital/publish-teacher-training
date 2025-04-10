@@ -17,40 +17,40 @@ class SearchResultTitleComponent < ViewComponent::Base
     [
       count_text,
       found_text,
-      query_text
-    ].compact.join(' ')
+      query_text,
+    ].compact.join(" ")
   end
 
   def results_text
     return many_results_text if results_count > results_limit
-    return govuk_link_to('Change your search.', return_path).html_safe if results_count.zero?
+    return govuk_link_to("Change your search.", return_path).html_safe if results_count.zero?
 
     "#{govuk_link_to('Change your search', return_path)} if the #{search_resource.humanize(capitalize: false)} you’re looking for is not listed.".html_safe
   end
 
-  private
+private
 
   attr_reader :query, :results_limit, :results_count, :return_path, :search_resource, :caption_text
 
   def count_text
     return number_to_delimited(results_count) if results_count >= 1
 
-    'No'
+    "No"
   end
 
   def found_text
-    return 'result found' if results_count == 1
+    return "result found" if results_count == 1
 
-    'results found'
+    "results found"
   end
 
   def query_text
     return "for ‘#{query}’" if query.present?
 
-    'for your search'
+    "for your search"
   end
 
   def many_results_text
-    t('.many_results_html', results_limit:, link: govuk_link_to('Try narrowing down your search', return_path), search_resource:)
+    t(".many_results_html", results_limit:, link: govuk_link_to("Try narrowing down your search", return_path), search_resource:)
   end
 end

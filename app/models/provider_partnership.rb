@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ProviderPartnership < ApplicationRecord
-  belongs_to :training_provider, class_name: 'Provider'
-  belongs_to :accredited_provider, class_name: 'Provider'
+  belongs_to :training_provider, class_name: "Provider"
+  belongs_to :accredited_provider, class_name: "Provider"
 
   validates :accredited_provider, uniqueness: { scope: %i[training_provider_id] }
   validate :accredited_provider_must_be_accredited

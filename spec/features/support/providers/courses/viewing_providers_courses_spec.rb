@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Viewing a providers courses' do
-  scenario 'Provider is discarded' do
+feature "Viewing a providers courses" do
+  scenario "Provider is discarded" do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_discarded_provider_with_courses
     when_i_visit_the_support_discarded_provider_courses_index_page
     then_i_am_redirected_to_the_providers_page
   end
 
-  scenario 'viewing course status tags' do
+  scenario "viewing course status tags" do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_with_courses
     when_i_visit_the_support_provider_courses_index_page
     then_i_should_see_the_open_status
   end
 
-  private
+private
 
   def then_i_should_see_the_open_status
-    within('td.govuk-table__cell.status') do
-      expect(page).to have_css('strong.govuk-tag.govuk-tag--turquoise', text: 'Open')
+    within("td.govuk-table__cell.status") do
+      expect(page).to have_css("strong.govuk-tag.govuk-tag--turquoise", text: "Open")
     end
   end
 

@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false } do
+feature "Accredited partnership flow", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_are_accredited_providers_in_the_database
     and_i_visit_the_index_page
   end
 
-  scenario 'i can view the accredited partnerships tab when there are none' do
+  scenario "i can view the accredited partnerships tab when there are none" do
     then_i_see_the_correct_text_for_no_accredited_providers
   end
 
-  scenario 'i can view accredited partnerships on the index page' do
+  scenario "i can view accredited partnerships on the index page" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
     then_i_see_the_accredited_provider_name_displayed
@@ -22,21 +22,21 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     then_i_am_on_the_accredited_providers_page
   end
 
-  scenario 'i can create a new provider partnership' do
+  scenario "i can create a new provider partnership" do
     when_i_click_add_accredited_provider
     and_i_search_with_an_invalid_query
-    then_i_see_an_error_message('Enter a provider name')
+    then_i_see_an_error_message("Enter a provider name")
 
     when_i_search_for_an_accredited_provider_with_a_valid_query
     then_i_see_the_provider_i_searched_for
 
     when_i_continue_without_selecting_an_accredited_provider
-    and_i_see_an_error_message('Select an accredited provider')
+    and_i_see_an_error_message("Select an accredited provider")
     then_i_still_see_the_provider_i_searched_for
 
     when_i_select_the_provider
     and_i_continue_without_entering_a_description
-    then_i_see_an_error_message('Enter details about the accredited provider')
+    then_i_see_an_error_message("Enter details about the accredited provider")
 
     when_i_input_new_information
     then_i_should_see_the_information_i_added
@@ -48,7 +48,7 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     and_i_see_the_accredited_partnership
   end
 
-  scenario 'i can edit accredited partnerships on the index page' do
+  scenario "i can edit accredited partnerships on the index page" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
     and_i_click_change
@@ -62,23 +62,23 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     and_i_see_the_success_message
   end
 
-  scenario 'i cannot delete accredited partnerships attached to a course' do
+  scenario "i cannot delete accredited partnerships attached to a course" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
     and_i_click_remove
     then_i_see_the_cannot_remove_text
   end
 
-  scenario 'i edit the description of a partnership' do
+  scenario "i edit the description of a partnership" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
     and_i_click_change_description
     and_i_delete_all_the_text
     and_i_click_update_description
-    then_i_see_an_error_message('Enter details about the accredited provider')
+    then_i_see_an_error_message("Enter details about the accredited provider")
   end
 
-  scenario 'i can delete accredited partnerships not attached to a course' do
+  scenario "i can delete accredited partnerships not attached to a course" do
     and_i_click_on_the_accredited_provider_tab
     and_i_click_add_accredited_provider
     and_i_search_for_an_accredited_provider_with_a_valid_query
@@ -91,56 +91,56 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     and_i_see_the_remove_success_message
   end
 
-  private
+private
 
   def and_i_see_the_remove_success_message
-    expect(page).to have_content('Accredited provider removed')
+    expect(page).to have_content("Accredited provider removed")
   end
 
   def and_i_see_the_create_success_message
-    expect(page).to have_content('Accredited provider added')
+    expect(page).to have_content("Accredited provider added")
   end
 
   def and_i_click_remove_ap
-    click_link_or_button 'Remove accredited provider'
+    click_link_or_button "Remove accredited provider"
   end
 
   def and_i_confirm_the_changes
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button "Add accredited provider"
   end
   alias_method :when_i_confirm_the_changes, :and_i_confirm_the_changes
 
   def when_i_input_new_information
-    fill_in 'About the accredited provider', with: 'New AP description'
-    click_link_or_button 'Continue'
+    fill_in "About the accredited provider", with: "New AP description"
+    click_link_or_button "Continue"
   end
 
   def then_i_should_see_the_information_i_added
-    expect(page).to have_text('New AP description')
+    expect(page).to have_text("New AP description")
   end
 
   def and_i_select_the_provider
     choose @accredited_provider.provider_name
-    click_link_or_button 'Continue'
+    click_link_or_button "Continue"
   end
   alias_method :when_i_select_the_provider, :and_i_select_the_provider
 
   def form_title
-    'Enter a provider name, UKPRN or postcode'
+    "Enter a provider name, UKPRN or postcode"
   end
 
   def and_i_search_with_an_invalid_query
-    fill_in form_title, with: ''
-    click_link_or_button 'Continue'
+    fill_in form_title, with: ""
+    click_link_or_button "Continue"
   end
 
   def when_i_continue_without_selecting_an_accredited_provider
-    click_link_or_button 'Continue'
+    click_link_or_button "Continue"
   end
 
   def and_i_search_for_an_accredited_provider_with_a_valid_query
     fill_in form_title, with: @accredited_provider.provider_name
-    click_link_or_button 'Continue'
+    click_link_or_button "Continue"
   end
   alias_method :when_i_search_for_an_accredited_provider_with_a_valid_query, :and_i_search_for_an_accredited_provider_with_a_valid_query
 
@@ -152,16 +152,16 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
   alias_method :then_i_still_see_the_provider_i_searched_for, :then_i_see_the_provider_i_searched_for
 
   def and_i_click_add_accredited_provider
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button "Add accredited provider"
   end
   alias_method :when_i_click_add_accredited_provider, :and_i_click_add_accredited_provider
 
   def and_i_click_remove
-    click_link_or_button 'Remove'
+    click_link_or_button "Remove"
   end
 
   def then_i_see_the_cannot_remove_text
-    expect(page).to have_css('h1', text: 'You cannot remove this accredited provider')
+    expect(page).to have_css("h1", text: "You cannot remove this accredited provider")
   end
 
   def given_i_am_authenticated_as_an_admin_user
@@ -170,35 +170,35 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
 
   def and_there_are_accredited_providers_in_the_database
     @provider = create(:provider, :lead_school)
-    @accredited_provider = create(:provider, :accredited_provider, provider_name: 'UCL', users: [create(:user)])
-    @accredited_provider_two = create(:provider, :accredited_provider, provider_name: 'Accredited provider two')
-    @accredited_provider_three = create(:provider, :accredited_provider, provider_name: 'Accredited provider three')
+    @accredited_provider = create(:provider, :accredited_provider, provider_name: "UCL", users: [create(:user)])
+    @accredited_provider_two = create(:provider, :accredited_provider, provider_name: "Accredited provider two")
+    @accredited_provider_three = create(:provider, :accredited_provider, provider_name: "Accredited provider three")
   end
 
   def then_i_return_to_the_index_page
     expect(page).to have_current_path(support_recruitment_cycle_provider_accredited_partnerships_path(
                                         recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-                                        provider_id: @provider.id
+                                        provider_id: @provider.id,
                                       ))
   end
 
   def and_i_visit_the_index_page
     visit support_recruitment_cycle_provider_accredited_partnerships_path(
       recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-      provider_id: @provider.id
+      provider_id: @provider.id,
     )
   end
 
   def and_i_click_change
-    click_link_or_button('Change')
+    click_link_or_button("Change")
   end
 
   def when_i_click_the_back_link
-    click_link_or_button 'Back'
+    click_link_or_button "Back"
   end
 
   def and_i_see_the_success_message
-    expect(page).to have_content('Accredited provider updated')
+    expect(page).to have_content("Accredited provider updated")
   end
 
   def and_i_see_an_error_message(error_message = form_title)
@@ -207,16 +207,16 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
   alias_method :then_i_see_an_error_message, :and_i_see_an_error_message
 
   def then_i_see_the_updated_description
-    expect(page).to have_text('update the AP description')
+    expect(page).to have_text("update the AP description")
   end
 
   def and_i_continue_without_entering_a_description
-    click_link_or_button 'Continue'
+    click_link_or_button "Continue"
   end
 
   def when_i_input_updated_description
-    fill_in 'About the accredited provider', with: 'update the AP description'
-    click_link_or_button 'Update description'
+    fill_in "About the accredited provider", with: "update the AP description"
+    click_link_or_button "Update description"
   end
 
   def then_i_see_the_correct_text_for_no_accredited_providers
@@ -224,13 +224,13 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
   end
 
   def and_i_click_on_the_accredited_provider_tab
-    click_link_or_button 'Accredited providers'
+    click_link_or_button "Accredited providers"
   end
 
   def and_my_provider_has_accrediting_providers
-    @course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting provider name'))
+    @course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: "Accrediting provider name"))
 
-    @provider.accredited_partnerships.create(accredited_provider: @course.accrediting_provider, description: 'Description')
+    @provider.accredited_partnerships.create(accredited_provider: @course.accrediting_provider, description: "Description")
     @provider.courses << @course
   end
 
@@ -246,21 +246,21 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
 
   def then_i_see_the_accredited_provider_name_displayed
     expect(page).to have_css(
-      'h2.govuk-summary-card__title a.govuk-link',
-      text: 'Accrediting provider name'
+      "h2.govuk-summary-card__title a.govuk-link",
+      text: "Accrediting provider name",
     )
   end
 
   def and_i_click_change_description
-    page.click_link_or_button 'Change description'
+    page.click_link_or_button "Change description"
   end
 
   def and_i_delete_all_the_text
-    fill_in 'About the accredited provider', with: ''
+    fill_in "About the accredited provider", with: ""
   end
 
   def and_i_click_update_description
-    click_link_or_button 'Update description'
+    click_link_or_button "Update description"
   end
 
   def when_i_click_the_accredited_provider_link

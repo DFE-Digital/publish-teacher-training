@@ -17,7 +17,7 @@ module Support
       super(processed_params)
     end
 
-    private
+  private
 
     def application_end_date_must_be_after_start_date
       return if application_start_date.blank? || application_end_date.blank?

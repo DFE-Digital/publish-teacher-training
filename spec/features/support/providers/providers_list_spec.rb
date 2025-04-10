@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'View providers' do
+feature "View providers" do
   let(:user) { create(:user, :admin) }
 
   before do
@@ -11,11 +11,11 @@ feature 'View providers' do
     when_i_visit_the_support_provider_index_page
   end
 
-  scenario 'i can view the providers' do
+  scenario "i can view the providers" do
     then_i_see_the_providers
   end
 
-  scenario 'navigate to provider page' do
+  scenario "navigate to provider page" do
     and_i_click_on_add_provider
     then_i_am_on_the_provider_page
   end
@@ -37,6 +37,6 @@ feature 'View providers' do
   end
 
   def and_i_click_on_add_provider
-    click_link_or_button('Add provider')
+    click_link_or_button("Add provider")
   end
 end

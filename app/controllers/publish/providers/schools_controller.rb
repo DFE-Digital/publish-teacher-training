@@ -26,11 +26,11 @@ module Publish
 
       def destroy
         site.destroy!
-        flash[:success] = 'School removed'
+        flash[:success] = "School removed"
         redirect_to publish_provider_recruitment_cycle_schools_path
       end
 
-      private
+    private
 
       def site
         @site ||= provider.sites.find(params[:id])

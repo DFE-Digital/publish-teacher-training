@@ -10,7 +10,7 @@
     value_provided?(markdown(course.about_course)),
     %w[about_course],
     action_path: course.is_withdrawn? ? nil : about_this_course_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-    action_visually_hidden_text: t("publish.providers.courses.description_content.about_course_hidden_text")
+    action_visually_hidden_text: t("publish.providers.courses.description_content.about_course_hidden_text"),
   ) %>
 
   <% enrichment_summary(
@@ -20,7 +20,7 @@
        value_provided?(markdown(course.how_school_placements_work)),
        %w[how_school_placements_work],
        action_path: course.is_withdrawn? ? nil : school_placements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-       action_visually_hidden_text: t("publish.providers.courses.description_content.how_school_placements_work_hidden_text")
+       action_visually_hidden_text: t("publish.providers.courses.description_content.how_school_placements_work_hidden_text"),
      ) %>
 
   <% enrichment_summary(
@@ -30,7 +30,7 @@
     value_provided?(markdown(course.interview_process)),
     %w[interview_process],
     action_path: course.is_withdrawn? ? nil : interview_process_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-    action_visually_hidden_text: t("publish.providers.courses.description_content.interview_process_hidden_text")
+    action_visually_hidden_text: t("publish.providers.courses.description_content.interview_process_hidden_text"),
   ) %>
 
 <% end %>
@@ -45,7 +45,7 @@
       t("publish.providers.courses.description_content.course_length_label"),
       value_provided?(course.length),
       %w[course_length],
-      action_path: course.cannot_change_course_length? ? nil : length_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
+      action_path: course.cannot_change_course_length? ? nil : length_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     ) %>
 
     <% enrichment_summary(
@@ -55,7 +55,7 @@
       value_provided?(number_to_currency(course.fee_uk_eu)),
       %w[fee_uk_eu],
       action_path: course.is_withdrawn? ? nil : fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-      action_visually_hidden_text: t("publish.providers.courses.description_content.fee_for_uk_students_hidden_text")
+      action_visually_hidden_text: t("publish.providers.courses.description_content.fee_for_uk_students_hidden_text"),
     ) %>
 
     <% enrichment_summary(
@@ -64,7 +64,7 @@
       t("publish.providers.courses.description_content.fee_for_international_students_label"),
       value_provided?(number_to_currency(course.fee_international)),
       %w[fee_international],
-      action_path: course.is_withdrawn? ? nil : fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
+      action_path: course.is_withdrawn? ? nil : fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     ) %>
 
     <% enrichment_summary(
@@ -74,7 +74,7 @@
       value_provided?(markdown(course.fee_details)),
       %w[fee_details],
       action_path: course.is_withdrawn? ? nil : fees_and_financial_support_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-      action_visually_hidden_text: t("publish.providers.courses.description_content.fee_details_hidden_text")
+      action_visually_hidden_text: t("publish.providers.courses.description_content.fee_details_hidden_text"),
     ) %>
 
     <% summary_list.with_row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
@@ -90,7 +90,7 @@
          value_provided?(course.length),
          %w[course_length],
          action_path: course.cannot_change_course_length? ? nil : length_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-         action_visually_hidden_text: t("publish.providers.courses.description_content.course_length_hidden_text")
+         action_visually_hidden_text: t("publish.providers.courses.description_content.course_length_hidden_text"),
        ) %>
 
     <% enrichment_summary(
@@ -99,7 +99,7 @@
       t("publish.providers.courses.description_content.salary_label"),
       value_provided?(markdown(course.salary_details)),
       %w[salary_details],
-      action_path: course.is_withdrawn? ? nil : salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
+      action_path: course.is_withdrawn? ? nil : salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     ) %>
   <% end %>
 <% end %>
@@ -116,7 +116,7 @@
         t("publish.providers.courses.description_content.degree_label"),
         (render DegreeRowContent.new(course:, errors: @errors)),
         %w[degree_grade degree_subject_requirements],
-        action_path: !course.is_withdrawn? && course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil
+        action_path: !course.is_withdrawn? && course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
       ) %>
     <% end %>
 
@@ -129,7 +129,7 @@
         %w[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency],
         action_path: course.a_level_change_path,
         action_visually_hidden_text: "A levels",
-        render_errors: false
+        render_errors: false,
       ) %>
     <% end %>
 
@@ -139,6 +139,6 @@
       t("publish.providers.courses.description_content.gcse_label"),
       (render GcseRowContent.new(course:, errors: @errors)),
       %w[accept_pending_gcse accept_gcse_equivalency accept_english_gcse_equivalency accept_maths_gcse_equivalency accept_science_gcse_equivalency additional_gcse_equivalencies],
-      action_path: !course.is_withdrawn? && course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil
+      action_path: !course.is_withdrawn? && course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
     ) %>
 <% end %>

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Courses::EditOptions::StartDateConcern do
   let(:example_model) { create(:course) }
 
   let(:year) { example_model.provider.recruitment_cycle.year.to_i }
 
-  context 'non persisted course' do
-    context 'start_date_options' do
-      it 'returns the correct options for the recruitment_cycle' do
+  context "non persisted course" do
+    context "start_date_options" do
+      it "returns the correct options for the recruitment_cycle" do
         expect(example_model.start_date_options).to eq(
           ["October #{year - 1}",
            "November #{year - 1}",
@@ -32,13 +32,13 @@ describe Courses::EditOptions::StartDateConcern do
            "April #{year + 1}",
            "May #{year + 1}",
            "June #{year + 1}",
-           "July #{year + 1}"]
+           "July #{year + 1}"],
         )
       end
     end
   end
 
-  context 'persisted course' do
+  context "persisted course" do
     let(:example_model) { build(:course) }
     let(:month) { [*1..12].sample }
     let(:expected_starting_options) do
@@ -55,7 +55,7 @@ describe Courses::EditOptions::StartDateConcern do
         "September #{year}",
         "October #{year}",
         "November #{year}",
-        "December #{year}"
+        "December #{year}",
       ][month..12].compact
     end
 
@@ -69,7 +69,7 @@ describe Courses::EditOptions::StartDateConcern do
         "April #{year + 1}",
         "May #{year + 1}",
         "June #{year + 1}",
-        "July #{year + 1}"
+        "July #{year + 1}",
       ]
     end
 
@@ -79,7 +79,7 @@ describe Courses::EditOptions::StartDateConcern do
       end
     end
 
-    it 'returns the available options for the recruitment_cycle' do
+    it "returns the available options for the recruitment_cycle" do
       expect(example_model.start_date_options).to eq(expected_available_options)
     end
   end

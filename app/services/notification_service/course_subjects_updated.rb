@@ -23,12 +23,12 @@ module NotificationService
           course:,
           previous_subject_names:,
           previous_course_name:,
-          recipient: user
+          recipient: user,
         ).deliver_later
       end
     end
 
-    private
+  private
 
     attr_reader :course, :previous_subject_names, :previous_course_name
 

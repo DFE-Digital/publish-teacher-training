@@ -30,7 +30,7 @@ class UserNotificationPreferences
             user_id: id,
             course_publish: enable_notifications,
             course_update: enable_notifications,
-            provider_code:
+            provider_code:,
           )
         end
       end
@@ -41,9 +41,9 @@ class UserNotificationPreferences
     self
   end
 
-  alias enabled? enabled
+  alias_method :enabled?, :enabled
 
-  private
+private
 
   def user_accredited_provider_codes
     user.providers.accredited.in_current_cycle.distinct.pluck(:provider_code)

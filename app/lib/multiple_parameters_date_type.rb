@@ -3,7 +3,7 @@
 class MultipleParametersDateType < ActiveModel::Type::Value
   def self.process(params)
     params.keys.select { |key| key.to_s.match?(/\(\d+i\)$/) }.each do |key|
-      attribute_name = key.to_s.split('(').first
+      attribute_name = key.to_s.split("(").first
 
       year = params.delete("#{attribute_name}(1i)")
       month = params.delete("#{attribute_name}(2i)")

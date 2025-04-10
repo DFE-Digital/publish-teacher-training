@@ -65,7 +65,7 @@ module Courses
     end
 
     def level
-      return 'further_education' if old_further_education_parameters?
+      return "further_education" if old_further_education_parameters?
 
       super
     end
@@ -87,21 +87,21 @@ module Courses
     def ordering_options
       [
         OrderingOption.new(
-          id: 'course_name_ascending',
-          name: I18n.t('helpers.label.courses_search_form.ordering.options.course_name_ascending')
+          id: "course_name_ascending",
+          name: I18n.t("helpers.label.courses_search_form.ordering.options.course_name_ascending"),
         ),
         OrderingOption.new(
-          id: 'course_name_descending',
-          name: I18n.t('helpers.label.courses_search_form.ordering.options.course_name_descending')
+          id: "course_name_descending",
+          name: I18n.t("helpers.label.courses_search_form.ordering.options.course_name_descending"),
         ),
         OrderingOption.new(
-          id: 'provider_name_ascending',
-          name: I18n.t('helpers.label.courses_search_form.ordering.options.provider_name_ascending')
+          id: "provider_name_ascending",
+          name: I18n.t("helpers.label.courses_search_form.ordering.options.provider_name_ascending"),
         ),
         OrderingOption.new(
-          id: 'provider_name_descending',
-          name: I18n.t('helpers.label.courses_search_form.ordering.options.provider_name_descending')
-        )
+          id: "provider_name_descending",
+          name: I18n.t("helpers.label.courses_search_form.ordering.options.provider_name_descending"),
+        ),
       ]
     end
 
@@ -114,7 +114,7 @@ module Courses
       RADIUS_VALUES.map do |value|
         RadiusOption.new(
           value:,
-          name: I18n.t('helpers.label.courses_search_form.radius_options.miles', count: value)
+          name: I18n.t("helpers.label.courses_search_form.radius_options.miles", count: value),
         )
       end
     end
@@ -122,10 +122,10 @@ module Courses
     def radius
       return super if super.present?
 
-      types&.include?('administrative_area_level_2') ? LARGE_RADIUS : DEFAULT_RADIUS
+      types&.include?("administrative_area_level_2") ? LARGE_RADIUS : DEFAULT_RADIUS
     end
 
-    PHYSICS_SUBJECT_CODE = 'F3'
+    PHYSICS_SUBJECT_CODE = "F3"
 
     def search_for_physics?
       PHYSICS_SUBJECT_CODE.in?(Array(subjects)) || subject_code == PHYSICS_SUBJECT_CODE
@@ -151,7 +151,7 @@ module Courses
       super
     end
 
-    private
+  private
 
     def transform_old_parameters(params)
       params.tap do
@@ -173,10 +173,10 @@ module Courses
     end
 
     DEGREE_REQUIRED_OLD_VALUES_TO_NEW_VALUES = {
-      'show_all_courses' => 'two_one',
-      'two_two' => 'two_two',
-      'third_class' => 'third_class',
-      'not_required' => 'pass'
+      "show_all_courses" => "two_one",
+      "two_two" => "two_two",
+      "third_class" => "third_class",
+      "not_required" => "pass",
     }.freeze
     private_constant :DEGREE_REQUIRED_OLD_VALUES_TO_NEW_VALUES
 
@@ -185,10 +185,10 @@ module Courses
     end
 
     SORT_BY_OLD_VALUES_TO_NEW_VALUES = {
-      'course_asc' => 'course_name_ascending',
-      'course_desc' => 'course_name_descending',
-      'provider_asc' => 'provider_name_ascending',
-      'provider_desc' => 'provider_name_descending'
+      "course_asc" => "course_name_ascending",
+      "course_desc" => "course_name_descending",
+      "provider_asc" => "provider_name_ascending",
+      "provider_desc" => "provider_name_descending",
     }.freeze
     private_constant :SORT_BY_OLD_VALUES_TO_NEW_VALUES
 
@@ -197,13 +197,13 @@ module Courses
     end
 
     OLD_QUALIFICATION_VALUES_TO_NEW_VALUES = {
-      'pgce_with_qts' => 'qts_with_pgce_or_pgde'
+      "pgce_with_qts" => "qts_with_pgce_or_pgde",
     }.freeze
     private_constant :OLD_QUALIFICATION_VALUES_TO_NEW_VALUES
 
     def old_qualification_transformation
       Array(qualification)
-        .reject { |old_qualification_param| old_qualification_param == 'pgce pgde' }
+        .reject { |old_qualification_param| old_qualification_param == "pgce pgde" }
         .map do |old_qualification_param|
           OLD_QUALIFICATION_VALUES_TO_NEW_VALUES[old_qualification_param] || old_qualification_param
         end
@@ -212,12 +212,12 @@ module Courses
     def university_degree_status_transformation
       return if university_degree_status.nil?
 
-      'no_degree_required' unless university_degree_status
+      "no_degree_required" unless university_degree_status
     end
 
     def old_further_education_parameters?
-      age_group == 'further_education' ||
-        qualification&.include?('pgce pgde')
+      age_group == "further_education" ||
+        qualification&.include?("pgce pgde")
     end
 
     def old_provider_name_parameter

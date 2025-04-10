@@ -5,14 +5,14 @@ module Find
     module EntryRequirementsComponent
       class ViewPreview < ViewComponent::Preview
         def qualifications_needed_only
-          course = Course.new(course_code: 'FIND',
-                              subjects: [Subject.new(subject_name: 'Foo', subject_code: '1')],
-                              name: 'Super cool awesome course',
-                              provider: Provider.new(provider_code: 'DFE', recruitment_cycle: RecruitmentCycle.current),
+          course = Course.new(course_code: "FIND",
+                              subjects: [Subject.new(subject_name: "Foo", subject_code: "1")],
+                              name: "Super cool awesome course",
+                              provider: Provider.new(provider_code: "DFE", recruitment_cycle: RecruitmentCycle.current),
                               additional_degree_subject_requirements: true,
-                              degree_subject_requirements: 'Degree Subject Requirements Text',
-                              level: 'secondary',
-                              additional_gcse_equivalencies: 'Additional GCSE Equivalencies Text')
+                              degree_subject_requirements: "Degree Subject Requirements Text",
+                              level: "secondary",
+                              additional_gcse_equivalencies: "Additional GCSE Equivalencies Text")
 
           render Find::Courses::EntryRequirementsComponent::View.new(course: course.decorate)
         end
@@ -33,7 +33,7 @@ module Find
           render Find::Courses::EntryRequirementsComponent::View.new(course: mock_primary_maths_ske_course)
         end
 
-        private
+      private
 
         def mock_etp_course
           FakeCourse.new(**mock_etp_course_attributes)
@@ -52,31 +52,31 @@ module Find
         end
 
         def mock_ske_course_attributes
-          mock_course_attributes.merge({ subjects: [Subject.new(subject_name: 'SKE Subject', subject_code: 'G1')] })
+          mock_course_attributes.merge({ subjects: [Subject.new(subject_name: "SKE Subject", subject_code: "G1")] })
         end
 
         def mock_primary_maths_ske_course_attributes
-          mock_course_attributes.merge({ subjects: [Subject.new(subject_name: 'Primary Maths SKE Subject', subject_code: '03')] })
+          mock_course_attributes.merge({ subjects: [Subject.new(subject_name: "Primary Maths SKE Subject", subject_code: "03")] })
         end
 
         def mock_course_attributes
           { degree_grade: 1,
-            degree_subject_requirements: 'Degree Subject Requirements Text Goes Here',
-            level: 'secondary',
-            name: 'Super Awesome Course',
-            gcse_grade_required: 'A*',
+            degree_subject_requirements: "Degree Subject Requirements Text Goes Here",
+            level: "secondary",
+            name: "Super Awesome Course",
+            gcse_grade_required: "A*",
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
             accept_english_gcse_equivalency: true,
             accept_maths_gcse_equivalency: true,
             accept_science_gcse_equivalency: true,
-            additional_gcse_equivalencies: 'much much more',
-            computed_subject_name_or_names: 'Biology',
-            funding_type: 'salary',
+            additional_gcse_equivalencies: "much much more",
+            computed_subject_name_or_names: "Biology",
+            funding_type: "salary",
             can_sponsor_skilled_worker_visa: true,
-            provider_code: 'provider_code',
-            course_code: 'course_code',
-            subjects: [Subject.new(subject_name: 'foo', subject_code: 'sc')] }
+            provider_code: "provider_code",
+            course_code: "course_code",
+            subjects: [Subject.new(subject_name: "foo", subject_code: "sc")] }
         end
 
         def mock_course
@@ -96,7 +96,7 @@ module Find
           end
 
           def secondary_course?
-            level == 'secondary'
+            level == "secondary"
           end
 
           def two_one?
@@ -112,7 +112,7 @@ module Find
           end
 
           def apprenticeship?
-            funding_type.to_s == 'apprenticeship'
+            funding_type.to_s == "apprenticeship"
           end
 
           def engineers_teach_physics?
@@ -124,11 +124,11 @@ module Find
           end
 
           def degree_grade_content
-            I18n.t('shared.decorators.course.two_one_degree')
+            I18n.t("shared.decorators.course.two_one_degree")
           end
 
           def equivalent_qualification
-            I18n.t('shared.decorators.course.above_or_equivalent_qualification_html').html_safe
+            I18n.t("shared.decorators.course.above_or_equivalent_qualification_html").html_safe
           end
         end
       end

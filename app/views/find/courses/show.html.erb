@@ -4,7 +4,7 @@
   <%= content_for(:before_content) do %>
     <%= govuk_back_link(
       text: t("find.courses.show.back_to_search"),
-      href: course_back_link
+      href: course_back_link,
     ) %>
   <% end %>
 <% end %>
@@ -58,8 +58,8 @@
           t(".training_with_disabilities_link", provider_name: @course.provider_name),
           find_training_with_disabilities_path(
             @course.provider_code,
-            @course.course_code
-          )
+            @course.course_code,
+          ),
         ) %>
       </p>
     <% end %>

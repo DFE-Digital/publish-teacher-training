@@ -2,7 +2,7 @@
 
 module Publish
   class CourseAboutThisCourseForm < BaseProviderForm
-    alias course_enrichment model
+    alias_method :course_enrichment, :model
 
     FIELDS = %i[about_course].freeze
 
@@ -23,7 +23,7 @@ module Publish
       end
     end
 
-    private
+  private
 
     def compute_fields
       course_enrichment.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)

@@ -2,7 +2,7 @@
 
 module Publish
   class NotificationForm < BaseModelForm
-    alias user model
+    alias_method :user, :model
 
     FIELDS = %i[
       explicitly_enabled
@@ -10,7 +10,7 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :explicitly_enabled, inclusion: { in: [true, false], message: 'Please select one option' }
+    validates :explicitly_enabled, inclusion: { in: [true, false], message: "Please select one option" }
 
     def save!
       if valid?
@@ -20,7 +20,7 @@ module Publish
       end
     end
 
-    private
+  private
 
     def compute_fields
       { explicitly_enabled: preference_selected? }.merge(new_attributes).symbolize_keys

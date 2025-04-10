@@ -31,8 +31,8 @@ module Token
           verify_sub: true,
           verify_iat: true,
           exp_leeway: 6.seconds.to_i,
-          **claims
-        }
+          **claims,
+        },
       )
 
       (payload, _algorithm) = decoded_token
@@ -40,7 +40,7 @@ module Token
       payload.with_indifferent_access[:data]
     end
 
-    private
+  private
 
     attr_reader :encoded_token, :secret, :algorithm, :audience, :issuer, :subject
 
@@ -48,7 +48,7 @@ module Token
       @claims ||= {
         aud: audience,
         iss: issuer,
-        sub: subject
+        sub: subject,
       }
     end
   end

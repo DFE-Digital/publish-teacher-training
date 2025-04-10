@@ -2,7 +2,7 @@
 
 module Publish
   class BaseCourseForm < BaseModelForm
-    alias course model
+    alias_method :course, :model
 
     def save!
       if valid?
@@ -12,7 +12,7 @@ module Publish
       end
     end
 
-    private
+  private
 
     def after_successful_save_action
       NotificationService::CourseUpdated.call(course:)

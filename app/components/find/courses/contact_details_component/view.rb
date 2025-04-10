@@ -18,7 +18,7 @@ module Find
           contact_form?
         end
 
-        private
+      private
 
         def course_information_config
           @course_information_config ||= Configs::CourseInformation.new(course)

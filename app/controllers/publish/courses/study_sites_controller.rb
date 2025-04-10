@@ -29,8 +29,8 @@ module Publish
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code
-          ), flash: { success: t('flash.updated', resource: 'Study sites') }
+            course.course_code,
+          ), flash: { success: t("flash.updated", resource: "Study sites") }
         else
           render :edit
         end
@@ -41,7 +41,7 @@ module Publish
         redirect_to @provider.study_sites.many? ? new_publish_provider_recruitment_cycle_courses_study_sites_path(path_params) : @back_link_path
       end
 
-      private
+    private
 
       def update_course_study_sites
         study_site_ids = params[:course][:study_sites]

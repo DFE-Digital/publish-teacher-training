@@ -1,37 +1,37 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-feature 'selecting a course outcome', { can_edit_current_and_next_cycles: false } do
+feature "selecting a course outcome", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_publish_courses_new_outcome_page
   end
 
-  scenario 'selecting qts' do
+  scenario "selecting qts" do
     when_i_select_an_outcome(:qts)
     and_i_click_continue
     then_i_am_met_with_the_funding_type_page(:qts)
   end
 
-  scenario 'selecting pgce with qts' do
+  scenario "selecting pgce with qts" do
     when_i_select_an_outcome(:pgce_with_qts)
     and_i_click_continue
     then_i_am_met_with_the_funding_type_page(:pgce_with_qts)
   end
 
-  scenario 'selecting pgde with qts' do
+  scenario "selecting pgde with qts" do
     when_i_select_an_outcome(:pgde_with_qts)
     and_i_click_continue
     then_i_am_met_with_the_funding_type_page(:pgde_with_qts)
   end
 
-  scenario 'invalid entries' do
+  scenario "invalid entries" do
     and_i_click_continue
     then_i_am_met_with_errors
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, :with_provider)
@@ -56,12 +56,12 @@ feature 'selecting a course outcome', { can_edit_current_and_next_cycles: false 
 
   def then_i_am_met_with_the_funding_type_page(outcome)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/funding-type/new#{selected_params(outcome)}")
-    expect(page).to have_content('Funding type')
+    expect(page).to have_content("Funding type")
   end
 
   def then_i_am_met_with_errors
-    expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select a qualification')
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("Select a qualification")
   end
 
   def selected_params(outcome)

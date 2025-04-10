@@ -13,7 +13,7 @@ module Support
       filter_records
     end
 
-    private
+  private
 
     attr_reader :model_data_scope, :filter_params
 
@@ -39,9 +39,9 @@ module Support
       return records if user_type_arr&.all?(&:blank?)
 
       case user_type_arr
-      when ['admin']
+      when %w[admin]
         records.admins
-      when ['provider']
+      when %w[provider]
         records.non_admins
       else
         records
@@ -55,7 +55,7 @@ module Support
     end
 
     def provider_accredited_type(records, accredited_provider)
-      return records unless accredited_provider == 'on'
+      return records unless accredited_provider == "on"
 
       records.accredited
     end

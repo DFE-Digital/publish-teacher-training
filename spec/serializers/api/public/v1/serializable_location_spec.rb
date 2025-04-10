@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe API::Public::V1::SerializableLocation do
   subject { JSON.parse(resource.as_jsonapi.to_json) }
@@ -8,11 +8,11 @@ describe API::Public::V1::SerializableLocation do
   let(:location) { create(:site) }
   let(:resource) { described_class.new(object: location) }
 
-  it 'sets type to locations' do
+  it "sets type to locations" do
     expect(resource.jsonapi_type).to eq(:locations)
   end
 
-  it { is_expected.to have_type 'locations' }
+  it { is_expected.to have_type "locations" }
 
   it { is_expected.to have_attribute(:city).with_value(location.town) }
   it { is_expected.to have_attribute(:code).with_value(location.code) }
@@ -26,12 +26,12 @@ describe API::Public::V1::SerializableLocation do
   it { is_expected.to have_attribute(:street_address_2).with_value(location.address2) }
   it { is_expected.to have_attribute(:street_address_3).with_value(location.address3) }
 
-  context 'relationships' do
-    context 'default' do
+  context "relationships" do
+    context "default" do
       it { is_expected.to have_relationships(:provider, :recruitment_cycle) }
     end
 
-    context 'with a course' do
+    context "with a course" do
       let(:resource) { described_class.new(object: location, course: build_stubbed(:course)) }
 
       it { is_expected.to have_relationships(:course, :provider, :recruitment_cycle) }

@@ -20,13 +20,13 @@ module NotificationService
             attribute_name: updated_attribute,
             original_value:,
             updated_value:,
-            recipient: user
+            recipient: user,
           ).deliver_later
         end
       end
     end
 
-    private
+  private
 
     attr_reader :course
 

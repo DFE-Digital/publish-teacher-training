@@ -15,10 +15,10 @@ module Support
 
           reset_forms
 
-          redirect_to support_recruitment_cycle_provider_path(recruitment_cycle.year, provider.id), flash: { success: 'Organisation added' }
+          redirect_to support_recruitment_cycle_provider_path(recruitment_cycle.year, provider.id), flash: { success: "Organisation added" }
         end
 
-        private
+      private
 
         def reset_forms
           [provider_form, provider_contact_form].each(&:clear_stash)
