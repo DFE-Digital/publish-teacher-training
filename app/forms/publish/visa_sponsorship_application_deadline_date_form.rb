@@ -2,47 +2,60 @@
 
 module Publish
   class VisaSponsorshipApplicationDeadlineDateForm < ApplicationForm
+    CURRENT_STEP = "visa_sponsorship_deadline_date"
+
     include ActiveModel::Attributes
     include ActiveRecord::AttributeAssignment
 
     attribute :visa_sponsorship_application_deadline_at, :datetime
+    attribute :course
+    attribute :recruitment_cycle
+    attribute :starting_step
 
     validate :date_present
     validate :within_range
 
-    def self.build(attributes, recruitment_cycle:)
-      year = attributes["visa_sponsorship_application_deadline_at(1i)"]
-      month = attributes["visa_sponsorship_application_deadline_at(2i)"]
-      day = attributes["visa_sponsorship_application_deadline_at(3i)"]
-      attributes["visa_sponsorship_application_deadline_at"] = Struct.new(:year, :month, :day).new(year, month, day)
+    def self.build_from_hash(year:, month:, day:, course: nil, recruitment_cycle: nil, starting_step: CURRENT_STEP)
+      attributes = {
+        visa_sponsorship_application_deadline_at: Struct.new(:year, :month, :day).new(year, month, day),
+        course:,
+        recruitment_cycle: recruitment_cycle || course.recruitment_cycle,
+        starting_step:,
+      }
 
-      attributes = attributes.except("visa_sponsorship_application_deadline_at(1i)", "visa_sponsorship_application_deadline_at(2i)", "visa_sponsorship_application_deadline_at(3i)")
-      new(attributes, recruitment_cycle:)
+      new(attributes)
     end
 
-    def initialize(attributes, recruitment_cycle:)
-      @recruitment_cycle = recruitment_cycle
-      super(attributes)
+    def started_at_current_step?
+      starting_step == CURRENT_STEP
+    end
+
+    def update!
+      return unless valid?
+
+      course.update!(visa_sponsorship_application_deadline_at: @date)
     end
 
     def date_present
       error_type = if [year, month, day].all?(&:blank?)
-                     :blank
-                   elsif day.blank? || day.to_i.zero?
-                     :blank_day
-                   elsif month.blank? || month.to_i.zero?
-                     :blank_month
-                   elsif year.blank? || year.to_i.zero?
-                     :blank_year
+                     :all_blank
+                   elsif [year, month, day].any?(&:blank?)
+                     :some_blank
+                   elsif [year, month, day].any? { |entry| entry.to_i.zero? }
+                     :not_integers
                    end
 
       errors.add(:visa_sponsorship_application_deadline_at, error_type) if error_type.present?
     end
 
-    def within_range
-      date = DateTime.new(year.to_i, month.to_i, day.to_i, 23, 59)
+    def set_date
+      @date = DateTime.new(year.to_i, month.to_i, day.to_i).change(hour: 23, min: 59)
+    end
 
-      unless date.between?(first_valid_datetime, last_valid_datetime)
+    def within_range
+      set_date
+
+      unless @date.between?(first_valid_datetime, last_valid_datetime)
         errors.add(
           :visa_sponsorship_application_deadline_at,
           :not_in_range,
@@ -67,7 +80,7 @@ module Publish
     end
 
     def last_valid_datetime
-      @last_valid_datetime ||= @recruitment_cycle.application_end_date.end_of_day.change(hour: 18)
+      @last_valid_datetime ||= recruitment_cycle.application_end_date.end_of_day.change(hour: 18)
     end
 
     def first_valid_datetime
@@ -83,7 +96,7 @@ module Publish
     end
 
     def start_of_cycle
-      @start_of_cycle ||= @recruitment_cycle.application_start_date.end_of_day.change(hour: 9)
+      @start_of_cycle ||= recruitment_cycle.application_start_date.end_of_day.change(hour: 9)
     end
   end
 end
