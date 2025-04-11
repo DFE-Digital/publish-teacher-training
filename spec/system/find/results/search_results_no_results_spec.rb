@@ -39,7 +39,7 @@ RSpec.describe "No search results", :js, service: :find do
   end
 
   def given_courses_exist
-    romford = build(:location, :romford)
+    romford = build(:location, :bristol)
     primary_subject = find_or_create(:primary_subject, :primary)
 
     create(
