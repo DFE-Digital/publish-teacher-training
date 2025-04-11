@@ -137,6 +137,8 @@
           country: @search_params[:country],
           minimum_degree_required: @search_params[:minimum_degree_required],
           subjects: @search_params[:subjects],
+          search_params: @search_params,
+          radius_links_query: @radius_links_query || nil,
         ) %>
       <% end %>
     </div>
