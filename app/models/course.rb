@@ -424,18 +424,6 @@ class Course < ApplicationRecord
     accrediting_provider&.train_with_us
   end
 
-  def accrediting_provider_description
-    return if accrediting_provider.blank?
-    return if provider.accrediting_provider_enrichments.blank?
-
-    accrediting_provider_enrichment = provider.accrediting_provider_enrichments
-                                              .find do |provider|
-      provider.UcasProviderCode == accrediting_provider.provider_code
-    end
-
-    accrediting_provider_enrichment.Description if accrediting_provider_enrichment.present?
-  end
-
   def publishable?
     valid? :publish
   end
@@ -443,7 +431,7 @@ class Course < ApplicationRecord
   def validate_accredited_provider_partnership_exists
     return if accredited_provider_code.blank?
 
-    errors.add(:accrediting_provider, :partnership_missing) unless provider.accredited_providers.include?(accrediting_provider)
+    errors.add(:accrediting_provider, :partnership_missing) unless provider.accredited_partners.include?(accrediting_provider)
   end
 
   def update_valid?

@@ -21,7 +21,7 @@
         <%= render "publish/shared/error_messages", error_keys: [:accredited_provider_code] %>
 
         <div class="govuk-radios" data-module="govuk-radios" data-qa="course__ratifying_provider">
-          <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
+          <%= render partial: "provider_suggestion", collection: @provider.accredited_partners.sort_by(&:provider_name), locals: { form: fields } %>
         </div>
       <% end %>
     <% end %>

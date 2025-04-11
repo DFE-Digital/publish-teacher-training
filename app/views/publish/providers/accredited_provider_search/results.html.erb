@@ -2,7 +2,7 @@
 <% content_for :page_title, title_with_error_prefix(search_result_title_component.title, @accredited_provider_select_form.errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_accredited_providers_path) %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_accredited_partnerships_path) %>
 <% end %>
 
 <%= form_with(
@@ -31,7 +31,7 @@
 
       <% unless @accredited_provider_search.providers.empty? %>
         <p class="govuk-body">
-          <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_providers_path) %>
+          <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_partnerships_path) %>
         </p>
       <% end %>
       </div>

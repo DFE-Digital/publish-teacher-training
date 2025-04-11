@@ -21,7 +21,7 @@
                     method: :put do |form| %>
 
         <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__ratifying_provider">
-          <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies, locals: { form: } %>
+          <%= render partial: "provider_suggestion", collection: @provider.accredited_partners, locals: { form: } %>
         </div>
 
         <div class="govuk-button-group">

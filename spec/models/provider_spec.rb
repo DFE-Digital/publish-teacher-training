@@ -5,13 +5,11 @@ require "rails_helper"
 describe Provider do
   subject { provider }
 
-  let(:accrediting_provider_enrichments) { [] }
   let(:courses) { [] }
   let(:provider) do
     create(:provider,
            provider_name: "ACME SCITT",
            provider_code: "A01",
-           accrediting_provider_enrichments:,
            courses:)
   end
 
@@ -368,28 +366,6 @@ describe Provider do
           expect { course.discard }.to change { provider.reload.courses.size }.by(-1)
         end
       end
-    end
-  end
-
-  describe "#accrediting_providers" do
-    let(:provider) { create(:provider, accrediting_provider_enrichments:) }
-    let!(:partnership) { create(:provider_partnership, training_provider: provider, accredited_provider:) }
-
-    let(:accrediting_provider) { create(:accredited_provider) }
-    let(:accredited_provider) { accrediting_provider }
-    let!(:course1) { create(:course, accrediting_provider:, provider:) }
-    let!(:course2) { create(:course, accrediting_provider:, provider:) }
-
-    it "returns the course's accrediting provider" do
-      expect(provider.accrediting_providers.first).to eq(accrediting_provider)
-    end
-
-    it "is aliased" do
-      expect(provider.accrediting_providers).to eq(provider.accredited_providers)
-    end
-
-    it "does not duplicate data" do
-      expect(provider.accrediting_providers.count).to eq(1)
     end
   end
 
@@ -942,26 +918,6 @@ describe Provider do
       let(:search_term) { "dave" }
 
       it { is_expected.to contain_exactly(matching_provider) }
-    end
-  end
-
-  describe "#accredited_bodies" do
-    it "returns empty array" do
-      expect(subject.accredited_bodies).to match([])
-    end
-
-    context "with accredited provider" do
-      let(:accredited_provider_one) { create(:accredited_provider, provider_code: "AP1") }
-      let(:accredited_provider_two) { create(:accredited_provider, provider_code: "AP2") }
-
-      let!(:accredited_partnerships) do
-        [create(:provider_partnership, training_provider: provider, accredited_provider: accredited_provider_one, description: "about the accredited provider"),
-         create(:provider_partnership, training_provider: provider, accredited_provider: accredited_provider_two)]
-      end
-
-      it "returns the current recruitment accredited bodies" do
-        expect(subject.accredited_bodies.map(&:id)).to match_array(accredited_partnerships.map(&:accredited_provider_id))
-      end
     end
   end
 
