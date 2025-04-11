@@ -8,12 +8,12 @@
           url: visa_sponsorship_application_deadline_required_publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
             @provider.recruitment_cycle_year,
-            @course.course_code
+            @course.course_code,
           ),
           model: @deadline_required_form,
           scope: :course,
           method: :put,
-          local: true
+          local: true,
         ) do |form| %>
       <%= form.govuk_error_summary %>
       <%= render CaptionText.new(text: course.name_and_code) %>
@@ -23,7 +23,7 @@
             legend: {  text: t(".legend"), size: "l" },
             hint: -> { tag.div(t(".inset_text"), class: "govuk-inset-text") }
           ) %>
-      <%= form.hidden_field(:origin) %>
+      <%= form.hidden_field(:starting_step) %>
       <%= form.submit t(".update"), class: "govuk-button" %>
     <% end %>
     <p class="govuk-body">
@@ -33,8 +33,7 @@
               course.provider_code,
               course.recruitment_cycle_year,
               course.course_code,
-              origin: @deadline_required_form.origin
-            )
+            ),
           ) %>
     </p>
   </div>

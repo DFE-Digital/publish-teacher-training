@@ -73,7 +73,7 @@ module Publish
           @course_funding_form.stash
           visa_page_path
         else
-          flash[:success] = I18n.t("funding_type.updated")
+          flash[:success] = t(".updated")
           course_page_path
         end
       end

@@ -4,10 +4,13 @@ module Publish
   module Courses
     class VisaSponsorshipApplicationDeadlineDateController < ApplicationController
       include CourseBasicDetailConcern
+
       def new
         authorize(@provider, :can_create_course?)
-        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_form(
-          deadline_params,
+        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_hash(
+          year: deadline_params["visa_sponsorship_application_deadline_at(1i)"],
+          month: deadline_params["visa_sponsorship_application_deadline_at(2i)"],
+          day: deadline_params["visa_sponsorship_application_deadline_at(3i)"],
           recruitment_cycle: @provider.recruitment_cycle,
         )
       end
@@ -18,7 +21,7 @@ module Publish
           {
             course:,
             visa_sponsorship_application_deadline_at: course.visa_sponsorship_application_deadline_at,
-            origin: origin_param || "visa_sponsorship_deadline_date",
+            starting_step:,
           },
         )
         set_back_link
@@ -26,15 +29,17 @@ module Publish
 
       def update
         authorize(provider)
-        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_form(
-          deadline_params,
-          origin: origin_param || "visa_sponsorship_deadline_date",
+        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_hash(
+          year: deadline_params["visa_sponsorship_application_deadline_at(1i)"],
+          month: deadline_params["visa_sponsorship_application_deadline_at(2i)"],
+          day: deadline_params["visa_sponsorship_application_deadline_at(3i)"],
+          starting_step:,
           course:,
         )
 
         if @deadline_form.valid?
           @deadline_form.update!
-          flash[:success] = I18n.t("publish.courses.visa_sponsorship_application_deadline_date.update.success.#{@deadline_form.origin}")
+          flash[:success] = t(".success.#{@deadline_form.starting_step}")
           redirect_to(details_publish_provider_recruitment_cycle_course_path(*course_nav_params))
         else
           set_back_link
@@ -45,13 +50,11 @@ module Publish
     private
 
       def set_back_link
-        @back_link_path = if @deadline_form.origin == "visa_sponsorship_deadline_date"
-                            details_publish_provider_recruitment_cycle_course_path(
-                              *course_nav_params, origin: @deadline_form.origin
-                            )
+        @back_link_path = if @deadline_form.started_at_current_step?
+                            details_publish_provider_recruitment_cycle_course_path(*course_nav_params)
                           else
                             visa_sponsorship_application_deadline_required_publish_provider_recruitment_cycle_course_path(
-                              *course_nav_params, origin: @deadline_form.origin
+                              *course_nav_params, starting_step: @deadline_form.starting_step
                             )
                           end
       end
@@ -65,8 +68,11 @@ module Publish
       end
 
       def errors
-        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_form(
-          deadline_params,
+        # This method is only used in the CourseBasicDetailConcern for the new / create methods.
+        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_hash(
+          year: deadline_params["visa_sponsorship_application_deadline_at(1i)"],
+          month: deadline_params["visa_sponsorship_application_deadline_at(2i)"],
+          day: deadline_params["visa_sponsorship_application_deadline_at(3i)"],
           recruitment_cycle: @provider.recruitment_cycle,
         )
         @deadline_form.validate
@@ -77,8 +83,10 @@ module Publish
         course_params.permit(:visa_sponsorship_application_deadline_at)
       end
 
-      def origin_param
-        params[:origin] || params.dig("course", "origin")
+      def starting_step
+        params[:starting_step] ||
+          params.dig("course", "starting_step") ||
+          VisaSponsorshipApplicationDeadlineDateForm::CURRENT_STEP
       end
     end
   end
