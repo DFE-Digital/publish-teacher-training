@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # Download today's sanitized backup of the publish database to the Downloads directory
 # Drop and recreate the development and test databases
