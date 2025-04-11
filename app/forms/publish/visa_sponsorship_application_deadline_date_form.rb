@@ -2,29 +2,32 @@
 
 module Publish
   class VisaSponsorshipApplicationDeadlineDateForm < ApplicationForm
+    CURRENT_STEP = "visa_sponsorship_deadline_date"
+
     include ActiveModel::Attributes
     include ActiveRecord::AttributeAssignment
 
     attribute :visa_sponsorship_application_deadline_at, :datetime
     attribute :course
     attribute :recruitment_cycle
-    attribute :origin
+    attribute :starting_step
 
     validate :date_present
     validate :within_range
 
-    def self.build_from_form(form_params, recruitment_cycle: nil, course: nil, origin: "visa_sponsorship_deadline_date")
-      year = form_params["visa_sponsorship_application_deadline_at(1i)"]
-      month = form_params["visa_sponsorship_application_deadline_at(2i)"]
-      day = form_params["visa_sponsorship_application_deadline_at(3i)"]
+    def self.build_from_hash(year:, month:, day:, course: nil, recruitment_cycle: nil, starting_step: CURRENT_STEP)
       attributes = {
         visa_sponsorship_application_deadline_at: Struct.new(:year, :month, :day).new(year, month, day),
         course:,
         recruitment_cycle: recruitment_cycle || course.recruitment_cycle,
-        origin: origin,
+        starting_step:,
       }
 
       new(attributes)
+    end
+
+    def started_at_current_step?
+      starting_step == CURRENT_STEP
     end
 
     def update!

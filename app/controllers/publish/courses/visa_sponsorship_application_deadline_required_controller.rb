@@ -16,7 +16,7 @@ module Publish
           {
             course:,
             visa_sponsorship_application_deadline_required: course.visa_sponsorship_application_deadline_at.present?,
-            origin: origin_param || "visa_sponsorship_deadline_required",
+            starting_step:,
           },
         )
         set_back_link
@@ -25,11 +25,11 @@ module Publish
       def update
         authorize(provider)
         @deadline_required_form = VisaSponsorshipApplicationDeadlineRequiredForm.new(
-          date_required_params.merge(course:, origin: origin_param || "visa_sponsorship_deadline_required"),
+          date_required_params.merge(course:, starting_step:),
         )
         if @deadline_required_form.valid?
           @deadline_required_form.update!
-          redirect_action_after_update
+          redirect_to_after_update
         else
           set_back_link
           render :edit
@@ -39,17 +39,15 @@ module Publish
     private
 
       def set_back_link
-        @back_link_path = if @deadline_required_form.origin == "visa_sponsorship_deadline_required"
-                            details_publish_provider_recruitment_cycle_course_path(
-                              *course_nav_params, origin: @deadline_required_form.origin
-                            )
+        @back_link_path = if @deadline_required_form.started_at_current_step?
+                            details_publish_provider_recruitment_cycle_course_path(*course_nav_params)
                           elsif course.visa_type == "student"
                             student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
-                              *course_nav_params, origin: @deadline_required_form.origin
+                              *course_nav_params, starting_step: @deadline_required_form.starting_step
                             )
                           else
                             skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
-                              *course_nav_params, origin: @deadline_required_form.origin
+                              *course_nav_params, starting_step: @deadline_required_form.starting_step
                             )
                           end
       end
@@ -58,18 +56,16 @@ module Publish
         [course.provider_code, course.recruitment_cycle_year, course.course_code]
       end
 
-      def redirect_action_after_update
+      def redirect_to_after_update
         if @deadline_required_form.visa_sponsorship_application_deadline_required
           redirect_to(
             visa_sponsorship_application_deadline_date_publish_provider_recruitment_cycle_course_path(
               *course_nav_params,
-              origin: @deadline_required_form.origin,
+              starting_step: @deadline_required_form.starting_step,
             ),
           )
         else
-          flash[:success] = I18n.t(
-            "publish.courses.visa_sponsorship_application_deadline_required.update.success.#{@deadline_required_form.origin}",
-          )
+          flash[:success] = t(".success.#{@deadline_required_form.starting_step}")
           redirect_to(details_publish_provider_recruitment_cycle_course_path(*course_nav_params))
         end
       end
@@ -82,8 +78,10 @@ module Publish
         course_params.permit(:visa_sponsorship_application_deadline_required)
       end
 
-      def origin_param
-        params[:origin] || params.dig("course", "origin")
+      def starting_step
+        params[:starting_step] ||
+          params.dig("course", "starting_step") ||
+          VisaSponsorshipApplicationDeadlineRequiredForm::CURRENT_STEP
       end
 
       def errors
