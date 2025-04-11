@@ -931,6 +931,10 @@ class Course < ApplicationRecord
     visa_sponsorship == :no_sponsorship
   end
 
+  def offers_sponsorship?
+    !no_visa_sponsorship?
+  end
+
 private
 
   def update_vac_status(study_mode, site_status)
@@ -1163,7 +1167,7 @@ private
   end
 
   def visa_sponsorship_application_deadline_when_no_sponsorship
-    return unless visa_sponsorship_application_deadline_at.present? && visa_sponsorship == :no_sponsorship
+    return if visa_sponsorship_application_deadline_at.blank? || offers_sponsorship?
 
     errors.add(:visa_sponsorship_application_deadline_at, :only_available_if_course_sponsors_visas)
   end

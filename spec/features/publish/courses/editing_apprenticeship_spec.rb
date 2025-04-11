@@ -178,11 +178,6 @@ private
     end
   end
 
-  def and_i_select_no_visa_deadline_required
-    choose "No"
-    click_on "Update"
-  end
-
   def then_i_should_see_a_success_message_for(visa_type)
     expect(page).to have_content(I18n.t("visa_sponsorships.updated.apprenticeship_and_visa", visa_type:))
   end

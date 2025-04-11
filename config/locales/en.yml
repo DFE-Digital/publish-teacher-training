@@ -101,8 +101,6 @@ en:
     generate_course_name_service:
       further_education_title: "Further education"
       etp_title: "Engineers teach physics"
-  funding_type:
-    updated: 'You have updated funding type'
   visa_sponsorships:
     student: "Student"
     skilled_worker: "Skilled Worker"
