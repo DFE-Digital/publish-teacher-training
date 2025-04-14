@@ -15,11 +15,11 @@ module Publish
     validate :date_present
     validate :within_range
 
-    def self.build_from_hash(year:, month:, day:, course: nil, recruitment_cycle: nil, starting_step: CURRENT_STEP)
+    def self.build(year:, month:, day:, recruitment_cycle:, course: nil, starting_step: CURRENT_STEP)
       attributes = {
         visa_sponsorship_application_deadline_at: Struct.new(:year, :month, :day).new(year, month, day),
         course:,
-        recruitment_cycle: recruitment_cycle || course.recruitment_cycle,
+        recruitment_cycle:,
         starting_step:,
       }
 
@@ -49,7 +49,7 @@ module Publish
     end
 
     def set_date
-      @date = DateTime.new(year.to_i, month.to_i, day.to_i).change(hour: 23, min: 59)
+      @date = DateTime.new(year.to_i, month.to_i, day.to_i).end_of_day
     end
 
     def within_range

@@ -207,9 +207,9 @@
          row.with_value { course.visa_sponsorship_deadline_required }
          row.with_action(
            href: visa_sponsorship_application_deadline_required_publish_provider_recruitment_cycle_course_path(
-             provider_code: @provider.provider_code,
-             recruitment_cycle_year: course.recruitment_cycle_year,
-             code: course.course_code,
+             @provider.provider_code,
+             course.recruitment_cycle_year,
+             course.course_code,
            ),
            visually_hidden_text: t(".sponsorship_deadline_required_visually_hidden"),
          )
