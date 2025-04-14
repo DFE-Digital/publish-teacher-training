@@ -2,7 +2,7 @@
   @include govuk-clearfix;
   margin-top: 0;
 
-  &__label:after {
+  &__label::after {
     display: inline-block;
   }
 }
@@ -12,10 +12,12 @@
   vertical-align: top;
 
   @include govuk-media-query($from: desktop) {
-    clear: left;
     float: left;
-    margin-bottom: govuk-spacing(1);
+    clear: left;
+
     width: 30%;
+
+    margin-bottom: govuk-spacing(1);
   }
 }
 
@@ -26,13 +28,16 @@
 
 %app-description-list > dd {
   @include govuk-font($size: 19, $weight: normal);
-  margin: 0 0 govuk-spacing(2) 0;
+  margin: 0 0 govuk-spacing(2);
+
   vertical-align: top;
 
   @include govuk-media-query($from: desktop) {
     float: left;
-    margin-bottom: govuk-spacing(1);
+
     width: 70%;
+
+    margin-bottom: govuk-spacing(1);
   }
 
   .govuk-details,
@@ -58,14 +63,16 @@
 .app-description-list {
   @extend %app-description-list;
 
-  &__label:after {
+  &__label::after {
     display: inline-block;
   }
 
   &__hint {
     @include govuk-font($size: 16, $weight: normal);
-    color: $govuk-secondary-text-colour;
     display: block;
+
     margin-bottom: govuk-space(1);
+
+    color: $govuk-secondary-text-colour;
   }
 }
