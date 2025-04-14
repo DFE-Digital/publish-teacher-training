@@ -27,7 +27,6 @@ module PageObjects
       element :about_accrediting_provider, "[data-qa=course__about_accrediting_provider]"
       element :train_with_disability, "[data-qa=course__train_with_disabilities]"
       element :course_advice, "#section-advice"
-      element :course_tda_advice, "#section-tda-advice"
       element :course_support_and_advice, "#section-support-and-advice"
       element :course_apply, "#section-apply"
       element :back_link, "[data-qa=page-back]"

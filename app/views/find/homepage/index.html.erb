@@ -148,14 +148,14 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
-    <%= govuk_inset_text classes: "app-callout app-callout--pink" do %>
+    <%= govuk_inset_text classes: "app-callout app-callout--pink app-callout--min-height govuk-!-margin-top-0" do %>
       <h3><%= t("find.search.become_a_teacher") %></h3>
       <%= t("find.search.become_a_teacher_html", link: govuk_link_to(t("find.search.become_a_teacher_link_text"), find_track_click_path(utm_content: "become_a_teacher", url: t("get_into_teaching.url_become_a_teacher")))) %>
     <% end %>
   </div>
 
   <div class="govuk-grid-column-one-half">
-    <%= govuk_inset_text classes: "app-callout app-callout--pink" do %>
+    <%= govuk_inset_text classes: "app-callout app-callout--pink app-callout--min-height govuk-!-margin-top-0" do %>
       <h3><%= t("find.search.get_help_and_support") %></h3>
       <%= t("find.search.get_help_and_support_html", link: govuk_link_to(t("find.search.get_help_and_support_link_text"), find_track_click_path(utm_content: "get_help_and_support", url: t("get_into_teaching.url_help_and_support")))) %>
     <% end %>
