@@ -1,5 +1,6 @@
 import propertyGroups from 'stylelint-config-recess-order/groups'
 
+/** @type {import("stylelint").Config} */
 export default {
   extends: ['stylelint-config-gds/scss', 'stylelint-config-recess-order'],
   plugins: ['stylelint-order'],
@@ -15,6 +16,7 @@ export default {
       {
         camelCaseSvgKeywords: true
       }
-    ]
+    ],
+    'scss/at-extend-no-missing-placeholder': null
   }
 }
