@@ -17,8 +17,8 @@ en:
           cancel: Cancel
         update:
             success:
-              funding: You have updated funding type and visa sponsorship and deadline
-              apprenticeship: You have updated Teaching apprenticeship and visa sponsorship and deadline
-              visa_sponsorship: You have updated visa sponsorship and deadline
-              visa_sponsorship_deadline_required: You have updated visa sponsorship deadline
+              funding: Funding type and visa sponsorship and deadline updated
+              apprenticeship: Teaching apprenticeship and visa sponsorship and deadline updated
+              visa_sponsorship: Visa sponsorship and deadline updated
+              visa_sponsorship_deadline_required: Visa sponsorship deadline updated
 

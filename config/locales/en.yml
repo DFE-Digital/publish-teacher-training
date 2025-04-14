@@ -108,10 +108,10 @@ en:
       funding: "You’re being shown this page because you changed your answer to funding type."
       funding_type: "You’re being shown this page because you changed your answer to funding type."
       apprenticeship: "You’re being shown this page because you changed your answer to whether this is a teaching apprenticeship."
-      funding_and_visa: "You have updated funding type and visa sponsorship"
-      funding_type_and_visa: "You have updated funding type and visa sponsorship"
-      apprenticeship_and_visa: "You have updated teaching apprenticeship and visa sponsorship"
-      visa: "You have updated %{visa_type} visas"
+      funding_and_visa: "Funding type and visa sponsorship updated"
+      funding_type_and_visa: "Funding type and visa sponsorship updated"
+      apprenticeship_and_visa: "Teaching apprenticeship and visa sponsorship updated"
+      visa: "%{visa_type} visas updated"
   page_titles:
     study_mode:
       edit: Study pattern

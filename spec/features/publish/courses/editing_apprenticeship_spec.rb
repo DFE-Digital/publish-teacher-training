@@ -174,7 +174,7 @@ private
 
   def then_i_see_the_no_deadline_success_message
     within(".govuk-notification-banner__content") do
-      expect(page).to have_content "You have updated Teaching apprenticeship and visa sponsorship and deadline"
+      expect(page).to have_content "Teaching apprenticeship and visa sponsorship and deadline updated"
     end
   end
 

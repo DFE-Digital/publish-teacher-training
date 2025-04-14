@@ -271,7 +271,7 @@ private
 
   def then_i_see_the_no_deadline_success_message
     within(".govuk-notification-banner__content") do
-      expect(page).to have_content "You have updated funding type and visa sponsorship and deadline"
+      expect(page).to have_content "Funding type and visa sponsorship and deadline updated"
     end
   end
 
