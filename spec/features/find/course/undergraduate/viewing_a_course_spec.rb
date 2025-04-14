@@ -37,12 +37,12 @@ feature "Viewing an undergraduate course" do
   end
 
   def then_i_see_the_tda_advice_callout
-    expect(find_course_show_page.course_tda_advice).to have_css(:h2, text: "Teacher degree apprenticeship")
-    expect(find_course_show_page.course_tda_advice).to have_content("On a teacher degree apprenticeship you’ll work in a school and earn a salary while getting a bachelor’s degree and qualified teacher status (QTS).")
+    expect(page).to have_css("h2", text: "Teacher degree apprenticeship")
+    expect(page).to have_content("On a teacher degree apprenticeship you’ll work in a school and earn a salary while getting a bachelor’s degree and qualified teacher status (QTS).")
   end
 
   def and_i_do_not_see_the_support_and_advice_callout
-    expect(page).to have_no_css(:h2, text: "Support and advice")
+    expect(page).to have_no_css("h2", text: "Support and advice")
   end
 
   def when_i_click_to_contact_get_into_teaching
