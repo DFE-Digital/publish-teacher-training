@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require 'sidekiq/testing'
+require "rails_helper"
+require "sidekiq/testing"
 
 RSpec.describe RolloverJob do
   let(:recruitment_cycle) { create(:recruitment_cycle) }
@@ -14,21 +14,21 @@ RSpec.describe RolloverJob do
 
   after { Sidekiq::Testing.disable! }
 
-  describe '#perform' do
-    it 'enqueues jobs with correct staggered timings' do
+  describe "#perform" do
+    it "enqueues jobs with correct staggered timings" do
       Timecop.freeze do
         current_time = Time.zone.now
         subject.perform
 
-        expect(Sidekiq::Queues['default'].size).to eq(15)
+        expect(Sidekiq::Queues["default"].size).to eq(15)
 
         providers[0..9].each do |provider|
           job = find_job(provider.provider_code)
 
           expect(job).to include(
-            'class' => 'RolloverProviderJob',
-            'args' => [provider.provider_code],
-            'enqueued_at' => current_time.to_f
+            "class" => "RolloverProviderJob",
+            "args" => [provider.provider_code],
+            "enqueued_at" => current_time.to_f,
           )
         end
 
@@ -36,21 +36,21 @@ RSpec.describe RolloverJob do
           job = find_job(provider.provider_code)
 
           expect(job).to include(
-            'class' => 'RolloverProviderJob',
-            'args' => [provider.provider_code],
-            'at' => (current_time + 1.hour).to_f
+            "class" => "RolloverProviderJob",
+            "args" => [provider.provider_code],
+            "at" => (current_time + 1.hour).to_f,
           )
         end
       end
     end
 
-    it 'handles empty provider lists gracefully' do
+    it "handles empty provider lists gracefully" do
       Provider.delete_all
-      expect { subject.perform }.not_to change(Sidekiq::Queues['default'], :size)
+      expect { subject.perform }.not_to change(Sidekiq::Queues["default"], :size)
     end
   end
 
   def find_job(provider_code)
-    Sidekiq::Queues['default'].find { |j| j['args'] == [provider_code] }
+    Sidekiq::Queues["default"].find { |j| j["args"] == [provider_code] }
   end
 end
