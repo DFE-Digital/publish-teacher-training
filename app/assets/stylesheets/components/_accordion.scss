@@ -8,8 +8,8 @@ body:not(.js-enabled) {
   }
 
   .course-accordion .govuk-accordion__section-content {
+    padding-top: 0;
     padding-bottom: govuk-spacing(3);
-    padding-top: 0px;
   }
 
   .course-accordion {
@@ -26,13 +26,13 @@ body:not(.js-enabled) {
 }
 
 .course-accordion .govuk-accordion__section {
-  border-left: govuk-spacing(1) solid govuk-colour("purple");
   background-color: govuk-colour("light-grey");
+  border-left: govuk-spacing(1) solid govuk-colour("purple");
 }
 
 .course-accordion .govuk-accordion__section-header {
-  padding-left: govuk-spacing(4);
   padding-right: govuk-spacing(4);
+  padding-left: govuk-spacing(4);
 }
 
 .course-accordion .govuk-accordion__section-header:hover {
@@ -44,13 +44,13 @@ body:not(.js-enabled) {
 }
 
 .course-accordion .govuk-accordion__section-content {
-  padding-left: govuk-spacing(4);
+  padding-top: 0;
   padding-right: govuk-spacing(4);
-  padding-top: 0px;
   padding-bottom: 1px;
+  padding-left: govuk-spacing(4);
 }
 
 .course-accordion .govuk-accordion__section--orange {
-  border-left: govuk-spacing(1) solid govuk-colour("orange");
   background-color: govuk-colour("light-grey");
+  border-left: govuk-spacing(1) solid govuk-colour("orange");
 }

@@ -2,9 +2,10 @@
   .govuk-fieldset {
     .govuk-checkboxes {
       .scrollable-filter {
-        margin-left: -10px;
-        overflow-y: auto;
         padding-left: 10px;
+        margin-left: -10px;
+
+        overflow-y: auto;
       }
 
       .primary-scrollable-filter {
