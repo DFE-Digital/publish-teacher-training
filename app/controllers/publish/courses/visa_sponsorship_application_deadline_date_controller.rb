@@ -7,10 +7,8 @@ module Publish
 
       def new
         authorize(@provider, :can_create_course?)
-        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_hash(
-          year: deadline_params["visa_sponsorship_application_deadline_at(1i)"],
-          month: deadline_params["visa_sponsorship_application_deadline_at(2i)"],
-          day: deadline_params["visa_sponsorship_application_deadline_at(3i)"],
+        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build(
+          **date_params_for_form,
           recruitment_cycle: @provider.recruitment_cycle,
         )
       end
@@ -20,6 +18,7 @@ module Publish
         @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.new(
           {
             course:,
+            recruitment_cycle: course.recruitment_cycle,
             visa_sponsorship_application_deadline_at: course.visa_sponsorship_application_deadline_at,
             starting_step:,
           },
@@ -29,10 +28,9 @@ module Publish
 
       def update
         authorize(provider)
-        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_hash(
-          year: deadline_params["visa_sponsorship_application_deadline_at(1i)"],
-          month: deadline_params["visa_sponsorship_application_deadline_at(2i)"],
-          day: deadline_params["visa_sponsorship_application_deadline_at(3i)"],
+        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build(
+          **date_params_for_form,
+          recruitment_cycle: course.recruitment_cycle,
           starting_step:,
           course:,
         )
@@ -69,10 +67,8 @@ module Publish
 
       def errors
         # This method is only used in the CourseBasicDetailConcern for the new / create methods.
-        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build_from_hash(
-          year: deadline_params["visa_sponsorship_application_deadline_at(1i)"],
-          month: deadline_params["visa_sponsorship_application_deadline_at(2i)"],
-          day: deadline_params["visa_sponsorship_application_deadline_at(3i)"],
+        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build(
+          **date_params_for_form,
           recruitment_cycle: @provider.recruitment_cycle,
         )
         @deadline_form.validate
@@ -81,6 +77,14 @@ module Publish
 
       def deadline_params
         course_params.permit(:visa_sponsorship_application_deadline_at)
+      end
+
+      def date_params_for_form
+        {
+          year: deadline_params["visa_sponsorship_application_deadline_at(1i)"],
+          month: deadline_params["visa_sponsorship_application_deadline_at(2i)"],
+          day: deadline_params["visa_sponsorship_application_deadline_at(3i)"],
+        }
       end
 
       def starting_step

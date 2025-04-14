@@ -114,8 +114,7 @@ module Publish
     end
 
     def assign_attributes_to_model
-      self.fields = compute_fields
-      super
+      model.assign_attributes(compute_fields.except(*fields_to_ignore_before_save))
     end
 
     def compute_fields
