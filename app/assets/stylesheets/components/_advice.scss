@@ -1,9 +1,11 @@
 .app-advice {
   @include govuk-responsive-margin(4, "bottom");
+  clear: both;
+
+  padding: govuk-spacing(4);
+
   background: govuk-colour("light-grey");
   border-left: $govuk-border-width solid $git-brand-colour;
-  clear: both;
-  padding: govuk-spacing(4);
 }
 
 .app-advice__title {
@@ -18,8 +20,9 @@
 
 #section-advice-and-support,
 #section-tda-advice {
-  border: 5px solid govuk-colour("pink");
-  margin-bottom: 30px;
   padding: 20px;
+  margin-bottom: 30px;
+
   background: govuk-colour("light-grey");
+  border: 5px solid govuk-colour("pink");
 }

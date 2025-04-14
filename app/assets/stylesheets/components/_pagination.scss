@@ -1,27 +1,34 @@
 .app-pagination {
   display: block;
+
   margin: govuk-spacing(6) #{govuk-spacing(3) * -1};
 }
 
 .app-pagination__list {
-  margin: 0;
   padding: 0;
+  margin: 0;
+
   list-style: none;
 }
 
 .app-pagination__list::after {
-  content: "";
-  display: block;
   clear: both;
+
+  display: block;
+
+  content: "";
 }
 
 .app-pagination__item {
   @include govuk-font(14);
   float: left;
-  text-align: right;
-  margin: 0;
-  padding: 0;
+
   width: 50%;
+
+  padding: 0;
+  margin: 0;
+
+  text-align: right;
 
   @include govuk-media-query($from: tablet) {
     @include govuk-font(16);
@@ -30,7 +37,9 @@
 
 .app-pagination__link {
   display: block;
+
   padding: govuk-spacing(3);
+
   text-decoration: none;
 }
 
@@ -45,33 +54,41 @@
 
 .app-pagination__item--previous {
   float: left;
+
   text-align: left;
 
   @include govuk-media-query($until: tablet) {
     float: none;
+
     width: 100%;
   }
 }
 
 .app-pagination__item--next {
   float: right;
+
   text-align: right;
 
   @include govuk-media-query($until: tablet) {
     float: none;
+
     width: 100%;
   }
 }
 
 .app-pagination__link-icon {
   display: inline-block;
-  margin-bottom: 1px;
-  height: 0.482em;
+
   width: 0.63em;
+  height: 0.482em;
+
+  margin-bottom: 1px;
 }
 
 .app-pagination__link-label {
   display: inline-block;
+
   margin-top: govuk-spacing(1);
+
   text-decoration: underline;
 }

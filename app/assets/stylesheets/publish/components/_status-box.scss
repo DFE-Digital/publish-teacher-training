@@ -1,7 +1,8 @@
 .app-status-box {
   @include govuk-responsive-margin(6, "bottom");
-  background-color: govuk-colour("light-grey");
   padding: govuk-spacing(4);
+
+  background-color: govuk-colour("light-grey");
 
   > *:last-child {
     margin-bottom: 0;
