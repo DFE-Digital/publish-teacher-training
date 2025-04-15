@@ -73,6 +73,10 @@ class RecruitmentCycle < ApplicationRecord
                 end
   end
 
+  def upcoming?
+    status == :upcoming
+  end
+
   def year_range
     "#{year.to_i - 1} to #{year}"
   end

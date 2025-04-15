@@ -29,4 +29,8 @@ class RecruitmentCyclePolicy
   def show?
     user.present?
   end
+
+  def edit?
+    user.present? && @recruitment_cycle.upcoming?
+  end
 end
