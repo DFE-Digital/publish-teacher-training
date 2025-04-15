@@ -4,8 +4,16 @@ en:
       index:
         page_title: Recruitment Cycles
         add_recruitment_cycle: Add recruitment cycle
-        status_current: Current
-        status_inactive: Past
+        status:
+          current:
+            text: Current
+            colour: green
+          inactive:
+            text: Past
+            colour: grey
+          upcoming:
+            text: Upcoming
+            colour: yellow
       new:
         page_title: Recruitment cycle details
         page_caption: Add recruitment cycle
