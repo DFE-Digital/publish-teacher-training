@@ -1,0 +1,55 @@
+<% content_for :page_title, @recruitment_cycle.to_s %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_back_link(href: support_recruitment_cycles_path) %>
+<% end %>
+
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l"><%= t(".page_caption") %></span>
+      <h1 class="govuk-heading-l"><%= @recruitment_cycle %></h1>
+
+      <%= govuk_summary_list(actions: policy(@recruitment_cycle).edit?) do |summary_list| %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: RecruitmentCycle.human_attribute_name(:year) %>
+          <% row.with_value text: @recruitment_cycle.year %>
+          <% if policy(@recruitment_cycle).edit? %>
+            <% row.with_action(
+              text: t("change"),
+              href: edit_support_recruitment_cycle_path(@recruitment_cycle),
+              visually_hidden_text: RecruitmentCycle.human_attribute_name(:year),
+              classes: ["govuk-link--no-visited-state"],
+            ) %>
+          <% end %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: RecruitmentCycle.human_attribute_name(:application_start_date) %>
+          <% row.with_value text: l(@recruitment_cycle.application_start_date, format: :long) %>
+          <% if policy(@recruitment_cycle).edit? %>
+            <% row.with_action(
+              text: t("change"),
+              href: edit_support_recruitment_cycle_path(@recruitment_cycle),
+              visually_hidden_text: RecruitmentCycle.human_attribute_name(:application_start_date),
+              html_attributes: { class: "govuk-link--no-visited-state" },
+            ) %>
+          <% end %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: RecruitmentCycle.human_attribute_name(:application_end_date) %>
+          <% row.with_value text: l(@recruitment_cycle.application_end_date, format: :long) %>
+          <% if policy(@recruitment_cycle).edit? %>
+            <% row.with_action(
+              text: t("change"),
+              href: edit_support_recruitment_cycle_path(@recruitment_cycle),
+              visually_hidden_text: RecruitmentCycle.human_attribute_name(:application_end_date),
+              classes: ["govuk-link--no-visited-state"],
+            ) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

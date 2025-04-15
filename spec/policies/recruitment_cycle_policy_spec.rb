@@ -26,10 +26,19 @@ describe RecruitmentCyclePolicy do
     it { is_expected.to permit(user, RecruitmentCycle) }
   end
 
+  # rubocop:disable RSpec/RepeatedExample
   permissions :show? do
     let(:user) { create(:user) }
 
     it { is_expected.to permit(user, current_recruitment_cycle) }
     it { is_expected.to permit(user, next_recruitment_cycle) }
   end
+
+  permissions :edit? do
+    let(:user) { create(:user) }
+
+    it { is_expected.not_to permit(user, current_recruitment_cycle) }
+    it { is_expected.to permit(user, next_recruitment_cycle) }
+  end
+  # rubocop:enable RSpec/RepeatedExample
 end

@@ -17,7 +17,15 @@ en:
       new:
         page_title: Recruitment cycle details
         page_caption: Add recruitment cycle
-        submit: Continue
-        cancel: Cancel
       create:
         added: Recruitment cycle added
+      edit:
+        page_title: Recruitment cycle details
+        page_caption: Edit recruitment cycle
+      update:
+        updated: Recruitment cycle updated
+      form:
+        submit: Continue
+        cancel: Cancel
+      show:
+        page_caption: Recruitment cycle

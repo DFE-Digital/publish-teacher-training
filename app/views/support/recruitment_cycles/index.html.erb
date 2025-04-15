@@ -20,7 +20,7 @@
         <% table.with_body do |body| %>
           <% @recruitment_cycles.each do |recruitment_cycle| %>
             <% body.with_row do |row| %>
-              <% row.with_cell text: recruitment_cycle.year %>
+              <% row.with_cell text: govuk_link_to(recruitment_cycle.year, support_recruitment_cycle_path(recruitment_cycle)) %>
               <% row.with_cell text: recruitment_cycle.application_start_date.strftime("%-d %B %Y") %>
               <% row.with_cell text: recruitment_cycle.application_end_date.strftime("%-d %B %Y") %>
               <% row.with_cell do %>

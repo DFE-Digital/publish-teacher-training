@@ -18,7 +18,7 @@ RSpec.describe Support::RecruitmentCyclesHelper do
     end
 
     context "with upcoming cycle" do
-      let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
+      let(:recruitment_cycle) { build(:recruitment_cycle, :next, application_start_date: Date.tomorrow) }
 
       it "returns yellow 'Upcoming' tag" do
         expect(tag.text).to eq("Upcoming")
