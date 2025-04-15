@@ -8,8 +8,7 @@ module CoursePreview
        gcse
        how_school_placements_work
        train_with_disability
-       train_with_us
-       about_accrediting_provider].each do |information_type|
+       train_with_us].each do |information_type|
       define_method information_type do
         provider = Provider.new(provider_code: "BAT", recruitment_cycle: RecruitmentCycle.current)
         accrediting_provider = Provider.new(provider_code: "CAT", recruitment_cycle: RecruitmentCycle.current)
