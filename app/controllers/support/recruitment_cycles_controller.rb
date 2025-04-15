@@ -2,16 +2,14 @@
 
 module Support
   class RecruitmentCyclesController < ApplicationController
+    before_action :set_recruitment_cycle, :authorize_recruitment_cycle, only: %i[show edit update]
+
     def index
       @recruitment_cycles = RecruitmentCycle.order(year: :desc)
     end
 
     def new
       @support_recruitment_cycle_form = RecruitmentCycleForm.new
-    end
-
-    def show
-      @recruitment_cycle = RecruitmentCycle.find(params[:id])
     end
 
     def create
@@ -31,8 +29,6 @@ module Support
     end
 
     def edit
-      @recruitment_cycle = RecruitmentCycle.find(params[:id])
-
       @support_recruitment_cycle_form = RecruitmentCycleForm.new(
         year: @recruitment_cycle.year,
         application_start_date: @recruitment_cycle.application_start_date,
@@ -41,7 +37,6 @@ module Support
     end
 
     def update
-      @recruitment_cycle = RecruitmentCycle.find(params[:id])
       @support_recruitment_cycle_form = RecruitmentCycleForm.new(recruitment_cycle_form_params)
 
       if @support_recruitment_cycle_form.valid?(:update)
@@ -66,6 +61,14 @@ module Support
                                              application_start_date
                                              application_end_date],
         )
+    end
+
+    def set_recruitment_cycle
+      @recruitment_cycle = RecruitmentCycle.find(params[:id])
+    end
+
+    def authorize_recruitment_cycle
+      authorize @recruitment_cycle
     end
   end
 end

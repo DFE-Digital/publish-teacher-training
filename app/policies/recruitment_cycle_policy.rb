@@ -33,4 +33,5 @@ class RecruitmentCyclePolicy
   def edit?
     user.present? && @recruitment_cycle.upcoming?
   end
+  alias_method :update?, :edit?
 end
