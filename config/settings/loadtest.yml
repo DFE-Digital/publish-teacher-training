@@ -1,4 +1,3 @@
-gcp_api_key: please_change_me
 publish_api_url: https://publish-teacher-training-loadtest.london.cloudapps.digital
 publish_url: https://publish-loadtest.london.cloudapps.digital
 find_url: https://find-loadtest.london.cloudapps.digital
