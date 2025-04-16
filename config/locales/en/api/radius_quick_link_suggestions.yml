@@ -1,0 +1,10 @@
+en:
+  api:
+    radius_quick_link_suggestions:
+      radius_in_miles:
+        one: "%{count} mile (%{course_count})"
+        other: "%{count} miles (%{course_count})"
+      over_100_courses: more than 100 courses
+      course_count:
+        one: "%{count} course"
+        other: "%{count} courses"
