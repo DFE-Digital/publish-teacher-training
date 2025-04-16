@@ -1,20 +1,16 @@
 .app-filter__group {
-  .govuk-fieldset {
-    .govuk-checkboxes {
-      .scrollable-filter {
-        padding-left: 10px;
-        margin-left: -10px;
+  .scrollable-filter {
+    padding-left: 10px;
+    margin-left: -10px;
 
-        overflow-y: auto;
-      }
+    overflow-y: auto;
+  }
 
-      .primary-scrollable-filter {
-        max-height: 165px;
-      }
+  .primary-scrollable-filter {
+    max-height: 165px;
+  }
 
-      .secondary-scrollable-filter {
-        max-height: 155px;
-      }
-    }
+  .secondary-scrollable-filter {
+    max-height: 155px;
   }
 }
