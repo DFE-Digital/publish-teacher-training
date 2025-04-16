@@ -107,8 +107,8 @@ module Courses
 
     RadiusOption = Struct.new(:value, :name, keyword_init: true)
     RADIUS_VALUES = [1, 5, 10, 15, 20, 25, 50, 100, 200].freeze
-    DEFAULT_RADIUS = 10
-    LARGE_RADIUS = 50
+    DEFAULT_RADIUS = 50
+    SMALL_RADIUS = 10
 
     def radius_options
       RADIUS_VALUES.map do |value|
@@ -122,7 +122,10 @@ module Courses
     def radius
       return super if super.present?
 
-      types&.include?("administrative_area_level_2") ? LARGE_RADIUS : DEFAULT_RADIUS
+      # If the geocoded result is a low radius area we will limit the radius to 10 miles
+      small_radius = %w[route locality sublocality street_address postal_code]
+
+      types && (types & small_radius).present? ? SMALL_RADIUS : DEFAULT_RADIUS
     end
 
     PHYSICS_SUBJECT_CODE = "F3"
