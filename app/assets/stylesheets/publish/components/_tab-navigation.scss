@@ -100,6 +100,8 @@
 
   &:focus::before {
     height: 7px; // Bar needs to change thickness so that we don’t rely on colour alone.
+
+    background-color: govuk-colour("black");
   }
 
   &::before {
@@ -120,9 +122,4 @@
     }
 
   }
-
-  &:focus::before {
-    background-color: govuk-colour("black");
-  }
-
 }
