@@ -264,7 +264,18 @@ private
 
     expect(publish_course_preview_page).to have_course_advice
 
-    expect(publish_course_preview_page).to have_link("Apply for this course", href: "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply")
+    has_apply_for_course_buttons
+  end
+
+  def has_apply_for_course_buttons
+    expected_url = "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply"
+
+    links = publish_course_preview_page.all("a", text: "Apply for this course", exact_text: true)
+    expect(links.size).to eq(2)
+
+    links.each do |link|
+      expect(link[:href]).to eq(expected_url)
+    end
   end
 
   def user_with_custom_address_requested_via_zendesk

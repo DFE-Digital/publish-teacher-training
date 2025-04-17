@@ -30,7 +30,6 @@ module PageObjects
       element :course_tda_advice, "#section-tda-advice"
       element :course_support_and_advice, "#section-support-and-advice"
       element :course_apply, "#section-apply"
-      element :apply_link, "a[data-qa=course__apply_link]"
       element :back_link, "[data-qa=page-back]"
       element :end_of_cycle_notice, "[data-qa=course__end_of_cycle_notice]"
       element :feedback_link, "[data-qa=feedback-link]"
