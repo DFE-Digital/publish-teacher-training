@@ -94,6 +94,135 @@ describe Courses::CreationService do
     end
   end
 
+  context "when provider is not accredited and has exactly one accredited partner" do
+    let(:accredited_partner) { create(:provider, :accredited_provider) }
+    let(:provider) do
+      create(
+        :provider,
+        accredited: false,
+      )
+    end
+
+    let(:valid_course_params) do
+      {
+        "level" => "primary",
+        "qualification" => "qts",
+        "funding" => "fee",
+        "sites_ids" => [site.id],
+        "study_sites_ids" => [study_site.id],
+      }
+    end
+
+    before do
+      create(
+        :provider_partnership,
+        training_provider: provider,
+        accredited_provider: accredited_partner,
+      )
+    end
+
+    it "assigns the single accredited partner as the accrediting_provider" do
+      expect(subject.accrediting_provider).to eq(accredited_partner)
+    end
+  end
+
+  context "when provider is accredited" do
+    let(:provider) do
+      create(
+        :provider,
+        :accredited_provider,
+      )
+    end
+
+    let(:valid_course_params) do
+      {
+        "level" => "primary",
+        "qualification" => "qts",
+        "funding" => "fee",
+        "sites_ids" => [site.id],
+        "study_sites_ids" => [study_site.id],
+      }
+    end
+
+    it "does not assign an accrediting_provider" do
+      expect(subject.accrediting_provider).to be_nil
+    end
+  end
+
+  context "when provider is accredited and has a partner that lost its accreditation" do
+    let(:provider) do
+      create(
+        :provider,
+        :accredited_provider,
+      )
+    end
+
+    let(:valid_course_params) do
+      {
+        "level" => "primary",
+        "qualification" => "qts",
+        "funding" => "fee",
+        "sites_ids" => [site.id],
+        "study_sites_ids" => [study_site.id],
+      }
+    end
+
+    before do
+      unaccredited_partner = create(:provider, accredited: false)
+
+      # simulating a provider that lost an accreditation
+      ProviderPartnership.new(
+        training_provider: provider,
+        accredited_provider: unaccredited_partner,
+      ).save(validate: false)
+    end
+
+    it "does not assign an accrediting_provider" do
+      expect(
+        subject.accrediting_provider,
+      ).to be_nil,
+           <<~MSG
+             Expected accrediting_provider to be nil but got #{subject.accrediting_provider&.provider_name}. Provider partners: #{provider.accredited_partners.map { |partner| partner.attributes.symbolize_keys.slice(:provider_name, :accredited) }}
+           MSG
+    end
+  end
+
+  context "when provider has more than one accredited partner" do
+    let(:accredited_partner_one) { create(:provider, :accredited_provider) }
+    let(:accredited_partner_two) { create(:provider, :accredited_provider) }
+    let(:provider) do
+      create(
+        :provider,
+        accredited: false,
+        sites: [site],
+        study_sites: [study_site],
+      )
+    end
+
+    let(:valid_course_params) do
+      {
+        "level" => "primary",
+        "qualification" => "qts",
+        "funding" => "fee",
+        "sites_ids" => [site.id],
+        "study_sites_ids" => [study_site.id],
+      }
+    end
+
+    before do
+      create(:provider_partnership,
+             training_provider: provider,
+             accredited_provider: accredited_partner_one)
+      create(:provider_partnership,
+             training_provider: provider,
+             accredited_provider: accredited_partner_two)
+    end
+
+    it "does not assign an accrediting_provider" do
+      expect(subject.accrediting_provider).to be_nil
+    end
+  end
+
   context "primary course" do
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
 

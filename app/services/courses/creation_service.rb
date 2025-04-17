@@ -35,7 +35,11 @@ module Courses
       update_study_mode(course)
       update_sites(course)
       update_study_sites(course)
-      course.accrediting_provider = course.provider.accredited_partners.first if course.provider.accredited_partners.length == 1
+
+      if assign_accrediting_provider_by_single_partner?(course)
+        course.accrediting_provider = course.provider.accredited_partners.first
+      end
+
       course.course_code = provider.next_available_course_code if next_available_course_code
 
       Publish::Courses::AssignTdaAttributesService.new(course).call if course.undergraduate_degree_with_qts?
@@ -120,6 +124,10 @@ module Courses
       course.study_sites = study_sites if study_site_ids.any?
 
       course.errors.add(:study_sites, message: "Select at least one study site") if study_site_ids.empty?
+    end
+
+    def assign_accrediting_provider_by_single_partner?(course)
+      !course.provider.accredited? && course.provider.accredited_partners.one?
     end
   end
 end
