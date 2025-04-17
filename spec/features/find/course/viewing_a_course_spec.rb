@@ -301,10 +301,18 @@ private
 
   def has_apply_for_course_buttons
     links = all("a", text: "Apply for this course", exact_text: true)
-
     expect(links.size).to eq(2)
-    links.each do |link|
-      expect(link[:href]).to eq("/course/#{provider.provider_code}/#{@course.course_code}/apply")
+
+    expected_url = "/course/#{provider.provider_code}/#{@course.course_code}/apply"
+    expected_utm_contents = %w[apply_course_button_top apply_course_button_bottom]
+
+    links.each_with_index do |link, i|
+      uri = URI(link[:href])
+      params = Rack::Utils.parse_query(uri.query)
+
+      expect(uri.path).to eq("/track_click")
+      expect(params["url"]).to eq(expected_url)
+      expect(params["utm_content"]).to eq(expected_utm_contents[i])
     end
   end
 

@@ -21,7 +21,7 @@
 
     <!--The reason for the Apply component duplication here is because we want to keep the warning text at the top but Keep the Apply button and end of cycle text at the bottom-->
 
-    <%= render Find::Courses::ApplyComponent::View.new(course) if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course:) %>
 
@@ -58,6 +58,6 @@
 
     <%= render partial: "find/courses/advice", locals: { course: } %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(course) unless course.application_status_open? %>
+    <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) unless course.application_status_open? %>
   </div>
 </div>

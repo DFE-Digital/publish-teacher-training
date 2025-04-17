@@ -4,13 +4,15 @@ module Find
   module Courses
     module ApplyComponent
       class View < ViewComponent::Base
-        attr_reader :course
+        attr_reader :course, :preview, :utm_content
 
         delegate :application_status_open?, :provider, to: :course
 
-        def initialize(course)
+        def initialize(course, preview: false, utm_content: nil)
           super
           @course = course
+          @preview = preview
+          @utm_content = utm_content
         end
 
         def apply_path

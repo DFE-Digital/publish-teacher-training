@@ -4,7 +4,7 @@
       <p class="govuk-body govuk-!-margin-0">
         <%= govuk_start_button(
               text: "Apply for this course",
-              href: apply_path,
+              href: preview ? apply_path : find_track_click_path(utm_content:, url: apply_path),
             ) %>
       </p>
       <% if show_application_deadline? %>
