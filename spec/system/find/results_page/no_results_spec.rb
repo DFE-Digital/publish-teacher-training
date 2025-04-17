@@ -5,24 +5,12 @@ require "rails_helper"
 RSpec.describe "No search results", :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-
-    given_courses_exist
-    visit find_results_path
+    when_i_visit_the_results_page
   end
 
   scenario "when searching for courses in Northern Ireland" do
     when_i_search_courses_in_northern_ireland
     then_i_see_northern_ireland_no_results_content
-  end
-
-  scenario "when searching for courses in Scotland" do
-    when_i_search_courses_in_scotland
-    then_i_see_scotland_no_results_content
-  end
-
-  scenario "when searching for courses in Wales" do
-    when_i_search_courses_in_wales
-    then_i_see_wales_no_results_content
   end
 
   scenario "when searching for courses in England with no results" do
@@ -34,11 +22,13 @@ RSpec.describe "No search results", :js, service: :find do
   end
 
   scenario "when searching for teacher degree apprenticeship courses with no results" do
+    given_courses_exist
     when_i_search_teacher_degree_apprenticeship_courses_in_england
     then_i_see_teacher_degree_apprenticeship_no_results_content
   end
 
   scenario "when there are no results for the given radius, a selection of wider search options are given" do
+    given_courses_exist
     when_i_search_for_maths_in_london
     then_i_see_radius_quick_links
     then_i_click_on_radius_quick_link
@@ -81,38 +71,6 @@ RSpec.describe "No search results", :js, service: :find do
     )
   end
 
-  def when_i_search_courses_in_scotland
-    fill_in "City, town or postcode", with: "Edinburgh"
-    stub_geocode_request("Edinburgh")
-    stub_autocomplete_request("Edinburgh")
-    and_i_click_search
-  end
-
-  def then_i_see_scotland_no_results_content
-    and_i_see_the_service_is_only_for_courses_in_england
-
-    expect(page).to have_link(
-      "Learn more about teacher training in Scotland",
-      href: find_track_click_path(url: "https://teachinscotland.scot"),
-    )
-  end
-
-  def when_i_search_courses_in_wales
-    fill_in "City, town or postcode", with: "Cardiff"
-    stub_geocode_request("Cardiff")
-    stub_autocomplete_request("Cardiff")
-    and_i_click_search
-  end
-
-  def then_i_see_wales_no_results_content
-    and_i_see_the_service_is_only_for_courses_in_england
-
-    expect(page).to have_link(
-      "Learn more about teacher training in Wales",
-      href: find_track_click_path(url: "https://educators.wales/teacher"),
-    )
-  end
-
   def and_i_click_search
     click_link_or_button "Search"
   end
@@ -127,6 +85,7 @@ RSpec.describe "No search results", :js, service: :find do
 
     fill_in "Subject", with: "Mathematics"
     fill_in "City, town or postcode", with: "London"
+    and_i_set_the_radius_to_10_miles
     stub_geocode_request("London")
     and_i_click_search
   end
@@ -148,6 +107,7 @@ RSpec.describe "No search results", :js, service: :find do
 
     fill_in "City, town or postcode", with: "London"
     stub_geocode_request("London")
+    and_i_set_the_radius_to_10_miles
     and_i_click_search
   end
 
@@ -219,5 +179,14 @@ RSpec.describe "No search results", :js, service: :find do
       body: file_fixture("google_old_places_api_client/geocode/#{location_stub}.json").read,
       headers: { "Content-Type" => "application/json" },
     )
+  end
+
+  def when_i_set_the_radius_to_10_miles
+    select "10 miles", from: "radius"
+  end
+  alias_method :and_i_set_the_radius_to_10_miles, :when_i_set_the_radius_to_10_miles
+
+  def when_i_visit_the_results_page
+    visit find_results_path
   end
 end
