@@ -219,7 +219,7 @@ jobs:
   build:
     name: Build
     needs: [lint, analytics-checks, javascript-tests, rails-tests]
-    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    if: ${{ github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) }}
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
@@ -307,7 +307,6 @@ jobs:
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_CHANNEL: twd_findpub_tech
           SLACK_COLOR: "#ef5343"
           SLACK_ICON_EMOJI: ":github-logo:"
           SLACK_USERNAME: Publish Teacher Training
