@@ -1,3 +1,5 @@
+<%= render Find::Courses::ApplyComponent::View.new(course) if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
 <h2 class="govuk-heading-l">
   <%= t(".course_summary") %>
 </h2>
