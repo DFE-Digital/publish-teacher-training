@@ -669,6 +669,28 @@ describe Course do
         end
       end
 
+      describe "when not accreditted provider with a further education course without accredited partners" do
+        let(:course) do
+          create(
+            :course,
+            :unpublished,
+            :draft_enrichment,
+            :with_gcse_equivalency,
+            :resulting_in_pgce,
+            accredited: false,
+            level: "further_education",
+            accrediting_provider: nil,
+            provider: create(:provider, accredited: false),
+          )
+        end
+
+        it "is publishable" do
+          subject.valid?(:publish)
+
+          expect(subject.errors.full_messages).to be_empty
+        end
+      end
+
       describe "training provider must have partnership with accrediting provider" do
         let(:course) { create(:course, :publishable, accredited: false) }
 
