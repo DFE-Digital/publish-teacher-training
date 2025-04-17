@@ -107,8 +107,9 @@ module Courses
 
     RadiusOption = Struct.new(:value, :name, keyword_init: true)
     RADIUS_VALUES = [1, 5, 10, 15, 20, 25, 50, 100, 200].freeze
-    DEFAULT_RADIUS = 10
-    LARGE_RADIUS = 50
+    DEFAULT_RADIUS = 50
+    SMALL_RADIUS = 10
+    LONDON_RADIUS = 15
 
     def radius_options
       RADIUS_VALUES.map do |value|
@@ -122,7 +123,23 @@ module Courses
     def radius
       return super if super.present?
 
-      types&.include?("administrative_area_level_2") ? LARGE_RADIUS : DEFAULT_RADIUS
+      if london?
+        LONDON_RADIUS
+      elsif locality?
+        SMALL_RADIUS
+      else
+        DEFAULT_RADIUS
+      end
+    end
+
+    def london?
+      formatted_address == "London, UK"
+    end
+
+    def locality?
+      # @see https://developers.google.com/maps/documentation/geocoding/requests-geocoding#Types
+      small_radius = %w[postal_code street_address route sublocality locality]
+      types && (types & small_radius).present?
     end
 
     PHYSICS_SUBJECT_CODE = "F3"

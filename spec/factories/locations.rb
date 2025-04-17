@@ -25,6 +25,11 @@ FactoryBot.define do
       longitude { -3.1791 }
     end
 
+    trait :cornwall do
+      latitude { 50.5036299 }
+      longitude { -4.6524982 }
+    end
+
     trait :crawley do
       latitude { 51.1091 }
       longitude { -0.1872 }
