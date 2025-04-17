@@ -5,8 +5,10 @@
 .app-filter-layout__filter {
   @include govuk-media-query(desktop) {
     float: left;
-    margin-right: govuk-spacing(6);
+
     max-width: govuk-grid-width("one-third");
+
+    margin-right: govuk-spacing(6);
   }
 }
 
@@ -15,18 +17,22 @@
     outline: 0 none;
 
     @include govuk-media-query($until: desktop) {
-      display: none;
-      background-color: govuk-colour("light-grey");
-      bottom: govuk-spacing(1);
-      border: 1px solid govuk-colour("mid-grey");
-      max-width: 310px;
-      min-width: 260px;
-      width: 100%;
-      overflow-y: scroll;
       position: fixed;
-      right: govuk-spacing(1);
       top: govuk-spacing(1);
+      right: govuk-spacing(1);
+      bottom: govuk-spacing(1);
       z-index: 100;
+
+      display: none;
+
+      width: 100%;
+      min-width: 260px;
+      max-width: 310px;
+
+      overflow-y: scroll;
+
+      background-color: govuk-colour("light-grey");
+      border: 1px solid govuk-colour("mid-grey");
 
       &:focus {
         outline: $govuk-focus-width solid $govuk-focus-colour;
@@ -54,7 +60,8 @@
 .app-filter-layout__content {
   @include govuk-media-query(desktop) {
     float: right;
-    max-width: calc(#{govuk-grid-width("two-thirds")} - #{govuk-spacing(6)});
+
     width: 100%;
+    max-width: calc(#{govuk-grid-width("two-thirds")} - #{govuk-spacing(6)});
   }
 }

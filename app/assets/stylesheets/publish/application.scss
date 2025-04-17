@@ -2,7 +2,6 @@
 @import "../govuk_style_setup";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min";
 
-@import "../components/advice";
 @import "../components/autocomplete";
 @import "../components/filters";
 @import "../components/header";
@@ -12,7 +11,6 @@
 @import "../components/accordion";
 
 @import "./components/card";
-@import "./components/description-list";
 @import "./components/inset-text";
 @import "./components/link";
 @import "./components/navigation-bar";
@@ -31,12 +29,14 @@
   li {
     position: relative;
 
-    &:before {
-      color: govuk-colour("dark-grey");
-      content: "\2013";
-      left: -16px;
+    &::before {
       position: absolute;
       top: 0;
+      left: -16px;
+
+      color: govuk-colour("dark-grey");
+
+      content: "\2013";
     }
   }
 }
@@ -54,6 +54,7 @@
 
 .app-action-group {
   display: block;
+
   gap: govuk-spacing(2);
   @include govuk-media-query($until: tablet) {
     :not(:first-child) {
@@ -63,7 +64,8 @@
 
   @include govuk-media-query($from: tablet) {
     display: flex;
-    align-items: center;
+
     column-gap: govuk-spacing(4);
+    align-items: center;
   }
 }

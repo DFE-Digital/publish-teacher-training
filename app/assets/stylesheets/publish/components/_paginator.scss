@@ -2,10 +2,10 @@
   padding: 0 0 5px 3px;
 }
 
-.moj-pagination__item--prev .moj-pagination__link:before {
+.moj-pagination__item--prev .moj-pagination__link::before {
   margin-right: 1px;
 }
 
-.moj-pagination__item--next .moj-pagination__link:after {
+.moj-pagination__item--next .moj-pagination__link::after {
   margin-left: 1px;
 }

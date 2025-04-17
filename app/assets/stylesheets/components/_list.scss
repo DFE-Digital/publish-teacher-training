@@ -4,12 +4,14 @@
   li {
     position: relative;
 
-    &:before {
-      color: govuk-colour("dark-grey");
-      content: "\2013";
-      left: -16px;
+    &::before {
       position: absolute;
       top: 0;
+      left: -16px;
+
+      color: govuk-colour("dark-grey");
+
+      content: "\2013";
     }
   }
 }

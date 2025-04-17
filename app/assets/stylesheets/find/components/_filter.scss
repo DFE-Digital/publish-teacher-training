@@ -3,13 +3,17 @@
 }
 
 .app-filter__header {
-  background-color: govuk-colour("light-grey");
-  display: flex;
-  justify-content: space-between;
-  padding: govuk-spacing(2) govuk-spacing(3);
   position: sticky;
   top: 0;
   z-index: 10;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  padding: govuk-spacing(2) govuk-spacing(3);
+
+  background-color: govuk-colour("light-grey");
 
   @include govuk-media-query($from: desktop) {
     position: static;
@@ -26,53 +30,66 @@
 
 .app-filter__close {
   @include govuk-font(19);
+  padding: govuk-spacing(1);
+  margin: #{govuk-spacing(1) * -1};
+
+  color: $govuk-text-colour;
 
   -webkit-appearance: none;
+  cursor: pointer;
+
   background-color: transparent;
   border: none;
   border-radius: 0;
-  color: $govuk-text-colour;
-  cursor: pointer;
-  margin: #{govuk-spacing(1) * -1};
-  padding: govuk-spacing(1);
 
   &:focus {
-    background-color: $govuk-focus-colour;
     color: $govuk-focus-text-colour;
+
+    outline: none;
+
+    background-color: $govuk-focus-colour;
     box-shadow:
       0 -2px $govuk-focus-colour,
       0 4px $govuk-focus-text-colour;
-    outline: none;
   }
 
   // Fix unwanted button padding in Firefox
   &::-moz-focus-inner {
     padding: 0;
+
     border: 0;
   }
 
   &::before {
-    background-image: url("icon-cross.svg");
-    content: "";
-    display: inline-block;
-    height: 14px;
-    margin-right: govuk-spacing(1);
     position: relative;
     top: -2px; // Alignment tweak
-    vertical-align: middle;
+
+    display: inline-block;
+
     width: 14px;
+    height: 14px;
+
+    margin-right: govuk-spacing(1);
+
+    vertical-align: middle;
+
+    content: "";
+
+    background-image: url("icon-cross.svg");
   }
 }
 
 .app-filter__group {
-  border-bottom: 1px solid $govuk-border-colour;
-  margin-bottom: govuk-spacing(3);
   padding-bottom: govuk-spacing(2);
+  margin-bottom: govuk-spacing(3);
+
+  border-bottom: 1px solid $govuk-border-colour;
 
   &:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
     padding-bottom: 0;
+    margin-bottom: 0;
+
+    border-bottom: none;
   }
 
   .govuk-fieldset__legend {

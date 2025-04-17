@@ -1,7 +1,8 @@
 .app-search-results {
   @include govuk-responsive-padding(4, "top");
-  margin: 0;
   padding-left: 0;
+  margin: 0;
+
   border-top: 1px solid $govuk-border-colour;
 }
 
@@ -26,23 +27,28 @@
 
 .app-search-result__course-name {
   display: block;
+
   text-decoration: underline;
 }
 
 .app-search-results-header {
-  border-top: 1px solid $govuk-border-colour;
   padding: govuk-spacing(2) 0;
 
+  border-top: 1px solid $govuk-border-colour;
+
   @include govuk-media-query($from: "desktop") {
-    align-items: center;
     display: flex;
+
+    align-items: center;
     justify-content: space-between;
   }
 }
 
 .app-search-results-header__sort {
   display: flex;
+
   flex-wrap: wrap;
+
   align-items: baseline;
 
   * {
@@ -62,6 +68,7 @@
   @include govuk-media-query($until: "tablet") {
     .govuk-select {
       flex: 1;
+
       margin: 0;
     }
 
