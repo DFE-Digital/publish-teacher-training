@@ -290,9 +290,7 @@ private
 
     expect(find_course_show_page).to have_course_advice
 
-    expect(find_course_show_page.apply_link.text).to eq("Apply for this course")
-
-    expect(find_course_show_page.apply_link[:href]).to eq("/course/#{provider.provider_code}/#{@course.course_code}/apply")
+    has_apply_for_course_buttons
 
     expect(find_course_show_page).to have_no_content("When you apply you’ll need these codes for the Choices section of your application form")
 
@@ -301,12 +299,21 @@ private
     expect(find_course_show_page.feedback_link[:href]).to eq("https://www.apply-for-teacher-training.service.gov.uk/candidate/find-feedback?path=/course/#{provider.provider_code}/#{@course.course_code}&find_controller=find/courses")
   end
 
+  def has_apply_for_course_buttons
+    links = all("a", text: "Apply for this course", exact_text: true)
+
+    expect(links.size).to eq(2)
+    links.each do |link|
+      expect(link[:href]).to eq("/course/#{provider.provider_code}/#{@course.course_code}/apply")
+    end
+  end
+
   def and_i_should_see_funding_options
     expect(find_course_show_page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
   end
 
   def then_i_should_not_see_the_apply_button
-    expect(find_course_show_page).not_to have_apply_link
+    expect(page).not_to have_link("Apply for this course", exact_text: true)
     expect(find_course_show_page).to have_end_of_cycle_notice
   end
 
