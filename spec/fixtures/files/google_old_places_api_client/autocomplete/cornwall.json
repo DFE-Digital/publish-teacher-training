@@ -1,0 +1,41 @@
+{
+  "predictions": [
+    {
+      "description": "Cornwall, UK",
+      "matched_substrings": [
+        {
+          "length": 8,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJyQ4nv_C3akgRcUVL2YU8Qm4",
+      "reference": "ChIJyQ4nv_C3akgRcUVL2YU8Qm4",
+      "structured_formatting": {
+        "main_text": "Cornwall",
+        "main_text_matched_substrings": [
+          {
+            "length": 8,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "UK"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "Cornwall"
+        },
+        {
+          "offset": 10,
+          "value": "UK"
+        }
+      ],
+      "types": [
+        "political",
+        "geocode",
+        "administrative_area_level_2"
+      ]
+    }
+  ],
+  "status": "OK"
+}

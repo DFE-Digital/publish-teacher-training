@@ -1,0 +1,48 @@
+{
+  "predictions": [
+    {
+      "description": "Beacon Road, Marazion TR17 0HF, UK",
+      "matched_substrings": [
+        {
+          "length": 8,
+          "offset": 22
+        }
+      ],
+      "place_id": "ChIJu0TvYk7bakgR8HSit5vKcd8",
+      "reference": "ChIJu0TvYk7bakgR8HSit5vKcd8",
+      "structured_formatting": {
+        "main_text": "TR17 0HF",
+        "main_text_matched_substrings": [
+          {
+            "length": 8,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "Beacon Road, Marazion, UK"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "Beacon Road"
+        },
+        {
+          "offset": 13,
+          "value": "Marazion"
+        },
+        {
+          "offset": 22,
+          "value": "TR17 0HF"
+        },
+        {
+          "offset": 32,
+          "value": "UK"
+        }
+      ],
+      "types": [
+        "geocode",
+        "postal_code"
+      ]
+    }
+  ],
+  "status": "OK"
+}

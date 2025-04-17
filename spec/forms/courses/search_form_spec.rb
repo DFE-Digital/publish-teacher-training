@@ -211,7 +211,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435) }
 
       it "returns the correct search params with location details and default radius" do
-        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 10)
+        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50)
       end
     end
 
@@ -219,7 +219,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: "") }
 
       it "returns the correct search params with location details and default radius" do
-        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 10)
+        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50)
       end
     end
 
