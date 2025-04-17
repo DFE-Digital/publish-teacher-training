@@ -1,0 +1,66 @@
+{
+  "results": [
+    {
+      "address_components": [
+        {
+          "long_name": "Cornwall",
+          "short_name": "Cornwall",
+          "types": [
+            "administrative_area_level_2",
+            "political"
+          ]
+        },
+        {
+          "long_name": "England",
+          "short_name": "England",
+          "types": [
+            "administrative_area_level_1",
+            "political"
+          ]
+        },
+        {
+          "long_name": "United Kingdom",
+          "short_name": "GB",
+          "types": [
+            "country",
+            "political"
+          ]
+        }
+      ],
+      "formatted_address": "Cornwall, UK",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": 50.9312716,
+            "lng": -4.1663819
+          },
+          "southwest": {
+            "lat": 49.9588004,
+            "lng": -5.74689
+          }
+        },
+        "location": {
+          "lat": 50.5036299,
+          "lng": -4.6524982
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": 50.9312716,
+            "lng": -4.1663819
+          },
+          "southwest": {
+            "lat": 49.9588004,
+            "lng": -5.74689
+          }
+        }
+      },
+      "place_id": "ChIJyQ4nv_C3akgRcUVL2YU8Qm4",
+      "types": [
+        "administrative_area_level_2",
+        "political"
+      ]
+    }
+  ],
+  "status": "OK"
+}
