@@ -343,7 +343,7 @@ class Course < ApplicationRecord
 
   validates :sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
-  validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? }
+  validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? || further_education_course? }
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
   validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
