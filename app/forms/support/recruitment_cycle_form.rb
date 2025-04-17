@@ -9,7 +9,7 @@ module Support
     validates :year, presence: true, numericality: { only_integer: true }
     validates :application_start_date, :application_end_date, multiple_parameters_date: true
     validate :application_end_date_must_be_after_start_date
-    validate :year_must_be_unique
+    validate :year_must_be_unique, if: -> { validation_context != :update }
 
     def initialize(params = {})
       processed_params = MultipleParametersDateType.process(params)

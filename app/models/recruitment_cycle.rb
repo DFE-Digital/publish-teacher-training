@@ -63,6 +63,20 @@ class RecruitmentCycle < ApplicationRecord
     end
   end
 
+  def status
+    @status ||= if current?
+                  :current
+                elsif application_start_date.future?
+                  :upcoming
+                else
+                  :inactive
+                end
+  end
+
+  def upcoming?
+    status == :upcoming
+  end
+
   def year_range
     "#{year.to_i - 1} to #{year}"
   end

@@ -39,6 +39,34 @@ describe RecruitmentCycle do
     it { is_expected.to have_many(:sites).through(:providers) }
   end
 
+  describe "#status" do
+    context "when current cycle" do
+      let(:recruitment_cycle) { build(:recruitment_cycle) }
+
+      it "returns green 'Current' tag" do
+        allow(recruitment_cycle).to receive(:current?).and_return(true)
+
+        expect(recruitment_cycle.status).to eq(:current)
+      end
+    end
+
+    context "with upcoming cycle" do
+      let(:recruitment_cycle) { build(:recruitment_cycle, :next, application_start_date: Date.tomorrow) }
+
+      it "returns yellow 'Upcoming' tag" do
+        expect(recruitment_cycle.status).to eq(:upcoming)
+      end
+    end
+
+    context "with inactive cycle" do
+      let(:recruitment_cycle) { build(:recruitment_cycle, :previous) }
+
+      it "returns grey 'Past' tag" do
+        expect(recruitment_cycle.status).to eq(:inactive)
+      end
+    end
+  end
+
   describe "current?" do
     it "returns true when it's the current cycle" do
       expect(current_cycle.current?).to be(true)
