@@ -185,7 +185,7 @@ GEM
     brakeman (7.0.2)
       racc
     builder (3.3.0)
-    bullet (8.0.3)
+    bullet (8.0.4)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (12.0.0)
@@ -210,7 +210,7 @@ GEM
     config (5.5.2)
       deep_merge (~> 1.2, >= 1.2.1)
       ostruct
-    connection_pool (2.5.0)
+    connection_pool (2.5.1)
     crack (1.0.0)
       bigdecimal
       rexml
