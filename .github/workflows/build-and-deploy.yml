@@ -202,6 +202,13 @@ jobs:
           EXCLUDE_PATTERN: ${{ matrix.tests.exclude-pattern || ' ' }}
           FEATURE_FLAGS: ${{ matrix.feature-flags }}
 
+      - name: Upload screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test-screenshots
+          path: ${{ github.workspace }}/tmp/capybara/*
+
       # - name: Upload coverage results
       #   if: always()
       #   uses: actions/upload-artifact@v4
