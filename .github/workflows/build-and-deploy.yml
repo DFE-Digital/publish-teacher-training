@@ -27,8 +27,10 @@ jobs:
             command: bundle exec rubocop --format github
           - name: erb_lint
             command: bundle exec erb_lint app
-          - name: yarn lint
+          - name: JS standard
             command: yarn run standard $(git ls-files '**.js' | tr '\n' ' ')
+          - name: Stylelint
+            command: yarn run stylelint
 
     steps:
       - name: Checkout

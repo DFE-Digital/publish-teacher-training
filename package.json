@@ -16,7 +16,7 @@
     "standard:fix": "standard --fix",
     "standard": "standard",
     "test": "vitest",
-    "stylelint": "stylelint '**/*.scss'"
+    "stylelint": "stylelint 'app/**/*.scss'"
   },
   "standard": {
     "envs": [
