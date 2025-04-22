@@ -167,8 +167,12 @@ jobs:
             include-pattern: spec/features/.*_spec.rb
             exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
 
-          - name: System
+
+          - name: System - Find
+            include-pattern: spec/system/find/.*_spec.rb
+          - name: System - Other
             include-pattern: spec/system/.*_spec.rb
+            exclude-pattern: spec/system/find/.*_spec.rb
         # Pass Settings compatible env vars to runs tests with
         # feature flag(s) enables
         # Separate mutliple flags with a space
