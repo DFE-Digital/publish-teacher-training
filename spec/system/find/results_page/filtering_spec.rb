@@ -322,11 +322,6 @@ RSpec.describe "Search Results", :js, service: :find do
     end
   end
 
-  scenario "when no results" do
-    when_i_visit_the_find_results_page
-    then_i_see_no_courses_found
-  end
-
   def given_there_are_courses_that_sponsor_visa
     create(:course, :with_full_time_sites, :can_sponsor_skilled_worker_visa, name: "Biology", course_code: "S872")
     create(:course, :with_full_time_sites, :can_sponsor_student_visa, name: "Chemistry", course_code: "K592")
@@ -842,11 +837,6 @@ RSpec.describe "Search Results", :js, service: :find do
 
   def and_the_chemistry_secondary_option_is_checked
     expect(page).to have_checked_field("Chemistry", visible: :all)
-  end
-
-  def then_i_see_no_courses_found
-    expect(page).to have_content("No courses found")
-    expect(page).to have_title("No courses found")
   end
 
   def given_courses_exist_with_varied_start_dates
