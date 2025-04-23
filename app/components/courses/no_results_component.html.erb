@@ -22,12 +22,31 @@
     <p class="govuk-body">
       <%= t(".undergraduate.message_html", contact: govuk_mail_to(Settings.support_email)) %>
     </p>
-
     <p class="govuk-body">
       <%= govuk_link_to(t(".undergraduate.find_out_more_about_tda"), find_track_click_path(url: t("find.get_into_teaching.url_tda"))) %>
     </p>
   <% end %>
 
-  <div data-radius-quick-link-suggestions-target="heading"></div>
   <div data-radius-quick-link-suggestions-target="container"></div>
+
+  <template data-radius-quick-link-suggestions-target="loadingTemplate">
+    <p class="govuk-body"><%= t(".loading_suggestions") %></p>
+  </template>
+
+  <template data-radius-quick-link-suggestions-target="contentTemplate">
+    <h3 class="govuk-heading-m">
+      {{#subjectName}}
+        <%= t(".browsing_subject", subject_name: "{{subjectName}}") %>
+      {{/subjectName}}
+      {{^subjectName}}
+        <%= t(".browsing_non_subject") %>
+      {{/subjectName}}
+    </h3>
+
+    <ul class="govuk-list govuk-list--bullet">
+      {{#links}}
+        <li><a href="{{url}}" class="govuk-link">{{text}}</a></li>
+      {{/links}}
+    </ul>
+  </template>
 </div>
