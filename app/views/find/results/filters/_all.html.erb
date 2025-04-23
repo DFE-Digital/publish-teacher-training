@@ -21,12 +21,48 @@
     </div>
   <% end %>
 
-  <%= form.govuk_check_boxes_fieldset :secondary_subjects, legend: { text: t("helpers.legend.courses_search_form.secondary_html"), size: "s" }, hint: { text: t("helpers.hint.courses_search_form.secondary"), class: "govuk-!-font-size-16" }, class: "govuk-checkboxes--small", hidden: false, multiple: false, form_group: { class: "app-filter__group", data: { controller: "filter-search" } } do %>
-    <div class="filter-search scrollable-filter secondary-scrollable-filter" data-filter-search-target="optionsList">
+  <%= form.govuk_check_boxes_fieldset :secondary_subjects,
+    legend: {
+      text: t("helpers.legend.courses_search_form.secondary_html"),
+      size: "s",
+    },
+    hint: {
+      text: t("helpers.hint.courses_search_form.secondary"),
+      class: "govuk-!-font-size-16",
+    },
+    class: "govuk-checkboxes--small",
+    hidden: false,
+    multiple: false,
+    form_group: {
+      class: "app-filter__group",
+      data: { controller: "filter-search" },
+    } do %>
+
+    <template data-filter-search-target="template">
+      <div class="filter-search__search">
+        <label for="{{id}}" class="govuk-label govuk-visually-hidden">
+          {{label}}
+        </label>
+        <input
+          type="search"
+          id="{{id}}"
+          class="govuk-input govuk-!-margin-bottom-1"
+          autocomplete="off"
+          placeholder="Search"
+          data-action="input->filter-search#search"
+          data-filter-search-target="searchInput">
+      </div>
+    </template>
+
+    <div data-filter-search-target="searchInputContainer"></div>
+
+    <div class="filter-search scrollable-filter secondary-scrollable-filter">
       <% form.object.secondary_subjects.each do |subject| %>
-        <%= form.govuk_check_box :subjects,
-        subject.subject_code,
-        label: { text: subject.subject_name } %>
+        <div data-filter-search-target="optionsList">
+          <%= form.govuk_check_box :subjects,
+                subject.subject_code,
+                label: { text: subject.subject_name } %>
+        </div>
       <% end %>
     </div>
   <% end %>
