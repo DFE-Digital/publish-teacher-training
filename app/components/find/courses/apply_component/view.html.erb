@@ -1,8 +1,9 @@
-<div class="govuk-!-margin-bottom-8" id="section-apply">
+<div class="govuk-!-margin-bottom-6" id="section-apply">
   <% if Find::CycleTimetable.mid_cycle? %>
     <% if application_status_open? %>
       <p class="govuk-body govuk-!-margin-0">
         <%= govuk_start_button(
+              classes: "govuk-!-margin-0",
               text: "Apply for this course",
               href: preview ? apply_path : find_track_click_path(utm_content:, url: apply_path),
             ) %>
