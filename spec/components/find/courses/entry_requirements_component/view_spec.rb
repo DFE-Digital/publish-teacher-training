@@ -407,7 +407,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       component = described_class.new(course: course.decorate)
       render_inline(component)
 
-      expect(component.qualification_required).to eq("Degree")
+      expect(component.qualification_required).to eq("Degree required")
     end
 
     context "when teacher_degree_apprenticeship" do

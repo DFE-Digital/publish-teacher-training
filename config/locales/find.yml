@@ -222,7 +222,7 @@ en:
           heading: Entry requirements
           visa_sponsorship: Visa sponsorship
           gcses: GCSEs
-          degree: Degree
+          degree: Degree required
           or_equivalent_qualification: or equivalent qualification
           equivalency_tests: Equivalency tests
           degree_subject_requirements: Degree subject requirements
@@ -242,10 +242,10 @@ en:
           no_fee: There is no fee
           course_summary: Course summary
           course_length: Course length
-          age_range: Age range
+          age_range: Age group
           date_can_apply: Date you can apply from
           start_date: Start date
-          qualification: Qualification
+          qualification: Qualification awarded
           provider: Provider
           accredited_by: Accredited by
           for_uk_citizens: for UK citizens
