@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "Publish::ProvidersController" do
+describe "Publish::ProvidersController", service: :publish do
   include DfESignInUserHelper
 
   let(:user) { create(:user, :with_provider) }

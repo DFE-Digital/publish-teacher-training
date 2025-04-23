@@ -1,14 +1,22 @@
-publish_api_url: https://publish-teacher-training-loadtest.london.cloudapps.digital
-publish_url: https://publish-loadtest.london.cloudapps.digital
-find_url: https://find-loadtest.london.cloudapps.digital
-apply_base_url: https://apply-loadtest.london.cloudapps.digital
-
-# URL of this app for the callback after signing in
-base_url: https://publish-loadtest.london.cloudapps.digital
-
 environment:
   label: "Load test"
   name: "loadtest"
+
+find_url: https://find-loadtest.london.cloudapps.digital
+find_hosts:
+  - find-loadtest.london.cloudapps.digital
+
+publish_url: https://publish-loadtest.london.cloudapps.digital
+publish_hosts:
+  - publish-loadtest.london.cloudapps.digital
+
+api_url: https://publish-teacher-training-loadtest.london.cloudapps.digital
+api_hosts:
+  - publish-teacher-training-loadtest.london.cloudapps.digital
+
+base_url: https://publish-loadtest.london.cloudapps.digital
+
+apply_base_url: https://apply-loadtest.london.cloudapps.digital
 
 features:
   send_request_data_to_bigquery: false

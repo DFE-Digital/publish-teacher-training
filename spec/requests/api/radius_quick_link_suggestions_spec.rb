@@ -2,12 +2,8 @@
 
 require "rails_helper"
 
-RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
+RSpec.describe "API::RadiusQuickLinkSuggestions", service: :find do
   describe "GET /api/radius_quick_link_suggestions" do
-    before do
-      host! "www.find-example.com"
-    end
-
     let(:search_params) do
       {
         subject_name: "Mathematics",

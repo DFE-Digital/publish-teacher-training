@@ -8,6 +8,9 @@ Rails.application.routes.draw do
 
   constraints(APIConstraint.new) do
     get "/", to: redirect("/docs/")
+    # draw(:api)
+    draw(:find_api)
+    draw(:publish_api)
   end
 
   constraints(FindConstraint.new) do
@@ -18,6 +21,5 @@ Rails.application.routes.draw do
   constraints(PublishConstraint.new) do
     draw(:publish)
     draw(:support)
-    draw(:publish_api)
   end
 end

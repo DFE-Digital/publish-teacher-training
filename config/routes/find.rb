@@ -45,5 +45,5 @@ namespace :find, path: "/" do
   post "/cycles", to: "switcher#update", as: :switch_cycle_schedule
 
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
-  resource :sitemap, only: :show
+  resource :sitemap, only: :show, defaults: { format: :xml }
 end
