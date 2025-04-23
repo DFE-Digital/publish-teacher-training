@@ -145,8 +145,6 @@ RSpec.describe "when I filter by subject", :js, service: :find do
   end
 
   def secondary_options
-    page.all(
-      '[data-filter-search-target="optionsList"]', wait: 2
-    ).map(&:text).join(" ").split("\n")
+    page.all('[data-filter-search-target="optionsList"]', wait: 2).flat_map { |subject| subject.text.split("\n") }
   end
 end
