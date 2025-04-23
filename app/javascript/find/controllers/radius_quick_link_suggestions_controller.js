@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import Mustache from 'mustache'
 
 export default class extends Controller {
   static values = {
@@ -6,10 +7,10 @@ export default class extends Controller {
     subjectName: String
   }
 
-  static targets = ['container', 'heading']
+  static targets = ['container', 'loadingTemplate', 'contentTemplate']
 
   connect () {
-    this.containerTarget.innerHTML = '<p class="govuk-body">Loading suggestions...</p>'
+    this.renderLoading()
 
     let search = {}
 
@@ -34,37 +35,32 @@ export default class extends Controller {
         if (!response.ok) throw new Error('Network response was not ok')
         return response.json()
       })
-      .then(data => {
-        this.renderLinks(data)
-      })
+      .then(data => this.renderLinks(data))
       .catch(error => {
         console.error('Fetch error:', error)
         this.containerTarget.innerHTML = ''
       })
   }
 
+  renderLoading () {
+    this.containerTarget.innerHTML = Mustache.render(
+      this.loadingTemplateTarget.innerHTML,
+      {}
+    )
+  }
+
   renderLinks (links) {
     if (!links.length) {
       this.containerTarget.innerHTML = ''
-      this.headingTarget.innerHTML = ''
       return
     }
 
-    const subjectName = this.subjectNameValue
-    const headingText = subjectName
-      ? `Try browsing for '${subjectName}' in a wider location search`
-      : 'Try browsing with a wider location search'
-
-    this.headingTarget.innerHTML = `<h3 class="govuk-heading-m">${headingText}</h3>`
-
-    const listItems = links.map(link =>
-      `<li class="govuk-list govuk-list--bullet"><a href="${link.url}" class="govuk-link">${link.text}</a></li>`
-    ).join('')
-
-    this.containerTarget.innerHTML = `
-      <ul class="govuk-list govuk-list--bullet">
-        ${listItems}
-      </ul>
-    `
+    this.containerTarget.innerHTML = Mustache.render(
+      this.contentTemplateTarget.innerHTML,
+      {
+        subjectName: this.subjectNameValue,
+        links
+      }
+    )
   }
 }

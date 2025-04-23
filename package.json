@@ -34,7 +34,8 @@
     "govuk-frontend": "^5.9.0",
     "jquery": "^3.6.0",
     "lodash.debounce": "^4.0.8",
-    "lodash.throttle": "^4.1.1"
+    "lodash.throttle": "^4.1.1",
+    "mustache": "^4.2.0"
   },
   "devDependencies": {
     "esbuild": "^0.25.3",

@@ -1,6 +1,9 @@
 en:
   courses:
     no_results_component:
+      loading_suggestions: Loading suggestions...
+      browsing_non_subject: Try browsing with a wider location search
+      browsing_subject: "Try browsing for '%{subject_name}' in a wider location search"
       try_another_search_content:
         zero: You can try another search, for example by changing subject, location or radius
         one: You can try another search, for example by changing subject, location or radius
