@@ -2,6 +2,7 @@
 
 # Use different Capybara ports when running tests in parallel
 Capybara.server_port = 9887 + ENV["TEST_ENV_NUMBER"].to_i if ENV["TEST_ENV_NUMBER"]
+Capybara.default_max_wait_time = 10 # seconds
 
 # Cannot use puma, we may need to upgrade rackup > 3
 Capybara.server = :webrick
