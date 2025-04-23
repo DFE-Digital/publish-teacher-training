@@ -14,8 +14,8 @@ module Find
           expect(result.text).to include(
             "Fee or salary",
             "Course length",
-            "Age range",
-            "Qualification",
+            "Age group",
+            "Qualification awarded",
             "Provider",
             "Date you can apply from",
             "Start date",
