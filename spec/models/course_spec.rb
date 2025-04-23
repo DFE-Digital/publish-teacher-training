@@ -680,7 +680,7 @@ describe Course do
             accredited: false,
             level: "further_education",
             accrediting_provider: nil,
-            provider: create(:provider, accredited: false),
+            provider: create(:provider),
           )
         end
 
