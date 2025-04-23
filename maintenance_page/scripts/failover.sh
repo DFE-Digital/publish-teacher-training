@@ -33,8 +33,14 @@ kubectl apply -n ${NAMESPACE} -f maintenance_page/manifests/${CONFIG}/ingress_ex
 echo Configure internal ingress to point at the maintenance app
 kubectl apply -n ${NAMESPACE} -f maintenance_page/manifests/${CONFIG}/ingress_internal_to_maintenance.yml
 
-echo Create temp ingress
+echo Create temp ingress for publish
 kubectl apply -n ${NAMESPACE} -f maintenance_page/manifests/${CONFIG}/ingress_temp_to_main.yml
+
+echo Create temp ingress for find
+kubectl apply -n ${NAMESPACE} -f maintenance_page/manifests/${CONFIG}/ingress_temp_to_main2.yml
+
+echo Create temp ingress for api-publish
+kubectl apply -n ${NAMESPACE} -f maintenance_page/manifests/${CONFIG}/ingress_temp_to_main3.yml
 
 # Retrieve the teacherservices.cloud internal domain from the temp ingress manifest
 TEMP_URL=$(awk '/name:.*cloud/ {print $2}' ./maintenance_page/manifests/${CONFIG}/ingress_temp_to_main.yml)

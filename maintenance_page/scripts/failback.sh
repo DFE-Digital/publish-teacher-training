@@ -18,8 +18,14 @@ kubectl -n ${NAMESPACE} apply -f maintenance_page/manifests/${CONFIG}/ingress_ex
 echo Reset internal ingress
 kubectl -n ${NAMESPACE} apply -f maintenance_page/manifests/${CONFIG}/ingress_internal_to_main.yml
 
-echo Delete temp ingress
+echo Delete temp ingress publish
 kubectl -n ${NAMESPACE} delete  --ignore-not-found=true -f maintenance_page/manifests/${CONFIG}/ingress_temp_to_main.yml
+
+echo Delete temp ingress find
+kubectl -n ${NAMESPACE} delete  --ignore-not-found=true -f maintenance_page/manifests/${CONFIG}/ingress_temp_to_main2.yml
+
+echo Delete temp ingress api-publish
+kubectl -n ${NAMESPACE} delete  --ignore-not-found=true -f maintenance_page/manifests/${CONFIG}/ingress_temp_to_main3.yml
 
 echo Delete maintenance ingress
 kubectl -n ${NAMESPACE} delete  --ignore-not-found=true -f maintenance_page/manifests/${CONFIG}/ingress_maintenance.yml
