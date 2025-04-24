@@ -31,6 +31,13 @@ RSpec.describe "Secondary subjects quick link", service: :find do
       click_link_or_button "Find secondary courses"
       then_i_see_errors
     end
+
+    scenario "check for backlink presence and navigation on secondary page" do
+      click_link_or_button "Browse secondary courses"
+      then_i_see_backlink_to_find_homepage
+      click_link_or_button "Back"
+      then_i_am_on_the_find_homepage
+    end
   end
 
   def given_there_are_courses_with_secondary_subjects
@@ -58,23 +65,8 @@ RSpec.describe "Secondary subjects quick link", service: :find do
     click_link_or_button "Find secondary courses"
   end
 
-  def when_i_select_all_primary_courses
-    check "Primary"
-    check "Primary with English"
-    check "Primary with geography and history"
-    check "Primary with mathematics"
-    check "Primary with modern languages"
-    check "Primary with physical education"
-    check "Primary with science"
-    click_link_or_button "Find secondary courses"
-  end
-
   def then_i_see_only_see_chemistry_courses
     expect(page).to have_content("1 course found")
-  end
-
-  def then_i_see_all_primary_courses
-    expect(page).to have_content("4 courses found")
   end
 
   def then_i_see_errors
@@ -91,5 +83,13 @@ RSpec.describe "Secondary subjects quick link", service: :find do
 
   def then_i_see_all_secondary_courses
     expect(page).to have_content("4 courses found")
+  end
+
+  def then_i_see_backlink_to_find_homepage
+    expect(page).to have_link("Back", href: find_path)
+  end
+
+  def then_i_am_on_the_find_homepage
+    expect(page).to have_current_path(find_path)
   end
 end
