@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
-root to: "find/homepage#index", as: :find
+namespace :find, path: "/", defaults: { host: Settings.find_hosts.first } do
+  root to: "homepage#index"
 
-scope via: :all do
-  match "/404", to: "find/errors#not_found"
-  match "/500", to: "find/errors#internal_server_error"
-  match "/403", to: "find/errors#forbidden"
-end
-
-namespace :find, path: "/" do
   get "track_click", to: "track#track_click"
 
   get "/accessibility", to: "pages#accessibility", as: :accessibility
@@ -46,4 +40,10 @@ namespace :find, path: "/" do
 
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
   resource :sitemap, only: :show, defaults: { format: :xml }
+end
+
+scope via: :all do
+  match "/404", to: "find/errors#not_found"
+  match "/500", to: "find/errors#internal_server_error"
+  match "/403", to: "find/errors#forbidden"
 end

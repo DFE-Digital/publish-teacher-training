@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-namespace :support do
+namespace :support, defaults: { host: Settings.publish_hosts.first } do
   root to: "recruitment_cycle#index"
 
   resources :recruitment_cycle, only: %i[index], param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "" do
