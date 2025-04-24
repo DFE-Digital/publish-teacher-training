@@ -30,6 +30,13 @@ RSpec.describe "Primary subjects quick link", service: :find do
       click_link_or_button "Find primary courses"
       then_i_see_errors
     end
+
+    scenario "check for backlink presence and navigation on primary page" do
+      click_link_or_button "Browse primary courses"
+      then_i_see_backlink_to_find_homepage
+      click_link_or_button "Back"
+      then_i_am_on_the_find_homepage
+    end
   end
 
   def given_there_are_courses_with_primary_subjects
@@ -69,5 +76,13 @@ RSpec.describe "Primary subjects quick link", service: :find do
 
   def then_i_see_errors
     expect(page).to have_content("Select at least one type of primary course")
+  end
+
+  def then_i_see_backlink_to_find_homepage
+    expect(page).to have_link("Back", href: find_path)
+  end
+
+  def then_i_am_on_the_find_homepage
+    expect(page).to have_current_path(find_path)
   end
 end
