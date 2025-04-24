@@ -8,6 +8,18 @@ module Support
       flash[:warning] = "Provider not found"
       redirect_to support_recruitment_cycle_providers_path
     end
+    helper_method :course
+
+    def show
+      @provider = course.provider
+      @course = course.decorate
+    end
+
+    def schools
+      @course = course.decorate
+      @sites = @course.sites
+      @site_statuses = @course.site_statuses
+    end
 
     def edit
       @edit_course_form = Support::EditCourseForm.new(course)

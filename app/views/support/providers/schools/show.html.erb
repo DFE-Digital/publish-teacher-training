@@ -26,11 +26,38 @@
             end
           end %>
 
-          <p class="govuk-body">
-            <%= govuk_link_to t("support.actions.remove_school", resource: "location"),
-                delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site),
-                class: "app-link--destructive" %>
-          </p>
+      <h2 class="govuk-heading-m">Courses at this location</h2>
+      <%= govuk_table do |table| %>
+        <% table.with_head do |head| %>
+          <% head.with_row do |row| %>
+            <% row.with_cell text: "Course name and code" %>
+            <% row.with_cell text: "Status" %>
+            <% row.with_cell text: "Ratifying Provider" %>
+            <% row.with_cell %>
+          <% end %>
+        <% end %>
+
+        <% table.with_body do |body| %>
+          <% @courses.each do |course| %>
+            <% body.with_row classes: ["course-row"] do |row| %>
+              <% row.with_cell text: govuk_link_to(course.name_and_code, support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider.id, course.id)), classes: ["name"] %>
+              <% row.with_cell text: course.decorate.status_tag, classes: ["status"] %>
+
+              <% row.with_cell do %>
+                <% if course.accrediting_provider %>
+                  <%= govuk_link_to(course.accrediting_provider.provider_name, support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, course.accrediting_provider)) %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <p class="govuk-body">
+        <%= govuk_link_to t("support.actions.remove_school", resource: "location"),
+        delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site),
+        class: "app-link--destructive" %>
+      </p>
     </fieldset>
   </div>
 </div>
