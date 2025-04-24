@@ -1,5 +1,7 @@
 <% content_for :page_title, title_with_error_prefix(t(".page_title"), @form.errors.present?) %>
-
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(find_path) %>
+<% end %>
 <%= form_with model: @form, url: find_secondary_path, method: :post do |f| %>
   <%= f.hidden_field :utm_source, value: 'home' %>
   <%= f.hidden_field :utm_medium, value: 'secondary_courses' %>
