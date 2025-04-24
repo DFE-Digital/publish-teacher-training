@@ -951,8 +951,8 @@ detect-libc@^1.0.3:
   integrity sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==
 
 dfe-autocomplete@DFE-Digital/dfe-autocomplete:
-  version "0.0.1"
-  resolved "https://codeload.github.com/DFE-Digital/dfe-autocomplete/tar.gz/674ad38e35ba391526075109052f106694f167da"
+  version "0.2.1"
+  resolved "https://codeload.github.com/DFE-Digital/dfe-autocomplete/tar.gz/966efa70f058585fdbc91e7217d678092db62303"
   dependencies:
     accessible-autocomplete "^3.0.1"
 
