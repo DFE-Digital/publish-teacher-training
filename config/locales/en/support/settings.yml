@@ -6,3 +6,4 @@ en:
         feature_flag: Feature Flags
         view_components: View Components
         recruitment_cycles: Recruitment Cycles
+        geolocation_cache: Geolocation cache
