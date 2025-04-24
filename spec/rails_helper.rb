@@ -152,6 +152,6 @@ RSpec.configure do |config|
                         when :publish then Settings.publish_url
                         end
 
-    driven_by :rack_test
+    driven_by Capybara.current_driver
   end
 end
