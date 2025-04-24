@@ -188,8 +188,6 @@ group :development, :test do
   # Test framework
   gem "rspec-rails", "7.1.1"
 
-  gem "selenium-webdriver"
-
   # Make diffs of Ruby objects much more readable
   gem "super_diff"
 
@@ -233,7 +231,10 @@ group :test do
 
   gem "webmock"
 
+  gem "selenium-webdriver"
+
   # Adds support for Capybara system testing and selenium driver
   gem "capybara", ">= 2.15"
+  gem "capybara-screenshot"
   gem "launchy"
 end

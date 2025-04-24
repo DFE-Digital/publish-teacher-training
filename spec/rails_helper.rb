@@ -11,7 +11,10 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 require "capybara/rspec"
 require "capybara/rails"
+require "capybara-screenshot/rspec"
 # Add additional requires below this line. Rails is not loaded until this point!
+
+DevelopmentSettings = Config.load_files(Config.setting_files(Rails.root.join("config"), "development"))
 
 # Pull in all the files in spec/support automatically.
 Dir["./spec/strategies/**/*.rb"].each { |file| require file }
@@ -54,6 +57,7 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
 RSpec.configure do |config|
   # add `FactoryBot` methods
   config.include FactoryBot::Syntax::Methods
@@ -151,6 +155,11 @@ RSpec.configure do |config|
                         when :find    then Settings.find_url
                         when :publish then Settings.publish_url
                         end
+
+    Capybara.asset_host = case service
+                          when :find    then DevelopmentSettings.find_url
+                          when :publish then DevelopmentSettings.publish_url
+                          end
 
     driven_by Capybara.current_driver
   end
