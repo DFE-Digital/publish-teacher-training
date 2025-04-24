@@ -95,4 +95,10 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
   resource :environment_confirmations, path: "confirm-environment", only: %i[new create]
   resources :view_components, only: %i[index]
   resources :recruitment_cycles
+  resource :geolocation_cache, only: %i[show update destroy] do
+    member do
+      get :delete
+      delete :delete, to: "geolocation_caches#destroy"
+    end
+  end
 end
