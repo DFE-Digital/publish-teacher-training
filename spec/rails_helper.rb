@@ -145,7 +145,10 @@ RSpec.configure do |config|
                         when :publish then Settings.publish_url
                         end
 
-    driven_by :rack_test
+    Capybara.asset_host = case service
+                          when :find    then DevelopmentSettings.find_url
+                          when :publish then DevelopmentSettings.publish_url
+                          end
   end
 
   config.before(:each, type: :system) do
