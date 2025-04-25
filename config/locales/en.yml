@@ -736,7 +736,6 @@ en:
             caption: *add_accredited_partnership
             add: *add_accredited_partnership
             check_answers: Check your answers
-            about: About the accredited provider
             accredited_provider: Accredited provider
             warning: All users at %{provider_name} will be sent an email to let them know they’ve been added.
           update:

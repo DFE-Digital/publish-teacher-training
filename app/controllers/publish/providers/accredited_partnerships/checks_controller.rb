@@ -13,12 +13,13 @@ module Publish
         end
 
         def update
-          @partnership = provider.accredited_partnerships.build(accredited_provider: provider_partnership_form.accredited_provider, description: provider_partnership_form.description)
+          @partnership = provider.accredited_partnerships.build(accredited_provider:)
 
           if @partnership.save
             notify_accredited_provider_users
 
-            redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: t(".added") }
+            flash[:success_with_body] = { "title" => t(".added"), "body" => accredited_provider.provider_name }
+            redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year)
           else
             flash[:error] = { "message" => @partnership.errors[:accredited_provider].first }
             render :show
@@ -27,8 +28,8 @@ module Publish
 
       private
 
-        def provider_partnership_form
-          @provider_partnership_form ||= ProviderPartnershipForm.new(current_user, provider)
+        def accredited_provider
+          @accredited_provider = Provider.in_cycle(provider.recruitment_cycle).accredited.find(params[:accredited_provider_id])
         end
 
         def notify_accredited_provider_users

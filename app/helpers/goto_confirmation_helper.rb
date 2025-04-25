@@ -31,7 +31,7 @@ module GotoConfirmationHelper
 
   def publish_back_link_for_adding_provider_partnership_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
     if goto_confirmation?(param_form_key:, params:)
-      check_publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, recruitment_cycle_year)
+      check_publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, recruitment_cycle_year, accredited_provider_id: params[:accredited_provider_id])
     elsif param_form_key == :provider_partnership_form
       search_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
     else
