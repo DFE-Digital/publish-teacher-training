@@ -3,8 +3,7 @@
 ) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(new_publish_provider_recruitment_cycle_accredited_partnership_path(provider_code: @provider.provider_code,
-                                                                                            recruitment_cycle_year: @provider.recruitment_cycle_year)) %>
+  <%= govuk_back_link_to(search_publish_provider_recruitment_cycle_accredited_providers_path) %>
 <% end %>
 
 <div class="govuk-grid-row">

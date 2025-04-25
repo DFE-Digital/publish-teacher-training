@@ -2,7 +2,7 @@
 <% content_for :page_title, title_with_error_prefix(search_result_title_component.title, @accredited_provider_select_form.errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_accredited_partnerships_path) %>
+  <%= govuk_back_link_to(search_publish_provider_recruitment_cycle_accredited_providers_path) %>
 <% end %>
 
 <%= form_with(
