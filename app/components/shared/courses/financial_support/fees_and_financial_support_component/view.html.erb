@@ -1,10 +1,13 @@
 <div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-financial-support">Fees and financial support</h2>
-
+  <h2 class="govuk-heading-l" id="section-financial-support">
+    <%= salaried? ? t(".salary_and_financial_support") : t(".fees_and_financial_support") %>
+  </h2>
+  <% if salaried? %>
+    <%= render partial: "find/courses/salary", locals: { course: @course } %>
+  <% end %>
   <% if has_fees? %>
     <%= render Find::Courses::FeesComponent::View.new(course) %>
   <% end %>
-
   <% if salaried? %>
     <%= render partial: "shared/courses/financial_support/salaried" %>
   <% elsif excluded_from_bursary? %>

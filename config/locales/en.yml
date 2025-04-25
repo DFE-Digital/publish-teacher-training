@@ -39,6 +39,11 @@ en:
             This should be an honours degree (Third or above), or equivalent
           </span>
     courses:
+      financial_support:
+        fees_and_financial_support_component:
+          view:
+            fees_and_financial_support: Fees and financial support
+            salary_and_financial_support: Salary and financial support
       provider:
         heading: Contact %{provider_name}
       placements:

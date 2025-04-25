@@ -33,10 +33,6 @@
 
     <%= render partial: "find/courses/about_course", locals: { course: } %>
 
-    <% if course.salaried? %>
-      <%= render partial: "find/courses/salary", locals: { course: } %>
-    <% end %>
-
     <% if course.interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: } %>
     <% end %>
