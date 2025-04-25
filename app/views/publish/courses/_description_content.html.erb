@@ -114,7 +114,7 @@
         summary_list,
         :course,
         t("publish.providers.courses.description_content.degree_label"),
-        (render DegreeRowContent.new(course:, errors: @errors)),
+        render(DegreeRowContent.new(course:, errors: @errors)),
         %w[degree_grade degree_subject_requirements],
         action_path: !course.is_withdrawn? && course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
       ) %>
@@ -125,7 +125,7 @@
         summary_list,
         :course,
         t("publish.providers.courses.description_content.a_levels_label"),
-        (render ALevelRowComponent.new(course:, errors: @errors)),
+        render(ALevelRowComponent.new(course:, errors: @errors)),
         %w[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency],
         action_path: course.a_level_change_path,
         action_visually_hidden_text: "A levels",
@@ -137,7 +137,7 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.gcse_label"),
-      (render GcseRowContent.new(course:, errors: @errors)),
+      render(GcseRowContent.new(course:, errors: @errors)),
       %w[accept_pending_gcse accept_gcse_equivalency accept_english_gcse_equivalency accept_maths_gcse_equivalency accept_science_gcse_equivalency additional_gcse_equivalencies],
       action_path: !course.is_withdrawn? && course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
     ) %>
