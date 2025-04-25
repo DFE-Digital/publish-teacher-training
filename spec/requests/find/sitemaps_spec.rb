@@ -37,13 +37,13 @@ module Find
           <?xml version="1.0" encoding="UTF-8"?>
           <urlset xmlns="http://www.google.com/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
             <url>
-              <loc>http://www.example.com/</loc>
+              <loc>http://find-teacher-training-courses.service.gov.uk/</loc>
             </url>
             <url>
-              <loc>http://www.example.com/results</loc>
+              <loc>http://find-teacher-training-courses.service.gov.uk/results</loc>
             </url>
             <url>
-              <loc>http://www.example.com/course/#{provider_code}/#{course_code}</loc>
+              <loc>http://find-teacher-training-courses.service.gov.uk/course/#{provider_code}/#{course_code}</loc>
               <lastmod>#{changed_at.to_date.strftime('%Y-%m-%d')}</lastmod>
             </url>
           </urlset>

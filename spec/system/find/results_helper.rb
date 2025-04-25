@@ -426,7 +426,7 @@ module ResultsHelper
   end
 
   def when_i_visit_the_homepage
-    visit find_path
+    visit find_root_path
   end
 
   def and_i_check_visa_sponsorship_filter_in_the_homepage
@@ -435,7 +435,7 @@ module ResultsHelper
   end
 
   def and_i_am_on_the_homepage
-    expect(page).to have_current_path(find_path)
+    expect(page).to have_current_path(find_root_path)
   end
 
   def and_i_am_on_the_results_page

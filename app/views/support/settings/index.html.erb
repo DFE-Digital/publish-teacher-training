@@ -3,7 +3,7 @@
 <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
 
 <%= govuk_list([
-  govuk_link_to(t(".feature_flag"), x_find_url(find_feature_flags_path)),
+  govuk_link_to(t(".feature_flag"), find_feature_flags_url),
   govuk_link_to(t(".view_components"), support_view_components_path),
   govuk_link_to(t(".recruitment_cycles"), support_recruitment_cycles_path),
 ]) %>

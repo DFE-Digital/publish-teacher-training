@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-root to: "find/homepage#index", as: :find
-
 scope via: :all do
   match "/404", to: "find/errors#not_found"
   match "/500", to: "find/errors#internal_server_error"
   match "/403", to: "find/errors#forbidden"
 end
 
-namespace :find, path: "/" do
+namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host } do
+  root to: "homepage#index"
+
   get "track_click", to: "track#track_click"
 
   get "/accessibility", to: "pages#accessibility", as: :accessibility
