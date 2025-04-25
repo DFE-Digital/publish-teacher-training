@@ -126,7 +126,7 @@ en:
       find_out_more_student_loans: Find out more about student loans for teacher training.
       eligible_for_student_loan: You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.
       uk_citizens:
-        title: Financial Support for UK citizens
+        title: Financial support for UK citizens
         salaried_courses:
           title: How salaried courses work
           paid_salary: You will be paid a salary during this course. Financial support such as bursaries, scholarships and student loans is not available.
@@ -134,7 +134,7 @@ en:
           competitive: Places on salaried courses are limited and very competitive. Check your eligibility with the training provider and apply as soon as possible.
           find_out_more: Find out more about salaried courses.
       non_uk_citizens:
-        title: Financial Support for non-UK citizens
+        title: Financial support for non-UK citizens
         salaried_courses:
           title: "Non-UK citizens: applying for salaried courses"
           competitive: You can apply for a salaried teacher training course. However, these courses are limited in number and very competitive.
@@ -212,6 +212,7 @@ en:
           where_you_will_train: Where you will train
           training_with_disabilities: Training with disabilities
           fees_and_financial_support: Fees and financial support
+          salary_and_financial_support: Salary and financial support
           salary: Salary
           interview_process: Interview process
           support_and_advice: Support and advice
