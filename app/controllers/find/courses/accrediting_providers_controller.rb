@@ -2,7 +2,7 @@
 
 module Find
   module Courses
-    class AccreditingProvidersController < Find::ApplicationController
+    class AccreditingProvidersController < ApplicationController
       def show
         @course = provider.courses.includes(
           :enrichments,

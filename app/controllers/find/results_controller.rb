@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Find
-  class ResultsController < Find::ApplicationController
+  class ResultsController < ApplicationController
     after_action :store_result_fullpath_for_backlinks, :send_analytics_event, only: [:index]
 
     def index
@@ -19,7 +19,7 @@ module Find
   private
 
     def send_analytics_event
-      Find::Analytics::SearchResultsEvent.new(
+      Analytics::SearchResultsEvent.new(
         request:,
         total: @courses_count,
         page: @pagy.page,

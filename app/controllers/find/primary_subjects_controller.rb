@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Find
-  class PrimarySubjectsController < Find::ApplicationController
-    include Find::FinancialIncentiveHelper
+  class PrimarySubjectsController < ApplicationController
+    include FinancialIncentiveHelper
 
     before_action :initialize_form
 
@@ -22,7 +22,7 @@ module Find
   private
 
     def initialize_form
-      @form = Find::Subjects::PrimaryForm.new(subject_params)
+      @form = Subjects::PrimaryForm.new(subject_params)
     end
 
     def subject_params

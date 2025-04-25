@@ -2,7 +2,7 @@
 
 module Find
   module Courses
-    class ProvidersController < Find::ApplicationController
+    class ProvidersController < ApplicationController
       before_action -> { render_not_found if provider.nil? }
 
       def show

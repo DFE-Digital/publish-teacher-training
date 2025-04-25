@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Find
-  class SecondarySubjectsController < Find::ApplicationController
-    include Find::FinancialIncentiveHelper
+  class SecondarySubjectsController < ApplicationController
+    include FinancialIncentiveHelper
 
     before_action :initialize_form
 
@@ -22,7 +22,7 @@ module Find
   private
 
     def initialize_form
-      @form = Find::Subjects::SecondaryForm.new(subject_params)
+      @form = Subjects::SecondaryForm.new(subject_params)
     end
 
     SecondarySubjectInput = Struct.new(:code, :name, :financial_info, :subject_group, keyword_init: true)
