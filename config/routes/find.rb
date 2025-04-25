@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-scope via: :all do
-  match "/404", to: "find/errors#not_found"
-  match "/500", to: "find/errors#internal_server_error"
-  match "/403", to: "find/errors#forbidden"
-end
-
 namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host } do
   root to: "homepage#index"
 
@@ -46,4 +40,10 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
 
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
   resource :sitemap, only: :show
+
+  scope via: :all do
+    match "/404", to: "errors#not_found"
+    match "/500", to: "errors#internal_server_error"
+    match "/403", to: "errors#forbidden"
+  end
 end
