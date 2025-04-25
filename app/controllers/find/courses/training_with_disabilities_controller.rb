@@ -2,7 +2,7 @@
 
 module Find
   module Courses
-    class TrainingWithDisabilitiesController < Find::ApplicationController
+    class TrainingWithDisabilitiesController < ApplicationController
       before_action -> { render_not_found if provider.nil? }
       before_action -> { render_not_found if provider.train_with_disability.blank? }
 
