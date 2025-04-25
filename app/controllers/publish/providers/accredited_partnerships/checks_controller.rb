@@ -5,7 +5,11 @@ module Publish
     module AccreditedPartnerships
       class ChecksController < ApplicationController
         def show
-          provider_partnership_form
+          @partnership = provider.accredited_partnerships.build(accredited_provider:)
+
+          if @partnership.invalid?
+            redirect_to search_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle.year), flash: { error: { message: "#{accredited_provider.name_and_code} partnership already exists" } }
+          end
         end
 
         def update
