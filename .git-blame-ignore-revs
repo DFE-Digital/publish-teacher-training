@@ -1,2 +1,7 @@
-fa9bb3bdd1f105043ccdad8cbde124c0fa776cbf # https://github.com/DFE-Digital/publish-teacher-training/commit/fa9bb3bdd1f105043ccdad8cbde124c0fa776cbf
-30dc154189ec222a157a8ddf806b7fdc454c93a2 # https://github.com/DFE-Digital/publish-teacher-training/commit/30dc154189ec222a157a8ddf806b7fdc454c93a2
+# Prefer single-quoted strings (.rb)
+# https://github.com/DFE-Digital/publish-teacher-training/commit/fa9bb3bdd1f105043ccdad8cbde124c0fa776cbf
+fa9bb3bdd1f105043ccdad8cbde124c0fa776cbf
+
+# Adopt GOV.UK's RuboCop configuration
+# https://github.com/DFE-Digital/publish-teacher-training/commit/e1832eb7e84a4dadf2f63ffa747558cefdca57ef
+e1832eb7e84a4dadf2f63ffa747558cefdca57ef
