@@ -711,21 +711,12 @@ en:
           title: Enter a school, university, college, URN or postcode
           cannot_find: I cannot find the site - enter manually
       accredited_partnerships:
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_partnership Add accredited provider
         index:
           title: Accredited providers
           add: Add accredited provider
           no_providers: There are no accredited providers for %{provider_name}.
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: &add_accredited_partnership Add accredited provider
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          updated: About the accredited provider updated
-          update_description: Update description
         delete:
           title: Are you sure you want to remove this accredited provider?
           warning: You cannot remove this accredited provider
