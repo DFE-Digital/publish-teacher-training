@@ -16,7 +16,7 @@ module Find
 
       it "links to the homepage" do
         render_inline(described_class.new(service_name: "Test Service"))
-        expect(page.has_link?(nil, href: find_path)).to be true
+        expect(page.has_link?(nil, href: find_root_path)).to be true
       end
     end
   end

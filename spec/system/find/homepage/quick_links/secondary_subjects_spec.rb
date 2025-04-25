@@ -57,7 +57,7 @@ RSpec.describe "Secondary subjects quick link", service: :find do
   end
 
   def when_i_visit_the_find_homepage
-    visit find_path
+    visit find_root_path
   end
 
   def when_i_select_chemistry
@@ -86,10 +86,10 @@ RSpec.describe "Secondary subjects quick link", service: :find do
   end
 
   def then_i_see_backlink_to_find_homepage
-    expect(page).to have_link("Back", href: find_path)
+    expect(page).to have_link("Back", href: find_root_path)
   end
 
   def then_i_am_on_the_find_homepage
-    expect(page).to have_current_path(find_path)
+    expect(page).to have_current_path(find_root_path)
   end
 end

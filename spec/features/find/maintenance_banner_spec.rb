@@ -7,7 +7,7 @@ feature "Maintenance banner" do
     scenario "sends me to the maintenance page" do
       FeatureFlag.activate(:maintenance_banner)
 
-      visit find_path
+      visit find_root_path
 
       expect(page).to have_content "This service will be unavailable on"
     end
@@ -17,7 +17,7 @@ feature "Maintenance banner" do
     scenario "sends me to the homepage" do
       FeatureFlag.deactivate(:maintenance_banner)
 
-      visit find_path
+      visit find_root_path
 
       expect(page).to have_content "Find teacher training courses"
       expect(page).to have_no_content "This service will be unavailable on"

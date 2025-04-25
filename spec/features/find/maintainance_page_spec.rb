@@ -12,7 +12,7 @@ feature "Maintenance mode" do
       FeatureFlag.activate(:maintenance_mode)
       FeatureFlag.activate(:maintenance_banner)
 
-      visit find_path
+      visit find_root_path
 
       expect(page).to have_current_path find_maintenance_path
       expect(page).to have_no_content "This service will be unavailable on"
@@ -25,7 +25,7 @@ feature "Maintenance mode" do
 
       visit find_maintenance_path
 
-      expect(page).to have_current_path find_path
+      expect(page).to have_current_path find_root_path
     end
   end
 

@@ -21,7 +21,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def find_url(provider = object.provider)
-    h.x_find_course_page_url(provider_code: provider.provider_code, course_code: object.course_code)
+    h.find_course_url(provider.provider_code, object.course_code)
   end
 
   def description
@@ -31,7 +31,7 @@ class CourseDecorator < ApplicationDecorator
   def on_find(provider = object.provider)
     if object.findable?
       if current_cycle_and_open?
-        h.govuk_link_to("Yes - view online", h.x_find_course_page_url(provider_code: provider.provider_code, course_code: object.course_code))
+        h.govuk_link_to("Yes - view online", h.find_course_url(provider.provider_code, object.course_code))
       else
         "No - live on #{l(Settings.next_cycle_open_date.to_date, format: :govuk_short)}"
       end

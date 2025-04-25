@@ -3,10 +3,7 @@
 <% end %>
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    href: x_find_course_page_url(
-      provider_code: @course.provider_code,
-      course_code: @course.course_code,
-    ),
+    href: find_course_url(@course.provider_code, @course.course_code),
     text: t(
       ".back",
       course_name: @course.name,

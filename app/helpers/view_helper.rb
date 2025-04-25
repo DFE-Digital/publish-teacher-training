@@ -14,14 +14,6 @@ module ViewHelper
     )
   end
 
-  def x_find_url(relative_path)
-    URI.join(Settings.find_url, relative_path).to_s
-  end
-
-  def x_find_course_page_url(provider_code:, course_code:)
-    x_find_url(find_course_path(provider_code, course_code))
-  end
-
   def bat_contact_email_address
     Settings.support_email
   end
