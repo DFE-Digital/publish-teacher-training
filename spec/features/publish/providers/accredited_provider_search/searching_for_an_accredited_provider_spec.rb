@@ -21,10 +21,7 @@ feature "Searching for an accredited provider" do
     and_i_still_see_the_provider_i_searched_for
 
     when_i_select_the_provider
-    and_i_continue_without_entering_a_description
-    then_i_see_an_error_message("Enter details about the accredited provider")
 
-    when_i_enter_a_description
     and_i_confirm_the_changes
     then_i_am_taken_to_the_index_page
     and_i_see_a_success_message
@@ -45,10 +42,6 @@ feature "Searching for an accredited provider" do
     then_i_am_taken_back_to_the_confirm_page
 
     when_i_am_on_the_confirm_page
-    and_i_click_the_change_link_for("accredited provider description")
-    then_i_am_taken_to_the_accredited_provider_description_page
-    when_i_click_the_back_link
-    then_i_am_taken_back_to_the_confirm_page
   end
 
 private
@@ -115,11 +108,6 @@ private
     expect(page).to have_no_content(@accredited_provider_three.provider_name)
   end
 
-  def when_i_enter_a_description
-    fill_in "About the accredited provider", with: "This is a description"
-    click_continue
-  end
-
   def and_i_confirm_the_changes
     expect {
       click_link_or_button "Add accredited provider"
@@ -143,7 +131,6 @@ private
     when_i_visit_the_accredited_provider_search_page
     when_i_search_for_an_accredited_provider_with_a_valid_query
     when_i_select_the_provider
-    when_i_enter_a_description
   end
 
   def and_i_click_the_change_link_for(field)
@@ -166,6 +153,7 @@ private
       search_publish_provider_recruitment_cycle_accredited_providers_path(
         recruitment_cycle_year: Settings.current_recruitment_cycle_year,
         provider_code: provider.provider_code,
+        accredited_provider_id: @accredited_provider.id,
         goto_confirmation: true,
       ),
     )
@@ -190,6 +178,7 @@ private
       check_publish_provider_recruitment_cycle_accredited_partnerships_path(
         recruitment_cycle_year: Settings.current_recruitment_cycle_year,
         provider_code: provider.provider_code,
+        accredited_provider_id: @accredited_provider.id,
       ),
     )
   end
