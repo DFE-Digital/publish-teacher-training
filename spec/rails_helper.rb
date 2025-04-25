@@ -11,7 +11,6 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 require "capybara/rspec"
 require "capybara/rails"
-require "selenium/webdriver"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Pull in all the files in spec/support automatically.
@@ -124,4 +123,18 @@ RSpec.configure do |config|
   end
 
   ActiveJob::Base.queue_adapter = :test
+
+  config.before(:each, type: :feature) do
+    service = self.class.metadata[:service]
+
+    Capybara.app_host = "http://www.#{service}-test.lvh.me"
+  end
+
+  config.before(:each, type: :system) do
+    service = self.class.metadata[:service]
+
+    Capybara.app_host = "http://www.#{service}-test.lvh.me"
+
+    driven_by Capybara.current_driver
+  end
 end
