@@ -5,4 +5,5 @@ en:
         year: Year
         start_date: Start date
         end_date: End date
+        rollover_progress: Rollover progress
         status: Status

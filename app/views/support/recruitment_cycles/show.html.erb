@@ -49,6 +49,11 @@
             ) %>
           <% end %>
         <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: RecruitmentCycle.human_attribute_name(:rollover_progress) %>
+          <% row.with_value text: render(RolloverProgressComponent.new(current_cycle: RecruitmentCycle.current, target_cycle: @recruitment_cycle)) %>
+        <% end %>
       <% end %>
     </div>
   </div>
