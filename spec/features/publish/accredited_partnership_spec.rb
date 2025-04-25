@@ -19,18 +19,6 @@ feature "Accredited partnership flow", { can_edit_current_and_next_cycles: false
     then_i_see_the_accredited_provider_name_displayed
   end
 
-  scenario "i can edit accredited partnerships on the index page" do
-    and_my_provider_has_accrediting_providers
-    and_i_click_on_the_accredited_provider_tab
-    and_i_click_change
-
-    when_i_enter_a_different_description
-
-    click_link_or_button "Update description"
-    then_i_see_the_different_description
-    and_i_see_the_success_message
-  end
-
   scenario "i cannot select accredited providers if a partnership exists" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
@@ -75,12 +63,6 @@ feature "Accredited partnership flow", { can_edit_current_and_next_cycles: false
 
     when_i_select_the_provider
     click_continue
-    and_i_continue_without_entering_a_description
-    then_i_see_an_error_message("Enter details about the accredited provider")
-
-    when_i_enter_a_description
-    click_continue
-    then_i_see_the_description
 
     when_i_confirm_the_changes
     then_i_am_taken_to_the_index_page
@@ -96,13 +78,6 @@ feature "Accredited partnership flow", { can_edit_current_and_next_cycles: false
 
     when_i_click_the_back_link
     then_i_am_taken_back_to_the_confirm_page
-
-    when_i_click_the_change_link_for("accredited provider description")
-    then_i_am_taken_to_the_accredited_provider_description_page
-    and_i_see_the_correct_description_content
-
-    when_i_click_the_back_link
-    then_i_am_taken_back_to_the_confirm_page
   end
 
   scenario "change links behaviour" do
@@ -113,22 +88,11 @@ feature "Accredited partnership flow", { can_edit_current_and_next_cycles: false
     when_i_search_for_an_accredited_provider_with_a_valid_query
     click_continue
     when_i_select_the_provider
-    click_continue
-    then_i_am_on_the_description_page
 
-    when_i_enter_a_description
     click_continue
     then_i_am_taken_to_the_confirm_page
     and_i_see_the_information_to_be_confirmed
 
-    when_i_click_the_change_link_for("accredited provider description")
-    then_i_am_taken_to_the_accredited_provider_description_page
-    and_i_see_the_correct_description_content
-
-    when_i_enter_a_different_description
-    click_continue
-
-    then_i_see_the_different_description
     when_i_confirm_the_changes
     then_i_am_taken_to_the_index_page
     and_the_accredited_provider_is_saved_to_the_database
@@ -141,19 +105,11 @@ private
   def and_i_see_the_information_to_be_confirmed
     expect(page).to have_content("Check your answers")
     expect(page).to have_content("Accredited providerUCLChange accredited provider name")
-    expect(page).to have_content("About the accredited provider")
-    expect(page).to have_content("This is a description")
   end
 
   def then_i_am_taken_to_the_confirm_page
-    expect(page).to have_current_path(check_publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year))
+    expect(page).to have_current_path(check_publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year, accredited_provider_id: @accredited_provider.id))
   end
-
-  def and_i_see_the_correct_description_content
-    expect(page).to have_content("This is a description")
-  end
-
-  def when_i_change_the_description; end
 
   def and_i_click_remove_ap
     click_link_or_button "Remove accredited provider"
@@ -174,8 +130,6 @@ private
     click_continue
     when_i_select_the_provider
     click_continue
-    when_i_enter_a_description
-    click_continue
     when_i_confirm_the_changes
   end
 
@@ -194,16 +148,8 @@ private
     expect(@provider.accredited_partners.first.id).to eq(@accredited_provider.id)
   end
 
-  def then_i_am_on_the_description_page
-    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_accredited_partnership_path(@provider.provider_code, @provider.recruitment_cycle_year, accredited_provider_id: @accredited_provider.id))
-  end
-
-  def then_i_am_taken_to_the_accredited_provider_description_page
-    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_accredited_partnership_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true))
-  end
-
   def then_i_am_taken_back_to_the_confirm_page
-    expect(page).to have_current_path(check_publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year))
+    expect(page).to have_current_path(check_publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year, accredited_provider_id: @accredited_provider.id))
   end
 
   def when_i_click_the_back_link
@@ -212,7 +158,7 @@ private
 
   def then_i_am_taken_to_the_accredited_provider_search_page
     expect(page).to have_current_path(
-      search_publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true),
+      search_publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true, accredited_provider_id: @accredited_provider.id),
     )
   end
 
@@ -228,8 +174,6 @@ private
     when_i_search_for_an_accredited_provider_with_a_valid_query
     click_continue
     when_i_select_the_provider
-    click_continue
-    when_i_enter_a_description
     click_continue
   end
 
@@ -253,22 +197,6 @@ private
     expect {
       click_link_or_button "Add accredited provider"
     }.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
-  end
-
-  def then_i_see_the_description
-    expect(page).to have_text("This is a description")
-  end
-
-  def then_i_see_the_different_description
-    expect(page).to have_text("updates to the AP description")
-  end
-
-  def when_i_enter_a_description
-    fill_in "About the accredited provider", with: "This is a description"
-  end
-
-  def when_i_enter_a_different_description
-    fill_in "About the accredited provider", with: "updates to the AP description"
   end
 
   def and_i_search_with_an_invalid_query
@@ -356,8 +284,6 @@ private
   def click_continue
     click_link_or_button "Continue"
   end
-
-  alias_method :and_i_continue_without_entering_a_description, :click_continue
 
   def and_my_provider_has_accrediting_providers
     course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: "Accrediting provider name"))

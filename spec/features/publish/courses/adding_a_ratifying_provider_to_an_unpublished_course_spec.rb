@@ -44,17 +44,11 @@ feature "unpublished course without accredited provider", { can_edit_current_and
     and_i_click_add_accredited_provider_link
     and_i_search_for_an_accredited_provider_with_a_valid_query
     and_i_select_the_provider
-    and_i_input_some_information
     and_i_click_add_accredited_provider_button
   end
 
   def and_i_select_the_provider
     choose @accredited_provider.provider_name
-    click_continue
-  end
-
-  def and_i_input_some_information
-    fill_in "About the accredited provider", with: "This is a description"
     click_continue
   end
 

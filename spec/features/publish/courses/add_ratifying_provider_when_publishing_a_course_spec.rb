@@ -21,7 +21,6 @@ feature "Publishing a course when course ratifying provider is invalid", { can_e
     then_it_takes_me_to_the_accredited_providers_page
     when_i_click_add_an_accredited_partner
     and_i_search_for_an_accredited_provider
-    and_i_fill_in_the_accredited_provider_form
     and_i_confirm_creation_of_the_accredited_partnership
     then_i_see_that_the_accredited_partnership_has_been_added
 
@@ -125,12 +124,6 @@ feature "Publishing a course when course ratifying provider is invalid", { can_e
     publish_provider_accredited_providers_search_page.continue_button.click
     choose accredited_provider.name_and_code
     publish_provider_accredited_providers_search_page.continue_button.click
-  end
-
-  def and_i_fill_in_the_accredited_provider_form
-    publish_new_accredited_provider_page.about_section_input.set("About course")
-
-    publish_new_accredited_provider_page.submit.click
   end
 
   def and_i_confirm_creation_of_the_accredited_partnership

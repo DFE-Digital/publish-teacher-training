@@ -52,7 +52,6 @@ feature "Publishing courses errors", { can_edit_current_and_next_cycles: false }
     and_i_click_on_add_accredited_provider
     and_i_search_for_the_accredited_provider
     and_i_select_the_provider
-    and_i_input_some_information
     and_i_click_add_accredited_provider_button
     then_i_see_success_message
 
@@ -311,11 +310,6 @@ feature "Publishing courses errors", { can_edit_current_and_next_cycles: false }
 
   def and_i_select_the_provider
     choose @accredited_provider.provider_name
-    and_i_click_continue
-  end
-
-  def and_i_input_some_information
-    fill_in "About the accredited provider", with: "This is a description"
     and_i_click_continue
   end
 
