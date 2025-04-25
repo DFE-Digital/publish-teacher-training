@@ -16,11 +16,21 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <% if @provider.accredited_partnerships.none? %>
-        <p class="govuk-body"><%= t(".no_providers", provider_name: @provider.provider_name) %>
-</p>
+      <p class="govuk-body"><%= t(".no_providers", provider_name: @provider.provider_name) %>
+      </p>
     <% else %>
       <% @provider.accredited_partnerships.each do |partnership| %>
-        <%= render AccreditedProviderComponent.new(provider_name: partnership.accredited_provider.provider_name, remove_path: delete_publish_provider_recruitment_cycle_accredited_partnership_path(accredited_provider_code: partnership.accredited_provider.provider_code), about_accredited_provider: partnership.description, change_about_accredited_provider_path: edit_publish_provider_recruitment_cycle_accredited_partnership_path(accredited_provider_code: partnership.accredited_provider.provider_code)) %>
+        <div class="govuk-summary-card">
+          <div class="govuk-summary-card__title-wrapper">
+            <h2 class="govuk-summary-card__title"><%= partnership.accredited_provider.provider_name %></h2>
+            <ul class="govuk-summary-card__actions">
+              <li class="govuk-summary-card__action">
+                <%= govuk_link_to("Remove", delete_publish_provider_recruitment_cycle_accredited_partnership_path(accredited_provider_code: partnership.accredited_provider.provider_code), class: "app-link--destructive govuk-!-font-weight-regular", data: { qa: "remove-link" }) %>
+                <span class="govuk-visually-hidden"> (<%= partnership.accredited_provider.name_and_code %>)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       <% end %>
     <% end %>
   </div>
