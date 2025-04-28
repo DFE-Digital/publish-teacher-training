@@ -4,31 +4,18 @@ require "rails_helper"
 
 describe AccreditedProviderComponent do
   alias_method :component, :page
+  let!(:provider) { create(:provider) }
 
   before do
-    render_inline(described_class.new(provider_name: "Provider name SCITT",
-                                      remove_path: "remove_path",
-                                      about_accredited_provider: "Enter some random text here",
-                                      change_about_accredited_provider_path: "change_about_accredited_provider_path"))
-  end
-
-  it "renders the about_accredited_provider text" do
-    expect(component).to have_css ".govuk-summary-list__value", text: "Enter some random text here"
-  end
-
-  it "renders the about_accredited_provider key" do
-    expect(component).to have_css ".govuk-summary-list__key", text: "About the accredited provider"
-  end
-
-  it "renders the about_accredited_provider change link" do
-    expect(component).to have_link "Change"
+    render_inline(described_class.new(provider:,
+                                      remove_path: "remove_path"))
   end
 
   it "renders the provider_name title" do
-    expect(component).to have_css "h2.govuk-summary-card__title", text: "Provider name SCITT"
+    expect(component).to have_css "h2.govuk-summary-card__title", text: provider.provider_name
   end
 
   it "renders the provider_name remove link" do
-    expect(component).to have_link "Remove"
+    expect(component).to have_link "Remove", href: "remove_path"
   end
 end

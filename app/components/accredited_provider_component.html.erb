@@ -1,6 +1,13 @@
-<%= govuk_summary_card(title: provider_name) do |card|
-      card.with_action { govuk_link_to("Remove", remove_path, class: "app-link--destructive govuk-!-font-weight-regular", data: { qa: "remove-link" }) }
-      card.with_summary_list(rows: [{ key: { text: "About the accredited provider" },
-                                      value: { text: markdown(about_accredited_provider) },
-                                      actions: [{ href: change_about_accredited_provider_path, visually_hidden_text: "description" }] }])
-    end %>
+<div class="govuk-summary-card">
+  <div class="govuk-summary-card__title-wrapper">
+    <h2 class="govuk-summary-card__title">
+      <%= govuk_link_to(provider.provider_name, support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider)) %>
+    </h2>
+    <ul class="govuk-summary-card__actions">
+      <li class="govuk-summary-card__action">
+        <%= govuk_link_to(t("components.accredited_provider.remove"), remove_path, class: "app-link--destructive govuk-!-font-weight-regular") %>
+        <span class="govuk-visually-hidden"> (<%= provider.name_and_code %>)</span>
+      </li>
+    </ul>
+  </div>
+</div>
