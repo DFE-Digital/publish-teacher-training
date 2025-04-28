@@ -25,7 +25,7 @@
             <h2 class="govuk-summary-card__title"><%= partnership.accredited_provider.provider_name %></h2>
             <ul class="govuk-summary-card__actions">
               <li class="govuk-summary-card__action">
-                <%= govuk_link_to("Remove", delete_publish_provider_recruitment_cycle_accredited_partnership_path(accredited_provider_code: partnership.accredited_provider.provider_code), class: "app-link--destructive govuk-!-font-weight-regular", data: { qa: "remove-link" }) %>
+                <%= govuk_link_to("Remove", delete_publish_provider_recruitment_cycle_accredited_partnership_path(accredited_provider_code: partnership.accredited_provider.provider_code), class: "app-link--destructive govuk-!-font-weight-regular") %>
                 <span class="govuk-visually-hidden"> (<%= partnership.accredited_provider.name_and_code %>)</span>
               </li>
             </ul>
