@@ -4,8 +4,6 @@ module Support
   module Providers
     module AccreditedPartnerships
       class ChecksController < ApplicationController
-        include ClearStashable
-
         def show
           accredited_provider_form
         end
