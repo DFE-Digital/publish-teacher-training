@@ -124,17 +124,53 @@ RSpec.configure do |config|
 
   ActiveJob::Base.queue_adapter = :test
 
+  config.before(:each, type: :request) do
+    service = self.class.metadata[:service]
+
+    host! app_host(service:)
+  end
+
   config.before(:each, type: :feature) do
     service = self.class.metadata[:service]
 
-    Capybara.app_host = "http://www.#{service}-test.lvh.me"
+    Capybara.app_host = app_url(service:)
   end
 
   config.before(:each, type: :system) do
     service = self.class.metadata[:service]
 
-    Capybara.app_host = "http://www.#{service}-test.lvh.me"
+    Capybara.app_host = app_url(service:)
 
     driven_by Capybara.current_driver
+  end
+
+private
+
+  def app_host(service:)
+    case service
+    when :find    then Settings.find_hosts.first
+    when :publish then Settings.publish_hosts.first
+    when :api     then Settings.api_hosts.first
+    end
+  end
+
+  def app_url(service:)
+    case service
+    when :find    then Settings.find_url
+    when :publish then Settings.publish_url
+    when :api     then Settings.api_url
+    end
+  end
+
+  def asset_url(service:)
+    case service
+    when :find    then development_settings.find_url
+    when :publish then development_settings.publish_url
+    when :api     then development_settings.api_url
+    end
+  end
+
+  def development_settings
+    @development_settings ||= Config.load_files(Config.setting_files(Rails.root.join("config"), "development"))
   end
 end

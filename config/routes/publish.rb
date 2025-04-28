@@ -52,7 +52,7 @@ else
   get "/auth/dfe/signout", to: "sessions#destroy"
 end
 
-namespace :publish, as: :publish do
+namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_url).host } do
   get "/organisations", to: "providers#index", as: :root
   get "/providers/search", to: "providers#search"
   get "/providers/suggest", to: "providers#suggest"

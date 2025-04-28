@@ -1,21 +1,25 @@
-publish_api_url: https://sandbox.api.publish-teacher-training-courses.service.gov.uk
-publish_url: https://sandbox.publish-teacher-training-courses.service.gov.uk
-find_url: https://sandbox.find-teacher-training-courses.service.gov.uk
-extra_find_url: https://sandbox.find-teacher-training-courses.service.gov.uk
-apply_base_url: https://sandbox.apply-for-teacher-training.service.gov.uk
-
 environment:
-  label: "Sandbox"
-  name: "sandbox"
+  label: Sandbox
+  name: sandbox
+
+find_url: https://sandbox.find-teacher-training-courses.service.gov.uk
+find_hosts:
+  - sandbox.find-teacher-training-courses.service.gov.uk
+
+publish_url: https://sandbox.publish-teacher-training-courses.service.gov.uk
+publish_hosts:
+  - sandbox.publish-teacher-training-courses.service.gov.uk
+
+api_url: https://sandbox.api.publish-teacher-training-courses.service.gov.uk
+api_hosts:
+  - sandbox.api.publish-teacher-training-courses.service.gov.uk
 
 base_url: https://sandbox.publish-teacher-training-courses.service.gov.uk
+
+apply_base_url: https://sandbox.apply-for-teacher-training.service.gov.uk
 
 dfe_signin:
   issuer: https://oidc.signin.education.gov.uk
   secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
   profile: https://profile.signin.education.gov.uk
   user_search_url: https://support.signin.education.gov.uk/users
-
-find_valid_referers:
-  - https://sandbox.find-teacher-training-courses.service.gov.uk
-  - https://sandbox.find-teacher-training-courses.service.gov.uk

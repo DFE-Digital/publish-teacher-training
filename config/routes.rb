@@ -6,18 +6,18 @@ Rails.application.routes.draw do
   get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
-  constraints(APIConstraint.new) do
-    get "/", to: redirect("/docs/")
+  constraints host: Settings.api_hosts do
+    draw(:external_api)
   end
 
-  constraints(FindConstraint.new) do
+  constraints host: Settings.find_hosts do
+    draw(:internal_api)
     draw(:find)
-    draw(:find_api)
   end
 
-  constraints(PublishConstraint.new) do
+  constraints host: Settings.publish_hosts do
+    draw(:internal_api)
     draw(:publish)
     draw(:support)
-    draw(:publish_api)
   end
 end

@@ -1,24 +1,33 @@
-base_url: http://www.publish-test.com
+environment:
+  label: Test
+  name: test
+
+find_url: http://find.localhost
+find_hosts:
+  - find.localhost
+
+publish_url: http://publish.localhost
+publish_hosts:
+  - publish.localhost
+
+api_url: http://api.localhost
+api_hosts:
+  - api.localhost
+
+base_url: http://publish.localhost
+
 govuk_notify:
   api_key: cafe-cafecafe-cafe-cafe-cafe-cafecafecafe-cafecafe-cafe-cafe-cafe-cafecafecafe
 system_authentication_token: "Ge32"
-publish_url: https://www.publish-teacher-training-courses.service.gov.uk
-find_url: https://find-teacher-training-courses.service.gov.uk
+
 bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
     queue: save_statistic
-environment:
-  label: "Test"
-  name: "test"
 
 basic_auth:
   username: admin
   password: password
 
 STATE_CHANGE_SLACK_URL: https://example.com/webhook
-
-
-find_valid_referers:
-  - http://localhost:9000

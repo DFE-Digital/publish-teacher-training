@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+get "/", to: redirect("/docs/")
+
 mount OpenApi::Rswag::Ui::Engine => "/api-docs"
 mount OpenApi::Rswag::Api::Engine => "/api-docs"
 
@@ -26,8 +28,6 @@ namespace :api do
       get "/courses", to: "courses#index"
     end
   end
-  get "/school_suggestions", to: "school_suggestions#index"
-  get ":recruitment_cycle_year/accredited_provider_suggestions", to: "accredited_provider_suggestions#index"
 end
 
 get "error_500", to: "api_error#error500"
