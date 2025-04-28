@@ -1,6 +1,5 @@
-
 <%= render PageTitle.new(
-  title: "Check your answers - #{t('.caption', provider_name: @provider.provider_name, code: @provider.provider_code)}",
+  title: "Check your answers - #{t('.caption', provider_name: @partnership.training_provider.provider_name, code: @partnership.training_provider.provider_code)}",
 ) %>
 
 <% content_for :before_content do %>
@@ -10,9 +9,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= form_with(url: check_support_recruitment_cycle_provider_accredited_partnerships_path, method: :put, local: true) do |f| %>
+    <%= form_with(model: @partnership, url: check_support_recruitment_cycle_provider_accredited_partnerships_path, method: :put, local: true) do |f| %>
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code) %></span>
+        <span class="govuk-caption-l"><%= t(".caption", provider_name: @partnership.training_provider.provider_name, code: @partnership.training_provider.provider_code) %></span>
         Check your answers
       </h1>
 
@@ -24,7 +23,8 @@
             end
           end %>
 
-      <%= govuk_warning_text(text: "All users at #{@partnership.accredited_provider.provider_name} will be sent an email to let them know they’ve been added.") %>
+      <%= f.hidden_field :accredited_provider_id %>
+      <%= govuk_warning_text(text: t(".warning", provider_name: @partnership.accredited_provider.provider_name)) %>
 
       <%= f.govuk_submit(t(".add")) %>
     <% end %>

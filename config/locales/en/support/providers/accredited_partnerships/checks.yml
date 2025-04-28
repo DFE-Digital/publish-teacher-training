@@ -1,0 +1,11 @@
+en:
+  support:
+    providers:
+      accredited_partnerships:
+        checks:
+          show:
+            caption: "Add accredited provider - %{provider_name} (%{code})"
+            add: Add accredited provider
+            warning: "All users at %{provider_name} will be sent an email to let them know they’ve been added."
+          update:
+            added: Accredited provider added
