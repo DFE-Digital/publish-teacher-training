@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Guidance pages", :with_publish_constraint do
+feature "Guidance pages" do
   scenario "Navigating through how to use this service pages" do
     given_i_visit_the_root_path
     when_i_click_how_to_use_this_service

@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-describe "API", :with_publish_constraint do
+describe "API" do
   let(:recruitment_cycle) { create(:recruitment_cycle) }
   let(:year) { recruitment_cycle.year }
 

@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-describe "API", :with_publish_constraint do
+describe "API" do
   path "/subject_areas" do
     get "Returns a list of subject areas used to organise subjects." do
       operationId :public_api_v1_subject_areas
