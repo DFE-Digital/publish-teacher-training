@@ -439,7 +439,7 @@ en:
         study_type_html: Study type<span class="govuk-visually-hidden"> filter</span>
         qualifications_html: Qualification awarded<span class="govuk-visually-hidden"> filter</span>
         further_education_html: Further education<span class="govuk-visually-hidden"> filter</span>
-        minimum_degree_required_html: Minimum degree required<span class="govuk-visually-hidden"> filter</span>
+        minimum_degree_required_html: Degree grade<span class="govuk-visually-hidden"> filter</span>
         special_education_needs_html: Special educational needs<span class="govuk-visually-hidden"> filter</span>
         funding_html: Fee or salary<span class="govuk-visually-hidden"> filter</span>
         applications_open_html: Applications open<span class="govuk-visually-hidden"> filter</span>
@@ -449,6 +449,7 @@ en:
         primary: (ages 3 to 11)
         further_education: (ages 16 and over)
         secondary: (ages 11 to 18)
+        degree_grade: Select your degree (or expected degree)
     submit:
       courses_search_form:
         filters: Apply filters
@@ -477,7 +478,9 @@ en:
           two_two: "2:2"
           third_class: Third
           pass: Pass
-          no_degree_required: No degree required
+          no_degree_required: No degree
+          show_all_courses: Show all courses
+          or: or
         funding_options:
           fee: Fee - no salary
           salary: Salary
