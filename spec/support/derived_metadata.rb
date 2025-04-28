@@ -13,8 +13,6 @@ RSpec.configure do |config|
 
     metadata[:publish_features] = true
     metadata[:auth_features] = true
-
-    metadata[:with_publish_constraint] = true
   end
 
   config.define_derived_metadata(file_path: Regexp.new("/spec/(system|features)/support")) do |metadata|
@@ -22,8 +20,6 @@ RSpec.configure do |config|
 
     metadata[:support_features] = true
     metadata[:auth_features] = true
-
-    metadata[:with_publish_constraint] = true
   end
 
   config.define_derived_metadata(file_path: Regexp.new("/spec/(system|features)/auth")) do |metadata|
@@ -32,8 +28,6 @@ RSpec.configure do |config|
     metadata[:auth_features] = true
     metadata[:support_features] = true
     metadata[:publish_features] = true
-
-    metadata[:with_publish_constraint] = true
   end
 
   config.define_derived_metadata(file_path: Regexp.new("/spec/requests/find")) do |metadata|

@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-describe "API", :with_publish_constraint do
+describe "API" do
   before do
     create(:course, :engineers_teach_physics, provider:, course_code: "C100", funding: "fee")
     create(:course, :engineers_teach_physics, provider:, course_code: "C101", funding: "fee")
