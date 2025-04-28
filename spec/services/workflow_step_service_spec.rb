@@ -120,7 +120,7 @@ describe WorkflowStepService do
       let(:provider) { build(:provider) }
       let(:course) { create(:course, :salary, accrediting_provider: accredited_provider, provider:) }
       let(:accredited_provider) { build(:accredited_provider) }
-      let!(:accredited_partnerships) { [create(:provider_partnership, accredited_provider:, description: "Something great about the accredited provider", training_provider: provider)] }
+      let!(:accredited_partnerships) { [create(:provider_partnership, accredited_provider:, training_provider: provider)] }
 
       it "returns the expected workflow steps" do
         expected_steps = %i[
@@ -152,8 +152,8 @@ describe WorkflowStepService do
       let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, provider:) }
       let!(:accredited_partnerships) do
         [
-          create(:provider_partnership, accredited_provider:, description: "Something great about the accredited provider", training_provider: provider),
-          create(:provider_partnership, accredited_provider: second_accredited_provider, description: "Something great about the accredited provider", training_provider: provider),
+          create(:provider_partnership, accredited_provider:, training_provider: provider),
+          create(:provider_partnership, accredited_provider: second_accredited_provider, training_provider: provider),
         ]
       end
       let(:accredited_provider) { build(:accredited_provider) }
@@ -183,7 +183,7 @@ describe WorkflowStepService do
     context "when only one accredited provider" do
       let(:provider) { build(:provider) }
       let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, accrediting_provider: accredited_provider, provider:) }
-      let!(:accredited_partnerships) { [create(:provider_partnership, accredited_provider:, description: "Something great about the accredited provider", training_provider: provider)] }
+      let!(:accredited_partnerships) { [create(:provider_partnership, accredited_provider:, training_provider: provider)] }
       let(:accredited_provider) { build(:accredited_provider) }
 
       it "removes accredited provider step" do

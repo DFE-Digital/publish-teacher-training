@@ -175,7 +175,7 @@ private
   def and_my_provider_has_accrediting_providers
     @course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: "Accrediting provider name"))
 
-    @provider.accredited_partnerships.create(accredited_provider: @course.accrediting_provider, description: "Description")
+    @provider.accredited_partnerships.create(accredited_provider: @course.accrediting_provider)
     @provider.courses << @course
   end
 

@@ -2397,7 +2397,7 @@ describe Course do
       end
 
       context "with accrediting_provider_enrichments" do
-        let(:provider) { create(:provider, accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider, description: "one two three")]) }
+        let(:provider) { create(:provider, accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider)]) }
 
         it { is_expected.to eq(accrediting_provider.train_with_us) }
       end

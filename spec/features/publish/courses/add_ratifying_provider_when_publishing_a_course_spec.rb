@@ -60,7 +60,7 @@ feature "Publishing a course when course ratifying provider is invalid", { can_e
 
   def and_the_provider_has_a_valid_accrediting_provider
     provider = @user.providers.first
-    provider.accredited_partnerships.create(accredited_provider: accredited_provider, description: "Description")
+    provider.accredited_partnerships.create(accredited_provider: accredited_provider)
   end
 
   def and_the_provider_has_no_accredited_partners
