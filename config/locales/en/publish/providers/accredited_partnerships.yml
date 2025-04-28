@@ -1,0 +1,23 @@
+en:
+  publish:
+    providers:
+      accredited_partnerships:
+        index:
+          title: Accredited providers
+          add: Add accredited provider
+          no_providers: There are no accredited providers for %{provider_name}.
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          caption: Add accredited provider
+        delete:
+          title: Are you sure you want to remove this accredited provider?
+          warning: You cannot remove this accredited provider
+          remove: Remove accredited provider
+        destroy:
+          removed: Accredited provider removed
+        can_remove:
+          title: Are you sure you want to remove this accredited provider?
+          remove: Remove accredited provider
+        cannot_remove:
+          warning: You cannot remove this accredited provider
+          reason: "%{ratifying_provider_name} is an accredited provider for courses run by %{training_provider_name}. At least one of these courses is currently published on Find."
+          need_to_change_html: If you need to change an accredited provider for a course which is published, please contact us at %{email}

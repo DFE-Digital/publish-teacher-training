@@ -63,8 +63,8 @@ en:
       sections_for:
         find: [6, 14, 15, 25, 29, 30, 43]
         publish: [1, 6, 14, 16, 22, 29, 30, 37, 43]
-      sections: 
-        1: 
+      sections:
+        1:
           link_text: Section 1
           body_html: "%{link} tells you what we do with your data to provide funding."
           anchor: "#using-your-data-to-fund-learning-including-apprenticeships"
@@ -109,7 +109,7 @@ en:
           body_html: "%{link} tells you how to contact us to make a complaint."
           anchor: "#how-to-contact-us-and-how-to-make-a-complaint"
   privacy_notice:
-    page_title: "%{service_name} privacy notice"   
+    page_title: "%{service_name} privacy notice"
   privacy_information:
     base_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/privacy-information-education-providers-workforce-including-teachers"
   markdown_formatting:
@@ -710,36 +710,6 @@ en:
         new:
           title: Enter a school, university, college, URN or postcode
           cannot_find: I cannot find the site - enter manually
-      accredited_partnerships:
-        index:
-          title: Accredited providers
-          add: Add accredited provider
-          no_providers: There are no accredited providers for %{provider_name}.
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_partnership Add accredited provider
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          warning: You cannot remove this accredited provider
-          remove: Remove accredited provider
-        destroy:
-          removed: Accredited provider removed
-        can_remove:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-        cannot_remove:
-          warning: You cannot remove this accredited provider
-          reason: "%{ratifying_provider_name} is an accredited provider for courses run by %{training_provider_name}. At least one of these courses is currently published on Find."
-          need_to_change_html: If you need to change an accredited provider for a course which is published, please contact us at %{email}
-        checks:
-          show:
-            title:  *add_accredited_partnership
-            caption: *add_accredited_partnership
-            add: *add_accredited_partnership
-            check_answers: Check your answers
-            accredited_provider: Accredited provider
-            warning: All users at %{provider_name} will be sent an email to let them know they’ve been added.
-          update:
-            added: Accredited provider added
       training_partners:
         index:
           title: Training partners
