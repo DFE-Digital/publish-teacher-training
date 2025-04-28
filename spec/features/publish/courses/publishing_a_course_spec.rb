@@ -141,8 +141,7 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_visit_the_course_page
-    page.driver.header "Host", "find"
-    visit "/course/#{provider.provider_code}/#{course.course_code}"
+    visit find_course_url(provider.provider_code, course.course_code)
   end
 
   def and_i_do_not_see_the_unpublished_content_on_find
@@ -150,13 +149,11 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_see_the_content_on_find
-    page.driver.header "Host", "find"
-    visit "/course/#{provider.provider_code}/#{course.course_code}"
+    visit find_course_url(provider.provider_code, course.course_code)
     expect(page).to have_content("some new information about school placements")
   end
 
   def when_i_return_to_publish
-    page.driver.header "Host", "publish"
     and_i_am_authed_again
     publish_provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
