@@ -13,14 +13,14 @@ module Support
         end
 
         def update
-          @partnership = provider.accredited_partnerships.build(accredited_provider_id: accredited_provider_form.accredited_provider_id,
-                                                                description: accredited_provider_form.description)
+          @partnership = provider.accredited_partnerships.build(accredited_provider_id: params[:provider_partnership][:accredited_provider_id])
+
           if @partnership.save
             notify_accredited_provider_users
-
+            flash[:success_with_body] = { "title" => t(".added"), "body" => @partnership.accredited_provider.provider_name }
             redirect_to support_recruitment_cycle_provider_accredited_partnerships_path(
               recruitment_cycle.year, provider.id
-            ), flash: { success: t(".added") }
+            )
           else
             render :show
           end
