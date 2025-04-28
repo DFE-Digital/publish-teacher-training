@@ -19,10 +19,11 @@ module Support
 
         provider.accredited_partnerships.find_by(accredited_provider_id: partner.id).destroy
 
+        flash[:success_with_body] = { "title" => t(".removed"), "body" => partner.provider_name }
         redirect_to support_recruitment_cycle_provider_accredited_partnerships_path(
           recruitment_cycle_year: @recruitment_cycle.year,
           provider_id: @provider.id,
-        ), flash: { success: t(".removed") }
+        )
       end
 
     private
