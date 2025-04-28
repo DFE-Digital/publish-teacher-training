@@ -1,11 +1,25 @@
-publish_api_url: https://qa.api.publish-teacher-training-courses.service.gov.uk
-publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
-find_url: https://qa.find-teacher-training-courses.service.gov.uk
-extra_find_url: https://qa.find-teacher-training-courses.service.gov.uk
-apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
+environment:
+  label: QA
+  name: qa
 
-# URL of this app for the callback after sigining in
+find_url: https://qa.find-teacher-training-courses.service.gov.uk
+find_hosts:
+  - qa.find-teacher-training-courses.service.gov.uk
+  # - find-qa.test.teacherservices.cloud
+
+publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
+publish_hosts:
+  - qa.publish-teacher-training-courses.service.gov.uk
+  - publish-qa.test.teacherservices.cloud
+
+api_url: https://qa.api.publish-teacher-training-courses.service.gov.uk
+api_hosts:
+  - qa.api.publish-teacher-training-courses.service.gov.uk
+  # - publish-api-qa.test.teacherservices.cloud
+
 base_url: https://qa.publish-teacher-training-courses.service.gov.uk
+
+apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 
 bg_jobs:
   save_statistic:
@@ -14,9 +28,6 @@ bg_jobs:
     queue: save_statistic
 skylight:
   enable: true
-environment:
-  label: "QA"
-  name: "qa"
 
 authentication:
   # mode: dfe_signin  # default authentication mode
@@ -28,7 +39,3 @@ basic_auth:
 features:
   send_request_data_to_bigquery: true
   api_summary_content_change: true
-
-find_valid_referers:
-  - https://qa.find-teacher-training-courses.service.gov.uk
-  - https://qa.find-teacher-training-courses.service.gov.uk

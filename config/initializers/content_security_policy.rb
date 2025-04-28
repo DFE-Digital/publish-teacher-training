@@ -8,16 +8,10 @@
 
 Rails.application.configure do
   config.content_security_policy do |policy|
-    local_domains = %w[https://publish.localhost https://find.localhost]
-    prod_domains = [
-      "https://*.find-teacher-training-courses.service.gov.uk",
-      "https://*.find-postgraduate-teacher-training.service.gov.uk",
-      "https://*.publish-teacher-training-courses.service.gov.uk",
-    ]
-    all_domains = local_domains + prod_domains
+    all_domains = [*Settings.find_hosts, *Settings.publish_hosts, *Settings.api_hosts]
 
     policy.default_src :self
-    policy.font_src    :self, :data, *all_domains
+    policy.font_src    :self, :data, "fonts.googleapis.com", *all_domains
     policy.img_src     :self,
                        :https,
                        :data
@@ -35,7 +29,7 @@ Rails.application.configure do
     policy.style_src   :self, *all_domains
 
     policy.frame_src   :self,
-                       *local_domains
+                       *all_domains
 
     # Specify URI for violation reports
     # policy.report_uri "/csp-violation-report-endpoint"

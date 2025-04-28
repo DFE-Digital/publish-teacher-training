@@ -67,7 +67,7 @@ RSpec.describe "Canonical tags" do
   end
 
   def then_the_page_contains_canonical_tags_for_a_course
-    canonical_url = "http://www.find-test.lvh.me/course/#{@mathematics_course.provider.provider_code}/#{@mathematics_course.course_code}/"
+    canonical_url = "http://find.localhost/course/#{@mathematics_course.provider.provider_code}/#{@mathematics_course.course_code}/"
 
     link_tag = page.find("link[rel='canonical']", visible: :all)
     expect(link_tag[:href]).to eq(canonical_url)
@@ -77,17 +77,17 @@ RSpec.describe "Canonical tags" do
   end
 
   def then_the_page_contains_canonical_tags_with_no_query_params
-    expect(page).to have_css("link[rel='canonical'][href='http://www.find-test.lvh.me/']", visible: :all)
-    expect(page).to have_css("meta[property='og:url'][content='http://www.find-test.lvh.me/']", visible: :all)
+    expect(page).to have_css("link[rel='canonical'][href='http://find.localhost/']", visible: :all)
+    expect(page).to have_css("meta[property='og:url'][content='http://find.localhost/']", visible: :all)
   end
 
   def then_the_page_contains_canonical_tags_without_query_params
-    expect(page).to have_css("link[rel='canonical'][href='http://www.find-test.lvh.me/results/']", visible: :all)
-    expect(page).to have_css("meta[property='og:url'][content='http://www.find-test.lvh.me/results/']", visible: :all)
+    expect(page).to have_css("link[rel='canonical'][href='http://find.localhost/results/']", visible: :all)
+    expect(page).to have_css("meta[property='og:url'][content='http://find.localhost/results/']", visible: :all)
   end
 
   def then_the_publish_page_contains_canonical_tags
-    expect(page).to have_css("link[rel='canonical'][href='http://www.publish-test.lvh.me/sign-in/']", visible: :all)
-    expect(page).to have_css("meta[property='og:url'][content='http://www.publish-test.lvh.me/sign-in/']", visible: :all)
+    expect(page).to have_css("link[rel='canonical'][href='http://publish.localhost/sign-in/']", visible: :all)
+    expect(page).to have_css("meta[property='og:url'][content='http://publish.localhost/sign-in/']", visible: :all)
   end
 end

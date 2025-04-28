@@ -1,3 +1,21 @@
+environment:
+  label: Development
+  name: development
+
+find_url: https://find.localhost
+find_hosts:
+  - find.localhost
+
+publish_url: https://publish.localhost
+publish_hosts:
+  - publish.localhost
+
+api_url: https://api.localhost
+api_hosts:
+  - api.localhost
+
+base_url: https://publish.localhost
+
 authentication:
   secret: secret
   mode: persona
@@ -7,13 +25,3 @@ mcbg:
 
 system_authentication_token: "Ge32"
 log_level: debug
-
-environment:
-  label: Development
-  name: development
-
-find_valid_referers:
-  - http://localhost:3001
-
-base_url: https://publish.localhost
-find_url: https://find.localhost

@@ -48,4 +48,13 @@ Config.setup do |config|
   #   required(:age).maybe(:int?)
   #   required(:email).filled(format?: EMAIL_REGEX)
   # end
+
+  # Parse values as arrays.
+  #
+  # SETTINGS__[KEY]__[INDEX]
+  #
+  # e.g.
+  #   SETTINGS__NUMBERS__0=1 SETTINGS__NUMBERS__1=2 rails runner "p Settings.numbers" #=> [1, 2]
+  #
+  config.env_parse_arrays = true
 end
