@@ -164,7 +164,7 @@ FactoryBot.define do
       accrediting_provider { association(:accredited_provider) }
 
       after(:create) do |course|
-        create(:provider_partnership, training_provider: course.provider, accredited_provider: course.accrediting_provider, description: "EnrichmentDescription")
+        create(:provider_partnership, training_provider: course.provider, accredited_provider: course.accrediting_provider)
       end
     end
 
