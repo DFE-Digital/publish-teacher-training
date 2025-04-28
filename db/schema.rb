@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_25_151829) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_28_153208) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -317,7 +317,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_25_151829) do
     t.datetime "discarded_at", precision: nil
     t.text "train_with_us"
     t.text "train_with_disability"
-    t.jsonb "accrediting_provider_enrichments"
     t.float "latitude"
     t.float "longitude"
     t.string "ukprn"
