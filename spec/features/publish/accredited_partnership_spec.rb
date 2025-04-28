@@ -289,7 +289,7 @@ private
     course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: "Accrediting provider name"))
 
     @provider.courses << course
-    @provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider, description: "Great provider!")
+    @provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider)
   end
 
   def then_i_see_the_accredited_provider_name_displayed

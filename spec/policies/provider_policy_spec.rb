@@ -40,7 +40,7 @@ describe ProviderPolicy do
       let(:provider) { course.accrediting_provider }
       let(:training_provider) do
         course.provider
-        course.provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider, description: "description")
+        course.provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider)
         course.provider
       end
 

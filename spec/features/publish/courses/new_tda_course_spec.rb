@@ -218,7 +218,7 @@ feature "Adding a teacher degree apprenticeship course", :can_edit_current_and_n
     @provider = @user.providers.first
     create(:accredited_provider, provider_code: "1BJ")
     @accredited_provider = create(:accredited_provider, provider_code: "1BK")
-    @provider.accredited_partnerships.create(accredited_provider: @accredited_provider, description: "description")
+    @provider.accredited_partnerships.create(accredited_provider: @accredited_provider)
 
     given_i_am_authenticated(user: @user)
   end
