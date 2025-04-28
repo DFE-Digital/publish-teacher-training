@@ -1,0 +1,15 @@
+en:
+  publish:
+    providers:
+      accredited_partnerships:
+        checks:
+          show:
+            title:  Add accredited provider
+            caption: Add accredited provider
+            add: Add accredited provider
+            check_answers: Check your answers
+            accredited_provider: Accredited provider
+            warning: All users at %{provider_name} will be sent an email to let them know they’ve been added.
+          update:
+            added: Accredited provider added
+
