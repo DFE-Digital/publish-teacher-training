@@ -5,7 +5,11 @@ module Support
     module AccreditedPartnerships
       class ChecksController < ApplicationController
         def show
-          accredited_provider_form
+          @partnership = provider.accredited_partnerships.build(accredited_provider: partner)
+
+          if @partnership.invalid?
+            redirect_to search_support_recruitment_cycle_provider_accredited_providers_path(provider_id: provider.id, recruitment_cycle_year: recruitment_cycle.year), flash: { error: { message: "#{partner.name_and_code} partnership already exists" } }
+          end
         end
 
         def update
@@ -24,20 +28,12 @@ module Support
 
       private
 
-        def accredited_provider_form
-          @accredited_provider_form ||= ProviderPartnershipForm.new(current_user, new_partnership)
-        end
-
         def provider
           @provider ||= recruitment_cycle.providers.find(params[:provider_id])
         end
 
-        def new_partnership
-          @new_partnership = provider.accredited_partnerships.build
-        end
-
         def partner
-          Provider.find(accredited_provider_form.accredited_provider_id)
+          Provider.find(params[:accredited_provider_id])
         end
 
         def notify_accredited_provider_users

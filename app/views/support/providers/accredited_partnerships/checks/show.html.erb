@@ -4,7 +4,7 @@
 ) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(new_support_recruitment_cycle_provider_accredited_partnership_path) %>
+  <%= govuk_back_link_to(search_support_recruitment_cycle_provider_accredited_providers_path) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -19,12 +19,12 @@
       <%= render GovukComponent::SummaryListComponent.new do |component|
             component.with_row do |row|
               row.with_key { "Accredited provider" }
-              row.with_value { @accredited_provider_form.provider_name }
+              row.with_value { @partnership.accredited_provider.provider_name }
               row.with_action(text: "Change", href: search_support_recruitment_cycle_provider_accredited_providers_path(goto_confirmation: true), visually_hidden_text: "accredited partner name")
             end
           end %>
 
-      <%= govuk_warning_text(text: "All users at #{@accredited_provider_form.provider_name} will be sent an email to let them know they’ve been added.") %>
+      <%= govuk_warning_text(text: "All users at #{@partnership.accredited_provider.provider_name} will be sent an email to let them know they’ve been added.") %>
 
       <%= f.govuk_submit(t(".add")) %>
     <% end %>
