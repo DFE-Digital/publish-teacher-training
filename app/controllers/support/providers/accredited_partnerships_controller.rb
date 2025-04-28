@@ -3,11 +3,7 @@
 module Support
   module Providers
     class AccreditedPartnershipsController < ApplicationController
-      include ClearStashable
-
       helper_method :accredited_provider_id
-
-      before_action :reset_accredited_provider_form, only: %i[index]
 
       def index
         @pagy, @partnerships = pagy(provider.accredited_partnerships)
