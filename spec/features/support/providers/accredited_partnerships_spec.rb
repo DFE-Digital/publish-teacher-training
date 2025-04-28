@@ -35,31 +35,12 @@ feature "Accredited partnership flow", { can_edit_current_and_next_cycles: false
     then_i_still_see_the_provider_i_searched_for
 
     when_i_select_the_provider
-    and_i_continue_without_entering_a_description
-    then_i_see_an_error_message("Enter details about the accredited provider")
-
-    when_i_input_new_information
-    then_i_should_see_the_information_i_added
 
     when_i_confirm_the_changes
     then_i_return_to_the_index_page
     and_the_accredited_provider_is_saved_to_the_database
     and_i_see_the_create_success_message
     and_i_see_the_accredited_partnership
-  end
-
-  scenario "i can edit accredited partnerships on the index page" do
-    and_my_provider_has_accrediting_providers
-    and_i_click_on_the_accredited_provider_tab
-    and_i_click_change
-
-    when_i_click_the_back_link
-    then_i_return_to_the_index_page
-    and_i_click_change
-
-    when_i_input_updated_description
-    then_i_see_the_updated_description
-    and_i_see_the_success_message
   end
 
   scenario "i cannot delete accredited partnerships attached to a course" do
@@ -69,21 +50,11 @@ feature "Accredited partnership flow", { can_edit_current_and_next_cycles: false
     then_i_see_the_cannot_remove_text
   end
 
-  scenario "i edit the description of a partnership" do
-    and_my_provider_has_accrediting_providers
-    and_i_click_on_the_accredited_provider_tab
-    and_i_click_change_description
-    and_i_delete_all_the_text
-    and_i_click_update_description
-    then_i_see_an_error_message("Enter details about the accredited provider")
-  end
-
   scenario "i can delete accredited partnerships not attached to a course" do
     and_i_click_on_the_accredited_provider_tab
     and_i_click_add_accredited_provider
     and_i_search_for_an_accredited_provider_with_a_valid_query
     and_i_select_the_provider
-    when_i_input_new_information
     and_i_confirm_the_changes
     and_i_click_remove
     and_i_click_remove_ap
@@ -109,15 +80,6 @@ private
     click_link_or_button "Add accredited provider"
   end
   alias_method :when_i_confirm_the_changes, :and_i_confirm_the_changes
-
-  def when_i_input_new_information
-    fill_in "About the accredited provider", with: "New AP description"
-    click_link_or_button "Continue"
-  end
-
-  def then_i_should_see_the_information_i_added
-    expect(page).to have_text("New AP description")
-  end
 
   def and_i_select_the_provider
     choose @accredited_provider.provider_name
@@ -197,27 +159,10 @@ private
     click_link_or_button "Back"
   end
 
-  def and_i_see_the_success_message
-    expect(page).to have_content("Accredited provider updated")
-  end
-
   def and_i_see_an_error_message(error_message = form_title)
     expect(page).to have_content(error_message)
   end
   alias_method :then_i_see_an_error_message, :and_i_see_an_error_message
-
-  def then_i_see_the_updated_description
-    expect(page).to have_text("update the AP description")
-  end
-
-  def and_i_continue_without_entering_a_description
-    click_link_or_button "Continue"
-  end
-
-  def when_i_input_updated_description
-    fill_in "About the accredited provider", with: "update the AP description"
-    click_link_or_button "Update description"
-  end
 
   def then_i_see_the_correct_text_for_no_accredited_providers
     expect(page).to have_text("There are no accredited providers for #{@provider.provider_name}")
@@ -249,18 +194,6 @@ private
       "h2.govuk-summary-card__title a.govuk-link",
       text: "Accrediting provider name",
     )
-  end
-
-  def and_i_click_change_description
-    page.click_link_or_button "Change description"
-  end
-
-  def and_i_delete_all_the_text
-    fill_in "About the accredited provider", with: ""
-  end
-
-  def and_i_click_update_description
-    click_link_or_button "Update description"
   end
 
   def when_i_click_the_accredited_provider_link
