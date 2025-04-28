@@ -139,7 +139,6 @@ shared:
     - discarded_at
     - train_with_us
     - train_with_disability
-    - accrediting_provider_enrichments
     - latitude
     - longitude
     - ukprn
