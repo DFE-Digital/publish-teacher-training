@@ -115,7 +115,6 @@ shared:
     - id
     - accredited_provider_id
     - training_provider_id
-    - description
     - created_at
     - updated_at
   provider:
