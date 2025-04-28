@@ -10,7 +10,8 @@ RSpec.configure do |config|
   end
 
   config.define_derived_metadata(file_path: %r{spec/docs}) do |metadata|
-    metadata[:type] ||= :request
+    metadata[:type] = :request
+    metadata[:service] = :api
   end
 
   # Specify a root folder where Swagger JSON files are generated
