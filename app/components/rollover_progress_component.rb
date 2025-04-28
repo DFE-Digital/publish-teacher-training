@@ -2,10 +2,9 @@ class RolloverProgressComponent < ViewComponent::Base
   attr_reader :current_cycle, :target_cycle
 
   def initialize(current_cycle:, target_cycle:)
+    super
     @current_cycle = current_cycle
     @target_cycle = target_cycle
-
-    super
   end
 
   def status
