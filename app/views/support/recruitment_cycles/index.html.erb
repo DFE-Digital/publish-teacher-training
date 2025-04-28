@@ -1,37 +1,33 @@
 <% content_for :page_title, t(".page_title") %>
 
 <div class="govuk-width-container">
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
+  <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
 
-      <%= govuk_button_link_to t(".add_recruitment_cycle"), new_support_recruitment_cycle_path %>
+  <%= govuk_button_link_to t(".add_recruitment_cycle"), new_support_recruitment_cycle_path %>
 
-      <%= govuk_table do |table| %>
-        <% table.with_head do |head| %>
-          <% head.with_row do |row| %>
-            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:year) %>
-            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:start_date) %>
-            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:end_date) %>
-            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:rollover_progress) %>
-            <% row.with_cell text: RecruitmentCycle.human_attribute_name(:status) %>
-          <% end %>
-        <% end %>
+  <%= govuk_table do |table| %>
+    <% table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell text: RecruitmentCycle.human_attribute_name(:year) %>
+        <% row.with_cell text: RecruitmentCycle.human_attribute_name(:start_date) %>
+        <% row.with_cell text: RecruitmentCycle.human_attribute_name(:end_date) %>
+        <% row.with_cell text: RecruitmentCycle.human_attribute_name(:rollover_progress) %>
+        <% row.with_cell text: RecruitmentCycle.human_attribute_name(:status) %>
+      <% end %>
+    <% end %>
 
-        <% table.with_body do |body| %>
-          <% @recruitment_cycles.each do |recruitment_cycle| %>
-            <% body.with_row do |row| %>
-              <% row.with_cell text: govuk_link_to(recruitment_cycle.year, support_recruitment_cycle_path(recruitment_cycle)) %>
-              <% row.with_cell text: recruitment_cycle.application_start_date.strftime("%-d %B %Y") %>
-              <% row.with_cell text: recruitment_cycle.application_end_date.strftime("%-d %B %Y") %>
-              <% row.with_cell text: render(RolloverProgressComponent.new(current_cycle: RecruitmentCycle.current, target_cycle: recruitment_cycle)) %>
-              <% row.with_cell do %>
-                <%= recruitment_cycle_status_tag(recruitment_cycle) %>
-              <% end %>
-            <% end %>
+    <% table.with_body do |body| %>
+      <% @recruitment_cycles.each do |recruitment_cycle| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell text: govuk_link_to(recruitment_cycle.year, support_recruitment_cycle_path(recruitment_cycle)) %>
+          <% row.with_cell text: recruitment_cycle.application_start_date.strftime("%-d %B %Y") %>
+          <% row.with_cell text: recruitment_cycle.application_end_date.strftime("%-d %B %Y") %>
+          <% row.with_cell text: render(RolloverProgressComponent.new(current_cycle: RecruitmentCycle.current, target_cycle: recruitment_cycle)) %>
+          <% row.with_cell do %>
+            <%= recruitment_cycle_status_tag(recruitment_cycle) %>
           <% end %>
         <% end %>
       <% end %>
-    </div>
-  </div>
+    <% end %>
+  <% end %>
 </div>
