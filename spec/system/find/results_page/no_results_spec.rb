@@ -131,7 +131,7 @@ RSpec.describe "No search results", :js, service: :find do
   end
 
   def when_i_search_teacher_degree_apprenticeship_courses_in_england
-    choose "No degree required", visible: :all
+    choose "No degree", visible: :all
     and_i_click_search
   end
 
