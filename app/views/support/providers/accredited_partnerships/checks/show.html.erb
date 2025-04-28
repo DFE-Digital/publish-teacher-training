@@ -22,12 +22,6 @@
               row.with_value { @accredited_provider_form.provider_name }
               row.with_action(text: "Change", href: search_support_recruitment_cycle_provider_accredited_providers_path(goto_confirmation: true), visually_hidden_text: "accredited partner name")
             end
-
-            component.with_row do |row|
-              row.with_key { "About the accredited partner" }
-              row.with_value { @accredited_provider_form.description }
-              row.with_action(text: "Change", href: new_support_recruitment_cycle_provider_accredited_partnership_path(goto_confirmation: true), visually_hidden_text: "accredited partner description")
-            end
           end %>
 
       <%= govuk_warning_text(text: "All users at #{@accredited_provider_form.provider_name} will be sent an email to let them know they’ve been added.") %>
