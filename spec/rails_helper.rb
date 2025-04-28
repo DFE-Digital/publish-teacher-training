@@ -124,6 +124,7 @@ RSpec.configure do |config|
 
   ActiveJob::Base.queue_adapter = :test
 
+  Capybara.default_max_wait_time = 10
   config.before(:each, type: :feature) do
     service = self.class.metadata[:service]
 
