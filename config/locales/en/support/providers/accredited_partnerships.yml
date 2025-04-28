@@ -1,0 +1,19 @@
+en:
+  support:
+    providers:
+      accredited_partnerships:
+        index:
+          title: About the accredited provider
+          add: Add accredited provider
+          no_providers: There are no accredited providers for %{provider_name}.
+        destroy:
+          removed: Accredited provider removed
+        delete:
+          title: Are you sure you want to remove this accredited provider?
+          remove: Remove accredited provider
+        can_remove:
+          title: Are you sure you want to remove this accredited provider?
+          remove: Remove accredited provider
+        cannot_remove:
+          warning: You cannot remove this accredited provider
+          reason: "%{ratifying_provider_name} is an accredited provider for courses run by %{training_provider_name}. At least one of these courses is currently published on Find."
