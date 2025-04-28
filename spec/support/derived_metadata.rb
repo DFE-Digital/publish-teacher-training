@@ -5,7 +5,6 @@ RSpec.configure do |config|
     metadata[:service] = :find
 
     metadata[:find_features] = true
-    metadata[:with_find_constraint] = true
   end
 
   config.define_derived_metadata(file_path: Regexp.new("/spec/(system|features)/publish")) do |metadata|
