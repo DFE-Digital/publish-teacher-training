@@ -10,12 +10,12 @@ class RecruitmentCycleCreationService
   end
 
   def call
-    RecruitmentCycle.create!(
+    recruitment_cycle = RecruitmentCycle.create!(
       year: @year,
       application_start_date: @application_start_date,
       application_end_date: @application_end_date,
     )
 
-    RolloverJob.perform_later
+    RolloverJob.perform_later(recruitment_cycle.id)
   end
 end

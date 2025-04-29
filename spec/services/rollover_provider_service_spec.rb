@@ -46,5 +46,29 @@ describe RolloverProviderService do
 
       described_class.call(provider_code: provider.provider_code, course_codes:, force:)
     end
+
+    context "when a new_recruitment_cycle_id is provided" do
+      let(:custom_recruitment_cycle) do
+        find_or_create(
+          :recruitment_cycle,
+          year: 1.year.from_now.year,
+          application_start_date: DateTime.new(Date.current.year.to_i + 1, 10, 1),
+          application_end_date: DateTime.new(Date.current.year.to_i + 2, 9, 30),
+        )
+      end
+
+      it "uses the specified recruitment cycle" do
+        expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
+          provider:, new_recruitment_cycle: custom_recruitment_cycle, course_codes:,
+        )
+
+        described_class.call(
+          provider_code: provider.provider_code,
+          course_codes: course_codes,
+          force: force,
+          new_recruitment_cycle_id: custom_recruitment_cycle.id,
+        )
+      end
+    end
   end
 end
