@@ -9,11 +9,10 @@ describe Provider do
   let(:provider) do
     create(:provider,
            provider_name: "ACME SCITT",
-           provider_code: "A01",
            courses:)
   end
 
-  its(:to_s) { is_expected.to eq("ACME SCITT (A01) [#{provider.recruitment_cycle}]") }
+  its(:to_s) { is_expected.to eq("ACME SCITT (#{provider.provider_code}) [#{provider.recruitment_cycle}]") }
 
   describe "auditing" do
     it { is_expected.to be_audited.except(:changed_at) }
@@ -502,46 +501,51 @@ describe Provider do
   end
 
   describe "#accredited_courses" do
-    subject { provider.accredited_courses }
-
-    let(:provider) { create(:provider, :accredited_provider) }
+    let(:accrediting_provider) { create(:provider, :accredited_provider) }
     let!(:findable_course) do
       create(:course, name: "findable-course",
-                      accrediting_provider: provider,
+                      accrediting_provider:,
                       site_statuses: [build(:site_status, :findable)])
     end
     let!(:discarded_course) do
       create(:course, :deleted,
              name: "deleted-course",
-             accrediting_provider: provider)
+             accrediting_provider:)
     end
     let!(:discontinued_course) do
       create(:course,
              name: "discontinued-course",
-             accrediting_provider: provider,
+             accrediting_provider:,
              site_statuses: [build(:site_status, :discontinued)])
     end
 
-    it { is_expected.to include findable_course }
-    it { is_expected.to include discontinued_course }
-    it { is_expected.not_to include discarded_course }
+    it "includes findable and discontinued courses but not discarded courses" do
+      expect(accrediting_provider.accredited_courses).to include(findable_course)
+      expect(accrediting_provider.accredited_courses).to include(discontinued_course)
+      expect(accrediting_provider.accredited_courses).not_to include(discarded_course)
+    end
+  end
 
-    describe "#current_accredited_courses" do
-      subject { provider.current_accredited_courses }
+  # This is a self accredited course
+  # There needs tests for normal accredited relationships
+  describe "#current_accredited_courses" do
+    # let(:training_provider) { create(:provider) }
+    let(:accredited_provider) { create(:provider, :accredited_provider) }
 
-      let(:last_years_provider) do
-        # make provider_codes the same to simulate a rolled over provider
-        create(:provider, :previous_recruitment_cycle, provider_code: provider.provider_code)
-      end
-      let!(:last_years_course) do
-        create(:course,
-               name: "last-years-course",
-               provider: last_years_provider,
-               accrediting_provider: provider,
-               site_statuses: [build(:site_status, :discontinued)])
-      end
+    let(:last_years_provider) do
+      # make provider_codes the same to simulate a rolled over provider
+      create(:provider, :previous_recruitment_cycle, provider_code: accredited_provider.provider_code)
+    end
+    let!(:last_years_course) do
+      create(:course,
+             name: "last-years-course",
+             provider: last_years_provider,
+             accrediting_provider: accredited_provider,
+             site_statuses: [build(:site_status)])
+    end
 
-      it { is_expected.not_to include last_years_course }
+    it "does not include courses from past cycles" do
+      expect(provider.current_accredited_courses).not_to include last_years_course
     end
   end
 
