@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_28_153208) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_29_124044) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -344,7 +344,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_153208) do
   create_table "provider_partnership", force: :cascade do |t|
     t.bigint "accredited_provider_id", null: false
     t.bigint "training_provider_id", null: false
-    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["accredited_provider_id", "training_provider_id"], name: "idx_on_accredited_provider_id_training_provider_id_7705512e33", unique: true
