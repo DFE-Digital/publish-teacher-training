@@ -5,7 +5,7 @@ require "spec_helper_smoke"
 describe "V1 Public API Smoke Tests", :aggregate_failures, :smoke do
   subject(:response) { HTTParty.get(url) }
 
-  let(:base_url) { Settings.publish_api_url }
+  let(:base_url) { Settings.api_url }
 
   describe "GET /healthcheck" do
     let(:url) { "#{base_url}/healthcheck" }
@@ -19,6 +19,8 @@ describe "V1 Public API Smoke Tests", :aggregate_failures, :smoke do
     end
 
     it "returns the expected response report" do
+      puts url
+      puts response.body
       expect(response.body).to eq(
         {
           checks: {

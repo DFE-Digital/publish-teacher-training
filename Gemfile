@@ -201,6 +201,9 @@ group :development, :test do
   gem "faker"
 
   gem "dotenv"
+
+  # Make HTTP requests fun again
+  gem "httparty"
 end
 
 group :development do
@@ -215,9 +218,6 @@ group :development do
 
   # Output scaffold commands based on schema
   gem "schema_to_scaffold"
-
-  # Make HTTP requests fun again
-  gem "httparty"
 end
 
 group :test do
