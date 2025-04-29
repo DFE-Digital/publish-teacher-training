@@ -4,12 +4,22 @@ require "rails_helper"
 
 RSpec.describe RolloverProviderJob do
   describe "#perform" do
-    let(:provider_code) { "ABC123" }
+    let(:new_recruitment_cycle) do
+      find_or_create(:recruitment_cycle, :next)
+    end
+    let(:provider) do
+      create(:provider)
+    end
 
-    it "calls the rollover service with correct parameters" do
-      expect(RolloverProviderService).to receive(:call).with(provider_code:, force: false)
+    it "copy courses from specific provider only" do
+      courses = create_list(:course, 5, :published, provider:)
+      create_list(:course, 5, :published, provider: create(:provider))
 
-      subject.perform(provider_code)
+      subject.perform(provider.provider_code, new_recruitment_cycle.id)
+
+      expect(new_recruitment_cycle.courses.pluck(:name, :course_code)).to eq(
+        courses.pluck(:name, :course_code),
+      )
     end
   end
 end

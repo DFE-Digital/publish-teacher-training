@@ -18,7 +18,7 @@ RSpec.describe RolloverJob do
     it "enqueues jobs with correct staggered timings" do
       Timecop.freeze do
         current_time = Time.zone.now
-        subject.perform
+        subject.perform(recruitment_cycle.id)
 
         expect(Sidekiq::Queues["default"].size).to eq(15)
 
@@ -27,7 +27,7 @@ RSpec.describe RolloverJob do
 
           expect(job).to include(
             "class" => "RolloverProviderJob",
-            "args" => [provider.provider_code],
+            "args" => [provider.provider_code, recruitment_cycle.id],
             "enqueued_at" => current_time.to_f,
           )
         end
@@ -37,7 +37,7 @@ RSpec.describe RolloverJob do
 
           expect(job).to include(
             "class" => "RolloverProviderJob",
-            "args" => [provider.provider_code],
+            "args" => [provider.provider_code, recruitment_cycle.id],
             "at" => (current_time + 1.hour).to_f,
           )
         end
@@ -46,11 +46,11 @@ RSpec.describe RolloverJob do
 
     it "handles empty provider lists gracefully" do
       Provider.delete_all
-      expect { subject.perform }.not_to change(Sidekiq::Queues["default"], :size)
+      expect { subject.perform(recruitment_cycle.id) }.not_to change(Sidekiq::Queues["default"], :size)
     end
   end
 
   def find_job(provider_code)
-    Sidekiq::Queues["default"].find { |j| j["args"] == [provider_code] }
+    Sidekiq::Queues["default"].find { |j| j["args"] == [provider_code, recruitment_cycle.id] }
   end
 end

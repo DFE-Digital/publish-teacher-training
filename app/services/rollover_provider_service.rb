@@ -3,9 +3,10 @@
 class RolloverProviderService
   include ServicePattern
 
-  def initialize(provider_code:, force:, course_codes: nil)
+  def initialize(provider_code:, force:, new_recruitment_cycle_id: nil, course_codes: nil)
     @provider_code = provider_code
     @course_codes = course_codes
+    @new_recruitment_cycle_id = new_recruitment_cycle_id
     @force = force
   end
 
@@ -37,7 +38,11 @@ private
   end
 
   def new_recruitment_cycle
-    @new_recruitment_cycle ||= RecruitmentCycle.next_recruitment_cycle
+    @new_recruitment_cycle ||= if @new_recruitment_cycle_id.present?
+                                 RecruitmentCycle.find(@new_recruitment_cycle_id)
+                               else
+                                 RecruitmentCycle.next_recruitment_cycle
+                               end
   end
 
   def provider
