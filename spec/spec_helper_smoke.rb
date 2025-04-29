@@ -2,6 +2,7 @@
 
 ENV["RAILS_ENV"] ||= "test"
 
+require "json"
 require "rspec"
 require "config"
 require "httparty"

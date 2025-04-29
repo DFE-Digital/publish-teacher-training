@@ -2,19 +2,19 @@ environment:
   label: Review
   name: review
 
-find_url: https://find-#{ENV["APP_NAME_SUFFIX"]}.teacherservices.cloud
+find_url: <%= "https://find-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 find_hosts:
-  - find-#{ENV["APP_NAME_SUFFIX"]}.teacherservices.cloud
+  - <%= "find-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 
-publish_url: https://publish-#{ENV["APP_NAME_SUFFIX"]}.teacherservices.cloud
+publish_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 publish_hosts:
-  - publish-#{ENV["APP_NAME_SUFFIX"]}.teacherservices.cloud
+  - <%= "publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 
-api_url: https://publish-#{ENV["APP_NAME_SUFFIX"]}.teacherservices.cloud/api
+api_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 api_hosts:
-  - publish-#{ENV["APP_NAME_SUFFIX"]}.teacherservices.cloud
+  - <%= "publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 
-base_url: https://publish-#{ENV["APP_NAME_SUFFIX"]}.teacherservices.cloud
+base_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 
 apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 
