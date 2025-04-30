@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_29_124044) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_30_141008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -368,6 +368,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_124044) do
     t.date "application_end_date", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.date "available_in_publish_from"
   end
 
   create_table "session", id: :serial, force: :cascade do |t|
