@@ -153,6 +153,7 @@ shared:
     - year
     - application_start_date
     - application_end_date
+    - available_in_publish_from
     - created_at
     - updated_at
   site:
