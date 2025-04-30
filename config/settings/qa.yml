@@ -6,16 +6,18 @@ find_url: https://qa.find-teacher-training-courses.service.gov.uk
 find_hosts:
   - qa.find-teacher-training-courses.service.gov.uk
   # - find-qa.test.teacherservices.cloud
+  - find-temp.test.teacherservices.cloud
 
 publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
 publish_hosts:
   - qa.publish-teacher-training-courses.service.gov.uk
   - publish-qa.test.teacherservices.cloud
+  - publish-temp.test.teacherservices.cloud
 
 api_url: https://qa.api.publish-teacher-training-courses.service.gov.uk
 api_hosts:
   - qa.api.publish-teacher-training-courses.service.gov.uk
-  # - publish-api-qa.test.teacherservices.cloud
+  - api-publish-temp.test.teacherservices.cloud
 
 base_url: https://qa.publish-teacher-training-courses.service.gov.uk
 

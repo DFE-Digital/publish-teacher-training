@@ -5,15 +5,18 @@ environment:
 find_url: https://find-teacher-training-courses.service.gov.uk
 find_hosts:
   - find-teacher-training-courses.service.gov.uk
+  - find-temp.teacherservices.cloud
 
 publish_url: https://www.publish-teacher-training-courses.service.gov.uk
 publish_hosts:
   - www.publish-teacher-training-courses.service.gov.uk
   - publish-production.teacherservices.cloud
+  - publish-temp.teacherservices.cloud
 
 api_url: https://api.publish-teacher-training-courses.service.gov.uk
 api_hosts:
   - api.publish-teacher-training-courses.service.gov.uk
+  - api-publish-temp.teacherservices.cloud
 
 base_url: https://www.publish-teacher-training-courses.service.gov.uk
 
