@@ -82,6 +82,9 @@ RSpec.describe Support::RecruitmentCycleForm do
           "application_end_date(1i)" => "2051",
           "application_end_date(2i)" => "03",
           "application_end_date(3i)" => "10",
+          "available_in_publish_from(1i)" => "2050",
+          "available_in_publish_from(2i)" => "03",
+          "available_in_publish_from(3i)" => "09",
         }
       end
 

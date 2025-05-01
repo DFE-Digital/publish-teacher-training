@@ -11,6 +11,7 @@
         <% row.with_cell text: RecruitmentCycle.human_attribute_name(:year) %>
         <% row.with_cell text: RecruitmentCycle.human_attribute_name(:start_date) %>
         <% row.with_cell text: RecruitmentCycle.human_attribute_name(:end_date) %>
+        <% row.with_cell text: RecruitmentCycle.human_attribute_name(:available_in_publish_from) %>
         <% row.with_cell text: RecruitmentCycle.human_attribute_name(:rollover_progress) %>
         <% row.with_cell text: RecruitmentCycle.human_attribute_name(:status) %>
       <% end %>
@@ -22,6 +23,7 @@
           <% row.with_cell text: govuk_link_to(recruitment_cycle.year, support_recruitment_cycle_path(recruitment_cycle)) %>
           <% row.with_cell text: recruitment_cycle.application_start_date.strftime("%-d %B %Y") %>
           <% row.with_cell text: recruitment_cycle.application_end_date.strftime("%-d %B %Y") %>
+          <% row.with_cell text: recruitment_cycle.available_in_publish_from&.strftime("%-d %B %Y") %>
           <% row.with_cell text: render(RolloverProgressComponent.new(current_cycle: RecruitmentCycle.current, target_cycle: recruitment_cycle)) %>
           <% row.with_cell do %>
             <%= recruitment_cycle_status_tag(recruitment_cycle) %>

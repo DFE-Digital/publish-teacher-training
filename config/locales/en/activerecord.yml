@@ -7,3 +7,4 @@ en:
         end_date: End date
         rollover_progress: Rollover progress
         status: Status
+        available_in_publish_from: Available in Publish

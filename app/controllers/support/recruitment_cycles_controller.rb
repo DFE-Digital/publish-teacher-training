@@ -20,6 +20,7 @@ module Support
           year: @support_recruitment_cycle_form.year,
           application_start_date: @support_recruitment_cycle_form.application_start_date,
           application_end_date: @support_recruitment_cycle_form.application_end_date,
+          available_in_publish_from: @support_recruitment_cycle_form.available_in_publish_from,
         )
 
         redirect_to support_recruitment_cycles_path, flash: { success: t(".added") }
@@ -33,6 +34,7 @@ module Support
         year: @recruitment_cycle.year,
         application_start_date: @recruitment_cycle.application_start_date,
         application_end_date: @recruitment_cycle.application_end_date,
+        available_in_publish_from: @recruitment_cycle.available_in_publish_from,
       )
     end
 
@@ -44,6 +46,7 @@ module Support
           year: @support_recruitment_cycle_form.year,
           application_start_date: @support_recruitment_cycle_form.application_start_date,
           application_end_date: @support_recruitment_cycle_form.application_end_date,
+          available_in_publish_from: @support_recruitment_cycle_form.available_in_publish_from,
         )
 
         redirect_to support_recruitment_cycle_path(@recruitment_cycle), flash: { success: t(".updated") }
@@ -57,9 +60,12 @@ module Support
     def recruitment_cycle_form_params
       params
         .expect(
-          support_recruitment_cycle_form: %i[year
-                                             application_start_date
-                                             application_end_date],
+          support_recruitment_cycle_form: %i[
+            year
+            application_start_date
+            application_end_date
+            available_in_publish_from
+          ],
         )
     end
 
