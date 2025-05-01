@@ -117,4 +117,4 @@ cookies:
 STATE_CHANGE_SLACK_URL: replace_me
 
 find_service:
-  feedback_url: https://forms.office.com/e/LcMi76ZfHU
+  feedback_url: "./feedback/new"
