@@ -5,6 +5,8 @@ en:
         year: Recruitment cycle year
         application_start_date: Application start date
         application_end_date: Application end date
+        available_in_publish_from: Available in publish from
+        available_in_publish_from_description: Date when courses will become available to users in Publish.
     errors:
       models:
         support/recruitment_cycle_form:
@@ -20,4 +22,7 @@ en:
             application_end_date:
               blank: Enter an application end date
               application_end_date_after_start_date: End date must be after the application start date
+              invalid_date: Enter a valid date
+            available_in_publish_from:
+              blank: Enter the date when courses will become available to users in Publish.
               invalid_date: Enter a valid date

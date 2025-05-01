@@ -5,9 +5,10 @@ module Support
     attribute :year, :string
     attribute :application_start_date, :multiple_parameters_date
     attribute :application_end_date, :multiple_parameters_date
+    attribute :available_in_publish_from, :multiple_parameters_date
 
     validates :year, presence: true, numericality: { only_integer: true }
-    validates :application_start_date, :application_end_date, multiple_parameters_date: true
+    validates :application_start_date, :application_end_date, :available_in_publish_from, multiple_parameters_date: true
     validate :application_end_date_must_be_after_start_date
     validate :year_must_be_unique, if: -> { validation_context != :update }
 

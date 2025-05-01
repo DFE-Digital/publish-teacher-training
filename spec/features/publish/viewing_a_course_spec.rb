@@ -173,7 +173,12 @@ private
 
   def given_there_is_a_next_recruitment_cycle
     next_year = RecruitmentCycle.current.year.to_i + 1
-    RecruitmentCycle.create(year: next_year, application_start_date: Date.new(next_year - 1, 10, 1), application_end_date: Date.new(next_year, 9, 30))
+    create(
+      :recruitment_cycle,
+      year: next_year,
+      application_start_date: Date.new(next_year - 1, 10, 1),
+      application_end_date: Date.new(next_year, 9, 30),
+    )
   end
 
   def when_i_click_the_rollover_course_button
