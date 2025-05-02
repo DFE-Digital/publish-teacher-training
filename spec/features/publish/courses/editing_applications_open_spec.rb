@@ -54,7 +54,7 @@ feature "editing applications open date", { can_edit_current_and_next_cycles: fa
   end
 
   def given_i_choose_as_soon_as_find_is_open
-    page.choose("As soon as the course is on Find - recommended")
+    page.choose("As soon as the course is published - recommended")
   end
 
   def when_i_click_update

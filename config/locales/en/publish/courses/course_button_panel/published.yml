@@ -1,0 +1,12 @@
+en:
+  publish:
+    courses:
+      course_button_panel:
+        published:
+          withdraw_course: Withdraw course
+          last_published_on: Last published on %{date}
+          publish_course: Publish course
+          preview_course: Preview course
+          view_live_course: View live course
+          hidden_text: teacher training courses
+

@@ -671,8 +671,7 @@ en:
           page_title: About this course - %{course_name_and_code}
           submit_button: Update about this course
           description: >
-            The course summary appears at the top of the page on Find. Use it to show how this course is different from
-            others, this helps candidates understand whether it is right for them.
+            The course summary appears at the top of the course page. Use it to show how this course is different from others, this helps candidates understand whether it is right for them.
           candidates_say_section_html:
             <p class="govuk-body">Candidates say the most important information is:</p>
             <ul class="govuk-list govuk-list--bullet">

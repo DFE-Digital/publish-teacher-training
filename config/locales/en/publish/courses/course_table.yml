@@ -1,0 +1,8 @@
+en:
+  publish:
+    courses:
+      course_table:
+        view_course: View course
+        course: Course
+        status: Status
+        applications: Applications
