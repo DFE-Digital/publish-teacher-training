@@ -195,16 +195,26 @@ private
   def then_it_displays_correctly
     expect(page.title).to start_with("Check your answers")
 
-    expect(publish_course_confirmation_page.title).to have_content("Check your answers")
-    expect(publish_course_confirmation_page.details.level.value.text).to eq("Secondary")
-    expect(publish_course_confirmation_page.details.is_send.value.text).to eq("No")
-    expect(publish_course_confirmation_page.details.subjects.value.text).to include("Psychology")
-    expect(publish_course_confirmation_page.details.age_range.value.text).to eq("14 to 19")
-    expect(publish_course_confirmation_page.details.study_mode.value.text).to eq("Full time or part time")
-    expect(publish_course_confirmation_page.details.schools.value.text).to have_content(site.location_name)
-    # expect(publish_course_confirmation_page.details.study_sites.value.text).to have_content(study_site.location_name) # this can be uncommented when the 2023 cycle is over
-    expect(publish_course_confirmation_page.details.applications_open.value.text).to eq("12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
-    expect(publish_course_confirmation_page.details.start_date.value.text).to eq("October #{Settings.current_recruitment_cycle_year.to_i - 1}")
+    expect_summary_list_to_include(key: "Subject level", value: "Secondary")
+    expect_summary_list_to_include(key: "Special educational needs and disability (SEND)", value: "No")
+    expect_summary_list_to_include(key: "Subject", value: "Psychology")
+    expect_summary_list_to_include(key: "Age range", value: "14 to 19")
+    expect_summary_list_to_include(key: "Qualification", value: "QTS with PGDE")
+    expect_summary_list_to_include(key: "Funding type", value: "Salary (apprenticeship)")
+    expect_summary_list_to_include(key: "Study pattern", value: "Full time or part time")
+    expect_summary_list_to_include(key: "School", value: site.location_name)
+    expect_summary_list_to_include(key: "Applications open date", value: "12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
+    expect_summary_list_to_include(key: "Course start date", value: "October #{Settings.current_recruitment_cycle_year.to_i - 1}")
+  end
+
+  def expect_summary_list_to_include(key:, value:)
+    row = page.find_all(".govuk-summary-list__row").find do |r|
+      r.find(".govuk-summary-list__key").text.strip == key
+    end
+
+    expect(row).to be_present, "Expected to find row with key '#{key}'"
+    actual_value = row.find(".govuk-summary-list__value").text.strip
+    expect(actual_value).to eq(value), "Expected '#{value}' for key '#{key}', got '#{actual_value}'"
   end
 
   def and_i_click_to_update_the_schools
