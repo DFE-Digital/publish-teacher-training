@@ -26,13 +26,13 @@
 
       <%= govuk_summary_list(html_attributes: { data: { qa: "course__details" } }) do |summary_list| %>
 
-        <% summary_list.with_row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
+        <% summary_list.with_row do |row| %>
           <% row.with_key { t(".subject_level") } %>
           <% row.with_value { course.level.humanize } %>
           <% row.with_action %>
         <% end %>
 
-        <% summary_list.with_row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
+        <% summary_list.with_row do |row| %>
           <% row.with_key { t(".send") } %>
           <% row.with_value { course.is_send? } %>
           <% row.with_action %>
@@ -49,7 +49,7 @@
           <% end %>
 
           <% if course.applicable_for_engineers_teach_physics? %>
-            <% summary_list.with_row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
+            <% summary_list.with_row do |row| %>
               <% row.with_key { t(".engineers") } %>
               <% row.with_value { course.is_engineers_teach_physics? ? "Yes" : "No" } %>
               <% row.with_action(
@@ -59,7 +59,7 @@
             <% end %>
           <% end %>
 
-          <% summary_list.with_row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
+          <% summary_list.with_row do |row| %>
             <% row.with_key { t(".age_range") } %>
             <% row.with_value { course.age_range } %>
             <% row.with_action(
@@ -125,7 +125,7 @@
           <% end %>
         <% end %>
 
-        <% summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row| %>
+        <% summary_list.with_row do |row| %>
           <% row.with_key { t(".study_site", count: course.study_sites.length) } %>
           <% row.with_value do %>
             <% if course.study_sites.any? %>
@@ -152,7 +152,7 @@
 
         <% unless @provider.accredited? || course.is_further_education? %>
           <% change_ratifying_provider_url = new_publish_provider_recruitment_cycle_courses_ratifying_provider_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)) %>
-          <% summary_list.with_row(html_attributes: { data: { qa: "course__ratifying_provider" } }) do |row| %>
+          <% summary_list.with_row do |row| %>
             <% row.with_key { t(".accredited_provider") } %>
             <% row.with_value { course.accrediting_provider.provider_name } %>
             <% if @provider.accredited_partners.length > 1 %>
@@ -167,7 +167,7 @@
         <% end %>
 
         <% if course.fee_based? %>
-          <% summary_list.with_row(html_attributes: { data: { qa: "course__student_visa_sponsorship" } }) do |row| %>
+          <% summary_list.with_row do |row| %>
             <% row.with_key { t(".student_visas") } %>
             <% row.with_value { course.can_sponsor_student_visa ? t(".can_sponsor") : t(".cannot_sponsor") } %>
             <% row.with_action(
