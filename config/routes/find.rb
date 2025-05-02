@@ -3,6 +3,8 @@
 namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host } do
   root to: "homepage#index"
 
+  get :landing, to: 'pages#landing', as: :landing
+
   get "track_click", to: "track#track_click"
   get "track_apply_to_course_click", to: "track#track_apply_to_course_click"
 
