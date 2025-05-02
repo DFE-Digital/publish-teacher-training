@@ -9,6 +9,10 @@ en:
         available_in_publish_from_description: Date when courses will become available to users in Publish.
     errors:
       models:
+        find/subjects/secondary_form:
+          blank: "Select at least one type of secondary course"
+        find/subjects/primary_form:
+          blank: "Select at least one type of primary course"
         support/recruitment_cycle_form:
           attributes:
             year:
