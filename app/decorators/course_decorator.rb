@@ -31,7 +31,7 @@ class CourseDecorator < ApplicationDecorator
   def on_find(provider = object.provider)
     if object.findable?
       if current_cycle_and_open?
-        h.govuk_link_to("Yes - view online", h.find_course_url(provider.provider_code, object.course_code))
+        h.govuk_link_to("View live course", h.find_course_url(provider.provider_code, object.course_code))
       else
         "No - live on #{l(Settings.next_cycle_open_date.to_date, format: :govuk_short)}"
       end
@@ -261,7 +261,7 @@ class CourseDecorator < ApplicationDecorator
 
   def applications_open_first_label(recruitment_cycle)
     if current_cycle?
-      "As soon as the course is on Find - recommended"
+      "As soon as the course is published - recommended"
     else
       application_start_date = recruitment_cycle.application_start_date.strftime("%-d %B %Y")
       "On #{application_start_date} when Apply opens - recommended"
@@ -522,7 +522,7 @@ private
 
   def not_on_find
     if object.new_and_not_running?
-      "No - still in draft"
+      "Still in draft"
     elsif object.is_withdrawn?
       "No - withdrawn"
     else

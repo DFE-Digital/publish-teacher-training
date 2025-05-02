@@ -2,9 +2,47 @@ en:
   publish:
     courses:
       confirmation:
+        page_title: Check your answers
+        subject_level: Subject level
+        send: Special educational needs and disability (SEND)
+        subjects:
+          one: Subject
+          other: Subjects
+        school:
+          one: School
+          other: Schools
+        study_site:
+          one: Study site
+          other: Study sites
+        study_sites: Study sites
+        select_study_site: Select a study site
+        add_a_study_site: Add a study site
+        student_visas: Student visas
+        can_sponsor: Yes - can sponsor
+        cannot_sponsor: No - cannot sponsor
+        skilled_worker_visas: Skilled Worker visas
+        skilled_worker_visa_sponsorship: skilled worker visa sponsorship
+        schools: Schools
+        none: None
+        engineers: Engineers Teach Physics
+        age_range: Age range
+        qualification: Qualification
+        outcome: Outcome
+        funding_type: Funding type
+        if_funding: if funding type
+        study_pattern: Study pattern
+        if_full_part_time: if full or part time
+        applications_opening_date: Applications open date
+        as_soon_as_published: As soon as the course is published
+        date_applications_open: date applications open
+        course_start_date: Course start date
+        date_course_starts: date course starts
+        add_course: Add course
+        cancel: Cancel
         is_there_a_visa_sponsorship_deadline: Is there a visa sponsorship deadline?
         visa_sponsorship_application_deadline_date: Visa sponsorship deadline
-        ratifying_provider: Accredited provider
+        accredited_provider: Accredited provider
+        ratifying_provider: ratifying provider
         visa_sponsorship_deadline_required_visually_hidden: visa sponsorship deadline required
         date_for_applications_requiring_visa_sponsorship_visually_hidden: date for applications requiring visa sponsorship
 
