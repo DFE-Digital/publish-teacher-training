@@ -3,83 +3,57 @@ name: Delete Review App
 on:
   pull_request:
     types: [closed]
-    branches: [main]
-
-permissions:
-  deployments: write
-  id-token: write
+    branches: [ptt-2323-use-delete-review-app-github-action]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number of review app to delete
+        required: true
+        type: string
 
 jobs:
   delete-review-app:
-    environment: review
     name: Delete Review App ${{ github.event.pull_request.number }}
     concurrency: deploy_review_${{ github.event.pull_request.number }}
-    if: contains(github.event.pull_request.labels.*.name, 'deploy')
+    environment: review
+    if: contains(github.event.pull_request.labels.*.name, 'deploy') ||  ${{ github.event_name }} == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set Environment variables
+      - name: set PR_NUMBER
+        id: config
         run: |
-          terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
-          PR_NUMBER=${{ github.event.pull_request.number }}
+          if [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
+            PR_NUMBER=${{ github.event.inputs.pr_number }}
+          else
+            PR_NUMBER=${{ github.event.pull_request.number }}
+          fi
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-          echo "DEPLOY_ENV=review" >> $GITHUB_ENV
-          echo "TF_STATE_FILE=pr-$PR_NUMBER.tfstate" >> $GITHUB_ENV
-          echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
-          echo "USE_DB_SETUP_COMMAND=false" >> $GITHUB_ENV
+          echo "ENVIRONMENT=pr-${PR_NUMBER})" >> $GITHUB_ENV
 
-          pr_state_file=$(az storage blob list -c ptt-tfstate \
-           --connection-string $AZURE_STORAGE_CONNECTION_STRING \
-           --prefix pr-$PR_NUMBER.tfstate --query "[].name" -o tsv)
-
-          if [ ! -z "$pr_state_file" ]; then echo "TF_STATE_EXISTS=true" >> $GITHUB_ENV; fi;
-
-          tf_vars_file=terraform/aks/workspace_variables/review.tfvars.json
-          echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-        env:
-          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
-
-      - name: Setup Terraform ${{ env.TERRAFORM_VERSION }}
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-
-      - uses: azure/login@v2
-        if: env.TF_STATE_EXISTS == 'true'
-        with:
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-
-      - name: Validate Azure Key Vault secrets
-        if: env.TF_STATE_EXISTS == 'true'
-        uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
-        with:
-          KEY_VAULT: ${{ env.key_vault_name }}
-          SECRETS: |
-            ${{ env.key_vault_app_secret_name }}
-            ${{ env.key_vault_infra_secret_name }}
-
-      - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
-        with:
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-
-      - name: Terraform Destroy
-        if: env.TF_STATE_EXISTS == 'true'
-        run: make ci review destroy
-        env:
-          PR_NUMBER: ${{ env.PR_NUMBER }}
-
-      - name: Delete tf state file
-        if: env.TF_STATE_EXISTS == 'true'
+      - name: Set environment variables
+        shell: bash
         run: |
-            az storage blob delete -c ptt-tfstate --name ${{ env.TF_STATE_FILE }} \
-            --connection-string $AZURE_STORAGE_CONNECTION_STRING
-        env:
-          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
+          source global_config/review.sh
+          echo "AZURE_RESOURCE_PREFIX=${AZURE_RESOURCE_PREFIX}" >> $GITHUB_ENV
+          echo "CONFIG_SHORT=${CONFIG_SHORT}" >> $GITHUB_ENV
+          echo "SERVICE_SHORT=${SERVICE_SHORT}" >> $GITHUB_ENV
+
+      - name: Delete Review App
+        id: delete-review-app
+        uses: DFE-Digital/github-actions/delete-review-app@master
+        with:
+          terraform-base: "terraform/aks"
+          tf-file: "providers.tf"
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          container-name: terraform-state
+          gcp-wip: ${{ vars.GCP_WIP }}
+          gcp-project-id: ${{ vars.GCP_PROJECT_ID }}
+          pr-number: ${{ env.PR_NUMBER }}
+          resource-group-name: "${{ env.AZURE_RESOURCE_PREFIX }}-${{env.SERVICE_SHORT}}-${{ env.CONFIG_SHORT }}-rg"
+          storage-account-name: "${{ env.AZURE_RESOURCE_PREFIX }}${{env.SERVICE_SHORT}}${{ env.CONFIG_SHORT }}tfsa"
+          tf-state-file: "${{ env.ENVIRONMENT }}_kubernetes.tfstate"
