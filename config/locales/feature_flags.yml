@@ -1,5 +1,0 @@
-en:
-  feature_flags:
-    active:
-      true: active
-      false: inactive

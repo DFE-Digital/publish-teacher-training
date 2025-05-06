@@ -2,23 +2,24 @@
 
 module Support
   class FeatureFlagsController < ApplicationController
-    def update
-      FeatureFlag.send(action, feature_name)
+    rescue_from FeatureFlag::UnknownFeatureError, with: :unknown_feature
 
-      if Rails.env.production?
-        SlackNotificationJob.perform_now(
-          ":flags: Feature ‘#{feature_name}‘ was #{action}d",
-          support_feature_flags_path,
-        )
-      end
+    def activate
+      FeatureFlag.activate(feature_name)
 
-      redirect_to support_feature_flags_path, flash: { success: "Feature ‘#{feature_name.humanize}’ #{action}d" }
+      redirect_to support_feature_flags_path, flash: { success: t(".success", feature_name: feature_name.humanize) }
+    end
+
+    def deactivate
+      FeatureFlag.deactivate(feature_name)
+
+      redirect_to support_feature_flags_path, flash: { success: t(".success", feature_name: feature_name.humanize) }
     end
 
   private
 
-    def action
-      params[:state]
+    def unknown_feature
+      redirect_to support_feature_flags_path, flash: { error: { message: t(".error.unknown_feature") } }
     end
 
     def feature_name

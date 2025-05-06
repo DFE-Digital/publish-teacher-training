@@ -1,0 +1,12 @@
+en:
+  support:
+    feature_flags:
+      index:
+        activate: Activate
+        deactivate: Deactivate
+      activate:
+        success: Feature ‘%{feature_name}’ activated
+      deactivate:
+        success: Feature ‘%{feature_name}’ deactivated
+      error:
+        unknown_feature: Unknown feature flag

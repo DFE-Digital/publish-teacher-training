@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class FeatureFlag
+  extend Rails.application.routes.url_helpers
+
   class << self
     def active?(feature_name)
       feature = RedisClient.current.get("feature_flags_#{feature_name}")
@@ -14,12 +16,14 @@ class FeatureFlag
       raise UnknownFeatureError unless feature_name.in?(features)
 
       sync_with_redis(feature_name, true)
+      notify_slack(feature_name, true)
     end
 
     def deactivate(feature_name)
       raise UnknownFeatureError unless feature_name.in?(features)
 
       sync_with_redis(feature_name, false)
+      notify_slack(feature_name, false)
     end
 
     def features
@@ -42,6 +46,19 @@ class FeatureFlag
       RedisClient.current.set(
         "feature_flags_#{feature_name}", { state: feature_state, updated_at: Time.zone.now }.to_json
       )
+    end
+
+    def notify_slack(feature_name, feature_activated)
+      return unless Rails.env.production?
+
+      SlackNotificationJob.perform_now(
+        I18n.t(slack_notification_i18n_key(feature_activated), feature_name: feature_name.humanize),
+        support_feature_flags_path,
+      )
+    end
+
+    def slack_notification_i18n_key(feature_activated)
+      "feature_flags.slack_notification.#{feature_activated ? 'activated' : 'deactivated'}"
     end
   end
 
