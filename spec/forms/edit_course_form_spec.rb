@@ -8,6 +8,7 @@ module Support
     let(:valid_attributes) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: Settings.current_recruitment_cycle_year, applications_open_from_day: "5", applications_open_from_month: "7", applications_open_from_year: Settings.current_recruitment_cycle_year, is_send: "true" } }
     let(:attributes_with_invalid_date_format) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "222", start_date_month: "90", start_date_year: Settings.current_recruitment_cycle_year, applications_open_from_day: "500x", applications_open_from_month: "7", applications_open_from_year: "2022" } }
     let(:attributes_with_invalid_date_year) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2027", applications_open_from_day: "4", applications_open_from_month: "8", applications_open_from_year: "2000" } }
+    let(:attributes_with_two_digit_date_year) { { course_code: "T92", name: "Universitry of Oxfords", applications_open_from_day: "4", applications_open_from_month: "8", applications_open_from_year: "25" } }
     let(:blank_attributes) { { course_code: "", name: "", start_date_day: "", start_date_month: "", start_date_year: "", applications_open_from_day: "", applications_open_from_month: "", applications_open_from_year: "" } }
 
     subject { described_class.new(course) }
@@ -94,6 +95,17 @@ module Support
           expect(subject.errors.messages.count).to eq(2)
           expect(subject.errors.messages[:start_date]).to include("September 2027 is not in the #{Settings.current_recruitment_cycle_year} cycle")
           expect(subject.errors.messages[:applications_open_from]).to include("The date when applications open must be between #{course.recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{course.recruitment_cycle.application_end_date.to_fs(:govuk_date)}")
+        end
+      end
+
+      context "form is assigned date year args with a 2 digit date" do
+        it "can promote and return errors including 2-digit year error" do
+          subject.assign_attributes(attributes_with_two_digit_date_year)
+          subject.save
+          subject.valid?
+
+          expect(subject.errors.messages.count).to eq(1)
+          expect(subject.errors.messages[:applications_open_from]).to include("Year must include 4 numbers")
         end
       end
     end

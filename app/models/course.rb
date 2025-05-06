@@ -1092,6 +1092,8 @@ private
   def validate_applications_open_from
     if applications_open_from.blank? || applications_open_from.is_a?(Struct)
       errors.add(:applications_open_from, :blank)
+    elsif applications_open_from.year.to_s.length != 4
+      errors.add(:applications_open_from, "Year must include 4 numbers")
     elsif valid_date_range.exclude?(applications_open_from)
       errors.add(
         :applications_open_from,
