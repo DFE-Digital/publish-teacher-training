@@ -1,0 +1,40 @@
+en:
+  support:
+    data_exports:
+      index:
+        users:
+          name: "Only users affiliated with a provider"
+          description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
+    providers:
+      add: "Add organisation"
+      schools: # file
+        check_multiple: # file
+        multiple: # file
+        checks: # file
+        search: # file
+      users:
+        first_name: "First name"
+        last_name: "Last name"
+        email: "Email address"
+        new: "Add user"
+        edit: "Update user"
+        check: "Check your answers"
+      accredited_provider_search:
+        new:
+          title: Enter a provider name, UKPRN or postcode
+          caption: Add accredited provider - %{provider_name} (%{code})
+      provider_type:
+        lead_school: "School"
+        scitt: "School centred initial teacher training (SCITT)"
+        university: "Higher education institution (HEI)"
+    flash:
+      created: "%{resource} successfully created"
+      updated: "%{resource} successfully updated"
+      deleted: "%{resource} successfully deleted"
+    actions:
+      delete: "Delete this %{resource}"
+      remove_school: "Remove school"
+      remove_study_site: "Remove study site"
+    update_record: "Update"
+    update_resource: "Update %{resource}"
+    create_record: "Create"
