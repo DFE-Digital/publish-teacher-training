@@ -1,27 +1,124 @@
 <div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
-  <div data-qa="course__about_schools">
+<h2 class="govuk-heading-l" id="course-overview">Course overview</h2>
 
-    <% if course.fee_based? %>
-      <p class="govuk-body">
-        <%= t(".fee_based") %>
-      </p>
-    <% else %>
-      <p class="govuk-body">
-        <%= t(".non_fee_based") %>
-      </p>
-    <% end %>
+<% if course.fee_based? %>
+<div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+    <%= t(".fee_based") %>
+  </div>
+</div>
+<% else %>
+<div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+    <%= t(".non_fee_based") %>
+  </div>
+</div>
+<% end %>
+
+<% case @course.course_code %>
+<% when "R480" %>
+ <p class="govuk-body">
+   Trainee timetables are progressive in design with trainees supported at all times to ensure a balance between challenge and support.
+ </p>
+ <p class="govuk-body">
+   This course leads to qualified teacher status - QTS (11-16 years).
+ </p>
+<% when "E026" %>
+ <p class="govuk-body">
+   E026 is great
+ </p>
+<% when "H971" %>
+ <p class="govuk-body">
+   H971 is great
+ </p>
+<% when "36P4" %>
+ <p class="govuk-body">
+   36P4 is great
+ </p>
+<% when "Y404" %>
+ <p class="govuk-body">
+   Y404 is great
+ </p>
+<% end %>
+<!-- END COURSE OVERVIEW -->
+
+  <h2 class="govuk-heading-m" id="training-locations"><%= t(".heading") %> </h2>
+  <div data-qa="course__about_schools">
 
     <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
 
     <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
 
-    <% if course.published_how_school_placements_work.present? %>
-      <%= markdown(course.published_how_school_placements_work) %>
-    <% elsif course.how_school_placements_work.present? %>
-      <%= markdown(course.how_school_placements_work) %>
-    <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>
+    <% case @course.course_code %>
+    <% when "R480" %>
+      <p class="govuk-body">
+        All trainee teachers must complete a minimum of two placements with our secondary placements arranged through an A-B-A model. This means that the trainee will be placed in a ‘home school’ for the autumn term, an ‘alternative school’ placement runs from January to Easter. Following Easter, the trainee will return to their ‘home’ school until the end of the programme at the start of July.
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Autumn Term - Placement A </li>
+        <li>Spring Term - Placement B </li>
+        <li>Summer Term - Placement A </li>
+      </ul>
+
+      <p class="govuk-body">
+        We believe in the power of choice and work with successful applicants to cater towards providing them ‘home school’ placements in their chosen academies within our Trust. Trainees are able to select a preferred home school before submitting their application.
+      </p>
+      <p class="govuk-body">
+        ‘Alternative school’ placements are chosen considering a number of factors, including trainee prior experience, training needs and location.
+      </p>
+    <% when "E026" %>
+      <p class="govuk-body">
+        E026 is great
+      </p>
+    <% when "H971" %>
+      <p class="govuk-body">
+        H971 is great
+      </p>
+    <% when "36P4" %>
+      <p class="govuk-body">
+        36P4 is great
+      </p>
+    <% when "Y404" %>
+      <p class="govuk-body">
+        Y404 is great
+      </p>
     <% end %>
   </div>
+
+  <h2 class="govuk-heading-m">What you will study</h2>
+
+  <% case @course.course_code %>
+    <% when "R480" %>
+      <p class="govuk-body">
+      Throughout the course, trainees engage with professional development training which takes an evidence-informed approach to teaching and learning. Whilst the majority of training takes place at One Angel Square, some training will take place at our Hubs, academies and through online seminars.
+      </p>
+      <p class="govuk-body">
+      Intensive Training and Practice (ITaP) is an additional element, taking place over 20 days of the programme. The ITaP grants trainees the opportunity to work with expert practitioners, access the latest and most pertinent research and allows trainees to take their learning further with an intensive focus on a specific, granular area of pedagogy. The four areas we have identified as beneficial to our trainees’ learning and development are:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Setting high expectations, establishing strong starts to lessons & during transitions.</li>
+        <li>Developing teacher clarity through explicit instruction.</li>
+        <li>Design purposeful scaffolding leading to developing independence.</li>
+        <li>Questioning and deepening thinking..</li>
+      </ul>
+    <% when "E026" %>
+      <p class="govuk-body">
+        E026 is great
+      </p>
+    <% when "H971" %>
+      <p class="govuk-body">
+        H971 is great
+      </p>
+    <% when "36P4" %>
+      <p class="govuk-body">
+        36P4 is great
+      </p>
+    <% when "Y404" %>
+      <p class="govuk-body">
+        Y404 is great
+      </p>
+    <% end %>
+
 </div>
