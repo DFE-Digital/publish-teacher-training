@@ -6,7 +6,11 @@
   <%= govuk_summary_card(title: feature_name.to_s.humanize, classes: %w[app-summary-card]) do |summary_card| %>
     <% summary_card.with_action do %>
       <% protect_against_mistakes do %>
-        <%= govuk_button_to FeatureFlag.active?(feature_name) ? "Deactivate" : "Activate", support_feature_flag_path(feature_name, state: FeatureFlag.active?(feature_name) ? :deactivate : :activate), method: :put, class: "govuk-!-margin-bottom-0" %>
+        <% if FeatureFlag.active?(feature_name) %>
+          <%= govuk_button_to t(".deactivate"), deactivate_support_feature_flag_path(feature_name), method: :put, class: "govuk-!-margin-bottom-0" %>
+        <% else %>
+          <%= govuk_button_to t(".activate"), activate_support_feature_flag_path(feature_name), method: :put, class: "govuk-!-margin-bottom-0" %>
+        <% end %>
       <% end %>
     <% end %>
 
