@@ -1,13 +1,29 @@
 <%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
 
-<% if permitted_referrer? && course_back_link %>
-  <%= content_for(:before_content) do %>
-    <%= govuk_back_link(
-      text: course_back_link == find_candidate_saved_courses_path ? t("find.courses.show.back_to_saved_courses") : t("find.courses.show.back_to_search"),
-      href: course_back_link,
-    ) %>
-  <% end %>
-<% end %>
+<% case @course.course_code %>
+        <% when "E026" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "R480" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "H971" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "36P4" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "Y404" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% else %>
+          <% if permitted_referrer? %>
+            <%= content_for(:before_content) do %>
+              <%= govuk_back_link(
+                text: t("find.courses.show.back_to_search"),
+                href: find_results_path(session[:search_params]),
+                html_attributes: {
+                  data: { qa: "page-back" }
+                }
+              ) %>
+            <% end %>
+          <% end %>
+        <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -48,10 +64,52 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
-    <% if FeatureFlag.active?(:long_form_content) %>
-      <%= render partial: "find/courses/v2/components", locals: { course: @course } %>
-    <% else %>
-      <%= render partial: "find/courses/v1_components", locals: { course: @course } %>
+    <%= render Find::Courses::ContentsComponent::View.new(@course) %>
+
+    <h2 class="govuk-heading-l">Why train with us</h2>
+
+    <h2 class="govuk-heading-l">Course structure</h2>
+
+    <h3 class="govuk-heading-m">School placements</h3>
+
+    <h3 class="govuk-heading-m">What you will study</h3>
+
+    <h2 class="govuk-heading-l">Mentorship and support</h2>
+
+    <h2 class="govuk-heading-l">Assessment</h2>
+
+    <h2 class="govuk-heading-l">Fees and financial support</h2>
+
+    <h2 class="govuk-heading-l">Interview process</h2>
+
+    <h2 class="govuk-heading-l">Training with disabilities</h2>
+
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
+
+    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+
+    <% if @course.published_about_course.present? %>
+      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
+    <% end %>
+
+    <% if @course.published_interview_process.present? %>
+      <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
+    <% end %>
+
+    <% if @provider.train_with_disability.present? %>
+      <h2 class="govuk-heading-m" id="section-train-with-disabilities">
+        <%= t(".training_with_disabilities") %>
+      </h2>
+
+      <p class="govuk-body govuk-!-margin-bottom-8">
+        <%= govuk_link_to(
+          t(".training_with_disabilities_link", provider_name: @course.provider_name),
+          find_training_with_disabilities_path(
+            @course.provider_code,
+            @course.course_code,
+          ),
+        ) %>
+      </p>
     <% end %>
 
     <% if @course.teacher_degree_apprenticeship? %>
