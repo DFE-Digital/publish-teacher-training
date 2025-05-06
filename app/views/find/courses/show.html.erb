@@ -1,30 +1,33 @@
 <%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
 
-<% case @course.course_code %>
-        <% when "E026" %>
-          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
-        <% when "R480" %>
-          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
-        <% when "H971" %>
-          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
-        <% when "36P4" %>
-          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
-        <% when "Y404" %>
-          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
-        <% else %>
-          <% if permitted_referrer? %>
-            <%= content_for(:before_content) do %>
-              <%= govuk_back_link(
-                text: t("find.courses.show.back_to_search"),
-                href: find_results_path(session[:search_params]),
-                html_attributes: {
-                  data: { qa: "page-back" }
-                }
-              ) %>
-            <% end %>
-          <% end %>
+<!--BACK LINK -->
+  <% case @course.course_code %>
+    <% when "R480" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% when "E026" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% when "H971" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% when "36P4" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% when "Y404" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% else %>
+      <% if permitted_referrer? %>
+        <%= content_for(:before_content) do %>
+          <%= govuk_back_link(
+            text: t("find.courses.show.back_to_search"),
+            href: find_results_path(session[:search_params]),
+            html_attributes: {
+              data: { qa: "page-back" }
+            }
+          ) %>
         <% end %>
+      <% end %>
+    <% end %>
+<!-- END BACK LINK -->
 
+<!--COURSE HEADING -->
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
@@ -35,72 +38,126 @@
     </h1>
   </div>
 </div>
+<!-- END COURSE HEADING -->
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @course.application_status_closed? %>
-      <%= render partial: "find/courses/course_closed" %>
-    <% end %>
 
-    <% if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
-      <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        <div class="<%= FeatureFlag.active?(:candidate_accounts) ? "govuk-grid-column-one-third-from-desktop" : "govuk-grid-column-one-half" %>">
-          <%= render Find::Courses::ApplyComponent::View.new(
-                @course,
-                preview: preview?(params),
-                utm_content: "apply_course_button_top",
-              ) %>
-        </div>
+  <!-- COURSE SUMMARY -->
+  <%= render Find::Courses::SummaryComponent::View.new(@course) %>
+  <!-- END COURSE SUMMARY -->
 
-        <% if FeatureFlag.active?(:candidate_accounts) %>
-          <div class="govuk-grid-column-two-thirds-from-desktop">
-            <%= render "find/saved_courses/save_toggle" %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-
-    <%= render Find::Courses::SummaryComponent::View.new(@course) %>
-
+    <!-- ENTRY REQUIREMENTS -->
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
+    <!-- END ENTRY REQUIREMENTS -->
 
+    <!-- CONTENTS -->
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
+    <!-- END CONTENTS -->
 
-    <h2 class="govuk-heading-l">Why train with us</h2>
+    <!-- WHY TRAIN WTIH US -->
+    <h2 class="govuk-heading-l" id="why-train-with-us">Why train with us</h2>
 
-    <h2 class="govuk-heading-l">Course structure</h2>
+    <% case @course.course_code %>
+        <% when "R480" %>
+          <p class="govuk-body">
+          The Science Departments across our Trust are excellent bases to begin your teaching career. This course is designed to enable you to become a successful teacher of Science, specialising in Biology.
+          </p>
+          <p class="govuk-body">
+          Over 125 days of the course will be spent in schools working alongside highly professional and well-qualified colleagues. Specific subject knowledge training will enable you to build up strong knowledge of the Biology (and Science) curriculum for Key stage 3 and 4.
+          </p>
+        <% when "E026" %>
+          <p class="govuk-body">
+            E026 is great
+          </p>
+        <% when "H971" %>
+          <p class="govuk-body">
+            H971 is great
+          </p>
+        <% when "36P4" %>
+          <p class="govuk-body">
+            36P4 is great
+          </p>
+        <% when "Y404" %>
+          <p class="govuk-body">
+            Y404 is great
+          </p>
+        <% end %>
+    <!-- END WHY TRAIN WTIH US -->
 
-    <h3 class="govuk-heading-m">School placements</h3>
-
-    <h3 class="govuk-heading-m">What you will study</h3>
-
-    <h2 class="govuk-heading-l">Mentorship and support</h2>
-
-    <h2 class="govuk-heading-l">Assessment</h2>
-
-    <h2 class="govuk-heading-l">Fees and financial support</h2>
-
-    <h2 class="govuk-heading-l">Interview process</h2>
-
-    <h2 class="govuk-heading-l">Training with disabilities</h2>
-
+    <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
     <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
+    <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
+
+    <h2 class="govuk-heading-l" id="mentorship-and-support">Mentorship and support</h2>
+
+    <% case @course.course_code %>
+    <% when "R480" %>
+      <p class="govuk-body">
+        Progress is monitored by your class and professional mentor with the Lead Provider moderating you throughout the year. Trainee teacher development is supported through training, classroom experience, professional dialogue, self-reflection and weekly progress review meetings with your mentor.
+      </p>
+      <p class="govuk-body">
+        You will review our ITT curriculum, discussing what you have learnt, how you will further explore pedagogy and what targets & actions will be set to support you applying this within your practice. Progress will be reported on at 6 key points throughout the year in the form of written reports.      </p>
+      </p>
+        <% when "E026" %>
+        <p class="govuk-body">
+          E026 is great
+        </p>
+      <% when "H971" %>
+        <p class="govuk-body">
+          H971 is great
+        </p>
+      <% when "36P4" %>
+        <p class="govuk-body">
+          36P4 is great
+        </p>
+      <% when "Y404" %>
+        <p class="govuk-body">
+          Y404 is great
+        </p>
+      <% end %>
+
+    <h2 class="govuk-heading-l" id="assessment">Assessment</h2>
+
+    <% case @course.course_code %>
+    <% when "R480" %>
+      <p class="govuk-body">
+        Qualified Teacher Status (QTS) is awarded based on how well you have met each of the Teacher Standards. Evidence gathered to substantiate each of the standards comes from all assignments, teaching files, reflections and observations completed during your training.
+      </p>
+      <p class="govuk-body">
+        Applicants enrolled on the PGCE programme are expected to complete three Masters Level assignments leading to a PGCE qualification and 60 Masters level credits.
+      </p>
+        <% when "E026" %>
+        <p class="govuk-body">
+          E026 is great
+        </p>
+      <% when "H971" %>
+        <p class="govuk-body">
+          H971 is great
+        </p>
+      <% when "36P4" %>
+        <p class="govuk-body">
+          36P4 is great
+        </p>
+      <% when "Y404" %>
+        <p class="govuk-body">
+          Y404 is great
+        </p>
+      <% end %>
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <% if @course.published_about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <% end %>
-
+    <!-- INTERVIEW PROCESS -->
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
     <% end %>
+    <!-- END INTERVIEW PROCESS -->
 
+    <!-- TRAINING WITH DISABILITIES -->
     <% if @provider.train_with_disability.present? %>
-      <h2 class="govuk-heading-m" id="section-train-with-disabilities">
+      <h2 class="govuk-heading-l" id="section-train-with-disabilities">
         <%= t(".training_with_disabilities") %>
       </h2>
-
       <p class="govuk-body govuk-!-margin-bottom-8">
         <%= govuk_link_to(
           t(".training_with_disabilities_link", provider_name: @course.provider_name),
@@ -111,17 +168,23 @@
         ) %>
       </p>
     <% end %>
+    <!-- END TRAINING WITH DISABILITIES -->
 
+    <% if @course.application_status_closed? %>
+      <%= render partial: "find/courses/course_closed" %>
+    <% end %>
+    <%= render Find::Courses::ApplyComponent::View.new(@course, utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <!-- END APPLY BUTTON -->
+
+    <br><br>
+
+    <!-- SUPPORT CALLOUT -->
     <% if @course.teacher_degree_apprenticeship? %>
       <%= render partial: "find/courses/tda_advice" %>
     <% else %>
       <%= render partial: "find/courses/advice", locals: { course: @course } %>
     <% end %>
+    <!-- END SUPPORT CALLOUT -->
 
-    <% if @course.application_status_closed? %>
-      <%= render partial: "find/courses/course_closed" %>
-    <% end %>
-
-    <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
   </div>
 </div>
