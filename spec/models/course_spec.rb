@@ -414,6 +414,14 @@ describe Course do
             expect(error).not_to be_empty
             expect(error.first).to include("The date when applications open must be between #{recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{recruitment_cycle.application_end_date.to_fs(:govuk_date)}")
           end
+
+          it "adds an error when the year only has 2 digits" do
+            course.applications_open_from = "01-01-25"
+            course.valid?(:new)
+            error = course.errors.messages[:applications_open_from]
+            expect(error).not_to be_empty
+            expect(error.first).to include("Year must include 4 numbers")
+          end
         end
 
         it "Requires at least one location" do
