@@ -168,6 +168,9 @@ deploy-plan: deploy-init
 deploy: deploy-init
 	terraform -chdir=terraform/aks apply -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS} $(AUTO_APPROVE)
 
+.PHONY: terraform-destroy
+terraform-destoy: destroy
+
 destroy: deploy-init
 	terraform -chdir=terraform/aks destroy -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS} $(AUTO_APPROVE)
 
