@@ -1,0 +1,25 @@
+en:
+  helpers:
+    submit:
+      courses_search_form:
+        search: Search
+        order: Sort
+    label:
+      courses_search_form:
+        subject_name: Subject
+        location: City, town or postcode
+        radius: Search radius
+        provider: Enter a provider name
+        visa_sponsorship: Only show courses that offer visa sponsorship
+        ordering:
+          location: Sorted by distance
+          non_location: Sorted by
+          options:
+            course_name_ascending: Course name (A-Z)
+            course_name_descending: Course name (Z-A)
+            provider_name_ascending: Training provider (A-Z)
+            provider_name_descending: Training provider (Z-A)
+        radius_options:
+          miles:
+            one: "%{count} mile"
+            other: "%{count} miles"
