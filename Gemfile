@@ -107,7 +107,7 @@ gem "skylight"
 
 # govuk styling
 gem "govuk-components", "~> 5.10.0"
-gem "govuk_design_system_formbuilder", "~> 5.9"
+gem "govuk_design_system_formbuilder", "~> 5.10"
 
 # DfE Sign-In
 gem "omniauth", "~> 2.1"
