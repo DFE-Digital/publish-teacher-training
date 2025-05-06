@@ -1,16 +1,4 @@
 en:
-  find:
-      courses:
-        training_locations:
-          view:
-            distance: "%{distance} from %{location}"
-            search_help_fee: Search by city, town or postcode to find the nearest potential placement school
-            search_help_apprenticeship: Search by city, town or postcode to find the nearest potential employing school
-            search_help_salary: Search by city, town or postcode to find the nearest potential employing school
-            potential_study_sites_hint_text: Contact the training provider for more information
-            guaranteed: Schools can change and are not guaranteed
-            nearest_placement_school: Nearest placement school
-            nearest_employing_school: Nearest employing school
   shared:
     decorators:
       course:
