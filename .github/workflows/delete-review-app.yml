@@ -44,8 +44,6 @@ jobs:
           echo "CONFIG_SHORT=${CONFIG_SHORT}" >> $GITHUB_ENV
           echo "SERVICE_SHORT=${SERVICE_SHORT}" >> $GITHUB_ENV
           echo "USE_DB_SETUP_COMMAND=false" >> $GITHUB_ENV
-        env:
-          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
 
       - name: Delete Review App
         id: delete-review-app
