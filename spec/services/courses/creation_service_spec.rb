@@ -234,7 +234,7 @@ describe Courses::CreationService do
         "is_send" => "1",
         "level" => "primary",
         "qualification" => "qts",
-        "start_date" => "September #{recruitment_cycle.year}",
+        "start_date" => Time.zone.local(recruitment_cycle.year, 9, 1),
         "study_mode" => %w[full_time],
         "sites_ids" => [site.id],
         "study_sites_ids" => [study_site.id],
@@ -293,7 +293,7 @@ describe Courses::CreationService do
         "is_send" => "0",
         "level" => "secondary",
         "qualification" => "pgce_with_qts",
-        "start_date" => "September #{recruitment_cycle.year}",
+        "start_date" => Time.zone.local(recruitment_cycle.year, 9, 1),
         "study_mode" => %w[part_time],
         "sites_ids" => [site.id],
         "study_sites_ids" => [study_site.id],
@@ -349,7 +349,7 @@ describe Courses::CreationService do
           "is_send" => "0",
           "level" => "secondary",
           "qualification" => "pgce_with_qts",
-          "start_date" => "September #{recruitment_cycle.year}",
+          "start_date" => Time.zone.local(recruitment_cycle.year, 9, 1),
           "study_mode" => "part_time",
           "sites_ids" => [site.id],
           "study_sites_ids" => [study_site.id],
@@ -382,7 +382,7 @@ describe Courses::CreationService do
         "level" => "further_education",
         "funding" => "fee",
         "qualification" => "pgde",
-        "start_date" => "September #{recruitment_cycle.year}",
+        "start_date" => Time.zone.local(recruitment_cycle.year, 9, 1),
         "study_mode" => %w[full_time part_time],
         "sites_ids" => [site.id],
         "study_sites_ids" => [study_site.id],
@@ -457,8 +457,8 @@ describe Courses::CreationService do
         end
 
         it "saves the visa sponsorship application deadline at from the params" do
-          deadline = DateTime.new(recruitment_cycle.year.to_i, 8, 1).in_time_zone("London").end_of_day.utc
-          expect(subject.visa_sponsorship_application_deadline_at).to be_within(1.second).of deadline
+          deadline = Time.zone.local(recruitment_cycle.year.to_i, 8, 1).end_of_day
+          expect(subject.visa_sponsorship_application_deadline_at).to eq deadline
         end
       end
     end

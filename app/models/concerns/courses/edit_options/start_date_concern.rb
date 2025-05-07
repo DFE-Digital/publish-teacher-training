@@ -36,7 +36,7 @@ module Courses
           if instance_of?(Course) && persisted?
             available_options
           else
-            starting_index = available_options.find_index "#{Date::MONTHNAMES[DateTime.now.month]} #{DateTime.now.year}"
+            starting_index = available_options.find_index "#{Date::MONTHNAMES[Time.current.month]} #{Time.current.year}"
 
             available_options[starting_index..available_options.size]
           end
