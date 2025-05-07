@@ -44,6 +44,7 @@ jobs:
           echo "CONFIG_SHORT=${CONFIG_SHORT}" >> $GITHUB_ENV
           echo "SERVICE_SHORT=${SERVICE_SHORT}" >> $GITHUB_ENV
           echo "USE_DB_SETUP_COMMAND=false" >> $GITHUB_ENV
+          echo "TF_STATE_FILE=pr-$PR_NUMBER.tfstate" >> $GITHUB_ENV
 
       - name: Delete Review App
         id: delete-review-app
@@ -60,4 +61,4 @@ jobs:
           pr-number: ${{ env.PR_NUMBER }}
           resource-group-name: "${{ env.AZURE_RESOURCE_PREFIX }}-${{env.SERVICE_SHORT}}-${{ env.CONFIG_SHORT }}-rg"
           storage-account-name: "${{ env.AZURE_RESOURCE_PREFIX }}${{env.SERVICE_SHORT}}tfstate${{ env.CONFIG_SHORT }}sa"
-          tf-state-file: "${{ env.ENVIRONMENT }}.tfstate"
+
