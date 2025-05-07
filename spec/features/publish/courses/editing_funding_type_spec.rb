@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
+feature "Editing funding type" do
   context "with visa sponsorship deadline feature flag activated" do
     before do
       FeatureFlag.activate(:visa_sponsorship_deadline)

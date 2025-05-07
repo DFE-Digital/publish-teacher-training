@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Blazer SQL tool", { can_edit_current_and_next_cycles: false } do
+feature "Blazer SQL tool" do
   scenario "i cannot access blazer as an admin who does not have blazer access" do
     given_i_am_authenticated_as_an_admin
     when_i_visit_the_blazer_page

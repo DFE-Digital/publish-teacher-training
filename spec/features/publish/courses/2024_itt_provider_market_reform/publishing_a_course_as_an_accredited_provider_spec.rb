@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Publishing a course when course when accrediting_provider is nil", { can_edit_current_and_next_cycles: false } do
+feature "Publishing a course when course when accrediting_provider is nil" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

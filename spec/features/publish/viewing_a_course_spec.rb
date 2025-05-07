@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Course show", { can_edit_current_and_next_cycles: false } do
+feature "Course show" do
   include ActiveSupport::NumberHelper
 
   scenario "i can view the course basic details" do

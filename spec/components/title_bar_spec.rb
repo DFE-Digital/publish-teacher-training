@@ -8,8 +8,9 @@ describe TitleBar do
   let(:provider_code) { "1BJ" }
   let(:current_user) { create(:user) }
 
-  context "single org users", { can_edit_current_and_next_cycles: false } do
+  context "single org users" do
     before do
+      create(:recruitment_cycle, :next, available_in_publish_from: 1.day.from_now)
       render_inline(described_class.new(title:, current_user:, provider: provider_code))
     end
 
@@ -24,7 +25,7 @@ describe TitleBar do
 
   context "single org users during rollover" do
     before do
-      allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+      create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
       render_inline(described_class.new(title:, current_user:, provider: provider_code))
     end
 

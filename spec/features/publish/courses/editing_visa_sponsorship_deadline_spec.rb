@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing visa sponsorship deadlines", { can_edit_current_and_next_cycles: false } do
+feature "Editing visa sponsorship deadlines" do
   before do
     FeatureFlag.activate(:visa_sponsorship_deadline)
     and_i_am_authenticated_as_a_lead_school_provider_user

@@ -43,7 +43,7 @@ private
   end
 
   def rollover_active?
-    Settings.features.rollover.can_edit_current_and_next_cycles == true
+    RecruitmentCycle.next_editable_cycles?
   end
 
   def current_recruitment_cycle_year
