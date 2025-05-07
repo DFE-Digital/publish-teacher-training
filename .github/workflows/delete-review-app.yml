@@ -60,4 +60,4 @@ jobs:
           pr-number: ${{ env.PR_NUMBER }}
           resource-group-name: "${{ env.AZURE_RESOURCE_PREFIX }}-${{env.SERVICE_SHORT}}-${{ env.CONFIG_SHORT }}-rg"
           storage-account-name: "${{ env.AZURE_RESOURCE_PREFIX }}${{env.SERVICE_SHORT}}tfstate${{ env.CONFIG_SHORT }}sa"
-          tf-state-file: "${{ env.ENVIRONMENT }}_kubernetes.tfstate"
+          tf-state-file: "${{ env.ENVIRONMENT }}.tfstate"
