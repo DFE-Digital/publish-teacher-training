@@ -33,7 +33,7 @@
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
     <%= render HeaderComponent.new(service_name: I18n.t("service_name.find")) do |header| %>
-      <% header.with_phase_banner_text t(".feedback", link_to: govuk_link_to(t(".feedback_text"), Settings.find_service.feedback_url, new_tab: false)) %>
+      <% header.with_phase_banner_text t(".feedback", link_to: govuk_link_to(t(".feedback_text"), feedback_url, new_tab: feedback_new_tab?)) %>
     <% end %>
 
     <div class="govuk-width-container">
