@@ -49,7 +49,9 @@ module Publish
     end
 
     def set_date
-      @date = DateTime.new(year.to_i, month.to_i, day.to_i).end_of_day
+      @date = DateTime.new(year.to_i, month.to_i, day.to_i)
+                      .in_time_zone("London")
+                      .end_of_day
     end
 
     def within_range
