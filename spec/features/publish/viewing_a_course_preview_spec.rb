@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Course show", { can_edit_current_and_next_cycles: false } do
+feature "Course show" do
   include Rails.application.routes.url_helpers
 
   context "bursaries and scholarships is announced" do

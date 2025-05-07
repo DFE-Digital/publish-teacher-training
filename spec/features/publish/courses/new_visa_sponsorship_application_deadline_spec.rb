@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Entering a deadline for candidates who need visa sponsorship", { can_edit_current_and_next_cycles: false } do
+feature "Entering a deadline for candidates who need visa sponsorship" do
   before do
     FeatureFlag.activate(:visa_sponsorship_deadline)
   end

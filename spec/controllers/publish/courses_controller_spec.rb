@@ -24,7 +24,7 @@ module Publish
       controller.instance_variable_set(:@current_user, user)
     end
 
-    describe "#Publish", { can_edit_current_and_next_cycles: false } do
+    describe "#Publish" do
       it "calls NotificationService::CoursePublished when successful" do
         expect(NotificationService::CoursePublished).to receive(:call).with(course:)
 

@@ -91,11 +91,11 @@ feature "Providers index" do
   end
 
   def given_we_are_not_in_rollover
-    allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(false)
+    create(:recruitment_cycle, :next, available_in_publish_from: 1.day.from_now)
   end
 
   def given_we_are_in_rollover
-    allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+    create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
   end
 
   def and_i_am_authenticated_as_a_multi_provider_user

@@ -42,7 +42,7 @@ module RecruitmentCycleHelper
   end
 
   def rollover_active?
-    FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+    RecruitmentCycle.next_editable_cycles?
   end
 
   def current_cycle_provider(provider)
