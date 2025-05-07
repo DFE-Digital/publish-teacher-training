@@ -204,7 +204,7 @@ private
 
   def then_the_course_is_saved_with_the_new_deadline
     deadline = @provider.courses.reload.last.visa_sponsorship_application_deadline_at
-    expect(deadline).to eq @new_date.change(hour: 11, min: 59)
+    expect(deadline).to be_within(1.second).of @new_date.in_time_zone("London").end_of_day.utc
   end
 
   def and_i_complete_the_rest_of_the_form
