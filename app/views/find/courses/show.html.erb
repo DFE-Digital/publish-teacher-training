@@ -55,10 +55,6 @@
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
     <!-- END CONTENTS -->
 
-    <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
-    <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
-
     <!-- WHY TRAIN WTIH US -->
     <div class="govuk-!-margin-bottom-8">
       <h2 class="govuk-heading-l" id="why-train-with-us">Why train with us</h2>
@@ -66,11 +62,15 @@
       <% case @course.course_code %>
           <% when "R480" %>
             <p class="govuk-body">
-            The Science Departments across our Trust are excellent bases to begin your teaching career. This course is designed to enable you to become a successful teacher of Science, specialising in Biology.
+            We believe in changing the lives of young people by empowering teachers and young people to work together for a better education and a better community.
             </p>
-            <p class="govuk-body">
-            Over 125 days of the course will be spent in schools working alongside highly professional and well-qualified colleagues. Specific subject knowledge training will enable you to build up strong knowledge of the Biology (and Science) curriculum for Key stage 3 and 4.
+            <p class="govuk-body">You will benefit from:
             </p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>In-school training from the first day</li>
+              <li>Summer induction sessions prior to starting your training year </li>
+              <li>A new Google Chromebook will be given to every trainee teacher to support their training year</li>
+            </ul>
           <% when "E026" %>
             <p class="govuk-body">
               E026 is great
@@ -88,8 +88,115 @@
               Y404 is great
             </p>
           <% end %>
-        </div>
+        <p class="govuk-body">
+          <a href="#" class="govuk-link">
+            Find out more about
+            <span data-qa="course__provider_name">
+              <%= smart_quotes(@course.provider.provider_name) %>
+            </span>
+          </a>
+        </p>
+      </div>
     <!-- END WHY TRAIN WTIH US -->
+
+    <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
+    <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
+
+    <!-- HOW SCHOOL PLACEMENTS WORK -->
+    <div class="govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-l" id="studies">How school placements work</h2>
+    <% case @course.course_code %>
+      <% when "R480" %>
+        <p class="govuk-body">
+          Trainee teacher development is supported through training, classroom experience, professional dialogue, self-reflection and weekly progress review meetings with your mentor.         </p>
+        <p class="govuk-body">
+          You will start training in your placement school from your first day on the course, and will attend all INSET days throughout the year, focusing on whole-school improvements.         </p>
+        <p class="govuk-body">
+          Your progress will be monitored by your class and professional mentor with the Lead Provider moderating you throughout the year.          </p>
+        <p class="govuk-body">
+          In your mentoring sessions you will review the ITT curriculum, discussing what you have learnt, how you will further explore pedagogy and what targets & actions will be set to support you applying this within your practice.         </p>
+        <p class="govuk-body">
+          Progress will be reported on at 6 key points throughout the year in the form of written reports.
+        </p>
+
+        <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+            <p class="govuk-heading-m">What will I do on my placements?</p>
+            <p class="govuk-body">You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.</p>
+            <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements#what-will-i-do-on-my-placements">Find out more about what you'll do on your placements.
+            </a></p>
+          </div>
+        </div>
+      <% when "E026" %>
+        <p class="govuk-body">
+          E026 is great
+        </p>
+      <% when "H971" %>
+        <p class="govuk-body">
+          H971 is great
+        </p>
+      <% when "36P4" %>
+        <p class="govuk-body">
+          36P4 is great
+        </p>
+      <% when "Y404" %>
+        <p class="govuk-body">
+          Y404 is great
+        </p>
+      <% end %>
+    </div>
+    <!-- END HOW SCHOOL PLACEMENTS WORK -->
+
+    <!-- WHAT YOU WILL STUDY -->
+    <div class="govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-l" id="studies">What you will study</h2>
+    <% case @course.course_code %>
+      <% when "R480" %>
+        <p class="govuk-body">
+        Throughout the course, trainees engage with professional development training which takes an evidence-informed approach to teaching and learning. Whilst the majority of training takes place at One Angel Square, some training will take place at our Hubs, academies and through online seminars.
+        </p>
+        <p class="govuk-body">
+        Intensive Training and Practice (ITaP) is an additional element, taking place over 20 days of the programme. The ITaP grants trainees the opportunity to work with expert practitioners, access the latest and most pertinent research and allows trainees to take their learning further with an intensive focus on a specific, granular area of pedagogy. The four areas we have identified as beneficial to our trainees’ learning and development are:
+        </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Setting high expectations, establishing strong starts to lessons & during transitions.</li>
+          <li>Developing teacher clarity through explicit instruction.</li>
+          <li>Design purposeful scaffolding leading to developing independence.</li>
+          <li>Questioning and deepening thinking..</li>
+        </ul>
+
+        <p class="govuk-body">
+          Applicants enrolled on the PGCE programme are expected to complete three Masters Level assignments leading to a PGCE qualification and 60 Masters level credits.
+        </p>
+
+        <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+            <p class="govuk-heading-m">What to expect in teacher training</p>
+            <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training">Find out what to expect in teacher training
+            </a></p>
+          </div>
+        </div>
+      <% when "E026" %>
+        <p class="govuk-body">
+          E026 is great
+        </p>
+      <% when "H971" %>
+        <p class="govuk-body">
+          H971 is great
+        </p>
+      <% when "36P4" %>
+        <p class="govuk-body">
+          36P4 is great
+        </p>
+      <% when "Y404" %>
+        <p class="govuk-body">
+          Y404 is great
+        </p>
+      <% end %>
+    </div>
+    <!-- END WHAT YOU WILL STUDY -->
 
   <div class="govuk-!-margin-bottom-8">
 
