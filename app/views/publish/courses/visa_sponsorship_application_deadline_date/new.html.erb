@@ -15,12 +15,12 @@
           method: :get,
           local: true,
         ) do |form| %>
+      <%= form.govuk_error_summary %>
       <%= render CaptionText.new(text: t("course.add_course")) %>
       <h1 class="govuk-heading-l">
         <%= t(".title") %>
       </h1>
       <%= render "deadline_advice" %>
-      <%= form.govuk_error_summary %>
       <%= form.govuk_date_field(
             :visa_sponsorship_application_deadline_at,
             maxlength_enabled: true,
