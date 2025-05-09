@@ -1,21 +1,13 @@
 <h2 class="govuk-heading-m"><%= t(".heading") %> </h2>
 <ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
+  <li><a href="#training-locations" class="govuk-link">Where you will train</a></li>
+  <li><a href="#studies" class="govuk-link">What you will study</a></li>
   <li><a href="#why-train-with-us" class="govuk-link">Why train with us</a></li>
-  <li><a href="#course-overview" class="govuk-link">Course overview</a></li>
-  <li><a href="#mentorship-and-support" class="govuk-link">Mentorship and support</a></li>
-  <li><a href="#assessment" class="govuk-link">Assessment</a></li>
   <li><%= govuk_link_to (salaried? ? t(".salary_and_financial_support") : t(".fees_and_financial_support")), "#section-financial-support" %></li>
-  <% if about_course.present? || preview? %>
-    <li><%= govuk_link_to t(".course_details"), "#section-about" %></li>
-  <% end %>
   <% if interview_process.present? %>
     <li><%= govuk_link_to t(".interview_process"), "#section-interviews" %></li>
   <% end %>
   <% if provider.train_with_disability.present? || preview? %>
     <li><%= govuk_link_to t(".training_with_disabilities"), "#section-train-with-disabilities" %></li>
   <% end %>
-   <% if course.application_status_open? %>
-    <li><%= govuk_link_to t(".apply"), "#section-apply" %></li>
-  <% end %>
-  <li><%= govuk_link_to t(".support_and_advice"), "#section-advice" %></li>
 </ul>
