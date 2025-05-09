@@ -41,9 +41,9 @@ en:
         schools_you_can_choose: 'The schools you can choose from are:'
       school_placements_advice:
         view:
-          heading: How school placements work
+          heading: Where will my placements take place?
           content:
-            find_out_more_about_school_placements: Find out more about how school placements work.
+            find_out_more_about_school_placements: Find out more about where your placements will take place.
             selectable_school: You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.
             fee: The training provider will contact you to discuss your preferences to help them select placement schools that you can travel to.
             fee_and_placement: The training provider will contact you to discuss your preferences to help them select placement schools that you can travel to.
