@@ -1,0 +1,29 @@
+en:
+  find:
+    feedbacks:
+      new:
+        title: Feedback
+        heading: Give feedback on Find teacher training courses
+        error_summary_title: There is a problem
+        ease_of_use: How easy is it to find courses relevant to you?
+        options:
+          very_easy: Very easy
+          easy: Easy
+          neither_easy_nor_difficult: Neither easy nor difficult
+          difficult: Difficult
+          very_difficult: Very difficult
+        experience_label: Tell us about your experience searching for teacher training courses
+        experience_hint: You can give general feedback on your experience searching for courses, or tell us about a specific problem. Do not include any information that could identify you personally, such as your name.
+        submit_feedback_button: Submit feedback
+      create:
+        success: Feedback submitted
+  activemodel:
+    errors:
+      models:
+        find/feedback_form:
+          attributes:
+            ease_of_use:
+              blank: "Select how easy it is to find courses relevant to you"
+            experience:
+              blank: "Enter your feedback"
+              too_long: Feedback is too long (maximum is 1200 characters)
