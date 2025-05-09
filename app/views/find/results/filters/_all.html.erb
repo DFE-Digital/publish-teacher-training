@@ -67,9 +67,12 @@
     </div>
   <% end %>
 
-  <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t(".study_type_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
-    <%= form.govuk_check_box :study_types, "full_time", label: { text: t(".study_type_options.full_time"), size: "s" }, include_hidden: false %>
-    <%= form.govuk_check_box :study_types, "part_time", label: { text: t(".study_type_options.part_time"), size: "s" }, include_hidden: false %>
+  <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t(".further_education_html"), size: "s" }, hint: { text: t(".hint.further_education"), class: "govuk-!-font-size-16" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+    <%= form.govuk_check_box :level, "further_education", label: { text: t(".further_education"), size: "s" }, multiple: false %>
+  <% end %>
+
+  <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t(".special_education_needs_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
+    <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t(".special_education_needs"), size: "s" } %>
   <% end %>
 
   <%= form.govuk_check_boxes_fieldset :qualifications, legend: { text: t(".qualifications_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
@@ -87,29 +90,24 @@
     <%= form.govuk_radio_button :minimum_degree_required, "show_all_courses", label: { text: t(".minimum_degree_required_options.show_all_courses"), size: "s" } %>
   <% end %>
 
-  <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t(".special_education_needs_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
-    <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t(".special_education_needs"), size: "s" } %>
-  <% end %>
-
   <%= form.govuk_check_boxes_fieldset :funding, legend: { text: t(".funding_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
     <%= form.govuk_check_box :funding, "fee", label: { text: t(".funding_options.fee"), size: "s" }, include_hidden: false %>
     <%= form.govuk_check_box :funding, "salary", label: { text: t(".funding_options.salary"), size: "s" }, include_hidden: false %>
     <%= form.govuk_check_box :funding, "apprenticeship", label: { text: t(".funding_options.apprenticeship"), size: "s" }, include_hidden: false %>
   <% end %>
 
-  <% unless FeatureFlag.active?(:hide_applications_open_date) %>
-    <%= form.govuk_check_boxes_fieldset :applications_open, multiple: false, legend: { text: t(".applications_open_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
-      <%= form.govuk_check_box :applications_open, "true", multiple: false, label: { text: t(".applications_open"), size: "s" } %>
-    <% end %>
+  <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t(".study_type_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+    <%= form.govuk_check_box :study_types, "full_time", label: { text: t(".study_type_options.full_time"), size: "s" }, include_hidden: false %>
+    <%= form.govuk_check_box :study_types, "part_time", label: { text: t(".study_type_options.part_time"), size: "s" }, include_hidden: false %>
+  <% end %>
+
+  <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: { text: t(".online_interviews_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
+    <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t(".online_interviews"), size: "s" } %>
   <% end %>
 
   <%= form.govuk_check_boxes_fieldset :start_date, legend: { text: t(".start_date_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
     <%= form.govuk_check_box :start_date, "september", label: { text: t(".start_date_options.september", recruitment_cycle_year: Settings.current_recruitment_cycle_year), size: "s" }, include_hidden: false %>
     <%= form.govuk_check_box :start_date, "all_other_dates", label: { text: t(".start_date_options.all_other_dates", size: "s") }, include_hidden: false %>
-  <% end %>
-
-  <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t(".further_education_html"), size: "s" }, hint: { text: t(".hint.further_education"), class: "govuk-!-font-size-16" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
-    <%= form.govuk_check_box :level, "further_education", label: { text: t(".further_education"), size: "s" }, multiple: false %>
   <% end %>
 
   <div class="govuk-!-margin-top-4">

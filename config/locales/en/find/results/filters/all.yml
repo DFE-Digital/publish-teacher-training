@@ -7,8 +7,9 @@ en:
           special_education_needs: Only show courses with a SEND specialism
           applications_open: Only show courses open for applications
           further_education: Further education courses
-          can_sponsor_visa: Only show courses with visa sponsorship
+          can_sponsor_visa: Only show courses that offer visa sponsorship
           engineers_teach_physics: Only show Engineers teach physics courses
+          online_interviews: Only show courses that offer online interviews
           apply_filter: Apply filters
           study_type_options:
             full_time: Full time (12 months)
@@ -47,3 +48,5 @@ en:
           engineers_teach_physics_html: Engineers teach physics<span class="govuk-visually-hidden"> filter</span>
           primary_html: Primary<span class="govuk-visually-hidden"> filter</span>
           secondary_html: Secondary<span class="govuk-visually-hidden"> filter</span>
+          online_interviews_html: Online interviews<span class="govuk-visually-hidden"> filter</span>
+
