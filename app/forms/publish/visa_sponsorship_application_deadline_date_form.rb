@@ -41,7 +41,7 @@ module Publish
                      :all_blank
                    elsif [year, month, day].any?(&:blank?)
                      :some_blank
-                   elsif [year, month, day].any? { |entry| entry.to_i.zero? }
+                   elsif [year, month, day].any? { |entry| entry.match?(/\A[a-zA-Z'-]*\z/) }
                      :not_integers
                    end
 
