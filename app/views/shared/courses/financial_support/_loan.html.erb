@@ -1,6 +1,7 @@
-<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--orange" }) do %>
-    <div data-qa="course__loan_details">
+<div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+    <h3 class="govuk-heading-m">Financial support for UK citizens</h3>
+     <div data-qa="course__loan_details">
       <h4 class="govuk-heading-s"><%= t("find.financial_support.student_loans") %></h4>
 
       <p class="govuk-body"><%= t("find.financial_support.eligible_for_student_loan") %></p>
@@ -9,9 +10,10 @@
   <% end %>
 <% end %>
 
-<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.non_uk_citizens.title"), class: "govuk-heading-m")) do %>
-    <div data-qa="course__loan_details_non_uk">
+<div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+  <h3 class="govuk-heading-m">Financial support for non-UK citizens</h3>
+  <div data-qa="course__loan_details_non_uk">
       <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
       <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_loans_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
     </div>
