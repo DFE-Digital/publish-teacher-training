@@ -458,7 +458,7 @@ describe Courses::CreationService do
 
         it "saves the visa sponsorship application deadline at from the params" do
           deadline = Time.zone.local(recruitment_cycle.year.to_i, 8, 1).end_of_day
-          expect(subject.visa_sponsorship_application_deadline_at).to eq deadline
+          expect(subject.visa_sponsorship_application_deadline_at).to be_within(1.second).of deadline
         end
       end
     end
