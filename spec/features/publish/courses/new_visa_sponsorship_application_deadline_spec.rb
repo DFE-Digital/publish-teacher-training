@@ -61,6 +61,9 @@ feature "Entering a deadline for candidates who need visa sponsorship", { can_ed
 
     when_i_enter_a_date("year", "a", "14")
     then_i_see_an_error("The date that applications which require visa sponsorship will close can only contain numbers 0 to 9")
+
+    when_i_enter_a_date("2025", "0", "14")
+    then_i_see_an_error("Enter a real date that applications close for visa sponsored candidates")
   end
 
   scenario "changing my answers at the review page and saving with new date" do
@@ -152,6 +155,7 @@ private
   def then_i_see_an_error(error_message)
     expect(page).to have_content("There is a problem")
     expect(page).to have_content(error_message).twice
+    expect(page.title).to have_text "Error:"
   end
 
   def then_i_see_the_review_page_with_no_deadline_selected
