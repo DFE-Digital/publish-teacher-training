@@ -216,7 +216,7 @@ en:
           contact: Contact %{provider_name}
       about_schools_component:
         view:
-          heading: School placements
+          heading: Where you will train
           work_with_schools: We work with the following schools to provide your school placements.
       placements:
         heading: School placements at %{provider_name}
