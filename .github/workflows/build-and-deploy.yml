@@ -232,7 +232,7 @@ jobs:
   build:
     name: Build
     needs: [lint, analytics-checks, javascript-tests, rails-tests]
-    if: ${{ github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) }}
+    if: ${{ github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'prototype') && always()) }}
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
@@ -332,7 +332,7 @@ jobs:
     environment:
       name: review
     concurrency: deploy_review_${{ github.event.pull_request.number }}
-    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    if: ${{ (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'prototype') && always()) }}
     needs: [build]
     runs-on: ubuntu-latest
     env:
