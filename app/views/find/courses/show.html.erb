@@ -93,15 +93,15 @@
 
   <div class="govuk-!-margin-bottom-8">
 
-    <!-- FEES -->
-    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
-    <!-- END FEES -->
-
-    <!-- INTERVIEW PROCESS -->
+  <!-- INTERVIEW PROCESS -->
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
     <% end %>
     <!-- END INTERVIEW PROCESS -->
+
+    <!-- FEES -->
+    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+    <!-- END FEES -->
 
     <!-- TRAINING WITH DISABILITIES -->
     <% if @provider.train_with_disability.present? %>
