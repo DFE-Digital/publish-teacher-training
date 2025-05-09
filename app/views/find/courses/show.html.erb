@@ -55,97 +55,47 @@
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
     <!-- END CONTENTS -->
 
-    <!-- WHY TRAIN WTIH US -->
-    <h2 class="govuk-heading-l" id="why-train-with-us">Why train with us</h2>
-
-    <% case @course.course_code %>
-        <% when "R480" %>
-          <p class="govuk-body">
-          The Science Departments across our Trust are excellent bases to begin your teaching career. This course is designed to enable you to become a successful teacher of Science, specialising in Biology.
-          </p>
-          <p class="govuk-body">
-          Over 125 days of the course will be spent in schools working alongside highly professional and well-qualified colleagues. Specific subject knowledge training will enable you to build up strong knowledge of the Biology (and Science) curriculum for Key stage 3 and 4.
-          </p>
-        <% when "E026" %>
-          <p class="govuk-body">
-            E026 is great
-          </p>
-        <% when "H971" %>
-          <p class="govuk-body">
-            H971 is great
-          </p>
-        <% when "36P4" %>
-          <p class="govuk-body">
-            36P4 is great
-          </p>
-        <% when "Y404" %>
-          <p class="govuk-body">
-            Y404 is great
-          </p>
-        <% end %>
-    <!-- END WHY TRAIN WTIH US -->
-
     <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
     <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
     <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
 
-    <h2 class="govuk-heading-l" id="mentorship-and-support">Mentorship and support</h2>
+    <!-- WHY TRAIN WTIH US -->
+    <div class="govuk-!-margin-bottom-8">
+      <h2 class="govuk-heading-l" id="why-train-with-us">Why train with us</h2>
 
-    <% case @course.course_code %>
-    <% when "R480" %>
-      <p class="govuk-body">
-        Progress is monitored by your class and professional mentor with the Lead Provider moderating you throughout the year. Trainee teacher development is supported through training, classroom experience, professional dialogue, self-reflection and weekly progress review meetings with your mentor.
-      </p>
-      <p class="govuk-body">
-        You will review our ITT curriculum, discussing what you have learnt, how you will further explore pedagogy and what targets & actions will be set to support you applying this within your practice. Progress will be reported on at 6 key points throughout the year in the form of written reports.      </p>
-      </p>
-        <% when "E026" %>
-        <p class="govuk-body">
-          E026 is great
-        </p>
-      <% when "H971" %>
-        <p class="govuk-body">
-          H971 is great
-        </p>
-      <% when "36P4" %>
-        <p class="govuk-body">
-          36P4 is great
-        </p>
-      <% when "Y404" %>
-        <p class="govuk-body">
-          Y404 is great
-        </p>
-      <% end %>
+      <% case @course.course_code %>
+          <% when "R480" %>
+            <p class="govuk-body">
+            The Science Departments across our Trust are excellent bases to begin your teaching career. This course is designed to enable you to become a successful teacher of Science, specialising in Biology.
+            </p>
+            <p class="govuk-body">
+            Over 125 days of the course will be spent in schools working alongside highly professional and well-qualified colleagues. Specific subject knowledge training will enable you to build up strong knowledge of the Biology (and Science) curriculum for Key stage 3 and 4.
+            </p>
+          <% when "E026" %>
+            <p class="govuk-body">
+              E026 is great
+            </p>
+          <% when "H971" %>
+            <p class="govuk-body">
+              H971 is great
+            </p>
+          <% when "36P4" %>
+            <p class="govuk-body">
+              36P4 is great
+            </p>
+          <% when "Y404" %>
+            <p class="govuk-body">
+              Y404 is great
+            </p>
+          <% end %>
+        </div>
+    <!-- END WHY TRAIN WTIH US -->
 
-    <h2 class="govuk-heading-l" id="assessment">Assessment</h2>
+  <div class="govuk-!-margin-bottom-8">
 
-    <% case @course.course_code %>
-    <% when "R480" %>
-      <p class="govuk-body">
-        Qualified Teacher Status (QTS) is awarded based on how well you have met each of the Teacher Standards. Evidence gathered to substantiate each of the standards comes from all assignments, teaching files, reflections and observations completed during your training.
-      </p>
-      <p class="govuk-body">
-        Applicants enrolled on the PGCE programme are expected to complete three Masters Level assignments leading to a PGCE qualification and 60 Masters level credits.
-      </p>
-        <% when "E026" %>
-        <p class="govuk-body">
-          E026 is great
-        </p>
-      <% when "H971" %>
-        <p class="govuk-body">
-          H971 is great
-        </p>
-      <% when "36P4" %>
-        <p class="govuk-body">
-          36P4 is great
-        </p>
-      <% when "Y404" %>
-        <p class="govuk-body">
-          Y404 is great
-        </p>
-      <% end %>
-
+    <!-- FEES -->
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+    <!-- END FEES -->
 
     <!-- INTERVIEW PROCESS -->
     <% if @course.published_interview_process.present? %>
