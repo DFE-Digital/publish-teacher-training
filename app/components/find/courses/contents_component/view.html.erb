@@ -3,10 +3,10 @@
   <li><a href="#training-locations" class="govuk-link">Where you will train</a></li>
   <li><a href="#studies" class="govuk-link">What you will study</a></li>
   <li><a href="#why-train-with-us" class="govuk-link">Why train with us</a></li>
-  <li><%= govuk_link_to (salaried? ? t(".salary_and_financial_support") : t(".fees_and_financial_support")), "#section-financial-support" %></li>
   <% if interview_process.present? %>
-    <li><%= govuk_link_to t(".interview_process"), "#section-interviews" %></li>
-  <% end %>
+  <li><%= govuk_link_to t(".interview_process"), "#section-interviews" %></li>
+<% end %>
+  <li><%= govuk_link_to (salaried? ? t(".salary_and_financial_support") : t(".fees_and_financial_support")), "#section-financial-support" %></li>
   <% if provider.train_with_disability.present? || preview? %>
     <li><%= govuk_link_to t(".training_with_disabilities"), "#section-train-with-disabilities" %></li>
   <% end %>
