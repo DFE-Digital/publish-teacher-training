@@ -1,21 +1,22 @@
 <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
   <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
     <h3 class="govuk-heading-m">Financial support for UK citizens</h3>
-     <div data-qa="course__loan_details">
-      <h4 class="govuk-heading-s"><%= t("find.financial_support.student_loans") %></h4>
 
+    <div data-qa="course__loan_details">
+      <h4 class="govuk-heading-s"><%= t("find.financial_support.student_loans") %></h4>
       <p class="govuk-body"><%= t("find.financial_support.eligible_for_student_loan") %></p>
       <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.find_out_more_student_loans"), find_track_click_path(utm_content: "uk_citizens_loans_maintenance_loans", url: t("find.get_into_teaching.url_maintenance_loans"))) %></p>
     </div>
-  <% end %>
-<% end %>
+  </div>
+</div>
 
 <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
   <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-  <h3 class="govuk-heading-m">Financial support for non-UK citizens</h3>
-  <div data-qa="course__loan_details_non_uk">
+    <h3 class="govuk-heading-m">Financial support for non-UK citizens</h3>
+
+    <div data-qa="course__loan_details_non_uk">
       <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
       <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_loans_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
     </div>
-  <% end %>
-<% end %>
+  </div>
+</div>
