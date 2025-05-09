@@ -5,7 +5,7 @@ module API
     module V1
       module Providers
         module Courses
-          class LocationsController < API::Public::V1::ApplicationController
+          class LocationsController < ApplicationController
             def index
               render jsonapi: locations,
                      include: include_param,
