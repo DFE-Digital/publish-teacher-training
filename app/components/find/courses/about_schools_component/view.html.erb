@@ -1,27 +1,58 @@
 <div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
-  <div data-qa="course__about_schools">
 
-    <% if course.fee_based? %>
-      <p class="govuk-body">
-        <%= t(".fee_based") %>
-      </p>
-    <% else %>
-      <p class="govuk-body">
-        <%= t(".non_fee_based") %>
-      </p>
-    <% end %>
+  <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
+
+  <% if course.fee_based? %>
+    <p class="govuk-body">
+      <%= t(".fee_based") %>
+    </p>
+  <% else %>
+    <p class="govuk-body">
+      <%= t(".non_fee_based") %>
+    </p>
+  <% end %>
+
+  <div data-qa="course__about_schools">
 
     <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
 
-    <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
+    <% case @course.course_code %>
+    <% when "R480" %>
+      <p class="govuk-body">
+        All trainee teachers must complete a minimum of two placements with our secondary placements arranged through an A-B-A model. This means that the trainee will be placed in a ‘home school’ for the autumn term, an ‘alternative school’ placement runs from January to Easter. Following Easter, the trainee will return to their ‘home’ school until the end of the programme at the start of July.
+      </p>
 
-    <% if course.published_how_school_placements_work.present? %>
-      <%= markdown(course.published_how_school_placements_work) %>
-    <% elsif course.how_school_placements_work.present? %>
-      <%= markdown(course.how_school_placements_work) %>
-    <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Autumn Term - Placement A </li>
+        <li>Spring Term - Placement B </li>
+        <li>Summer Term - Placement A </li>
+      </ul>
+
+      <p class="govuk-body">
+        We believe in the power of choice and work with successful applicants to cater towards providing them ‘home school’ placements in their chosen academies within our Trust. Trainees are able to select a preferred home school before submitting their application.
+      </p>
+      <p class="govuk-body">
+        ‘Alternative school’ placements are chosen considering a number of factors, including trainee prior experience, training needs and location.
+      </p>
+    <% when "E026" %>
+      <p class="govuk-body">
+        E026 is great
+      </p>
+    <% when "H971" %>
+      <p class="govuk-body">
+        H971 is great
+      </p>
+    <% when "36P4" %>
+      <p class="govuk-body">
+        36P4 is great
+      </p>
+    <% when "Y404" %>
+      <p class="govuk-body">
+        Y404 is great
+      </p>
     <% end %>
   </div>
+
+  <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
+
 </div>

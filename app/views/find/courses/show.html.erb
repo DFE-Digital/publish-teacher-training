@@ -1,14 +1,33 @@
 <%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
 
-<% if permitted_referrer? && course_back_link %>
-  <%= content_for(:before_content) do %>
-    <%= govuk_back_link(
-      text: t("find.courses.show.back_to_search"),
-      href: course_back_link,
-    ) %>
-  <% end %>
-<% end %>
+<!--BACK LINK -->
+  <% case @course.course_code %>
+    <% when "R480" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% when "E026" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% when "H971" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% when "36P4" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% when "Y404" %>
+      <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+    <% else %>
+      <% if permitted_referrer? %>
+        <%= content_for(:before_content) do %>
+          <%= govuk_back_link(
+            text: t("find.courses.show.back_to_search"),
+            href: find_results_path(session[:search_params]),
+            html_attributes: {
+              data: { qa: "page-back" },
+            },
+          ) %>
+        <% end %>
+      <% end %>
+    <% end %>
+<!-- END BACK LINK -->
 
+<!--COURSE HEADING -->
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
@@ -19,36 +38,183 @@
     </h1>
   </div>
 </div>
+<!-- END COURSE HEADING -->
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render Find::Courses::SummaryComponent::View.new(@course) %>
 
-    <% if @course.application_status_closed? %>
-      <%= render partial: "find/courses/course_closed" %>
-    <% end %>
+  <!-- COURSE SUMMARY -->
+  <%= render Find::Courses::SummaryComponent::View.new(@course) %>
+  <!-- END COURSE SUMMARY -->
 
+    <!-- ENTRY REQUIREMENTS -->
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
+    <!-- END ENTRY REQUIREMENTS -->
 
+    <!-- CONTENTS -->
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
+    <!-- END CONTENTS -->
 
+    <!-- WHY TRAIN WTIH US -->
+    <div class="govuk-!-margin-bottom-8">
+      <h2 class="govuk-heading-l" id="why-train-with-us">Why train with us</h2>
+
+      <% case @course.course_code %>
+          <% when "R480" %>
+            <p class="govuk-body">
+            We believe in changing the lives of young people by empowering teachers and young people to work together for a better education and a better community.
+            </p>
+            <p class="govuk-body">You will benefit from:
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>In-school training from the first day</li>
+              <li>Summer induction sessions prior to starting your training year </li>
+              <li>A new Google Chromebook will be given to every trainee teacher to support their training year</li>
+            </ul>
+          <% when "E026" %>
+            <p class="govuk-body">
+              E026 is great
+            </p>
+          <% when "H971" %>
+            <p class="govuk-body">
+              H971 is great
+            </p>
+          <% when "36P4" %>
+            <p class="govuk-body">
+              36P4 is great
+            </p>
+          <% when "Y404" %>
+            <p class="govuk-body">
+              Y404 is great
+            </p>
+          <% end %>
+        <p class="govuk-body">
+          <a href="#" class="govuk-link">
+            Find out more about
+            <span data-qa="course__provider_name">
+              <%= smart_quotes(@course.provider.provider_name) %>
+            </span>
+          </a>
+        </p>
+      </div>
+    <!-- END WHY TRAIN WTIH US -->
+
+    <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
     <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
+    <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
 
-    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+    <!-- HOW SCHOOL PLACEMENTS WORK -->
+    <div class="govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-l" id="studies">How school placements work</h2>
+    <% case @course.course_code %>
+      <% when "R480" %>
+        <p class="govuk-body">
+          Trainee teacher development is supported through training, classroom experience, professional dialogue, self-reflection and weekly progress review meetings with your mentor.         </p>
+        <p class="govuk-body">
+          You will start training in your placement school from your first day on the course, and will attend all INSET days throughout the year, focusing on whole-school improvements.         </p>
+        <p class="govuk-body">
+          Your progress will be monitored by your class and professional mentor with the Lead Provider moderating you throughout the year.          </p>
+        <p class="govuk-body">
+          In your mentoring sessions you will review the ITT curriculum, discussing what you have learnt, how you will further explore pedagogy and what targets & actions will be set to support you applying this within your practice.         </p>
+        <p class="govuk-body">
+          Progress will be reported on at 6 key points throughout the year in the form of written reports.
+        </p>
 
-    <% if @course.published_about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <% end %>
+        <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+            <p class="govuk-heading-m">What will I do on my placements?</p>
+            <p class="govuk-body">You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.</p>
+            <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements#what-will-i-do-on-my-placements">Find out more about what you'll do on your placements.
+            </a></p>
+          </div>
+        </div>
+      <% when "E026" %>
+        <p class="govuk-body">
+          E026 is great
+        </p>
+      <% when "H971" %>
+        <p class="govuk-body">
+          H971 is great
+        </p>
+      <% when "36P4" %>
+        <p class="govuk-body">
+          36P4 is great
+        </p>
+      <% when "Y404" %>
+        <p class="govuk-body">
+          Y404 is great
+        </p>
+      <% end %>
+    </div>
+    <!-- END HOW SCHOOL PLACEMENTS WORK -->
 
+    <!-- WHAT YOU WILL STUDY -->
+    <div class="govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-l" id="studies">What you will study</h2>
+    <% case @course.course_code %>
+      <% when "R480" %>
+        <p class="govuk-body">
+        Throughout the course, trainees engage with professional development training which takes an evidence-informed approach to teaching and learning. Whilst the majority of training takes place at One Angel Square, some training will take place at our Hubs, academies and through online seminars.
+        </p>
+        <p class="govuk-body">
+        Intensive Training and Practice (ITaP) is an additional element, taking place over 20 days of the programme. The ITaP grants trainees the opportunity to work with expert practitioners, access the latest and most pertinent research and allows trainees to take their learning further with an intensive focus on a specific, granular area of pedagogy. The four areas we have identified as beneficial to our trainees’ learning and development are:
+        </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Setting high expectations, establishing strong starts to lessons & during transitions.</li>
+          <li>Developing teacher clarity through explicit instruction.</li>
+          <li>Design purposeful scaffolding leading to developing independence.</li>
+          <li>Questioning and deepening thinking..</li>
+        </ul>
+
+        <p class="govuk-body">
+          Applicants enrolled on the PGCE programme are expected to complete three Masters Level assignments leading to a PGCE qualification and 60 Masters level credits.
+        </p>
+
+        <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+            <p class="govuk-heading-m">What to expect in teacher training</p>
+            <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training">Find out what to expect in teacher training
+            </a></p>
+          </div>
+        </div>
+      <% when "E026" %>
+        <p class="govuk-body">
+          E026 is great
+        </p>
+      <% when "H971" %>
+        <p class="govuk-body">
+          H971 is great
+        </p>
+      <% when "36P4" %>
+        <p class="govuk-body">
+          36P4 is great
+        </p>
+      <% when "Y404" %>
+        <p class="govuk-body">
+          Y404 is great
+        </p>
+      <% end %>
+    </div>
+    <!-- END WHAT YOU WILL STUDY -->
+
+  <div class="govuk-!-margin-bottom-8">
+
+  <!-- INTERVIEW PROCESS -->
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
     <% end %>
+    <!-- END INTERVIEW PROCESS -->
 
+    <!-- FEES -->
+    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+    <!-- END FEES -->
+
+    <!-- TRAINING WITH DISABILITIES -->
     <% if @provider.train_with_disability.present? %>
-      <h2 class="govuk-heading-m" id="section-train-with-disabilities">
+      <h2 class="govuk-heading-l" id="section-train-with-disabilities">
         <%= t(".training_with_disabilities") %>
       </h2>
-
       <p class="govuk-body govuk-!-margin-bottom-8">
         <%= govuk_link_to(
           t(".training_with_disabilities_link", provider_name: @course.provider_name),
@@ -59,17 +225,23 @@
         ) %>
       </p>
     <% end %>
+    <!-- END TRAINING WITH DISABILITIES -->
 
+    <% if @course.application_status_closed? %>
+      <%= render partial: "find/courses/course_closed" %>
+    <% end %>
+    <%= render Find::Courses::ApplyComponent::View.new(@course, utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <!-- END APPLY BUTTON -->
+
+    <br><br>
+
+    <!-- SUPPORT CALLOUT -->
     <% if @course.teacher_degree_apprenticeship? %>
       <%= render partial: "find/courses/tda_advice" %>
     <% else %>
       <%= render partial: "find/courses/advice", locals: { course: @course } %>
     <% end %>
+    <!-- END SUPPORT CALLOUT -->
 
-    <% if @course.application_status_closed? %>
-      <%= render partial: "find/courses/course_closed" %>
-    <% end %>
-
-    <%= render Find::Courses::ApplyComponent::View.new(@course, utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
   </div>
 </div>
