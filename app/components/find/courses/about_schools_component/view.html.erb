@@ -1,53 +1,20 @@
 <div class="govuk-!-margin-bottom-8">
-<h2 class="govuk-heading-l" id="course-overview">Course overview</h2>
 
-<% if course.fee_based? %>
-<div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-  <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-    <%= t(".fee_based") %>
-  </div>
-</div>
-<% else %>
-<div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-  <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-    <%= t(".non_fee_based") %>
-  </div>
-</div>
-<% end %>
+  <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
 
-<% case @course.course_code %>
-<% when "R480" %>
- <p class="govuk-body">
-   Trainee timetables are progressive in design with trainees supported at all times to ensure a balance between challenge and support.
- </p>
- <p class="govuk-body">
-   This course leads to qualified teacher status - QTS (11-16 years).
- </p>
-<% when "E026" %>
- <p class="govuk-body">
-   E026 is great
- </p>
-<% when "H971" %>
- <p class="govuk-body">
-   H971 is great
- </p>
-<% when "36P4" %>
- <p class="govuk-body">
-   36P4 is great
- </p>
-<% when "Y404" %>
- <p class="govuk-body">
-   Y404 is great
- </p>
-<% end %>
-<!-- END COURSE OVERVIEW -->
+  <% if course.fee_based? %>
+    <p class="govuk-body">
+      <%= t(".fee_based") %>
+    </p>
+  <% else %>
+    <p class="govuk-body">
+      <%= t(".non_fee_based") %>
+    </p>
+  <% end %>
 
-  <h2 class="govuk-heading-m" id="training-locations"><%= t(".heading") %> </h2>
   <div data-qa="course__about_schools">
 
     <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
-
-    <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
 
     <% case @course.course_code %>
     <% when "R480" %>
@@ -86,7 +53,13 @@
     <% end %>
   </div>
 
-  <h2 class="govuk-heading-m">What you will study</h2>
+  <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
+
+
+</div>
+<div class="govuk-!-margin-bottom-8">
+
+  <h2 class="govuk-heading-l" id="studies">What you will study</h2>
 
   <% case @course.course_code %>
     <% when "R480" %>
@@ -103,6 +76,15 @@
         <li>Design purposeful scaffolding leading to developing independence.</li>
         <li>Questioning and deepening thinking..</li>
       </ul>
+
+      <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+          <p class="govuk-heading-m">What to expect in teacher training</p>
+          <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training">Find out what to expect in teacher training
+          </a></p>
+        </div>
+      </div>
+
     <% when "E026" %>
       <p class="govuk-body">
         E026 is great
