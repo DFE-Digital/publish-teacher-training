@@ -1,0 +1,12 @@
+en:
+  find:
+    courses:
+      training_with_disabilities:
+        show:
+          funding_and_support: Funding and support
+          neurodivergent_html: If you're neurodivergent, have a long-term physical or mental health condition, or have any other accessibility needs, %{link}
+          neurodivergent_link_text: find out what funding and support you can get
+          neurodivergent_link: https://getintoteaching.education.gov.uk/funding-and-support/if-youre-disabled
+          adjustments_html: Training providers can also make adjustments so you can attend an interview and complete your teacher training. %{link}
+          adjustments_link_text: Find out more about adjustments to help you apply and train to teach
+          adjustments_link: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/accessibility-adjustments
