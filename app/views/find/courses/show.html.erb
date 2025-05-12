@@ -73,30 +73,79 @@
             </ul>
           <% when "E026" %>
             <p class="govuk-body">
-              E026 is great
+              <p class="govuk-body">
+            We prioritise your relationship with, and impact on, the pupils you teach, so you will do most of your training in one school.
+            </p>
+            <p class="govuk-body">
+            This one-school approach also gives you the opportunity to build relationships with teachers, staff, and the wider school community.
+            </p>
+            <p class="govuk-body">
+            With us, you will:
+            </p>
+            <p class="govuk-body">
+            <strong>Improve children’s lives</strong>. Our mission is to help young people reach their full potential, particularly those from disadvantaged backgrounds.
+            </p>
+            <p class="govuk-body">
+            <strong>Be guided by national experts</strong>. We are England’s largest professional development provider for teachers and school leaders.
+            </p>
+            <p class="govuk-body">
+            <strong>Learn flexibly</strong>. We offer a range of training routes for both full and part-time learning to make sure you are supported to be the best teacher you can be.
+            </p>
             </p>
           <% when "H971" %>
             <p class="govuk-body">
-              H971 is great
+              The University of Cumbria is a growing, multi-campus university with over 10,000 students. We’re the No. 1 University in the North West and Top 10 in the UK for graduates into employment or further study within 15 months (97% of graduates – HESA 2024).
+            </p>
+            <p class="govuk-body">
+              Our Secondary Biology course combines expert school-based training with academic excellence. You will gain hands-on experience with outstanding teachers at Mossley Hollins High School and partner schools, all of whom are committed to providing the support and guidance needed to develop your teaching skills.
             </p>
           <% when "36P4" %>
             <p class="govuk-body">
-              36P4 is great
+              Education Learning Trust is based in South Manchester / Stockport and we are an alliance of 3 primary and 2 secondary schools.
+            </p>
+            <p class="govuk-body">
+              We a unique and ambitious learning community who COLLABORATE and support each other to achieve ambitious goals in our education and career.
+            </p>
+            <p class="govuk-body">
+              As a family of schools we EMPOWER everyone to commit to their personal and academic development.
+            </p>
+            <p class="govuk-body">
+              Together, we ACHIEVE exceptionally through our commitment to an inclusive and inspiring environment.
+            </p>
+            <p class="govuk-body">
+              You will be trained in a highly supportive and aspirational environment and will develop the rigour, professional knowledge, understanding and skills necessary for the delivery of creative, purposeful and challenging teaching and learning.
             </p>
           <% when "Y404" %>
             <p class="govuk-body">
-              Y404 is great
+              Our aim is simple; to ensure we have great schools – strong in faith – serving society.
+            </p>
+            <p class="govuk-body">
+              Emmaus CAT are creating a healthy Catholic organisation. We are here to serve the children and young people in Catholic schools, communities, parishes, and families across the Greater Manchester area.
+            </p>
+            <p class="govuk-body">
+              Our schools are aligned in our mission and share our philosophy of working collegially to develop meaningful relationships between schools, parishes, families, communities, and the Diocese of Salford by continually supporting school improvement, faith formation and serving society.
+            </p>
+            <p class="govuk-body">
+              As a growing Trust with nearly 70 schools, there are great opportunities for collaboration, career development and accessing high quality professional networks.
             </p>
           <% end %>
-        <p class="govuk-body">
-          <a href="#" class="govuk-link">
-            Find out more about
-            <span data-qa="course__provider_name">
-              <%= smart_quotes(@course.provider.provider_name) %>
-            </span>
-          </a>
-        </p>
-      </div>
+          <p class="govuk-body">
+              <a href="#" class="govuk-link">
+                Find out more about
+                <span data-qa="course__provider_name">
+                  <%= smart_quotes(@course.provider.provider_name) %>
+                </span>
+              </a>
+            </p>
+          <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+              <p class="govuk-heading-m">Not sure which course is right for you?</p>
+              <p class="govuk-body">Your course will vary depending on whether the training provider is a university, a school or another organisation.</p>
+              <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course">Find out how to choose a course.
+              </a></p>
+            </div>
+          </div>
+        </div>
     <!-- END WHY TRAIN WTIH US -->
 
     <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
@@ -105,7 +154,7 @@
 
     <!-- HOW SCHOOL PLACEMENTS WORK -->
     <div class="govuk-!-margin-bottom-8">
-    <h2 class="govuk-heading-l" id="studies">How school placements work</h2>
+    <h2 class="govuk-heading-l" id="do-on-school-placements">What you will do on school placements</h2>
     <% case @course.course_code %>
       <% when "R480" %>
         <p class="govuk-body">
@@ -119,32 +168,52 @@
         <p class="govuk-body">
           Progress will be reported on at 6 key points throughout the year in the form of written reports.
         </p>
-
+      <% when "E026" %>
+        <p class="govuk-body">
+          When in school you will have the opportunity to work alongside experienced teachers and observe subject experts whilst refining your approaches to teaching and learning.
+        </p>
+        <p class="govuk-body">
+          You will be supported by a dedicated mentor who will be an experienced teacher who works in your school.
+        </p>
+        <p class="govuk-body">
+          Your mentor will provide one-to-one guidance and support throughout your training. This will allow you to develop and refine your teaching practice with an expert, trained in the latest evidence-based learning.
+        </p>
+      <% when "H971" %>
+        <p class="govuk-body">
+          On your placements you will be able observe outstanding teaching in Mainstream Primary, Specialist and Sixth Form settings. You will immerse yourself in the day-to-day life of a professional working school whilst retaining the role of trainee teacher.
+        </p>
+        <p class="govuk-body">
+          You will also receive weekly 1-2-1 mentor support and guidance.
+        </p>
+        <p class="govuk-body">
+          Our mentors are carefully selected on the basis of their experience, expert classroom practice and interpersonal skills, and they are given detailed training and guidance so they stay up-to-date with developments in education and teacher training.
+        </p>
+      <% when "36P4" %>
+        <p class="govuk-body">
+          You will be attached to each school for a substantial period of time so will be expected to engage in the full life of the school as a committed professional.
+        </p>
+        <p class="govuk-body">
+          You’ll have a gradual introduction to teaching, observing, getting to know your pupils, classes and teachers, before teaching the classes on your own.
+        </p>
+        <p class="govuk-body">
+          You will receive your own trained mentor to guide you through the year as you explore effective teaching and learning, making a difference to the outcomes of all the children you teach.
+        </p>
+      <% when "Y404" %>
+        <p class="govuk-body">
+          All Emmaus CAT teachers are fully integrated into school life by our partner schools to ensure that they get to know staff, pupils and mentors extremely well, to the benefit of all involved.
+        </p>
+        <p class="govuk-body">
+          Your mentor will support you while in school by engaging in a range of specific and tailored learning activities such as co planning, co teaching, team teaching, lesson observations, post lesson learning conversations and feedback.
+        </p>
+      <% end %>
         <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
           <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-            <p class="govuk-heading-m">What will I do on my placements?</p>
+            <p class="govuk-heading-m">What you'll do on your placements</p>
             <p class="govuk-body">You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.</p>
             <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements#what-will-i-do-on-my-placements">Find out more about what you'll do on your placements.
             </a></p>
           </div>
         </div>
-      <% when "E026" %>
-        <p class="govuk-body">
-          E026 is great
-        </p>
-      <% when "H971" %>
-        <p class="govuk-body">
-          H971 is great
-        </p>
-      <% when "36P4" %>
-        <p class="govuk-body">
-          36P4 is great
-        </p>
-      <% when "Y404" %>
-        <p class="govuk-body">
-          Y404 is great
-        </p>
-      <% end %>
     </div>
     <!-- END HOW SCHOOL PLACEMENTS WORK -->
 
@@ -159,42 +228,62 @@
         <p class="govuk-body">
         Intensive Training and Practice (ITaP) is an additional element, taking place over 20 days of the programme. The ITaP grants trainees the opportunity to work with expert practitioners, access the latest and most pertinent research and allows trainees to take their learning further with an intensive focus on a specific, granular area of pedagogy. The four areas we have identified as beneficial to our trainees’ learning and development are:
         </p>
-
         <ul class="govuk-list govuk-list--bullet">
           <li>Setting high expectations, establishing strong starts to lessons & during transitions.</li>
           <li>Developing teacher clarity through explicit instruction.</li>
           <li>Design purposeful scaffolding leading to developing independence.</li>
           <li>Questioning and deepening thinking..</li>
         </ul>
-
         <p class="govuk-body">
           Applicants enrolled on the PGCE programme are expected to complete three Masters Level assignments leading to a PGCE qualification and 60 Masters level credits.
         </p>
-
-        <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-          <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-            <p class="govuk-heading-m">What to expect in teacher training</p>
-            <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training">Find out what to expect in teacher training
-            </a></p>
-          </div>
-        </div>
       <% when "E026" %>
         <p class="govuk-body">
-          E026 is great
+          For the theoretical part of your training, we offer two blended, flexible training routes.
+        </p>
+        <p class="govuk-body">
+          Sessions are a combination of face to face and online. Face to face sessions are held in central, easily accessed locations, bringing together trainees from across the campuses to share their experiences.
         </p>
       <% when "H971" %>
         <p class="govuk-body">
-          H971 is great
+          The Biology course is carefully planned, robust and ambitious with evidence-based enquiry at its heart. Delivering the Initial Teacher Training and Early Career Framework, it also seeks to go beyond it in its design. It covers:
         </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Preparing for your ITT year</li>
+          <li>Personal and professional conduct and responsibilities</li>
+          <li>Pupil safety, wellbeing, happiness, and progress</li>
+          <li>Creating an effective behaviour for learning environment</li>
+          <li>Planning, teaching, and evaluating lessons</li>
+          <li>Meeting the needs of all learners</li>
+          <li>Pedagogical knowledge</li>
+          <li>Preparing to become an effective Early Career Teacher</li>
+      </ul>
       <% when "36P4" %>
         <p class="govuk-body">
-          36P4 is great
+          University sessions will explore theory informed, up-to-date and practical teaching practices in our school-styled laboratories. You’ll learn how to plan, assess, reflect and use research to continually improve your practice in a supportive environment. You will develop your teacher persona, ability to manage behaviour for learning and support children’s wellbeing.
+        </p>
+        <p class="govuk-body">
+          Some sessions are specific to biology, but the majority occur as mixed specialism groups. Like science departments in schools, we explore the connections across the sciences and share expertise.
         </p>
       <% when "Y404" %>
         <p class="govuk-body">
-          Y404 is great
+          We provide personalised support for you to develop your subject knowledge and pedagogy across all three sciences for teaching in key stages 3 and 4 in your science specialism.
+        </p>
+        <p class="govuk-body">
+          You will study subject-specific key concepts such as genetics, ecology, cell biology, and physiology, alongside strategies for practical science teaching, laboratory safety, and the use of models and demonstrations to enhance learning.
+        </p>
+        <p class="govuk-body">
+          Through professional studies, you’ll explore broader themes, including behaviour management, assessment for learning, curriculum design, inclusive education, safeguarding, and promoting literacy and numeracy in science.
         </p>
       <% end %>
+       <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+            <p class="govuk-heading-m">What to expect in teacher training</p>
+            <p class="govuk-body">You'll spend most of your time teaching in a classroom, with some time dedicated to studying. This may include seminars, workshops and assignments.</p>
+            <p class="govuk-body"><a class="govuk-link" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training">Find out what to expect in teacher training.
+            </a></p>
+          </div>
+        </div>
     </div>
     <!-- END WHAT YOU WILL STUDY -->
 
