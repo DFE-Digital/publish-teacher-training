@@ -172,6 +172,7 @@ en:
           age_range: Age group
           date_can_apply: Date you can apply from
           start_date: Start date
+          number_of_places: Number of places
           qualification: Qualification awarded
           provider: Provider
           accredited_by: Accredited by
