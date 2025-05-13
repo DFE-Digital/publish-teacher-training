@@ -1,79 +1,81 @@
+<% unless request.variant.include?(:v2) %>
   <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
+<% end %>
 
-  <% if course.fee_based? %>
+<% if course.fee_based? %>
+  <p class="govuk-body">
+    <%= t(".fee_based") %>
+  </p>
+<% else %>
+  <p class="govuk-body">
+    <%= t(".non_fee_based") %>
+  </p>
+<% end %>
+
+<div data-qa="course__about_schools">
+
+  <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
+
+  <% case @course.course_code %>
+  <% when "R480" %>
     <p class="govuk-body">
-      <%= t(".fee_based") %>
+      All trainee teachers must complete a minimum of two placements with our secondary placements arranged through an A-B-A model. This means that the trainee will be placed in a ‘home school’ for the autumn term, an ‘alternative school’ placement runs from January to Easter. Following Easter, the trainee will return to their ‘home’ school until the end of the programme at the start of July.
     </p>
-  <% else %>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Autumn Term - Placement A </li>
+      <li>Spring Term - Placement B </li>
+      <li>Summer Term - Placement A </li>
+    </ul>
     <p class="govuk-body">
-      <%= t(".non_fee_based") %>
+      We believe in the power of choice and work with successful applicants to cater towards providing them ‘home school’ placements in their chosen academies within our Trust. Trainees are able to select a preferred home school before submitting their application.
+    </p>
+    <p class="govuk-body">
+      ‘Alternative school’ placements are chosen considering a number of factors, including trainee prior experience, training needs and location.
+    </p>
+  <% when "E026" %>
+    <p class="govuk-body">
+      You’ll have one main school placement for the year. This will help you to build strong relationships with the students you teach and the colleagues you work alongside. As well as your main school placement, you will also complete a second placement in the final term, which will take place in a contrasting school and will typically last two to three weeks.
+    </p>
+    <p class="govuk-body">
+      In addition, you will have opportunities to engage with a range of specialist placement days, allowing for you to experience a variety of different educational settings. These placements will advance your knowledge and equip you with the skills needed to teach in a range of contexts.
+    </p>
+  <% when "H971" %>
+    <p class="govuk-body">
+      Where possible, school placements are arranged to meet the needs of the trainee. We aim, where possible, to ensure trainees are not travelling for more than 40 minutes at the start and end of the day. Consideration is also given to those trainees who don’t drive.
+    </p>
+    <p class="govuk-body">
+      Trainees will complete 2 contrasting placements during their training year: September- December and January- June. The programme is designed in such a way that trainees have numerous opportunities to visit other schools/settings throughout the course of the programme.
+    </p>
+  <% when "36P4" %>
+    <p class="govuk-body">
+      You will be placed in a school within our locality, gaining a wide range of experience from Year 7 to 11.
+    </p>
+    <p class="govuk-body">
+      We organise placements starting with your term-time postcode and matching this with placement offers from schools. You should be prepared to travel up to 60 minutes (maximum) each way from where you live and to arrive in school at least 30 minutes before the school day commences. We take into consideration special circumstances such as disabilities, cultural requirements and medical conditions. In addition, we match carefully to ensure a breadth of experience across different age phases.
+    </p>
+    <p class="govuk-body">
+      You’ll go on at least two placements in different secondary schools or colleges. You might experience mixed and single-gender schools, city academies, faith schools, comprehensive and selective schools. This will allow you to develop knowledge, skills and experience to teach your subject at Key Stage 3, Key Stage 4, GCSE and also to gain an understanding of A level.
+    </p>
+    <p class="govuk-body">
+      There will be a contrasting placement in a second school, including an opportunity to look at Special Educational Needs. We will discuss your second placement school with you to ensure that you are prepared and are able to experience different contexts.
+    </p>
+  <% when "Y404" %>
+    <p class="govuk-body">
+      Your training will take place in one host school, with a further six week placement at a contrasting setting.
+    </p>
+    <p class="govuk-body">
+      We are proud to offer a variety of local placement schools to ease the barrier of travel and transport for trainees. Our current training partner schools are all graded good or better on their most recent Ofsted inspection and have experience of hosting successful trainee placements.
+    </p>
+    <p class="govuk-body">
+      Our current schools are;
+    </p>
+    <p class="govuk-body">
+      Our Lady's RC High School, Blakley Blessed John Henry Newman College, Oldham St Anne’s RC Academy, Stockport
+    </p>
+    <p class="govuk-body">
+      High quality partnership schools are selected for students according to their training requirements and location. We match placements carefully ensuring students gain a range of experience, building on their prior knowledge and experience.
     </p>
   <% end %>
+</div>
 
-  <div data-qa="course__about_schools">
-
-    <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
-
-    <% case @course.course_code %>
-    <% when "R480" %>
-      <p class="govuk-body">
-        All trainee teachers must complete a minimum of two placements with our secondary placements arranged through an A-B-A model. This means that the trainee will be placed in a ‘home school’ for the autumn term, an ‘alternative school’ placement runs from January to Easter. Following Easter, the trainee will return to their ‘home’ school until the end of the programme at the start of July.
-      </p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>Autumn Term - Placement A </li>
-        <li>Spring Term - Placement B </li>
-        <li>Summer Term - Placement A </li>
-      </ul>
-      <p class="govuk-body">
-        We believe in the power of choice and work with successful applicants to cater towards providing them ‘home school’ placements in their chosen academies within our Trust. Trainees are able to select a preferred home school before submitting their application.
-      </p>
-      <p class="govuk-body">
-        ‘Alternative school’ placements are chosen considering a number of factors, including trainee prior experience, training needs and location.
-      </p>
-    <% when "E026" %>
-      <p class="govuk-body">
-        You’ll have one main school placement for the year. This will help you to build strong relationships with the students you teach and the colleagues you work alongside. As well as your main school placement, you will also complete a second placement in the final term, which will take place in a contrasting school and will typically last two to three weeks.
-      </p>
-      <p class="govuk-body">
-        In addition, you will have opportunities to engage with a range of specialist placement days, allowing for you to experience a variety of different educational settings. These placements will advance your knowledge and equip you with the skills needed to teach in a range of contexts.
-      </p>
-    <% when "H971" %>
-      <p class="govuk-body">
-        Where possible, school placements are arranged to meet the needs of the trainee. We aim, where possible, to ensure trainees are not travelling for more than 40 minutes at the start and end of the day. Consideration is also given to those trainees who don’t drive.
-      </p>
-      <p class="govuk-body">
-        Trainees will complete 2 contrasting placements during their training year: September- December and January- June. The programme is designed in such a way that trainees have numerous opportunities to visit other schools/settings throughout the course of the programme.
-      </p>
-    <% when "36P4" %>
-      <p class="govuk-body">
-        You will be placed in a school within our locality, gaining a wide range of experience from Year 7 to 11.
-      </p>
-      <p class="govuk-body">
-        We organise placements starting with your term-time postcode and matching this with placement offers from schools. You should be prepared to travel up to 60 minutes (maximum) each way from where you live and to arrive in school at least 30 minutes before the school day commences. We take into consideration special circumstances such as disabilities, cultural requirements and medical conditions. In addition, we match carefully to ensure a breadth of experience across different age phases.
-      </p>
-      <p class="govuk-body">
-        You’ll go on at least two placements in different secondary schools or colleges. You might experience mixed and single-gender schools, city academies, faith schools, comprehensive and selective schools. This will allow you to develop knowledge, skills and experience to teach your subject at Key Stage 3, Key Stage 4, GCSE and also to gain an understanding of A level.
-      </p>
-      <p class="govuk-body">
-        There will be a contrasting placement in a second school, including an opportunity to look at Special Educational Needs. We will discuss your second placement school with you to ensure that you are prepared and are able to experience different contexts.
-      </p>
-    <% when "Y404" %>
-      <p class="govuk-body">
-        Your training will take place in one host school, with a further six week placement at a contrasting setting.
-      </p>
-      <p class="govuk-body">
-        We are proud to offer a variety of local placement schools to ease the barrier of travel and transport for trainees. Our current training partner schools are all graded good or better on their most recent Ofsted inspection and have experience of hosting successful trainee placements.
-      </p>
-      <p class="govuk-body">
-        Our current schools are;
-      </p>
-      <p class="govuk-body">
-        Our Lady's RC High School, Blakley Blessed John Henry Newman College, Oldham St Anne’s RC Academy, Stockport
-      </p>
-      <p class="govuk-body">
-        High quality partnership schools are selected for students according to their training requirements and location. We match placements carefully ensuring students gain a range of experience, building on their prior knowledge and experience.
-      </p>
-    <% end %>
-  </div>
-
-  <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
+<%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
