@@ -13,6 +13,14 @@ module Find
     before_action :set_course, only: %i[show confirm_apply]
 
     def show
+      request.variant = params[:variant].to_sym if params[:variant]
+
+      @course = provider.courses.includes(
+        :enrichments,
+        subjects: [:financial_incentive],
+        site_statuses: [:site],
+      ).find_by!(course_code: params[:course_code]&.upcase).decorate
+
       distance_from_location if params[:location]
 
       @saved_course = @candidate&.saved_courses&.find_by(course_id: @course.id)
