@@ -4,7 +4,7 @@
 
 <% @courses.each do |course| %>
   <h2 class="govuk-heading-m">
-    <%= govuk_link_to find_course_path(course.provider_code, course.course_code, **request.query_parameters), no_visited_state: true do %>
+    <%= govuk_link_to find_course_path(course.provider_code, course.course_code, location: "Manchester, UK"), no_visited_state: true do %>
       <%= "#{course.provider.provider_name} - #{course.name_and_code}" %>
     <% end %>
   </h2>
@@ -16,7 +16,7 @@
 
 <% @courses.each do |course| %>
   <h2 class="govuk-heading-m">
-    <%= govuk_link_to find_course_path(course.provider_code, course.course_code, variant: :v2, **request.query_parameters), no_visited_state: true do %>
+    <%= govuk_link_to find_course_path(course.provider_code, course.course_code, variant: :v2, location: "Manchester, UK"), no_visited_state: true do %>
       <%= "#{course.provider.provider_name} - #{course.name_and_code}" %>
     <% end %>
   </h2>
