@@ -2,10 +2,25 @@
   <h2 class="govuk-heading-l" id="section-interviews">Interview process</h2>
 <% end %>
 
-<div data-qa="course__interview_process">
-<div class="govuk-inset-text">
-  This course offers online interviews.
-</div>
+<% case @course.course_code %>
+      <% when "R480" %>
+        <div data-qa="course__interview_process">
+        <div class="govuk-inset-text">
+          This course offers online interviews.
+        </div>
+      <% when "E026" %>
+
+      <% when "H971" %>
+        <div data-qa="course__interview_process">
+        <div class="govuk-inset-text">
+          This course offers online interviews.
+        </div>
+      <% when "36P4" %>
+
+      <% when "Y404" %>
+      <% end %>
+
+
 
   <% if course.published_interview_process %>
     <%= markdown(course.published_interview_process) %>
