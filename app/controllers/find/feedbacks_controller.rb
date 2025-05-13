@@ -1,30 +1,23 @@
 module Find
   class FeedbacksController < ApplicationController
     def new
-      @feedback_form = FeedbackForm.new
+      @feedback = Feedback.new
     end
 
     def create
-      @feedback_form = FeedbackForm.new(feedback_form_params)
-      @feedback = Feedback.new(feedback_attributes)
+      @feedback = Feedback.new(feedback_form_params)
 
-      if @feedback_form.invalid?
-        render :new
+      if @feedback.save
+        redirect_to find_root_path, flash: { success: t(".success") }
       else
-        @feedback.save
-        flash[:success] = t(".success")
-        redirect_to find_root_path
+        render :new
       end
     end
 
   private
 
     def feedback_form_params
-      params.fetch(:find_feedback_form, {}).permit(:ease_of_use, :experience)
-    end
-
-    def feedback_attributes
-      feedback_form_params
+      params.require(:feedback).permit(:ease_of_use, :experience)
     end
   end
 end

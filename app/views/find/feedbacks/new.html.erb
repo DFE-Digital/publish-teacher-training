@@ -7,21 +7,21 @@
     <h2 class="govuk-heading-l">
       <%= t(".heading") %>
     </h2>
-    <%= form_with model: @feedback_form, url: find_feedback_path, local: true do |f| %>
+    <%= form_with model: @feedback, url: find_feedback_path, local: true do |f| %>
       <%= f.govuk_error_summary %>
-      <%= f.govuk_radio_buttons_fieldset :ease_of_use,
-      legend: { text: t(".ease_of_use") } do %>
-        <%= f.govuk_radio_button :ease_of_use, "very easy", label: { text: t(".options.very_easy") } %>
-        <%= f.govuk_radio_button :ease_of_use, "easy", label: { text: t(".options.easy") } %>
-        <%= f.govuk_radio_button :ease_of_use, "neither easy nor difficult", label: { text: t(".options.neither_easy_nor_difficult") } %>
-        <%= f.govuk_radio_button :ease_of_use, "difficult", label: { text: t(".options.difficult") } %>
-        <%= f.govuk_radio_button :ease_of_use, "very difficult", label: { text: t(".options.very_difficult") } %>
-      <% end %>
+      <%= f.govuk_collection_radio_buttons(
+            :ease_of_use,
+            Feedback.ease_of_uses.keys,
+            ->(option) { option },
+            ->(option) { t(".options.#{option}") },
+            nil,
+            legend: { text: t(".ease_of_use") },
+          ) %>
       <%= f.govuk_text_area :experience,
             label: { text: t(".experience_label"), size: "m" },
             hint: { text: t(".experience_hint") },
             rows: 5,
-            max_chars: 1200 %>
+            max_chars: Feedback::MAX_EXPERIENCE_LENGTH %>
       <%= f.govuk_submit t(".submit_feedback_button") %>
     <% end %>
   </div>

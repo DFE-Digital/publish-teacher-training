@@ -8,3 +8,12 @@ en:
         rollover_progress: Rollover progress
         status: Status
         available_in_publish_from: Available in Publish
+    errors:
+      models:
+        feedback:
+          attributes:
+            ease_of_use:
+              blank: "Select how easy it is to find courses relevant to you"
+            experience:
+              blank: "Enter your feedback"
+              too_long: Feedback is too long (maximum is 1200 characters)
