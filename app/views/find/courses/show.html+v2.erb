@@ -54,9 +54,6 @@
     <%= govuk_accordion do |accordion| %>
       <% accordion.with_section(heading_text: "Why train with us") do %>
         <!-- WHY TRAIN WTIH US -->
-        <div class="govuk-!-margin-bottom-8">
-          <h2 class="govuk-heading-l" id="why-train-with-us">Why train with us</h2>
-
           <% case @course.course_code %>
               <% when "R480" %>
                 <p class="govuk-body">
@@ -143,7 +140,6 @@
                   </a></p>
                 </div>
               </div>
-            </div>
         <!-- END WHY TRAIN WTIH US -->
       <% end %>
 
@@ -155,7 +151,6 @@
 
       <% accordion.with_section(heading_text: "What you will do on school placements") do %>
         <!-- HOW SCHOOL PLACEMENTS WORK -->
-        <div class="govuk-!-margin-bottom-8">
         <h2 class="govuk-heading-l" id="do-on-school-placements">What you will do on school placements</h2>
         <% case @course.course_code %>
           <% when "R480" %>
@@ -216,13 +211,11 @@
                 </a></p>
               </div>
             </div>
-        </div>
         <!-- END HOW SCHOOL PLACEMENTS WORK -->
       <% end %>
 
       <% accordion.with_section(heading_text: "What you will study") do %>
         <!-- WHAT YOU WILL STUDY -->
-        <div class="govuk-!-margin-bottom-8">
         <h2 class="govuk-heading-l" id="studies">What you will study</h2>
         <% case @course.course_code %>
           <% when "R480" %>
@@ -288,7 +281,6 @@
                 </a></p>
               </div>
             </div>
-        </div>
         <!-- END WHAT YOU WILL STUDY -->
       <% end %>
 
@@ -312,7 +304,7 @@
           <h2 class="govuk-heading-l" id="section-train-with-disabilities">
             <%= t(".training_with_disabilities") %>
           </h2>
-          <p class="govuk-body govuk-!-margin-bottom-8">
+          <p class="govuk-body">
             <%= govuk_link_to(
               t(".training_with_disabilities_link", provider_name: @course.provider_name),
               find_training_with_disabilities_path(
