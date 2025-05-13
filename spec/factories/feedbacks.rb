@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :feedback do
-    ease_of_use { "MyString" }
-    experience { "MyText" }
+    ease_of_use { "very_easy" }
+    experience { "Great experience!" }
   end
 end
