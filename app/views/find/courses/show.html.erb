@@ -149,7 +149,9 @@
     <!-- END WHY TRAIN WTIH US -->
 
     <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
+    <div class="govuk-!-margin-bottom-8">
+      <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
+    </div>
     <!-- COURSE OVERVIEW and SCHOOL PLACEMENTS -->
 
     <!-- HOW SCHOOL PLACEMENTS WORK -->
@@ -289,14 +291,19 @@
 
   <div class="govuk-!-margin-bottom-8">
 
-  <!-- INTERVIEW PROCESS -->
+    <!-- INTERVIEW PROCESS -->
+    <div class="govuk-!-margin-bottom-8">
+
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
     <% end %>
+    </div>
     <!-- END INTERVIEW PROCESS -->
 
     <!-- FEES -->
-    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+    <div class="govuk-!-margin-bottom-8">
+      <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+     </div>
     <!-- END FEES -->
 
     <!-- TRAINING WITH DISABILITIES -->
