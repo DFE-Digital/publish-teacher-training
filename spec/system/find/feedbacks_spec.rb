@@ -52,7 +52,7 @@ RSpec.describe "User feedback form", service: :find do
 
   def and_the_feedback_is_saved_to_database
     feedback = Feedback.last
-    expect(feedback.ease_of_use).to eq("very easy")
+    expect(feedback.ease_of_use).to eq("very_easy")
     expect(feedback.experience).to eq("Great experience!")
   end
 
