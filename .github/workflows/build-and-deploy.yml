@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - dd/skip-review-app-deployment-on-main
   pull_request:
     types: [opened, reopened, synchronize, labeled]
 
@@ -235,7 +236,7 @@ jobs:
     needs: [lint, analytics-checks, javascript-tests, rails-tests]
     if: |
       ${{
-        always() && (
+        !cancelled() && (
           (
             needs.lint.result == 'success' &&
             needs.analytics-checks.result == 'success' &&
@@ -246,7 +247,7 @@ jobs:
               (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
             )
           ) ||
-          github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'prototype')
+          (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'prototype'))
         )
       }}
     outputs:
@@ -257,6 +258,28 @@ jobs:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
 
     steps:
+      - name: Print Event data
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "github.event.pull_request.labels.*.name: ${{ toJSON(github.event.pull_request.labels.*.name) }}"
+          echo "github.event_name == 'pull_request': ${{ github.event_name == 'pull_request' }}"
+          echo ${{
+            (
+              (
+                needs.lint.result == 'success' &&
+                needs.analytics-checks.result == 'success' &&
+                needs.javascript-tests.result == 'success' &&
+                needs.rails-tests.result == 'success' &&
+                (
+                  github.ref == 'refs/heads/main' ||
+                  (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy'))
+                )
+              ) ||
+              (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'prototype'))
+            )
+          }}
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -351,17 +374,40 @@ jobs:
     needs: [build]
     if: |
       ${{
-        always() &&
-        needs.build.result == 'success' && github.event_name == 'pull_request' &&
-        (
-          contains(github.event.pull_request.labels.*.name, 'deploy') ||
-          contains(github.event.pull_request.labels.*.name, 'prototype')
+        !cancelled() && (
+          needs.build.result == 'success' &&
+          github.event_name != 'push' &&
+          github.event_name == 'pull_request' &&
+          (
+            contains(github.event.pull_request.labels.*.name, 'deploy') ||
+            contains(github.event.pull_request.labels.*.name, 'prototype')
+          )
         )
       }}
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Print Event data
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "github.event.pull_request.labels.*.name: ${{ toJSON(github.event.pull_request.labels.*.name) }}"
+          echo "github.event_name == 'push': ${{ github.event_name == 'push' }}"
+          echo "github.event_name == 'pull_request': ${{ github.event_name == 'pull_request' }}"
+          echo "(contains(github.event.pull_request.labels.*.name, 'deploy') || contains(github.event.pull_request.labels.*.name, 'prototype')): ${{ (contains(github.event.pull_request.labels.*.name, 'deploy') || contains(github.event.pull_request.labels.*.name, 'prototype')) }}"
+          echo ${{
+            (
+              needs.build.result == 'success' &&
+              github.event_name != 'push' &&
+              github.event_name == 'pull_request' &&
+              (
+                contains(github.event.pull_request.labels.*.name, 'deploy') ||
+                contains(github.event.pull_request.labels.*.name, 'prototype')
+              )
+            )
+          }}
+
       - name: Checkout
         uses: actions/checkout@v4
 
