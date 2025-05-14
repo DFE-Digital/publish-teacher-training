@@ -1,4 +1,4 @@
-# Alerting and Monitoring
+# Monitoring
 
 ## External Integrations
 

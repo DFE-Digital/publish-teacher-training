@@ -11,4 +11,4 @@
 * [9. Form objects](0009-form-objects.md)
 * [10. Merge Publish service into TTAPI](0010-merge-publish-service-into-ttapi.md)
 * [11. TDA courses](0011-tda-courses.md)
-* [12. Formalise Accredited Provider relationships](0010-accredited-provider-relationships.md)
+* [12. Formalise Accredited Provider relationships](0012-formalize-accredited-provider-relationships.md)

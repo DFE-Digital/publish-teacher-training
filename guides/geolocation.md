@@ -1,6 +1,6 @@
 # Geolocation
 
-We use geolocation services in two ways. 
+We use geolocation services in two ways.
 
 1. Autocomplete a users text input when searching for a location.
 2. Retreiving the geographic coordinates of the corresponding place.
@@ -14,7 +14,6 @@ We use geolocation services in two ways.
 3. We then pass the autocompleted place name to get the coordinates of the place using the geocode API.
 4. When we get the coordinates, we can use postgis to select all the courses whose schools are within a given distance of this place.
 5. We return the filtered and sorted list of courses.
-
 
 ## Classes
 
