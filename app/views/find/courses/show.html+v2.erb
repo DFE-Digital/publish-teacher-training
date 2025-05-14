@@ -125,12 +125,12 @@
           <% end %>
 
           <p class="govuk-body">
-            <a href="#" class="govuk-link">
+            <%= govuk_link_to find_provider_path(@course.provider.provider_code, @course.course_code) do %>
               Find out more about
               <span data-qa="course__provider_name">
                 <%= smart_quotes(@course.provider.provider_name) %>.
               </span>
-            </a>
+            <% end %>
           </p>
 
           <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
