@@ -1,0 +1,118 @@
+name: Build and Deploy Prototype
+concurrency: build_and_deploy_${{ github.ref_name }}
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
+
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'prototype') }}
+    outputs:
+      docker_image: ${{ env.DOCKER_IMAGE }}
+      image_tag: ${{ env.DOCKER_IMAGE_TAG }}
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get values for current commit (Pull request)
+        if: github.event_name == 'pull_request'
+        run: |
+          # This is the actual PR branch
+          GIT_REF=${{ github.head_ref }}
+          GIT_BRANCH=${GIT_REF##*/}
+          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+          # This is the latest commit on the actual PR branch
+          echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Publish-Teacher-Training-Middleman
+        uses: docker/build-push-action@v6
+        with:
+          tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+          push: true
+          target: middleman
+          cache-from: |
+            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
+            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+          build-args: BUILDKIT_INLINE_CACHE=1
+
+      - name: Build Publish-Teacher-Training
+        uses: docker/build-push-action@v6
+        with:
+          tags: |
+            ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+            ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
+          push: false
+          load: true
+          cache-from: |
+            type=registry,ref=${{ env.DOCKER_IMAGE}}:main
+            type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
+            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+            COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
+
+      - name: Push ${{ env.DOCKER_IMAGE }} images for review
+        run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+
+  deploy-review-app:
+    name: Deployment To Review
+    environment:
+      name: review
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy App to Review
+        id: deploy_review
+        uses: ./.github/actions/deploy/
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          environment: review
+          pr-number: ${{ github.event.pull_request.number }}
+          sha: ${{ needs.build.outputs.image_tag }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
+
+      - name: Post comment to Pull Request ${{ github.event.number }}
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: aks
+          message: |
+            ### Deployments
+
+            | App               | URL                                                                                      |
+            | ----------------- | ---------------------------------------------------------------------------------------- |
+            | Publish           | <https://publish-review-${{ github.event.number }}.test.teacherservices.cloud>           |
+            | Find              | <https://find-review-${{ github.event.number }}.test.teacherservices.cloud>              |
