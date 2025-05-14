@@ -129,14 +129,16 @@
               As a growing Trust with nearly 70 schools, there are great opportunities for collaboration, career development and accessing high quality professional networks.
             </p>
           <% end %>
+
           <p class="govuk-body">
-              <a href="#" class="govuk-link">
-                Find out more about
-                <span data-qa="course__provider_name">
-                  <%= smart_quotes(@course.provider.provider_name) %>.
-                </span>
-              </a>
-            </p>
+            <%= govuk_link_to find_provider_path(@course.provider.provider_code, @course.course_code) do %>
+              Find out more about
+              <span data-qa="course__provider_name">
+                <%= smart_quotes(@course.provider.provider_name) %>.
+              </span>
+            <% end %>
+          </p>
+
           <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
             <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
               <p class="govuk-heading-m">How to choose a course</p>
