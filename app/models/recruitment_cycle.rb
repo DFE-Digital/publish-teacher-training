@@ -24,18 +24,14 @@ class RecruitmentCycle < ApplicationRecord
       current_recruitment_cycle.next
     end
     alias_method :next, :next_recruitment_cycle
+  end
 
-    def next_editable_cycles?
-      next_editable_cycles
-      .exists?
-    end
+  def self.next_editable_cycles?
+    next_editable_cycles.exists?
+  end
 
-    def current_and_next_editable_cycles
-      where(year: Settings.current_recruitment_cycle_year).or(
-        where("application_start_date > ?", Date.current)
-        .where("? BETWEEN available_in_publish_from AND application_start_date", Date.current),
-      )
-    end
+  def self.current_and_next_editable_cycles
+    where(year: Settings.current_recruitment_cycle_year).or(next_editable_cycles)
   end
 
   scope :next_editable_cycles, lambda {
