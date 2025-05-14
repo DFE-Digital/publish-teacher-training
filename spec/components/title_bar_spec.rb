@@ -10,7 +10,7 @@ describe TitleBar do
 
   context "single org users" do
     before do
-      create(:recruitment_cycle, :next, available_in_publish_from: 1.day.from_now)
+      allow(RecruitmentCycle).to receive(:next_editable_cycles?).and_return(false)
       render_inline(described_class.new(title:, current_user:, provider: provider_code))
     end
 
@@ -25,7 +25,7 @@ describe TitleBar do
 
   context "single org users during rollover" do
     before do
-      create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+      allow(RecruitmentCycle).to receive(:next_editable_cycles?).and_return(true)
       render_inline(described_class.new(title:, current_user:, provider: provider_code))
     end
 

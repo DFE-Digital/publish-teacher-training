@@ -21,7 +21,7 @@ describe SupportTitleBar do
 
   context "during rollover" do
     before do
-      create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+      allow(RecruitmentCycle).to receive(:next_editable_cycles?).and_return(true)
       render_inline(described_class.new)
     end
 
