@@ -268,7 +268,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
       end
 
       scope module: :providers do
-        get "/training-providers-courses", on: :member, to: "training_providers/course_exports#index", as: "download_training_providers_courses"
+        get "/training-providers-courses", on: :member, to: "training_partners/course_exports#index", as: "download_training_providers_courses"
         resources :training_partners, path: "/training-partners", controller: "training_partners", only: [:index], param: :code do
           resources :courses, only: [:index], controller: "training_partners/courses"
         end
