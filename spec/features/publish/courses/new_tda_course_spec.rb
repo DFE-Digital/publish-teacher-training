@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Adding a teacher degree apprenticeship course", :can_edit_current_and_next_cycles do
+feature "Adding a teacher degree apprenticeship course" do
   scenario "creating a degree awarding course from school direct provider" do
     given_i_am_authenticated_as_a_school_direct_provider_user
     when_i_visit_the_courses_page

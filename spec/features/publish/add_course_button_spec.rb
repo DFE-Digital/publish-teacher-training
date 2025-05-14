@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Add course button", :can_edit_current_and_next_cycles do
+feature "Add course button" do
   scenario "with no study sites on the provider in the next cycle" do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_courses_page
