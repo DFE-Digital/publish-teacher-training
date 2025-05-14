@@ -2,11 +2,7 @@
 
 ## Find
 
-The Find service is publicly available with one or two internal routes protected by basic auth.
-
-### Basic Auth
-
-The feature flags route in Find is protected by basic auth. The username and password are set in the `SETTINGS__BASIC_AUTH_USERNAME` and `SETTINGS__BASIC_AUTH_PASSWORD` environment variables.
+The Find service is publicly available. We are in the process of looking into adding candidate accounts via GOV.UK One Login.
 
 ## Publish
 

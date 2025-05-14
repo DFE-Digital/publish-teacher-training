@@ -1,4 +1,4 @@
-# Find & Publish Teacher Training
+# Publish & Find teacher training courses
 
 [![View performance data on Skylight](https://badges.skylight.io/status/NXAwzyZjkp2m.svg)](https://oss.skylight.io/app/applications/NXAwzyZjkp2m)
 
@@ -26,21 +26,26 @@ This repo is home to three services:
 | Staging     | [staging](https://staging.publish-teacher-training-courses.service.gov.uk) | For internal use by DfE to test deploys
 | QA          | [qa](https://qa.publish-teacher-training-courses.service.gov.uk)           | For internal use by DfE for testing. Automatically deployed from main
 
-## Guides
+## Developer documentation
 
-- [Configuration](/guides/configuration.md)
-- [Machine Setup](/guides/machine-setup.md)
-- [Setting up the application in development](/guides/setup-development.md)
-- [Testing & Linting](/guides/testing.md)
-- [Rollover](/guides/rollover.md)
-- [API](/guides/api.md)
-- [Authentication](/guides/authentication.md)
-- [Alerting & Monitoring](/guides/alerting_and_monitoring.md)
-- [Transactional Emails](/guides/emails.md)
-- [Healthchecks](/guides/healthcheck_and_ping_endpoints.md)
-- [Maintenance Mode](/guides/maintenance-mode.md)
-- [Disaster Recovery Plan](/guides/disaster-recovery.md)
-- [ADRs](/guides/adr/index.md)
-- [Support Playbook](/guides/support_playbook.md)
-- [AKS Module Information](/guides/aks_modules.md)
-- [AKS Cheatsheet](/guides/aks-cheatsheet.md)
+### Getting Started
+
+- [Developer onboarding](guides/developer-onboarding.md)
+- [Setting up your local environment](guides/setup-development.md)
+- [Development workflow](guides/development-workflow.md)
+- [Conventions](guides/conventions.md)
+
+### Guides
+
+- [Prototype branches](guides/prototype-branches.md)
+- [Support playbook](guides/support-playbook.md)
+- [Authentication](guides/authentication.md)
+- [API](guides/api.md)
+- [Monitoring](guides/monitoring.md)
+- [Healthchecks](guides/healthchecks.md)
+- [Rollover](guides/rollover.md)
+
+### Infrastructure
+
+- [AKS Module Information](guides/aks-modules.md)
+- [AKS Cheatsheet](guides/aks-cheatsheet.md)

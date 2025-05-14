@@ -30,10 +30,6 @@ Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.
 
 ## Feature Flags
 
-### Find
+Feature flags are stored in Redis. The `FeatureFlag` class is a wrapper around the `Redis` class that provides a simple interface for setting and checking feature flags.
 
-Feature flags for Find are stored in Redis. The `FeatureFlag` class is a wrapper around the `Redis` class that provides a simple interface for setting and checking feature flags.
-
-### Publish
-
-Feature flags for Publish are still stored in the `settings.yml` file. The `FeatureService` class provides a simple interface for checking publish feature flags.
+We want to move away from Redis and into a [Solid Cache](https://github.com/rails/solid_cache) backed approach.
