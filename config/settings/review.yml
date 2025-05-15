@@ -24,6 +24,3 @@ authentication:
 
 skylight:
   enable: false
-
-features:
-  api_summary_content_change: true
