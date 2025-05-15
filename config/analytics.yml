@@ -1,4 +1,9 @@
 shared:
+  candidate:
+    - id
+    - email_address
+    - created_at
+    - updated_at
   contact:
     - id
     - provider_id
