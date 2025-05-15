@@ -1,6 +1,6 @@
 # Prototype branches
 
-We branch off the `main` branch of this repository to build prototype branches. Prototype branches should be prefixed with `prototype/`.
+We branch off the `main` branch of this repository to build prototype branches. Prototype branches must be prefixed with `prototype/` in order to be deployed.
 
 ## What are "prototype" branches?
 
@@ -18,7 +18,10 @@ The drawbacks, compared to Figma and the GOV.UK Prototype kit, are:
 
 ## Deploying prototype branches
 
-To deploy a prototype branch, open a PR and add the `prototype` label to it. The `prototype` label bypasses any code quality checks and directly deploys the review app, if possible.
+> [!IMPORTANT]
+> The deployment workflow will only trigger if the branch name is prefixed with `prototype/` and the `prototype` label has been attached.
+
+To deploy a prototype branch, open a PR and add the `prototype` label to it. The `prototype` label bypasses any code quality checks and directly deploys the review app, if possible. The code will redeploy itself on all new code pushes.
 
 Once deployment is successful, a comment will be posted to the PR linking to the relevant review app URLs.
 
