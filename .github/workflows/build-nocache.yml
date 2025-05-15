@@ -4,7 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       level:
-        description: Snyk scan level
+        description: |
+          Snyk scan level
+
+          The build usually blocks on high and above vulnerabilities, so setting to high will ignore the low level ones for rebuild and it will unblock the pipeline.
         type: choice
         default: low
         options:
