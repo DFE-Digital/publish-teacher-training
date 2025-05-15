@@ -11,6 +11,11 @@ module Publish
         redirect_to next_step
       end
 
+      def back
+        authorize(@provider, :edit?)
+        redirect_to new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
+      end
+
     private
 
       def current_step

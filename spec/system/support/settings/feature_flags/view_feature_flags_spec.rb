@@ -26,6 +26,7 @@ RSpec.describe "Viewing feature flags" do
       "Puts Find into maintenance mode",
       "Displays the maintenance mode banner",
       "Display scholarship and bursary information",
+      "Hides the the option to create, edit and view a courses open date",
     ].each do |feature_flag_text|
       expect(page).to have_content(feature_flag_text)
     end

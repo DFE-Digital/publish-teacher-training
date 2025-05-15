@@ -106,10 +106,17 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
           get "continue"
         end
         resource :start_date, on: :member, only: %i[new], controller: "courses/start_date", path: "start-date" do
+          get "back"
           get "continue"
         end
-        resource :applications_open, on: :member, only: %i[new], controller: "courses/applications_open", path: "applications-open" do
-          get "continue"
+        constraints ->(_req) { !FeatureFlag.active?(:hide_applications_open_date) } do
+          resource :applications_open,
+                   on: :member,
+                   only: %i[new],
+                   controller: "courses/applications_open",
+                   path: "applications-open" do
+            get "continue"
+          end
         end
         resource :age_range, on: :member, only: %i[new], controller: "courses/age_range", path: "age-range" do
           get "continue"
@@ -134,6 +141,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         end
 
         resource :student_visa_sponsorship, on: :member, controller: "courses/student_visa_sponsorship", path: "student-visa-sponsorship" do
+          get "back"
           get "continue"
         end
         resource :skilled_worker_visa_sponsorship, on: :member, controller: "courses/skilled_worker_visa_sponsorship", path: "skilled-worker-visa-sponsorship" do
