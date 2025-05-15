@@ -130,11 +130,7 @@ module API
         end
 
         attribute :summary do
-          if FeatureService.enabled?(:api_summary_content_change)
-            @object.summary
-          else
-            @object.description
-          end
+          @object.summary
         end
 
         attribute :subject_codes do
