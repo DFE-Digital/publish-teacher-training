@@ -1,4 +1,6 @@
 ---
 shared:
+  candidate:
+    - email_address
   user:
     - sign_in_user_id
