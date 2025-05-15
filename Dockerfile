@@ -1,6 +1,7 @@
 FROM ruby:2.7.5-alpine3.15 AS middleman
-RUN apk add --no-cache libxml2
-RUN apk add --update --no-cache npm git build-base
+
+RUN apk update && apk add --no-cache libxml2=2.12.7-r3
+RUN apk add --no-cache npm git build-base
 
 COPY docs/Gemfile docs/Gemfile.lock /
 
@@ -17,14 +18,14 @@ RUN bundle exec middleman build --build-dir=../public
 
 FROM ruby:3.4.2-alpine3.20
 
-RUN apk add --no-cache libxml2 yaml-dev
+RUN apk update && apk add --no-cache libxml2=2.12.7-r3 yaml-dev
 
 RUN apk add --update --no-cache tzdata && \
   cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
   echo "Europe/London" > /etc/timezone
 
-RUN apk add --update --no-cache \
-  postgresql-dev git ncurses shared-mime-info jemalloc
+RUN apk add --no-cache \
+  postgresql-dev git ncurses shared-mime-info jemalloc libxml2=2.12.7-r3
 
 ENV APP_HOME=/app
 
