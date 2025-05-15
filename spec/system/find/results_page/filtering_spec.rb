@@ -7,6 +7,7 @@ RSpec.describe "Search Results", :js, service: :find do
   include FilteringHelper
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
+    FeatureFlag.activate(:applications_open_date)
   end
 
   scenario "when I filter by visa sponsorship" do

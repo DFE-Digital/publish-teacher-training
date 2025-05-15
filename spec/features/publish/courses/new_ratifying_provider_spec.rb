@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "selection accredited_partners", { can_edit_current_and_next_cycles: false } do
   before do
+    FeatureFlag.activate(:applications_open_date)
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_new_ratifying_providers_page
   end
