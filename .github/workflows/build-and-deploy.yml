@@ -367,6 +367,7 @@ jobs:
             | ----------------- | ---------------------------------------------------------------------------------------- |
             | Publish           | <https://publish-review-${{ github.event.number }}.test.teacherservices.cloud>           |
             | Find              | <https://find-review-${{ github.event.number }}.test.teacherservices.cloud>              |
+            | API               | <https://publish-review-${{ github.event.number }}-api.test.teacherservices.cloud>       |
 
   deploy-aks-before-production:
     name: Parallel deployment before production

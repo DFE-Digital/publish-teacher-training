@@ -10,9 +10,9 @@ publish_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices
 publish_hosts:
   - <%= "publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 
-api_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
+api_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}-api.test.teacherservices.cloud" %>
 api_hosts:
-  - <%= "publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
+  - <%= "publish-#{ENV["APP_NAME_SUFFIX"]}-api.test.teacherservices.cloud" %>
 
 base_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 
