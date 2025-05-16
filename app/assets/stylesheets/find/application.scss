@@ -2,13 +2,14 @@
 @import "../govuk_style_setup";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min";
 
+@import "../components/accordion";
 @import "../components/autocomplete";
 @import "../components/filters";
+@import "../components/footer";
 @import "../components/header";
 @import "../components/js-enabled";
 @import "../components/list";
 @import "../components/pagination";
-@import "../components/accordion";
 @import "../components/summary-card";
 
 @import "./components/accordion";
