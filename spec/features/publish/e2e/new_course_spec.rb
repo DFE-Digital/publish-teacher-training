@@ -3,6 +3,10 @@
 require "rails_helper"
 
 feature "new course", { can_edit_current_and_next_cycles: false } do
+  before do
+    FeatureFlag.activate(:applications_open_date)
+  end
+
   scenario "creates the correct course in the next cycle" do
     # This is intended to be a test which will go through the entire flow
     # and ensure that the correct page gets displayed at the end

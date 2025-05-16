@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "Editing course study mode", { can_edit_current_and_next_cycles: false } do
   before do
+    FeatureFlag.activate(:applications_open_date)
     given_i_am_authenticated_as_a_provider_user
   end
 

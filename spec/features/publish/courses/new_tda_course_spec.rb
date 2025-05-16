@@ -3,6 +3,10 @@
 require "rails_helper"
 
 feature "Adding a teacher degree apprenticeship course", :can_edit_current_and_next_cycles do
+  before do
+    FeatureFlag.activate(:applications_open_date)
+  end
+
   scenario "creating a degree awarding course from school direct provider" do
     given_i_am_authenticated_as_a_school_direct_provider_user
     when_i_visit_the_courses_page
@@ -341,7 +345,7 @@ feature "Adding a teacher degree apprenticeship course", :can_edit_current_and_n
   end
 
   def and_the_back_link_points_to_applications_open_date_page
-    expect(publish_courses_new_start_date_page.back_link[:href]).to include(new_publish_provider_recruitment_cycle_courses_applications_open_path(provider_code: provider.provider_code, recruitment_cycle_year:))
+    expect(publish_courses_new_start_date_page.back_link[:href]).to include(back_publish_provider_recruitment_cycle_courses_start_date_path(provider_code: provider.provider_code, recruitment_cycle_year:))
   end
 
   def when_i_choose_the_applications_open_date
