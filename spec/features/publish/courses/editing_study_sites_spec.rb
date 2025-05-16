@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "updating study sites on a course", { can_edit_current_and_next_cycles: false } do
+feature "updating study sites on a course" do
   scenario "provider has no study sites" do
     and_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "selecting an age range", { can_edit_current_and_next_cycles: false } do
+feature "selecting an age range" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing how placements work", { can_edit_current_and_next_cycles: false } do
+feature "Editing how placements work" do
   scenario "I can update some information about the course" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit

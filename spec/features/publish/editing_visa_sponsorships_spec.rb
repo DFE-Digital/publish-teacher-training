@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing visa sponsorships", { can_edit_current_and_next_cycles: false } do
+feature "Editing visa sponsorships" do
   scenario "as a lead school i cannot view any visa details" do
     given_i_am_authenticated_as_a_lead_school_provider_user
     when_i_visit_the_provider_details_page

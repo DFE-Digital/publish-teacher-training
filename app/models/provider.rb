@@ -93,7 +93,7 @@ class Provider < ApplicationRecord
   end
 
   def rolled_over?
-    FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+    RecruitmentCycle.next_editable_cycles?
   end
 
   # the providers that this provider is an accredited_provider for

@@ -16,7 +16,7 @@
   <%= tabs.with_tab(label: "Users") do %>
     <%= render partial: "pages/performance_dashboard/users_tab" %>
   <% end %>
-  <% if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") %>
+  <% if RecruitmentCycle.next_editable_cycles? %>
     <%= tabs.with_tab(label: "Rollover") do %>
       <%= render partial: "pages/performance_dashboard/rollover_tab" %>
     <% end %>

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing apprenticeship", { can_edit_current_and_next_cycles: false } do
+feature "Editing apprenticeship" do
   context "visa sponsorship feature flag is activated" do
     before do
       FeatureFlag.activate(:visa_sponsorship_deadline)

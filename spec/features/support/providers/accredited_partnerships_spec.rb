@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Accredited partnership flow", { can_edit_current_and_next_cycles: false } do
+feature "Accredited partnership flow" do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_are_accredited_providers_in_the_database

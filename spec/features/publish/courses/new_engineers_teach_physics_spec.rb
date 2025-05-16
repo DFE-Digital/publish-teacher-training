@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "selecting a physics subject", { can_edit_current_and_next_cycles: false } do
+feature "selecting a physics subject" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

@@ -99,14 +99,26 @@ describe User do
       end
     end
 
-    context "can_edit_current_and_next_cycles is set to true" do
-      before do
-        allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+    context "rollover is active" do
+      let(:next_cycle) do
+        create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
       end
 
       describe "during rollover" do
-        let(:rolled_over_provider) { create(:provider, :next_recruitment_cycle, provider_code: provider.provider_code) }
-        let(:rolled_over_other_provider) { create(:provider, :next_recruitment_cycle, provider_code: other_provider.provider_code) }
+        let(:rolled_over_provider) do
+          create(
+            :provider,
+            recruitment_cycle: next_cycle,
+            provider_code: provider.provider_code,
+          )
+        end
+        let(:rolled_over_other_provider) do
+          create(
+            :provider,
+            recruitment_cycle: next_cycle,
+            provider_code: other_provider.provider_code,
+          )
+        end
 
         before do
           subject.providers = [provider, other_provider, rolled_over_provider, rolled_over_other_provider]
@@ -114,7 +126,7 @@ describe User do
         end
 
         it "removes the right provider" do
-          expect(subject.reload.providers).to eq([other_provider])
+          expect(subject.reload.providers).to match_collection([other_provider])
         end
       end
     end

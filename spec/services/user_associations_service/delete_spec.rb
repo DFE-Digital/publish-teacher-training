@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycles: false } do
+RSpec.describe UserAssociationsService::Delete do
   let(:user) { create(:user) }
 
   let(:accredited_provider1) { create(:provider, :accredited_provider, users: [user]) }
@@ -94,8 +94,11 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
         end
       end
 
-      context "during rollover", :can_edit_current_and_next_cycles do
-        let(:next_accredited_provider1) { create(:provider, :accredited_provider, :next_recruitment_cycle, provider_code: "AAA") }
+      context "during rollover" do
+        let(:recruitment_cycle) { create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago) }
+        let(:next_accredited_provider1) do
+          create(:provider, :accredited_provider, recruitment_cycle:, provider_code: "AAA")
+        end
 
         it "removes user_permissions association in both cycles" do
           subject

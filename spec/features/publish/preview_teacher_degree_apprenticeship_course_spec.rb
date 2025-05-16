@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Course show", { can_edit_current_and_next_cycles: false } do
+feature "Course show" do
   scenario "when viewing a teacher degree apprenticeship course" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_teacher_degree_apprenticeship_course

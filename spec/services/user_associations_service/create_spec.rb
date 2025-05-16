@@ -2,15 +2,20 @@
 
 require "rails_helper"
 
-RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycles: false } do
+RSpec.describe UserAssociationsService::Create do
   let!(:user) { create(:user) }
   let(:accredited_provider) { create(:provider, :accredited_provider, users: [user]) }
   let!(:new_accredited_provider) { create(:provider, :accredited_provider, provider_code: "AAA") }
-  let!(:next_cycle_new_accredited_provider) { create(:provider, :accredited_provider, :next_recruitment_cycle, users: [user], provider_code: "AAA") }
+  let(:next_cycle) do
+    create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+  end
+  let!(:next_cycle_new_accredited_provider) do
+    create(:provider, :accredited_provider, recruitment_cycle: next_cycle, users: [user], provider_code: "AAA")
+  end
 
   describe "#call" do
     context "when adding to a single organisation" do
-      context "when two recruitment cycles are active", :can_edit_current_and_next_cycles do
+      context "when two recruitment cycles are active" do
         context "when the user is added in the current cycle" do
           subject do
             described_class.call(
@@ -35,10 +40,6 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
             )
           end
 
-          before do
-            allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
-          end
-
           it "creates user_permissions association in both cycles" do
             subject
             expect(next_cycle_new_accredited_provider.users).to eq([user])
@@ -56,7 +57,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
           end
 
           before do
-            allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+            create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
           end
 
           let!(:current_cycle_provider) { create(:provider, :accredited_provider, users: [user]) }

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Viewing courses as an accredited provider", { can_edit_current_and_next_cycles: false } do
+feature "Viewing courses as an accredited provider" do
   before do
     given_i_am_authenticated_as_an_accredited_provider_user
     and_some_courses_exist_with_one_i_accredit

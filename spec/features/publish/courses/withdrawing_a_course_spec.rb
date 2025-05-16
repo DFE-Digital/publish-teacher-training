@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
+feature "Withdrawing courses" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

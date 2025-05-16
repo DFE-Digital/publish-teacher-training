@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Publishing a course when course ratifying provider is invalid", { can_edit_current_and_next_cycles: false } do
+feature "Publishing a course when course ratifying provider is invalid" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

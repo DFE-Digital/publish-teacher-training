@@ -5,7 +5,7 @@ require "rails_helper"
 describe SupportTitleBar do
   alias_method :component, :page
 
-  context "not during rollover", { can_edit_current_and_next_cycles: false } do
+  context "not during rollover" do
     before do
       render_inline(described_class.new)
     end
@@ -21,7 +21,7 @@ describe SupportTitleBar do
 
   context "during rollover" do
     before do
-      allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+      create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
       render_inline(described_class.new)
     end
 

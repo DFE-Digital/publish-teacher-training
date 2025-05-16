@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "About Your Organisation section", { can_edit_current_and_next_cycles: false } do
+feature "About Your Organisation section" do
   scenario "Provider user edits provider details" do
     given_i_am_a_provider_user_as_a_provider_user
     when_i_visit_the_details_page
