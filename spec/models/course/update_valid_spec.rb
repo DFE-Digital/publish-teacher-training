@@ -24,7 +24,7 @@ describe "#update_valid" do
       context "with an invalid date" do
         let(:course) do
           create(:course,
-                 applications_open_from: DateTime.new(current_year, 10, 1))
+                 applications_open_from: Time.zone.local(current_year, 10, 1))
         end
 
         its(:update_valid?) { is_expected.to be false }
@@ -49,7 +49,7 @@ describe "#update_valid" do
         let(:course) do
           create(:course,
                  provider:,
-                 applications_open_from: DateTime.new(current_year - 1, 10, 1))
+                 applications_open_from: Time.zone.local(current_year - 1, 10, 1))
         end
 
         its(:update_valid?) { is_expected.to be false }
@@ -60,7 +60,7 @@ describe "#update_valid" do
   context "start_date" do
     subject { course }
 
-    let(:course) { create(:course, start_date: DateTime.new(current_year, 9, 1)) }
+    let(:course) { create(:course, start_date: Time.zone.local(current_year, 9, 1)) }
 
     context "for the current recruitment cycle" do
       context "with a valid start date" do
@@ -68,7 +68,7 @@ describe "#update_valid" do
       end
 
       context "with an invalid start date" do
-        let(:course) { create(:course, start_date: DateTime.new(next_year, 9, 1)) }
+        let(:course) { create(:course, start_date: Time.zone.local(next_year, 9, 1)) }
 
         its(:update_valid?) { is_expected.to be false }
       end
@@ -83,7 +83,7 @@ describe "#update_valid" do
           create(:course,
                  provider:,
                  study_sites: [build(:site, :study_site)],
-                 start_date: DateTime.new(next_year, 9, 1))
+                 start_date: Time.zone.local(next_year, 9, 1))
         end
 
         its(:update_valid?) { is_expected.to be true }
@@ -93,7 +93,7 @@ describe "#update_valid" do
         let(:course) do
           create(:course,
                  provider:,
-                 start_date: DateTime.new(next_year - 1, 9, 1))
+                 start_date: Time.zone.local(next_year - 1, 9, 1))
         end
 
         its(:update_valid?) { is_expected.to be false }
