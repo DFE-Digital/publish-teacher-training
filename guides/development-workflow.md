@@ -39,9 +39,8 @@
 
 - Developers should attempt to create small iterative PRs.
   - Features may be broken down into smaller PRs to assist with PR reviews and encourage iterative development.
-  - If a feature is not ready for usage, it should be hidden behind a environment variable.
-    - TODO: We need to update terraform to allow developers to set environment variables in config.
-  - If a feautre needs to be turned on or off, it should be hidden behind a feature flag.
+  - If a feature is not ready for usage, it should be hidden behind a `Settings.features.x` configuration.
+  - If a feature needs to be turned on or off, it should be hidden behind a feature flag.
 
 ### Things to check before marking a PR as ready for review
 
