@@ -1,0 +1,10 @@
+en:
+  support:
+    geolocation_caches:
+      show:
+        page_title: Geolocation cache
+      delete:
+        page_title: Reset geolocation cache
+        caption: Delete the cache
+        reset: Reset the geocoding cache
+
