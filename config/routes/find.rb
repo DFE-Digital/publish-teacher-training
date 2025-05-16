@@ -36,6 +36,9 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
 
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
   resource :sitemap, only: :show
+  if Settings.features.gov_style_feedback_form_enabled
+    resource :feedbacks, only: %i[new create], path: "/feedback", as: :feedback
+  end
 
   scope via: :all do
     match "/404", to: "errors#not_found"

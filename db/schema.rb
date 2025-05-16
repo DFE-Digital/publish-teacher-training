@@ -241,6 +241,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_111739) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "feedback", force: :cascade do |t|
+    t.string "ease_of_use"
+    t.text "experience"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "financial_incentive", force: :cascade do |t|
     t.bigint "subject_id", null: false
     t.string "bursary_amount"

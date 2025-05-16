@@ -1,0 +1,18 @@
+en:
+  find:
+    feedbacks:
+      new:
+        title: Feedback
+        heading: Give feedback on Find teacher training courses
+        ease_of_use: How easy is it to find courses relevant to you?
+        options:
+          very_easy: Very easy
+          easy: Easy
+          neither_easy_nor_difficult: Neither easy nor difficult
+          difficult: Difficult
+          very_difficult: Very difficult
+        experience_label: Tell us about your experience searching for teacher training courses
+        experience_hint: You can give general feedback on your experience searching for courses, or tell us about a specific problem. Do not include any information that could identify you personally, such as your name.
+        submit_feedback_button: Submit feedback
+      create:
+        success: Feedback submitted

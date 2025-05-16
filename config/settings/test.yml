@@ -31,3 +31,6 @@ basic_auth:
   password: password
 
 STATE_CHANGE_SLACK_URL: https://example.com/webhook
+
+features:
+  gov_style_feedback_form_enabled: true
