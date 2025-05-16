@@ -16,12 +16,14 @@ jobs:
     name: Delete Review App ${{ github.event.pull_request.number }}
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     environment: review
-    if: contains(github.event.pull_request.labels.*.name, 'deploy') ||  ${{ github.event_name }} == 'workflow_dispatch'
+    if: contains(github.event.pull_request.labels.*.name, 'deploy') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
-      contents: "read"
-      id-token: "write"
+      contents: read
+      id-token: write
       deployments: write
+      pull-requests: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
