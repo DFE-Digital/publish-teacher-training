@@ -8,8 +8,6 @@ on:
       - reopened
       - synchronize
       - labeled
-    branches:
-      - prototype/**
 
 permissions:
   contents: write
