@@ -24,7 +24,11 @@ module Find
     end
 
     def distance_from_location
-      @coordinates = Geolocation::CoordinatesQuery.new(params[:location]).call
+      @coordinates = {
+        location: params[:location],
+        **Geolocation::CoordinatesQuery.new(params[:location]).call,
+      }
+
       @distance_from_location ||= ::Courses::NearestSchoolQuery.new(
         courses: [@course],
         latitude: @coordinates[:latitude],
