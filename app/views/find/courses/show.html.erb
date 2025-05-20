@@ -22,11 +22,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render Find::Courses::SummaryComponent::View.new(@course) %>
-
     <% if @course.application_status_closed? %>
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
+
+    <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_top") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+    <%= render Find::Courses::SummaryComponent::View.new(@course) %>
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
