@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "editing applications open date", { can_edit_current_and_next_cycles: false } do
   before do
+    FeatureFlag.activate(:applications_open_date)
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     then_i_visit_the_applications_open_page
