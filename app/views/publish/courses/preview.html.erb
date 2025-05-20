@@ -54,6 +54,6 @@
 
     <%= render partial: "find/courses/advice", locals: { course: } %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) unless course.application_status_open? %>
+    <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
   </div>
 </div>
