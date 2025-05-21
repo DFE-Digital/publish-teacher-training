@@ -25,7 +25,7 @@ module Publish
 
       def redirect_to_after_update
         redirect_params = [provider.provider_code, recruitment_cycle.year, course.course_code]
-        if course.reload.no_visa_sponsorship? || !FeatureFlag.active?(:visa_sponsorship_deadline)
+        if course.reload.no_visa_sponsorship?
           flash[:success] = success_message
 
           redirect_to(

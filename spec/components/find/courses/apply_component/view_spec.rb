@@ -53,8 +53,6 @@ describe Find::Courses::ApplyComponent::View, type: :component do
     end
 
     context "when the course has a deadline for candidates who require visa sponsorship" do
-      before { FeatureFlag.activate(:visa_sponsorship_deadline) }
-
       it "renders the deadline" do
         deadline = 2.days.from_now.change(hour: 11, min: 59)
         course = build(

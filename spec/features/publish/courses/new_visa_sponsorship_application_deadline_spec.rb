@@ -3,10 +3,6 @@
 require "rails_helper"
 
 feature "Entering a deadline for candidates who need visa sponsorship" do
-  before do
-    FeatureFlag.activate(:visa_sponsorship_deadline)
-  end
-
   scenario "navigation" do
     given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
     and_i_am_creating_a_new_course_that_allows_visa_sponsorship

@@ -41,6 +41,7 @@ feature "course confirmation" do
       and_i_select_funding_type(:fee)
       and_i_click_continue
       and_i_should_see_the_title_as("Student visas")
+      and_i_select_no_student_visa
       and_i_click_continue
       then_i_should_be_on_the_confirmation_page
     end
@@ -50,6 +51,7 @@ feature "course confirmation" do
       and_i_select_funding_type(:apprenticeship)
       and_i_click_continue
       and_i_should_see_the_title_as("Skilled Worker visas")
+      and_i_select_no_skilled_worker_visa
       and_i_click_continue
       then_i_should_be_on_the_confirmation_page
     end
@@ -59,6 +61,7 @@ feature "course confirmation" do
       and_i_select_funding_type(:salary)
       and_i_click_continue
       and_i_should_see_the_title_as("Skilled Worker visas")
+      and_i_select_no_skilled_worker_visa
       and_i_click_continue
       then_i_should_be_on_the_confirmation_page
     end
@@ -231,5 +234,13 @@ private
 
   def then_i_am_met_with_the_publish_course_confirmation_page
     expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/confirmation")
+  end
+
+  def and_i_select_no_student_visa
+    choose "course_can_sponsor_student_visa_false"
+  end
+
+  def and_i_select_no_skilled_worker_visa
+    choose "course_can_sponsor_skilled_worker_visa_false"
   end
 end
