@@ -63,6 +63,61 @@ module GoogleOldPlacesAPI
       }
     end
 
+    # @see https://developers.google.com/maps/documentation/places/web-service/search-find-place
+    def find_place(query, fields: %w[place_id formatted_address name geometry])
+      response = get(
+        endpoint: "place/findplacefromtext/json",
+        params: {
+          key: @api_key,
+          input: query,
+          inputtype: "textquery",
+          fields: fields.join(","),
+          language: "en",
+          locationbias: "country:UK",
+        },
+      )
+
+      candidates = Array(response["candidates"])
+      return [] if candidates.empty?
+
+      candidates.map do |candidate|
+        {
+          place_id: candidate["place_id"],
+          name: candidate["name"],
+          formatted_address: candidate["formatted_address"],
+          latitude: candidate.dig("geometry", "location", "lat"),
+          longitude: candidate.dig("geometry", "location", "lng"),
+        }.compact
+      end
+    end
+
+    # @see https://developers.google.com/maps/documentation/places/web-service/details
+    def place_details(place_id, fields: nil)
+      params = {
+        key: @api_key,
+        place_id: place_id,
+        language: "en",
+      }
+
+      # Add fields parameter if specific fields are requested
+      params[:fields] = fields.join(",") if fields.present?
+
+      response = get(
+        endpoint: "place/details/json",
+        params:,
+      )
+
+      result = response["result"]
+      return if result.blank?
+
+      {
+        name: result["name"],
+        place_id: result["place_id"],
+        formatted_address: result["formatted_address"],
+        types: result["types"],
+      }
+    end
+
   private
 
     def get(endpoint:, params:)
