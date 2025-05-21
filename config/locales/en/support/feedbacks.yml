@@ -4,8 +4,10 @@ en:
       index:
         title: Find Feedback
         heading: Feedback on Find teacher training courses
-  table_heading:
-    id: ID
-    ease_of_use: Ease of use
-    experience: User experience
-    created_at: Created at
+      list:
+        truncate_experience_chars_max: 100
+        view_full_experience_text: View full
+      show:
+        title: Feedback details
+        heading: Feedback details
+        back_link_text: All feedback responses

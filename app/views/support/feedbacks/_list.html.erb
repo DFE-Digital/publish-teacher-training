@@ -1,27 +1,25 @@
-<table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter"><%= t("table_heading.id") %></th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter"><%= t("table_heading.ease_of_use") %></th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter"><%= t("table_heading.experience") %></th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter"><%= t("table_heading.created_at") %></th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    <% feedbacks.each do |feedback| %>
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell">
-          <%= feedback.id %>
-        </td>
-        <td class="govuk-table__cell">
-          <%= feedback.ease_of_use.humanize %>
-        </td>
-        <td class="govuk-table__cell">
-          <%= feedback.experience %>
-        </td>
-        <td class="govuk-table__cell">
-          <%= l(feedback.created_at, format: :last_event) %>
-        </td>
-      </tr>
+<%= govuk_table do |table| %>
+  <% table.with_head do |head| %>
+    <% head.with_row do |row| %>
+      <% row.with_cell(header: true, text: Feedback.human_attribute_name(:id), width: "one-quarter") %>
+      <% row.with_cell(header: true, text: Feedback.human_attribute_name(:ease_of_use), width: "one-quarter") %>
+      <% row.with_cell(header: true, text: Feedback.human_attribute_name(:experience), width: "one-quarter") %>
+      <% row.with_cell(header: true, text: Feedback.human_attribute_name(:created_at), width: "one-quarter") %>
     <% end %>
-  </table>
+  <% end %>
+  <% table.with_body do |body| %>
+    <% feedbacks.each do |feedback| %>
+      <% body.with_row do |row| %>
+        <% row.with_cell(text: feedback.id) %>
+        <% row.with_cell(text: feedback.ease_of_use.humanize) %>
+        <% row.with_cell do %>
+          <%= truncate(feedback.experience, length: t(".truncate_experience_chars_max")) %>
+          <% if feedback.experience.length > t(".truncate_experience_chars_max") %>
+            <%= govuk_link_to t(".view_full_experience_text"), support_feedback_path(feedback) %>
+          <% end %>
+        <% end %>
+        <% row.with_cell(text: l(feedback.created_at, format: :last_event)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
