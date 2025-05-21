@@ -5,7 +5,6 @@ require "rails_helper"
 feature "Editing apprenticeship" do
   context "visa sponsorship feature flag is activated" do
     before do
-      FeatureFlag.activate(:visa_sponsorship_deadline)
       and_i_am_authenticated_as_accredited_provider_provider_user
     end
 
@@ -50,7 +49,6 @@ feature "Editing apprenticeship" do
 
   context "visa sponsorship feature flag is deactivated" do
     before do
-      FeatureFlag.deactivate(:visa_sponsorship_deadline)
       and_i_am_authenticated_as_accredited_provider_provider_user
     end
 
