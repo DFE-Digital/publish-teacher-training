@@ -457,13 +457,11 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def show_sponsorship_deadline_required_row?
-    FeatureFlag.active?(:visa_sponsorship_deadline) &&
-      visa_sponsorship.in?(%i[can_sponsor_student_visa can_sponsor_skilled_worker_visa])
+    visa_sponsorship.in?(%i[can_sponsor_student_visa can_sponsor_skilled_worker_visa])
   end
 
   def show_sponsorship_deadline_date_row?
-    FeatureFlag.active?(:visa_sponsorship_deadline) &&
-      show_sponsorship_deadline_required_row? &&
+    show_sponsorship_deadline_required_row? &&
       visa_sponsorship_application_deadline_at.respond_to?(:to_fs)
   end
 

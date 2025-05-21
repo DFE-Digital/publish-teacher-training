@@ -4,7 +4,6 @@ require "rails_helper"
 
 feature "Editing visa sponsorship deadlines" do
   before do
-    FeatureFlag.activate(:visa_sponsorship_deadline)
     and_i_am_authenticated_as_a_lead_school_provider_user
   end
 

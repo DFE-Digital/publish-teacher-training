@@ -186,6 +186,7 @@ feature "Adding a teacher degree apprenticeship course" do
     when_i_click_continue
     and_i_click_continue
     and_i_choose_to_sponsor_a_student_visa
+    and_i_choose_no_visa_deadline
     when_i_click_on_add_a_course
     then_i_see_the_correct_attributes_in_the_database_for_fee_paying
   end
@@ -209,6 +210,7 @@ feature "Adding a teacher degree apprenticeship course" do
     and_i_click_continue
 
     and_i_choose_to_sponsor_a_skilled_worker_visa
+    and_i_choose_no_visa_deadline
     when_i_click_on_add_a_course
     then_i_see_the_correct_attributes_in_the_database_for_salaried
   end
@@ -571,6 +573,11 @@ feature "Adding a teacher degree apprenticeship course" do
 
   def and_i_choose_to_sponsor_a_student_visa
     choose "Yes"
+    and_i_click_continue
+  end
+
+  def and_i_choose_no_visa_deadline
+    choose "No"
     and_i_click_continue
   end
 

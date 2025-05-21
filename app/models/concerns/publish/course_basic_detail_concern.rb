@@ -123,8 +123,6 @@ module Publish
     end
 
     def more_visa_information_required?
-      return false unless FeatureFlag.active?(:visa_sponsorship_deadline)
-
       # If they have changed course to allow sponsorship, we need to ask if a visa deadline is required
       (current_step.in?(%i[can_sponsor_skilled_worker_visa can_sponsor_student_visa]) &&
         course.visa_sponsorship != :no_sponsorship) ||
