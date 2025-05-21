@@ -1,17 +1,19 @@
 require "rails_helper"
 
 RSpec.describe "Support console feedback view", service: :support do
+  include ActionView::Helpers::TextHelper
   let(:user) { create(:user, :admin) }
+
+  before { given_i_am_authenticated }
 
   context "when navigating to the feedback page via the support console" do
     before do
-      given_i_am_authenticated
       when_i_navigate_to_the_feedback_page
     end
 
     scenario "user sees feedback table" do
       then_i_see_feedback_table
-      and_expect_to_see_feedback_entries
+      then_i_see_recent_feedback_entries
     end
 
     scenario "check for backlink presence and navigation on feedback page" do
@@ -24,18 +26,37 @@ RSpec.describe "Support console feedback view", service: :support do
   context "with more than one page of feedback" do
     before do
       create_list(:feedback, 15)
-      given_i_am_authenticated
       when_i_visit_the_feedback_page
     end
 
     scenario "user sees pagination controls and can navigate to next page" do
-      expect(page).to have_selector("table tbody tr", count: 10)
-      expect(page).to have_link("Next")
+      then_i_see_first_page_of_feedback_with_pagination
 
       click_link "Next"
 
-      expect(page).to have_selector("table tbody tr", count: 5)
-      expect(page).to have_link("Previous")
+      then_i_see_second_page_of_feedback_with_pagination
+    end
+  end
+
+  context "when a feedback experience is over the truncation limit" do
+    let!(:long_feedback) do
+      create(:feedback, experience: "This is a very long feedback message designed to be more than 100 characters long so that it can trigger the truncation logic and display the 'View full' link.")
+    end
+
+    before do
+      when_i_visit_the_feedback_page
+    end
+
+    scenario "displays truncated experience with 'view full' link, leading user to feedback details show page with bespoke backlink" do
+      then_i_see_truncated_feedback_with_link(long_feedback)
+
+      when_i_click_to_view_full_feedback
+
+      then_i_see_the_feedback_details_page_for(long_feedback)
+
+      then_i_see_backlink_to_feedback_list
+      click_link "All feedback responses"
+      then_i_am_on_the_feedback_list_page
     end
   end
 
@@ -60,7 +81,7 @@ RSpec.describe "Support console feedback view", service: :support do
     expect(page).to have_content("Created at")
   end
 
-  def and_expect_to_see_feedback_entries
+  def then_i_see_recent_feedback_entries
     Feedback.order(created_at: :desc).limit(10).each do |feedback|
       expect(page).to have_content(feedback.id)
       expect(page).to have_content(feedback.ease_of_use)
@@ -75,5 +96,38 @@ RSpec.describe "Support console feedback view", service: :support do
 
   def then_i_am_on_the_support_homepage
     expect(page).to have_current_path(support_recruitment_cycle_providers_path(Settings.current_recruitment_cycle_year))
+  end
+
+  def then_i_see_first_page_of_feedback_with_pagination
+    expect(page).to have_selector("table tbody tr", count: 10)
+    expect(page).to have_link("Next")
+  end
+
+  def then_i_see_second_page_of_feedback_with_pagination
+    expect(page).to have_selector("table tbody tr", count: 5)
+    expect(page).to have_link("Previous")
+  end
+
+  def then_i_see_truncated_feedback_with_link(feedback)
+    experience_limit = 100
+    expect(page).to have_content(truncate(feedback.experience, length: experience_limit))
+    expect(page).to have_link("View full", href: support_feedback_path(feedback))
+  end
+
+  def when_i_click_to_view_full_feedback
+    click_link "View full"
+  end
+
+  def then_i_see_the_feedback_details_page_for(feedback)
+    expect(page).to have_current_path(support_feedback_path(feedback))
+    expect(page).to have_content(feedback.experience)
+  end
+
+  def then_i_see_backlink_to_feedback_list
+    expect(page).to have_link("All feedback responses", href: support_feedback_index_path)
+  end
+
+  def then_i_am_on_the_feedback_list_page
+    visit support_feedback_index_path
   end
 end

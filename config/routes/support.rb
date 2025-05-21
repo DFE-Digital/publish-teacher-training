@@ -3,7 +3,7 @@
 namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { host: URI.parse(Settings.publish_url).host } do
   root to: "recruitment_cycle#index"
 
-  resources :feedbacks, only: %i[index], path: "feedback", as: :feedback
+  resources :feedbacks, only: %i[index show], path: "feedback", as: :feedback
 
   resources :recruitment_cycle, only: %i[index], param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "" do
     namespace :providers do

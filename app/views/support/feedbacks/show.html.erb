@@ -1,0 +1,24 @@
+<% content_for :page_title, "#{t('.title')} ##{@feedback.id}" %>
+<% content_for :before_content do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: t(".back_link_text"),
+    href: support_feedback_index_path,
+  ) %>
+<% end %>
+<h1 class="govuk-heading-l"><%= t(".heading") %> #<%= @feedback.id %></h1>
+<%= govuk_table do |table| %>
+  <% table.with_body do |body| %>
+    <% body.with_row do |row| %>
+      <% row.with_cell(header: true, text: Feedback.human_attribute_name(:ease_of_use), classes: "govuk-!-width-one-third") %>
+      <% row.with_cell(text: @feedback.ease_of_use.humanize, classes: "govuk-!-width-two-thirds") %>
+    <% end %>
+    <% body.with_row do |row| %>
+      <% row.with_cell(header: true, text: Feedback.human_attribute_name(:experience)) %>
+      <% row.with_cell(text: @feedback.experience) %>
+    <% end %>
+    <% body.with_row do |row| %>
+      <% row.with_cell(header: true, text: Feedback.human_attribute_name(:created_at)) %>
+      <% row.with_cell(text: l(@feedback.created_at, format: :last_event)) %>
+    <% end %>
+  <% end %>
+<% end %>
