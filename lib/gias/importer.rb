@@ -15,7 +15,13 @@ module Gias
 
       school_records = CSV.foreach(csv_path, headers: true).map(&:to_h)
 
-      GiasSchool.upsert_all(school_records, unique_by: :urn)
+      school_records.each do |school|
+        gs = GiasSchool.find_or_initialize_by(urn: school["urn"])
+        gs.assign_attributes(school)
+        if gs.changed?
+          gs.save!
+        end
+      end
 
       Log.log("Gias::Importer", "GIAS Data Imported!")
     end
