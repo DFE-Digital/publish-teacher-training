@@ -134,7 +134,11 @@ private
 
   def then_i_see_the_out_of_range_error
     start_of_cycle = @provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9).to_fs(:govuk_date_and_time)
-    end_of_cycle = @provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18).to_fs(:govuk_date_and_time)
+    end_of_cycle = Find::CycleTimetable.date(
+      :apply_deadline,
+      @provider.recruitment_cycle.year.to_i,
+    ).to_fs(:govuk_date_and_time)
+
     error_message = "The date that applications which require visa sponsorship will close must be between #{start_of_cycle} and the end of the recruitment cycle, #{end_of_cycle}"
     then_i_see_an_error(error_message)
   end

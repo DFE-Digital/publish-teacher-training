@@ -123,7 +123,10 @@ feature "Editing visa sponsorship" do
   end
 
   def when_i_add_a_date_and_continue
-    @valid_date = accrediting_provider.recruitment_cycle.application_end_date - 1.day
+    @valid_date = Find::CycleTimetable.date(
+      :apply_deadline,
+      accrediting_provider.recruitment_cycle.year.to_i,
+    ) - 1.day
     fill_in "Year", with: @valid_date.year
     fill_in "Month", with: @valid_date.month
     fill_in "Day", with: @valid_date.day

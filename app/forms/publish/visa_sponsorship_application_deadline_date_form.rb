@@ -82,7 +82,7 @@ module Publish
     end
 
     def last_valid_datetime
-      @last_valid_datetime ||= recruitment_cycle.application_end_date.end_of_day.change(hour: 18)
+      @last_valid_datetime ||= Find::CycleTimetable.date(:apply_deadline, recruitment_cycle.year.to_i)
     end
 
     def first_valid_datetime
