@@ -61,6 +61,7 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include ActiveJob::TestHelper, type: :request
+  config.include ActiveSupport::Testing::TimeHelpers
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   config.before(:suite) do
