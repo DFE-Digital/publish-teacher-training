@@ -65,6 +65,7 @@ en:
           back: Back to %{course_name} (%{course_code})
         description_content:
           course_information_heading: Course information
+          why_train_with_us: Why train with us
           about_course_label: About this course
           about_course_hidden_text: details about this course
           interview_process_label: Interview process (optional)
