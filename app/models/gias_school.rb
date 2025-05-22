@@ -6,7 +6,7 @@ class GiasSchool < ApplicationRecord
 
   ESTABLISHMENT_OPEN_STATUS_CODE = "1"
 
-  validates :urn, :name, :address1, :town, :postcode, presence: true
+  validates :urn, :name, presence: true
   validates :urn, uniqueness: { case_sensitive: false }
 
   pg_search_scope :search,
