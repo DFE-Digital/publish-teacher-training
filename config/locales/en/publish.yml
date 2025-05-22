@@ -63,6 +63,31 @@ en:
         placements:
           heading: School placements at %{provider_name}
           back: Back to %{course_name} (%{course_code})
+        description_content:
+          course_information_heading: Course information
+          about_course_label: About this course
+          about_course_hidden_text: details about this course
+          interview_process_label: Interview process (optional)
+          interview_process_hidden_text: details about the interview process
+          how_school_placements_work_label: Where you will train
+          how_school_placements_work_hidden_text: details about how placements work
+          course_length_and_fees_heading: Course length and fees
+          course_length_and_salary_heading: Course length and salary
+          course_length_label: Course length
+          course_length_hidden_text: course length
+          fee_for_uk_students_label: Fee for UK students
+          fee_for_uk_students_hidden_text: fee for UK students
+          fee_for_international_students_label: Fee for international students
+          fee_details_label: Fees and financial support (optional)
+          fee_details_hidden_text: fees and financial support
+          financial_incentive_details_label: Financial support from the government
+          salary_label: Salary
+          requirements_heading: Requirements and eligibility
+          degree_label: Degree
+          gcse_label: GCSEs
+          enter_a_levels: Enter A levels and equivalency test requirements
+          a_levels_heading: A levels and equivalency tests
+          a_levels_label: A levels
       course_length:
         edit:
           course_length: Course length
@@ -115,7 +140,7 @@ en:
             </ul>
       school_placements:
         edit:
-          page_title: How placements work - %{course_name_and_code}
+          page_title: Where you will train - %{course_name_and_code}
           submit_button: Update how placements work
           selectable_school_label: Do you want to show placement schools to candidates?
           selectable_school_hint: Candidates will see a list of placement schools on your course pages and be able to select a preference when they apply.

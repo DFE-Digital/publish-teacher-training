@@ -138,7 +138,7 @@ en:
     list_item_one: "* list item 1"
     list_item_one_show_as_html: >
       Will show as
-      <br> 
+      <br>
       <ul class="govuk-list govuk-list--bullet">
         <li>list item 1</li>
       </ul>
@@ -567,9 +567,9 @@ en:
         lead_school: "Lead school"
         university: "University"
       course_enrichment:
-        fee_uk_eu: "Course fee for UK and EU students"
-        fee_international: "Course fee for international students"
-        how_school_placements_work: How placements work
+        fee_uk_eu: "Course fees for UK and EU students"
+        fee_international: "Course fees for international students"
+        how_school_placements_work: Where you will train
         fee_details: Fees and financial support
         about_course: About this course
         what-trainee-do-in-school: What will trainees do while in their placement schools?
