@@ -4,6 +4,9 @@
 
 @import "../components/accordion";
 @import "../components/autocomplete";
+@import "../components/filter-layout";
+@import "../components/filter";
+@import "../components/filter-search";
 @import "../components/filters";
 @import "../components/footer";
 @import "../components/header";
@@ -11,18 +14,15 @@
 @import "../components/list";
 @import "../components/pagination";
 @import "../components/summary-card";
+@import "../components/search-results";
 
 @import "./components/accordion";
 @import "./components/callout";
 @import "./components/feedback";
-@import "./components/filter-layout";
-@import "./components/filter";
-@import "./components/filter-search";
 @import "./components/filters";
 @import "./components/map";
 @import "./components/promoted-link";
 @import "./components/quick-link-card";
-@import "./components/search-results";
 @import "./components/text-ellipsis";
 @import "./components/toggle";
 @import "./components/homepage_search";

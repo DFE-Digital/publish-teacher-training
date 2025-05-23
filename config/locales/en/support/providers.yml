@@ -1,0 +1,10 @@
+en:
+  support:
+    providers:
+      index:
+        page_title: Providers (%{count})
+        accredited_providers: Accredited providers
+        provider_types: Provider type
+        search:
+          label: Search by provider name, code, UKPRN, or course code
+          submit: Search

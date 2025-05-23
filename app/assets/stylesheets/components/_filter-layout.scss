@@ -6,6 +6,7 @@
   @include govuk-media-query(desktop) {
     float: left;
 
+    width: 100%;
     max-width: govuk-grid-width("one-third");
 
     margin-right: govuk-spacing(6);
