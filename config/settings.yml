@@ -115,6 +115,8 @@ features:
   gov_style_feedback_form_enabled: false
 
 cookies:
+  candidate_session:
+    name: _candidate_teacher_training_session
   session:
     name: _teacher_training_courses_session
 
