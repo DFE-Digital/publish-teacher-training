@@ -7,6 +7,14 @@ en:
         application_end_date: Application end date
         available_in_publish_from: Available in publish from
         available_in_publish_from_description: Date when courses will become available to users in Publish.
+      rollover_progress:
+        status: Status
+        summary: '%{rolled_over_providers_count} of %{total_eligible_providers_count} providers (%{rollover_percentage}%)'
+        remaining_to_rollover: Remaining to rollover
+        providers_without_published_courses: Providers without published courses (not rolled over)
+        no_previous_cycle: No previous cycle
+        in_progress: In progress
+        finished: Finished
     errors:
       models:
         find/subjects/secondary_form:

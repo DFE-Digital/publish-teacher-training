@@ -1,5 +1,0 @@
-en:
-  rollover_progress_component:
-    status:
-      default_message: 'Rollover complete: All providers were processed in the previous cycle.'
-      message: '%{rolled_over_providers} of %{total_providers} providers (%{percentage_complete}%)'
