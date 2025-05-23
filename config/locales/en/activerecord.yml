@@ -8,6 +8,11 @@ en:
         rollover_progress: Rollover progress
         status: Status
         available_in_publish_from: Available in Publish
+      feedback:
+        id: ID
+        ease_of_use: Ease of use
+        experience: User experience
+        created_at: Created at
     errors:
       models:
         feedback:
