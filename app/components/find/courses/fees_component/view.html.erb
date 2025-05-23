@@ -14,12 +14,12 @@
           </thead>
           <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell"><%= t(".uk_citizens") %></td>
+            <td class="govuk-table__cell"><strong><%= t(".uk_citizens") %></strong></td>
 
             <td class="govuk-table__cell" data-qa="course__uk_fees"><%= number_to_currency(fee_uk_eu) %></td>
           </tr>
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell"><%= t(".non_uk_citizens") %></td>
+            <td class="govuk-table__cell"><strong><%= t(".non_uk_citizens") %></strong></td>
             <td class="govuk-table__cell" data-qa="course__international_fees"><%= number_to_currency(fee_international) %></td>
           </tr>
           </tbody>
