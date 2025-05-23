@@ -1,11 +1,108 @@
 <%= render PageTitle.new(title: "support.providers.index") %>
 
-<h1 class="govuk-heading-l">Providers</h1>
+<h1 class="govuk-heading-l"><%= t(".page_title", count: @pagy.count) %></h1>
 
 <%= govuk_link_to("Add provider",
       new_support_recruitment_cycle_providers_onboarding_path,
       class: "govuk-button govuk-!-margin-bottom-6") %>
 
-<%= render PaginatedFilter.new(filter_params: @filter_params, collection: @providers, pagy: @pagy) do %>
-  <%= render "list", providers: @providers %>
+<%= form_with scope: "", url: support_recruitment_cycle_providers_path, method: :get do |form| %>
+  <div class="app-filter-layout" data-controller="visibility" data-visibility-visible-class="app-filter-layout__filter--open">
+    <div class="app-filter-layout__filter app-filter" data-visibility-target="container">
+      <div class="app-filter__header">
+        <h2 class="govuk-heading-m">Filters</h2>
+
+        <button type="button" class="app-filter__close" data-visibility-target="trigger" data-action="visibility#hide" aria-expanded="false">
+          Close
+          <span class="govuk-visually-hidden"> filter menu</span>
+        </button>
+      </div>
+
+      <div class="app-filter__content">
+        <%= form.govuk_submit "Apply filters", name: "utm_medium", value: "apply_filters_top" %>
+
+        <%= form.govuk_check_boxes_fieldset :accredited, legend: { text: t(".accredited_providers"), size: "s" }, small: true, hidden: false, form_group: { class: "app-filter__group" } do %>
+          <%= form.govuk_check_box :accredited, "true", label: { text: "Yes", size: "s" } %>
+          <%= form.govuk_check_box :accredited, "false", label: { text: "No", size: "s" } %>
+        <% end %>
+
+        <%= form.govuk_check_boxes_fieldset :provider_types, legend: { text: t(".provider_types"), size: "s" }, small: true, hidden: false, form_group: { class: "app-filter__group" } do %>
+          <%= form.govuk_check_box :provider_types, "B", label: { text: "SCITT", size: "s" } %>
+          <%= form.govuk_check_box :provider_types, "false", label: { text: "University", size: "s" } %>
+          <%= form.govuk_check_box :provider_types, "false", label: { text: "Lead school", size: "s" } %>
+        <% end %>
+
+        <%= form.govuk_submit "Apply filters", name: "utm_medium", value: "apply_filters_bottom", class: "govuk-!-margin-top-5" %>
+      </div>
+    </div>
+
+    <div class="app-filter-layout__content">
+      <div class="app-search-results-controls">
+        <%= form.govuk_label :search, text: t(".search.label"), size: "s" %>
+
+        <div class="app-search-results-controls__input-group">
+          <%= form.govuk_text_field :search,
+            label: nil,
+            form_group: {
+              class: "app-search-results-controls__input govuk-!-margin-bottom-0",
+              "data-controller" => "locations-autocomplete",
+              "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path,
+            },
+            autocomplete: "off",
+            data: { locations_autocomplete_target: "input" } %>
+
+          <%= form.govuk_submit t(".search.submit"), size: "s" %>
+        </div>
+      </div>
+
+      <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
+        Filter results
+      </button>
+
+      <% if @providers.present? %>
+        <ul class="app-search-results">
+          <% @providers.each do |provider| %>
+            <li class="app-search-results__item">
+              <%= govuk_summary_card(title: govuk_link_to(provider.name_and_code, support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider))) do |summary_card| %>
+                <% summary_card.with_summary_list do |summary_list| %>
+                  <% summary_list.with_row do |row| %>
+                    <% row.with_key text: "Provider Type" %>
+                    <% row.with_value text: Provider.human_attribute_name(provider.provider_type) %>
+                  <% end %>
+
+                  <% summary_list.with_row do |row| %>
+                    <% row.with_key text: "Accredited Provider Number" %>
+                    <% row.with_value do %>
+                      <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+                        <% if provider.accredited? %>
+                           <% if provider.accredited_provider_number.present? %>
+                              <%= govuk_tag(text: provider.accredited_provider_number, colour: "green") %>
+                           <% else %>
+                              <%= govuk_tag(text: "Fill me in", colour: "yellow") %>
+                           <% end %>
+                        <% end %>
+                      </span>
+                    <% end %>
+                  <% end %>
+
+                  <% summary_list.with_row do |row| %>
+                    <% row.with_key text: "UKPRN" %>
+                    <% row.with_value text: provider.ukprn %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+
+        <%= govuk_pagination(pagy: @pagy) %>
+      <% else %>
+        <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
+          Filter results
+        </button>
+
+        <p class="govuk-body">No results</p>
+      <% end %>
+    </div>
+  </div>
 <% end %>

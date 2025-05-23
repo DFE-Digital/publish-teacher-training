@@ -24,6 +24,17 @@
   }
 }
 
+.app-search-results-controls__input-group {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 1rem;
+}
+
+.app-search-results-controls__input {
+  flex-grow: 1;
+}
+
 .app-filter {
   box-shadow: none;
 
@@ -123,4 +134,3 @@
     float: left;
   }
 }
-
