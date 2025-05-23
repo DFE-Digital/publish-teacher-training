@@ -29,6 +29,10 @@ module Support
       end
     end
 
+    def show
+      @rollover_progress = RolloverProgress.new(target_cycle: @recruitment_cycle)
+    end
+
     def edit
       @support_recruitment_cycle_form = RecruitmentCycleForm.new(
         year: @recruitment_cycle.year,
