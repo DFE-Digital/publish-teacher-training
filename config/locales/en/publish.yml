@@ -43,11 +43,12 @@ en:
           back: Back to %{course_name} (%{course_code})
         description_content:
           course_information_heading: Course information
+          why_train_with_us: Why train with us
           about_course_label: About this course
           about_course_hidden_text: details about this course
           interview_process_label: Interview process (optional)
           interview_process_hidden_text: details about the interview process
-          how_school_placements_work_label: How placements work
+          how_school_placements_work_label: Where you will train
           how_school_placements_work_hidden_text: details about how placements work
           course_length_and_fees_heading: Course length and fees
           course_length_and_salary_heading: Course length and salary
@@ -118,7 +119,7 @@ en:
             </ul>
       school_placements:
         edit:
-          page_title: How placements work - %{course_name_and_code}
+          page_title: Where you will train - %{course_name_and_code}
           submit_button: Update how placements work
           selectable_school_label: Do you want to show placement schools to candidates?
           selectable_school_hint: Candidates will see a list of placement schools on your course pages and be able to select a preference when they apply.

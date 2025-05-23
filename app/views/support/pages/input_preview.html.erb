@@ -1,0 +1,9 @@
+<div data-controller="input-preview">
+  <%= form_with scope: "" do |f| %>
+    <%= f.govuk_text_field :test, data: { input_preview_target: "input", action: "input-preview#updatePreview" } %>
+
+    <div class="govuk-body" data-input-preview-target="preview">
+      Preview will show here.
+    </div>
+  <% end %>
+</div>
