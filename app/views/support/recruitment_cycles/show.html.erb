@@ -62,10 +62,52 @@
             ) %>
           <% end %>
         <% end %>
+      <% end %>
 
-        <% summary_list.with_row do |row| %>
-          <% row.with_key text: RecruitmentCycle.human_attribute_name(:rollover_progress) %>
-          <% row.with_value text: render(RolloverProgressComponent.new(current_cycle: RecruitmentCycle.current, target_cycle: @recruitment_cycle)) %>
+      <% if @rollover_progress.previous_target_cycle.present? %>
+        <%= govuk_summary_card(classes: %w[recruitment-cycle-summary-card], title: RecruitmentCycle.human_attribute_name(:rollover_progress)) do |card| %>
+          <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
+            <% summary_list.with_row do |row| %>
+              <% row.with_key(text: RolloverProgress.human_attribute_name(:status)) %>
+              <% row.with_value(text: @rollover_progress.summary) %>
+            <% end %>
+
+            <% summary_list.with_row do |row| %>
+              <% row.with_key(text: RolloverProgress.human_attribute_name(:remaining_to_rollover)) %>
+              <% row.with_value(text: @rollover_progress.remaining_to_rollover_count) %>
+            <% end %>
+
+            <% summary_list.with_row do |row| %>
+              <% row.with_key(text: RolloverProgress.human_attribute_name(:providers_without_published_courses)) %>
+              <% row.with_value(text: @rollover_progress.providers_without_published_courses_count) %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <%= govuk_table do |table| %>
+          <%= table.with_caption(text: RolloverProgress.human_attribute_name(:providers_without_published_courses), size: "m") %>
+          <%= table.with_head do |head| %>
+            <%= head.with_row do |row| %>
+              <%= row.with_cell(text: "Provider code") %>
+              <%= row.with_cell(text: "Provider name") %>
+            <% end %>
+          <% end %>
+
+          <%= table.with_body do |body| %>
+            <% @rollover_progress.providers_without_published_courses.each do |provider| %>
+              <%= body.with_row do |row| %>
+                <%= row.with_cell(text: provider.provider_code) %>
+                <%= row.with_cell do %>
+                  <% if @rollover_progress.target_cycle.upcoming? %>
+                    <%= govuk_link_to provider.provider_name,
+                      support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider) %>
+                  <% else %>
+                    <%= provider.provider_name %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
         <% end %>
       <% end %>
     </div>
