@@ -5,7 +5,6 @@ require "rails_helper"
 feature "Editing funding type" do
   context "with visa sponsorship deadline feature flag activated" do
     before do
-      FeatureFlag.activate(:visa_sponsorship_deadline)
       and_i_am_authenticated_as_a_lead_school_provider_user
     end
 
@@ -76,7 +75,6 @@ feature "Editing funding type" do
 
   context "with visa sponsorship deadline feature flag deactivated" do
     before do
-      FeatureFlag.deactivate(:visa_sponsorship_deadline)
       and_i_am_authenticated_as_a_lead_school_provider_user
     end
 

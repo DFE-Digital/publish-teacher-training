@@ -22,7 +22,7 @@ module Find
         end
 
         def show_application_deadline?
-          course.visa_sponsorship_application_deadline_at.present? && FeatureFlag.active?(:visa_sponsorship_deadline)
+          course.visa_sponsorship_application_deadline_at.present?
         end
 
         def application_deadline

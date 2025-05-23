@@ -8,7 +8,6 @@ feature "new course" do
     # and ensure that the correct page gets displayed at the end
     # with the correct course being created
     given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
-    and_the_visa_sponsor_deadline_feature_flag_is_on
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     then_i_can_create_the_course
@@ -46,10 +45,6 @@ private
         ],
       ),
     )
-  end
-
-  def and_the_visa_sponsor_deadline_feature_flag_is_on
-    FeatureFlag.activate(:visa_sponsorship_deadline)
   end
 
   def when_i_visit_the_courses_page
