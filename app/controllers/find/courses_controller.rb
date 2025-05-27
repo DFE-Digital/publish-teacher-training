@@ -12,6 +12,8 @@ module Find
     before_action :set_search_params, only: :show
 
     def show
+      request.variant = params[:variant].to_sym if params[:variant]
+
       @course = provider.courses.includes(
         :enrichments,
         subjects: [:financial_incentive],
