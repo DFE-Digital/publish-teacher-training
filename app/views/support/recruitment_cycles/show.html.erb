@@ -94,7 +94,7 @@
           <% end %>
 
           <%= table.with_body do |body| %>
-            <% @rollover_progress.providers_without_published_courses.each do |provider| %>
+            <% @rollover_progress.providers_without_published_courses.order(provider_name: :asc).each do |provider| %>
               <%= body.with_row do |row| %>
                 <%= row.with_cell(text: provider.provider_code) %>
                 <%= row.with_cell do %>
