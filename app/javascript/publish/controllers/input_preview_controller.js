@@ -7,9 +7,30 @@ export default class extends Controller {
     let previewContent = ""
 
     this.inputTargets.forEach(input => {
-      const contentWithLineBreaks = input.value.replace(/\n/g, '<br>')
+      let content = input.value
 
-      previewContent += `<p>${contentWithLineBreaks}</p>`
+      let listContent = ""
+
+      // Convert bullet points: * text -> <li>text</li> (removes the '*')
+      content = content.replace(/^\* ([^\n]+)(?:\s*\(([^\)]+)\))?$/gm, (match, text, url) => {
+        if (url) {
+          // If a URL is provided in the parentheses, create a link
+          listContent += `<li><a class="govuk-link" href="${url}">${text}</a></li>`
+        } else {
+          // Otherwise, just create a list item with plain text
+          listContent += `<li>${text}</li>`
+        }
+        return "" // Remove the bullet point line after adding to listContent
+      })
+
+      // Only wrap the list items in <ul class="govuk-list govuk-list--bullet"> if listContent is not empty
+      if (listContent) {
+        listContent = `<ul class="govuk-list govuk-list--bullet">${listContent}</ul>`
+      }
+
+      content = content.replace(/\n/g, '<br>')
+      previewContent += `${content}${listContent}`
+      previewContent += `<p>&nbsp;</p>` // Empty paragraph to create a space between sections
     })
 
     this.previewTarget.innerHTML = previewContent
