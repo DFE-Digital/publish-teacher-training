@@ -1,11 +1,12 @@
 <%= t("publish.providers.school_placements.edit.guidance_text_html") %>
 
-<details class="govuk-details">
-  <summary class="govuk-details__summary">
-    <span class="govuk-details__summary-text">
-      <%= t("publish.providers.school_placements.edit.summary_text") %>
-    </span>
-  </summary>
-  <div class="govuk-!-margin-top-4" />
-  <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(@course) %>
-</details>
+<p class="govuk-body"><a class="govuk-link" href="#">See what you've already written about where and how trainees will train.</a></p>
+
+<ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
+  <li><a class="govuk-link" href="#where-you-will-train">Where you will train</a></li>
+  <li><a class="govuk-link" href="#what-you-do-school-placements">What you will do on school placements</a></li>
+  <li><a class="govuk-link" href="#what-you-will-study">What you will study</a></li>
+</ul>
+
+
+
