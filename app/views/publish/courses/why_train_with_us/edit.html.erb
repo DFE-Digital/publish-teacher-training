@@ -44,66 +44,75 @@
 
       <%= render partial: "guidance" %>
 
-      <%= f.govuk_text_area(:why_train_with_us,
-                            label: { text: t("publish.providers.about_course.edit.why_train_with_you"), size: "s" },
-                            max_words: 50,
-                            rows: 6) %>
+      <div data-controller="input-preview">
+        <%= f.govuk_text_area(:why_train_with_us_1,
+                              data: { input_preview_target: "input", action: "input-preview#updatePreview" },
+                              label: { text: t("publish.providers.about_course.edit.why_train_with_you"), size: "s" },
+                              max_words: 50,
+                              rows: 6) %>
 
-      <%= f.govuk_text_area(:why_train_with_us,
-                            label: { text: t("publish.providers.about_course.edit.what_different_other_providers"), size: "s" },
-                            max_words: 50,
-                            rows: 6) %>
+        <%= f.govuk_text_area(:why_train_with_us_2,
+                              data: { input_preview_target: "input", action: "input-preview#updatePreview" },
+                              label: { text: t("publish.providers.about_course.edit.what_different_other_providers"), size: "s" },
+                              max_words: 50,
+                              rows: 6) %>
 
-      <%= f.govuk_text_area(:why_train_with_us,
-                            label: { text: t("publish.providers.about_course.edit.who_suitable_course"), size: "s" },
-                            max_words: 50,
-                            rows: 6) %>
+        <%= f.govuk_text_area(:why_train_with_us_3,
+                              data: { input_preview_target: "input", action: "input-preview#updatePreview" },
+                              label: { text: t("publish.providers.about_course.edit.who_suitable_course"), size: "s" },
+                              max_words: 50,
+                              rows: 6) %>
 
-    <p class="govuk-heading-m">Preview</p>
-    <div class="app-preview-container">
-      <p class="govuk-heading-l">Why train with us</p>
-      <p class="govuk-body">[This is where the live preview will go]</p>
-      <p class="govuk-body"><a class="govuk-link" href="#">Find out more about [provider name]</a></p>
-
-      <!--Call out-->
-      <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__content app-notification-banner__content--grey">
-          <span class="govuk-heading-m">
-            How to choose a course
-          </span>
+        <p class="govuk-heading-m">Preview</p>
+        <div class="app-preview-container">
+          <p class="govuk-heading-l">Why train with us</p>
           <p class="govuk-body">
-            Your course will vary depending on whether the training provider is a university, a school or another organisation.
+            <div class="govuk-body" data-input-preview-target="preview">
+              Preview will show here.
+            </div>
           </p>
-          <p class="govuk-body">
-            <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course">
-              Find out how to choose a course.</a>
-          </p>
+          <p class="govuk-body"><a class="govuk-link" href="#">Find out more about <%= @provider.provider_name %></a></p>
+
+          <!-- Call out -->
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                How to choose a course
+              </span>
+              <p class="govuk-body">
+                Your course will vary depending on whether the training provider is a university, a school, or another organisation.
+              </p>
+              <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course">
+                  Find out how to choose a course.
+                </a>
+              </p>
+            </div>
+          </div>
+          <!-- END Call out -->
         </div>
       </div>
-      <!--END Call out-->
 
+      <%= f.govuk_submit t("publish.providers.about_course.edit.submit_button") %>
+      <% end %>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
+                                                                                      @provider.recruitment_cycle.year,
+                                                                                      @course.course_code)) %>
+      </p>
     </div>
-
-    <%= f.govuk_submit t("publish.providers.about_course.edit.submit_button") %>
-    <% end %>
-    <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
-                                                                                    @provider.recruitment_cycle.year,
-                                                                                    @course.course_code)) %>
-    </p>
-  </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-    <%= render(
-          partial: "publish/courses/related_sidebar",
-          locals: {
-            course: @course,
-            page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
-              @provider.provider_code,
-              @course.recruitment_cycle_year,
-              @course.course_code,
-            ),
-          },
-        ) %>
-  </aside>
+    <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+      <%= render(
+            partial: "publish/courses/related_sidebar",
+            locals: {
+              course: @course,
+              page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+              ),
+            },
+          ) %>
+    </aside>
   </div>
 </div>
