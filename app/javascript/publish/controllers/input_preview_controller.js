@@ -7,27 +7,47 @@ export default class extends Controller {
     let previewContent = ""
 
     this.inputTargets.forEach(input => {
-      let content = input.value
+      const rawContent = input.value
+      const lines = rawContent.split('\n')
 
-      let listContent = ""
+      let blockHtml = ""
+      let currentListItems = []
 
-      // Convert bullet points: * text -> <li>text</li> (removes the '*')
-      content = content.replace(/^\* ([^\n]+)(?:\s*\(([^\)]+)\))?$/gm, (match, text, url) => {
-        if (url) {
-          listContent += `<li><a class="govuk-link" href="${url}">${text}</a></li>`
-        } else {
-          listContent += `<li>${text}</li>`
+      const flushList = () => {
+        if (currentListItems.length > 0) {
+          blockHtml += `<ul class="govuk-list govuk-list--bullet">${currentListItems.join('')}</ul>`
+          currentListItems = []
         }
-        return "" // Remove bullet point line
-      })
-
-      if (listContent) {
-        listContent = `<ul class="govuk-list govuk-list--bullet">${listContent}</ul>`
       }
 
-      // Convert newlines to <br> and wrap in <p>
-      content = content.replace(/\n/g, '<br>')
-      previewContent += `<p>${content}</p>${listContent}`
+      lines.forEach(line => {
+        const bulletMatch = line.match(/^\* (.+)$/)
+        if (bulletMatch) {
+          let text = bulletMatch[1]
+
+          text = text.replace(
+            /\[([^\]]+)\]\(([^)]+)\)/g,
+            '<a class="govuk-link" href="$2">$1</a>'
+          )
+
+          currentListItems.push(`<li>${text}</li>`)
+        } else {
+          flushList()
+
+          if (line.trim() === '') {
+            blockHtml += `<p></p>`
+          } else {
+            const processed = line.replace(
+              /\[([^\]]+)\]\(([^)]+)\)/g,
+              '<a class="govuk-link" href="$2">$1</a>'
+            )
+            blockHtml += `<p>${processed}</p>`
+          }
+        }
+      })
+
+      flushList()
+      previewContent += blockHtml
     })
 
     this.previewTarget.innerHTML = previewContent
