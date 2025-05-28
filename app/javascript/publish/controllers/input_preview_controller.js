@@ -3,9 +3,15 @@ import { Controller } from '@hotwired/stimulus'
 export default class extends Controller {
   static targets = ['input', 'preview']
 
-  updatePreview () {
-    this.previewTargets.forEach(previewTarget => {
-      previewTarget.innerText = this.inputTarget.value
+  updatePreview(event) {
+    let previewContent = ""
+
+    this.inputTargets.forEach(input => {
+      const contentWithLineBreaks = input.value.replace(/\n/g, '<br>')
+
+      previewContent += `<p>${contentWithLineBreaks}</p>`
     })
+
+    this.previewTarget.innerHTML = previewContent
   }
 }
