@@ -160,11 +160,13 @@ en:
           why_train_with_us: Why train with us
       about_course:
         edit:
-          about_this_course: About this course
-          page_title: About this course - %{course_name_and_code}
-          submit_button: Update about this course
+          why_train_with_you: Why should candidates choose to train with you?
+          what_different_other_providers: What makes you different from other providers? (optional)
+          who_suitable_course: Who is suitable to do this course? (optional)
+          page_title: Why train with us - %{course_name_and_code}
+          submit_button: Update why train with us
           description: >
-            The course summary appears at the top of the course page. Use it to show how this course is different from others, this helps candidates understand whether it is right for them.
+            This information appears at the top of the course page. It will help candidates work out if the course and provider are right for them.
           candidates_say_section_html:
             <p class="govuk-body">Candidates say the most important information is:</p>
             <ul class="govuk-list govuk-list--bullet">
