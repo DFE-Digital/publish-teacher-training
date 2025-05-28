@@ -542,7 +542,19 @@ en:
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"
-        how_school_placements_work: Where you will train
+        how_school_placements_work: Where and how you will train
+        where-time-school-study: How will trainees' time be split between school placements and studying?
+        how-many-placements: How many school placements will trainees have? How much time will they spend in each school?
+        how-trainees-placed: How do you decide where to place trainees? Do you take commuting time into consideration?
+        where-study-site: Where will trainees' theoretical training take place?
+        where-study-site-hint: For example at a study site or online
+        what-trainee-do-in-school: What will trainees do while in schools?
+        what-trainee-do-in-school-hint: For example observations, lesson planning, getting involved in school life
+        how-trainees-mentored: How will trainees be supported and mentored? (optional)
+        how-trainees-mentored-hint: Be as specific as you can. For example, how many mentors trainees will have, or how often they will meet with their mentors
+        what-trainees-study: What will trainees study?
+        what-trainees-study-hint: For example modules or topics covered
+        how-trainees-assessed: How will trainees be assessed? (optional)
         fee_details: Fees and financial support
         about_course: About this course
       site:
