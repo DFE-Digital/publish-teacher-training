@@ -133,6 +133,9 @@ en:
             </ul>
           where_you_will_train: Where you will train
           summary_text: See what we include in this section
+      why_train_with_us:
+        edit:
+          why_train_with_us: Why train with us
       about_course:
         edit:
           about_this_course: About this course
