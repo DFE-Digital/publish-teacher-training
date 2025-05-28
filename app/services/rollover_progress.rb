@@ -8,24 +8,6 @@ class RolloverProgress
     @previous_target_cycle = RecruitmentCycle.find_by(year: @target_cycle.year.to_i - 1)
   end
 
-  def status
-    {
-      text: I18n.t("#{i18n_path}.#{rollover_status}"),
-      colour: colours[rollover_status],
-    }
-  end
-
-  def summary
-    return I18n.t("#{i18n_path}.no_previous_cycle") if previous_target_cycle.blank?
-
-    I18n.t(
-      "#{i18n_path}.summary",
-      total_eligible_providers_count:,
-      rolled_over_providers_count:,
-      rollover_percentage:,
-    )
-  end
-
   def remaining_to_rollover_count
     total_eligible_providers_count - rolled_over_providers_count
   end
@@ -76,24 +58,5 @@ private
       .joins(accredited_courses: :most_recent_enrichment)
       .where(course_enrichment: { status: %i[published withdrawn] })
       .distinct
-  end
-
-  def i18n_path
-    "#{self.class.i18n_scope}.attributes.#{self.class.model_name.i18n_key}"
-  end
-
-  def rollover_status
-    if @target_cycle.upcoming?
-      :in_progress
-    else
-      :finished
-    end
-  end
-
-  def colours
-    {
-      in_progress: "yellow",
-      finished: "green",
-    }
   end
 end

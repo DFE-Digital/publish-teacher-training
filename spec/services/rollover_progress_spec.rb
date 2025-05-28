@@ -29,55 +29,6 @@ RSpec.describe RolloverProgress, type: :model do
     end
   end
 
-  describe "#status" do
-    context "when target cycle is upcoming" do
-      before { allow(target_cycle).to receive(:upcoming?).and_return(true) }
-
-      it "returns in_progress status with yellow colour" do
-        expect(rollover_progress.status).to eq({
-          text: "In progress",
-          colour: "yellow",
-        })
-      end
-    end
-
-    context "when target cycle is finished" do
-      before { allow(target_cycle).to receive(:upcoming?).and_return(false) }
-
-      it "returns finished status with green colour" do
-        expect(rollover_progress.status).to eq({
-          text: "Finished",
-          colour: "green",
-        })
-      end
-    end
-  end
-
-  describe "#summary" do
-    context "when previous_target_cycle is nil" do
-      before do
-        allow(RecruitmentCycle).to receive(:find_by).with(year: 2025).and_return(nil)
-      end
-
-      it "returns no_previous_cycle translation" do
-        expect(rollover_progress.summary).to eq(
-          I18n.t("activemodel.attributes.rollover_progress.no_previous_cycle"),
-        )
-      end
-    end
-
-    context "when previous_target_cycle is present" do
-      before do
-        given_we_have_providers_and_courses_on_previous_target_cycle
-        given_we_have_rolled_over_providers
-      end
-
-      it "returns the summary translation with counts" do
-        expect(rollover_progress.summary).to eq("1 of 4 providers (25.0%)")
-      end
-    end
-  end
-
   describe "#remaining_to_rollover_count" do
     before do
       given_we_have_providers_and_courses_on_previous_target_cycle

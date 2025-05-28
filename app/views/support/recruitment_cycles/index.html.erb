@@ -24,7 +24,7 @@
           <% row.with_cell text: recruitment_cycle.application_start_date.strftime("%-d %B %Y") %>
           <% row.with_cell text: recruitment_cycle.application_end_date.strftime("%-d %B %Y") %>
           <% row.with_cell text: recruitment_cycle.available_in_publish_from&.strftime("%-d %B %Y") %>
-          <% row.with_cell text: govuk_tag(**RolloverProgress.new(target_cycle: recruitment_cycle).status) %>
+          <% row.with_cell text: govuk_tag(**rollover_status(target_cycle: recruitment_cycle)) %>
           <% row.with_cell do %>
             <%= recruitment_cycle_status_tag(recruitment_cycle) %>
           <% end %>

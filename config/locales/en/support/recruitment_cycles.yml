@@ -4,6 +4,9 @@ en:
       index:
         page_title: Recruitment Cycles
         add_recruitment_cycle: Add recruitment cycle
+        rollover_status:
+          in_progress: In progress
+          finished: Finished
         status:
           current:
             text: Current
@@ -26,3 +29,6 @@ en:
         cancel: Cancel
       show:
         page_caption: Recruitment cycle
+        rollover_status:
+          no_previous_cycle: No previous cycle
+          summary: '%{rolled_over_providers_count} of %{total_eligible_providers_count} providers (%{rollover_percentage}%)'
