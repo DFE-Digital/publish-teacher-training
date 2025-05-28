@@ -1,28 +1,22 @@
 <div class="app-status-box">
-  <% if @self_accredited_courses.present? || @courses_by_accrediting_provider.present? %>
-    <h3 class="govuk-heading-m">Copy content from another course</h3>
-    <p class="govuk-body">Fill in this page with content from another course.</p>
-    <p class="govuk-body">This will replace any existing content.</p>
-    <%= form_for course, url: page_path, data: { qa: "course__copy-content-form" }, method: :get do |form| %>
-      <div class="govuk-form-group">
-        <label class="govuk-label govuk-label--s" for="copy-from">Copy from</label>
-        <select id="copy-from" name="copy_from" class="govuk-select">
-          <option value="" selected="selected">Pick a course</option>
-          <% if @self_accredited_courses %>
-            <%= render partial: "publish/courses/course_select_option", collection: @self_accredited_courses, as: :other_course %>
-          <% end %>
-
-          <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
-            <optgroup label="<%= accrediting_provider %>">
-              <%= render partial: "publish/courses/course_select_option", collection: courses, as: :other_course %>
-            </optgroup>
-          <% end %>
-        </select>
-      </div>
-      <%= form.submit "Copy content", class: "govuk-button govuk-!-margin-bottom-0", name: nil, data: { qa: "course__copy" } %>
-    <% end %>
-  <% else %>
-    <h3 class="govuk-heading-m" data-qa="course__use_content">Use this content again</h3>
-    <p class="govuk-body">When you&#8217;ve added content to this page, you can copy it to other courses</p>
-  <% end %>
+    <h3 class="govuk-heading-m">Formatting</h3>
+    <p class="govuk-body"><strong>How to create a link</strong></p>
+    <p class="govuk-body">Use square brackets [] around the text you want to be a link. Use round brackets () around the URL for the link. Make sure there are no spaces between the brackets.</p>
+    <p class="govuk-body">For example: [GOV.UK](https://gov.uk) will show as <a class="govuk-link" href="https://gov.uk">GOV.UK</a></p>
+    <p class="govuk-body"><strong>How to create bullet points</strong></p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>Use asterisks (*) to create a bullet point
+    </li>
+    <li>Make sure there is one space after the asterisk
+    </li>
+    <li>leave one empty line space before the bullet points start, and one after
+    </li>
+  </ul>
+  <p class="govuk-body">For example:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>list item 1
+    </li>
+    <li>list item 2
+    </li>
+  </ul>
 </div>
