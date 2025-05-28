@@ -69,7 +69,14 @@
           <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
             <% summary_list.with_row do |row| %>
               <% row.with_key(text: RolloverProgress.human_attribute_name(:status)) %>
-              <% row.with_value(text: @rollover_progress.summary) %>
+              <% row.with_value(
+                                       text: rollover_summary(
+                                         previous_target_cycle: @rollover_progress.previous_target_cycle,
+                                         total_eligible_providers_count: @rollover_progress.total_eligible_providers_count,
+                                         rolled_over_providers_count: @rollover_progress.rolled_over_providers_count,
+                                         rollover_percentage: @rollover_progress.rollover_percentage,
+                                       ),
+                                     ) %>
             <% end %>
 
             <% summary_list.with_row do |row| %>
