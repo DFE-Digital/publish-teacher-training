@@ -101,7 +101,7 @@ feature "Course show" do
 
   describe "rollover with an empty course" do
     scenario "i can see the success message and link" do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [], funding_type: "salary"))
+      given_i_am_authenticated_as_a_provider_user(course: create(:course, enrichments: [], funding_type: "salary"))
       given_there_is_a_next_recruitment_cycle
       when_i_visit_the_rollover_form_page
       when_i_click_the_rollover_course_button
@@ -400,7 +400,7 @@ private
   end
 
   def course_with_financial_incentive
-    build(
+    create(
       :course,
       :secondary,
       enrichments: [course_enrichment],
@@ -424,7 +424,12 @@ private
   end
 
   def next_cycle_provider
-    create(:provider, :next_recruitment_cycle, provider_code: current_user.providers.first.provider_code, courses: [build(:course, enrichments: [course_enrichments_published])]) do |provider|
+    create(
+      :provider,
+      :next_recruitment_cycle,
+      provider_code: current_user.providers.first.provider_code,
+      courses: [build(:course, enrichments: [course_enrichments_published])],
+    ) do |provider|
       current_user.providers << provider
     end
   end

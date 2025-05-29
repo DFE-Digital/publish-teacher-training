@@ -21,7 +21,7 @@ module Publish
     end
 
     describe "rolled over course" do
-      let(:course) { build(:course, enrichments: [rolled_over_enrichment]) }
+      let(:course) { create(:course, enrichments: [rolled_over_enrichment]) }
 
       it "is valid" do
         expect(subject).to be_valid
@@ -29,7 +29,7 @@ module Publish
     end
 
     describe "empty course" do
-      let(:course) { build(:course, enrichments: []) }
+      let(:course) { create(:course, enrichments: []) }
 
       it "is valid" do
         expect(subject).to be_valid
@@ -37,7 +37,7 @@ module Publish
     end
 
     describe "published course" do
-      let(:course) { build(:course, enrichments: [published_enrichment]) }
+      let(:course) { create(:course, enrichments: [published_enrichment]) }
 
       it "is invalid" do
         expect(subject).not_to be_valid
@@ -45,7 +45,7 @@ module Publish
     end
 
     describe "unpublished changes course" do
-      let(:course) { build(:course, enrichments: [unpublished_changes_enrichment]) }
+      let(:course) { create(:course, enrichments: [unpublished_changes_enrichment]) }
 
       it "is invalid" do
         expect(subject).not_to be_valid
@@ -53,7 +53,7 @@ module Publish
     end
 
     describe "withdrawn course" do
-      let(:course) { build(:course, enrichments: [withdrawn_enrichment]) }
+      let(:course) { create(:course, enrichments: [withdrawn_enrichment]) }
 
       it "is invalid" do
         expect(subject).not_to be_valid

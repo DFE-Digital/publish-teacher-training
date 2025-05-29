@@ -30,7 +30,7 @@ module Support
     end
 
     def show
-      @rollover_progress = RolloverProgress.new(target_cycle: @recruitment_cycle)
+      @rollover_progress = RolloverProgressQuery.new(target_cycle: @recruitment_cycle)
     end
 
     def edit

@@ -48,11 +48,15 @@ module Courses
     end
 
     def copy_latest_enrichment_to_course(course, new_course)
-      course.enrichments << CourseEnrichment.new(course:, status: "draft") if course.enrichments.blank?
+      latest_enrichment = if course.enrichments.blank?
+                            enrichment = CourseEnrichment.new(course:, status: "draft")
+                            course.enrichments << enrichment
+                            enrichment
+                          else
+                            course.latest_enrichment
+                          end
 
-      last_enrichment = course.enrichments.most_recent.first
-
-      @enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course:)
+      @enrichments_copy_to_course.execute(enrichment: latest_enrichment, new_course:)
     end
 
     def adjusted_applications_open_from_date(course, year_differential)

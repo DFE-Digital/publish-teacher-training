@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RolloverProgress, type: :model do
+RSpec.describe RolloverProgressQuery, type: :model do
   let(:target_cycle) { create(:recruitment_cycle, year: "2026", application_start_date: Date.new(2025, 9, 1)) }
   let(:previous_target_cycle) { RecruitmentCycle.current }
   let(:rollover_progress) { described_class.new(target_cycle:) }

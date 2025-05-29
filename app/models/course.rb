@@ -194,7 +194,7 @@ class Course < ApplicationRecord
   has_one :latest_published_enrichment, -> { published.most_recent },
           class_name: "CourseEnrichment", inverse_of: :course
 
-  has_one :most_recent_enrichment, -> { most_recent },
+  has_one :latest_enrichment, -> { most_recent },
           class_name: "CourseEnrichment", inverse_of: :course
 
   scope :within, lambda { |range, origin:|
@@ -953,16 +953,6 @@ private
     latest_enrichment.withdraw
   end
 
-  def latest_enrichment
-    return if enrichments.empty?
-
-    if enrichments.last.created_at.nil?
-      enrichments.last
-    else
-      enrichments.max_by(&:created_at)
-    end
-  end
-
   def enrichment_not_withdrawn?
     !enrichments.most_recent.first.withdrawn?
   end
@@ -1014,11 +1004,11 @@ private
   end
 
   def validate_enrichment
-    latest_enrichment = enrichments.select(&:draft?).last
-    return if latest_enrichment.blank?
+    latest_draft_enrichment = enrichments.select(&:draft?).last
+    return if latest_draft_enrichment.blank?
 
-    latest_enrichment.valid?
-    add_enrichment_errors(latest_enrichment)
+    latest_draft_enrichment.valid?
+    add_enrichment_errors(latest_draft_enrichment)
   end
 
   def validate_accredited_provider_is_accredited
@@ -1033,11 +1023,11 @@ private
       temp_enrichment.valid?(:publish)
       add_enrichment_errors(temp_enrichment)
     else
-      latest_enrichment = enrichments.select(&:draft?).last
+      latest_draft_enrichment = enrichments.select(&:draft?).last
 
-      if latest_enrichment
-        latest_enrichment.valid?(:publish)
-        add_enrichment_errors(latest_enrichment)
+      if latest_draft_enrichment
+        latest_draft_enrichment.valid?(:publish)
+        add_enrichment_errors(latest_draft_enrichment)
       end
     end
   end
