@@ -38,15 +38,104 @@
 
       <%= render partial: "guidance" %>
 
+    <div data-controller="input-preview">
       <%= f.govuk_text_area(
-            :fee_details,
+            :fee_details1,
+            data: { input_preview_target: "input", action: "input-preview#updatePreview" },
             label: { text: t("publish.providers.fees_and_financial_support.edit.label"), size: "s" },
-            hint: -> { render partial: "publish/courses/markdown_formatting" },
             value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
-            rows: 15,
-            max_words: 250,
+            rows: 6,
+            max_words: 50,
             data: { qa: "course_fee_details" },
           ) %>
+
+      <%= f.govuk_text_area(
+          :fee_details2,
+          data: { input_preview_target: "input", action: "input-preview#updatePreview" },
+          label: { text: t("publish.providers.fees_and_financial_support.edit.additional_costs"), size: "s" },
+          hint: { text: t("publish.providers.fees_and_financial_support.edit.additional_costs_hint"), size: "s" },
+          value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
+          rows: 6,
+          max_words: 50,
+          data: { qa: "course_fee_details" },
+        ) %>
+
+      <%= f.govuk_text_area(
+          :fee_details3,
+          label: { text: t("publish.providers.fees_and_financial_support.edit.org_financial_support"), size: "s" },
+          hint: { text: t("publish.providers.fees_and_financial_support.edit.org_financial_support_hint"), size: "s" },
+          value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
+          rows: 6,
+          max_words: 50,
+          data: { qa: "course_fee_details" },
+        ) %>
+
+      <p class="govuk-heading-m">Preview</p>
+      <div class="app-preview-container">
+        <p class="govuk-heading-l">Fees and financial support</p>
+
+       <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            UK citizens
+          </dt>
+          <dd class="govuk-summary-list__value">
+            [Figure goes here]
+          </dd>
+        </div>
+          <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Non-UK citizens
+          </dt>
+          <dd class="govuk-summary-list__value">
+            [Figure goes here]
+          </dd>
+        </div>
+      </dl>
+
+        <p class="govuk-body">
+          <div class="govuk-body" data-input-preview-target="preview">
+            Preview will show here.
+          </div>
+        </p>
+
+        <!-- Call out -->
+        <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+            <span class="govuk-heading-m">
+              Financial support for UK citizens
+            </span>
+            <span class="govuk-heading-s">Student loans</span>
+            <p class="govuk-body">
+             You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.
+            </p>
+            <p class="govuk-body">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/funding-and-support/tuition-fee-and-maintenance-loans">
+                Find out more about student loans for teacher training.
+              </a>
+            </p>
+          </div>
+        </div>
+        <!-- END Call out -->
+         <!-- Call out -->
+        <div class="govuk-notification-banner app-notification-banner--non-uk" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+            <span class="govuk-heading-m">
+              Financial support for non-UK citizens
+            </span>
+            <p class="govuk-body">
+              If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan.            </p>
+            <p class="govuk-body">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/non-uk-teachers/fees-and-funding-for-non-uk-trainees">
+                Find out what financial support is available to non-UK citizens.
+              </a>
+            </p>
+          </div>
+        </div>
+        <!-- END Call out -->
+      </div>
+    </div>
+
       <%= f.govuk_submit t("publish.providers.fees_and_financial_support.edit.submit_button") %>
     <% end %>
     <p class="govuk-body">
