@@ -70,7 +70,7 @@ en:
           about_course_hidden_text: details about this course
           interview_process_label: Interview process (optional)
           interview_process_hidden_text: details about the interview process
-          how_school_placements_work_label: Where you will train
+          how_school_placements_work_label: Where and how you will train
           how_school_placements_work_hidden_text: details about how placements work
           course_length_and_fees_heading: Course length and fees
           course_length_and_salary_heading: Course length and salary
@@ -79,7 +79,7 @@ en:
           fee_for_uk_students_label: Fee for UK students
           fee_for_uk_students_hidden_text: fee for UK students
           fee_for_international_students_label: Fee for international students
-          fee_details_label: Fees and financial support (optional)
+          fee_details_label: Fees and financial support
           fee_details_hidden_text: fees and financial support
           financial_incentive_details_label: Financial support from the government
           salary_label: Salary
