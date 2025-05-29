@@ -997,7 +997,7 @@ describe CourseDecorator do
 
     context "when course is withdrawn" do
       let(:course) do
-        build(
+        create(
           :course,
           :with_a_level_requirements,
           :withdrawn,

@@ -1,4 +1,4 @@
-class RolloverProgress
+class RolloverProgressQuery
   include ActiveModel::Model
 
   attr_reader :previous_target_cycle, :target_cycle
@@ -48,14 +48,14 @@ private
 
   def providers_with_own_rollable_courses
     @previous_target_cycle.providers
-      .joins(courses: :most_recent_enrichment)
+      .joins(courses: :latest_enrichment)
       .where(course_enrichment: { status: %i[published withdrawn] })
       .distinct
   end
 
   def providers_with_rollable_accredited_courses
     @previous_target_cycle.providers
-      .joins(accredited_courses: :most_recent_enrichment)
+      .joins(accredited_courses: :latest_enrichment)
       .where(course_enrichment: { status: %i[published withdrawn] })
       .distinct
   end

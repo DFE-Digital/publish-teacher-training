@@ -8,10 +8,10 @@ RSpec.describe Courses::CopyToProviderService do
   let(:published_course_enrichment) { build(:course_enrichment, :published) }
   let(:maths) { create(:secondary_subject, :mathematics) }
   let(:course) do
-    build(:course,
-          enrichments: [published_course_enrichment],
-          accrediting_provider:,
-          subjects: [maths], level: "secondary")
+    create(:course,
+           enrichments: [published_course_enrichment],
+           accrediting_provider:,
+           subjects: [maths], level: "secondary")
   end
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
@@ -146,18 +146,16 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context "course has a published and a draft enrichment" do
-    let!(:published_enrichment) do
-      create(:course_enrichment, :published, course:)
-    end
-    let!(:draft_enrichment) do
-      create(:course_enrichment, course:)
-    end
+    it "copies the latest enrichment" do
+      draft_enrichment = create(:course_enrichment, status: :draft, course:)
 
-    it "copies the draft enrichment" do
+      course.enrichments.reload
+
       service.execute(course:, new_provider:)
 
       expect(mocked_enrichments_copy_to_course_service).to have_received(:execute).with(
-        enrichment: draft_enrichment, new_course:,
+        enrichment: draft_enrichment,
+        new_course:,
       )
     end
   end
