@@ -44,137 +44,173 @@
 
       <%= render partial: "guidance" %>
 
-      <!--WHERE YOU WILL TRAIN-->
-      <h2 class="govuk-heading-l" id="where-you-will-train">Where you will train</h2>
-      <p class="govuk-body">Candidates say the most important thing when choosing a course is the location of their school placements and study site.</p>
+      <div data-controller="input-preview">
+        <!--WHERE YOU WILL TRAIN-->
+        <h2 class="govuk-heading-l" id="where-you-will-train">Where you will train</h2>
+        <p class="govuk-body">Candidates say the most important thing when choosing a course is the location of their school placements and study site.</p>
 
-      <%= f.govuk_text_area(:how_school_placements_work,
-        value: ".",
-        label: { text: CourseEnrichment.human_attribute_name("where-time-school-study"), size: "s" },
-        max_words: 50,
-        rows: 6) %>
+        <%= f.govuk_text_area(:how_school_placements_work_1,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("where-time-school-study"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-      <%= f.govuk_text_area(:how_school_placements_work,
-        value: ".",
-        label: { text: CourseEnrichment.human_attribute_name("how-many-placements"), size: "s" },
-        max_words: 50,
-        rows: 6) %>
+        <%= f.govuk_text_area(:how_school_placements_work_2,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-many-placements"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-      <%= f.govuk_text_area(:how_school_placements_work,
-        value: ".",
-        label: { text: CourseEnrichment.human_attribute_name("how-trainees-placed"), size: "s" },
-        max_words: 50,
-        rows: 6) %>
+        <%= f.govuk_text_area(:how_school_placements_work_3,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-trainees-placed"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-     <%= f.govuk_text_area(:how_school_placements_work,
-        value: ".",
-        label: { text: CourseEnrichment.human_attribute_name("where-study-site"), size: "s" },
-        hint: { text: CourseEnrichment.human_attribute_name("where-study-site-hint"), size: "s" },
-        max_words: 50,
-        rows: 6) %>
+      <%= f.govuk_text_area(:how_school_placements_work_4,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("where-study-site"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("where-study-site-hint"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
-      <!--WHAT YOU WILL DO ON SCHOOL PLACEMENTS-->
-      <h2 class="govuk-heading-l" id="what-you-do-school-placements">What you will do on school placements</h2>
+        <!--WHAT YOU WILL DO ON SCHOOL PLACEMENTS-->
+        <h2 class="govuk-heading-l" id="what-you-do-school-placements">What you will do on school placements</h2>
 
-      <%= f.govuk_text_area(:how_school_placements_work,
-        value: ".",
-        label: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school"), size: "s" },
-        hint: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school-hint"), size: "s" },
-        max_words: 50,
-        rows: 6) %>
+        <%= f.govuk_text_area(:how_school_placements_work_5,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview2"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school-hint"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-      <%= f.govuk_text_area(:how_school_placements_work,
-        value: ".",
-        label: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored"), size: "s" },
-        hint: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored-hint"), size: "s" },
-        max_words: 50,
-        rows: 6) %>
+        <%= f.govuk_text_area(:how_school_placements_work_6,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview2"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored-hint"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
-      <!--WHAT YOU WILL STUDY-->
-       <h2 class="govuk-heading-l" id="what-you-will-study">What you will study</h2>
+        <!--WHAT YOU WILL STUDY-->
+        <h2 class="govuk-heading-l" id="what-you-will-study">What you will study</h2>
 
-      <%= f.govuk_text_area(:how_school_placements_work,
-        value: ".",
-        label: { text: CourseEnrichment.human_attribute_name("what-trainees-study"), size: "s" },
-        hint: { text: CourseEnrichment.human_attribute_name("what-trainees-study-hint"), size: "s" },
-        max_words: 50,
-        rows: 6) %>
+        <%= f.govuk_text_area(:how_school_placements_work_7,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview3"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("what-trainees-study"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("what-trainees-study-hint"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-      <%= f.govuk_text_area(:how_school_placements_work,
-        value: ".",
-        label: { text: CourseEnrichment.human_attribute_name("how-trainees-assessed"), size: "s" },
-        max_words: 50,
-        rows: 6) %>
+        <%= f.govuk_text_area(:how_school_placements_work_8,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview3"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-trainees-assessed"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-      <p class="govuk-heading-m">Preview</p>
-      <div class="app-preview-container">
-        <p class="govuk-heading-l">Where you will train</p>
-        <p class="govuk-body">You will spend most of your time on school placements - a minimum of 24 weeks. This time is spread across at least 2 schools. You will also spend time in a location where you will study.</p>
-        <p class="govuk-body">[description list with locations]</p>
-        <p class="govuk-body">[this is where the live preview text would go]</p>
-        <!--Call out-->
-        <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
-            <span class="govuk-heading-m">
-              Where your school placements will take place
-            </span>
-            <p class="govuk-body">
-              The training provider will contact you to discuss your preferences to help them select placement schools that you can travel to.
-            </p>
-            <p class="govuk-body">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements#where-will-my-placements-take-place">
-                Find out more about where your school placements will take place.</a>
-            </p>
+        <p class="govuk-heading-m">Preview</p>
+        <div class="app-preview-container">
+          <p class="govuk-heading-l">Where you will train</p>
+          <p class="govuk-body">You will spend most of your time on school placements - a minimum of 24 weeks. This time is spread across at least 2 schools. You will also spend time in a location where you will study.</p>
+          <p class="govuk-body">[description list with locations]</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview1"></p>
+
+          <!--Call out-->
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                Where your school placements will take place
+              </span>
+              <p class="govuk-body">
+                The training provider will contact you to discuss your preferences to help them select placement schools that you can travel to.
+              </p>
+              <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements#where-will-my-placements-take-place">
+                  Find out more about where your school placements will take place.</a>
+              </p>
+            </div>
           </div>
-        </div>
-        <!--END Call out-->
+          <!--END Call out-->
 
-        <p class="govuk-heading-l">What you will do on school placements</p>
-        <p class="govuk-body">[this is where the live preview text would go]</p>
-        <!--Call out-->
-        <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
-            <span class="govuk-heading-m">
-              What to expect on school placements
-            </span>
-            <p class="govuk-body">
-              You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.
-            </p>
-            <p class="govuk-body">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements">
-                Find out more about what to expect on school placements.</a>
-            </p>
+          <p class="govuk-heading-l">What you will do on school placements</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview2"></p>
+          <!--Call out-->
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                What to expect on school placements
+              </span>
+              <p class="govuk-body">
+                You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.
+              </p>
+              <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements">
+                  Find out more about what to expect on school placements.</a>
+              </p>
+            </div>
           </div>
-        </div>
-        <!--END Call out-->
+          <!--END Call out-->
 
-         <p class="govuk-heading-l">What you will study</p>
-        <p class="govuk-body">[this is where the live preview text would go]</p>
-        <!--Call out-->
-        <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
-            <span class="govuk-heading-m">
-              What to expect in teacher training
-            </span>
-            <p class="govuk-body">
-              You'll spend most of your time teaching in a classroom, with some time dedicated to studying. This may include seminars, workshops and assignments.
-            </p>
-            <p class="govuk-body">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training">
-                Find out what to expect in teacher training.</a>
-            </p>
+          <p class="govuk-heading-l">What you will study</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview3"></p>
+          <!--Call out-->
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                What to expect in teacher training
+              </span>
+              <p class="govuk-body">
+                You'll spend most of your time teaching in a classroom, with some time dedicated to studying. This may include seminars, workshops and assignments.
+              </p>
+              <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training">
+                  Find out what to expect in teacher training.</a>
+              </p>
+            </div>
           </div>
+          <!--END Call out-->
+
         </div>
-        <!--END Call out-->
 
-      </div>
+        <%= f.govuk_submit t("publish.providers.school_placements.edit.submit_button") %>
+      <% end %>
+    </div>
 
-      <%= f.govuk_submit t("publish.providers.school_placements.edit.submit_button") %>
-    <% end %>
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
