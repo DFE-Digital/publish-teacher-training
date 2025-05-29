@@ -158,10 +158,10 @@ en:
           summary_text: See what we include in this section
       why_train_with_us:
         edit:
-          why_train_with_us: Why train with [provider name]
+          why_train_with_us: Why train with %{provider_name}
       about_course:
         edit:
-          why_train_with_you: What kind of organisation is [provider name]?
+          why_train_with_you: What kind of organisation is %{provider_name}?
           why_train_with_you_hint: Are you a large or small organisation? Do you work in a particular area? How many schools do you work with?
           what_different_other_providers: Why should candidates choose to train with you?
           what_different_other_providers_hint: Focus on what makes you different from other providers. You can include past achievements, for example student successes or Ofsted ratings. Be specific with your claims, and support them with evidence
