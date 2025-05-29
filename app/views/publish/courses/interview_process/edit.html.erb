@@ -42,14 +42,52 @@
         <%= t("publish.providers.interview_process.edit.interview_process_heading") %>
       </h1>
 
+      <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="waste" name="waste" type="checkbox" value="carcasses">
+        <label class="govuk-label govuk-checkboxes__label" for="waste">
+          This course offers online interviews
+        </label>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
       <%= t("publish.providers.interview_process.edit.include_information_about_html") %>
 
       <%= f.govuk_text_area(:interview_process,
-                            value: @copied_fields_values&.dig("interview_process") || @interview_process_form.interview_process,
+                            value: ".",
                             label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
-                            hint: -> { render partial: "publish/courses/markdown_formatting" },
-                            max_words: 250,
-                            rows: 20) %>
+                            max_words: 150,
+                            rows: 12) %>
+
+      <p class="govuk-heading-m">Preview</p>
+      <div class="app-preview-container">
+        <p class="govuk-heading-l">Interview process</p>
+        <p class="govuk-body">
+          <div class="govuk-body" data-input-preview-target="preview">
+            Preview will show here.
+          </div>
+        </p>
+
+        <!-- Call out -->
+        <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+            <span class="govuk-heading-m">
+              Preparing for your interview
+            </span>
+            <p class="govuk-body">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/how-to-apply-for-teacher-training/teacher-training-interview">
+                Find out how to prepare for your interview.
+              </a>
+            </p>
+          </div>
+        </div>
+        <!-- END Call out -->
+      </div>
+
       <%= f.govuk_submit t("publish.providers.interview_process.edit.submit_button") %>
     <% end %>
     <p class="govuk-body">
