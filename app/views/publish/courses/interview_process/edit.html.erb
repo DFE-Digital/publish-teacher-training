@@ -42,26 +42,35 @@
         <%= t("publish.providers.interview_process.edit.interview_process_heading") %>
       </h1>
 
+      <%= f.govuk_text_area(:interview_process1,
+          label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
+
       <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
-    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-      <div class="govuk-checkboxes__item">
-        <input class="govuk-checkboxes__input" id="waste" name="waste" type="checkbox" value="carcasses">
-        <label class="govuk-label govuk-checkboxes__label" for="waste">
-          This course offers online interviews
-        </label>
+        <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="waste" name="waste" type="checkbox" value="carcasses">
+              <label class="govuk-label govuk-checkboxes__label" for="waste">
+                This course offers online interviews
+              </label>
+            </div>
+          </div>
+        </fieldset>
       </div>
-    </div>
-  </fieldset>
-</div>
 
-      <%= t("publish.providers.interview_process.edit.include_information_about_html") %>
+      <%= f.govuk_text_area(:interview_process2,
+          label: { text: t("publish.providers.interview_process.edit.interview_process_format"), size: "s" },
+          hint: { text: t("publish.providers.interview_process.edit.interview_process_format_hint"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
-      <%= f.govuk_text_area(:interview_process,
-                            value: ".",
-                            label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
-                            max_words: 150,
-                            rows: 12) %>
+      <%= f.govuk_text_area(:interview_process3,
+          label: { text: t("publish.providers.interview_process.edit.interview_process_preparation"), size: "s" },
+          hint: { text: t("publish.providers.interview_process.edit.interview_process_preparation_hint"), size: "s" },
+          max_words: 50,
+          rows: 6) %>
 
       <p class="govuk-heading-m">Preview</p>
       <div class="app-preview-container">
