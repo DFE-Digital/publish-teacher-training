@@ -39,7 +39,7 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
-        <%= t("publish.providers.why_train_with_us.edit.why_train_with_us") %>
+        <%= t("publish.providers.why_train_with_us.edit.why_train_with_us", provider_name: @provider.provider_name) %>
       </h1>
 
       <%= render partial: "guidance" %>
@@ -47,7 +47,7 @@
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:why_train_with_us_1,
                               data: { input_preview_target: "input", action: "input-preview#updatePreview" },
-                              label: { text: t("publish.providers.about_course.edit.why_train_with_you"), size: "s" },
+                              label: { text: t("publish.providers.about_course.edit.why_train_with_you", provider_name: @provider.provider_name), size: "s" },
                               hint: { text: t("publish.providers.about_course.edit.why_train_with_you_hint"), size: "s" },
                               max_words: 100,
                               rows: 8) %>
