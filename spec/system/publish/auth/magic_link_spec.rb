@@ -52,7 +52,7 @@ RSpec.describe "Authentication with magic links" do
   end
 
   def given_magic_link_auth_is_enabled
-    allow(AuthenticationService).to receive(:mode).and_return("magic_link")
+    allow(Publish::AuthenticationService).to receive(:mode).and_return("magic_link")
     Rails.application.reload_routes!
   end
 
@@ -121,15 +121,15 @@ RSpec.describe "Authentication with magic links" do
   end
 
   def invalid_token_message
-    I18n.t("publish_authentication.magic_link.invalid_token")
+    I18n.t("publish.authentication.magic_link.invalid_token")
   end
 
   def expired_token_message
-    I18n.t("publish_authentication.magic_link.expired")
+    I18n.t("publish.authentication.magic_link.expired")
   end
 
   def disable_magic_link_auth
-    allow(AuthenticationService).to receive(:mode).and_return(nil)
+    allow(Publish::AuthenticationService).to receive(:mode).and_return(nil)
     Rails.application.reload_routes!
   end
 end

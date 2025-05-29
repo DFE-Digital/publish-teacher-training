@@ -1,7 +1,7 @@
 
 <h1 class="govuk-heading-l">Sign in to <%= I18n.t("service_name.publish") %></h1>
 
-<% if AuthenticationService.dfe_signin? %>
+<% if Publish::AuthenticationService.dfe_signin? %>
   <p class="govuk-body-m">Use DfE Sign-in to access your account.</p>
 
   <%= govuk_button_to("Sign in using DfE Sign-in", "/auth/dfe", class: "qa-sign_in_button") %>

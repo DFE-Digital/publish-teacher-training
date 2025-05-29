@@ -19,7 +19,7 @@ RSpec.describe "Authentication with Personas" do
   end
 
   def given_persona_based_authentication_is_active
-    allow(AuthenticationService).to receive(:mode).and_return("persona")
+    allow(Publish::AuthenticationService).to receive(:mode).and_return("persona")
   end
 
   def when_i_go_to_sign_in
@@ -27,7 +27,7 @@ RSpec.describe "Authentication with Personas" do
   end
 
   def when_i_go_to_support
-    support_provider_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
+    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def then_i_am_given_the_option_to_sign_in_with_a_persona
