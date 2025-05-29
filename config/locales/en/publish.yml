@@ -127,17 +127,17 @@ en:
       interview_process:
         edit:
           interview_process_heading: Interview process (optional)
-          interview_process_label: Interview process (optional)
+          interview_process_label: What is the interview process? (optional)
           interview_process_success: Interview process
           page_title: Interview process (optional) - %{course_name_and_code}
           submit_button: Update interview process
           include_information_about_html:
             <p class="govuk-body">Include information about:</p>
             <ul class="govuk-list govuk-list--bullet">
-            <li>how many interview candidates will have</li>
-            <li>the format of interviews, for example could they interview online</li>
-            <li>who will be interviewing them</li>
-            <li>any tests needed - if so, how they can prepare</li>
+              <li>How many interviews will candidates have?</li>
+              <li>What is the format of the interiews?</li>
+              <li>Who will be interviewing the candidates?</li>
+              <li>Will the candidates need to do any tests? If so, how can they prepare?</li>
             </ul>
       school_placements:
         edit:
