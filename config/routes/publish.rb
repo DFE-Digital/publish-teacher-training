@@ -14,10 +14,6 @@ scope via: :all do
   match "/403", to: "publish/errors#forbidden"
 end
 
-get "/sign-in", to: "sign_in#index"
-get "/user-not-found", to: "sign_in#new"
-get "/sign-out", to: "sessions#sign_out"
-
 get "/accessibility", to: "pages#accessibility", as: :accessibility
 get "/guidance", to: "pages#guidance", as: :guidance
 get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
@@ -37,19 +33,25 @@ end
 
 resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
 
-if AuthenticationService.magic_link?
-  get "/sign-in/magic-link", to: "magic_links#new", as: :magic_links
-  post "/magic-link", to: "magic_links#create"
-  get "/magic-link-sent", to: "magic_links#magic_link_sent"
-  get "/signin_with_magic_link", to: "magic_link_sessions#create", as: "signin_with_magic_link"
-  get "/auth/dfe/signout", to: "sessions#destroy"
-elsif AuthenticationService.persona?
-  get "/personas", to: "personas#index"
-  get "/auth/developer/callback", to: "sessions#callback"
-  get "/auth/developer/signout", to: "sessions#destroy"
-else
-  get "/auth/dfe/callback", to: "sessions#callback"
-  get "/auth/dfe/signout", to: "sessions#destroy"
+scope module: "publish/authentication" do
+  get "/sign-in", to: "sign_in#index"
+  get "/user-not-found", to: "sign_in#new"
+  get "/sign-out", to: "sessions#sign_out"
+
+  if Publish::AuthenticationService.magic_link?
+    get "/sign-in/magic-link", to: "magic_links#new", as: :magic_links
+    post "/magic-link", to: "magic_links#create"
+    get "/magic-link-sent", to: "magic_links#magic_link_sent"
+    get "/signin_with_magic_link", to: "magic_link_sessions#create", as: "signin_with_magic_link"
+    get "/auth/dfe/signout", to: "sessions#destroy"
+  elsif Publish::AuthenticationService.persona?
+    get "/personas", to: "personas#index"
+    get "/auth/developer/callback", to: "sessions#callback"
+    get "/auth/developer/signout", to: "sessions#destroy"
+  else
+    get "/auth/dfe/callback", to: "sessions#callback"
+    get "/auth/dfe/signout", to: "sessions#destroy"
+  end
 end
 
 namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_url).host } do

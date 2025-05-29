@@ -2,10 +2,6 @@
 
 class ApplicationController < ActionController::Base
   include DfE::Analytics::Requests
-  include Authentication
-
-  helper_method :current_user
-  before_action :authenticate
 
   include Pundit::Authorization
   include Pagy::Backend
