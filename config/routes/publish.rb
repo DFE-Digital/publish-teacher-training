@@ -14,24 +14,25 @@ scope via: :all do
   match "/403", to: "publish/errors#forbidden"
 end
 
-get "/accessibility", to: "pages#accessibility", as: :accessibility
-get "/guidance", to: "pages#guidance", as: :guidance
-get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
-get "/privacy", to: "pages#privacy", as: :privacy
-get "/terms-conditions", to: "pages#terms", as: :terms
-get "/how-to-use-this-service", to: "pages#how_to_use_this_service"
+scope module: :publish do
+  get "/accessibility", to: "pages#accessibility", as: :accessibility
+  get "/guidance", to: "pages#guidance", as: :guidance
+  get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
+  get "/privacy", to: "pages#privacy", as: :privacy
+  get "/terms-conditions", to: "pages#terms", as: :terms
+  get "/how-to-use-this-service", to: "pages#how_to_use_this_service"
 
-scope path: "how-to-use-this-service" do
-  get "/add-an-organisation", to: "pages#add_an_organisation", as: :add_an_organisation
-  get "/add-and-remove-users", to: "pages#add_and_remove_users", as: :add_and_remove_users
-  get "/change-an-accredited-provider-relationship", to: "pages#change_an_accredited_provider_relationship", as: :change_an_accredited_provider_relationship
-  get "/add-schools-and-study-sites", to: "pages#add_schools_and_study_sites", as: :add_schools_and_study_sites
-  get "/roll-over-courses-to-a-new-recruitment-cycle", to: "pages#roll_over_courses_to_a_new_recruitment_cycle", as: :roll_over_courses_to_a_new_recruitment_cycle
-  get "/help-writing-course-descriptions", to: "pages#help_writing_course_descriptions", as: :help_writing_course_descriptions
-  get "/course-summary-examples", to: "pages#course_summary_examples", as: :course_summary_examples
+  scope path: "how-to-use-this-service" do
+    get "/add-an-organisation", to: "pages#add_an_organisation", as: :add_an_organisation
+    get "/add-and-remove-users", to: "pages#add_and_remove_users", as: :add_and_remove_users
+    get "/change-an-accredited-provider-relationship", to: "pages#change_an_accredited_provider_relationship", as: :change_an_accredited_provider_relationship
+    get "/add-schools-and-study-sites", to: "pages#add_schools_and_study_sites", as: :add_schools_and_study_sites
+    get "/roll-over-courses-to-a-new-recruitment-cycle", to: "pages#roll_over_courses_to_a_new_recruitment_cycle", as: :roll_over_courses_to_a_new_recruitment_cycle
+    get "/help-writing-course-descriptions", to: "pages#help_writing_course_descriptions", as: :help_writing_course_descriptions
+    get "/course-summary-examples", to: "pages#course_summary_examples", as: :course_summary_examples
+  end
+  resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
 end
-
-resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
 
 scope module: "publish/authentication" do
   get "/sign-in", to: "sign_in#index"
