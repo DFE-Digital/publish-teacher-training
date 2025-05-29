@@ -48,20 +48,16 @@
         <%= f.govuk_text_area(:why_train_with_us_1,
                               data: { input_preview_target: "input", action: "input-preview#updatePreview" },
                               label: { text: t("publish.providers.about_course.edit.why_train_with_you"), size: "s" },
-                              max_words: 50,
-                              rows: 6) %>
+                              hint: { text: t("publish.providers.about_course.edit.why_train_with_you_hint"), size: "s" },
+                              max_words: 100,
+                              rows: 8) %>
 
         <%= f.govuk_text_area(:why_train_with_us_2,
                               data: { input_preview_target: "input", action: "input-preview#updatePreview" },
                               label: { text: t("publish.providers.about_course.edit.what_different_other_providers"), size: "s" },
-                              max_words: 50,
-                              rows: 6) %>
-
-        <%= f.govuk_text_area(:why_train_with_us_3,
-                              data: { input_preview_target: "input", action: "input-preview#updatePreview" },
-                              label: { text: t("publish.providers.about_course.edit.who_suitable_course"), size: "s" },
-                              max_words: 50,
-                              rows: 6) %>
+                              hint: { text: t("publish.providers.about_course.edit.what_different_other_providers_hint"), size: "s" },
+                              max_words: 100,
+                              rows: 8) %>
 
         <p class="govuk-heading-m">Preview</p>
         <div class="app-preview-container">
