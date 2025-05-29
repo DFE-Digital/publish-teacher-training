@@ -36,28 +36,57 @@
         <%= t("publish.providers.fees_and_financial_support.edit.heading") %>
       </h1>
 
+    <div data-controller="input-preview">
+      <%= f.govuk_text_field(:fee_uk_eu,
+        form_group: { id: "fee-uk" },
+        label: { text: "Fee for UK students", size: "s" },
+        value: @copied_fields_values&.dig("fee_uk_eu"),
+        prefix_text: "£",
+        width: 5,
+        data: { qa: "course_fee_uk_eu",
+          input_preview_target: "input",
+          action: "input-preview#updatePreview",
+          preview_output_target: "preview1" }
+        ) %>
+
+      <%= f.govuk_text_field(:fee_international,
+        form_group: { id: "fee-international" },
+        label: { text: @course.can_sponsor_student_visa? ? "Fee for international students" : "Fee for international students (optional)", size: "s" },
+        value: @copied_fields_values&.dig("fee_international"),
+        prefix_text: "£",
+        width: 5,
+        data: {
+          qa: "course_fee_international",
+          input_preview_target: "input",
+          action: "input-preview#updatePreview",
+          preview_output_target: "preview2" }
+        ) %>
+
       <%= render partial: "guidance" %>
 
-    <div data-controller="input-preview">
       <%= f.govuk_text_area(
             :fee_details1,
-            data: { input_preview_target: "input", action: "input-preview#updatePreview" },
             label: { text: t("publish.providers.fees_and_financial_support.edit.label"), size: "s" },
             value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
             rows: 6,
             max_words: 50,
-            data: { qa: "course_fee_details" },
+            data: { qa: "course_fee_details",
+              input_preview_target: "input",
+              action: "input-preview#updatePreview",
+              preview_output_target: "preview3" }
           ) %>
 
       <%= f.govuk_text_area(
           :fee_details2,
-          data: { input_preview_target: "input", action: "input-preview#updatePreview" },
           label: { text: t("publish.providers.fees_and_financial_support.edit.additional_costs"), size: "s" },
           hint: { text: t("publish.providers.fees_and_financial_support.edit.additional_costs_hint"), size: "s" },
           value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
           rows: 6,
           max_words: 50,
-          data: { qa: "course_fee_details" },
+          data: { qa: "course_fee_details",
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview3" }
         ) %>
 
       <%= f.govuk_text_area(
@@ -67,7 +96,10 @@
           value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
           rows: 6,
           max_words: 50,
-          data: { qa: "course_fee_details" },
+          data: { qa: "course_fee_details",
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview3" }
         ) %>
 
       <p class="govuk-heading-m">Preview</p>
@@ -80,7 +112,7 @@
             UK citizens
           </dt>
           <dd class="govuk-summary-list__value">
-            [Figure goes here]
+            <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview1"></p>
           </dd>
         </div>
           <div class="govuk-summary-list__row">
@@ -88,14 +120,14 @@
             Non-UK citizens
           </dt>
           <dd class="govuk-summary-list__value">
-            [Figure goes here]
+            <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview2"></p>
           </dd>
         </div>
       </dl>
 
         <p class="govuk-body">
           <div class="govuk-body" data-input-preview-target="preview">
-            Preview will show here.
+            <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview3"></p>
           </div>
         </p>
 
