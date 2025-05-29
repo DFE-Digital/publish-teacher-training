@@ -1,5 +1,9 @@
 en:
   publish:
+    authentication:
+      magic_link:
+        invalid_token: "Magic link could not be verified, please request a new one"
+        expired: "Magic link has expired, please request a new one"
     courses:
       index:
         ratifying_provider: Accredited provider
