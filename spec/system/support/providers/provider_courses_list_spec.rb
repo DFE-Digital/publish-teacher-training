@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View provider courses" do
+RSpec.describe "View provider courses" do
   let(:user) { create(:user, :admin) }
 
   scenario "i can view courses belonging to a provider" do
