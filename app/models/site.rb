@@ -92,8 +92,6 @@ class Site < ApplicationRecord
       saved_change_to_postcode?
   end
 
-  delegate :recruitment_cycle, to: :provider
-
   def assign_code
     self.code ||= Sites::CodeGenerator.call(provider:)
   end

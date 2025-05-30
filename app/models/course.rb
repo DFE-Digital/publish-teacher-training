@@ -109,8 +109,6 @@ class Course < ApplicationRecord
 
   belongs_to :provider
 
-  delegate :provider_name, :provider_code, to: :provider, allow_nil: true
-
   belongs_to :accrediting_provider,
              ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
              class_name: "Provider",
@@ -125,7 +123,7 @@ class Course < ApplicationRecord
            before_add: :set_subject_position,
            dependent: :destroy
 
-  delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
+  delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def applicable_for_engineers_teach_physics?
