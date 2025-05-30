@@ -42,6 +42,8 @@
         <%= t("publish.providers.interview_process.edit.interview_process_heading") %>
       </h1>
 
+      <%= render partial: "guidance" %>
+
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:interview_process1,
             label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
