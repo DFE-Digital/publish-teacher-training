@@ -109,10 +109,10 @@ en:
       interview_process:
         edit:
           interview_process_heading: Interview process (optional)
-          interview_process_label: Where will the interviews take place?
-          interview_process_format: What is the format of the interiews?
+          interview_process_label: Where will the interviews take place? (optional)
+          interview_process_format: What is the format of the interiews? (optional)
           interview_process_format_hint: Include how many interviews candidates will have, and who will be interviewing them
-          interview_process_preparation: Will the candidates need to do any tests?
+          interview_process_preparation: Will the candidates need to do any tests? (optional)
           interview_process_preparation_hint: If so, how can they prepare for these?
           interview_process_success: Interview process
           page_title: Interview process (optional) - %{course_name_and_code}
