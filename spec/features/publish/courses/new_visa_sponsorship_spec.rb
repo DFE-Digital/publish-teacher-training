@@ -16,6 +16,7 @@ feature "visa sponsorship (add course summary page)" do
       then_i_should_see_the_student_visas_title
 
       when_i_choose_yes_for_student_visa
+      and_i_select_no_student_visa
       and_i_click_continue
       then_i_should_be_back_on_the_publish_course_confirmation_page
     end
@@ -27,6 +28,7 @@ feature "visa sponsorship (add course summary page)" do
       then_i_should_see_the_skilled_worker_visas_title
 
       when_i_choose_yes_for_skilled_worker_visa
+      and_i_select_no_skillled_worker_visa
       and_i_click_continue
       then_i_should_be_back_on_the_publish_course_confirmation_page
     end
@@ -106,5 +108,13 @@ private
 
   def then_i_should_be_back_on_the_publish_course_confirmation_page
     expect(page).to have_text("Check your answers")
+  end
+
+  def and_i_select_no_student_visa
+    choose "course_can_sponsor_student_visa_false"
+  end
+
+  def and_i_select_no_skillled_worker_visa
+    choose "course_can_sponsor_skilled_worker_visa_false"
   end
 end

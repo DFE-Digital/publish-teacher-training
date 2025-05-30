@@ -144,7 +144,7 @@ private
   end
 
   def sponsorship_application_steps_to_remove
-    if !FeatureFlag.active?(:visa_sponsorship_deadline) || course.no_visa_sponsorship?
+    if course.no_visa_sponsorship?
       %i[visa_sponsorship_application_deadline_required visa_sponsorship_application_deadline_at]
     elsif visa_sponsorship_application_deadline_required_param == false
       [:visa_sponsorship_application_deadline_at]

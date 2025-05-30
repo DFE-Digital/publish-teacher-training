@@ -26,7 +26,6 @@ RSpec.describe "Viewing feature flags" do
       "Puts Find into maintenance mode",
       "Displays the maintenance mode banner",
       "Display scholarship and bursary information",
-      "Allow providers to add a deadline for those candidates require visa sponsorship",
     ].each do |feature_flag_text|
       expect(page).to have_content(feature_flag_text)
     end

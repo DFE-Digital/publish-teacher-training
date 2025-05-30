@@ -9,10 +9,6 @@ describe WorkflowStepService do
 
   let(:params) { {} }
 
-  before do
-    FeatureFlag.activate(:visa_sponsorship_deadline)
-  end
-
   describe "#call" do
     context "when course.is_school_direct? && when course.provider.accredited_partners.length == 0 && course.no_visa_sponsorship?" do
       let(:provider) { build(:provider) }
