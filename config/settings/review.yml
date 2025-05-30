@@ -18,10 +18,6 @@ base_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cl
 
 apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 
-authentication:
-  secret: secret
-  mode: persona
-
 skylight:
   enable: false
 
