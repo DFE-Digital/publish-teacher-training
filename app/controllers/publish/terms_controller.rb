@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class TermsController < ApplicationController
-    skip_before_action :check_interrupt_redirects
-    skip_before_action :authorize_provider
-    skip_after_action :verify_authorized
-
+  class TermsController < ::ApplicationController
     def edit
       @accept_terms_form = Interruption::AcceptTermsForm.new(current_user)
     end
