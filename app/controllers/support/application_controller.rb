@@ -2,7 +2,6 @@
 
 module Support
   class ApplicationController < ::ApplicationController
-    include Publish::Authentication
     layout "support"
     before_action :check_user_is_admin
 
