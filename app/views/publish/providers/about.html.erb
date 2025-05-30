@@ -23,7 +23,7 @@
             preview_output_target: "preview"
           },
           form_group: { id: "train-with-disability" },
-          caption: { text: "PROVIDER NAME GOES HERE", size: "l" },
+          caption: { text: @provider.provider_name, size: "l" },
           label: { text: "Training with disabilities and other needs", size: "l" },
           hint: -> { render partial: "publish/courses/disabilities_guidance" },
           max_words: 250,
