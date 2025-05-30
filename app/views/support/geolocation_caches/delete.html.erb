@@ -1,0 +1,34 @@
+<%= content_for :page_title, t(".page_title") %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_breadcrumbs(breadcrumbs: [
+      govuk_breadcrumb_link_to("Support", support_recruitment_cycle_index_path),
+      govuk_breadcrumb_link_to("Settings", support_settings_path),
+      govuk_breadcrumb_link_to("Geolocation cache", support_geolocation_cache_path),
+    ]) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t(".caption") %></span>
+        <%= t(".reset") %>
+    </h1>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        This will remove all entries in the cache for the geolocation lookups!
+      </strong>
+    </div>
+
+    <%= govuk_button_to "Reset the cache",
+        delete_support_geolocation_cache_path,
+        method: :delete,
+        class: "govuk-button--warning" %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to("Cancel", support_geolocation_cache_path) %>
+    </p>
+  </div>
+</div>
