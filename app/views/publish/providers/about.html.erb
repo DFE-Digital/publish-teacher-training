@@ -15,22 +15,11 @@
 
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= @provider.provider_name %></span>
-        Training with disabilities and other needs
-      </h1>
-
-      <p class="govuk-body">Say how you support candidates with disabilities and other needs. This could include candidates with:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>dyslexia</li>
-        <li>physical, hearing and visual impairments</li>
-        <li>mental health conditions</li>
-      </ul>
-      <p class="govuk-body">If accessibility varies between schools, give details. It’s also useful for candidates to know how you’ve accommodated others with specific access needs in the past.</p>
-
-      <%= f.govuk_text_area(:train_with_disability,
+      <%= f.govuk_text_area(:train_with_disability1,
         form_group: { id: "train-with-disability" },
-        label: { text: "Training with disabilities and other needs", size: "m" },
+        caption: { text: "PROVIDER NAME GOES HERE", size: "l" },
+        label: { text: "Training with disabilities and other needs", size: "l" },
+        hint: -> { render partial: "publish/courses/disabilities_guidance" },
         max_words: 250,
         rows: 8) %>
       <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
@@ -41,23 +30,6 @@
 <p class="govuk-heading-m">What candidates will see</p>
       <div class="app-preview-container">
         <p class="govuk-heading-l">Training with disabilities and other needs</p>
-
-       <dl class="govuk-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            UK citizens
-          </dt>
-          <dd class="govuk-summary-list__value" data-input-preview-target="preview" data-preview-target="currency1">
-          </dd>
-        </div>
-          <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Non-UK citizens
-          </dt>
-          <dd class="govuk-summary-list__value" data-input-preview-target="preview" data-preview-target="currency2">
-          </dd>
-        </div>
-      </dl>
 
         <p class="govuk-body">
           <div class="govuk-body" data-input-preview-target="preview">
@@ -71,7 +43,6 @@
             <span class="govuk-heading-m">
               Funding and support
             </span>
-            <span class="govuk-heading-s">Student loans</span>
             <p class="govuk-body">
               If you're neurodivergent, have a long-term physical or mental health condition, or have any other accessibility needs,
               <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/funding-and-support/if-youre-disabled">
@@ -88,9 +59,15 @@
         </div>
         <!-- END Call out -->
       </div>
-    </div>
 
-      <%= f.govuk_submit "Save and publish" %>
+      <%= f.govuk_submit "Update training with disabilities and other needs" %>
     <% end %>
-  </div>
+      </div>
+
+    <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+      <%= render(
+            partial: "publish/courses/related_sidebar"
+          ) %>
+    </aside>
+
 </div>
