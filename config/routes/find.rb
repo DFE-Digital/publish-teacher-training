@@ -30,7 +30,9 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
     get "/:provider_code/:course_code/training-with-disabilities", to: "training_with_disabilities#show", as: :training_with_disabilities
   end
 
-  resource :sessions, path: "auth/session"
+  if Settings.features.candidate_sessions
+    resource :sessions, path: "auth/session"
+  end
   get "/maintenance", to: "pages#maintenance", as: "maintenance"
   get "/cycles", to: "switcher#cycles", as: :cycles
   post "/cycles", to: "switcher#update", as: :switch_cycle_schedule

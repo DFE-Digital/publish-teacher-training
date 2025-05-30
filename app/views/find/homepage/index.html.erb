@@ -1,11 +1,13 @@
 <%= content_for :page_title, title_with_error_prefix("Find courses by location or by training provider", flash[:error].present?) %>
 
-<% if authenticated? %>
-  <h1>You're logged in!</h1>
+<% if Settings.features.candidate_sessions %>
+  <% if authenticated? %>
+    <h1>You're logged in!</h1>
 
-  <%= button_to "Logout", find_sessions_path, method: :delete, local: true %>
-<% else %>
-  <%= button_to "Login", find_sessions_path, method: :post, params: { email_address: "iain.mcnulty@education.gov.uk" } %>
+    <%= button_to "Logout", find_sessions_path, method: :delete, local: true %>
+  <% else %>
+    <%= button_to "Login", find_sessions_path, method: :post, params: { email_address: "iain.mcnulty@education.gov.uk" } %>
+  <% end %>
 <% end %>
 
 <div class="app-homepage-search-container">
