@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Multiple schools" do
+RSpec.describe "Multiple schools" do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_some_gias_schools_exist

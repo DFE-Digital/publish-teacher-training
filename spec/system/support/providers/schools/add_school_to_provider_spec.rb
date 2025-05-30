@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Adding school to provider as an admin" do
+RSpec.describe "Adding school to provider as an admin" do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider

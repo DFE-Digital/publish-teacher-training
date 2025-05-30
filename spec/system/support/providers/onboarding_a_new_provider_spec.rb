@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Onboarding a new provider" do
+RSpec.describe "Onboarding a new provider" do
   describe "adding provider details" do
     before do
       given_i_am_authenticated(user:)

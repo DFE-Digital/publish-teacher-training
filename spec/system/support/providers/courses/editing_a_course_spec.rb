@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Edit provider course details" do
+RSpec.describe "Edit provider course details" do
   around do |example|
     Timecop.freeze(2021, 8, 1, 12) do
       example.run

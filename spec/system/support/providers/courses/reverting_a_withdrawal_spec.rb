@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Reverting a withdrawal" do
+RSpec.describe "Reverting a withdrawal" do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_with_a_withdrawn_course
