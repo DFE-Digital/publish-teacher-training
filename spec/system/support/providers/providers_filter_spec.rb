@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View filtered providers" do
+RSpec.describe "View filtered providers" do
   let(:user) { create(:user, :admin) }
 
   before do
