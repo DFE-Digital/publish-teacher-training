@@ -25,6 +25,3 @@ mcbg:
 
 system_authentication_token: "Ge32"
 log_level: debug
-
-features:
-  gov_style_feedback_form_enabled: true

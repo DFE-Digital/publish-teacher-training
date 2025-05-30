@@ -24,6 +24,3 @@ authentication:
 
 skylight:
   enable: false
-
-features:
-  gov_style_feedback_form_enabled: true
