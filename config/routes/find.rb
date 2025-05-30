@@ -31,7 +31,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
   end
 
   if Settings.features.candidate_sessions
-    resource :sessions, path: "auth/session"
+    resource :sessions, path: "auth/session", only: %i[create destroy]
   end
   get "/maintenance", to: "pages#maintenance", as: "maintenance"
   get "/cycles", to: "switcher#cycles", as: :cycles
