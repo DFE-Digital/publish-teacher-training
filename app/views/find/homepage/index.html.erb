@@ -1,5 +1,15 @@
 <%= content_for :page_title, title_with_error_prefix("Find courses by location or by training provider", flash[:error].present?) %>
 
+<% if Settings.features.candidate_sessions %>
+  <% if authenticated? %>
+    <h1>You're logged in!</h1>
+
+    <%= button_to "Logout", find_sessions_path, method: :delete, local: true %>
+  <% else %>
+    <%= button_to "Login", find_sessions_path, method: :post, params: { email_address: "iain.mcnulty@education.gov.uk" } %>
+  <% end %>
+<% end %>
+
 <div class="app-homepage-search-container">
   <div class="app-homepage-search-content">
     <h1 class="govuk-heading-l">Find teacher training courses in England</h1>
@@ -100,7 +110,7 @@
       <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.send.title"), class: "govuk-heading-m")) do %>
         <p class="govuk-body"><%= t("find.search.send.send_specialism") %></p>
         <p class="govuk-body">
-        <%= govuk_link_to(
+          <%= govuk_link_to(
           t("find.search.send.browse_primary_send"),
           find_results_path(
             {
@@ -114,7 +124,7 @@
         ) %>
         </p>
         <p class="govuk-body">
-        <%= govuk_link_to(
+          <%= govuk_link_to(
           t("find.search.send.browse_secondary_send"),
           find_results_path(
             {

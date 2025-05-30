@@ -102,6 +102,7 @@ feedback:
   link: https://forms.office.com/pages/responsepage.aspx?id=yXfS-grGoU2187O4s0qC-SKECobyE75EtuJMp8rYxZtURTNaTTJaTVhBQlQzM1RESTJDVlBERk1JQS4u
 
 features:
+  candidate_sessions: false
   send_request_data_to_bigquery: false
   rollover:
     # Normally a short period of time between rollover and the next cycle
@@ -115,6 +116,8 @@ features:
   gov_style_feedback_form_enabled: false
 
 cookies:
+  candidate_session:
+    name: _candidate_teacher_training_session
   session:
     name: _teacher_training_courses_session
 
