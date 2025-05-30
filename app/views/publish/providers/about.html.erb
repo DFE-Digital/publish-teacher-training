@@ -15,55 +15,61 @@
 
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_text_area(:train_with_disability1,
-        form_group: { id: "train-with-disability" },
-        caption: { text: "PROVIDER NAME GOES HERE", size: "l" },
-        label: { text: "Training with disabilities and other needs", size: "l" },
-        hint: -> { render partial: "publish/courses/disabilities_guidance" },
-        max_words: 250,
-        rows: 8) %>
-      <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
-      <%= f.hidden_field(:goto_provider, value: goto_provider_value(param_form_key: f.object_name.to_sym, params:)) %>
-      <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
-      <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
+      <div data-controller="input-preview">
+        <%= f.govuk_text_area(:train_with_disability1,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview"
+          },
+          form_group: { id: "train-with-disability" },
+          caption: { text: "PROVIDER NAME GOES HERE", size: "l" },
+          label: { text: "Training with disabilities and other needs", size: "l" },
+          hint: -> { render partial: "publish/courses/disabilities_guidance" },
+          max_words: 250,
+          rows: 8) %>
+        <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
+        <%= f.hidden_field(:goto_provider, value: goto_provider_value(param_form_key: f.object_name.to_sym, params:)) %>
+        <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
+        <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
 
-<p class="govuk-heading-m">What candidates will see</p>
-      <div class="app-preview-container">
-        <p class="govuk-heading-l">Training with disabilities and other needs</p>
+      <p class="govuk-heading-m">What candidates will see</p>
+        <div class="app-preview-container">
+          <p class="govuk-heading-l">Training with disabilities and other needs</p>
 
-        <p class="govuk-body">
-          <div class="govuk-body" data-input-preview-target="preview">
-            <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview3"></p>
-          </div>
-        </p>
+          <p class="govuk-body">
+            <div class="govuk-body">
+              <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview"></p>
+            </div>
+          </p>
 
-        <!-- Call out -->
-        <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
-            <span class="govuk-heading-m">
-              Funding and support
-            </span>
-            <p class="govuk-body">
-              If you're neurodivergent, have a long-term physical or mental health condition, or have any other accessibility needs,
-              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/funding-and-support/if-youre-disabled">
-                find out what funding and support you can get.
-              </a>
-              </p>
-            <p class="govuk-body">
-                Training providers can also make adjustments so you can attend an interview and complete your teacher training.
-                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/accessibility-adjustments">
-                  Find out more about adjustments to help you apply and train to teach.
+          <!-- Call out -->
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                Funding and support
+              </span>
+              <p class="govuk-body">
+                If you're neurodivergent, have a long-term physical or mental health condition, or have any other accessibility needs,
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/funding-and-support/if-youre-disabled">
+                  find out what funding and support you can get.
                 </a>
-            </p>
+                </p>
+              <p class="govuk-body">
+                  Training providers can also make adjustments so you can attend an interview and complete your teacher training.
+                  <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/accessibility-adjustments">
+                    Find out more about adjustments to help you apply and train to teach.
+                  </a>
+              </p>
+            </div>
           </div>
+          <!-- END Call out -->
         </div>
-        <!-- END Call out -->
-      </div>
 
-      <%= f.govuk_submit "Update training with disabilities and other needs" %>
-    <% end %>
+        <%= f.govuk_submit "Update training with disabilities and other needs" %>
+      <% end %>
+        </div>
       </div>
-
     <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
       <%= render(
             partial: "publish/courses/related_sidebar"
