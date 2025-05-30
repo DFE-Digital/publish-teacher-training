@@ -47,7 +47,6 @@
       <div data-controller="input-preview">
         <!--WHERE YOU WILL TRAIN-->
         <h2 class="govuk-heading-l" id="where-you-will-train">Where you will train</h2>
-        <p class="govuk-body">Candidates say the most important thing when choosing a course is the location of their school placements and study site.</p>
 
         <%= f.govuk_text_area(:how_school_placements_work_1,
           data: {
@@ -76,6 +75,7 @@
             preview_output_target: "preview1"
           },
           label: { text: CourseEnrichment.human_attribute_name("how-trainees-placed"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-placed-hint"), size: "s" },
           max_words: 50,
           rows: 6) %>
 
