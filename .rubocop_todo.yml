@@ -22,27 +22,6 @@ Lint/MissingSuper:
     - 'lib/gias/importer.rb'
     - 'lib/gias/transformer.rb'
 
-# Offense count: 20
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyleForLeadingUnderscores.
-# SupportedStylesForLeadingUnderscores: disallowed, required, optional
-Naming/MemoizedInstanceVariableName:
-  Exclude:
-    - 'spec/features/find/course/viewing_a_course_spec.rb'
-    - 'spec/features/find/viewing_courses_in_various_states_spec.rb'
-    - 'spec/features/publish/courses/editing_course_about_this_course_copy_content_spec.rb'
-    - 'spec/features/publish/courses/editing_course_fee_details_copy_content_spec.rb'
-    - 'spec/features/publish/courses/editing_course_gcse_requirements_copy_content_spec.rb'
-    - 'spec/features/publish/courses/editing_course_interview_process_copy_content_spec.rb'
-    - 'spec/features/publish/courses/editing_course_school_placements_copy_content_spec.rb'
-    - 'spec/features/publish/courses/editing_course_subject_requirements_copy_content_spec.rb'
-    - 'spec/features/publish/courses/editing_modern_languages_spec.rb'
-    - 'spec/features/publish/courses/new_modern_languages_spec.rb'
-    - 'spec/features/publish/viewing_training_partners_and_their_courses_spec.rb'
-    - 'spec/features/support/providers/courses/editing_a_course_spec.rb'
-    - 'spec/features/support/providers/courses/reverting_a_withdrawal_spec.rb'
-    - 'spec/features/support/providers/courses/viewing_providers_courses_spec.rb'
-    - 'spec/support/feature_helpers/course_steps.rb'
 
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, AllowedPatterns, ForbiddenIdentifiers, ForbiddenPatterns.

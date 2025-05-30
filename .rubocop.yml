@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 plugins:
   - rubocop-factory_bot
   - rubocop-rspec_rails
@@ -13,6 +11,11 @@ inherit_gem:
 inherit_mode:
   merge:
     - Exclude
+
+inherit_from:
+  - '.rubocop_todo.yml'
+  - 'config/rubocop/rspec.yml'
+  - 'config/rubocop/naming.yml'
 
 AllCops:
   ParserEngine: parser_prism
