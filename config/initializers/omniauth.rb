@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "../../app/services/publish/authentication_service"
+require_relative "../../app/services/authentication_service"
 
-if Publish::AuthenticationService.persona?
+if AuthenticationService.persona?
 
   Rails.application.config.middleware.use OmniAuth::Builder do
     provider :developer,
