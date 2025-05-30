@@ -46,7 +46,7 @@
         data: { qa: "course_fee_uk_eu",
           input_preview_target: "input",
           action: "input-preview#updatePreview",
-          preview_output_target: "preview1" }
+          preview_output_target: "currency1" }
         ) %>
 
       <%= f.govuk_text_field(:fee_international,
@@ -59,7 +59,7 @@
           qa: "course_fee_international",
           input_preview_target: "input",
           action: "input-preview#updatePreview",
-          preview_output_target: "preview2" }
+          preview_output_target: "currency2" }
         ) %>
 
       <%= render partial: "guidance" %>
@@ -111,14 +111,14 @@
           <dt class="govuk-summary-list__key">
             UK citizens
           </dt>
-          <dd class="govuk-summary-list__value" data-input-preview-target="preview" data-preview-target="preview1">
+          <dd class="govuk-summary-list__value" data-input-preview-target="preview" data-preview-target="currency1">
           </dd>
         </div>
           <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Non-UK citizens
           </dt>
-          <dd class="govuk-summary-list__value" data-input-preview-target="preview" data-preview-target="preview2">
+          <dd class="govuk-summary-list__value" data-input-preview-target="preview" data-preview-target="currency2">
           </dd>
         </div>
       </dl>

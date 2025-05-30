@@ -30,6 +30,14 @@ export default class extends Controller {
         const rawContent = input.value
         const lines = rawContent.split('\n')
 
+        // Special handling for preview2 (international fee)
+        if (key === 'currency1' || key === 'currency2') {
+          const sanitizedValue = rawContent.trim()
+          previewContent = sanitizedValue ? `£${sanitizedValue}` : ''
+          return
+        }
+
+        // Default rich preview rendering
         let blockHtml = ''
         let currentListItems = []
 
