@@ -53,37 +53,38 @@ RSpec.describe Gias::Importer do
     end
 
     it "does not save the school again" do
-      freeze_time
-      now = Time.zone.now
+      freeze_time do
+        now = Time.zone.now
 
-      described_class.call(test_csv)
+        described_class.call(test_csv)
 
-      school = GiasSchool.last
+        school = GiasSchool.last
 
-      expect(school.reload).to have_attributes(
-        { urn: "100000",
-          name: "The Aldgate School",
-          type_code: "02",
-          group_code: "4",
-          status_code: "1",
-          phase_code: "2",
-          minimum_age: "3",
-          maximum_age: "11",
-          ukprn: "10079319",
-          address1: "St James's Passage",
-          address2: "Duke's Place",
-          address3: "",
-          town: "",
-          county: "",
-          postcode: "EC3A 5DE",
-          website: "www.thealdgateschool.org",
-          telephone: "02072831147",
-          searchable: "'100000':1 '5de':9 'aldgate':3,6 'ec3a':8 'ec3a5de':10 'school':4,7 'the':2,5",
-          latitude: 51.513968813644965,
-          longitude: -0.077530631715809 },
-      )
+        expect(school.reload).to have_attributes(
+          { urn: "100000",
+            name: "The Aldgate School",
+            type_code: "02",
+            group_code: "4",
+            status_code: "1",
+            phase_code: "2",
+            minimum_age: "3",
+            maximum_age: "11",
+            ukprn: "10079319",
+            address1: "St James's Passage",
+            address2: "Duke's Place",
+            address3: "",
+            town: "",
+            county: "",
+            postcode: "EC3A 5DE",
+            website: "www.thealdgateschool.org",
+            telephone: "02072831147",
+            searchable: "'100000':1 '5de':9 'aldgate':3,6 'ec3a':8 'ec3a5de':10 'school':4,7 'the':2,5",
+            latitude: 51.513968813644965,
+            longitude: -0.077530631715809 },
+        )
 
-      expect(GiasSchool.last.updated_at).to be_within(1.second).of(now)
+        expect(GiasSchool.last.updated_at).to be_within(1.second).of(now)
+      end
 
       travel_to 1.minute.from_now do
         expect { described_class.call(test_csv) }.not_to(change { GiasSchool.last.updated_at })
