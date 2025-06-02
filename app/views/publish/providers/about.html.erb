@@ -27,7 +27,7 @@
           label: { text: "Training with disabilities and other needs", size: "l" },
           hint: -> { render partial: "publish/courses/disabilities_guidance" },
           max_words: 250,
-          rows: 8) %>
+          rows: 20) %>
         <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
         <%= f.hidden_field(:goto_provider, value: goto_provider_value(param_form_key: f.object_name.to_sym, params:)) %>
         <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
