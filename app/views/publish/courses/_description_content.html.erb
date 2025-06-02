@@ -41,7 +41,7 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.salary_label"),
-      value_provided?(markdown(course.salary_details)),
+      value_provided?(""),
       %w[salary_details],
       action_path: course.is_withdrawn? ? nil : salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     ) %>
