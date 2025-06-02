@@ -44,6 +44,30 @@
 
       <%= render partial: "guidance" %>
 
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              <h1 class="govuk-fieldset__heading">
+                Does this course offer online interviews? (optional)
+              </h1>
+            </legend>
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
+                <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
+                  Yes
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
+                <label class="govuk-label govuk-radios__label" for="whereDoYouLive-2">
+                  No
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:interview_process1,
             label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
@@ -54,19 +78,6 @@
               preview_output_target: "preview"
               },
             rows: 6) %>
-
-        <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
-            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-              <div class="govuk-checkboxes__item">
-                <input class="govuk-checkboxes__input" id="waste" name="waste" type="checkbox" value="carcasses">
-                <label class="govuk-label govuk-checkboxes__label" for="waste">
-                  This course offers online interviews
-                </label>
-              </div>
-            </div>
-          </fieldset>
-        </div>
 
         <%= f.govuk_text_area(:interview_process2,
             label: { text: t("publish.providers.interview_process.edit.interview_process_format"), size: "s" },
@@ -93,6 +104,11 @@
         <p class="govuk-heading-m">What candidates will see</p>
         <div class="app-preview-container">
           <p class="govuk-heading-l">Interview process</p>
+
+          <div class="govuk-inset-text">
+            This course offers online interviews
+          </div>
+
           <p class="govuk-body">
             <div class="govuk-body">
               <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview"></p>
