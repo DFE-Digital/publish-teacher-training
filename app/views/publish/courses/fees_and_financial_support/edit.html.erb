@@ -67,7 +67,6 @@
       <%= f.govuk_text_area(
             :fee_details1,
             label: { text: t("publish.providers.fees_and_financial_support.edit.label"), size: "s" },
-            value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
             rows: 6,
             max_words: 50,
             data: { qa: "course_fee_details",
@@ -80,7 +79,6 @@
           :fee_details2,
           label: { text: t("publish.providers.fees_and_financial_support.edit.additional_costs"), size: "s" },
           hint: { text: t("publish.providers.fees_and_financial_support.edit.additional_costs_hint"), size: "s" },
-          value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
           rows: 6,
           max_words: 50,
           data: { qa: "course_fee_details",
@@ -93,7 +91,6 @@
           :fee_details3,
           label: { text: t("publish.providers.fees_and_financial_support.edit.org_financial_support"), size: "s" },
           hint: { text: t("publish.providers.fees_and_financial_support.edit.org_financial_support_hint"), size: "s" },
-          value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
           rows: 6,
           max_words: 50,
           data: { qa: "course_fee_details",
