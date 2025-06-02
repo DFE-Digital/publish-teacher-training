@@ -38,6 +38,7 @@ else
     issuer: ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?),
   }
 
-  Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
-
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider :openid_connect, options
+  end
 end
