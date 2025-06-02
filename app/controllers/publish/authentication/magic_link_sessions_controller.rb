@@ -7,6 +7,7 @@ module Publish
 
       skip_before_action :authenticate
       skip_after_action :verify_authorized
+      skip_before_action :authorize_provider
 
       before_action :redirect_if_token_is_invalid
       before_action :redirect_if_token_expired

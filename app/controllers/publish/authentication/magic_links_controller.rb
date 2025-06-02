@@ -7,6 +7,7 @@ module Publish
 
       skip_before_action :authenticate
       skip_after_action :verify_authorized
+      skip_before_action :authorize_provider
 
       def new
         @magic_link_form = MagicLinkForm.new
