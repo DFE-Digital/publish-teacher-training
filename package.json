@@ -42,7 +42,7 @@
   "devDependencies": {
     "esbuild": "^0.25.4",
     "jsdom": "^26.1.0",
-    "sass": "^1.89.0",
+    "sass": "^1.89.1",
     "standard": "^17.1.2",
     "stylelint": "^16.20.0",
     "stylelint-config-gds": "^2.0.0",
