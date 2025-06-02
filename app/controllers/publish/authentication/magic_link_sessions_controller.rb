@@ -3,11 +3,9 @@
 module Publish
   module Authentication
     class MagicLinkSessionsController < ApplicationController
-      layout "application"
+      include Unauthenticated
 
-      skip_before_action :authenticate
-      skip_after_action :verify_authorized
-      skip_before_action :authorize_provider
+      layout "application"
 
       before_action :redirect_if_token_is_invalid
       before_action :redirect_if_token_expired

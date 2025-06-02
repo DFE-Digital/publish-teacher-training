@@ -3,11 +3,9 @@
 module Publish
   module Authentication
     class PersonasController < ApplicationController
-      layout "application"
+      include Unauthenticated
 
-      skip_before_action :authenticate
-      skip_after_action :verify_authorized
-      skip_before_action :authorize_provider
+      layout "application"
 
       def index; end
     end

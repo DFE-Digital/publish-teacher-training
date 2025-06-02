@@ -3,11 +3,9 @@
 module Publish
   module Authentication
     class MagicLinksController < ApplicationController
-      layout "application"
+      include Unauthenticated
 
-      skip_before_action :authenticate
-      skip_after_action :verify_authorized
-      skip_before_action :authorize_provider
+      layout "application"
 
       def new
         @magic_link_form = MagicLinkForm.new
