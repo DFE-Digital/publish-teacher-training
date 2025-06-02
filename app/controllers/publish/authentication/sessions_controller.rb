@@ -5,6 +5,7 @@ module Publish
     class SessionsController < ApplicationController
       skip_before_action :authenticate
       skip_after_action :verify_authorized
+      skip_before_action :authorize_provider
 
       def sign_out
         if Publish::AuthenticationService.persona?
