@@ -3,9 +3,7 @@
 module Publish
   module Authentication
     class SessionsController < ApplicationController
-      skip_before_action :authenticate
-      skip_after_action :verify_authorized
-      skip_before_action :authorize_provider
+      include Unauthenticated
 
       def sign_out
         if Publish::AuthenticationService.persona?
