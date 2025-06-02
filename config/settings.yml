@@ -35,7 +35,7 @@ dfe_signin:
   # Our service name
   identifier: bats2
   # URL that the users are redirected to for signing in
-  issuer: https://test-oidc.signin.education.gov.uk/
+  issuer: https://test-oidc.signin.education.gov.uk
   # URL of the users profile
   profile: https://test-profile.signin.education.gov.uk
   # This value must be set otherwise sign in will fail
