@@ -3,15 +3,6 @@
 </h2>
 
 <%= govuk_summary_list do |summary_list| %>
-  <% enrichment_summary(
-    summary_list,
-    :course,
-    t("publish.providers.courses.description_content.why_train_with_us"),
-    value_provided?(""),
-    %w[about_course],
-    action_path: course.is_withdrawn? ? nil : why_train_with_us_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-    action_visually_hidden_text: t("publish.providers.courses.description_content.about_course_hidden_text"),
-  ) %>
 
   <% enrichment_summary(
        summary_list,
@@ -33,39 +24,26 @@
     action_visually_hidden_text: t("publish.providers.courses.description_content.interview_process_hidden_text"),
   ) %>
 
-<% end %>
-
-<h2 class="govuk-heading-m"><%= course.length_and_fees_or_salary_heading %></h2>
-
-<%= govuk_summary_list do |summary_list| %>
   <% if course.has_fees? %>
 
     <% enrichment_summary(
       summary_list,
       :course,
       t("publish.providers.courses.description_content.fee_details_label"),
-      value_provided?(markdown(course.fee_details)),
+      value_provided?(""),
       %w[fee_details],
       action_path: course.is_withdrawn? ? nil : fees_and_financial_support_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
       action_visually_hidden_text: t("publish.providers.courses.description_content.fee_details_hidden_text"),
     ) %>
 
   <% else %>
+    <% enrichment_summary(
+      summary_list,
+      :course,
+      t("publish.providers.courses.description_content.salary_label"),
+      value_provided?(markdown(course.salary_details)),
+      %w[salary_details],
+      action_path: course.is_withdrawn? ? nil : salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+    ) %>
   <% end %>
-<% end %>
-
-<h2 class="govuk-heading-m">Training with disabilities</h2>
-
-<%= govuk_summary_list do |summary_list| %>
-
-  <% enrichment_summary(
-    summary_list,
-    :course,
-    "Training with disabilities",
-    value_provided?(""),
-    %w[about_course],
-    action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
-    action_visually_hidden_text: t("publish.providers.courses.description_content.about_course_hidden_text"),
-  ) %>
-
 <% end %>
