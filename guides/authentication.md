@@ -14,6 +14,11 @@ The Publish QA environment is protected by basic auth. The username and password
 
 To access the staging and production environments, you will need to sign in with DfE Sign-in.
 
+If you need to test DfE Sign In before release, 
+
+1. Enable `mode: dfe_signin` as the authentication mode in config/settings/qa.yml
+2. Run the "Deploy" workflow and deploy your branch to QA (Use worflow from: 'main')
+
 ### Magic Link Sign in
 
 In the event that DfE Sign-in is unavailable, we enable sign in via magic link. There are three ways this can be achieved.
