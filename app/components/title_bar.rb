@@ -55,10 +55,6 @@ private
   end
 
   def recruitment_label
-    if current_recruitment_cycle?
-      "- #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} - current"
-    elsif next_recruitment_cycle?
-      "- #{current_recruitment_cycle_year + 1} to #{next_recruitment_cycle_year + 1}"
-    end
+    RecruitmentCycle.find_by(year: recruitment_cycle_year)&.year_range
   end
 end
