@@ -30,15 +30,16 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= govuk_summary_list do |summary_list| %>
-      <% enrichment_summary(
+       <% enrichment_summary(
         summary_list,
         :provider,
         "Why train with us",
         value_provided?(""),
-        %w[train_with_us],
-        action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
-        action_visually_hidden_text: "details about training with your organisation",
+        %w[email],
+        action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#email",
+        action_visually_hidden_text: "email address",
       ) %>
+
       <% enrichment_summary(
         summary_list,
         :provider,

@@ -18,78 +18,86 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @provider_contact_form.provider_name %></span>
-        <%= page_title %>
+        Why train with us
       </h1>
 
-      <%= f.govuk_text_field(:email,
-        form_group: { id: "email" },
-        label: { text: "Email address", size: "s" },
-        autocomplete: "email",
-        spellcheck: false,
-        data: { qa: "email" }) %>
+      <p class="govuk-body"><%= t("publish.providers.about_course.edit.description") %></p>
 
-      <%= f.govuk_text_field(:telephone,
-        form_group: { id: "telephone" },
-        label: { text: "Telephone number", size: "s" },
-        width: 20,
-        autocomplete: "tel",
-        data: { qa: "telephone" }) %>
+      <p class="govuk-body">
+        Be as <strong>specific</strong> as possible. This will help candidates work out if they want to train with you.
+      </p>
 
-      <%= f.govuk_text_field(:website,
-        form_group: { id: "website" },
-        label: { size: "s" },
-        data: { qa: "website" }) %>
+      <details class="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            See what you wrote last cycle
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+        <p class="govuk-body">
+          We are a growing, multi-campus university with over 10,000 students, where we equip you with the skills and practical experience to stand out. We’re the No. 1 University in the North West and Top 10 in the UK for graduates into employment or further study within 15 months (97% of graduates – HESA 2024).    </p>
+        <p class="govuk-body">
+          If you’re passionate about enriching young lives through education, you’ll have the resources and expertise to become the best educator you can be. With personalised support, a tailored curriculum, and intimate classroom settings where lecturers know you by name, you’ll grow every step of the way.     </p>
+          <p class="govuk-body">
+            With over 100 years of teacher training experience, you’ll receive all the support you need to inspire young minds. You’ll benefit from our strong partnerships with schools across the UK, refining your skills in diverse classroom environments. Our campus and school-based programmes offer placements that fully prepare you for a teaching role upon graduation.     </p>
+          <p class="govuk-body">
+            Start your journey with us in Lancaster, Carlisle, or London, and take the next step toward your future as an inspiring educator.     </p>
+        </div>
+      </details>
 
-      <%= f.govuk_text_field(:ukprn,
-        form_group: { id: "ukprn" },
-        label: { text: "UK provider reference number (UKPRN)", size: "s" },
-        width: 10,
-        data: { qa: "ukprn" }) %>
+      <div data-controller="input-preview">
+        <%= f.govuk_text_area(:why_train_with_us_1,
+                              data: { input_preview_target: "input", action: "input-preview#updatePreview" },
+                              label: { text: t("publish.providers.about_course.edit.why_train_with_you", provider_name: @provider.provider_name), size: "s" },
+                              hint: { text: t("publish.providers.about_course.edit.why_train_with_you_hint"), size: "s" },
+                              max_words: 100,
+                              rows: 8) %>
 
-      <% if @provider_contact_form.provider.provider_type == "lead_school" %>
-        <%= f.govuk_text_field(:urn,
-          form_group: { id: "urn" },
-          label: { text: "Unique reference number (URN)", size: "s" },
-          width: 10,
-          data: { qa: "urn" }) %>
-      <% end %>
+        <%= f.govuk_text_area(:why_train_with_us_2,
+                              data: { input_preview_target: "input", action: "input-preview#updatePreview" },
+                              label: { text: t("publish.providers.about_course.edit.what_different_other_providers"), size: "s" },
+                              hint: { text: t("publish.providers.about_course.edit.what_different_other_providers_hint_html"), size: "s" },
+                              max_words: 100,
+                              rows: 8) %>
 
-      <%= f.govuk_fieldset legend: { text: "Address", size: "m" }, id: "address" do %>
-        <%= f.govuk_text_field(:address1,
-          label: { text: "Address line 1", size: "s" },
-          autocomplete: "address-line1",
-          data: { qa: "address1" }) %>
+      <p class="govuk-heading-m">What candidates will see</p>
+        <div class="app-preview-container">
+          <p class="govuk-heading-l">Why train with us</p>
+          <p class="govuk-body">
+            <div class="govuk-body" data-input-preview-target="preview">
+              Your information will show here.
+            </div>
+          </p>
+          <p class="govuk-body"><a class="govuk-link" href="#">Contact <%= @provider.provider_name %></a></p>
 
-        <%= f.govuk_text_field(:address2,
-          label: { text: "Address line 2 (optional)", size: "s" },
-          autocomplete: "address-line2",
-          data: { qa: "address2" }) %>
+          <!-- Call out -->
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                How to choose a course
+              </span>
+              <p class="govuk-body">
+                Your course will vary depending on whether the training provider is a university, a school, or another organisation.
+              </p>
+              <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course">
+                  Find out how to choose a course.
+                </a>
+              </p>
+            </div>
+          </div>
+          <!-- END Call out -->
+        </div>
+      </div>
 
-        <%= f.govuk_text_field(:address3,
-          label: { text: "Address line 3 (optional)", size: "s" },
-          autocomplete: "address-line3",
-          data: { qa: "address3" }) %>
-
-        <%= f.govuk_text_field(:town,
-          label: { text: "Town or city", size: "s" },
-          width: "two-thirds",
-          autocomplete: "address-level2",
-          data: { qa: "town" }) %>
-
-        <%= f.govuk_text_field(:address4,
-          label: { text: "County (optional)", size: "s" },
-          width: "two-thirds",
-          autocomplete: "address-level1",
-          data: { qa: "address4" }) %>
-
-        <%= f.govuk_text_field(:postcode,
-          label: { size: "s" },
-          width: 10,
-          autocomplete: "postal-code",
-          data: { qa: "postcode" }) %>
-      <% end %>
-
-      <%= f.govuk_submit "Save and publish" %>
+      <%= f.govuk_submit "Update why train with us" %>
     <% end %>
+      <p class="govuk-body">
+        <a class="govuk-link" href="#">
+          Cancel
+        </a>
+      </p>
+    </div>
+
   </div>
 </div>
