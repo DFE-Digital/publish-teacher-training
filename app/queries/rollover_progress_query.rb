@@ -18,6 +18,10 @@ class RolloverProgressQuery
 
   delegate :count, to: :rolled_over_providers, prefix: true
 
+  delegate :count, to: :total_eligible_courses, prefix: true
+
+  delegate :count, to: :rolled_over_courses, prefix: true
+
   def rollover_percentage
     return 0 if total_eligible_providers_count.zero? || rolled_over_providers_count.zero?
 
@@ -38,6 +42,18 @@ class RolloverProgressQuery
         id: providers_with_rollable_accredited_courses.select(:id),
       ),
     ).distinct
+  end
+
+  def total_eligible_courses
+    @previous_target_cycle
+      .courses
+      .joins(:latest_enrichment)
+      .where(course_enrichment: { status: %i[published withdrawn] })
+      .where(provider_id: total_eligible_providers.pluck(:id)).distinct
+  end
+
+  def rolled_over_courses
+    @target_cycle.courses.where("course.created_at < ?", @target_cycle.application_start_date)
   end
 
   def rolled_over_providers
