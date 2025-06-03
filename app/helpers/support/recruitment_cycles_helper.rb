@@ -35,11 +35,11 @@ module Support
       }
     end
 
-    def rollover_summary(previous_target_cycle:, total_eligible_providers_count:, rolled_over_providers_count:, rollover_percentage:)
+    def rollover_providers_summary(previous_target_cycle:, total_eligible_providers_count:, rolled_over_providers_count:, rollover_percentage:)
       return t(".rollover_status.no_previous_cycle") if previous_target_cycle.blank?
 
       t(
-        ".rollover_status.summary",
+        ".rollover_status.providers_summary",
         total_eligible_providers_count:,
         rolled_over_providers_count:,
         rollover_percentage:,

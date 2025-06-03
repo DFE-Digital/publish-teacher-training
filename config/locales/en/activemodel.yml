@@ -8,7 +8,8 @@ en:
         available_in_publish_from: Available in publish from
         available_in_publish_from_description: Date when courses will become available to users in Publish.
       rollover_progress_query:
-        status: Status
+        providers_summary: Rolled over providers
+        courses_summary: Rolled over courses
         remaining_to_rollover: Remaining to rollover
         providers_without_published_courses: Providers without published courses (not rolled over)
     errors:

@@ -17,6 +17,27 @@ RSpec.describe RolloverProgressQuery, type: :model do
   let(:new_provider) do
     create(:provider, recruitment_cycle: target_cycle, created_at: 1.day.after(target_cycle.application_start_date))
   end
+  let(:published_course) do
+    create(:course, :published, provider: provider_with_own_course)
+  end
+  let(:rolled_over_published_course) do
+    create(:course, provider: rolled_over_provider, course_code: published_course.course_code)
+  end
+  let(:accredited_course) do
+    create(:course, :published, provider: training_provider, accredited_provider_code: provider_with_accredited_course.provider_code)
+  end
+  let(:rolled_over_accredited_course) do
+    create(:course, provider: new_provider, accredited_provider_code: rolled_over_provider.provider_code, course_code: accredited_course.course_code)
+  end
+  let(:draft_course) do
+    create(:course, :draft_enrichment, provider: provider_with_only_draft_courses)
+  end
+  let(:withdrawn_course) do
+    create(:course, :withdrawn, provider: provider_with_withdrawn_course)
+  end
+  let(:rolled_over_withdrawn_course) do
+    create(:course, provider: new_provider, course_code: withdrawn_course.course_code)
+  end
 
   before do
     mid_cycle = Time.zone.local(2025, 5, 23, 10, 0, 0)
@@ -117,10 +138,40 @@ RSpec.describe RolloverProgressQuery, type: :model do
     end
   end
 
+  describe "#total_eligible_courses" do
+    before do
+      given_we_have_providers_and_courses_on_previous_target_cycle
+    end
+
+    it "includes providers with own rollable courses and accredited rollable courses" do
+      expect(rollover_progress.total_eligible_courses).to match_collection(
+        [published_course, accredited_course, withdrawn_course],
+        attribute_names: %w[course_code],
+      )
+    end
+  end
+
+  describe "#rolled_over_courses" do
+    before do
+      given_we_have_rolled_over_providers
+      given_we_have_rolled_over_courses
+    end
+
+    it "includes courses created on rollover" do
+      expect(
+        rollover_progress.rolled_over_courses,
+      ).to match_collection(
+        [rolled_over_published_course, rolled_over_accredited_course, rolled_over_withdrawn_course],
+        attribute_names: %w[course_code],
+      )
+    end
+  end
+
   describe "delegated count methods" do
     before do
       given_we_have_providers_and_courses_on_previous_target_cycle
       given_we_have_rolled_over_providers
+      given_we_have_rolled_over_courses
     end
 
     it "delegates providers_without_published_courses_count" do
@@ -134,6 +185,10 @@ RSpec.describe RolloverProgressQuery, type: :model do
     it "delegates rolled_over_providers_count" do
       expect(rollover_progress.rolled_over_providers_count).to eq(1)
     end
+
+    it "delegates rolled_over_courses_count" do
+      expect(rollover_progress.rolled_over_courses_count).to eq(3)
+    end
   end
 
 private
@@ -146,14 +201,20 @@ private
     provider_with_only_draft_courses
     provider_without_courses
 
-    create(:course, :published, provider: provider_with_own_course)
-    create(:course, :published, provider: training_provider, accredited_provider_code: provider_with_accredited_course.provider_code)
-    create(:course, :draft_enrichment, provider: provider_with_only_draft_courses)
-    create(:course, :withdrawn, provider: provider_with_withdrawn_course)
+    published_course
+    accredited_course
+    draft_course
+    withdrawn_course
   end
 
   def given_we_have_rolled_over_providers
     rolled_over_provider
     new_provider
+  end
+
+  def given_we_have_rolled_over_courses
+    rolled_over_published_course
+    rolled_over_accredited_course
+    rolled_over_withdrawn_course
   end
 end
