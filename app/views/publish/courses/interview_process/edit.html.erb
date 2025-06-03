@@ -51,15 +51,15 @@
                 Does this course offer online interviews? (optional)
               </h1>
             </legend>
-            <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios" data-module="govuk-radios" data-controller="input-preview">
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
+                <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="true" data-action="input-preview#toggleInterviewOnline" data-input-preview-target="input" data-preview-output-target="preview">
                 <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
                   Yes
                 </label>
               </div>
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
+              <div class="govuk-radios__item" >
+                <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="false" data-action="input-preview#toggleInterviewOnline" data-input-preview-target="input" data-preview-output-target="preview">
                 <label class="govuk-label govuk-radios__label" for="whereDoYouLive-2">
                   No
                 </label>
@@ -105,7 +105,7 @@
         <div class="app-preview-container">
           <p class="govuk-heading-l">Interview process</p>
 
-          <div class="govuk-inset-text">
+          <div id="course_interview_online_label" class="govuk-inset-text">
             This course offers online interviews
           </div>
 
