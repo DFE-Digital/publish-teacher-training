@@ -72,4 +72,13 @@ export default class extends Controller {
       previewEl.innerHTML = previewContent
     })
   }
+
+  toggleInterviewOnline(event) {
+    const isChecked = event.target.value == 'true'
+    if (!isChecked) {
+      document.getElementById('course_interview_online_label').style.display = 'none';
+    } else if (isChecked) {
+      document.getElementById('course_interview_online_label').style.display = 'block';
+    }
+  }
 }
