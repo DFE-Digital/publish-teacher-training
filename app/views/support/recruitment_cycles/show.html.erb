@@ -65,6 +65,16 @@
       <% end %>
 
       <% if @rollover_progress.previous_target_cycle.present? %>
+        <div class="govuk-inset-text">
+          <%= t(
+                ".rollover_status.inset_text_html",
+                total_eligible_providers_count: @rollover_progress.total_eligible_providers_count,
+                total_eligible_courses_count: @rollover_progress.total_eligible_courses_count,
+                providers_plus_one: @rollover_progress.total_eligible_providers_count + 1,
+                courses_plus_one: @rollover_progress.total_eligible_courses_count + 1,
+              ) %>
+        </div>
+
         <%= govuk_summary_card(classes: %w[recruitment-cycle-summary-card], title: RecruitmentCycle.human_attribute_name(:rollover_progress)) do |card| %>
           <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
             <% summary_list.with_row do |row| %>
