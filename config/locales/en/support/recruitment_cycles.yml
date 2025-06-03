@@ -33,3 +33,9 @@ en:
           no_previous_cycle: No previous cycle
           providers_summary: '%{rolled_over_providers_count} of %{total_eligible_providers_count} providers (%{rollover_percentage}%)'
           courses_summary: '%{rolled_over_courses_count} of %{total_eligible_courses_count}'
+          inset_text_html: |
+            The numbers below shown for "providers" and "courses" in the rollover summary reflect the status at the time the rollover automation was run.
+            <br><br>
+            At that point, there were <strong>%{total_eligible_providers_count} providers</strong> and <strong>%{total_eligible_courses_count} courses</strong> eligible for rollover.
+            <br><br>
+            If you see higher numbers displayed later (for example, "%{providers_plus_one} of %{total_eligible_providers_count} providers" or "%{courses_plus_one} of %{total_eligible_courses_count} courses"), this means that after the automated rollover process completed, additional providers or courses were manually added — either by support staff or by provider users manually rolling over specific courses — before the start of the new cycle.
