@@ -18,6 +18,7 @@ describe RolloverProviderService do
     allow(Providers::CopyToRecruitmentCycleService).to receive(:new).with(
       copy_course_to_provider_service:,
       copy_site_to_provider_service: instance_of(Sites::CopyToProviderService),
+      copy_partnership_to_provider_service: instance_of(Partnerships::CopyToProviderService),
       force:,
     ).and_return(copy_provider_to_recruitment_cycle_service)
   end
