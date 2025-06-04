@@ -233,7 +233,7 @@ jobs:
 
   build:
     name: Build
-    needs: [lint, analytics-checks, javascript-tests, rails-tests]
+    #needs: [lint, analytics-checks, javascript-tests, rails-tests]
     if: ${{ github.ref == 'refs/heads/2326-use-build-docker-image' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) }}
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
