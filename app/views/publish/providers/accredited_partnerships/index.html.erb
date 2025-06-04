@@ -1,30 +1,22 @@
 <% content_for :page_title, title_with_error_prefix(t(".title"), nil) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
       <%= t(".title") %>
     </h1>
-
     <%= govuk_button_link_to(t(".add"), search_publish_provider_recruitment_cycle_accredited_providers_path(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year,
     )) %>
   </div>
 </div>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <% if @provider.accredited_partnerships.none? %>
       <p class="govuk-body"><%= t(".no_providers", provider_name: @provider.provider_name) %>
       </p>
     <% else %>
-      <% @provider.accredited_partnerships.each do |partnership| %>
-        <%= render AccreditedProviderComponent.new(
-            provider: partnership.accredited_provider,
-            remove_path: delete_publish_provider_recruitment_cycle_accredited_partnership_path(accredited_provider_code: partnership.accredited_provider.provider_code),
-          ) %>
-      <% end %>
+      <%= render partial: "accredited_provider_table", locals: { partnerships: @provider.accredited_partnerships } %>
     <% end %>
   </div>
 </div>
