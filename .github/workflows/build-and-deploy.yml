@@ -240,7 +240,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
-
+      DOCKER_REPOSITORY: ghcr.io/dfe-digital/publish-teacher-training
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -270,8 +270,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Build and push docker image
+        id: build-image
+        uses: DFE-Digital/github-actions/build-docker-image@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: .
+          docker-repository: ${{ env.DOCKER_REPOSITORY }}
+          max-cache: true
+          reuse-cache: true
+          snyk-token: ${{ secrets.SNYK_TOKEN }}
 
       - name: Build Publish-Teacher-Training-Middleman
         uses: docker/build-push-action@v6
@@ -304,14 +312,6 @@ jobs:
       - name: Push ${{ env.DOCKER_IMAGE }} images for review
         if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
         run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
-
-      - name: Run Snyk to check Docker image for vulnerabilities
-        uses: snyk/actions/docker@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          image: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
-          args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
 
       - name: Push ${{ env.DOCKER_IMAGE }} images
         if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy') }}
