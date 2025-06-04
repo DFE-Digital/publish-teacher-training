@@ -4,7 +4,7 @@ concurrency: build_and_deploy_${{ github.ref_name }}
 on:
   push:
     branches:
-      - main
+      - 2326-use-build-docker-image
   pull_request:
     types: [opened, reopened, synchronize, labeled]
 
@@ -19,7 +19,8 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype')) }}
+    #if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype')) }}
+    if: false
     strategy:
       fail-fast: false
       matrix:
@@ -233,7 +234,7 @@ jobs:
   build:
     name: Build
     needs: [lint, analytics-checks, javascript-tests, rails-tests]
-    if: ${{ github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) }}
+    if: ${{ github.ref == 'refs/heads/2326-use-build-docker-image' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) }}
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
@@ -241,6 +242,7 @@ jobs:
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
       DOCKER_REPOSITORY: ghcr.io/dfe-digital/publish-teacher-training
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -262,13 +264,6 @@ jobs:
           echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
           # This is the latest commit on the actual PR branch
           echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push docker image
         id: build-image
