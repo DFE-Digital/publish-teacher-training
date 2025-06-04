@@ -49,7 +49,7 @@ class RolloverProgressQuery
       .courses
       .joins(:latest_enrichment)
       .where(course_enrichment: { status: %i[published withdrawn] })
-      .where(provider_id: total_eligible_providers.pluck(:id)).distinct
+      .where(provider_id: total_eligible_providers.select(:id)).distinct
   end
 
   def rolled_over_courses
