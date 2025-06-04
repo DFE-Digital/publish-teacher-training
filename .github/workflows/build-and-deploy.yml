@@ -255,16 +255,6 @@ jobs:
           echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
           echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
 
-      - name: Get values for current commit (Pull request)
-        if: github.event_name == 'pull_request'
-        run: |
-          # This is the actual PR branch
-          GIT_REF=${{ github.head_ref }}
-          GIT_BRANCH=${GIT_REF##*/}
-          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
-          # This is the latest commit on the actual PR branch
-          echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
-
       - name: Build and push docker image
         id: build-image
         uses: DFE-Digital/github-actions/build-docker-image@master
