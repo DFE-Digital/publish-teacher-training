@@ -117,3 +117,6 @@
   - statement
   - data_source
   - created_at
+  :session:
+  - id_token
+  - data
