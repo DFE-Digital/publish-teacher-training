@@ -4,6 +4,15 @@ shared:
     - email_address
     - created_at
     - updated_at
+  session:
+    - id
+    - user_agent
+    - ip_address
+    - session_key
+    - sessionable_id
+    - sessionable_type
+    - created_at
+    - updated_at
   contact:
     - id
     - provider_id
