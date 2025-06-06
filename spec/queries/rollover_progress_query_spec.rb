@@ -105,13 +105,13 @@ RSpec.describe RolloverProgressQuery, type: :model do
     end
   end
 
-  describe "#total_eligible_providers" do
+  describe "#eligible_providers" do
     before do
       given_we_have_providers_and_courses_on_previous_target_cycle
     end
 
     it "includes providers with own rollable courses and accredited rollable courses" do
-      expect(rollover_progress.total_eligible_providers).to match_collection(
+      expect(rollover_progress.eligible_providers).to match_collection(
         [
           provider_with_own_course,
           training_provider,
@@ -138,13 +138,13 @@ RSpec.describe RolloverProgressQuery, type: :model do
     end
   end
 
-  describe "#total_eligible_courses" do
+  describe "#eligible_courses" do
     before do
       given_we_have_providers_and_courses_on_previous_target_cycle
     end
 
     it "includes providers with own rollable courses and accredited rollable courses" do
-      expect(rollover_progress.total_eligible_courses).to match_collection(
+      expect(rollover_progress.eligible_courses).to match_collection(
         [published_course, accredited_course, withdrawn_course],
         attribute_names: %w[course_code],
       )
@@ -167,6 +167,88 @@ RSpec.describe RolloverProgressQuery, type: :model do
     end
   end
 
+  describe "#eligible_partnerships" do
+    let(:accredited_provider) { create(:provider, :accredited_provider) }
+    let(:rollable_partnership_one) do
+      create(
+        :provider_partnership,
+        training_provider:,
+        accredited_provider:,
+      )
+    end
+    let(:rollable_partnership2_two) do
+      create(
+        :provider_partnership,
+        training_provider: provider_with_withdrawn_course,
+        accredited_provider:,
+      )
+    end
+    let(:not_rollable_partnership_one) do
+      create(
+        :provider_partnership,
+        training_provider: provider_without_courses,
+        accredited_provider:,
+      )
+    end
+    let(:not_rollable_partnership2_two) do
+      create(
+        :provider_partnership,
+        training_provider: create(:provider, recruitment_cycle: previous_target_cycle),
+        accredited_provider:,
+      )
+    end
+
+    before do
+      given_we_have_providers_and_courses_on_previous_target_cycle
+      rollable_partnership_one
+      rollable_partnership2_two
+      not_rollable_partnership_one
+      not_rollable_partnership2_two
+    end
+
+    it "includes partnerships with eligible providers" do
+      expect(rollover_progress.eligible_partnerships).to match_collection(
+        [rollable_partnership_one, rollable_partnership2_two],
+      )
+    end
+
+    it "returns correct count through delegation" do
+      expect(rollover_progress.eligible_partnerships_count).to eq(2)
+    end
+  end
+
+  describe "#rolled_over_partnerships" do
+    let(:rolled_over_provider) { create(:provider, recruitment_cycle: target_cycle) }
+    let(:new_provider) { create(:provider, :accredited_provider, recruitment_cycle: target_cycle) }
+
+    let!(:valid_partnership) do
+      create(:provider_partnership,
+             training_provider: create(:provider, recruitment_cycle: target_cycle),
+             accredited_provider: new_provider)
+    end
+    let!(:another_valid_partnership) do
+      create(:provider_partnership,
+             training_provider: rolled_over_provider,
+             accredited_provider: new_provider)
+    end
+    let!(:old_cycle_partnership) do
+      create(:provider_partnership,
+             training_provider: create(:provider, recruitment_cycle: previous_target_cycle),
+             accredited_provider: create(:provider, :accredited_provider, recruitment_cycle: previous_target_cycle))
+    end
+
+    it "includes partnerships with at least one rolled-over provider" do
+      expect(rollover_progress.rolled_over_partnerships).to match_collection(
+        [valid_partnership, another_valid_partnership],
+        attribute_names: %w[id],
+      )
+    end
+
+    it "returns correct count through delegation" do
+      expect(rollover_progress.rolled_over_partnerships_count).to eq(2)
+    end
+  end
+
   describe "delegated count methods" do
     before do
       given_we_have_providers_and_courses_on_previous_target_cycle
@@ -178,8 +260,8 @@ RSpec.describe RolloverProgressQuery, type: :model do
       expect(rollover_progress.providers_without_published_courses_count).to eq(2)
     end
 
-    it "delegates total_eligible_providers_count" do
-      expect(rollover_progress.total_eligible_providers_count).to eq(4)
+    it "delegates eligible_providers_count" do
+      expect(rollover_progress.eligible_providers_count).to eq(4)
     end
 
     it "delegates rolled_over_providers_count" do

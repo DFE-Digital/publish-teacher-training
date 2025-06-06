@@ -2,9 +2,10 @@
 
 module Providers
   class CopyToRecruitmentCycleService
-    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, force:)
+    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, copy_partnership_to_provider_service:, force:)
       @copy_course_to_provider_service = copy_course_to_provider_service
       @copy_site_to_provider_service = copy_site_to_provider_service
+      @copy_partnership_to_provider_service = copy_partnership_to_provider_service
       @force = force
     end
 
@@ -13,6 +14,7 @@ module Providers
       sites_count = 0
       study_sites_count = 0
       courses_count = 0
+      partnerships_count = 0
 
       if provider.rollable? || force
         ActiveRecord::Base.transaction do
@@ -34,6 +36,7 @@ module Providers
           sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
           study_sites_count = copy_study_sites_to_new_provider(provider, rolled_over_provider)
           courses_count = copy_courses_to_new_provider(rolled_over_provider, courses_to_copy(provider, course_codes))
+          partnerships_count = copy_partnerships_to_new_provider(provider, rolled_over_provider, new_recruitment_cycle)
         end
       end
 
@@ -42,6 +45,7 @@ module Providers
         sites: sites_count,
         study_sites: study_sites_count,
         courses: courses_count,
+        partnerships: partnerships_count,
       }
     end
 
@@ -111,6 +115,14 @@ module Providers
       end
 
       study_sites_count
+    end
+
+    def copy_partnerships_to_new_provider(provider, rolled_over_provider, new_recruitment_cycle)
+      @copy_partnership_to_provider_service.execute(
+        provider:,
+        rolled_over_provider:,
+        new_recruitment_cycle:,
+      )
     end
   end
 end

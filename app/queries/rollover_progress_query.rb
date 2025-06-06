@@ -9,33 +9,37 @@ class RolloverProgressQuery
   end
 
   def remaining_to_rollover_count
-    total_eligible_providers_count - rolled_over_providers_count
+    eligible_providers_count - rolled_over_providers_count
   end
 
   delegate :count, to: :providers_without_published_courses, prefix: true
 
-  delegate :count, to: :total_eligible_providers, prefix: true
+  delegate :count, to: :eligible_providers, prefix: true
 
   delegate :count, to: :rolled_over_providers, prefix: true
 
-  delegate :count, to: :total_eligible_courses, prefix: true
+  delegate :count, to: :eligible_courses, prefix: true
 
   delegate :count, to: :rolled_over_courses, prefix: true
 
-  def rollover_percentage
-    return 0 if total_eligible_providers_count.zero? || rolled_over_providers_count.zero?
+  delegate :count, to: :eligible_partnerships, prefix: true
 
-    (rolled_over_providers_count.to_f / total_eligible_providers_count * 100).round(2)
+  delegate :count, to: :rolled_over_partnerships, prefix: true
+
+  def rollover_percentage
+    return 0 if eligible_providers_count.zero? || rolled_over_providers_count.zero?
+
+    (rolled_over_providers_count.to_f / eligible_providers_count * 100).round(2)
   end
 
   def providers_without_published_courses
-    @previous_target_cycle.providers.where.not(
-      id: total_eligible_providers.select(:id),
-    ).distinct
+    @previous_target_cycle.providers
+    .where.not(id: eligible_providers.select(:id))
+    .distinct
   end
 
-  def total_eligible_providers
-    @total_eligible_providers ||= @previous_target_cycle.providers.where(
+  def eligible_providers
+    @eligible_providers ||= @previous_target_cycle.providers.where(
       id: providers_with_own_rollable_courses.select(:id),
     ).or(
       @previous_target_cycle.providers.where(
@@ -44,12 +48,55 @@ class RolloverProgressQuery
     ).distinct
   end
 
-  def total_eligible_courses
+  def eligible_courses
     @previous_target_cycle
       .courses
       .joins(:latest_enrichment)
       .where(course_enrichment: { status: %i[published withdrawn] })
-      .where(provider_id: total_eligible_providers.select(:id)).distinct
+      .where(provider_id: eligible_providers.select(:id)).distinct
+  end
+
+  def eligible_partnerships
+    ProviderPartnership
+    .includes(:training_provider, :accredited_provider)
+    .where(
+      "accredited_provider_id IN (:ids) OR training_provider_id IN (:ids)",
+      ids: eligible_providers.select(:id),
+    )
+    .where.not(
+      training_provider_id: providers_without_published_courses.select(:id),
+    )
+    .where.not(
+      training_provider_id: previous_cycle_discarded_providers.select(:id),
+    )
+    .where.not(
+      accredited_provider_id: previous_cycle_discarded_providers.select(:id),
+    )
+  end
+
+  def rolled_over_partnerships
+    ProviderPartnership.includes(:training_provider, :accredited_provider).where(
+      "accredited_provider_id IN (:id) OR training_provider_id IN (:id)",
+      id: @target_cycle.providers.select(:id),
+    )
+  end
+
+  def partnerships_diff
+    previous_pairs = eligible_partnerships.map do |partnership|
+      [
+        partnership.training_provider.provider_code,
+        partnership.accredited_provider.provider_code,
+      ]
+    end
+
+    rolled_over_pairs = rolled_over_partnerships.map do |partnership|
+      [
+        partnership.training_provider.provider_code,
+        partnership.accredited_provider.provider_code,
+      ]
+    end
+
+    previous_pairs - rolled_over_pairs
   end
 
   def rolled_over_courses
@@ -74,5 +121,12 @@ private
       .joins(accredited_courses: :latest_enrichment)
       .where(course_enrichment: { status: %i[published withdrawn] })
       .distinct
+  end
+
+  def previous_cycle_discarded_providers
+    Provider
+      .unscoped
+      .where(recruitment_cycle_id: @previous_target_cycle.id)
+      .discarded
   end
 end
