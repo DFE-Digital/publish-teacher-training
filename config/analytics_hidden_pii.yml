@@ -4,3 +4,5 @@ shared:
     - email_address
   user:
     - sign_in_user_id
+  session:
+    - ip_address
