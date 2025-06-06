@@ -39,7 +39,6 @@ module Find
       terminate_session
       user.sessions.create!(session_key: candidate_session, user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
         Current.session = session
-        Current.user = user
       end
     end
 
