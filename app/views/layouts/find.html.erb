@@ -32,7 +32,7 @@
 
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
-    <%= render HeaderComponent.new(service_name: I18n.t("service_name.find")) do |header| %>
+    <%= render HeaderComponent.new(service_name: I18n.t("service_name.find"), current_user: Current.session&.sessionable) do |header| %>
       <% header.with_phase_banner_text t(".feedback", link_to: govuk_link_to(t(".feedback_text"), new_find_feedback_path)) %>
     <% end %>
 
