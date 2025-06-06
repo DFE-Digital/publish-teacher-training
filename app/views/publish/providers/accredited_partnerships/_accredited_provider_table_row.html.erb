@@ -2,15 +2,12 @@
 <% body.with_row do |row| %>
   <% row.with_cell do %>
     <%= govuk_link_to(
-          "#{provider.provider_name} (#{provider.provider_code})",
-          support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider)
-        ) %>
-  <% end %>
-  <% row.with_cell do %>
-    <%= govuk_link_to(
-          "Remove",
-          delete_publish_provider_recruitment_cycle_accredited_partnership_path(accredited_provider_code: provider.provider_code),
-          class: "app-link--destructive govuk-!-font-weight-regular"
-        ) %>
+      "#{provider.provider_name} (#{provider.provider_code})",
+      details_publish_provider_recruitment_cycle_accredited_partnership_path(
+        provider_code: @provider.provider_code,
+        recruitment_cycle_year: @provider.recruitment_cycle_year,
+        accredited_provider_code: provider.provider_code,
+      ),
+    ) %>
   <% end %>
 <% end %>

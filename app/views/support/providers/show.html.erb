@@ -14,4 +14,4 @@
 
 <%= render "support/providers/navigation" %>
 
-<%= render Providers::ProviderList::View.new(provider: @provider) %>
+<%= render Providers::ProviderList::View.new(provider: @provider, display_change_links: true) %>
