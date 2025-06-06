@@ -8,6 +8,9 @@ en:
           no_providers: There are no accredited providers for %{provider_name}.
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: Add accredited provider
+        show:
+          back_link_text: All accredited providers
+          remove: Remove accredited provider
         delete:
           title: Are you sure you want to remove this accredited provider?
           warning: You cannot remove this accredited provider
@@ -16,6 +19,7 @@ en:
           removed: Accredited provider removed
         can_remove:
           title: Are you sure you want to remove this accredited provider?
+          warning: You will not longer be able to select this accredited provider when creating a course.
           remove: Remove accredited provider
         cannot_remove:
           warning: You cannot remove this accredited provider
