@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing visa sponsorship" do
+RSpec.describe "Editing visa sponsorship" do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_with_courses
