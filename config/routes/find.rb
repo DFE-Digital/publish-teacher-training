@@ -30,6 +30,11 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
     get "/:provider_code/:course_code/training-with-disabilities", to: "training_with_disabilities#show", as: :training_with_disabilities
   end
 
+  constraints ->(_req) { FeatureFlag.active?(:candidate_accounts) } do
+    scope module: "authentication" do
+      resource :sessions, path: "auth/session", only: %i[create destroy]
+    end
+  end
   get "/maintenance", to: "pages#maintenance", as: "maintenance"
   get "/cycles", to: "switcher#cycles", as: :cycles
   post "/cycles", to: "switcher#update", as: :switch_cycle_schedule
