@@ -53,6 +53,12 @@ We can look into unauthenticated sessions and the use of Guests in future if we 
 | 3     | Guest     | unauthenticated | `_candidate_teacher_training_courses_session` | `session`     |
 
 
+#### Session expiration
+
+Candidate sessions in Find will be session cookies. This means they expire when the browser is closed. This is the normal behaviour for a session cookie and unless we want to set another condition like a TTL, this is the proposed style of session expiration for this iteration.
+
+In later iterations we will be integrating with an Identity Provider. The Identity Provider session lasts 1 hour. While the candidate is logged into Find, their session with the Identity Provider can expire and it will make no difference to the candidates use of Find.
+
 ### Considerations
 
 We are rolling our own authentications system here. We need to be careful not to expose any vulnerabilities.
