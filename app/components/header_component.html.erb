@@ -6,7 +6,7 @@
 <% end %>
 
 <% if navigation_items %>
-  <%= govuk_service_navigation(service_name:, service_url:) do |service_navigation| %>
+  <%= govuk_service_navigation(service_name:, service_url:, current_path: request.path) do |service_navigation| %>
     <% navigation_items.each do |navigation_item| %>
       <%= service_navigation.with_navigation_item text: navigation_item.text, href: navigation_item.href %>
     <% end %>

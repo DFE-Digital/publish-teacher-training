@@ -34,6 +34,11 @@
 
     <%= render HeaderComponent.new(service_name: I18n.t("service_name.find"), current_user: Current.session&.sessionable) do |header| %>
       <% header.with_phase_banner_text t(".feedback", link_to: govuk_link_to(t(".feedback_text"), new_find_feedback_path)) %>
+
+      <% if authenticated? %>
+        <% header.with_navigation_item t(".primary_nav.courses_html"), find_root_path %>
+        <% header.with_navigation_item t(".primary_nav.saved_courses_html"), find_candidate_saved_courses_path %>
+      <% end %>
     <% end %>
 
     <div class="govuk-width-container">

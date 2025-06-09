@@ -32,9 +32,14 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
 
   constraints ->(_req) { FeatureFlag.active?(:candidate_accounts) } do
     scope module: "authentication" do
-      resource :sessions, path: "auth/session", only: %i[create destroy]
+      resource :sessions, path: "auth/session", only: %i[new create destroy]
+    end
+
+    scope path: "candidate", module: "candidates", as: "candidate" do
+      get "/saved-courses", to: "saved_courses#index", as: :saved_courses
     end
   end
+
   get "/maintenance", to: "pages#maintenance", as: "maintenance"
   get "/cycles", to: "switcher#cycles", as: :cycles
   post "/cycles", to: "switcher#update", as: :switch_cycle_schedule
