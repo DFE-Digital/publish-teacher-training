@@ -3,3 +3,6 @@ en:
     find:
       feedback: This is a new service &ndash; %{link_to} will help us to improve it.
       feedback_text: your feedback
+      primary_nav:
+        courses_html: "<strong>Courses</strong>"
+        saved_courses_html: "<strong>Saved courses</strong>"

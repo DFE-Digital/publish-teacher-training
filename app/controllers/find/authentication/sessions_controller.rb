@@ -1,6 +1,8 @@
 module Find
   module Authentication
     class SessionsController < ApplicationController
+      def new; end
+
       def create
         if (candidate = Candidate.find_or_create_by(params.permit(:email_address)))
           start_new_session_for candidate

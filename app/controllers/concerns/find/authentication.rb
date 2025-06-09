@@ -3,7 +3,6 @@ module Find
     extend ActiveSupport::Concern
 
     included do
-      # before_action :require_authentication
       before_action :load_session
       helper_method :authenticated?
       helper_method :candidate_session
@@ -43,8 +42,11 @@ module Find
     end
 
     def request_authentication
-      Current.session.data["return_to_after_authenticating"] = request.url
-      redirect_to new_session_path
+      if Current.session
+        Current.session.data["return_to_after_authenticating"] = request.url
+      end
+
+      redirect_to new_find_sessions_path
     end
 
     def after_authentication_url
