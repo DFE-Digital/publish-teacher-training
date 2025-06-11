@@ -33,12 +33,18 @@ feature "Accredited partnership flow" do
   scenario "i cannot delete accredited providers if they are attached to a course" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
+    and_i_click_on_the_accredited_provider
+    then_i_am_on_the_accredited_provider_details_page
+    and_i_see_the_remove_link
     and_i_click_remove
     then_i_see_the_cannot_remove_ap_text
   end
 
   scenario "i can delete accredited providers if they are not attached to a course" do
     and_i_create_a_new_accredited_provider
+    and_i_click_on_the_accredited_provider
+    then_i_am_on_the_accredited_provider_details_page
+    and_i_see_the_remove_link
     and_i_click_remove
     and_i_click_remove_ap
     and_i_see_the_remove_success_message
@@ -119,6 +125,10 @@ private
     expect(page).to have_css("h1", text: "You cannot remove this accredited provider")
   end
 
+  def and_i_see_the_remove_link
+    expect(page).to have_link("Remove accredited provider")
+  end
+
   def and_i_click_remove
     click_link_or_button "Remove"
   end
@@ -138,7 +148,7 @@ private
   end
 
   def and_i_see_the_accredited_providers
-    expect(page).to have_css(".govuk-summary-card", count: 1)
+    expect(page).to have_css(".govuk-table__cell", count: 1)
     expect(page).to have_content(@accredited_provider.provider_name)
   end
 
@@ -268,6 +278,22 @@ private
 
   alias_method :and_i_click_on_the_accredited_provider_tab, :when_i_click_on_the_accredited_provider_tab
 
+  def and_i_click_on_the_accredited_provider
+    expect(page).to have_link(@accredited_provider.provider_name)
+    click_link @accredited_provider.provider_name
+  end
+
+  def then_i_am_on_the_accredited_provider_details_page
+    expect(page).to have_current_path(
+      details_publish_provider_recruitment_cycle_accredited_partnership_path(
+        provider_code: @provider.provider_code,
+        recruitment_cycle_year: @provider.recruitment_cycle_year,
+        accredited_provider_code: @accredited_provider.provider_code,
+      ),
+    )
+    expect(page).to have_content(@accredited_provider.provider_name)
+  end
+
   def and_i_visit_the_root_path
     visit root_path
   end
@@ -286,13 +312,14 @@ private
   end
 
   def and_my_provider_has_accrediting_providers
-    course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: "Accrediting provider name"))
+    @accredited_provider = build(:provider, :accredited_provider, provider_name: "Accrediting provider name")
+    course = build(:course, accrediting_provider: @accredited_provider)
 
     @provider.courses << course
-    @provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider)
+    @provider.accredited_partnerships.create(accredited_provider: @accredited_provider)
   end
 
   def then_i_see_the_accredited_provider_name_displayed
-    expect(page).to have_css("h2", text: "Accrediting provider name")
+    expect(page).to have_css(".govuk-table__header", text: "Name")
   end
 end
