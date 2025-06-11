@@ -119,7 +119,7 @@ private
   end
 
   def and_i_see_the_accredited_providers
-    expect(page).to have_css(".govuk-summary-card", count: 1)
+    expect(page).to have_css(".govuk-table__cell", count: 1)
     expect(page).to have_content(@accredited_provider.provider_name)
   end
 
