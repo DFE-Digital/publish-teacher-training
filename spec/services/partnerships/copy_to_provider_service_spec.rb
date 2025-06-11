@@ -6,12 +6,12 @@ RSpec.describe Partnerships::CopyToProviderService do
   let(:service) { described_class.new }
 
   describe "#execute" do
-    let(:original_provider) { create(:provider, recruitment_cycle: current_cycle, provider_code: "ORIG") }
-    let(:rolled_over_provider) { create(:provider, recruitment_cycle: target_cycle, provider_code: "ORIG") }
+    let(:original_provider) { create(:provider, recruitment_cycle: current_cycle, provider_code: "ORI") }
+    let(:rolled_over_provider) { create(:provider, recruitment_cycle: target_cycle, provider_code: "ORI") }
 
     context "when partnership involves rolled-over provider as training provider" do
-      let!(:partner_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "Accred") }
-      let!(:target_partner) { create(:provider, :accredited_provider, recruitment_cycle: target_cycle, provider_code: "Accred") }
+      let!(:partner_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "Acc") }
+      let!(:target_partner) { create(:provider, :accredited_provider, recruitment_cycle: target_cycle, provider_code: "Acc") }
       let!(:partnership) do
         create(:provider_partnership,
                training_provider: original_provider,
@@ -43,10 +43,10 @@ RSpec.describe Partnerships::CopyToProviderService do
     end
 
     context "when partnership involves rolled-over provider as accredited provider" do
-      let(:original_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "Accr") }
-      let(:rolled_over_provider) { create(:provider, :accredited_provider, recruitment_cycle: target_cycle, provider_code: "Accr") }
-      let!(:partner_provider) { create(:provider, recruitment_cycle: current_cycle, provider_code: "Train") }
-      let!(:target_partner) { create(:provider, recruitment_cycle: target_cycle, provider_code: "Train") }
+      let(:original_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "Acc") }
+      let(:rolled_over_provider) { create(:provider, :accredited_provider, recruitment_cycle: target_cycle, provider_code: "Acc") }
+      let!(:partner_provider) { create(:provider, recruitment_cycle: current_cycle, provider_code: "Tra") }
+      let!(:target_partner) { create(:provider, recruitment_cycle: target_cycle, provider_code: "Tra") }
       let!(:partnership) do
         create(:provider_partnership,
                training_provider: partner_provider,
@@ -69,8 +69,8 @@ RSpec.describe Partnerships::CopyToProviderService do
     end
 
     context "when partnership doesn't involve rolled-over provider" do
-      let!(:other_provider_one) { create(:provider, recruitment_cycle: current_cycle, provider_code: "OTH1") }
-      let!(:other_provider_two) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "OTH2") }
+      let!(:other_provider_one) { create(:provider, recruitment_cycle: current_cycle, provider_code: "OT1") }
+      let!(:other_provider_two) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "OT2") }
       let!(:partnership) do
         create(:provider_partnership,
                training_provider: other_provider_one,
@@ -89,7 +89,7 @@ RSpec.describe Partnerships::CopyToProviderService do
     end
 
     context "when partner provider doesn't exist in target cycle" do
-      let!(:partner_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "MISS") }
+      let!(:partner_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "MIS") }
       let!(:partnership) do
         create(:provider_partnership,
                training_provider: original_provider,
@@ -108,8 +108,8 @@ RSpec.describe Partnerships::CopyToProviderService do
     end
 
     context "when partnership already exists in target cycle" do
-      let!(:partner_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "PART") }
-      let!(:target_partner) { create(:provider, :accredited_provider, recruitment_cycle: target_cycle, provider_code: "PART") }
+      let!(:partner_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_cycle, provider_code: "PAR") }
+      let!(:target_partner) { create(:provider, :accredited_provider, recruitment_cycle: target_cycle, provider_code: "PAR") }
       let!(:existing_partnership) do
         create(:provider_partnership,
                training_provider: rolled_over_provider,
