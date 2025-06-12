@@ -4,6 +4,12 @@ shared:
     - email_address
     - created_at
     - updated_at
+  saved_course:
+    - id
+    - candidate_id
+    - course_id
+    - created_at
+    - updated_at
   session:
     - id
     - user_agent
