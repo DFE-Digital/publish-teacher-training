@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_12_110338) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_12_111028) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -389,6 +389,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_12_110338) do
     t.bigint "course_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["candidate_id", "course_id"], name: "index_saved_course_on_candidate_id_and_course_id", unique: true
     t.index ["candidate_id"], name: "index_saved_course_on_candidate_id"
     t.index ["course_id"], name: "index_saved_course_on_course_id"
   end
