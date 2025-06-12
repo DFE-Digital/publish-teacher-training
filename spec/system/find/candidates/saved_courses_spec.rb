@@ -1,8 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "View pages" do
+  before do
+    FeatureFlag.activate(:candidate_accounts)
+  end
+
   scenario "As a Candidate, I can visit my saved courses" do
-    given_candidate_accounts_is_active
     when_i_visit_the_find_homepage
     then_i_see_a_login_button
 
@@ -14,14 +17,9 @@ RSpec.describe "View pages" do
   end
 
   scenario "As a Candidate, I cant visit my saved courses when not logged in" do
-    given_candidate_accounts_is_active
     when_i_visit_the_find_homepage
     then_i_cant_see_the_primary_navigation_links
     then_i_cant_visit_saved_courses_page_without_logging_in
-  end
-
-  def given_candidate_accounts_is_active
-    FeatureFlag.activate(:candidate_accounts)
   end
 
   def when_i_visit_the_find_homepage
