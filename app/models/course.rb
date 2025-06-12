@@ -148,6 +148,10 @@ class Course < ApplicationRecord
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
   has_many :study_site_placements, dependent: :destroy
+
+  has_many :saved_courses, dependent: :destroy
+  has_many :saved_by_candidates, through: :saved_courses, source: :candidate
+
   accepts_nested_attributes_for :site_statuses
 
   has_many :sites,

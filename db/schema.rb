@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_16_093746) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_12_110338) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -384,6 +384,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_16_093746) do
     t.date "available_in_publish_from"
   end
 
+  create_table "saved_course", force: :cascade do |t|
+    t.bigint "candidate_id", null: false
+    t.bigint "course_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candidate_id"], name: "index_saved_course_on_candidate_id"
+    t.index ["course_id"], name: "index_saved_course_on_course_id"
+  end
+
   create_table "session", force: :cascade do |t|
     t.string "user_agent"
     t.string "ip_address"
@@ -520,6 +529,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_16_093746) do
   add_foreign_key "organisation_user", "user", name: "FK_organisation_user_user_user_id"
   add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
+  add_foreign_key "saved_course", "candidate"
+  add_foreign_key "saved_course", "course"
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
   add_foreign_key "study_site_placement", "course"
   add_foreign_key "study_site_placement", "site"
