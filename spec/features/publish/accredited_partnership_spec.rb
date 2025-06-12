@@ -16,7 +16,19 @@ feature "Accredited partnership flow" do
   scenario "i can view accredited partnerships on the index page" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
-    then_i_see_the_accredited_provider_name_displayed
+    then_i_see_the_accredited_provider_name_and_code_displayed_in_a_table
+  end
+
+  scenario "i can view the accredited provider details page and return to index page using backlink" do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    and_i_click_on_the_accredited_provider_with_code
+    then_i_am_on_the_accredited_provider_details_page
+    and_i_see_the_remove_link
+    and_i_dont_see_change_links
+    and_i_see_the_back_link_to_accredited_providers_page
+    then_i_click_the_back_link_to_accredited_providers_page
+    then_i_am_taken_to_the_index_page
   end
 
   scenario "i cannot select accredited providers if a partnership exists" do
@@ -33,7 +45,7 @@ feature "Accredited partnership flow" do
   scenario "i cannot delete accredited providers if they are attached to a course" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
-    and_i_click_on_the_accredited_provider
+    and_i_click_on_the_accredited_provider_with_code
     then_i_am_on_the_accredited_provider_details_page
     and_i_see_the_remove_link
     and_i_click_remove
@@ -42,7 +54,7 @@ feature "Accredited partnership flow" do
 
   scenario "i can delete accredited providers if they are not attached to a course" do
     and_i_create_a_new_accredited_provider
-    and_i_click_on_the_accredited_provider
+    and_i_click_on_the_accredited_provider_with_code
     then_i_am_on_the_accredited_provider_details_page
     and_i_see_the_remove_link
     and_i_click_remove
@@ -278,20 +290,37 @@ private
 
   alias_method :and_i_click_on_the_accredited_provider_tab, :when_i_click_on_the_accredited_provider_tab
 
-  def and_i_click_on_the_accredited_provider
-    expect(page).to have_link(@accredited_provider.provider_name)
-    click_link @accredited_provider.provider_name
+  def and_i_click_on_the_accredited_provider_with_code
+    link_text = "#{@accredited_provider.provider_name} (#{@accredited_provider.provider_code})"
+    expect(page).to have_link(link_text)
+    click_link link_text
   end
 
   def then_i_am_on_the_accredited_provider_details_page
     expect(page).to have_current_path(
-      details_publish_provider_recruitment_cycle_accredited_partnership_path(
+      publish_provider_recruitment_cycle_accredited_partnership_path(
         provider_code: @provider.provider_code,
         recruitment_cycle_year: @provider.recruitment_cycle_year,
         accredited_provider_code: @accredited_provider.provider_code,
       ),
     )
     expect(page).to have_content(@accredited_provider.provider_name)
+    expect(page).to have_content(@accredited_provider.provider_code)
+  end
+
+  def and_i_dont_see_change_links
+    expect(page).not_to have_link("Change")
+  end
+
+  def and_i_see_the_back_link_to_accredited_providers_page
+    expect(page).to have_link("All accredited providers", href: publish_provider_recruitment_cycle_accredited_partnerships_path(
+      provider_code: @provider.provider_code,
+      recruitment_cycle_year: @provider.recruitment_cycle_year,
+    ))
+  end
+
+  def then_i_click_the_back_link_to_accredited_providers_page
+    click_link "All accredited providers"
   end
 
   def and_i_visit_the_root_path
@@ -312,14 +341,16 @@ private
   end
 
   def and_my_provider_has_accrediting_providers
-    @accredited_provider = build(:provider, :accredited_provider, provider_name: "Accrediting provider name")
+    @accredited_provider = build(:provider, :accredited_provider, provider_name: "Accrediting provider name", provider_code: "AP01")
     course = build(:course, accrediting_provider: @accredited_provider)
 
     @provider.courses << course
     @provider.accredited_partnerships.create(accredited_provider: @accredited_provider)
   end
 
-  def then_i_see_the_accredited_provider_name_displayed
+  def then_i_see_the_accredited_provider_name_and_code_displayed_in_a_table
+    expect(page).to have_css(".govuk-table__cell", text: @accredited_provider.provider_name)
+    expect(page).to have_css(".govuk-table__cell", text: @accredited_provider.provider_code)
     expect(page).to have_css(".govuk-table__header", text: "Name")
   end
 end

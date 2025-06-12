@@ -8,8 +8,7 @@ module Publish
       def index; end
 
       def show
-        @provider = provider
-        @accredited_provider = partner
+        @provider_partnership = provider.accredited_partnerships.find_by!(accredited_provider: partner)
       end
 
       def delete
