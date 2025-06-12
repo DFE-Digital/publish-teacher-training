@@ -46,4 +46,12 @@ RSpec.describe Candidate, type: :model do
       }.to change(SavedCourse, :count).by(-1)
     end
   end
+
+  describe "logged in" do
+    it "has a session and authentication" do
+      candidate = build(:candidate, :logged_in)
+      expect(candidate.sessions.first).to be_a(Session)
+      expect(candidate.authentications.first).to be_a(Authentication)
+    end
+  end
 end
