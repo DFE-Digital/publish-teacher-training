@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_12_111028) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_12_111146) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -45,6 +45,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_12_111028) do
     t.index ["created_at"], name: "index_audit_on_created_at"
     t.index ["request_uuid"], name: "index_audit_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
+  end
+
+  create_table "authentication", force: :cascade do |t|
+    t.integer "provider", null: false
+    t.string "subject_key", null: false
+    t.string "authenticable_type", null: false
+    t.bigint "authenticable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authenticable_type", "authenticable_id"], name: "index_authentication_on_authenticable"
+    t.index ["subject_key"], name: "index_authentication_on_subject_key"
   end
 
   create_table "blazer_audits", force: :cascade do |t|
