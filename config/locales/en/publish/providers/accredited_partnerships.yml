@@ -19,7 +19,7 @@ en:
           removed: Accredited provider removed
         can_remove:
           title: Are you sure you want to remove this accredited provider?
-          warning: You will not longer be able to select this accredited provider when creating a course.
+          warning: You will no longer be able to select this accredited provider when creating a course.
           remove: Remove accredited provider
         cannot_remove:
           warning: You cannot remove this accredited provider

@@ -1,12 +1,14 @@
-<% provider = partnership.accredited_provider %>
+<% accredited_provider = partnership.accredited_provider %>
+<% training_provider = partnership.training_provider %>
+
 <% body.with_row do |row| %>
   <% row.with_cell do %>
     <%= govuk_link_to(
-      "#{provider.provider_name} (#{provider.provider_code})",
-      details_publish_provider_recruitment_cycle_accredited_partnership_path(
-        provider_code: @provider.provider_code,
-        recruitment_cycle_year: @provider.recruitment_cycle_year,
-        accredited_provider_code: provider.provider_code,
+      "#{accredited_provider.provider_name} (#{accredited_provider.provider_code})",
+      publish_provider_recruitment_cycle_accredited_partnership_path(
+        provider_code: training_provider.provider_code,
+        recruitment_cycle_year: training_provider.recruitment_cycle_year,
+        accredited_provider_code: accredited_provider.provider_code,
       ),
     ) %>
   <% end %>
