@@ -1,5 +1,7 @@
 ---
 shared:
+  authentication:
+    - subject_key
   candidate:
     - email_address
   user:
