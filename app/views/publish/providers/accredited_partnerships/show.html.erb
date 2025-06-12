@@ -1,14 +1,17 @@
-<%# Define reusable path variables %>
+<% training_provider = @provider_partnership.training_provider %>
+<% accredited_provider = @provider_partnership.accredited_provider %>
+
 <% accredited_provider_list_path = publish_provider_recruitment_cycle_accredited_partnerships_path(
-     provider_code: @provider.provider_code,
-     recruitment_cycle_year: @provider.recruitment_cycle_year,
+     provider_code: training_provider.provider_code,
+     recruitment_cycle_year: training_provider.recruitment_cycle_year,
    ) %>
 <% delete_accredited_provider_path = delete_publish_provider_recruitment_cycle_accredited_partnership_path(
-     accredited_provider_code: @accredited_provider.provider_code,
-     provider_code: @provider.provider_code,
-     recruitment_cycle_year: @provider.recruitment_cycle_year,
+     accredited_provider_code: accredited_provider.provider_code,
+     provider_code: training_provider.provider_code,
+     recruitment_cycle_year: training_provider.recruitment_cycle_year,
    ) %>
-<% content_for :page_title, "#{@accredited_provider.provider_name} (#{@accredited_provider.provider_code})" %>
+
+<% content_for :page_title, "#{accredited_provider.provider_name} (#{accredited_provider.provider_code})" %>
 <% content_for :before_content do %>
   <%= render GovukComponent::BackLinkComponent.new(
         text: t(".back_link_text"),
@@ -16,9 +19,9 @@
       ) %>
 <% end %>
 <h1 class="govuk-heading-l">
-  <%= @accredited_provider.provider_name %>
+  <%= accredited_provider.provider_name %>
 </h1>
-<%= render Providers::ProviderList::View.new(provider: @accredited_provider, display_change_links: false) %>
+<%= render Providers::ProviderList::View.new(provider: accredited_provider, display_change_links: false) %>
 <p class="govuk-body">
   <%= govuk_link_to t(".remove"),
             delete_accredited_provider_path,
