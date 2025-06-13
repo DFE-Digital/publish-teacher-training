@@ -6,9 +6,10 @@ module Providers
       include Support::TimeHelper
       include Publish::ValueHelper
 
-      def initialize(provider:, classes: [], html_attributes: {})
+      def initialize(provider:, display_change_links: false, classes: [], html_attributes: {})
         super(classes:, html_attributes:)
         @provider = provider
+        @display_change_links = display_change_links
       end
 
       def formatted_provider_type
@@ -17,6 +18,10 @@ module Providers
 
       def formatted_accrediting_provider
         @provider.accredited? ? "Yes" : "No"
+      end
+
+      def display_change_links?
+        @display_change_links
       end
     end
   end
