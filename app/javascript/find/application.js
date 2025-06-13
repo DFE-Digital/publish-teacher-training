@@ -4,6 +4,7 @@ import { initAll } from 'govuk-frontend'
 
 import { Application } from '@hotwired/stimulus'
 import FilterSearchController from './controllers/filter_search_controller'
+import SaveCourseToggleController from './controllers/save_course_toggle_controller'
 import SubjectsAutocompleteController from './controllers/subjects_autocomplete_controller'
 import ProviderAutocompleteController from './controllers/provider_autocomplete_controller'
 import RadiusQuickLinkSuggestionsController from './controllers/radius_quick_link_suggestions_controller'
@@ -20,6 +21,7 @@ Stimulus.register('locations-autocomplete', LocationsAutocompleteController)
 Stimulus.register('visibility', VisibilityController)
 Stimulus.register('provider-autocomplete', ProviderAutocompleteController)
 Stimulus.register('radius-quick-link-suggestions', RadiusQuickLinkSuggestionsController)
+Stimulus.register('save-course-toggle', SaveCourseToggleController)
 
 window.jQuery = jQuery
 window.$ = jQuery
