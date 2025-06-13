@@ -1,49 +1,48 @@
-<% page_title = "Contact details" %>
-<% content_for :page_title, title_with_error_prefix(page_title, @provider_contact_form.errors.present?) %>
+<% content_for :page_title, title_with_error_prefix(
+  t("publish.providers.about_course.edit.page_title", course_name_and_code: @course.name_and_code),
+  @about_this_course_form.errors.any?,
+) %>
 
-<% content_for :before_content do %>
-  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider_contact_form.provider_code, @provider_contact_form.recruitment_cycle_year)) %>
+<% if params[:copy_from].present? && @copied_fields.any? %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-course-about-this-course-form",
+    @source_course,
+  ) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
-      model: @provider_contact_form,
-      url: contact_publish_provider_recruitment_cycle_path(@provider_contact_form.provider_code, @provider_contact_form.recruitment_cycle_year),
-      method: :put,
-      local: true,
-    ) do |f| %>
+          model: @about_this_course_form,
+          url: about_this_course_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+          data: { qa: "enrichment-form", module: "form-check-leave" },
+          method: :patch,
+          local: true,
+        ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(
+              back_link_path(param_form_key: f.object_name.to_sym,
+                             params:,
+                             provider_code: @provider.provider_code,
+                             recruitment_cycle_year: @course.recruitment_cycle_year,
+                             course_code: @course.course_code),
+            ) %>
+      <% end %>
 
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= @provider_contact_form.provider_name %></span>
-        Why train with us
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        <%= t("publish.providers.why_train_with_us.edit.why_train_with_us", provider_name: @provider.provider_name) %>
       </h1>
 
-      <p class="govuk-body"><%= t("publish.providers.about_course.edit.description") %></p>
-
-      <p class="govuk-body">
-        Be as <strong>specific</strong> as possible. This will help candidates work out if they want to train with you.
-      </p>
-
-      <details class="govuk-details">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">
-            See what you wrote last cycle
-          </span>
-        </summary>
-        <div class="govuk-details__text">
-        <p class="govuk-body">
-          We are a growing, multi-campus university with over 10,000 students, where we equip you with the skills and practical experience to stand out. We’re the No. 1 University in the North West and Top 10 in the UK for graduates into employment or further study within 15 months (97% of graduates – HESA 2024).    </p>
-        <p class="govuk-body">
-          If you’re passionate about enriching young lives through education, you’ll have the resources and expertise to become the best educator you can be. With personalised support, a tailored curriculum, and intimate classroom settings where lecturers know you by name, you’ll grow every step of the way.     </p>
-          <p class="govuk-body">
-            With over 100 years of teacher training experience, you’ll receive all the support you need to inspire young minds. You’ll benefit from our strong partnerships with schools across the UK, refining your skills in diverse classroom environments. Our campus and school-based programmes offer placements that fully prepare you for a teaching role upon graduation.     </p>
-          <p class="govuk-body">
-            Start your journey with us in Lancaster, Carlisle, or London, and take the next step toward your future as an inspiring educator.     </p>
-        </div>
-      </details>
+      <%= render partial: "guidance" %>
 
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:why_train_with_us_1,
@@ -60,7 +59,7 @@
                               max_words: 100,
                               rows: 8) %>
 
-      <p class="govuk-heading-m">What candidates will see</p>
+        <p class="govuk-heading-m">What candidates will see</p>
         <div class="app-preview-container">
           <p class="govuk-heading-l">Why train with us</p>
           <p class="govuk-body">
@@ -90,19 +89,25 @@
         </div>
       </div>
 
-      <%= f.govuk_submit "Update why train with us" %>
-    <% end %>
+      <%= f.govuk_submit t("publish.providers.about_course.edit.submit_button") %>
+      <% end %>
       <p class="govuk-body">
-        <a class="govuk-link" href="#">
-          Cancel
-        </a>
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
+                                                                                      @provider.recruitment_cycle.year,
+                                                                                      @course.course_code)) %>
       </p>
     </div>
-
-
     <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
       <%= render(
-            partial: "publish/courses/related_sidebar"
+            partial: "publish/courses/related_sidebar",
+            locals: {
+              course: @course,
+              page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+              ),
+            },
           ) %>
     </aside>
   </div>
