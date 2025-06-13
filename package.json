@@ -40,7 +40,7 @@
     "mustache": "^4.2.0"
   },
   "devDependencies": {
-    "esbuild": "^0.25.4",
+    "esbuild": "^0.25.5",
     "jsdom": "^26.1.0",
     "sass": "^1.89.2",
     "standard": "^17.1.2",
