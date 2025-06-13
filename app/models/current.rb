@@ -3,6 +3,6 @@ class Current < ActiveSupport::CurrentAttributes
   delegate :sessionable, to: :session, allow_nil: true
 
   def user
-    session.sessionable
+    session&.sessionable
   end
 end

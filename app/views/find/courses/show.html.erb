@@ -26,7 +26,23 @@
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_top") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <% if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-one-half">
+          <%= render Find::Courses::ApplyComponent::View.new(
+                @course,
+                preview: preview?(params),
+                utm_content: "apply_course_button_top",
+              ) %>
+        </div>
+
+        <% if FeatureFlag.active?(:candidate_accounts) %>
+          <div class="govuk-grid-column-one-half">
+            <%= render "find/saved_courses/save_toggle" %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
 
     <%= render Find::Courses::SummaryComponent::View.new(@course) %>
 

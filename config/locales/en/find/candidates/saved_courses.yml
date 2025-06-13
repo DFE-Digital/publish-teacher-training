@@ -1,0 +1,8 @@
+en:
+  find:
+    candidates:
+      saved_courses:
+        create:
+          save_failed: Failed to save course
+        destroy:
+          unsave_failed: Failed to unsave course
