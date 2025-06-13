@@ -1,0 +1,30 @@
+.unstyled-button {
+  padding: 0;
+
+  cursor: pointer;
+
+  background: none;
+  border: none;
+}
+
+.save-course-button {
+  display: flex;
+
+  &__button {
+    display: inline-flex;
+
+    text-decoration: none;
+  }
+
+  &__text {
+    @include govuk-font(19);
+
+    font-weight: 700;
+
+    color: $govuk-link-colour;
+
+    &:hover {
+      color: darken($govuk-link-colour, 15%);
+    }
+  }
+}

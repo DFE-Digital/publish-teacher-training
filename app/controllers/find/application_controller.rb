@@ -10,6 +10,7 @@ module Find
 
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
+    before_action :set_candidate
     before_action :redirect_to_cycle_has_ended_if_find_is_down
     before_action :redirect_to_maintenance_page_if_flag_is_active
 
@@ -25,6 +26,10 @@ module Find
     end
 
   private
+
+    def set_candidate
+      @candidate = Current.user
+    end
 
     def provider
       @provider ||= RecruitmentCycle.current.providers.find_by(provider_code: params[:provider_code]&.upcase)
