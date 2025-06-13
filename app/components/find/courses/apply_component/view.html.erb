@@ -1,13 +1,42 @@
 <div class="govuk-!-margin-bottom-6" id="section-apply">
-  <% if Find::CycleTimetable.mid_cycle? %>
-    <% if application_status_open? %>
-      <p class="govuk-body">
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-one-half">
+      <% if Find::CycleTimetable.mid_cycle? && application_status_open? %>
         <%= govuk_start_button(
               classes: "govuk-!-margin-0",
               text: "Apply for this course",
               href: preview ? apply_path : find_track_click_path(utm_content:, url: apply_path),
             ) %>
-      </p>
+      <% end %>
+    </div>
+
+    <div class="govuk-grid-column-one-half">
+      <a href="#"
+        class="banner-button-component__button save-course-toggle govuk-!-margin-0 govuk-!-padding-top-2"
+        data-controller="save-course-toggle"
+        data-action="click->save-course-toggle#toggle"
+        data-save-course-toggle-course-id-value="<%= @course.id %>"
+        data-save-course-toggle-saved-path-value="<%= asset_path("icon-saved.svg") %>"
+        data-save-course-toggle-unsaved-path-value="<%= asset_path("icon-save.svg") %>"
+        <% if Current.user.present? %>
+          data-save-course-toggle-user-id-value="<%= Current.user.id %>"
+        <% end %>>
+        <%= image_tag "icon-save.svg",
+              alt: "Save course",
+              width: 24,
+              height: 24,
+              class: "govuk-!-margin-right-2 govuk-!-padding-top-0",
+              data: { save_course_toggle_target: "icon" } %>
+
+        <span data-save-course-toggle-target="text" class="govuk-heading-s govuk-!-margin-0 banner-button-component__text">
+          Save this course for later
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <% if Find::CycleTimetable.mid_cycle? %>
+    <% if application_status_open? %>
       <% if show_application_deadline? %>
         <p class="govuk-body">
           <%= t(".visa_sponsorship_deadline_notice_html", application_deadline:) %>

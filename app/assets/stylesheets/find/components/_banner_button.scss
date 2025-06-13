@@ -1,0 +1,35 @@
+.banner-button-component {
+  display: flex;
+
+  &__button {
+    @include govuk-font(19);
+
+    display: inline-flex;
+
+    flex: 1;
+
+    align-items: center;
+
+    height: 100%;
+
+    padding-bottom: govuk-spacing(2);
+    padding-left: govuk-spacing(2);
+    margin-top: govuk-spacing(3);
+
+    font-weight: 700;
+
+    text-align: left;
+
+    text-decoration: none;
+
+    background-color: inherit;
+    background-repeat: no-repeat;
+    background-position: top 0 left 0;
+    background-size: 20px 25px;
+    border: 0;
+  }
+
+  &__text {
+    color: $govuk-link-colour;
+  }
+}
