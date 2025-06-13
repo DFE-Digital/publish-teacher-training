@@ -2,47 +2,55 @@
 
 module Partnerships
   class CopyToProviderService
+    def initialize
+      @partnerships_count = 0
+    end
+
     def execute(provider:, rolled_over_provider:, new_recruitment_cycle:)
-      partnerships_count = 0
+      @provider = provider
+      @rolled_over_provider = rolled_over_provider
+      @new_recruitment_cycle = new_recruitment_cycle
 
-      partnerships = ProviderPartnership.where(
-        "accredited_provider_id = :id OR training_provider_id = :id",
-        id: provider.id,
-      )
-      partnerships.find_each do |partnership|
-        new_accredited = find_provider_in_cycle(
-          partnership.accredited_provider.provider_code,
-          new_recruitment_cycle,
-        )
-        new_training = find_provider_in_cycle(
-          partnership.training_provider.provider_code,
-          new_recruitment_cycle,
-        )
-
-        next unless new_accredited && new_training
-        next unless partnership_involves_rolled_over?(new_accredited, new_training, rolled_over_provider)
-
-        create_partnership(new_accredited, new_training)
-        partnerships_count += 1
-      end
-
-      partnerships_count
+      process_partnerships
+      @partnerships_count
     end
 
   private
 
-    def find_provider_in_cycle(provider_code, cycle)
-      cycle.providers.find_by(provider_code:)
+    def process_partnerships
+      partnerships.each do |partnership|
+        new_accredited = find_provider_in_cycle(partnership.accredited_provider.provider_code)
+        new_training = find_provider_in_cycle(partnership.training_provider.provider_code)
+
+        next unless valid_partnership?(new_accredited, new_training)
+
+        create_partnership(new_accredited, new_training)
+        @partnerships_count += 1
+      end
     end
 
-    def partnership_involves_rolled_over?(accredited, training, rolled_over)
-      accredited == rolled_over || training == rolled_over
+    def partnerships
+      @partnerships ||= ProviderPartnership
+        .where("accredited_provider_id = :id OR training_provider_id = :id", id: @provider.id)
+        .includes(:accredited_provider, :training_provider)
     end
 
-    def create_partnership(accredited, training)
+    def find_provider_in_cycle(provider_code)
+      @new_recruitment_cycle.providers.find_by(provider_code: provider_code)
+    end
+
+    def valid_partnership?(accredited, training)
+      accredited && training && partnership_involves_rolled_over?(accredited, training)
+    end
+
+    def partnership_involves_rolled_over?(accredited, training)
+      accredited == @rolled_over_provider || training == @rolled_over_provider
+    end
+
+    def create_partnership(accredited_provider, training_provider)
       ProviderPartnership.find_or_create_by(
-        accredited_provider: accredited,
-        training_provider: training,
+        accredited_provider:,
+        training_provider:,
       )
     end
   end
