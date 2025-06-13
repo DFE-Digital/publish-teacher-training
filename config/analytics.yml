@@ -1,4 +1,12 @@
 shared:
+  authentication:
+    - id
+    - provider
+    - subject_key
+    - authenticable_id
+    - authenticable_type
+    - created_at
+    - updated_at
   candidate:
     - id
     - email_address

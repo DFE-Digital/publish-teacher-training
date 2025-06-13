@@ -15,6 +15,10 @@ en:
         created_at: Created at
     errors:
       models:
+        authentication:
+          attributes:
+            authenticable:
+              unique: "should be unique to the given provider"
         feedback:
           attributes:
             ease_of_use:
