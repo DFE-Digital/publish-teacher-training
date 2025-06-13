@@ -93,6 +93,9 @@ gem "dry-container"
 # For geocoding and geographic logic (e.g: filtering sites by ranges)
 gem "geokit-rails"
 
+# turbo-rails for faster page loads and partial updates
+gem "turbo-rails"
+
 # Geocoding
 gem "geocoder"
 

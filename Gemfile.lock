@@ -748,6 +748,9 @@ GEM
     timecop (0.9.10)
     timeout (0.4.3)
     trailblazer-option (0.1.2)
+    turbo-rails (2.0.16)
+      actionpack (>= 7.1.0)
+      railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -885,6 +888,7 @@ DEPENDENCIES
   skylight
   super_diff
   timecop
+  turbo-rails
   tzinfo-data
   uk_postcode
   webmock

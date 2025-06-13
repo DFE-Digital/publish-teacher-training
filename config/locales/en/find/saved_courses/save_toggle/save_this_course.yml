@@ -1,0 +1,6 @@
+en:
+  find:
+    saved_courses:
+      save_toggle:
+        save_this_course: Save this course for later
+        course_saved: Course saved

@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "save_course_#{@course.id}" do %>
+  <%= render "find/saved_courses/save_toggle", course: @course, candidate: @candidate %>
+<% end %>

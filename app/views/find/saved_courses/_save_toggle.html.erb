@@ -1,0 +1,45 @@
+<%= turbo_frame_tag "save_course_#{course.id}" do %>
+  <% saved_course = SavedCourse.find_by(candidate_id: candidate&.id, course_id: course.id) %>
+
+  <% if saved_course %>
+    <%= button_to find_candidate_saved_course_path(saved_course),
+                  method: :delete,
+                  class: "unstyled-button" do %>
+      <div class="banner-button-component__button save-course-toggle govuk-!-margin-0 govuk-!-padding-top-2">
+        <%= image_tag "icon-saved.svg", alt: t(".course_saved"), width: 24, height: 24,
+                                        class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
+        <span class="govuk-heading-s govuk-!-margin-0 banner-button-component__text">
+          <%= t(".course_saved") %>
+        </span>
+      </div>
+    <% end %>
+
+  <% elsif candidate.present? %>
+    <%= form_with url: find_candidate_saved_courses_path,
+                  method: :post do %>
+      <%= hidden_field_tag :candidate_id, candidate.id %>
+      <%= hidden_field_tag :course_id, course.id %>
+
+      <button type="submit" class="unstyled-button">
+        <div class="banner-button-component__button save-course-toggle govuk-!-margin-0 govuk-!-padding-top-2">
+          <%= image_tag "icon-save.svg", alt: t(".save_this_course"), width: 24, height: 24,
+                                         class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
+          <span class="govuk-heading-s govuk-!-margin-0 banner-button-component__text">
+            <%= t(".save_this_course") %>
+          </span>
+        </div>
+      </button>
+    <% end %>
+
+  <% else %>
+    <%= link_to new_find_sessions_path,
+                data: { turbo: false },
+                class: "banner-button-component__button save-course-toggle govuk-!-margin-0 govuk-!-padding-top-2" do %>
+      <%= image_tag "icon-save.svg", alt: t(".save_this_course"), width: 24, height: 24,
+                                     class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
+      <span class="govuk-heading-s govuk-!-margin-0 banner-button-component__text">
+        <%= t(".save_this_course") %>
+      </span>
+    <% end %>
+  <% end %>
+<% end %>

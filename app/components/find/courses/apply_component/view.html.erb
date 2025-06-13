@@ -1,13 +1,24 @@
 <div class="govuk-!-margin-bottom-6" id="section-apply">
-  <% if Find::CycleTimetable.mid_cycle? %>
-    <% if application_status_open? %>
-      <p class="govuk-body">
+  <div class="govuk-grid-row govuk-!-margin-bottom-3">
+    <div class="govuk-grid-column-one-half">
+      <% if Find::CycleTimetable.mid_cycle? && application_status_open? %>
         <%= govuk_start_button(
               classes: "govuk-!-margin-0",
               text: "Apply for this course",
               href: preview ? apply_path : find_track_click_path(utm_content:, url: apply_path),
             ) %>
-      </p>
+      <% end %>
+    </div>
+
+    <% if FeatureFlag.active?(:candidate_accounts) && show_save_course_button %>
+      <div class="govuk-grid-column-one-half">
+        <%= render "find/saved_courses/save_toggle", course: @course, candidate: Current.user %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if Find::CycleTimetable.mid_cycle? %>
+    <% if application_status_open? %>
       <% if show_application_deadline? %>
         <p class="govuk-body">
           <%= t(".visa_sponsorship_deadline_notice_html", application_deadline:) %>
