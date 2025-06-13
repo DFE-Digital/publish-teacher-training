@@ -13,7 +13,8 @@
       <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
 
       <% @secondary_subject_options.group_by(&:subject_group).each do |subject_group_name, subjects| %>
-        <%= f.govuk_collection_check_boxes :subjects, subjects, :code, :name, :financial_info, legend: { text: subject_group_name } %>
+      <% label_lambda = ->(s) { subject_display_name(s) } %>
+      <%= f.govuk_collection_check_boxes :subjects, subjects, :code, label_lambda, :financial_info %>
       <% end %>
 
       <%= f.govuk_submit t(".find_courses_button") %>
