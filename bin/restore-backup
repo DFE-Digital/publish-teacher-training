@@ -4,46 +4,106 @@
 # Drop and recreate the development and test databases
 # Restore the development database with today's sanitized backup.
 
-set -e
+set -euo pipefail
 
 log() {
   echo "$(date +'%Y-%m-%d %H:%M:%S') - $1"
 }
 
-log "Starting backup download..."
+usage() {
+  cat <<EOF
+Usage: $0 [--no-download] [--help]
 
-az storage blob download \
-  --account-name s189p01pttdbbkpsanpdsa \
-  --container-name database-backup \
-  --name "publish_sanitised_$(date +%Y-%m-%d).sql.gz" \
-  --file  ~/Downloads/sanitised_backup.sql.gz \
-  --connection-string "$(az storage account show-connection-string -g s189p01-ptt-pd-rg -n s189p01pttdbbkpsanpdsa --query 'connectionString')"
-
-log "Backup download completed."
-
-log "Dropping and recreating development database..."
-
-RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:drop db:create 
-
-log "Development database recreated."
-
-log "Checking if backup file exists..."
-if [[ -e ~/Downloads/sanitised_backup.sql.gz ]]; then
-  log "Decompressing backup file..."
-  gunzip -fd ~/Downloads/sanitised_backup.sql.gz
-  log "Backup file decompressed."
-else
-  log "Backup file not found!"
+Options:
+  --no-download   Skip downloading and decompressing the backup file.
+  --help          Show this help message.
+EOF
   exit 1
-fi
+}
 
-log "Restoring development database..."
-if [[ -x pv ]];then
-  pv ~/Downloads/sanitised_backup.sql | psql manage_courses_backend_development > /dev/null 2>&1
-else
-  psql manage_courses_backend_development < ~/Downloads/sanitised_backup.sql
-fi
-psql manage_courses_backend_development -c 'CREATE EXTENSION IF NOT EXISTS postgis;' > /dev/null 2>&1
-psql manage_courses_backend_test -c 'CREATE EXTENSION IF NOT EXISTS postgis;' > /dev/null 2>&1
+NO_DOWNLOAD=0
 
-log "Development database restored."
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --no-download)
+      NO_DOWNLOAD=1
+      ;;
+    --help|-h)
+      usage
+      ;;
+    *)
+      log "Unknown argument: $1"
+      usage
+      ;;
+  esac
+  shift
+done
+
+readonly BACKUP_DATE="$(date +%Y-%m-%d)"
+readonly BACKUP_BLOB="publish_sanitised_${BACKUP_DATE}.sql.gz"
+readonly BACKUP_FILE="${HOME}/Downloads/sanitised_backup.sql.gz"
+readonly SQL_FILE="${HOME}/Downloads/sanitised_backup.sql"
+readonly STORAGE_ACCOUNT="s189p01pttdbbkpsanpdsa"
+readonly CONTAINER="database-backup"
+readonly RESOURCE_GROUP="s189p01-ptt-pd-rg"
+readonly DEV_DB="manage_courses_backend_development"
+readonly TEST_DB="manage_courses_backend_test"
+
+download_backup() {
+  log "Starting backup download..."
+  az storage blob download \
+    --account-name "${STORAGE_ACCOUNT}" \
+    --container-name "${CONTAINER}" \
+    --name "${BACKUP_BLOB}" \
+    --file "${BACKUP_FILE}" \
+    --connection-string "$(az storage account show-connection-string -g "${RESOURCE_GROUP}" -n "${STORAGE_ACCOUNT}" --query 'connectionString' -o tsv)"
+  log "Backup download completed."
+}
+
+decompress_backup() {
+  log "Checking if backup file exists..."
+  if [[ -e "${BACKUP_FILE}" ]]; then
+    log "Decompressing backup file..."
+    gunzip -fd "${BACKUP_FILE}"
+    log "Backup file decompressed."
+  else
+    log "Backup file not found: ${BACKUP_FILE}"
+    exit 1
+  fi
+}
+
+drop_and_recreate_db() {
+  log "Dropping and recreating development database..."
+  RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:drop db:create
+  log "Development database recreated."
+}
+
+restore_db() {
+  log "Restoring development database..."
+  if command -v pv > /dev/null; then
+    pv "${SQL_FILE}" | psql "${DEV_DB}" > /dev/null 2>&1
+  else
+    psql "${DEV_DB}" < "${SQL_FILE}"
+  fi
+  psql "${DEV_DB}" -c 'CREATE EXTENSION IF NOT EXISTS postgis;' > /dev/null 2>&1
+  psql "${TEST_DB}" -c 'CREATE EXTENSION IF NOT EXISTS postgis;' > /dev/null 2>&1
+  log "Development database restored."
+}
+
+main() {
+  if [[ "${NO_DOWNLOAD}" -eq 0 ]]; then
+    download_backup
+    decompress_backup
+  else
+    log "--no-download flag set, skipping download and decompression."
+    if [[ ! -e "${SQL_FILE}" ]]; then
+      log "SQL file not found: ${SQL_FILE}. Cannot continue."
+      exit 1
+    fi
+  fi
+
+  drop_and_recreate_db
+  restore_db
+}
+
+main "$@"
