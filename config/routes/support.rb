@@ -97,6 +97,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
   resources :recruitment_cycles do
     member do
       get :review_rollover
+      post :confirm_rollover
     end
   end
 end

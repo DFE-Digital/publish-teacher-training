@@ -10,7 +10,7 @@
       <span class="govuk-caption-l"><%= t(".page_caption") %></span>
       <h1 class="govuk-heading-l"><%= @recruitment_cycle %></h1>
 
-      <% if @recruitment_cycle.providers.count.zero? %>
+      <% if @recruitment_cycle.rollover_awaiting_start? && params[:confirmed].blank? %>
         <p class="govuk-block">
           <%= govuk_button_to "Review rollover", review_rollover_support_recruitment_cycle_path(@recruitment_cycle), method: :get %>
         </p>
@@ -70,49 +70,49 @@
         <% end %>
       <% end %>
 
-      <% if @rollover_progress.previous_target_cycle.present? %>
+      <% if @rollover_progress_query.previous_target_cycle.present? && !@recruitment_cycle.rollover_awaiting_start? %>
         <div class="govuk-inset-text">
           <%= t(
                 ".rollover_status.inset_text_html",
-                total_eligible_providers_count: @rollover_progress.eligible_providers_count,
-                total_eligible_courses_count: @rollover_progress.eligible_courses_count,
-                providers_plus_one: @rollover_progress.eligible_providers_count + 1,
-                courses_plus_one: @rollover_progress.eligible_courses_count + 1,
+                total_eligible_providers_count: @rollover_progress_query.eligible_providers_count,
+                total_eligible_courses_count: @rollover_progress_query.eligible_courses_count,
+                providers_plus_one: @rollover_progress_query.eligible_providers_count + 1,
+                courses_plus_one: @rollover_progress_query.eligible_courses_count + 1,
               ) %>
         </div>
 
-        <%= govuk_summary_card(classes: %w[recruitment-cycle-summary-card], title: RecruitmentCycle.human_attribute_name(:rollover_progress)) do |card| %>
+        <%= govuk_summary_card(classes: %w[recruitment-cycle-summary-card], title: RecruitmentCycle.human_attribute_name(:rollover_progress_query)) do |card| %>
           <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
             <% summary_list.with_row do |row| %>
               <% row.with_key(text: RolloverProgressQuery.human_attribute_name(:providers_summary)) %>
               <% row.with_value(
                                        text: rollover_providers_summary(
-                                         previous_target_cycle: @rollover_progress.previous_target_cycle,
-                                         total_eligible_providers_count: @rollover_progress.eligible_providers_count,
-                                         rolled_over_providers_count: @rollover_progress.rolled_over_providers_count,
-                                         rollover_percentage: @rollover_progress.rollover_percentage,
+                                         previous_target_cycle: @rollover_progress_query.previous_target_cycle,
+                                         total_eligible_providers_count: @rollover_progress_query.eligible_providers_count,
+                                         rolled_over_providers_count: @rollover_progress_query.rolled_over_providers_count,
+                                         rollover_percentage: @rollover_progress_query.rollover_percentage,
                                        ),
                                      ) %>
             <% end %>
 
             <% summary_list.with_row do |row| %>
               <% row.with_key(text: RolloverProgressQuery.human_attribute_name(:courses_summary)) %>
-              <% row.with_value(text: t(".rollover_status.summary", total_eligible_count: @rollover_progress.eligible_courses_count, rolled_over_count: @rollover_progress.rolled_over_courses_count)) %>
+              <% row.with_value(text: t(".rollover_status.summary", total_eligible_count: @rollover_progress_query.eligible_courses_count, rolled_over_count: @rollover_progress_query.rolled_over_courses_count)) %>
             <% end %>
 
             <% summary_list.with_row do |row| %>
               <% row.with_key(text: RolloverProgressQuery.human_attribute_name(:partnerships_summary)) %>
-              <% row.with_value(text: t(".rollover_status.summary", total_eligible_count: @rollover_progress.eligible_partnerships_count, rolled_over_count: @rollover_progress.rolled_over_partnerships_count)) %>
+              <% row.with_value(text: t(".rollover_status.summary", total_eligible_count: @rollover_progress_query.eligible_partnerships_count, rolled_over_count: @rollover_progress_query.rolled_over_partnerships_count)) %>
             <% end %>
 
             <% summary_list.with_row do |row| %>
               <% row.with_key(text: RolloverProgressQuery.human_attribute_name(:remaining_to_rollover)) %>
-              <% row.with_value(text: @rollover_progress.remaining_to_rollover_count) %>
+              <% row.with_value(text: @rollover_progress_query.remaining_to_rollover_count) %>
             <% end %>
 
             <% summary_list.with_row do |row| %>
               <% row.with_key(text: RolloverProgressQuery.human_attribute_name(:providers_without_published_courses)) %>
-              <% row.with_value(text: @rollover_progress.providers_without_published_courses_count) %>
+              <% row.with_value(text: @rollover_progress_query.providers_without_published_courses_count) %>
             <% end %>
           <% end %>
         <% end %>
@@ -127,11 +127,11 @@
           <% end %>
 
           <%= table.with_body do |body| %>
-            <% @rollover_progress.providers_without_published_courses.order(provider_name: :asc).each do |provider| %>
+            <% @rollover_progress_query.providers_without_published_courses.order(provider_name: :asc).each do |provider| %>
               <%= body.with_row do |row| %>
                 <%= row.with_cell(text: provider.provider_code) %>
                 <%= row.with_cell do %>
-                  <% if @rollover_progress.target_cycle.upcoming? %>
+                  <% if @rollover_progress_query.target_cycle.upcoming? %>
                     <%= govuk_link_to provider.provider_name,
                       support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider) %>
                   <% else %>
