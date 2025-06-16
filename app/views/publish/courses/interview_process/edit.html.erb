@@ -115,9 +115,11 @@
               },
             rows: 5) %>
 
-        <p class="govuk-heading-m">What candidates will see</p>
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview</strong></span>
+        </div>
         <div class="app-preview-container">
-          <p class="govuk-heading-l">Interview process</p>
+          <p class="govuk-heading-m">Interview process</p>
 
           <div id="course_interview_online_label" class="govuk-inset-text course_interview_online_label">
             This course offers online interviews
@@ -125,11 +127,11 @@
 
           <p class="govuk-body">
             <div class="govuk-body">
-              <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview">Your information will show here.</p>
+              <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview">The text you type above will show here.</p>
             </div>
           </p>
 
-          <!-- Call out -->
+          <!-- Call out interview process
           <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
             <div class="govuk-notification-banner__content app-notification-banner__content--grey">
               <span class="govuk-heading-m">
@@ -142,7 +144,7 @@
               </p>
             </div>
           </div>
-          <!-- END Call out -->
+          END Call out -->
         </div>
       </div>
       <%= f.govuk_submit t("publish.providers.interview_process.edit.submit_button") %>
