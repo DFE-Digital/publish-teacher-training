@@ -42,7 +42,25 @@
         <%= CourseEnrichment.human_attribute_name("how_school_placements_work") %>
       </h1>
 
+      <%= t("publish.providers.school_placements.edit.guidance_text_html") %>
+
       <%= render partial: "guidance" %>
+
+
+      <aside data-qa="course__related_sidebar">
+      <%= render(
+        partial: "publish/courses/related_sidebar",
+        locals: {
+          course: @course,
+          page_path: school_placements_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+        },
+      ) %>
+    </aside>
+
 
       <div data-controller="input-preview">
         <!--WHERE YOU WILL TRAIN-->
@@ -238,17 +256,5 @@
       )) %>
     </p>
   </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-    <%= render(
-      partial: "publish/courses/related_sidebar",
-      locals: {
-        course: @course,
-        page_path: school_placements_publish_provider_recruitment_cycle_course_path(
-          @provider.provider_code,
-          @course.recruitment_cycle_year,
-          @course.course_code,
-        ),
-      },
-    ) %>
-  </aside>
+
 </div>

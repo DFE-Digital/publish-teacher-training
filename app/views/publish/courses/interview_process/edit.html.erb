@@ -44,6 +44,20 @@
 
       <%= render partial: "guidance" %>
 
+      <aside data-qa="course__related_sidebar">
+    <%= render(
+          partial: "publish/courses/related_sidebar",
+          locals: {
+            course: @course,
+            page_path: interview_process_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code,
+            ),
+          },
+        ) %>
+  </aside>
+
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
@@ -139,17 +153,4 @@
                                                                                     @course.course_code)) %>
     </p>
   </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-    <%= render(
-          partial: "publish/courses/related_sidebar",
-          locals: {
-            course: @course,
-            page_path: interview_process_publish_provider_recruitment_cycle_course_path(
-              @provider.provider_code,
-              @course.recruitment_cycle_year,
-              @course.course_code,
-            ),
-          },
-        ) %>
-  </aside>
 </div>
