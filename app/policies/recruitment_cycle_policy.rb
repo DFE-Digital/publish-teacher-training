@@ -34,4 +34,8 @@ class RecruitmentCyclePolicy
     user.present? && @recruitment_cycle.upcoming?
   end
   alias_method :update?, :edit?
+
+  def review_rollover?
+    user.present?
+  end
 end

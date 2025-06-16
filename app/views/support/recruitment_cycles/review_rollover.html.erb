@@ -1,0 +1,91 @@
+<% content_for :page_title, @recruitment_cycle.to_s %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_back_link(href: support_recruitment_cycles_path) %>
+<% end %>
+
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l"><%= t(".page_caption") %></span>
+      <h1 class="govuk-heading-l"><%= @recruitment_cycle %></h1>
+
+        <%= govuk_summary_list do |summary_list| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Name' } %>
+            <% row.with_value { 'Sarah Philips' } %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'name') %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Date of birth' } %>
+            <% row.with_value { '5 January 1978' } %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'date of birth') %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Customer reference' } %>
+            <% row.with_value { 'Not provided' } %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'customer reference') %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Address' } %>
+            <% row.with_value do %>
+              <%= safe_join(["72 Guild Street", "London", "SE23 6FH"], tag.br) %>
+            <% end %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'address') %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Contact details' } %>
+            <% row.with_value do %>
+              <%= tag.p("07700 900457", class: "govuk-body") %>
+              <%= tag.p("sarah.phillips@example.com", class: "govuk-body") %>
+            <% end %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'contact details') %>
+          <% end %>
+        <% end %>
+
+        <h2 class="govuk-heading-m">Application details</h2>
+        <%= govuk_summary_list do |summary_list| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Previous application number' } %>
+            <% row.with_value { '502135326' } %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'previous application number') %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Licence type' } %>
+            <% row.with_value { 'For personal use' } %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'licence type') %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Home address' } %>
+            <% row.with_value do %>
+              <%= safe_join(["72 Guild Street", "London", "SE23 6FH"], tag.br) %>
+            <% end %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'home address') %>
+          <% end %>
+
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { 'Licence period' } %>
+            <% row.with_value { 'Valid for 6 months' } %>
+            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'licence period') %>
+          <% end %>
+        <% end %>
+
+        <h2 class="govuk-heading-m">Now send your application</h2>
+        <p class="govuk-body">
+          By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct.
+        </p>
+
+        <%= form_with url: "/form-handler", method: :post, html: { novalidate: true } do |form| %>
+          <%= form.hidden_field :answers_checked, value: true %>
+          <%= govuk_button_to("Accept and send") %>
+        <% end %>
+
+    </div>
+  </div>
+</div>
