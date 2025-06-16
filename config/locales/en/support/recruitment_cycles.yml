@@ -39,3 +39,6 @@ en:
             At that point, there were <strong>%{total_eligible_providers_count} providers</strong> and <strong>%{total_eligible_courses_count} courses</strong> eligible for rollover.
             <br><br>
             If you see higher numbers displayed later (for example, "%{providers_plus_one} of %{total_eligible_providers_count} providers" or "%{courses_plus_one} of %{total_eligible_courses_count} courses"), this means that after the automated rollover process completed, additional providers or courses were manually added — either by support staff or by provider users manually rolling over specific courses — before the start of the new cycle.
+      review_rollover:
+        page_title: Review rollover
+        page_caption: Review rollover

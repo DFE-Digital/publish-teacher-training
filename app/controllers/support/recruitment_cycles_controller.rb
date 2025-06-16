@@ -2,7 +2,7 @@
 
 module Support
   class RecruitmentCyclesController < ApplicationController
-    before_action :set_recruitment_cycle, :authorize_recruitment_cycle, only: %i[show edit update]
+    before_action :set_recruitment_cycle, :authorize_recruitment_cycle, only: %i[show edit update review_rollover]
 
     def index
       @recruitment_cycles = RecruitmentCycle.order(year: :desc)
@@ -31,6 +31,9 @@ module Support
 
     def show
       @rollover_progress = RolloverProgressQuery.new(target_cycle: @recruitment_cycle)
+    end
+
+    def review_rollover
     end
 
     def edit

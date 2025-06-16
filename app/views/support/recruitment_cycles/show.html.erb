@@ -10,6 +10,12 @@
       <span class="govuk-caption-l"><%= t(".page_caption") %></span>
       <h1 class="govuk-heading-l"><%= @recruitment_cycle %></h1>
 
+      <% if @recruitment_cycle.providers.count.zero? %>
+        <p class="govuk-block">
+          <%= govuk_button_to "Review rollover", review_rollover_support_recruitment_cycle_path(@recruitment_cycle), method: :get %>
+        </p>
+      <% end %>
+
       <%= govuk_summary_list(actions: policy(@recruitment_cycle).edit?) do |summary_list| %>
         <% summary_list.with_row do |row| %>
           <% row.with_key text: RecruitmentCycle.human_attribute_name(:year) %>
