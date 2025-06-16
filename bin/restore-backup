@@ -3,6 +3,7 @@
 # Download today's sanitized backup of the publish database to the Downloads directory
 # Drop and recreate the development and test databases
 # Restore the development database with today's sanitized backup.
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -21,12 +22,12 @@ EOF
   exit 1
 }
 
-NO_DOWNLOAD=0
+DOWNLOAD=1
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --no-download)
-      NO_DOWNLOAD=1
+      DOWNLOAD=0
       ;;
     --help|-h)
       usage
@@ -91,7 +92,7 @@ restore_db() {
 }
 
 main() {
-  if [[ "${NO_DOWNLOAD}" -eq 0 ]]; then
+  if [[ "${DOWNLOAD}" -eq 1 ]]; then
     download_backup
     decompress_backup
   else
