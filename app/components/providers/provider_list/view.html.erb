@@ -1,121 +1,125 @@
 <%= render GovukComponent::SummaryListComponent.new do |component| %>
-  <% component.with_row do |row| %>
-    <% row.with_key { "Provider name" } %>
-    <% row.with_value { @provider.provider_name } %>
-    <% if display_change_links? %>
-      <% row.with_action(
-        text: "Change",
-        href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
-        visually_hidden_text: "provider name",
-      ) %>
+  <% if display_accredited_provider_name? %>
+    <% component.with_row do |row|
+         row.with_key { "Provider name" }
+         row.with_value { @provider.provider_name }
+         if display_change_links?
+           row.with_action(
+             text: "Change",
+             href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
+             visually_hidden_text: "provider name",
+           )
+         end
+       end %>
+  <% end %>
+  <% component.with_row do |row|
+       row.with_key { "Provider Code" }
+       row.with_value { @provider.provider_code }
+       if display_change_links?
+         row.with_action(
+           text: "Change",
+           href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
+           visually_hidden_text: "provider code",
+         )
+       end
+     end %>
+  <% component.with_row do |row|
+       row.with_key { "UK provider reference number (UKPRN)" }
+       row.with_value { @provider.ukprn }
+       if display_change_links?
+         row.with_action(
+           text: "Change",
+           href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
+           visually_hidden_text: "provider ukprn",
+         )
+       end
+     end %>
+  <% if display_is_the_organisation_an_accredited_provider? %>
+    <% component.with_row do |row|
+         row.with_key { "Is the organisation an accredited provider?" }
+         row.with_value { formatted_accrediting_provider }
+         if display_change_links?
+           row.with_action(
+             text: "Change",
+             href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
+             visually_hidden_text: "accredited provider",
+           )
+         end
+       end %>
+  <% end %>
+  <% if display_accredited_provider_number? %>
+    <% if @provider.accredited? %>
+      <% component.with_row(html_attributes: { data: { qa: "ap-number-row" } }) do |row|
+           row.with_key { "Accredited provider number" }
+           row.with_value { value_provided?(@provider.accredited_provider_number.to_s) }
+           if display_change_links?
+             row.with_action(
+               text: "Change",
+               href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
+               visually_hidden_text: "accredited provider id",
+             )
+           end
+         end %>
     <% end %>
   <% end %>
-
-  <% component.with_row do |row| %>
-    <% row.with_key { "Provider Code" } %>
-    <% row.with_value { @provider.provider_code } %>
-    <% row.with_action if display_change_links? %>
-  <% end %>
-
-  <% component.with_row do |row| %>
-    <% row.with_key { "UK provider reference number (UKPRN) " } %>
-    <% row.with_value { @provider.ukprn } %>
-    <% if display_change_links? %>
-      <% row.with_action(
-        text: "Change",
-        href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
-        visually_hidden_text: "provider ukprn",
-      ) %>
-    <% end %>
-  <% end %>
-
-  <% component.with_row do |row| %>
-    <% row.with_key { "Is the organisation an accredited provider?" } %>
-    <% row.with_value { formatted_accrediting_provider } %>
-    <% if display_change_links? %>
-      <% row.with_action(
-        text: "Change",
-        href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
-        visually_hidden_text: "accredited provider",
-      ) %>
-    <% end %>
-  <% end %>
-
-  <% if @provider.accredited? %>
-    <% component.with_row(html_attributes: { data: { qa: "ap-number-row" } }) do |row| %>
-      <% row.with_key { "Accredited provider number" } %>
-      <% row.with_value { value_provided?(@provider.accredited_provider_number.to_s) } %>
-      <% if display_change_links? %>
-        <% row.with_action(
-          text: "Change",
-          href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
-          visually_hidden_text: "accredited provider id",
-        ) %>
-      <% end %>
-    <% end %>
-  <% end %>
-
-  <% component.with_row do |row| %>
-    <% row.with_key { "Provider type" } %>
-    <% row.with_value { formatted_provider_type } %>
-    <% if display_change_links? %>
-      <% row.with_action(
-        text: "Change",
-        href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
-        visually_hidden_text: "provider type",
-      ) %>
-    <% end %>
-  <% end %>
+  <% component.with_row do |row|
+       row.with_key { "Provider type" }
+       row.with_value { formatted_provider_type }
+       if display_change_links?
+         row.with_action(
+           text: "Change",
+           href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
+           visually_hidden_text: "provider type",
+         )
+       end
+     end %>
 <% end %>
-
-<h2 class="govuk-heading-m">Contact details</h2>
-
-<%= render GovukComponent::SummaryListComponent.new do |component| %>
-  <% component.with_row do |row| %>
-    <% row.with_key { "Email address" } %>
-    <% row.with_value { value_provided?(@provider.email) } %>
-    <% if display_change_links? %>
-      <% row.with_action(
-        text: "Change",
-        href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider),
-        visually_hidden_text: "provider email",
-      ) %>
-    <% end %>
-  <% end %>
-
-  <% component.with_row do |row| %>
-    <% row.with_key { "Telephone number" } %>
-    <% row.with_value { value_provided?(@provider.telephone) } %>
-    <% if display_change_links? %>
-      <% row.with_action(
-        text: "Change",
-        href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider),
-        visually_hidden_text: "provider phone",
-      ) %>
-    <% end %>
-  <% end %>
-
-  <% component.with_row do |row| %>
-    <% row.with_key { "Website" } %>
-    <% row.with_value { value_provided?(@provider.website) } %>
-    <% if display_change_links? %>
-      <% row.with_action(
-        text: "Change",
-        href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider),
-        visually_hidden_text: "provider website",
-      ) %>
-    <% end %>
-  <% end %>
-
-  <% component.with_row do |row| %>
-    <% row.with_key { "Address" } %>
-    <% row.with_value { @provider.decorate.full_address } %>
-    <% if display_change_links? %>
-      <% row.with_action(
-        text: "Change",
-        href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider),
-        visually_hidden_text: "provider address",
-      ) %>
-    <% end %>
+<% if display_contact_details? %>
+  <h2 class="govuk-heading-m">Contact details</h2>
+  <%= render GovukComponent::SummaryListComponent.new do |component| %>
+    <% component.with_row do |row|
+         row.with_key { "Email address" }
+         row.with_value { value_provided?(@provider.email) }
+         if display_change_links?
+           row.with_action(
+             text: "Change",
+             href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider),
+             visually_hidden_text: "provider email",
+           )
+         end
+       end %>
+    <% component.with_row do |row|
+         row.with_key { "Telephone number" }
+         row.with_value { value_provided?(@provider.telephone) }
+         if display_change_links?
+           row.with_action(
+             text: "Change",
+             href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider),
+             visually_hidden_text: "provider phone",
+           )
+         end
+       end %>
+    <% component.with_row do |row|
+         row.with_key { "Website" }
+         row.with_value { value_provided?(@provider.website) }
+         if display_change_links?
+           row.with_action(
+             text: "Change",
+             href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider),
+             visually_hidden_text: "provider website",
+           )
+         end
+       end %>
+    <% component.with_row do |row|
+         row.with_key { "Address" }
+         row.with_value { @provider.decorate.full_address }
+         if display_change_links?
+           row.with_action(
+             text: "Change",
+             href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider),
+             visually_hidden_text: "provider address",
+           )
+         end
+       end %>
   <% end %>
 <% end %>
