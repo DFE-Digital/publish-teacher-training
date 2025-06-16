@@ -108,6 +108,14 @@
           max_words: 50,
           rows: 5) %>
 
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview</strong></span>
+        </div>
+        <div class="app-preview-container">
+          <p class="govuk-heading-m">Where you will train</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview1">The text you type above will show here.</p>
+        </div>
+
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
         <!--WHAT YOU WILL DO ON SCHOOL PLACEMENTS-->
@@ -135,6 +143,14 @@
           max_words: 50,
           rows: 5) %>
 
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview</strong></span>
+        </div>
+        <div class="app-preview-container">
+          <p class="govuk-heading-m">What you will do on school placements</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview2">The text you type above will show here.</p>
+        </div>
+
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
         <!--WHAT YOU WILL STUDY-->
@@ -161,12 +177,16 @@
           max_words: 50,
           rows: 5) %>
 
-        <p class="govuk-heading-m">What candidates will see</p>
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview</strong></span>
+        </div>
         <div class="app-preview-container">
-          <p class="govuk-heading-l">Where you will train</p>
-          <p class="govuk-body">You will spend most of your time on school placements - a minimum of 24 weeks. This time is spread across at least 2 schools. You will also spend time in a location where you will study.</p>
-
-          <dl class="govuk-summary-list">
+        <p class="govuk-heading-m">What you will study</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview3">The text you type above will show here.</p>
+        </div>
+        <!--<div class="app-preview-container">-->
+          <!--<p class="govuk-body">You will spend most of your time on school placements - a minimum of 24 weeks. This time is spread across at least 2 schools. You will also spend time in a location where you will study.</p>-->
+          <!--<dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 Nearest placement school
@@ -184,10 +204,9 @@
                 <strong>2 miles</strong> from <strong>Manchester, UK</strong>
               </dd>
             </div>
-          </dl>
-          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview1">Your information will show here.</p>
+          </dl>-->
 
-          <!--Call out-->
+          <!--Call out - wheree you will train
           <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
             <div class="govuk-notification-banner__content app-notification-banner__content--grey">
               <span class="govuk-heading-m">
@@ -202,11 +221,10 @@
               </p>
             </div>
           </div>
-          <!--END Call out-->
+          END Call out-->
 
-          <p class="govuk-heading-l">What you will do on school placements</p>
-          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview2">Your information will show here.</p>
-          <!--Call out-->
+          <!--<p class="govuk-heading-l">What you will do on school placements</p>-->
+          <!--Call out - what you will do on school placements
           <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
             <div class="govuk-notification-banner__content app-notification-banner__content--grey">
               <span class="govuk-heading-m">
@@ -221,11 +239,10 @@
               </p>
             </div>
           </div>
-          <!--END Call out-->
+          END Call out-->
 
-          <p class="govuk-heading-l">What you will study</p>
-          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview3">Your information will show here.</p>
-          <!--Call out-->
+          <!--<p class="govuk-heading-l">What you will study</p>-->
+          <!--Call out - what you will study
           <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
             <div class="govuk-notification-banner__content app-notification-banner__content--grey">
               <span class="govuk-heading-m">
@@ -240,9 +257,9 @@
               </p>
             </div>
           </div>
-          <!--END Call out-->
+          END Call out-->
 
-        </div>
+        <!--</div>-->
 
         <%= f.govuk_submit t("publish.providers.school_placements.edit.submit_button") %>
       <% end %>
