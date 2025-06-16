@@ -36,7 +36,7 @@ class RecruitmentCyclePolicy
   alias_method :update?, :edit?
 
   def review_rollover?
-    user.present?
+    user.present? && @recruitment_cycle.rollover_awaiting_start?
   end
   alias_method :confirm_rollover?, :review_rollover?
 end
