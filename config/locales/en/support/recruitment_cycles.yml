@@ -42,3 +42,16 @@ en:
       review_rollover:
         page_title: Review rollover
         page_caption: Review rollover
+        intro: "You are about to confirm and initiate the rollover process for the %{new_cycle} recruitment cycle. This means that all eligible providers, courses, schools, study sites and partnerships from the current cycle (%{current_cycle}) will be carried over into the new cycle (%{new_cycle})"
+        eligibility_intro_html: <strong>Eligibility for rollover:</strong> Only providers with <strong>published</strong> or <strong>withdrawn</strong> courses will be rolled over to the next recruitment cycle.
+        date_context_html: After confirmation, all records from the current cycle will be rolled over with today's date (%{today}).
+        available_in_publish_html: Rolled-over courses will be available to edit in Publish from <strong>%{available_date}</strong>.
+        summary:
+          providers: "Providers to be rolled over"
+          courses: "Courses to be rolled over"
+          partnerships: "Partnerships to be rolled over"
+          not_rolled_over: "Providers that will NOT be rolled over"
+        confirm_heading: "Confirm rollover"
+        confirm_body: "By submitting this confirmation you are agreeing that, to the best of your knowledge, the details above are correct and you wish to proceed with the rollover."
+      confirm_rollover:
+        rollover_confirmed: Rollover started. This process may take up to 1 hour to complete.

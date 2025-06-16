@@ -38,4 +38,5 @@ class RecruitmentCyclePolicy
   def review_rollover?
     user.present?
   end
+  alias_method :confirm_rollover?, :review_rollover?
 end

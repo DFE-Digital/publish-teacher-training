@@ -25,15 +25,6 @@ describe RecruitmentCycleCreationService do
         expect(recruitment_cycle.application_start_date).to eq(application_start_date)
         expect(recruitment_cycle.application_end_date).to eq(application_end_date)
       end
-
-      it "enqueues the rollover job with the recruitment cycle ID" do
-        allow(RolloverJob).to receive(:perform_later)
-
-        service
-
-        RecruitmentCycle.find_by(year: year)
-        expect(RolloverJob).to have_received(:perform_later)
-      end
     end
 
     context "when creation fails" do
@@ -46,14 +37,6 @@ describe RecruitmentCycleCreationService do
 
         expect { service }.to raise_error(ActiveRecord::RecordInvalid)
         expect(RecruitmentCycle.count).to eq(0)
-      end
-
-      it "does not enqueue the rollover job" do
-        allow(RolloverJob).to receive(:perform_later)
-
-        expect { service }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect(RolloverJob).not_to have_received(:perform_later)
       end
     end
   end

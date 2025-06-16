@@ -6,86 +6,52 @@
 
 <div class="govuk-width-container">
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l"><%= t(".page_caption") %></span>
       <h1 class="govuk-heading-l"><%= @recruitment_cycle %></h1>
 
-        <%= govuk_summary_list do |summary_list| %>
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Name' } %>
-            <% row.with_value { 'Sarah Philips' } %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'name') %>
-          <% end %>
+      <%= form_with model: @review_rollover_form, url: confirm_rollover_support_recruitment_cycle_path(@recruitment_cycle), method: :post do |form| %>
+        <%= form.govuk_error_summary %>
 
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Date of birth' } %>
-            <% row.with_value { '5 January 1978' } %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'date of birth') %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Customer reference' } %>
-            <% row.with_value { 'Not provided' } %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'customer reference') %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Address' } %>
-            <% row.with_value do %>
-              <%= safe_join(["72 Guild Street", "London", "SE23 6FH"], tag.br) %>
-            <% end %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'address') %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Contact details' } %>
-            <% row.with_value do %>
-              <%= tag.p("07700 900457", class: "govuk-body") %>
-              <%= tag.p("sarah.phillips@example.com", class: "govuk-body") %>
-            <% end %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'contact details') %>
-          <% end %>
-        <% end %>
-
-        <h2 class="govuk-heading-m">Application details</h2>
-        <%= govuk_summary_list do |summary_list| %>
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Previous application number' } %>
-            <% row.with_value { '502135326' } %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'previous application number') %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Licence type' } %>
-            <% row.with_value { 'For personal use' } %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'licence type') %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Home address' } %>
-            <% row.with_value do %>
-              <%= safe_join(["72 Guild Street", "London", "SE23 6FH"], tag.br) %>
-            <% end %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'home address') %>
-          <% end %>
-
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { 'Licence period' } %>
-            <% row.with_value { 'Valid for 6 months' } %>
-            <% row.with_action(text: 'Change', href: '#', visually_hidden_text: 'licence period') %>
-          <% end %>
-        <% end %>
-
-        <h2 class="govuk-heading-m">Now send your application</h2>
         <p class="govuk-body">
-          By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct.
+          <%= t(".intro", current_cycle: RecruitmentCycle.current.to_s, new_cycle: @recruitment_cycle.to_s) %>
         </p>
 
-        <%= form_with url: "/form-handler", method: :post, html: { novalidate: true } do |form| %>
-          <%= form.hidden_field :answers_checked, value: true %>
-          <%= govuk_button_to("Accept and send") %>
+        <div class="govuk-inset-text">
+          <%= t(".eligibility_intro_html") %>
+          <p class="govuk-body">
+            <%= t(".date_context_html", today: l(Date.current, format: :long)) %>
+          </p>
+          <p class="govuk-body">
+            <%= t(".available_in_publish_html", available_date: l(@recruitment_cycle.available_in_publish_from, format: :long)) %>
+          </p>
+      </div>
+
+        <%= govuk_summary_list do |summary_list| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { t(".summary.providers") } %>
+            <% row.with_value(text: @rollover_progress_query.eligible_providers_count) %>
+          <% end %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { t(".summary.courses") } %>
+            <% row.with_value(text: @rollover_progress_query.eligible_courses_count) %>
+          <% end %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { t(".summary.partnerships") } %>
+            <% row.with_value(text: @rollover_progress_query.eligible_partnerships_count) %>
+          <% end %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { t(".summary.not_rolled_over") } %>
+            <% row.with_value(text: @rollover_progress_query.providers_without_published_courses_count) %>
+          <% end %>
         <% end %>
 
+        <h2 class="govuk-heading-m"><%= t(".confirm_heading") %></h2>
+        <p class="govuk-body">
+        <%= t(".confirm_body") %>
+        </p>
+
+        <%= form.govuk_text_field :confirmation, label: { text: "Type ‘#{Support::ReviewRolloverForm::CONFIRM_ROLLOVER}’ to confirm that you want to proceed", size: "m" }, width: 20 %>
+        <%= form.govuk_submit t("continue") %>
+      <% end %>
     </div>
-  </div>
 </div>

@@ -90,6 +90,10 @@ class RecruitmentCycle < ApplicationRecord
     status == :upcoming
   end
 
+  def rollover_awaiting_start?
+    providers.count.zero?
+  end
+
   def year_range
     "#{year.to_i - 1} to #{year}"
   end
