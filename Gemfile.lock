@@ -252,6 +252,7 @@ GEM
       concurrent-ruby (~> 1.0)
     email_validator (2.2.4)
       activemodel
+    erb (5.0.1)
     erb_lint (0.9.0)
       activesupport
       better_html (>= 2.0.1)
@@ -262,11 +263,11 @@ GEM
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
-    factory_bot (6.5.0)
-      activesupport (>= 5.0.0)
-    factory_bot_rails (6.4.4)
+    factory_bot (6.5.4)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.0)
       factory_bot (~> 6.5)
-      railties (>= 5.0.0)
+      railties (>= 6.1.0)
     fakefs (3.0.0)
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
@@ -588,7 +589,8 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rb-readline (0.5.5)
-    rdoc (6.13.1)
+    rdoc (6.14.0)
+      erb
       psych (>= 4.0.0)
     redcarpet (3.6.1)
     redis (4.8.1)
@@ -782,7 +784,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.7.2)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   arm64-darwin
@@ -818,7 +820,7 @@ DEPENDENCIES
   draper
   dry-container
   erb_lint
-  factory_bot_rails (~> 6.4)
+  factory_bot_rails (~> 6.5)
   fakefs
   faker
   faraday
