@@ -45,6 +45,12 @@
         </div>
       </details>
 
+       <aside data-qa="course__related_sidebar">
+      <%= render(
+            partial: "publish/courses/related_sidebar"
+          ) %>
+    </aside>
+
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:why_train_with_us_1,
                               data: { input_preview_target: "input", action: "input-preview#updatePreview" },
@@ -99,11 +105,5 @@
       </p>
     </div>
 
-
-    <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-      <%= render(
-            partial: "publish/courses/related_sidebar"
-          ) %>
-    </aside>
   </div>
 </div>
