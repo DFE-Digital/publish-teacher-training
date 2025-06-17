@@ -58,29 +58,26 @@
         ) %>
   </aside>
 
-        <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-              <h1 class="govuk-fieldset__heading">
-                Does this course offer online interviews? (optional)
-              </h1>
-            </legend>
-            <div class="govuk-radios" data-module="govuk-radios" data-controller="input-preview">
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="true" data-action="input-preview#toggleInterviewOnline" data-input-preview-target="input" data-preview-output-target="preview">
-                <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
-                  Yes
-                </label>
-              </div>
-              <div class="govuk-radios__item" >
-                <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="false" data-action="input-preview#toggleInterviewOnline" data-input-preview-target="input" data-preview-output-target="preview">
-                <label class="govuk-label govuk-radios__label" for="whereDoYouLive-2">
-                  No
-                </label>
-              </div>
-            </div>
-          </fieldset>
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+      <h1 class="govuk-fieldset__heading">
+        Online interviews (optional)
+      </h1>
+    </legend>
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes" data-controller="input-preview">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="waste" name="waste" type="checkbox" value="true" data-action="input-preview#toggleInterviewOnline" data-input-preview-target="input" data-preview-output-target="preview">
+        <label class="govuk-label govuk-checkboxes__label" for="waste">
+          Online interviews are available for this course
+        </label>
+         <div id="nationality-item-hint" class="govuk-hint govuk-checkboxes__hint">
+          subject to individual circumstances
         </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
 
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:interview_process1,
@@ -122,8 +119,9 @@
           <p class="govuk-heading-m">Interview process</p>
 
           <div id="course_interview_online_label" class="govuk-inset-text course_interview_online_label">
-            This course offers online interviews
-          </div>
+            Online interviews are available for this course<br>
+            <span class="govuk-hint">subject to individual circumstances</span>
+           </div>
 
           <p class="govuk-body">
             <div class="govuk-body">
