@@ -53,11 +53,8 @@ RSpec.describe Gias::Importer do
     end
 
     it "does not save the school again" do
-      freeze_time do
-        now = Time.zone.now
-
+      Timecop.freeze(Time.zone.local(2025, 6, 17, 12, 0, 0)) do
         described_class.call(test_csv)
-
         school = GiasSchool.last
 
         expect(school.reload).to have_attributes(
@@ -83,12 +80,18 @@ RSpec.describe Gias::Importer do
             longitude: -0.077530631715809 },
         )
 
-        expect(GiasSchool.last.updated_at).to be_within(1.second).of(now)
+        @initial_updated_at = school.updated_at
       end
 
-      travel_to 1.minute.from_now do
-        expect { described_class.call(test_csv) }.not_to(change { GiasSchool.last.updated_at })
+      Timecop.freeze(Time.zone.local(2025, 6, 17, 12, 1, 0)) do
+        expect {
+          described_class.call(test_csv)
+        }.not_to change {
+          GiasSchool.find_by(urn: "100000").updated_at
+        }.from(@initial_updated_at)
       end
+
+      Timecop.return
     end
   end
 end
