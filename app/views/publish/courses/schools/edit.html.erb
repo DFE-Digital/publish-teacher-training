@@ -17,8 +17,57 @@
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Important
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <p class="govuk-body">
+      The way schools are added to your account has changed.<br>
+      <a class="govuk-notification-banner__link" href="#">Find out more about how schools are added to your account.</a>
+    </p>
+  </div>
+</div>
+
+<span class="govuk-caption-l"><%= @course.name_and_code %></span>
+<h1 class="govuk-heading-l">Schools</h1>
+<h2 class="govuk-heading-s">We have added some schools</h2>
+<p class="govuk-body">We have automatically uploaded all schools you are working with. These are schools that are on <a class="govuk-link" href="https://staging.register-trainee-teachers.education.gov.uk/">Register trainee teachers</a>.</p>
+
+<h2 class="govuk-heading-s">We have removed some schools</h2>
+<p class="govuk-body">These are schools that are not on <a class="govuk-link" href="https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments">Get Information About Schools (GIAS)</a>.</p>
+<details class="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      Schools that have been removed from this course
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    <p class="govuk-body"><strong>Abbey Park Academy</strong><br>
+    Keighley Close, Illingworth, Halifax, West Yorkshire, HX2 9DG
+    </p>
+    <p class="govuk-body"><strong>Beacon Academy</strong><br>
+    Woodthorpe Road, Loughborough, Leicestershire, LE11 2NF
+    </p>
+    <p class="govuk-body"><strong>Charfield Primary School</strong><br>
+    Wotton Road, Charfield, Wotton-Under-Edge, Gloucestershire, GL12 8TG
+    </p><br>
+    <p class="govuk-body"><strong>If a school name or address is incorrect</strong><br>
+    You can <a class="govuk-link" href="#">add the correct school details to your account</a>.
+    </p>
+    <p class="govuk-body"><strong>If the school is not on GIAS</strong><br>
+    If the school you would like to add is not on GIAS, or the information on GIAS is not correct, contact the school and ask them to update their information on GIAS.
+    </p>
+  </div>
+</details>
+
+
+
       <%= f.govuk_check_boxes_fieldset :site_ids, legend:
-      { text: "#{render CaptionText.new(text: course.name_and_code)} Schools".html_safe, tag: "h1", size: "l" }, hint: { text: "Select all that apply" } do %>
+      { text: ".".html_safe, tag: "h1", size: "l" }, hint: { text: "Select all that apply" } do %>
        <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
           <%= f.govuk_check_box :site_ids,
               site.id,
