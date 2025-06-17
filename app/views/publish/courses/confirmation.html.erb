@@ -216,6 +216,7 @@
           <% end %>
         <% end %>
 
+      <% unless FeatureFlag.active?(:hide_applications_open_date) %>
         <% summary_list.with_row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
           <% row.with_key { t(".applications_opening_date") } %>
           <% row.with_value do %>
@@ -230,6 +231,7 @@
             visually_hidden_text: t(".applications_opening_date"),
           ) %>
         <% end %>
+      <% end %>
 
         <% summary_list.with_row(html_attributes: { data: { qa: "course__start_date" } }) do |row| %>
           <% row.with_key { t(".course_start_date") } %>

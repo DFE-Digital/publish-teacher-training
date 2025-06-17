@@ -13,6 +13,7 @@ require "action_view/railtie"
 require "active_support/core_ext/integer/time"
 require "view_component/compile_cache"
 require "govuk/components"
+require_relative "../app/middleware/request_logging_tags"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -68,7 +69,10 @@ module ManageCoursesBackend
     config.exceptions_app = routes
     config.active_job.queue_adapter = :sidekiq
 
-    config.log_tags = [:request_id]
+    config.log_tags = []
     config.log_level = Settings.log_level
+
+    # Insert the middlware at the end of the stack
+    config.middleware.use RequestLoggingTags
   end
 end

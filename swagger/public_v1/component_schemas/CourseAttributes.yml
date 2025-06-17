@@ -48,7 +48,7 @@ properties:
   applications_open_from:
     type: string
     format: date
-    description: "Date from which applications can be submitted."
+    description: "Date from which applications can be submitted. This field is being deprecated after 2025 recruitment cycle."
     example: "2019-10-08"
   bursary_amount:
     type: integer

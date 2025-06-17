@@ -4,14 +4,9 @@ module Find
   class ApplicationController < ActionController::Base
     include Pagy::Backend
     include DfE::Analytics::Requests
+    include Authentication
 
     layout "find"
-
-    before_action :log_session
-
-    def log_session
-      Rails.logger.push_tags({ session_id: session.id })
-    end
 
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 

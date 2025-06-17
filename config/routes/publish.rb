@@ -14,42 +14,45 @@ scope via: :all do
   match "/403", to: "publish/errors#forbidden"
 end
 
-get "/sign-in", to: "sign_in#index"
-get "/user-not-found", to: "sign_in#new"
-get "/sign-out", to: "sessions#sign_out"
+scope module: :publish do
+  get "/accessibility", to: "pages#accessibility", as: :accessibility
+  get "/guidance", to: "pages#guidance", as: :guidance
+  get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
+  get "/privacy", to: "pages#privacy", as: :privacy
+  get "/terms-conditions", to: "pages#terms", as: :terms
+  get "/how-to-use-this-service", to: "pages#how_to_use_this_service"
 
-get "/accessibility", to: "pages#accessibility", as: :accessibility
-get "/guidance", to: "pages#guidance", as: :guidance
-get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
-get "/privacy", to: "pages#privacy", as: :privacy
-get "/terms-conditions", to: "pages#terms", as: :terms
-get "/how-to-use-this-service", to: "pages#how_to_use_this_service"
-
-scope path: "how-to-use-this-service" do
-  get "/add-an-organisation", to: "pages#add_an_organisation", as: :add_an_organisation
-  get "/add-and-remove-users", to: "pages#add_and_remove_users", as: :add_and_remove_users
-  get "/change-an-accredited-provider-relationship", to: "pages#change_an_accredited_provider_relationship", as: :change_an_accredited_provider_relationship
-  get "/add-schools-and-study-sites", to: "pages#add_schools_and_study_sites", as: :add_schools_and_study_sites
-  get "/roll-over-courses-to-a-new-recruitment-cycle", to: "pages#roll_over_courses_to_a_new_recruitment_cycle", as: :roll_over_courses_to_a_new_recruitment_cycle
-  get "/help-writing-course-descriptions", to: "pages#help_writing_course_descriptions", as: :help_writing_course_descriptions
-  get "/course-summary-examples", to: "pages#course_summary_examples", as: :course_summary_examples
+  scope path: "how-to-use-this-service" do
+    get "/add-an-organisation", to: "pages#add_an_organisation", as: :add_an_organisation
+    get "/add-and-remove-users", to: "pages#add_and_remove_users", as: :add_and_remove_users
+    get "/change-an-accredited-provider-relationship", to: "pages#change_an_accredited_provider_relationship", as: :change_an_accredited_provider_relationship
+    get "/add-schools-and-study-sites", to: "pages#add_schools_and_study_sites", as: :add_schools_and_study_sites
+    get "/roll-over-courses-to-a-new-recruitment-cycle", to: "pages#roll_over_courses_to_a_new_recruitment_cycle", as: :roll_over_courses_to_a_new_recruitment_cycle
+    get "/help-writing-course-descriptions", to: "pages#help_writing_course_descriptions", as: :help_writing_course_descriptions
+    get "/course-summary-examples", to: "pages#course_summary_examples", as: :course_summary_examples
+  end
+  resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
 end
 
-resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
+scope module: "publish/authentication" do
+  get "/sign-in", to: "sign_in#index"
+  get "/user-not-found", to: "sign_in#new"
+  get "/sign-out", to: "sessions#sign_out"
 
-if AuthenticationService.magic_link?
-  get "/sign-in/magic-link", to: "magic_links#new", as: :magic_links
-  post "/magic-link", to: "magic_links#create"
-  get "/magic-link-sent", to: "magic_links#magic_link_sent"
-  get "/signin_with_magic_link", to: "magic_link_sessions#create", as: "signin_with_magic_link"
-  get "/auth/dfe/signout", to: "sessions#destroy"
-elsif AuthenticationService.persona?
-  get "/personas", to: "personas#index"
-  get "/auth/developer/callback", to: "sessions#callback"
-  get "/auth/developer/signout", to: "sessions#destroy"
-else
-  get "/auth/dfe/callback", to: "sessions#callback"
-  get "/auth/dfe/signout", to: "sessions#destroy"
+  if Publish::AuthenticationService.magic_link?
+    get "/sign-in/magic-link", to: "magic_links#new", as: :magic_links
+    post "/magic-link", to: "magic_links#create"
+    get "/magic-link-sent", to: "magic_links#magic_link_sent"
+    get "/signin_with_magic_link", to: "magic_link_sessions#create", as: "signin_with_magic_link"
+    get "/auth/dfe/signout", to: "sessions#destroy"
+  elsif Publish::AuthenticationService.persona?
+    get "/personas", to: "personas#index"
+    get "/auth/developer/callback", to: "sessions#callback"
+    get "/auth/developer/signout", to: "sessions#destroy"
+  else
+    get "/auth/dfe/callback", to: "sessions#callback"
+    get "/auth/dfe/signout", to: "sessions#destroy"
+  end
 end
 
 namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_url).host } do
@@ -103,10 +106,17 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
           get "continue"
         end
         resource :start_date, on: :member, only: %i[new], controller: "courses/start_date", path: "start-date" do
+          get "back"
           get "continue"
         end
-        resource :applications_open, on: :member, only: %i[new], controller: "courses/applications_open", path: "applications-open" do
-          get "continue"
+        constraints ->(_req) { !FeatureFlag.active?(:hide_applications_open_date) } do
+          resource :applications_open,
+                   on: :member,
+                   only: %i[new],
+                   controller: "courses/applications_open",
+                   path: "applications-open" do
+            get "continue"
+          end
         end
         resource :age_range, on: :member, only: %i[new], controller: "courses/age_range", path: "age-range" do
           get "continue"
@@ -131,6 +141,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         end
 
         resource :student_visa_sponsorship, on: :member, controller: "courses/student_visa_sponsorship", path: "student-visa-sponsorship" do
+          get "back"
           get "continue"
         end
         resource :skilled_worker_visa_sponsorship, on: :member, controller: "courses/skilled_worker_visa_sponsorship", path: "skilled-worker-visa-sponsorship" do

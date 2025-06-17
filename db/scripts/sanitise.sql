@@ -9,3 +9,8 @@ UPDATE "user"
            sign_in_user_id=null
        WHERE email NOT LIKE '%@digital.education.gov.uk'
              AND email NOT LIKE '%@education.gov.uk';
+
+UPDATE "candidate"
+       SET email=concat('anonimized-candidate-',id,'@example.com')
+       WHERE email NOT LIKE '%@digital.education.gov.uk'
+             AND email NOT LIKE '%@education.gov.uk';

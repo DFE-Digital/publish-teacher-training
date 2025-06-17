@@ -30,15 +30,23 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
     get "/:provider_code/:course_code/training-with-disabilities", to: "training_with_disabilities#show", as: :training_with_disabilities
   end
 
+  constraints ->(_req) { FeatureFlag.active?(:candidate_accounts) } do
+    scope module: "authentication" do
+      resource :sessions, path: "auth/session", only: %i[new create destroy]
+    end
+
+    scope path: "candidate", module: "candidates", as: "candidate" do
+      get "/saved-courses", to: "saved_courses#index", as: :saved_courses
+    end
+  end
+
   get "/maintenance", to: "pages#maintenance", as: "maintenance"
   get "/cycles", to: "switcher#cycles", as: :cycles
   post "/cycles", to: "switcher#update", as: :switch_cycle_schedule
 
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
   resource :sitemap, only: :show
-  if Settings.features.gov_style_feedback_form_enabled
-    resource :feedbacks, only: %i[new create], path: "/feedback", as: :feedback
-  end
+  resource :feedbacks, only: %i[new create], path: "/feedback", as: :feedback
 
   scope via: :all do
     match "/404", to: "errors#not_found"

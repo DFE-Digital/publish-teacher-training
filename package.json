@@ -42,14 +42,14 @@
   "devDependencies": {
     "esbuild": "^0.25.4",
     "jsdom": "^26.1.0",
-    "sass": "^1.89.0",
+    "sass": "^1.89.2",
     "standard": "^17.1.2",
     "stylelint": "^16.20.0",
     "stylelint-config-gds": "^2.0.0",
-    "stylelint-config-recess-order": "^6.0.0",
+    "stylelint-config-recess-order": "^6.1.0",
     "stylelint-config-standard": "^38.0.0",
     "stylelint-config-standard-scss": "^15.0.1",
     "stylelint-selector-bem-pattern": "^4.0.1",
-    "vitest": "^3.1.4"
+    "vitest": "^3.2.3"
   }
 }

@@ -30,10 +30,9 @@ module Find
     end
 
     def search_courses_params
-      params.permit(
+      permitted = [
         :'provider.provider_name',
         :age_group,
-        :applications_open,
         :can_sponsor_visa,
         :degree_required,
         :funding,
@@ -53,14 +52,13 @@ module Find
         :subject_code,
         :subject_name,
         :university_degree_status,
-        subjects: [],
-        start_date: [],
-        study_type: [],
-        study_types: [],
-        qualifications: [],
-        qualification: [],
-        funding: [],
-      )
+        :applications_open,
+        { subjects: [], start_date: [], study_type: [], study_types: [], qualifications: [], qualification: [], funding: [] },
+      ]
+
+      permitted.delete(:applications_open) if FeatureFlag.active?(:hide_applications_open_date)
+
+      params.permit(*permitted)
     end
 
     def location_params

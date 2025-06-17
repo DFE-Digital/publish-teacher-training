@@ -36,10 +36,12 @@ describe Providers::CopyToRecruitmentCycleService do
     end
     let(:mocked_copy_course_service) { double(execute: nil) }
     let(:mocked_copy_site_service) { double(execute: nil) }
+    let(:mocked_copy_partnership_service) { double(execute: nil) }
     let(:service) do
       described_class.new(
         copy_course_to_provider_service: mocked_copy_course_service,
         copy_site_to_provider_service: mocked_copy_site_service,
+        copy_partnership_to_provider_service: mocked_copy_partnership_service,
         force:,
       )
     end
@@ -106,6 +108,19 @@ describe Providers::CopyToRecruitmentCycleService do
 
         expect(mocked_copy_course_service).to have_received(:execute).with(course:, new_provider:)
       end
+
+      it "copies over the partnerships" do
+        service.execute(provider:, new_recruitment_cycle:)
+
+        expect(
+          mocked_copy_partnership_service,
+        ).to have_received(:execute)
+          .with(
+            provider:,
+            rolled_over_provider: new_provider,
+            new_recruitment_cycle:,
+          )
+      end
     end
 
     it "assigns the new provider to organisation" do
@@ -156,6 +171,7 @@ describe Providers::CopyToRecruitmentCycleService do
     it "returns a hash of the counts of copied objects" do
       allow(mocked_copy_course_service).to receive(:execute).and_return(double)
       allow(mocked_copy_site_service).to receive(:execute).and_return(double)
+      allow(mocked_copy_partnership_service).to receive(:execute).and_return(1)
 
       output = service.execute(provider:, new_recruitment_cycle:)
 
@@ -164,6 +180,7 @@ describe Providers::CopyToRecruitmentCycleService do
         sites: 1,
         study_sites: 1,
         courses: 1,
+        partnerships: 1,
       )
     end
 

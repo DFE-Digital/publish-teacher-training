@@ -35,7 +35,7 @@ dfe_signin:
   # Our service name
   identifier: bats2
   # URL that the users are redirected to for signing in
-  issuer: https://test-oidc.signin.education.gov.uk/
+  issuer: https://test-oidc.signin.education.gov.uk
   # URL of the users profile
   profile: https://test-profile.signin.education.gov.uk
   # This value must be set otherwise sign in will fail
@@ -109,10 +109,6 @@ features:
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
     can_edit_current_and_next_cycles: false
-  # This is a temporary feature flag to allow time to link the gov style feedback form responses to the support console.
-  # N.B. gov_style_feedback_form_enabled is set to false as a default and true in review and test.
-  # To clean up: you can delete the feature flag, remove the helper method here: app/helpers/find/feedback_form_helper.rb, change the url and new_tab: to false in layouts/find, remove the feature flag from the routes.rb file if it remains.
-  gov_style_feedback_form_enabled: false
 
 cookies:
   session:

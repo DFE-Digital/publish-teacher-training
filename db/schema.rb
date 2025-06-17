@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_15_111739) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_12_111146) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -45,6 +45,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_111739) do
     t.index ["created_at"], name: "index_audit_on_created_at"
     t.index ["request_uuid"], name: "index_audit_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
+  end
+
+  create_table "authentication", force: :cascade do |t|
+    t.integer "provider", null: false
+    t.string "subject_key", null: false
+    t.string "authenticable_type", null: false
+    t.bigint "authenticable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authenticable_type", "authenticable_id"], name: "index_authentication_on_authenticable"
+    t.index ["subject_key"], name: "index_authentication_on_subject_key"
   end
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -384,12 +395,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_111739) do
     t.date "available_in_publish_from"
   end
 
-  create_table "session", id: :serial, force: :cascade do |t|
-    t.text "access_token"
-    t.datetime "created_utc", precision: nil, null: false
-    t.integer "user_id", null: false
-    t.index ["access_token", "created_utc"], name: "IX_session_access_token_created_utc"
-    t.index ["user_id"], name: "IX_session_user_id"
+  create_table "saved_course", force: :cascade do |t|
+    t.bigint "candidate_id", null: false
+    t.bigint "course_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candidate_id", "course_id"], name: "index_saved_course_on_candidate_id_and_course_id", unique: true
+    t.index ["candidate_id"], name: "index_saved_course_on_candidate_id"
+    t.index ["course_id"], name: "index_saved_course_on_course_id"
+  end
+
+  create_table "session", force: :cascade do |t|
+    t.string "user_agent"
+    t.string "ip_address"
+    t.string "id_token"
+    t.string "session_key", null: false
+    t.jsonb "data", default: {}
+    t.string "sessionable_type", null: false
+    t.bigint "sessionable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_key"], name: "index_session_on_session_key", unique: true
+    t.index ["sessionable_type", "sessionable_id"], name: "index_session_on_sessionable"
+    t.index ["updated_at"], name: "index_session_on_updated_at"
   end
 
   create_table "site", id: :serial, force: :cascade do |t|
@@ -513,7 +541,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_111739) do
   add_foreign_key "organisation_user", "user", name: "FK_organisation_user_user_user_id"
   add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
-  add_foreign_key "session", "user", name: "FK_session_user_user_id", on_delete: :cascade
+  add_foreign_key "saved_course", "candidate"
+  add_foreign_key "saved_course", "course"
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
   add_foreign_key "study_site_placement", "course"
   add_foreign_key "study_site_placement", "site"

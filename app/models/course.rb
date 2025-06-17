@@ -109,8 +109,6 @@ class Course < ApplicationRecord
 
   belongs_to :provider
 
-  delegate :provider_name, :provider_code, to: :provider, allow_nil: true
-
   belongs_to :accrediting_provider,
              ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
              class_name: "Provider",
@@ -125,7 +123,7 @@ class Course < ApplicationRecord
            before_add: :set_subject_position,
            dependent: :destroy
 
-  delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
+  delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def applicable_for_engineers_teach_physics?
@@ -150,6 +148,10 @@ class Course < ApplicationRecord
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
   has_many :study_site_placements, dependent: :destroy
+
+  has_many :saved_courses, dependent: :destroy
+  has_many :saved_by_candidates, through: :saved_courses, source: :candidate
+
   accepts_nested_attributes_for :site_statuses
 
   has_many :sites,
@@ -194,6 +196,9 @@ class Course < ApplicationRecord
   end
 
   has_one :latest_published_enrichment, -> { published.most_recent },
+          class_name: "CourseEnrichment", inverse_of: :course
+
+  has_one :latest_enrichment, -> { most_recent },
           class_name: "CourseEnrichment", inverse_of: :course
 
   scope :within, lambda { |range, origin:|
@@ -952,16 +957,6 @@ private
     latest_enrichment.withdraw
   end
 
-  def latest_enrichment
-    return if enrichments.empty?
-
-    if enrichments.last.created_at.nil?
-      enrichments.last
-    else
-      enrichments.max_by(&:created_at)
-    end
-  end
-
   def enrichment_not_withdrawn?
     !enrichments.most_recent.first.withdrawn?
   end
@@ -1013,11 +1008,11 @@ private
   end
 
   def validate_enrichment
-    latest_enrichment = enrichments.select(&:draft?).last
-    return if latest_enrichment.blank?
+    latest_draft_enrichment = enrichments.select(&:draft?).last
+    return if latest_draft_enrichment.blank?
 
-    latest_enrichment.valid?
-    add_enrichment_errors(latest_enrichment)
+    latest_draft_enrichment.valid?
+    add_enrichment_errors(latest_draft_enrichment)
   end
 
   def validate_accredited_provider_is_accredited
@@ -1032,11 +1027,11 @@ private
       temp_enrichment.valid?(:publish)
       add_enrichment_errors(temp_enrichment)
     else
-      latest_enrichment = enrichments.select(&:draft?).last
+      latest_draft_enrichment = enrichments.select(&:draft?).last
 
-      if latest_enrichment
-        latest_enrichment.valid?(:publish)
-        add_enrichment_errors(latest_enrichment)
+      if latest_draft_enrichment
+        latest_draft_enrichment.valid?(:publish)
+        add_enrichment_errors(latest_draft_enrichment)
       end
     end
   end

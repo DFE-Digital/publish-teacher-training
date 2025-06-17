@@ -12,11 +12,15 @@ class WorkflowStepService
     return teacher_degree_apprenticeship_workflow_steps if course.undergraduate_degree_with_qts?
 
     if course.is_further_education?
-      further_education_workflow_steps
+      remove_applications_open(further_education_workflow_steps)
     elsif course.is_school_direct?
-      school_direct_workflow_steps_with_accredited_provider_check - visas_to_remove(course) - sponsorship_application_steps_to_remove
+      remove_applications_open(
+        school_direct_workflow_steps_with_accredited_provider_check - visas_to_remove(course) - sponsorship_application_steps_to_remove,
+      )
     elsif course.is_uni_or_scitt?
-      uni_or_scitt_workflow_steps - visas_to_remove(course) - sponsorship_application_steps_to_remove
+      remove_applications_open(
+        uni_or_scitt_workflow_steps - visas_to_remove(course) - sponsorship_application_steps_to_remove,
+      )
     end
   end
 
@@ -60,17 +64,16 @@ private
   end
 
   def teacher_degree_apprenticeship_workflow_steps
-    if course.is_school_direct?
-      teacher_degree_apprenticeship_school_direct_workflow_steps - workflow_removed_steps
-    elsif course.is_uni_or_scitt?
-      teacher_degree_apprenticeship_scitt_workflow_steps - workflow_removed_steps
-    end
-  end
+    steps =
+      if course.is_school_direct?
+        teacher_degree_apprenticeship_school_direct_workflow_steps
+      elsif course.is_uni_or_scitt?
+        teacher_degree_apprenticeship_scitt_workflow_steps
+      else
+        []
+      end
 
-  def workflow_removed_steps
-    return [] unless course.provider.accredited_partners.length == 1
-
-    %i[accredited_provider]
+    remove_applications_open(steps.reject { |step| workflow_removed_steps.include?(step) })
   end
 
   def further_education_workflow_steps
@@ -135,6 +138,12 @@ private
     ]
   end
 
+  def workflow_removed_steps
+    steps = []
+    steps << :accredited_provider if course.provider.accredited_partners.length == 1
+    steps
+  end
+
   def visas_to_remove(course)
     if course.fee_based?
       [:can_sponsor_skilled_worker_visa]
@@ -160,10 +169,12 @@ private
   end
 
   def school_direct_workflow_steps_with_accredited_provider_check
-    if course.provider.accredited_partners.length == 1
-      school_direct_workflow_steps - [:accredited_provider]
-    else
-      school_direct_workflow_steps
-    end
+    school_direct_workflow_steps.reject { |step| workflow_removed_steps.include?(step) }
+  end
+
+  def remove_applications_open(steps)
+    return steps unless FeatureFlag.active?(:hide_applications_open_date)
+
+    steps - [:applications_open]
   end
 end

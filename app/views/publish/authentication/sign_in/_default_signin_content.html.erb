@@ -1,0 +1,19 @@
+
+<h1 class="govuk-heading-l">Sign in to <%= I18n.t("service_name.publish") %></h1>
+
+<% if Publish::AuthenticationService.dfe_signin? %>
+  <p class="govuk-body-m">Use DfE Sign-in to access your account.</p>
+
+  <%= govuk_button_to("Sign in using DfE Sign-in", "/auth/dfe", class: "qa-sign_in_button") %>
+
+  <p class="govuk-body-m">If you do not have a DfE Sign-in account but need access to <%= I18n.t("service_name.publish") %>, email <%= support_email(classes: "govuk-link") %>.</p>
+  <% elsif params[:support] == "true" %>
+    <%= render Persona.new(
+      email_address: "becomingateacher+admin-integration-tests@digital.education.gov.uk",
+      first_name: "Support agent",
+      last_name: "an Admin",
+    ) %>
+  <% else %>
+    <p class="govuk-body-m">Use Personas to access an account.</p>
+    <%= govuk_link_to "Sign in using a Persona", "/personas", class: "govuk-button", data: { qa: "sign-in-using-a-persona" } %>
+<% end %>

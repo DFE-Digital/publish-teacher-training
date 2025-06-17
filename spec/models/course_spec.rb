@@ -79,6 +79,8 @@ describe Course do
     it { is_expected.to have_many(:sites) }
     it { is_expected.to have_many(:enrichments) }
     it { is_expected.to have_many(:financial_incentives) }
+    it { is_expected.to have_many(:saved_courses).dependent(:destroy) }
+    it { is_expected.to have_many(:saved_by_candidates).through(:saved_courses).source(:candidate) }
 
     describe "course_subjects" do
       context "Adding subjects to a new course" do

@@ -343,7 +343,7 @@ feature "Adding a teacher degree apprenticeship course" do
   end
 
   def and_the_back_link_points_to_applications_open_date_page
-    expect(publish_courses_new_start_date_page.back_link[:href]).to include(new_publish_provider_recruitment_cycle_courses_applications_open_path(provider_code: provider.provider_code, recruitment_cycle_year:))
+    expect(publish_courses_new_start_date_page.back_link[:href]).to include(back_publish_provider_recruitment_cycle_courses_start_date_path(provider_code: provider.provider_code, recruitment_cycle_year:))
   end
 
   def when_i_choose_the_applications_open_date

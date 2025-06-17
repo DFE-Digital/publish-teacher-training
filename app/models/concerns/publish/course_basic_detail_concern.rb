@@ -184,6 +184,12 @@ module Publish
         back_publish_provider_recruitment_cycle_courses_schools_path(path_params)
       when :study_site
         back_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
+      when :applications_open
+        if FeatureFlag.active?(:hide_applications_open_date)
+          back_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
+        else
+          back_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
+        end
       when :modern_languages
         back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :engineers_teach_physics
@@ -220,7 +226,11 @@ module Publish
           new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params)
         end
       when :applications_open
-        new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
+        if FeatureFlag.active?(:hide_applications_open_date)
+          new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
+        else
+          new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
+        end
       when :accredited_provider, :ratifying_provider
         new_publish_provider_recruitment_cycle_courses_ratifying_provider_path(path_params)
       when :can_sponsor_student_visa

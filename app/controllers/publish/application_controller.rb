@@ -2,6 +2,7 @@
 
 module Publish
   class ApplicationController < ::ApplicationController
+    include Authentication
     include SuccessMessage
 
     before_action :check_interrupt_redirects

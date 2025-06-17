@@ -1,7 +1,30 @@
 shared:
+  authentication:
+    - id
+    - provider
+    - subject_key
+    - authenticable_id
+    - authenticable_type
+    - created_at
+    - updated_at
   candidate:
     - id
     - email_address
+    - created_at
+    - updated_at
+  saved_course:
+    - id
+    - candidate_id
+    - course_id
+    - created_at
+    - updated_at
+  session:
+    - id
+    - user_agent
+    - ip_address
+    - session_key
+    - sessionable_id
+    - sessionable_type
     - created_at
     - updated_at
   contact:

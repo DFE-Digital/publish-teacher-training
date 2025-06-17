@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "../../app/services/authentication_service"
+require_relative "../../app/services/publish/authentication_service"
 
-if AuthenticationService.persona?
+if Publish::AuthenticationService.persona?
 
   Rails.application.config.middleware.use OmniAuth::Builder do
     provider :developer,
@@ -38,6 +38,7 @@ else
     issuer: ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?),
   }
 
-  Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
-
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider :openid_connect, options
+  end
 end

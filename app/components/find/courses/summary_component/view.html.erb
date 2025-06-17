@@ -51,7 +51,7 @@
     <% end %>
   <% end %>
 
-  <% if show_apply_from_row? %>
+  <% if show_apply_from_row? && !FeatureFlag.active?(:hide_applications_open_date) %>
     <% summary_list.with_row do |row| %>
       <% row.with_key(text: t(".date_can_apply")) %>
       <% row.with_value(text: l(applications_open_from&.to_date)) %>
