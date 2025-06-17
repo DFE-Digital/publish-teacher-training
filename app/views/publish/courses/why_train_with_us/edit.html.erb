@@ -59,13 +59,13 @@
         },
       ) %>
     </aside>
-
+    <div data-controller="input-preview">
       <!--WHAT YOU WILL DO ON SCHOOL PLACEMENTS-->
         <%= f.govuk_text_area(:how_school_placements_work_5,
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
-            preview_output_target: "preview2"
+            preview_output_target: "preview1"
           },
           label: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school"), size: "s" },
           hint: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school-hint"), size: "s" },
@@ -76,7 +76,7 @@
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
-            preview_output_target: "preview2"
+            preview_output_target: "preview1"
           },
           label: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored"), size: "s" },
           hint: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored-hint"), size: "s" },
@@ -88,8 +88,9 @@
         </div>
         <div class="app-preview-container">
           <p class="govuk-heading-m">What you will do on school placements</p>
-          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview2">The text you type above will show here.</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview1">The text you type above will show here.</p>
         </div>
+      </div>
 
       <%= f.govuk_submit t("publish.providers.about_course.edit.submit_button") %>
       <% end %>

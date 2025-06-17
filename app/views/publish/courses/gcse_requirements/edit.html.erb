@@ -53,6 +53,7 @@
       ) %>
     </aside>
 
+    <div data-controller="input-preview">
     <!--WHAT YOU WILL STUDY-->
         <%= f.govuk_text_area(:how_school_placements_work_7,
           data: {
@@ -93,5 +94,6 @@
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
     </p>
+    </div>
   </div>
 </div>
