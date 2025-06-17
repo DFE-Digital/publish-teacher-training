@@ -15,10 +15,10 @@
         </p>
         <h3 class="govuk-heading-s">We have added 4 schools</h3>
         <p class="govuk-body">You will no longer need to manually add all your schools to your account. We automatically upload all schools you are working with.</p>
-        <p class="govuk-body">These are schools that are on <a class="govuk-link" href="#">Register trainee teachers</a>.</p>
+        <p class="govuk-body">These are schools that are on <a class="govuk-link" href="https://staging.register-trainee-teachers.education.gov.uk/">Register trainee teachers</a>.</p>
         <p class="govuk-body"><a class="govuk-link" href="#">View the schools that have been added to your account.</a></p>
         <h3 class="govuk-heading-s">We have removed 12 schools</h3>
-        <p class="govuk-body">These are schools that are not on <a class="govuk-link" href="#">Get Information About Schools (GIAS)</a>.</p>
+        <p class="govuk-body">These are schools that are not on <a class="govuk-link" href="https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments">Get Information About Schools (GIAS)</a>.</p>
         <p class="govuk-body"><a class="govuk-link" href="#">View the schools have been removed from your account.</a></p>
       </div>
     </div>
@@ -38,7 +38,7 @@
       <%= govuk_link_to("Add multiple schools", new_publish_provider_recruitment_cycle_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") %>
     </div>
 
-    <p class="govuk-body">You can only add schools that are on <a class="govuk-link" href="#">Get Information About Schools (GIAS)</a>.</p>
+    <p class="govuk-body">You can only add schools that are on <a class="govuk-link" href="https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments">Get Information About Schools (GIAS)</a>.</p>
     <p class="govuk-body">You can attach placement schools to any of your courses from the ‘Basic details’ tab on each of <a class="govuk-link" href="#">your courses</a>.</p>
 
     <%= render Publish::Providers::SchoolPlacements::ExplainerComponent.new %>
