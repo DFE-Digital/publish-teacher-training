@@ -39,55 +39,57 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
-        <%= t("publish.providers.why_train_with_us.edit.why_train_with_us", provider_name: @provider.provider_name) %>
+        What you will do on school placements
       </h1>
+
+      <%= t("publish.providers.school_placements.edit.guidance_text_html") %>
 
       <%= render partial: "guidance" %>
 
-      <div data-controller="input-preview">
-        <%= f.govuk_text_area(:why_train_with_us_1,
-                              data: { input_preview_target: "input", action: "input-preview#updatePreview" },
-                              label: { text: t("publish.providers.about_course.edit.why_train_with_you", provider_name: @provider.provider_name), size: "s" },
-                              hint: { text: t("publish.providers.about_course.edit.why_train_with_you_hint"), size: "s" },
-                              max_words: 100,
-                              rows: 8) %>
+      <aside data-qa="course__related_sidebar">
+      <%= render(
+        partial: "publish/courses/related_sidebar",
+        locals: {
+          course: @course,
+          page_path: school_placements_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+        },
+      ) %>
+    </aside>
 
-        <%= f.govuk_text_area(:why_train_with_us_2,
-                              data: { input_preview_target: "input", action: "input-preview#updatePreview" },
-                              label: { text: t("publish.providers.about_course.edit.what_different_other_providers"), size: "s" },
-                              hint: { text: t("publish.providers.about_course.edit.what_different_other_providers_hint_html"), size: "s" },
-                              max_words: 100,
-                              rows: 8) %>
+      <!--WHAT YOU WILL DO ON SCHOOL PLACEMENTS-->
+        <%= f.govuk_text_area(:how_school_placements_work_5,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview2"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school-hint"), size: "s" },
+          max_words: 150,
+          rows: 10) %>
 
-        <p class="govuk-heading-m">What candidates will see</p>
-        <div class="app-preview-container">
-          <p class="govuk-heading-l">Why train with us</p>
-          <p class="govuk-body">
-            <div class="govuk-body" data-input-preview-target="preview">
-              Your information will show here.
-            </div>
-          </p>
-          <p class="govuk-body"><a class="govuk-link" href="#">Contact <%= @provider.provider_name %></a></p>
+        <%= f.govuk_text_area(:how_school_placements_work_6,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview2"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored-hint"), size: "s" },
+          max_words: 50,
+          rows: 5) %>
 
-          <!-- Call out -->
-          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
-              <span class="govuk-heading-m">
-                How to choose a course
-              </span>
-              <p class="govuk-body">
-                Your course will vary depending on whether the training provider is a university, a school, or another organisation.
-              </p>
-              <p class="govuk-body">
-                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course">
-                  Find out how to choose a course.
-                </a>
-              </p>
-            </div>
-          </div>
-          <!-- END Call out -->
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview of what candidates will see</strong></span>
         </div>
-      </div>
+        <div class="app-preview-container">
+          <p class="govuk-heading-m">What you will do on school placements</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview2">The text you type above will show here.</p>
+        </div>
 
       <%= f.govuk_submit t("publish.providers.about_course.edit.submit_button") %>
       <% end %>
@@ -97,18 +99,6 @@
                                                                                       @course.course_code)) %>
       </p>
     </div>
-    <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-      <%= render(
-            partial: "publish/courses/related_sidebar",
-            locals: {
-              course: @course,
-              page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
-                @provider.provider_code,
-                @course.recruitment_cycle_year,
-                @course.course_code,
-              ),
-            },
-          ) %>
-    </aside>
+
   </div>
 </div>
