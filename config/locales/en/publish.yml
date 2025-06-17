@@ -146,7 +146,7 @@ en:
           page_title: Why train with us - %{course_name_and_code}
           submit_button: Update why train with us
           description: >
-            This information appears at the top of the course page.
+            This information appears at the top of every course page.
           candidates_say_section_html:
             <p class="govuk-body">Candidates say the most important information is:</p>
             <ul class="govuk-list govuk-list--bullet">
