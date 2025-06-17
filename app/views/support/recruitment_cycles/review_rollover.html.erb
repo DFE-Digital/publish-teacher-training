@@ -7,22 +7,22 @@
 <div class="govuk-width-container">
   <div class="govuk-grid-row">
       <span class="govuk-caption-l"><%= t(".page_caption") %></span>
-      <h1 class="govuk-heading-l"><%= @recruitment_cycle %></h1>
+      <h1 class="govuk-heading-l"><%= @recruitment_cycle.year_range %></h1>
 
       <%= form_with model: @review_rollover_form, url: confirm_rollover_support_recruitment_cycle_path(@recruitment_cycle), method: :post do |form| %>
         <%= form.govuk_error_summary %>
 
         <p class="govuk-body">
-          <%= t(".intro", current_cycle: RecruitmentCycle.current.to_s, new_cycle: @recruitment_cycle.to_s) %>
+          <%= t(".intro", current_cycle: RecruitmentCycle.current.year_range, new_cycle: @recruitment_cycle.year_range) %>
         </p>
 
         <div class="govuk-inset-text">
           <%= t(".eligibility_intro_html") %>
           <p class="govuk-body">
-            <%= t(".date_context_html", today: l(Date.current, format: :long)) %>
+            <%= t(".date_context_html", today: l(Date.current)) %>
           </p>
           <p class="govuk-body">
-            <%= t(".available_in_publish_html", available_date: l(@recruitment_cycle.available_in_publish_from, format: :long)) %>
+            <%= t(".available_in_publish_html", available_date: l(@recruitment_cycle.available_in_publish_from)) %>
           </p>
       </div>
 
