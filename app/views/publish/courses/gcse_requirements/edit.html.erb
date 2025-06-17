@@ -1,4 +1,4 @@
-<% page_title = "GCSEs and equivalency tests" %>
+<% page_title = "what you will study" %>
 
 <% content_for :page_title, title_with_error_prefix(page_title, @errors && @errors.any?) %>
 
@@ -32,10 +32,58 @@
 
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= @course.name_and_code %></span>
-      GCSEs and equivalency tests
+      What you will study
     </h1>
 
-     <%= render partial: "publish/courses/gcse_requirements", locals: { f:, course_object: @source_course ? source_course : @course } %>
+     <%= t("publish.providers.school_placements.edit.guidance_text_html") %>
+
+      <%= render partial: "guidance" %>
+
+      <aside data-qa="course__related_sidebar">
+      <%= render(
+        partial: "publish/courses/related_sidebar",
+        locals: {
+          course: @course,
+          page_path: school_placements_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+        },
+      ) %>
+    </aside>
+
+    <!--WHAT YOU WILL STUDY-->
+        <%= f.govuk_text_area(:how_school_placements_work_7,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview3"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("what-trainees-study"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("what-trainees-study-hint"), size: "s" },
+          max_words: 150,
+          rows: 10) %>
+
+        <%= f.govuk_text_area(:how_school_placements_work_8,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview3"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-trainees-assessed"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-assessed-hint"), size: "s" },
+          max_words: 50,
+          rows: 5) %>
+
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview of what candidates will see</strong></span>
+        </div>
+        <div class="app-preview-container">
+        <p class="govuk-heading-m">What you will study</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview3">The text you type above will show here.</p>
+        </div>
+
 
      <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
 
@@ -46,13 +94,4 @@
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
     </p>
   </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-     <%= render(
-      partial: "publish/courses/related_sidebar",
-      locals: {
-        course: @course,
-        page_path: gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
-      },
-    ) %>
-  </aside>
 </div>

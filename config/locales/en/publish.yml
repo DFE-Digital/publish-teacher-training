@@ -144,7 +144,7 @@ en:
           what_different_other_providers: Why should candidates choose to train with you?
           what_different_other_providers_hint_html: Focus on what makes you different from other providers. </br></br> You can include past achievements, for example student successes or Ofsted ratings. Be specific with your claims, and support them with evidence
           page_title: Why train with us - %{course_name_and_code}
-          submit_button: Update why train with us
+          submit_button: Update what you will do on school placements
           description: >
             This information appears at the top of every course page.
           candidates_say_section_html:
