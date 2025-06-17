@@ -37,7 +37,7 @@
 
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-xl">
+      <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
         <%= CourseEnrichment.human_attribute_name("how_school_placements_work") %>
       </h1>
@@ -64,8 +64,6 @@
 
       <div data-controller="input-preview">
         <!--WHERE YOU WILL TRAIN-->
-        <h2 class="govuk-heading-l" id="where-you-will-train">Where you will train</h2>
-
         <%= f.govuk_text_area(:how_school_placements_work_1,
           data: {
             input_preview_target: "input",
@@ -116,75 +114,6 @@
           <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview1">The text you type above will show here.</p>
         </div>
 
-        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-        <!--WHAT YOU WILL DO ON SCHOOL PLACEMENTS-->
-        <h2 class="govuk-heading-l" id="what-you-do-school-placements">What you will do on school placements</h2>
-
-        <%= f.govuk_text_area(:how_school_placements_work_5,
-          data: {
-            input_preview_target: "input",
-            action: "input-preview#updatePreview",
-            preview_output_target: "preview2"
-          },
-          label: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school"), size: "s" },
-          hint: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school-hint"), size: "s" },
-          max_words: 150,
-          rows: 10) %>
-
-        <%= f.govuk_text_area(:how_school_placements_work_6,
-          data: {
-            input_preview_target: "input",
-            action: "input-preview#updatePreview",
-            preview_output_target: "preview2"
-          },
-          label: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored"), size: "s" },
-          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored-hint"), size: "s" },
-          max_words: 50,
-          rows: 5) %>
-
-        <div class="app-preview-container--heading">
-          <span class="govuk-body"><strong>Preview of what candidates will see</strong></span>
-        </div>
-        <div class="app-preview-container">
-          <p class="govuk-heading-m">What you will do on school placements</p>
-          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview2">The text you type above will show here.</p>
-        </div>
-
-        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-        <!--WHAT YOU WILL STUDY-->
-        <h2 class="govuk-heading-l" id="what-you-will-study">What you will study</h2>
-
-        <%= f.govuk_text_area(:how_school_placements_work_7,
-          data: {
-            input_preview_target: "input",
-            action: "input-preview#updatePreview",
-            preview_output_target: "preview3"
-          },
-          label: { text: CourseEnrichment.human_attribute_name("what-trainees-study"), size: "s" },
-          hint: { text: CourseEnrichment.human_attribute_name("what-trainees-study-hint"), size: "s" },
-          max_words: 150,
-          rows: 10) %>
-
-        <%= f.govuk_text_area(:how_school_placements_work_8,
-          data: {
-            input_preview_target: "input",
-            action: "input-preview#updatePreview",
-            preview_output_target: "preview3"
-          },
-          label: { text: CourseEnrichment.human_attribute_name("how-trainees-assessed"), size: "s" },
-          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-assessed-hint"), size: "s" },
-          max_words: 50,
-          rows: 5) %>
-
-        <div class="app-preview-container--heading">
-          <span class="govuk-body"><strong>Preview of what candidates will see</strong></span>
-        </div>
-        <div class="app-preview-container">
-        <p class="govuk-heading-m">What you will study</p>
-          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview3">The text you type above will show here.</p>
-        </div>
         <!--<div class="app-preview-container">-->
           <!--<p class="govuk-body">You will spend most of your time on school placements - a minimum of 24 weeks. This time is spread across at least 2 schools. You will also spend time in a location where you will study.</p>-->
           <!--<dl class="govuk-summary-list">
