@@ -224,6 +224,7 @@ group :test do
   gem "database_cleaner"
   gem "jsonapi-rspec"
   gem "mock_redis"
+  gem "redis", "~> 5.4.0"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 6.5"
   gem "simplecov", "< 0.23", require: false
