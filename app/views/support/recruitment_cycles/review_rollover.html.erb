@@ -6,52 +6,53 @@
 
 <div class="govuk-width-container">
   <div class="govuk-grid-row">
-      <span class="govuk-caption-l"><%= t(".page_caption") %></span>
-      <h1 class="govuk-heading-l"><%= @recruitment_cycle.year_range %></h1>
+    <span class="govuk-caption-l"><%= t(".page_caption") %></span>
+    <h1 class="govuk-heading-l"><%= @recruitment_cycle.year_range %></h1>
 
-      <%= form_with model: @review_rollover_form, url: confirm_rollover_support_recruitment_cycle_path(@recruitment_cycle), method: :post do |form| %>
-        <%= form.govuk_error_summary %>
+    <%= form_with model: @review_rollover_form, url: confirm_rollover_support_recruitment_cycle_path(@recruitment_cycle), local: true do |form| %>
+      <%= form.govuk_error_summary %>
 
+      <p class="govuk-body">
+        <%= t(".intro", current_cycle: RecruitmentCycle.current.year_range, new_cycle: @recruitment_cycle.year_range) %>
+      </p>
+
+      <div class="govuk-inset-text">
+        <%= t(".eligibility_intro_html") %>
         <p class="govuk-body">
-          <%= t(".intro", current_cycle: RecruitmentCycle.current.year_range, new_cycle: @recruitment_cycle.year_range) %>
+          <%= t(".date_context_html", today: l(Date.current)) %>
         </p>
-
-        <div class="govuk-inset-text">
-          <%= t(".eligibility_intro_html") %>
-          <p class="govuk-body">
-            <%= t(".date_context_html", today: l(Date.current)) %>
-          </p>
-          <p class="govuk-body">
-            <%= t(".available_in_publish_html", available_date: l(@recruitment_cycle.available_in_publish_from)) %>
-          </p>
+        <p class="govuk-body">
+          <%= t(".available_in_publish_html", available_date: l(@recruitment_cycle.available_in_publish_from)) %>
+        </p>
       </div>
 
-        <%= govuk_summary_list do |summary_list| %>
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { t(".summary.providers") } %>
-            <% row.with_value(text: @rollover_progress_query.eligible_providers_count) %>
-          <% end %>
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { t(".summary.courses") } %>
-            <% row.with_value(text: @rollover_progress_query.eligible_courses_count) %>
-          <% end %>
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { t(".summary.partnerships") } %>
-            <% row.with_value(text: @rollover_progress_query.eligible_partnerships_count) %>
-          <% end %>
-          <% summary_list.with_row do |row| %>
-            <% row.with_key { t(".summary.not_rolled_over") } %>
-            <% row.with_value(text: @rollover_progress_query.providers_without_published_courses_count) %>
-          <% end %>
+      <%= govuk_summary_list do |summary_list| %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { t(".summary.providers") } %>
+          <% row.with_value(text: @rollover_progress_query.eligible_providers_count) %>
         <% end %>
-
-        <h2 class="govuk-heading-m"><%= t(".confirm_heading") %></h2>
-        <p class="govuk-body">
-        <%= t(".confirm_body") %>
-        </p>
-
-        <%= form.govuk_text_field :confirmation, label: { text: "Type ‘#{Support::ReviewRolloverForm::CONFIRM_ROLLOVER}’ to confirm that you want to proceed", size: "m" }, width: 20 %>
-        <%= form.govuk_submit t("continue") %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { t(".summary.courses") } %>
+          <% row.with_value(text: @rollover_progress_query.eligible_courses_count) %>
+        <% end %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { t(".summary.partnerships") } %>
+          <% row.with_value(text: @rollover_progress_query.eligible_partnerships_count) %>
+        <% end %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { t(".summary.not_rolled_over") } %>
+          <% row.with_value(text: @rollover_progress_query.providers_without_published_courses_count) %>
+        <% end %>
       <% end %>
-    </div>
+
+      <h2 class="govuk-heading-m"><%= t(".confirm_heading") %></h2>
+      <p class="govuk-body"><%= t(".confirm_body") %></p>
+
+      <%= form.govuk_text_field :confirmation, label: { text: "Type ‘#{Support::ReviewRolloverForm::CONFIRM_ROLLOVER}’ to confirm that you want to proceed", size: "m" }, width: 20, autocomplete: "off" %>
+
+      <%= form.govuk_text_field :environment, label: { text: "Type ‘#{Settings.environment.name}’ to confirm that you want to proceed", size: "m" }, width: 20, autocomplete: "off" %>
+
+      <%= form.govuk_submit t("continue") %>
+    <% end %>
+  </div>
 </div>

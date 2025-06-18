@@ -40,3 +40,6 @@ en:
             confirmation:
               invalid_confirmation: &rollover_confirmation_message "You must type 'confirm rollover' to proceed."
               blank: *rollover_confirmation_message
+            environment:
+              invalid_environment: &rollover_environment_message "You must type the environment name to proceed."
+              blank: *rollover_environment_message

@@ -25,6 +25,7 @@ RSpec.describe "Confirm rollover", service: :publish do
     and_i_click_continue
     then_i_see_an_error_message
     and_i_write_the_wrong_confirmation_message
+    and_i_write_the_wrong_environment_name
     and_i_click_continue
     then_i_see_an_error_message
 
@@ -55,14 +56,20 @@ RSpec.describe "Confirm rollover", service: :publish do
 
   def then_i_see_an_error_message
     expect(page).to have_content("You must type 'confirm rollover' to proceed.")
+    expect(page).to have_content("You must type the environment name to proceed.")
   end
 
   def and_i_write_the_wrong_confirmation_message
     fill_in "Type ‘confirm rollover’ to confirm that you want to proceed", with: "wrong message"
   end
 
+  def and_i_write_the_wrong_environment_name
+    fill_in "Type ‘test’ to confirm that you want to proceed", with: "wrong message"
+  end
+
   def when_i_confirm_the_rollover
     fill_in "Type ‘confirm rollover’ to confirm that you want to proceed", with: "confirm rollover"
+    fill_in "Type ‘test’ to confirm that you want to proceed", with: "test"
   end
 
   def then_rollover_is_started

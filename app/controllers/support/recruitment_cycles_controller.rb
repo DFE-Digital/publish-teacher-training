@@ -63,7 +63,7 @@ module Support
     end
 
     def confirm_rollover
-      @review_rollover_form = ReviewRolloverForm.new(params.fetch(:support_review_rollover_form, {}).permit(:confirmation))
+      @review_rollover_form = ReviewRolloverForm.new(params.fetch(:support_review_rollover_form, {}).permit(:confirmation, :environment))
 
       if @review_rollover_form.valid?
         RolloverJob.perform_later(@recruitment_cycle.id)
