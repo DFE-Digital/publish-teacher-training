@@ -576,15 +576,15 @@ en:
         how-many-placements-hint: For example first placement in the autumn term
         how-trainees-placed: How do you decide which schools to place trainees in?
         how-trainees-placed-hint: For example taking commuting time into consideration
-        where-study-site: Where does theoretical training take place? (optional)
+        where-study-site: Where will theoretical training take place? (optional)
         where-study-site-hint: For example at a training location, university or online
         what-trainee-do-in-school: What will trainees do while in schools?
         what-trainee-do-in-school-hint: For example observations, lesson planning, getting involved in school life
-        how-trainees-mentored: How will trainees be supported and mentored? (optional)
-        how-trainees-mentored-hint: Be as specific as you can. For example, how many mentors trainees will have, or how often they will meet with their mentors
-        what-trainees-study: What will trainees study?
-        what-trainees-study-hint: For example modules or topics covered
-        how-trainees-assessed: How will trainees be assessed? (optional)
+        how-trainees-mentored: How will they be supported and mentored? (optional)
+        how-trainees-mentored-hint: For example how many mentors they will have, and how often they will meet
+        what-trainees-study: What will trainees do for theoretical training?
+        what-trainees-study-hint: For example the curriculum, modules or topics covered
+        how-trainees-assessed: How will they be assessed? (optional)
         how-trainees-assessed-hint: Courses that include how trainees will be assessed can increase applications by around 55%
         fee_details: Fees and financial support
         about_course: About this course
