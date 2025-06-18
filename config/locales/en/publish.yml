@@ -157,7 +157,7 @@ en:
           submit_button: Update where and how you'll train
           selectable_school_label: Do you want to show placement schools to candidates?
           selectable_school_hint: Candidates will see a list of placement schools on your course pages and be able to select a preference when they apply.
-          guidance_text_html: <p class="govuk-body">Be as specific as possible. This will help candidates work out if your course is right for them.</p>
+          guidance_text_html: <p class="govuk-body">Candidates say location is the most important thing when choosing a course.</p><p class="govuk-body">Be as <strong>specific</strong> as possible. This will help candidates work out if your course is right for them.</p>
           where_you_will_train: Where you will train
           summary_text: See what we include in this section
       why_train_with_us:
