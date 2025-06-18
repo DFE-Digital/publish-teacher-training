@@ -64,13 +64,15 @@
 
       <div data-controller="input-preview">
         <!--WHERE YOU WILL TRAIN-->
-        <%= f.govuk_text_area(:how_school_placements_work_1,
+
+        <%= f.govuk_text_area(:how_school_placements_work_3,
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
             preview_output_target: "preview1"
           },
-          label: { text: CourseEnrichment.human_attribute_name("where-time-school-study"), size: "s" },
+          label: { text: CourseEnrichment.human_attribute_name("how-trainees-placed"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-placed-hint"), size: "s" },
           max_words: 50,
           rows: 5) %>
 
@@ -84,18 +86,7 @@
           max_words: 50,
           rows: 5) %>
 
-        <%= f.govuk_text_area(:how_school_placements_work_3,
-          data: {
-            input_preview_target: "input",
-            action: "input-preview#updatePreview",
-            preview_output_target: "preview1"
-          },
-          label: { text: CourseEnrichment.human_attribute_name("how-trainees-placed"), size: "s" },
-          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-placed-hint"), size: "s" },
-          max_words: 50,
-          rows: 5) %>
-
-      <%= f.govuk_text_area(:how_school_placements_work_4,
+        <%= f.govuk_text_area(:how_school_placements_work_4,
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
@@ -103,6 +94,16 @@
           },
           label: { text: CourseEnrichment.human_attribute_name("where-study-site"), size: "s" },
           hint: { text: CourseEnrichment.human_attribute_name("where-study-site-hint"), size: "s" },
+          max_words: 50,
+          rows: 5) %>
+
+        <%= f.govuk_text_area(:how_school_placements_work_1,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("where-time-school-study"), size: "s" },
           max_words: 50,
           rows: 5) %>
 
