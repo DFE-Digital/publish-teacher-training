@@ -186,13 +186,15 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def then_i_only_see_courses_within_a_10_mile_radius
-    expect(results).to have_content(@london_primary_course.name_and_code)
-    expect(results).to have_content(@london_mathematics_course.name_and_code)
+    with_retry do
+      expect(results).to have_content(@london_primary_course.name_and_code)
+      expect(results).to have_content(@london_mathematics_course.name_and_code)
 
-    expect(results).to have_no_content(@romford_primary_course.name_and_code)
-    expect(results).to have_no_content(@romford_mathematics_course.name_and_code)
-    expect(results).to have_no_content(@watford_primary_course.name_and_code)
-    expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
+      expect(results).to have_no_content(@romford_primary_course.name_and_code)
+      expect(results).to have_no_content(@romford_mathematics_course.name_and_code)
+      expect(results).to have_no_content(@watford_primary_course.name_and_code)
+      expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
+    end
   end
 
   def and_the_10_mile_radius_is_selected
@@ -222,13 +224,15 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   alias_method :and_i_set_the_radius_to_10_miles, :when_i_set_the_radius_to_10_miles
 
   def then_i_see_courses_up_to_15_miles_distance
-    expect(results).to have_content(@london_primary_course.name_and_code)
-    expect(results).to have_content(@london_mathematics_course.name_and_code)
-    expect(results).to have_content(@romford_primary_course.name_and_code)
-    expect(results).to have_content(@romford_mathematics_course.name_and_code)
+    with_retry do
+      expect(results).to have_content(@london_primary_course.name_and_code)
+      expect(results).to have_content(@london_mathematics_course.name_and_code)
+      expect(results).to have_content(@romford_primary_course.name_and_code)
+      expect(results).to have_content(@romford_mathematics_course.name_and_code)
 
-    expect(results).to have_no_content(@watford_primary_course.name_and_code)
-    expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
+      expect(results).to have_no_content(@watford_primary_course.name_and_code)
+      expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
+    end
   end
 
   def when_i_increase_the_radius_to_20_miles
@@ -236,12 +240,14 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def then_i_see_courses_up_to_20_miles_distance
-    expect(results).to have_content(@london_primary_course.name_and_code)
-    expect(results).to have_content(@london_mathematics_course.name_and_code)
-    expect(results).to have_content(@romford_primary_course.name_and_code)
-    expect(results).to have_content(@romford_mathematics_course.name_and_code)
-    expect(results).to have_content(@watford_primary_course.name_and_code)
-    expect(results).to have_content(@watford_mathematics_course.name_and_code)
+    with_retry do
+      expect(results).to have_content(@london_primary_course.name_and_code)
+      expect(results).to have_content(@london_mathematics_course.name_and_code)
+      expect(results).to have_content(@romford_primary_course.name_and_code)
+      expect(results).to have_content(@romford_mathematics_course.name_and_code)
+      expect(results).to have_content(@watford_primary_course.name_and_code)
+      expect(results).to have_content(@watford_mathematics_course.name_and_code)
+    end
   end
 
   def and_select_primary_subject
@@ -255,12 +261,14 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def then_i_see_only_courses_within_selected_location_and_primary_subject_within_a_10_mile_radius
-    expect(results).to have_content(@london_primary_course.name_and_code)
-    expect(results).to have_no_content(@london_mathematics_course.name_and_code)
-    expect(results).to have_no_content(@romford_primary_course.name_and_code)
-    expect(results).to have_no_content(@romford_mathematics_course.name_and_code)
-    expect(results).to have_no_content(@watford_primary_course.name_and_code)
-    expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
+    with_retry do
+      expect(results).to have_content(@london_primary_course.name_and_code)
+      expect(results).to have_no_content(@london_mathematics_course.name_and_code)
+      expect(results).to have_no_content(@romford_primary_course.name_and_code)
+      expect(results).to have_no_content(@romford_mathematics_course.name_and_code)
+      expect(results).to have_no_content(@watford_primary_course.name_and_code)
+      expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
+    end
   end
 
   def when_i_search_for_math
@@ -268,23 +276,27 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def then_i_see_only_mathematics_courses
-    expect(results).to have_content(@london_mathematics_course.name_and_code)
-    expect(results).to have_content(@romford_mathematics_course.name_and_code)
-    expect(results).to have_content(@watford_mathematics_course.name_and_code)
+    with_retry do
+      expect(results).to have_content(@london_mathematics_course.name_and_code)
+      expect(results).to have_content(@romford_mathematics_course.name_and_code)
+      expect(results).to have_content(@watford_mathematics_course.name_and_code)
 
-    expect(results).to have_no_content(@london_primary_course.name_and_code)
-    expect(results).to have_no_content(@romford_primary_course.name_and_code)
-    expect(results).to have_no_content(@watford_primary_course.name_and_code)
+      expect(results).to have_no_content(@london_primary_course.name_and_code)
+      expect(results).to have_no_content(@romford_primary_course.name_and_code)
+      expect(results).to have_no_content(@watford_primary_course.name_and_code)
+    end
   end
 
   def then_i_see_mathematics_courses_in_15_miles_from_london_that_sponsors_visa
-    expect(results).to have_content(@london_mathematics_course.name_and_code)
+    with_retry do
+      expect(results).to have_content(@london_mathematics_course.name_and_code)
 
-    expect(results).to have_no_content(@romford_mathematics_course.name_and_code)
-    expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
-    expect(results).to have_no_content(@london_primary_course.name_and_code)
-    expect(results).to have_no_content(@romford_primary_course.name_and_code)
-    expect(results).to have_no_content(@watford_primary_course.name_and_code)
+      expect(results).to have_no_content(@romford_mathematics_course.name_and_code)
+      expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
+      expect(results).to have_no_content(@london_primary_course.name_and_code)
+      expect(results).to have_no_content(@romford_primary_course.name_and_code)
+      expect(results).to have_no_content(@watford_primary_course.name_and_code)
+    end
   end
 
   def when_i_search_for_a_provider
@@ -301,12 +313,14 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def then_i_see_only_courses_from_that_provider
-    expect(results).to have_content("First university")
+    with_retry do
+      expect(results).to have_content("First university")
 
-    providers = Provider.where.not(provider_name: "First university")
+      providers = Provider.where.not(provider_name: "First university")
 
-    providers.each do |provider|
-      expect(results).to have_no_content(provider.provider_name)
+      providers.each do |provider|
+        expect(results).to have_no_content(provider.provider_name)
+      end
     end
   end
 

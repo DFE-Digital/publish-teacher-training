@@ -77,27 +77,35 @@ RSpec.describe "when I filter by funding type", :js, service: :find do
   end
 
   def then_i_see_only_salaried_courses
-    expect(results).to have_content("Chemistry (K592)")
-    expect(results).to have_no_content("Biology (S872)")
-    expect(results).to have_no_content("Computing (L364)")
+    with_retry do
+      expect(results).to have_content("Chemistry (K592)")
+      expect(results).to have_no_content("Biology (S872)")
+      expect(results).to have_no_content("Computing (L364)")
+    end
   end
 
   def then_i_see_only_fee_courses
-    expect(results).to have_content("Biology (S872)")
-    expect(results).to have_no_content("Chemistry (K592)")
-    expect(results).to have_no_content("Computing (L364)")
+    with_retry do
+      expect(results).to have_content("Biology (S872)")
+      expect(results).to have_no_content("Chemistry (K592)")
+      expect(results).to have_no_content("Computing (L364)")
+    end
   end
 
   def then_i_see_fee_and_salaried_courses
-    expect(results).to have_content("Biology (S872)")
-    expect(results).to have_content("Chemistry (K592)")
-    expect(results).to have_no_content("Computing (L364)")
+    with_retry do
+      expect(results).to have_content("Biology (S872)")
+      expect(results).to have_content("Chemistry (K592)")
+      expect(results).to have_no_content("Computing (L364)")
+    end
   end
 
   def then_i_see_only_apprenticeship_courses
-    expect(results).to have_content("Computing (L364)")
-    expect(results).to have_no_content("Chemistry (K592)")
-    expect(results).to have_no_content("Biology (S872)")
+    with_retry do
+      expect(results).to have_content("Computing (L364)")
+      expect(results).to have_no_content("Chemistry (K592)")
+      expect(results).to have_no_content("Biology (S872)")
+    end
   end
 
   def and_the_fee_filter_is_checked

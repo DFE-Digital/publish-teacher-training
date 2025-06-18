@@ -224,6 +224,8 @@ RSpec.describe "Search results ordering", :js, service: :find do
 private
 
   def result_titles
-    page.all(".govuk-summary-card__title").map { |element| element.text.split("\n").join(" ") }
+    with_retry do
+      page.all(".govuk-summary-card__title").map { |element| element.text.split("\n").join(" ") }
+    end
   end
 end

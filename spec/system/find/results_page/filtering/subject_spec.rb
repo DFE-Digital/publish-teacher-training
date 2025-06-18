@@ -83,7 +83,9 @@ RSpec.describe "when I filter by subject", :js, service: :find do
   end
 
   def when_i_clear_my_search_for_secondary_options
-    fill_in "filter-search-0-input", with: ""
+    with_retry do
+      page.find('[data-filter-search-target="searchInput"]').set("")
+    end
   end
 
   def when_i_filter_by_primary
@@ -108,17 +110,21 @@ RSpec.describe "when I filter by subject", :js, service: :find do
   end
 
   def then_i_see_only_primary_specific_courses
-    expect(results).to have_content("Primary (S872)")
-    expect(results).to have_no_content("Primary with english")
-    expect(results).to have_no_content("Primary with mathematics")
-    expect(results).to have_no_content("Primary with science")
+    with_retry do
+      expect(results).to have_content("Primary (S872)")
+      expect(results).to have_no_content("Primary with english")
+      expect(results).to have_no_content("Primary with mathematics")
+      expect(results).to have_no_content("Primary with science")
+    end
   end
 
   def then_i_see_primary_and_primary_with_science_courses
-    expect(results).to have_content("Primary (S872)")
-    expect(results).to have_content("Primary with science")
-    expect(results).to have_no_content("Primary with english")
-    expect(results).to have_no_content("Primary with mathematics")
+    with_retry do
+      expect(results).to have_content("Primary (S872)")
+      expect(results).to have_content("Primary with science")
+      expect(results).to have_no_content("Primary with english")
+      expect(results).to have_no_content("Primary with mathematics")
+    end
   end
 
   def and_the_primary_option_is_checked
@@ -130,10 +136,12 @@ RSpec.describe "when I filter by subject", :js, service: :find do
   end
 
   def then_i_see_mathematics_and_chemistry_courses
-    expect(results).to have_content("Mathematics")
-    expect(results).to have_content("Chemistry")
-    expect(results).to have_no_content("Biology")
-    expect(results).to have_no_content("Computing")
+    with_retry do
+      expect(results).to have_content("Mathematics")
+      expect(results).to have_content("Chemistry")
+      expect(results).to have_no_content("Biology")
+      expect(results).to have_no_content("Computing")
+    end
   end
 
   def and_the_mathematics_secondary_option_is_checked
