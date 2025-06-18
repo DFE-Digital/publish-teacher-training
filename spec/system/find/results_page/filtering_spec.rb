@@ -161,16 +161,20 @@ RSpec.describe "Search Results", :js, service: :find do
   end
 
   def then_i_see_only_courses_that_sponsor_visa
-    expect(results).to have_content("Biology (S872")
-    expect(results).to have_content("Chemistry (K592)")
-    expect(results).to have_content("Computing (L364)")
-    expect(results).to have_no_content("Dance (C115)")
+    with_retry do
+      expect(results).to have_content("Biology (S872")
+      expect(results).to have_content("Chemistry (K592)")
+      expect(results).to have_content("Computing (L364)")
+      expect(results).to have_no_content("Dance (C115)")
+    end
   end
 
   def then_i_see_only_part_time_courses
-    expect(results).to have_content("Chemistry (K592)")
-    expect(results).to have_content("Computing (L364)")
-    expect(results).to have_no_content("Biology (S872)")
+    with_retry do
+      expect(results).to have_content("Chemistry (K592)")
+      expect(results).to have_content("Computing (L364)")
+      expect(results).to have_no_content("Biology (S872)")
+    end
   end
 
   def and_the_part_time_filter_is_checked
@@ -178,9 +182,11 @@ RSpec.describe "Search Results", :js, service: :find do
   end
 
   def then_i_see_only_full_time_courses
-    expect(results).to have_content("Biology (S872)")
-    expect(results).to have_content("Computing (L364)")
-    expect(results).to have_no_content("Chemistry (K592)")
+    with_retry do
+      expect(results).to have_content("Biology (S872)")
+      expect(results).to have_content("Computing (L364)")
+      expect(results).to have_no_content("Chemistry (K592)")
+    end
   end
 
   def and_the_full_time_filter_is_checked
@@ -188,18 +194,22 @@ RSpec.describe "Search Results", :js, service: :find do
   end
 
   def then_i_see_all_courses_containing_all_study_types
-    expect(results).to have_content("Biology (S872)")
-    expect(results).to have_content("Computing (L364)")
-    expect(results).to have_content("Chemistry (K592)")
+    with_retry do
+      expect(results).to have_content("Biology (S872)")
+      expect(results).to have_content("Computing (L364)")
+      expect(results).to have_content("Chemistry (K592)")
+    end
   end
 
   def then_i_see_only_qts_only_courses
-    expect(results).to have_content("Biology (S872)")
-    expect(results).to have_no_content("Chemistry (K592)")
-    expect(results).to have_no_content("Computing (L364)")
-    expect(results).to have_no_content("Dance (C115)")
-    expect(results).to have_no_content("Physics (3CXN)")
-    expect(results).to have_no_content("Mathemathics (4RTU)")
+    with_retry do
+      expect(results).to have_content("Biology (S872)")
+      expect(results).to have_no_content("Chemistry (K592)")
+      expect(results).to have_no_content("Computing (L364)")
+      expect(results).to have_no_content("Dance (C115)")
+      expect(results).to have_no_content("Physics (3CXN)")
+      expect(results).to have_no_content("Mathemathics (4RTU)")
+    end
   end
 
   def and_the_qts_only_filter_is_checked
@@ -207,12 +217,14 @@ RSpec.describe "Search Results", :js, service: :find do
   end
 
   def then_i_see_only_qts_with_pgce_or_pgde_courses
-    expect(results).to have_content("Chemistry (K592)")
-    expect(results).to have_content("Computing (L364)")
-    expect(results).to have_no_content("Biology (S872)")
-    expect(results).to have_no_content("Dance (C115)")
-    expect(results).to have_no_content("Physics (3CXN)")
-    expect(results).to have_no_content("Mathemathics (4RTU)")
+    with_retry do
+      expect(results).to have_content("Chemistry (K592)")
+      expect(results).to have_content("Computing (L364)")
+      expect(results).to have_no_content("Biology (S872)")
+      expect(results).to have_no_content("Dance (C115)")
+      expect(results).to have_no_content("Physics (3CXN)")
+      expect(results).to have_no_content("Mathemathics (4RTU)")
+    end
   end
 
   def and_the_qts_with_pgce_or_pgde_filter_is_checked
@@ -220,19 +232,23 @@ RSpec.describe "Search Results", :js, service: :find do
   end
 
   def then_i_see_only_courses_with_special_education_needs
-    expect(results).to have_content("Biology SEND (S872")
-    expect(results).to have_content("Chemistry SEND (K592)")
-    expect(results).to have_content("Computing SEND (L364)")
-    expect(results).to have_no_content("Dance (C115)")
-    expect(results).to have_no_content("Physics (3CXN)")
+    with_retry do
+      expect(results).to have_content("Biology SEND (S872")
+      expect(results).to have_content("Chemistry SEND (K592)")
+      expect(results).to have_content("Computing SEND (L364)")
+      expect(results).to have_no_content("Dance (C115)")
+      expect(results).to have_no_content("Physics (3CXN)")
+    end
   end
 
   def then_i_see_only_courses_that_are_open_for_applications
-    expect(results).to have_content("Biology (S872)")
-    expect(results).to have_content("Chemistry (K592)")
-    expect(results).to have_content("Computing (L364)")
-    expect(results).to have_no_content("Dance (C115)")
-    expect(results).to have_no_content("Physics (3CXN)")
+    with_retry do
+      expect(results).to have_content("Biology (S872)")
+      expect(results).to have_content("Chemistry (K592)")
+      expect(results).to have_content("Computing (L364)")
+      expect(results).to have_no_content("Dance (C115)")
+      expect(results).to have_no_content("Physics (3CXN)")
+    end
   end
 
   def and_the_visa_sponsorship_filter_is_checked

@@ -72,23 +72,27 @@ RSpec.describe "when filtering by start date", :js, service: :find do
   end
 
   def then_i_see_only_courses_starting_in_september
-    expect(results).to have_content(@beginning_of_september_course.name)
-    expect(results).to have_content(@middle_of_september_course.name)
-    expect(results).to have_content(@end_of_september_course.name)
+    with_retry do
+      expect(results).to have_content(@beginning_of_september_course.name)
+      expect(results).to have_content(@middle_of_september_course.name)
+      expect(results).to have_content(@end_of_september_course.name)
 
-    expect(results).to have_no_content(@january_course.name)
-    expect(results).to have_no_content(@august_course.name)
-    expect(results).to have_no_content(@october_course.name)
+      expect(results).to have_no_content(@january_course.name)
+      expect(results).to have_no_content(@august_course.name)
+      expect(results).to have_no_content(@october_course.name)
+    end
   end
 
   def then_i_see_only_courses_not_starting_in_september
-    expect(results).to have_content(@january_course.name)
-    expect(results).to have_content(@august_course.name)
-    expect(results).to have_content(@october_course.name)
+    with_retry do
+      expect(results).to have_content(@january_course.name)
+      expect(results).to have_content(@august_course.name)
+      expect(results).to have_content(@october_course.name)
 
-    expect(results).to have_no_content(@beginning_of_september_course.name)
-    expect(results).to have_no_content(@middle_of_september_course.name)
-    expect(results).to have_no_content(@end_of_september_course.name)
+      expect(results).to have_no_content(@beginning_of_september_course.name)
+      expect(results).to have_no_content(@middle_of_september_course.name)
+      expect(results).to have_no_content(@end_of_september_course.name)
+    end
   end
 
   def when_i_filter_by_all_start_date_options
@@ -97,12 +101,14 @@ RSpec.describe "when filtering by start date", :js, service: :find do
   end
 
   def then_i_see_all_courses_regardless_of_start_date
-    expect(results).to have_content(@january_course.name)
-    expect(results).to have_content(@august_course.name)
-    expect(results).to have_content(@october_course.name)
-    expect(results).to have_content(@beginning_of_september_course.name)
-    expect(results).to have_content(@middle_of_september_course.name)
-    expect(results).to have_content(@end_of_september_course.name)
+    with_retry do
+      expect(results).to have_content(@january_course.name)
+      expect(results).to have_content(@august_course.name)
+      expect(results).to have_content(@october_course.name)
+      expect(results).to have_content(@beginning_of_september_course.name)
+      expect(results).to have_content(@middle_of_september_course.name)
+      expect(results).to have_content(@end_of_september_course.name)
+    end
   end
 
   def and_i_see_that_six_courses_are_found

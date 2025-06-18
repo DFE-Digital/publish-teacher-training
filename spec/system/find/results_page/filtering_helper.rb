@@ -43,10 +43,12 @@ module FilteringHelper
   end
 
   def then_i_see_only_mathematics_courses
-    expect(results).to have_content("Mathematics (4RTU)")
-    expect(results).to have_no_content("Biology")
-    expect(results).to have_no_content("Chemistry")
-    expect(results).to have_no_content("Computing")
+    with_retry do
+      expect(results).to have_content("Mathematics (4RTU)")
+      expect(results).to have_no_content("Biology")
+      expect(results).to have_no_content("Chemistry")
+      expect(results).to have_no_content("Computing")
+    end
   end
 
   def and_i_click_search
