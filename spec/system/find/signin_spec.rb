@@ -34,7 +34,8 @@ RSpec.describe "Candidate Sign in" do
   end
 
   def then_i_see_that_i_am_logged_out
-    expect(page).to have_no_content("You're logged in!")
+    expect(page).to have_no_content("You are signed in!")
+    expect(page).to have_content("You have been successfully signed out.")
     expect(page).to have_button("Sign in")
   end
 end

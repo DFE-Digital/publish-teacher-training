@@ -5,16 +5,16 @@ module Find
         email_address = omniauth.info.email
         if (candidate = Candidate.find_or_create_by(email_address:))
           start_new_session_for candidate, omniauth
-          flash[:success] = "You are signed in!"
+          flash[:success] = t(".sign_in")
           redirect_to Current.session.data["return_to_after_authenticating"] || find_root_path
         else
-          redirect_to find_root_path, flash: { warning: "Authentication failed" }
+          redirect_to find_root_path, flash: { warning: t(".authentication_error") }
         end
       end
 
       def destroy
         terminate_session
-        flash[:success] = "You have been successfully signed out."
+        flash[:success] = t(".sign_out")
         redirect_to find_root_path
       end
 
