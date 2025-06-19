@@ -277,9 +277,9 @@ GEM
       logger
     faraday-follow_redirects (0.3.0)
       faraday (>= 1, < 3)
-    faraday-net_http (3.4.0)
+    faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
-    faraday-net_http_persistent (2.3.0)
+    faraday-net_http_persistent (2.3.1)
       faraday (~> 2.5)
       net-http-persistent (>= 4.0.4, < 5)
     ffi (1.17.2-arm64-darwin)
@@ -434,8 +434,8 @@ GEM
     mutex_m (0.3.0)
     net-http (0.6.0)
       uri
-    net-http-persistent (4.0.4)
-      connection_pool (~> 2.2)
+    net-http-persistent (4.0.6)
+      connection_pool (~> 2.2, >= 2.2.4)
     net-imap (0.5.7)
       date
       net-protocol
