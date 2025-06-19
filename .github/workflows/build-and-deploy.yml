@@ -244,6 +244,7 @@ jobs:
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
       DOCKER_REPOSITORY: ghcr.io/dfe-digital/publish-teacher-training
+      MIDDLEMAN_IMAGE: ghcr.io/dfe-digital/publish-teacher-training-middleman
 
     steps:
       - name: Checkout
@@ -268,6 +269,7 @@ jobs:
           reuse-cache: true
           snyk-token: ${{ secrets.SNYK_TOKEN }}
           target: middleman
+          extra-cache-repo: ${{ env.MIDDLEMAN_IMAGE }}
 
       - name: Push ${{ env.DOCKER_IMAGE }} images for review
         if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
