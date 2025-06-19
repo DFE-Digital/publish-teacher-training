@@ -15,11 +15,13 @@ RSpec.describe Gias::Downloader do
     end
   end
 
+  let!(:file_name) { "tmp/gias_school-#{Process.pid}.csv" }
+
   it "downloads the file" do
-    FileUtils.rm_f("tmp/gias_school.csv")
-    expect { described_class.call }.to change { File.exist?("tmp/gias_school.csv") }.from(false).to(true)
+    FileUtils.rm_f(file_name)
+    expect { described_class.call }.to change { File.exist?(file_name) }.from(false).to(true)
   ensure
-    FileUtils.rm_f("tmp/gias_school.csv")
+    FileUtils.rm_f(file_name)
   end
 
   it "raises DownloadError when request is not success" do

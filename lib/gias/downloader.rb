@@ -9,7 +9,7 @@ module Gias
       yesterday = Time.zone.yesterday.strftime("%Y%m%d")
       filename = "edubasealldata#{yesterday}.csv"
       url = URI("#{PATH}/#{filename}")
-      csv_path = "tmp/gias_school.csv"
+      csv_path = "tmp/gias_school-#{Process.pid}.csv"
 
       Log.log("Gias::Downloader", "Downloading the new gias file for #{Time.zone.yesterday}", level: :info)
 
