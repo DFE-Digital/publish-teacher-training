@@ -1,8 +1,6 @@
 module Find
   module Authentication
     class SessionsController < ApplicationController
-      def new; end
-
       def callback
         email_address = omniauth.info.email
         if (candidate = Candidate.find_or_create_by(email_address:))

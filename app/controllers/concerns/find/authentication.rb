@@ -60,7 +60,7 @@ module Find
         Current.session.data["return_to_after_authenticating"] = request.url
       end
 
-      redirect_to new_find_sessions_path
+      redirect_to find_root_path, flash: { info: "You must sign in to visit that page." }
     end
 
     def after_authentication_url

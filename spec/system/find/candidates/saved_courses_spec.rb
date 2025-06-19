@@ -59,6 +59,7 @@ RSpec.describe "View pages" do
   def then_i_cant_visit_saved_courses_page_without_logging_in
     visit find_candidate_saved_courses_path
 
-    expect(page).to have_current_path(new_find_sessions_path)
+    expect(page).to have_current_path(find_root_path)
+    expect(page).to have_content("You must sign in to visit that page.")
   end
 end

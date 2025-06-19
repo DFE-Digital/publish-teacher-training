@@ -32,7 +32,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
 
   constraints ->(_req) { FeatureFlag.active?(:candidate_accounts) } do
     scope module: "authentication" do
-      resource :sessions, path: "auth", only: %i[new] do
+      resource :sessions, path: "auth", only: %i[] do
         get ":provider/callback", action: :callback
       end
       delete "/sign-out", to: "sessions#destroy"
