@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: f7df3171c79f36c5b90da5d63477a56ae3483899
-  tag: v1.15.4
+  revision: 14be35cf91c1ca86a18bd87243444cb3e2d9fae2
+  tag: v1.15.6
   specs:
-    dfe-analytics (1.15.4)
+    dfe-analytics (1.15.6)
       google-cloud-bigquery (~> 1.38)
       httparty (~> 0.21)
       multi_xml (~> 0.6.0)
@@ -220,7 +220,7 @@ GEM
       unicode (>= 0.4.4.5)
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
-    csv (3.3.4)
+    csv (3.3.5)
     data_migrate (11.3.0)
       activerecord (>= 6.1)
       railties (>= 6.1)
@@ -301,9 +301,9 @@ GEM
       rails (>= 3.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-bigquery_v2 (0.87.0)
+    google-apis-bigquery_v2 (0.89.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-core (0.16.0)
+    google-apis-core (0.18.0)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (~> 1.9)
       httpclient (>= 2.8.3, < 3.a)
@@ -322,11 +322,11 @@ GEM
     google-cloud-core (1.8.0)
       google-cloud-env (>= 1.0, < 3.a)
       google-cloud-errors (~> 1.0)
-    google-cloud-env (2.2.2)
+    google-cloud-env (2.3.1)
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.a)
     google-cloud-errors (1.5.0)
-    google-logging-utils (0.1.0)
+    google-logging-utils (0.2.0)
     googleauth (1.14.0)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
@@ -717,7 +717,7 @@ GEM
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
       sidekiq (>= 6.5.0)
-    signet (0.19.0)
+    signet (0.20.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
