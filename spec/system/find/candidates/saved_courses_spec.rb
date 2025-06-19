@@ -3,11 +3,11 @@ require "rails_helper"
 RSpec.describe "View pages" do
   before do
     FeatureFlag.activate(:candidate_accounts)
+    CandidateAuthHelper.mock_auth
   end
 
   scenario "As a Candidate, I can visit my saved courses" do
     when_i_visit_the_find_homepage
-    then_i_see_a_login_button
 
     when_i_click_login
     then_i_see_that_i_am_logged_in
@@ -26,16 +26,12 @@ RSpec.describe "View pages" do
     visit "/"
   end
 
-  def then_i_see_a_login_button
-    expect(page).to have_button("Login")
-  end
-
   def when_i_click_login
-    click_link_or_button "Login"
+    click_link_or_button "Sign in"
   end
 
   def then_i_see_that_i_am_logged_in
-    expect(page).to have_content("You're logged in!")
+    expect(page).to have_content("You are signed in!")
   end
 
   def then_i_can_see_the_primary_navigation_links
