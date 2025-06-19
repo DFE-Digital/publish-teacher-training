@@ -5,9 +5,10 @@ require "spec_helper"
 RSpec.describe Gias::Transformer do
   subject { described_class.call(downloaded_csv.open) }
 
+  let(:file_name) { "tmp/gias_school-#{Process.pid}.csv" }
   let(:downloaded_csv) do
-    FileUtils.cp(file_fixture("lib/gias/downloaded.csv"), "tmp/gias_school.csv")
-    File.new("tmp/gias_school.csv")
+    FileUtils.cp(file_fixture("lib/gias/downloaded.csv"), file_name)
+    File.new(file_name)
   end
 
   it "when northing or easting is not present does not create a row and logs error" do
@@ -24,11 +25,11 @@ RSpec.describe Gias::Transformer do
 
     expect(Gias::Log).to have_received(:log).with("Gias::Transformer", "Starting transformation of GIAS schools download...")
 
-    expect(File.exist?("tmp/gias_school.csv")).to be(false)
+    expect(File.exist?(file_name)).to be(false)
     expect(expected_csv).to eq(actual_csv)
   ensure
     inline_csv&.delete
-    FileUtils.rm_f("tmp/gias_school.csv")
+    FileUtils.rm_f(file_name)
   end
 
   it "filters out the columns we do not use" do
@@ -40,7 +41,7 @@ RSpec.describe Gias::Transformer do
     actual_csv = described_class.call(downloaded_csv)
     expect(actual_csv.read).to eq(expected_csv)
   ensure
-    FileUtils.rm_f("tmp/gias_school.csv")
+    FileUtils.rm_f(file_name)
     actual_csv&.delete
   end
 end
