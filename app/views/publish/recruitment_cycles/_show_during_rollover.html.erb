@@ -8,11 +8,13 @@
   </li>
 
   <% RecruitmentCycle.next_editable_cycles.each do |recruitment_cycle| %>
-    <li>
-        <%= govuk_link_to(
-        recruitment_cycle.year_range,
-        publish_provider_recruitment_cycle_path(@provider.provider_code, recruitment_cycle.year),
-      ) %>
-    </li>
+    <% if recruitment_cycle.providers.exists?(provider_code: @provider.provider_code) %>
+      <li>
+          <%= govuk_link_to(
+          recruitment_cycle.year_range,
+          publish_provider_recruitment_cycle_path(@provider.provider_code, recruitment_cycle.year),
+        ) %>
+      </li>
+    <% end %>
   <% end %>
 </ul>
