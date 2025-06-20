@@ -19,16 +19,15 @@ jobs:
   lint:
     name: Lint
     if: |
-      github.ref == 'refs/heads/main' ||
+      github.event_name != 'pull_request' ||
       (
         github.event_name == 'pull_request' &&
         (
           !contains(github.event.pull_request.labels.*.name, 'deploy') ||
           (github.event.action == 'labeled' && github.event.label.name == 'deploy')
         )
-      )
+      ) || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype'))
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype')) }}
     strategy:
       fail-fast: false
       matrix:
