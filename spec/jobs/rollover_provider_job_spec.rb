@@ -17,7 +17,7 @@ RSpec.describe RolloverProviderJob do
 
       subject.perform(provider.provider_code, new_recruitment_cycle.id)
 
-      expect(new_recruitment_cycle.courses.pluck(:name, :course_code)).to eq(
+      expect(new_recruitment_cycle.courses.pluck(:name, :course_code)).to match_array(
         courses.pluck(:name, :course_code),
       )
     end
