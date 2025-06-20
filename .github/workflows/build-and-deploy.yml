@@ -233,7 +233,15 @@ jobs:
   build:
     name: Build
     needs: [lint, analytics-checks, javascript-tests, rails-tests]
-    if: ${{ github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) }}
+    if: |
+      github.ref == 'refs/heads/main' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
+          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
+        )
+      )
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
