@@ -19,8 +19,6 @@ def with_stubbed_stdout(stdin: nil, stderr: nil, &)
   end
 end
 
-private
-
 def run(stdin: nil, stderr: nil)
   # Here is where we'll redirect STDOUT to temporarily. Using a StringIO
   # doesn't seem to work, it seems to require a proper file.
