@@ -18,8 +18,16 @@ permissions:
 jobs:
   lint:
     name: Lint
+    if: |
+      github.event_name != 'pull_request' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
+          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
+        )
+      ) || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype'))
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype')) }}
     strategy:
       fail-fast: false
       matrix:
@@ -64,6 +72,15 @@ jobs:
 
   javascript-tests:
     name: JavaScript Tests
+    if: |
+      github.ref == 'refs/heads/main' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
+          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
+        )
+      )
     needs: [lint]
     runs-on: ubuntu-latest
 
@@ -92,6 +109,15 @@ jobs:
 
   analytics-checks:
     name: Analytics checks
+    if: |
+      github.ref == 'refs/heads/main' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
+          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
+        )
+      )
     needs: [lint]
     runs-on: ubuntu-latest
     env:
@@ -125,6 +151,15 @@ jobs:
 
   rails-tests:
     name: Rails Tests
+    if: |
+      github.ref == 'refs/heads/main' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
+          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
+        )
+      )
     needs: [lint]
     runs-on: ubuntu-latest
     env:
@@ -233,7 +268,15 @@ jobs:
   build:
     name: Build
     needs: [lint, analytics-checks, javascript-tests, rails-tests]
-    if: ${{ github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) }}
+    if: |
+      github.ref == 'refs/heads/main' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
+          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
+        )
+      )
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
