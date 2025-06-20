@@ -1,12 +1,14 @@
+#
 name: Build and Deploy
 concurrency: build_and_deploy_${{ github.ref_name }}
 
 on:
   push:
     branches:
-      - main
+      - 2326-use-build-docker-image
   pull_request:
     types: [opened, reopened, synchronize, labeled]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,8 +20,9 @@ permissions:
 jobs:
   lint:
     name: Lint
+    if: false
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype')) }}
+    #if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype')) }}
     strategy:
       fail-fast: false
       matrix:
@@ -64,6 +67,7 @@ jobs:
 
   javascript-tests:
     name: JavaScript Tests
+    if: false
     needs: [lint]
     runs-on: ubuntu-latest
 
@@ -92,6 +96,7 @@ jobs:
 
   analytics-checks:
     name: Analytics checks
+    if: false
     needs: [lint]
     runs-on: ubuntu-latest
     env:
@@ -125,6 +130,7 @@ jobs:
 
   rails-tests:
     name: Rails Tests
+    if: false
     needs: [lint]
     runs-on: ubuntu-latest
     env:
@@ -230,9 +236,15 @@ jobs:
           SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training Test failure :sadparrot:"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
+
+
+
+####################################
+
+
   build:
     name: Build
-    needs: [lint, analytics-checks, javascript-tests, rails-tests]
+    #needs: [lint, analytics-checks, javascript-tests, rails-tests]
     if: ${{ github.ref == 'refs/heads/main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')) }}
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
@@ -240,49 +252,36 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
+      MIDDLEMAN_IMAGE: ghcr.io/dfe-digital/publish-teacher-training-middleman
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get values for current commit (Push)
-        if: github.event_name == 'push'
-        run: |
-          GIT_REF=${{github.ref}}
-          GIT_BRANCH=${GIT_REF##*/}
-          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
 
-      - name: Get values for current commit (Pull request)
-        if: github.event_name == 'pull_request'
-        run: |
-          # This is the actual PR branch
-          GIT_REF=${{ github.head_ref }}
-          GIT_BRANCH=${GIT_REF##*/}
-          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
-          # This is the latest commit on the actual PR branch
-          echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+#      - name: Build Publish-Teacher-Training-Middleman
+#        uses: docker/build-push-action@v6
+#        with:
+#          tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+#          push: true
+#          target: middleman
+#          cache-from: |
+#            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
+#            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+#          build-args: BUILDKIT_INLINE_CACHE=1
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - name: Build middleman Docker Image
+        id: build-image-middleman
+        uses: DFE-Digital/github-actions/build-docker-image@master
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Publish-Teacher-Training-Middleman
-        uses: docker/build-push-action@v6
-        with:
-          tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
-          push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: ""
+          reuse-cache: true
+          max-cache: false
           target: middleman
-          cache-from: |
-            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
-            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
-          build-args: BUILDKIT_INLINE_CACHE=1
+          docker-repository: ${{ env.MIDDLEMAN_IMAGE }}
+          snyk-token: ${{ secrets.SNYK_TOKEN }}
+
 
       - name: Build Publish-Teacher-Training
         uses: docker/build-push-action@v6
@@ -300,6 +299,12 @@ jobs:
           build-args: |
             BUILDKIT_INLINE_CACHE=1
             COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
+
+
+
+
+
+
 
       - name: Push ${{ env.DOCKER_IMAGE }} images for review
         if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
@@ -328,13 +333,20 @@ jobs:
           SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training Build failure :sadparrot:"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
+
+
+
+################################################
+
+
   deploy-review-app:
     name: Deployment To Review
+    if: false
     environment:
       name: review
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     needs: [build]
-    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    #if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

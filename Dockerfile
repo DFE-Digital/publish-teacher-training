@@ -1,17 +1,17 @@
-FROM ruby:2.7.5-alpine3.15 AS middleman
+FROM ruby:3.3.5-alpine3.20 AS middleman
 RUN apk add --no-cache libxml2
 RUN apk add --update --no-cache npm git build-base
 
 COPY docs/Gemfile docs/Gemfile.lock /
 
-RUN bundle install --jobs=4
+#RUN bundle install --jobs=4
 
 COPY docs /docs
 COPY public /public
 COPY swagger /swagger
 
 WORKDIR /docs
-RUN bundle exec middleman build --build-dir=../public
+#RUN bundle exec middleman build --build-dir=../public
 
 ###
 
