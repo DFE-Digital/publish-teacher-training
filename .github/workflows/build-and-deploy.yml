@@ -23,7 +23,6 @@ jobs:
     if: false
     runs-on: ubuntu-latest
     #if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype')) }}
-    if: false
     strategy:
       fail-fast: false
       matrix:
