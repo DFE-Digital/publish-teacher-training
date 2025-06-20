@@ -63,7 +63,7 @@ module Find
           I18n.t(
             ".find.courses.training_locations.view.distance",
             distance: content_tag(:span, pluralize(distance_from_location, "mile"), class: "govuk-!-font-weight-bold"),
-            location: content_tag(:span, sanitize(coordinates[:formatted_address]), class: "govuk-!-font-weight-bold"),
+            location: content_tag(:span, sanitize(coordinates[:location]), class: "govuk-!-font-weight-bold"),
           ).html_safe
         end
 
