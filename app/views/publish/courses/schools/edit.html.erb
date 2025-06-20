@@ -27,7 +27,7 @@
   <div class="govuk-notification-banner__content">
     <p class="govuk-body">
       The way schools are added to your account has changed.<br>
-      <a class="govuk-notification-banner__link" href="#">Find out more about how schools are added to your account.</a>
+      <%= govuk_link_to 'Find out more about how schools are added to your account.',  publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @provider.recruitment_cycle.year), class: "govuk-notification-banner__link" %>
     </p>
   </div>
 </div>
@@ -56,7 +56,7 @@
     Wotton Road, Charfield, Wotton-Under-Edge, Gloucestershire, GL12 8TG
     </p><br>
     <p class="govuk-body"><strong>If a school name or address is incorrect</strong><br>
-    You can <a class="govuk-link" href="#">add the correct school details to your account</a>.
+    You can <%= govuk_link_to 'add the correct school details to your account',  search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @provider.recruitment_cycle.year), class: "govuk-link" %>.
     </p>
     <p class="govuk-body"><strong>If the school is not on GIAS</strong><br>
     If the school you would like to add is not on GIAS, or the information on GIAS is not correct, contact the school and ask them to update their information on GIAS.
