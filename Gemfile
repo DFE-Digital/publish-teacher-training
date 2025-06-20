@@ -186,7 +186,7 @@ group :development, :test do
   gem "rspec-wait"
 
   # Test framework
-  gem "rspec-rails", "8.0.0"
+  gem "rspec-rails", "8.0.1"
 
   gem "selenium-webdriver"
 
