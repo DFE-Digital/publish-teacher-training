@@ -39,11 +39,11 @@
     </div>
 
     <p class="govuk-body">You can only add schools that are on <a class="govuk-link" href="https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments">Get Information About Schools (GIAS)</a>.</p>
-    <p class="govuk-body">You can attach placement schools to any of your courses from the ‘Basic details’ tab on each of <a class="govuk-link" href="#">your courses</a>.</p>
+    <p class="govuk-body">You can attach placement schools to any of your courses from the ‘Basic details’ tab on each of <%= govuk_link_to 'your courses',  publish_provider_recruitment_cycle_courses_path(@provider.provider_code, RecruitmentCycle.current.year), class: "govuk-link" %>.</p>
 
     <%= render Publish::Providers::SchoolPlacements::ExplainerComponent.new %>
 
-    <p class="govuk-body">You can choose whether to show or hide the placements from candidates in <a class="govuk-link" href="#">Organisation details</a>.</p>
+    <p class="govuk-body">You can choose whether to show or hide the placements from candidates in <%= govuk_link_to 'Organisation details', details_publish_provider_recruitment_cycle_path(@provider.provider_code, RecruitmentCycle.current.year), class: "govuk-link" %>.</p>
 
     <% if @schools.any? %>
       <table class="govuk-table app-table--vertical-align-middle">
