@@ -1,4 +1,4 @@
-FROM ruby:2.7.5-alpine3.15 AS middleman
+FROM ruby:2.7.6-alpine3.16 AS middleman
 RUN apk add --no-cache libxml2
 RUN apk add --update --no-cache npm git build-base
 
