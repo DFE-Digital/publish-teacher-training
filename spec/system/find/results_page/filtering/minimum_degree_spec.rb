@@ -171,63 +171,51 @@ RSpec.describe "when I filter by minimum degree", :js, service: :find do
   end
 
   def then_courses_with_two_one_or_lower_degree_requirement_are_visible
-    with_retry do
-      expect(results).to have_content("Biology")
-      expect(results).to have_content("Chemistry")
-      expect(results).to have_content("Computing")
-      expect(results).to have_content("Dance")
-      expect(results).to have_no_content("Mathematics")
-    end
+    expect(results).to have_content("Biology")
+    expect(results).to have_content("Chemistry")
+    expect(results).to have_content("Computing")
+    expect(results).to have_content("Dance")
+    expect(results).to have_no_content("Mathematics")
   end
 
   def then_courses_with_two_two_or_lower_degree_requirement_are_visible
-    with_retry do
-      expect(results).to have_content("Chemistry")
-      expect(results).to have_content("Computing")
-      expect(results).to have_content("Dance")
-      expect(results).to have_no_content("Biology")
-      expect(results).to have_no_content("Mathematics")
-    end
+    expect(results).to have_content("Chemistry")
+    expect(results).to have_content("Computing")
+    expect(results).to have_content("Dance")
+    expect(results).to have_no_content("Biology")
+    expect(results).to have_no_content("Mathematics")
   end
 
   def then_courses_with_third_class_or_lower_degree_requirement_are_visible
-    with_retry do
-      expect(results).to have_content("Computing")
-      expect(results).to have_content("Dance")
-      expect(results).to have_no_content("Biology")
-      expect(results).to have_no_content("Chemistry")
-      expect(results).to have_no_content("Mathematics")
-    end
+    expect(results).to have_content("Computing")
+    expect(results).to have_content("Dance")
+    expect(results).to have_no_content("Biology")
+    expect(results).to have_no_content("Chemistry")
+    expect(results).to have_no_content("Mathematics")
   end
 
   def then_only_courses_with_ordinary_degree_requirement_are_visible
-    with_retry do
-      expect(results).to have_content("Dance")
-      expect(results).to have_no_content("Biology")
-      expect(results).to have_no_content("Chemistry")
-      expect(results).to have_no_content("Computing")
-      expect(results).to have_no_content("Mathematics")
-    end
+    expect(results).to have_content("Dance")
+    expect(results).to have_no_content("Biology")
+    expect(results).to have_no_content("Chemistry")
+    expect(results).to have_no_content("Computing")
+    expect(results).to have_no_content("Mathematics")
   end
 
   def then_only_undergraduate_courses_are_visible
-    with_retry do
-      expect(results).to have_content("Mathematics")
-      expect(results).to have_no_content("Biology")
-      expect(results).to have_no_content("Dance")
-      expect(results).to have_no_content("Chemistry")
-      expect(results).to have_no_content("Computing")
-    end
+    expect(results).to have_content("Mathematics")
+    expect(results).to have_no_content("Biology")
+    expect(results).to have_no_content("Dance")
+    expect(results).to have_no_content("Chemistry")
+    expect(results).to have_no_content("Computing")
   end
 
   def then_all_courses_are_visible
-    with_retry do
-      expect(results).to have_content("Biology")
-      expect(results).to have_content("Chemistry")
-      expect(results).to have_content("Computing")
-      expect(results).to have_content("Dance")
-      expect(results).to have_content("Mathematics")
-    end
+    expect(results).to have_content("Biology")
+    expect(results).to have_content("Chemistry")
+    expect(results).to have_content("Computing")
+    expect(results).to have_content("Dance")
+    expect(results).to have_content("Mathematics")
   end
 
   def and_i_see_that_four_courses_are_found

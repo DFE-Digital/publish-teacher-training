@@ -146,9 +146,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
   end
 
   def when_i_apply_filters_using_the_bottom_button
-    with_retry do
-      page.all("button", text: "Apply filters").last.click
-    end
+    page.all("button", text: "Apply filters").last.click
   end
 
   def then_search_result_is_tracked_with_applied_filters_with_bottom_applied_filter
