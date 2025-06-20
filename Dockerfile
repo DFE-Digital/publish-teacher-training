@@ -4,7 +4,7 @@ RUN apk add --update --no-cache npm git build-base
 
 COPY docs/Gemfile docs/Gemfile.lock /
 
-RUN bundle install --jobs=4
+#RUN bundle install --jobs=4
 
 COPY docs /docs
 COPY public /public
