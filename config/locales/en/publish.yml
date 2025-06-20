@@ -122,7 +122,7 @@ en:
           additional_costs: Are there any additional fees or costs? (optional)
           additional_costs_hint: For example top up fees or additional costs such as books and transport
           org_financial_support: Does your organisation offer any financial support? (optional)
-          org_financial_support_hint: Do not include information about financial support available from the government like student loans, scholarships or bursaries.
+          org_financial_support_hint: Do not include information about financial support available from the government like student loans, scholarships or bursaries
           page_title: Fees and financial support - %{course_name_and_code}
           submit_button: Update fees and financial support
           summary_link: See what we include in this section
