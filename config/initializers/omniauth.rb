@@ -42,3 +42,15 @@ else
     provider :openid_connect, options
   end
 end
+
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider(:find_developer,
+           name: "find-developer",
+           fields: %i[uid email],
+           uid_field: :uid,
+           path_prefix: "/auth",
+           callback_path: "/auth/find-developer/callback")
+  on_failure do |env|
+    Find::Authentication::SessionsController.action(:failure).call(env)
+  end
+end
