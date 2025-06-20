@@ -20,6 +20,9 @@ module Find
 
       distance_from_location if params[:location]
 
+      @candidate = Current.user
+      @saved_course = SavedCourse.find_by(candidate_id: @candidate&.id, course_id: @course.id)
+
       render_not_found unless @course.is_published?
     end
 

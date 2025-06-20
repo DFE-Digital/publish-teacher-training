@@ -1,0 +1,9 @@
+<% if @saved_course %>
+  <%= render partial: "find/courses/unsave_button", locals: { saved_course: @saved_course } %>
+
+<% elsif @candidate.present? %>
+  <%= render partial: "find/courses/save_button", locals: { course: @course } %>
+
+<% else %>
+  <%= render partial: "find/courses/save_button_login_link" %>
+<% end %>
