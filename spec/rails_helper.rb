@@ -3,7 +3,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require "database_cleaner"
 require "spec_helper"
-require_relative "./support/system_retry_helper"
 
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
@@ -13,8 +12,9 @@ require "rspec/rails"
 require "capybara/rspec"
 require "capybara/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
+require_relative "./support/system_retry_helper.rb"
 
-# Pull in all the files in spec/support automatically.
+# Pull in all the files in spec/strategies automatically.
 Dir["./spec/strategies/**/*.rb"].each { |file| require file }
 
 Faker::Config.locale = "en-GB"
