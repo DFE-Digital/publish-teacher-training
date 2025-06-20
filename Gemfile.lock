@@ -234,7 +234,7 @@ GEM
     debug_inspector (1.2.0)
     declarative (0.0.20)
     deep_merge (1.2.2)
-    diff-lcs (1.6.1)
+    diff-lcs (1.6.2)
     discard (1.4.0)
       activerecord (>= 4.2, < 9.0)
     docile (1.4.0)
@@ -482,7 +482,7 @@ GEM
       tzinfo
       validate_url
       webfinger (~> 2.0)
-    optimist (3.2.0)
+    optimist (3.2.1)
     os (1.1.4)
     ostruct (0.6.1)
     pagy (9.3.4)
@@ -737,7 +737,7 @@ GEM
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
     stringio (3.1.7)
-    super_diff (0.15.0)
+    super_diff (0.16.0)
       attr_extras (>= 6.2.4)
       diff-lcs
       patience_diff
