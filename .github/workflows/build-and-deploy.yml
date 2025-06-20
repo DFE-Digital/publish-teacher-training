@@ -252,6 +252,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
+      MIDDLEMAN_IMAGE: ghcr.io/dfe-digital/publish-teacher-training-middleman
 
     steps:
       - name: Checkout
@@ -278,7 +279,7 @@ jobs:
           reuse-cache: true
           max-cache: false
           target: middleman
-          docker-repository: ${{ env.GEMS_NODE_MODULES_IMAGE }}
+          docker-repository: ${{ env.MIDDLEMAN_IMAGE }}
           snyk-token: ${{ secrets.SNYK_TOKEN }}
 
 
