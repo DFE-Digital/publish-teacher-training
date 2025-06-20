@@ -2,12 +2,7 @@ name: Build and Deploy Prototype
 concurrency: build_and_deploy_${{ github.ref_name }}
 
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - labeled
+  workflow_dispatch:
 
 permissions:
   contents: write
