@@ -97,10 +97,12 @@ jobs:
 
   analytics-checks:
     name: Analytics checks
-    if: false  
+    if: false
     needs: [lint]
     runs-on: ubuntu-latest
-    env:    if: false
+    env:
+      DATABASE_URL: postgres://postgres:developmentpassword@localhost:5432
+
     services:
       postgres:
         image: postgis/postgis:14-3.2-alpine
