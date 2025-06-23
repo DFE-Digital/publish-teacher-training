@@ -64,11 +64,10 @@
   </div>
 </details>
 
-
-
       <%= f.govuk_check_boxes_fieldset :site_ids, legend:
       { text: ".".html_safe, tag: "h1", size: "l" }, hint: { text: "Select all that apply" } do %>
        <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+         <%# VERY DIRTY, do not push the label with code and .html safe to prod!!!!!!!!!!! %>
           <%= f.govuk_check_box :site_ids,
               site.id,
               label: { text: "#{site.location_name} #{if index == 3 then "<strong class=\"govuk-tag govuk-tag--green\">Newly Added</strong>" end }".html_safe },
