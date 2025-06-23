@@ -22,11 +22,11 @@ jobs:
       github.event_name != 'pull_request' ||
       (
         github.event_name == 'pull_request' &&
-        (
+        ((
           !contains(github.event.pull_request.labels.*.name, 'deploy') ||
           (github.event.action == 'labeled' && github.event.label.name == 'deploy')
-        )
-      ) || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype'))
+        ) || !contains(github.event.pull_request.labels.*.name, 'prototype'))
+      )
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -72,15 +72,6 @@ jobs:
 
   javascript-tests:
     name: JavaScript Tests
-    if: |
-      github.ref == 'refs/heads/main' ||
-      (
-        github.event_name == 'pull_request' &&
-        (
-          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
-          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
-        )
-      )
     needs: [lint]
     runs-on: ubuntu-latest
 
@@ -109,15 +100,6 @@ jobs:
 
   analytics-checks:
     name: Analytics checks
-    if: |
-      github.ref == 'refs/heads/main' ||
-      (
-        github.event_name == 'pull_request' &&
-        (
-          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
-          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
-        )
-      )
     needs: [lint]
     runs-on: ubuntu-latest
     env:
@@ -151,15 +133,6 @@ jobs:
 
   rails-tests:
     name: Rails Tests
-    if: |
-      github.ref == 'refs/heads/main' ||
-      (
-        github.event_name == 'pull_request' &&
-        (
-          !contains(github.event.pull_request.labels.*.name, 'deploy') ||
-          (github.event.action == 'labeled' && github.event.label.name == 'deploy')
-        )
-      )
     needs: [lint]
     runs-on: ubuntu-latest
     env:
