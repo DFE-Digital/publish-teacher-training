@@ -85,6 +85,9 @@ RSpec.describe Support::RecruitmentCycleForm do
           "available_in_publish_from(1i)" => "2050",
           "available_in_publish_from(2i)" => "03",
           "available_in_publish_from(3i)" => "09",
+          "available_for_support_users_from(1i)" => "2030",
+          "available_for_support_users_from(2i)" => "10",
+          "available_for_support_users_from(3i)" => "10",
         }
       end
 
@@ -123,6 +126,9 @@ RSpec.describe Support::RecruitmentCycleForm do
           "application_end_date(1i)" => "2025",
           "application_end_date(2i)" => "03",
           "application_end_date(3i)" => "50",
+          "available_for_support_users_from(1i)" => "2025",
+          "available_for_support_users_from(2i)" => "03",
+          "available_for_support_users_from(3i)" => "50",
         }
       end
 
@@ -130,6 +136,7 @@ RSpec.describe Support::RecruitmentCycleForm do
         expect(form).not_to be_valid
         expect(form.errors[:application_start_date]).to include("Enter a valid date")
         expect(form.errors[:application_end_date]).to include("Enter a valid date")
+        expect(form.errors[:available_for_support_users_from]).to include("Enter a valid date")
       end
     end
 
@@ -142,12 +149,15 @@ RSpec.describe Support::RecruitmentCycleForm do
           "application_end_date(1i)" => "2025",
           "application_end_date(2i)" => "03",
           "application_end_date(3i)" => "10",
+          "available_for_support_users_from(3i)" => "2025",
+          "available_for_support_users_from(2i)" => "10",
         }
       end
 
       it "is invalid" do
         expect(form).not_to be_valid
         expect(form.errors[:application_start_date]).to include("Enter an application start date")
+        expect(form.errors[:available_for_support_users_from]).to include("Enter the date when courses will become available to support users (in Publish and Support).")
       end
     end
 
