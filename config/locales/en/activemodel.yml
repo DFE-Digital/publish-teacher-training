@@ -5,6 +5,8 @@ en:
         year: Recruitment cycle year
         application_start_date: Application start date
         application_end_date: Application end date
+        available_for_support_users_from: Available for support users from
+        available_for_support_users_from_description:  Date when courses will become available to support users (in Support and in Publish).
         available_in_publish_from: Available in publish from
         available_in_publish_from_description: Date when courses will become available to users in Publish.
       rollover_progress_query:
@@ -34,6 +36,9 @@ en:
               invalid_date: Enter a valid date
             available_in_publish_from:
               blank: Enter the date when courses will become available to users in Publish.
+              invalid_date: Enter a valid date
+            available_for_support_users_from:
+              blank: Enter the date when courses will become available to support users (in Publish and Support).
               invalid_date: Enter a valid date
         support/review_rollover_form:
           attributes:

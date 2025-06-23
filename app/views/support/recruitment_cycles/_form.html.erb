@@ -24,6 +24,15 @@
     </div>
 
     <div class="govuk-form-group">
+      <%= f.govuk_date_field :available_for_support_users_from,
+                              class: "govuk-input--width-20",
+                              legend: { text: Support::RecruitmentCycleForm.human_attribute_name(:available_for_support_users_from), size: "s" },
+                              hint: {
+          text: Support::RecruitmentCycleForm.human_attribute_name(:available_for_support_users_from_description),
+        } %>
+    </div>
+
+    <div class="govuk-form-group">
       <%= f.govuk_date_field :available_in_publish_from,
                               class: "govuk-input--width-20",
                               legend: { text: Support::RecruitmentCycleForm.human_attribute_name(:available_in_publish_from), size: "s" },

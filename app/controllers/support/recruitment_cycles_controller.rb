@@ -21,6 +21,7 @@ module Support
           year: @support_recruitment_cycle_form.year,
           application_start_date: @support_recruitment_cycle_form.application_start_date,
           application_end_date: @support_recruitment_cycle_form.application_end_date,
+          available_for_support_users_from: @support_recruitment_cycle_form.available_for_support_users_from,
           available_in_publish_from: @support_recruitment_cycle_form.available_in_publish_from,
         )
 
@@ -35,6 +36,7 @@ module Support
         year: @recruitment_cycle.year,
         application_start_date: @recruitment_cycle.application_start_date,
         application_end_date: @recruitment_cycle.application_end_date,
+        available_for_support_users_from: @recruitment_cycle.available_for_support_users_from,
         available_in_publish_from: @recruitment_cycle.available_in_publish_from,
       )
     end
@@ -47,6 +49,7 @@ module Support
           year: @support_recruitment_cycle_form.year,
           application_start_date: @support_recruitment_cycle_form.application_start_date,
           application_end_date: @support_recruitment_cycle_form.application_end_date,
+          available_for_support_users_from: @support_recruitment_cycle_form.available_for_support_users_from,
           available_in_publish_from: @support_recruitment_cycle_form.available_in_publish_from,
         )
 
@@ -83,6 +86,7 @@ module Support
             year
             application_start_date
             application_end_date
+            available_for_support_users_from
             available_in_publish_from
           ],
         )
