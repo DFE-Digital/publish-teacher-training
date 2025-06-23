@@ -4,7 +4,6 @@ module Publish
   class ProvidersController < ApplicationController
     include RecruitmentCycleHelper
     include GotoPreview
-    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
     def index
       authorize :provider, :index?

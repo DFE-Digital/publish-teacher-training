@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include DfE::Analytics::Requests
   include Pundit::Authorization
   include Pagy::Backend
+  include Errorable
 
   before_action :enforce_basic_auth, if: -> { BasicAuthenticable.required? }
 
@@ -15,9 +16,5 @@ private
     authenticate_or_request_with_http_basic do |username, password|
       BasicAuthenticable.authenticate(username, password)
     end
-  end
-
-  def render_not_found
-    render "errors/not_found", status: :not_found, formats: :html
   end
 end
