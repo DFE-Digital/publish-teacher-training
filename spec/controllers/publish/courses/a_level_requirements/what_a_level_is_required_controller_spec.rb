@@ -42,9 +42,8 @@ module Publish
 
           context "when uuid is provided but not found" do
             it "raises ActiveRecord::RecordNotFound" do
-              expect {
-                get :new, params: { provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code, uuid: "someuuid" }
-              }.to raise_error(ActiveRecord::RecordNotFound)
+              get :new, params: { provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code, uuid: "someuuid" }
+              expect(response).to have_http_status :not_found
             end
           end
 
