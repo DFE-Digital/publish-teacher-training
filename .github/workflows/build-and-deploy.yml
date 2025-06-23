@@ -19,7 +19,17 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' || (github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'prototype')) }}
+    # Run if:
+    # - It's not a PR
+    # - It is a PR, don't run if it has a prototype label
+    # - It is a PR, don't run on opened if it has a deploy label
+    if: |
+        github.event_name == 'pull_request' &&
+        !contains(github.event.pull_request.labels.*.name, 'prototype') &&
+        (
+          github.event.action != 'opened' ||
+          !contains(github.event.pull_request.labels.*.name, 'deploy')
+        )
     strategy:
       fail-fast: false
       matrix:
