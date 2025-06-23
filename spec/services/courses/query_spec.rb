@@ -592,6 +592,20 @@ RSpec.describe Courses::Query do
       end
     end
 
+    context "when searching excluding courses" do
+      let!(:course_to_exclude) { create(:course, :with_full_time_sites, course_code: "EX12", name: "Excluded Course") }
+      let!(:included_course) { create(:course, :with_full_time_sites, course_code: "IN34", name: "Included Course") }
+
+      let(:params) { { excluded_courses: %w[EX12] } }
+
+      it "excludes specified courses from the results" do
+        expect(results).to match_collection(
+          [included_course],
+          attribute_names: %w[name],
+        )
+      end
+    end
+
     shared_examples "location search results" do |radius:|
       it "returns courses within a #{radius} mile radius" do
         params = { latitude: london.latitude, longitude: london.longitude, radius: }

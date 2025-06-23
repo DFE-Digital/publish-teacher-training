@@ -40,6 +40,7 @@ module Courses
       @scope = provider_scope
       @scope = optimisation_scope
       @scope = location_scope
+      @scope = excluded_courses_scope
 
       if @applied_scopes[:location].blank?
         @scope = default_ordering_scope
@@ -99,6 +100,16 @@ module Courses
       @applied_scopes[:subjects] = subject_codes
 
       @scope.joins(:subjects).where(subjects: { subject_code: subject_codes })
+    end
+
+    def excluded_courses_scope
+      return @scope if params[:excluded_courses].blank?
+
+      excluded_course_codes = params[:excluded_courses].compact_blank
+
+      @applied_scopes[:excluded_courses] = excluded_course_codes
+
+      @scope.where.not(course_code: excluded_course_codes)
     end
 
     def study_modes_scope
