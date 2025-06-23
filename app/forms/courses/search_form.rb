@@ -23,6 +23,7 @@ module Courses
     attribute :subject_code
     attribute :subject_name
     attribute :subjects
+    attribute :excluded_courses
 
     # Coordinates #
     attribute :country

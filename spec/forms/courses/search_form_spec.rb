@@ -199,6 +199,14 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context "when excluded courses are provided" do
+      let(:form) { described_class.new(excluded_courses: %w[EX12]) }
+
+      it "returns the correct search params with excluded courses" do
+        expect(form.search_params).to eq({ excluded_courses: %w[EX12] })
+      end
+    end
+
     context "when location is provided" do
       let(:form) { described_class.new(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 10) }
 
