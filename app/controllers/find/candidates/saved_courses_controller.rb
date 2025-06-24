@@ -2,9 +2,10 @@ module Find
   module Candidates
     class SavedCoursesController < ApplicationController
       before_action :require_authentication
-      before_action :set_candidate
 
-      def index; end
+      def index
+        @saved_courses = @candidate.saved_courses
+      end
 
       def create
         course = Course.find(params[:course_id])
@@ -28,10 +29,6 @@ module Find
       end
 
     private
-
-      def set_candidate
-        @candidate = Current.user
-      end
 
       def redirect_to_course(course, error: nil)
         options = {

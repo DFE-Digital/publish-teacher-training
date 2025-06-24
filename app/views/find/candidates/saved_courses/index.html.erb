@@ -1,2 +1,23 @@
-<%= content_for :page_title, title_with_error_prefix("Saved courses", flash[:error].present?) %>
-<%= "Hi #{@candidate.email_address} these are your saved courses" %>
+<%= content_for :page_title, title_with_error_prefix(t(".page_title"), flash[:error].present?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      <%= t(".page_title") %>
+    </h1>
+  </div>
+
+  <div class="govuk-grid-column-full">
+    <% if @saved_courses.any? %>
+      <table class="govuk-table">
+        <tbody class="govuk-table__body">
+          <% @saved_courses.each do |saved_course| %>
+            <%= render partial: "find/candidates/saved_courses/saved_course_row", locals: { saved_course: } %>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="govuk-body"><%= t(".no_saved_courses") %></p>
+    <% end %>
+  </div>
+</div>

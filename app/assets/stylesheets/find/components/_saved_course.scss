@@ -1,0 +1,31 @@
+.app-saved-course__cell {
+  position: relative;
+
+  padding-top: 0;
+  padding-right: govuk-spacing(8);
+  padding-bottom: 0;
+}
+
+.app-saved-course__cell-link {
+  display: block;
+
+  color: inherit;
+
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+
+    background-color: govuk-colour("light-grey");
+  }
+}
+
+.app-saved-course__cell-content {
+  display: flex;
+
+  justify-content: space-between;
+
+  padding-top: govuk-spacing(4);
+  padding-bottom: govuk-spacing(4);
+  padding-left: govuk-spacing(2);
+}

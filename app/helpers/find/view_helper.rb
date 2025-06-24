@@ -9,7 +9,9 @@ module Find
     end
 
     def course_back_link
-      if referer.request_uri =~ %r{^/results}
+      if referer.request_uri =~ %r{^/candidate/saved-courses}
+        find_candidate_saved_courses_path
+      elsif referer.request_uri =~ %r{^/results}
         request.referer
       elsif referer && session[:results_path] =~ %r{^/results}
         session[:results_path]

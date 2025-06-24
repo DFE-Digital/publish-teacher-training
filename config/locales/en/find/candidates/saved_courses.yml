@@ -2,6 +2,9 @@ en:
   find:
     candidates:
       saved_courses:
+        index:
+          page_title: Saved courses
+          no_saved_courses: You have no saved courses.
         create:
           save_failed: Failed to save course
         destroy:

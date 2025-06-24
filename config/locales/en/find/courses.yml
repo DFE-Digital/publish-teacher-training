@@ -135,5 +135,6 @@ en:
         not_consider_a_level_equivalency: We will not consider candidates who need to take A level equivalency tests.
       show:
         back_to_search: Back to search results
+        back_to_saved_courses: Back to saved courses
         training_with_disabilities: Training with disabilities
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.

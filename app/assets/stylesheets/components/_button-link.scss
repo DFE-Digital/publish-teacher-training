@@ -1,0 +1,19 @@
+// Make a button look like a link
+.app-button-link {
+  @include govuk-link-common;
+
+  &:not(:hover) {
+    text-decoration: underline;
+  }
+
+  font-size: inherit;
+
+  color: govuk-colour("blue");
+
+  text-decoration: underline;
+
+  cursor: pointer;
+
+  background: none;
+  border: none;
+}

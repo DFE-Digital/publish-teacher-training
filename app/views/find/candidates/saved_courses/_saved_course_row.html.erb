@@ -1,0 +1,40 @@
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell app-saved-course__cell">
+    <% if saved_course.course.is_withdrawn? %>
+      <div class="app-saved-course__cell-content">
+        <div>
+          <strong>
+            <span>
+              <%= saved_course.course.provider_name %>
+            </span>
+          </strong>
+          <span class="govuk-!-padding-left-2"><%= saved_course.course.decorate.status_tag %></span><br>
+          <span class="govuk-body-s"><%= saved_course.course.name_and_code %></span>
+        </div>
+        <%= button_to t(".delete"),
+                      find_candidate_saved_course_path(saved_course),
+                      method: :delete,
+                      class: "app-button-link" %>
+      </div>
+    <% else %>
+      <%= govuk_link_to find_course_path(provider_code: saved_course.course.provider_code, course_code: saved_course.course.course_code),
+                        class: "app-saved-course__cell-link" do %>
+        <div class="app-saved-course__cell-content">
+          <div>
+            <strong>
+              <span class="govuk-link">
+                <%= saved_course.course.provider_name %>
+              </span>
+            </strong>
+            <span class="govuk-!-padding-left-2"><%= saved_course.course.decorate.status_tag %></span><br>
+            <span class="govuk-body-s"><%= saved_course.course.name_and_code %></span>
+          </div>
+          <%= button_to t(".delete"),
+                        find_candidate_saved_course_path(saved_course),
+                        method: :delete,
+                        class: "app-button-link" %>
+        </div>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

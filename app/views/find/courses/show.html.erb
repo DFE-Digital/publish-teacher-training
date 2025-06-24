@@ -3,7 +3,7 @@
 <% if permitted_referrer? && course_back_link %>
   <%= content_for(:before_content) do %>
     <%= govuk_back_link(
-      text: t("find.courses.show.back_to_search"),
+      text: course_back_link == find_candidate_saved_courses_path ? t("find.courses.show.back_to_saved_courses") : t("find.courses.show.back_to_search"),
       href: course_back_link,
     ) %>
   <% end %>

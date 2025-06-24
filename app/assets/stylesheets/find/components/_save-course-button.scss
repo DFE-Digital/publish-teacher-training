@@ -24,7 +24,7 @@
     color: $govuk-link-colour;
 
     &:hover {
-      color: darken($govuk-link-colour, 15%);
+      color: govuk-colour("dark-grey");
     }
   }
 }
