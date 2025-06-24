@@ -1,6 +1,7 @@
 <tr class="govuk-table__row school-row">
   <th class="govuk-table__header name" scope="row">
     <%= govuk_link_to school.location_name, publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.id) %>
+    <% if school.id.even? %> <strong class="govuk-tag govuk-tag--green">Newly Added</strong><% end %>
   </th>
   <td class="govuk-table__cell code">
     <%= school.code %> <%= school.code == "-" ? "(dash)" : "" %>
