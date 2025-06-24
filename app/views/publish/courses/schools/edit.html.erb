@@ -71,7 +71,7 @@
          <%# VERY DIRTY, do not push the label with code and .html safe to prod!!!!!!!!!!! %>
           <%= f.govuk_check_box :site_ids,
               site.id,
-              label: { text: "#{site.location_name} #{if index == 3 then "<strong class=\"govuk-tag govuk-tag--green\">Newly Added</strong>" end }".html_safe },
+              label: { text: "#{site.location_name} #{if [2,4,6,7].include?(index) then "<strong class=\"govuk-tag govuk-tag--green\">Newly Added</strong>" end }".html_safe },
               hint: { text: site.full_address },
               link_errors: index.zero? %>
        <% end %>
