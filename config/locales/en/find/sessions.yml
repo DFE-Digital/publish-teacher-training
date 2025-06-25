@@ -1,0 +1,7 @@
+en:
+  find:
+    authentication:
+      sessions:
+        sign_out: You have been successfully signed out.
+        sign_in:  You have been successfully signed in.
+        authentication_error: Authentication failed
