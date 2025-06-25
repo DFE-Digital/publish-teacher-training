@@ -1,0 +1,24 @@
+@import "govuk-one-login/service-header/dist/styles/service-header-no-imports";
+
+// If there's only one list-item, do not put a border on it
+.one-login-header__nav__list-item:only-of-type {
+  border: none;
+}
+
+// Make a button look like a link
+.one-login-header__button-link {
+  @include govuk-link-common;
+
+  &:not(:hover) {
+    text-decoration: none;
+  }
+
+  font-size: inherit;
+
+  color: govuk-colour("white");
+
+  cursor: pointer;
+
+  background: none;
+  border: none;
+}
