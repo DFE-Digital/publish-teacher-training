@@ -44,17 +44,6 @@
     <div class="govuk-width-container">
       <%= yield :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
-        <% if flash[:success] %>
-          <%= govuk_notification_banner(
-            title_text: "Success",
-            success: true,
-            title_id: "success-message",
-            html_attributes: { role: "alert" },
-          ) do |notification_banner| %>
-            <% notification_banner.with_heading(text: flash[:success]) %>
-          <% end %>
-        <% end %>
-
         <%= render Find::MaintenanceBannerComponent.new %>
         <%= render Find::DeadlineBannerComponent.new(flash_empty: flash.reject { |flash| flash[0] == "start_wizard" }.empty?) unless request.url.include?("/results/filter/subject") %>
         <%= render Find::FinancialIncentivesBannerComponent.new %>
