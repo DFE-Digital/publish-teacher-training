@@ -7,6 +7,11 @@ module Find
     def index
       coordinates = Geolocation::CoordinatesQuery.new(location_params).call
 
+      if coordinates[:latitude].present? && coordinates[:longitude].present?
+        postcode_lookup = Geolocation::PostcodeLookup.new(latitude: coordinates[:latitude], longitude: coordinates[:longitude])
+        @postcode_result = postcode_lookup.call
+      end
+
       @search_courses_form = ::Courses::SearchForm.new(search_courses_params.merge(coordinates))
       @search_params = @search_courses_form.search_params
       @courses_query = ::Courses::Query.new(params: @search_params.dup)

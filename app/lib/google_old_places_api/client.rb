@@ -63,6 +63,25 @@ module GoogleOldPlacesAPI
       }
     end
 
+    # reverse geocoding to get the postcode from latitude and longitude
+    # when searching by city or region, we need to display the first part of the postcode
+    def reverse_geocode(latitude:, longitude:)
+      response = get(
+        endpoint: "geocode/json",
+        params: {
+          key: @api_key,
+          latlng: "#{latitude},#{longitude}",
+          language: "en",
+          result_type: "postal_code",
+        },
+      )
+
+      result = response.dig("results", 0)
+      return if result.blank?
+
+      { postcode: extract_postcode(result) }
+    end
+
   private
 
     def get(endpoint:, params:)
@@ -78,6 +97,10 @@ module GoogleOldPlacesAPI
       address_components = Array(result["address_components"]).pluck("long_name")
 
       (address_components & (DEVOLVED_NATIONS + %w[England])).first
+    end
+
+    def extract_postcode(result)
+      result["address_components"].find { |c| c["types"].include?("postal_code") }&.dig("long_name")
     end
   end
 end

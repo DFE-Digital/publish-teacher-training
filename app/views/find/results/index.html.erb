@@ -115,6 +115,7 @@
               course:,
               location: @search_params[:formatted_address] || @search_params[:location],
               visa_sponsorship: @search_params[:can_sponsor_visa],
+              postcode: @postcode_result&.dig(:postcode),
             ) %>
 
             <%= render Courses::SchoolDistancesDebugComponent.new(

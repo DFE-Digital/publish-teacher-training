@@ -4,10 +4,11 @@ module Courses
   class SummaryCardComponent < ViewComponent::Base
     attr_reader :course, :location, :visa_sponsorship
 
-    def initialize(course:, location: nil, visa_sponsorship: nil)
+    def initialize(course:, location: nil, postcode: nil, visa_sponsorship: nil)
       @course = course
       @location = location
       @visa_sponsorship = visa_sponsorship
+      @postcode = postcode
       super
     end
 
@@ -30,11 +31,27 @@ module Courses
     def location_value
       return unless search_by_location?
 
+      # Searching by city or region, we need to add the first part of the postcode in this format: e.g. York YO1, UK
+      # If location name ends with ", UK" then insert the first part of the postcode before this
+      if @location.end_with?(", UK") && @postcode.present?
+        location_without_country = @location.sub(", UK", "")
+        country = @location.split(", ").last
+
+        formatted_location = if location_without_country.include?(@postcode)
+                               "#{location_without_country}, #{country}"
+                             else
+                               "#{location_without_country} #{@postcode}, #{country}"
+                             end
+      else
+        formatted_location = @location
+      end
+
       t(
         ".location_value.distance",
         school_term:,
         distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
-        location: content_tag(:span, sanitize(@location), class: "govuk-!-font-weight-bold"),
+        location: content_tag(:span, sanitize(formatted_location), class: "govuk-!-font-weight-bold"),
+        postcode: content_tag(:span, sanitize(@postcode), class: "govuk-!-font-weight-bold"),
       ).html_safe
     end
 
