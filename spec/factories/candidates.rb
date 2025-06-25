@@ -7,4 +7,8 @@ FactoryBot.define do
       sessions { build_list(:session, 1) }
     end
   end
+
+  factory :find_developer_candidate, parent: :candidate do
+    email_address { "candidateemail@example.com" }
+  end
 end

@@ -1,30 +1,31 @@
 require "rails_helper"
 
-RSpec.describe "Saving a course", :js, service: :find do
+RSpec.describe "Saving a course", service: :find do
   before do
     FeatureFlag.activate(:candidate_accounts)
+    CandidateAuthHelper.mock_auth
     given_a_published_course_exists
   end
 
   scenario "A signed-in candidate can save a course" do
-    when_i_log_in_as_a_candidate
+    when_i_sign_in_as_a_candidate
     when_i_view_a_course
     then_i_save_the_course
 
     then_the_course_is_saved
   end
 
-  scenario "An unauthenticated visitor is prompted to log in when trying to save a course" do
-    when_i_visit_a_course_without_logging_in
+  scenario "An unauthenticated visitor is prompted to sign in when trying to save a course" do
+    when_i_visit_a_course_without_signing_in
     then_i_save_the_course
 
-    then_i_am_prompted_to_log_in
+    then_i_am_prompted_to_sign_in
   end
 
-  def when_i_log_in_as_a_candidate
+  def when_i_sign_in_as_a_candidate
     visit "/"
-    click_link_or_button "Login"
-    expect(page).to have_content("You're logged in!")
+    click_link_or_button "Sign in"
+    expect(page).to have_content("You have been successfully signed in.")
   end
 
   def when_i_view_a_course
@@ -32,7 +33,7 @@ RSpec.describe "Saving a course", :js, service: :find do
     click_on_first_course
   end
 
-  def when_i_visit_a_course_without_logging_in
+  def when_i_visit_a_course_without_signing_in
     visit "/"
     visit find_results_path
     click_on_first_course
@@ -47,9 +48,9 @@ RSpec.describe "Saving a course", :js, service: :find do
     expect(page).to have_content("Course saved")
   end
 
-  def then_i_am_prompted_to_log_in
-    expect(page).to have_content("You must login to view this page")
-    expect(page).to have_current_path(new_find_sessions_path)
+  def then_i_am_prompted_to_sign_in
+    expect(page).to have_content("You must sign in to visit that page.")
+    expect(page).to have_current_path(find_root_path)
   end
 
   def click_on_first_course
