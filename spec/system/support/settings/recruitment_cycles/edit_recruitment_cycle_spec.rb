@@ -97,8 +97,8 @@ RSpec.describe "Editing a recruitment cycle", service: :publish do
 
   def and_i_change_the_available_in_publish_from_date
     within_fieldset "Available in publish from" do
-      fill_in "Day", with: "14"
-      fill_in "Month", with: "08"
+      fill_in "Day", with: RecruitmentCycle.current.available_for_support_users_from.day + 1
+      fill_in "Month", with: RecruitmentCycle.current.available_for_support_users_from.month
     end
   end
 
@@ -114,8 +114,8 @@ RSpec.describe "Editing a recruitment cycle", service: :publish do
     expect(@upcoming_cycle.application_start_date.month).to eq(9)
     expect(@upcoming_cycle.application_end_date.day).to eq(5)
     expect(@upcoming_cycle.application_end_date.month).to eq(10)
-    expect(@upcoming_cycle.available_in_publish_from.day).to eq(14)
-    expect(@upcoming_cycle.available_in_publish_from.month).to eq(8)
+    expect(@upcoming_cycle.available_in_publish_from.day).to eq(RecruitmentCycle.current.available_for_support_users_from.day + 1)
+    expect(@upcoming_cycle.available_in_publish_from.month).to eq(RecruitmentCycle.current.available_for_support_users_from.month)
     expect(page).to have_content(@upcoming_cycle.year)
     expect(page).to have_content(I18n.l(@upcoming_cycle.application_start_date, format: :long))
     expect(page).to have_content(I18n.l(@upcoming_cycle.application_end_date, format: :long))

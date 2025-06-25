@@ -15,6 +15,7 @@ module Support
               :available_in_publish_from,
               multiple_parameters_date: true
     validate :application_end_date_must_be_after_start_date
+    validate :available_for_support_users_from_must_be_before_available_in_publish_from
     validate :year_must_be_unique, if: -> { validation_context != :update }
 
     def initialize(params = {})
@@ -38,6 +39,21 @@ module Support
       return if year.blank?
 
       errors.add(:year, :taken) if RecruitmentCycle.exists?(year:)
+    end
+
+    def available_for_support_users_from_must_be_before_available_in_publish_from
+      return if available_for_support_users_from.blank? || available_in_publish_from.blank?
+
+      if available_for_support_users_from >= available_in_publish_from
+        errors.add(
+          :available_for_support_users_from,
+          :before_available_in_publish_from,
+        )
+        errors.add(
+          :available_in_publish_from,
+          :after_available_for_support_users_from,
+        )
+      end
     end
   end
 end
