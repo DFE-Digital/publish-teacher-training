@@ -2,19 +2,6 @@ name: Build No Cache
 
 on:
   workflow_dispatch:
-    inputs:
-      level:
-        description: |
-          Snyk scan level
-
-          The build usually blocks on high and above vulnerabilities, so setting to high will ignore the low level ones for rebuild and it will unblock the pipeline.
-        type: choice
-        default: low
-        options:
-        - low
-        - high
-        required: false
-
   schedule:
     - cron: '0 13 * * 0'
 
@@ -29,69 +16,34 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
-      SNYK_LEVEL: ${{ inputs.level || 'low'  }}
+      MIDDLEMAN_IMAGE: ghcr.io/dfe-digital/publish-teacher-training-middleman
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set Environment variable
-        run: |
-          GIT_REF=${{github.ref}}
-          GIT_BRANCH=${GIT_REF##*/}
-          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - name: Build middleman Docker Image
+        id: build-image-middleman
+        uses: DFE-Digital/github-actions/build-docker-image@master
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Publish-Teacher-Training-Middleman
-        uses: docker/build-push-action@v6
-        with:
-          tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
-          push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: ""
+          reuse-cache: false
+          max-cache: false
           target: middleman
-          build-args: BUILDKIT_INLINE_CACHE=1
+          docker-repository: ${{ env.MIDDLEMAN_IMAGE }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+#          snyk-token: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Build Publish-Teacher-Training
-        uses: docker/build-push-action@v6
+      - name: Build Docker Image
+        id: build-image
+        uses: DFE-Digital/github-actions/build-docker-image@master
         with:
-          tags: |
-            ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-            ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
-          push: false
-          load: true
-          build-args: |
-            BUILDKIT_INLINE_CACHE=1
-            COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
-
-      - name: Run Snyk to check Docker image for vulnerabilities
-        uses: snyk/actions/docker@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          image: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
-          args: --file=Dockerfile --exclude-app-vulns --severity-threshold=${SNYK_LEVEL}
-
-      - name: Push ${{ env.DOCKER_IMAGE }} images
-        if: ${{ success() }}
-        run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
-
-      - name: 'Notify #twd_findpub_tech on failure'
-        if: failure()
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_CHANNEL: twd_findpub_tech
-          SLACK_COLOR: '#ef5343'
-          SLACK_ICON_EMOJI: ':github-logo:'
-          SLACK_USERNAME: Publish Teacher Training
-          SLACK_TITLE: Build failure on weekly rebuild cache workflow
-          SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Build failure :sadparrot:'
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: ""
+          reuse-cache: false
+          max-cache: false
+          docker-repository: ${{ env.DOCKER_IMAGE }}
+          extra-cache-repo: ${{ env.MIDDLEMAN_IMAGE }}
+          snyk-token: ${{ secrets.SNYK_TOKEN }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
