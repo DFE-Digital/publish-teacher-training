@@ -1,0 +1,5 @@
+en:
+  find:
+    concerns:
+      authentication:
+        unauthenticated_message: You must sign in to visit that page.

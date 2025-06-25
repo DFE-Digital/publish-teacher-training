@@ -32,21 +32,33 @@ module Find
       Session.find_by(session_key: candidate_session) if candidate_session
     end
 
+    def omniauth
+      request.env["omniauth.auth"]
+    end
+
     # Create session
     #
-    def start_new_session_for(user)
-      terminate_session
-      user.sessions.create!(session_key: candidate_session, user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
-        Current.session = session
+    def start_new_session_for(user, oauth)
+      ::Authentication.transaction do
+        terminate_session
+
+        user.sessions.create!(session_key: candidate_session, id_token: oauth.credentials.token, user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
+          Current.session = session
+        end
+        user.authentications.find_or_create_by(authenticable: user, provider: provider_map(oauth.provider), subject_key: oauth.uid)
       end
     end
 
-    def request_authentication
-      if Current.session
-        Current.session.data["return_to_after_authenticating"] = request.url
-      end
+    def provider_map(provider)
+      {
+        "find-developer" => "developer",
+      }[provider]
+    end
 
-      redirect_to new_find_sessions_path
+    def request_authentication
+      session["return_to_after_authenticating"] = request.url
+
+      redirect_to find_root_path, flash: { info: t("find.concerns.authentication.unauthenticated_message") }
     end
 
     def after_authentication_url
