@@ -16,6 +16,17 @@ module Find
         terminate_session
         redirect_to find_root_path
       end
+
+      # We render this action when an authentication error occurs
+      #
+      # request.env["omniauth.error"] # => #<JWT::EncodeError: The given key is a String. It has to be an OpenSSL::PKey::RSA instance>,
+      # request.env["omniauth.error.type"] # => :"The given key is a String. It has to be an OpenSSL::PKey::RSA instance",
+      # request.env["omniauth.error.strategy"] # => #<OmniAuth::Strategies::GovukOneLogin>
+      def failure
+        Sentry.capture_exception(request.env["omniauth.error"])
+
+        render "errors/omniauth"
+      end
     end
   end
 end
