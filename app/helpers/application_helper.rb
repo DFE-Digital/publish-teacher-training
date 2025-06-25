@@ -85,4 +85,15 @@ private
       visually_hidden_text: action_visually_hidden_text,
     }
   end
+
+  def phase_colour
+    {
+      development: "grey",
+      production: "blue",
+      review: "purple",
+      sandbox: "purple",
+      staging: "red",
+      qa: "orange",
+    }.fetch(Settings.environment.name.to_sym, "grey")
+  end
 end
