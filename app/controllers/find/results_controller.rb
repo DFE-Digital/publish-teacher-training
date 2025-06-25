@@ -7,6 +7,7 @@ module Find
     def index
       coordinates = Geolocation::CoordinatesQuery.new(location_params).call
 
+      # we only want to do a postcode lookup if the user searched by city or region to avoid a second API call when it's not needed - HOW?
       if coordinates[:latitude].present? && coordinates[:longitude].present?
         postcode_lookup = Geolocation::PostcodeLookup.new(latitude: coordinates[:latitude], longitude: coordinates[:longitude])
         @postcode_result = postcode_lookup.call

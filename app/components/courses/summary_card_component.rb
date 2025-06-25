@@ -33,14 +33,14 @@ module Courses
 
       # Searching by city or region, we need to add the first part of the postcode in this format: e.g. York YO1, UK
       # If location name ends with ", UK" then insert the first part of the postcode before this
-      if @location.end_with?(", UK") && @postcode.present?
+      if @location.end_with?(", UK") && postcode_area.present?
         location_without_country = @location.sub(", UK", "")
         country = @location.split(", ").last
 
-        formatted_location = if location_without_country.include?(@postcode)
+        formatted_location = if location_without_country.include?(postcode_area)
                                "#{location_without_country}, #{country}"
                              else
-                               "#{location_without_country} #{@postcode}, #{country}"
+                               "#{location_without_country} #{postcode_area}, #{country}"
                              end
       else
         formatted_location = @location
@@ -51,8 +51,13 @@ module Courses
         school_term:,
         distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
         location: content_tag(:span, sanitize(formatted_location), class: "govuk-!-font-weight-bold"),
-        postcode: content_tag(:span, sanitize(@postcode), class: "govuk-!-font-weight-bold"),
       ).html_safe
+    end
+
+    def postcode_area
+      return if @postcode.blank?
+
+      @postcode.split(" ").first
     end
 
     def location_hint

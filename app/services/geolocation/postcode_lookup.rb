@@ -8,16 +8,17 @@ module Geolocation
       @client = client
     end
 
-    # Looks up the postcode area based on latitude and longitude.
+    # Looks up the postcode based on latitude and longitude.
+    # Returns a hash with the postcode and postcode area if found
     def call
       return nil if latitude.blank? || longitude.blank?
 
       result = client.reverse_geocode(latitude: latitude, longitude: longitude)
       return nil if result&.dig(:postcode).blank?
 
-      postcode_area = result[:postcode].split(" ").first
+      postcode = result[:postcode]
 
-      { postcode: postcode_area }
+      { postcode: postcode }
     end
   end
 end
