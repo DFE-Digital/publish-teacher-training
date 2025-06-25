@@ -1,1 +1,2 @@
+<%= content_for :page_title, title_with_error_prefix("Saved courses", flash[:error].present?) %>
 <%= "Hi #{@candidate.email_address} these are your saved courses" %>
