@@ -33,6 +33,7 @@
     "@ministryofjustice/frontend": "2.0.0",
     "accessible-autocomplete": "^3.0.1",
     "dfe-autocomplete": "DFE-Digital/dfe-autocomplete#v0.2.1",
+    "govuk-one-login/service-header": "govuk-one-login/service-header#v3.0.1",
     "govuk-frontend": "^5.10.2",
     "jquery": "^3.6.0",
     "lodash.debounce": "^4.0.8",
