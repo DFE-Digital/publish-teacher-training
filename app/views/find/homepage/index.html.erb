@@ -1,18 +1,5 @@
 <%= content_for :page_title, title_with_error_prefix("Find courses by location or by training provider", flash[:error].present?) %>
 
-<% if FeatureFlag.active?(:candidate_accounts) %>
-  <p class="govuk-body"><%= candidate_session %></p>
-  <% if authenticated? %>
-    <h1 class="govuk-heading-m">You're logged in!</h1>
-
-    <%= button_to "Logout", find_sessions_path, method: :delete, local: true %>
-
-    <p class="govuk-body code"><%= Current.session.data %></p>
-  <% else %>
-    <%= button_to "Login", find_sessions_path, method: :post, params: { email_address: "test-candidate@example.com" } %>
-  <% end %>
-<% end %>
-
 <div class="app-homepage-search-container">
   <div class="app-homepage-search-content">
     <h1 class="govuk-heading-l">Find teacher training courses in England</h1>
