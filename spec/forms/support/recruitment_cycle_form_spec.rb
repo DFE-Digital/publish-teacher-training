@@ -140,6 +140,30 @@ RSpec.describe Support::RecruitmentCycleForm do
       end
     end
 
+    context "when available_for_support_users_from is not before available_in_publish_from" do
+      let(:params) do
+        {
+          "available_for_support_users_from(1i)" => "2026",
+          "available_for_support_users_from(2i)" => "05",
+          "available_for_support_users_from(3i)" => "01",
+          "available_in_publish_from(1i)" => "2026",
+          "available_in_publish_from(2i)" => "04",
+          "available_in_publish_from(3i)" => "01",
+        }
+      end
+
+      it "is invalid" do
+        form = described_class.new(params)
+        expect(form).not_to be_valid
+        expect(form.errors[:available_for_support_users_from]).to include(
+          "Please choose a date before the courses become available in Publish",
+        )
+        expect(form.errors[:available_in_publish_from]).to include(
+          "Please choose a date after the courses become available to support users",
+        )
+      end
+    end
+
     context "when dates are incomplete" do
       let(:params) do
         {

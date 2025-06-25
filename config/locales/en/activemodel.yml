@@ -37,9 +37,11 @@ en:
             available_in_publish_from:
               blank: Enter the date when courses will become available to users in Publish.
               invalid_date: Enter a valid date
+              after_available_for_support_users_from: Please choose a date after the courses become available to support users
             available_for_support_users_from:
               blank: Enter the date when courses will become available to support users (in Publish and Support).
               invalid_date: Enter a valid date
+              before_available_in_publish_from: Please choose a date before the courses become available in Publish
         support/review_rollover_form:
           attributes:
             confirmation:
