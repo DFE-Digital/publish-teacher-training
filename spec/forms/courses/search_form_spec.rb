@@ -200,10 +200,10 @@ RSpec.describe Courses::SearchForm do
     end
 
     context "when excluded courses are provided" do
-      let(:form) { described_class.new(excluded_courses: %w[EX12]) }
+      let(:form) { described_class.new(excluded_courses: [{ provider_code: "ABC", course_code: "C1" }]) }
 
       it "returns the correct search params with excluded courses" do
-        expect(form.search_params).to eq({ excluded_courses: %w[EX12] })
+        expect(form.search_params).to eq({ excluded_courses: [{ provider_code: "ABC", course_code: "C1" }] })
       end
     end
 
