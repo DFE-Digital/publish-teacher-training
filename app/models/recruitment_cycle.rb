@@ -26,17 +26,22 @@ class RecruitmentCycle < ApplicationRecord
     alias_method :next, :next_recruitment_cycle
   end
 
-  def self.next_editable_cycles?
-    next_editable_cycles.exists?
+  def self.upcoming_cycles_open_to_publish?
+    upcoming_cycles_open_to_publish.exists?
   end
 
-  def self.current_and_next_editable_cycles
-    where(year: Settings.current_recruitment_cycle_year).or(next_editable_cycles)
+  def self.current_and_upcoming_cycles_open_to_publish
+    where(year: Settings.current_recruitment_cycle_year).or(upcoming_cycles_open_to_publish)
   end
 
-  scope :next_editable_cycles, lambda {
+  scope :upcoming_cycles_open_to_publish, lambda {
     where("application_start_date > ?", Date.current)
      .where("? BETWEEN available_in_publish_from AND application_start_date", Date.current)
+  }
+
+  scope :upcoming_cycles_open_to_support, lambda {
+    where("application_start_date > ?", Date.current)
+     .where("? BETWEEN available_for_support_users_from AND application_start_date", Date.current)
   }
 
   def previous

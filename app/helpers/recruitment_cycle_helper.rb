@@ -42,7 +42,7 @@ module RecruitmentCycleHelper
   end
 
   def rollover_active?
-    RecruitmentCycle.next_editable_cycles?
+    RolloverPeriod.active?(current_user:)
   end
 
   def current_cycle_provider(provider)

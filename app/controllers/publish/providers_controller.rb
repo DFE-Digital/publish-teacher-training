@@ -28,15 +28,9 @@ module Publish
     end
 
     def show
-      @cycle_year = session[:cycle_year] if session[:cycle_year].present?
+      @rollover_period = RolloverPeriod.new(current_user:)
 
-      if rollover_active?
-        if session[:cycle_year].present? && params[:switcher] != "true"
-          redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
-        else
-          :show?
-        end
-      else
+      unless @rollover_period.active?
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
       end
     end

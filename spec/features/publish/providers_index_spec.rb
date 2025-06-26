@@ -3,8 +3,11 @@
 require "rails_helper"
 
 feature "Providers index" do
+  after { travel_back }
+
   scenario "view page as Mary - multi provider user" do
     given_we_are_not_in_rollover
+    and_there_is_a_multi_provider_organisation
     and_i_am_authenticated_as_a_multi_provider_user
     when_i_visit_the_publish_providers_index_page
     i_should_see_the_provider_list
@@ -29,11 +32,36 @@ feature "Providers index" do
     i_should_see_the_change_organisation_link
   end
 
+  scenario "view page as Colin - admin user - during rollover" do
+    given_we_are_in_rollover
+    and_there_are_providers
+    and_today_is_before_next_cycle_available_for_support_users_date
+    and_i_am_authenticated_as_an_admin_user
+    when_i_visit_the_publish_providers_index_page
+    i_should_see_the_provider_list
+
+    when_i_visit_support_page
+    then_i_am_on_providers_list_page
+
+    and_today_is_after_next_cycle_available_for_support_users_date
+    and_i_am_authenticated_as_an_admin_user
+    when_i_visit_support_page
+    then_i_see_the_recruitment_cycle_list
+  end
+
   scenario "view page as a multi org user during rollover" do
     given_we_are_in_rollover
-    and_there_is_a_previous_recruitment_cycle
-    and_i_am_authenticated_as_a_multi_provider_user
+    and_there_is_a_multi_provider_organisation
     and_there_are_providers
+    and_today_is_before_next_cycle_available_for_publish_users_date
+    and_i_am_authenticated_as_a_multi_provider_user
+    when_i_visit_the_publish_providers_index_page
+    i_should_see_the_provider_list
+    and_i_click_on_a_provider
+    then_the_change_cycle_link_is_not_visible
+
+    and_today_is_after_next_cycle_available_in_publish_from_date
+    and_i_am_authenticated_as_a_multi_provider_user
     when_i_visit_the_publish_providers_index_page
     and_i_click_on_a_provider
     i_should_be_on_the_recruitment_cycle_switcher_page
@@ -46,6 +74,7 @@ feature "Providers index" do
     i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
     and_i_click_the_change_organisation_link
     and_i_click_on_a_provider
+    when_i_click_on_the_current_cycle_link
     i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
 
     # Tests below for a couple of bugs which prevented those pages from knowing about the recruitment cycle
@@ -61,6 +90,22 @@ feature "Providers index" do
     expect(publish_title_bar_page.recruitment_cycle_text).to have_text("#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current")
   end
 
+  def and_today_is_before_next_cycle_available_for_support_users_date
+    travel_to(RecruitmentCycle.next.available_for_support_users_from - 1.day)
+  end
+
+  def and_today_is_after_next_cycle_available_for_support_users_date
+    travel_to(RecruitmentCycle.next.available_for_support_users_from + 1.day)
+  end
+
+  def and_today_is_before_next_cycle_available_for_publish_users_date
+    travel_to(RecruitmentCycle.next.available_in_publish_from - 1.day)
+  end
+
+  def and_today_is_after_next_cycle_available_in_publish_from_date
+    travel_to(RecruitmentCycle.next.available_in_publish_from + 1.day)
+  end
+
   def when_i_click_on_users
     publish_primary_nav_page.users.click
   end
@@ -71,10 +116,6 @@ feature "Providers index" do
 
   def when_i_click_on_the_current_cycle_link
     click_link_or_button "#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current"
-  end
-
-  def and_there_is_a_previous_recruitment_cycle
-    find_or_create(:recruitment_cycle, :previous)
   end
 
   def i_should_be_on_the_recruitment_cycle_switcher_page
@@ -91,19 +132,32 @@ feature "Providers index" do
   end
 
   def given_we_are_not_in_rollover
-    create(:recruitment_cycle, :next, available_in_publish_from: 1.day.from_now)
+    create(
+      :recruitment_cycle,
+      :next,
+      available_in_publish_from: 1.week.from_now,
+      available_for_support_users_from: 1.day.from_now,
+    )
   end
 
   def given_we_are_in_rollover
-    create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+    create(
+      :recruitment_cycle,
+      :next,
+      available_in_publish_from: 1.week.from_now,
+      available_for_support_users_from: 1.day.from_now,
+    )
+  end
+
+  def and_there_is_a_multi_provider_organisation
+    current_recruitment_cycle = RecruitmentCycle.current
+    @accredited_provider = create(:provider, :accredited_provider, recruitment_cycle: current_recruitment_cycle, provider_name: "Bat School")
+    @accredited_provider1 = create(:provider, :accredited_provider, recruitment_cycle: current_recruitment_cycle)
+    @organisation = create(:organisation, providers: [@accredited_provider, @accredited_provider1])
   end
 
   def and_i_am_authenticated_as_a_multi_provider_user
-    current_recruitment_cycle = find_or_create(:recruitment_cycle)
-    accredited_provider = create(:provider, :accredited_provider, recruitment_cycle: current_recruitment_cycle, provider_name: "Bat School")
-    accredited_provider1 = create(:provider, :accredited_provider, recruitment_cycle: current_recruitment_cycle)
-    organisation = create(:organisation, providers: [accredited_provider, accredited_provider1])
-    given_i_am_authenticated(user: create(:user, providers: [accredited_provider, accredited_provider1], organisations: [organisation]))
+    given_i_am_authenticated(user: create(:user, providers: [@accredited_provider, @accredited_provider1], organisations: [@organisation]))
   end
 
   def and_i_am_authenticated_as_an_admin_user
@@ -162,5 +216,26 @@ feature "Providers index" do
 
   def and_i_click_the_change_organisation_link
     click_link_or_button "Change organisation"
+  end
+
+  def then_the_change_cycle_link_is_not_visible
+    expect(page).not_to have_content("Change recruitment cycle")
+  end
+
+  def when_i_visit_support_page
+    visit support_root_path
+  end
+
+  def then_i_am_on_providers_list_page
+    expect(page).to have_current_path(support_recruitment_cycle_providers_path(recruitment_cycle_year: RecruitmentCycle.current.year))
+  end
+
+  def then_i_see_the_recruitment_cycle_list
+    expect(page).to have_text(RecruitmentCycle.current.year_range)
+    expect(page).to have_text(RecruitmentCycle.next.year_range)
+  end
+
+  def next_recruitment_cycle
+    RecruitmentCycle.next
   end
 end

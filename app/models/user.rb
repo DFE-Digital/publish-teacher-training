@@ -3,7 +3,6 @@
 class User < ApplicationRecord
   include Discard::Model
   include PgSearch::Model
-  include RecruitmentCycleHelper
 
   before_save :downcase_email, :strip_email_whitespace
 
@@ -59,7 +58,7 @@ class User < ApplicationRecord
     next_recruitment_cycle_provider_codes = providers_to_remove
                                             .filter_map { |provider| provider.provider_code if provider.recruitment_cycle.current? }
 
-    return unless rollover_active? && !RecruitmentCycle.next.nil? && next_recruitment_cycle_provider_codes.any?
+    return unless !RecruitmentCycle.next.nil? && next_recruitment_cycle_provider_codes.any?
 
     next_cycle_providers = RecruitmentCycle.next_recruitment_cycle.providers.where(provider_code: next_recruitment_cycle_provider_codes)
     self.providers = providers - next_cycle_providers
