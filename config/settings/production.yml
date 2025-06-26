@@ -28,6 +28,13 @@ dfe_signin:
   profile: https://profile.signin.education.gov.uk
   user_search_url: https://support.signin.education.gov.uk/users
 
+one_login:
+  enabled: false
+  # URL that the users are redirected to for signing in
+  idp_base_url: https://oidc.account.gov.uk
+  # URL of the users profile
+  profile_url: https://home.oidc.account.gov.uk
+
 bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
