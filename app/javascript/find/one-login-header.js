@@ -90,7 +90,7 @@ function initCrossServiceHeader () {
     "[data-module='one-login-header']"
   )
   if (oneLoginHeader && CrossServiceHeader) {
-    new CrossServiceHeader(oneLoginHeader) // eslint-disable-line
+    new CrossServiceHeader(oneLoginHeader); // eslint-disable-line
   }
 }
 /**
