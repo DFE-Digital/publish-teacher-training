@@ -93,7 +93,7 @@ class Provider < ApplicationRecord
   end
 
   def rolled_over?
-    RecruitmentCycle.next_editable_cycles?
+    RecruitmentCycle.upcoming_cycles_open_to_publish?
   end
 
   # the providers that this provider is an accredited_provider for

@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class SupportTitleBar < ViewComponent::Base
+  attr_reader :current_user
+
+  def initialize(current_user:)
+    super
+
+    @current_user = current_user
+  end
+
 private
 
   def title
@@ -20,7 +28,7 @@ private
   end
 
   def rollover_active?
-    RecruitmentCycle.next_editable_cycles?
+    RolloverPeriod.active?(current_user:)
   end
 
   def recruitment_cycle_year
