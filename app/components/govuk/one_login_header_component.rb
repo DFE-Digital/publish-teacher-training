@@ -28,7 +28,11 @@ module Govuk
     end
 
     def path
-      "/auth/find-developer"
+      if Settings.one_login.enabled
+        "/auth/one-login"
+      else
+        "/auth/find-developer"
+      end
     end
   end
 end
