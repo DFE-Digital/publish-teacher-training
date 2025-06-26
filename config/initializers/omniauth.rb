@@ -42,8 +42,17 @@ else
 end
 
 if Settings.one_login.enabled
-  URI.parse(Settings.one_login.idp_base_url)
-  one_login_redirect_uri = URI.join("http://find.localhost:3001/auth/one-login/callback")
+  # Generate callback URL for any environment
+  host = URI(Settings.find_url).host
+  port = Rails.env.development? && "3001"
+  path = "/auth/one-login/callback"
+  one_login_redirect_uri = if Rails.env.local?
+                             URI::HTTP.build(host:, port:, path:)
+                           else
+                             URI::HTTPS.build(host:, port:, path:)
+                           end
+
+  # Load private key from environment variable
   begin
     private_key = OpenSSL::PKey::RSA.new(Settings.one_login.private_key.gsub('\n', "\n"))
   rescue StandardError => e
