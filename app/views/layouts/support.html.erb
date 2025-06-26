@@ -42,7 +42,7 @@
     <% end %>
 
     <div class="govuk-width-container">
-      <%= render SupportTitleBar.new %>
+      <%= render SupportTitleBar.new(current_user:) %>
       <%= yield :breadcrumbs %>
     </div>
 

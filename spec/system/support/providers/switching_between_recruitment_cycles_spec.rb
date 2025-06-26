@@ -3,9 +3,17 @@
 require "rails_helper"
 
 RSpec.describe "Support index" do
+  after { travel_back }
+
   scenario "viewing support cycles page during rollover" do
-    given_we_are_in_rollover
+    given_we_have_a_next_cycle
     and_there_are_two_recruitment_cycles
+    and_today_is_before_next_cycle_available_for_support_users_date
+    and_i_am_authenticated_as_an_admin_user
+    when_i_visit_the_support_index_page
+    then_i_should_be_on_the_support_providers_page
+
+    and_today_is_after_next_cycle_available_for_support_users_date
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
     then_i_should_be_on_the_recruitment_cycle_switcher_page
@@ -20,7 +28,7 @@ RSpec.describe "Support index" do
   end
 
   scenario "viewing providers page when not in rollover" do
-    given_we_are_not_in_rollover
+    given_we_have_a_next_cycle
     and_there_are_two_recruitment_cycles
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
@@ -31,12 +39,13 @@ RSpec.describe "Support index" do
     expect(support_provider_index_page).to be_displayed
   end
 
-  def given_we_are_not_in_rollover
-    create(:recruitment_cycle, :next, available_in_publish_from: 1.day.from_now)
-  end
-
-  def given_we_are_in_rollover
-    create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+  def given_we_have_a_next_cycle
+    create(
+      :recruitment_cycle,
+      :next,
+      available_in_publish_from: 1.week.from_now,
+      available_for_support_users_from: 1.day.from_now,
+    )
   end
 
   def and_there_are_two_recruitment_cycles
@@ -62,11 +71,11 @@ RSpec.describe "Support index" do
   end
 
   def when_i_click_on_the_current_cycle
-    click_link_or_button "#{Settings.current_recruitment_cycle_year} - current"
+    click_link_or_button "#{RecruitmentCycle.current.year} - current"
   end
 
   def and_click_on_the_next_cycle
-    click_link_or_button Settings.current_recruitment_cycle_year + 1
+    click_link_or_button RecruitmentCycle.next.year
   end
 
   def i_should_see_the_current_cycle_page
@@ -87,5 +96,13 @@ RSpec.describe "Support index" do
 
   def and_i_should_not_see_the_pe_allocations_tab
     expect(support_provider_index_page).to have_no_link "PE Allocations"
+  end
+
+  def and_today_is_before_next_cycle_available_for_support_users_date
+    travel_to(RecruitmentCycle.next.available_for_support_users_from - 1.day)
+  end
+
+  def and_today_is_after_next_cycle_available_for_support_users_date
+    travel_to(RecruitmentCycle.next.available_for_support_users_from + 1.day)
   end
 end
