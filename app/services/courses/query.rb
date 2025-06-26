@@ -105,11 +105,25 @@ module Courses
     def excluded_courses_scope
       return @scope if params[:excluded_courses].blank?
 
-      excluded_course_codes = params[:excluded_courses].compact_blank
+      excluded_course_codes = Array.wrap(params[:excluded_courses]).compact_blank
 
       @applied_scopes[:excluded_courses] = excluded_course_codes
 
-      @scope.where.not(course_code: excluded_course_codes)
+      new_scope = @scope.joins(:provider)
+
+      excluded_course_codes
+        .map { |excluded_course| ExcludedCourseParam.new(provider_code: excluded_course[:provider_code], course_code: excluded_course[:course_code]) }
+        .each do |excluded_course_code|
+        next unless excluded_course_code.valid?
+
+        new_scope = new_scope.where
+                             .not(
+                               course_code: excluded_course_code.course_code,
+                               provider: { provider_code: excluded_course_code.provider_code },
+                             )
+      end
+
+      new_scope
     end
 
     def study_modes_scope
@@ -371,6 +385,12 @@ module Courses
 
     def providers_table
       Provider.arel_table
+    end
+
+    ExcludedCourseParam = Data.define(:provider_code, :course_code) do
+      def valid?
+        provider_code.present? && course_code.present?
+      end
     end
   end
 end
