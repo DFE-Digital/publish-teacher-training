@@ -54,6 +54,18 @@ authentication:
   # mode: magic_link  # when dfe_signin is down
   # mode: persona     # none critical systems, ie localhost
 
+one_login:
+  enabled: true
+  # Integration client id in One Login
+  identifier: <%= ENV.fetch('ONE_LOGIN_CLIENT_ID', 'client_id') %>
+  # URL that the users are redirected to for signing in
+  idp_base_url: https://oidc.integration.account.gov.uk/
+  # URL of the users profile
+  profile_url: https://home.oidc.integration.account.gov.uk
+  # YAML doesn't preserve newlines. Convert newlines to \n
+  # Then convert them back to newlines for OpenSSL
+  private_key: <%= ENV.fetch('ONE_LOGIN_PRIVATE_KEY', 'private_key').gsub("\n", '\n') %>
+
 current_recruitment_cycle_year: 2025
 next_cycle_open_date: 2025-10-1 # TBC
 
