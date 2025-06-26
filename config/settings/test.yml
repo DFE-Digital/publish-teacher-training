@@ -30,4 +30,7 @@ basic_auth:
   username: admin
   password: password
 
+one_login:
+  enabled: false
+
 STATE_CHANGE_SLACK_URL: https://example.com/webhook
