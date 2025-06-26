@@ -2,17 +2,15 @@
 
 require_relative "../../app/services/publish/authentication_service"
 
-if Publish::AuthenticationService.persona?
+OmniAuth.config.logger = Rails.logger
 
+if Publish::AuthenticationService.persona?
   Rails.application.config.middleware.use OmniAuth::Builder do
     provider :developer,
              fields: %i[uid email first_name last_name],
              uid_field: :uid
   end
 else
-
-  OmniAuth.config.logger = Rails.logger
-
   dfe_sign_in_issuer_uri = URI.parse(Settings.dfe_signin.issuer)
   dfe_sign_in_redirect_uri = URI.join(Settings.base_url, "/auth/dfe/callback")
 
@@ -43,14 +41,43 @@ else
   end
 end
 
-Rails.application.config.middleware.use OmniAuth::Builder do
-  provider(:find_developer,
-           name: "find-developer",
-           fields: %i[uid email],
-           uid_field: :uid,
-           path_prefix: "/auth",
-           callback_path: "/auth/find-developer/callback")
-  on_failure do |env|
-    Find::Authentication::SessionsController.action(:failure).call(env)
+if Settings.one_login.enabled
+  URI.parse(Settings.one_login.idp_base_url)
+  one_login_redirect_uri = URI.join("http://find.localhost:3001/auth/one-login/callback")
+  begin
+    private_key = OpenSSL::PKey::RSA.new(Settings.one_login.private_key.gsub('\n', "\n"))
+  rescue StandardError => e
+    Rails.logger.error(e)
+  end
+
+  options = {
+    name: :"one-login",
+    client_id: Settings.one_login.identifier,
+    idp_base_url: Settings.one_login.idp_base_url,
+    # scope: "openid,email", # default
+    # vtr: ["Cl.Cm"], # default
+    redirect_uri: one_login_redirect_uri&.to_s,
+    private_key:,
+  }
+
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider :govuk_one_login, options
+
+    # will call `Users::OmniauthController#failure` if there are any errors during the login process
+    on_failure do |env|
+      Find::Authentication::SessionsController.action(:failure).call(env)
+    end
+  end
+elsif Rails.env.in?(%w[development test])
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider(:find_developer,
+             name: "find-developer",
+             fields: %i[uid email],
+             uid_field: :uid,
+             path_prefix: "/auth",
+             callback_path: "/auth/find-developer/callback")
+    on_failure do |env|
+      Find::Authentication::SessionsController.action(:failure).call(env)
+    end
   end
 end
