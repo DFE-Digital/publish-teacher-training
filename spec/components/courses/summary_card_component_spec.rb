@@ -15,12 +15,14 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         course:,
         location:,
         visa_sponsorship:,
+        postcode:,
       ),
     )
   end
   let(:search_params) { {} }
   let(:location) { search_params[:location] }
   let(:visa_sponsorship) { search_params[:can_sponsor_visa] }
+  let(:postcode) { nil }
 
   describe "#title" do
     let(:course) do
@@ -156,6 +158,31 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
             'Nearest placement school 1 mile from alert("XSS")',
           )
         end
+      end
+    end
+  end
+
+  describe "displaying postcode area in location value when user searches by city, region or postcode" do
+    let(:course) { create(:course, funding:) }
+    let(:funding) { :fee }
+
+    before { course.define_singleton_method(:minimum_distance_to_search_location) { 1 } }
+
+    context "when user searches by city or region and postcode is present from reverse geocode lookup" do
+      let(:search_params) { { location: "York, UK", postcode: "YO1 7AA", latitude: 1, longitude: 1 } }
+      let(:postcode) { search_params[:postcode] }
+
+      it "includes the postcode area in the location value; after the city name but before the country (UK)" do
+        expect(summary_card_content).to include("Nearest placement school 1 mile from York YO1, UK")
+      end
+    end
+
+    context "when user searches via postcode and it's already in the location string" do
+      let(:search_params) { { location: "London WC2N 5HS, UK", latitude: 1, longitude: 1 } }
+
+      it "does not duplicate by appending the postcode area" do
+        expect(summary_card_content).to include("1 mile from London WC2N 5HS, UK")
+        expect(summary_card_content.scan("WC2N").count).to eq(1)
       end
     end
   end
