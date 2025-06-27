@@ -592,6 +592,58 @@ RSpec.describe Courses::Query do
       end
     end
 
+    context "when searching excluding courses" do
+      let(:params) { { excluded_courses: { provider_code: "P12", course_code: "EX12" } } }
+
+      it "excludes specified courses from the results" do
+        create(:course, :with_full_time_sites,
+               name: "Excluded Course",
+               course_code: "EX12",
+               provider: create(:provider, provider_code: "P12"))
+
+        included_course = create(:course, :with_full_time_sites,
+                                 name: "Included Course",
+                                 course_code: "IN34",
+                                 provider: create(:provider, provider_code: "P34"))
+
+        same_course_code_different_provider = create(:course, :with_full_time_sites,
+                                                     name: "Included Course with same course code but different provider",
+                                                     course_code: "EX12",
+                                                     provider: create(:provider, provider_code: "P99"))
+
+        expect(results).to match_collection(
+          [included_course, same_course_code_different_provider],
+          attribute_names: %w[name],
+        )
+      end
+    end
+
+    context "when searching excluding courses array" do
+      let(:params) { { excluded_courses: [{ provider_code: "P12", course_code: "EX12" }] } }
+
+      it "excludes specified courses from the results" do
+        create(:course, :with_full_time_sites,
+               name: "Excluded Course",
+               course_code: "EX12",
+               provider: create(:provider, provider_code: "P12"))
+
+        included_course = create(:course, :with_full_time_sites,
+                                 name: "Included Course",
+                                 course_code: "IN34",
+                                 provider: create(:provider, provider_code: "P34"))
+
+        same_course_code_different_provider = create(:course, :with_full_time_sites,
+                                                     name: "Included Course with same course code but different provider",
+                                                     course_code: "EX12",
+                                                     provider: create(:provider, provider_code: "P99"))
+
+        expect(results).to match_collection(
+          [included_course, same_course_code_different_provider],
+          attribute_names: %w[name],
+        )
+      end
+    end
+
     shared_examples "location search results" do |radius:|
       it "returns courses within a #{radius} mile radius" do
         params = { latitude: london.latitude, longitude: london.longitude, radius: }

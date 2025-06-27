@@ -199,6 +199,24 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context "when excluded courses are provided" do
+      context "when excluded courses are an array" do
+        let(:form) { described_class.new(excluded_courses: [{ provider_code: "ABC", course_code: "C1" }]) }
+
+        it "returns the correct search params with excluded courses" do
+          expect(form.search_params).to eq({ excluded_courses: [{ provider_code: "ABC", course_code: "C1" }] })
+        end
+      end
+
+      context "when excluded courses are hash" do
+        let(:form) { described_class.new(excluded_courses: { 0 => { provider_code: "ABC", course_code: "C1" } }) }
+
+        it "returns the correct search params with excluded courses" do
+          expect(form.search_params).to eq({ excluded_courses: [{ provider_code: "ABC", course_code: "C1" }] })
+        end
+      end
+    end
+
     context "when location is provided" do
       let(:form) { described_class.new(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 10) }
 

@@ -23,6 +23,7 @@ module Courses
     attribute :subject_code
     attribute :subject_name
     attribute :subjects
+    attribute :excluded_courses
 
     # Coordinates #
     attribute :country
@@ -49,6 +50,10 @@ module Courses
 
       @subjects_cache = SubjectsCache.new
       @providers_cache = ProvidersCache.new
+    end
+
+    def excluded_courses=(attributes)
+      super(attributes.is_a?(Hash) ? attributes.values : attributes)
     end
 
     def search_params
