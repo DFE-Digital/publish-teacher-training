@@ -42,17 +42,162 @@
         <%= CourseEnrichment.human_attribute_name("how_school_placements_work") %>
       </h1>
 
+      <%= t("publish.providers.school_placements.edit.guidance_text_html") %>
+
       <%= render partial: "guidance" %>
-      <%= f.govuk_text_area(:how_school_placements_work,
-        value: @copied_fields_values&.dig("how_school_placements_work") ||
-          @course_school_placements_form.how_school_placements_work,
-        label: { text: CourseEnrichment.human_attribute_name("how_school_placements_work"), size: "s" },
-        hint: -> { render partial: "publish/courses/markdown_formatting" },
-        max_words: 350,
-        rows: 15) %>
-      <%= f.hidden_field(:goto_preview, value: params[:goto_preview]) %>
-      <%= f.govuk_submit t("publish.providers.school_placements.edit.submit_button") %>
-    <% end %>
+
+
+      <aside data-qa="course__related_sidebar">
+      <%= render(
+        partial: "publish/courses/related_sidebar",
+        locals: {
+          course: @course,
+          page_path: school_placements_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+        },
+      ) %>
+    </aside>
+
+
+      <div data-controller="input-preview">
+        <!--WHERE YOU WILL TRAIN-->
+
+        <%= f.govuk_text_area(:how_school_placements_work_3,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-trainees-placed"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-placed-hint"), size: "s" },
+          max_words: 50,
+          rows: 5) %>
+
+        <%= f.govuk_text_area(:how_school_placements_work_2,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-many-placements"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("how-many-placements-hint"), size: "s" },
+          max_words: 50,
+          rows: 5) %>
+
+        <%= f.govuk_text_area(:how_school_placements_work_4,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("where-study-site"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("where-study-site-hint"), size: "s" },
+          max_words: 50,
+          rows: 5) %>
+
+        <%= f.govuk_text_area(:how_school_placements_work_1,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("where-time-school-study"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("where-time-school-study-hint"), size: "s" },
+          max_words: 50,
+          rows: 5) %>
+
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview of what candidates will see</strong></span>
+        </div>
+        <div class="app-preview-container">
+          <p class="govuk-heading-m">Where you will train</p>
+          <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview1">The text you type above will show here.</p>
+        </div>
+
+        <!--<div class="app-preview-container">-->
+          <!--<p class="govuk-body">You will spend most of your time on school placements - a minimum of 24 weeks. This time is spread across at least 2 schools. You will also spend time in a location where you will study.</p>-->
+          <!--<dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Nearest placement school
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <strong>2 miles</strong> from <strong>Manchester, UK</strong><br><br>
+                <span class="govuk-hint govuk-!-font-size-16">Schools can change and are not guaranteed</span>
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Where you will study
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <strong>2 miles</strong> from <strong>Manchester, UK</strong>
+              </dd>
+            </div>
+          </dl>-->
+
+          <!--Call out - wheree you will train
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                Where your school placements will take place
+              </span>
+              <p class="govuk-body">
+                The training provider will contact you to discuss your preferences to help them select placement schools that you can travel to.
+              </p>
+              <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements#where-will-my-placements-take-place">
+                  Find out more about where your school placements will take place.</a>
+              </p>
+            </div>
+          </div>
+          END Call out-->
+
+          <!--<p class="govuk-heading-l">What you will do on school placements</p>-->
+          <!--Call out - what you will do on school placements
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                What to expect on school placements
+              </span>
+              <p class="govuk-body">
+                You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.
+              </p>
+              <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements">
+                  Find out more about what to expect on school placements.</a>
+              </p>
+            </div>
+          </div>
+          END Call out-->
+
+          <!--<p class="govuk-heading-l">What you will study</p>-->
+          <!--Call out - what you will study
+          <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__content app-notification-banner__content--grey">
+              <span class="govuk-heading-m">
+                What to expect in teacher training
+              </span>
+              <p class="govuk-body">
+                You'll spend most of your time teaching in a classroom, with some time dedicated to studying. This may include seminars, workshops and assignments.
+              </p>
+              <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training">
+                  Find out what to expect in teacher training.</a>
+              </p>
+            </div>
+          </div>
+          END Call out-->
+
+        <!--</div>-->
+
+        <%= f.govuk_submit t("publish.providers.school_placements.edit.submit_button") %>
+      <% end %>
+    </div>
+
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
@@ -61,17 +206,5 @@
       )) %>
     </p>
   </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-    <%= render(
-      partial: "publish/courses/related_sidebar",
-      locals: {
-        course: @course,
-        page_path: school_placements_publish_provider_recruitment_cycle_course_path(
-          @provider.provider_code,
-          @course.recruitment_cycle_year,
-          @course.course_code,
-        ),
-      },
-    ) %>
-  </aside>
+
 </div>
