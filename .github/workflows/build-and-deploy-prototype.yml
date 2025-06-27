@@ -14,7 +14,7 @@ permissions:
 jobs:
   build:
     name: Build
-    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'prototype') }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
@@ -23,18 +23,39 @@ jobs:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
 
     steps:
+      - name: Find open PR for this branch
+        id: pr
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // strip “refs/heads/” → branch name
+            const branch = process.env.GITHUB_REF.replace('refs/heads/', '');
+            // list open PRs whose head matches this branch
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${branch}`,
+              state: 'open',
+            });
+            // if found, return the first number; else empty
+            return prs.length ? prs[0].number : '';
+        result-encoding: string
+
+      - name: Expose PR number as env
+        run: echo "PR_NUMBER=${{ steps.pr.outputs.result }}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Get values for current commit (Pull request)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'workflow_dispatch'
         run: |
           # This is the actual PR branch
           GIT_REF=${{ github.head_ref }}
           GIT_BRANCH=${GIT_REF##*/}
           echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
           # This is the latest commit on the actual PR branch
-          echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha || github.sha }}" >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -81,7 +102,7 @@ jobs:
     name: Deployment To Review
     environment:
       name: review
-    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    concurrency: deploy_review_${{ env.PR_NUMBER }}
     needs: [build]
     runs-on: ubuntu-latest
     env:
@@ -98,13 +119,13 @@ jobs:
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: review
-          pr-number: ${{ github.event.pull_request.number }}
+          pr-number: ${{ env.PR_NUMBER}}
           sha: ${{ needs.build.outputs.image_tag }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
           azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
 
       - name: Post comment to Pull Request ${{ github.event.number }}
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: aks
