@@ -26,6 +26,12 @@ en:
           back: Back to %{course_name} (%{course_code})
           heading: About %{provider_name}
     providers:
+      added_schools:
+        index:
+          page_title: Schools added to %{provider_name}
+      removed_schools:
+        index:
+          page_title: Schools removed from %{provider_name}
       details:
         page_title: Organisation details
         about: About your organisation
