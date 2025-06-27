@@ -3,7 +3,6 @@
 module UserAssociationsService
   class Create
     include RecruitmentCycleHelper
-
     attr_reader :provider, :user, :all_providers
 
     class << self
@@ -74,6 +73,10 @@ module UserAssociationsService
       user_notification_preferences.update(
         enable_notifications: user_notification_preferences.enabled,
       )
+    end
+
+    def rollover_active?
+      RecruitmentCycle.next_editable_cycles?
     end
   end
 end

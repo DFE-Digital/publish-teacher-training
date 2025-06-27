@@ -3,7 +3,9 @@
 module Support
   class RecruitmentCycleController < ApplicationController
     def index
-      redirect_to support_recruitment_cycle_providers_path(Settings.current_recruitment_cycle_year) unless RecruitmentCycle.next_editable_cycles?
+      @rollover_period = RolloverPeriod.new(current_user:)
+
+      redirect_to support_recruitment_cycle_providers_path(Settings.current_recruitment_cycle_year) unless @rollover_period.active?
     end
   end
 end

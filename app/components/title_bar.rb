@@ -43,7 +43,7 @@ private
   end
 
   def rollover_active?
-    RecruitmentCycle.next_editable_cycles?
+    RolloverPeriod.active?(current_user:)
   end
 
   def current_recruitment_cycle_year

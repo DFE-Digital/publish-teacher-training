@@ -30,6 +30,10 @@ class RecruitmentCycle < ApplicationRecord
     next_editable_cycles.exists?
   end
 
+  def self.next_editable_cycles_via_support?
+    next_editable_cycles_via_support.exists?
+  end
+
   def self.current_and_next_editable_cycles
     where(year: Settings.current_recruitment_cycle_year).or(next_editable_cycles)
   end
@@ -37,6 +41,11 @@ class RecruitmentCycle < ApplicationRecord
   scope :next_editable_cycles, lambda {
     where("application_start_date > ?", Date.current)
      .where("? BETWEEN available_in_publish_from AND application_start_date", Date.current)
+  }
+
+  scope :next_editable_cycles_via_support, lambda {
+    where("application_start_date > ?", Date.current)
+     .where("? BETWEEN available_for_support_users_from AND application_start_date", Date.current)
   }
 
   def previous
