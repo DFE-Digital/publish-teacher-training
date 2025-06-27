@@ -5,6 +5,7 @@ module Find
     include Pagy::Backend
     include DfE::Analytics::Requests
     include Authentication
+    include Errorable
 
     layout "find"
 
@@ -41,10 +42,6 @@ module Find
 
     def redirect_to_cycle_has_ended_if_find_is_down
       redirect_to find_cycle_has_ended_path if CycleTimetable.find_down?
-    end
-
-    def render_not_found
-      render "errors/not_found", status: :not_found
     end
   end
 end

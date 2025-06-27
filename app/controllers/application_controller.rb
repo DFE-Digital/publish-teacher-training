@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include DfE::Analytics::Requests
   include Pundit::Authorization
   include Pagy::Backend
+  include Errorable
 
   before_action :enforce_basic_auth, if: -> { BasicAuthenticable.required? }
 
