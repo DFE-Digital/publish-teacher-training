@@ -40,7 +40,7 @@ jobs:
             });
             // if found, return the first number; else empty
             return prs.length ? prs[0].number : '';
-        result-encoding: string
+          result-encoding: string
 
       - name: Expose PR number as env
         run: echo "PR_NUMBER=${{ steps.pr.outputs.result }}" >> $GITHUB_ENV
