@@ -75,9 +75,7 @@ RSpec.describe "Search results - view a course", :js, service: :find do
   end
 
   def when_i_click_on_the_first_result
-    with_retry do
-      page.first(".app-search-results").first("a").click
-    end
+    page.first(".app-search-results").first("a").click
   end
 
   def when_i_click_on_the_provider_link

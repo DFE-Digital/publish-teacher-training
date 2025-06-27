@@ -3,7 +3,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require "database_cleaner"
 require "spec_helper"
-require_relative "./support/system_retry_helper"
 
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
@@ -63,7 +62,6 @@ RSpec.configure do |config|
   config.include Capybara::RSpecMatchers, type: :component
   config.include ActiveJob::TestHelper, type: :request
   config.include ActiveSupport::Testing::TimeHelpers
-  config.include SystemRetryHelper, type: :system
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   config.before(:suite) do
