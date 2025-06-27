@@ -52,6 +52,10 @@ module Courses
       @providers_cache = ProvidersCache.new
     end
 
+    def excluded_courses=(attributes)
+      super(attributes.is_a?(Hash) ? attributes.values : attributes)
+    end
+
     def search_params
       attributes
         .symbolize_keys
