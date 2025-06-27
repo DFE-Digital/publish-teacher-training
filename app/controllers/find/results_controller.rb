@@ -53,7 +53,14 @@ module Find
         :subject_name,
         :university_degree_status,
         :applications_open,
-        { subjects: [], start_date: [], study_type: [], study_types: [], qualifications: [], qualification: [], funding: [], excluded_courses: %i[provider_code course_code] },
+        { subjects: [],
+          start_date: [],
+          study_type: [],
+          study_types: [],
+          qualifications: [],
+          qualification: [],
+          funding: [],
+          excluded_courses: %i[provider_code course_code] }, # No produced by the UI
       ]
 
       permitted.delete(:applications_open) if FeatureFlag.active?(:hide_applications_open_date)
