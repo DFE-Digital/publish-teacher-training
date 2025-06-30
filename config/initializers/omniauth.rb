@@ -71,11 +71,6 @@ if Settings.one_login.enabled
 
   Rails.application.config.middleware.use OmniAuth::Builder do
     provider :govuk_one_login, options
-
-    # will call `Users::OmniauthController#failure` if there are any errors during the login process
-    on_failure do |env|
-      Find::Authentication::SessionsController.action(:failure).call(env)
-    end
   end
 elsif Rails.env.in?(%w[development test])
   Rails.application.config.middleware.use OmniAuth::Builder do
@@ -85,8 +80,5 @@ elsif Rails.env.in?(%w[development test])
              uid_field: :uid,
              path_prefix: "/auth",
              callback_path: "/auth/find-developer/callback")
-    on_failure do |env|
-      Find::Authentication::SessionsController.action(:failure).call(env)
-    end
   end
 end
