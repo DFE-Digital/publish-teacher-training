@@ -60,7 +60,7 @@ module Find
           qualifications: [],
           qualification: [],
           funding: [],
-          excluded_courses: %i[provider_code course_code] }, # No produced by the UI
+          excluded_courses: %i[provider_code course_code] },
       ]
 
       permitted.delete(:applications_open) if FeatureFlag.active?(:hide_applications_open_date)
