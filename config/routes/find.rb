@@ -34,6 +34,8 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
     scope module: "authentication" do
       resource :sessions, path: "auth", only: %i[] do
         get ":provider/callback", action: :callback
+
+        get "/failure", to: "sessions#failure"
       end
       delete "/sign-out", to: "sessions#destroy"
     end

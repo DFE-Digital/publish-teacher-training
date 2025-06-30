@@ -24,7 +24,25 @@ module Find
       # request.env["omniauth.error.type"] # => :"The given key is a String. It has to be an OpenSSL::PKey::RSA instance",
       # request.env["omniauth.error.strategy"] # => #<OmniAuth::Strategies::GovukOneLogin>
       def failure
-        Sentry.capture_exception(request.env["omniauth.error"])
+        exception = request.env["omniauth.error"]
+        strategy = request.env["omniauth.error.strategy"]
+        error_type = request.env["omniauth.error.type"]
+
+        if exception
+          Sentry.capture_exception(exception, extra: {
+            provider: strategy&.name,
+            error_type: error_type,
+          })
+        elsif error_type
+          Sentry.capture_message("OmniAuth failure without exception", extra: {
+            error_type:,
+          })
+        elsif params[:message]
+          Sentry.capture_message("OmniAuth failure without exception", extra: {
+            error_type: params[:message],
+            provider: params[:provider],
+          })
+        end
 
         render "errors/omniauth"
       end
