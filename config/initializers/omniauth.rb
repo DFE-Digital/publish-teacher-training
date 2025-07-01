@@ -56,6 +56,7 @@ if Settings.one_login.enabled
   begin
     private_key = OpenSSL::PKey::RSA.new(Settings.one_login.private_key.gsub('\n', "\n"))
   rescue StandardError => e
+    Sentry.capture_exception(e)
     Rails.logger.error(e)
   end
 
