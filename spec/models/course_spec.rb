@@ -523,6 +523,46 @@ describe Course do
       end
     end
 
+    describe "#manually_rollable?" do
+      context "when next cycle is available for publish users" do
+        before do
+          create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+        end
+
+        it "returns true" do
+          expect(create(:course)).to be_manually_rollable
+        end
+      end
+
+      context "when next cycle is available for publish users but course was already rolled over" do
+        let(:course) { create(:course) }
+
+        before do
+          next_recruitment_cycle = create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+
+          create(
+            :course,
+            course_code: course.course_code,
+            provider: create(:provider, recruitment_cycle: next_recruitment_cycle, provider_code: course.provider.provider_code),
+          )
+        end
+
+        it "returns false" do
+          expect(course).not_to be_manually_rollable
+        end
+      end
+
+      context "when next cycle is not available for publish users" do
+        before do
+          create(:recruitment_cycle, :next, available_in_publish_from: 1.day.from_now)
+        end
+
+        it "returns false" do
+          expect(create(:course)).not_to be_manually_rollable
+        end
+      end
+    end
+
     describe "publishable?" do
       context "invalid enrichment" do
         let(:course) { create(:course, enrichments: [invalid_enrichment]) }

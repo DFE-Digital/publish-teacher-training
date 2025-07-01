@@ -64,6 +64,7 @@ feature "Course show" do
     scenario "published courses have a 'Scheduled' status" do
       given_there_is_a_next_recruitment_cycle
       given_i_am_authenticated_as_a_provider_user(course: build(:course))
+      and_there_is_the_provider_in_the_next_cycle
       when_i_visit_the_next_cycle_courses_page
       then_i_should_see_the_status_scheduled
     end
@@ -178,6 +179,8 @@ private
       year: next_year,
       application_start_date: Date.new(next_year - 1, 10, 1),
       application_end_date: Date.new(next_year, 9, 30),
+      available_for_support_users_from: 1.week.ago,
+      available_in_publish_from: 1.day.ago,
     )
   end
 
@@ -286,14 +289,19 @@ private
   end
 
   def given_i_am_authenticated_as_a_provider_user(course:)
-    given_i_am_authenticated(
-      user: create(
-        :user,
-        providers: [
-          create(:provider, sites: [build(:site)], courses: [course]),
-        ],
-      ),
+    @user = create(
+      :user,
+      providers: [
+        create(:provider, sites: [build(:site)], courses: [course]),
+      ],
     )
+    given_i_am_authenticated(user: @user)
+  end
+
+  def and_there_is_the_provider_in_the_next_cycle
+    provider = create(:provider, recruitment_cycle: RecruitmentCycle.next, provider_code: @user.providers.first.provider_code, courses: [build(:course, :published)])
+
+    @user.providers << provider
   end
 
   def when_i_visit_the_course_page
