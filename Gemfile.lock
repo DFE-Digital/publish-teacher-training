@@ -61,6 +61,16 @@ GIT
       actionpack
       railties
 
+GIT
+  remote: https://github.com/pauldougan/omniauth-govuk-one-login.git
+  revision: aee3e10c5d4c6dbe855059198283ced16acec91f
+  ref: aee3e10c5d4c6dbe855059198283ced16acec91f
+  specs:
+    omniauth_govuk_one_login (1.3.0)
+      faraday (~> 2.13)
+      jwt (~> 2.10)
+      omniauth (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -466,10 +476,6 @@ GEM
     omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    omniauth_govuk_one_login (1.3.0)
-      faraday (~> 2.13)
-      jwt (~> 2.10)
-      omniauth (~> 2.1)
     omniauth_openid_connect (0.8.0)
       omniauth (>= 1.9, < 3)
       openid_connect (~> 2.2)
@@ -849,7 +855,7 @@ DEPENDENCIES
   oj
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
-  omniauth_govuk_one_login
+  omniauth_govuk_one_login!
   omniauth_openid_connect (~> 0.8)
   open_api-rswag-api (= 0.2.0)!
   open_api-rswag-specs (= 0.2.0)!
