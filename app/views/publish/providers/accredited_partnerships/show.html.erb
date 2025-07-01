@@ -19,7 +19,7 @@
 <h1 class="govuk-heading-l">
   <%= accredited_provider.provider_name %>
 </h1>
-<%= render Providers::ProviderList::View.new(provider: accredited_provider) %>
+<%= render Publish::Providers::AccreditedProviderDetails::View.new(provider: accredited_provider) %>
 <p class="govuk-body">
   <%= govuk_link_to t(".remove"),
             delete_accredited_provider_path,

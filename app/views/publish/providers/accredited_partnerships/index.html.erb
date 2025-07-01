@@ -16,7 +16,7 @@
       <p class="govuk-body"><%= t(".no_providers", provider_name: @provider.provider_name) %>
       </p>
     <% else %>
-      <%= render partial: "accredited_provider_table", locals: { partnerships: @provider.accredited_partnerships } %>
+      <%= render partial: "accredited_provider_table", locals: { partnerships: @provider_partnerships } %>
     <% end %>
   </div>
 </div>
