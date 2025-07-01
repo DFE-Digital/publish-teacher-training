@@ -111,7 +111,7 @@ gem "govuk_design_system_formbuilder", "~> 5.10"
 
 # DfE Sign-In
 gem "omniauth", "~> 2.1"
-gem "omniauth_govuk_one_login"
+gem "omniauth_govuk_one_login", github: "pauldougan/omniauth-govuk-one-login", ref: "aee3e10c5d4c6dbe855059198283ced16acec91f"
 gem "omniauth_openid_connect", "~> 0.8"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 
