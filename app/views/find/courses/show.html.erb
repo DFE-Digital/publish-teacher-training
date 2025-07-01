@@ -61,9 +61,11 @@
 
       <% case @course.course_code %>
           <% when "R480" %>
+            <h3 class="govuk-heading-s">About <%= smart_quotes(@course.provider.provider_name) %></h3>
             <p class="govuk-body">
             We believe in changing the lives of young people by empowering teachers and young people to work together for a better education and a better community.
             </p>
+            <h3 class="govuk-heading-s">Why should choose to train with them</h3>
             <p class="govuk-body">You will benefit from:
             </p>
             <ul class="govuk-list govuk-list--bullet">
@@ -161,10 +163,14 @@
     <h2 class="govuk-heading-l" id="do-on-school-placements">What you will do on school placements</h2>
     <% case @course.course_code %>
       <% when "R480" %>
+        <h3 class="govuk-heading-s">What you will do while in schools
+        </h3>
         <p class="govuk-body">
           Trainee teacher development is supported through training, classroom experience, professional dialogue, self-reflection and weekly progress review meetings with your mentor.         </p>
         <p class="govuk-body">
           You will start training in your placement school from your first day on the course, and will attend all INSET days throughout the year, focusing on whole-school improvements.         </p>
+        <h3 class="govuk-heading-s">How you will be supported and mentored
+        </h3>
         <p class="govuk-body">
           Your progress will be monitored by your class and professional mentor with the Lead Provider moderating you throughout the year.          </p>
         <p class="govuk-body">
@@ -226,6 +232,8 @@
     <h2 class="govuk-heading-l" id="studies">What you will study</h2>
     <% case @course.course_code %>
       <% when "R480" %>
+        <h3 class="govuk-heading-s">What you will do for theoretical training
+        </h3>
         <p class="govuk-body">
         Throughout the course, trainees engage with professional development training which takes an evidence-informed approach to teaching and learning. Whilst the majority of training takes place at One Angel Square, some training will take place at our Hubs, academies and through online seminars.
         </p>
@@ -238,6 +246,8 @@
           <li>Design purposeful scaffolding leading to developing independence.</li>
           <li>Questioning and deepening thinking..</li>
         </ul>
+        <h3 class="govuk-heading-s">How you will be assessed
+        </h3>
         <p class="govuk-body">
           Applicants enrolled on the PGCE programme are expected to complete three Masters Level assignments leading to a PGCE qualification and 60 Masters level credits.
         </p>
