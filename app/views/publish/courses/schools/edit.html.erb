@@ -65,8 +65,25 @@
   </div>
 </details>
 
+<div>
+  <fieldset class="govuk-fieldset" aria-describedby="countries-hint">
+    <div id="countries-hint" class="govuk-hint">
+      Select all that apply
+    </div>
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="countries" name="countries" type="checkbox" value="france">
+        <label class="govuk-label govuk-checkboxes__label" for="countries">
+          Select all schools
+        </label>
+      </div>
+      <div class="govuk-checkboxes__divider">or</div>
+    </div>
+  </fieldset>
+</div>
+
       <%= f.govuk_check_boxes_fieldset :site_ids, legend:
-      { text: "<p hidden>.</p>".html_safe, tag: "h1", size: "s" }, hint: { text: "Select all that apply" } do %>
+      { text: "<p hidden>.</p>".html_safe, tag: "h1", size: "s" } do %>
        <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
          <%# VERY DIRTY, do not push the label with code and .html safe to prod!!!!!!!!!!! %>
           <%= f.govuk_check_box :site_ids,
