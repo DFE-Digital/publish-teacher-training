@@ -18,6 +18,11 @@ base_url: <%= "https://publish-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cl
 
 apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 
+
+one_login:
+  # URL user is redirected to after logging out of One Login
+  post_logout_url: <%= "https://find-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
+
 authentication:
   secret: secret
   mode: persona

@@ -20,6 +20,10 @@ authentication:
   secret: secret
   mode: persona
 
+one_login:
+  # URL user is redirected to after logging out of One Login
+  post_logout_url: http://find.localhost:3001/
+
 mcbg:
   redis_password:
 
