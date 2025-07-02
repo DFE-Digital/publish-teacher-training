@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../app/services/publish/authentication_service"
-require_relative "../../app/lib/authentications/candidate_config"
+require_relative "../../app/lib/authentications/candidate_omni_auth"
 
 OmniAuth.config.logger = Rails.logger
 
@@ -43,8 +43,7 @@ else
 end
 
 # Find / Candidate inteface authentication
-Authentications::CandidateConfig.new.config do |config|
-
+Authentications::CandidateOmniAuth.new.config do |config|
   Rails.application.config.middleware.use OmniAuth::Builder do
     provider config.provider, config.options
   end

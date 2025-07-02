@@ -1,8 +1,8 @@
 require "rails_helper"
 
 module Authentications
-  RSpec.describe CandidateConfig do
-    let(:config) { described_class.new }
+  RSpec.describe CandidateOmniAuth do
+    subject { described_class.new }
 
     describe "#provider" do
       context "when Setting.one_login.enabled is false" do
@@ -11,7 +11,7 @@ module Authentications
         end
 
         it "sets provider to :find_developer" do
-          expect(config.provider).to eq(:find_developer)
+          expect(subject.provider).to eq(:find_developer)
         end
       end
 
@@ -21,7 +21,7 @@ module Authentications
         end
 
         it "sets provider to :govuk_one_login" do
-          expect(config.provider).to eq(:govuk_one_login)
+          expect(subject.provider).to eq(:govuk_one_login)
         end
       end
     end
@@ -40,7 +40,7 @@ module Authentications
             redirect_uri: "http://find.localhost/auth/one-login/callback",
             private_key: nil,
           }
-          expect(config.options).to eq(expected)
+          expect(subject.options).to eq(expected)
         end
       end
 
@@ -58,7 +58,40 @@ module Authentications
             callback_path: "/auth/find-developer/callback",
           }
 
-          expect(config.options).to eq(expected)
+          expect(subject.options).to eq(expected)
+        end
+      end
+    end
+
+    describe "#config" do
+      context "when Setting.one_login.enabled is false and env is not local" do
+        before do
+          allow(Settings.one_login).to receive(:enabled).and_return(false)
+          allow(Rails.env).to receive(:local?).and_return(false)
+        end
+
+        it "does not yield" do
+          expect { |b| subject.config(&b) }.not_to yield_control
+        end
+      end
+
+      context "when Setting.one_login.enabled is false and env is local" do
+        before do
+          allow(Settings.one_login).to receive(:enabled).and_return(false)
+        end
+
+        it "does yield" do
+          expect { |b| subject.config(&b) }.to yield_control
+        end
+      end
+
+      context "when Setting.one_login.enabled is true" do
+        before do
+          allow(Settings.one_login).to receive(:enabled).and_return(true)
+        end
+
+        it "sets provider to :govuk_one_login" do
+          expect(subject.provider).to eq(:govuk_one_login)
         end
       end
     end
