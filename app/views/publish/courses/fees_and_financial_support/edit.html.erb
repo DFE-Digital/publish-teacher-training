@@ -142,40 +142,6 @@
           </div>
         </p>
 
-        <!-- Call out fees UK
-        <div class="govuk-notification-banner app-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
-            <span class="govuk-heading-m">
-              Financial support for UK citizens
-            </span>
-            <span class="govuk-heading-s">Student loans</span>
-            <p class="govuk-body">
-             You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.
-            </p>
-            <p class="govuk-body">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/funding-and-support/tuition-fee-and-maintenance-loans">
-                Find out more about student loans for teacher training.
-              </a>
-            </p>
-          </div>
-        </div>
-        END Call out -->
-         <!-- Call out fees non uk
-        <div class="govuk-notification-banner app-notification-banner--non-uk" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-          <div class="govuk-notification-banner__content app-notification-banner__content--grey">
-            <span class="govuk-heading-m">
-              Financial support for non-UK citizens
-            </span>
-            <p class="govuk-body">
-              If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan.            </p>
-            <p class="govuk-body">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/non-uk-teachers/fees-and-funding-for-non-uk-trainees">
-                Find out what financial support is available to non-UK citizens.
-              </a>
-            </p>
-          </div>
-        </div>
-        END Call out -->
       </div>
     </div>
 
@@ -192,4 +158,19 @@
           ) %>
     </p>
   </div>
+
+    <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+      <%= render(
+            partial: "publish/courses/related_sidebar_content",
+            locals: {
+              course: @course,
+              page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+              ),
+            },
+          ) %>
+    </aside>
+
 </div>

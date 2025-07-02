@@ -101,5 +101,19 @@
       </p>
     </div>
 
+   <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+      <%= render(
+            partial: "publish/courses/related_sidebar_content",
+            locals: {
+              course: @course,
+              page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+              ),
+            },
+          ) %>
+    </aside>
+
   </div>
 </div>
