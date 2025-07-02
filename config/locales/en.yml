@@ -604,7 +604,7 @@ en:
               course_creation: "^Select a subject"
               duplicate: "^The second subject must be different to the first subject"
             modern_languages_subjects:
-              select_a_language: "^Select at least one language"
+              select_a_language: "Select at least one language"
             study_mode:
               blank: "^Select a study mode"
             applications_open_from:
