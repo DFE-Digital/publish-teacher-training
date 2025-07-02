@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../app/services/publish/authentication_service"
+require_relative "../../app/lib/authentications/candidate_config"
 
 OmniAuth.config.logger = Rails.logger
 
@@ -41,45 +42,9 @@ else
   end
 end
 
-if Settings.one_login.enabled
-  # Generate callback URL for any environment
-  host = URI(Settings.find_url).host
-  port = Rails.env.development? && "3001"
-  path = "/auth/one-login/callback"
-  one_login_redirect_uri = if Rails.env.local?
-                             URI::HTTP.build(host:, port:, path:)
-                           else
-                             URI::HTTPS.build(host:, port:, path:)
-                           end
-
-  # Load private key from environment variable
-  begin
-    private_key = OpenSSL::PKey::RSA.new(Settings.one_login.private_key.gsub('\n', "\n"))
-  rescue StandardError => e
-    Sentry.capture_exception(e)
-    Rails.logger.error(e)
-  end
-
-  options = {
-    name: :"one-login",
-    client_id: Settings.one_login.identifier,
-    idp_base_url: Settings.one_login.idp_base_url,
-    # scope: "openid,email", # default
-    # vtr: ["Cl.Cm"], # default
-    redirect_uri: one_login_redirect_uri&.to_s,
-    private_key:,
-  }
-
+# Find / Candidate inteface authentication
+Authentications::CandidateConfig.new.tap do |config|
   Rails.application.config.middleware.use OmniAuth::Builder do
-    provider :govuk_one_login, options
-  end
-elsif Rails.env.in?(%w[development test])
-  Rails.application.config.middleware.use OmniAuth::Builder do
-    provider(:find_developer,
-             name: "find-developer",
-             fields: %i[uid email],
-             uid_field: :uid,
-             path_prefix: "/auth",
-             callback_path: "/auth/find-developer/callback")
+    provider config.provider, config.options
   end
 end
