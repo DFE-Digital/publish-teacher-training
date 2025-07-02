@@ -43,7 +43,8 @@ else
 end
 
 # Find / Candidate inteface authentication
-Authentications::CandidateConfig.new.tap do |config|
+Authentications::CandidateConfig.new.config do |config|
+
   Rails.application.config.middleware.use OmniAuth::Builder do
     provider config.provider, config.options
   end
