@@ -93,27 +93,11 @@
           In person
         </label>
       </div>
-      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact">
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="contact-by-email">
-            <strong>About the in person interviews (optional)</strong>
-          </label>
-          <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="5" aria-describedby="more-detail-hint"></textarea>
-        </div>
-      </div>
       <div class="govuk-radios__item">
         <input class="govuk-radios__input" id="contact-2" name="contact" type="radio" value="phone" data-aria-controls="conditional-contact-2">
         <label class="govuk-label govuk-radios__label" for="contact-2">
           Online
         </label>
-      </div>
-      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="contact-by-phone">
-            <strong>About the in online interviews (optional)</strong>
-          </label>
-          <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="5" aria-describedby="more-detail-hint"></textarea>
-        </div>
       </div>
       <div class="govuk-radios__item">
         <input class="govuk-radios__input" id="contact-3" name="contact" type="radio" value="text" data-aria-controls="conditional-contact-3">
@@ -122,14 +106,6 @@
         </label>
         <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
             Depending on individual circumstances
-        </div>
-      </div>
-      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-3">
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="contact-by-text">
-            <strong>About the in person or online interviews (optional)</strong>
-          </label>
-          <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="5" aria-describedby="more-detail-hint"></textarea>
         </div>
       </div>
     </div>
@@ -141,24 +117,13 @@
         <%= f.govuk_text_area(:interview_process2,
             label: { text: t("publish.providers.interview_process.edit.interview_process_format"), size: "s" },
             hint: { text: t("publish.providers.interview_process.edit.interview_process_format_hint"), size: "s" },
-            max_words: 50,
+            max_words: 250,
             data: {
               input_preview_target: "input",
               action: "input-preview#updatePreview",
               preview_output_target: "preview"
               },
-            rows: 5) %>
-
-        <%= f.govuk_text_area(:interview_process3,
-            label: { text: t("publish.providers.interview_process.edit.interview_process_preparation"), size: "s" },
-            hint: { text: t("publish.providers.interview_process.edit.interview_process_preparation_hint"), size: "s" },
-            max_words: 50,
-            data: {
-              input_preview_target: "input",
-              action: "input-preview#updatePreview",
-              preview_output_target: "preview"
-              },
-            rows: 5) %>
+            rows: 20) %>
 
         <div class="app-preview-container--heading">
           <span class="govuk-body"><strong>Preview of what candidates will see</strong></span>
