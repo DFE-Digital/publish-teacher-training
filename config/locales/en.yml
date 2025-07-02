@@ -570,12 +570,11 @@ en:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"
         how_school_placements_work: Where you will train
-        where-time-school-study: How is time split between schools and theoretical training? (optional)
-        where-time-school-study-hint: For example 4 days in school, 1 day of theoretical training
-        how-many-placements: How much time will they spend in each school? (optional)
-        how-many-placements-hint: For example first placement in the autumn term
+        where-time-school-study: How much time will they spend in theoretical training? (optional)
+        where-time-school-study-hint: For example one day of theoretical training each week
+        how-many-placements: How much time will they spend in each school?
         how-trainees-placed: How do you decide which schools to place trainees in?
-        how-trainees-placed-hint: For example taking commuting time into consideration
+        how-trainees-placed-hint: For example do you take commuting time into consideration?
         where-study-site: Where will theoretical training take place? (optional)
         where-study-site-hint: For example at a training location, university or online
         what-trainee-do-in-school: What will trainees do while in schools?
