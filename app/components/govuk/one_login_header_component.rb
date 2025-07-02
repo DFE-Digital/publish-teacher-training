@@ -11,6 +11,10 @@ module Govuk
       @current_user = current_user
     end
 
+    def account_link
+      Settings.one_login.profile_url
+    end
+
     def sign_out_link
       button_to("Sign out", find_sign_out_path, class: %w[
         one-login-header__nav__link--one-login
