@@ -26,6 +26,20 @@
   </div>
 <% end %>
 
+<div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Important
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <p class="govuk-body">
+      The way you add information about courses has changed.<br>
+      <a class="govuk-notification-banner__link" href="#">Find out more about how to add course information.</a>
+    </p>
+  </div>
+</div>
+
 <h1 class="govuk-heading-l <%= "govuk-!-margin-bottom-2" if (course.is_published? && course.is_running?) || course.is_withdrawn? %>">
   <%= course.name_and_code %> <span data-qa="course__content-status"><%= course.status_tag %></span>
 </h1>
