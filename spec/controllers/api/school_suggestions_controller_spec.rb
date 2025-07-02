@@ -6,7 +6,7 @@ RSpec.describe API::SchoolSuggestionsController do
   describe "#index" do
     let!(:site1) { create(:gias_school, name: "claydon school") }
     let!(:site2) { create(:gias_school, name: "claytown high school") }
-    let!(:site3) { create(:gias_school, name: "another school") }
+    let!(:site3) { create(:gias_school, name: "another school", town: "", postcode: "") }
 
     context "with invalid params" do
       before do
