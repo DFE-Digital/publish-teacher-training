@@ -1,5 +1,5 @@
 module Authentications
-  class CandidateConfig
+  class CandidateOmniAuth
     attr_reader :provider
 
     def initialize
