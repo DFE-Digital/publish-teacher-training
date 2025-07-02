@@ -35,8 +35,6 @@
       What you will study
     </h1>
 
-     <%= t("publish.providers.school_placements.edit.guidance_text_html") %>
-
       <%= render partial: "guidance" %>
 
       <aside data-qa="course__related_sidebar">
@@ -73,7 +71,6 @@
             preview_output_target: "preview3"
           },
           label: { text: CourseEnrichment.human_attribute_name("how-trainees-assessed"), size: "s" },
-          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-assessed-hint"), size: "s" },
           max_words: 50,
           rows: 5) %>
 
