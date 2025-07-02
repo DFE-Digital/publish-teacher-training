@@ -60,6 +60,10 @@ one_login:
   identifier: <%= ENV.fetch('ONE_LOGIN_CLIENT_ID', 'client_id') %>
   # URL that the users are redirected to for signing in
   idp_base_url: https://oidc.integration.account.gov.uk/
+  # URL we use to end the Onne Login session on behalf of the user
+  logout_url: https://oidc.integration.account.gov.uk/logout
+  # URL user is redirected to after logging out of One Login
+  post_logout_url: https://qa.publish-teacher-training-courses.service.gov.uk/
   # URL of the users profile
   profile_url: https://home.oidc.integration.account.gov.uk
   # YAML doesn't preserve newlines. Convert newlines to \n
