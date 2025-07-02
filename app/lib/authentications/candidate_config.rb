@@ -28,6 +28,10 @@ module Authentications
       end
     end
 
+    def config
+      yield self if block_given? && @provider.present?
+    end
+
   private
 
     def one_login?
