@@ -34,7 +34,7 @@
 
     <% if FeatureFlag.active?(:candidate_accounts) %>
       <%= render Govuk::OneLoginHeaderComponent.new(current_user: Current.session&.sessionable) %>
-      <%= govuk_service_navigation(service_name: t("service_name.find"), service_url: "#") do |nav|
+      <%= govuk_service_navigation(service_name: t("service_name.find"), service_url: find_root_path) do |nav|
             if authenticated?
               nav.with_navigation_item(text: t(".primary_nav.courses_html"), href: find_root_path)
               nav.with_navigation_item(text: t(".primary_nav.saved_courses_html"), href: find_candidate_saved_courses_path)
