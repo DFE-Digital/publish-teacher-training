@@ -4,7 +4,7 @@ module_function
   def mock_auth
     OmniAuth.config.mock_auth[:"find-developer"] = OmniAuth::AuthHash.new(
       {
-        "provider" => "dfe",
+        "provider" => "find-developer",
         "uid" => "sign_in_user_id",
         "info" => {
           "name" => "candidate test",
