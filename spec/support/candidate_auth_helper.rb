@@ -1,14 +1,14 @@
 module CandidateAuthHelper
 module_function
 
-  def mock_auth
+  def mock_auth(email_address: "candidateemail@example.com")
     OmniAuth.config.mock_auth[:"find-developer"] = OmniAuth::AuthHash.new(
       {
         "provider" => "find-developer",
         "uid" => "sign_in_user_id",
         "info" => {
           "name" => "candidate test",
-          "email" => "candidateemail@example.com",
+          "email" => email_address,
         },
         "credentials" => {
           "id_token" => "id_token",
@@ -18,7 +18,7 @@ module_function
         },
         "extra" => {
           "raw_info" => {
-            "email" => "candidateemail@example.com",
+            "email" => email_address,
             "sub" => "sign_in_user_id",
           },
         },
