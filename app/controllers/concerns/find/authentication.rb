@@ -48,13 +48,6 @@ module Find
       end
     end
 
-    def provider_map(provider)
-      {
-        "find-developer" => "developer",
-        "one-login" => "govuk_one_login",
-      }[provider.to_s]
-    end
-
     def request_authentication
       session["return_to_after_authenticating"] = request.url
 
