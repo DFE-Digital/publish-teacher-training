@@ -65,7 +65,7 @@ one_login:
   # URL user is redirected to after logging out of One Login
   post_logout_url: https://qa.publish-teacher-training-courses.service.gov.uk/
   # URL of the users profile
-  profile_url: https://home.oidc.integration.account.gov.uk
+  profile_url: https://home.integration.account.gov.uk
   # YAML doesn't preserve newlines. Convert newlines to \n
   # Then convert them back to newlines for OpenSSL
   private_key: <%= ENV.fetch('ONE_LOGIN_PRIVATE_KEY', 'private_key').gsub("\n", '\n') %>
