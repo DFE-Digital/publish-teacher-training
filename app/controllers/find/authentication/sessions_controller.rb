@@ -2,22 +2,7 @@ module Find
   module Authentication
     class SessionsController < ApplicationController
       def callback
-        email_address = omniauth.info.email
-        authentication = ::Authentication.find_by(subject_key: omniauth.uid)
-
-        if authentication.present?
-          candidate = authentication.authenticable
-          unless candidate.email_address.casecmp?(email_address)
-            candidate.update(email_address:)
-          end
-        else
-          Candidate.transaction do
-            candidate = Candidate.create(email_address:)
-
-            candidate.authentications.build(provider: provider_map(omniauth.provider), subject_key: omniauth.uid)
-            candidate.save!
-          end
-        end
+        candidate = Find::CandidateAuthenticator.new(oauth: omniauth).call
 
         if start_new_session_for candidate, omniauth
           flash[:success] = t(".sign_in")
