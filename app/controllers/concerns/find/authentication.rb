@@ -45,14 +45,14 @@ module Find
         user.sessions.create!(session_key: candidate_session, id_token: oauth.credentials.id_token, user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
           Current.session = session
         end
-        user.authentications.find_or_create_by(authenticable: user, provider: provider_map(oauth.provider), subject_key: oauth.uid)
       end
     end
 
     def provider_map(provider)
       {
         "find-developer" => "developer",
-      }[provider]
+        "one-login" => "govuk_one_login",
+      }[provider.to_s]
     end
 
     def request_authentication
