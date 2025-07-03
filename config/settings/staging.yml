@@ -24,6 +24,9 @@ dfe_signin:
   secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
   user_search_url: https://pp-support.signin.education.gov.uk/users
 
+one_login:
+  enabled: false
+
 bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight

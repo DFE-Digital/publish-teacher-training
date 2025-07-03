@@ -23,3 +23,6 @@ dfe_signin:
   secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
   profile: https://profile.signin.education.gov.uk
   user_search_url: https://support.signin.education.gov.uk/users
+
+one_login:
+  enabled: false
