@@ -6,6 +6,13 @@ class Authentication < ApplicationRecord
   validates :authenticable, :provider, :subject_key, presence: true
   validate :unique_authenticable_with_provider
 
+  def self.provider_map(provider)
+    {
+      "find-developer" => "developer",
+      "one-login" => "govuk_one_login",
+    }[provider.to_s]
+  end
+
 private
 
   def unique_authenticable_with_provider
