@@ -37,7 +37,7 @@ one_login:
   # URL user is redirected to after logging out of One Login
   post_logout_url: https://find-teacher-training-courses.service.gov.uk/
   # URL of the users profile
-  profile_url: https://home.oidc.account.gov.uk
+  profile_url: https://home.account.gov.uk
 
 bg_jobs:
   save_statistic:
