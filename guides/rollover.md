@@ -1,166 +1,204 @@
-# Rollover
+# Rollover Process Guide
 
-Each year we close the current cycles courses and open the new cycle in a process we call `Rollover`.
+Each year, we close the current cycle's courses and open the new cycle in a process called **Rollover**.
+This guide explains the full process in simple steps, with images to help you understand each stage.
 
+## What is Rollover?
 
-This involves copying existing providers and courses to new records to allow the
-providers to update any details and then switching the API over to a new
-`recruitment cycle` which in turn releases the new courses on `Find` & `Apply`.
+Rollover is the process of copying existing providers and courses to new records for the upcoming year.
+This allows providers to update their details and prepares the system for the next **recruitment cycle**.
+Once rollover is complete, new courses appear on **Find** & **Apply**.
 
-This document lists the changes needed to be made to the codebase and the 
-timings for these changes. 
+## Rollover Overview
 
-## Rollover overview
+![Screenshot of the whole rollover phases](/guides/images/00-rollover-automation.png)
 
-The below sequence diagram covers an approximately 4 month period of time ending around `October`.
-It covers 
-1. when there is only `current` recruitment cycle to `current` and `next` recruitment cycles then 
-back to `current/new` recruitment cycle.
-2. the rollover cycle from `prepare` to `launch` to `end`.
-3. the period where `Find` closes and reopens with new courses.
-4. the 4 main Validation points to validate the `data`, `Publish` and `Find` for the dry run testing.
+With the new changes, rollover happens in four main phases:
 
-```mermaid
-sequenceDiagram
-autonumber
-    participant Publish
-    participant Data
-    participant Find
+### 1. **Testing (QA) phase**
 
-rect rgb(100, 150, 255)
-Note over Publish: When only current recruitment cycle is available
-end
-rect rgb(200, 150, 255)
-Note over Publish,Data : Prepare rollover
-Data->>Data: Create new recruitment cycle & rollover providers
-Note over Data: This can be time consuming
+- We run rollover in a test environment first.
+- This lets us check that everything copies over correctly before making the changes.
 
-rect rgb(191, 223, 255)
-    loop Validation point
-        Data->Data: Verify Data
-    end
-end
-end
+### 2. **Production rollover**
 
-Publish->>+ Data : Launch rollover
-Note over Publish: When current and next recruitment cycles is available
-Note over Find: Will be showing current courses
+- We run rollover in our live system.
+- All current provider and course data is copied to the new cycle.
 
-Data-->+Find: Find is Closed
-Note over Find: Maintenance page is shown
-Note over Data,Find: This will also affect Apply
-rect rgb(191, 223, 255)
-    loop Validation point
-        Publish->Data: Verify Publish and Data 
-    end
-end
-Data->>- Publish : End rollover    
-rect rgb(100, 150, 255)
-Publish-->> Publish : When next becomes current/new recruitment cycles 
-Note over Publish: When only current recruitment cycle is available
-end
+### 3. **Support team review**
 
-rect rgb(191, 223, 255)
-    loop Validation point
-        Publish->Data: Verify Publish and Data 
-    end
-end
+- After rollover, the Support team can review and make important updates (like accreditation).
+- This is our chance to fix any issues before providers see the new cycle.
 
-Find-->-Data: Find is Open
-Note over Find: Will be showing next courses
+### 4. **Publish users (Providers)**
 
-rect rgb(191, 223, 255)
-    loop Validation point
-        Find->Data: Verify Find and Data 
-    end
-end
+- The new cycle and courses become visible to providers in the Publish system.
+- Providers can log in, see their courses in the new cycle, and make any updates they need.
+
+## Running rollover
+
+### 1. Create a New Recruitment Cycle
+
+First you need to create a new cycle.
+
+- Go to the **Support interface**.
+- Navigate to:
+  `Settings > Recruitment cycles > Add new recruitment cycle`
+- Add:
+  - Year of the cycle
+  - Start and end dates
+  - When support users can edit next cycle data
+  - When providers can edit data (for both current and next cycle)
+
+![Recruitment cycle list page](/guides/images/1-recruitment-cycle-list.png)
+
+### 2. Start the Rollover
+
+- Click on the new cycle to open its details page.
+- Click **'Review rollover'**.
+
+  ![Review rollover](/guides/images/3-review-rollover.png)
+
+- Review the summary (number of providers, courses, accreditations to be copied).
+- Click **'Confirm'** to start the rollover.
+
+  ![Confirm rollover](/guides/images/3-confirm-rollover.png)
+
+### 3. Monitor Progress
+
+- Many jobs will run in the background (using **Sidekiq**).
+- To check progress, visit `/sidekiq` on Publish.
+
+### 4. Verify Data and System Status
+
+- Check for any data issues or errors.
+- Test:
+  - **Publish** (admin interface)
+  - **Publish public v1 endpoints**
+  - **Publish support console**
+
+#### Eligibility: Who and What Gets Rolled Over?
+
+- **Providers:**
+  Only providers with **published** or **withdrawn** courses are eligible for rollover.
+- **Courses:**
+  Only courses that are **published** or **withdrawn** will be rolled over.
+
+#### Checking the Numbers
+
+- The **cycle page** clearly shows:
+  - Number of eligible providers
+  - Number of eligible courses
+  - Number of partnerships
+  - Number of items actually rolled over
+
+- **After rollover automation finishes:**
+  - These numbers should match exactly.
+  - If there is a difference, you need to check the database to find out why.
+
+#### What to Do If Numbers Don't Match
+
+- Investigate in the database:
+  - Look for providers/courses that were not rolled over.
+  - Check their status (published/withdrawn).
+  - Compare with the eligibility criteria.
+  - Compare both cycles. `RolloverProgressQuery` might help.
+
+```ruby
+  query = RolloverProgressQuery.new(target_cycle: RecruitmentCycle.next)
+
+  # Provider from previous cycle that don't have published courses
+  query.providers_without_published_courses
+
+  query.eligible_providers
+  query.eligible_courses
+  query.eligible_partnerships
+
+  query.rolled_over_providers
+  query.rolled_over_courses
+  query.rolled_over_partnerships
 ```
-### Dry run / full process
-1. Create new recruitment cycle & rollover providers
-2. Verify Data issues
-  a. Overtime the data discrepancies maybe introduced, which may lead to rollover process experiencing issues.
-3. Launch rollover
-4. Find is Closed
-5. Verify Publish and Data issues 
-  a. Overtime the data discrepancies maybe introduced, which may lead to Publish experiencing (mainly UI) issues. 
-6. End rollover    
-7. When next becomes current recruitment cycles 
-8. Verify Publish and Data issues 
-  a. Overtime the data discrepancies maybe introduced, which may lead to Publish experiencing (mainly API) issues.
-9. Find is Open
-10. Verify Find and Data issues
-  a. Overtime the data discrepancies maybe introduced, which may lead to Find experiencing issues.
 
-> 3,4,6 and 9 are most likely going to be time sensitive.
-## Testing the Rollover process
+#### Disclaimer: Why Data Might Not Be Correct After Rollover
 
-This should happen every year in good time to allow for any code
-updates/refactoring work.
+Here are some common reasons why rollover data might not match expectations:
 
-1. Ensure that **testing environments** are set up for Publish and Find. 
-  (A minimum of 3gb ram is recommended for Publish)
+1. **New Table Not Included:**
+   A new table was added to the database, but the rollover script wasn't updated to handle it.
 
-2. Begin a test Rollover by running through the steps in
-  [On Rollover launch date](#on-rollover-launch-date).
+2. **New Validation Issues:**
+   A new validation rule was added, but old data wasn't updated (backfilled), making some records invalid during rollover.
 
-   You'll need a new `RecruitmentCycle` for the next cycle, to create this,
-   run `bundle exec rake rollover:create_recruitment_cycle"[YYYY, "YYYY-MM-DD", "YYYY-MM-DD"]"`.
-   This is `year`, `application_start_date` and `application_end_date` respectively.
-   You might not know the `application_start_date` and `application_end_date` in time for 
-   testing, so just use sensible placeholders.
+3. **Missing Columns:**
+   A new column was added to an important table, but the rollover process doesn't copy this column.
 
-3. Test Publish, Publish public v1 endpoints, and Publish support console.
-> This covers 1 to 5 from the above Rollover overview diagram
+4. **Structural Changes:**
+   Important tables or columns were changed during the cycle, but the rollover script wasn't updated to match the new structure.
 
-4. End the test Rollover by running through the steps in
-  [On Rollover end date](#on-rollover-end-date).
+## Rollover Timeline
 
-5. Test Publish, Publish public v1 endpoints, and Publish support console, and Find.
-> This covers 6 to 10 from the above Rollover overview diagram
+1. **Create new recruitment cycle** in Support
+2. **Rollover providers**
+3. **Verify data issues** (fix any errors found)
+4. **Find is closed** (old cycle is no longer visible)
+5. **Verify Publish and data issues**
+6. **Next cycle becomes current**
+7. **Verify Publish and data issues again**
+8. **Find is open** (new cycle is visible)
+9. **Verify Find and data issues**
 
-6. **Reverse the Rollover** if further testing needed. It might be easiest to
-  reset the testing database at this point to remove the rolled-over providers.
+## Testing the Rollover Process
 
-7. **Update this document** with any missing steps/changes identified.
+- Set up **testing environments** for Publish and Find (at least 3GB RAM for Publish).
+- Run a test rollover by following the steps above.
+- Use the Support interface to create a new RecruitmentCycle for the next year.
 
-## On Rollover launch date
-### Prior Rollover launch date
-1. Create a new `RecruitmentCycle` with the correct `year`, `application_start_date` and `application_end_date` by 
-running:
+## What to Do If Data Is Incomplete
 
-    ```bash
-    bundle exec rake 'rollover:create_recruitment_cycle"[YYYY, "YYYY-MM-DD", "YYYY-MM-DD"]'
-    # example
-    bundle exec rake 'rollover:create_recruitment_cycle[2023, "2022-10-11", "2023-09-29"]'
-    ```
+If a provider or course fails during rollover:
 
-2. Rollover providers by running:
+1. **Check Sidekiq** for error messages.
+2. If needed, investigate further:
+    - Use the latest backup (see [seeding data guide](https://github.com/DFE-Digital/publish-teacher-training/blob/main/guides/setup-development.md#seeding-data))
+    - Run rollover locally
+    - Identify the problematic provider or course
+    - Use the Rails console to debug
 
-    ```bash
-    bundle exec rake rollover:providers
-    ```
+#### To Rollover a Provider
 
-3. Create a **Start Rollover PR** including the following code changes:
-    - Update the setting for `can_edit_current_and_next_cycles: true`
-    - Any hardcoded copy changes
+```ruby
+provider_code = "CHANGE-HERE"
+recruitment_cycle_id = RecruitmentCycle.next.id # or RecruitmentCycle.find_by(year: 'YEAR').id
 
-### Begin Rollover launch
+RolloverProviderService.call(
+  provider_code:,
+  new_recruitment_cycle_id:,
+  force: false,
+)
+```
 
-1. Verify the dates on `Find` [CycleTimetable](https://github.com/DFE-Digital/find-teacher-training/blob/ae89dee0415679422b8e7af52543fdb1df83689d/app/services/cycle_timetable.rb#L2)
+#### To Rollover a Specific Course
 
-2. Merge the **Start Rollover PR**
+```ruby
+copy_courses_to_provider_service = Courses::CopyToProviderService.new(
+  sites_copy_to_course: Sites::CopyToCourseService,
+  enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
+  force: false,
+)
 
-## During Rollover
+# Find the course from current cycle that is raising error when rolling over
+course =  RecruitmentCycle.current.courses.where(course_code: 'COURSE-CODE')
 
-1. Create an **End Rollover PR** including the following code changes:
-    - Update the setting for `can_edit_current_and_next_cycles: false`
-    - Any hardcoded copy changes
-    - Increment setting `current_recruitment_cycle_year`
-    - Increment year in setting `next_cycle_open_date`
+# Find the provider in the new cycle
+new_provider = RecruitmentCycle.next.providers.where(provider_code: 'PROVIDER-CODE')
 
+# Rollover the course and see the error
+copy_courses_to_provider_service.execute(course:, new_provider:)
+```
 
-## On Rollover end date
+## Summary
 
-1. Merge the **End Rollover PR**
-
-2. Complete the steps on `Find`
+- **Rollover** is an annual process to prepare for the new recruitment cycle.
+- Follow the steps above to ensure a smooth transition.
+- Use the images to guide you through the interface.
+- If you encounter issues, use Sidekiq logs and the Rails console for troubleshooting.
