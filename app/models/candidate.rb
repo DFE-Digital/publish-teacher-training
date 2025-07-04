@@ -12,4 +12,6 @@ class Candidate < ApplicationRecord
   def full_name
     email_address
   end
+
+  audited associated_with: [:authentications, :sessions]
 end
