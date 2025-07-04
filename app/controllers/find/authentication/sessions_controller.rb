@@ -2,9 +2,9 @@ module Find
   module Authentication
     class SessionsController < ApplicationController
       def callback
-        email_address = omniauth.info.email
-        if (candidate = Candidate.find_or_create_by(email_address:))
-          start_new_session_for candidate, omniauth
+        candidate = Find::CandidateAuthenticator.new(oauth: omniauth).call
+
+        if start_new_session_for candidate, omniauth
           flash[:success] = t(".sign_in")
           redirect_to(session["return_to_after_authenticating"] || find_root_path, allow_remote_host: false)
         else
