@@ -32,6 +32,23 @@ module Find
         render "errors/omniauth"
       end
 
+      def backchannel_logout
+        return head :bad_request if params[:logout_token].blank?
+
+        uid = backchannel_logout_utility.get_sub(logout_token: params[:logout_token])
+
+        return head :bad_request if uid.blank?
+
+        authentication = ::Authentication.find_by!(subject_key: uid, provider: provider_map(params[:provider]))
+
+        authentication.authenticable.sessions.destroy_all
+        head :ok
+      end
+
+      def backchannel_logout_utility
+        OmniAuth::GovukOneLogin::BackchannelLogoutUtility.new(client_id: Settings.one_login.identifier, idp_base_url: Settings.one_login.idp_base_url)
+      end
+
     private
 
       def logout_request(token)
