@@ -11,6 +11,8 @@ module Publish
 
       def show
         @provider_partnership = provider.accredited_partnerships.find_by!(accredited_provider: partner)
+        @accredited_provider = @provider_partnership.accredited_provider
+        @training_provider = @provider_partnership.training_provider
       end
 
       def delete
