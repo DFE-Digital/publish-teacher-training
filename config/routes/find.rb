@@ -37,6 +37,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
         get ":provider/callback", action: :callback
 
         get "/failure", to: "sessions#failure"
+        post ":provider/backchannel-logout", to: "sessions#backchannel_logout"
       end
       delete "/sign-out", to: "sessions#destroy"
     end
