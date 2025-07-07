@@ -20,7 +20,7 @@
     <% elsif key == "success_with_body" %>
       <%= govuk_notification_banner(title_text: t("notification_banner.success"), success: true, html_attributes: { role: "alert" }) do |notification_banner| %>
         <% notification_banner.with_heading(text: value["title"]) %>
-        <p class="govuk-body" data-qa="flash__success__body"><%= value["body"] %></p>
+        <p class="govuk-body" data-qa="flash__success__body"><%= value["body"].html_safe %></p>
       <% end %>
     <% end %>
   <% end %>
