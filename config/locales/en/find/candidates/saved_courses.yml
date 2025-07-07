@@ -8,4 +8,10 @@ en:
         create:
           save_failed: Failed to save course
         destroy:
+          success_message_title: Saved course deleted
+          success_message_html: "%{provider_name} - %{course_name_and_code}. %{undo_link}"
           unsave_failed: Failed to unsave course
+          undo: Undo
+        undo_link:
+          undo: Undo
+          save_failed: Failed to undo course

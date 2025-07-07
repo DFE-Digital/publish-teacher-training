@@ -41,7 +41,9 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
     end
 
     scope path: "candidate", module: "candidates", as: "candidate" do
-      resources :saved_courses, only: %i[index create destroy], path: "saved-courses"
+      resources :saved_courses, only: %i[index create destroy], path: "saved-courses" do
+        post :undo, on: :collection
+      end
     end
   end
 
