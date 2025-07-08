@@ -3,5 +3,6 @@
   <%= govuk_back_link_to(support_root_path) %>
 <% end %>
 <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+<%= link_to "Download feedback (CSV)", support_download_feedback_data_export_path, class: "govuk-button govuk-button--secondary" %>
 <%= render "list", feedbacks: @feedbacks %>
 <%= govuk_pagination(pagy: @pagy) %>
