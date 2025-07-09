@@ -17,3 +17,13 @@
   background: none;
   border: none;
 }
+
+.app-cancel-button-container {
+  padding-left: 0;
+  margin-top: govuk-spacing(2);
+
+  @include govuk-media-query($until: desktop) {
+    padding-left: govuk-spacing(3);
+    margin-top: 0;
+  }
+}

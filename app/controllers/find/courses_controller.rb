@@ -10,20 +10,17 @@ module Find
 
     before_action :render_feedback_component, only: :show
     before_action :set_search_params, only: :show
+    before_action :set_course, only: %i[show confirm_apply]
 
     def show
-      @course = provider.courses.includes(
-        :enrichments,
-        subjects: [:financial_incentive],
-        site_statuses: [:site],
-      ).find_by!(course_code: params[:course_code]&.upcase).decorate
-
       distance_from_location if params[:location]
 
       @saved_course = @candidate&.saved_courses&.find_by(course_id: @course.id)
 
       render_not_found unless @course.is_published?
     end
+
+    def confirm_apply; end
 
     def distance_from_location
       @coordinates = Geolocation::CoordinatesQuery.new(params[:location]).call
@@ -89,6 +86,16 @@ module Find
         subjects: [],
         subject_codes: [], # Legacy
       )
+    end
+
+  private
+
+    def set_course
+      @course = provider.courses.includes(
+        :enrichments,
+        subjects: [:financial_incentive],
+        site_statuses: [:site],
+      ).find_by!(course_code: params[:course_code]&.upcase).decorate
     end
   end
 end

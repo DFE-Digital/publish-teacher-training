@@ -1,0 +1,12 @@
+en:
+  find:
+    courses:
+      confirm_apply:
+        apply_to_course: Apply for this course
+        back_link_text: Back to %{course_name_and_code}
+        continue_text: Continue to the Apply for teacher training website to apply for this course.
+        need_to_sign_in: "You’ll need to sign in to use this service. If you do not already have sign in details, you’ll be able to create them."
+        save_application: You can save your application and come back to it at any time.
+        start_application: Start your application on the Apply for teacher training website.
+        start_now: Start now
+        cancel: Cancel and return to the course page
