@@ -5,3 +5,4 @@ en:
         view:
           not_accepting_applications: This course is not accepting applications at the moment. You can contact the provider for more information.
           visa_sponsorship_deadline_notice_html: Non-UK citizens, apply by <b>%{application_deadline}</b>
+          apply_to_course: Apply for this course

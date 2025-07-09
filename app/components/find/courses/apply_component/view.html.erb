@@ -2,12 +2,21 @@
   <% if Find::CycleTimetable.mid_cycle? %>
     <% if application_status_open? %>
       <p class="govuk-body">
-        <%= govuk_start_button(
-              classes: "govuk-!-margin-0",
-              text: "Apply for this course",
-              href: preview ? apply_path : find_track_click_path(utm_content:, url: apply_path),
-            ) %>
+        <% if FeatureFlag.active?(:candidate_accounts) %>
+          <%= govuk_link_to(
+                t(".apply_to_course"),
+                find_confirm_apply_path(provider_code: course.provider_code, course_code: course.course_code),
+                class: "govuk-button govuk-!-margin-0",
+              ) %>
+        <% else %>
+          <%= govuk_start_button(
+                text: t(".apply_to_course"),
+                href: preview ? apply_path : find_track_click_path(utm_content:, url: apply_path),
+                classes: "govuk-!-margin-0",
+              ) %>
+        <% end %>
       </p>
+
       <% if show_application_deadline? %>
         <p class="govuk-body">
           <%= t(".visa_sponsorship_deadline_notice_html", application_deadline:) %>
