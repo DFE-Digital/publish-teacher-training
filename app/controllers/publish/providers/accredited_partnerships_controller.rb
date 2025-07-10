@@ -5,7 +5,15 @@ module Publish
     class AccreditedPartnershipsController < ApplicationController
       helper_method :accredited_provider_id
 
-      def index; end
+      def index
+        @provider_partnerships = @provider.accredited_partnerships
+      end
+
+      def show
+        @provider_partnership = provider.accredited_partnerships.find_by!(accredited_provider: partner)
+        @accredited_provider = @provider_partnership.accredited_provider
+        @training_provider = @provider_partnership.training_provider
+      end
 
       def delete
         @provider_partnership = provider.accredited_partnerships.find_by(accredited_provider: partner)

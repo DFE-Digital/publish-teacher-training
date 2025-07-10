@@ -284,7 +284,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
           resources :courses, only: [:index], controller: "training_partners/courses"
         end
 
-        resources :accredited_partnerships, param: :accredited_provider_code, only: %i[index destroy], path: "accredited-partnerships", controller: "accredited_partnerships" do
+        resources :accredited_partnerships, param: :accredited_provider_code, only: %i[index destroy show], path: "accredited-partnerships", controller: "accredited_partnerships" do
           member do
             get :delete
             delete :delete, to: "accredited_partnerships#destroy"
