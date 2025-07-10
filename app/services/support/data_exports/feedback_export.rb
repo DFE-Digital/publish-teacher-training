@@ -13,6 +13,17 @@ module Support
         ["ID", "Ease of use", "User experience", "Created at"]
       end
 
+      def to_csv
+        CSV.generate(headers: true) do |csv|
+          csv << headers
+          data.each { |row| csv << row.values }
+        end
+      end
+
+      def filename
+        "feedbacks-#{Time.zone.now.strftime('%Y-%m-%d')}.csv"
+      end
+
     private
 
       def feedback_data(feedback)

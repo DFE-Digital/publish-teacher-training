@@ -7,7 +7,6 @@ module Support
         def all
           [
             DataExports::UsersExport,
-            DataExports::FeedbackExport,
           ].map(&:new)
         end
 

@@ -3,7 +3,6 @@
 namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { host: URI.parse(Settings.publish_url).host } do
   root to: "recruitment_cycle#index"
 
-  get "feedback/data-exports", to: "data_exports#download_feedbacks", as: :download_feedback_data_export
   resources :feedbacks, only: %i[index show], path: "feedback", as: :feedback
 
   resources :recruitment_cycle, only: %i[index], param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "" do

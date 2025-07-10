@@ -60,6 +60,33 @@ RSpec.describe "Support console feedback view", service: :support do
     end
   end
 
+  context "when I visit the download link for feedback data" do
+    before do
+      when_i_visit_the_feedback_page
+    end
+
+    scenario "I see a link to download feedback data as CSV" do
+      expect(page).to have_link("Download feedback (CSV)", href: support_feedback_index_path(format: :csv))
+    end
+
+    scenario "clicking the download link redirects to the CSV export" do
+      click_link "Download feedback (CSV)"
+      then_i_download_the_feedback_data_as_csv
+    end
+  end
+
+  context "when I want to download feedback data as a CSV file" do
+    before do
+      when_i_download_the_feedback_data_as_csv
+    end
+
+    scenario "user can download feedback data" do
+      expect(page.response_headers["Content-Type"]).to include "text/csv"
+      expect(page.response_headers["Content-Disposition"]).to include "attachment; filename=\"feedbacks-#{Time.zone.today}.csv\""
+      expect(page.body).to include("ID,Ease of use,User experience,Created at")
+    end
+  end
+
   def given_i_am_authenticated
     sign_in_system_test(user:)
   end
@@ -130,4 +157,10 @@ RSpec.describe "Support console feedback view", service: :support do
   def then_i_am_on_the_feedback_list_page
     visit support_feedback_index_path
   end
+
+  def when_i_download_the_feedback_data_as_csv
+    visit support_feedback_index_path(format: :csv)
+  end
+
+  alias_method :then_i_download_the_feedback_data_as_csv, :when_i_download_the_feedback_data_as_csv
 end
