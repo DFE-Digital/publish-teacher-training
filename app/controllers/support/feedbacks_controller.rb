@@ -14,6 +14,7 @@ module Support
                       disposition: :attachment
           rescue StandardError => e
             Rails.logger.error("CSV export failed: #{e.message}")
+            Sentry.capture_exception(e)
             flash[:alert] = "Unable to download feedback data. Error: #{e.message}"
             redirect_to support_feedback_index_path
           end
