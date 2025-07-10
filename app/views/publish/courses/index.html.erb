@@ -1,6 +1,6 @@
 <% content_for :page_title, @provider.rolled_over? ? "Courses – #{@recruitment_cycle.title}" : "Courses" %>
 <%= content_for :before_content, render_breadcrumbs(:courses) %>
-<%= render(NotificationBanner.new(text: "You can start rolling over your courses from early September.", text_body: "In early September, your courses will be ready to be rolled over to the 2025 to 2026 recruitment cycle. We will email you when you need to sign in to check and publish, or delete, your courses.")) %>
+<%= render(NotificationBanner.new(text: t("publish.rollover_notification.text"), text_body: t("publish.rollover_notification.text_body"))) %>
 
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>
