@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class NotificationBanner < ApplicationComponent
-  attr_reader :text, :title_id
+  attr_reader :text, :title_id, :text_body
 
   SUCCESS_TITLE = "Success"
   DEFAULT_TITLE = "Important"
@@ -14,6 +14,7 @@ class NotificationBanner < ApplicationComponent
   def initialize(
     title_text: nil,
     text: nil,
+    text_body: nil,
     type: nil,
     role: nil,
     title_id: nil,
@@ -24,6 +25,7 @@ class NotificationBanner < ApplicationComponent
     super(classes:, html_attributes:)
     @title_text = title_text
     @text = text
+    @text_body = text_body
     @type = type
     @role = role
     @title_id = title_id || "#{DEFAULT_CLASS}-title"
