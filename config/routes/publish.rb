@@ -83,7 +83,8 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
       get "/about", on: :member, to: "providers#about"
       put "/about", on: :member, to: "providers#update"
       get "/details", on: :member, to: "providers#details"
-
+      resources :added_schools, only: [:index], controller: "providers/added_schools", path: "added-schools"
+      resources :removed_schools, only: [:index], controller: "providers/removed_schools", path: "removed-schools"
       resource :courses, only: %i[create] do
         resource :outcome, on: :member, only: %i[new], controller: "courses/outcome" do
           get "continue"
