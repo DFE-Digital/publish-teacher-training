@@ -10,5 +10,6 @@ FactoryBot.define do
 
   factory :find_developer_candidate, parent: :candidate do
     email_address { "candidateemail@example.com" }
+    authentications { build_list(:authentication, 1, subject_key: "sign_in_user_id") }
   end
 end
