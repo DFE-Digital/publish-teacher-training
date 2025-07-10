@@ -13,40 +13,44 @@ RSpec.describe Support::DataExports::FeedbackExport do
     end
   end
 
-  describe ".feedback_data" do
-    let(:feedback) { build(:feedback, id: 1, ease_of_use: "easy", experience: "Great", created_at: 1.day.ago) }
+  describe "#to_csv" do
+    let!(:feedback) { create(:feedback, id: 1, ease_of_use: "easy", experience: "Great", created_at: Time.zone.parse("2025-07-10")) }
 
-    it "returns a hash of feedback attributes" do
-      res = subject.send(:feedback_data, feedback)
-      expect(res).to eql(
-        {
-          "ID" => feedback.id,
-          "Ease of use" => feedback.ease_of_use,
-          "User experience" => feedback.experience,
-          "Created at" => feedback.created_at,
-        },
-      )
+    it "generates CSV with headers and data" do
+      csv = subject.to_csv
+      expect(csv).to include("ID,Ease of use,User experience,Created at")
+      expect(csv).to include("1")
+      expect(csv).to include("easy")
+      expect(csv).to include("Great")
+      expect(csv).to include("2025-07-10")
     end
   end
 
-  describe ".data" do
-    let!(:feedbackone) { create(:feedback, id: 1, ease_of_use: "easy", experience: "Great", created_at: 2.days.ago) }
-    let!(:feedbacktwo) { create(:feedback, id: 2, ease_of_use: "difficult", experience: "Poor", created_at: 1.day.ago) }
+  describe "#filename" do
+    it "returns a filename with the current date" do
+      expected_filename = "feedbacks-#{Time.zone.now.strftime('%Y-%m-%d')}.csv"
+      expect(subject.filename).to eql(expected_filename)
+    end
+  end
+
+  describe "#data" do
+    let!(:feedback_one) { create(:feedback, id: 1, ease_of_use: "easy", experience: "Great", created_at: 2.days.ago) }
+    let!(:feedback_two) { create(:feedback, id: 2, ease_of_use: "difficult", experience: "Poor", created_at: 1.day.ago) }
 
     it "returns an array of feedback data" do
-      res = subject.data
-      expect(res).to eql([
+      data = subject.data
+      expect(data).to eql([
         {
-          "ID" => feedbackone.id,
-          "Ease of use" => feedbackone.ease_of_use,
-          "User experience" => feedbackone.experience,
-          "Created at" => feedbackone.created_at,
+          "ID" => feedback_one.id,
+          "Ease of use" => feedback_one.ease_of_use,
+          "User experience" => feedback_one.experience,
+          "Created at" => feedback_one.created_at,
         },
         {
-          "ID" => feedbacktwo.id,
-          "Ease of use" => feedbacktwo.ease_of_use,
-          "User experience" => feedbacktwo.experience,
-          "Created at" => feedbacktwo.created_at,
+          "ID" => feedback_two.id,
+          "Ease of use" => feedback_two.ease_of_use,
+          "User experience" => feedback_two.experience,
+          "Created at" => feedback_two.created_at,
         },
       ])
     end
