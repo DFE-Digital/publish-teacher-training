@@ -42,23 +42,9 @@
         <%= t("publish.providers.interview_process.edit.interview_process_heading") %>
       </h1>
 
-      <%= t("publish.providers.interview_process.edit.include_information_about_html") %>
+      <%= render partial: "guidance" %>
 
-      <%= f.govuk_text_area(:interview_process,
-                            value: @copied_fields_values&.dig("interview_process") || @interview_process_form.interview_process,
-                            label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
-                            hint: -> { render partial: "publish/courses/markdown_formatting" },
-                            max_words: 250,
-                            rows: 20) %>
-      <%= f.govuk_submit t("publish.providers.interview_process.edit.submit_button") %>
-    <% end %>
-    <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
-                                                                                    @provider.recruitment_cycle.year,
-                                                                                    @course.course_code)) %>
-    </p>
-  </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+      <aside data-qa="course__related_sidebar">
     <%= render(
           partial: "publish/courses/related_sidebar",
           locals: {
@@ -71,4 +57,113 @@
           },
         ) %>
   </aside>
+
+<!--<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+      <h1 class="govuk-fieldset__heading">
+        Are online interviews available for this course? (optional)
+      </h1>
+    </legend>
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes" data-controller="input-preview">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="waste" name="waste" type="checkbox" value="true" data-action="input-preview#toggleInterviewOnline" data-input-preview-target="input" data-preview-output-target="preview">
+        <label class="govuk-label govuk-checkboxes__label" for="waste">
+          Online interviews are available for this course
+        </label>
+         <div id="nationality-item-hint" class="govuk-hint govuk-checkboxes__hint">
+          this may be based on individual circumstances
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>-->
+
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+      <h1 class="govuk-fieldset__heading">
+        Where will the interviews take place? (optional)
+      </h1>
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="contact" name="contact" type="radio" value="email" data-aria-controls="conditional-contact">
+        <label class="govuk-label govuk-radios__label" for="contact">
+          In person
+        </label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="contact-2" name="contact" type="radio" value="phone" data-aria-controls="conditional-contact-2">
+        <label class="govuk-label govuk-radios__label" for="contact-2">
+          Online
+        </label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="contact-3" name="contact" type="radio" value="text" data-aria-controls="conditional-contact-3">
+        <label class="govuk-label govuk-radios__label" for="contact-3">
+          Either in person or online
+        </label>
+        <div id="signIn-item-hint" class="govuk-hint govuk-radios__hint">
+            Depending on individual circumstances
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+      <div data-controller="input-preview">
+
+        <%= f.govuk_text_area(:interview_process2,
+            label: { text: t("publish.providers.interview_process.edit.interview_process_format"), size: "s" },
+            hint: { text: t("publish.providers.interview_process.edit.interview_process_format_hint").html_safe, size: "s" },
+            max_words: 200,
+            data: {
+              input_preview_target: "input",
+              action: "input-preview#updatePreview",
+              preview_output_target: "preview"
+              },
+            rows: 20) %>
+
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview of what candidates will see</strong></span>
+        </div>
+        <div class="app-preview-container">
+          <p class="govuk-heading-m">Interview process</p>
+
+          <div id="course_interview_online_label" class="govuk-inset-text course_interview_online_label">
+            Online interviews are available for this course<br>
+            <span class="govuk-hint">this may be based on individual circumstances</span>
+           </div>
+
+          <p class="govuk-body">
+            <div class="govuk-body">
+              <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview">The text you type above will show here.</p>
+            </div>
+          </p>
+
+        </div>
+      </div>
+      <%= f.govuk_submit t("publish.providers.interview_process.edit.submit_button") %>
+    <% end %>
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,                                                                                    @provider.recruitment_cycle.year,                                                                             @course.course_code)) %>
+    </p>
+
+  </div>
+
+    <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+      <%= render(
+            partial: "publish/courses/related_sidebar_content",
+            locals: {
+              course: @course,
+              page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+              ),
+            },
+          ) %>
+    </aside>
+
 </div>
