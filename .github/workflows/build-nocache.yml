@@ -24,7 +24,7 @@ jobs:
 
       - name: Build middleman Docker Image
         id: build-image-middleman
-        uses: DFE-Digital/github-actions/build-docker-image@master
+        uses: DFE-Digital/github-actions/build-docker-image@build-docker-image-override-tags
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           context: ""
@@ -37,7 +37,7 @@ jobs:
 
       - name: Build Docker Image
         id: build-image
-        uses: DFE-Digital/github-actions/build-docker-image@master
+        uses: DFE-Digital/github-actions/build-docker-image@build-docker-image-override-tags
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           context: ""
