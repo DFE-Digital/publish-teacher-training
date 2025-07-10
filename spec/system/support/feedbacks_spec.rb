@@ -76,6 +76,8 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   context "when I want to download feedback data as a CSV file" do
+    let!(:feedback) { create(:feedback, id: 1, ease_of_use: "easy", experience: "Great experience", created_at: "2025/07/10") }
+
     before do
       when_i_download_the_feedback_data_as_csv
     end
@@ -84,6 +86,7 @@ RSpec.describe "Support console feedback view", service: :support do
       expect(page.response_headers["Content-Type"]).to include "text/csv"
       expect(page.response_headers["Content-Disposition"]).to include "attachment; filename=\"feedbacks-#{Time.zone.today}.csv\""
       expect(page.body).to include("ID,Ease of use,User experience,Created at")
+      expect(page.body).to include("1,easy,Great experience,2025-07-10")
     end
   end
 
