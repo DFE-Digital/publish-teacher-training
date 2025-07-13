@@ -8,9 +8,10 @@ RSpec.describe Find::SaveCourseService do
     let(:course) { create(:course) }
 
     context "when the course is saved successfully" do
-      it "returns true" do
+      it "returns the saved course" do
         result = described_class.call(candidate: candidate, course: course)
-        expect(result).to be(true)
+        expect(result).to be_a(SavedCourse)
+        expect(result.course_id).to eq(course.id)
         expect(candidate.saved_courses.exists?(course_id: course.id)).to be(true)
       end
     end
@@ -21,9 +22,9 @@ RSpec.describe Find::SaveCourseService do
         allow(Sentry).to receive(:capture_exception)
       end
 
-      it "returns false and reports to Sentry" do
+      it "returns nil and reports to Sentry" do
         result = described_class.call(candidate: candidate, course: course)
-        expect(result).to be(false)
+        expect(result).to be_nil
         expect(Sentry).to have_received(:capture_exception).once
       end
     end

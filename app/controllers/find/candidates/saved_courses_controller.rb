@@ -8,18 +8,20 @@ module Find
       end
 
       def create
-        course = Course.find(params[:course_id])
+        saved_course = SaveCourseService.call(candidate: @candidate, course:)
 
-        if SaveCourseService.call(candidate: @candidate, course:)
-          redirect_to_course(course)
-        else
-          redirect_to_course(course, error: t(".save_failed"))
+        respond_to do |format|
+          if saved_course
+            format.html { redirect_to_course(course) }
+            format.json { render json: { saved_course: saved_course.id }, status: :created }
+          else
+            format.html { redirect_to_course(course, error: t(".save_failed")) }
+            format.json { render json: { error: t(".save_failed") }, status: :unprocessable_entity }
+          end
         end
       end
 
       def undo
-        course = Course.find(params[:course_id])
-
         if SaveCourseService.call(candidate: @candidate, course:)
           redirect_to find_candidate_saved_courses_path
         else
@@ -31,29 +33,45 @@ module Find
         saved_course = @candidate.saved_courses.find(params[:id])
         course = saved_course.course
 
-        if saved_course.destroy
-          undo_link = view_context.render(
-            partial: "find/candidates/saved_courses/undo_link",
-            locals: { label: t(".undo"), undo_path: undo_find_candidate_saved_courses_path, course: },
-          )
+        respond_to do |format|
+          if saved_course.destroy
+            format.json { render json: { deleted: true }, status: :ok }
 
-          flash[:success_with_body] = {
-            title: t(".success_message_title"),
-            body: t(
-              ".success_message_html",
-              provider_name: course.provider_name,
-              course_name_and_code: course.name_and_code,
-              undo_link: undo_link,
-            ),
-          }
+            format.html do
+              if params[:unsaved_course_on_show_page]
+                redirect_to_course(course)
+              else
+                undo_link = view_context.render(
+                  partial: "find/candidates/saved_courses/undo_link",
+                  locals: { label: t(".undo"), undo_path: undo_find_candidate_saved_courses_path, course: },
+                )
 
-          redirect_to find_candidate_saved_courses_path
-        else
-          redirect_to_course(course, error: t(".unsave_failed"))
+                flash[:success_with_body] = {
+                  title: t(".success_message_title"),
+                  body: t(
+                    ".success_message_html",
+                    provider_name: course.provider_name,
+                    course_name_and_code: course.name_and_code,
+                    undo_link: undo_link,
+                  ),
+                }
+
+                redirect_to find_candidate_saved_courses_path
+              end
+            end
+          else
+            format.json { render json: { error: t(".unsave_failed") }, status: :unprocessable_entity }
+
+            format.html { redirect_to_course(course, error: t(".unsave_failed")) }
+          end
         end
       end
 
     private
+
+      def course
+        @course ||= Course.find(params[:course_id])
+      end
 
       def redirect_to_course(course, error: nil)
         options = {

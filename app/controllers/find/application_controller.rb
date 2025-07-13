@@ -27,7 +27,7 @@ module Find
   private
 
     def set_candidate
-      @candidate = Current.user
+      @candidate ||= Current.user
     end
 
     def provider
