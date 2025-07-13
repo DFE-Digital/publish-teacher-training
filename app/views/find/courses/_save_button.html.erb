@@ -1,6 +1,7 @@
 <%= form_with url: find_candidate_saved_courses_path,
               method: :post do %>
-  <%= hidden_field_tag :course_id, @course.id %>
+
+  <%= hidden_field_tag :course_id, course.id %>
 
   <button type="submit" class="unstyled-button">
     <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">

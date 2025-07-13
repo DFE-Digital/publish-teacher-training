@@ -55,7 +55,7 @@ authentication:
   # mode: persona     # none critical systems, ie localhost
 
 one_login:
-  enabled: true
+  enabled: false
   # Integration client id in One Login
   identifier: <%= ENV.fetch('ONE_LOGIN_CLIENT_ID', 'client_id') %>
   # URL that the users are redirected to for signing in
