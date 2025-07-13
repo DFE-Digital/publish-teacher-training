@@ -13,10 +13,9 @@ module Find
 
     def call
       @candidate.saved_courses.find_or_create_by!(course_id: @course.id)
-      true
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved => e
       Sentry.capture_exception(e)
-      false
+      nil
     end
   end
 end

@@ -5,6 +5,27 @@
 
   background: none;
   border: none;
+
+  &:focus {
+    outline: none;
+    outline-color: $govuk-focus-colour;
+
+    background: $govuk-focus-colour;
+    border: none;
+    border-bottom: 3px solid govuk-colour("black");
+  }
+
+  &:focus .save-course-button__text {
+    color: govuk-colour("black");
+  }
+}
+
+.results-save-course-button__unstyled-button {
+  float: right;
+
+  @include govuk-media-query($until: tablet) {
+    float: left;
+  }
 }
 
 .save-course-button {
@@ -24,7 +45,7 @@
     color: $govuk-link-colour;
 
     &:hover {
-      color: govuk-colour("dark-grey");
+      color: $govuk-link-hover-colour;
     }
   }
 }

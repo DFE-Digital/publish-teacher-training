@@ -3,3 +3,5 @@ en:
     courses:
       save_button:
         save_this_course: Save this course for later
+        results_save_this_course: Save
+

@@ -4,27 +4,49 @@ module Courses
   class SummaryCardComponent < ViewComponent::Base
     attr_reader :course, :location, :visa_sponsorship
 
-    def initialize(course:, location: nil, visa_sponsorship: nil)
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil)
       @course = course
+      @candidate = candidate
       @location = location
       @visa_sponsorship = visa_sponsorship
       super
     end
 
     def title
-      govuk_link_to(find_course_path(
-                      provider_code: course.provider_code,
-                      course_code: course.course_code,
-                      location: @location,
-                      distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
-                    ), class: "govuk-link govuk-!-font-size-24") do
-        safe_join(
-          [
-            content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
-            content_tag(:span, course.name_and_code, class: "app-search-result__course-name"),
-          ],
-        )
+      course_link = govuk_link_to(find_course_path(
+                                    provider_code: course.provider_code,
+                                    course_code: course.course_code,
+                                    location: @location,
+                                    distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
+                                  ), class: "govuk-link govuk-!-font-size-24") do
+        safe_join([
+          content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
+          content_tag(:span, course.name_and_code, class: "app-search-result__course-name"),
+        ])
       end
+
+      classes = [
+        ("govuk-grid-column-three-quarters" if save_toggle_button),
+        ("govuk-!-padding-left-2" unless save_toggle_button),
+      ].compact.join(" ")
+
+      content_tag(:div, class: "govuk-grid-row") do
+        safe_join([
+          content_tag(:div, course_link, class: classes),
+          content_tag(:div, save_toggle_button || "", class: "govuk-grid-column-one-quarter govuk-!-padding-top-2 govuk-!-padding-right-0"),
+        ])
+      end
+    end
+
+    def save_toggle_button
+      return unless candidate_accounts_enabled?
+
+      saved_course = @candidate&.saved_courses&.find_by(course_id: course.id)
+      render("find/saved_courses/save_toggle", course: course, saved_course: saved_course)
+    end
+
+    def candidate_accounts_enabled?
+      @candidate_accounts_enabled ||= FeatureFlag.active?(:candidate_accounts)
     end
 
     def location_value

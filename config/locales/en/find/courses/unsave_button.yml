@@ -3,3 +3,4 @@ en:
     courses:
       unsave_button:
         course_saved: Course saved
+        results_unsave_this_course: Save
