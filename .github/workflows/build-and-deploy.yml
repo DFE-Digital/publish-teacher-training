@@ -261,7 +261,7 @@ jobs:
 
       - name: Build middleman Docker Image
         id: build-image-middleman
-        uses: DFE-Digital/github-actions/build-docker-image@master
+        uses: DFE-Digital/github-actions/build-docker-image@pass-build-args
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           context: ""
@@ -274,7 +274,9 @@ jobs:
 
       - name: Build Docker Image
         id: build-image
-        uses: DFE-Digital/github-actions/build-docker-image@master
+        uses: DFE-Digital/github-actions/build-docker-image@pass-build-args
+        env:
+          SOME_KEY: "testing"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           context: ""
@@ -284,6 +286,7 @@ jobs:
           extra-cache-repo: ${{ env.MIDDLEMAN_IMAGE }}
           snyk-token: ${{ secrets.SNYK_TOKEN }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          build-arg: "--secret id=your_key,env=SOME_KEY"
 
   deploy-review-app:
     name: Deployment To Review
