@@ -46,6 +46,16 @@ GIT
       jsonapi-rb (~> 0.5.0)
 
 GIT
+  remote: https://github.com/DFE-Digital/omniauth-govuk-one-login.git
+  revision: a875d09fb4dd6c9b6ba6155c496e9aa44dad72e6
+  tag: v1.3.0
+  specs:
+    omniauth_govuk_one_login (1.3.0)
+      faraday (~> 2.13)
+      jwt (~> 2.10)
+      omniauth (~> 2.1)
+
+GIT
   remote: https://github.com/DFE-Digital/open-api-rswag.git
   revision: b39fb1bdc9fef1c3beca52b0d0c61072c2597bae
   tag: v0.2.0
@@ -60,16 +70,6 @@ GIT
     open_api-rswag-ui (0.2.0)
       actionpack
       railties
-
-GIT
-  remote: https://github.com/pauldougan/omniauth-govuk-one-login.git
-  revision: aee3e10c5d4c6dbe855059198283ced16acec91f
-  ref: aee3e10c5d4c6dbe855059198283ced16acec91f
-  specs:
-    omniauth_govuk_one_login (1.3.0)
-      faraday (~> 2.13)
-      jwt (~> 2.10)
-      omniauth (~> 2.1)
 
 GEM
   remote: https://rubygems.org/
