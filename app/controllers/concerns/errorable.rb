@@ -28,9 +28,14 @@ module Errorable
     end
   end
 
-  def internal_server_error(error)
-    Sentry.capture_exception(error)
-    raise error if Rails.env.development? || Rails.env.test?
+  # This method is called when /500.xxx is requested
+  # an in that case, no error is passed to the
+  # method
+  def internal_server_error(error = nil)
+    if error
+      Sentry.capture_exception(error)
+      raise error if Rails.env.development? || Rails.env.test?
+    end
 
     respond_to do |format|
       format.any { render status: :internal_server_error, formats: [:html], template: "errors/internal_server_error" }
