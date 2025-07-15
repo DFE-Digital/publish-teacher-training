@@ -1,6 +1,5 @@
 <% content_for :page_title, title_with_error_prefix("About your organisation", @errors.present?) %>
 <%= content_for :before_content, render_breadcrumbs(:organisation_details) %>
-
 <% if @errors.present? %>
   <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error">
     <h2 class="govuk-error-summary__title" id="error-summary-title">
@@ -22,11 +21,9 @@
     </div>
   </div>
 <% end %>
-
 <h1 class="govuk-heading-l">
   <%= t(".page_title") %>
 </h1>
-
 <h2 class="govuk-heading-m">
   <%= t(".about") %>
 </h2>
@@ -52,7 +49,6 @@
         action_visually_hidden_text: "details about training with disabilities and other needs",
       ) %>
     <% end %>
-
     <% unless @provider.provider_type == 'lead_school' %>
       <h2 class="govuk-heading-m"><%= t(".visa_sponsorship") %></h2>
       <%= govuk_summary_list do |summary_list| %>
@@ -65,7 +61,6 @@
              action_path: @provider.university? ? student_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) : nil,
              action_visually_hidden_text: "if candidates can get Student visa sponsorship",
            ) %>
-
         <% enrichment_summary(
              summary_list,
              :provider,
@@ -77,8 +72,18 @@
            ) %>
       <% end %>
     <% end %>
-
     <h2 class="govuk-heading-m"><%= t(".school_placements") %></h2>
+    <%= govuk_summary_list do |summary_list| %>
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        t(".show_school_label"),
+        @provider.show_school ? "Yes" : "No",
+        %w[show_school],
+        action_path: school_placements_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+        action_visually_hidden_text: "show school placement display",
+      ) %>
+    <% end %>
     <%= govuk_summary_list do |summary_list| %>
       <% enrichment_summary(
         summary_list,
@@ -87,7 +92,7 @@
         @provider.selectable_school ? "Yes" : "No",
         %w[selectable_school],
         action_path: school_placements_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
-        action_visually_hidden_text: "school placement display",
+        action_visually_hidden_text: "select a preferred school display",
       ) %>
     <% end %>
     <h2 class="govuk-heading-m"><%= t(".contact_details") %></h2>
@@ -101,7 +106,6 @@
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#email",
         action_visually_hidden_text: "email address",
       ) %>
-
       <% enrichment_summary(
         summary_list,
         :provider,
@@ -111,7 +115,6 @@
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#telephone",
         action_visually_hidden_text: "telephone number",
       ) %>
-
       <% enrichment_summary(
         summary_list,
         :provider,
@@ -121,7 +124,6 @@
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#website",
         action_visually_hidden_text: "website",
       ) %>
-
       <% enrichment_summary(
         summary_list,
         :provider,
@@ -131,7 +133,6 @@
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#ukprn",
         action_visually_hidden_text: "UKPRN",
       ) %>
-
       <% if @provider.provider_type == "lead_school" %>
         <% enrichment_summary(
           summary_list,
@@ -143,7 +144,6 @@
           action_visually_hidden_text: "URN",
         ) %>
       <% end %>
-
       <% enrichment_summary(
         summary_list,
         :provider,

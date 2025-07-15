@@ -163,6 +163,7 @@ shared:
   provider:
     - accredited
     - selectable_school
+    - show_school
     - id
     - address4
     - provider_name

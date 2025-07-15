@@ -368,6 +368,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_21_145533) do
     t.text "address3"
     t.boolean "selectable_school", default: false, null: false
     t.boolean "accredited", default: false, null: false
+    t.boolean "show_school", default: false, null: false
     t.index ["accredited"], name: "index_provider_on_accredited"
     t.index ["can_sponsor_student_visa"], name: "index_provider_on_can_sponsor_student_visa"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true

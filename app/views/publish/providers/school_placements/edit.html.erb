@@ -1,10 +1,8 @@
-<% page_title = "School placements" %>
+<% page_title = t(".page_title") %>
 <% content_for :page_title, title_with_error_prefix(page_title, @provider.errors.present?) %>
-
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
 <% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -13,23 +11,34 @@
       method: :put,
       local: true,
     ) do |f| %>
-
       <%= f.govuk_error_summary %>
-
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @provider.provider_name %></span>
         <%= page_title %>
       </h1>
-
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          Changes to these preferences will not change courses you have already added.
+        </strong>
+      </div>
+      <p class="govuk-body">To change preferences of an existing course, go to the 'Basic details' tab of the course.</p>
+      <%= f.govuk_radio_buttons_fieldset(
+            :show_school,
+            legend: { text: t(".show_school_label") },
+            hint: { text: t(".show_school_hint") },
+          ) do %>
+        <%= f.govuk_radio_button :show_school, true, label: { text: "Yes"}, id: "provider-show-school-true-field", link_errors: true %>
+        <%= f.govuk_radio_button :show_school, false, label: { text: "No" }, id: "provider-show-school-false-field" %>
+      <% end %>
       <%= f.govuk_radio_buttons_fieldset(
             :selectable_school,
             legend: { text: t(".selectable_school_label") },
             hint: { text: t(".selectable_school_hint") },
           ) do %>
-        <%= f.govuk_radio_button :selectable_school, true, label: { text: "Yes" }, link_errors: true %>
-        <%= f.govuk_radio_button :selectable_school, false, label: { text: "No" } %>
+        <%= f.govuk_radio_button :selectable_school, true, label: { text: "Yes" }, id: "provider-selectable-school-true-field", link_errors: true %>
+        <%= f.govuk_radio_button :selectable_school, false, label: { text: "No" }, id: "provider-selectable-school-false-field" %>
       <% end %>
-
       <%= f.govuk_submit "Update school placement preferences" %>
     <% end %>
   </div>
