@@ -17,7 +17,7 @@ module Authentications
           redirect_uri:,
           private_key:,
         }
-      elsif Rails.env.local?
+      elsif !Rails.env.production?
         {
           name: "find-developer",
           fields: %i[uid email],
@@ -41,7 +41,7 @@ module Authentications
     def set_provider
       if Settings.one_login.enabled
         :govuk_one_login
-      elsif Rails.env.local?
+      elsif !Rails.env.production?
         :find_developer
       end
     end
