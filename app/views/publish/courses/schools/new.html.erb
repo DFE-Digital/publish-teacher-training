@@ -1,11 +1,8 @@
-<% content_for :page_title, title_with_error_prefix("Schools", @errors && @errors.any?) %>
-
+<% content_for :page_title, title_with_error_prefix(course.salaried? ? "Employing schools" : "Placement schools", @errors && @errors.any?) %>
 <% content_for :before_content do %>
   <%= govuk_back_link_to(@back_link_path) %>
 <% end %>
-
 <%= render "publish/shared/errors" %>
-
 <%= form_for course,
   url: continue_publish_provider_recruitment_cycle_courses_schools_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
   method: :get do |form| %>
@@ -15,14 +12,25 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading" data-qa="page-heading">
             <%= render CaptionText.new(text: t("course.add_course")) %>
-            Schools
+            <%= course.salaried? ? "Employing schools" : "Placement schools" %>
           </h1>
         </legend>
+        <p class="govuk-body">
+          The more schools you select, the more searches your course will appear in.
+        </p>
+        <p class="govuk-body">
+          80% of searches are by location.
+        </p>
+        <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            If you do not add all your 
+            <%= course.salaried? ? "employing schools" : "placement schools" %>, you may miss out on potential candidates.
+          </strong>
+        </div>
         <%= render "publish/shared/error_messages", error_keys: [:sites] %>
-
         <div class="govuk-form-group govuk-!-margin-top-2">
           <div class="govuk-hint">Select all that apply</div>
-
           <%= form.govuk_check_boxes_fieldset :sites_ids, legend: nil do %>
             <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
               <%= form.govuk_check_box :sites_ids,
@@ -32,13 +40,11 @@
                     link_errors: index.zero? %>
             <% end %>
           <% end %>
-
         </div>
       </fieldset>
     <% end %>
   <% end %>
 <% end %>
-
 <p class="govuk-body">
   <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
 </p>
