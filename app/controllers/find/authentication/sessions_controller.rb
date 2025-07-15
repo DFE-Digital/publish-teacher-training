@@ -39,7 +39,7 @@ module Find
 
         return head :bad_request if uid.blank?
 
-        authentication = ::Authentication.find_by!(subject_key: uid, provider: provider_map(params[:provider]))
+        authentication = ::Authentication.find_by!(subject_key: uid, provider: ::Authentication.provider_map(params[:provider]))
 
         authentication.authenticable.sessions.destroy_all
         head :ok
