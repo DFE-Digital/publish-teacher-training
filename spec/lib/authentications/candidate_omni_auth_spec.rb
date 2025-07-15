@@ -64,10 +64,10 @@ module Authentications
     end
 
     describe "#config" do
-      context "when Setting.one_login.enabled is false and env is not local" do
+      context "when Setting.one_login.enabled is false and env is production" do
         before do
           allow(Settings.one_login).to receive(:enabled).and_return(false)
-          allow(Rails.env).to receive(:local?).and_return(false)
+          allow(Rails.env).to receive(:production?).and_return(true)
         end
 
         it "does not yield" do
@@ -75,9 +75,10 @@ module Authentications
         end
       end
 
-      context "when Setting.one_login.enabled is false and env is local" do
+      context "when Setting.one_login.enabled is false and env is not production" do
         before do
           allow(Settings.one_login).to receive(:enabled).and_return(false)
+          allow(Rails.env).to receive(:production?).and_return(false)
         end
 
         it "does yield" do
