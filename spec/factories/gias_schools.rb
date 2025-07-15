@@ -9,6 +9,10 @@ FactoryBot.define do
     postcode { Faker::Address.postcode }
     status_code { GiasSchool::ESTABLISHMENT_OPEN_STATUS_CODE }
 
+    trait :open do
+      status_code { GiasSchool::ESTABLISHMENT_OPEN_STATUS_CODE }
+    end
+
     trait :closed do
       status_code { nil }
     end
