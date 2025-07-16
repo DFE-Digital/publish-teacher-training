@@ -33,16 +33,12 @@ module Find
       end
 
       def backchannel_logout
-        return head :bad_request if params[:logout_token].blank?
+        response_status = BackchannelLogout.new(
+          params[:logout_token],
+          params[:provider],
+        ).call
 
-        uid = backchannel_logout_utility.get_sub(logout_token: params[:logout_token])
-
-        return head :bad_request if uid.blank?
-
-        authentication = ::Authentication.find_by!(subject_key: uid, provider: ::Authentication.provider_map(params[:provider]))
-
-        authentication.authenticable.sessions.destroy_all
-        head :ok
+        head response_status
       end
 
       def backchannel_logout_utility

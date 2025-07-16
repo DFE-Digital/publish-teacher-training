@@ -26,6 +26,7 @@ describe "/auth/one-login/backchannel-logout", service: :find do
         allow(@utility).to receive(:get_sub).with(logout_token: anything).and_return("")
         post "/auth/find-developer/backchannel-logout", params: { logout_token: "TOKEN" }
 
+        expect(@utility).to have_received(:get_sub)
         expect(response).to have_http_status(:bad_request)
       end
 
@@ -33,6 +34,7 @@ describe "/auth/one-login/backchannel-logout", service: :find do
         allow(@utility).to receive(:get_sub).with(logout_token: anything).and_return(subject_key)
         post "/auth/find-developer/backchannel-logout", params: { logout_token: "TOKEN" }
 
+        expect(@utility).to have_received(:get_sub)
         expect(response).to have_http_status(:not_found)
       end
 
@@ -43,6 +45,7 @@ describe "/auth/one-login/backchannel-logout", service: :find do
 
         post "/auth/other-provider/backchannel-logout", params: { logout_token: "TOKEN" }
 
+        expect(@utility).to have_received(:get_sub)
         expect(response).to have_http_status(:not_found)
       end
 
@@ -53,6 +56,7 @@ describe "/auth/one-login/backchannel-logout", service: :find do
 
         post "/auth/find-developer/backchannel-logout", params: { logout_token: "TOKEN" }
 
+        expect(@utility).to have_received(:get_sub)
         expect(auth.authenticable.sessions).to be_blank
         expect(response).to have_http_status(:successful)
       end
