@@ -6,9 +6,7 @@
   <% end %>
   <% table.with_body do |body| %>
     <% partnerships.each do |partnership| %>
-      <% accredited_provider = partnership.accredited_provider %>
-      <% training_provider = partnership.training_provider %>
-      <%= render partial: "publish/providers/accredited_partnerships/accredited_provider_table_row", locals: { accredited_provider:, training_provider:, body: } %>
+      <%= render partial: "publish/providers/accredited_partnerships/accredited_provider_table_row", locals: { accredited_provider: partnership.accredited_provider, training_provider: partnership.training_provider, body: } %>
     <% end %>
   <% end %>
 <% end %>

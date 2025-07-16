@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Publish::Providers::AccreditedProviderDetails::View, type: :component do
+RSpec.describe Publish::Providers::AccreditedProviderDetails, type: :component do
   let(:provider) { build_stubbed(:provider, provider_code: "ABC", ukprn: "12345678", provider_type: "university", accredited: true) }
 
   it "renders the provider details summary list" do

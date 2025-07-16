@@ -9,7 +9,6 @@ en:
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: Add accredited provider
         show:
-          back_link_text: All accredited providers
           remove: Remove accredited provider
         delete:
           title: Are you sure you want to remove this accredited provider?
