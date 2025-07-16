@@ -58,6 +58,20 @@
   - personal_qualities
   - required_qualifications
   - salary_details
+  - describe_school
+  - candidate_training_rationale
+  - placement_selection_criteria
+  - duration_per_school
+  - theoretical_training_location
+  - theoretical_training_duration
+  - placement_school_activities
+  - support_and_mentorship
+  - theoretical_training_activities
+  - assessment_methods
+  - interview_location
+  - fee_schedule
+  - additional_fees
+  - fee_support
   :contact:
   - name
   - email
