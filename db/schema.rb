@@ -205,6 +205,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_22_110352) do
     t.integer "updated_by_user_id"
     t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "course_id", null: false
+    t.integer "version", default: 1, null: false
     t.index ["course_id"], name: "index_course_enrichment_on_course_id"
     t.index ["created_by_user_id"], name: "IX_course_enrichment_created_by_user_id"
     t.index ["updated_by_user_id"], name: "IX_course_enrichment_updated_by_user_id"
