@@ -313,14 +313,14 @@ private
   end
 
   def and_i_see_the_back_link_to_accredited_providers_page
-    expect(page).to have_link("All accredited providers", href: publish_provider_recruitment_cycle_accredited_partnerships_path(
+    expect(page).to have_link("Back", href: publish_provider_recruitment_cycle_accredited_partnerships_path(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year,
     ))
   end
 
   def then_i_click_the_back_link_to_accredited_providers_page
-    click_link "All accredited providers"
+    click_link "Back"
   end
 
   def and_i_visit_the_root_path
