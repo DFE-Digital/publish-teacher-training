@@ -145,12 +145,6 @@ shared:
     - longitude
     - created_at
     - updated_at
-  import:
-    - id
-    - short_summary
-    - import_type
-    - created_at
-    - updated_at
   provider_partnership:
     - id
     - accredited_provider_id

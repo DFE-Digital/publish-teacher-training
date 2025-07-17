@@ -121,4 +121,9 @@
   - id_token
   - data
   :import:
+  - id
+  - short_summary
+  - import_type
+  - created_at
+  - updated_at
   - full_summary
