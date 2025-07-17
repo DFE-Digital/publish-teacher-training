@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_20_135618) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_17_005722) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -296,6 +296,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_20_135618) do
     t.index ["searchable"], name: "index_gias_school_on_searchable", using: :gin
     t.index ["status_code"], name: "index_gias_school_on_status_code", where: "(status_code = '1'::text)"
     t.index ["urn"], name: "index_gias_school_on_urn", unique: true
+  end
+
+  create_table "import", force: :cascade do |t|
+    t.jsonb "short_summary"
+    t.jsonb "full_summary"
+    t.integer "import_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["import_type"], name: "index_import_on_import_type"
   end
 
   create_table "organisation", id: :serial, force: :cascade do |t|
