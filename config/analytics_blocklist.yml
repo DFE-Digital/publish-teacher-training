@@ -120,3 +120,5 @@
   :session:
   - id_token
   - data
+  :import:
+  - full_summary
