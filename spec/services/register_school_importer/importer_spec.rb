@@ -17,6 +17,7 @@ RSpec.describe RegisterSchoolImporter::Importer do
     create(:gias_school, :open, urn: "972674")
     create(:gias_school, :open, urn: "511462")
     create(:gias_school, :open, urn: "108852")
+    create(:gias_school, :open, urn: "298561", town: "")
 
     # 115046 and 601996 missing (simulate "Not found in GIAS")
     # 50494 and 230153 missing (simulate "Not found in GIAS")
@@ -88,6 +89,23 @@ RSpec.describe RegisterSchoolImporter::Importer do
       expect(group_d39.provider_not_found).to eq([{ row: 6 }])
       expect(group_d39.schools_added).to be_empty
       expect(group_d39.ignored_schools).to be_empty
+    end
+  end
+
+  context "when a site fails to save for a specific urn" do
+    it "records the school error but continues processing other schools" do
+      summary = subject.call
+      provider_group = summary.groups.find { |g| g.provider_code == "1A3" }
+
+      expect(provider_group.school_errors).to include(
+        a_hash_including(
+          urn: "298561",
+          row: 6,
+          error: a_string_matching(/Validation failed: Town or city Enter a town or city/),
+        ),
+      )
+      expect(provider_group.school_errors_urns).to include("298561")
+      expect(provider_group.school_errors_count).to eq(1)
     end
   end
 end

@@ -56,10 +56,25 @@ RSpec.describe RegisterSchoolImporter::SchoolCreator do
         expect(@result.ignored_urns).to eq([{ urn: "12345", row: row_number, reason: "Already exists for provider" }])
       end
     end
+
+    context "when site save raises an error" do
+      let!(:gias_school) { create(:gias_school, :open, urn: "12345", name: "Test School", town: "") }
+      let(:urns) { %w[12345] }
+
+      it "adds to school_errors and continues processing" do
+        result = creator.call
+        expect(result.schools_added).to be_empty
+        expect(result.ignored_urns).to be_empty
+        expect(result.school_errors.first[:urn]).to eq("12345")
+        expect(result.school_errors.first[:row]).to eq(row_number)
+        expect(result.school_errors.first[:error]).to be_present
+      end
+    end
   end
 
   describe "#create!" do
     let(:urns) { %w[12345] }
+    let(:urn) { urns.first }
     let!(:gias_school) { create(:gias_school, :open, urn: "12345", name: "Test School") }
 
     it "assigns attributes and saves the site" do

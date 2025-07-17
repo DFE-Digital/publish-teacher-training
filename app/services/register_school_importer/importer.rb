@@ -30,6 +30,7 @@ module RegisterSchoolImporter
 
       @summary.mark_ignored_schools(provider_code, result.ignored_urns) if result.ignored_urns.any?
       @summary.mark_schools_added(provider_code, result.schools_added) if result.schools_added.any?
+      @summary.mark_school_errors(provider_code, result.school_errors) if result.school_errors.any?
     end
 
     def resolve_provider(parser)
