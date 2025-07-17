@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe RegisterSchoolImporter::SchoolCreator do
-  subject { described_class.new(provider:, urns:, row_number:) }
+  subject(:creator) { described_class.new(provider:, urns:, row_number:) }
 
   let(:provider) { create(:provider) }
   let(:row_number) { 10 }
@@ -13,7 +13,7 @@ RSpec.describe RegisterSchoolImporter::SchoolCreator do
 
       it "creates a new site and returns it in schools_added" do
         expect {
-          @result = subject.call
+          @result = creator.call
         }.to change { provider.sites.count }.by(1)
 
         expect(@result.schools_added).to eq([{ urn: "12345", row: row_number }])
@@ -31,7 +31,7 @@ RSpec.describe RegisterSchoolImporter::SchoolCreator do
 
       it "does not create a site and returns ignored_urns with reason" do
         expect {
-          @result = subject.call
+          @result = creator.call
         }.not_to(change { provider.sites.count })
 
         expect(@result.schools_added).to be_empty
@@ -49,7 +49,7 @@ RSpec.describe RegisterSchoolImporter::SchoolCreator do
 
       it "does not create a new site and returns ignored_urns with reason" do
         expect {
-          @result = subject.call
+          @result = creator.call
         }.not_to(change { provider.sites.count })
 
         expect(@result.schools_added).to be_empty
@@ -83,7 +83,51 @@ RSpec.describe RegisterSchoolImporter::SchoolCreator do
       expect(site).to receive(:site_type=).with(Site.site_types[:school])
       expect(site).to receive(:save!).and_call_original
 
-      subject.create!(site, gias_school)
+      creator.create!(site, gias_school)
+    end
+
+    context "when GIAS school has latitude and longitude" do
+      let!(:gias_school) { create(:gias_school, :open, urn:, latitude: 52.6, longitude: -1.2) }
+
+      it "copies lat/lng and does NOT enqueue geocoding" do
+        expect {
+          creator.call
+        }.not_to have_enqueued_job(GeocodeJob).with("Site", kind_of(Integer))
+
+        site = provider.reload.sites.find_by(urn:)
+        expect(site.latitude).to eq(52.6)
+        expect(site.longitude).to eq(-1.2)
+      end
+    end
+
+    context "when GIAS school lacks latitude and longitude" do
+      let!(:gias_school) { create(:gias_school, :open, urn: urns.first, latitude: nil, longitude: nil) }
+
+      it "does NOT copy lat/lng and DOES enqueue geocoding" do
+        expect {
+          creator.call
+        }.to have_enqueued_job(GeocodeJob).with("Site", kind_of(Integer))
+
+        site = provider.reload.sites.find_by(urn:)
+        expect(site.latitude).to be_nil
+        expect(site.longitude).to be_nil
+        expect(site.skip_geocoding).not_to be(true)
+      end
+    end
+
+    context "when only one coordinate is present" do
+      let!(:gias_school) { create(:gias_school, :open, urn:, latitude: 51.5, longitude: nil) }
+
+      it "does NOT copy lat/lng and DOES enqueue geocoding" do
+        expect {
+          creator.call
+        }.to have_enqueued_job(GeocodeJob).with("Site", kind_of(Integer))
+
+        site = provider.reload.sites.find_by(urn:)
+        expect(site.latitude).to be_nil
+        expect(site.longitude).to be_nil
+        expect(site.skip_geocoding).not_to be(true)
+      end
     end
   end
 end
