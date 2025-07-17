@@ -2,7 +2,13 @@ module RegisterSchoolImporter
   class ImportSummary
     class Group
       include ActiveModel::Model
-      attr_accessor :provider_code, :provider_not_found, :ignored_schools, :schools_added
+      attr_accessor :provider_code,
+                    :provider_not_found,
+                    :ignored_schools,
+                    :schools_added,
+                    :school_errors,
+                    :school_errors_urns,
+                    :school_errors_count
     end
 
     IGNORE_REASONS = {
@@ -17,6 +23,9 @@ module RegisterSchoolImporter
           provider_not_found: [],
           ignored_schools: [],
           schools_added: [],
+          school_errors: [],
+          school_errors_urns: [],
+          school_errors_count: 0,
         )
       end
     end
@@ -33,6 +42,14 @@ module RegisterSchoolImporter
       @groups[provider_code].schools_added.concat(urns)
     end
 
+    def mark_school_errors(provider_code, school_errors)
+      school_errors.each do |school_error|
+        @groups[provider_code].school_errors << school_error
+        @groups[provider_code].school_errors_urns << school_error[:urn]
+        @groups[provider_code].school_errors_count += 1
+      end
+    end
+
     def groups
       @groups.values
     end
@@ -42,6 +59,8 @@ module RegisterSchoolImporter
       providers_not_found_codes = Set.new
       schools_not_found_in_gias_urns = []
       schools_already_exists_count = 0
+      school_errors_count = 0
+      school_errors_urns = []
 
       groups.each do |group|
         schools_added_count += group.schools_added.size
@@ -55,6 +74,9 @@ module RegisterSchoolImporter
             schools_already_exists_count += 1
           end
         end
+
+        school_errors_count += group.school_errors_count
+        school_errors_urns.concat(group.school_errors_urns)
       end
 
       {
@@ -64,6 +86,8 @@ module RegisterSchoolImporter
         schools_not_found_in_gias_count: schools_not_found_in_gias_urns.size,
         schools_not_found_in_gias_urns: schools_not_found_in_gias_urns,
         schools_already_exists_count: schools_already_exists_count,
+        school_errors_count: school_errors_count,
+        school_errors_urns: school_errors_urns,
       }
     end
 

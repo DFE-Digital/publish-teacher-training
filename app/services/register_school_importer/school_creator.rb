@@ -1,6 +1,6 @@
 module RegisterSchoolImporter
   class SchoolCreator
-    Result = Struct.new(:schools_added, :ignored_urns)
+    Result = Struct.new(:schools_added, :ignored_urns, :school_errors, keyword_init: true)
 
     def initialize(provider:, urns:, row_number:)
       @provider = provider
@@ -11,6 +11,7 @@ module RegisterSchoolImporter
     def call
       schools_added = []
       ignored_urns = []
+      school_errors = []
 
       @urns.each do |urn|
         gias_school = find_gias_school(urn)
@@ -25,11 +26,15 @@ module RegisterSchoolImporter
           next
         end
 
-        create!(site, gias_school)
-        schools_added << { urn:, row: @row_number }
+        begin
+          create!(site, gias_school)
+          schools_added << { urn:, row: @row_number }
+        rescue StandardError => e
+          school_errors << { urn:, row: @row_number, error: e.message }
+        end
       end
 
-      Result.new(schools_added, ignored_urns)
+      Result.new(schools_added:, ignored_urns:, school_errors:)
     end
 
     def create!(site, gias_school)
