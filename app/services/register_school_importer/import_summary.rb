@@ -1,6 +1,6 @@
 module RegisterSchoolImporter
   class ImportSummary
-    class Group
+    class ProviderSummary
       include ActiveModel::Model
       attr_accessor :provider_code,
                     :provider_not_found,
@@ -17,8 +17,8 @@ module RegisterSchoolImporter
     }.freeze
 
     def initialize
-      @groups = Hash.new do |groups, provider_code|
-        groups[provider_code] = Group.new(
+      @provider_summaries = Hash.new do |provider_summaries, provider_code|
+        provider_summaries[provider_code] = ProviderSummary.new(
           provider_code:,
           provider_not_found: [],
           ignored_schools: [],
@@ -31,27 +31,27 @@ module RegisterSchoolImporter
     end
 
     def mark_provider_not_found(provider_code, row)
-      @groups[provider_code].provider_not_found << { row: }
+      @provider_summaries[provider_code].provider_not_found << { row: }
     end
 
     def mark_ignored_schools(provider_code, urns_with_reasons)
-      @groups[provider_code].ignored_schools.concat(urns_with_reasons)
+      @provider_summaries[provider_code].ignored_schools.concat(urns_with_reasons)
     end
 
     def mark_schools_added(provider_code, urns)
-      @groups[provider_code].schools_added.concat(urns)
+      @provider_summaries[provider_code].schools_added.concat(urns)
     end
 
     def mark_school_errors(provider_code, school_errors)
       school_errors.each do |school_error|
-        @groups[provider_code].school_errors << school_error
-        @groups[provider_code].school_errors_urns << school_error[:urn]
-        @groups[provider_code].school_errors_count += 1
+        @provider_summaries[provider_code].school_errors << school_error
+        @provider_summaries[provider_code].school_errors_urns << school_error[:urn]
+        @provider_summaries[provider_code].school_errors_count += 1
       end
     end
 
-    def groups
-      @groups.values
+    def provider_summaries
+      @provider_summaries.values
     end
 
     def meta
@@ -62,7 +62,7 @@ module RegisterSchoolImporter
       school_errors_count = 0
       school_errors_urns = []
 
-      groups.each do |group|
+      provider_summaries.each do |group|
         schools_added_count += group.schools_added.size
 
         providers_not_found_codes << group.provider_code if group.provider_not_found.any?
@@ -94,7 +94,7 @@ module RegisterSchoolImporter
     def full_summary
       {
         meta:,
-        groups: @groups,
+        provider_summaries: @provider_summaries,
       }
     end
   end

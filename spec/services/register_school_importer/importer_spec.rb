@@ -30,7 +30,7 @@ RSpec.describe RegisterSchoolImporter::Importer do
   context "when all schools are created for a provider" do
     it "records all schools as created and none as ignored" do
       summary = subject.call
-      group_133 = summary.groups.find { |g| g.provider_code == "133" }
+      group_133 = summary.provider_summaries.find { |g| g.provider_code == "133" }
 
       expect(group_133.provider_not_found).to be_empty
       expect(group_133.ignored_schools).to be_empty
@@ -47,7 +47,7 @@ RSpec.describe RegisterSchoolImporter::Importer do
 
     it "records ignored schools with correct reasons and created schools" do
       summary = subject.call
-      group_12k = summary.groups.find { |g| g.provider_code == "12K" }
+      group_12k = summary.provider_summaries.find { |g| g.provider_code == "12K" }
 
       expect(group_12k.provider_not_found).to be_empty
       expect(group_12k.schools_added).to contain_exactly({ urn: "441668", row: 4 }, { urn: "985750", row: 4 }, { urn: "998363", row: 4 })
@@ -58,7 +58,7 @@ RSpec.describe RegisterSchoolImporter::Importer do
   context "when some schools are ignored for not being in GIAS" do
     it "records ignored schools with correct reasons and created schools" do
       summary = subject.call
-      group_13s = summary.groups.find { |g| g.provider_code == "13S" }
+      group_13s = summary.provider_summaries.find { |g| g.provider_code == "13S" }
 
       expect(group_13s.provider_not_found).to be_empty
       expect(group_13s.schools_added).to eq([{ urn: "129676", row: 5 }])
@@ -69,7 +69,7 @@ RSpec.describe RegisterSchoolImporter::Importer do
   context "when all schools are ignored for not being in GIAS" do
     it "records all schools as ignored with correct reason" do
       summary = subject.call
-      group_1a3 = summary.groups.find { |g| g.provider_code == "1A3" }
+      group_1a3 = summary.provider_summaries.find { |g| g.provider_code == "1A3" }
 
       expect(group_1a3.provider_not_found).to be_empty
       expect(group_1a3.schools_added).to be_empty
@@ -84,7 +84,7 @@ RSpec.describe RegisterSchoolImporter::Importer do
 
     it "records provider not found and no schools processed" do
       summary = subject.call
-      group_d39 = summary.groups.find { |g| g.provider_code == "1A3" }
+      group_d39 = summary.provider_summaries.find { |g| g.provider_code == "1A3" }
 
       expect(group_d39.provider_not_found).to eq([{ row: 6 }])
       expect(group_d39.schools_added).to be_empty
@@ -95,7 +95,7 @@ RSpec.describe RegisterSchoolImporter::Importer do
   context "when a site fails to save for a specific urn" do
     it "records the school error but continues processing other schools" do
       summary = subject.call
-      provider_group = summary.groups.find { |g| g.provider_code == "1A3" }
+      provider_group = summary.provider_summaries.find { |g| g.provider_code == "1A3" }
 
       expect(provider_group.school_errors).to include(
         a_hash_including(
