@@ -12,19 +12,21 @@ module RegisterSchoolImporter
       raw = @row["placement_urns"]
       return [] if raw.blank?
 
-      raw.strip[1..-2].split(",").map { |u| u.strip.gsub(/\A['"]|['"]\z/, "") }
+      raw.strip[1..-2].split(",").map { |u| u.gsub(/[\s'"]/, "") }
     end
 
   private
 
     def csv_provider_code
       value = @row["provider_code"]
-      value.present? ? value.strip : nil
+
+      value.to_s.strip.presence
     end
 
     def csv_accredited_provider_code
       value = @row["register_accredited_provider_code"] || @row["accredited_provider_code"]
-      value.present? ? value.strip : nil
+
+      value.to_s.strip.presence
     end
   end
 end

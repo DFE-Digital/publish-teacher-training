@@ -9,7 +9,7 @@ RSpec.describe RegisterSchoolImporter::ImportSummary do
     it "adds a row to provider_not_found for the correct provider group" do
       summary.mark_provider_not_found(provider_code, 3)
 
-      group = summary.groups.find { |g| g.provider_code == provider_code }
+      group = summary.provider_summaries.find { |g| g.provider_code == provider_code }
 
       expect(group).not_to be_nil
       expect(group.provider_not_found).to contain_exactly({ row: 3 })
@@ -27,7 +27,7 @@ RSpec.describe RegisterSchoolImporter::ImportSummary do
     it "adds the ignored schools to the group" do
       summary.mark_ignored_schools(provider_code, ignored)
 
-      group = summary.groups.find { |g| g.provider_code == provider_code }
+      group = summary.provider_summaries.find { |g| g.provider_code == provider_code }
 
       expect(group.ignored_schools).to match_array(ignored)
     end
@@ -44,7 +44,7 @@ RSpec.describe RegisterSchoolImporter::ImportSummary do
     it "adds the schools added to the group" do
       summary.mark_schools_added(provider_code, added)
 
-      group = summary.groups.find { |g| g.provider_code == provider_code }
+      group = summary.provider_summaries.find { |g| g.provider_code == provider_code }
 
       expect(group.schools_added).to match_array(added)
     end
@@ -58,7 +58,7 @@ RSpec.describe RegisterSchoolImporter::ImportSummary do
       ]
       summary.mark_school_errors(provider_code, school_errors)
 
-      group = summary.groups.find { |g| g.provider_code == provider_code }
+      group = summary.provider_summaries.find { |g| g.provider_code == provider_code }
 
       expect(group.school_errors).to match_array(school_errors)
       expect(group.school_errors_urns).to match_array(%w[999111 999112])
@@ -70,7 +70,7 @@ RSpec.describe RegisterSchoolImporter::ImportSummary do
       summary.mark_school_errors(provider_code, school_errors)
       summary.mark_school_errors(provider_code, [])
 
-      group = summary.groups.find { |g| g.provider_code == provider_code }
+      group = summary.provider_summaries.find { |g| g.provider_code == provider_code }
 
       expect(group.school_errors).to eq(school_errors)
       expect(group.school_errors_urns).to eq(%w[900001])
@@ -80,7 +80,7 @@ RSpec.describe RegisterSchoolImporter::ImportSummary do
     it "does nothing if an empty array is passed" do
       expect {
         summary.mark_school_errors(provider_code, [])
-      }.not_to(change { summary.groups.find { |g| g.provider_code == provider_code }&.school_errors })
+      }.not_to(change { summary.provider_summaries.find { |g| g.provider_code == provider_code }&.school_errors })
     end
   end
 
@@ -129,15 +129,15 @@ RSpec.describe RegisterSchoolImporter::ImportSummary do
       summary.mark_school_errors("DEF", [{ urn: "500005", row: 8, error: "Fail" }])
     end
 
-    it "includes both meta and groups" do
+    it "includes both meta and provider_summaries" do
       result = summary.full_summary
 
       expect(result).to have_key(:meta)
-      expect(result).to have_key(:groups)
+      expect(result).to have_key(:provider_summaries)
 
-      expect(result[:groups].keys).to match_array(%w[BU DEF XYZ])
+      expect(result[:provider_summaries].keys).to match_array(%w[BU DEF XYZ])
 
-      def_group = result[:groups]["DEF"]
+      def_group = result[:provider_summaries]["DEF"]
       expect(def_group.school_errors).to eq([{ urn: "500005", row: 8, error: "Fail" }])
       expect(def_group.school_errors_urns).to eq(%w[500005])
       expect(def_group.school_errors_count).to eq(1)
