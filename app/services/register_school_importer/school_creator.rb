@@ -40,6 +40,13 @@ module RegisterSchoolImporter
     def create!(site, gias_school)
       site.assign_attributes(gias_school.school_attributes)
       site.site_type = Site.site_types[:school]
+
+      if gias_school.latitude.present? && gias_school.longitude.present?
+        site.latitude  = gias_school.latitude
+        site.longitude = gias_school.longitude
+        site.skip_geocoding = true
+      end
+
       site.save!
     end
 
