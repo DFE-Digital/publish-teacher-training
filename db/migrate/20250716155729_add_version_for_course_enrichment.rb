@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # This migration adds a version column to the course_enrichments table.
 class AddVersionForCourseEnrichment < ActiveRecord::Migration[8.0]
   # This migration adds a version column to the course_enrichments table.
