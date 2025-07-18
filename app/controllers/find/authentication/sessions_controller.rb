@@ -1,6 +1,8 @@
 module Find
   module Authentication
     class SessionsController < ApplicationController
+      skip_before_action :verify_authenticity_token, only: %i[backchannel_logout]
+
       def callback
         candidate = Find::CandidateAuthenticator.new(oauth: omniauth).call
 
