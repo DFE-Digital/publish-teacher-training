@@ -100,4 +100,5 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       post :confirm_rollover
     end
   end
+  resources :candidates, only: %i[index]
 end

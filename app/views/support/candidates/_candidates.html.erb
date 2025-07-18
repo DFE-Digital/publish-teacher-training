@@ -1,0 +1,25 @@
+<table class="govuk-table--fixed">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Email address</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Created at</th>
+    </tr>
+  </thead>
+
+  <tbody class="govuk-table__body">
+    <% @candidates.each do |candidate| %>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= candidate.email_address %>
+          </span>
+        </td>
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1 break">
+            <%= candidate.created_at.to_fs(:govuk_date_and_time) %> (<%= time_ago_in_words(candidate.created_at) %>)
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
