@@ -1,6 +1,7 @@
 en:
   layouts:
     support:
+      candidates: Candidates
       providers: Providers
       users: Users
       settings: Settings
