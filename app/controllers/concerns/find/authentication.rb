@@ -50,8 +50,18 @@ module Find
 
     def request_authentication
       session["return_to_after_authenticating"] = request.url
+      flash_info_message = t("find.concerns.authentication.unauthenticated_message")
 
-      redirect_to find_root_path, flash: { info: t("find.concerns.authentication.unauthenticated_message") }
+      respond_to do |format|
+        format.html do
+          redirect_to find_root_path, flash: { info: flash_info_message }
+        end
+
+        format.json do
+          session["flash_info"] = flash_info_message
+          render json: { redirect: find_root_path }, status: :unauthorized
+        end
+      end
     end
 
     def after_authentication_url

@@ -97,6 +97,8 @@
 }
 
 .course-summary-card .govuk-summary-card__title-wrapper {
+  display: inherit;
+
   padding-top: govuk-spacing(2);
 }
 
