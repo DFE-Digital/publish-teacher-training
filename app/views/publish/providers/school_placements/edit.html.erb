@@ -28,7 +28,7 @@
             legend: { text: t(".show_school_label") },
             hint: { text: t(".show_school_hint") },
           ) do %>
-        <%= f.govuk_radio_button :show_school, true, label: { text: "Yes"}, id: "provider-show-school-true-field", link_errors: true %>
+        <%= f.govuk_radio_button :show_school, true, label: { text: "Yes" }, id: "provider-show-school-true-field", link_errors: true %>
         <%= f.govuk_radio_button :show_school, false, label: { text: "No" }, id: "provider-show-school-false-field" %>
       <% end %>
       <%= f.govuk_radio_buttons_fieldset(
