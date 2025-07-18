@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_20_135618) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_14_140702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -353,6 +353,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_20_135618) do
     t.text "address3"
     t.boolean "selectable_school", default: false, null: false
     t.boolean "accredited", default: false, null: false
+    t.boolean "show_school", default: false, null: false
     t.index ["accredited"], name: "index_provider_on_accredited"
     t.index ["can_sponsor_student_visa"], name: "index_provider_on_can_sponsor_student_visa"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
