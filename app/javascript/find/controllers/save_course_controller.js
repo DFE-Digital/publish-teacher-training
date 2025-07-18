@@ -32,6 +32,12 @@ export default class extends Controller {
         body
       })
 
+      if (response.status === 401) {
+        const json = await response.json()
+        window.location.href = json.redirect
+        return
+      }
+
       if (response.ok) {
         const json = await response.json()
         this.unsaveUrlValue = `/candidate/saved-courses/${json.saved_course}`

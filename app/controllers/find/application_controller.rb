@@ -14,6 +14,7 @@ module Find
     before_action :set_candidate
     before_action :redirect_to_cycle_has_ended_if_find_is_down
     before_action :redirect_to_maintenance_page_if_flag_is_active
+    before_action :promote_flash_info
 
     def render_feedback_component
       @render_feedback_component = true
@@ -25,6 +26,13 @@ module Find
     end
 
   private
+
+    def promote_flash_info
+      if session[:flash_info].present?
+        flash[:info] = session.delete(:flash_info)
+        flash.discard(:info)
+      end
+    end
 
     def set_candidate
       @candidate ||= Current.user
