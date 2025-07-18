@@ -38,7 +38,6 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
   def when_i_visit_a_course_without_signing_in
     visit "/"
     visit find_results_path
-    click_on_first_course
   end
 
   def then_i_save_the_course
@@ -53,10 +52,6 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
   def then_i_am_prompted_to_sign_in
     expect(page).to have_content("You must sign in to visit that page.")
     expect(page).to have_current_path(find_root_path)
-  end
-
-  def click_on_first_course
-    page.first(".app-search-results").first("a").click
   end
 
   def given_a_published_course_exists
