@@ -76,7 +76,7 @@ module Find
         end
 
         def show_school_placements_link?
-          course.provider.selectable_school?
+          course.provider.show_school?
         end
       end
     end
