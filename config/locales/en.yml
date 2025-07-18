@@ -250,6 +250,8 @@ en:
     rollover:
       show: "Recruitment cycles"
       change_cycle: "Change recruitment cycle"
+    candidates:
+      index: "Candidates"
     users:
       index: "Users"
       new: "Personal details"
@@ -358,6 +360,8 @@ en:
               new: "Contact details"
             checks:
               show: "Check your answers"
+        candidates:
+          index: "Candidates"
         users:
           index: "Users"
           show: "User overview"
