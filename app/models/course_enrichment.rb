@@ -18,7 +18,21 @@ class CourseEnrichment < ApplicationRecord
                  other_requirements: [:string, { store_key: "OtherRequirements" }],
                  personal_qualities: [:string, { store_key: "PersonalQualities" }],
                  required_qualifications: [:string, { store_key: "Qualifications" }],
-                 salary_details: [:string, { store_key: "SalaryDetails" }]
+                 salary_details: [:string, { store_key: "SalaryDetails" }],
+                 describe_school: [:string, { store_key: "DescribeSchool" }],
+                 candidate_training_rationale: [:string, { store_key: "CandidateTrainingRationale" }],
+                 placement_selection_criteria: [:string, { store_key: "PlacementSelectionCriteria" }],
+                 duration_per_school: [:string, { store_key: "DurationPerSchool" }],
+                 theoretical_training_location: [:string, { store_key: "TheoreticalTrainingLocation" }],
+                 theoretical_training_duration: [:string, { store_key: "TheoreticalTrainingDuration" }],
+                 placement_school_activities: [:string, { store_key: "PlacementSchoolActivities" }],
+                 support_and_mentorship: [:string, { store_key: "SupportAndMentorship" }],
+                 theoretical_training_activities: [:string, { store_key: "TheoreticalTrainingActivities" }],
+                 assessment_methods: [:string, { store_key: "AssessmentMethods" }],
+                 interview_location: [:string, { store_key: "InterviewLocation" }],
+                 fee_schedule: [:string, { store_key: "FeeSchedule" }],
+                 additional_fees: [:string, { store_key: "AdditionalFees" }],
+                 fee_support: [:string, { store_key: "FeeSupport" }]
 
   belongs_to :course
 
@@ -30,12 +44,12 @@ class CourseEnrichment < ApplicationRecord
   end
 
   # About this course
-  validates :about_course, presence: true, on: :publish
+  validates :about_course, presence: true, on: :publish, if: -> { version == 1 }
   validates :about_course, words_count: { maximum: 400 }
 
   validates :interview_process, words_count: { maximum: 250 }
 
-  validates :how_school_placements_work, presence: true, on: :publish
+  validates :how_school_placements_work, presence: true, on: :publish, if: -> { version == 1 }
   validates :how_school_placements_work, words_count: { maximum: 350 }
 
   # Course length and fees
