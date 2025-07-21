@@ -56,13 +56,12 @@ describe Find::Courses::TrainingLocations::View, type: :component do
   end
 
   describe "#placements_url" do
-    let(:provider) { create(:provider, selectable_school:) }
+    let(:provider) { create(:provider, show_school:) }
     let(:course) { create(:course, provider:) }
-    let(:selectable_school) { false }
 
-    context "when preview is true and provider is not selectable_school" do
+    context "when preview is true and provider does not show schools" do
       let(:preview) { true }
-      let(:selectable_school) { false }
+      let(:show_school) { false }
 
       it "renders link to the publish path for provider" do
         expect(subject).to have_no_link(
@@ -76,8 +75,8 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
     end
 
-    context "when preview is false and provider has selectable_school enabled" do
-      let(:selectable_school) { true }
+    context "when preview is false and provider has show_school enabled" do
+      let(:show_school) { true }
 
       it "renders a link to the find path" do
         expect(subject).to have_link("View list of school placements",

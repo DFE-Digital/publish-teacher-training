@@ -138,7 +138,7 @@ feature "Course show" do
     create(:recruitment_cycle, :next)
     Timecop.travel(Find::CycleTimetable.find_opens) do
       given_i_am_authenticated(user: user_with_fee_based_course)
-      provider.update(selectable_school: false)
+      provider.update(show_school: false)
       when_i_visit_the_publish_course_preview_page
       then_i_see_no_school_placements_link
     end
