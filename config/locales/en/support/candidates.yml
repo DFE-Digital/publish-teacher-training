@@ -1,0 +1,6 @@
+en:
+  support:
+    candidates:
+      index:
+        email_address: Email address
+        created_at: Created at

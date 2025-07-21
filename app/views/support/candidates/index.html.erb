@@ -5,8 +5,8 @@
 <%= govuk_table do |table| %>
   <% table.with_head do |head| %>
     <% head.with_row do |row| %>
-      <% row.with_cell text: "Email address" %>
-      <% row.with_cell text: "Created at" %>
+      <% row.with_cell text: t(".email_address") %>
+      <% row.with_cell text: t(".created_at") %>
     <% end %>
   <% end %>
   <% table.with_body do |body| %>
