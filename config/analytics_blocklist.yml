@@ -121,12 +121,4 @@
   - id_token
   - data
   :data_hub_process_summary:
-  - id
-  - type
-  - status
-  - started_at
-  - finished_at
-  - short_summary
   - full_summary
-  - created_at
-  - updated_at
