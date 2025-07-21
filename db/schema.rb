@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_20_135618) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_21_145533) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -232,6 +232,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_20_135618) do
     t.index ["course_id", "subject_id"], name: "index_course_subject_on_course_id_and_subject_id", unique: true
     t.index ["course_id"], name: "index_course_subject_on_course_id"
     t.index ["subject_id"], name: "index_course_subject_on_subject_id"
+  end
+
+  create_table "data_hub_process_summary", force: :cascade do |t|
+    t.string "type", null: false
+    t.string "status"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.jsonb "short_summary", default: {}, null: false
+    t.jsonb "full_summary", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["finished_at"], name: "index_data_hub_process_summary_on_finished_at"
+    t.index ["id", "type"], name: "index_data_hub_process_summary_on_id_and_type"
+    t.index ["started_at"], name: "index_data_hub_process_summary_on_started_at"
+    t.index ["type"], name: "index_data_hub_process_summary_on_type"
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
