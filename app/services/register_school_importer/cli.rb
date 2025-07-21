@@ -2,9 +2,9 @@ module RegisterSchoolImporter
   class CLI
     attr_reader :csv_path, :year
 
-    def initialize(env: ENV)
-      @csv_path = env["CSV_PATH"]
-      @year = env["YEAR"]
+    def initialize(environment: ENV)
+      @csv_path = environment["CSV_PATH"]
+      @year = environment["YEAR"]
     end
 
     def validate!
@@ -14,23 +14,24 @@ module RegisterSchoolImporter
 
           Usage:
             CSV_PATH=path/to/register.csv YEAR=2025 bin/rails register_schools:import
+
           Example:
             CSV_PATH=/home/user/register_2025.csv YEAR=2025 bin/rails register_schools:import
         USAGE
 
-        raise
+        raise ArgumentError, "CSV_PATH and YEAR must be provided"
       end
     end
 
     def recruitment_cycle
-      rc = RecruitmentCycle.find_by(year:)
+      recruitment_cycle = RecruitmentCycle.find_by(year: year)
 
-      unless rc
+      unless recruitment_cycle
         Rails.logger.info "ERROR: RecruitmentCycle with year=#{year} not found."
-        raise
+        raise ActiveRecord::RecordNotFound, "RecruitmentCycle for year #{year} not found"
       end
 
-      rc
+      recruitment_cycle
     end
   end
 end
