@@ -84,6 +84,15 @@ shared:
     - site_id
     - status
     - vac_status
+  data_hub_process_summary:
+    - id
+    - type
+    - status
+    - started_at
+    - finished_at
+    - short_summary
+    - created_at
+    - updated_at
   study_site_placement:
     - id
     - course_id
