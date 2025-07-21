@@ -292,6 +292,9 @@ action-group-resources: set-azure-account # make env action-group-resources ACTI
 
 ### Infra targets end
 
+
+# build test
+
 #### Maintenence targets
 
 maintenance-image-push:
