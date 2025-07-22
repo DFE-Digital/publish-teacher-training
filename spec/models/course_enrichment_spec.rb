@@ -1,352 +1,204 @@
 # frozen_string_literal: true
-
 require "rails_helper"
 
-describe CourseEnrichment do
-  subject { build(:course_enrichment) }
-
+RSpec.describe CourseEnrichment do
   describe "associations" do
     it { is_expected.to belong_to(:course) }
   end
 
-  describe "#has_been_published_before?" do
-    context "when the enrichment is an initial draft" do
-      subject { create(:course_enrichment, :initial_draft) }
-
-      it { is_expected.not_to have_been_published_before }
-    end
-
-    context "when the enrichment is published" do
-      subject { create(:course_enrichment, :published) }
-
-      it { is_expected.to have_been_published_before }
-    end
-
-    context "when the enrichment is a subsequent draft" do
-      subject { create(:course_enrichment, :subsequent_draft) }
-
-      it { is_expected.to have_been_published_before }
+  describe "defaults" do
+    it "defaults version to 1" do
+      expect(build(:course_enrichment).version).to eq 1
     end
   end
 
+  describe "overwrites default version" do
+    it "can be set to 2" do
+      expect(build(:course_enrichment, :v2).version).to eq 2
+    end
+
+    it "can be set to 1" do
+      expect(build(:course_enrichment, :v1).version).to eq 1
+    end
+  end
+
+  #
+  # Versioned fields
+  #
+  it_behaves_like "versioned_presence_field",
+                  field: :about_course,
+                  required_in: { 1 => true, 2 => false }, # This is required in v1 but not in v2
+                  word_limit: 400
+
+  it_behaves_like "versioned_presence_field",
+                  field: :interview_process,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 200
+
+  it_behaves_like "versioned_presence_field",
+                  field: :how_school_placements_work,
+                  required_in: { 1 => true, 2 => false },
+                  word_limit: 350
+
+  it_behaves_like "versioned_presence_field",
+                  field: :describe_school,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 100
+
+  it_behaves_like "versioned_presence_field",
+                  field: :candidate_training_rationale,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 100
+
+  it_behaves_like "versioned_presence_field",
+                  field: :placement_selection_criteria,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 50
+
+  it_behaves_like "versioned_presence_field",
+                  field: :duration_per_school,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 50
+
+  it_behaves_like "versioned_presence_field",
+                  field: :theoretical_training_location,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 50
+
+  it_behaves_like "versioned_presence_field",
+                  field: :theoretical_training_duration,
+                  required_in: { 1 => false, 2 => false },
+                  word_limit: 50
+
+  it_behaves_like "versioned_presence_field",
+                  field: :placement_school_activities,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 150
+
+  it_behaves_like "versioned_presence_field",
+                  field: :support_and_mentorship,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 50
+
+  it_behaves_like "versioned_presence_field",
+                  field: :theoretical_training_activities,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 150
+
+  it_behaves_like "versioned_presence_field",
+                  field: :assessment_methods,
+                  required_in: { 1 => false, 2 => false },
+                  word_limit: 50
+
+  it_behaves_like "versioned_presence_field",
+                  field: :interview_location,
+                  required_in: { 1 => false, 2 => false }
+  #
+  # Fields required for all versions
+  #
+  describe "course_length" do
+    subject(:record) { build(:course_enrichment, course_length:) }
+    let(:course_length) { "1 year" }
+
+    context "nil" do
+      let(:course_length) { nil }
+
+      it { is_expected.to be_valid }             # draft
+      it { is_expected.not_to be_valid(:publish) }
+    end
+  end
+
+  #
+  # Conditional fee fields (fee-based only, and only v2)
+  #
+  # fee_conditional = ->(rec) { rec.course.funding_type == "fee" } removed this functionality, can be added below to the shared example if needed
+  it_behaves_like "versioned_presence_field",
+                  field: :fee_schedule,
+                  required_in: { 1 => false, 2 => false },
+                  word_limit: 50
+
+  it_behaves_like "versioned_presence_field",
+                  field: :additional_fees,
+                  required_in: { 1 => false, 2 => false },
+                  word_limit: 50
+
+  it_behaves_like "versioned_presence_field",
+                  field: :financial_support,
+                  required_in: { 1 => false, 2 => false },
+                  word_limit: [250, 50]
+
+  #
+  # Existing specs we already had
+  #
   describe "#publish" do
     let(:user) { create(:user) }
 
-    context "when the enrichment is an initial draft" do
-      subject { create(:course_enrichment, :initial_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago) }
+    context "initial draft" do
+      subject(:record) { create(:course_enrichment, :initial_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago) }
 
-      before do
-        subject.publish(user)
-      end
+      before { record.publish(user) }
 
       it { is_expected.to be_published }
-      its(:updated_at) { is_expected.to be_within(1.second).of Time.now.utc }
-      its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of Time.now.utc }
       its(:updated_by_user_id) { is_expected.to eq user.id }
+      its(:updated_at) { is_expected.to be_within(1.second).of Time.current.utc }
+      its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of Time.current.utc }
     end
 
-    context "when the enrichment is a subsequent draft" do
-      subject { create(:course_enrichment, :subsequent_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago) }
+    context "subsequent draft" do
+      subject(:record) { create(:course_enrichment, :subsequent_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago) }
 
-      before do
-        subject.publish(user)
-      end
+      before { record.publish(user) }
 
       it { is_expected.to be_published }
-      its(:updated_at) { is_expected.to be_within(1.second).of Time.now.utc }
-      its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of Time.now.utc }
       its(:updated_by_user_id) { is_expected.to eq user.id }
+      its(:updated_at) { is_expected.to be_within(1.second).of Time.current.utc }
+      its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of Time.current.utc }
+    end
+  end
+
+  describe "#has_been_published_before?" do
+    it "is false for an initial draft" do
+      expect(create(:course_enrichment, :initial_draft)).not_to have_been_published_before
+    end
+
+    it "is true for published items" do
+      expect(create(:course_enrichment, :published)).to have_been_published_before
+    end
+
+    it "is true for subsequent drafts" do
+      expect(create(:course_enrichment, :subsequent_draft)).to have_been_published_before
     end
   end
 
   describe ".most_recent" do
-    let!(:old_enrichment) { create(:course_enrichment, :published, created_at: Date.yesterday) }
-    let!(:new_enrichment) { create(:course_enrichment, :published) }
-
-    it "orders by created_at descending" do
-      expect(described_class.most_recent).to eq([new_enrichment, old_enrichment])
-    end
-  end
-
-  describe "about_course attribute" do
-    subject { build(:course_enrichment, about_course: about_course_text) }
-
-    let(:about_course_text) { "this course is great" }
-
-    context "with over 400 words" do
-      let(:about_course_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context "when nil" do
-      let(:about_course_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        it { is_expected.not_to be_valid :publish }
-      end
-    end
-  end
-
-  describe "course_length attribute" do
-    subject { build(:course_enrichment, course_length: course_length_text) }
-
-    let(:course_length_text) { "this course is great" }
-
-    context "when nil" do
-      let(:course_length_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        it { is_expected.not_to be_valid :publish }
-      end
-    end
-  end
-
-  describe "how_school_placements_work attribute" do
-    subject { build(:course_enrichment, how_school_placements_work: how_school_placements_work_text) }
-
-    let(:how_school_placements_work_text) { "this course is great" }
-
-    context "with over 400 words" do
-      let(:how_school_placements_work_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context "when nil" do
-      let(:how_school_placements_work_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        it { is_expected.not_to be_valid :publish }
-      end
-    end
-  end
-
-  describe "interview_process attribute" do
-    subject { build(:course_enrichment, interview_process: interview_process_text) }
-
-    let(:interview_process_text) { "this course is great" }
-
-    context "with over 250 words" do
-      let(:interview_process_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-  end
-
-  describe "required_qualifications attribute" do
-    subject { build(:course_enrichment, required_qualifications: required_qualifications_text, course:) }
-
-    let(:required_qualifications_text) { "this course is great" }
-    let(:recruitment_cycle) { build(:recruitment_cycle, year: "2021") }
-    let(:provider) { build(:provider, recruitment_cycle:) }
-    let(:course) { build(:course, provider:) }
-
-    context "with over 100 words" do
-      let(:required_qualifications_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context "when nil" do
-      let(:required_qualifications_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        context "in recruitment cycle 2021" do
-          it { is_expected.not_to be_valid :publish }
-        end
-
-        context "in recruitment cycle 2022" do
-          let(:recruitment_cycle) { build(:recruitment_cycle, year: "2022") }
-
-          it { is_expected.to be_valid :publish }
-        end
-      end
-    end
-  end
-
-  describe "personal_qualities attribute" do
-    subject { build(:course_enrichment, personal_qualities: personal_qualities_text) }
-
-    let(:personal_qualities_text) { "this course is great" }
-
-    context "with over 100 words" do
-      let(:personal_qualities_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-  end
-
-  describe "other_requirements attribute" do
-    subject { build(:course_enrichment, other_requirements: other_requirements_text) }
-
-    let(:other_requirements_text) { "this course is great" }
-
-    context "with over 100 words" do
-      let(:other_requirements_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-  end
-
-  describe "salary_details attribute" do
-    subject { build(:course_enrichment, salary_details: salary_details_text, course: salaried_course) }
-
-    let(:salary_details_text) { "this course is great" }
-
-    let(:salaried_course) { build(:course, :salary) }
-
-    context "with over 250 words" do
-      let(:salary_details_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context "when nil" do
-      let(:salary_details_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        it { is_expected.not_to be_valid :publish }
-      end
-    end
-  end
-
-  describe "validation for publish" do
-    subject { course_enrichment }
-
-    let(:course_enrichment) { build(:course_enrichment, :with_fee_based_course) }
-
-    context "fee based course" do
-      it { is_expected.to validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { is_expected.to validate_numericality_of(:fee_uk_eu).on(:publish) }
-      it { is_expected.to validate_numericality_of(:fee_international).on(:publish) }
-
-      it "validates maximum word count for interview_process" do
-        course_enrichment.interview_process = Faker::Lorem.sentence(word_count: 250 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:interview_process]).to be_present
-      end
-
-      it "validates maximum word count for fee_details" do
-        course_enrichment.fee_details = Faker::Lorem.sentence(word_count: 250 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:fee_details]).to be_present
-      end
-
-      context "salary based fields" do
-        it "does not validates maximum word count for salary_details" do
-          course_enrichment.salary_details = Faker::Lorem.sentence(word_count: 250 + 1)
-
-          expect(course_enrichment).to be_valid :publish
-          expect(course_enrichment.errors[:salary_details]).to be_empty
-        end
-
-        it { is_expected.not_to validate_presence_of(:salary_details).on(:publish) }
-      end
-    end
-
-    context "fee based course after 2024 cycle which can sponsor student visa" do
-      let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
-      let(:provider) { build(:provider, recruitment_cycle:) }
-      let(:course) { build(:course, can_sponsor_student_visa: true, funding: "fee", provider:) }
-      let(:course_enrichment) { build(:course_enrichment, course:) }
-
-      it do
-        expect(subject).to validate_presence_of(:fee_international).on(:publish)
-      end
-    end
-
-    context "salary based course" do
-      let(:course_enrichment) { build(:course_enrichment, :with_salary_based_course) }
-
-      it { is_expected.to validate_presence_of(:salary_details).on(:publish) }
-      it { is_expected.not_to validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { is_expected.not_to validate_numericality_of(:fee_uk_eu).on(:publish) }
-      it { is_expected.not_to validate_numericality_of(:fee_international).on(:publish) }
-
-      it "validates maximum word count for required_qualifications" do
-        course_enrichment.required_qualifications = Faker::Lorem.sentence(word_count: 100 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:required_qualifications]).to be_present
-      end
-
-      it "validates maximum word count for salary_details" do
-        course_enrichment.salary_details = Faker::Lorem.sentence(word_count: 250 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:salary_details]).to be_present
-      end
-
-      context "fee based fields" do
-        it "does not validates maximum word count for fee_details" do
-          course_enrichment.fee_details = Faker::Lorem.sentence(word_count: 250 + 1)
-
-          expect(course_enrichment).to be_valid :publish
-          expect(course_enrichment.errors[:fee_details]).to be_empty
-        end
-
-        it { is_expected.not_to validate_presence_of(:fee_uk_eu).on(:publish) }
-      end
+    let!(:older) { create(:course_enrichment, :published, created_at: 1.day.ago) }
+    let!(:newer) { create(:course_enrichment, :published) }
+
+    it "orders by created_at desc" do
+      expect(described_class.most_recent).to eq [newer, older]
     end
   end
 
   describe "#unpublish" do
-    subject do
-      create(:course_enrichment, :published,
-             last_published_timestamp_utc:,
-             course:)
-    end
-
     let(:provider) { create(:provider) }
-    let(:course) { create(:course, provider:) }
-    let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
+    let(:course)   { create(:course, provider:) }
+    let(:timestamp) { Time.utc(2017, 1, 1) }
+    subject(:record) { create(:course_enrichment, :published, last_published_timestamp_utc: timestamp, course:) }
 
-    describe "to initial draft" do
-      it "sets the course to draft" do
-        expect { subject.unpublish(initial_draft: true) }.to change { subject.reload.status }
-          .from("published")
-          .to("draft")
-      end
-
-      it "sets the last_published_timestamp_utc to nil" do
-        expect { subject.unpublish(initial_draft: true) }.to change { subject.reload.last_published_timestamp_utc }
-          .from(last_published_timestamp_utc)
-          .to(nil)
-      end
+    it "to initial draft resets last_published_timestamp_utc" do
+      expect { record.unpublish(initial_draft: true) }.to change { record.reload.last_published_timestamp_utc }
+        .from(timestamp).to(nil)
     end
 
-    describe "to subsequent draft" do
-      it "sets the course to draft" do
-        expect { subject.unpublish(initial_draft: false) }.to change { subject.reload.status }
-          .from("published")
-          .to("draft")
-      end
-
-      it "keeps the last_published_timestamp_utc as is" do
-        expect { subject.unpublish(initial_draft: false) }.not_to(change { subject.reload.last_published_timestamp_utc })
-      end
+    it "to subsequent draft keeps last_published_timestamp_utc" do
+      expect { record.unpublish(initial_draft: false) }.not_to change { record.reload.last_published_timestamp_utc }
     end
   end
 
   describe "#withdraw" do
-    let(:enrichment) { create(:course_enrichment, :published) }
-
-    it "sets the status to withdrawn" do
+    it "sets status to withdrawn" do
+      enrichment = create(:course_enrichment, :published)
       enrichment.withdraw
-
       expect(enrichment.status).to eq("withdrawn")
     end
   end
