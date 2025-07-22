@@ -1,22 +1,17 @@
-<%= t("publish.providers.fees_and_financial_support.edit.guidance_html") %>
 <details class="govuk-details">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">
-      <%= t("publish.providers.fees_and_financial_support.edit.summary_link") %>
+      See what you wrote last cycle
     </span>
   </summary>
-  <div class="govuk-!-margin-top-4" />
-  <%= render Shared::AdviceComponent::View.new(title: "Financial support from the government") do %>
-    <% if @course.salaried? %>
-      <%= render partial: "shared/courses/financial_support/salaried" %>
-    <% elsif @course.excluded_from_bursary? %>
-      <%= render partial: "shared/courses/financial_support/loan" %>
-    <% elsif @course.bursary_only? %>
-      <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(@course) %>
-    <% elsif @course.has_scholarship_and_bursary? %>
-      <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(@course) %>
-    <% else %>
-      <%= render partial: "shared/courses/financial_support/loan" %>
-    <% end %>
-  <% end %>
+  <div class="govuk-details__text">
+  <p class="govuk-body">
+    This fee includes the PGCE element to the programme in addition to the QTS.
+  </p>
+  <p class="govuk-body">
+    If you are unsure at the time of applying, whether to choose QTS only or QTS with PGCE, we can discuss the options with you at interview. Should you choose the QTS only programme, the fee would be reduced to £8535.   </p>
+  <p class="govuk-body">
+    Bursaries of £26,000 are available to eligible trainees. Alternatively, you may be eligible for student loans to cover the cost of your tuition fee or to help with living costs. Find out more by contacting the DfE.   </p>
+  </p>
+  </div>
 </details>
