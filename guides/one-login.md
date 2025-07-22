@@ -1,106 +1,142 @@
-# One Login
+# Candidate Authentication
 
-We use One Login to authenticate Candidates in Find.
+This document describes the authentication process for candidates in **Find**. The authentication system supports two providers:
 
-One Login is a Government wide authentication provider for users of Government services.
+1. **One Login** - Used in production and other government-related environments.
+2. **FindDeveloper** - A custom OmniAuth strategy used for developer and testing environments (e.g., QA, local development, and review apps).
 
-- [General documentation](https://www.sign-in.service.gov.uk/documentation)
-- [Technical documentation](https://docs.sign-in.service.gov.uk/)
-- [One Login Admin Tool](https://admin.sign-in.service.gov.uk/sign-in/enter-email-address) 
+## Overview of Authentication Providers
 
-### Technical Details
+### One Login
+**One Login** is the government-wide authentication provider used for candidates in the production environment. It handles both authentication and authorization using the **OAuth 2.0** and **OpenID Connect** protocols.
 
-One Login implements the OAuth Open ID Connect
+- [General Documentation](https://www.sign-in.service.gov.uk/documentation)
+- [Technical Documentation](https://docs.sign-in.service.gov.uk/)
+- [One Login Admin Tool](https://admin.sign-in.service.gov.uk/sign-in/enter-email-address)
 
+### FindDeveloper
+**FindDeveloper** is a custom OmniAuth strategy designed specifically for use in development and non-production environments. It mimics the authentication flow of **One Login** but is used to simplify local development and testing.
+
+- [OmniAuth Documentation](https://github.com/omniauth/omniauth)
+
+## Technical Overview
+
+Both **One Login** and **FindDeveloper** use the **OAuth 2.0** and **OpenID Connect** protocols to handle authorization and authentication. The primary difference is that **FindDeveloper** is a mock authentication strategy used to simulate the behavior of **One Login** in development and testing environments.
+
+### Protocols in Use
 
 | Term                     | Explanation                                              |
-| ---------------          | ---------------                                          |
-| OAuth 2.0                | Protocol for Authorization                               |
-| OpenID Connect           | Protocol for Authentication                              |
-| OmniAuth                 | Ruby gem for OAuth                                       |
-| omniauth-govuk-one-login | OmniAuth plugin for OpenID Connect specific to One Login |
+|--------------------------|----------------------------------------------------------|
+| **OAuth 2.0**             | A protocol for authorization (allowing users to grant access to their resources). |
+| **OpenID Connect**        | A protocol built on top of OAuth 2.0, used for authentication (proving identity). |
+| **OmniAuth**              | A Ruby library for managing OAuth clients.                |
+| **omniauth-govuk-one-login** | An OmniAuth plugin specifically for integrating with One Login via OpenID Connect. |
+| **FindDeveloper**         | A custom OmniAuth strategy for development environments. |
 
-#### OmniAuth
+---
 
-OmniAuth is a ruby libarary for managing OAuth clients.
-Our system already uses an OmniAuth provider for DfESignIn on the Publish side and now we added One Login for candidates.
+## Authentication Flow
 
+The authentication flow is largely the same for both providers, but with different endpoints and configurations depending on the environment.
 
-# Authentications namespace
+1. **Sign In**:
+   - Every incoming request is checked to determine if it matches the authentication endpoint (`/auth/one-login` for One Login or `/auth/find_developer` for FindDeveloper).
+   - If the request matches, it's processed through the OmniAuth middleware, which handles requests to the respective provider's endpoints:
+     - **One Login**: `/authorize`, `/token`, `/userinfo`, `/logout`
+     - **FindDeveloper**: Mimics the same flow, but using mock data for local development.
 
-Authentications::CandidateOmniAuth decide which oauth provider to use based on the current environment.
+2. **Sign Out**:
+   - The application uses the `LogoutUtility` from **GovukOneLogin** to send a logout request to One Login.
+   - For **FindDeveloper**, the logout flow is simulated.
 
-### What features of One Login our app uses 
+3. **Backdoor Logout**:
+   - We provide a public endpoint that One Login can call with a signed request containing the user's UID. This triggers a logout request via the **BackdoorLogoutUtility**.
+   - For **FindDeveloper**, this functionality is also simulated.
 
-1. Sign in
+4. **Passive Authentication**:
+   - **TBC** (To be confirmed).
 
-    1. Every request is tested to see if it matches our auth endpoint (`auth/one-login`)
-        If it does, then the request is processed through the OmniAuth / OneLogin middleware.
-        The GovukOneLogin library handles all the requests that are made to One Login.
-        `/authorize`
-        `/token`
-        `/userinfo`
-        `/logout`
+---
 
-1. Sign Out
-    1. Our code uses the `LogoutUtility` provided by GovukOneLogin to make a logout reqeust to One Login
-2. Backdoor logout
-    1. We provide a public endpoint to which One Login makes a signed request with the user uid BackdoorLogoutUtility provided by GovukOneLogin to make a logout reqeust to One Login
-3. Passive Authentication
-    1. TBC
+## OmniAuth Provider Configuration
 
+Both **One Login** and **FindDeveloper** are registered with **OmniAuth** as providers in the Rails application, but their configurations differ based on the environment.
 
-#### How does OmniAuth work?
+### Example Configuration for One Login (Production)
 
-We register a `provider` with its configuration in an initializer. (Authentications::CandidateOmniAuth)
-
-When you register a provider with OmniAuth, it is created in a middleware and inserted in the middleware stack.
-The middlware recognises url paths based on the configuration the provider is initialized with.
-
-```ruby
-provider :govuk_one_login,
-    name: :"one-login", # This sets the :provider variable in /auth/:provider
-    path_prefix: "/auth" # This sets the /auth segment in /auth/:provider
+In **production**, we use the `govuk_one_login` provider.
 
 ```
+provider :govuk_one_login,
+    name: :"one-login",        # This sets the :provider variable in /auth/:provider
+    path_prefix: "/auth"       # This sets the /auth prefix in /auth/:provider
+```
 
-None of these routes are printed in `bin/rails routes`.
-Just assume `/auth/:provider` and the `/:path_prefix/:provider_name/callback` url exist based on the configuration.
+### Example Configuration for FindDeveloper (Non-Production)
 
-When the provider returns an error, the `/auth/failure` endpoint is called and the error messages is set as a query param. `/auth/failure?erorr=abc&message=def`. Our app renders `errors/omniauth` for the candidate interface.
+In **non-production environments** (e.g., QA, local development), we use the `find_developer` provider, which is a custom OmniAuth strategy.
 
+```
+provider :find_developer,
+    name: :"find-developer",   # This sets the :provider variable in /auth/:provider
+    path_prefix: "/auth"       # This sets the /auth prefix in /auth/:provider
+```
 
-### Our Setup
-In production we use the `:govuk_one_login` provider and in all other environments we use the `:find_developer` provider, although we can enable One Login in any environment.
+### Handling Authentication Failures
 
-
-## One Login "admin tool"
-
-We do not have a access to the One Login production configuration. We need to contact One Login if we want to create or change any production configuration.
-
-One Login Admin console
-The link to the Admin tool is at the top of the page.
-##### Setup One Login
-If you want to enable One Login provider in QA, review app or locally, these are the steps you should take:
-
-1. Create a [One Login admin tool integration](https://admin.sign-in.service.gov.uk/sign-in/enter-email-address) 
-2. Create a [public-private key pair](https://docs.sign-in.service.gov.uk/before-integrating/set-up-your-public-and-private-keys/#create-a-key-pair)
-    1. Double check the docs that this is still the recommended approach
-    2. ```
-       openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
-       openssl rsa -pubout -in private_key.pem -out public_key.pem
-       ```
-3. In the admin tool, fill in
-    1. the Redirect URL `https://HOSTNAME/auth/one-login/callback`
-    2. the Public Key pem
-4. Set the values in the review environment
-    1. `make review edit-app-secrets`
-    2. Set the `ONE_LOGIN_PRIVATE_KEY`
-    3. Set the `ONE_LOGIN_CLIENT_ID`
+When either provider returns an error, the app redirects to `/auth/failure`. The error messages are passed as query parameters (e.g., `/auth/failure?error_code=invalid_request&error_description=client%20registry%20does%20not%20contain%20post_logout_redirect_uri&state=W4T5a-HP_RkXh3tCSJwH8GqXG9bgl_rgT1U3OphGw39GbyVfsO8HCs8R2inxsFey`). The application renders the error view (`errors/omniauth`) for the candidate interface.
 
 
-## In what environments is One Login 
+---
 
-1. Production
-2. QA
-3. Review apps - needs configuring for each review app
+## Environment-Specific Setup
+
+### **One Login (Production)**
+- **Production Environment**: The app uses the **One Login** provider.
+- **Configuration**: One Login is configured in the **One Login Admin Tool**.
+
+### **FindDeveloper (Non-Production)**
+- **Non-Production Environments**: The **FindDeveloper** provider is used for development, QA, and review apps.
+- **Configuration**: **FindDeveloper** is set up using a custom OmniAuth strategy designed to simulate the One Login authentication flow without connecting to the actual One Login service.
+
+#### Environments Using One Login and FindDeveloper
+
+- **Production**: Uses the **One Login** provider.
+- **QA**: Uses the **FindDeveloper** provider (or **One Login** can be enabled for QA if required).
+- **Review Apps**: Requires configuration for each review app using **FindDeveloper** or **One Login**.
+
+---
+
+## One Login Admin Tool
+
+We use the **One Login Admin Tool** to configure and manage One Login integrations, but we do not have direct access to production configurations. Changes to production settings must be requested from One Login.
+
+### Steps to Set Up One Login for Non-Production Environments
+
+If you want to enable One Login in environments such as QA, a review app, or locally, follow these steps:
+
+1. Create a [One Login Admin Tool Integration](https://admin.sign-in.service.gov.uk/sign-in/enter-email-address).
+2. Generate a [public-private key pair](https://docs.sign-in.service.gov.uk/before-integrating/set-up-your-public-and-private-keys/#create-a-key-pair):
+   - Ensure that this is still the recommended method by checking the latest docs.
+   - Generate the key pair using:
+     ```
+     openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+     openssl rsa -pubout -in private_key.pem -out public_key.pem
+     ```
+
+3. In the **One Login Admin Tool**, complete the following:
+   - Set the **Redirect URL**: `https://HOSTNAME/auth/one-login/callback`
+   - Upload the **Public Key PEM** file.
+
+1. Set the necessary values in the review environment:
+   - Run `make review edit-app-secrets`.
+   - Set `ONE_LOGIN_PRIVATE_KEY`.
+   - Set `ONE_LOGIN_CLIENT_ID`.
+
+
+### Setup in QA
+
+Public Key 
+```
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqiJ/SiyVGRWzdQZSp4wViLtshGUclpyxoc8yw0N5/vZqt1N3XuN/WKiqsI9iI362/3MIfbUnrkc9q39aE9O6nDNkHchrscas5ri7n0rRiElKAi1QEHIaanH7kUbC8kg8v7ZTSzygbJOdNlRicMxUcaXqFLZjaWxs9Gog6D3A/yUaxTJih6ILQbrZ8KpMKyG/cl3BoAKrYpQeiVM0n0+kv2irLQitmm7D79uohxCyJYioWYEDUMLmrcMX42zm0fkoVfb6MBwk1Y0E69/B/hIczJHSER3z1roUPHLI67uqRJgjw04cqdRuBzYDWvWXeguk6mRpimMCqtdkBjpImuViqQIDAQAB
+```
