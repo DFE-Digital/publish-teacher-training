@@ -18,7 +18,7 @@ private
   def unique_authenticable_with_provider
     return if authenticable.nil?
 
-    if self.class.exists?(authenticable:, provider:)
+    if self.class.where.not(id:).exists?(authenticable:, provider:)
       errors.add(:authenticable, :unique)
     end
   end
