@@ -127,6 +127,8 @@ en:
       school_placements:
         edit:
           page_title: Preferences for schools
+          warning_text: Changes to these preferences will not change courses you have already added.
+          change_preferences: To change preferences of an existing course, go to the 'Basic details' tab of the course.
           submit_button: Update how placements work
           selectable_school_label: Do you want to let candidates select a preferred school?
           selectable_school_hint: Candidates will be able to select a preferred school when applying.

@@ -19,10 +19,10 @@
       <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
-          Changes to these preferences will not change courses you have already added.
+          <%= t(".warning_text") %>
         </strong>
       </div>
-      <p class="govuk-body">To change preferences of an existing course, go to the 'Basic details' tab of the course.</p>
+      <p class="govuk-body"><%= t(".change_preferences") %></p>
       <%= f.govuk_radio_buttons_fieldset(
             :show_school,
             legend: { text: t(".show_school_label") },
