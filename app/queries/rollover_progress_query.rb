@@ -100,7 +100,7 @@ class RolloverProgressQuery
   end
 
   def rolled_over_courses
-    @target_cycle.courses.where("course.created_at < ?", @target_cycle.application_start_date)
+    @target_cycle.courses.where("course.created_at < ?", @target_cycle.application_start_date).order(created_at: :asc)
   end
 
   def rolled_over_providers
