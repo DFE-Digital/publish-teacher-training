@@ -8,9 +8,9 @@ RSpec.describe DataHub::ProcessSummary, type: :model do
     it { is_expected.to validate_presence_of(:status) }
 
     it "is invalid with an unknown status" do
-       expect {
+      expect {
         described_class.new(status: "invalid")
-       }.to raise_error(ArgumentError, /'invalid' is not a valid status/)
+      }.to raise_error(ArgumentError, /'invalid' is not a valid status/)
     end
   end
 
@@ -71,6 +71,49 @@ RSpec.describe DataHub::ProcessSummary, type: :model do
     it "can be found via ProcessSummary" do
       found = described_class.find(persisted_summary.id)
       expect(found).to be_a(DataHub::RegisterSchoolImportSummary)
+    end
+  end
+
+  describe ".start!" do
+    it "creates a new summary with status 'started' and timestamps" do
+      summary = DataHub::RegisterSchoolImportSummary.start!
+
+      expect(summary).to be_started
+      expect(summary.started_at).to be_within(1.second).of(Time.current)
+      expect(summary.status).to eq("started")
+      expect(summary.short_summary).to eq({})
+      expect(summary.full_summary).to eq({})
+      expect(summary.type).to eq("DataHub::RegisterSchoolImportSummary")
+    end
+  end
+
+  describe "#finish!" do
+    let(:summary) { create(:process_summary) }
+
+    it "updates status to 'finished' and fills summary fields" do
+      short_summary = { count: 42 }
+      full_summary = { sites: [1, 2, 3] }
+
+      summary.finish!(short_summary:, full_summary:)
+
+      expect(summary.status).to eq("finished")
+      expect(summary.finished_at).to be_within(1.second).of(Time.current)
+      expect(summary.short_summary).to eq(short_summary.stringify_keys)
+      expect(summary.full_summary).to eq(full_summary.stringify_keys)
+    end
+  end
+
+  describe "#fail!" do
+    let(:summary) { create(:process_summary) }
+    let(:error) { StandardError.new("Something went wrong") }
+
+    it "updates status to 'failed' with error details" do
+      summary.fail!(error)
+
+      expect(summary.status).to eq("failed")
+      expect(summary.finished_at).to be_within(1.second).of(Time.current)
+      expect(summary.short_summary["error_class"]).to eq("StandardError")
+      expect(summary.short_summary["error_message"]).to eq("Something went wrong")
     end
   end
 end
