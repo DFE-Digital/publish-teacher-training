@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RegisterSchoolImporter::Importer do
+RSpec.describe DataHub::RegisterSchoolImporter::Importer do
   subject { described_class.new(recruitment_cycle:, csv_path:) }
 
   let(:recruitment_cycle) { create(:recruitment_cycle) }

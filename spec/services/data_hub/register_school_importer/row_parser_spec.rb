@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RegisterSchoolImporter::RowParser do
+RSpec.describe DataHub::RegisterSchoolImporter::RowParser do
   subject(:parser) { described_class.new(row) }
 
   let(:row) do

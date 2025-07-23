@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RegisterSchoolImporter::ImportSummary do
+RSpec.describe DataHub::RegisterSchoolImporter::ImportSummary do
   subject(:summary) { described_class.new }
 
   let(:provider_code) { "BU1" }
