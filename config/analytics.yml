@@ -218,6 +218,7 @@ shared:
     - town
     - address3
     - site_type
+    - discarded_via_script
   statistic:
     - id
     - json_data
