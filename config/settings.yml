@@ -63,7 +63,7 @@ one_login:
   # URL we use to end the Onne Login session on behalf of the user
   logout_url: https://oidc.integration.account.gov.uk/logout
   # URL user is redirected to after logging out of One Login
-  post_logout_url: https://qa.publish-teacher-training-courses.service.gov.uk/
+  post_logout_url: https://qa.find-teacher-training-courses.service.gov.uk
   # URL of the users profile
   profile_url: https://home.integration.account.gov.uk
   # YAML doesn't preserve newlines. Convert newlines to \n
