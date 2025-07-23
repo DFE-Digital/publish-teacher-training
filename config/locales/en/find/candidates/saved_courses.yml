@@ -4,7 +4,9 @@ en:
       saved_courses:
         index:
           page_title: Saved courses
-          no_saved_courses: You have no saved courses.
+          no_saved_courses: You have no saved courses
+          find_saved_courses: Find a course
+          empty_state_html: "%{link} and start saving courses you may want to review and apply for later."
         create:
           save_failed: Failed to save course
         destroy:

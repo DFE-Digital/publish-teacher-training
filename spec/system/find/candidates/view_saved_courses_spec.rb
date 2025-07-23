@@ -25,7 +25,9 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def then_i_see_no_saved_courses_message
-    expect(page).to have_content("You have no saved courses.")
+    expect(page).to have_content("You have no saved courses")
+    expect(page).to have_link("Find a course", href: find_root_path)
+    expect(page).to have_content("and start saving courses you may want to review and apply for later.")
   end
 
   def then_i_view_my_saved_courses

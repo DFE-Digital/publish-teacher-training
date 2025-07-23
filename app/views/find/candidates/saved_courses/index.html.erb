@@ -7,8 +7,17 @@
     </h1>
   </div>
 
-  <div class="govuk-grid-column-full">
-    <% if @saved_courses.any? %>
+  <% if @saved_courses.empty? %>
+    <div class="govuk-grid-column-full">
+      <div class="no_saved-courses-box">
+        <h2 class="govuk-heading-m"><%= t(".no_saved_courses") %></h2>
+        <p class="govuk-body">
+          <%= t(".empty_state_html", link: govuk_link_to(t(".find_saved_courses"), find_root_path)) %>
+        </p>
+      </div>
+    </div>
+  <% else %>
+    <div class="govuk-grid-column-full">
       <table class="govuk-table">
         <tbody class="govuk-table__body">
           <% @saved_courses.each do |saved_course| %>
@@ -16,8 +25,6 @@
           <% end %>
         </tbody>
       </table>
-    <% else %>
-      <p class="govuk-body"><%= t(".no_saved_courses") %></p>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
