@@ -6,6 +6,12 @@ RSpec.describe DataHub::ProcessSummary, type: :model do
   describe "validations" do
     it { is_expected.to validate_presence_of(:type) }
     it { is_expected.to validate_presence_of(:status) }
+
+    it "is invalid with an unknown status" do
+       expect {
+        described_class.new(status: "invalid")
+       }.to raise_error(ArgumentError, /'invalid' is not a valid status/)
+    end
   end
 
   describe "enums" do
