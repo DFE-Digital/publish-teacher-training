@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe RegisterSchoolImporter::ProviderResolver do
+RSpec.describe DataHub::RegisterSchoolImporter::ProviderResolver do
   subject { described_class.new(recruitment_cycle, parser) }
 
   let(:recruitment_cycle) { create(:recruitment_cycle) }
-  let(:parser) { instance_double(RegisterSchoolImporter::RowParser) }
+  let(:parser) { instance_double(DataHub::RegisterSchoolImporter::RowParser) }
 
   describe "#resolve" do
     context "when provider_code is present and matches a provider" do

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RegisterSchoolImporter::CLI do
+RSpec.describe DataHub::RegisterSchoolImporter::CLI do
   describe "#validate!" do
     context "when both CSV_PATH and YEAR are present" do
       let(:env) { { "CSV_PATH" => "/tmp/test.csv", "YEAR" => "2025" } }

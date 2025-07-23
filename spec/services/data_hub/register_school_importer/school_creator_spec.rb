@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RegisterSchoolImporter::SchoolCreator do
+RSpec.describe DataHub::RegisterSchoolImporter::SchoolCreator do
   subject(:creator) { described_class.new(provider:, urns:, row_number:) }
 
   let(:provider) { create(:provider) }

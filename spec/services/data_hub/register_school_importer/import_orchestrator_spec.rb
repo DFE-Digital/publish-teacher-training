@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RegisterSchoolImporter::ImportOrchestrator do
+RSpec.describe DataHub::RegisterSchoolImporter::ImportOrchestrator do
   subject(:orchestrator) do
     described_class.new(
       recruitment_cycle:,
@@ -18,12 +18,12 @@ RSpec.describe RegisterSchoolImporter::ImportOrchestrator do
   describe "#run!" do
     context "when the import completes successfully" do
       let(:summary_double) do
-        instance_double(RegisterSchoolImporter::ImportSummary, meta: short_summary, full_summary: full_summary)
+        instance_double(DataHub::RegisterSchoolImporter::ImportSummary, meta: short_summary, full_summary: full_summary)
       end
 
       before do
-        allow(RegisterSchoolImporter::Importer).to receive(:new).and_return(
-          instance_double(RegisterSchoolImporter::Importer, call: summary_double),
+        allow(DataHub::RegisterSchoolImporter::Importer).to receive(:new).and_return(
+          instance_double(DataHub::RegisterSchoolImporter::Importer, call: summary_double),
         )
       end
 
@@ -46,7 +46,7 @@ RSpec.describe RegisterSchoolImporter::ImportOrchestrator do
       let(:error) { StandardError.new("Simulated Error") }
 
       before do
-        allow(RegisterSchoolImporter::Importer).to receive(:new).and_raise(error)
+        allow(DataHub::RegisterSchoolImporter::Importer).to receive(:new).and_raise(error)
       end
 
       it "creates a failed RegisterSchoolImportSummary with error info in short_summary" do
