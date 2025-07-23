@@ -1,3 +1,4 @@
 shared:
   - search_results
   - track_click
+  - saved_course

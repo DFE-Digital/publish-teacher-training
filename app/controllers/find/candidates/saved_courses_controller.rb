@@ -2,6 +2,7 @@ module Find
   module Candidates
     class SavedCoursesController < ApplicationController
       before_action :require_authentication
+      after_action :send_saved_course_analytics_event, only: [:create]
 
       def index
         @saved_courses = @candidate.saved_courses
@@ -12,10 +13,10 @@ module Find
 
         respond_to do |format|
           if saved_course
-            format.html { redirect_to_course(course) }
+            format.html { redirect_to_course(@course) }
             format.json { render json: { saved_course: saved_course.id }, status: :created }
           else
-            format.html { redirect_to_course(course, error: t(".save_failed")) }
+            format.html { redirect_to_course(@course, error: t(".save_failed")) }
             format.json { render json: { error: t(".save_failed") }, status: :unprocessable_entity }
           end
         end
@@ -71,6 +72,14 @@ module Find
 
       def course
         @course ||= Course.find(params[:course_id])
+      end
+
+      def send_saved_course_analytics_event
+        Analytics::SavedCourseEvent.new(
+          request:,
+          candidate_id: @candidate.id,
+          course_id: @course.id,
+        ).send_event
       end
 
       def redirect_to_course(course, error: nil)
