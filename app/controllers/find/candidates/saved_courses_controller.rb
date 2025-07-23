@@ -2,6 +2,7 @@ module Find
   module Candidates
     class SavedCoursesController < ApplicationController
       before_action :require_authentication
+      after_action :send_save_course_analytics_event, only: [:create]
 
       def index
         @saved_courses = @candidate.saved_courses
@@ -54,6 +55,14 @@ module Find
       end
 
     private
+
+      def send_save_course_analytics_event
+        Analytics::SaveCourseEvent.new(
+          request:,
+          candidate_id: @candidate.id,
+          course_id: @course.id,
+        ).send_event
+      end
 
       def redirect_to_course(course, error: nil)
         options = {
