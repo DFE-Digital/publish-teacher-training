@@ -47,7 +47,14 @@ module Find
         apply_opens: Time.zone.local(2025, 10, 8, 9), # CONFIRMED
         first_deadline_banner: Time.zone.local(2026, 7, 12, 9), # TBC
         apply_deadline: Time.zone.local(2026, 9, 16, 18), # CONFIRMED
-        find_closes: Time.zone.local(2026, 9, 30, 23, 59, 59), # TBC
+        find_closes: Time.zone.local(2026, 9, 30, 23, 59, 59), # CONFIRMED
+      },
+      2027 => {
+        find_opens: Time.zone.local(2026, 10, 1, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2026, 10, 8, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2027, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2027, 9, 21, 18), # CONFIRMED
+        find_closes: Time.zone.local(2027, 10, 4, 23, 59, 59), # TBC
       },
     }.freeze
 
