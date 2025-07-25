@@ -109,9 +109,10 @@ RSpec.describe CourseEnrichment do
   end
 
   #
-  # Conditional fee fields (fee-based only, and only v2)
+  # Conditional fee fields (fee-based only)
   #
   # fee_conditional = ->(rec) { rec.course.funding_type == "fee" } removed this functionality, can be added below to the shared example if needed
+  # Conditional logic is implemented on the shared example, however I have not added it here as the fields.
   it_behaves_like "versioned_presence_field",
                   field: :fee_schedule,
                   required_in: { 1 => false, 2 => false },

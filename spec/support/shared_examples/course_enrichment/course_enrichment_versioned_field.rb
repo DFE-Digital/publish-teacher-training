@@ -21,10 +21,6 @@ RSpec.shared_examples "versioned_presence_field" do |field:, required_in:, word_
       let(:course)  { build(:course,funding: "fee") }
       let(:record)  { build(:course_enrichment, "v#{ver}".to_sym, course:) }
 
-      def required_here?(rec)
-        required_in[version] && (conditional ? conditional.call(rec) : true)
-      end
-
       context "presence_field" do
         before { record.public_send("#{field}=", nil) }
         required = required_in.fetch(ver)
