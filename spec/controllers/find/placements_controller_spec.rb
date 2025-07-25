@@ -9,7 +9,7 @@ module Find
     end
 
     describe "#placements" do
-      context "when provider is not pressent" do
+      context "when provider is not present" do
         it "renders the not found page" do
           get :index, params: {
             provider_code: "ABC",
@@ -20,9 +20,9 @@ module Find
         end
       end
 
-      context "when provider sets school_placement as not selectable" do
+      context "when provider does not show schools" do
         it "renders the not found page" do
-          provider = create(:provider, selectable_school: false)
+          provider = create(:provider, show_school: false)
           course = create(:course, :published, provider:)
 
           get :index, params: {
@@ -48,9 +48,9 @@ module Find
         end
       end
 
-      context "when course is published and school placement is selectable" do
+      context "when course is published and provider shows schools" do
         it "respond successfully" do
-          provider = create(:provider, selectable_school: true)
+          provider = create(:provider, show_school: true)
           course = create(:course, :published, provider:)
 
           get :index, params: {

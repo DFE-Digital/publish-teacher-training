@@ -27,7 +27,7 @@ module Publish
     private
 
       def provider_params
-        params.expect(provider: [:selectable_school])
+        params.expect(provider: %i[selectable_school show_school])
       end
     end
   end

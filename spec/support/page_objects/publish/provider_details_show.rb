@@ -14,6 +14,8 @@ module PageObjects
       element :email_link, "[data-qa=enrichment__email] a"
       element :selectable_school, "[data-qa=enrichment__selectable_school]"
       element :selectable_school_change_link, "[data-qa=enrichment__selectable_school] a"
+      element :show_school, "[data-qa=enrichment__show_school]"
+      element :show_school_change_link, "[data-qa=enrichment__show_school] a"
     end
   end
 end
