@@ -13,10 +13,10 @@ module Find
 
         respond_to do |format|
           if saved_course
-            format.html { redirect_to_course(@course) }
+            format.html { redirect_to_course(course) }
             format.json { render json: { saved_course: saved_course.id }, status: :created }
           else
-            format.html { redirect_to_course(@course, error: t(".save_failed")) }
+            format.html { redirect_to_course(course, error: t(".save_failed")) }
             format.json { render json: { error: t(".save_failed") }, status: :unprocessable_entity }
           end
         end
