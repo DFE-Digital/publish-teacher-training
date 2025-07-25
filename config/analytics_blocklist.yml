@@ -122,3 +122,9 @@
   - data
   :data_hub_process_summary:
   - full_summary
+  - discarded_total_count
+  - discarded_lack_urn
+  - discarded_invalid_gias_urn
+  - error
+  - discarded_ids_lack_urn
+  - discarded_invalid_urns
