@@ -1,6 +1,6 @@
 module DataHub
   module RegisterSchoolImporter
-    class CLI
+    class Cli
       attr_reader :csv_path, :year
 
       def initialize(environment: ENV)

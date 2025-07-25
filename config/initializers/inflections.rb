@@ -28,5 +28,4 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym "DfE" # Department for Education
   inflect.acronym "SCITT" # School-Centred Initial Teacher Training
   inflect.acronym "QA"
-  inflect.acronym "CLI"
 end

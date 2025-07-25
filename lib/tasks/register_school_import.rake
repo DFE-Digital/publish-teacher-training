@@ -1,7 +1,7 @@
 namespace :register_schools do
   desc "Real import: Process register of placement schools from CSV (saves data)"
   task import: :environment do
-    cli = RegisterSchoolImporter::CLI.new
+    cli = DataHub::RegisterSchoolImporter::Cli.new
     cli.validate!
     recruitment_cycle = cli.recruitment_cycle
 
@@ -9,10 +9,10 @@ namespace :register_schools do
     puts "CSV Path: #{cli.csv_path}"
     puts "Recruitment Cycle: #{recruitment_cycle.year}"
 
-    orchestrator = RegisterSchoolImporter::ImportOrchestrator.new(
+    orchestrator = DataHub::RegisterSchoolImporter::ImportOrchestrator.new(
       recruitment_cycle: recruitment_cycle,
       csv_path: cli.csv_path,
-      school_creator_class: RegisterSchoolImporter::SchoolCreator,
+      school_creator_class: DataHub::RegisterSchoolImporter::SchoolCreator,
     )
 
     import_record = orchestrator.run!
@@ -27,7 +27,7 @@ namespace :register_schools do
 
   desc "Dry-run import: Simulate register of placement schools import (no data changed)"
   task dry_run: :environment do
-    cli = RegisterSchoolImporter::CLI.new
+    cli = DataHub::RegisterSchoolImporter::Cli.new
     cli.validate!
     recruitment_cycle = cli.recruitment_cycle
 
@@ -35,10 +35,10 @@ namespace :register_schools do
     puts "CSV Path: #{cli.csv_path}"
     puts "Recruitment Cycle: #{recruitment_cycle.year}"
 
-    summary = RegisterSchoolImporter::Importer.new(
+    summary = DataHub::RegisterSchoolImporter::Importer.new(
       recruitment_cycle:,
       csv_path: cli.csv_path,
-      school_creator_class: RegisterSchoolImporter::SchoolDryRunCreator,
+      school_creator_class: DataHub::RegisterSchoolImporter::SchoolDryRunCreator,
     ).call
 
     puts "Summary: #{summary.meta.to_json}"
