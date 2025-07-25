@@ -11,9 +11,9 @@ namespace :discard_invalid_schools do
 
     puts "Starting REAL discard for recruitment cycle year #{year}..."
 
-    DiscardInvalidSchools::Executor.new(
+    DataHub::DiscardInvalidSchools::Executor.new(
       year:,
-      discarder_class: DiscardInvalidSchools::SiteDiscarder,
+      discarder_class: DataHub::DiscardInvalidSchools::SiteDiscarder,
     ).execute
 
     puts "REAL discard completed."
@@ -35,9 +35,9 @@ namespace :discard_invalid_schools do
 
     puts "Starting DRY RUN discard simulation for recruitment cycle year #{year}..."
 
-    DiscardInvalidSchools::Executor.new(
+    DataHub::DiscardInvalidSchools::Executor.new(
       year:,
-      discarder_class: DiscardInvalidSchools::DryRunSiteDiscarder,
+      discarder_class: DataHub::DiscardInvalidSchools::DryRunSiteDiscarder,
     ).execute
 
     puts "DRY RUN discard simulation completed."
