@@ -1,0 +1,390 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "0f1dd3d1811456d8ede5faa9cc7d79d768d41177ada310fbfbb4b92f1ca28dbe",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/support/users/providers/show.html.erb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => TabNavigation.new(:items => ([{ :name => \"Details\", :url => support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user) }, { :name => \"Providers\", :url => support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) }])), { :locals => ({ :tabnavigation => TabNavigation.new(:items => ([{ :name => \"Details\", :url => support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user) }, { :name => \"Providers\", :url => support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) }])) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Support::Users::ProvidersController",
+          "method": "show",
+          "line": 9,
+          "file": "app/controllers/support/users/providers_controller.rb",
+          "rendered": {
+            "name": "support/users/providers/show",
+            "file": "app/views/support/users/providers/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "support/users/providers/show"
+      },
+      "user_input": "params[:recruitment_cycle_year]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "44644415f251a3fadb9fa7efdbb23052fab802e65465040d6c7fc5533dc64a98",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/support/view_components/preview.html.erb",
+      "line": 11,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => @preview.render_args(File.basename(params[:path]), :params => params.permit!)[:component], {})",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Support::ViewComponentsController",
+          "method": "previews",
+          "line": 40,
+          "file": "app/controllers/support/view_components_controller.rb",
+          "rendered": {
+            "name": "support/view_components/preview",
+            "file": "app/views/support/view_components/preview.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "support/view_components/preview"
+      },
+      "user_input": "params.permit!",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "61cd106032eaeba90480ca9703c3b12c14b41458b74169649b78aed4d8d3ea4d",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/support/view_components/preview.html.erb",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(template => @preview.render_args(File.basename(params[:path]), :params => params.permit!)[:template], { :locals => ((@preview.render_args(File.basename(params[:path]), :params => params.permit!)[:locals] or {})) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Support::ViewComponentsController",
+          "method": "previews",
+          "line": 40,
+          "file": "app/controllers/support/view_components_controller.rb",
+          "rendered": {
+            "name": "support/view_components/preview",
+            "file": "app/views/support/view_components/preview.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "support/view_components/preview"
+      },
+      "user_input": "params.permit!",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "6810bb85e8494ec41aa3a03bc75e0e8ebd1a7fadccf7819adf867f8575bc179f",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/support/users/show.html.erb",
+      "line": 6,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => GovukComponent::BackLinkComponent.new(:text => \"All user records\", :href => support_recruitment_cycle_users_path(params[:recruitment_cycle_year])), { :locals => ({ :\"govukcomponent::backlinkcomponent\" => GovukComponent::BackLinkComponent.new(:text => \"All user records\", :href => support_recruitment_cycle_users_path(params[:recruitment_cycle_year])) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Support::UsersController",
+          "method": "show",
+          "line": 12,
+          "file": "app/controllers/support/users_controller.rb",
+          "rendered": {
+            "name": "support/users/show",
+            "file": "app/views/support/users/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "support/users/show"
+      },
+      "user_input": "params[:recruitment_cycle_year]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "7ddfd1852fae9b7440c3419038386660d11674b4546658da8717399d070d48e6",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/concerns/apply_redirect.rb",
+      "line": 17,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(\"#{Settings.apply_base_url}/candidate/apply?providerCode=#{RecruitmentCycle.current.providers.by_provider_code(params[:provider_code]).courses.case_insensitive_search(course_code_param).first!.provider.provider_code}&courseCode=#{RecruitmentCycle.current.providers.by_provider_code(params[:provider_code]).courses.case_insensitive_search(course_code_param).first!.course_code}\", :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ApplyRedirect",
+        "method": "apply"
+      },
+      "user_input": "RecruitmentCycle.current.providers.by_provider_code(params[:provider_code]).courses.case_insensitive_search(course_code_param).first!.provider.provider_code",
+      "confidence": "Weak",
+      "cwe_id": [
+        601
+      ],
+      "note": "The values interpolated into the redirected url are sourced from our DB and not user params"
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "872846270e20c776d20be1527bbce1fbc0c4fd25571e34b0c46cc2c2d0707576",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/find/track_controller.rb",
+      "line": 11,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(params[:url], :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Find::TrackController",
+        "method": "track_click"
+      },
+      "user_input": "params[:url]",
+      "confidence": "Weak",
+      "cwe_id": [
+        601
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "88d3bb22bd9a4163327cfbf91e06dd76c453a6f63d0f11a2756c448cbe5a81fd",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/support/providers/copy_courses/new.html.erb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => PageTitle.new(:title => \"support.providers.copy_courses.new\", :has_errors => CopyCoursesForm.new(Provider.find(params[:provider_id]), recruitment_cycle.providers.find_by(:provider_code => params[:course][:autocompleted_provider_code])).errors.present?), { :locals => ({ :pagetitle => PageTitle.new(:title => \"support.providers.copy_courses.new\", :has_errors => CopyCoursesForm.new(Provider.find(params[:provider_id]), recruitment_cycle.providers.find_by(:provider_code => params[:course][:autocompleted_provider_code])).errors.present?) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Support::Providers::CopyCoursesController",
+          "method": "create",
+          "line": 35,
+          "file": "app/controllers/support/providers/copy_courses_controller.rb",
+          "rendered": {
+            "name": "support/providers/copy_courses/new",
+            "file": "app/views/support/providers/copy_courses/new.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "support/providers/copy_courses/new"
+      },
+      "user_input": "params[:course][:autocompleted_provider_code]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "8c226e908ca1028ae86900637c8447267d2feb0e91adc1e272b4415462a3c27b",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/support/users/providers/show.html.erb",
+      "line": 6,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => GovukComponent::BackLinkComponent.new(:text => \"All user records\", :href => support_recruitment_cycle_users_path(params[:recruitment_cycle_year])), { :locals => ({ :\"govukcomponent::backlinkcomponent\" => GovukComponent::BackLinkComponent.new(:text => \"All user records\", :href => support_recruitment_cycle_users_path(params[:recruitment_cycle_year])) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Support::Users::ProvidersController",
+          "method": "show",
+          "line": 9,
+          "file": "app/controllers/support/users/providers_controller.rb",
+          "rendered": {
+            "name": "support/users/providers/show",
+            "file": "app/views/support/users/providers/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "support/users/providers/show"
+      },
+      "user_input": "params[:recruitment_cycle_year]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "98e7f7dca8c7831a23d2b9f7366bf006b43aff36f55b4b7ce32808592c0894b1",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/support/view_components_controller.rb",
+      "line": 34,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Support::ViewComponentsController",
+        "method": "previews"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "a707a4a2f0bce905213e5bd13873600ce89d0fc92140d3bb385bd4b1cf9b1d06",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/support/users/edit.html.erb",
+      "line": 6,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => GovukComponent::BackLinkComponent.new(:text => \"User record\", :href => support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user)), { :locals => ({ :\"govukcomponent::backlinkcomponent\" => GovukComponent::BackLinkComponent.new(:text => \"User record\", :href => support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user)) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Support::UsersController",
+          "method": "edit",
+          "line": 20,
+          "file": "app/controllers/support/users_controller.rb",
+          "rendered": {
+            "name": "support/users/edit",
+            "file": "app/views/support/users/edit.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "support/users/edit"
+      },
+      "user_input": "params[:recruitment_cycle_year]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "c06da0e44a98d0bb98f687e869e7e3d880fac0fc0a2d2969ed408f86a161d6c6",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/support/users/show.html.erb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => TabNavigation.new(:items => ([{ :name => \"Details\", :url => support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user) }, { :name => \"Providers\", :url => support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) }])), { :locals => ({ :tabnavigation => TabNavigation.new(:items => ([{ :name => \"Details\", :url => support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user) }, { :name => \"Providers\", :url => support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) }])) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Support::UsersController",
+          "method": "show",
+          "line": 12,
+          "file": "app/controllers/support/users_controller.rb",
+          "rendered": {
+            "name": "support/users/show",
+            "file": "app/views/support/users/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "support/users/show"
+      },
+      "user_input": "params[:recruitment_cycle_year]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "c8acba69dc0954f56c0fd06a8d5bd445eb3f883fb7546fb22d9e54b2312d6734",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/publish/shared/_navigation_bar.html.erb",
+      "line": 3,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => NavigationBar.new(:items => navigation_items(recruitment_cycle.providers.find_by(:provider_code => params[:provider_code])), :current_path => request.path, :current_user => (@current_user)), { :locals => ({ :navigationbar => NavigationBar.new(:items => navigation_items(recruitment_cycle.providers.find_by(:provider_code => params[:provider_code])), :current_path => request.path, :current_user => (@current_user)) }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "API::Public::V1::Providers::Courses::LocationsController",
+          "method": "provider",
+          "line": 32,
+          "file": "app/controllers/api/public/v1/providers/courses/locations_controller.rb",
+          "rendered": {
+            "name": "layouts/application",
+            "file": "app/views/layouts/application.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "layouts/application",
+          "line": 55,
+          "file": "app/views/layouts/application.html.erb",
+          "rendered": {
+            "name": "publish/shared/_navigation_bar",
+            "file": "app/views/publish/shared/_navigation_bar.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "publish/shared/_navigation_bar"
+      },
+      "user_input": "params[:provider_code]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    }
+  ],
+  "brakeman_version": "7.1.0"
+}
