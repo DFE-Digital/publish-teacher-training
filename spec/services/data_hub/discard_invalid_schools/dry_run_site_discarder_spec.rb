@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DiscardInvalidSchools::DryRunSiteDiscarder do
+RSpec.describe DataHub::DiscardInvalidSchools::DryRunSiteDiscarder do
   let(:provider) { create(:provider) }
 
   context "with nil URN" do
