@@ -128,7 +128,7 @@ class CourseEnrichment < ApplicationRecord
 
   # v2 optional fields
   validates :theoretical_training_duration, words_count: { maximum: 50 }
-  validates :interview_location, inclusion: { in: ['onsite', 'in person', 'both', nil] }
+  validates :interview_location, inclusion: { in: ["onsite", "in person", "both", nil] }
   validates :fee_schedule, words_count: { maximum: 50 }, if: :is_fee_based?
   validates :additional_fees, words_count: { maximum: 50 }, if: :is_fee_based?
   validates :assessment_methods, words_count: { maximum: 50 }
