@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DiscardInvalidSchools::SiteDiscarder do
+RSpec.describe DataHub::DiscardInvalidSchools::SiteDiscarder do
   let(:urn) { "12345" }
   let(:provider) { create(:provider) }
 

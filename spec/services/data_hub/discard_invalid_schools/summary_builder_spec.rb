@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DiscardInvalidSchools::SummaryBuilder do
+RSpec.describe DataHub::DiscardInvalidSchools::SummaryBuilder do
   subject(:builder) { described_class.new(no_urn_ids:, invalid_urns:) }
 
   let(:no_urn_ids) { [1, 2] }

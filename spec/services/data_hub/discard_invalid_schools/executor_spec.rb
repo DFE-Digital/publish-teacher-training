@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DiscardInvalidSchools::Executor do
+RSpec.describe DataHub::DiscardInvalidSchools::Executor do
   subject(:executor) { described_class.new(year:, discarder_class:) }
 
   let(:recruitment_cycle) { RecruitmentCycle.current }
@@ -11,7 +11,7 @@ RSpec.describe DiscardInvalidSchools::Executor do
   let!(:site_invalid_urn) { create(:site, provider:, urn: "12345", location_name: "Some School") }
 
   before do
-    allow(DiscardInvalidSchools::SiteFilter).to receive(:filter).and_call_original
+    allow(DataHub::DiscardInvalidSchools::SiteFilter).to receive(:filter).and_call_original
     allow(DataHub::DiscardInvalidSchoolsProcessSummary).to receive(:create!).and_call_original
   end
 
@@ -26,7 +26,7 @@ RSpec.describe DiscardInvalidSchools::Executor do
   end
 
   context "with real discarder" do
-    let(:discarder_class) { DiscardInvalidSchools::SiteDiscarder }
+    let(:discarder_class) { DataHub::DiscardInvalidSchools::SiteDiscarder }
 
     it_behaves_like "a successful execution"
 
@@ -38,7 +38,7 @@ RSpec.describe DiscardInvalidSchools::Executor do
   end
 
   context "with dry run discarder" do
-    let(:discarder_class) { DiscardInvalidSchools::DryRunSiteDiscarder }
+    let(:discarder_class) { DataHub::DiscardInvalidSchools::DryRunSiteDiscarder }
 
     it_behaves_like "a successful execution"
 

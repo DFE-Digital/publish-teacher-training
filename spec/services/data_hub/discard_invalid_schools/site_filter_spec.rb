@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DiscardInvalidSchools::SiteFilter do
+RSpec.describe DataHub::DiscardInvalidSchools::SiteFilter do
   let(:recruitment_cycle) { create(:recruitment_cycle, year: "2025") }
   let(:provider) { create(:provider, recruitment_cycle:) }
 
