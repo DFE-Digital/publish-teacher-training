@@ -11,7 +11,7 @@ module Find
 
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
-    before_action :set_candidate
+    before_action :candidate
     before_action :redirect_to_cycle_has_ended_if_find_is_down
     before_action :redirect_to_maintenance_page_if_flag_is_active
     before_action :promote_flash_info
@@ -34,7 +34,7 @@ module Find
       end
     end
 
-    def set_candidate
+    def candidate
       @candidate ||= Current.user
     end
 
