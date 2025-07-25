@@ -3,7 +3,7 @@ module Find
     class SavedCoursesController < ApplicationController
       before_action :require_authentication
       after_action :send_saved_course_analytics_event, only: [:create]
-      after_action :send_removed_saved_course_analytics_event, only: [:destroy]
+      after_action :send_remove_saved_course_analytics_event, only: [:destroy]
 
       def index
         @saved_courses = @candidate.saved_courses
@@ -83,7 +83,7 @@ module Find
         ).send_event
       end
 
-      def send_removed_saved_course_analytics_event
+      def send_remove_saved_course_analytics_event
         Analytics::RemoveSavedCourseEvent.new(
           request:,
           candidate_id: @candidate.id,
