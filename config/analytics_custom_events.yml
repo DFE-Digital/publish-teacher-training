@@ -3,3 +3,4 @@ shared:
   - track_click
   - saved_course
   - removed_saved_course
+  - candidate_applies
