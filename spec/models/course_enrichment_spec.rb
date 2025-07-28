@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe CourseEnrichment do
@@ -98,12 +99,13 @@ RSpec.describe CourseEnrichment do
   #
   describe "course_length" do
     subject(:record) { build(:course_enrichment, course_length:) }
+
     let(:course_length) { "1 year" }
 
     context "nil" do
       let(:course_length) { nil }
 
-      it { is_expected.to be_valid }             # draft
+      it { is_expected.to be_valid } # draft
       it { is_expected.not_to be_valid(:publish) }
     end
   end
@@ -181,10 +183,11 @@ RSpec.describe CourseEnrichment do
   end
 
   describe "#unpublish" do
+    subject(:record) { create(:course_enrichment, :published, last_published_timestamp_utc: timestamp, course:) }
+
     let(:provider) { create(:provider) }
     let(:course)   { create(:course, provider:) }
     let(:timestamp) { Time.utc(2017, 1, 1) }
-    subject(:record) { create(:course_enrichment, :published, last_published_timestamp_utc: timestamp, course:) }
 
     it "to initial draft resets last_published_timestamp_utc" do
       expect { record.unpublish(initial_draft: true) }.to change { record.reload.last_published_timestamp_utc }
@@ -192,7 +195,7 @@ RSpec.describe CourseEnrichment do
     end
 
     it "to subsequent draft keeps last_published_timestamp_utc" do
-      expect { record.unpublish(initial_draft: false) }.not_to change { record.reload.last_published_timestamp_utc }
+      expect { record.unpublish(initial_draft: false) }.not_to(change { record.reload.last_published_timestamp_utc })
     end
   end
 
