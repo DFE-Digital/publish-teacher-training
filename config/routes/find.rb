@@ -4,6 +4,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
   root to: "homepage#index"
 
   get "track_click", to: "track#track_click"
+  get "track_apply_to_course_click", to: "track#track_apply_to_course_click"
 
   get "/accessibility", to: "pages#accessibility", as: :accessibility
   get "/privacy", to: "pages#privacy", as: :privacy

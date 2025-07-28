@@ -38,8 +38,9 @@ RSpec.describe "Saving a course", service: :find do
     expect(page).to have_content("Apply for this course")
     expect(page).to have_content("Continue to the Apply for teacher training website to apply for this course.")
 
-    expected_href = find_track_click_path(
+    expected_href = find_track_apply_to_course_click_path(
       utm_content: "confirm_apply_course_button",
+      course_id: @course.id,
       url: find_apply_path(provider_code: @course.provider.provider_code, course_code: @course.course_code),
     )
 
