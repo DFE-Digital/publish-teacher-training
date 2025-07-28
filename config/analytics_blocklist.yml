@@ -128,3 +128,9 @@
   - error
   - discarded_ids_lack_urn
   - discarded_invalid_urns
+  - updated_total_count
+  - updated_location_name
+  - updated_latlon
+  - updated_address3
+  - dry_run
+  - site_updates
