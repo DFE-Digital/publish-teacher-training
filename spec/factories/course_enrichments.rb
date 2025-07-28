@@ -86,7 +86,7 @@ FactoryBot.define do
       fee_schedule { Faker::Lorem.sentence }
       additional_fees { Faker::Lorem.sentence }
       theoretical_training_activities { Faker::Lorem.sentence }
-      interview_location { 'both' }
+      interview_location { "both" }
     end
 
     trait :rolled_over do

@@ -18,11 +18,12 @@ RSpec.shared_examples "versioned_presence_field" do |field:, required_in:, word_
   [1, 2].each do |ver|
     context "version #{ver}" do
       let(:version) { ver }
-      let(:course)  { build(:course,funding: "fee") }
+      let(:course)  { build(:course, funding: "fee") }
       let(:record)  { build(:course_enrichment, "v#{ver}".to_sym, course:) }
 
       context "presence_field" do
         before { record.public_send("#{field}=", nil) }
+
         required = required_in.fetch(ver)
 
         it ":#{field} #{required ? 'is' : 'is not'} required on publish (v#{ver})" do
