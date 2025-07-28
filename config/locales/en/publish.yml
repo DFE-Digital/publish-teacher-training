@@ -28,6 +28,20 @@ en:
         show:
           back: Back to %{course_name} (%{course_code})
           heading: About %{provider_name}
+      schools:
+        salaried: Employing
+        unsalaried: Placement
+        heading:
+          salaried: Employing schools
+          unsalaried: Placement schools
+        label:
+          one: "%{prefix} school"
+          other: "%{prefix} schools"
+        new:
+          schools_selection: The more schools you select, the more searches your course will appear in.
+          searches_by_location: 60% of searches are by location.
+          warning_text: "If you do not add all your %{school_type}, you may miss out on potential candidates."
+          selection: Select all that apply
     providers:
       details:
         page_title: Organisation details
@@ -104,10 +118,10 @@ en:
           summary_link: See what we include in this section
           guidance_html:
             <p class="govuk-body">Candidates find it helpful to know when fees are due, payment schedules, top up fees
-              and other costs like books and transport.</p>
+            and other costs like books and transport.</p>
             <p class="govuk-body">You can also tell them about any financial support your institution offers.</p>
             <p class="govuk-body">Do not include information about financial support available from the government
-              like student loans or bursaries.</p>
+            like student loans or bursaries.</p>
       interview_process:
         edit:
           interview_process_heading: Interview process (optional)
@@ -118,10 +132,10 @@ en:
           include_information_about_html:
             <p class="govuk-body">Include information about:</p>
             <ul class="govuk-list govuk-list--bullet">
-              <li>how many interview candidates will have</li>
-              <li>the format of interviews, for example could they interview online</li>
-              <li>who will be interviewing them</li>
-              <li>any tests needed - if so, how they can prepare</li>
+            <li>how many interview candidates will have</li>
+            <li>the format of interviews, for example could they interview online</li>
+            <li>who will be interviewing them</li>
+            <li>any tests needed - if so, how they can prepare</li>
             </ul>
       school_placements:
         edit:
@@ -133,9 +147,9 @@ en:
             <p class="govuk-body">Give candidates information about the schools they will be training in</p>
             <p class="govuk-body">Tell them:</p>
             <ul class="govuk-list govuk-list--bullet">
-              <li>how many placements they will have</li>
-              <li>how much time they will spend in each school</li>
-              <li>if mentors are available within the schools</li>
+            <li>how many placements they will have</li>
+            <li>how much time they will spend in each school</li>
+            <li>if mentors are available within the schools</li>
             </ul>
           where_you_will_train: Where you will train
           summary_text: See what we include in this section
@@ -149,18 +163,17 @@ en:
           candidates_say_section_html:
             <p class="govuk-body">Candidates say the most important information is:</p>
             <ul class="govuk-list govuk-list--bullet">
-              <li>how and where they will spend their time</li>
-              <li>how the course is structured, for example which specific modules or areas are taught</li>
-              <li>how they will be supported, for example tutors and mentoring</li>
-              <li>the qualification and experience they will have at the end of the course</li>
+            <li>how and where they will spend their time</li>
+            <li>how the course is structured, for example which specific modules or areas are taught</li>
+            <li>how they will be supported, for example tutors and mentoring</li>
+            <li>the qualification and experience they will have at the end of the course</li>
             <ul>
-          remember_to_section_html:
-            <p class="govuk-body">Remember to:</p>
+          remember_to_section_html: <p class="govuk-body">Remember to:</p>
             <ul class="govuk-list govuk-list--bullet">
-              <li>keep it brief and to the point, people struggle with long blocks of writing online</li>
-              <li>use bullet points, headings and paragraphs to make your writing easy to read</li>
-              <li>spell out acronyms the first time you use them, for example, ITT, NQT, SCITT</li>
-              <li>link to your organisation's website for people who want more detail about who you are and what you do</li>
+            <li>keep it brief and to the point, people struggle with long blocks of writing online</li>
+            <li>use bullet points, headings and paragraphs to make your writing easy to read</li>
+            <li>spell out acronyms the first time you use them, for example, ITT, NQT, SCITT</li>
+            <li>link to your organisation's website for people who want more detail about who you are and what you do</li>
             </ul>
           view_examples: View examples of great course summaries
       study_mode:
