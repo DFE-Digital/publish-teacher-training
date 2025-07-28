@@ -45,11 +45,11 @@ RSpec.shared_examples "versioned_presence_field" do |field:, required_in:, word_
       if word_limit
         context "word over limit of #{word_limit}" do
           before do
-            if word_limit.is_a?(Array)
-              over = Faker::Lorem.words(number: word_limit[version - 1] + 1).join(" ")
-            else
-              over = Faker::Lorem.words(number: word_limit + 1).join(" ")
-            end
+            over = if word_limit.is_a?(Array)
+                     Faker::Lorem.words(number: word_limit[version - 1] + 1).join(" ")
+                   else
+                     Faker::Lorem.words(number: word_limit + 1).join(" ")
+                   end
             record.public_send("#{field}=", over)
           end
 
@@ -61,11 +61,11 @@ RSpec.shared_examples "versioned_presence_field" do |field:, required_in:, word_
 
         context "word at limit of #{word_limit}" do
           before do
-            if word_limit.is_a?(Array)
-              words = Faker::Lorem.words(number: word_limit[version - 1]).join(" ")
-            else
-              words = Faker::Lorem.words(number: word_limit).join(" ")
-            end
+            words = if word_limit.is_a?(Array)
+                      Faker::Lorem.words(number: word_limit[version - 1]).join(" ")
+                    else
+                      Faker::Lorem.words(number: word_limit).join(" ")
+                    end
             record.public_send("#{field}=", words)
           end
 
