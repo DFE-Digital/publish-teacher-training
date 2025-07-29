@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_22_110352) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_29_125830) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -456,6 +456,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_22_110352) do
     t.text "address3"
     t.integer "site_type", default: 0, null: false
     t.boolean "discarded_via_script"
+    t.string "added_via", default: "publish_interface", null: false
+    t.index ["added_via"], name: "index_site_on_added_via"
     t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["discarded_via_script"], name: "index_site_on_discarded_via_script"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"

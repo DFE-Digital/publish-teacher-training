@@ -219,6 +219,7 @@ shared:
     - address3
     - site_type
     - discarded_via_script
+    - added_via
   statistic:
     - id
     - json_data
