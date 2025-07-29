@@ -23,6 +23,7 @@ RSpec.describe DataHub::RegisterSchoolImporter::SchoolCreator do
         expect(site).not_to be_nil
         expect(site.location_name).to eq("Test School")
         expect(site.site_type).to eq("school")
+        expect(site.added_via).to eq("register_import")
       end
     end
 
@@ -97,6 +98,7 @@ RSpec.describe DataHub::RegisterSchoolImporter::SchoolCreator do
         site = provider.reload.sites.find_by(urn:)
         expect(site.latitude).to eq(52.6)
         expect(site.longitude).to eq(-1.2)
+        expect(site.added_via).to eq("register_import")
       end
     end
 

@@ -253,6 +253,15 @@ describe Site do
     end
   end
 
+  describe "added via" do
+    it "defines a string enum for added_via" do
+      expect(described_class.added_via).to eq({
+        "publish_interface" => "publish_interface",
+        "register_import" => "register_import",
+      })
+    end
+  end
+
   describe "site type" do
     let(:site) { build(:site) }
 
