@@ -55,11 +55,19 @@ module DataHub
     private
 
       def find_gias_school(urn)
-        GiasSchool.open.find_by(urn:)
+        gias_schools_by_urn[urn]
       end
 
       def find_site(urn)
-        @provider.sites.find_or_initialize_by(urn:)
+        sites_by_urn[urn] || @provider.sites.new(urn:)
+      end
+
+      def gias_schools_by_urn
+        @gias_schools_by_urn ||= GiasSchool.open.where(urn: @urns).index_by(&:urn)
+      end
+
+      def sites_by_urn
+        @sites_by_urn ||= @provider.sites.where(urn: @urns).index_by(&:urn)
       end
 
       def build_ignored_hash(urn, reason)
