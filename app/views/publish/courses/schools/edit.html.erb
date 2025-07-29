@@ -1,4 +1,4 @@
-<% page_title = "Schools" %>
+<% page_title = school_label_for(course) %>
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", @course_school_form.errors.present?) %>
 
 <% content_for :before_content do %>
@@ -18,7 +18,7 @@
 
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_check_boxes_fieldset :site_ids, legend:
-      { text: "#{render CaptionText.new(text: course.name_and_code)} Schools".html_safe, tag: "h1", size: "l" }, hint: { text: "Select all that apply" } do %>
+      { text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe, tag: "h1", size: "l" }, hint: { text: "Select all that apply" } do %>
        <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
           <%= f.govuk_check_box :site_ids,
               site.id,
