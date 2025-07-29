@@ -27,6 +27,11 @@ class Site < ApplicationRecord
     study_site: 1,
   }
 
+  enum :added_via, {
+    publish_interface: "publish_interface",
+    register_import: "register_import",
+  }
+
   validates :location_name, uniqueness: { scope: %i[provider_id site_type],
                                           message: lambda { |object, _data|
                                             "This #{object.site_type.humanize.downcase} has already been added"

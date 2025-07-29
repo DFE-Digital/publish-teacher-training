@@ -41,6 +41,7 @@ module DataHub
       def create!(site, gias_school)
         site.assign_attributes(gias_school.school_attributes)
         site.site_type = Site.site_types[:school]
+        site.added_via = Site.added_via[:register_import]
 
         if gias_school.latitude.present? && gias_school.longitude.present?
           site.latitude  = gias_school.latitude
