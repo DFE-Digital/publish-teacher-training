@@ -15,7 +15,7 @@ en:
         view:
           uk_citizens: UK citizens
           non_uk_citizens: Non-UK citizens
-          course_fees: The course fees for UK citizens in %{cycle_range} are %{fee}.
+          course_fees: The course fee for UK citizens in %{cycle_range} are %{fee}.
       tda_advice:
         heading: Teacher degree apprenticeships (TDAs)
         content: On a teacher degree apprenticeship you’ll work in a school and earn a salary while getting a bachelor’s degree and qualified teacher status (QTS).
