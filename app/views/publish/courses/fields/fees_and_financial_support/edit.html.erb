@@ -1,0 +1,123 @@
+<% content_for :page_title, title_with_error_prefix(
+  t(".page_title", course_name_and_code: @course.name_and_code),
+  @fees_and_financial_support_form.errors.any?,
+) %>
+
+<% if params[:copy_from].present? %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-course-information-form",
+    @source_course,
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+          model: @fees_and_financial_support_form,
+          url: fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+          data: { qa: "enrichment-form", module: "form-check-leave" },
+          method: :patch,
+          local: true,
+        ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @course.recruitment_cycle_year, course_code: @course.course_code)) %>
+      <% end %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        <%= t(".heading") %>
+      </h1>
+
+      <%= f.govuk_text_field(:fee_uk_eu,
+          form_group: { id: "fee-uk" },
+          label: { text: t(".fee_uk"), size: "s" },
+          value: @copied_fields_values&.dig("fee_uk_eu"),
+          prefix_text: "£",
+          width: 5,
+          data: { qa: "course_fee_uk_eu",
+                  input_preview_target: "input",
+                  action: "input-preview#updatePreview",
+                  preview_output_target: "currency1" }) %>
+
+      <%= f.govuk_text_field(:fee_international,
+          form_group: { id: "fee-international" },
+          label: { text: @course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), size: "s" },
+          value: @copied_fields_values&.dig("fee_international"),
+          prefix_text: "£",
+          width: 5,
+          data: {
+            qa: "course_fee_international",
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "currency2",
+        }) %>
+
+      <%= f.govuk_text_area(:fee_schedule,
+          label: { text: t(".fee_schedule"), size: "s" },
+          value: @copied_fields_values&.dig("fee_schedule"),
+          rows: 5,
+          max_words: 50,
+          data: { qa: "course_fee_schedule",
+                  input_preview_target: "input",
+                  action: "input-preview#updatePreview",
+                  preview_output_target: "preview3" }) %>
+
+      <%= f.govuk_text_area(:additional_fees,
+          label: { text: t(".additional_fees"), size: "s" },
+          value: @copied_fields_values&.dig("additional_fees"),
+          hint: { text: t(".additional_fees_hint"), size: "s" },
+          rows: 5,
+          max_words: 50,
+          data: { qa: "course_additional_fees",
+                  input_preview_target: "input",
+                  action: "input-preview#updatePreview",
+                  preview_output_target: "preview3" }) %>
+
+      <%= f.govuk_text_area(:financial_support,
+          label: { text: t(".financial_support"), size: "s" },
+          value: @copied_fields_values&.dig("financial_support"),
+          hint: { text: t(".financial_support_hint"), size: "s" },
+          rows: 5,
+          max_words: @course_enrichment.version == 2 ? 50 : 250,
+          data: { qa: "course_financial_support",
+                  input_preview_target: "input",
+                  action: "input-preview#updatePreview",
+                  preview_output_target: "preview3" }) %>
+
+      <%= f.govuk_submit t(".submit_button") %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(
+            t("cancel"),
+            publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle.year,
+              @course.course_code,
+            ),
+          ) %>
+    </p>
+  </div>
+
+  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+    <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        ),
+      },
+    ) %>
+  </aside>
+</div>

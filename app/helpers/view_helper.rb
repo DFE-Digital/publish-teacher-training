@@ -41,14 +41,19 @@ module ViewHelper
     provider_base = "/publish/organisations/#{provider_code}/#{course.recruitment_cycle_year}"
     accrediting_provider = ratifying_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)
 
+    long_form_content_base = "#{base}/fields/fees-and-financial-support"
+    non_long_form_content_base = "#{base}/fees"
+
+    error_url_base = FeatureFlag.active?(:long_form_content) ? long_form_content_base : non_long_form_content_base
+
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
     else
       {
         about_course: "#{base}/about-this-course?display_errors=true#publish-course-information-form-about-course-field-error",
         how_school_placements_work: "#{base}/school-placements?display_errors=true#publish-course-information-form-how-school-placements-work-field-error",
-        fee_uk_eu: "#{base}/fees?display_errors=true#fee_uk_eu-error",
-        fee_international: "#{base}/fees?display_errors=true#fee_internation-error",
+        fee_uk_eu: "#{error_url_base}?display_errors=true#fee-error",
+        fee_international: "#{error_url_base}?display_errors=true#fee_international-error",
         course_length: "#{base}/length?display_errors=true#course_length-error",
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",

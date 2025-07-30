@@ -77,10 +77,16 @@ en:
           course_length_and_salary_heading: Course length and salary
           course_length_label: Course length
           course_length_hidden_text: course length
+          fee_for_uk_citizens_label: Fee for UK citizens
           fee_for_uk_students_label: Fee for UK students
           fee_for_uk_students_hidden_text: fee for UK students
+          fee_international_label: Fee for non-UK citizens
+          fee_international_optional_label: Fee for non-UK citizens (optional)
           fee_for_international_students_label: Fee for international students
-          fee_details_label: Fees and financial support (optional)
+          fee_for_international_citizens_label: Fee for international citizens
+          fee_for_international_citizens_optional_label: Fee for international citizens (optional)
+          fee_details_optional_label: Fees and financial support (optional)
+          fee_details_label: Fees and financial support
           fee_details_hidden_text: fees and financial support
           financial_incentive_details_label: Financial support from the government
           salary_label: Salary

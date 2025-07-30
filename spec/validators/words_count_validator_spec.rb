@@ -24,7 +24,7 @@ describe WordsCountValidator do
     model
   end
 
-  let(:expected_errors) { ["^Reduce the word count for some words"] }
+  let(:expected_errors) { ["Reduce the word count for some words"] }
 
   context "with max valid number of words" do
     let(:some_words_field) { (%w[word] * maximum).join(" ") }
