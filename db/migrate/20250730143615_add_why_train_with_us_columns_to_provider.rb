@@ -4,7 +4,7 @@
 class AddWhyTrainWithUsColumnsToProvider < ActiveRecord::Migration[8.0]
   # This migration adds columns to the provider table for the "Why Train With Us" section.
   def change
-    change_table(:provider) do |t|
+    change_table(:provider, bulk: true) do |t|
       t.string :self_description
       t.string :provider_value_proposition
     end
