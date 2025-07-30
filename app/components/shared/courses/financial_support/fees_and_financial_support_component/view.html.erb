@@ -6,7 +6,11 @@
     <%= render partial: "find/courses/salary", locals: { course: @course } %>
   <% end %>
   <% if has_fees? %>
+   <% if FeatureFlag.active?(:long_form_content) %>
+    <%= render partial: "find/courses/v2/financial_support/fees_and_financials", locals: { course: @course } %>
+   <% else %>
     <%= render Find::Courses::FeesComponent::View.new(course) %>
+   <% end %>
   <% end %>
   <% if salaried? %>
     <%= render partial: "shared/courses/financial_support/salaried" %>

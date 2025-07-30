@@ -1,0 +1,40 @@
+<% if course.fee_uk_eu.present? && !course.fee_international.present? %>
+  <p class="govuk-body"><%= t(".course_fees", cycle_range: course.cycle_range, fee: number_to_currency(course.fee_uk_eu)) %></p>
+<% end %>
+
+<% if course.fee_international.present? %>
+  <table class="govuk-table app-table--vertical-align-middle">
+    <caption class="govuk-table__caption govuk-!-font-weight-regular govuk-!-margin-bottom-4">The course fees
+      for <%= course.cycle_range %> are as follows:
+    </caption>
+    <thead class="govuk-table__head">
+    <tr class="govuk-visually-hidden govuk-table__row">
+      <th class="govuk-table__header">Student type</th>
+      <th class="govuk-table__header">Fees to pay</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell"><%= t(".uk_citizens") %></td>
+
+      <td class="govuk-table__cell"><%= number_to_currency(course.fee_uk_eu) %></td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell"><%= t(".non_uk_citizens") %></td>
+      <td class="govuk-table__cell"><%= number_to_currency(course.fee_international) %></td>
+    </tr>
+    </tbody>
+  </table>
+<% end %>
+
+<% if course.fee_schedule.present? %>
+  <%= markdown(course.fee_schedule) %>
+<% end %>
+
+<% if course.additional_fees.present? %>
+  <%= markdown(course.additional_fees) %>
+<% end %>
+
+<% if course.financial_support.present? %>
+  <%= markdown(course.financial_support) %>
+<% end %>
