@@ -1,0 +1,25 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_schools_path(@provider.provider_code, RecruitmentCycle.current.year)) %>
+<% end %>
+
+<% content_for :page_title do %>
+  <%= t(".page_title", provider_name: @provider.provider_name) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl"><%= t(".heading", count: @added_schools.count) %></h1>
+
+    <p class="govuk-body">
+      <%= t(".intro_html", register_url: t(".register_url")) %>
+    </p>
+
+    <% @added_schools.each do |site| %>
+      <p class="govuk-body">
+        <strong><%= site.location_name %></strong><br>
+        <%= [site.address1, site.address2, site.town, site.postcode].reject(&:blank?).join(", ") %>
+      </p>
+    <% end %>
+  </div>
+</div>
