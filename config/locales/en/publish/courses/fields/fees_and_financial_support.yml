@@ -1,0 +1,19 @@
+en:
+  publish:
+    courses:
+      fields:
+        fees_and_financial_support:
+          edit:
+            heading: Fees and financial support
+            label: Fees and financial support
+            page_title: Fees and financial support- %{course_name_and_code}
+            submit_button: Update fees and financial support
+            summary_link: See what we include in this section
+            fee_uk: Fee for UK citizens
+            fee_international: Fee for non-UK citizens
+            fee_international_optional: Fee for non-UK citizens (optional)
+            fee_schedule: When are the fees due? Is there a payment schedule? (optional)
+            additional_fees: Are there any additional fees or costs? (optional)
+            additional_fees_hint: For example top up fees or additional costs such as books and transport
+            financial_support: Does your organisation offer any financial support? (optional)
+            financial_support_hint: Do not include information about financial support available from the government like student loans, scholarships or bursaries

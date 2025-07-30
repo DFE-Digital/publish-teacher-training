@@ -197,6 +197,12 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         patch "/length", on: :member, to: "courses/length#update"
         get "/fees-and-financial-support", on: :member, to: "courses/fees_and_financial_support#edit"
         patch "/fees-and-financial-support", on: :member, to: "courses/fees_and_financial_support#update"
+
+        constraints ->(_req) { FeatureFlag.active?(:long_form_content) } do
+          get "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#edit"
+          patch "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#update"
+        end
+
         get "/fees", on: :member, to: "courses/fees#edit"
         patch "/fees", on: :member, to: "courses/fees#update"
         get "/salary", on: :member, to: "courses/salary#edit"

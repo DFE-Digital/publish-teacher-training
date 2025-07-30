@@ -23,6 +23,8 @@
          action_visually_hidden_text: t("publish.providers.courses.description_content.course_length_hidden_text"),
        ) %>
   <% end %>
+
+  <%= render partial: "publish/courses/v2/fields/fees_and_financial_support", locals: { course: course, summary_list: summary_list } %>
 <% end %>
 
 <h2 class="govuk-heading-m">
