@@ -173,6 +173,10 @@ class Provider < ApplicationRecord
   validates :accredited_provider_number, accredited_provider_number_format: true, if: :accredited?
 
   validate :accredited_provider_type
+
+  validates :self_description, words_count: { maximum: 100 }
+  validates :provider_value_proposition, words_count: { maximum: 100 }
+
   def accredited_provider_type
     return unless accredited?
 
