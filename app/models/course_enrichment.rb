@@ -46,7 +46,7 @@ class CourseEnrichment < ApplicationRecord
   validates :about_course, presence: true, on: :publish, if: -> { version == 1 }
   validates :about_course, words_count: { maximum: 400 }
 
-  validates :interview_process, words_count: { maximum: 250 }
+  validates :interview_process, words_count: { maximum: 250 }, if: -> { version == 1 }
 
   validates :how_school_placements_work, presence: true, on: :publish, if: -> { version == 1 }
   validates :how_school_placements_work, words_count: { maximum: 350 }
@@ -82,13 +82,6 @@ class CourseEnrichment < ApplicationRecord
             words_count: { maximum: 50 },
             if: -> { is_fee_based? && version == 2 }
 
-  # Requirements and qualifications
-  validates :required_qualifications, presence: true, on: :publish, if: :required_qualifications_needed?
-  validates :required_qualifications, words_count: { maximum: 100 }
-
-  validates :personal_qualities, words_count: { maximum: 100 }
-  validates :other_requirements, words_count: { maximum: 100 }
-
   # Course length and salary
   validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
   validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
@@ -99,7 +92,6 @@ class CourseEnrichment < ApplicationRecord
   validates :required_qualifications, words_count: { maximum: 100 }
 
   validates :personal_qualities, words_count: { maximum: 100 }
-
   validates :other_requirements, words_count: { maximum: 100 }
 
   # v2 validations
@@ -124,7 +116,7 @@ class CourseEnrichment < ApplicationRecord
   validates :theoretical_training_activities, words_count: { maximum: 150 }
 
   validates :interview_process, presence: true, on: :publish, if: -> { version == 2 }
-  validates :interview_process, words_count: { maximum: 200 }
+  validates :interview_process, words_count: { maximum: 200 }, if: -> { version == 2 }
 
   # v2 optional fields
   validates :theoretical_training_duration, words_count: { maximum: 50 }
