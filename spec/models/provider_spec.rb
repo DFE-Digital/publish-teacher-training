@@ -61,7 +61,7 @@ describe Provider do
       it "over maximum word count for self_description" do
         words = Faker::Lorem.words(number: 101)
         provider.self_description = words
-        expect(provider).to_not be_valid
+        expect(provider).not_to be_valid
       end
 
       it "exactly at maximum word count for self_description" do
@@ -78,7 +78,7 @@ describe Provider do
       it "over maximum word count for provider_value_proposition" do
         words = Faker::Lorem.words(number: 101)
         provider.provider_value_proposition = words
-        expect(provider).to_not be_valid
+        expect(provider).not_to be_valid
       end
 
       it "exactly at maximum word count for provider_value_proposition" do
