@@ -347,6 +347,14 @@ class CourseDecorator < ApplicationDecorator
     object.enrichment_attribute(:fee_international)
   end
 
+  def additional_fees
+    object.enrichment_attribute(:additional_fees)
+  end
+
+  def fee_schedule
+    object.enrichment_attribute(:fee_schedule)
+  end
+
   def fee_details
     object.enrichment_attribute(:fee_details)
   end
