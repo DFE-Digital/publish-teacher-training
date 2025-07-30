@@ -52,6 +52,42 @@ describe Provider do
   end
 
   describe "validations" do
+    describe "word count validation" do
+      it "self_description no presence needed" do
+        provider.self_description = nil
+        expect(provider).to be_valid
+      end
+
+      it "over maximum word count for self_description" do
+        words = Faker::Lorem.words(number: 101)
+        provider.self_description = words
+        expect(provider).to_not be_valid
+      end
+
+      it "exactly at maximum word count for self_description" do
+        words = Faker::Lorem.words(number: 100)
+        provider.self_description = words
+        expect(provider).to be_valid
+      end
+
+      it "provider_value_proposition no presence needed" do
+        provider.provider_value_proposition = nil
+        expect(provider).to be_valid
+      end
+
+      it "over maximum word count for provider_value_proposition" do
+        words = Faker::Lorem.words(number: 101)
+        provider.provider_value_proposition = words
+        expect(provider).to_not be_valid
+      end
+
+      it "exactly at maximum word count for provider_value_proposition" do
+        words = Faker::Lorem.words(number: 100)
+        provider.provider_value_proposition = words
+        expect(provider).to be_valid
+      end
+    end
+
     describe "urn validations" do
       context "when provider_type is lead_school" do
         let(:invalid_provider) { build(:provider, urn: "1") }
