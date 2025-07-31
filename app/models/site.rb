@@ -39,7 +39,7 @@ class Site < ApplicationRecord
   validates :location_name,
             :address1,
             :postcode,
-            presence: true, unless: -> { site_type == 'school' }
+            presence: true
 
   # NOTE: Existing dataset causing cascading issues (from site_status/course) hence it is enforced independently differently
   validates :town, presence: true, on: %i[create], unless: -> { site_type == "school" }
