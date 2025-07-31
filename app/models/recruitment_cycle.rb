@@ -102,6 +102,10 @@ class RecruitmentCycle < ApplicationRecord
     "#{year.to_i - 1} to #{year}"
   end
 
+  def schools_outcome?
+    year.to_i == 2026 && Time.zone.now < application_start_date
+  end
+
   # TODO: remove once the 2022 rollover is complete
   def after_2021?
     year.to_i >= 2022

@@ -1,0 +1,22 @@
+en:
+  publish:
+    schools_changed_banner_component:
+      header: "Changes to the schools in your account"
+      minimal_header: "The way schools are added to your account has changed."
+      content_heading: "Changes to the schools in your account"
+      minimal_heading: "You will no longer need to manually add all your schools to your account."
+      auto_upload: "We automatically upload all schools you are working with."
+      added_register_html: >
+        These are schools that are on <a class="govuk-link" href="%{url}">Register trainee teachers</a>.
+      register_url: "https://www.register-trainee-teachers.service.gov.uk/"
+      added_count:
+        one: "We have added 1 school"
+        other: "We have added %{count} schools"
+      view_added_link: "View the schools that have been added to your account."
+      removed_count:
+        one: "We have removed 1 school"
+        other: "We have removed %{count} schools"
+      removed_gias_html: >
+        These are schools that are not on <a class="govuk-link" href="%{url}">Get Information About Schools (GIAS)</a>.
+      gias_url: "https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments"
+      view_removed_link: "View the schools that have been removed from your account."
