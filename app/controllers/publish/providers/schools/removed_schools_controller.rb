@@ -2,7 +2,11 @@ module Publish
   module Providers
     module Schools
       class RemovedSchoolsController < ::Publish::ApplicationController
+        before_action :render_not_found, unless: :schools_outcome?
+
         def index
+          authorize(provider, :index?)
+
           @removed_schools = @provider
             .sites
             .school

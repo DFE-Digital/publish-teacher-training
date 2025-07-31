@@ -15,7 +15,7 @@ RSpec.describe "Publish - Providers - Removed Schools page", service: :publish, 
   end
 
   let(:provider) { create(:provider, provider_name: "Test Provider", provider_code: "ABC") }
-  let!(:site_one)   { create(:site, provider:, **site_attributes) }
+  let!(:site_one) { create(:site, provider:, **site_attributes) }
   let!(:site_two) do
     create(
       :site,
