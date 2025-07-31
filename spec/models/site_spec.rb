@@ -14,10 +14,10 @@ describe Site do
   end
 
   describe "school" do
-    it { is_expected.not_to validate_presence_of(:location_name) }
-    it { is_expected.not_to validate_presence_of(:address1) }
+    it { is_expected.to validate_presence_of(:location_name) }
+    it { is_expected.to validate_presence_of(:address1) }
     it { is_expected.not_to validate_presence_of(:town).on(:create) }
-    it { is_expected.not_to validate_presence_of(:postcode) }
+    it { is_expected.to validate_presence_of(:postcode) }
   end
 
   describe "study_site" do
