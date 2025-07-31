@@ -71,14 +71,6 @@ variable "key_vault_name" {
   type = string
 }
 
-variable "key_vault_app_secret_name" {
-  type = string
-}
-
-variable "key_vault_infra_secret_name" {
-  type = string
-}
-
 variable "resource_group_name" {
   type = string
 }
