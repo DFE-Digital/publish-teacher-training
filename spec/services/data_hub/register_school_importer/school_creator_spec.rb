@@ -59,7 +59,7 @@ RSpec.describe DataHub::RegisterSchoolImporter::SchoolCreator do
     end
 
     context "when site save raises an error" do
-      let!(:gias_school) { create(:gias_school, :open, urn: "12345", name: "Test School", town: "") }
+      let!(:gias_school) { create(:gias_school, :open, urn: "12345", name: "Test School", postcode: "") }
       let(:urns) { %w[12345] }
 
       it "adds to school_errors and continues processing" do
