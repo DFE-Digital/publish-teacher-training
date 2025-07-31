@@ -17,7 +17,7 @@ RSpec.describe DataHub::RegisterSchoolImporter::Importer do
     create(:gias_school, :open, urn: "972674")
     create(:gias_school, :open, urn: "511462")
     create(:gias_school, :open, urn: "108852")
-    create(:gias_school, :open, urn: "298561", town: "")
+    create(:gias_school, :open, urn: "298561", postcode: "")
 
     # 115046 and 601996 missing (simulate "Not found in GIAS")
     # 50494 and 230153 missing (simulate "Not found in GIAS")
@@ -101,7 +101,7 @@ RSpec.describe DataHub::RegisterSchoolImporter::Importer do
         a_hash_including(
           urn: "298561",
           row: 6,
-          error: a_string_matching(/Validation failed: Town or city Enter a town or city/),
+          error: a_string_matching("Validation failed: Postcode Enter a postcode, Postcode Postcode is not valid (for example, BN1 1AA)"),
         ),
       )
       expect(provider_group.school_errors_urns).to include("298561")
