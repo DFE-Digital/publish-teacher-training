@@ -8,6 +8,7 @@ class FeatureFlags
       [:bursaries_and_scholarships_announced, "Display scholarship and bursary information", "Find and Publish team"],
       [:hide_applications_open_date, "Hides the the option to create, edit and view a courses open date"],
       [:candidate_accounts, "Enable candidate accounts feature", "Find and Publish team"],
+      [:long_form_content, "Enable long form content", "Find and Publish team"],
     ]
   end
 end

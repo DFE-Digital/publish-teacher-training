@@ -11,6 +11,9 @@ module Find
 
         delegate :fee_uk_eu,
                  :fee_international,
+                 :fee_schedule,
+                 :additional_fees,
+                 :financial_support,
                  :cycle_range,
                  :fee_details, to: :course
 
