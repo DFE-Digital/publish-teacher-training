@@ -969,6 +969,13 @@ en:
             about_course:
               blank: Enter information about this course
               too_long: Reduce the word count for about this course
+        publish/course_content_what_you_will_study_form:
+          attributes:
+            theoretical_training_activities:
+              blank: Enter details about theoretical training activities
+              too_long: Reduce the word count for theoretical training activities
+            assessment_methods:
+              too_long: Reduce the word count for assessment methods
         publish/course_school_placements_form:
           attributes:
             how_school_placements_work:

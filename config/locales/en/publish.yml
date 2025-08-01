@@ -90,7 +90,10 @@ en:
           fee_details_hidden_text: fees and financial support
           financial_incentive_details_label: Financial support from the government
           salary_label: Salary
+          what_you_will_study_label: What you will study
+          what_you_will_study_hidden_text: details about what you will study
           requirements_heading: Requirements and eligibility
+          about_the_course_heading: About the course
           degree_label: Degree
           gcse_label: GCSEs
           enter_a_levels: Enter A levels and equivalency test requirements

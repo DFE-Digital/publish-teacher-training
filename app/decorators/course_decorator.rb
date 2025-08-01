@@ -339,6 +339,14 @@ class CourseDecorator < ApplicationDecorator
     object.enrichment_attribute(:how_school_placements_work)
   end
 
+  def theoretical_training_activities
+    object.enrichment_attribute(:theoretical_training_activities)
+  end
+
+  def assessment_methods
+    object.enrichment_attribute(:assessment_methods)
+  end
+
   def fee_uk_eu
     object.enrichment_attribute(:fee_uk_eu)
   end
