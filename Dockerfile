@@ -64,7 +64,7 @@ ENV COMMIT_SHA=${COMMIT_SHA}
 RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
 
 # Change ownership only for directories that need write access
-
+RUN mkdir /app/tmp
 RUN chown appuser:appgroup /app/tmp
 
 # Switch to non-root user
