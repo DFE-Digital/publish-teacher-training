@@ -1,0 +1,31 @@
+# frozen_string_literal: true
+
+module Publish
+  class CourseContentWhatYouWillStudyForm < BaseModelForm
+    include RecruitmentCycleHelper
+
+    alias_method :course_enrichment, :model
+
+    FIELDS = %i[theoretical_training_activities assessment_methods].freeze
+    WHAT_YOU_WILL_STUDY_FIELDS = FIELDS
+    attr_accessor(*FIELDS)
+
+    validates :theoretical_training_activities, presence: true, words_count: { maximum: 150 }
+    validates :assessment_methods, words_count: { maximum: 50 }, allow_blank: true
+
+  private
+
+    def declared_fields
+      FIELDS
+    end
+
+    def compute_fields
+      course_enrichment
+        .attributes
+        .symbolize_keys
+        .slice(*FIELDS)
+        .merge(new_attributes)
+        .symbolize_keys
+    end
+  end
+end

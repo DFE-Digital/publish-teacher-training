@@ -141,3 +141,18 @@
       action_path: !course.is_withdrawn? && course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
     ) %>
 <% end %>
+
+<h2 class="govuk-heading-m">
+  <%= t("publish.providers.courses.description_content.about_the_course_heading") %>
+</h2>
+  <%= govuk_summary_list do |summary_list| %>
+    <% enrichment_summary(
+      summary_list,
+      :course,
+      t("publish.providers.courses.description_content.what_you_will_study_label"),
+      value_provided?(markdown([course.theoretical_training_activities, course.assessment_methods].compact_blank.join("\n\n"))),
+      %w[theoretical_training_activities assessment_methods],
+      action_path: course.is_withdrawn? ? nil : publish_provider_recruitment_cycle_course_what_you_will_study_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+      action_visually_hidden_text: t("publish.providers.courses.description_content.what_you_will_study_hidden_text"),
+    ) %>
+<% end %>

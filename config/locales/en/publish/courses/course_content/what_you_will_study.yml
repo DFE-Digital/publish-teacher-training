@@ -1,0 +1,11 @@
+en:
+  publish:
+    courses:
+      course_content:
+        what_you_will_study:
+          edit:
+            page_title: What you will study
+            theoretical_training_activities: What will trainees do during their theoretical training?
+            theoretical_training_activities_hint: For example the curriculum, modules or topics covered
+            assessment_methods: How will they be assessed? (optional)
+            submit_button: Update what you will study
