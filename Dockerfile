@@ -60,4 +60,14 @@ RUN ls /app/public/ && \
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}
 
+# Create non-root user and group with specific UIDs/GIDs
+RUN addgroup -S appgroup -g 20001 && adduser -S appuser -G appgroup -u 10001
+
+# Change ownership only for directories that need write access
+
+RUN chown appuser:appgroup /app/tmp
+
+# Switch to non-root user
+USER 10001
+
 CMD bundle exec rails db:migrate:with_data_migrations && bundle exec rails server -b 0.0.0.0
