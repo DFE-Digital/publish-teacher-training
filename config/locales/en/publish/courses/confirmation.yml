@@ -8,9 +8,6 @@ en:
         subjects:
           one: Subject
           other: Subjects
-        school:
-          one: School
-          other: Schools
         study_site:
           one: Study site
           other: Study sites
@@ -45,4 +42,3 @@ en:
         ratifying_provider: ratifying provider
         visa_sponsorship_deadline_required_visually_hidden: visa sponsorship deadline required
         date_for_applications_requiring_visa_sponsorship_visually_hidden: date for applications requiring visa sponsorship
-
