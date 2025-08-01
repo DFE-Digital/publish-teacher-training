@@ -1,0 +1,13 @@
+en:
+  publish:
+    providers:
+      schools:
+        added_schools:
+          index:
+            page_title: 'Schools added to %{provider_name} - Publish teacher training courses - GOV.UK'
+            heading:
+              one: "We have added 1 school to your account"
+              other: "We have added %{count} schools to your account"
+            intro_html: >-
+              These are schools that are on <a class="govuk-link" href="%{register_url}">Register trainee teachers</a>.
+            register_url: "https://www.register-trainee-teachers.service.gov.uk/"

@@ -79,7 +79,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
     post "/request-access", on: :member, to: "providers/access_requests#create"
     get "schools"
 
-    resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "", only: [:show] do
+    resources :recruitment_cycles, param: :year, constraints: { year: /2024|#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "", only: [:show] do
       get "/about", on: :member, to: "providers#about"
       put "/about", on: :member, to: "providers#update"
       get "/details", on: :member, to: "providers#details"
@@ -319,6 +319,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
             get "/search", to: "schools/search#new"
             post "/search", to: "schools/search#create"
             put "/search", to: "schools/search#update"
+
+            get "/added-schools", to: "schools/added_schools#index", as: :added_schools
+            get "/removed-schools", to: "schools/removed_schools#index", as: :removed_schools
           end
         end
 

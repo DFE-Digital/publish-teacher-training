@@ -1,0 +1,17 @@
+en:
+  publish:
+    providers:
+      schools:
+        removed_schools:
+          index:
+            page_title: "Schools removed from %{provider_name} - Publish teacher training courses - GOV.UK"
+            heading:
+              one: "We have removed 1 school from your account"
+              other: "We have removed %{count} schools from your account"
+            intro_html: >
+              These are schools that are not on <a class="govuk-link" href="https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments">Get Information About Schools (GIAS)</a>.
+            address_incorrect_heading: "If a school name or address is incorrect"
+            address_incorrect_link_text: "add the correct school details to your account"
+            address_incorrect_html: "You can %{link}."
+            school_not_on_gias_heading: "If the school is not on GIAS"
+            school_not_on_gias_text: "If the school you would like to add is not on GIAS, or the information on GIAS is not correct, contact the school and ask them to update their information on GIAS."

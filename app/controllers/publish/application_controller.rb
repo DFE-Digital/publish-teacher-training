@@ -58,5 +58,9 @@ module Publish
     def provider_code_param
       params[:provider_code] || params[:code]
     end
+
+    def schools_outcome?
+      @recruitment_cycle.schools_outcome?
+    end
   end
 end
