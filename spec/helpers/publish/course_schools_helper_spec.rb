@@ -18,11 +18,11 @@ RSpec.describe Publish::CourseSchoolsHelper, type: :helper do
 
   describe "#school_warning_text" do
     it "returns the warning text for salaried courses" do
-      expect(helper.school_warning_text(salaried_course)).to eq("If you do not add all your employing schools, you may miss out on potential candidates.")
+      expect(helper.school_warning_text(salaried_course)).to eq("If you do not add all relevant employing schools, you may miss out on potential candidates.")
     end
 
     it "returns the warning text for unsalaried courses" do
-      expect(helper.school_warning_text(unsalaried_course)).to eq("If you do not add all your placement schools, you may miss out on potential candidates.")
+      expect(helper.school_warning_text(unsalaried_course)).to eq("If you do not add all relevant placement schools, you may miss out on potential candidates.")
     end
   end
 

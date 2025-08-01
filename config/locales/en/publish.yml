@@ -38,9 +38,9 @@ en:
           one: "%{prefix} school"
           other: "%{prefix} schools"
         new:
-          schools_selection: The more schools you select, the more searches your course will appear in.
+          schools_selection: The more schools you select, the more searches your course will appear in. You should only add schools that are relevent to this course.
           searches_by_location: 60% of searches are by location.
-          warning_text: "If you do not add all your %{school_type} schools, you may miss out on potential candidates."
+          warning_text: "If you do not add all relevant %{school_type} schools, you may miss out on potential candidates."
           selection: Select all that apply
     providers:
       details:
