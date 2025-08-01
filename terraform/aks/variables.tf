@@ -147,3 +147,9 @@ variable "uploads_storage_account_name" {
   type    = string
   default = null
 }
+
+variable "run_as_non_root" {
+  type        = bool
+  default     = true
+  description = "Whether to enforce that containers must run as non-root user"
+}

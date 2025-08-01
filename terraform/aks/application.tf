@@ -29,6 +29,7 @@ module "web_application" {
 
   docker_image           = var.docker_image
   enable_logit           = var.enable_logit
+  run_as_non_root        = var.run_as_non_root
   command                = var.use_db_setup_command ? local.db_setup_command : []
   web_external_hostnames = var.app_environment == "review" ? local.review_additional_hostnames : var.additional_hostnames
   max_memory             = each.value.max_memory
@@ -55,11 +56,12 @@ module "worker_application" {
   kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
-  docker_image  = var.docker_image
-  command       = length("${each.value.startup_command}") > 0 ? each.value.startup_command : local.worker_startup_command
-  max_memory    = each.value.max_memory
-  replicas      = each.value.replicas
-  enable_logit  = var.enable_logit
+  docker_image    = var.docker_image
+  command         = length("${each.value.startup_command}") > 0 ? each.value.startup_command : local.worker_startup_command
+  max_memory      = each.value.max_memory
+  replicas        = each.value.replicas
+  enable_logit    = var.enable_logit
+  run_as_non_root = var.run_as_non_root
   probe_command = ["pgrep", "-f", "sidekiq"]
 
   enable_gcp_wif = true
