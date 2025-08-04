@@ -10,7 +10,7 @@ class FlashBanner < ApplicationComponent
     @flash = flash
   end
 
-  def display?
+  def render?
     flash.any?
   end
 end
