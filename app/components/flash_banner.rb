@@ -13,4 +13,17 @@ class FlashBanner < ApplicationComponent
   def render?
     flash.any?
   end
+
+  def title(type)
+    case type.to_s
+    when "warning", "info"
+      "important"
+    else
+      "success"
+    end.capitalize
+  end
+
+  def success(key)
+    key == "success"
+  end
 end
