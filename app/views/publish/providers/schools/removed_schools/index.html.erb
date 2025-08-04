@@ -42,7 +42,7 @@
     <% @removed_schools.each do |site| %>
       <p class="govuk-body govuk-!-margin-bottom-3">
         <strong><%= site.location_name %></strong><br>
-        <%= [site.address1, site.address2, site.town, site.postcode].reject(&:blank?).join(", ") %>
+        <%= site.address.compact_blank.join(", ") %>
       </p>
     <% end %>
   </div>
