@@ -9,12 +9,23 @@
       <%= t(".title") %>
     </h1>
 
+    <% if @recruitment_cycle.rollover_period_2026? %>
+      <p class="govuk-body"><%= t(".add_school_to_account") %></p>
+    <% end %>
+
     <div class="govuk-button-group">
       <%= govuk_button_link_to t(".add_school"), search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
       <%= govuk_link_to("Add multiple schools", new_publish_provider_recruitment_cycle_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") %>
     </div>
 
-    <%= render Publish::Providers::SchoolPlacements::ExplainerComponent.new %>
+    <% if @recruitment_cycle.rollover_period_2026? %>
+      <%= render Publish::Providers::SchoolPlacements::OutcomeExplainerComponent.new(
+        recruitment_cycle: @recruitment_cycle,
+        provider: @provider,
+      ) %>
+    <% else %>
+      <%= render Publish::Providers::SchoolPlacements::ExplainerComponent.new %>
+    <% end %>
 
     <% if @schools.any? %>
       <table class="govuk-table app-table--vertical-align-middle">

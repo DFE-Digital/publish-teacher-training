@@ -200,6 +200,8 @@ en:
         address4: "County"
         postcode: "Postcode"
       schools: # file
+        index:
+          add_school_to_account: If needed, you can add new schools to your account.
       study_site_search:
         new:
           title: Enter a school, university, college, URN or postcode
