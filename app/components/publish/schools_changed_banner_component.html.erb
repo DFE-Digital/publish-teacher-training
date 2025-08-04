@@ -1,15 +1,19 @@
-<div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-  <div class="govuk-notification-banner__header">
-    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-      <%= show_minimal? ? t(".minimal_header") : t(".header") %>
-    </h2>
-  </div>
+<%= govuk_notification_banner(title_text:) do |nb| %>
+  <% nb.with_heading(text: heading_text) %>
 
-  <div class="govuk-notification-banner__content">
-    <% if show_minimal? %>
-      <p class="govuk-notification-banner__heading">
-        <%= t(".minimal_heading") %>
-      </p>
+  <% if show_minimal? %>
+    <p class="govuk-body">
+      <%= t(".auto_upload") %>
+    </p>
+
+    <p class="govuk-body">
+      <%= t(".added_register_html", url: t(".register_url")).html_safe %>
+    </p>
+  <% else %>
+    <% if show_added? %>
+      <h3 class="govuk-heading-s">
+        <%= t(".added_count", count: added_count) %>
+      </h3>
 
       <p class="govuk-body">
         <%= t(".auto_upload") %>
@@ -18,46 +22,28 @@
       <p class="govuk-body">
         <%= t(".added_register_html", url: t(".register_url")).html_safe %>
       </p>
-    <% else %>
-      <p class="govuk-notification-banner__heading">
-        <%= t(".content_heading") %>
+
+      <p class="govuk-body">
+        <%= govuk_link_to t(".view_added_link"),
+             added_schools_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year),
+             class: "govuk-link", rel: "noopener" %>
+      </p>
+    <% end %>
+
+    <% if show_removed? %>
+      <h3 class="govuk-heading-s">
+        <%= t(".removed_count", count: removed_count) %>
+      </h3>
+
+      <p class="govuk-body">
+        <%= t(".removed_gias_html", url: t(".gias_url")).html_safe %>
       </p>
 
-      <% if show_added? %>
-        <h3 class="govuk-heading-s">
-          <%= t(".added_count", count: added_count) %>
-        </h3>
-
-        <p class="govuk-body">
-          <%= t(".auto_upload") %>
-        </p>
-
-        <p class="govuk-body">
-          <%= t(".added_register_html", url: t(".register_url")).html_safe %>
-        </p>
-
-        <p class="govuk-body">
-          <%= link_to t(".view_added_link"),
-         added_schools_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year),
-                      class: "govuk-link", rel: "noopener" %>
-        </p>
-      <% end %>
-
-      <% if show_removed? %>
-        <h3 class="govuk-heading-s">
-          <%= t(".removed_count", count: removed_count) %>
-        </h3>
-
-        <p class="govuk-body">
-          <%= t(".removed_gias_html", url: t(".gias_url")).html_safe %>
-        </p>
-
-        <p class="govuk-body">
-          <%= link_to t(".view_removed_link"),
-          removed_schools_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year),
-                      class: "govuk-link", rel: "noopener" %>
-        </p>
-      <% end %>
+      <p class="govuk-body">
+        <%= govuk_link_to t(".view_removed_link"),
+             removed_schools_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year),
+             class: "govuk-link", rel: "noopener" %>
+      </p>
     <% end %>
-  </div>
-</div>
+  <% end %>
+<% end %>

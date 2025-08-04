@@ -11,6 +11,14 @@ module Publish
       @recruitment_cycle.rollover_period_2026?
     end
 
+    def title_text
+      show_minimal? ? t(".minimal_header") : t(".header")
+    end
+
+    def heading_text
+      show_minimal? ? t(".minimal_heading") : t(".content_heading")
+    end
+
     def added_count
       @added_count ||= @provider.sites.school.register_import.count
     end
