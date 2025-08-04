@@ -103,26 +103,28 @@
      summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row|
        row.with_key { "School".pluralize(course.sites.length) }
        row.with_value do
-         if course.sites.blank?
-           raw("<span class=\"app-!-colour-muted\">None</span>")
-         elsif course.sites.size == 1
-           course.sites.first.location_name
-         else
-           school_names = course.alphabetically_sorted_sites.map do |site|
-             "<li>#{site.location_name}</li>"
-           end
-           raw("<ul class=\"govuk-list\">#{school_names.join}</ul>")
+         content_tag(:div, class: "govuk-inset-text app-inset-text--narrow-border app-inset-text--important") do
+          if course.sites.blank?
+            raw(govuk_link_to('Add schools for this course', schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)))
+          elsif course.sites.size == 1
+            raw("<ul class=\"govuk-list\"><li>#{course.sites.first.location_name}</li></ul> #{govuk_link_to('Check the schools for this course', schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code))}")
+          else
+            school_names = course.alphabetically_sorted_sites.map do |site|
+              "<li>#{site.location_name}</li>"
+            end
+            raw("<ul class=\"govuk-list\">#{school_names.join}</ul>") + govuk_link_to('Check the schools for this course', schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code))
+          end
          end
        end
 
-       if course.is_withdrawn?
-         row.with_action
-       else
-         row.with_action(
-           href: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-           visually_hidden_text: "schools",
-         )
-       end
+      #  if course.is_withdrawn?
+      #    row.with_action
+      #  else
+      #    row.with_action(
+      #      href: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+      #      visually_hidden_text: "schools",
+      #    )
+      #  end
      end
 
      summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row|
