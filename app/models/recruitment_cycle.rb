@@ -102,7 +102,7 @@ class RecruitmentCycle < ApplicationRecord
     "#{year.to_i - 1} to #{year}"
   end
 
-  def schools_outcome?
+  def rollover_period_2026?
     year.to_i == 2026 && Time.zone.now < application_start_date
   end
 
