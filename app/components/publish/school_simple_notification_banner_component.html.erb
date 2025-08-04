@@ -1,0 +1,14 @@
+<%= govuk_notification_banner(title_text: "Important") do %>
+  <p class="govuk-body govuk-!-margin-0">
+    <%= t(".title") %>
+  </p>
+
+  <p class="govuk-body">
+    <%= govuk_link_to t(".body"),
+      publish_provider_recruitment_cycle_schools_path(
+        @provider.provider_code,
+        @recruitment_cycle.year,
+      ),
+      new_tab: true %>
+  </p>
+<% end %>
