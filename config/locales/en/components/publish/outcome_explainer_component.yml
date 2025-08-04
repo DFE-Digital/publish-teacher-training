@@ -1,0 +1,13 @@
+en:
+  publish:
+    providers:
+      school_placements:
+        outcome_explainer_component:
+          gias_school_text_html: You can only add schools that are on %{link}.
+          gias_link_text: Get Information About Schools (GIAS)
+          gias_url: https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments
+          placement_school_text_html: You can attach placement schools to any of your courses from the ‘Basic details’ tab on each of %{link}.
+          courses_link_text: your courses
+          location_searches_text: Your courses will not appear in candidates‘ location searches if you do not add placement schools to them.
+          organisation_details_html: You can choose whether to show or hide the placements from candidates in %{link}.
+          find_out_more: Find out more about why you should add school placement locations.
