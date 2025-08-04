@@ -11,12 +11,16 @@
   method: :put,
   local: true,
 ) do |f| %>
-
   <%= f.govuk_error_summary %>
 
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
+      <%= render ::Publish::SchoolSimpleNotificationBannerComponent.new(
+        recruitment_cycle: @recruitment_cycle,
+        provider: @provider,
+      ) %>
+
       <%= f.govuk_check_boxes_fieldset :site_ids, legend:
       { text: "#{render CaptionText.new(text: course.name_and_code)} Schools".html_safe, tag: "h1", size: "l" }, hint: { text: "Select all that apply" } do %>
        <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
