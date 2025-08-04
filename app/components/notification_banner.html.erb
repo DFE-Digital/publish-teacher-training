@@ -8,8 +8,10 @@
     <p class="govuk-notification-banner__heading">
       <%= text %>
     </p>
-    <p class="govuk-body">
-      <%= text_body %>
-    </p>
+    <% if text_body.present? %>
+      <p class="govuk-body">
+        <%= text_body %>
+      </p>
+    <% end %>
   </div>
 <% end %>
