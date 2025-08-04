@@ -59,8 +59,8 @@ module Publish
       params[:provider_code] || params[:code]
     end
 
-    def schools_outcome?
-      @recruitment_cycle.schools_outcome?
+    def rollover_period_2026?
+      @recruitment_cycle.rollover_period_2026?
     end
   end
 end

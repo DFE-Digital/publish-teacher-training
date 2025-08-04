@@ -8,7 +8,7 @@ module Publish
     end
 
     def render?
-      @recruitment_cycle.schools_outcome?
+      @recruitment_cycle.rollover_period_2026?
     end
 
     def added_count
