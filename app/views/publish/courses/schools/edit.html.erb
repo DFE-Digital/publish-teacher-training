@@ -26,7 +26,7 @@
        <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
           <%= f.govuk_check_box :site_ids,
               site.id,
-              label: { text: site.location_name },
+              label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
               hint: { text: site.full_address },
               link_errors: index.zero? %>
        <% end %>
