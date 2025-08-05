@@ -5,9 +5,8 @@ class CourseEnrichment < ApplicationRecord
   include RecruitmentCycleHelper
   enum :status, { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }
 
-  attribute :version, :integer, default: -> {
-    FeatureFlag.active?(:long_form_content) ? 2 : 1
-  }
+  # Default to version 2 if the feature flag is active, otherwise default to version 1
+  attribute :version, :integer, default: -> { FeatureFlag.active?(:long_form_content) ? 2 : 1 }
 
   jsonb_accessor :json_data,
                  about_course: [:string, { store_key: "AboutCourse" }],
