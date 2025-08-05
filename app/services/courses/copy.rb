@@ -49,6 +49,11 @@ module Courses
       ["Salary details", "salary_details"],
     ].freeze
 
+    WHAT_YOU_WILL_STUDY_FIELDS = [
+      ["Theoretical training activities", "theoretical_training_activities"],
+      ["Assessment methods", "assessment_methods"],
+    ].freeze
+
     # TODO: This is to be utilised when we add these to a course form
     VISA_FIELDS = [
       ["Can sponsor skilled worker visa", "can_sponsor_skilled_worker_visa"],
