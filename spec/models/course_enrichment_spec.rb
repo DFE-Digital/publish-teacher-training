@@ -13,6 +13,16 @@ RSpec.describe CourseEnrichment do
     end
   end
 
+  describe "default v2 if feature flag is enabled" do
+    before do
+      allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+    end
+
+    it "defaults version to 2" do
+      expect(build(:course_enrichment).version).to eq 2
+    end
+  end
+
   describe "overwrites default version" do
     it "can be set to 2" do
       expect(build(:course_enrichment, :v2).version).to eq 2
