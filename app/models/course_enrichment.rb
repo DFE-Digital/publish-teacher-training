@@ -5,6 +5,10 @@ class CourseEnrichment < ApplicationRecord
   include RecruitmentCycleHelper
   enum :status, { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }
 
+  attribute :version, :integer, default: -> {
+    FeatureFlag.active?(:long_form_content) ? 2 : 1
+  }
+
   jsonb_accessor :json_data,
                  about_course: [:string, { store_key: "AboutCourse" }],
                  course_length: [:string, { store_key: "CourseLength" }],
@@ -124,10 +128,6 @@ class CourseEnrichment < ApplicationRecord
   validates :fee_schedule, words_count: { maximum: 50 }, if: :is_fee_based?
   validates :additional_fees, words_count: { maximum: 50 }, if: :is_fee_based?
   validates :assessment_methods, words_count: { maximum: 50 }
-
-  def version
-    self[:version] || 1
-  end
 
   def is_fee_based?
     course&.fee_based?

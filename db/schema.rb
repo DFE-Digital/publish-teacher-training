@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_30_143615) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_05_165939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -205,7 +205,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_30_143615) do
     t.integer "updated_by_user_id"
     t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "course_id", null: false
-    t.integer "version", default: 1, null: false
+    t.integer "version"
     t.index ["course_id"], name: "index_course_enrichment_on_course_id"
     t.index ["created_by_user_id"], name: "IX_course_enrichment_created_by_user_id"
     t.index ["updated_by_user_id"], name: "IX_course_enrichment_updated_by_user_id"
