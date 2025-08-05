@@ -1,7 +1,7 @@
 <% content_for :page_title,
                title_with_error_prefix(
                  t(".page_title", course_name_and_code: @course.name_and_code),
-                 @course_content_what_you_will_study_form.errors.any?
+                 @what_you_will_study_form.errors.any?
                ) %>
 <% if params[:copy_from].present? %>
   <%= render Providers::CopyCourseContentWarningComponent.new(
@@ -13,8 +13,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
-          model: @course_content_what_you_will_study_form,
-          url: publish_provider_recruitment_cycle_course_what_you_will_study_path(@provider.provider_code,
+          model: @what_you_will_study_form,
+          url: fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(@provider.provider_code,
                                                                                  @course.recruitment_cycle_year,
                                                                                  @course.course_code),
           data: { qa: "enrichment-form", module: "form-check-leave" },
@@ -66,7 +66,7 @@
       partial: "publish/courses/related_sidebar",
       locals: {
         course: @course,
-        page_path: publish_provider_recruitment_cycle_course_what_you_will_study_path(
+        page_path: fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
           @course.recruitment_cycle_year,
           @course.course_code,

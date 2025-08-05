@@ -1,7 +1,7 @@
 en:
   publish:
     courses:
-      course_content:
+      fields:
         what_you_will_study:
           edit:
             page_title: What you will study
