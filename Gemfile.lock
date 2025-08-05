@@ -262,7 +262,7 @@ GEM
       concurrent-ruby (~> 1.0)
     email_validator (2.2.4)
       activemodel
-    erb (5.0.1)
+    erb (5.0.2)
     erb_lint (0.9.0)
       activesupport
       better_html (>= 2.0.1)
@@ -377,7 +377,7 @@ GEM
       mutex_m
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    io-console (0.8.0)
+    io-console (0.8.1)
     irb (1.15.2)
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
@@ -584,7 +584,7 @@ GEM
     rails-html-sanitizer (1.6.2)
       loofah (~> 2.21)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
-    rails_semantic_logger (4.17.0)
+    rails_semantic_logger (4.18.0)
       rack
       railties (>= 5.1)
       semantic_logger (~> 4.16)
@@ -602,13 +602,13 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rb-readline (0.5.5)
-    rdoc (6.14.1)
+    rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
     redcarpet (3.6.1)
     redis (4.8.1)
     regexp_parser (2.10.0)
-    reline (0.6.1)
+    reline (0.6.2)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -708,7 +708,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    semantic_logger (4.16.0)
+    semantic_logger (4.17.0)
       concurrent-ruby (~> 1.0)
     sentry-rails (5.26.0)
       railties (>= 5.0)
