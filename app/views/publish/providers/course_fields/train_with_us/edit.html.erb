@@ -1,0 +1,48 @@
+<% page_title = "Why Train with us" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @errors.present?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @about_form,
+      url: publish_provider_recruitment_cycle_train_with_us_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      method: :put,
+    ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(@about_form.back_path) %>
+      <% end %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @provider.provider_name %></span>
+        <%= page_title %>
+      </h1>
+
+      <p class="govuk-body">This information appears at the top of every course page.</p>
+      <p class="govuk-body">Be as specific as possible. This will help candidates work out if they want to train with you.</p>
+
+      <%= f.govuk_text_area(:about_us,
+        form_group: { id: "about-us" },
+        label: { text: "What kind of organisation is #{@provider.provider_name}?", size: "m" },
+        hint: -> { "Are you a large or small organisation? Do you work in a particular area? How many schools do you work with?" },
+        max_words: 100,
+        rows: 15) %>
+
+      <%= f.govuk_text_area(:provider_value_proposition,
+        form_group: { id: "train-with-us" },
+        label: { text: "Why should candidates choose to train with you?", size: "m" },
+        hint: lambda {
+          concat(tag.span("Focus on what makes you different from other providers."))
+          concat(tag.br)
+          concat(tag.br)
+          concat(tag.span("You can include past achievements, for example student successes or Ofsted ratings. Be specific with your claims, and support them with evidence"))
+        },
+        max_words: 100,
+        rows: 15) %>
+
+      <%= f.govuk_submit "Update why train with us" %>
+    <% end %>
+  </div>
+</div>
