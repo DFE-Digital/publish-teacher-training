@@ -11,7 +11,7 @@ module Publish
         include CopyCourseContent
         before_action :authorise_with_pundit
 
-        private
+      private
 
         # Authorises the user with Pundit
         def authorise_with_pundit
