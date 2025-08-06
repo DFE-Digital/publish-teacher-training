@@ -13,6 +13,9 @@ module "domains" {
   cached_paths          = try(each.value.cached_paths, [])
   exclude_cnames        = try(each.value.exclude_cnames, [])
   redirect_rules        = try(each.value.redirect_rules, null)
+  allow_aks             = try(var.allow_aks, false)
+  block_ip              = try(var.block_ip, false)
+  rate_limit_max        = try(var.rate_limit_max, false)
 }
 
 # Takes values from hosted_zone.domain_name.cnames (or txt_records, a-records). Use for domains which are not associated with front door.
