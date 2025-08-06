@@ -286,6 +286,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
         scope module: :course_fields do
           resource :train_with_us, only: %i[edit update], path: "train-with-us"
+          resource :training_with_disabilities, only: %i[edit update], path: "training-with-disabilities"
         end
 
         resources :accredited_partnerships, param: :accredited_provider_code, only: %i[index destroy show], path: "accredited-partnerships", controller: "accredited_partnerships" do

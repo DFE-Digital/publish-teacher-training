@@ -1,0 +1,46 @@
+<% page_title = "Training with disabilities and other needs" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @errors.present?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @about_form,
+      url: publish_provider_recruitment_cycle_training_with_disabilities_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      method: :put,
+    ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(@about_form.back_path) %>
+      <% end %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @provider.provider_name %></span>
+        <%= page_title %>
+      </h1>
+
+      <h2 class="govuk-heading-m">Training with disabilities and other needs</h2>
+      <p class="govuk-body">Say how you support candidates with disabilities and other needs. This could include candidates with:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>dyslexia</li>
+        <li>physical, hearing and visual impairments</li>
+        <li>mental health conditions</li>
+      </ul>
+      <p class="govuk-body">If accessibility varies between schools, give details. It’s also useful for candidates to know how you’ve accommodated others with specific access needs in the past.</p>
+
+      <%= f.govuk_text_area(:train_with_disability,
+        form_group: { id: "train-with-disability" },
+        label: { text: "Training with disabilities and other needs", size: "m" },
+        hint: -> { render partial: "publish/courses/markdown_formatting" },
+        max_words: 250,
+        rows: 15) %>
+      <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
+      <%= f.hidden_field(:goto_provider, value: goto_provider_value(param_form_key: f.object_name.to_sym, params:)) %>
+      <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
+      <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
+
+      <%= f.govuk_submit "Update training with disabilities" %>
+    <% end %>
+  </div>
+</div>
