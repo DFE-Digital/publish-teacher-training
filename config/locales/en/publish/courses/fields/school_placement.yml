@@ -1,0 +1,10 @@
+en:
+  publish:
+    courses:
+      fields:
+        school_placement:
+          edit:
+            page_title: Where you will train - %{course_name_and_code}
+            submit_button: Update what you will do on school placements
+            preview_heading: What you will study
+            summary_text: See what we include in this section

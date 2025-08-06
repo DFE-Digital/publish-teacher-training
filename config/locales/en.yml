@@ -545,6 +545,10 @@ en:
         how_school_placements_work: How placements work
         fee_details: Fees and financial support
         about_course: About this course
+        what-trainee-do-in-school: What will trainees do while in their placement schools?
+        what-trainee-do-in-school-hint: For example observations, lesson planning, getting involved in school life
+        how-trainees-mentored: How will they be supported and mentored? (optional)
+        how-trainees-mentored-hint: For example how many mentors they will have, and how often they will meet
       site:
         location_name: "Name"
         address1: "Building and street"

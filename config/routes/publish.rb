@@ -188,6 +188,12 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
         get "/about-this-course", on: :member, to: "courses/about_this_course#edit"
         patch "/about-this-course", on: :member, to: "courses/about_this_course#update"
+
+        constraints ->(_req) { FeatureFlag.active?(:long_form_content) } do 
+          get "/fields/school-placement", on: :member, to: "courses/fields/school_placement#edit"
+          patch "/fields/school-placement", on: :member, to: "courses/fields/school_placement#update"
+        end
+
         get "/interview-process", on: :member, to: "courses/interview_process#edit"
         patch "/interview-process", on: :member, to: "courses/interview_process#update"
         get "/school-placements", on: :member, to: "courses/school_placements#edit"
