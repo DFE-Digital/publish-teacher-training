@@ -2,10 +2,21 @@
   <%= t(".heading", provider_name: course.provider_name) %>
 </h2>
 
-<% if course.provider.train_with_us.present? %>
-  <div data-qa="course__about_provider">
-    <%= markdown(course.provider.train_with_us) %>
-  </div>
+<% if FeatureFlag.active?(:long_form_content) %>
+  <% if course.provider.about_us.present? || course.provider.provider_value_proposition.present? %>
+    <div data-qa="course__about_provider">
+      <%= markdown(course.provider.about_us) %>
+      <%= markdown(course.provider.provider_value_proposition) %>
+    </div>
+  <% else %>
+    <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_us, is_preview: preview?(params)) %>
+  <% end %>
 <% else %>
-  <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_us, is_preview: preview?(params)) %>
+  <% if course.provider.train_with_us.present? %>
+    <div data-qa="course__about_provider">
+      <%= markdown(course.provider.train_with_us) %>
+    </div>
+  <% else %>
+    <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_us, is_preview: preview?(params)) %>
+  <% end %>
 <% end %>
