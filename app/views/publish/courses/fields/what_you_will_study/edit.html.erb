@@ -1,7 +1,7 @@
 <% content_for :page_title,
                title_with_error_prefix(
                  t(".page_title", course_name_and_code: @course.name_and_code),
-                 @what_you_will_study_form.errors.any?
+                 @what_you_will_study_form.errors.any?,
                ) %>
 <% if params[:copy_from].present? %>
   <%= render Providers::CopyCourseContentWarningComponent.new(
@@ -42,12 +42,12 @@
           hint: { text: t(".theoretical_training_activities_hint"), size: "s" },
           rows: 5,
           max_words: 150,
-          data: { qa: "course_theoretical_training_activities" } ) %>
+          data: { qa: "course_theoretical_training_activities" }) %>
       <%= f.govuk_text_area(:assessment_methods,
           label: { text: t(".assessment_methods"), size: "s" },
           rows: 5,
           max_words: 50,
-          data: { qa: "assessment_methods" } ) %>
+          data: { qa: "assessment_methods" }) %>
       <%= f.govuk_submit t(".submit_button") %>
     <% end %>
     <p class="govuk-body">
