@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "About Your Organisation section" do
+feature "Why Train With Us section in 2026 cyle +" do
   scenario "Provider user edits provider details" do
     given_i_am_a_provider_user_as_a_provider_user
     when_i_visit_the_details_page
@@ -12,7 +12,7 @@ feature "About Your Organisation section" do
   end
 
   def given_i_am_a_provider_user_as_a_provider_user
-    @recruitment_cycle = find_or_create(:recruitment_cycle, year: 2025)
+    @recruitment_cycle = create(:recruitment_cycle, :next)
     @provider = create(:provider, recruitment_cycle: @recruitment_cycle)
     course = create(:course, :with_accrediting_provider, provider: @provider)
 
@@ -30,23 +30,26 @@ feature "About Your Organisation section" do
   end
 
   def then_i_can_edit_info_about_training_with_us
-    publish_provider_details_show_page.train_with_us_link.click
-    expect(page).to have_current_path publish_provider_details_edit_page.url(
+    visit("/publish/organisations/#{@provider.provider_code}/#{@recruitment_cycle.year}/details")
+    page.click_link "Change details about training with your organisation"
+
+    expect(page).to have_current_path edit_publish_provider_recruitment_cycle_why_train_with_us_path(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year,
     )
 
-    publish_provider_details_edit_page.training_with_you_field.set ""
-    publish_provider_details_edit_page.save_and_publish.click
+    page.find("#publish-why-train-with-us-form-about-us-field").set ""
+
+    page.click_button "Update why train with us"
     within publish_provider_details_edit_page.error_summary do
-      expect(page).to have_content "Enter details about training with you"
+      expect(page).to have_content "Enter what kind of organisation you are"
     end
 
-    publish_provider_details_edit_page.training_with_you_field.set "Updated: Training with you"
-    publish_provider_details_edit_page.save_and_publish.click
+    page.find("#publish-why-train-with-us-form-about-us-field-error").set "Updated: Training with you"
+    page.click_button "Update why train with us"
 
     expect(page).to have_content "Your changes have been published"
-    within_summary_row "Training with your organisation" do
+    within_summary_row "Why train with us" do
       expect(page).to have_content "Updated: Training with you"
     end
   end
