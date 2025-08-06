@@ -31,6 +31,8 @@ FactoryBot.define do
     region_code { "london" }
     association :recruitment_cycle, strategy: :find_or_create
 
+    about_us { Faker::Lorem.sentence.to_s }
+    value_proposition { Faker::Lorem.sentence.to_s }
     train_with_us { Faker::Lorem.sentence.to_s }
     train_with_disability { Faker::Lorem.sentence.to_s }
     can_sponsor_student_visa { [true, false].sample }
