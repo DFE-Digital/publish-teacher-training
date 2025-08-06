@@ -42,7 +42,7 @@ module Publish
           end
         end
 
-        private
+      private
 
         # Fetches the parameters for the school placement form
         def school_placement_params

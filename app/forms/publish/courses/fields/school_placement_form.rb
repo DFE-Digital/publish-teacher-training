@@ -22,7 +22,7 @@ module Publish
         validates :placement_school_activities, words_count: { maximum: 150 }
         validates :support_and_mentorship, words_count: { maximum: 50 }
 
-        private
+      private
 
         # Returns the fields that are declared for this form
         def declared_fields
