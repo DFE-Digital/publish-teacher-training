@@ -3,6 +3,16 @@
   <%= govuk_back_link_to(@back_link_path) %>
 <% end %>
 <%= render "publish/shared/errors" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render ::Publish::Schools::NotificationBannerComponent.new(
+        recruitment_cycle: @recruitment_cycle,
+        provider: @provider,
+    ) %>
+  </div>
+</div>
+
 <%= form_for course,
   url: continue_publish_provider_recruitment_cycle_courses_schools_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
   method: :get do |form| %>
