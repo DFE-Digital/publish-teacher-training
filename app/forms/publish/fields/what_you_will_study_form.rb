@@ -8,7 +8,6 @@ module Publish
       alias_method :course_enrichment, :model
 
       FIELDS = %i[theoretical_training_activities assessment_methods].freeze
-      WHAT_YOU_WILL_STUDY_FIELDS = FIELDS
       attr_accessor(*FIELDS)
 
       validates :theoretical_training_activities, presence: true, words_count: { maximum: 150 }

@@ -652,6 +652,8 @@ en:
               not_an_integer: "must not include pence, like 1000 or 1500"
             about_course:
               blank: "^Enter information about this course"
+            theoretical_training_activities:
+              blank: "^Enter details about theoretical training activities"
             how_school_placements_work:
               blank: "^Enter details about how placements work"
             required_qualifications:
@@ -969,7 +971,7 @@ en:
             about_course:
               blank: Enter information about this course
               too_long: Reduce the word count for about this course
-        publish/fields_what_you_will_study_form:
+        publish/fields/what_you_will_study_form:
           attributes:
             theoretical_training_activities:
               blank: Enter details about theoretical training activities
