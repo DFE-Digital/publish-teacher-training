@@ -1,0 +1,16 @@
+en:
+  publish:
+    providers:
+      course_fields:
+        why_train_with_us:
+          edit:
+            page_title: "Why train with us"
+            about_us_label:  "What kind of organisation is %{provider_name}?"
+            about_us_hint: "Are you a large or small organisation? Do you work in a particular area? How many schools do you work with?"
+            train_with_us_label:  "Why should candidates choose to train with you?"
+            train_with_us_hint_html: |
+              <span>Focus on what makes you different from other providers.</span>
+              <br>
+              <br>
+              <span>You can include past achievements, for example student successes or Ofsted ratings. Be specific with your claims, and support them with evidence</span>
+            submit: Update why train with us
