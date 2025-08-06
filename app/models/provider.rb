@@ -174,7 +174,7 @@ class Provider < ApplicationRecord
 
   validate :accredited_provider_type
 
-  validates :self_description, words_count: { maximum: 100 }
+  validates :about_us, words_count: { maximum: 100 }
   validates :provider_value_proposition, words_count: { maximum: 100 }
 
   def accredited_provider_type

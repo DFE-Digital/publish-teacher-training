@@ -53,20 +53,20 @@ describe Provider do
 
   describe "validations" do
     describe "word count validation" do
-      it "self_description no presence needed" do
-        provider.self_description = nil
+      it "about_us no presence needed" do
+        provider.about_us = nil
         expect(provider).to be_valid
       end
 
-      it "over maximum word count for self_description" do
+      it "over maximum word count for about_us" do
         words = Faker::Lorem.words(number: 101)
-        provider.self_description = words
+        provider.about_us = words
         expect(provider).not_to be_valid
       end
 
-      it "exactly at maximum word count for self_description" do
+      it "exactly at maximum word count for about_us" do
         words = Faker::Lorem.words(number: 100)
-        provider.self_description = words
+        provider.about_us = words
         expect(provider).to be_valid
       end
 
