@@ -38,7 +38,11 @@
 <section class="app-section" id="description">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <%= render partial: "description_content" %>
+      <% if FeatureFlag.active?(:long_form_content) %>
+        <%= render partial: "v2_description_content" %>
+      <% else %>
+        <%= render partial: "description_content" %>
+      <% end %>
     </div>
   </div>
 </section>
