@@ -1,0 +1,112 @@
+<% content_for :page_title, title_with_error_prefix(
+  t(".page_title", course_name_and_code: @course.name_and_code),
+  @school_placement_form.errors.any?,
+) %>
+
+<% if params[:copy_from].present? && @copied_fields.any? %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-course-about-this-course-form",
+    @source_course,
+  ) %>
+<% end %>
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+          model: @school_placement_form,
+          url: fields_school_placement_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+          data: { qa: "enrichment-form", module: "form-check-leave" },
+          method: :patch,
+          local: true,
+        ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(
+              back_link_path(param_form_key: f.object_name.to_sym,
+                             params:,
+                             provider_code: @provider.provider_code,
+                             recruitment_cycle_year: @course.recruitment_cycle_year,
+                             course_code: @course.course_code),
+            ) %>
+      <% end %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        What you will do on school placements
+      </h1>
+
+      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: { texts: [@v1_enrichment.about_course, @v1_enrichment.how_school_placements_work] } %>
+
+      <aside data-qa="course__related_sidebar">
+      <%= render(
+        partial: "publish/courses/markdown_formatting",
+        locals: {
+          course: @course,
+          page_path: school_placements_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+        },
+      ) %>
+    </aside>
+
+    <div data-controller="input-preview">
+        <%= f.govuk_text_area(:placement_school_activities,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school-hint"), size: "s" },
+          max_words: 150,
+          rows: 10) %>
+
+        <%= f.govuk_text_area(:support_and_mentorship,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview1"
+          },
+          label: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored"), size: "s" },
+          hint: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored-hint"), size: "s" },
+          max_words: 50,
+          rows: 5) %>
+
+          <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
+      </div>
+
+      <%= f.govuk_submit t(".submit_button") %>
+      <% end %>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
+                                                                                      @provider.recruitment_cycle.year,
+                                                                                      @course.course_code)) %>
+      </p>
+    </div>
+
+   <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+      <%= render(
+            partial: "publish/courses/related_sidebar",
+            locals: {
+              course: @course,
+              page_path: fields_school_placement_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+              ),
+            },
+          ) %>
+    </aside>
+
+  </div>
+</div>
