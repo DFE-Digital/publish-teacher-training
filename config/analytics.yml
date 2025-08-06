@@ -192,8 +192,8 @@ shared:
     - accredited_provider_number
     - town
     - address3
-    - self_description
-    - provider_value_proposition
+    - about_us
+    - value_proposition
   recruitment_cycle:
     - id
     - year
