@@ -5,10 +5,15 @@
     </span>
   </summary>
   <div class="govuk-details__text">
-    <% texts.each do |text| %>
+    <% texts.each do |headline, text| %>
+      <% if headline %>
         <p class="govuk-body">
-            <%= text %>
+          <strong><%= headline %></strong>
         </p>
+      <% end %>
+      <p class="govuk-body">
+          <%= text %>
+      </p>
     <% end %>
   </div>
 </details>
