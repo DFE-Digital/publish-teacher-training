@@ -1,29 +1,33 @@
 .app-preview-container {
-  border: 10px solid 	#b1b4b6;
-  margin-bottom: 30px;
   padding: 15px;
+  margin-bottom: 30px;
+
+  border: 10px solid 	#b1b4b6;
 }
 
 .app-preview-container--heading {
-  background-color: #b1b4b6;
-  padding-left: 15px;
   padding-top: 10px;
+  padding-left: 15px;
+
+  background-color: #b1b4b6;
 }
 
 .app-notification-banner--git {
-  border-bottom: 0px;
-  border-left: 5px solid #f47738;
-  border-right: 0px;
-  border-top: 0px;
   margin-bottom: 30px;
+
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 5px solid #f47738;
 }
 
 .app-notification-banner--non-uk {
-   border-bottom: 0px;
-  border-left: 5px solid #4c2c92;
-  border-right: 0px;
-  border-top: 0px;
   margin-bottom: 30px;
+
+  border-top: 0;
+  border-right: 0;
+   border-bottom: 0;
+  border-left: 5px solid #4c2c92;
 }
 
 .app-notification-banner--flight-check {
@@ -36,8 +40,9 @@
 }
 
 .app-details-flight-check {
-  background-color: #fff;
   padding: 20px;
+
+  background-color: #ffffff;
 }
 
 .course_interview_online_label {
