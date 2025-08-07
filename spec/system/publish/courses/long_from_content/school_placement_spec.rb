@@ -115,6 +115,17 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     then_i_should_see_something_in_the_preview("ABC\nDEF")
   end
 
+  scenario "A user can see his changes in the dynamic preview should return the default message if all text is deleted", :js do
+    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+    given_there_is_a_draft_course
+    when_i_visit_the_school_placement_page
+    then_i_should_see_something_in_the_preview("The text you type above will show here.")
+    then_i_edit_the_school_placement_fields(placement_school_activities: "ABC", support_and_mentorship: "DEF")
+    then_i_should_see_something_in_the_preview("ABC\nDEF")
+    then_i_edit_the_school_placement_fields(placement_school_activities: "", support_and_mentorship: "")
+    then_i_should_see_something_in_the_preview("The text you type above will show here.")
+  end
+
   def when_i_visit_the_course_page
     visit "/publish/organisations/#{@course.provider.provider_code}/#{@course.start_date.year}/courses/#{@course.course_code}"
     expect(page).to have_content(@course.name)
