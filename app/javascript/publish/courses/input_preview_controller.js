@@ -6,6 +6,13 @@ export default class extends Controller {
   // allowing easy access to all matching elements [oai_citation:1‡stimulus.hotwired.dev](https://stimulus.hotwired.dev/reference/targets#:~:text=Kind%20Name%20Value%20Singular%20%60this.,a%20matching%20target%20in%20scope).
   static targets = ['input', 'preview']
 
+  /**
+  * Initialize the preview immediately so empty placeholders render on load.
+  */
+  connect() {
+    this.updatePreview()
+  };
+
   // This method updates the preview content. It should be triggered by an input event.
   updatePreview (event) {
     // Use a Map to group inputs by their preview target key.
@@ -108,6 +115,11 @@ export default class extends Controller {
         previewContent += blockHtml
       })
 
+      // If the preview content is empty after processing, we can set a default message.
+      var previewContentWitoutTags = previewContent.replace(/<[^>]*>/g, '');
+      if(previewContentWitoutTags === '') {
+        previewContent = '<p>The text you type above will show here.</p>';
+      };
       // Finally, update the preview element's HTML with the compiled content.
       previewEl.innerHTML = previewContent
     })
