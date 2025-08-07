@@ -51,6 +51,7 @@ module ViewHelper
     else
       {
         about_course: "#{base}/about-this-course?display_errors=true#publish-course-information-form-about-course-field-error",
+        theoretical_training_activities: "#{base}/fields/what-you-will-study?display_errors=true#theoretical-training-activities-error",
         how_school_placements_work: "#{base}/school-placements?display_errors=true#publish-course-information-form-how-school-placements-work-field-error",
         fee_uk_eu: "#{error_url_base}?display_errors=true#fee-error",
         fee_international: "#{error_url_base}?display_errors=true#fee_international-error",

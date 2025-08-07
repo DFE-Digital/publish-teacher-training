@@ -207,6 +207,10 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         patch "/fees", on: :member, to: "courses/fees#update"
         get "/salary", on: :member, to: "courses/salary#edit"
         patch "/salary", on: :member, to: "courses/salary#update"
+        constraints ->(_req) { FeatureFlag.active?(:long_form_content) } do
+          get "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#edit"
+          patch "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#update"
+        end
 
         get "/withdraw", on: :member, to: "courses/withdrawals#edit"
         patch "/withdraw", on: :member, to: "courses/withdrawals#update"
