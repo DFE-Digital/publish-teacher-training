@@ -1,0 +1,12 @@
+en:
+  activemodel:
+    errors:
+      models:
+        publish/why_train_with_us_form:
+          attributes:
+            about_us:
+              blank: Enter what kind of organisation you are
+              too_many_words: "'What kind of organisation is yours?' must be 100 words or less"
+            value_proposition:
+              blank: Enter why candidates should choose to train with you
+              too_many_words: "'Why should candidates choose to train with you?' must be 100 words or less"

@@ -4,11 +4,11 @@ module Publish
   class WhyTrainWithUsForm < BaseProviderForm
     include Rails.application.routes.url_helpers
 
-    validates :value_proposition, presence: { message: "Enter details about training with you" }, if: :value_proposition_changed?
-    validates :about_us, presence: { message: "Enter details about your organisation" }, if: :about_us_changed?
+    validates :about_us, presence: true, if: :about_us_changed?
+    validates :value_proposition, presence: true, if: :value_proposition_changed?
 
-    validates :value_proposition, words_count: { maximum: 100, message: "Reduce the word count for your value proposition" }
-    validates :about_us, words_count: { maximum: 100, message: "Reduce the word count for about us" }
+    validates :about_us, words_count: { maximum: 100, message: :too_many_words }
+    validates :value_proposition, words_count: { maximum: 100, message: :too_many_words }
 
     def initialize(model, params: {}, redirect_params: {}, course_code: nil)
       super(model, params:)
@@ -17,8 +17,8 @@ module Publish
     end
 
     FIELDS = %i[
-      about_us
       value_proposition
+      about_us
     ].freeze
 
     attr_accessor(*FIELDS)
