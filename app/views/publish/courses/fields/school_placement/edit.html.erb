@@ -11,7 +11,6 @@
   ) %>
 <% end %>
 
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -64,7 +63,7 @@
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
-            preview_output_target: "preview1"
+            preview_output_target: "preview1",
           },
           label: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school"), size: "s" },
           hint: { text: CourseEnrichment.human_attribute_name("what-trainee-do-in-school-hint"), size: "s" },
@@ -75,7 +74,7 @@
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
-            preview_output_target: "preview1"
+            preview_output_target: "preview1",
           },
           label: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored"), size: "s" },
           hint: { text: CourseEnrichment.human_attribute_name("how-trainees-mentored-hint"), size: "s" },
