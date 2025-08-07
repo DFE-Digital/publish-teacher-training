@@ -1,0 +1,12 @@
+en:
+  activemodel:
+    errors:
+      models:
+        publish/why_train_with_us_form:
+          attributes:
+            about_us:
+              blank: Enter details about your organisation
+              too_long: Reduce the word count for about us
+            provider_value_proposition:
+              blank: Enter details about training with you
+              too_long: Reduce the word count for your value proposition
