@@ -9,7 +9,7 @@ export default class extends Controller {
   /**
   * Initialize the preview immediately so empty placeholders render on load.
   */
-  connect() {
+  connect () {
     this.updatePreview()
   };
 
@@ -116,9 +116,9 @@ export default class extends Controller {
       })
 
       // If the preview content is empty after processing, we can set a default message.
-      var previewContentWitoutTags = previewContent.replace(/<[^>]*>/g, '');
-      if(previewContentWitoutTags === '') {
-        previewContent = '<p>The text you type above will show here.</p>';
+      const previewContentWitoutTags = previewContent.replace(/<[^>]*>/g, '')
+      if (previewContentWitoutTags === '') {
+        previewContent = '<p>The text you type above will show here.</p>'
       };
       // Finally, update the preview element's HTML with the compiled content.
       previewEl.innerHTML = previewContent
