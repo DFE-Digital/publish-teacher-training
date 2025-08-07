@@ -42,9 +42,11 @@
         What you will do on school placements
       </h1>
 
-      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-        texts: [["About this course", @v1_enrichment.about_course], ["How placements work", @v1_enrichment.how_school_placements_work]],
-      } %>
+      <% if @v1_enrichment%>
+        <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+          texts: [["About this course", @v1_enrichment.about_course], ["How placements work", @v1_enrichment.how_school_placements_work]],
+        } %>
+      <% end %>
 
       <aside data-qa="course__related_sidebar">
       <%= render(
