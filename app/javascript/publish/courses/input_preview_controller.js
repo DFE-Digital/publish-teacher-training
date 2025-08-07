@@ -6,9 +6,8 @@ export default class extends Controller {
   // allowing easy access to all matching elements [oai_citation:1‡stimulus.hotwired.dev](https://stimulus.hotwired.dev/reference/targets#:~:text=Kind%20Name%20Value%20Singular%20%60this.,a%20matching%20target%20in%20scope).
   static targets = ['input', 'preview']
 
-  
   // This method updates the preview content. It should be triggered by an input event.
-  updatePreview(event) {
+  updatePreview (event) {
     // Use a Map to group inputs by their preview target key.
     // Key will be either a specific target name (e.g., "currency1") or "shared".
     const previewMap = new Map()
@@ -45,8 +44,8 @@ export default class extends Controller {
 
       // Go through each input in the group and process its text content.
       inputs.forEach(input => {
-        const rawContent = input.value         // The raw text from the input field.
-        const lines = rawContent.split('\n')   // Split the text into lines for processing.
+        const rawContent = input.value // The raw text from the input field.
+        const lines = rawContent.split('\n') // Split the text into lines for processing.
 
         // **Special case**: If this preview is for currency fields (identified by keys 'currency1' or 'currency2'),
         // simply prefix the value with '£' (British Pound sign) and ignore other formatting rules.
@@ -54,20 +53,20 @@ export default class extends Controller {
           const sanitizedValue = rawContent.trim()
           // If there's a value, prefix it with £; if not, leave it blank.
           previewContent = sanitizedValue ? `£${sanitizedValue}` : ''
-          return  // Skip further processing for currency fields.
+          return // Skip further processing for currency fields.
         }
 
         // **Default case**: Render rich text preview with basic formatting.
         // We'll accumulate HTML in blockHtml for this input, then append to previewContent.
         let blockHtml = ''
-        let currentListItems = []  // Temporarily hold `<li>` items if we're in a bullet list context.
+        let currentListItems = [] // Temporarily hold `<li>` items if we're in a bullet list context.
 
         // Helper function to flush any collected list items into a `<ul>` block.
         const flushList = () => {
           if (currentListItems.length > 0) {
             // Wrap collected list items in a UL with GOV.UK styling classes.
             blockHtml += `<ul class="govuk-list govuk-list--bullet">${currentListItems.join('')}</ul>`
-            currentListItems = []  // Reset list item collection after flushing.
+            currentListItems = [] // Reset list item collection after flushing.
           }
         }
 
@@ -92,7 +91,7 @@ export default class extends Controller {
 
             if (line.trim() === '') {
               // If the line is blank (only whitespace), preserve an empty paragraph for spacing.
-              blockHtml += `<p></p>`
+              blockHtml += '<p></p>'
             } else {
               // For a normal line of text, convert markdown-style links to <a> tags as above.
               const processedLine = line.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="govuk-link" href="$2">$1</a>')
