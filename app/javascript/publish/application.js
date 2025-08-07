@@ -14,3 +14,9 @@ initAll()
 FilterToggle.init()
 
 autocompleteSetup()
+
+import { Application } from '@hotwired/stimulus'
+import InputPreviewController from './courses/input_preview_controller'
+window.Stimulus = Application.start()
+Stimulus.register('input-preview', InputPreviewController)
+console.log('Stimulus application started with input-preview controller registered.')
