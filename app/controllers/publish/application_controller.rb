@@ -25,7 +25,7 @@ module Publish
     end
 
     def recruitment_cycle
-      @recruitment_cycle ||= RecruitmentCycle.find_by!(year: cycle_year)
+      @recruitment_cycle ||= Current.recruitment_cycle = RecruitmentCycle.find_by!(year: cycle_year)
     end
 
     def cycle_year

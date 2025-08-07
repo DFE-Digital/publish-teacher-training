@@ -18,7 +18,7 @@ module Support
     end
 
     def recruitment_cycle
-      @recruitment_cycle ||= RecruitmentCycle.find_by(year: params.fetch(:recruitment_cycle_year))
+      @recruitment_cycle ||= Current.recruitment_cycle = RecruitmentCycle.find_by(year: params.fetch(:recruitment_cycle_year))
     end
   end
 end
