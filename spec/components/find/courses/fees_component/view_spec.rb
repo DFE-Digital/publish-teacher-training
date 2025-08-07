@@ -26,7 +26,7 @@ describe Find::Courses::FeesComponent::View, type: :component do
 
       result = render_inline(described_class.new(course))
       expect(result.text).not_to include("International students")
-      expect(result.text).to include("The course fees for UK citizens")
+      expect(result.text).to include("The course fee for UK citizens")
     end
   end
 end

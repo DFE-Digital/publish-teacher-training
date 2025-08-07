@@ -370,7 +370,7 @@ private
   end
 
   def and_i_see_the_the_course_fee
-    expect(page).to have_text "The course fees for UK citizens in #{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1} are £100."
+    expect(page).to have_text "The course fee for UK citizens in #{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1} are £100."
   end
 
   def and_i_submit_and_continue_through_the_two_forms
