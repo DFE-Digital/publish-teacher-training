@@ -8,5 +8,5 @@
     <% if @render_before_preview_body %>
         <%= render partial: "publish/courses/fields/#{@render_before_preview_body}", locals: { locals: before_preview_locals } %>
     <% end %>
-    <p class="govuk-body" data-input-preview-target="preview" data-preview-target="shared"><% t(".preview_text") %></p>
+    <p class="govuk-body" data-input-preview-target="preview" data-preview-target="shared"><%= t(".preview_text") %></p>
 </div>
