@@ -1014,7 +1014,7 @@ en:
         publish/courses/fields/school_placement_form:
           attributes:
             placement_school_activities:
-              too_long: "Reduce the word count for what trainee will do in school"
+              too_long: "Reduce the word count for what trainees will do in school"
               blank: "Enter what will trainees do while in their placement schools?"
             support_and_mentorship:
               too_long: "Reduce the word count for how trainees will be supported and mentored"
