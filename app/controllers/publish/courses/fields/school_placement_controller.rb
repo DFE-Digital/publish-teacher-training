@@ -11,7 +11,7 @@ module Publish
         include CopyCourseContent
         before_action :authorise_with_pundit
 
-        # Example method to fetch school placements
+        # Page to edit school placements data that is stored in the course enrichment
         def edit
           @school_placement_form = Publish::Courses::Fields::SchoolPlacementForm.new(course_enrichment)
           @copied_fields = copy_content_check(::Courses::Copy::SCHOOL_PLACEMENT_FIELDS)
@@ -20,7 +20,7 @@ module Publish
           @school_placement_form.valid? if show_errors_on_publish?
         end
 
-        # Example method to update school placements
+        # Page to update school placements data
         def update
           @school_placement_form = Publish::Courses::Fields::SchoolPlacementForm.new(
             course_enrichment,
