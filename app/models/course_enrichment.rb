@@ -112,7 +112,7 @@ class CourseEnrichment < ApplicationRecord
 
   validates :placement_school_activities, presence: true, on: :publish, if: -> { version == 2 }
   validates :placement_school_activities, words_count: { maximum: 150 }
-  validates :support_and_mentorship, presence: true, on: :publish, if: -> { version == 2 }
+
   validates :support_and_mentorship, words_count: { maximum: 50 }
 
   validates :theoretical_training_activities, presence: true, on: :publish, if: -> { version == 2 }
