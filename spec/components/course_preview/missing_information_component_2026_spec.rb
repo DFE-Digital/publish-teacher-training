@@ -16,6 +16,7 @@ module CoursePreview
 
       let(:hrefs) do
         {
+          train_with_disability: edit_publish_provider_recruitment_cycle_disability_support_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true),
           train_with_us: edit_publish_provider_recruitment_cycle_why_train_with_us_path(provider_code, recruitment_cycle_year, course_code:, goto_provider: true),
         }
       end
@@ -36,6 +37,7 @@ module CoursePreview
       end
 
       include_examples "course with missing information", :train_with_us, "Enter details about the training provider"
+      include_examples "course with missing information", :train_with_disability, "Enter details about training with disabilities and other needs"
     end
   end
 end

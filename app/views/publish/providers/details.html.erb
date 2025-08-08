@@ -43,6 +43,16 @@
         action_path: edit_publish_provider_recruitment_cycle_why_train_with_us_path(@provider.provider_code, @provider.recruitment_cycle_year),
         action_visually_hidden_text: "details about training with your organisation",
       ) %>
+
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "Training with disabilities and other needs",
+        markdown(@provider.train_with_disability),
+        %w[train_with_disability],
+        action_path: edit_publish_provider_recruitment_cycle_disability_support_path(@provider.provider_code, @provider.recruitment_cycle_year),
+        action_visually_hidden_text: "details about training with disabilities and other needs",
+      ) %>
       <% else %>
         <% enrichment_summary(
         summary_list,
@@ -53,7 +63,6 @@
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
         action_visually_hidden_text: "details about training with your organisation",
       ) %>
-      <% end %>
 
       <% enrichment_summary(
         summary_list,
@@ -61,9 +70,10 @@
         "Training with disabilities and other needs",
         markdown(@provider.train_with_disability),
         %w[train_with_disability],
-        action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-disability",
+        action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
         action_visually_hidden_text: "details about training with disabilities and other needs",
       ) %>
+      <% end %>
     <% end %>
 
     <% unless @provider.provider_type == 'lead_school' %>
