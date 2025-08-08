@@ -34,14 +34,24 @@
   <div class="govuk-grid-column-full">
     <%= govuk_summary_list do |summary_list| %>
       <% if FeatureFlag.active?(:long_form_content) || Current.recruitment_cycle.after_2025? %>
+          <% enrichment_summary(
+          summary_list,
+          :provider,
+          "Why train with us",
+          value_provided?(markdown(@provider.about_us) + markdown(@provider.value_proposition)),
+          %w[about_us value_proposition],
+          action_path: edit_publish_provider_recruitment_cycle_why_train_with_us_path(@provider.provider_code, @provider.recruitment_cycle_year),
+          action_visually_hidden_text: "details about training with your organisation",
+        ) %>
+
         <% enrichment_summary(
         summary_list,
         :provider,
-        "Why train with us",
-        value_provided?(markdown(@provider.about_us) + markdown(@provider.value_proposition)),
-        %w[about_us value_proposition],
-        action_path: edit_publish_provider_recruitment_cycle_why_train_with_us_path(@provider.provider_code, @provider.recruitment_cycle_year),
-        action_visually_hidden_text: "details about training with your organisation",
+        "Training with disabilities and other needs",
+        markdown(@provider.train_with_disability),
+        %w[train_with_disability],
+        action_path: edit_publish_provider_recruitment_cycle_disability_support_path(@provider.provider_code, @provider.recruitment_cycle_year),
+        action_visually_hidden_text: "details about training with disabilities and other needs",
       ) %>
       <% else %>
         <% enrichment_summary(
@@ -53,7 +63,6 @@
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
         action_visually_hidden_text: "details about training with your organisation",
       ) %>
-      <% end %>
 
       <% enrichment_summary(
         summary_list,
@@ -61,15 +70,16 @@
         "Training with disabilities and other needs",
         markdown(@provider.train_with_disability),
         %w[train_with_disability],
-        action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-disability",
+        action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
         action_visually_hidden_text: "details about training with disabilities and other needs",
       ) %>
     <% end %>
+  <% end %>
 
-    <% unless @provider.provider_type == 'lead_school' %>
-      <h2 class="govuk-heading-m"><%= t(".visa_sponsorship") %></h2>
-      <%= govuk_summary_list do |summary_list| %>
-        <% enrichment_summary(
+  <% unless @provider.provider_type == 'lead_school' %>
+    <h2 class="govuk-heading-m"><%= t(".visa_sponsorship") %></h2>
+    <%= govuk_summary_list do |summary_list| %>
+      <% enrichment_summary(
              summary_list,
              :provider,
              "Student visas",
@@ -79,7 +89,7 @@
              action_visually_hidden_text: "if candidates can get Student visa sponsorship",
            ) %>
 
-        <% enrichment_summary(
+      <% enrichment_summary(
              summary_list,
              :provider,
              "Skilled Worker visas",
@@ -88,12 +98,12 @@
              action_path: skilled_worker_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
              action_visually_hidden_text: "if candidates can get Skilled Worker visa sponsorship",
            ) %>
-      <% end %>
     <% end %>
+  <% end %>
 
-    <h2 class="govuk-heading-m"><%= t(".school_placements") %></h2>
-    <%= govuk_summary_list do |summary_list| %>
-      <% enrichment_summary(
+  <h2 class="govuk-heading-m"><%= t(".school_placements") %></h2>
+  <%= govuk_summary_list do |summary_list| %>
+    <% enrichment_summary(
         summary_list,
         :provider,
         t(".selectable_school_label"),
@@ -102,10 +112,10 @@
         action_path: school_placements_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
         action_visually_hidden_text: "school placement display",
       ) %>
-    <% end %>
-    <h2 class="govuk-heading-m"><%= t(".contact_details") %></h2>
-    <%= govuk_summary_list do |summary_list| %>
-      <% enrichment_summary(
+  <% end %>
+  <h2 class="govuk-heading-m"><%= t(".contact_details") %></h2>
+  <%= govuk_summary_list do |summary_list| %>
+    <% enrichment_summary(
         summary_list,
         :provider,
         "Email address",
@@ -115,7 +125,7 @@
         action_visually_hidden_text: "email address",
       ) %>
 
-      <% enrichment_summary(
+    <% enrichment_summary(
         summary_list,
         :provider,
         "Telephone number",
@@ -125,7 +135,7 @@
         action_visually_hidden_text: "telephone number",
       ) %>
 
-      <% enrichment_summary(
+    <% enrichment_summary(
         summary_list,
         :provider,
         "Website",
@@ -135,7 +145,7 @@
         action_visually_hidden_text: "website",
       ) %>
 
-      <% enrichment_summary(
+    <% enrichment_summary(
         summary_list,
         :provider,
         "UKPRN",
@@ -145,8 +155,8 @@
         action_visually_hidden_text: "UKPRN",
       ) %>
 
-      <% if @provider.provider_type == "lead_school" %>
-        <% enrichment_summary(
+    <% if @provider.provider_type == "lead_school" %>
+      <% enrichment_summary(
           summary_list,
           :provider,
           "URN",
@@ -155,9 +165,9 @@
           action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#urn",
           action_visually_hidden_text: "URN",
         ) %>
-      <% end %>
+    <% end %>
 
-      <% enrichment_summary(
+    <% enrichment_summary(
         summary_list,
         :provider,
         "Contact address",
@@ -166,6 +176,6 @@
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#address",
         action_visually_hidden_text: "contact address",
       ) %>
-    <% end %>
-  </div>
+  <% end %>
+</div>
 </div>
