@@ -41,7 +41,7 @@ private
   end
 
   def and_there_are_schools_in_the_database
-    @school = create(:gias_school, name: "Bernard", urn: "466415", postcode: "NW1 5WS", town: "Damonmouth")
+    @school = create(:gias_school, name: "Enda's", urn: "466415", postcode: "NW1 5WS", town: "Damonmouth")
     @school_two = create(:gias_school, name: "School Two")
     @school_three = create(:gias_school, name: "School Three")
   end
