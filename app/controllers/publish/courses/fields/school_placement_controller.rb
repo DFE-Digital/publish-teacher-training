@@ -7,7 +7,7 @@ module Publish
     # Module for managing course fields
     module Fields
       # Controller for managing school placement fields in the course enrichment
-      class SchoolPlacementController < Publish::Courses::Fields::ApplicationController
+      class SchoolPlacementController < Publish::Courses::Fields::BaseController
         include CopyCourseContent
         before_action :authorise_with_pundit
 
@@ -16,7 +16,7 @@ module Publish
           @school_placement_form = Publish::Courses::Fields::SchoolPlacementForm.new(course_enrichment)
           @copied_fields = copy_content_check(::Courses::Copy::SCHOOL_PLACEMENT_FIELDS)
           @v1_enrichment = course.enrichments.find_by(version: 1)
-          # @copied_fields_values = copied_fields_values if @copied_fields.present?
+          @copied_fields_values = copied_fields_values if @copied_fields.present?
           @school_placement_form.valid? if show_errors_on_publish?
         end
 
