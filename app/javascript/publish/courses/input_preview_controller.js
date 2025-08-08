@@ -116,8 +116,8 @@ export default class extends Controller {
       })
 
       // If the preview content is empty after processing, we can set a default message.
-      const previewContentWitoutTags = previewContent.replace(/<[^>]*>/g, '')
-      if (previewContentWitoutTags === '') {
+      const previewContentWithoutTags = previewContent.replace(/<[^>]*>/g, '')
+      if (previewContentWithoutTags === '') {
         previewContent = '<p>The text you type above will show here.</p>'
       };
       // Finally, update the preview element's HTML with the compiled content.
