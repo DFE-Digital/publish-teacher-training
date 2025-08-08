@@ -1,0 +1,8 @@
+en:
+  publish:
+    courses:
+      fields:
+        dynamic_preview:
+          preview_header: Preview of what candidates will see
+          preview_text: The text you type above will show here.
+          
