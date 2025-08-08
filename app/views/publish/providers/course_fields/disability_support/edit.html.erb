@@ -1,0 +1,41 @@
+<% page_title = t(".page_title") %>
+<% content_for :page_title, title_with_error_prefix(page_title, @errors.present?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @disability_support_form,
+      url: publish_provider_recruitment_cycle_disability_support_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      method: :put,
+    ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(@disability_support_form.back_path) %>
+      <% end %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @provider.provider_name %></span>
+        <%= page_title %>
+      </h1>
+
+      <%= t(".instructions_html") %>
+
+      <%= f.govuk_text_area(:train_with_disability,
+        form_group: { id: "train-with-disability" },
+        label: nil,
+        hint: -> { render partial: "publish/courses/markdown_formatting" },
+        max_words: 100,
+        rows: 15) %>
+      <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
+      <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
+
+      <%= f.govuk_submit t(".submit") %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), @disability_support_form.back_path) %>
+    </p>
+  </div>
+</div>

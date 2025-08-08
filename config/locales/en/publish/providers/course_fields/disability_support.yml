@@ -1,0 +1,25 @@
+en:
+  publish:
+    providers:
+      course_fields:
+        disability_support:
+          edit:
+            page_title: Training with disabilities and other needs
+            instructions_html: |
+              <p class="govuk-body">Say how you support candidates with disabilities and other needs. This could include candidates with:</p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>dyslexia</li>
+                <li>physical, hearing and visual impairments</li>
+                <li>mental health conditions</li>
+              </ul>
+              <p class="govuk-body">If accessibility varies between schools, give details. It’s also useful for candidates to know how you’ve accommodated others with specific access needs in the past.</p>
+            submit: Update training with disabilities
+  activemodel:
+    errors:
+      models:
+        publish/disability_support_form:
+          attributes:
+            train_with_disability:
+              blank: Enter how you support candidates with disabilities and other needs
+              too_many_words: "Training with disabilities and other needs must be 100 words or less"
+
