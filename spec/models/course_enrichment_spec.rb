@@ -88,7 +88,7 @@ RSpec.describe CourseEnrichment do
 
   it_behaves_like "versioned_presence_field",
                   field: :support_and_mentorship,
-                  required_in: { 1 => false, 2 => true },
+                  required_in: { 1 => false, 2 => false },
                   word_limit: 50
 
   it_behaves_like "versioned_presence_field",

@@ -7,7 +7,7 @@ module Publish
     # Module for managing course fields
     module Fields
       # Base controller for course fields
-      class ApplicationController < ::Publish::ApplicationController
+      class BaseController < ::Publish::ApplicationController
         include CopyCourseContent
         before_action :authorise_with_pundit
 
