@@ -9,84 +9,82 @@ RSpec.describe "Publishing a course with long form content on the school placeme
 
   before do
     sign_in_system_test(user:)
+    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
   end
 
-  # scenario "A user CANT update the Enrichment if What will trainees do while in their placement schools is blank" do
-  #   allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+  scenario "A user CANT update the Enrichment if What will trainees do while in their placement schools is blank" do
+    given_there_is_a_draft_course
+    when_i_visit_the_school_placement_page
+    then_i_edit_the_school_placement_fields(placement_school_activities: "", support_and_mentorship: "")
+    click_link_or_button "Update what you will do on school placements"
+    expect(page).to have_content("Enter what will trainees do while in their placement schools?")
+  end
 
-  #   given_there_is_a_draft_course
-  #   when_i_visit_the_course_page
-  #   then_i_edit_the_fees_and_financial_support_fields(placement_school_activities: nil, support_and_mentorship: "ABC")
+  scenario "A user CANT update the Enrichment if they only have supported and mentored filled out" do
+    given_there_is_a_draft_course
+    when_i_visit_the_school_placement_page
+    then_i_edit_the_school_placement_fields(placement_school_activities: "", support_and_mentorship: "Some support")
+    click_link_or_button "Update what you will do on school placements"
+    expect(page).to have_content("Enter what will trainees do while in their placement schools?")
+  end
 
-  #   expect(page).to have_content("Enter What will trainees do while in their placement schools?")
-  # end
+  scenario "A user CANT update the Enrichment if What will trainees do while in their placement schools has over 150 words" do
+    given_there_is_a_draft_course
+    when_i_visit_the_school_placement_page
+    then_i_edit_the_school_placement_fields(placement_school_activities: generate_text(151), support_and_mentorship: "")
+    click_link_or_button "Update what you will do on school placements"
+    expect(page).to have_content("Reduce the word count for placement school activities")
+  end
 
-  # scenario "A user CANT update fees and financial support page if fees above or equal to 100_000" do
-  #   allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+  scenario "A user CANT update the Enrichment if How will they be supported and mentored is over 50 words" do
+    given_there_is_a_draft_course
+    when_i_visit_the_school_placement_page
+    then_i_edit_the_school_placement_fields(placement_school_activities: "ABC", support_and_mentorship: generate_text(51))
+    click_link_or_button "Update what you will do on school placements"
+    expect(page).to have_content("Reduce the word count for support and mentorship")
+  end
 
-  #   given_there_is_a_draft_course
-  #   when_i_visit_the_course_page
-  #   then_i_edit_the_fees_and_financial_support_fields(uk_fee: 200_000, international_fee: 200_000)
+  scenario "A user can see his past cycles fields", :js do
+    given_there_is_a_draft_course
+    when_i_visit_the_school_placement_page
+    then_i_should_not_see_the_fields_from_the_last_cycle
+    then_i_should_see_a_collapsible_section_for_the_last_cycle_content
+    then_i_should_see_the_fields_from_the_last_cycle
+  end
 
-  #   expect(page).to have_content("Course fees for UK and EU students must be less than or equal to £100,000")
-  #   expect(page).to have_content("Course fees for international students must be less than or equal to £100,000")
-  # end
+  scenario "A user only updates the school placement activity field", :js do
+    given_there_is_a_draft_course
+    when_i_visit_the_school_placement_page
+    then_i_edit_the_school_placement_fields(placement_school_activities: "New activities", support_and_mentorship: "")
+    click_link_or_button "Update what you will do on school placements"
+    expect(page).to have_content("What will trainees do while in their placement schools? updated")
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_path(
+        @course.provider.provider_code,
+        @course.start_date.year,
+        @course.course_code,
+      ),
+    )
+    expect(CourseEnrichment.last.placement_school_activities).to eq("New activities")
+    expect(CourseEnrichment.last.support_and_mentorship).to eq("")
+  end
 
-  # scenario "A user CANT update fees and financial support page if optional fields are above the word count" do
-  #   allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
-
-  #   given_there_is_a_draft_course
-  #   when_i_visit_the_course_page
-  #   then_i_edit_the_fees_and_financial_support_fields(
-  #     fee_schedule: generate_text(51),
-  #     additional_fees: generate_text(51),
-  #     financial_support: generate_text(251),
-  #   )
-
-  #   expect(page).to have_content("Reduce the word count for fee schedule")
-  #   expect(page).to have_content("Reduce the word count for additional fees")
-  #   expect(page).to have_content("Reduce the word count for financial support")
-  # end
-
-  # scenario "A user CAN see the new long form course content fields if the current cycle is 2026 or beyond" do
-  #   allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
-
-  #   current_recruitment_cycle = RecruitmentCycle.create!(
-  #     year: 2026,
-  #     application_start_date: Date.new(2025, 10, 9),
-  #     application_end_date: Date.new(2026, 9, 30),
-  #     available_for_support_users_from: Date.new(2025, 10, 9),
-  #     available_in_publish_from: Date.new(2025, 10, 9),
-  #   )
-
-  #   given_there_is_a_draft_course(recruitment_cycle: current_recruitment_cycle)
-  #   when_i_visit_the_course_page
-
-  #   expect(page).to have_content("Fee for UK students")
-  #   expect(page).to have_content("Fee for international citizens")
-  #   expect(page).to have_content("Fees and financial support")
-
-  #   then_change_links_use_new_routes
-  # end
-
-  # scenario "A user CANT see the new long form course content fields if the current cycle is before 2026" do
-  #   current_recruitment_cycle = RecruitmentCycle.create!(
-  #     year: 2024,
-  #     application_start_date: Date.new(2023, 10, 9),
-  #     application_end_date: Date.new(2024, 9, 30),
-  #     available_for_support_users_from: Date.new(2023, 10, 9),
-  #     available_in_publish_from: Date.new(2023, 10, 9),
-  #   )
-
-  #   given_there_is_a_draft_course(recruitment_cycle: current_recruitment_cycle)
-  #   when_i_visit_the_course_page
-
-  #   expect(page).to have_content("Fee for UK students")
-  #   expect(page).to have_content("Fee for international students")
-  #   expect(page).to have_content("Fees and financial support (optional)")
-
-  #   then_change_links_use_old_routes
-  # end
+  scenario "A user can update the school placement activity field and support field", :js do
+    given_there_is_a_draft_course
+    when_i_visit_the_school_placement_page
+    then_i_edit_the_school_placement_fields(placement_school_activities: "New activities", support_and_mentorship: "New support")
+    click_link_or_button "Update what you will do on school placements"
+    expect(page).to have_content("What will trainees do while in their placement schools? updated")
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_path(
+        @course.provider.provider_code,
+        @course.start_date.year,
+        @course.course_code,
+      ),
+    )
+    expect(CourseEnrichment.last.placement_school_activities).to eq("New activities")
+    expect(CourseEnrichment.last.support_and_mentorship).to eq("New support")
+  end
 
   scenario "A user can see his changes in the dynamic preview when the field support_and_mentorship is changed", :js do
     allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
@@ -145,33 +143,11 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     fill_in "How will they be supported and mentored? (optional)", with: support_and_mentorship
   end
 
-  # def then_i_edit_the_fees_and_financial_support_fields(
-  #   uk_fee: 2000,
-  #   international_fee: 2000,
-  #   fee_schedule: "Paragraph 1",
-  #   additional_fees: "Paragraph 2",
-  #   financial_support: "Paragraph 3"
-  # )
-  #   all("a", text: "Change")[3].click
-  #   expect(page).to have_content("Fees and financial support")
-
-  #   expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fields/fees-and-financial-support")
-
-  #   fill_in "Fee for UK citizens", with: uk_fee
-  #   fill_in "Fee for international students", with: international_fee
-
-  #   fill_in "When are the fees due? Is there a payment schedule? (optional)", with: fee_schedule
-  #   fill_in "Are there any additional fees or costs? (optional)", with: additional_fees
-  #   fill_in "Does your organisation offer any financial support? (optional)", with: financial_support
-
-  #   click_link_or_button "Update fees and financial support"
-  # end
-
   def given_there_is_a_draft_course(recruitment_cycle: RecruitmentCycle.current)
     provider_in_cycle = create(:provider, recruitment_cycle: recruitment_cycle)
     user.providers << provider_in_cycle
 
-    course_enrichment = build(:course_enrichment, :v2, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil)
+    @course_enrichment = build(:course_enrichment, :v1, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil)
 
     @course = create(
       :course,
@@ -180,7 +156,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
       :can_sponsor_student_visa,
       provider: provider_in_cycle,
       accrediting_provider: build(:accredited_provider),
-      enrichments: [course_enrichment],
+      enrichments: [@course_enrichment],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
       applications_open_from: recruitment_cycle.application_start_date + 1.day,
@@ -188,14 +164,23 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     )
   end
 
-  def then_change_links_use_old_routes
-    all("a", text: "Change")[6].click
-    expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fees-and-financial-support")
+  def then_i_should_not_see_the_fields_from_the_last_cycle
+    expect(page).not_to have_content("About this course")
+    expect(page).not_to have_content(@course_enrichment.about_course)
+    expect(page).not_to have_content("How placements work")
+    expect(page).not_to have_content(@course_enrichment.how_school_placements_work)
   end
 
-  def then_change_links_use_new_routes
-    all("a", text: "Change")[3].click
-    expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fields/fees-and-financial-support")
+  def then_i_should_see_a_collapsible_section_for_the_last_cycle_content
+    expect(page).to have_content("See what you wrote last cycle")
+    page.find("span", text: "See what you wrote last cycle").click
+  end
+
+  def then_i_should_see_the_fields_from_the_last_cycle
+    expect(page).to have_content("About this course")
+    expect(page).to have_content(@course_enrichment.about_course)
+    expect(page).to have_content("How placements work")
+    expect(page).to have_content(@course_enrichment.how_school_placements_work)
   end
 
   def generate_text(word_count)

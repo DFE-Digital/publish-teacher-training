@@ -1011,7 +1011,7 @@ en:
               too_long: "Reduce the word count for additional fees"
             financial_support:
               too_long: "Reduce the word count for financial support"
-        publish/fields/school_placement_form:
+        publish/courses/fields/school_placement_form:
           attributes:
             placement_school_activities:
               too_long: "Reduce the word count for what trainee will do in school"
