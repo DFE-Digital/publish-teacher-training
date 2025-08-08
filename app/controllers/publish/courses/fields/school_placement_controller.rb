@@ -37,6 +37,7 @@ module Publish
             )
 
           else
+            @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
             render :edit
           end
