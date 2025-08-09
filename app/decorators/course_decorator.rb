@@ -331,6 +331,14 @@ class CourseDecorator < ApplicationDecorator
     object.enrichment_attribute(:about_course)
   end
 
+  def placement_school_activities
+    object.enrichment_attribute(:placement_school_activities)
+  end
+
+  def support_and_mentorship
+    object.enrichment_attribute(:support_and_mentorship)
+  end
+
   def interview_process
     object.enrichment_attribute(:interview_process)
   end

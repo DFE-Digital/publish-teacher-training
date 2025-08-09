@@ -12,6 +12,22 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
   end
 
+  scenario "A user visits the course page and clicks on the school placement link" do
+    given_there_is_a_draft_course
+    when_i_visit_the_course_page
+    expect(page).to have_content("What you will do on school placements")
+    expect(page).to have_link("Enter what you will do on school placements")
+    click_link "Enter what you will do on school placements"
+    expect(page).to have_current_path(
+      fields_school_placement_publish_provider_recruitment_cycle_course_path(
+        @course.provider.provider_code,
+        @course.start_date.year,
+        @course.course_code,
+      ),
+    )
+    expect(page).to have_content("What you will do on school placements")
+  end
+
   scenario "A user CANT update the Enrichment if What will trainees do while in their placement schools is blank" do
     given_there_is_a_draft_course
     when_i_visit_the_school_placement_page
@@ -147,7 +163,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     provider_in_cycle = create(:provider, recruitment_cycle: recruitment_cycle)
     user.providers << provider_in_cycle
 
-    @course_enrichment = build(:course_enrichment, :v1, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil)
+    @course_enrichment ||= build(:course_enrichment, :v1, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil)
 
     @course = create(
       :course,
