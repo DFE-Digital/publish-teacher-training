@@ -63,6 +63,8 @@ en:
           heading: School placements at %{provider_name}
           back: Back to %{course_name} (%{course_code})
         description_content:
+          school_palcement_label: What you will do on school placements
+          school_palcement_hidden_text: Enter what you will do on school placements
           course_requirements_heading: Requirements and eligibility
           course_interview_process_heading: Interview process
           course_about_heading: About the course
