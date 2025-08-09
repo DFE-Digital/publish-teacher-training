@@ -19,11 +19,15 @@ module Courses
       ["About this course", "about_course"],
     ].freeze
 
+    SCHOOL_PLACEMENT_FIELDS = [
+      "What you will do on school placements", "placement_school_activities"
+    ].freeze
+
     INTERVIEW_PROCESS_FIELDS = [
       ["Interview process", "interview_process"],
     ].freeze
 
-    SCHOOL_PLACEMENTS_FIELDS = [
+    SCHOOL_PLACEMENTS_FIELDS_V1 = [
       ["How placements work", "how_school_placements_work"],
     ].freeze
 

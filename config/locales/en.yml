@@ -545,6 +545,10 @@ en:
         how_school_placements_work: How placements work
         fee_details: Fees and financial support
         about_course: About this course
+        what-trainee-do-in-school: What will trainees do while in their placement schools?
+        what-trainee-do-in-school-hint: For example observations, lesson planning, getting involved in school life
+        how-trainees-mentored: How will they be supported and mentored? (optional)
+        how-trainees-mentored-hint: For example how many mentors they will have, and how often they will meet
       site:
         location_name: "Name"
         address1: "Building and street"
@@ -998,6 +1002,13 @@ en:
               too_long: "Reduce the word count for additional fees"
             financial_support:
               too_long: "Reduce the word count for financial support"
+        publish/courses/fields/school_placement_form:
+          attributes:
+            placement_school_activities:
+              too_long: "Reduce the word count for what trainees will do in school"
+              blank: "Enter what will trainees do while in their placement schools?"
+            support_and_mentorship:
+              too_long: "Reduce the word count for how trainees will be supported and mentored"
         publish/course_fee_form:
           attributes:
             fee_uk_eu:

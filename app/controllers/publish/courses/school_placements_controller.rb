@@ -14,7 +14,7 @@ module Publish
 
       def edit
         @course_school_placements_form = CourseSchoolPlacementsForm.new(course_enrichment)
-        @copied_fields = copy_content_check(::Courses::Copy::SCHOOL_PLACEMENTS_FIELDS)
+        @copied_fields = copy_content_check(::Courses::Copy::SCHOOL_PLACEMENTS_FIELDS_V1)
 
         @copied_fields_values = copied_fields_values if @copied_fields.present?
 
