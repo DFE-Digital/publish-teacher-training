@@ -50,7 +50,7 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
     and_i_see_checkbox_with_tag("Register Import School", "Newly added")
     and_i_see_checkbox_without_tag("UI Added School", "Newly added")
 
-    travel_to recruitment_cycle.application_start_date + 1.day
+    travel_to recruitment_cycle.application_start_date + 1.month
     sign_in_system_test(user:)
 
     when_i_visit_edit_course_schools_page

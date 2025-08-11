@@ -71,7 +71,7 @@ RSpec.describe Publish::SchoolsChangedBannerComponent, type: :component do
   end
 
   context "once the cycle has started" do
-    let(:application_start_date) { 2.days.ago }
+    let(:application_start_date) { 1.month.ago }
     let(:recruitment_cycle) { create(:recruitment_cycle, year: 2026, application_start_date:) }
 
     it "does not render the banner" do

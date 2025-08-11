@@ -86,10 +86,10 @@ RSpec.describe "Publish - Schools changes notification banner", service: :publis
   end
 
   context "the banner is not shown if recruitment cycle has started" do
-    let(:post_cycle_start_time) { recruitment_cycle.application_start_date + 1.day }
+    let(:post_rollover_period) { recruitment_cycle.application_start_date + 1.month }
 
     before do
-      travel_to(post_cycle_start_time)
+      travel_to(post_rollover_period)
       sign_in_system_test(user:)
     end
 
