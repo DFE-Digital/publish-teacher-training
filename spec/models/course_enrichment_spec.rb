@@ -43,7 +43,7 @@ RSpec.describe CourseEnrichment do
 
   it_behaves_like "versioned_presence_field",
                   field: :interview_process,
-                  required_in: { 1 => false, 2 => true },
+                  required_in: { 1 => false, 2 => false },
                   word_limit: [250, 200]
 
   it_behaves_like "versioned_presence_field",
