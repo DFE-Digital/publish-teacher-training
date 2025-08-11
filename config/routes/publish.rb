@@ -208,6 +208,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/fields/interview-process", on: :member, to: "courses/fields/interview_process#edit"
         patch "/fields/interview-process", on: :member, to: "courses/fields/interview_process#update"
 
+        get "/fields/where-you-will-train", on: :member, to: "courses/fields/where_you_will_train#edit"
+        patch "/fields/where-you-will-train", on: :member, to: "courses/fields/where_you_will_train#update"
+
         get "/fees", on: :member, to: "courses/fees#edit"
         patch "/fees", on: :member, to: "courses/fees#update"
         get "/salary", on: :member, to: "courses/salary#edit"

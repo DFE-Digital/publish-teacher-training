@@ -359,6 +359,22 @@ class CourseDecorator < ApplicationDecorator
     object.enrichment_attribute(:assessment_methods)
   end
 
+  %i[placement_selection_criteria
+     duration_per_school
+     theoretical_training_location
+     theoretical_training_duration].each do |col|
+    define_method col do
+      object.enrichment_attribute(col).to_s
+    end
+  end
+
+  def where_you_will_train
+    [placement_selection_criteria,
+     duration_per_school,
+     theoretical_training_location,
+     theoretical_training_duration].join
+  end
+
   def fee_uk_eu
     object.enrichment_attribute(:fee_uk_eu)
   end

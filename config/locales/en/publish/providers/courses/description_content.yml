@@ -1,0 +1,45 @@
+en:
+  publish:
+    providers:
+      courses:
+        description_content:
+          a_levels_heading: A levels and equivalency tests
+          a_levels_label: A levels
+          about_the_course_heading: About the course
+          about_course_hidden_text: details about this course
+          about_course_label: About this course
+          course_about_heading: About the course
+          course_information_heading: Course information
+          course_interview_process_heading: Interview process
+          course_length_and_fees_heading: Course length and fees
+          course_length_and_salary_heading: Course length and salary
+          course_length_hidden_text: course length
+          course_length_label: Course length
+          course_requirements_heading: Requirements and eligibility
+          degree_label: Degree
+          enter_a_levels: Enter A levels and equivalency test requirements
+          fee_details_hidden_text: fees and financial support
+          fee_details_label: Fees and financial support
+          fee_details_optional_label: Fees and financial support (optional)
+          fee_for_international_citizens_label: Fee for international citizens
+          fee_for_international_citizens_optional_label: Fee for international citizens (optional)
+          fee_for_international_students_label: Fee for international students
+          fee_for_uk_citizens_label: Fee for UK citizens
+          fee_for_uk_students_hidden_text: fee for UK students
+          fee_for_uk_students_label: Fee for UK students
+          fee_international_label: Fee for non-UK citizens
+          fee_international_optional_label: Fee for non-UK citizens (optional)
+          financial_incentive_details_label: Financial support from the government
+          gcse_label: GCSEs
+          how_school_placements_work_hidden_text: details about how placements work
+          how_school_placements_work_label: How placements work
+          interview_location_label: Where will the interviews take place (optional)
+          interview_process_hidden_text: details about the interview process
+          interview_process_label: Interview process (optional)
+          requirements_heading: Requirements and eligibility
+          salary_label: Salary
+          school_palcement_hidden_text: Enter what you will do on school placements
+          school_palcement_label: What you will do on school placements
+          v2_interview_process_label: What is the interview process? (optional)
+          what_you_will_study_hidden_text: details about what you will study
+          what_you_will_study_label: What you will study

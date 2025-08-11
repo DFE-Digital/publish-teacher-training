@@ -68,6 +68,10 @@
 
 <h2 class="govuk-heading-m">
   <%= t("publish.providers.courses.description_content.course_about_heading") %>
+
+  <%= govuk_summary_list do |summary_list| %>
+    <%= render "publish/courses/v2/fields/where_you_will_train", course:, summary_list: summary_list %>
+  <% end %>
 </h2>
 
 <%= govuk_summary_list do |summary_list| %>

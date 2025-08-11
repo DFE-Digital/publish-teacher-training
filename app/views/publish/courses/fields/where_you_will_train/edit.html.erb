@@ -1,0 +1,100 @@
+<% content_for :page_title, title_with_error_prefix(
+  t(".page_title", course_name_and_code: @course.name_and_code),
+  @where_you_will_train_form.errors.any?,
+) %>
+
+<% if params[:copy_from].present? %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-course-information-form",
+    @source_course,
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+          model: @where_you_will_train_form,
+          url: fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+          data: { module: "form-check-leave" },
+          method: :patch,
+          local: true,
+        ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @course.recruitment_cycle_year, course_code: @course.course_code)) %>
+      <% end %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        <%= t(".heading") %>
+      </h1>
+
+      <%= t(".description_html") %>
+
+      <%= f.govuk_text_area(:placement_selection_criteria,
+        value: @copied_fields_values&.dig("placement_selection_criteria") ||
+          @where_you_will_train_form.placement_selection_criteria,
+        label: { text: t(".placement_selection_criteria_label"), size: "s" },
+        hint: -> { t(".placement_selection_criteria_hint") },
+        max_words: 50,
+        rows: 5) %>
+
+      <%= f.govuk_text_area(:duration_per_school,
+        value: @copied_fields_values&.dig("duration_per_school") ||
+          @where_you_will_train_form.duration_per_school,
+        label: { text: t(".duration_per_school_label"), size: "s" },
+        max_words: 50,
+        rows: 5) %>
+
+      <%= f.govuk_text_area(:theoretical_training_location,
+        value: @copied_fields_values&.dig("theoretical_training_location") ||
+          @where_you_will_train_form.theoretical_training_location,
+        label: { text: t(".theoretical_training_location_label", suffix: "(optional)"), size: "s" },
+        hint: -> { t(".theoretical_training_location_hint") },
+        max_words: 50,
+        rows: 5) %>
+
+      <%= f.govuk_text_area(:theoretical_training_duration,
+        value: @copied_fields_values&.dig("theoretical_training_duration") ||
+          @where_you_will_train_form.theoretical_training_duration,
+        label: { text: t(".theoretical_training_duration_label", suffix: "(optional)"), size: "s" },
+        hint: -> { t(".theoretical_training_duration_hint") },
+        max_words: 50,
+        rows: 5) %>
+
+      <%= f.govuk_submit t(".submit_button") %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(
+            t("cancel"),
+            publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle.year,
+              @course.course_code,
+            ),
+          ) %>
+    </p>
+  </div>
+
+  <aside class="govuk-grid-column-one-third">
+    <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        ),
+      },
+    ) %>
+  </aside>
+</div>
