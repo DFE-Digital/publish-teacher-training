@@ -78,7 +78,7 @@ describe Course do
 
         expect(
           costom_course.enrichments.find_or_initialize_draft.attributes.except("id", "created_at", "updated_at", "version"),
-        ).to eq( enrichment.attributes.except("id", "created_at", "updated_at", "version"))
+        ).to eq(enrichment.attributes.except("id", "created_at", "updated_at", "version"))
         expect(costom_course.enrichments.find_or_initialize_draft.version).to eq(2)
       end
 
