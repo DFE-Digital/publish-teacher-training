@@ -27,6 +27,11 @@ module Courses
       ["Interview process", "interview_process"],
     ].freeze
 
+    V2_INTERVIEW_PROCESS_FIELDS = [
+      ["Interview process", "interview_process"],
+      ["Interview location", "interview_location"],
+    ].freeze
+
     SCHOOL_PLACEMENTS_FIELDS_V1 = [
       ["How placements work", "how_school_placements_work"],
     ].freeze

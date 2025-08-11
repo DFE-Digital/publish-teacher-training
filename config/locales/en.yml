@@ -970,6 +970,10 @@ en:
           attributes:
             interview_process:
               too_long: Reduce the word count for interview process
+        publish/fields/interview_process_form:
+          attributes:
+            interview_process:
+              too_long: Reduce the word count for interview process
         publish/course_about_this_course_form:
           attributes:
             about_course:

@@ -8,6 +8,8 @@ class CourseEnrichment < ApplicationRecord
   # Default to version 2 if the feature flag is active, otherwise default to version 1
   attribute :version, :integer, default: -> { FeatureFlag.active?(:long_form_content) ? 2 : 1 }
 
+  INTERVIEW_LOCATION_VALUES = ["online", "in person", "both", nil].freeze
+
   jsonb_accessor :json_data,
                  about_course: [:string, { store_key: "AboutCourse" }],
                  course_length: [:string, { store_key: "CourseLength" }],
@@ -123,7 +125,7 @@ class CourseEnrichment < ApplicationRecord
 
   # v2 optional fields
   validates :theoretical_training_duration, words_count: { maximum: 50 }
-  validates :interview_location, inclusion: { in: ["onsite", "in person", "both", nil] }
+  validates :interview_location, inclusion: { in: INTERVIEW_LOCATION_VALUES }
   validates :fee_schedule, words_count: { maximum: 50 }, if: :is_fee_based?
   validates :additional_fees, words_count: { maximum: 50 }, if: :is_fee_based?
   validates :assessment_methods, words_count: { maximum: 50 }
