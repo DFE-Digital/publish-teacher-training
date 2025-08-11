@@ -22,7 +22,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
         @course.provider.provider_code,
         @course.start_date.year,
         @course.course_code,
-      )
+      ),
     )
   end
 

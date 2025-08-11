@@ -22,7 +22,6 @@ module Publish
               recruitment_cycle.year,
               course.course_code,
             )
-            return
           end
         end
 
