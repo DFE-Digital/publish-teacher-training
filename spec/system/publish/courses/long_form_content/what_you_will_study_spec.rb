@@ -35,14 +35,7 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
   scenario "A user CAN see the new 'What you will study' content fields if the current cycle in 2026 or beyond" do
     FeatureFlag.activate(:long_form_content)
 
-    RecruitmentCycle.create!(
-      year: 2026,
-      application_start_date: Date.new(2025, 10, 9),
-      application_end_date: Date.new(2026, 9, 30),
-      available_for_support_users_from: Date.new(2025, 10, 9),
-      available_in_publish_from: Date.new(2025, 10, 9),
-    )
-
+    given_the_recruitment_cycle_year(2026)
     given_there_is_a_draft_course(recruitment_cycle: RecruitmentCycle.current)
     when_i_visit_the_course_page
 
@@ -52,14 +45,7 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
   end
 
   scenario "A user CANNOT see the new long form course content fields if the current cycle is before 2026" do
-    RecruitmentCycle.create!(
-      year: 2025,
-      application_start_date: Date.new(2024, 10, 9),
-      application_end_date: Date.new(2025, 9, 30),
-      available_for_support_users_from: Date.new(2024, 10, 9),
-      available_in_publish_from: Date.new(2024, 10, 9),
-    )
-
+    given_the_recruitment_cycle_year(2025)
     given_there_is_a_draft_course(recruitment_cycle: RecruitmentCycle.current)
     when_i_visit_the_course_page
 
@@ -88,7 +74,11 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
   end
 
   def when_i_visit_the_course_page
-    visit "/publish/organisations/#{@course.provider.provider_code}/#{@course.start_date.year}/courses/#{@course.course_code}"
+    visit publish_provider_recruitment_cycle_course_path(
+      @course.provider.provider_code,
+      @course.start_date.year,
+      @course.course_code,
+    )
     expect(page).to have_content(@course.name)
   end
 
@@ -98,13 +88,27 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
 
     fill_in "What will trainees do during their theoretical training?", with: theoretical_training_activities
     fill_in "How will they be assessed? (optional)", with: assessment_methods
-    expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fields/what-you-will-study")
+    expect(page).to have_current_path(fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code,
+                                                                                                                @course.start_date.year,
+                                                                                                                @course.course_code))
     click_button "Update what you will study"
   end
 
   def and_change_link_has_correct_route
     all("a", text: "Change")[6].click
-    expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fields/what-you-will-study")
+    expect(page).to have_current_path(fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code,
+                                                                                                                @course.start_date.year,
+                                                                                                                @course.course_code))
+  end
+
+  def given_the_recruitment_cycle_year(year)
+    RecruitmentCycle.create!(
+      year: year,
+      application_start_date: Date.new(year - 1, 10, 9),
+      application_end_date: Date.new(year, 9, 30),
+      available_for_support_users_from: Date.new(year - 1, 10, 9),
+      available_in_publish_from: Date.new(year - 1, 10, 9),
+    )
   end
 
   def generate_text(word_count)
