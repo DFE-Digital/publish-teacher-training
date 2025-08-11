@@ -4,7 +4,7 @@ module Publish
     module Fields
       class WhatYouWillStudyController < ApplicationController
         include CopyCourseContent
-        before_action :authorise_with_pundit
+        before_action :authorise_user
         def edit
           @what_you_will_study_form = Publish::Fields::WhatYouWillStudyForm.new(
             course_enrichment,
@@ -38,7 +38,7 @@ module Publish
           params.require(:publish_fields_what_you_will_study_form).permit(*Publish::Fields::WhatYouWillStudyForm::FIELDS)
         end
 
-        def authorise_with_pundit
+        def authorise_user
           authorize course_to_authorise
         end
 

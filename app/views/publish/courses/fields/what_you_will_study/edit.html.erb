@@ -17,7 +17,6 @@
           url: fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(@provider.provider_code,
                                                                                  @course.recruitment_cycle_year,
                                                                                  @course.course_code),
-          data: { qa: "enrichment-form", module: "form-check-leave" },
           method: :patch,
           local: true,
         ) do |f| %>
@@ -41,13 +40,11 @@
           label: { text: t(".theoretical_training_activities"), size: "s" },
           hint: { text: t(".theoretical_training_activities_hint"), size: "s" },
           rows: 5,
-          max_words: 150,
-          data: { qa: "course_theoretical_training_activities" }) %>
+          max_words: 150) %>
       <%= f.govuk_text_area(:assessment_methods,
           label: { text: t(".assessment_methods"), size: "s" },
           rows: 5,
-          max_words: 50,
-          data: { qa: "assessment_methods" }) %>
+          max_words: 50) %>
       <%= f.govuk_submit t(".submit_button") %>
     <% end %>
     <p class="govuk-body">
