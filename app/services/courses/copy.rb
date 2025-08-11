@@ -41,10 +41,10 @@ module Courses
     ].freeze
 
     V2_WHERE_YOU_WILL_TRAIN_FIELDS = [
-      ["Fee for UK students", "fee_uk_eu"],
-      ["Fee for international students", "fee_international"],
-      ["Fees details", "fee_details"],
-      ["Fees schedule", "fee_schedule"],
+      ["How do you decide which schools to place trainees in?", "placement_selection_criteria"],
+      ["How much time will they spend in each school?", "duration_per_school"],
+      ["Where will theoretical training take place?", "theoretical_training_location"],
+      ["How much time will they spend in theoretical training?", "theoretical_training_duration"],
     ].freeze
 
     V2_FEES_AND_FINANCIAL_SUPPORT_FIELDS = [

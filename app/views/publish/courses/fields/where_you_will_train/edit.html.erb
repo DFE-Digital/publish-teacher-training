@@ -6,7 +6,7 @@
 <% if params[:copy_from].present? %>
   <%= render Providers::CopyCourseContentWarningComponent.new(
     @copied_fields,
-    "publish-course-information-form",
+    "publish-fields-where-you-will-train-form",
     @source_course,
   ) %>
 <% end %>
@@ -89,7 +89,7 @@
       partial: "publish/courses/related_sidebar",
       locals: {
         course: @course,
-        page_path: fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+        page_path: fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
           @course.recruitment_cycle_year,
           @course.course_code,
