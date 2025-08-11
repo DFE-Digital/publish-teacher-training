@@ -31,6 +31,7 @@ en:
       schools:
         salaried: Employing
         unsalaried: Placement
+        select_all: Select all schools
         heading:
           salaried: Employing schools
           unsalaried: Placement schools
