@@ -171,12 +171,13 @@ class Course < ApplicationRecord
       # will return a new instance of a CourseEnrichment object which is different
       # to the ones in the cached `enrichments` association. This makes checking
       # for validations later down non-trivial.
-      latest_draft_enrichment = select(&:draft?).last
-
+      draft_version = FeatureFlag.active?(:long_form_content) ? 2 : 1
+      latest_draft_enrichment = select(&:draft?).last&.tap { |d| d.version = draft_version }
+      # pp({ latest: latest_draft_enrichment })
       latest_draft_enrichment || new(new_draft_attributes)
     end
 
-    def new_draft_attributes
+    def new_draft_attributes(draft_version = FeatureFlag.active?(:long_form_content) ? 2 : 1)
       latest_published_enrichment = most_recent.published.first
 
       new_enrichment_attributes = if latest_published_enrichment.present?
@@ -190,7 +191,7 @@ class Course < ApplicationRecord
                                   end
 
       new_enrichment_attributes.merge(
-        { status: :draft, last_published_timestamp_utc: nil },
+        { status: :draft, last_published_timestamp_utc: nil, version: draft_version },
       )
     end
   end
