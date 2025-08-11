@@ -146,6 +146,20 @@ RSpec.describe CourseEnrichment do
   describe "#publish" do
     let(:user) { create(:user) }
 
+    context "validates version 1 enrichment and fails to publish" do
+      subject(:record) { create(:course_enrichment, :v1, course:) }
+
+      let(:course) { create(:course) }
+
+      it "is not valid to publish v2" do
+        allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+        expect(record).not_to be_valid(:publish)
+        expect(record.errors[:placement_school_activities]).to include("can't be blank")
+        expect(record.errors[:support_and_mentorship]).to include("can't be blank")
+        expect(record.reload).to be_draft
+      end
+    end
+
     context "initial draft" do
       subject(:record) { create(:course_enrichment, :initial_draft, created_at: 1.day.ago, updated_at: 20.minutes.ago) }
 

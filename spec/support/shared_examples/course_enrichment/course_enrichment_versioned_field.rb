@@ -22,7 +22,14 @@ RSpec.shared_examples "versioned_presence_field" do |field:, required_in:, word_
       let(:record)  { build(:course_enrichment, "v#{ver}".to_sym, course:) }
 
       context "presence_field" do
-        before { record.public_send("#{field}=", nil) }
+        before do
+          record.public_send("#{field}=", nil)
+          if version == 2
+            allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+          else
+            allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
+          end
+        end
 
         required = required_in.fetch(ver)
 

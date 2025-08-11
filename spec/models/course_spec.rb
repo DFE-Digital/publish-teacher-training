@@ -62,6 +62,60 @@ describe Course do
     end
   end
 
+  describe "long form content versioning" do
+    context "when the feature flag is active" do
+      before { FeatureFlag.activate(:long_form_content) }
+
+      it "sets the version to 2 for new enrichments" do
+        enrichment = course.enrichments.find_or_initialize_draft
+        expect(enrichment.version).to eq(2)
+      end
+
+      it "assigns existing enrichments version 2" do
+        enrichment = create(:course_enrichment, version: 1, status: "draft")
+        costom_course = create(:course, course_code: "CUST1", enrichments: [enrichment])
+        expect(enrichment.version).to eq(1)
+
+        expect(
+          costom_course.enrichments.find_or_initialize_draft.attributes.except("id", "created_at", "updated_at", "version"),
+        ).to eq( enrichment.attributes.except("id", "created_at", "updated_at", "version"))
+        expect(costom_course.enrichments.find_or_initialize_draft.version).to eq(2)
+      end
+
+      it "has a published enrichment with version 1 and creates v2 draft" do
+        enrichment = create(:course_enrichment, version: 1, status: "published")
+        costom_course = create(:course, course_code: "CUST1", enrichments: [enrichment])
+        expect(enrichment.version).to eq(1)
+
+        expect(
+          costom_course.enrichments.find_or_initialize_draft.attributes.except("id", "created_at", "updated_at", "version", "status", "json_data"),
+        ).to eq(enrichment.attributes.except("id", "created_at", "updated_at", "version", "status", "json_data"))
+        expect(costom_course.enrichments.find_or_initialize_draft.version).to eq(2)
+      end
+    end
+
+    context "when the feature flag is inactive" do
+      before { FeatureFlag.deactivate(:long_form_content) }
+
+      it "sets the version to 1 for new enrichments" do
+        enrichment = course.enrichments.find_or_initialize_draft
+        expect(enrichment.version).to eq(1)
+      end
+
+      it "assigns existing version 2 enrichments version 1" do
+        allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
+        enrichment = create(:course_enrichment, version: 2, status: "draft")
+        costom_course = create(:course, course_code: "CUST1", enrichments: [enrichment])
+
+        expect(enrichment.version).to eq(2)
+        expect(
+          costom_course.enrichments.find_or_initialize_draft.attributes.except("id", "created_at", "updated_at", "version"),
+        ).to eq(enrichment.attributes.except("id", "created_at", "updated_at", "version"))
+        expect(enrichment.version).to eq(1)
+      end
+    end
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:provider) }
 
