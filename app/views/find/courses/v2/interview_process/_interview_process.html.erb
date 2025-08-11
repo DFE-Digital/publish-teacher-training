@@ -1,0 +1,24 @@
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-l" id="section-interviews"><%= t(".page_title") %></h2>
+
+  <div data-qa="course__interview_process">
+    <% unless course.interview_location == "in person" || course.published_interview_location == "in person" %>
+      <% if course.published_interview_location == "both" || course.interview_location == "both" %>
+        <%= govuk_inset_text do %>
+          <%= t(".online_interview") %>
+          <p class="govuk-hint"><%= t(".individual_circumstances") %></p>
+        <% end %>
+      <% elsif course.published_interview_location == "online" || course.interview_location == "online" %>
+        <%= govuk_inset_text do %>
+          <%= t(".online_interview") %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if course.published_interview_process %>
+      <%= markdown(course.published_interview_process) %>
+    <% else %>
+      <%= markdown(course.interview_process) %>
+    <% end %>
+  </div>
+</div>

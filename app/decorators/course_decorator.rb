@@ -395,6 +395,12 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:interview_process]
   end
 
+  def published_interview_location
+    return unless current_published_enrichment
+
+    current_published_enrichment[:interview_location]
+  end
+
   def published_how_school_placements_work
     return unless current_published_enrichment
 

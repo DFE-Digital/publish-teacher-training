@@ -58,8 +58,12 @@
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
     <% end %>
 
-    <% if @course.published_interview_process.present? %>
-      <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
+    <% if @course.published_interview_process.present? || @course.published_interview_location.present? %>
+      <% if FeatureFlag.active?(:long_form_content) %>
+        <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: @course } %>
+      <% else %>
+        <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
+      <% end %>
     <% end %>
 
     <% if @provider.train_with_disability.present? %>
