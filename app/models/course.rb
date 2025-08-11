@@ -173,7 +173,7 @@ class Course < ApplicationRecord
       # for validations later down non-trivial.
       draft_version = FeatureFlag.active?(:long_form_content) ? 2 : 1
       latest_draft_enrichment = select(&:draft?).last&.tap { |d| d.version = draft_version }
-      # pp({ latest: latest_draft_enrichment })
+
       latest_draft_enrichment || new(new_draft_attributes)
     end
 
