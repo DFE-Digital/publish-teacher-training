@@ -103,7 +103,11 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def rollover_period_2026?
-    year.to_i == 2026 && Time.zone.now < application_start_date
+    year.to_i == 2026 && Time.zone.now < rollover_end
+  end
+
+  def rollover_end
+    application_start_date + 1.month
   end
 
   # TODO: remove once the 2022 rollover is complete

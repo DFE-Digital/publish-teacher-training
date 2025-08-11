@@ -75,7 +75,7 @@ RSpec.describe "Publish - Providers - Added Schools page", service: :publish, ty
   context "when the 2026 cycle has started" do
     let(:frozen_time) { Time.zone.local(2025, 6, 1, 12, 0, 0) }
     let!(:recruitment_cycle) do
-      create(:recruitment_cycle, year: 2026, application_start_date: frozen_time - 1.day)
+      create(:recruitment_cycle, year: 2026, application_start_date: frozen_time - 1.month)
     end
 
     before do

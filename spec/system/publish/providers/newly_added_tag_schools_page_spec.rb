@@ -44,7 +44,7 @@ RSpec.describe "Publish - Schools: 'Newly added' tag for register import sites",
     and_i_see_school_with_tag("Register Import School", "Newly added")
     and_i_see_school_without_tag("UI Added School", "Newly added")
 
-    travel_to recruitment_cycle.application_start_date + 1.day
+    travel_to recruitment_cycle.application_start_date + 1.month
     sign_in_system_test(user:)
     when_i_visit_the_schools_page
     and_i_see_school_without_tag("Register Import School", "Newly added")

@@ -48,7 +48,7 @@ RSpec.describe "Publish - Providers - Removed Schools page", service: :publish, 
     )
   end
 
-  context "when the 2026 cycle has not yet started" do
+  context "when rollover period has not yet finished" do
     let(:frozen_time) { Time.zone.local(2025, 6, 1, 12, 0, 0) }
     let!(:recruitment_cycle) do
       create(:recruitment_cycle, year: 2026, application_start_date: frozen_time + 2.months)
@@ -71,10 +71,10 @@ RSpec.describe "Publish - Providers - Removed Schools page", service: :publish, 
     end
   end
 
-  context "when the 2026 cycle has started" do
+  context "when rollover period ended" do
     let(:frozen_time) { Time.zone.local(2025, 6, 1, 12, 0, 0) }
     let!(:recruitment_cycle) do
-      create(:recruitment_cycle, year: 2026, application_start_date: frozen_time - 1.day)
+      create(:recruitment_cycle, year: 2026, application_start_date: frozen_time - 1.month)
     end
 
     before do
