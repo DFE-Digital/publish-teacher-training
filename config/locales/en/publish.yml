@@ -72,6 +72,8 @@ en:
           about_course_label: About this course
           about_course_hidden_text: details about this course
           interview_process_label: Interview process (optional)
+          v2_interview_process_label: What is the interview process? (optional)
+          interview_location_label: Where will the interviews take place (optional)
           interview_process_hidden_text: details about the interview process
           how_school_placements_work_label: How placements work
           how_school_placements_work_hidden_text: details about how placements work

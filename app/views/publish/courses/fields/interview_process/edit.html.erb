@@ -1,0 +1,78 @@
+<% content_for :page_title, title_with_error_prefix(
+  t(".page_title", course_name_and_code: @course.name_and_code),
+  @interview_process_form.errors.any?,
+) %>
+
+<% if params[:copy_from].present? %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-fields-course-interview-process-form",
+    @source_course,
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+          model: @interview_process_form,
+          url: fields_interview_process_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+          method: :patch,
+          local: true,
+        ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(
+              back_link_path(param_form_key: f.object_name.to_sym,
+                             params:,
+                             provider_code: @provider.provider_code,
+                             recruitment_cycle_year: @course.recruitment_cycle_year,
+                             course_code: @course.course_code),
+            ) %>
+      <% end %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        <%= t(".page_title") %>
+      </h1>
+
+      <%= f.govuk_radio_buttons_fieldset :interview_location, legend: { text: t(".interview_location.legend"), size: "s" }, multiple: false do %>
+        <%= f.govuk_radio_button :interview_location, t(".interview_location.in_person"), label: { text: t(".interview_location.in_person").capitalize } %>
+        <%= f.govuk_radio_button :interview_location, t(".interview_location.online"), label: { text: t(".interview_location.online").capitalize } %>
+        <%= f.govuk_radio_button :interview_location, t(".interview_location.both"), label: { text: t(".interview_location.both_label") }, hint: { text: t(".interview_location.both_hint") } %>
+      <% end %>
+
+      <%= f.govuk_text_area(:interview_process,
+                            value: @copied_fields_values&.dig("interview_process") || @interview_process_form.interview_process,
+                            label: { text: t(".interview_process.label"), size: "s" },
+                            hint: -> { t(".interview_process.hint_html") },
+                            max_words: 200,
+                            rows: 20) %>
+
+      <%= f.govuk_submit t(".submit_button") %>
+    <% end %>
+    <p class="govuk-body">
+      <%= govuk_link_to(t(".cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
+                                                                                    @provider.recruitment_cycle.year,
+                                                                                    @course.course_code)) %>
+    </p>
+  </div>
+  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+    <%= render(
+          partial: "publish/courses/related_sidebar",
+          locals: {
+            course: @course,
+            page_path: fields_interview_process_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code,
+            ),
+          },
+        ) %>
+  </aside>
+</div>

@@ -205,6 +205,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         constraints ->(_req) { FeatureFlag.active?(:long_form_content) } do
           get "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#edit"
           patch "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#update"
+
+          get "/fields/interview-process", on: :member, to: "courses/fields/interview_process#edit"
+          patch "/fields/interview-process", on: :member, to: "courses/fields/interview_process#update"
         end
 
         get "/fees", on: :member, to: "courses/fees#edit"
