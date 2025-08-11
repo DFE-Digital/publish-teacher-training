@@ -1,0 +1,20 @@
+en:
+  publish:
+    fields:
+      where_you_will_train: asdf
+  activemodel:
+    errors:
+      models:
+        publish/fields/where_you_will_train_form:
+          attributes:
+            placement_selection_criteria:
+              blank: Enter how you decide which schools to place trainees in
+              too_many_words: "'How do you decide which schools to place trainees in?' must be 50 words or less"
+            duration_per_school:
+              blank: Enter how much time trainees will spend in each school
+              too_many_words: "'How much time will they spend in each school?' must be 50 words or less"
+            theoretical_training_location:
+              too_many_words: "'Where will theoretical training take place?' must be 50 words or less"
+            theoretical_training_duration:
+              too_many_words: "'How much time will they spend in theoretical training?' must be 50 words or less"
+
