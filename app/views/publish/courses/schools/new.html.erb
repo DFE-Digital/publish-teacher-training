@@ -10,50 +10,70 @@
         recruitment_cycle: @recruitment_cycle,
         provider: @provider,
       ) %>
+
+    <%= form_for course,
+      url: continue_publish_provider_recruitment_cycle_courses_schools_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
+      method: :get do |form| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:sites_ids] do |fields| %>
+        <%= render "publish/shared/error_wrapper", error_keys: [:sites], data_qa: "course__sites" do %>
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+              <h1 class="govuk-fieldset__heading" data-qa="page-heading">
+                <%= render CaptionText.new(text: t("course.add_course")) %>
+                <%= school_label_for(course) %>
+              </h1>
+            </legend>
+            <p class="govuk-body">
+              <%= t("publish.courses.schools.new.schools_selection") %>
+            </p>
+            <p class="govuk-body">
+              <%= t("publish.courses.schools.new.searches_by_location") %>
+            </p>
+            <div class="govuk-warning-text">
+              <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+              <strong class="govuk-warning-text__text">
+                <%= school_warning_text(course) %>
+              </strong>
+            </div>
+            <%= render "publish/shared/error_messages", error_keys: [:sites] %>
+            <div class="govuk-form-group govuk-!-margin-top-2">
+              <%= form.govuk_check_boxes_fieldset :sites_ids,
+                legend: nil,
+                form_group: { data: { controller: "select-all-checkboxes" } } do %>
+
+                <%= form.govuk_check_box :site_ids,
+                  "",
+                  label: { text: t("publish.courses.schools.select_all") },
+                  multiple: false,
+                  data: {
+                    select_all_checkboxes_target: "selectAll",
+                    action: "select-all-checkboxes#toggleAll",
+                  },
+                  link_errors: false %>
+
+                <div class="govuk-body govuk-!-margin-left-2">or</div>
+                <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
+
+                <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+                  <%= form.govuk_check_box :sites_ids,
+                        site.id,
+                        label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
+                        hint: { text: site.full_address },
+                        link_errors: index.zero?,
+                        data: {
+                          select_all_checkboxes_target: "checkbox",
+                          action: "select-all-checkboxes#updateSelectAll",
+                        } %>
+                <% end %>
+              <% end %>
+            </div>
+          </fieldset>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+    </p>
   </div>
 </div>
-
-<%= form_for course,
-  url: continue_publish_provider_recruitment_cycle_courses_schools_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
-  method: :get do |form| %>
-  <%= render "publish/courses/new_fields_holder", form:, except_keys: [:sites_ids] do |fields| %>
-    <%= render "publish/shared/error_wrapper", error_keys: [:sites], data_qa: "course__sites" do %>
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-          <h1 class="govuk-fieldset__heading" data-qa="page-heading">
-            <%= render CaptionText.new(text: t("course.add_course")) %>
-            <%= school_label_for(course) %>
-          </h1>
-        </legend>
-        <p class="govuk-body">
-          <%= t("publish.courses.schools.new.schools_selection") %>
-        </p>
-        <p class="govuk-body">
-          <%= t("publish.courses.schools.new.searches_by_location") %>
-        </p>
-        <div class="govuk-warning-text">
-          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-          <strong class="govuk-warning-text__text">
-            <%= school_warning_text(course) %>
-          </strong>
-        </div>
-        <%= render "publish/shared/error_messages", error_keys: [:sites] %>
-        <div class="govuk-form-group govuk-!-margin-top-2">
-          <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
-          <%= form.govuk_check_boxes_fieldset :sites_ids, legend: nil do %>
-            <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
-              <%= form.govuk_check_box :sites_ids,
-                    site.id,
-                    label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
-                    hint: { text: site.full_address },
-                    link_errors: index.zero? %>
-            <% end %>
-          <% end %>
-        </div>
-      </fieldset>
-    <% end %>
-  <% end %>
-<% end %>
-<p class="govuk-body">
-  <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
-</p>

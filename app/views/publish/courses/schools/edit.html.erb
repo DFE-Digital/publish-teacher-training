@@ -18,22 +18,47 @@
   <% end %>
 
   <div class="govuk-grid-row">
-
     <div class="govuk-grid-column-two-thirds">
       <%= render ::Publish::Schools::NotificationBannerComponent.new(
         recruitment_cycle: @recruitment_cycle,
         provider: @provider,
       ) %>
 
-      <%= f.govuk_check_boxes_fieldset :site_ids, legend:
-      { text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe, tag: "h1", size: "l" }, hint: { text: "Select all that apply" } do %>
-       <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
-          <%= f.govuk_check_box :site_ids,
-              site.id,
-              label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
-              hint: { text: site.full_address },
-              link_errors: index.zero? %>
-       <% end %>
+    <%= f.govuk_check_boxes_fieldset :site_ids,
+        legend:
+        {
+          text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe,
+          tag: "h1",
+          size: "l",
+        },
+        form_group: { data: { controller: "select-all-checkboxes" } } do %>
+
+          <div class="govuk-checkboxes__item">
+            <input type="checkbox"
+                   class="govuk-checkboxes__input"
+                   id="select-all-schools"
+                   data-select-all-checkboxes-target="selectAll"
+                   data-action="select-all-checkboxes#toggleAll">
+
+            <label class="govuk-label govuk-checkboxes__label" for="select-all-schools">
+              <%= t("publish.courses.schools.select_all") %>
+            </label>
+          </div>
+
+          <div class="govuk-body govuk-!-margin-left-2">or</div>
+          <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
+
+          <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+            <%= f.govuk_check_box :site_ids,
+                site.id,
+                label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
+                hint: { text: site.full_address },
+                link_errors: index.zero?,
+                data: {
+                  select_all_checkboxes_target: "checkbox",
+                  action: "select-all-checkboxes#updateSelectAll",
+                } %>
+         <% end %>
       <% end %>
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>

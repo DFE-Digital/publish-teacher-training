@@ -12,7 +12,7 @@ module PageObjects
       element :submit, 'button.govuk-button[type="submit"]'
 
       def vacancy_names
-        vacancies.map { |el| el.find(".govuk-label").text }
+        vacancies.map { |el| el.find(".govuk-label").text }.reject { |name| name == "Select all schools" }
       end
 
       def vacancy_checked_values
