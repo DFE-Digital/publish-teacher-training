@@ -9,9 +9,9 @@ module Publish
 
         def edit
           @where_you_will_train_form = Publish::Fields::WhereYouWillTrainForm.new(course_enrichment)
-          # @copied_fields = copy_content_check(::Courses::Copy::V2_WHERE_YOU_WILL_TRAIN_FIELDS)
+          @copied_fields = copy_content_check(::Courses::Copy::V2_WHERE_YOU_WILL_TRAIN_FIELDS)
 
-          # @copied_fields_values = copied_fields_values if @copied_fields.present?
+          @copied_fields_values = copied_fields_values if @copied_fields.present?
           @where_you_will_train_form.valid? if show_errors_on_publish?
         end
 
