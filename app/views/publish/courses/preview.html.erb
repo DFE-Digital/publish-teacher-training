@@ -33,8 +33,12 @@
 
     <%= render partial: "find/courses/about_course", locals: { course: } %>
 
-    <% if course.interview_process.present? %>
-      <%= render partial: "find/courses/interview_process", locals: { course: } %>
+    <% if course.interview_process.present? || course.interview_location.present? %>
+      <% if FeatureFlag.active?(:long_form_content) %>
+        <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: } %>
+      <% else %>
+        <%= render partial: "find/courses/interview_process", locals: { course: } %>
+      <% end %>
     <% end %>
 
     <h2 class="govuk-heading-m" id="section-train-with-disabilities">
