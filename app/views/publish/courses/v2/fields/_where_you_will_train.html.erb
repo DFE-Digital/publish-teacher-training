@@ -3,7 +3,7 @@
   :course,
   t(".label"),
   value_provided?(
-    course.where_you_will_train,
+    markdown(course.where_you_will_train.compact_blank.join("\n\n")),
   ),
   %w[placement_selection_criteria duration_per_school theoretical_training_location theoretical_training_duration],
   action_path: course.is_withdrawn? ? nil : fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
