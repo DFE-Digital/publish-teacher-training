@@ -18,7 +18,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     then_i_edit_the_interview_process_field(content: generate_text(201))
 
     expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Reduce the word count for interview process")
+    expect(page).to have_content("Interview process must be 200 words or less")
   end
 
   scenario "A user CAN update a courses interview process and location" do

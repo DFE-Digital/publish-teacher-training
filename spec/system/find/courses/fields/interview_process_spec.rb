@@ -5,21 +5,21 @@ RSpec.describe "Viewing long form course content for the interview process", ser
     FeatureFlag.activate(:long_form_content)
   end
 
-  scenario "A user can see the interview process long from content when the interview location is BOTH" do
+  scenario "A user can see the interview process long form content when the interview location is BOTH" do
     given_a_published_course_exists
     when_i_visit_a_course
     then_i_see_the_interview_process_section
     then_i_see_the_long_form_content_for_interview_location_both
   end
 
-  scenario "A user can see the interview process long from content when the interview location is IN PERSON" do
+  scenario "A user can see the interview process long form content when the interview location is IN PERSON" do
     given_a_published_course_exists(interview_location: "in person")
     when_i_visit_a_course
     then_i_see_the_interview_process_section
     then_i_see_the_long_form_content_for_interview_location_in_person
   end
 
-  scenario "A user can see the interview process long from content when the interview location is ONLINE" do
+  scenario "A user can see the interview process long form content when the interview location is ONLINE" do
     given_a_published_course_exists(interview_location: "online")
     when_i_visit_a_course
     then_i_see_the_interview_process_section
@@ -43,7 +43,7 @@ RSpec.describe "Viewing long form course content for the interview process", ser
     enrichment = @course.enrichments.first
 
     expect(page).to have_content("Online interviews are available for this course")
-    expect(page).to have_content("Depending on the individual circumstances")
+    expect(page).to have_content("Depending on individual circumstances")
     expect(page).to have_content(enrichment.interview_process)
   end
 
@@ -51,7 +51,7 @@ RSpec.describe "Viewing long form course content for the interview process", ser
     enrichment = @course.enrichments.first
 
     expect(page).not_to have_content("Online interviews are available for this course")
-    expect(page).not_to have_content("Depending on the individual circumstances")
+    expect(page).not_to have_content("Depending on individual circumstances")
     expect(page).to have_content(enrichment.interview_process)
   end
 
@@ -59,7 +59,7 @@ RSpec.describe "Viewing long form course content for the interview process", ser
     enrichment = @course.enrichments.first
 
     expect(page).to have_content("Online interviews are available for this course")
-    expect(page).not_to have_content("Depending on the individual circumstances")
+    expect(page).not_to have_content("Depending on individual circumstances")
     expect(page).to have_content(enrichment.interview_process)
   end
 
