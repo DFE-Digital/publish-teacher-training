@@ -41,18 +41,33 @@
         <%= t(".page_title") %>
       </h1>
 
-      <%= f.govuk_radio_buttons_fieldset :interview_location, legend: { text: t(".interview_location.legend"), size: "s" }, multiple: false do %>
-        <%= f.govuk_radio_button :interview_location, t(".interview_location.in_person"), label: { text: t(".interview_location.in_person").capitalize } %>
-        <%= f.govuk_radio_button :interview_location, t(".interview_location.online"), label: { text: t(".interview_location.online").capitalize } %>
-        <%= f.govuk_radio_button :interview_location, t(".interview_location.both"), label: { text: t(".interview_location.both_label") }, hint: { text: t(".interview_location.both_hint") } %>
+      <% if @v1_enrichment %>
+        <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+          texts: [["Interview process", @v1_enrichment.interview_process], ["Interview location", @v1_enrichment.interview_location]],
+        } %>
       <% end %>
 
-      <%= f.govuk_text_area(:interview_process,
-                            value: @copied_fields_values&.dig("interview_process") || @interview_process_form.interview_process,
-                            label: { text: t(".interview_process.label"), size: "s" },
-                            hint: -> { t(".interview_process.hint_html") },
-                            max_words: 200,
-                            rows: 20) %>
+      <div data-controller="input-preview">
+        <%= f.govuk_radio_buttons_fieldset :interview_location, legend: { text: t(".interview_location.legend"), size: "s" }, multiple: false do %>
+          <%= f.govuk_radio_button :interview_location, t(".interview_location.in_person"), label: { text: t(".interview_location.in_person").capitalize } %>
+          <%= f.govuk_radio_button :interview_location, t(".interview_location.online"), label: { text: t(".interview_location.online").capitalize } %>
+          <%= f.govuk_radio_button :interview_location, t(".interview_location.both"), label: { text: t(".interview_location.both_label") }, hint: { text: t(".interview_location.both_hint") } %>
+        <% end %>
+
+        <%= f.govuk_text_area(:interview_process,
+                              value: @copied_fields_values&.dig("interview_process") || @interview_process_form.interview_process,
+                              data: {
+                                input_preview_target: "input",
+                                action: "input-preview#updatePreview",
+                                preview_output_target: "shared",
+                              },
+                              label: { text: t(".interview_process.label"), size: "s" },
+                              hint: -> { t(".interview_process.hint_html") },
+                              max_words: 200,
+                              rows: 20) %>
+
+        <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
+      </div>
 
       <%= f.govuk_submit t(".submit_button") %>
     <% end %>

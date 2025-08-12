@@ -70,12 +70,6 @@
   <%= t("publish.providers.courses.description_content.course_about_heading") %>
 </h2>
 
-  <%= render partial: "publish/courses/v2/fields/what_you_will_study" %>
-
-<h2 class="govuk-heading-m">
-  <%= t("publish.providers.courses.description_content.course_interview_process_heading") %>
-</h2>
-
 <%= govuk_summary_list do |summary_list| %>
   <% enrichment_summary(
     summary_list,
@@ -85,11 +79,15 @@
       course.placement_school_activities,
       course.support_and_mentorship,
     ].compact_blank.join("\n\n"))),
-    %w[placement_school_activities support_and_mentorship],
+    %w[placement_school_activities],
     action_path: course.is_withdrawn? ? nil : fields_school_placement_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     action_visually_hidden_text: t("publish.providers.courses.description_content.school_palcement_hidden_text"),
   ) %>
 <% end %>
+
+<%= render partial: "publish/courses/v2/fields/what_you_will_study" %>
+
+<h2 class="govuk-heading-m"><%= t("publish.providers.courses.description_content.course_interview_process_heading") %></h2>
 
 <%= govuk_summary_list do |summary_list| %>
   <%= render partial: "publish/courses/v2/fields/interview_process", locals: { course: course, summary_list: summary_list } %>

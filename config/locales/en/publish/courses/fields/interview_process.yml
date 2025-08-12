@@ -4,6 +4,7 @@ en:
       fields:
         interview_process:
           edit:
+            preview_heading: Interview process
             page_title: Interview process (optional)
             interview_location:
               legend: Where will the interviews take place? (optional)
