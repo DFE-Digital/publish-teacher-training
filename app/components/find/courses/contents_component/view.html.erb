@@ -7,6 +7,9 @@
   <% if about_course.present? || preview? %>
     <li><%= govuk_link_to t(".course_details"), "#section-about" %></li>
   <% end %>
+  <% if course.theoretical_training_activities.present? %>
+    <li><%= govuk_link_to t(".what_you_will_study"), "#section-what-you-will-study" %></li>
+  <% end %>
   <% if interview_process.present? %>
     <li><%= govuk_link_to t(".interview_process"), "#section-interviews" %></li>
   <% end %>

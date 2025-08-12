@@ -1,0 +1,9 @@
+<h2 class="govuk-heading-l" id="section-what-you-will-study">
+  <%= t(".heading") %>
+</h2>
+<% if course.theoretical_training_activities.present? %>
+  <%= markdown(course.theoretical_training_activities) %>
+<% end %>
+<% if course.assessment_methods.present? %>
+  <%= markdown(course.assessment_methods) %>
+<% end %>
