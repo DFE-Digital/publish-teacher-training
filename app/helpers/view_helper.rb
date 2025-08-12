@@ -42,7 +42,7 @@ module ViewHelper
     accrediting_provider = ratifying_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)
 
     field_base_url = "#{base}/fields"
-    fee_base_v2 = "#{field_base_url}"
+    fee_base_v2 = field_base_url.to_s
     fee_base_v1 = "#{base}/fees"
 
     fees_url_base = FeatureFlag.active?(:long_form_content) ? fee_base_v2 : fee_base_v1

@@ -3,13 +3,14 @@
 module Publish
   module Courses
     module Fields
-      class InterviewProcessController < ApplicationController
+      class InterviewProcessController < Publish::Courses::Fields::BaseController
         include CopyCourseContent
         before_action :authorise_with_pundit
 
         def edit
           @interview_process_form = Publish::Fields::InterviewProcessForm.new(course_enrichment)
           @copied_fields = copy_content_check(::Courses::Copy::V2_INTERVIEW_PROCESS_FIELDS)
+          @v1_enrichment = course.enrichments.find_by(version: 1)
 
           @copied_fields_values = copied_fields_values if @copied_fields.present?
 
@@ -24,6 +25,7 @@ module Publish
 
             redirect_to redirect_path
           else
+            @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
             render :edit
           end
@@ -31,24 +33,8 @@ module Publish
 
       private
 
-        def authorise_with_pundit
-          authorize course_to_authorise
-        end
-
         def interview_process_params
           params.expect(publish_fields_interview_process_form: [*Publish::Fields::InterviewProcessForm::FIELDS])
-        end
-
-        def course_to_authorise
-          @course_to_authorise ||= provider.courses.find_by!(course_code: params[:code])
-        end
-
-        def course
-          @course ||= CourseDecorator.new(course_to_authorise)
-        end
-
-        def course_enrichment
-          @course_enrichment ||= course.enrichments.find_or_initialize_draft
         end
 
         def redirect_path

@@ -202,13 +202,11 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/fees-and-financial-support", on: :member, to: "courses/fees_and_financial_support#edit"
         patch "/fees-and-financial-support", on: :member, to: "courses/fees_and_financial_support#update"
 
-        constraints ->(_req) { FeatureFlag.active?(:long_form_content) } do
-          get "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#edit"
-          patch "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#update"
+        get "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#edit"
+        patch "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#update"
 
-          get "/fields/interview-process", on: :member, to: "courses/fields/interview_process#edit"
-          patch "/fields/interview-process", on: :member, to: "courses/fields/interview_process#update"
-        end
+        get "/fields/interview-process", on: :member, to: "courses/fields/interview_process#edit"
+        patch "/fields/interview-process", on: :member, to: "courses/fields/interview_process#update"
 
         get "/fees", on: :member, to: "courses/fees#edit"
         patch "/fees", on: :member, to: "courses/fees#update"

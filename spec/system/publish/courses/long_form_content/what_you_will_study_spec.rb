@@ -83,7 +83,7 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
   end
 
   def then_i_edit_the_what_you_will_study_fields(theoretical_training_activities:, assessment_methods:)
-    all("a", text: "Change")[6].click
+    all("a", text: "Change")[7].click
     expect(page).to have_content("What you will study")
 
     fill_in "What will trainees do during their theoretical training?", with: theoretical_training_activities
@@ -95,7 +95,7 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
   end
 
   def and_change_link_has_correct_route
-    all("a", text: "Change")[6].click
+    all("a", text: "Change")[7].click
     expect(page).to have_current_path(fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code,
                                                                                                                 @course.start_date.year,
                                                                                                                 @course.course_code))
