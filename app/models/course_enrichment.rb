@@ -144,14 +144,11 @@ class CourseEnrichment < ApplicationRecord
   end
 
   def publish(current_user)
-    assign_attributes(
+    update(
       status: "published",
       last_published_timestamp_utc: Time.now.utc,
       updated_by_user_id: current_user.id,
-      version: FeatureFlag.active?(:long_form_content) ? 2 : 1,
     )
-
-    save(context: :publish)
   end
 
   def unpublish(initial_draft: true)
