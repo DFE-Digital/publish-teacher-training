@@ -372,7 +372,7 @@ class CourseDecorator < ApplicationDecorator
     [placement_selection_criteria,
      duration_per_school,
      theoretical_training_location,
-     theoretical_training_duration].join
+     theoretical_training_duration]
   end
 
   def fee_uk_eu
