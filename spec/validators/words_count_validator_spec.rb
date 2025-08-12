@@ -3,20 +3,26 @@
 require "rails_helper"
 
 describe WordsCountValidator do
-  maximum = 10
-
   subject { model }
 
   before do
-    stub_const("Validatable", Class.new).class_eval do
+    maximum = maximum_val
+    message = message_val
+    message_attribute = message_attribute_val
+
+    stub_const("Validatable", Class.new do
       include ActiveModel::Validations
       attr_accessor :some_words
 
-      validates :some_words, words_count: { maximum: }
-    end
+      validates :some_words, words_count: { maximum:, message:, message_attribute: }
+    end)
 
     subject.validate
   end
+
+  let!(:maximum_val) { 10 }
+  let!(:message_val) { nil }
+  let!(:message_attribute_val) { nil }
 
   let(:model) do
     model = Validatable.new
@@ -27,7 +33,7 @@ describe WordsCountValidator do
   let(:expected_errors) { ["Reduce the word count for some words"] }
 
   context "with max valid number of words" do
-    let(:some_words_field) { (%w[word] * maximum).join(" ") }
+    let(:some_words_field) { (%w[word] * maximum_val).join(" ") }
 
     it { is_expected.to be_valid }
   end
@@ -45,7 +51,7 @@ describe WordsCountValidator do
   end
 
   context "with invalid number of words" do
-    let(:some_words_field) { "#{(%w[word] * maximum).join(' ')} popped" }
+    let(:some_words_field) { "#{(%w[word] * maximum_val).join(' ')} popped" }
 
     it { is_expected.to be_invalid }
 
@@ -55,7 +61,7 @@ describe WordsCountValidator do
   end
 
   context "with newlines" do
-    let(:some_words_field) { "#{(%w[word] * maximum).join("\n")} popped" }
+    let(:some_words_field) { "#{(%w[word] * maximum_val).join("\n")} popped" }
 
     it { is_expected.to be_invalid }
 
@@ -65,12 +71,40 @@ describe WordsCountValidator do
   end
 
   context "with non-words such as markdown" do
-    let(:some_words_field) { "#{(%w[word] * maximum).join(' ')} *" }
+    let(:some_words_field) { "#{(%w[word] * maximum_val).join(' ')} *" }
 
     it { is_expected.to be_invalid }
 
     it "adds an error" do
       expect(model.errors[:some_words]).to match_array expected_errors
+    end
+  end
+
+  describe "error messages" do
+    let(:some_words_field) { "#{(%w[word] * maximum_val).join(' ')} popped" }
+
+    context "with message option" do
+      let(:expected_errors) { ["My custom error message!"] }
+
+      let!(:message_val) { "My custom error message!" }
+
+      context "with non-words such as markdown" do
+        it "adds the correct error" do
+          expect(model.errors[:some_words]).to match_array expected_errors
+        end
+      end
+    end
+
+    context "with message_attribute option" do
+      let(:expected_errors) { ["Reduce the word count for append this to the standard message"] }
+
+      let!(:message_attribute_val) { "append this to the standard message" }
+
+      context "with non-words such as markdown" do
+        it "adds the correct error" do
+          expect(model.errors[:some_words]).to match_array expected_errors
+        end
+      end
     end
   end
 end
