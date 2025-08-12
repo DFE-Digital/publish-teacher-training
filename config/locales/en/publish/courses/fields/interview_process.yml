@@ -11,7 +11,7 @@ en:
               online: online
               both: both
               both_label: Either in person or online
-              both_hint: Depending on the individual circumstances
+              both_hint: Depending on individual circumstances
             interview_process:
               label: What is the interview process? (optional)
               hint_html: Include how many interviews candidates will have, and who be interviewing them. <br><br> You should also include any tasks candidates will need to do.
