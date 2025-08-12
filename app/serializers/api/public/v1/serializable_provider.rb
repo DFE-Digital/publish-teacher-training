@@ -16,7 +16,6 @@ module API
                    :provider_type,
                    :region_code,
                    :train_with_disability,
-                   :train_with_us,
                    :website,
                    :latitude,
                    :longitude,
@@ -25,6 +24,14 @@ module API
                    :can_sponsor_skilled_worker_visa,
                    :can_sponsor_student_visa,
                    :selectable_school
+
+        attribute :train_with_us do
+          if @object.recruitment_cycle.after_2025?
+            [@object.about_us.to_s, @object.value_proposition.to_s].compact_blank.join("\r\n\r\n")
+          else
+            @object.train_with_us
+          end
+        end
 
         attribute :accredited_body do
           @object.accredited?
