@@ -30,11 +30,13 @@ module Publish
     def after_successful_save_action
       return if previous_site_names == updated_site_names
 
-      NotificationService::CourseSitesUpdated.call(
-        course:,
-        previous_site_names:,
-        updated_site_names:,
-      )
+      if FeatureFlag.active?(:course_sites_updated_email_notification)
+        NotificationService::CourseSitesUpdated.call(
+          course:,
+          previous_site_names:,
+          updated_site_names:,
+        )
+      end
     end
 
     def updated_site_names
