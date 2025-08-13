@@ -37,21 +37,21 @@
           <% enrichment_summary(
           summary_list,
           :provider,
-          "Why train with us",
+          t(".why_train_with_us_label"),
           value_provided?(markdown(@provider.about_us) + markdown(@provider.value_proposition)),
           %w[about_us value_proposition],
           action_path: edit_publish_provider_recruitment_cycle_why_train_with_us_path(@provider.provider_code, @provider.recruitment_cycle_year),
-          action_visually_hidden_text: "details about training with your organisation",
+          action_visually_hidden_text: t(".why_train_with_us_hidden_text"),
         ) %>
 
         <% enrichment_summary(
         summary_list,
         :provider,
-        "Training with disabilities and other needs",
+        t(".training_with_disabilities_label"),
         markdown(@provider.train_with_disability),
         %w[train_with_disability],
         action_path: edit_publish_provider_recruitment_cycle_disability_support_path(@provider.provider_code, @provider.recruitment_cycle_year),
-        action_visually_hidden_text: "details about training with disabilities and other needs",
+        action_visually_hidden_text: t(".training_with_disabilities_hidden_text"),
       ) %>
       <% else %>
         <% enrichment_summary(
