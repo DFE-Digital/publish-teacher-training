@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Why Train With Us section in 2026 cyle +" do
+feature "Why Train With Us section in 2026 cycle +" do
   scenario "Provider user edits provider details" do
     given_i_am_a_provider_user_as_a_provider_user
     when_i_visit_the_details_page

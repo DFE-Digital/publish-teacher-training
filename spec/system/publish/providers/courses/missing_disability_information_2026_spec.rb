@@ -14,7 +14,7 @@ RSpec.describe "Publish - Missing provider information in course", service: :pub
     Timecop.travel Time.local(2025, 10, 1, 9, 0) do
       given_i_am_authenticated(user: user_with_course_in_2026_cycle)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_to_see_the_disablity_information
+      and_i_click_to_see_the_disability_information
       then_i_see_missing_information_link_for_provider_information
 
       when_i_click_the_missing_information_link
@@ -32,7 +32,7 @@ RSpec.describe "Publish - Missing provider information in course", service: :pub
           ))
   end
 
-  def and_i_click_to_see_the_disablity_information
+  def and_i_click_to_see_the_disability_information
     page.click_link "Find out about training with disabilities and other needs"
   end
 
