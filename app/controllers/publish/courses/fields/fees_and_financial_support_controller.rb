@@ -3,13 +3,15 @@
 module Publish
   module Courses
     module Fields
-      class FeesAndFinancialSupportController < ApplicationController
+      class FeesAndFinancialSupportController < Publish::Courses::Fields::BaseController
         include CopyCourseContent
         before_action :authorise_with_pundit
+        before_action :set_render_fees
 
         def edit
           @fees_and_financial_support_form = Publish::Fields::FeesAndFinancialSupportForm.new(course_enrichment)
           @copied_fields = copy_content_check(::Courses::Copy::V2_FEES_AND_FINANCIAL_SUPPORT_FIELDS)
+          @v1_enrichment = course.enrichments.find_by(version: 1)
 
           @copied_fields_values = copied_fields_values if @copied_fields.present?
           @fees_and_financial_support_form.valid? if show_errors_on_publish?
@@ -31,6 +33,7 @@ module Publish
             )
 
           else
+            @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
             render :edit
           end
@@ -38,25 +41,13 @@ module Publish
 
       private
 
+        def set_render_fees
+          @render_fees = true
+        end
+
         def fees_and_financial_support_params
           params
             .expect(publish_fields_fees_and_financial_support_form: [*Publish::Fields::FeesAndFinancialSupportForm::FIELDS])
-        end
-
-        def authorise_with_pundit
-          authorize course_to_authorise
-        end
-
-        def course_to_authorise
-          @course_to_authorise ||= provider.courses.find_by!(course_code: params[:code])
-        end
-
-        def course
-          @course ||= CourseDecorator.new(course_to_authorise)
-        end
-
-        def course_enrichment
-          @course_enrichment ||= course.enrichments.find_or_initialize_draft
         end
       end
     end

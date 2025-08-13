@@ -4,6 +4,7 @@ en:
       fields:
         fees_and_financial_support:
           edit:
+            preview_heading: Fees and financial support
             heading: Fees and financial support
             label: Fees and financial support
             page_title: Fees and financial support- %{course_name_and_code}

@@ -37,11 +37,9 @@ export default class extends Controller {
     // Next, update each preview region with the combined content of its inputs.
     previewMap.forEach((inputs, key) => {
       // Determine the preview element corresponding to this key.
-      // If the key is 'shared', use the first preview target element.
-      // Otherwise, find the preview target with a matching data-preview-target attribute.
-      const previewEl = (key === 'shared')
-        ? this.previewTargets[0]
-        : this.previewTargets.find(p => p.dataset.previewTarget === key)
+      // Instead of assuming the first preview target is 'shared',
+      // explicitly find the preview element by its matching data-preview-target attribute.
+      const previewEl = this.previewTargets.find(p => p.dataset.previewTarget === key)
 
       // If no corresponding preview element exists, skip this group.
       if (!previewEl) return

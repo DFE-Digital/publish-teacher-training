@@ -13,16 +13,9 @@ module Publish
 
       attr_accessor(*FIELDS)
 
-      validates :fee_schedule, words_count: { maximum: 50 }, if: :is_fee_based?
-      validates :additional_fees, words_count: { maximum: 50 }, if: :is_fee_based?
-
-      validates :financial_support,
-                words_count: { maximum: 250 },
-                if: -> { is_fee_based? && version.to_i == 1 }
-
-      validates :financial_support,
-                words_count: { maximum: 50 },
-                if: -> { is_fee_based? && version.to_i == 2 }
+      validates :fee_schedule, words_count: { maximum: 50, message: :too_long }
+      validates :additional_fees, words_count: { maximum: 50, message: :too_long }
+      validates :financial_support, words_count: { maximum: 50, message: :too_long }
 
       validates :fee_uk_eu, presence: true, if: :is_fee_based?
       validates :fee_uk_eu,

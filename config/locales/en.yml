@@ -1010,11 +1010,11 @@ en:
               less_than_or_equal_to: "Course fee for non-UK citizens must be less than or equal to £100,000"
               not_an_integer: "Course for fee non-UK citizens must not include pence, like 1000 or 1500"
             fee_schedule:
-              too_long: "Reduce the word count for fee schedule"
+              too_long: "Fee schedule must be 50 words or less"
             additional_fees:
-              too_long: "Reduce the word count for additional fees"
+              too_long: "Additional fees must be 50 words or less"
             financial_support:
-              too_long: "Reduce the word count for financial support"
+              too_long: "Financial support must be 50 words or less"
         publish/courses/fields/school_placement_form:
           attributes:
             placement_school_activities:

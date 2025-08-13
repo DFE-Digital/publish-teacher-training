@@ -1,0 +1,8 @@
+en:
+  publish:
+    courses:
+      fields:
+        fees:
+          uk_citizens: UK citizens
+          non_uk_citizens: Non-UK citizens
+          preview_text: The text you type above will show here.
