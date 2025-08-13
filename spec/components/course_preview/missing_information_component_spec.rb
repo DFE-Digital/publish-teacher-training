@@ -26,6 +26,8 @@ module CoursePreview
         gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           how_school_placements_work:
         school_placements_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
+          what_you_will_study:
+      fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           train_with_disability:
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true)}#train-with-disability",
           train_with_us:
@@ -48,6 +50,7 @@ module CoursePreview
       include_examples "course with missing information", :how_school_placements_work, "Enter details about how placements work"
       include_examples "course with missing information", :train_with_disability, "Enter details about training with disabilities and other needs"
       include_examples "course with missing information", :train_with_us, "Enter details about the training provider"
+      include_examples "course with missing information", :what_you_will_study, "Enter details about what you will study"
     end
   end
 end
