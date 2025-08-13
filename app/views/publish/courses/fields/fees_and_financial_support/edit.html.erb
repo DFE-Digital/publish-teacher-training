@@ -36,62 +36,71 @@
         <%= t(".heading") %>
       </h1>
 
-      <%= f.govuk_text_field(:fee_uk_eu,
-          form_group: { id: "fee-uk" },
-          label: { text: t(".fee_uk"), size: "s" },
-          value: @copied_fields_values&.dig("fee_uk_eu"),
-          prefix_text: "£",
-          width: 5,
-          data: { qa: "course_fee_uk_eu",
-                  input_preview_target: "input",
-                  action: "input-preview#updatePreview",
-                  preview_output_target: "currency1" }) %>
+      <% if @v1_enrichment %>
+        <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+          texts: [
+            [t(".fee_uk"), number_to_currency(@v1_enrichment.fee_uk_eu).to_s],
+            [@course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), number_to_currency(@v1_enrichment.fee_international).to_s],
+            [t(".fee_schedule"), @v1_enrichment.fee_schedule],
+            [t(".additional_fees"), @v1_enrichment.additional_fees],
+            [t(".financial_support"), @v1_enrichment.financial_support],
+          ],
+        } %>
+      <% end %>
 
-      <%= f.govuk_text_field(:fee_international,
-          form_group: { id: "fee-international" },
-          label: { text: @course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), size: "s" },
-          value: @copied_fields_values&.dig("fee_international"),
-          prefix_text: "£",
-          width: 5,
-          data: {
-            qa: "course_fee_international",
-            input_preview_target: "input",
-            action: "input-preview#updatePreview",
-            preview_output_target: "currency2",
-        }) %>
+      <div data-controller="input-preview">
+        <%= f.govuk_text_field(:fee_uk_eu,
+            form_group: { id: "fee-uk" },
+            label: { text: t(".fee_uk"), size: "s" },
+            value: @copied_fields_values&.dig("fee_uk_eu"),
+            prefix_text: "£",
+            width: 5,
+            data: { input_preview_target: "input",
+                    action: "input-preview#updatePreview",
+                    preview_output_target: "currency1" }) %>
 
-      <%= f.govuk_text_area(:fee_schedule,
-          label: { text: t(".fee_schedule"), size: "s" },
-          value: @copied_fields_values&.dig("fee_schedule"),
-          rows: 5,
-          max_words: 50,
-          data: { qa: "course_fee_schedule",
-                  input_preview_target: "input",
-                  action: "input-preview#updatePreview",
-                  preview_output_target: "preview3" }) %>
+        <%= f.govuk_text_field(:fee_international,
+            form_group: { id: "fee-international" },
+            label: { text: @course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), size: "s" },
+            value: @copied_fields_values&.dig("fee_international"),
+            prefix_text: "£",
+            width: 5,
+            data: { input_preview_target: "input",
+                    action: "input-preview#updatePreview",
+                    preview_output_target: "currency2" }) %>
 
-      <%= f.govuk_text_area(:additional_fees,
-          label: { text: t(".additional_fees"), size: "s" },
-          value: @copied_fields_values&.dig("additional_fees"),
-          hint: { text: t(".additional_fees_hint"), size: "s" },
-          rows: 5,
-          max_words: 50,
-          data: { qa: "course_additional_fees",
-                  input_preview_target: "input",
-                  action: "input-preview#updatePreview",
-                  preview_output_target: "preview3" }) %>
+        <%= f.govuk_text_area(:fee_schedule,
+            label: { text: t(".fee_schedule"), size: "s" },
+            value: @copied_fields_values&.dig("fee_schedule"),
+            rows: 5,
+            max_words: 50,
+            data: { input_preview_target: "input",
+                    action: "input-preview#updatePreview",
+                    preview_output_target: "shared" }) %>
 
-      <%= f.govuk_text_area(:financial_support,
-          label: { text: t(".financial_support"), size: "s" },
-          value: @copied_fields_values&.dig("financial_support"),
-          hint: { text: t(".financial_support_hint"), size: "s" },
-          rows: 5,
-          max_words: @course_enrichment.version == 2 ? 50 : 250,
-          data: { qa: "course_financial_support",
-                  input_preview_target: "input",
-                  action: "input-preview#updatePreview",
-                  preview_output_target: "preview3" }) %>
+        <%= f.govuk_text_area(:additional_fees,
+            label: { text: t(".additional_fees"), size: "s" },
+            value: @copied_fields_values&.dig("additional_fees"),
+            hint: { text: t(".additional_fees_hint"), size: "s" },
+            rows: 5,
+            max_words: 50,
+            data: { input_preview_target: "input",
+                    action: "input-preview#updatePreview",
+                    preview_output_target: "shared" }) %>
 
+        <%= f.govuk_text_area(:financial_support,
+            label: { text: t(".financial_support"), size: "s" },
+            value: @copied_fields_values&.dig("financial_support"),
+            hint: { text: t(".financial_support_hint"), size: "s" },
+            rows: 5,
+            max_words: 50,
+            data: { input_preview_target: "input",
+                    action: "input-preview#updatePreview",
+                    preview_output_target: "shared" }) %>
+
+        <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
+
+      </div>
       <%= f.govuk_submit t(".submit_button") %>
     <% end %>
 

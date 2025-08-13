@@ -44,9 +44,9 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
       financial_support: generate_text(251),
     )
 
-    expect(page).to have_content("Reduce the word count for fee schedule")
-    expect(page).to have_content("Reduce the word count for additional fees")
-    expect(page).to have_content("Reduce the word count for financial support")
+    expect(page).to have_content("Fee schedule must be 50 words or less")
+    expect(page).to have_content("Additional fees must be 50 words or less")
+    expect(page).to have_content("Financial support must be 50 words or less")
   end
 
   scenario "A user CAN see the new long form course content fields if the current cycle is 2026 or beyond" do
