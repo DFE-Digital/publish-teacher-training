@@ -28,8 +28,8 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
     when_i_visit_the_course_page
     then_i_edit_the_what_you_will_study_fields(theoretical_training_activities: generate_text(151), assessment_methods: generate_text(51))
 
-    expect(page).to have_content("What will trainees do during their theoretical training?' must be 150 words or less")
-    expect(page).to have_content("How will they be assessed?' must be 50 words or less")
+    expect(page).to have_content("'What will trainees do during their theoretical training?' must be 150 words or less")
+    expect(page).to have_content("'How will they be assessed?' must be 50 words or less")
   end
 
   scenario "A user CAN see the new 'What you will study' content fields if the current cycle in 2026 or beyond" do
