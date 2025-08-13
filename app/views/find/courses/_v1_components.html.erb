@@ -4,9 +4,7 @@
 
 <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course) %>
 
-<% if course.published_about_course.present? %>
-    <%= render partial: "find/courses/about_course", locals: { course: course } %>
-<% end %>
+<%= render partial: "find/courses/about_course", locals: { course: course } %>
 
 <% if course.published_interview_process.present? || course.published_interview_location.present? %>
     <%= render partial: "find/courses/interview_process", locals: { course: course } %>
