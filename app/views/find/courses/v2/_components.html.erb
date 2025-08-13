@@ -5,23 +5,23 @@
       <li><%= govuk_link_to t("find.courses.show.why_train_with_us"), "#section-why-train-with-us" %></li>
     <% end %>
     <%# Where you will train %>
-    <% if @course.placement_selection_criteria %>
+    <% if course.placement_selection_criteria %>
       <li><%= govuk_link_to t("find.courses.show.placement_selection_criteria"), "#section-placement-selection-criteria" %></li>
     <% end %>
     <%# What will you do on school placements %>
-    <% if @course.published_placement_school_activities %>
+    <% if course.published_placement_school_activities %>
       <li><%= govuk_link_to t("find.courses.show.what_will_you_do_on_school_placements"), "#section-school-placement" %></li>
     <% end %>
     <%# What you will study %>
-    <% if @course.theoretical_training_activities.present? %>
+    <% if course.theoretical_training_activities.present? %>
       <li><%= govuk_link_to t("find.courses.show.theoretical_training"), "#section-theoretical-training" %></li>
     <% end %>
     <%# Interview process %>
-    <% if @course.published_interview_process.present? || course.published_interview_location.present? %>
+    <% if course.published_interview_process.present? || course.published_interview_location.present? %>
       <li><%= govuk_link_to t("find.courses.show.interview_process"), "#section-interviews" %></li>
     <% end %>
     <%# Fees and financial support %>
-    <li><%= govuk_link_to (@course.salaried? ? t("find.courses.show.salary_and_financial_support") : t("find.courses.show.fees_and_financial_support")), "#section-financial-support" %></li>
+    <li><%= govuk_link_to (course.salaried? ? t("find.courses.show.salary_and_financial_support") : t("find.courses.show.fees_and_financial_support")), "#section-financial-support" %></li>
     <%# Training with disabilities %>
     <% if @provider.train_with_disability.present? %>
       <li><%= govuk_link_to t("find.courses.show.training_with_disabilities"), "#section-train-with-disabilities" %></li>
@@ -33,25 +33,25 @@
 <% end %>
 
 <%# Where you will train %>
-<% if @course.placement_selection_criteria.present? %>
+<% if course.placement_selection_criteria.present? %>
 <% end %>
 
 <%# What you will do on school placements %>
-<% if @course.published_placement_school_activities.present? %>
-    <%= render partial: "find/courses/v2/school_placement", locals: { course: @course } %>
+<% if course.published_placement_school_activities.present? %>
+    <%= render partial: "find/courses/v2/school_placement", locals: { course: course } %>
 <% end %>
 
 <%# What you will study %>
-<% if @course.theoretical_training_activities.present? %>
+<% if course.theoretical_training_activities.present? %>
 <% end %>
 
 <%# Interview process %>
-<% if @course.published_interview_process.present? || @course.published_interview_location.present? %>
-    <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: @course } %>
+<% if course.published_interview_process.present? || course.published_interview_location.present? %>
+    <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: course } %>
 <% end %>
 
 <%# Financial support %>
-<%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+<%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course) %>
 
 <%# Training with disabilities %>
 <% if @provider.train_with_disability.present? %>
@@ -62,10 +62,10 @@
     <p class="govu
     k-body govuk-!-margin-bottom-8">
     <%= govuk_link_to(
-            t("find.courses.show.training_with_disabilities_link", provider_name: @course.provider_name),
+            t("find.courses.show.training_with_disabilities_link", provider_name: course.provider_name),
             find_training_with_disabilities_path(
-            @course.provider_code,
-            @course.course_code,
+            course.provider_code,
+            course.course_code,
           ),
           ) %>
     </p>

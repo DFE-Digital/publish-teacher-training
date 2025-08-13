@@ -49,9 +49,9 @@
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
     <% if FeatureFlag.active?(:long_form_content) %>
-      <%= render partial: "find/courses/v2/components" %>
+      <%= render partial: "find/courses/v2/components", locals: { course: @course } %>
     <% else %>
-      <%= render partial: "find/courses/v1_components" %>
+      <%= render partial: "find/courses/v1_components", locals: { course: @course } %>
     <% end %>
 
     <% if @course.teacher_degree_apprenticeship? %>
