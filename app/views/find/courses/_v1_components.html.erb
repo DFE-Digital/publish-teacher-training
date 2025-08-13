@@ -21,9 +21,9 @@
     <%= govuk_link_to(
             t("find.courses.show.training_with_disabilities_link", provider_name: @course.provider_name),
             find_training_with_disabilities_path(
-            @course.provider_code,
-            @course.course_code,
-            ),
-        ) %>
+                @course.provider_code,
+                @course.course_code,
+              ),
+          ) %>
     </p>
 <% end %>
