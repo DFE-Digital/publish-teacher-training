@@ -409,7 +409,7 @@ en:
         train_with_us:
           text: "Enter details about the training provider"
         what_you_will_study:
-          text: "Enter details about what trainees will study"
+          text: "Enter details about what you will study"
   value_not_entered: "Not entered"
   a_level_grades:
     minimum_grade: Grade %{minimum_grade}
