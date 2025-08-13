@@ -2,7 +2,7 @@
 
 module Publish
   class CourseSchoolForm < BaseCourseForm
-    FIELDS = %i[site_ids].freeze
+    FIELDS = %i[site_ids schools_validated].freeze
 
     attr_accessor(*FIELDS)
 
@@ -13,16 +13,13 @@ module Publish
       super
     end
 
-    # def assign_attributes_to_model
-    #  model.assign_attributes(fields.except(*fields_to_ignore_before_save))
-    # end
-
     def save_action
       model.transaction do
         assign_attributes_to_model
-        #        update_site_statuses
-        #        after_successful_save_action
-        #        true
+        update_site_statuses
+        after_successful_save_action
+        model.save!
+        true
       end
     end
 
@@ -57,7 +54,12 @@ module Publish
     def no_schools_selected
       return if params[:site_ids].present?
 
-      errors.add(:site_ids, :no_schools)
+      if course.recruitment_cycle_rollover_period_2026?
+        errors.add(:site_ids, :check_schools) if course.sites.school.present?
+        errors.add(:site_ids, :enter_schools) if course.sites.school.blank?
+      else
+        errors.add(:site_ids, :no_schools)
+      end
     end
 
     def site_status_attributes

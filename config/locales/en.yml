@@ -601,6 +601,8 @@ en:
               blank: "^Complete your course information before publishing"
             sites:
               blank: "^Select at least one school"
+              enter_schools: "Enter schools for this course"
+              check_schools: "Check the schools for this course"
             study_sites:
               blank: "Add at least one study site"
             age_range_in_years:
@@ -1053,6 +1055,8 @@ en:
           attributes:
             site_ids:
               no_schools: "Select at least one school"
+              enter_schools: "Enter schools for this course"
+              check_schools: "Check the schools for this course"
         publish/course_study_site_form:
           attributes:
             study_site_ids:
