@@ -25,6 +25,7 @@ module Publish
 
       def update
         @course_school_form = CourseSchoolForm.new(@course, params: school_params)
+
         if @course_school_form.save!
           course_updated_message(section_key)
 

@@ -84,8 +84,9 @@ module Publish
       else
         @errors = format_publish_error_messages
 
-        fetch_course
-        render :show
+        #        fetch_course
+        # render :show
+        render :details
       end
     end
 

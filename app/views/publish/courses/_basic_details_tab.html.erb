@@ -103,7 +103,9 @@
      summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row|
        row.with_key { school_label_with_plural(course, count: course.sites.length) }
        row.with_value do
-         if course.sites.blank?
+         if course.recruitment_cycle_rollover_period_2026?
+           raw(render(::Publish::Schools::SchoolSummaryValueComponent.new(course:)))
+         elsif course.sites.blank?
            raw("<span class=\"app-!-colour-muted\">None</span>")
          elsif course.sites.size == 1
            course.sites.first.location_name
@@ -117,7 +119,7 @@
 
        if course.is_withdrawn?
          row.with_action
-       else
+       elsif !course.recruitment_cycle_rollover_period_2026?
          row.with_action(
            href: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
            visually_hidden_text: "schools",

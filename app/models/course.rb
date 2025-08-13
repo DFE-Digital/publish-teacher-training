@@ -124,7 +124,7 @@ class Course < ApplicationRecord
            dependent: :destroy
 
   delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
-  delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
+  delegate :after_2021?, :year, :rollover_period_2026?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def applicable_for_engineers_teach_physics?
     master_subject_id == SecondarySubject.physics.id
@@ -348,6 +348,14 @@ class Course < ApplicationRecord
 
   validates :sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
+  validate :validate_schools, on: :publish, if: -> { recruitment_cycle_rollover_period_2026? }
+
+  def validate_schools
+    if !schools_validated? && sites.school.present?
+      errors.add(:site_ids, :blank)
+    end
+  end
+
   validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? || further_education_course? }
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
