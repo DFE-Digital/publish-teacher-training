@@ -408,6 +408,8 @@ en:
           text: "Enter details about training with disabilities and other needs"
         train_with_us:
           text: "Enter details about the training provider"
+        what_you_will_study:
+          text: "Enter details about what trainees will study"
   value_not_entered: "Not entered"
   a_level_grades:
     minimum_grade: Grade %{minimum_grade}
@@ -982,10 +984,10 @@ en:
         publish/fields/what_you_will_study_form:
           attributes:
             theoretical_training_activities:
-              blank: Enter details about theoretical training activities
-              too_long: Reduce the word count for theoretical training activities
+              blank: Enter what trainees will do during their theoretical training
+              too_long: What will trainees do during their theoretical training?' must be 150 words or less
             assessment_methods:
-              too_long: Reduce the word count for assessment methods
+              too_long: How will they be assessed?' must be 50 words or less
         publish/course_school_placements_form:
           attributes:
             how_school_placements_work:

@@ -2,6 +2,6 @@ en:
   find:
     courses:
       v2:
-        fields:
+        what_you_will_study:
           what_you_will_study:
             heading: What you will study
