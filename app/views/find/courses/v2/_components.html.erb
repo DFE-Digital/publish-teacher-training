@@ -21,7 +21,7 @@
       <li><%= govuk_link_to t("find.courses.show.interview_process"), "#section-interviews" %></li>
     <% end %>
     <%# Fees and financial support %>
-    <li><%= govuk_link_to (@course&.salaried? ? t("find.courses.show.salary_and_financial_support") : t("find.courses.show.fees_and_financial_support")), "#section-financial-support" %></li>
+    <li><%= govuk_link_to (@course.salaried? ? t("find.courses.show.salary_and_financial_support") : t("find.courses.show.fees_and_financial_support")), "#section-financial-support" %></li>
     <%# Training with disabilities %>
     <% if @provider.train_with_disability.present? %>
       <li><%= govuk_link_to t("find.courses.show.training_with_disabilities"), "#section-train-with-disabilities" %></li>
@@ -33,9 +33,8 @@
 <% end %>
 
 <% # Where you will train %>
-<%# if @course.placement_selection_criteria.present? %>
-
-<%# end %>
+<% if @course.placement_selection_criteria.present? %>
+<% end %>
 
 <%# What you will do on school placements %>
 <% if @course.published_placement_school_activities.present? %>
@@ -48,7 +47,7 @@
 
 <%# Interview process %>
 <% if @course.published_interview_process.present? || @course.published_interview_location.present? %>
-    <%# render partial: "find/courses/v2/interview_process/interview_process", locals: { course: @course } %>
+    <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: @course } %>
 <% end %>
 
 <%# Financial support %>

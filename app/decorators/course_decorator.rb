@@ -423,7 +423,6 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:support_and_mentorship]
   end
 
-
   def published_interview_process
     return unless current_published_enrichment
 
