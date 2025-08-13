@@ -32,7 +32,7 @@
 <% if @provider.value_proposition.present? %>
 <% end %>
 
-<% # Where you will train %>
+<%# Where you will train %>
 <% if @course.placement_selection_criteria.present? %>
 <% end %>
 
@@ -42,7 +42,7 @@
 <% end %>
 
 <%# What you will study %>
-<% if @course.theoretical_training_activities.present?  %>
+<% if @course.theoretical_training_activities.present? %>
 <% end %>
 
 <%# Interview process %>
@@ -62,11 +62,11 @@
     <p class="govu
     k-body govuk-!-margin-bottom-8">
     <%= govuk_link_to(
-        t("find.courses.show.training_with_disabilities_link", provider_name: @course.provider_name),
-        find_training_with_disabilities_path(
-        @course.provider_code,
-        @course.course_code,
-        ),
-    ) %>
+            t("find.courses.show.training_with_disabilities_link", provider_name: @course.provider_name),
+            find_training_with_disabilities_path(
+            @course.provider_code,
+            @course.course_code,
+            ),
+        ) %>
     </p>
 <% end %>
