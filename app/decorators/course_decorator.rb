@@ -417,12 +417,6 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:placement_school_activities]
   end
 
-  def published_placement_school_activities
-    return unless current_published_enrichment
-
-    current_published_enrichment[:placement_school_activities]
-  end
-
   def published_support_and_mentorship
     return unless current_published_enrichment
 
