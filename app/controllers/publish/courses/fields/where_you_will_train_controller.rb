@@ -3,10 +3,7 @@
 module Publish
   module Courses
     module Fields
-      class WhereYouWillTrainController < ApplicationController
-        include CopyCourseContent
-        before_action :authorise_with_pundit
-
+      class WhereYouWillTrainController < BaseController
         def edit
           @where_you_will_train_form = Publish::Fields::WhereYouWillTrainForm.new(course_enrichment)
           @copied_fields = copy_content_check(::Courses::Copy::V2_WHERE_YOU_WILL_TRAIN_FIELDS)
@@ -41,22 +38,6 @@ module Publish
         def where_you_will_train_params
           params
             .expect(publish_fields_where_you_will_train_form: [*Publish::Fields::WhereYouWillTrainForm::FIELDS])
-        end
-
-        def authorise_with_pundit
-          authorize course_to_authorise
-        end
-
-        def course_to_authorise
-          @course_to_authorise ||= provider.courses.find_by!(course_code: params[:code])
-        end
-
-        def course
-          @course ||= CourseDecorator.new(course_to_authorise)
-        end
-
-        def course_enrichment
-          @course_enrichment ||= course.enrichments.find_or_initialize_draft
         end
       end
     end
