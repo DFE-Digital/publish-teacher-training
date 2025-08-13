@@ -417,6 +417,12 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:placement_school_activities]
   end
 
+  def published_placement_school_activities
+    return unless current_published_enrichment
+
+    current_published_enrichment[:placement_school_activities]
+  end
+
   def published_support_and_mentorship
     return unless current_published_enrichment
 
@@ -439,6 +445,12 @@ class CourseDecorator < ApplicationDecorator
     return unless current_published_enrichment
 
     current_published_enrichment[:how_school_placements_work]
+  end
+
+  def train_with_disability
+    return unless current_published_enrichment
+
+    current_published_enrichment[:train_with_disability]
   end
 
   def published_fee_uk_eu
