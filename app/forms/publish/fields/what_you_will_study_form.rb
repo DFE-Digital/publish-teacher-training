@@ -10,8 +10,8 @@ module Publish
       FIELDS = %i[theoretical_training_activities assessment_methods].freeze
       attr_accessor(*FIELDS)
 
-      validates :theoretical_training_activities, presence: true, words_count: { maximum: 150 }
-      validates :assessment_methods, words_count: { maximum: 50 }, allow_blank: true
+      validates :theoretical_training_activities, presence: true, words_count: { maximum: 150, message: :too_long }
+      validates :assessment_methods, words_count: { maximum: 50, message: :too_long }, allow_blank: true
 
     private
 
