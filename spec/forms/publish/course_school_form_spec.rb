@@ -30,10 +30,23 @@ module Publish
 
         let(:updated_site_names) { provider.sites.order(:location_name).map(&:location_name) }
 
-        it "calls the course sites updated notification service" do
-          expect(NotificationService::CourseSitesUpdated).to receive(:call)
-            .with(course:, previous_site_names:, updated_site_names:)
-          subject.save!
+        context "when course_sites_updated_email_notification flag is enabled" do
+          before { FeatureFlag.activate(:course_sites_updated_email_notification) }
+
+          it "calls the course sites updated notification service" do
+            expect(NotificationService::CourseSitesUpdated).to receive(:call)
+              .with(course:, previous_site_names:, updated_site_names:)
+            subject.save!
+          end
+        end
+
+        context "when course_sites_updated_email_notification flag is not enabled" do
+          before { FeatureFlag.deactivate(:course_sites_updated_email_notification) }
+
+          it "calls the course sites updated notification service" do
+            expect(NotificationService::CourseSitesUpdated).not_to receive(:call)
+            subject.save!
+          end
         end
 
         context "course is not published" do
