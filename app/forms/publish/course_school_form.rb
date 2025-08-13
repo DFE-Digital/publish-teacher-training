@@ -13,12 +13,16 @@ module Publish
       super
     end
 
+    # def assign_attributes_to_model
+    #  model.assign_attributes(fields.except(*fields_to_ignore_before_save))
+    # end
+
     def save_action
       model.transaction do
         assign_attributes_to_model
-        update_site_statuses
-        after_successful_save_action
-        true
+        #        update_site_statuses
+        #        after_successful_save_action
+        #        true
       end
     end
 

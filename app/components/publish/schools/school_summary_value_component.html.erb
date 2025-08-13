@@ -1,0 +1,15 @@
+<div class="govuk-inset-text app-inset-text--narrow-border <%= inset_class %>">
+  <ul class="govuk-list">
+
+    <% @course.alphabetically_sorted_sites.map do |site| %>
+      <li><%= site.location_name %></li>
+    <% end %>
+  </ul>
+
+  <p class="govuk-block">
+      <%= govuk_link_to(
+        enter_school_text,
+        enter_school_link,
+      ) %>
+  </p>
+</div>
