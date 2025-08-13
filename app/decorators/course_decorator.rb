@@ -441,12 +441,6 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:how_school_placements_work]
   end
 
-  def train_with_disability
-    return unless current_published_enrichment
-
-    current_published_enrichment[:train_with_disability]
-  end
-
   def published_fee_uk_eu
     return unless current_published_enrichment
 
