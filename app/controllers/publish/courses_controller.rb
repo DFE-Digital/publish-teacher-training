@@ -64,6 +64,7 @@ module Publish
 
     def preview
       fetch_course
+      @provider = provider
 
       authorize @course
     end

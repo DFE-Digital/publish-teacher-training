@@ -31,6 +31,23 @@
       <%= render partial: "find/courses/v1_components" %>
     <% end %>
 
+    <% if @provider.train_with_disability.nil? %>
+        <h2 class="govuk-heading-m" id="section-train-with-disabilities">
+          <%= t(".training_with_disabilities") %>
+        </h2>
+
+        <p class="govuk-body govuk-!-margin-bottom-8">
+          <%= govuk_link_to(
+            t(".training_with_disabilities_link", provider_name: course.provider_name),
+            training_with_disabilities_publish_provider_recruitment_cycle_course_path(
+              course.provider_code,
+              course.recruitment_cycle_year,
+              course.course_code,
+            ),
+          ) %>
+        </p>
+    <% end %>
+
     <%= render partial: "find/courses/advice", locals: { course: } %>
 
     <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
