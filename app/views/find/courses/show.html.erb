@@ -48,38 +48,10 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
-    <%= render Find::Courses::ContentsComponent::View.new(@course) %>
-
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, @coordinates, @distance_from_location, preview: preview?(params)) %>
-
-    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
-
-    <% if @course.published_about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <% end %>
-
-    <% if @course.published_interview_process.present? || @course.published_interview_location.present? %>
-      <% if FeatureFlag.active?(:long_form_content) %>
-        <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: @course } %>
-      <% else %>
-        <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
-      <% end %>
-    <% end %>
-
-    <% if @provider.train_with_disability.present? %>
-      <h2 class="govuk-heading-m" id="section-train-with-disabilities">
-        <%= t(".training_with_disabilities") %>
-      </h2>
-
-      <p class="govuk-body govuk-!-margin-bottom-8">
-        <%= govuk_link_to(
-          t(".training_with_disabilities_link", provider_name: @course.provider_name),
-          find_training_with_disabilities_path(
-            @course.provider_code,
-            @course.course_code,
-          ),
-        ) %>
-      </p>
+    <% if FeatureFlag.active?(:long_form_content) %>
+      <%= render partial: "find/courses/v2/components" %>
+    <% else %>
+      <%= render partial: "find/courses/v1_components" %>
     <% end %>
 
     <% if @course.teacher_degree_apprenticeship? %>
@@ -87,7 +59,7 @@
     <% else %>
       <%= render partial: "find/courses/advice", locals: { course: @course } %>
     <% end %>
-
+  
     <% if @course.application_status_closed? %>
       <%= render partial: "find/courses/course_closed" %>
     <% end %>

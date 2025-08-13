@@ -405,6 +405,25 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:about_course]
   end
 
+  def placement_selection_criteria
+    return unless current_published_enrichment
+
+    current_published_enrichment[:placement_selection_criteria]
+  end
+
+  def published_placement_school_activities
+    return unless current_published_enrichment
+
+    current_published_enrichment[:placement_school_activities]
+  end
+
+  def published_support_and_mentorship
+    return unless current_published_enrichment
+
+    current_published_enrichment[:support_and_mentorship]
+  end
+
+
   def published_interview_process
     return unless current_published_enrichment
 
