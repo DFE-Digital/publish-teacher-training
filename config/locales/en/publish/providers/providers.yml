@@ -1,0 +1,8 @@
+en:
+  publish:
+    providers:
+      details:
+        training_with_disabilities_hidden_text: details about training with disabilities and other needs
+        training_with_disabilities_label: Training with disabilities and other needs
+        why_train_with_us_hidden_text: details about training with your organisation
+        why_train_with_us_label: Why train with us
