@@ -25,6 +25,11 @@ module Publish
     def details
       fetch_course
 
+      if show_errors_on_publish?
+        @course.valid?(:publish)
+        @errors = format_publish_error_messages
+      end
+
       authorize @course
     end
 
@@ -84,9 +89,13 @@ module Publish
       else
         @errors = format_publish_error_messages
 
-        #        fetch_course
-        # render :show
-        render :details
+        if @errors.key?(:sites)
+          @current_tab = :details
+          render :details
+        else
+          @current_tab = :description
+          render :show
+        end
       end
     end
 

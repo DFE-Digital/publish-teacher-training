@@ -350,12 +350,6 @@ class Course < ApplicationRecord
   validates :subjects, presence: true, on: :publish
   validate :validate_schools, on: :publish, if: -> { recruitment_cycle_rollover_period_2026? }
 
-  def validate_schools
-    if !schools_validated? && sites.school.present?
-      errors.add(:site_ids, :blank)
-    end
-  end
-
   validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? || further_education_course? }
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
@@ -446,6 +440,13 @@ class Course < ApplicationRecord
     return if accredited_provider_code.blank?
 
     errors.add(:accrediting_provider, :partnership_missing) unless provider.accredited_partners.include?(accrediting_provider)
+  end
+
+  def validate_schools
+    return if schools_validated?
+
+    errors.add(:sites, :check_schools) if sites.school.present?
+    errors.add(:sites, :enter_schools) if sites.school.blank?
   end
 
   def update_valid?

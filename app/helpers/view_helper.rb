@@ -50,6 +50,18 @@ module ViewHelper
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
     else
+      # rubocop:disable Rails/HelperInstanceVariable
+      error_sites_url = if course.recruitment_cycle_rollover_period_2026?
+                          if @current_tab == :details
+                            "#{base}/publish#school-summary-link"
+                          elsif @current_tab == :description || !request.referer&.include?("details")
+                            "#{base}/details?display_errors=true#school-summary-link"
+                          end
+                        else
+                          "#{base}/schools?display_errors=true"
+                        end
+      # rubocop:enable Rails/HelperInstanceVariable
+
       {
         about_course: "#{base}/about-this-course?display_errors=true#publish-course-information-form-about-course-field-error",
         theoretical_training_activities: "#{base}/fields/what-you-will-study?display_errors=true#theoretical-training-activities-error",
@@ -62,7 +74,7 @@ module ViewHelper
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
-        sites: "#{base}/schools?display_errors=true",
+        sites: error_sites_url,
         study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s,
         accrediting_provider:,
         applications_open_from: "#{base}/applications-open",

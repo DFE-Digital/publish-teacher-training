@@ -66,7 +66,7 @@ module Publish
       def school_params
         return { site_ids: nil } if params[:publish_course_school_form][:site_ids].all?(&:empty?)
 
-        params.expect(publish_course_school_form: [site_ids: []])
+        params.expect(publish_course_school_form: [:schools_validated, { site_ids: [] }])
       end
 
       def build_course
