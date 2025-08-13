@@ -25,36 +25,11 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course:) %>
 
-    <%= render Find::Courses::ContentsComponent::View.new(course) %>
-
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(course, nil, nil, preview: preview?(params)) %>
-
-    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course) %>
-
-    <%= render partial: "find/courses/about_course", locals: { course: } %>
-
-    <% if course.interview_process.present? || course.interview_location.present? %>
-      <% if FeatureFlag.active?(:long_form_content) %>
-        <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: } %>
-      <% else %>
-        <%= render partial: "find/courses/interview_process", locals: { course: } %>
-      <% end %>
+    <% if FeatureFlag.active?(:long_form_content) %>
+      <%= render partial: "find/courses/v2/components" %>
+    <% else %>
+      <%= render partial: "find/courses/v1_components" %>
     <% end %>
-
-    <h2 class="govuk-heading-m" id="section-train-with-disabilities">
-      <%= t(".training_with_disabilities") %>
-    </h2>
-
-    <p class="govuk-body govuk-!-margin-bottom-8">
-      <%= govuk_link_to(
-        t(".training_with_disabilities_link", provider_name: course.provider_name),
-        training_with_disabilities_publish_provider_recruitment_cycle_course_path(
-          course.provider_code,
-          course.recruitment_cycle_year,
-          course.course_code,
-        ),
-      ) %>
-    </p>
 
     <%= render partial: "find/courses/advice", locals: { course: } %>
 
