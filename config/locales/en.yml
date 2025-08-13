@@ -988,9 +988,9 @@ en:
           attributes:
             theoretical_training_activities:
               blank: Enter what trainees will do during their theoretical training
-              too_long: What will trainees do during their theoretical training? must be 150 words or less
+              too_long: "'What will trainees do during their theoretical training?' must be 150 words or less"
             assessment_methods:
-              too_long: How will they be assessed? must be 50 words or less
+              too_long: "'How will they be assessed?' must be 50 words or less"
         publish/course_school_placements_form:
           attributes:
             how_school_placements_work:
