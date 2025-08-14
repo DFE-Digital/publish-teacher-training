@@ -19,6 +19,18 @@ RSpec.describe DataHub::RegisterSchoolImporter::ProviderResolver do
       end
     end
 
+    context "when provider_code is in the ignore list" do
+      let!(:provider) { create(:provider, recruitment_cycle: recruitment_cycle, provider_code: "1TF") }
+
+      before do
+        allow(parser).to receive(:provider_code).and_return("1TF")
+      end
+
+      it "returns nil" do
+        expect(subject.resolve).to be_nil
+      end
+    end
+
     context "when provider_code is nil" do
       before do
         allow(parser).to receive(:provider_code).and_return(nil)
