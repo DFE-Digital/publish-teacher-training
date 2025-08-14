@@ -8,9 +8,10 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
     create(:recruitment_cycle, year: 2026, application_start_date: frozen_time - 15.days)
   end
   let!(:provider) { create(:provider, recruitment_cycle:, provider_code: "ABC") }
+  let!(:accredited_provider) { create(:provider, :accredited_provider, recruitment_cycle:) }
   let!(:site_one) { create(:site, provider:, location_name: "School A") }
   let!(:site_two) { create(:site, provider:, location_name: "School B") }
-  let!(:course)   { create(:course, provider:, course_code: "XYZ", sites: [site_one, site_two]) }
+  let!(:course)   { create(:course, :publishable, provider:, course_code: "XYZ", sites: [site_one, site_two], accrediting_provider: accredited_provider) }
   let(:user)      { create(:user, providers: [provider]) }
 
   before do
@@ -30,6 +31,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
     then_i_should_be_on_schools_page_with_error_anchor
     when_i_click_update_schools
     when_i_click_publish_course
+    then_course_is_published
   end
 
   scenario "Publishing from details page shows rollover school validation errors" do
@@ -132,5 +134,10 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
 
   def when_i_click_update_schools
     click_link_or_button "Update placement schools"
+  end
+
+  def then_course_is_published
+    expect(page).to have_content("Your course has been published.")
+    expect(course.reload.is_published?).to be(true)
   end
 end
