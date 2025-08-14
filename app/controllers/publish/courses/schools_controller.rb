@@ -24,9 +24,11 @@ module Publish
       end
 
       def update
-        @course_school_form = CourseSchoolForm.new(@course, params: school_params)
+        @course_school_form = Publish::CourseSchoolForm.new(@course, params: school_params)
 
-        if @course_school_form.save!
+        if @course_school_form.valid?
+          Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
+
           course_updated_message(section_key)
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
