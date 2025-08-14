@@ -2,6 +2,8 @@
   <%= t(".heading", provider_name: course.provider_name) %>
 </h1>
 
+<h2 class="govuk-heading-l"><%= t(".contact_us") %></h1>
+
 <%= govuk_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% if course.provider.decorate.website.present? %>

@@ -22,6 +22,10 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render Find::Courses::ContactDetailsComponent::View.new(@course) %>
 
+    <% if @course.provider.about_us.present? || @course.provider.value_proposition.present? %>
+        <%= render partial: "find/courses/v2/train_with_us", locals: { provider: @provider } %>
+    <% end %>
+
     <% if @provider.train_with_us.present? || @course.about_accrediting_provider.present? %>
       <%= render partial: "find/courses/about_the_provider", locals: { course: @course } %>
     <% end %>
