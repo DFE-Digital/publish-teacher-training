@@ -405,10 +405,28 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:about_course]
   end
 
-  def placement_selection_criteria
+  def published_placement_selection_criteria
     return unless current_published_enrichment
 
     current_published_enrichment[:placement_selection_criteria]
+  end
+
+  def published_duration_per_school
+    return unless current_published_enrichment
+
+    current_published_enrichment[:duration_per_school]
+  end
+
+  def published_theoretical_training_duration
+    return unless current_published_enrichment
+
+    current_published_enrichment[:theoretical_training_duration]
+  end
+
+  def published_theoretical_training_location
+    return unless current_published_enrichment
+
+    current_published_enrichment[:theoretical_training_location]
   end
 
   def published_placement_school_activities
