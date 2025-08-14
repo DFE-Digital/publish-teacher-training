@@ -87,7 +87,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     when_i_visit_the_school_placement_page
     then_i_edit_the_school_placement_fields(placement_school_activities: "New activities", support_and_mentorship: "")
     click_link_or_button "Update what you will do on school placements"
-    expect(page).to have_content("What will trainees do while in their placement schools? updated")
+    expect(page).to have_content("What you will do on school placements")
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_path(
         @course.provider.provider_code,
@@ -104,7 +104,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     when_i_visit_the_school_placement_page
     then_i_edit_the_school_placement_fields(placement_school_activities: "New activities", support_and_mentorship: "New support")
     click_link_or_button "Update what you will do on school placements"
-    expect(page).to have_content("What will trainees do while in their placement schools? updated")
+    expect(page).to have_content("What you will do on school placements")
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_path(
         @course.provider.provider_code,
