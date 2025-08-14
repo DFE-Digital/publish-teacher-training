@@ -22,9 +22,9 @@ module Publish
 
       def enter_school_text
         if @course.sites.school.blank?
-          "Enter schools for this course"
+          t(".enter_schools")
         else
-          "Check the schools for this course"
+          t(".check_schools")
         end
       end
 
