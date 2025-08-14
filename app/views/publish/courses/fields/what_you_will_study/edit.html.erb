@@ -3,7 +3,7 @@
                  t(".page_title", course_name_and_code: @course.name_and_code),
                  @what_you_will_study_form.errors.any?,
                ) %>
-<% if params[:copy_from].present? %>
+<% if params[:copy_from].present? && @copied_fields.any? %>
   <%= render Providers::CopyCourseContentWarningComponent.new(
     @copied_fields,
     "publish-course-information-form",
@@ -36,15 +36,28 @@
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
         <%= t(".page_title") %>
       </h1>
-      <%= f.govuk_text_area(:theoretical_training_activities,
+      <div data-controller="input-preview">
+        <%= f.govuk_text_area(:theoretical_training_activities,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "shared",
+          },
           label: { text: t(".theoretical_training_activities"), size: "s" },
           hint: { text: t(".theoretical_training_activities_hint"), size: "s" },
           rows: 5,
           max_words: 150) %>
-      <%= f.govuk_text_area(:assessment_methods,
+        <%= f.govuk_text_area(:assessment_methods,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "shared",
+          },
           label: { text: t(".assessment_methods"), size: "s" },
           rows: 5,
           max_words: 50) %>
+        <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
+      </div>
       <%= f.govuk_submit t(".submit_button") %>
     <% end %>
     <p class="govuk-body">
