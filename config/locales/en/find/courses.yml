@@ -109,7 +109,8 @@ en:
           back: Back to %{course_name} (%{course_code})
       contact_details_component:
         view:
-          heading: Contact %{provider_name}
+          heading: About %{provider_name}
+          contact_us: Contact us
           contact_form: Contact form
           email_address: Email address
           send_email_to_contact: Send email to course contact

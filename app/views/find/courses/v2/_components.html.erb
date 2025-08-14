@@ -29,7 +29,8 @@
 </ul>
 
 <%# Why train with us below %>
-<% if @provider.value_proposition.present? %>
+<% if @provider.value_proposition.present? || @provider.about_us.present? %>
+  <%= render partial: "find/courses/v2/train_with_us", locals: { provider: @provider } %>
 <% end %>
 
 <%# Where you will train %>
