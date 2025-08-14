@@ -22,4 +22,3 @@ autocompleteSetup()
 window.Stimulus = Application.start()
 Stimulus.register('input-preview', InputPreviewController)
 Stimulus.register('select-all-checkboxes', SelectAllCheckboxesController)
-
