@@ -5,7 +5,7 @@ en:
       minimal_header: "The way schools are added to your account has changed."
       content_heading: "Changes to the schools in your account"
       minimal_heading: "You will no longer need to manually add all your schools to your account."
-      auto_upload: "We automatically upload all schools you are working with."
+      auto_upload: "You will no longer need to manually add all your schools to your account. We automatically upload all schools you are working with."
       added_register_html: >
         These are schools that are on <a class="govuk-link" href="%{url}">Register trainee teachers</a>.
       register_url: "https://www.register-trainee-teachers.service.gov.uk/"

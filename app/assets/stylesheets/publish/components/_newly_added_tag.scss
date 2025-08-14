@@ -1,0 +1,16 @@
+.school-row {
+  .govuk-table__header.name {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 0.50rem;
+    align-items: flex-start;
+
+    .newly-added-tag {
+      flex-shrink: 0;
+
+      margin-left: 0;
+    }
+  }
+}
