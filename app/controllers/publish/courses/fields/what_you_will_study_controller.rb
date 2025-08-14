@@ -11,6 +11,7 @@ module Publish
           )
           @copied_fields = copy_content_check(::Courses::Copy::WHAT_YOU_WILL_STUDY_FIELDS)
           @copied_fields_values = copied_fields_values if @copied_fields.present?
+          @v1_enrichment = course.enrichments.find_by(version: 1)
 
           @what_you_will_study_form.valid? if show_errors_on_publish?
         end
@@ -27,6 +28,7 @@ module Publish
                                                                        course.course_code)
 
           else
+            @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
             render :edit
           end

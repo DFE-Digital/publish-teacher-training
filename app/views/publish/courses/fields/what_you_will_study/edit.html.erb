@@ -36,6 +36,28 @@
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
         <%= t(".page_title") %>
       </h1>
+      <% if @v1_enrichment %>
+        <%= render(
+    partial: "publish/courses/fields/last_cycle_recap",
+    locals: {
+      texts: [
+        [t(".about_this_course"), @v1_enrichment&.about_course],
+        [t(".how_placements_work"), @v1_enrichment&.how_school_placements_work],
+      ],
+    },
+  ) %>
+      <% end %>
+      <%= render(
+        partial: "publish/courses/markdown_formatting",
+        locals: {
+          course: @course,
+          page_path: fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          ),
+        },
+      ) %>
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:theoretical_training_activities,
           data: {
