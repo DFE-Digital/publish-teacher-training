@@ -28,7 +28,7 @@ module Publish
           )
 
           if @school_placement_form.save!
-            course_updated_message CourseEnrichment.human_attribute_name("what-trainee-do-in-school")
+            course_updated_message CourseEnrichment.human_attribute_name("what-trainee-do-in-school-success")
 
             redirect_to publish_provider_recruitment_cycle_course_path(
               provider.provider_code,
