@@ -28,6 +28,8 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
     then_i_should_stay_on_publish_page_with_error_inset_for_schools
     when_i_click_the_inset_link_to_schools_page
     then_i_should_be_on_schools_page_with_error_anchor
+    when_i_click_update_schools
+    when_i_click_publish_course
   end
 
   scenario "Publishing from details page shows rollover school validation errors" do
@@ -126,5 +128,9 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
     expect(error_links).not_to be_empty
 
     expect(error_links.first[:href]).to eq("#publish-course-school-form-site-ids-field-error")
+  end
+
+  def when_i_click_update_schools
+    click_link_or_button "Update placement schools"
   end
 end
