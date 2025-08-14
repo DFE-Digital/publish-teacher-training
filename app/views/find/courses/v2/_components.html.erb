@@ -14,7 +14,7 @@
     <% end %>
     <%# What you will study %>
     <% if course.theoretical_training_activities.present? %>
-      <li><%= govuk_link_to t("find.courses.show.theoretical_training"), "#section-theoretical-training" %></li>
+      <li><%= govuk_link_to t("find.courses.show.what_you_will_study"), "#section-what-you-will-study" %></li>
     <% end %>
     <%# Interview process %>
     <% if course.published_interview_process.present? || course.published_interview_location.present? %>
@@ -45,6 +45,7 @@
 
 <%# What you will study %>
 <% if course.theoretical_training_activities.present? %>
+    <%= render partial: "find/courses/v2/what_you_will_study/what_you_will_study", locals: { course: @course } %>
 <% end %>
 
 <%# Interview process %>
