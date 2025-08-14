@@ -5,8 +5,8 @@
       <li><%= govuk_link_to t("find.courses.show.why_train_with_us"), "#section-why-train-with-us" %></li>
     <% end %>
     <%# Where you will train %>
-    <% if course.placement_selection_criteria %>
-      <li><%= govuk_link_to t("find.courses.show.placement_selection_criteria"), "#section-placement-selection-criteria" %></li>
+    <% if course.placement_selection_criteria.present? || course.published_duration_per_school.present? || course.published_theoretical_training_location.present? || course.published_theoretical_training_duration.present? %>
+      <li><%= govuk_link_to t("find.courses.show.where_you_will_train"), "#section-placement-selection-criteria" %></li>
     <% end %>
     <%# What will you do on school placements %>
     <% if course.published_placement_school_activities %>
@@ -34,7 +34,8 @@
 <% end %>
 
 <%# Where you will train %>
-<% if course.placement_selection_criteria.present? %>
+<% if course.published_placement_selection_criteria.present? || course.published_duration_per_school.present? || course.published_theoretical_training_location.present? || course.published_theoretical_training_duration.present? %>
+    <%= render partial: "find/courses/v2/where_you_will_train", locals: { course: course } %>
 <% end %>
 
 <%# What you will do on school placements %>

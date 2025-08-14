@@ -1,0 +1,20 @@
+<div class="govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-l" id="section-placement-selection-criteria"><%= t("find.courses.show.where_you_will_train") %> </h2>
+    <div data-qa="course__school_placement">
+        <% if course.published_placement_selection_criteria.present? %>
+            <%= markdown(course.published_placement_selection_criteria) %>
+        <% end %>
+
+        <% if course.published_duration_per_school.present? %>
+            <%= markdown(course.published_duration_per_school) %>
+        <% end %>
+
+        <% if course.published_theoretical_training_location.present? %>
+            <%= markdown(course.published_theoretical_training_location) %>
+        <% end %>
+
+        <% if course.published_theoretical_training_duration.present? %>
+            <%= markdown(course.published_theoretical_training_duration) %>
+        <% end %>
+    </div>
+</div>
