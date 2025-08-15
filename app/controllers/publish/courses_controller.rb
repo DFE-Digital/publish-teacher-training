@@ -70,6 +70,7 @@ module Publish
     def preview
       fetch_course
       @provider = provider
+      @course = @course.decorate
 
       authorize @course
     end
@@ -123,7 +124,10 @@ module Publish
     end
 
     def fetch_course
-      @course = provider.courses.find_by!(course_code: params[:code])
+      @course = provider.courses.includes(
+        :enrichments,
+        subjects: [:financial_incentive],
+        site_statuses: [:site]).find_by!(course_code: params[:code])
     end
 
     def provider

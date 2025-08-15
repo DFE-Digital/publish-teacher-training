@@ -1,5 +1,7 @@
 <% if course.fee_uk_eu.present? && !course.fee_international.present? %>
   <p class="govuk-body"><%= t(".course_fees", cycle_range: course.cycle_range, fee: number_to_currency(course.fee_uk_eu)) %></p>
+<% else %>
+  <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :fees_and_financials, is_preview: preview?(params)) %>
 <% end %>
 
 <% if course.fee_international.present? %>
