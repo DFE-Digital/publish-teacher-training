@@ -139,7 +139,6 @@ class CourseEnrichment < ApplicationRecord
   end
 
   def apply_publish_changes
-    self.status = "published"
     self.version = FeatureFlag.active?(:long_form_content) ? 2 : 1
   end
 

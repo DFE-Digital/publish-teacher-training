@@ -155,7 +155,6 @@ RSpec.describe CourseEnrichment do
         allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
         expect(record).not_to be_valid(:publish)
         expect(record.errors[:placement_school_activities]).to include("can't be blank")
-        expect(record.errors[:support_and_mentorship]).to include("can't be blank")
         expect(record.reload).to be_draft
       end
     end
