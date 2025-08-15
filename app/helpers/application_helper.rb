@@ -45,7 +45,7 @@ module ApplicationHelper
         @errors[field.to_sym]&.map { |error| enrichment_error_link(model, field, error) }
       }.flatten
 
-      value = raw(*errors) if render_errors.present?
+      value = safe_join(errors) if render_errors.present?
       action = nil
     end
 
