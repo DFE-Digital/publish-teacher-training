@@ -143,6 +143,8 @@ en:
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
         why_train_with_us: Why train with us
         where_you_will_train: Where you will train
+        where_you_will_train_fee_based_text: You will spend a minimum of 24 weeks on school placements. This time is spread across at least 2 schools. You will also spend time in a location to study.
+        where_you_will_train_non_fee_based_text: You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
         what_will_you_do_on_school_placements: What you will do on school placements
         what_you_will_study: What you will study
         interview_process: Interview process
