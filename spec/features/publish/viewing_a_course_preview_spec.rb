@@ -181,10 +181,9 @@ private
   def then_i_see_markdown_formatting_guidance_for_each_field
     %w[#publish-about-your-organisation-form-train-with-us-hint #publish-about-your-organisation-form-train-with-disability-hint].each do |section_id|
       within("div#{section_id}") do
-        page.find("span", text: "Help formatting your text")
-        expect(page).to have_content "How to format your text"
-        expect(page).to have_content "How to create a link"
-        expect(page).to have_content "How to create bullet points"
+      page.find("span", text: "How to create links and bullet points")
+      expect(page).to have_content "How to create a link"
+      expect(page).to have_content "How to create bullet points"
       end
     end
   end
