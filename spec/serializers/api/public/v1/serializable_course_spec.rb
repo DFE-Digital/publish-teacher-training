@@ -20,7 +20,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:accredited_body_code).with_value(course.accredited_provider_code) }
   it { is_expected.to have_attribute(:age_minimum).with_value(3) }
   it { is_expected.to have_attribute(:age_maximum).with_value(7) }
-  it { is_expected.to have_attribute(:applications_open_from).with_value(course.applications_open_from.iso8601) }
+  it { is_expected.to have_attribute(:applications_open_from).with_value(course.recruitment_cycle.application_start_date.iso8601) }
   it { expect(subject["attributes"]["applications_open_from"]).to match(/\d{4}-\d{2}-\d{2}/) }
   it { is_expected.to have_attribute(:bursary_amount).with_value(nil) }
 
