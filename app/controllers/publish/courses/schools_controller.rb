@@ -29,7 +29,11 @@ module Publish
         if @course_school_form.valid?
           Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
 
-          course_updated_message(section_key)
+          flash[:success] = if Array(@course_school_form.site_ids).size > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
+                              I18n.t("success.enqueued_schools")
+                            else
+                              I18n.t("success.saved", value: section_key)
+                            end
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
