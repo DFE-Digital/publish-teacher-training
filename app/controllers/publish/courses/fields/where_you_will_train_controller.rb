@@ -9,6 +9,7 @@ module Publish
           @copied_fields = copy_content_check(::Courses::Copy::V2_WHERE_YOU_WILL_TRAIN_FIELDS)
 
           @copied_fields_values = copied_fields_values if @copied_fields.present?
+          @v1_enrichment = course.enrichments.find_by(version: 1)
           @where_you_will_train_form.valid? if show_errors_on_publish?
         end
 
@@ -28,6 +29,7 @@ module Publish
             )
 
           else
+            @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
             render :edit
           end

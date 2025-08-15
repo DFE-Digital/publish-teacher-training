@@ -16,4 +16,7 @@ en:
             theoretical_training_location_hint: For example at a training location, university or online
             theoretical_training_duration_label: How much time will they spend in theoretical training? (optional)
             theoretical_training_duration_hint: For example, one day of theoretical training each week
+            about_this_course: About this course
+            how_placements_work: How placements work
+            preview_heading: Where you will train
             submit_button: Update where you will train
