@@ -64,6 +64,7 @@
 
     <div data-controller="input-preview">
         <%= f.govuk_text_area(:placement_school_activities,
+          value: @copied_fields_values&.dig("placement_school_activities"),
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
@@ -75,6 +76,7 @@
           rows: 10) %>
 
         <%= f.govuk_text_area(:support_and_mentorship,
+          value: @copied_fields_values&.dig("support_and_mentorship"),
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",

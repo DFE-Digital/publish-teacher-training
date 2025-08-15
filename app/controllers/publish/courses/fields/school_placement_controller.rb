@@ -14,7 +14,7 @@ module Publish
         # Page to edit school placements data that is stored in the course enrichment
         def edit
           @school_placement_form = Publish::Courses::Fields::SchoolPlacementForm.new(course_enrichment)
-          @copied_fields = copy_content_check(::Courses::Copy::SCHOOL_PLACEMENT_FIELDS)
+          @copied_fields = copy_content_check(::Courses::Copy::V2_SCHOOL_PLACEMENT_FIELDS)
           @v1_enrichment = course.enrichments.find_by(version: 1)
           @copied_fields_values = copied_fields_values if @copied_fields.present?
           @school_placement_form.valid? if show_errors_on_publish?
