@@ -62,7 +62,11 @@ module API
         end
 
         attribute :applications_open_from do
-          @object.applications_open_from&.iso8601
+          if FeatureFlag.active?(:hide_applications_open_date)
+            @object.recruitment_cycle&.application_start_date&.iso8601
+          else
+            @object.applications_open_from&.iso8601
+          end
         end
 
         attribute :changed_at do
