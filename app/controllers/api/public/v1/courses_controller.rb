@@ -12,11 +12,7 @@ module API
             class: API::Public::V1::SerializerService.call,
           }
 
-          if should_strip_applications_open_from?
-            strip_hidden_fields_from_response!(**render_opts)
-          else
-            render(**render_opts)
-          end
+          render(**render_opts)
         rescue ActiveRecord::StatementInvalid
           render json: {
             status: 400,
@@ -25,21 +21,6 @@ module API
         end
 
       private
-
-        def should_strip_applications_open_from?
-          FeatureFlag.active?(:hide_applications_open_date)
-        end
-
-        def strip_hidden_fields_from_response!(**render_opts)
-          rendered = render_to_string(**render_opts)
-          json = JSON.parse(rendered, symbolize_names: true)
-
-          json[:data].each do |course|
-            course[:attributes].delete(:applications_open_from)
-          end
-
-          render json: json
-        end
 
         def cached_course_count
           year = permitted_params[:recruitment_cycle_year] || RecruitmentCycle.current.year
