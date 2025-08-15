@@ -38,20 +38,8 @@
             <%= render "publish/shared/error_messages", error_keys: [:sites] %>
             <div class="govuk-form-group govuk-!-margin-top-2">
               <%= form.govuk_check_boxes_fieldset :sites_ids,
-                legend: nil,
-                form_group: { data: { controller: "select-all-checkboxes" } } do %>
+                legend: nil do %>
 
-                <%= form.govuk_check_box :site_ids,
-                  "",
-                  label: { text: t("publish.courses.schools.select_all") },
-                  multiple: false,
-                  data: {
-                    select_all_checkboxes_target: "selectAll",
-                    action: "select-all-checkboxes#toggleAll",
-                  },
-                  link_errors: false %>
-
-                <div class="govuk-body govuk-!-margin-left-2">or</div>
                 <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
                 <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
@@ -59,11 +47,7 @@
                         site.id,
                         label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
                         hint: { text: site.full_address },
-                        link_errors: index.zero?,
-                        data: {
-                          select_all_checkboxes_target: "checkbox",
-                          action: "select-all-checkboxes#updateSelectAll",
-                        } %>
+                        link_errors: index.zero? %>
                 <% end %>
               <% end %>
             </div>
