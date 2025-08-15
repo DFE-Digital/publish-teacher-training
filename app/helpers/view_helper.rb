@@ -42,10 +42,10 @@ module ViewHelper
     accrediting_provider = ratifying_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)
 
     field_base_url = "#{base}/fields"
-    fee_base_v2 = field_base_url.to_s
-    fee_base_v1 = "#{base}/fees"
+    fee_v2 = "#{field_base_url}/fees-and-financial-support".to_s
+    fee_v1 = "#{base}/fees"
 
-    fees_url_base = FeatureFlag.active?(:long_form_content) ? fee_base_v2 : fee_base_v1
+    fees_url = FeatureFlag.active?(:long_form_content) ? fee_v2 : fee_v1
 
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
@@ -70,8 +70,8 @@ module ViewHelper
         how_school_placements_work: "#{base}/school-placements?display_errors=true#publish-course-information-form-how-school-placements-work-field-error",
         placement_school_activities: "#{field_base_url}/school-placement?display_errors=true#placement_school_activities-error",
         support_and_mentorship: "#{field_base_url}/school-placement?display_errors=true#support_and_mentorship-error",
-        fee_uk_eu: "#{fees_url_base}/fees-and-financial-support?display_errors=true#fee-error",
-        fee_international: "#{fees_url_base}/fees-and-financial-support?display_errors=true#fee_international-error",
+        fee_uk_eu: "#{fees_url}?display_errors=true#fee-error",
+        fee_international: "#{fees_url}?display_errors=true#fee_international-error",
         course_length: "#{base}/length?display_errors=true#course_length-error",
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
