@@ -1,5 +1,19 @@
 <div class="govuk-!-margin-bottom-8">
     <h2 class="govuk-heading-l" id="section-placement-selection-criteria"><%= t("find.courses.show.where_you_will_train") %> </h2>
+    <% if course.fee_based? %>
+        <p class="govuk-body">
+        <%= t("find.courses.show.where_you_will_train_fee_based_text") %>
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        <%= t("find.courses.show.where_you_will_train_non_fee_based_text") %>
+      </p>
+    <% end %>
+
+    <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
+
+    <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
+
     <div data-qa="course__school_placement">
         <% if course.published_placement_selection_criteria.present? %>
             <%= markdown(course.published_placement_selection_criteria) %>
