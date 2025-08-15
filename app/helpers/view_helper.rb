@@ -56,6 +56,8 @@ module ViewHelper
                             "#{base}/publish#school-summary-link"
                           elsif @current_tab == :description || !request.referer&.include?("details")
                             "#{base}/details?display_errors=true#school-summary-link"
+                          else
+                            "#{base}/details?display_errors=true"
                           end
                         else
                           "#{base}/schools?display_errors=true"
