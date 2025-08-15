@@ -254,7 +254,8 @@ private
     click_on_continue
 
     # Schools
-    first("input[type='checkbox']").check
+    expect(page).to have_selector("input[type='checkbox']", minimum: 2)
+    page.all("input[type='checkbox']").to_a.second.check
     click_on_continue
 
     # Study sites
