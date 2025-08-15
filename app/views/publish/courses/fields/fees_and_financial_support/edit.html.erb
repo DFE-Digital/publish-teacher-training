@@ -48,6 +48,8 @@
         } %>
       <% end %>
 
+      <%= render partial: "publish/courses/markdown_formatting" %>
+
       <div data-controller="input-preview">
         <%= f.govuk_text_field(:fee_uk_eu,
             form_group: { id: "fee-uk" },
