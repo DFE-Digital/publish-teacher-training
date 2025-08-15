@@ -60,6 +60,7 @@
       ) %>
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:theoretical_training_activities,
+          value: @copied_fields_values&.dig("theoretical_training_activities"),
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
@@ -70,6 +71,7 @@
           rows: 5,
           max_words: 150) %>
         <%= f.govuk_text_area(:assessment_methods,
+          value: @copied_fields_values&.dig("assessment_methods"),
           data: {
             input_preview_target: "input",
             action: "input-preview#updatePreview",
