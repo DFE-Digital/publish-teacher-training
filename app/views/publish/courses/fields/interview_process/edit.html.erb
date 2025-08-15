@@ -47,6 +47,8 @@
         } %>
       <% end %>
 
+      <%= render partial: "publish/courses/markdown_formatting" %>
+
       <div data-controller="input-preview">
         <%= f.govuk_radio_buttons_fieldset :interview_location, legend: { text: t(".interview_location.legend"), size: "s" }, multiple: false do %>
           <%= f.govuk_radio_button :interview_location, t(".interview_location.in_person"), label: { text: t(".interview_location.in_person").capitalize } %>

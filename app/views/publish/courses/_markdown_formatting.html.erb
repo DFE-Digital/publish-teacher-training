@@ -1,11 +1,8 @@
 <%= govuk_details(summary_text: t("markdown_formatting.summary_text")) do %>
-  <h1 class="govuk-heading-m"><%= t("markdown_formatting.title") %></h1>
   <h2 class="govuk-heading-s"><%= t("markdown_formatting.create_a_link_heading") %></h2>
-  <p class="govuk-body"><%= t("markdown_formatting.link_is_made_up_of_two_parts") %></p>
-  <p class="govuk-body"><%= t("markdown_formatting.link_format_warning") %></p>
-  <p class="govuk-body"><%= t("markdown_formatting.link_instructions") %></p>
+  <p class="govuk-body"><%= t("markdown_formatting.how_to_create_link_html") %></p>
   <p class="govuk-body">
-    <%= t("markdown_formatting.link_example_html", formatted_link: link_to("http://GOV.UK", "http://gov.uk")) %>
+    <%= t("markdown_formatting.will_show_as_html", formatted_link: link_to("GOV.UK", "http://www.gov.uk")) %>
   </p>
   <h2 class="govuk-heading-s"><%= t("markdown_formatting.create_bullet_points_heading") %></h2>
   <ul class="govuk-list govuk-list--bullet">
@@ -13,5 +10,5 @@
   </ul>
   <p class="govuk-body"><%= t("markdown_formatting.for_example") %></p>
   <p class="govuk-body"><%= t("markdown_formatting.list_item_one") %></p>
-  <p class="govuk-body"><%= t("markdown_formatting.list_item_two") %></p>
+  <p class="govuk-body"><%= t("markdown_formatting.list_item_one_show_as_html") %></p>
 <% end %>
