@@ -13,7 +13,7 @@
     <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
 
     <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
-
+    <% if course.published_placement_selection_criteria.present? || course.published_duration_per_school.present? || course.published_theoretical_training_location.present? || course.published_theoretical_training_duration.present? %>
     <div data-qa="course__school_placement">
         <% if course.published_placement_selection_criteria.present? %>
             <%= markdown(course.published_placement_selection_criteria) %>
@@ -31,4 +31,7 @@
             <%= markdown(course.published_theoretical_training_duration) %>
         <% end %>
     </div>
+    <% else %>
+        <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :where_you_will_train, is_preview: preview?(params)) %>
+    <% end%>
 </div>
