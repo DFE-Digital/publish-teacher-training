@@ -43,8 +43,7 @@ private
   end
 
   def then_i_see_markdown_formatting_guidance
-    page.find("span", text: "Help formatting your text")
-    expect(page).to have_content "How to format your text"
+    page.find("span", text: "How to create links and bullet points")
     expect(page).to have_content "How to create a link"
     expect(page).to have_content "How to create bullet points"
   end
