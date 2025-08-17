@@ -106,7 +106,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
 
   def then_i_should_see_the_enqueued_success_message
     expect(page).to have_content(
-      "We are now processing your added schools, please wait a minute until all your schools are added",
+      "We are adding your schools to this course. This may take up to a minute to complete.",
     )
   end
 
