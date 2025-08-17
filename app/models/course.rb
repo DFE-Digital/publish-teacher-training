@@ -445,8 +445,10 @@ class Course < ApplicationRecord
   def validate_schools
     return if schools_validated?
 
-    errors.add(:sites, :check_schools) if sites.school.present?
-    errors.add(:sites, :enter_schools) if sites.school.blank?
+    if latest_enrichment&.rolled_over?
+      errors.add(:sites, :check_schools) if sites.school.present?
+      errors.add(:sites, :enter_schools) if sites.school.blank?
+    end
   end
 
   def update_valid?
