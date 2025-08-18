@@ -24,8 +24,6 @@ class CourseEnrichment < ApplicationRecord
                  personal_qualities: [:string, { store_key: "PersonalQualities" }],
                  required_qualifications: [:string, { store_key: "Qualifications" }],
                  salary_details: [:string, { store_key: "SalaryDetails" }],
-                 describe_school: [:string, { store_key: "DescribeSchool" }],
-                 candidate_training_rationale: [:string, { store_key: "CandidateTrainingRationale" }],
                  placement_selection_criteria: [:string, { store_key: "PlacementSelectionCriteria" }],
                  duration_per_school: [:string, { store_key: "DurationPerSchool" }],
                  theoretical_training_location: [:string, { store_key: "TheoreticalTrainingLocation" }],
@@ -38,8 +36,19 @@ class CourseEnrichment < ApplicationRecord
                  fee_schedule: [:string, { store_key: "FeeSchedule" }],
                  additional_fees: [:string, { store_key: "AdditionalFees" }]
 
+  delegate :train_with_disability, to: :provider, prefix: true, allow_nil: true
+  delegate :train_with_disability=, to: :provider, prefix: true
+
+  delegate :about_us, to: :provider, prefix: true, allow_nil: true
+  delegate :about_us=, to: :provider, prefix: true
+
+  delegate :value_proposition, to: :provider, prefix: true, allow_nil: true
+  delegate :value_proposition=, to: :provider, prefix: true
+
   before_validation :apply_publish_changes, on: :publish
+
   belongs_to :course
+  has_one :provider, through: :course
 
   scope :most_recent, -> { order(created_at: :desc, id: :desc) }
   scope :draft, -> { where(status: "draft").or(rolled_over) }
@@ -101,11 +110,6 @@ class CourseEnrichment < ApplicationRecord
   validates :other_requirements, words_count: { maximum: 100 }
 
   # v2 validations
-  validates :describe_school, presence: true, on: :publish, if: -> { version == 2 }
-  validates :describe_school, words_count: { maximum: 100 }
-  validates :candidate_training_rationale, presence: true, on: :publish, if: -> { version == 2 }
-  validates :candidate_training_rationale, words_count: { maximum: 100 }
-
   validates :placement_selection_criteria, presence: true, on: :publish, if: -> { version == 2 }
   validates :placement_selection_criteria, words_count: { maximum: 50 }
   validates :duration_per_school, presence: true, on: :publish, if: -> { version == 2 }
@@ -129,6 +133,16 @@ class CourseEnrichment < ApplicationRecord
   validates :fee_schedule, words_count: { maximum: 50 }, if: :is_fee_based?
   validates :additional_fees, words_count: { maximum: 50 }, if: :is_fee_based?
   validates :assessment_methods, words_count: { maximum: 50 }
+
+  # V2 provider fields
+  validates :provider_train_with_disability, presence: true, on: :publish, if: -> { version == 2 }
+  validates :provider_train_with_disability, words_count: { maximum: 100 }
+
+  validates :provider_about_us, presence: true, on: :publish, if: -> { version == 2 }
+  validates :provider_about_us, words_count: { maximum: 100 }
+
+  validates :provider_value_proposition, presence: true, on: :publish, if: -> { version == 2 }
+  validates :provider_value_proposition, words_count: { maximum: 100 }
 
   def is_fee_based?
     course&.fee_based?

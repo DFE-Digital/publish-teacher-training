@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :course_enrichment do
     course
+    provider
     status { :draft }
     about_course { Faker::Lorem.sentence }
     course_length do
@@ -73,9 +74,6 @@ FactoryBot.define do
 
     trait :v2 do
       version { 2 }
-
-      describe_school { Faker::Lorem.sentence }
-      candidate_training_rationale { Faker::Lorem.sentence }
       placement_selection_criteria { Faker::Lorem.sentence }
       duration_per_school { Faker::Lorem.sentence }
       theoretical_training_location { Faker::Lorem.sentence }
