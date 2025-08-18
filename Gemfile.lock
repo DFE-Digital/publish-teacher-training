@@ -492,7 +492,7 @@ GEM
     optimist (3.2.1)
     os (1.1.4)
     ostruct (0.6.2)
-    pagy (9.3.5)
+    pagy (9.4.0)
     parallel (1.27.0)
     parallel_tests (5.4.0)
       parallel
@@ -860,7 +860,7 @@ DEPENDENCIES
   open_api-rswag-api (= 0.2.0)!
   open_api-rswag-specs (= 0.2.0)!
   open_api-rswag-ui (= 0.2.0)!
-  pagy (~> 9.3)
+  pagy (~> 9.4)
   parallel_tests
   pg
   pg_search
