@@ -3,7 +3,7 @@ module Publish
     class SchoolSummaryValueComponent < ViewComponent::Base
       attr_reader :course
 
-      delegate :course_code, :recruitment_cycle_year, :provider, to: :course
+      delegate :schools_validated?, :course_code, :recruitment_cycle_year, :provider, to: :course
       delegate :provider_code, to: :provider
 
       def initialize(course:)
@@ -13,11 +13,15 @@ module Publish
       end
 
       def inset_class
-        if course.errors && course.errors[:sites].present?
-          "app-inset-text--error"
-        else
-          "app-inset-text--important"
-        end
+        return if schools_validated?
+
+        custom_class = if course.errors && course.errors[:sites].present?
+                         "app-inset-text--error"
+                       else
+                         "app-inset-text--important"
+                       end
+
+        "govuk-inset-text app-inset-text--narrow-border #{custom_class}"
       end
 
       def enter_school_text

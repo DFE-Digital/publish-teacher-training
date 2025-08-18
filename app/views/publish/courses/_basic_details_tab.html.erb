@@ -119,7 +119,7 @@
 
        if course.is_withdrawn?
          row.with_action
-       elsif !course.recruitment_cycle_rollover_period_2026?
+       elsif !course.recruitment_cycle_rollover_period_2026? || course.schools_validated?
          row.with_action(
            href: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
            visually_hidden_text: "schools",
