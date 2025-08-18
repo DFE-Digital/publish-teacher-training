@@ -1,15 +1,17 @@
-<div class="govuk-inset-text app-inset-text--narrow-border <%= inset_class %>">
-  <ul class="govuk-list">
-
+<div class="<%= inset_class %>">
+  <ul class="govuk-list <%= schools_validated? ? "govuk-!-margin-bottom-0" : nil %>">
     <% @course.alphabetically_sorted_sites.map do |site| %>
       <li><%= site.location_name %></li>
     <% end %>
   </ul>
 
-  <p class="govuk-block" id="school-summary-link">
-      <%= govuk_link_to(
-        enter_school_text,
-        enter_school_link,
-      ) %>
-  </p>
+  <% if schools_validated? %>
+  <% else %>
+    <p class="govuk-block" id="school-summary-link">
+        <%= govuk_link_to(
+          enter_school_text,
+          enter_school_link,
+        ) %>
+    </p>
+  <% end %>
 </div>
