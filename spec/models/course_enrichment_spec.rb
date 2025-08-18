@@ -4,6 +4,7 @@ require "rails_helper"
 
 RSpec.describe CourseEnrichment do
   describe "associations" do
+    it { is_expected.to have_one(:provider) }
     it { is_expected.to belong_to(:course) }
   end
 
@@ -52,16 +53,6 @@ RSpec.describe CourseEnrichment do
                   word_limit: 350
 
   it_behaves_like "versioned_presence_field",
-                  field: :describe_school,
-                  required_in: { 1 => false, 2 => true },
-                  word_limit: 100
-
-  it_behaves_like "versioned_presence_field",
-                  field: :candidate_training_rationale,
-                  required_in: { 1 => false, 2 => true },
-                  word_limit: 100
-
-  it_behaves_like "versioned_presence_field",
                   field: :placement_selection_criteria,
                   required_in: { 1 => false, 2 => true },
                   word_limit: 50
@@ -104,7 +95,21 @@ RSpec.describe CourseEnrichment do
   it_behaves_like "versioned_presence_field",
                   field: :interview_location,
                   required_in: { 1 => false, 2 => false }
-  #
+
+  # Check provider fields
+  it_behaves_like "versioned_presence_field",
+                  field: :provider_train_with_disability,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 100
+  it_behaves_like "versioned_presence_field",
+                  field: :provider_about_us,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 100
+  it_behaves_like "versioned_presence_field",
+                  field: :provider_value_proposition,
+                  required_in: { 1 => false, 2 => true },
+                  word_limit: 100
+
   # Fields required for all versions
   #
   describe "course_length" do
