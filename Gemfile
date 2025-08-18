@@ -27,7 +27,7 @@ gem "draper"
 gem "active_model_serializers"
 
 # Pagination for frontend and API
-gem "pagy", "~> 9.3"
+gem "pagy", "~> 9.4"
 
 # JSON:API Ruby Client
 gem "jsonapi-rails", github: "DFE-Digital/jsonapi-rails"
