@@ -5,8 +5,7 @@
     <% end %>
   </ul>
 
-  <% if schools_validated? %>
-  <% else %>
+  <% unless schools_validated? %>
     <p class="govuk-block" id="school-summary-link">
         <%= govuk_link_to(
           enter_school_text,
