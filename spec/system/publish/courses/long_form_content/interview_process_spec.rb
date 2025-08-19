@@ -28,7 +28,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
 
     expect(page).to have_content("Interview process updated")
     expect(page).to have_content("Interview process content")
-    expect(page).to have_content("online")
+    expect(page).to have_content("Online")
   end
 
   def when_i_visit_the_course_page

@@ -43,3 +43,7 @@ en:
           v2_interview_process_label: What is the interview process? (optional)
           what_you_will_study_hidden_text: details about what you will study
           what_you_will_study_label: What you will study
+          interview_location:
+            in_person: In person
+            online: Online
+            both: Either in person or online
