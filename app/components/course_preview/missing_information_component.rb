@@ -42,6 +42,7 @@ module CoursePreview
     def fees_and_financials_link = fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def financial_support_link = fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def where_you_will_train_link = fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
+    def provider_train_with_disability_link = edit_publish_provider_recruitment_cycle_disability_support_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true)
 
     def train_with_us_link
       if FeatureFlag.active?(:long_form_content) || Current.recruitment_cycle.after_2025?

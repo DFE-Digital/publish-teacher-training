@@ -76,7 +76,7 @@ module Publish
     end
 
     def publish
-      fetch_course
+      fetch_course_with_latest_draft_enrichment_eager_loaded
       authorize @course
 
       if ::Courses::PublishService.new(course: @course, user: @current_user).call
@@ -121,6 +121,14 @@ module Publish
       flash[:error] = { id: "schools-error", message: "You need to create at least one school before creating a course" }
 
       redirect_to new_publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle_year)
+    end
+
+    def fetch_course_with_latest_draft_enrichment_eager_loaded
+      @course = provider.courses.includes(
+        :latest_draft_enrichment,
+        subjects: [:financial_incentive],
+        site_statuses: [:site],
+      ).find_by!(course_code: params[:code])
     end
 
     def fetch_course

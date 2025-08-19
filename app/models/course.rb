@@ -165,6 +165,10 @@ class Course < ApplicationRecord
            source: :subject,
            class_name: "ModernLanguagesSubject"
 
+  has_one :latest_draft_enrichment,
+          -> { where(status: :draft).order(updated_at: :desc) },
+          class_name: "CourseEnrichment",
+          inverse_of: :course
   has_many :enrichments, class_name: "CourseEnrichment", dependent: :destroy do
     def find_or_initialize_draft
       # This is a ruby search as opposed to an AR search, because calling `draft`

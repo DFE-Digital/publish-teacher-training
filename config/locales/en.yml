@@ -686,6 +686,15 @@ en:
               blank: "^Enter details about the qualifications needed"
             course_length:
               blank: "^Enter a course length"
+            provider_about_us:
+              blank: "^Enter why candidates should choose to train with your"
+              too_long: "Details about your organisation must be 100 words or fewer"
+            provider_value_proposition:
+              blank: "^Enter why candidates should choose to train with you"
+              too_long: "Details about why candidates should train with you must be 100 words or fewer"
+            provider_train_with_disability:
+              blank: "^Enter details about training with a disability"
+              too_long: "Details about training with a disability must be 100 words or fewer"
         provider_partnership:
           attributes:
             accredited_provider:
