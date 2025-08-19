@@ -420,13 +420,13 @@ en:
         what_you_will_study:
           text: "Enter details about what you will study"
         school_placement:
-          text: "Enter details about school placements"
+          text: "Enter details about what you will do on school placements"
         interview_process:
           text: "Enter details about the interview process"
         fees_and_financials:
           text: "Enter details about fees and financial support"
         where_you_will_train:
-          text: "Enter details about how placements work"
+          text: "Enter details about where you will train"
   value_not_entered: "Not entered"
   a_level_grades:
     minimum_grade: Grade %{minimum_grade}
