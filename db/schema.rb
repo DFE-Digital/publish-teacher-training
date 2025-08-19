@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_12_151804) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_19_150924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -415,6 +415,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_151804) do
     t.date "available_for_support_users_from"
   end
 
+  create_table "rollover_provider_summary", force: :cascade do |t|
+    t.bigint "provider_id", null: false
+    t.string "provider_code", null: false
+    t.string "provider_name"
+    t.bigint "target_recruitment_cycle_id", null: false
+    t.string "status", null: false
+    t.json "summary_data"
+    t.text "error_message"
+    t.decimal "execution_time_seconds", precision: 10, scale: 3
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider_code", "target_recruitment_cycle_id"], name: "idx_rollover_provider_unique", unique: true
+    t.index ["status"], name: "index_rollover_provider_summary_on_status"
+    t.index ["target_recruitment_cycle_id"], name: "index_rollover_provider_summary_on_target_recruitment_cycle_id"
+  end
+
   create_table "saved_course", force: :cascade do |t|
     t.bigint "candidate_id", null: false
     t.bigint "course_id", null: false
@@ -565,6 +581,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_151804) do
   add_foreign_key "organisation_user", "user", name: "FK_organisation_user_user_user_id"
   add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
+  add_foreign_key "rollover_provider_summary", "provider"
+  add_foreign_key "rollover_provider_summary", "recruitment_cycle", column: "target_recruitment_cycle_id"
   add_foreign_key "saved_course", "candidate"
   add_foreign_key "saved_course", "course"
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
