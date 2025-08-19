@@ -3,12 +3,12 @@
 class RolloverJob < ApplicationJob
   queue_as :default
 
-  BATCH_SIZE = 10
+  BATCH_SIZE = 2
 
   def perform(recruitment_cycle_id)
     relation = RecruitmentCycle.current_recruitment_cycle.providers
 
-    BatchDelivery.new(relation:, stagger_over: 1.hour, batch_size: BATCH_SIZE).each do |batch_time, providers|
+    BatchDelivery.new(relation:, stagger_over: 2.hours, batch_size: BATCH_SIZE).each do |batch_time, providers|
       providers.pluck(:provider_code).each do |provider_code|
         RolloverProviderJob.perform_at(batch_time, provider_code, recruitment_cycle_id)
       end
