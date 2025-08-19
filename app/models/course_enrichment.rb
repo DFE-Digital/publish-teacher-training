@@ -61,7 +61,7 @@ class CourseEnrichment < ApplicationRecord
   validates :about_course, presence: true, on: :publish, if: -> { version == 1 }
   validates :about_course, words_count: { maximum: 400 }
 
-  validates :interview_process, words_count: { maximum: 250 }, if: -> { version == 1 }
+  validates :interview_process, words_count: { maximum: 250 }, if: -> { version == 1 }, on: :publish
 
   validates :how_school_placements_work, presence: true, on: :publish, if: -> { version == 1 }
   validates :how_school_placements_work, words_count: { maximum: 350 }
@@ -90,11 +90,11 @@ class CourseEnrichment < ApplicationRecord
   validates :fee_details, words_count: { maximum: 250 }, if: :is_fee_based?
 
   validates :financial_support,
-            words_count: { maximum: 250 },
+            words_count: { maximum: 250 }, on: :publish,
             if: -> { is_fee_based? && version == 1 }
 
   validates :financial_support,
-            words_count: { maximum: 50 },
+            words_count: { maximum: 50 }, on: :publish,
             if: -> { is_fee_based? && version == 2 }
 
   # Course length and salary
@@ -125,7 +125,7 @@ class CourseEnrichment < ApplicationRecord
   validates :theoretical_training_activities, presence: true, on: :publish, if: -> { version == 2 }
   validates :theoretical_training_activities, words_count: { maximum: 150 }
 
-  validates :interview_process, words_count: { maximum: 200 }, if: -> { version == 2 }
+  validates :interview_process, words_count: { maximum: 200 }, if: -> { version == 2 }, on: :publish
 
   # v2 optional fields
   validates :theoretical_training_duration, words_count: { maximum: 50 }
@@ -136,13 +136,13 @@ class CourseEnrichment < ApplicationRecord
 
   # V2 provider fields
   validates :provider_train_with_disability, presence: true, on: :publish, if: -> { version == 2 }
-  validates :provider_train_with_disability, words_count: { maximum: 100 }
+  validates :provider_train_with_disability, words_count: { maximum: 100 }, on: :publish
 
   validates :provider_about_us, presence: true, on: :publish, if: -> { version == 2 }
-  validates :provider_about_us, words_count: { maximum: 100 }
+  validates :provider_about_us, words_count: { maximum: 100 }, on: :publish
 
   validates :provider_value_proposition, presence: true, on: :publish, if: -> { version == 2 }
-  validates :provider_value_proposition, words_count: { maximum: 100 }
+  validates :provider_value_proposition, words_count: { maximum: 100 }, on: :publish
 
   def is_fee_based?
     course&.fee_based?

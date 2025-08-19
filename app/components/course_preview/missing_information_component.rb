@@ -40,6 +40,7 @@ module CoursePreview
     def what_you_will_study_link = fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def interview_process_link = fields_interview_process_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def fees_and_financials_link = fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
+    def financial_support_link = fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
     def where_you_will_train_link = fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)
 
     def train_with_us_link

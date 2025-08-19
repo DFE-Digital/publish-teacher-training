@@ -72,6 +72,7 @@ module ViewHelper
         support_and_mentorship: "#{field_base_url}/school-placement?display_errors=true#support_and_mentorship-error",
         fee_uk_eu: "#{fees_url}?display_errors=true#fee-error",
         fee_international: "#{fees_url}?display_errors=true#fee_international-error",
+        financial_support: "#{fees_url}?display_errors=true#publish-fields-fees-and-financial-support-form-financial-support-field-error",
         course_length: "#{base}/length?display_errors=true#course_length-error",
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
