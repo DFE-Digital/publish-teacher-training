@@ -139,7 +139,7 @@ class CourseEnrichment < ApplicationRecord
   end
 
   def apply_publish_changes
-    self.version = FeatureFlag.active?(:long_form_content) ? 2 : 1
+    self.version = FeatureFlag.active?(:long_form_content) || course.provider.recruitment_cycle.after_2025? ? 2 : 1
   end
 
   def publish(current_user)
