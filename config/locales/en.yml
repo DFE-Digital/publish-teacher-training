@@ -110,10 +110,11 @@ en:
     title: How to format your text
     create_a_link_heading: How to create a link
     how_to_create_link_html: >
-      <li>Usse square brackets [] around the text you want to be a link</li>
-      <li>Use round  brackets around the URL for the link</li>
-      <li>Make sure there are no spaces between the brackets</li>
-      <br>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Use square brackets [] around the text you want to be a link</li>
+        <li>Use round  brackets around the URL for the link</li>
+        <li>Make sure there are no spaces between the brackets</li>
+      </ul>
       For example:
       <br>
       <br>
@@ -128,12 +129,19 @@ en:
       spaces between the brackets.
     link_example_html: "For example: [http://GOV.UK](https://gov.uk/) will show as %{formatted_link}"
     create_bullet_points_heading: How to create bullet points
-    bullet_point_guidance_html:
-      <li>Use asterisks (*) to create bullet points</li>
-      <li>Nake sure there is a space after each asterisk</li>
+    bullet_point_guidance_html: >
+      <ul class="govuk-list govuk-list--bullet">
+        <li>Use asterisks (*) to create bullet points</li>
+        <li>Make sure there is a space after each asterisk</li>
+      </ul>
     for_example: "For example:"
     list_item_one: "* list item 1"
-    list_item_one_show_as_html: Will show as <br> <li>list item 1</li>
+    list_item_one_show_as_html: >
+      Will show as
+      <br> 
+      <ul class="govuk-list govuk-list--bullet">
+        <li>list item 1</li>
+      </ul>
   notification_banner:
     success: "Success"
     info: "Info"

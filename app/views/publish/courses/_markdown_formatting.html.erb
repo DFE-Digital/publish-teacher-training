@@ -1,13 +1,13 @@
 <%= govuk_details(summary_text: t("markdown_formatting.summary_text")) do %>
   <h2 class="govuk-heading-s"><%= t("markdown_formatting.create_a_link_heading") %></h2>
   <p class="govuk-body"><%= t("markdown_formatting.how_to_create_link_html") %></p>
-  <p class="govuk-body">
+  <div class="govuk-body">
     <%= t("markdown_formatting.will_show_as_html", formatted_link: link_to("GOV.UK", "http://www.gov.uk")) %>
-  </p>
+  </div>
   <h2 class="govuk-heading-s"><%= t("markdown_formatting.create_bullet_points_heading") %></h2>
-  <ul class="govuk-list govuk-list--bullet">
+  <div class="govuk-body">
     <%= t("markdown_formatting.bullet_point_guidance_html") %>
-  </ul>
+  </div>
   <p class="govuk-body"><%= t("markdown_formatting.for_example") %></p>
   <p class="govuk-body"><%= t("markdown_formatting.list_item_one") %></p>
   <p class="govuk-body"><%= t("markdown_formatting.list_item_one_show_as_html") %></p>
