@@ -3,7 +3,6 @@
 FactoryBot.define do
   factory :course_enrichment do
     course
-    provider
     status { :draft }
     about_course { Faker::Lorem.sentence }
     course_length do
