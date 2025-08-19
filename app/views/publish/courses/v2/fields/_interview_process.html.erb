@@ -2,7 +2,7 @@
   summary_list,
   :course,
   t("publish.providers.courses.description_content.interview_location_label"),
-  value_provided?(course.interview_location),
+  value_provided?(display_interview_location(course.interview_location)),
   %w[interview_location],
   action_path: course.is_withdrawn? ? nil : fields_interview_process_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
   action_visually_hidden_text: t("publish.providers.courses.description_content.interview_location_label"),
