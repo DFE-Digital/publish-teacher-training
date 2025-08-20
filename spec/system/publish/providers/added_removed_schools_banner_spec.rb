@@ -29,7 +29,7 @@ RSpec.describe "Publish - Schools changes notification banner", service: :publis
     scenario "shows banner with both added and removed info" do
       given_provider_has_schools(added: 2, removed: 2)
       when_i_visit_the_publish_schools_page
-      then_i_see_the_banner_header("Changes to the schools in your account")
+      then_i_see_the_banner_header("Important")
       and_i_see_count_in_banner("We have added 2 schools")
       and_i_see_count_in_banner("We have removed 2 schools")
       and_i_see_added_link
@@ -45,7 +45,7 @@ RSpec.describe "Publish - Schools changes notification banner", service: :publis
     scenario "shows minimal banner only" do
       given_provider_has_schools(added: 0, removed: 0)
       when_i_visit_the_publish_schools_page
-      then_i_see_the_banner_header("The way schools are added to your account has changed.")
+      then_i_see_the_banner_header("Important")
       and_i_do_not_see_added_link
       and_i_do_not_see_removed_link
       and_i_do_not_see_text("We have added")
@@ -61,7 +61,7 @@ RSpec.describe "Publish - Schools changes notification banner", service: :publis
     scenario "shows banner with added info only" do
       given_provider_has_schools(added: 2, removed: 0)
       when_i_visit_the_publish_schools_page
-      then_i_see_the_banner_header("Changes to the schools in your account")
+      then_i_see_the_banner_header("Important")
       and_i_see_count_in_banner("We have added 2 schools")
       and_i_see_added_link
       and_i_do_not_see_removed_link
@@ -77,7 +77,7 @@ RSpec.describe "Publish - Schools changes notification banner", service: :publis
     scenario "shows banner with removed info only" do
       given_provider_has_schools(added: 0, removed: 2)
       when_i_visit_the_publish_schools_page
-      then_i_see_the_banner_header("Changes to the schools in your account")
+      then_i_see_the_banner_header("Important")
       and_i_see_count_in_banner("We have removed 2 schools")
       and_i_see_removed_link
       and_i_do_not_see_added_link

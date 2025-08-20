@@ -52,7 +52,7 @@ RSpec.describe Publish::SchoolsChangedBannerComponent, type: :component do
 
   context "no added or removed schools" do
     it "shows the minimal banner only" do
-      expect(rendered).to have_text("The way schools are added to your account has changed.")
+      expect(rendered).to have_text("Important")
       expect(rendered).not_to have_text("We have added")
       expect(rendered).not_to have_text("We have removed")
 
