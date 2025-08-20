@@ -20,6 +20,10 @@ class RolloverProgressQuery
 
   delegate :count, to: :eligible_courses, prefix: true
 
+  delegate :count, to: :eligible_study_sites, prefix: true
+
+  delegate :count, to: :rolled_over_study_sites, prefix: true
+
   delegate :count, to: :rolled_over_courses, prefix: true
 
   delegate :count, to: :eligible_partnerships, prefix: true
@@ -72,6 +76,14 @@ class RolloverProgressQuery
     .where.not(
       accredited_provider_id: previous_cycle_discarded_providers.select(:id),
     )
+  end
+
+  def eligible_study_sites
+    @eligible_study_sites ||= @previous_target_cycle.study_sites
+  end
+
+  def rolled_over_study_sites
+    @rolled_over_study_sites ||= @target_cycle.study_sites
   end
 
   def rolled_over_partnerships
