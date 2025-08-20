@@ -19,8 +19,8 @@ module Publish
         attr_accessor(*FIELDS)
 
         validates :placement_school_activities, presence: true
-        validates :placement_school_activities, words_count: { maximum: 150 }
-        validates :support_and_mentorship, words_count: { maximum: 50 }
+        validates :placement_school_activities, words_count: { maximum: 150, message: :too_long }
+        validates :support_and_mentorship, words_count: { maximum: 50, message: :too_long }
 
       private
 
