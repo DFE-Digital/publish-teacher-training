@@ -4,10 +4,10 @@ module Publish
   class WhyTrainWithUsForm < BaseProviderForm
     include Rails.application.routes.url_helpers
 
-    validates :about_us, presence: true, if: :about_us_changed?
+    validate :about_us_present
     validates :value_proposition, presence: true, if: :value_proposition_changed?
 
-    validates :about_us, words_count: { maximum: 100, message: :too_many_words }
+    validate :about_us_word_count
     validates :value_proposition, words_count: { maximum: 100, message: :too_many_words }
 
     def initialize(model, params: {}, redirect_params: {}, course_code: nil)
@@ -65,6 +65,22 @@ module Publish
 
     def redirection_key
       redirect_params.select { |_k, v| v == "true" }&.keys&.first
+    end
+
+    def about_us_present
+      return unless about_us_changed?
+
+      if about_us.blank?
+        errors.add(:about_us, :blank, provider_name: provider.provider_name)
+      end
+    end
+
+    def about_us_word_count
+      return unless about_us_changed? && about_us.present?
+
+      if about_us.split.size > 100
+        errors.add(:about_us, :too_many_words, provider_name: provider.provider_name)
+      end
     end
   end
 end

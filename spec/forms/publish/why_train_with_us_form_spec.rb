@@ -20,15 +20,15 @@ module Publish
     subject { described_class.new(provider, params:, redirect_params:, course_code:) }
 
     context "validations" do
-      it { is_expected.to validate_presence_of(:about_us).with_message("Enter what kind of organisation you are") }
+      it { is_expected.to validate_presence_of(:about_us).with_message("Enter what kind of organisation #{provider.provider_name} is") }
       it { is_expected.to validate_presence_of(:value_proposition).with_message("Enter why candidates should choose to train with you") }
 
       context "traing_with_us word count is invalid" do
         let(:about_us) { Faker::Lorem.sentence(word_count: 101) }
 
-        it "is not valid when traing_with_us is over 100 words" do
+        it "is not valid when about_us word count is over 100 words" do
           expect(subject.valid?).to be_falsey
-          expect(subject.errors[:about_us]).to include("'What kind of organisation is yours?' must be 100 words or less")
+          expect(subject.errors[:about_us]).to include("'What kind of organisation is #{provider.provider_name}?' must be 100 words or less")
         end
       end
 
