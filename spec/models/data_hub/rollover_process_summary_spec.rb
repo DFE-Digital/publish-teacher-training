@@ -64,4 +64,114 @@ RSpec.describe DataHub::RolloverProcessSummary, type: :model do
       expect(process_summary.total_processed).to eq(3)
     end
   end
+
+  describe "#eligible_not_rolled_over_details" do
+    let(:current_cycle) { RecruitmentCycle.current }
+    let(:target_cycle) { RecruitmentCycle.next || create(:recruitment_cycle, :next) }
+    let(:process_summary) { create(:rollover_process_summary) }
+
+    let!(:eligible_provider_one) { create(:provider, courses: [build(:course, :published)], provider_code: "ABC", recruitment_cycle: current_cycle) }
+    let!(:eligible_provider_two) { create(:provider, courses: [build(:course, :published)], provider_code: "DEF", recruitment_cycle: current_cycle) }
+    let!(:eligible_provider_three) { create(:provider, courses: [build(:course, :published)], provider_code: "GHI", recruitment_cycle: current_cycle) }
+
+    let!(:rolled_over_provider) { create(:provider, provider_code: "ABC", recruitment_cycle: target_cycle) }
+
+    before do
+      process_summary.initialize_summary!
+
+      process_summary.add_provider_result(
+        provider_code: "ABC",
+        status: :rolled_over,
+        details: { courses_count: 2, sites_count: 1, study_sites_count: 0, partnerships_count: 0 },
+      )
+
+      process_summary.add_provider_result(
+        provider_code: "DEF",
+        status: :skipped,
+        details: { reason: "Provider not rollable" },
+      )
+
+      process_summary.add_provider_result(
+        provider_code: "GHI",
+        status: :errored,
+        details: { error_class: "StandardError", error_message: "Something went wrong" },
+      )
+    end
+
+    it "returns entries for providers that are eligible but not rolled over" do
+      result = process_summary.eligible_not_rolled_over_details(target_cycle: target_cycle)
+
+      expect(result.size).to eq(2)
+
+      provider_codes = result.map { |entry| entry["provider_code"] }
+      expect(provider_codes).to contain_exactly("DEF", "GHI")
+
+      expect(provider_codes).not_to include("ABC")
+    end
+
+    it "returns full summary entries with all details" do
+      result = process_summary.eligible_not_rolled_over_details(target_cycle: target_cycle)
+
+      skipped_entry = result.find { |entry| entry["provider_code"] == "DEF" }
+      expect(skipped_entry).to include(
+        "provider_code" => "DEF",
+        "status" => "skipped",
+        "reason" => "Provider not rollable",
+      )
+      expect(skipped_entry["timestamp"]).to be_present
+
+      errored_entry = result.find { |entry| entry["provider_code"] == "GHI" }
+      expect(errored_entry).to include(
+        "provider_code" => "GHI",
+        "status" => "errored",
+        "error_class" => "StandardError",
+        "error_message" => "Something went wrong",
+      )
+      expect(errored_entry["timestamp"]).to be_present
+    end
+
+    it "returns empty array when all eligible providers are rolled over" do
+      create(:provider, provider_code: "DEF", recruitment_cycle: target_cycle)
+      create(:provider, provider_code: "GHI", recruitment_cycle: target_cycle)
+
+      result = process_summary.eligible_not_rolled_over_details(target_cycle: target_cycle)
+
+      expect(result).to be_empty
+    end
+
+    it "returns empty array when no providers are processed" do
+      empty_summary = create(:rollover_process_summary)
+      empty_summary.initialize_summary!
+
+      result = empty_summary.eligible_not_rolled_over_details(target_cycle: target_cycle)
+
+      expect(result).to be_empty
+    end
+
+    context "when provider is eligible but not in processed list" do
+      let!(:unprocessed_provider) do
+        create(
+          :provider,
+          courses: [build(:course, :published)],
+          provider_code: "XYZ",
+          recruitment_cycle: current_cycle,
+        )
+      end
+
+      it "does not include providers that were never processed" do
+        result = process_summary.eligible_not_rolled_over_details(target_cycle: target_cycle)
+
+        provider_codes = result.map { |entry| entry["provider_code"] }
+        expect(provider_codes).not_to include("XYZ")
+      end
+    end
+
+    it "handles providers with mixed statuses correctly" do
+      result = process_summary.eligible_not_rolled_over_details(target_cycle: target_cycle)
+
+      statuses = result.map { |entry| entry["status"] }
+      expect(statuses).to contain_exactly("skipped", "errored")
+      expect(statuses).not_to include("rolled_over")
+    end
+  end
 end

@@ -45,6 +45,15 @@ module DataHub
       (total_processed.to_f / short_summary["total_providers"] * 100).round(2)
     end
 
+    def eligible_not_rolled_over_details(target_cycle:)
+      progress_query = RolloverProgressQuery.new(target_cycle:)
+      not_rolled_over_providers_codes = progress_query.not_rolled_over_providers_codes
+
+      full_summary["providers_processed"].select do |entry|
+        not_rolled_over_providers_codes.include?(entry["provider_code"])
+      end
+    end
+
   private
 
     def default_short_summary
