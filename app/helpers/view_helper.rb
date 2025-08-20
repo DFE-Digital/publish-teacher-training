@@ -77,7 +77,7 @@ module ViewHelper
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
-        provider_train_with_disability: "#{provider_base}//training-with-disabilities/edit?display_errors=true#publish-disability-support-form-train-with-disability-field",
+        provider_train_with_disability: "#{provider_base}/training-with-disabilities/edit?display_errors=true#publish-disability-support-form-train-with-disability-field",
         provider_train_with_us: "#{provider_base}/about?display_errors=true#publish-provider-information-form-train-with-us-field",
         sites: error_sites_url,
         study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s,
