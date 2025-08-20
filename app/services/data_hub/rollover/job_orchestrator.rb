@@ -6,6 +6,7 @@ module DataHub
       BATCH_SIZE = 5
       STAGGER_OVER = 2.hours
       MONITORING_DELAY = 5.minutes
+      MONITORING_START_TIME = STAGGER_OVER + MONITORING_DELAY
 
       def self.start_rollover(recruitment_cycle_id)
         new(recruitment_cycle_id).execute
@@ -13,19 +14,19 @@ module DataHub
 
       def initialize(recruitment_cycle_id)
         @recruitment_cycle_id = recruitment_cycle_id
-        @process_summary = nil
       end
 
       def execute
-        initialize_process_summary
-        schedule_provider_jobs
-        schedule_monitoring
+        RolloverLog.with_logging do
+          initialize_process_summary
+          schedule_provider_jobs
+          schedule_monitoring
 
-        Rails.logger.info "Rollover orchestration complete. " \
-                          "#{@process_summary.short_summary['total_providers']} providers scheduled"
-
+          RolloverLog.info("Orchestration complete: #{summary.short_summary['total_providers']} scheduled")
+        end
         @process_summary
       rescue StandardError => e
+        Rails.logger.tagged("Rollover") { Rails.logger.error "Orchestration failed: #{e.message}" }
         @process_summary&.fail!(e)
         raise
       end
@@ -48,28 +49,26 @@ module DataHub
           stagger_over: STAGGER_OVER,
           batch_size: BATCH_SIZE,
         ).each do |batch_time, providers|
-          providers.pluck(:provider_code).each do |provider_code|
-            RolloverProviderJob.perform_at(
-              batch_time,
-              provider_code,
-              recruitment_cycle_id,
+          RolloverProvidersBatchJob
+            .set(wait_until: batch_time)
+            .perform_later(
+              providers.map(&:provider_code),
+              @recruitment_cycle_id,
               @process_summary.id,
             )
-          end
         end
       end
 
       def schedule_monitoring
-        monitoring_start_time = STAGGER_OVER + MONITORING_DELAY
         attempt_number = 1
 
         RolloverMonitoringJob.perform_in(
-          monitoring_start_time,
+          MONITORING_START_TIME,
           @process_summary.id,
           attempt_number,
         )
 
-        Rails.logger.info "Scheduled monitoring to start in #{monitoring_start_time.to_i / 60} minutes"
+        Rails.logger.info "Scheduled monitoring to start in #{MONITORING_START_TIME.to_i / 60} minutes"
       end
 
       def current_providers

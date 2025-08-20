@@ -174,4 +174,50 @@ RSpec.describe DataHub::RolloverProcessSummary, type: :model do
       expect(statuses).not_to include("rolled_over")
     end
   end
+
+  describe "#add_batch_enqueue_result" do
+    let(:process_summary) { create(:rollover_process_summary) }
+    let(:codes_batch_one) { %w[A B C] }
+    let(:codes_batch_two) { %w[D E] }
+    let(:timestamp_one)   { Time.current.iso8601 }
+    let(:timestamp_two)   { (Time.current + 1.minute).iso8601 }
+
+    before do
+      process_summary.initialize_summary!
+
+      travel_to Time.current do
+        process_summary.add_batch_enqueue_result(provider_codes: codes_batch_one)
+      end
+
+      travel_to Time.current + 1.minute do
+        process_summary.add_batch_enqueue_result(provider_codes: codes_batch_two)
+      end
+    end
+
+    it "increments providers_enqueued counter correctly" do
+      expect(process_summary.short_summary["providers_enqueued"]).to eq(5)
+    end
+
+    it "appends batch entries to full_summary with timestamps and codes" do
+      batches = process_summary.full_summary["batches"]
+      expect(batches.size).to eq(2)
+
+      expect(batches[0].symbolize_keys).to include(
+        timestamp: timestamp_one,
+        provider_codes: codes_batch_one,
+      )
+      expect(batches[1].symbolize_keys).to include(
+        timestamp: timestamp_two,
+        provider_codes: codes_batch_two,
+      )
+    end
+
+    it "persists the updated short_summary and full_summary" do
+      reloaded = described_class.find(process_summary.id)
+      expect(reloaded.short_summary["providers_enqueued"]).to eq(5)
+      expect(
+        reloaded.full_summary["batches"].map { |b| b["provider_codes"] },
+      ).to contain_exactly(codes_batch_one, codes_batch_two)
+    end
+  end
 end
