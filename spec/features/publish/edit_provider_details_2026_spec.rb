@@ -42,7 +42,7 @@ feature "Why Train With Us section in 2026 cycle +" do
 
     page.click_button "Update why train with us"
     within publish_provider_details_edit_page.error_summary do
-      expect(page).to have_content "Enter what kind of organisation you are"
+      expect(page).to have_content "Enter what kind of organisation #{@provider.provider_name} is"
     end
 
     page.find("#publish-why-train-with-us-form-about-us-field-error").set "Updated: Training with you"
