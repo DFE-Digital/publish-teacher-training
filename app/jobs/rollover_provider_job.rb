@@ -3,11 +3,9 @@
 class RolloverProviderJob
   include Sidekiq::Job
 
-  def perform(provider_code, new_recruitment_cycle_id)
-    RolloverProviderService.call(
-      provider_code:,
-      new_recruitment_cycle_id:,
-      force: false,
-    )
+  sidekiq_options retry: false
+
+  def perform(provider_code, recruitment_cycle_id, process_summary_id)
+    DataHub::Rollover::ProviderProcessor.process(provider_code, recruitment_cycle_id, process_summary_id)
   end
 end
