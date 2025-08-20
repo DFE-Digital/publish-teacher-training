@@ -122,6 +122,13 @@ class RolloverProgressQuery
     @rolled_over_providers ||= @target_cycle.providers.where("created_at < ?", @target_cycle.application_start_date)
   end
 
+  def not_rolled_over_providers_codes
+    eligible_provider_codes = eligible_providers.pluck(:provider_code)
+    rolled_over_provider_codes = @target_cycle.providers.pluck(:provider_code)
+
+    eligible_provider_codes - rolled_over_provider_codes
+  end
+
 private
 
   def providers_with_own_rollable_courses
