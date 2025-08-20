@@ -1057,10 +1057,10 @@ en:
         publish/courses/fields/school_placement_form:
           attributes:
             placement_school_activities:
-              too_long: "Reduce the word count for what trainees will do in school"
-              blank: "Enter what will trainees do while in their placement schools?"
+              too_long: "'What will trainees do while in their placement schools?' must be 150 words or less"
+              blank: "Enter what will trainees do while in their placement schools"
             support_and_mentorship:
-              too_long: "Reduce the word count for how trainees will be supported and mentored"
+              too_long: "'How will they be supported and mentored?' must be 50 words or less"
         publish/course_fee_form:
           attributes:
             fee_uk_eu:

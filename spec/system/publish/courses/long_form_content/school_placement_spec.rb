@@ -47,7 +47,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     when_i_visit_the_school_placement_page
     then_i_edit_the_school_placement_fields(placement_school_activities: "", support_and_mentorship: "")
     click_link_or_button "Update what you will do on school placements"
-    expect(page).to have_content("Enter what will trainees do while in their placement schools?")
+    expect(page).to have_content("Enter what will trainees do while in their placement schools")
   end
 
   scenario "A user CANT update the Enrichment if they only have supported and mentored filled out" do
@@ -55,7 +55,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     when_i_visit_the_school_placement_page
     then_i_edit_the_school_placement_fields(placement_school_activities: "", support_and_mentorship: "Some support")
     click_link_or_button "Update what you will do on school placements"
-    expect(page).to have_content("Enter what will trainees do while in their placement schools?")
+    expect(page).to have_content("Enter what will trainees do while in their placement schools")
   end
 
   scenario "A user CANT update the Enrichment if What will trainees do while in their placement schools has over 150 words" do
@@ -63,7 +63,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     when_i_visit_the_school_placement_page
     then_i_edit_the_school_placement_fields(placement_school_activities: generate_text(151), support_and_mentorship: "")
     click_link_or_button "Update what you will do on school placements"
-    expect(page).to have_content("Reduce the word count for placement school activities")
+    expect(page).to have_content("'What will trainees do while in their placement schools?' must be 150 words or less")
   end
 
   scenario "A user CANT update the Enrichment if How will they be supported and mentored is over 50 words" do
@@ -71,7 +71,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     when_i_visit_the_school_placement_page
     then_i_edit_the_school_placement_fields(placement_school_activities: "ABC", support_and_mentorship: generate_text(51))
     click_link_or_button "Update what you will do on school placements"
-    expect(page).to have_content("Reduce the word count for support and mentorship")
+    expect(page).to have_content("'How will they be supported and mentored?' must be 50 words or less")
   end
 
   scenario "A user can see his past cycles fields", :js do
