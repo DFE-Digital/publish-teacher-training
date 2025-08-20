@@ -1,10 +1,9 @@
 en:
   publish:
     schools_changed_banner_component:
-      header: "Changes to the schools in your account"
-      minimal_header: "The way schools are added to your account has changed."
+      header: "Important"
       content_heading: "Changes to the schools in your account"
-      minimal_heading: "You will no longer need to manually add all your schools to your account."
+      minimal_heading: "The way schools are added to your account has changed"
       auto_upload: "You will no longer need to manually add all your schools to your account. We automatically upload all schools you are working with."
       added_register_html: >
         These are schools that are on <a class="govuk-link" href="%{url}">Register trainee teachers</a>.

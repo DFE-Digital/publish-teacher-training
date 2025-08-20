@@ -12,7 +12,7 @@ module Publish
     end
 
     def title_text
-      show_minimal? ? t(".minimal_header") : t(".header")
+      t(".header")
     end
 
     def heading_text
