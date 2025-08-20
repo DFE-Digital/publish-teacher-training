@@ -16,7 +16,7 @@
 #
 RSpec.shared_examples "versioned_presence_field" do |field:, required_in:, word_limit: nil, conditional: nil|
   [1, 2].each do |ver|
-    context "version #{ver}, field #{field}," do
+    context "version #{ver}, field #{field}" do
       let(:version) { ver }
       let(:provider) { build(:provider) }
       let(:course)  { build(:course, funding: "fee", provider:) }
