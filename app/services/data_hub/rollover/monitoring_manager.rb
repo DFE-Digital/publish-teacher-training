@@ -6,6 +6,10 @@ module DataHub
       MAX_ATTEMPTS = 5
       CHECK_INTERVAL = 5.minutes
 
+      attr_reader :process_summary
+
+      delegate :all_providers_processed?, :already_finished?, to: :process_summary
+
       def self.check_completion(process_summary_id, attempt_number = 1)
         new(process_summary_id, attempt_number).execute
       end
@@ -13,7 +17,6 @@ module DataHub
       def initialize(process_summary_id, attempt_number)
         @process_summary_id = process_summary_id
         @attempt_number = attempt_number
-        @process_summary = nil
       end
 
       def execute
@@ -33,14 +36,10 @@ module DataHub
 
     private
 
-      attr_reader :process_summary_id, :attempt_number, :process_summary
+      attr_reader :process_summary_id, :attempt_number
 
       def load_process_summary
         @process_summary = RolloverProcessSummary.find(process_summary_id)
-      end
-
-      def already_finished?
-        process_summary.finished? || process_summary.failed?
       end
 
       def log_monitoring_attempt
@@ -50,13 +49,6 @@ module DataHub
         Rails.logger.info "Monitoring attempt #{attempt_number}/#{MAX_ATTEMPTS}: " \
                           "#{total_processed}/#{total_providers} providers processed " \
                           "(#{process_summary.completion_percentage}%)"
-      end
-
-      def all_providers_processed?
-        total_processed = process_summary.total_processed
-        total_providers = process_summary.short_summary["total_providers"]
-
-        total_processed >= total_providers
       end
 
       def complete_process

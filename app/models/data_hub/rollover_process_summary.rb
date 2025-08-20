@@ -33,6 +33,24 @@ module DataHub
       end
     end
 
+    def add_batch_enqueue_result(provider_codes:)
+      with_lock do
+        current_short = short_summary.dup
+        current_full  = full_summary.dup
+
+        current_short["providers_enqueued"] ||= 0
+        current_short["providers_enqueued"] += provider_codes.size
+
+        current_full["batches"] ||= []
+        current_full["batches"] << {
+          timestamp: Time.current.iso8601,
+          provider_codes: provider_codes,
+        }
+
+        update!(short_summary: current_short, full_summary: current_full)
+      end
+    end
+
     def total_processed
       short_summary["providers_rolled_over"] +
         short_summary["providers_skipped"] +
@@ -52,6 +70,14 @@ module DataHub
       full_summary["providers_processed"].select do |entry|
         not_rolled_over_providers_codes.include?(entry["provider_code"])
       end
+    end
+
+    def already_finished?
+      finished? || failed?
+    end
+
+    def all_providers_processed?
+      total_processed >= short_summary["total_providers"]
     end
 
   private
