@@ -22,14 +22,6 @@ feature "Guidance pages" do
     given_i_click_on_the_how_to_use_this_service_breadcrumb
     when_i_click_on_roll_over_courses_to_a_new_recruitment_cycle
     then_i_should_see_the_h1_roll_over_courses_to_a_new_recruitment_cycle
-
-    given_i_click_on_the_how_to_use_this_service_breadcrumb
-    when_click_on_help_writing_course_descriptions
-    then_i_should_see_the_h1_help_writing_course_descriptions
-
-    given_i_click_on_the_how_to_use_this_service_breadcrumb
-    when_i_click_on_course_summary_examples
-    then_i_should_see_the_h1_course_summary_examples
   end
 
   def given_i_visit_the_root_path
@@ -77,22 +69,6 @@ feature "Guidance pages" do
   end
 
   def then_i_should_see_the_h1_roll_over_courses_to_a_new_recruitment_cycle
-    expect(page).to have_css("h1", text: "Roll over courses to a new recruitment cycle")
-  end
-
-  def when_click_on_help_writing_course_descriptions
-    click_link_or_button "Help writing course descriptions"
-  end
-
-  def then_i_should_see_the_h1_help_writing_course_descriptions
-    expect(page).to have_css("h1", text: "Help writing course descriptions")
-  end
-
-  def when_i_click_on_course_summary_examples
-    click_link_or_button "Course summary examples"
-  end
-
-  def then_i_should_see_the_h1_course_summary_examples
-    expect(page).to have_css("h1", text: "Course summary examples")
+    expect(page).to have_css("h1", text: "How to roll over courses to a new recruitment cycle")
   end
 end
