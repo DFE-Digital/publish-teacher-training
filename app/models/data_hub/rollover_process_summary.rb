@@ -100,7 +100,6 @@ module DataHub
         status: status,
         timestamp: Time.current.iso8601,
       }.merge(details)
-
       current_full["providers_processed"] << provider_info
     end
   end

@@ -10,119 +10,137 @@ module Providers
     end
 
     def execute(provider:, new_recruitment_cycle:, course_codes: nil)
-      providers_count = 0
-      sites_count = 0
-      study_sites_count = 0
-      courses_count = 0
-      partnerships_count = 0
+      result = init_result_hash
 
-      if provider.rollable? || force
+      if provider_eligible?(provider)
         ActiveRecord::Base.transaction do
-          rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
-          if rolled_over_provider.nil?
-            providers_count = 1
-            rolled_over_provider = provider.dup
-            rolled_over_provider.organisations << provider.organisations
-            rolled_over_provider.ucas_preferences = provider.ucas_preferences.dup
-            rolled_over_provider.contacts << provider.contacts.map(&:dup)
-            rolled_over_provider.recruitment_cycle = new_recruitment_cycle
-            rolled_over_provider.skip_geocoding = true
-            rolled_over_provider.users << provider.users
-            rolled_over_provider.save!
-          end
+          rolled_over_provider = find_or_create_provider_in_cycle(provider, new_recruitment_cycle, result)
 
-          # Order is important here. Sites should be copied over before courses
-          # so that courses can link up to the correct sites in the new provider.
-          sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
-          study_sites_count = copy_study_sites_to_new_provider(provider, rolled_over_provider)
-          courses_count = copy_courses_to_new_provider(rolled_over_provider, courses_to_copy(provider, course_codes))
-          partnerships_count = copy_partnerships_to_new_provider(provider, rolled_over_provider, new_recruitment_cycle)
+          copy_sites(provider, rolled_over_provider, result)
+          copy_study_sites(provider, rolled_over_provider, result)
+          copy_courses(provider, rolled_over_provider, course_codes, result)
+          result[:partnerships] = copy_partnerships(provider, rolled_over_provider, new_recruitment_cycle)
         end
       end
 
-      {
-        providers: providers_count,
-        sites: sites_count,
-        study_sites: study_sites_count,
-        courses: courses_count,
-        partnerships: partnerships_count,
-      }
+      result
     end
 
   private
 
-    attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service, :force
+    attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service, :copy_partnership_to_provider_service, :force
+
+    def init_result_hash
+      {
+        providers: 0,
+        sites: 0,
+        study_sites: 0,
+        courses: 0,
+        partnerships: 0,
+        courses_failed: [],
+        courses_skipped: [],
+        study_sites_skipped: [],
+      }
+    end
+
+    def provider_eligible?(provider)
+      provider.rollable? || force
+    end
+
+    def find_or_create_provider_in_cycle(provider, new_recruitment_cycle, result)
+      rolled_over_provider = new_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
+      unless rolled_over_provider
+        rolled_over_provider = duplicate_provider(provider, new_recruitment_cycle)
+        result[:providers] = 1
+      end
+      rolled_over_provider
+    end
+
+    def duplicate_provider(provider, new_recruitment_cycle)
+      rolled = provider.dup
+      rolled.organisations << provider.organisations
+      rolled.ucas_preferences = provider.ucas_preferences.dup
+      rolled.contacts << provider.contacts.map(&:dup)
+      rolled.recruitment_cycle = new_recruitment_cycle
+      rolled.skip_geocoding = true
+      rolled.users << provider.users
+      rolled.save!
+      rolled
+    end
+
+    def copy_sites(provider, new_provider, result)
+      provider.sites.each do |site|
+        safe_copy_site(site, new_provider, result, :sites)
+      end
+    end
+
+    def copy_study_sites(provider, new_provider, result)
+      provider.study_sites.each do |site|
+        safe_copy_site(site, new_provider, result, :study_sites)
+      end
+    end
+
+    def safe_copy_site(site, new_provider, result, count_key)
+      site_result = copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
+
+      if site_result.success?
+        result[count_key] += 1
+      else
+        result[:study_sites_skipped] << {
+          site_code: site.code,
+          reason: site_result.error_message,
+        }
+      end
+    end
+
+    def copy_courses(provider, new_provider, course_codes, result)
+      eligible_courses = courses_to_copy(provider, course_codes)
+      eligible_courses.each do |course|
+        safe_copy_course(course, new_provider, result)
+      end
+    end
+
+    def safe_copy_course(course, new_provider, result)
+      new_course = copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
+      if new_course.present?
+        result[:courses] += 1
+      else
+        result[:courses_skipped] << { course_code: course.course_code, reason: "not rollable or duplicate on provider" }
+      end
+    rescue StandardError => e
+      result[:courses_failed] << { course_code: course.course_code, error_message: e.message }
+    end
+
+    def copy_partnerships(provider, rolled_over_provider, new_recruitment_cycle)
+      copy_partnership_to_provider_service.execute(
+        provider: provider,
+        rolled_over_provider: rolled_over_provider,
+        new_recruitment_cycle: new_recruitment_cycle,
+      )
+    end
 
     def courses_to_copy(provider, course_codes)
-      courses = []
       if force
         if course_codes.nil?
-          Rails.logger.info "no courses will be roll overed"
+          []
         else
-          courses = courses_from_course_codes(provider, course_codes)
+          courses_from_course_codes(provider, course_codes)
         end
       elsif course_codes.nil?
-        courses = provider.courses
+        provider.courses
       else
-        courses = courses_from_course_codes(provider, course_codes)
+        courses_from_course_codes(provider, course_codes)
       end
-
-      courses
     end
 
     def courses_from_course_codes(provider, course_codes)
       courses = provider.courses.where(course_code: course_codes.to_a.map(&:upcase))
-
       unless courses.count == course_codes.count
         error_message = "Error: discrepancy between courses found and provided course codes (#{courses.count} vs #{course_codes.count})"
         Rails.logger.fatal error_message
         raise error_message
       end
-
       courses
-    end
-
-    def copy_courses_to_new_provider(new_provider, courses)
-      courses_count = 0
-      courses.each do |course|
-        new_course = copy_course_to_provider_service.execute(course:, new_provider:)
-        courses_count += 1 if new_course.present?
-      rescue StandardError
-        Rails.logger.fatal "error trying to copy course #{course.course_code}"
-        raise
-      end
-
-      courses_count
-    end
-
-    def copy_sites_to_new_provider(provider, new_provider)
-      sites_count = 0
-
-      provider.sites.each do |site|
-        new_site = @copy_site_to_provider_service.execute(site:, new_provider:)
-        sites_count += 1 if new_site.present?
-      end
-
-      sites_count
-    end
-
-    def copy_study_sites_to_new_provider(provider, new_provider)
-      study_sites_count = 0
-
-      provider.study_sites.each do |site|
-        new_site = @copy_site_to_provider_service.execute(site:, new_provider:)
-        study_sites_count += 1 if new_site.present?
-      end
-
-      study_sites_count
-    end
-
-    def copy_partnerships_to_new_provider(provider, rolled_over_provider, new_recruitment_cycle)
-      @copy_partnership_to_provider_service.execute(
-        provider:,
-        rolled_over_provider:,
-        new_recruitment_cycle:,
-      )
     end
   end
 end
