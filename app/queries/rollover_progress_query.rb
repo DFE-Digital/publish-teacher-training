@@ -79,7 +79,10 @@ class RolloverProgressQuery
   end
 
   def eligible_study_sites
-    @eligible_study_sites ||= @previous_target_cycle.study_sites
+    @eligible_study_sites ||= Site.joins(:provider)
+      .where(provider: { recruitment_cycle: @previous_target_cycle })
+      .where(site_type: "study_site")
+      .where(provider_id: eligible_providers.select(:id))
   end
 
   def rolled_over_study_sites

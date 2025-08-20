@@ -11,30 +11,29 @@ class RolloverProviderService
   end
 
   def call
-    rollover
+    counts = {}
+
+    elapsed = Benchmark.measure do
+      counts = within_transaction { copy_provider }
+    end
+
+    counts.merge(duration_seconds: elapsed)
   end
 
 private
 
   attr_reader :provider_code, :course_codes, :force
 
-  def rollover
-    Rails.logger.info { "Copying provider #{provider.provider_code}: " }
-    counts = nil
+  def within_transaction(&block)
+    Provider.connection.transaction(&block)
+  end
 
-    bm = Benchmark.measure do
-      Provider.connection.transaction do
-        counts = copy_provider_to_recruitment_cycle.execute(
-          provider:, new_recruitment_cycle:, course_codes:,
-        )
-      end
-    end
-
-    Rails.logger.info "provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
-                      "#{counts[:sites]} sites copied, " \
-                      "#{counts[:courses]} courses copied " +
-      sprintf("in %.3f seconds", bm.real)
-    counts
+  def copy_provider
+    copy_provider_to_recruitment_cycle.execute(
+      provider:,
+      new_recruitment_cycle:,
+      course_codes:,
+    )
   end
 
   def new_recruitment_cycle
@@ -49,19 +48,19 @@ private
     @provider ||= RecruitmentCycle.current_recruitment_cycle.providers.find_by(provider_code:)
   end
 
-  def copy_courses_to_provider_service
-    @copy_courses_to_provider_service ||= Courses::CopyToProviderService.new(
-      sites_copy_to_course: Sites::CopyToCourseService,
-      enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
-      force:,
-    )
-  end
-
   def copy_provider_to_recruitment_cycle
     @copy_provider_to_recruitment_cycle ||= Providers::CopyToRecruitmentCycleService.new(
       copy_course_to_provider_service: copy_courses_to_provider_service,
       copy_site_to_provider_service: Sites::CopyToProviderService.new,
       copy_partnership_to_provider_service: Partnerships::CopyToProviderService.new,
+      force:,
+    )
+  end
+
+  def copy_courses_to_provider_service
+    @copy_courses_to_provider_service ||= Courses::CopyToProviderService.new(
+      sites_copy_to_course: Sites::CopyToCourseService,
+      enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
       force:,
     )
   end
