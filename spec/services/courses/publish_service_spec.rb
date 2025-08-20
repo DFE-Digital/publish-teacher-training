@@ -21,6 +21,32 @@ RSpec.describe Courses::PublishService do
     end
   end
 
+  describe "gets published during rollover" do
+    let(:course) { create(:course, :unpublished, :with_accrediting_provider, :with_gcse_equivalency, uuid:) }
+
+    let(:v1_enrichment) { create(:course_enrichment, :v1, status: "rolled_over", course:) }
+    let(:v2_enrichment) { create(:course_enrichment, :v2, status: "draft", course:) }
+
+    before do
+      allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
+      v1_enrichment
+      allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+      v2_enrichment
+    end
+
+    it "has rolled over the enrichment" do
+      expect(v2_enrichment.reload.status).to eq "draft"
+      course_queried = Course.includes(
+        :latest_draft_enrichment,
+        subjects: [:financial_incentive],
+        site_statuses: [:site],
+      ).find(course.id) # Due to eager loading, we have to query before we can publish
+
+      described_class.new(course: course_queried, user:).call
+      expect(v2_enrichment.reload.status).to eq "published"
+    end
+  end
+
   describe "course is unpublishable" do
     let(:course) { create(:course, uuid:) }
 
