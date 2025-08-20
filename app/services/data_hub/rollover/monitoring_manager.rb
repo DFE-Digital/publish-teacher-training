@@ -23,14 +23,16 @@ module DataHub
         load_process_summary
         return if already_finished?
 
-        log_monitoring_attempt
+        RolloverLog.with_logging do
+          log_monitoring_attempt
 
-        if all_providers_processed?
-          complete_process
-        elsif should_continue_monitoring?
-          schedule_next_check
-        else
-          handle_timeout
+          if all_providers_processed?
+            complete_process
+          elsif should_continue_monitoring?
+            schedule_next_check
+          else
+            handle_timeout
+          end
         end
       end
 
@@ -46,9 +48,9 @@ module DataHub
         total_processed = process_summary.total_processed
         total_providers = process_summary.short_summary["total_providers"]
 
-        Rails.logger.info "Monitoring attempt #{attempt_number}/#{MAX_ATTEMPTS}: " \
-                          "#{total_processed}/#{total_providers} providers processed " \
-                          "(#{process_summary.completion_percentage}%)"
+        RolloverLog.info "Monitoring attempt #{attempt_number}/#{MAX_ATTEMPTS}: " \
+                         "#{total_processed}/#{total_providers} providers processed " \
+                         "(#{process_summary.completion_percentage}%)"
       end
 
       def complete_process
@@ -60,8 +62,8 @@ module DataHub
         total_processed = process_summary.total_processed
         total_providers = process_summary.short_summary["total_providers"]
 
-        Rails.logger.info "Rollover process completed successfully. " \
-                          "#{total_processed}/#{total_providers} providers processed"
+        RolloverLog.info "Rollover process completed successfully. " \
+                         "#{total_processed}/#{total_providers} providers processed"
       end
 
       def should_continue_monitoring?
@@ -72,16 +74,16 @@ module DataHub
         next_attempt = attempt_number + 1
         RolloverMonitoringJob.perform_in(CHECK_INTERVAL, process_summary_id, next_attempt)
 
-        Rails.logger.info "Scheduled next monitoring check (attempt #{next_attempt}) in #{CHECK_INTERVAL.to_i / 60} minutes"
+        RolloverLog.info "Scheduled next monitoring check (attempt #{next_attempt}) in #{CHECK_INTERVAL.to_i / 60} minutes"
       end
 
       def handle_timeout
         total_processed = process_summary.total_processed
         total_providers = process_summary.short_summary["total_providers"]
 
-        Rails.logger.warn "Monitoring stopped after #{attempt_number} attempts. " \
-                          "#{total_processed}/#{total_providers} providers processed. " \
-                          "Some jobs may still be running or failed silently."
+        RolloverLog.warn "Monitoring stopped after #{attempt_number} attempts. " \
+                         "#{total_processed}/#{total_providers} providers processed. " \
+                         "Some jobs may still be running or failed silently."
 
         finalize_with_timeout(total_processed, total_providers)
       end

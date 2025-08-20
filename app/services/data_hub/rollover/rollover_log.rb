@@ -3,8 +3,8 @@ module DataHub
     class RolloverLog
       TAG = "Rollover".freeze
 
-      def self.with_logging
-        Rails.logger.tagged(TAG) { yield }
+      def self.with_logging(&block)
+        Rails.logger.tagged(TAG, &block)
       end
 
       def self.info(message)

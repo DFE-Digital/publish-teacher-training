@@ -3,6 +3,8 @@
 module DataHub
   module Rollover
     class ProviderProcessor
+      PROVIDER_NOT_ROLLABLE = "Provider not rollable or already exists in target cycle"
+
       def self.process(provider_code, recruitment_cycle_id, process_summary_id)
         new(provider_code, recruitment_cycle_id, process_summary_id).process
       end
@@ -14,8 +16,12 @@ module DataHub
       end
 
       def process
-        process_provider_rollover
+        RolloverLog.with_logging do
+          RolloverLog.info("Starting provider rollover: code=#{provider_code}, cycle_id=#{recruitment_cycle_id}")
+          process_provider_rollover
+        end
       rescue StandardError => e
+        RolloverLog.error("Provider rollover failed: code=#{provider_code}, cycle_id=#{recruitment_cycle_id}, error=#{e.class}: #{e.message}")
         record_fatal_error(e)
       end
 
@@ -26,6 +32,7 @@ module DataHub
       def process_provider_rollover
         result = perform_rollover
         record_rollover_result(result)
+        RolloverLog.info("Provider rollover finished: code=#{provider_code}, result_providers=#{result[:providers]}, result_status=#{provider_rolled_over?(result) ? 'rolled_over' : 'skipped'}")
       end
 
       def perform_rollover
@@ -40,7 +47,7 @@ module DataHub
         if provider_rolled_over?(result)
           add_provider_result(:rolled_over, result)
         else
-          add_provider_result(:skipped, result.merge(reason: "Provider not rollable or already exists in target cycle"))
+          add_provider_result(:skipped, result.merge(reason: PROVIDER_NOT_ROLLABLE))
         end
       end
 

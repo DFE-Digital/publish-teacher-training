@@ -22,11 +22,11 @@ module DataHub
           schedule_provider_jobs
           schedule_monitoring
 
-          RolloverLog.info("Orchestration complete: #{summary.short_summary['total_providers']} scheduled")
+          RolloverLog.info("Orchestration complete: #{@process_summary.short_summary['total_providers']} scheduled")
         end
         @process_summary
       rescue StandardError => e
-        Rails.logger.tagged("Rollover") { Rails.logger.error "Orchestration failed: #{e.message}" }
+        RolloverLog.error("Orchestration failed: #{e.message}")
         @process_summary&.fail!(e)
         raise
       end
@@ -68,7 +68,7 @@ module DataHub
           attempt_number,
         )
 
-        Rails.logger.info "Scheduled monitoring to start in #{MONITORING_START_TIME.to_i / 60} minutes"
+        RolloverLog.info("Scheduled monitoring to start in #{MONITORING_START_TIME.to_i / 60} minutes")
       end
 
       def current_providers
