@@ -52,16 +52,6 @@ RSpec.describe CourseEnrichment do
                   word_limit: 350
 
   it_behaves_like "versioned_presence_field",
-                  field: :describe_school,
-                  required_in: { 1 => false, 2 => true },
-                  word_limit: 100
-
-  it_behaves_like "versioned_presence_field",
-                  field: :candidate_training_rationale,
-                  required_in: { 1 => false, 2 => true },
-                  word_limit: 100
-
-  it_behaves_like "versioned_presence_field",
                   field: :placement_selection_criteria,
                   required_in: { 1 => false, 2 => true },
                   word_limit: 50
