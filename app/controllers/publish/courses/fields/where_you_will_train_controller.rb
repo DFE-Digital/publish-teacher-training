@@ -22,11 +22,19 @@ module Publish
           if @where_you_will_train_form.save!
             course_updated_message "Where you will train"
 
-            redirect_to publish_provider_recruitment_cycle_course_path(
-              provider.provider_code,
-              recruitment_cycle.year,
-              course.course_code,
-            )
+            if params["publish_fields_where_you_will_train_form"][:goto_preview] == "true"
+              redirect_to preview_publish_provider_recruitment_cycle_course_path(
+                provider_code: provider.provider_code,
+                recruitment_cycle_year: provider.recruitment_cycle_year,
+                code: course.course_code,
+              )
+            else
+              redirect_to publish_provider_recruitment_cycle_course_path(
+                provider.provider_code,
+                recruitment_cycle.year,
+                course.course_code,
+              )
+            end
 
           else
             @v1_enrichment = course.enrichments.find_by(version: 1)
