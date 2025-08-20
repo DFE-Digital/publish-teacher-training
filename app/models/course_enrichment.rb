@@ -114,7 +114,6 @@ class CourseEnrichment < ApplicationRecord
   validates :placement_selection_criteria, words_count: { maximum: 50 }
   validates :duration_per_school, presence: true, on: :publish, if: -> { version == 2 }
   validates :duration_per_school, words_count: { maximum: 50 }
-  validates :theoretical_training_location, presence: true, on: :publish, if: -> { version == 2 }
   validates :theoretical_training_location, words_count: { maximum: 50 }
 
   validates :placement_school_activities, presence: true, on: :publish, if: -> { version == 2 }
