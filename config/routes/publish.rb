@@ -211,14 +211,13 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/fields/where-you-will-train", on: :member, to: "courses/fields/where_you_will_train#edit"
         patch "/fields/where-you-will-train", on: :member, to: "courses/fields/where_you_will_train#update"
 
+        get "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#edit"
+        patch "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#update"
+
         get "/fees", on: :member, to: "courses/fees#edit"
         patch "/fees", on: :member, to: "courses/fees#update"
         get "/salary", on: :member, to: "courses/salary#edit"
         patch "/salary", on: :member, to: "courses/salary#update"
-        constraints ->(_req) { FeatureFlag.active?(:long_form_content) } do
-          get "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#edit"
-          patch "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#update"
-        end
 
         get "/withdraw", on: :member, to: "courses/withdrawals#edit"
         patch "/withdraw", on: :member, to: "courses/withdrawals#update"
