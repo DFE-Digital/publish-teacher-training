@@ -39,28 +39,6 @@ describe Course do
     end
   end
 
-  describe "rolledover" do
-    it 'is publishable' do
-      allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
-      Timecop.travel Time.local(2025,10,10, 10, 10) do
-        recruitment_cycle = create(:recruitment_cycle,:next)
-        Current.recruitment_cycle = recruitment_cycle
-
-        provider = create(:provider, recruitment_cycle:, provider_code: "ABC")
-        course = create(:course, :publishable, provider:, course_code: "XYZ", sites: [build(:site)], enrichments: [build(:course_enrichment, :rolled_over, :v1), build(:course_enrichment, :draft, :v2)])
-
-        e1, e2 = course.enrichments
-        expect(e1.version).to eq(1)
-        expect(e2.version).to eq(2)
-
-        expect(e1.valid? :publish).to be_true
-        binding.pry
-        # course.publishable?
-        # expect(course).to be_publishable
-      end
-    end
-  end
-
   describe "auditing" do
     it { is_expected.to be_audited }
     it { is_expected.to have_associated_audits }
