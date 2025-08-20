@@ -2,24 +2,14 @@
 
 require "rails_helper"
 
-RSpec.describe RolloverProviderJob do
+RSpec.describe RolloverProviderJob, type: :job do
+  let(:process_summary) { create(:rollover_process_summary) }
+
   describe "#perform" do
-    let(:new_recruitment_cycle) do
-      find_or_create(:recruitment_cycle, :next)
-    end
-    let(:provider) do
-      create(:provider)
-    end
+    it "delegates to ProviderProcessor" do
+      expect(DataHub::Rollover::ProviderProcessor).to receive(:process).with("ABC", 123, process_summary.id)
 
-    it "copy courses from specific provider only" do
-      courses = create_list(:course, 5, :published, provider:)
-      create_list(:course, 5, :published, provider: create(:provider))
-
-      subject.perform(provider.provider_code, new_recruitment_cycle.id)
-
-      expect(new_recruitment_cycle.courses.pluck(:name, :course_code)).to match_array(
-        courses.pluck(:name, :course_code),
-      )
+      described_class.new.perform("ABC", 123, process_summary.id)
     end
   end
 end
