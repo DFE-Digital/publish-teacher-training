@@ -135,7 +135,7 @@ private
   end
 
   def valid_date_month
-    @valid_date_month ||= "10"
+    @valid_date_month ||= "6"
   end
 
   def invalid_date_month
@@ -155,7 +155,7 @@ private
   end
 
   def valid_date_year
-    @valid_date_year ||= (Settings.current_recruitment_cycle_year.to_i - 1).to_s
+    @valid_date_year ||= Settings.current_recruitment_cycle_year.to_i.to_s
   end
 
   def invalid_date_year
@@ -233,7 +233,7 @@ private
 
   def and_it_contains_invalid_value_errors
     expect(support_provider_course_edit_page.error_summary.text).to include("Course code is already taken")
-    expect(support_provider_course_edit_page.error_summary.text).to include("October #{Settings.current_recruitment_cycle_year + 3} is not in the #{Settings.current_recruitment_cycle_year} cycle")
+    expect(support_provider_course_edit_page.error_summary.text).to include("June #{Settings.current_recruitment_cycle_year + 3} is not in the #{Settings.current_recruitment_cycle_year} cycle")
   end
 
   def and_it_contains_start_date_format_error
