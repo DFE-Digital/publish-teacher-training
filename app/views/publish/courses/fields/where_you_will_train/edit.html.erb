@@ -112,6 +112,7 @@
           hint: -> { t(".theoretical_training_duration_hint") },
           max_words: 50,
           rows: 5) %>
+          <%= f.hidden_field :goto_preview, value: params[:goto_preview] %>
 
         <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
       </div>
