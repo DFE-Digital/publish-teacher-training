@@ -1,31 +1,31 @@
 <h2 class="govuk-heading-m"><%= t("find.courses.show.contents_header") %></h2>
 <ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
-    <%# Why train with us %>
-    <% if @provider&.value_proposition.present? || preview?(params) %>
-      <li><%= govuk_link_to t("find.courses.show.why_train_with_us"), "#section-why-train-with-us" %></li>
-    <% end %>
-    <%# Where you will train %>
-    <% if course.placement_selection_criteria.present? || course.published_duration_per_school.present? || course.published_theoretical_training_location.present? || course.published_theoretical_training_duration.present? || preview?(params) %>
-      <li><%= govuk_link_to t("find.courses.show.where_you_will_train"), "#section-placement-selection-criteria" %></li>
-    <% end %>
-    <%# What will you do on school placements %>
-    <% if course.published_placement_school_activities || preview?(params) %>
-      <li><%= govuk_link_to t("find.courses.show.what_will_you_do_on_school_placements"), "#section-school-placement" %></li>
-    <% end %>
-    <%# What you will study %>
-    <% if course.theoretical_training_activities.present? || preview?(params) %>
-      <li><%= govuk_link_to t("find.courses.show.what_you_will_study"), "#section-what-you-will-study" %></li>
-    <% end %>
-    <%# Interview process %>
-    <% if course.published_interview_process.present? || course.published_interview_location.present? || preview?(params) %>
-      <li><%= govuk_link_to t("find.courses.show.interview_process"), "#section-interviews" %></li>
-    <% end %>
-    <%# Fees and financial support %>
-    <li><%= govuk_link_to (course.salaried? ? t("find.courses.show.salary_and_financial_support") : t("find.courses.show.fees_and_financial_support")), "#section-financial-support" %></li>
-    <%# Training with disabilities %>
-    <% if @provider.train_with_disability.present? || preview?(params) %>
-      <li><%= govuk_link_to t("find.courses.show.training_with_disabilities"), "#section-train-with-disabilities" %></li>
-    <% end %>
+  <%# Why train with us %>
+  <% if @provider&.value_proposition.present? || preview?(params) %>
+    <li><%= govuk_link_to t("find.courses.show.why_train_with_us"), "#section-why-train-with-us" %></li>
+  <% end %>
+  <%# Where you will train %>
+  <% if course.placement_selection_criteria.present? || course.published_duration_per_school.present? || course.published_theoretical_training_location.present? || course.published_theoretical_training_duration.present? || preview?(params) %>
+    <li><%= govuk_link_to t("find.courses.show.where_you_will_train"), "#section-placement-selection-criteria" %></li>
+  <% end %>
+  <%# What will you do on school placements %>
+  <% if course.published_placement_school_activities || preview?(params) %>
+    <li><%= govuk_link_to t("find.courses.show.what_will_you_do_on_school_placements"), "#section-school-placement" %></li>
+  <% end %>
+  <%# What you will study %>
+  <% if course.theoretical_training_activities.present? || preview?(params) %>
+    <li><%= govuk_link_to t("find.courses.show.what_you_will_study"), "#section-what-you-will-study" %></li>
+  <% end %>
+  <%# Interview process %>
+  <% if course.published_interview_process.present? || course.published_interview_location.present? || preview?(params) %>
+    <li><%= govuk_link_to t("find.courses.show.interview_process"), "#section-interviews" %></li>
+  <% end %>
+  <%# Fees and financial support %>
+  <li><%= govuk_link_to (course.salaried? ? t("find.courses.show.salary_and_financial_support") : t("find.courses.show.fees_and_financial_support")), "#section-financial-support" %></li>
+  <%# Training with disabilities %>
+  <% if @provider.train_with_disability.present? || preview?(params) %>
+    <li><%= govuk_link_to t("find.courses.show.training_with_disabilities"), "#section-train-with-disabilities" %></li>
+  <% end %>
 </ul>
 
 <%# Why train with us below %>
@@ -35,22 +35,22 @@
 
 <%# Where you will train %>
 <% if course.published_placement_selection_criteria.present? || course.published_duration_per_school.present? || course.published_theoretical_training_location.present? || course.published_theoretical_training_duration.present? || preview?(params) %>
-    <%= render partial: "find/courses/v2/where_you_will_train", locals: { course: course } %>
+  <%= render partial: "find/courses/v2/where_you_will_train", locals: { course: course } %>
 <% end %>
 
 <%# What you will do on school placements %>
 <% if course.published_placement_school_activities.present? || preview?(params) %>
-    <%= render partial: "find/courses/v2/school_placement", locals: { course: course } %>
+  <%= render partial: "find/courses/v2/school_placement", locals: { course: course } %>
 <% end %>
 
 <%# What you will study %>
 <% if course.theoretical_training_activities.present? || preview?(params) %>
-    <%= render partial: "find/courses/v2/what_you_will_study/what_you_will_study", locals: { course: @course } %>
+  <%= render partial: "find/courses/v2/what_you_will_study/what_you_will_study", locals: { course: @course } %>
 <% end %>
 
 <%# Interview process %>
 <% if course.published_interview_process.present? || course.published_interview_location.present? || preview?(params) %>
-    <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: course } %>
+  <%= render partial: "find/courses/v2/interview_process/interview_process", locals: { course: course } %>
 <% end %>
 
 <%# Financial support %>
@@ -58,17 +58,30 @@
 
 <%# Training with disabilities %>
 <% if @provider.train_with_disability.present? || preview?(params) %>
-    <h2 class="govuk-heading-m" id="section-train-with-disabilities">
+  <h2 class="govuk-heading-m" id="section-train-with-disabilities">
     <%= t("find.courses.show.training_with_disabilities") %>
-    </h2>
+  </h2>
 
+  <% if preview?(params) %>
     <p class="govuk-body govuk-!-margin-bottom-8">
     <%= govuk_link_to(
-            t("find.courses.show.training_with_disabilities_link", provider_name: course.provider_name),
-            find_training_with_disabilities_path(
-            course.provider_code,
-            course.course_code,
-          ),
-          ) %>
+      t("find.courses.show.training_with_disabilities_link", provider_name: course.provider_name),
+      training_with_disabilities_publish_provider_recruitment_cycle_course_path(
+        course.provider_code,
+        course.recruitment_cycle_year,
+        course.course_code,
+      ),
+    ) %>
     </p>
+  <% else %>
+    <p class="govuk-body govuk-!-margin-bottom-8">
+    <%= govuk_link_to(
+      t("find.courses.show.training_with_disabilities_link", provider_name: course.provider_name),
+      find_training_with_disabilities_path(
+        course.provider_code,
+        course.course_code,
+      ),
+    ) %>
+    </p>
+  <% end %>
 <% end %>
