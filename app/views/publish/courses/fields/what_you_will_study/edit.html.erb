@@ -6,7 +6,7 @@
 <% if params[:copy_from].present? && @copied_fields.any? %>
   <%= render Providers::CopyCourseContentWarningComponent.new(
     @copied_fields,
-    "publish-course-information-form",
+    "publish-fields-what-you-will-study-form",
     @source_course,
   ) %>
 <% end %>
