@@ -3,10 +3,10 @@
 module Providers
   class CopyToRecruitmentCycleService
     def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, copy_partnership_to_provider_service:, force:)
-      @copy_course_to_provider_service = copy_course_to_provider_service
-      @copy_site_to_provider_service = copy_site_to_provider_service
+      @copy_course_to_provider_service      = copy_course_to_provider_service
+      @copy_site_to_provider_service        = copy_site_to_provider_service
       @copy_partnership_to_provider_service = copy_partnership_to_provider_service
-      @force = force
+      @force                                = force
     end
 
     def execute(provider:, new_recruitment_cycle:, course_codes: nil)
@@ -39,6 +39,7 @@ module Providers
         partnerships: 0,
         courses_failed: [],
         courses_skipped: [],
+        sites_skipped: [],
         study_sites_skipped: [],
       }
     end
@@ -58,57 +59,70 @@ module Providers
 
     def duplicate_provider(provider, new_recruitment_cycle)
       rolled = provider.dup
-      rolled.organisations << provider.organisations
-      rolled.ucas_preferences = provider.ucas_preferences.dup
-      rolled.contacts << provider.contacts.map(&:dup)
-      rolled.recruitment_cycle = new_recruitment_cycle
-      rolled.skip_geocoding = true
-      rolled.users << provider.users
+      rolled.organisations     << provider.organisations
+      rolled.ucas_preferences   = provider.ucas_preferences.dup
+      rolled.contacts          << provider.contacts.map(&:dup)
+      rolled.recruitment_cycle  = new_recruitment_cycle
+      rolled.skip_geocoding     = true
+      rolled.users             << provider.users
       rolled.save!
       rolled
     end
 
+    # updated: simple site copies
     def copy_sites(provider, new_provider, result)
       provider.sites.each do |site|
-        safe_copy_site(site, new_provider, result, :sites)
+        site_result = copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
+        save_site_result(site_result: site_result, result: result, count_key: :sites, skip_key: :sites_skipped, site_code: site.code)
       end
     end
 
+    # updated: use orchestrator for study sites
     def copy_study_sites(provider, new_provider, result)
-      provider.study_sites.each do |site|
-        safe_copy_site(site, new_provider, result, :study_sites)
+      assignments = DataHub::Rollover::StudySiteCodeOrchestrator.new(
+        target_provider: new_provider,
+        sites_to_copy: provider.study_sites,
+      ).call
+
+      assignments.each do |assignment|
+        site     = assignment[:site]
+        code     = assignment[:code]
+        site_result = copy_site_to_provider_service.execute(
+          site: site,
+          new_provider: new_provider,
+          assigned_code: code,
+        )
+        save_site_result(site_result: site_result, result: result, count_key: :study_sites, skip_key: :study_sites_skipped, site_code: code)
       end
     end
 
-    def safe_copy_site(site, new_provider, result, count_key)
-      site_result = copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
-
+    def save_site_result(site_result:, result:, count_key:, skip_key:, site_code:)
       if site_result.success?
         result[count_key] += 1
       else
-        result[:study_sites_skipped] << {
-          site_code: site.code,
-          reason: site_result.error_message,
-        }
+        result[skip_key] << { site_code: site_code, reason: site_result.error_message }
       end
     end
 
     def copy_courses(provider, new_provider, course_codes, result)
-      eligible_courses = courses_to_copy(provider, course_codes)
-      eligible_courses.each do |course|
-        safe_copy_course(course, new_provider, result)
-      end
-    end
+      eligible = if force
+                   course_codes ? provider.courses.where(course_code: course_codes.map(&:upcase)) : []
+                 else
+                   course_codes ? provider.courses.where(course_code: course_codes.map(&:upcase)) : provider.courses
+                 end
 
-    def safe_copy_course(course, new_provider, result)
-      new_course = copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
-      if new_course.present?
-        result[:courses] += 1
-      else
-        result[:courses_skipped] << { course_code: course.course_code, reason: "not rollable or duplicate on provider" }
+      if course_codes && (eligible.size != course_codes.size)
+        msg = "Error: discrepancy between courses found and provided course codes (#{eligible.size} vs #{course_codes.size})"
+        Rails.logger.fatal(msg)
+        raise msg
       end
-    rescue StandardError => e
-      result[:courses_failed] << { course_code: course.course_code, error_message: e.message }
+
+      eligible.each do |course|
+        copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
+        result[:courses] += 1
+      rescue StandardError => e
+        result[:courses_failed] << { course_code: course.course_code, error_message: e.message }
+      end
     end
 
     def copy_partnerships(provider, rolled_over_provider, new_recruitment_cycle)
@@ -117,30 +131,6 @@ module Providers
         rolled_over_provider: rolled_over_provider,
         new_recruitment_cycle: new_recruitment_cycle,
       )
-    end
-
-    def courses_to_copy(provider, course_codes)
-      if force
-        if course_codes.nil?
-          []
-        else
-          courses_from_course_codes(provider, course_codes)
-        end
-      elsif course_codes.nil?
-        provider.courses
-      else
-        courses_from_course_codes(provider, course_codes)
-      end
-    end
-
-    def courses_from_course_codes(provider, course_codes)
-      courses = provider.courses.where(course_code: course_codes.to_a.map(&:upcase))
-      unless courses.count == course_codes.count
-        error_message = "Error: discrepancy between courses found and provided course codes (#{courses.count} vs #{course_codes.count})"
-        Rails.logger.fatal error_message
-        raise error_message
-      end
-      courses
     end
   end
 end

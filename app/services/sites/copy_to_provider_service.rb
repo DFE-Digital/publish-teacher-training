@@ -1,49 +1,41 @@
-# frozen_string_literal: true
-
 module Sites
   class CopyToProviderService
     Result = Struct.new(:success?, :site, :error_message, keyword_init: true)
 
-    DUPLICATE_SITE_ERROR = "Site code already exists on provider"
+    def execute(site:, new_provider:, assigned_code: nil)
+      if new_provider.sites.exists?(code: assigned_code || site.code)
+        return error_result("Site with code '#{assigned_code || site.code}' already exists in the provider")
+      end
 
-    def execute(site:, new_provider:)
-      return duplicate_error if site_already_exists?(site, new_provider)
-
-      create_site(site, new_provider)
+      new_site = build_new_site(site, new_provider, assigned_code)
+      save_site(new_site)
     end
 
   private
 
-    def site_already_exists?(site, new_provider)
-      new_provider.sites.exists?(code: site.code) || new_provider.study_sites.exists?(code: site.code)
-    end
-
-    def duplicate_error
-      Result.new(success?: false, site: nil, error_message: DUPLICATE_SITE_ERROR)
-    end
-
-    def create_site(site, new_provider)
-      new_site = build_new_site(site, new_provider)
-
-      save_site(new_site, new_provider)
-    rescue StandardError => e
-      Result.new(success?: false, site: nil, error_message: e.message)
-    end
-
-    def build_new_site(site, new_provider)
+    def build_new_site(site, new_provider, assigned_code)
       new_site = site.dup
       new_site.provider_id = new_provider.id
       new_site.skip_geocoding = true
       new_site.uuid = SecureRandom.uuid
       new_site.site_type = "study_site" if site.study_site?
+      new_site.code = assigned_code if assigned_code
       new_site
     end
 
-    def save_site(new_site, new_provider)
+    def save_site(new_site)
       new_site.save!(validate: false)
-      new_provider.reload
+      success_result(new_site)
+    rescue StandardError => e
+      error_result(e.message)
+    end
 
-      Result.new(success?: true, site: new_site, error_message: nil)
+    def success_result(site)
+      Result.new(success?: true, site:, error_message: nil)
+    end
+
+    def error_result(error_message)
+      Result.new(success?: false, site: nil, error_message:)
     end
   end
 end
