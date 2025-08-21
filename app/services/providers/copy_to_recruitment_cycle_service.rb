@@ -69,7 +69,6 @@ module Providers
       rolled
     end
 
-    # updated: simple site copies
     def copy_sites(provider, new_provider, result)
       provider.sites.each do |site|
         site_result = copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
@@ -77,7 +76,6 @@ module Providers
       end
     end
 
-    # updated: use orchestrator for study sites
     def copy_study_sites(provider, new_provider, result)
       assignments = DataHub::Rollover::StudySiteCodeOrchestrator.new(
         target_provider: new_provider,
@@ -85,14 +83,14 @@ module Providers
       ).call
 
       assignments.each do |assignment|
-        site     = assignment[:site]
-        code     = assignment[:code]
+        site = assignment[:site]
+        code = assignment[:code]
         site_result = copy_site_to_provider_service.execute(
           site: site,
           new_provider: new_provider,
           assigned_code: code,
         )
-        save_site_result(site_result: site_result, result: result, count_key: :study_sites, skip_key: :study_sites_skipped, site_code: code)
+        save_site_result(site_result:, result:, count_key: :study_sites, skip_key: :study_sites_skipped, site_code: code)
       end
     end
 

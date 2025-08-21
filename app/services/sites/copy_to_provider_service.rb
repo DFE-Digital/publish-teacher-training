@@ -3,10 +3,6 @@ module Sites
     Result = Struct.new(:success?, :site, :error_message, keyword_init: true)
 
     def execute(site:, new_provider:, assigned_code: nil)
-      if new_provider.sites.exists?(code: assigned_code || site.code)
-        return error_result("Site with code '#{assigned_code || site.code}' already exists in the provider")
-      end
-
       new_site = build_new_site(site, new_provider, assigned_code)
       save_site(new_site)
     end
