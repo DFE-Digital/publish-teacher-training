@@ -6,6 +6,10 @@
   }
 }
 
+.app-table--no-collapse {
+  border-collapse: separate;
+}
+
 .app-table--courses {
   &__course-name {
     width: 33%;
