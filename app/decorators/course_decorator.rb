@@ -307,6 +307,25 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
+  %i[
+    about_course
+    placement_selection_criteria
+    placement_school_activities
+    support_and_mentorship
+    interview_process
+    duration_per_school
+    how_school_placements_work
+    interview_location
+    theoretical_training_activities
+    theoretical_training_location
+    theoretical_training_duration
+    assessment_methods
+  ].each do |col|
+    define_method col do
+      object.enrichment_attribute(col).to_s
+    end
+  end
+
   def accept_gcse_equivalency?
     object.accept_gcse_equivalency
   end
@@ -325,47 +344,6 @@ class CourseDecorator < ApplicationDecorator
 
   def gcse_section_complete?
     !object.accept_pending_gcse.nil? && !object.accept_gcse_equivalency.nil?
-  end
-
-  def about_course
-    object.enrichment_attribute(:about_course)
-  end
-
-  def placement_school_activities
-    object.enrichment_attribute(:placement_school_activities)
-  end
-
-  def support_and_mentorship
-    object.enrichment_attribute(:support_and_mentorship)
-  end
-
-  def interview_process
-    object.enrichment_attribute(:interview_process)
-  end
-
-  def interview_location
-    object.enrichment_attribute(:interview_location)
-  end
-
-  def how_school_placements_work
-    object.enrichment_attribute(:how_school_placements_work)
-  end
-
-  def theoretical_training_activities
-    object.enrichment_attribute(:theoretical_training_activities)
-  end
-
-  def assessment_methods
-    object.enrichment_attribute(:assessment_methods)
-  end
-
-  %i[placement_selection_criteria
-     duration_per_school
-     theoretical_training_location
-     theoretical_training_duration].each do |col|
-    define_method col do
-      object.enrichment_attribute(col).to_s
-    end
   end
 
   def where_you_will_train
