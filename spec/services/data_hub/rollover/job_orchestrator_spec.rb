@@ -50,6 +50,26 @@ RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
       expect(summary).to be_a(DataHub::RolloverProcessSummary)
     end
 
+    it "batches providers in id order for job enqueuing" do
+      ordered_providers = Provider.order(:id).to_a
+
+      Provider.first.update!(provider_name: "Change provider hopefully order do not change")
+      Provider.first.update!(provider_name: "Another provider order do not change")
+
+      expected_first_batch  = ordered_providers.first(5).map(&:provider_code)
+      expected_second_batch = ordered_providers.last(5).map(&:provider_code)
+
+      expect(RolloverProvidersBatchJob).to receive(:set).twice.and_return(RolloverProvidersBatchJob)
+      expect(RolloverProvidersBatchJob).to receive(:perform_later).ordered.with(
+        expected_first_batch, next_cycle.id, anything
+      )
+      expect(RolloverProvidersBatchJob).to receive(:perform_later).ordered.with(
+        expected_second_batch, next_cycle.id, anything
+      )
+
+      subject
+    end
+
     context "when scheduling raises an error" do
       it "records failure in summary and re-raises" do
         orchestrator = described_class.new(next_cycle.id)

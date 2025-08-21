@@ -72,7 +72,7 @@ module DataHub
       end
 
       def current_providers
-        @current_providers ||= RecruitmentCycle.current_recruitment_cycle.providers
+        @current_providers ||= RecruitmentCycle.current_recruitment_cycle.providers.order(:id)
       end
     end
   end
