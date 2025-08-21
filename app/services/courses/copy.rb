@@ -70,8 +70,8 @@ module Courses
     ].freeze
 
     WHAT_YOU_WILL_STUDY_FIELDS = [
-      ["Theoretical training activities", "theoretical_training_activities"],
-      ["Assessment methods", "assessment_methods"],
+      ["What will trainees do during their theoretical training?", "theoretical_training_activities"],
+      ["How will they be assessed?", "assessment_methods"],
     ].freeze
 
     # TODO: This is to be utilised when we add these to a course form
