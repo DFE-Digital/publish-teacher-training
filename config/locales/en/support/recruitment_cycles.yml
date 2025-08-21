@@ -54,4 +54,4 @@ en:
         confirm_heading: "Confirm rollover"
         confirm_body: "By submitting this confirmation you are agreeing that, to the best of your knowledge, the details above are correct and you wish to proceed with the rollover."
       confirm_rollover:
-        rollover_confirmed: Rollover started. This process may take up to 1 hour to complete.
+        rollover_confirmed: Rollover started. This process may take up to %{duration} to complete.

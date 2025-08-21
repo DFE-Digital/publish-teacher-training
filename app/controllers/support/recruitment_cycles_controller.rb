@@ -71,7 +71,13 @@ module Support
       if @review_rollover_form.valid?
         RolloverJob.perform_later(@recruitment_cycle.id)
 
-        redirect_to support_recruitment_cycle_path(@recruitment_cycle, confirmed: true), flash: { success: t(".rollover_confirmed") }
+        redirect_to(
+          support_recruitment_cycle_path(
+            @recruitment_cycle,
+            confirmed: true,
+          ),
+          flash: { success: t(".rollover_confirmed", duration: DataHub::Rollover::JobOrchestrator.total_rollover_duration) },
+        )
       else
         render :review_rollover
       end

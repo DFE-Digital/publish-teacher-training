@@ -73,7 +73,7 @@ RSpec.describe "Confirm rollover", service: :publish do
   end
 
   def then_rollover_is_started
-    expect(page).to have_content("Rollover started. This process may take up to 1 hour to complete.")
+    expect(page).to have_content("Rollover started. This process may take up to 2h 25m to complete.")
     expect(page).not_to have_content("Review rollover")
 
     rollover_job = ActiveJob::Base.queue_adapter.enqueued_jobs.find { |job| job["job_class"] == "RolloverJob" }
