@@ -185,11 +185,13 @@ RSpec.describe DataHub::RolloverProcessSummary, type: :model do
     before do
       process_summary.initialize_summary!
 
-      travel_to Time.current do
+      travel_to Time.utc(2025, 8, 21, 12, 11, 18) do
+        @timestamp_one = Time.current.iso8601
         process_summary.add_batch_enqueue_result(provider_codes: codes_batch_one)
       end
 
-      travel_to Time.current + 1.minute do
+      travel_to Time.utc(2025, 8, 21, 12, 12, 18) do
+        @timestamp_two = Time.current.iso8601
         process_summary.add_batch_enqueue_result(provider_codes: codes_batch_two)
       end
     end
@@ -203,11 +205,11 @@ RSpec.describe DataHub::RolloverProcessSummary, type: :model do
       expect(batches.size).to eq(2)
 
       expect(batches[0].symbolize_keys).to include(
-        timestamp: timestamp_one,
+        timestamp: @timestamp_one,
         provider_codes: codes_batch_one,
       )
       expect(batches[1].symbolize_keys).to include(
-        timestamp: timestamp_two,
+        timestamp: @timestamp_two,
         provider_codes: codes_batch_two,
       )
     end
