@@ -14,7 +14,7 @@ en:
             unfound_urns: Some URNs could not be found
             enter_new_urns_button: Enter new URNs
             find_school_html: or <a class="govuk-link" href="%{link}">find a school’s URN on Get Information About Schools (GIAS) (opens in a new tab)</a>.
-            gias_link_text: Get Information About Schools (GIAS) (opens in a new tab)
+            gias_link_text: Get Information About Schools (GIAS)
             inset_html: |
               If this information is not correct, contact the school(s) and ask them to update their information on %{link}.
           remove_school:
