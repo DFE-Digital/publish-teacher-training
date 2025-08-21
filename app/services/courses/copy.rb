@@ -53,11 +53,11 @@ module Courses
     ].freeze
 
     V2_FEES_AND_FINANCIAL_SUPPORT_FIELDS = [
-      ["Fee for UK students", "fee_uk_eu"],
-      ["Fee for international students", "fee_international"],
-      ["Fees schedule", "fee_schedule"],
-      ["Additional fees", "additional_fees"],
-      ["Financial support", "financial_support"],
+      ["Fee for UK citizens", "fee_uk_eu"],
+      ["Fee for non-UK citizens", "fee_international"],
+      ["When are the fees due?", "fee_schedule"],
+      ["Are there any additional fees or costs?", "additional_fees"],
+      ["Does your organisation offer any financial support?", "financial_support"],
     ].freeze
 
     FEES_FIELDS = [
