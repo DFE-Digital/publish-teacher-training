@@ -15,8 +15,8 @@
       <% end %>
     <% end %>
 
-    <% if course.published_interview_process %>
-      <%= markdown(course.published_interview_process) %>
+    <% if course.interview_process.present? %>
+      <%= markdown(course.interview_process) %>
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :interview_process, is_preview: preview?(params)) %>
     <% end %>
