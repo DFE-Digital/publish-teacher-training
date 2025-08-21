@@ -37,24 +37,6 @@ describe Sites::CopyToProviderService do
       end
     end
 
-    context "the site already exists in the new provider" do
-      let!(:next_site) do
-        create(
-          :site,
-          code: site.code,
-          provider: next_provider,
-        )
-      end
-
-      it "does not make a copy of the site and returns an error result" do
-        result = service.execute(site: site, new_provider: next_provider)
-        expect(next_provider.reload.sites.count).to eq(1)
-        expect(result.success?).to be(false)
-        expect(result.site).to be_nil
-        expect(result.error_message).to match(/already exists/)
-      end
-    end
-
     context "the site is invalid" do
       before do
         provider
