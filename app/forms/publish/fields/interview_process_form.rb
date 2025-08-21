@@ -11,8 +11,8 @@ module Publish
 
       delegate :recruitment_cycle_year, :provider_code, :name, to: :course
 
-      validates :interview_process, words_count: { maximum: 200, message: :too_long }
       validates :interview_location, inclusion: { in: ["online", "in person", "both", nil] }
+      validates :interview_process, words_count: { maximum: 200, message: :too_long }
 
       def save!
         if valid?
