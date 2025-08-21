@@ -55,7 +55,6 @@ module Courses
     V2_FEES_AND_FINANCIAL_SUPPORT_FIELDS = [
       ["Fee for UK students", "fee_uk_eu"],
       ["Fee for international students", "fee_international"],
-      ["Fees details", "fee_details"],
       ["Fees schedule", "fee_schedule"],
       ["Additional fees", "additional_fees"],
       ["Financial support", "financial_support"],
