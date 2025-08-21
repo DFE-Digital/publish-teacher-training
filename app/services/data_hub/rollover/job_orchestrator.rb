@@ -14,6 +14,17 @@ module DataHub
         new(recruitment_cycle_id).execute
       end
 
+      def self.total_rollover_duration
+        stagger_seconds = STAGGER_OVER.to_i
+        monitoring_seconds = MonitoringManager::MAX_ATTEMPTS * MonitoringManager::CHECK_INTERVAL.to_i
+        total_seconds = stagger_seconds + monitoring_seconds
+
+        hours = total_seconds / 3600
+        minutes = (total_seconds % 3600) / 60
+
+        "#{hours}h #{minutes}m"
+      end
+
       def initialize(recruitment_cycle_id)
         @recruitment_cycle_id = recruitment_cycle_id
       end
