@@ -687,7 +687,7 @@ en:
             course_length:
               blank: "^Enter a course length"
             provider_about_us:
-              blank: "^Enter why candidates should choose to train with your"
+              blank: "^Tell candidates about your organisation"
               too_long: "Details about your organisation must be 100 words or fewer"
             provider_value_proposition:
               blank: "^Enter why candidates should choose to train with you"
