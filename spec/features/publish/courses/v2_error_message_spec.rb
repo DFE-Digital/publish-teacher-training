@@ -87,6 +87,6 @@ private
   end
 
   def provider
-    @current_user.providers.first
+    @user.providers.first
   end
 end
