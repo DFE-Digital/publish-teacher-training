@@ -30,8 +30,8 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     given_there_is_a_draft_course
     when_i_visit_the_course_page
     expect(page).to have_content("What you will do on school placements")
-    expect(page).to have_link("Enter what you will do on school placements")
-    click_link "Enter what you will do on school placements"
+    expect(page).to have_link("Change what you will do on school placements")
+    click_link "Change what you will do on school placements"
     expect(page).to have_current_path(
       fields_school_placement_publish_provider_recruitment_cycle_course_path(
         @course.provider.provider_code,
