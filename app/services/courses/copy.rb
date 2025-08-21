@@ -24,8 +24,8 @@ module Courses
     ].freeze
 
     V2_SCHOOL_PLACEMENT_FIELDS = [
-      ["What you will do on school placements", "placement_school_activities"],
-      ["Support and mentorship", "support_and_mentorship"],
+      ["What will trainees do while in their placement schools?", "placement_school_activities"],
+      ["How will they be supported and mentored?", "support_and_mentorship"],
     ].freeze
 
     INTERVIEW_PROCESS_FIELDS = [
