@@ -194,6 +194,54 @@ describe Providers::CopyToRecruitmentCycleService do
       )
     end
 
+    it "passes through the original code when there are no duplicates" do
+      # single study_site with unique code
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+      expect(mocked_copy_site_service).to have_received(:execute).with(
+        site: study_site,
+        new_provider: new_provider,
+        assigned_code: study_site.code,
+      )
+    end
+
+    context "when the original provider has duplicate study site codes" do
+      let!(:dup_one) { create(:site, :study_site, provider: provider, code: "DUP") }
+      let!(:dup_two) { create(:site, :study_site, provider: provider, code: "DUP") }
+
+      before do
+        allow(DataHub::Rollover::StudySiteCodeOrchestrator)
+          .to receive(:new)
+          .and_return(
+            double(call: [
+              { site: study_site, code: study_site.code },
+              { site: dup_one,       code: "DUP"             },
+              { site: dup_two,       code: "DUP1"            },
+            ]),
+          )
+      end
+
+      it "enqueues both, giving the second site a new unique code" do
+        service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+        expect(mocked_copy_site_service).to have_received(:execute).with(
+          site: study_site,
+          new_provider: new_provider,
+          assigned_code: study_site.code,
+        )
+        expect(mocked_copy_site_service).to have_received(:execute).with(
+          site: dup_one,
+          new_provider: new_provider,
+          assigned_code: "DUP",
+        )
+        expect(mocked_copy_site_service).to have_received(:execute).with(
+          site: dup_two,
+          new_provider: new_provider,
+          assigned_code: "DUP1",
+        )
+      end
+    end
+
     context "when site copying fails" do
       let(:failed_site_result) do
         Sites::CopyToProviderService::Result.new(
@@ -203,14 +251,21 @@ describe Providers::CopyToRecruitmentCycleService do
         )
       end
 
-      it "tracks failed sites in the result" do
+      before do
         allow(mocked_copy_site_service).to receive(:execute).and_return(failed_site_result)
+      end
 
+      it "tracks failed sites and study sites separately" do
         result = service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
         expect(result[:sites]).to eq(0)
+        expect(result[:study_sites]).to eq(0)
+
+        expect(result[:sites_skipped]).to contain_exactly(
+          { site_code: site.code,       reason: "Site creation failed" },
+        )
+
         expect(result[:study_sites_skipped]).to contain_exactly(
-          { site_code: site.code, reason: "Site creation failed" },
           { site_code: study_site.code, reason: "Site creation failed" },
         )
       end
