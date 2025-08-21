@@ -3,10 +3,10 @@
 module Providers
   class CopyToRecruitmentCycleService
     def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, copy_partnership_to_provider_service:, force:)
-      @copy_course_to_provider_service      = copy_course_to_provider_service
-      @copy_site_to_provider_service        = copy_site_to_provider_service
+      @copy_course_to_provider_service = copy_course_to_provider_service
+      @copy_site_to_provider_service = copy_site_to_provider_service
       @copy_partnership_to_provider_service = copy_partnership_to_provider_service
-      @force                                = force
+      @force = force
     end
 
     def execute(provider:, new_recruitment_cycle:, course_codes: nil)
@@ -59,12 +59,12 @@ module Providers
 
     def duplicate_provider(provider, new_recruitment_cycle)
       rolled = provider.dup
-      rolled.organisations     << provider.organisations
-      rolled.ucas_preferences   = provider.ucas_preferences.dup
-      rolled.contacts          << provider.contacts.map(&:dup)
-      rolled.recruitment_cycle  = new_recruitment_cycle
-      rolled.skip_geocoding     = true
-      rolled.users             << provider.users
+      rolled.organisations << provider.organisations
+      rolled.ucas_preferences = provider.ucas_preferences.dup
+      rolled.contacts << provider.contacts.map(&:dup)
+      rolled.recruitment_cycle = new_recruitment_cycle
+      rolled.skip_geocoding = true
+      rolled.users << provider.users
       rolled.save!
       rolled
     end
