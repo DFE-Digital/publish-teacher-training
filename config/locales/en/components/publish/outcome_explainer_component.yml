@@ -8,6 +8,6 @@ en:
           gias_url: https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments
           placement_school_text_html: You can attach placement schools to any of your courses from the ‘Basic details’ tab on each of %{link}.
           courses_link_text: your courses
-          location_searches_text: Your courses will not appear in candidates‘ location searches if you do not attach placement schools to them.
+          location_searches_text_html: "Your courses will not appear in candidates&rsquo; location searches if you do not attach placement schools to them."
           organisation_details_html: You can choose whether to show or hide the placements from candidates in %{link}.
           find_out_more: Find out more about why you should add school placement locations.

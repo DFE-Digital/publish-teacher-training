@@ -1,22 +1,18 @@
 <p class="govuk-body">
   <%= t(".gias_school_text_html", link: govuk_link_to(t(".gias_link_text"), t(".gias_url"))) %>
 </p>
-
 <p class="govuk-body">
   <%= t(".placement_school_text_html", link: govuk_link_to(t(".courses_link_text"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @recruitment_cycle.year))) %>
 </p>
-
 <div class="govuk-inset-text">
   <p class="govuk-body">
-    <%= t(".location_searches_text") %>
+    <%= t(".location_searches_text_html") %>
   </p>
-
   <%= govuk_link_to(
     t(".find_out_more"),
     t("links.how_to.add_school_placements"),
   ) %>
 </div>
-
 <p class="govuk-body">
   <%= t(".organisation_details_html", link: govuk_link_to("Organisation details", details_publish_provider_recruitment_cycle_path(provider_code: @provider.provider_code, year: @recruitment_cycle.year))) %>
-<p>
+  <p>
