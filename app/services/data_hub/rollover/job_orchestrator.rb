@@ -55,19 +55,50 @@ module DataHub
       end
 
       def schedule_provider_jobs
+        scheduled_codes = schedule_initial_batches
+        missing_codes = identify_missing_providers(scheduled_codes)
+        schedule_missing_providers(missing_codes) if missing_codes.any?
+      end
+
+      def schedule_initial_batches
+        scheduled_codes = Set.new
+
         BatchDelivery.new(
           relation: current_providers,
           stagger_over: STAGGER_OVER,
           batch_size: BATCH_SIZE,
         ).each do |batch_time, providers|
+          provider_codes = providers.map(&:provider_code)
+          scheduled_codes.merge(provider_codes)
+
           RolloverProvidersBatchJob
             .set(wait_until: batch_time)
             .perform_later(
-              providers.map(&:provider_code),
+              provider_codes,
               @recruitment_cycle_id,
               @process_summary.id,
             )
         end
+
+        scheduled_codes
+      end
+
+      def identify_missing_providers(scheduled_codes)
+        all_provider_codes = current_providers.pluck(:provider_code).to_set
+
+        all_provider_codes - scheduled_codes
+      end
+
+      def schedule_missing_providers(missing_codes)
+        @process_summary.add_missing_batch(missing_codes)
+
+        RolloverProvidersBatchJob
+          .set(wait_until: STAGGER_OVER.from_now + 1.minute)
+          .perform_later(
+            missing_codes.to_a,
+            @recruitment_cycle_id,
+            @process_summary.id,
+          )
       end
 
       def schedule_monitoring

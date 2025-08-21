@@ -51,6 +51,17 @@ module DataHub
       end
     end
 
+    def add_missing_batch(missing_batch)
+      with_lock do
+        current_short = short_summary.dup
+        current_short["missing_batches_count"] ||= 0
+        current_short["missing_batches_count"] += missing_batch.size
+        current_short["missing_batches"] = missing_batch
+
+        update!(short_summary: current_short)
+      end
+    end
+
     def total_processed
       short_summary["providers_rolled_over"] +
         short_summary["providers_skipped"] +

@@ -36,6 +36,39 @@ RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
       subject
     end
 
+    it "schedules all providers including any missed by batching" do
+      batch_delivery = instance_double(BatchDelivery)
+      allow(BatchDelivery).to receive(:new).and_return(batch_delivery)
+
+      batched_providers = providers.first(7)
+      allow(batch_delivery).to receive(:each).and_yield(1.minute.from_now, batched_providers.first(5))
+                                             .and_yield(2.minutes.from_now, batched_providers.last(2))
+
+      expect(RolloverProvidersBatchJob).to receive(:set).with(wait_until: kind_of(ActiveSupport::TimeWithZone))
+        .exactly(3).times.and_return(RolloverProvidersBatchJob)
+
+      expect(RolloverProvidersBatchJob).to receive(:perform_later).with(
+        batched_providers.first(5).map(&:provider_code),
+        next_cycle.id,
+        anything,
+      )
+
+      expect(RolloverProvidersBatchJob).to receive(:perform_later).with(
+        batched_providers.last(2).map(&:provider_code),
+        next_cycle.id,
+        anything,
+      )
+
+      missing_codes = providers.last(3).map(&:provider_code)
+      expect(RolloverProvidersBatchJob).to receive(:perform_later).with(
+        missing_codes,
+        next_cycle.id,
+        anything,
+      )
+
+      subject
+    end
+
     it "schedules the monitoring job" do
       expect(RolloverMonitoringJob).to receive(:perform_in).with(
         kind_of(Numeric),

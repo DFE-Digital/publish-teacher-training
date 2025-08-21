@@ -222,4 +222,42 @@ RSpec.describe DataHub::RolloverProcessSummary, type: :model do
       ).to contain_exactly(codes_batch_one, codes_batch_two)
     end
   end
+
+  describe "#add_missing_batch" do
+    let(:process_summary) { create(:rollover_process_summary) }
+    let(:missing_codes)   { %w[AAA BBB CCC] }
+
+    before do
+      process_summary.initialize_summary!
+      process_summary.add_missing_batch(missing_codes)
+    end
+
+    it "increments the missing_batches_count by the number of missing codes" do
+      expect(process_summary.short_summary["missing_batches_count"]).to eq(3)
+    end
+
+    it "stores the missing batch codes in the summary" do
+      expect(process_summary.short_summary["missing_batches"]).to eq(missing_codes)
+    end
+
+    it "persists changes to the database" do
+      reloaded = described_class.find(process_summary.id)
+      expect(reloaded.short_summary["missing_batches_count"]).to eq(3)
+      expect(reloaded.short_summary["missing_batches"]).to eq(missing_codes)
+    end
+
+    context "when called multiple times" do
+      before do
+        process_summary.add_missing_batch(%w[DDD])
+      end
+
+      it "accumulates the missing_batches_count" do
+        expect(process_summary.short_summary["missing_batches_count"]).to eq(4)
+      end
+
+      it "overwrites the missing_batches array with the latest codes" do
+        expect(process_summary.short_summary["missing_batches"]).to eq(%w[DDD])
+      end
+    end
+  end
 end
