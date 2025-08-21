@@ -56,7 +56,7 @@
       <% else %>
         <div class="govuk-body govuk-!-font-size-20 app-action-group">
           <%= govuk_link_to(t(".enter_new_urns_button"), new_publish_provider_recruitment_cycle_schools_multiple_path, class: "govuk-button govuk-!-margin-bottom-0") %>
-          <div><%= t(".find_school_html", link: t("links.get_information_schools_search")) %></div>
+          <%= t(".find_school_html", link: govuk_link_to(t(".find_school_link_text"), t("links.get_information_schools_search"), new_tab: true)) %>
         </div>
       <% end %>
       <p class="govuk-body">
