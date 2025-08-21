@@ -6,7 +6,7 @@ module DataHub
       MAX_ATTEMPTS = 5
       CHECK_INTERVAL = 5.minutes
 
-      attr_reader :process_summary
+      attr_reader :process_summary, :process_summary_id, :attempt_number
 
       delegate :all_providers_processed?, :already_finished?, to: :process_summary
 
@@ -37,8 +37,6 @@ module DataHub
       end
 
     private
-
-      attr_reader :process_summary_id, :attempt_number
 
       def load_process_summary
         @process_summary = RolloverProcessSummary.find(process_summary_id)

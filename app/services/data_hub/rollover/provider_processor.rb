@@ -5,6 +5,8 @@ module DataHub
     class ProviderProcessor
       PROVIDER_NOT_ROLLABLE = "Provider not rollable or already exists in target cycle"
 
+      attr_reader :provider_code, :recruitment_cycle_id, :process_summary_id
+
       def self.process(provider_code, recruitment_cycle_id, process_summary_id)
         new(provider_code, recruitment_cycle_id, process_summary_id).process
       end
@@ -26,8 +28,6 @@ module DataHub
       end
 
     private
-
-      attr_reader :provider_code, :recruitment_cycle_id, :process_summary_id
 
       def process_provider_rollover
         result = perform_rollover
@@ -57,8 +57,8 @@ module DataHub
 
       def add_provider_result(status, details)
         process_summary.add_provider_result(
-          provider_code: provider_code,
-          status: status,
+          provider_code:,
+          status:,
           details: provider_details(details),
         )
       end
@@ -82,7 +82,7 @@ module DataHub
 
       def record_fatal_error(error)
         process_summary.add_provider_result(
-          provider_code: provider_code,
+          provider_code:,
           status: :errored,
           details: error_details(error),
         )

@@ -8,6 +8,8 @@ module DataHub
       MONITORING_DELAY = 5.minutes
       MONITORING_START_TIME = STAGGER_OVER + MONITORING_DELAY
 
+      attr_reader :recruitment_cycle_id
+
       def self.start_rollover(recruitment_cycle_id)
         new(recruitment_cycle_id).execute
       end
@@ -32,8 +34,6 @@ module DataHub
       end
 
     private
-
-      attr_reader :recruitment_cycle_id
 
       def initialize_process_summary
         @process_summary = RolloverProcessSummary.start!
