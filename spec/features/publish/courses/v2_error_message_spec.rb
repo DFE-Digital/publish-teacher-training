@@ -9,6 +9,10 @@ feature "V2 Publishing a course with validation errors", type: :feature do
 
     when_i_visit_the_course_page
     click_button "Publish course"
+  end
+
+  scenario "It should have an error box with validation errors" do
+    expect(page).to have_content("There is a problem")
     expect(page).to have_css(".govuk-error-summary")
   end
 
