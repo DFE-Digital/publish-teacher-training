@@ -1,10 +1,10 @@
 <div class="govuk-!-margin-bottom-8">
     <h2 class="govuk-heading-l" id="section-school-placement"><%= t("find.courses.v2.school_placement.heading") %> </h2>
     <div data-qa="course__school_placement">
-        <% if course.published_placement_school_activities.present? %>
-            <%= markdown(course.published_placement_school_activities) %>
-            <% if course.published_support_and_mentorship.present? %>
-                <%= markdown(course.published_support_and_mentorship) %>
+        <% if course.placement_school_activities.present? %>
+            <%= markdown(course.placement_school_activities) %>
+            <% if course.support_and_mentorship.present? %>
+                <%= markdown(course.support_and_mentorship) %>
             <% end %>
         <% else %>
             <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :school_placement, is_preview: preview?(params)) %>
