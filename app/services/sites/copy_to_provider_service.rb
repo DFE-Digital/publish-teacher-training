@@ -4,7 +4,7 @@ module Sites
   class CopyToProviderService
     Result = Struct.new(:success?, :site, :error_message, keyword_init: true)
 
-    DUPLICATE_SITE_ERROR = "Site code already exists on provider".freeze
+    DUPLICATE_SITE_ERROR = "Site code already exists on provider"
 
     def execute(site:, new_provider:)
       return duplicate_error if site_already_exists?(site, new_provider)
