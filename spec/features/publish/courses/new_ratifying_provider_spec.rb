@@ -49,8 +49,8 @@ private
   end
 
   def then_i_am_met_with_the_applications_open_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/applications-open/new", ignore_query: true)
-    expect(page).to have_content("Applications open date")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/start-date/new", ignore_query: true)
+    expect(page).to have_content("Add course Course start date")
   end
 
   def then_i_am_met_with_errors
