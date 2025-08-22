@@ -11,15 +11,16 @@ feature "Entering a deadline for candidates who need visa sponsorship" do
     when_i_go_back
     then_i_see_the_visa_sponsorship_question
     when_i_select_no_visa_sponsorship_and_continue
-    then_i_am_on_the_applications_open_date_page
+    then_i_am_on_the_course_start_date_page
 
     when_i_go_back
+    # see add course study sites page
+    then_i_see_the_course_study_sites_page_and_continue
     then_i_see_the_visa_sponsorship_question
     when_i_select_yes_visa_sponsorship_and_continue
     then_i_am_asked_if_there_is_a_different_deadline_for_candidates_with_visa_sponsorship
 
     when_i_select_no_deadline_and_continue
-    then_i_am_on_the_applications_open_date_page
     when_i_go_back
     then_i_am_asked_if_there_is_a_different_deadline_for_candidates_with_visa_sponsorship
     when_i_select_yes_deadline_and_continue
@@ -118,8 +119,14 @@ private
     click_on_continue
   end
 
-  def then_i_am_on_the_applications_open_date_page
-    expect(page).to have_content "Applications open date"
+  def then_i_see_the_course_study_sites_page_and_continue
+    expect(page).to have_content "Add course Study sites"
+    # first("input[type='checkbox']").check
+    click_on_continue
+  end
+
+  def then_i_am_on_the_course_start_date_page
+    expect(page).to have_content "Add course Course start date"
   end
 
   def when_i_enter_a_date_before_the_start_of_cycle
@@ -212,11 +219,6 @@ private
   end
 
   def and_i_complete_the_rest_of_the_form
-    # Applications open date
-    apply_opens = @provider.recruitment_cycle.application_start_date.to_fs(:govuk_date)
-    choose "On #{apply_opens} when Apply opens - recommended"
-    click_on_continue
-
     # Course start date
     choose "September #{@provider.recruitment_cycle_year}"
     click_on_continue

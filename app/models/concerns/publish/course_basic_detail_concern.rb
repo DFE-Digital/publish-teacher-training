@@ -185,7 +185,11 @@ module Publish
       when :study_site
         back_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
       when :applications_open
-        back_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
+        if path_params[:course]["can_sponsor_skilled_worker_visa"] == "true"
+          new_publish_provider_recruitment_cycle_courses_visa_sponsorship_application_deadline_required_path(path_params)
+        else
+          back_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
+        end
       when :modern_languages
         back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :engineers_teach_physics
