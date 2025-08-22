@@ -1174,7 +1174,7 @@ en:
     visa_warning: "Changing your answer will not change visa information for courses you have already created."
     visa_changes: "Visa sponsorship updated"
     user_removed: "User removed"
-    enqueued_schools: "We are adding your schools to this course. This may take up to a minute to complete."
+    enqueued_schools: "We are adding your schools to this course. After a minute, refresh your browser to see the schools that have been added."
   links:
     find_website_url: "https://find-teacher-training-courses.service.gov.uk/"
     dfe_signin: https://services.signin.education.gov.uk
