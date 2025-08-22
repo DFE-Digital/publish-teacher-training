@@ -6,7 +6,7 @@ module Publish
 
     validates :train_with_disability, presence: true, if: :train_with_disability_changed?
 
-    validates :train_with_disability, words_count: { maximum: 100, message: :too_many_words }
+    validates :train_with_disability, words_count: { maximum: 250, message: :too_many_words }
 
     def initialize(model, params: {}, redirect_params: {}, course_code: nil)
       super(model, params:)

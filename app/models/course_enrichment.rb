@@ -135,7 +135,7 @@ class CourseEnrichment < ApplicationRecord
 
   # V2 provider fields
   validates :provider_train_with_disability, presence: true, on: :publish, if: -> { version == 2 }
-  validates :provider_train_with_disability, words_count: { maximum: 100 }, on: :publish
+  validates :provider_train_with_disability, words_count: { maximum: 250 }, on: :publish
 
   validates :provider_about_us, presence: true, on: :publish, if: -> { version == 2 }
   validates :provider_about_us, words_count: { maximum: 100 }, on: :publish

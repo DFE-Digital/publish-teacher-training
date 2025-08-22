@@ -100,7 +100,7 @@ RSpec.describe CourseEnrichment do
   it_behaves_like "versioned_presence_field",
                   field: :provider_train_with_disability,
                   required_in: { 1 => false, 2 => true },
-                  word_limit: 100
+                  word_limit: 250
   it_behaves_like "versioned_presence_field",
                   field: :provider_about_us,
                   required_in: { 1 => false, 2 => true },
