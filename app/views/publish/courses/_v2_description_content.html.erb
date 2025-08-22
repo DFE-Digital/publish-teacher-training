@@ -24,7 +24,18 @@
        ) %>
   <% end %>
 
-  <%= render partial: "publish/courses/v2/fields/fees_and_financial_support", locals: { course: course, summary_list: summary_list } %>
+  <% if course.fee_based? %>
+    <%= render partial: "publish/courses/v2/fields/fees_and_financial_support", locals: { course: course, summary_list: summary_list } %>
+  <% else %>
+      <% enrichment_summary(
+      summary_list,
+      :course,
+      t("publish.providers.courses.description_content.salary_details_label"),
+      value_provided?(course.salary_details),
+      %w[salary_details],
+      action_path: salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code),
+    ) %>
+  <% end %>
 <% end %>
 
 <h2 class="govuk-heading-m">

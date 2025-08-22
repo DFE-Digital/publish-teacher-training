@@ -312,6 +312,7 @@ class CourseDecorator < ApplicationDecorator
     placement_selection_criteria
     placement_school_activities
     support_and_mentorship
+    salary_details
     interview_process
     duration_per_school
     how_school_placements_work
@@ -472,10 +473,6 @@ class CourseDecorator < ApplicationDecorator
     return I18n.t("components.course.financial_incentives.bursary_and_scholarship", scholarship:, bursary_amount:) if bursary_amount.present? && scholarship.present?
 
     I18n.t("components.course.financial_incentives.bursary", amount: bursary_amount)
-  end
-
-  def salary_details
-    object.enrichment_attribute(:salary_details)
   end
 
   def personal_qualities
