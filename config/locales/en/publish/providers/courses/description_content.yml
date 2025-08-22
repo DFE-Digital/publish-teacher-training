@@ -30,6 +30,7 @@ en:
           fee_international_label: Fee for non-UK citizens
           fee_international_optional_label: Fee for non-UK citizens (optional)
           financial_incentive_details_label: Financial support from the government
+          salary_details_label: Salary details
           gcse_label: GCSEs
           how_school_placements_work_hidden_text: details about how placements work
           how_school_placements_work_label: How placements work
