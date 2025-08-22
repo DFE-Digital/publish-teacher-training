@@ -29,8 +29,7 @@ private
     course_creation_params = select_study_site(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
     course_creation_params = select_visa_settings(course_creation_params)
     course_creation_params = select_sponsorship_application_deadline_required(course_creation_params)
-    course_creation_params = select_sponsorship_application_deadline_date(course_creation_params, next_page: publish_courses_new_applications_open_page)
-    course_creation_params = select_applications_open_from(course_creation_params, next_page: publish_courses_new_start_date_page)
+    course_creation_params = select_sponsorship_application_deadline_date(course_creation_params, next_page: publish_courses_new_start_date_page)
     select_start_date(course_creation_params)
 
     save_course

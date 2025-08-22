@@ -206,7 +206,6 @@ private
     expect_summary_list_to_include(key: "Funding type", value: "Salary (apprenticeship)")
     expect_summary_list_to_include(key: "Study pattern", value: "Full time or part time")
     expect_summary_list_to_include(key: "Employing school", value: site.location_name)
-    expect_summary_list_to_include(key: "Applications open date", value: "12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect_summary_list_to_include(key: "Course start date", value: "October #{Settings.current_recruitment_cycle_year.to_i - 1}")
   end
 
