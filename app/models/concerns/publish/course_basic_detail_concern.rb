@@ -225,12 +225,6 @@ module Publish
         else
           new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params)
         end
-      when :applications_open
-        if FeatureFlag.active?(:hide_applications_open_date)
-          new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
-        else
-          new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
-        end
       when :accredited_provider, :ratifying_provider
         new_publish_provider_recruitment_cycle_courses_ratifying_provider_path(path_params)
       when :can_sponsor_student_visa
