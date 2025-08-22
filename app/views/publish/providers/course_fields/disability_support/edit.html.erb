@@ -32,7 +32,7 @@
           },
           label: nil,
           hint: -> { render partial: "publish/courses/markdown_formatting" },
-          max_words: 100,
+          max_words: 250,
           rows: 15) %>
         <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
         <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
