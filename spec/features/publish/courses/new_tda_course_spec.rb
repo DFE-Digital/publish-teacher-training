@@ -21,9 +21,7 @@ feature "Adding a teacher degree apprenticeship course" do
     and_i_choose_the_study_site
 
     # # We skip the visa sponsorship question
-    # then_i_am_on_the_add_applications_open_date_page
 
-    # when_i_choose_the_applications_open_date
     and_i_choose_the_first_start_date
     then_i_am_on_the_check_your_answers_page
     and_i_can_not_change_funding_type
@@ -64,9 +62,7 @@ feature "Adding a teacher degree apprenticeship course" do
     when_i_choose_the_school
     and_i_choose_the_study_site
     # We skip the visa sponsorship question
-    # then_i_am_on_the_add_applications_open_date_page
 
-    # when_i_choose_the_applications_open_date
     and_i_choose_the_first_start_date
     then_i_am_on_the_check_your_answers_page
     and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
@@ -103,9 +99,7 @@ feature "Adding a teacher degree apprenticeship course" do
     when_i_choose_the_school
     and_i_choose_the_study_site
     # We skip the visa sponsorship question
-    # then_i_am_on_the_add_applications_open_date_page
 
-    # when_i_choose_the_applications_open_date
     and_i_choose_the_first_start_date
     then_i_am_on_the_check_your_answers_page
     and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
@@ -153,12 +147,8 @@ feature "Adding a teacher degree apprenticeship course" do
     then_the_back_link_points_to_the_school_page
     and_i_choose_the_study_site
     # We skip the visa sponsorship question
-    # then_i_am_on_the_add_applications_open_date_page
-    save_and_open_page
     and_the_back_link_points_to_the_study_site_page
 
-    # when_i_choose_the_applications_open_date
-    and_the_back_link_points_to_applications_open_date_page
     and_i_choose_the_first_start_date
     and_the_back_link_points_to_start_date_page
     then_i_am_on_the_check_your_answers_page
@@ -336,11 +326,11 @@ feature "Adding a teacher degree apprenticeship course" do
   end
 
   def and_the_back_link_points_to_the_study_site_page
-    expect(publish_courses_new_applications_open_page.back_link[:href]).to include(back_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(provider_code: provider.provider_code, recruitment_cycle_year:))
+    expect(publish_courses_new_applications_open_page.back_link[:href]).to include(back_publish_provider_recruitment_cycle_courses_study_sites_path(provider_code: provider.provider_code, recruitment_cycle_year:))
   end
 
   def and_the_back_link_points_to_applications_open_date_page
-    expect(publish_courses_new_start_date_page.back_link[:href]).to include(back_publish_provider_recruitment_cycle_courses_start_date_path(provider_code: provider.provider_code, recruitment_cycle_year:))
+    expect(publish_courses_new_start_date_page.back_link[:href]).to include(new_publish_provider_recruitment_cycle_courses_start_date_path(provider_code: provider.provider_code, recruitment_cycle_year:))
   end
 
   def and_i_choose_the_first_start_date
