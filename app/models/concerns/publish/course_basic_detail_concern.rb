@@ -185,7 +185,7 @@ module Publish
       when :study_site
         back_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
       when :applications_open
-        back_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
+        back_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
       when :modern_languages
         back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :engineers_teach_physics
