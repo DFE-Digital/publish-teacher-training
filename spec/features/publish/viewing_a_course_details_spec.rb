@@ -193,7 +193,6 @@ private
       "outcome",
       "if full or part time",
       "can sponsor skilled_worker visa",
-      "date applications open",
       "date course starts",
     )
   end
