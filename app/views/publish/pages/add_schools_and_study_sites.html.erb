@@ -27,37 +27,39 @@
     </ul>
 
     <p class="govuk-body">
-      Over 80% of course searches use location as the main criteria, so it’s important that location details have been added so courses can be found easily in searches.
+      60% of searches on Find teacher training courses are by city, town or postcode, so it’s important that location details have been added so courses can be found easily in searches.
     </p>
 
     <div class="govuk-warning-text">
       <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
 
       <strong class="govuk-warning-text__text">
-        If a course does not have a placement school location added to it then it will not appear in search results for that location.
+        Your courses will not appear in candidate’s location searches if you do not attach placement schools to them.
       </strong>
     </div>
 
-    <p class="govuk-body">You can add all potential schools and study sites to your account and then link them to each course that you publish.</p>
+    <p class="govuk-body">We automatically upload all schools you are working with to your account. These are schools that are on the <a href="https://www.register-trainee-teachers.service.gov.uk/">Register trainee teachers service</a>.</p>
 
-    <p class="govuk-body">If you do not want candidate to see a list of placement school locations, or select a preference when they apply, you can hide them in Organisation details.</p>
+    <p class="govuk-body">If needed, you can still manually add schools to your account.</p>
+
+    <p class="govuk-body">By default, school locations are hidden from candidates. If you would like candidates to see the list of placement school locations, you can change the settings under the 'Organisation details' tab.</p>
+
+    <%= image_tag("show-placement-schools.png", class: "govuk-!-margin-bottom-8") %>
 
     <h2 id="adding-a-school" class="govuk-heading-m">Adding a school</h2>
 
-    <p class="govuk-body"> To add details about a school, go to the ‘Schools’ tab.</p>
+    <p class="govuk-body">We automatically upload all schools you are working with to your account. To add a school to your account manually, go to the ‘Schools’ tab.</p>
 
-    <%= image_tag("add-school.png", class: "govuk-!-margin-bottom-3") %>
+    <%= image_tag("add-schools.png", class: "govuk-!-margin-bottom-3") %>
 
     <p class="govuk-body">
-      Once you’ve entered the details, check they are correct and select ‘Add school’. If you cannot find the school, you can enter it manually.
+      Select ‘Add school’ or ‘Add multiple schools’. You can add schools using their unique reference numbers (URNs). You can only add schools that are on <a href="https://get-information-schools.service.gov.uk/">Get Information About Schools</a> (GIAS). You’ll see a list of all schools you’ve added, and you’ll be able to select the name of the school to remove it.
     </p>
 
-    <p class="govuk-body">You’ll see a list of all schools you’ve added, and you’ll be able to select the name of the school to edit or remove it.</p>
-
-    <p class="govuk-body govuk-inset-text">You will not be able to remove a school if it has been attached to a course. You’ll need to detach it from the course first before you can remove it.</p>
+    <p class="govuk-body govuk-inset-text">You will not be able to remove a school if it has been attached to a course. You’ll need to <%= govuk_link_to "detach it from the course", "#detaching-schools-and-study-sites-from-a-course" %> first before you can remove it.</p>
 
     <p class="govuk-body">
-      If you are concerned about the time taken to add this information, especially if your organisation works with many placement schools, please email us at  <%= govuk_mail_to bat_contact_email_address %> and we can add the information for you.
+      If you have any questions about adding schools please email us at <%= govuk_mail_to bat_contact_email_address %> and we can assist you.
     </p>
 
     <h2 id="adding-a-study-site" class="govuk-heading-m">Adding a study site</h2>
@@ -72,15 +74,15 @@
 
     <p class="govuk-body">Once you’ve entered the details, check they are correct and select ‘Add study site’.</p>
 
-    <p class="govuk-body govuk-inset-text">
-      You will not be able to remove a study site if it has been attached to a course. You’ll need to detach it from the course first before you can remove it.
-    </p>
+    <p class="govuk-body govuk-inset-text">You will not be able to remove a study site if it has been attached to a course. You’ll need to <%= govuk_link_to "detach it from the course", "#detaching-schools-and-study-sites-from-a-course" %> first before you can remove it.</p>
 
     <h2 id="attaching-schools-and-study-sites-to-a-course" class="govuk-heading-m">Attaching schools and study sites to a course</h2>
     <p class="govuk-body">
-      Once you’ve added schools and study sites to your account, you can attach them to a course.
-      Your courses will appear in search results for the school placement locations that you have attached to them.
-      Candidates will be able to see the study sites on the course pages.
+      Once you’ve added schools and study sites to your account, you can attach them to courses.
+    </p>
+
+    <p class="govuk-body">
+      To attach schools to courses you can select them from the list of schools on your account. It is possible to select all schools and then deselect those which don't apply to the course to save time.
     </p>
 
     <h3 class="govuk-heading-s">When adding a new course</h3>

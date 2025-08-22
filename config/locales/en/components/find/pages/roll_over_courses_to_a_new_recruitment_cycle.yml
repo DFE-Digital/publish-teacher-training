@@ -1,6 +1,28 @@
 en:
-  pages:
-    roll_over_courses_to_a_new_recruitment_cycle:
-      roll_over_recruitment_content_this_year:  From this year, we will copy your courses from one recruitment cycle to the next in early September. This means you can update courses from the previous cycle, rather than having to create new ones.
-      roll_over_recruitment_content_previous_year: Previously, this happened in July, however, we have found that vast majority of providers did not interact with those courses until the middle of September.
-      roll_over_recruitment_content_email: We’ll email you at the beginning of September to let you know when we’ve rolled over your courses.
+  publish:
+    pages:
+      roll_over_courses_to_a_new_recruitment_cycle:
+        breadcrumbs:
+          home: Home
+          how_to_use_this_service: How to use this service
+          roll_over_courses: Roll over courses to a new recruitment cycle
+        how_to_use_this_service_caption: How to use this service
+        roll_over_recruitment_heading: How to roll over courses to a new recruitment cycle
+        roll_over_recruitment_content_this_year: During rollover, courses that were published in the current recruitment cycle are rolled over to the new cycle ready to be updated and published. This includes courses which were withdrawn after they were published. You will receive an email from us when courses are ready for you to edit and publish or delete.
+        publishing_rolled_over_courses_heading: Publishing rolled over courses
+        publishing_rolled_over_courses_content_html: >
+          <p class="govuk-body">
+            There’ll be an additional section in Publish teacher training courses called ‘Recruitment cycles’ where you can manage rolled over courses for the new cycle. You’ll be able to:
+          </p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>add courses</li>
+            <li>edit courses</li>
+            <li>remove courses</li>
+          </ul>
+          <p class="govuk-body"> 
+            When your course is ready, you can publish it. It will not go live on %{find_service} straight away. Instead, the course will be ‘Scheduled’ until Find opens at the beginning of October. Candidates will then be able to search for your course.
+          </p>
+        roll_over_recruitment_content_email: We’ll email you at the beginning of September to let you know when we’ve rolled over your courses.
+        recruitment_cycle_heading: Recruitment cycle
+        recruitment_cycle_content: "The recruitment cycle is the year in which candidates are applying for courses and are recruited, for example, ‘Recruitment cycle %{cycle}’."
+        academic_year_heading: Academic year

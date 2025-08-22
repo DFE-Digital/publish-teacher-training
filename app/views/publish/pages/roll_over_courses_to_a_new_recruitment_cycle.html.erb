@@ -1,63 +1,33 @@
-<% content_for :page_title, "Roll over courses to a new recruitment cycle" %>
-
-<%= content_for(:before_content) do %>
-
+<% content_for :page_title, "How to roll over courses to a new recruitment cycle" %>
+<% content_for(:before_content) do %>
   <%= govuk_breadcrumbs(breadcrumbs: [
-      govuk_breadcrumb_link_to("Home", root_path),
-      govuk_breadcrumb_link_to("How to use this service", how_to_use_this_service_path),
-      govuk_breadcrumb_link_to("Roll over courses to a new recruitment cycle", roll_over_courses_to_a_new_recruitment_cycle_path),
+      govuk_breadcrumb_link_to(t(".breadcrumbs.home"), root_path),
+      govuk_breadcrumb_link_to(t(".breadcrumbs.how_to_use_this_service"), how_to_use_this_service_path),
+      govuk_breadcrumb_link_to(t(".breadcrumbs.roll_over_courses"), roll_over_courses_to_a_new_recruitment_cycle_path),
     ]) %>
-
 <% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-       <span class="govuk-caption-l">How to use this service</span>
-        Roll over courses to a new recruitment cycle
+      <span class="govuk-caption-l"><%= t(".how_to_use_this_service_caption") %></span>
+      <%= t(".roll_over_recruitment_heading") %>
     </h1>
     <p class="govuk-body">
-    <%= t(".roll_over_recruitment_content_this_year") %>
+      <%= t(".roll_over_recruitment_content_this_year") %>
     </p>
-
+    <h3 class="govuk-heading-m">
+      <%= t(".publishing_rolled_over_courses_heading") %>
+    </h3>
     <p class="govuk-body">
-    <%= t(".roll_over_recruitment_content_previous_year") %>
+      <%= t(
+      ".publishing_rolled_over_courses_content_html",
+      find_service: govuk_link_to(
+        "Find teacher training courses (Find)",
+        "https://www.find-postgraduate-teacher-training.service.gov.uk/",
+      ),
+    ) %>
     </p>
-
-    <h3 class="govuk-heading-m">Recruitment cycle</h2>
-
+    <h3 class="govuk-heading-m"><%= t(".recruitment_cycle_heading") %></h3>
     <p class="govuk-body">
-      The year in which candidates are applying for courses and recruited, for example,
-      ‘Recruitment cycle <%= next_recruitment_cycle_period_text %>’.
-   </p>
-
-    <h3 class="govuk-heading-m">Academic year</h2>
-
-     <p class="govuk-body">
-        The year that follows the recruitment cycle in which candidates start their training, for example,
-        ‘Academic year <%= next_academic_cycle_period_text %>’.
-    </p>
-
-    <h2 class="govuk-heading-m">Publishing rolled over courses</h2>
-
-    <p class="govuk-body">
-      <%= t(".roll_over_recruitment_content_email") %>
-    </p>
-
-    <p class="govuk-body">
-      There’ll be an additional section in Publish teacher training courses called ‘Recruitment cycles’ where you can manage rolled over courses
-      for the new cycle. You’ll be able to:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>add courses</li>
-      <li>edit courses</li>
-      <li>remove courses</li>
-    </ul>
-
-    <p class="govuk-body">
-      When your course is ready, you can publish it. It will not go live on
-      <%= govuk_link_to("#{t('service_name.find')} (Find)", t("links.find_website_url")) %>
-      straight away. Instead, the course will be ‘Scheduled’ until Find opens at the beginning of October.
-      Candidates will then be able to search for your course.
+      <%= t(".recruitment_cycle_content", cycle: next_recruitment_cycle_period_text) %>’.
     </p>
