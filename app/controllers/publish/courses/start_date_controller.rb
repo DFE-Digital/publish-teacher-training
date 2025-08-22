@@ -7,7 +7,7 @@ module Publish
 
       def back
         authorize(@provider, :edit?)
-        redirect_to new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
+        redirect_to new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
       end
 
     private

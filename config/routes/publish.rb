@@ -110,15 +110,6 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
           get "back"
           get "continue"
         end
-        constraints ->(_req) { !FeatureFlag.active?(:hide_applications_open_date) } do
-          resource :applications_open,
-                   on: :member,
-                   only: %i[new],
-                   controller: "courses/applications_open",
-                   path: "applications-open" do
-            get "continue"
-          end
-        end
         resource :age_range, on: :member, only: %i[new], controller: "courses/age_range", path: "age-range" do
           get "continue"
         end
@@ -288,9 +279,6 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         put "/study-sites", on: :member, to: "courses/study_sites#update"
 
         get "/training-with-disabilities", on: :member, to: "courses/training_with_disabilities#show"
-
-        get "/applications-open", on: :member, to: "courses/applications_open#edit"
-        put "/applications-open", on: :member, to: "courses/applications_open#update"
 
         get "/start-date", on: :member, to: "courses/start_date#edit"
         put "/start-date", on: :member, to: "courses/start_date#update"
