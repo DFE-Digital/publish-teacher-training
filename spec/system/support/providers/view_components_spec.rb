@@ -11,11 +11,11 @@ RSpec.describe "view components" do
     end
   end
 
-  all_links = (ViewComponent::Preview.all.map do |component|
+  all_links = ViewComponent::Preview.all.map { |component|
     component.examples.map do |example|
       "#{Rails.application.config.view_component.preview_route}/#{component.preview_name}/#{example}"
     end
-  end).flatten
+  }.flatten
 
   all_links.each do |link|
     include_examples "navigate to", link
