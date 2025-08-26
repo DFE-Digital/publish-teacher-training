@@ -1,0 +1,57 @@
+<% content_for :page_title, "How to add course information (rollover 2025)" %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_breadcrumbs(breadcrumbs: [
+      govuk_breadcrumb_link_to("Home", root_path),
+      govuk_breadcrumb_link_to("How to add course information (rollover 2025)", add_course_information_path),
+    ]) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">How to add course information (rollover 2025)</h1>
+
+    <h2 class="govuk-heading-m">Contents</h2>
+    <ul class="govuk-list app-list--dash govuk-!-margin-bottom-8">
+      <li><a class="govuk-link" href="#what-we-changed">What we changed</a></li>
+      <li><a class="govuk-link" href="#what-you-need-to-do">What you need to do</a></li>
+    </ul>
+
+    <p class="govuk-body">
+      We have changed the way you add information about your courses. These changes aim to make it easier
+      for candidates to find the right course for them.
+    </p>
+
+    <h3 id="what-we-changed" class="govuk-heading-m">What we changed</h3>
+    <p class="govuk-body">We have changed some of the text fields where you add information.</p>
+    <p class="govuk-body">For example, under the ‘Description’ tab of a course, we have removed the ‘About the course’ section and added two new sections, 'What you will do on school placements' and 'What you will study'.</p>
+
+    <%= image_tag("add-school.png", class: "govuk-!-margin-bottom-5 govuk-!-margin-top-5") %>
+
+    <p class="govuk-body">Under ‘Organisation details’ we have replaced ‘Training with your organisation’ with ‘Why train with us’. </p>
+
+    <%= image_tag("add-school.png", class: "govuk-!-margin-bottom-5 govuk-!-margin-top-5") %>
+
+    <p class="govuk-body">These pages now have smaller, more structured questions to replace the single big text field which candidates found difficult to absorb.</p>
+    <p class="govuk-body">These are the most common questions that we know candidates have about courses. Some fields are optional.</p>
+
+    <%= image_tag("add-school.png", class: "govuk-!-margin-bottom-5 govuk-!-margin-top-5") %>
+
+    <p class="govuk-body">We have also introduced an optional question where you will be able to tell candidates where the interviews will take place.</p>
+
+    <%= image_tag("add-school.png", class: "govuk-!-margin-bottom-5 govuk-!-margin-top-5") %>
+
+    <h3 id="what-you-need-to-do" class="govuk-heading-m">What you need to do</h3>
+    <p class="govuk-body">In order to publish a course for the new cycle, you will need to enter new information for each of your courses. You will not be able to publish your courses until you do this.</p>
+    <p class="govuk-body">You can either write entirely new content, copy the content you wrote last cycle, or copy the content from another course.</p>
+    <p class="govuk-body">You will be able to see a live preview of the content you are writing so that you can check spelling and hyperlinks.</p>
+
+    <%= image_tag("add-school.png", class: "govuk-!-margin-bottom-5 govuk-!-margin-top-5") %>
+
+    <p class="govuk-body">You will also need to enter information on the new ‘Why train with us’ page, which can be found under ‘Organisation details’. This information will appear on each of your course pages.</p>
+    <p class="govuk-body">As before, you can either write entirely new content, or copy the content you wrote last cycle.</p>
+
+    <%= image_tag("add-school.png", class: "govuk-!-margin-bottom-5 govuk-!-margin-top-5") %>
+
+  </div>
+</div>

@@ -1,5 +1,7 @@
 en:
   publish:
+    course_information:
+      text_body_html: The way you add information about courses has changed. <br> <a class="govuk-link" href="%{how_to_add_course_info_url}">Find out more about how to add course information.</a>
     rollover_notification:
       text: "You can start rolling over your courses from early September."
       text_body: "In early September, your courses will be ready to be rolled over to the 2025 to 2026 recruitment cycle. We will email you when you need to sign in to check and publish, or delete, your courses."
