@@ -49,10 +49,19 @@
           },
           max_words: 100,
           rows: 15) %>
+
+          <%= f.govuk_text_area(:value_proposition,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "shared",
+          },
+          form_group: { id: "train-with-us" },
+          label: { text: t(".job_support_label"), size: "s" },
+          max_words: 100,
+          rows: 15) %>
         <%= f.hidden_field(:goto_provider, value: goto_provider_value(param_form_key: f.object_name.to_sym, params:)) %>
         <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
-
-        <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
 
         <%= f.govuk_submit t(".submit") %>
       <% end %>
