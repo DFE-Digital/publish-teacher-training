@@ -71,7 +71,7 @@ one_login:
   private_key: <%= ENV.fetch('ONE_LOGIN_PRIVATE_KEY', 'private_key').gsub("\n", '\n') %>
 
 current_recruitment_cycle_year: 2025
-next_cycle_open_date: 2025-10-1 # TBC
+next_cycle_open_date: 2025-09-30
 
 govuk_notify:
   api_key: please_change_me
