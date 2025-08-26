@@ -138,7 +138,7 @@ en:
     list_item_one: "* list item 1"
     list_item_one_show_as_html: >
       Will show as
-      <br> 
+      <br>
       <ul class="govuk-list govuk-list--bullet">
         <li>list item 1</li>
       </ul>
@@ -1276,7 +1276,7 @@ en:
     formats:
       default: "%-d %B %Y"
       short: "%B %Y"
-      govuk_short: "%-d %B"
+      govuk_short: "%-d%{ordinal} %B"
   time:
     formats:
       last_event: "%-d %B %Y at %l:%M%P"
