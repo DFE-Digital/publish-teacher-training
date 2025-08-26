@@ -23,5 +23,6 @@ module Publish
     def help_writing_course_descriptions; end
     def course_summary_examples; end
     def how_to_use_this_service; end
+    def add_course_information; end
   end
 end

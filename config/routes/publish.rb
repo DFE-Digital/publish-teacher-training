@@ -21,6 +21,7 @@ scope module: :publish do
   get "/privacy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
   get "/how-to-use-this-service", to: "pages#how_to_use_this_service"
+  get "/add-course-information", to: "pages#add_course_information", as: :add_course_information
 
   scope path: "how-to-use-this-service" do
     get "/add-an-organisation", to: "pages#add_an_organisation", as: :add_an_organisation
