@@ -1,8 +1,8 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="section-why-train-with-us"><%= t(".heading") %> </h2>
   <% if @provider.about_us.present? && @provider.value_proposition.present? %>
-    <p class="govuk-body"><%= @provider.about_us %></p>
-    <p class="govuk-body"><%= @provider.value_proposition %></p>
+    <p class="govuk-body"><%= markdown(@provider.about_us) %></p>
+    <p class="govuk-body"><%= markdown(@provider.value_proposition) %></p>
   <% else %>
     <%= render CoursePreview::MissingInformationComponent.new(course: @course, information_type: :train_with_us, is_preview: preview?(params)) %>
   <% end %>
