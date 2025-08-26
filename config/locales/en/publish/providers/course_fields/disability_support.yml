@@ -9,10 +9,13 @@ en:
               <p class="govuk-body">Say how you support candidates with disabilities and other needs. This could include candidates with:</p>
               <ul class="govuk-list govuk-list--bullet">
                 <li>dyslexia</li>
+                <li>neurodiversity</li>
                 <li>physical, hearing and visual impairments</li>
                 <li>mental health conditions</li>
               </ul>
-              <p class="govuk-body">If accessibility varies between schools, give details. It’s also useful for candidates to know how you’ve accommodated others with specific access needs in the past.</p>
+              <p class="govuk-body">Include whether you offer different learning styles, for trainees with a range of neurotypes.</p>
+              <p class="govuk-body">It’s also useful for candidates to know how you’ve accommodated others with specific access needs in the past.</p>
+              <p class="govuk-body">If accessibility varies between schools, give details.</p>
             preview_heading: Training with disabilities and other needs
             submit: Update training with disabilities
   activemodel:

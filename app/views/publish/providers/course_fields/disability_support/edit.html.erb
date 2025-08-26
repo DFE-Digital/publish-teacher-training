@@ -37,7 +37,6 @@
         <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
         <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
 
-        <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
         <%= f.govuk_submit t(".submit") %>
       <% end %>
 
