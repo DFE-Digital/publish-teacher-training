@@ -325,6 +325,7 @@ class CourseDecorator < ApplicationDecorator
     theoretical_training_location
     theoretical_training_duration
     assessment_methods
+    version
   ].each do |col|
     define_method col do
       object.enrichment_attribute(col).to_s
