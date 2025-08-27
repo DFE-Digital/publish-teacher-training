@@ -147,6 +147,13 @@ RSpec.configure do |config|
     driven_by Capybara.current_driver
   end
 
+  # Running test suite with time set to new cycle
+  config.around do |example|
+    Timecop.travel(Time.local(2025, 10, 15, 9, 0)) do
+      example.run
+    end
+  end
+
 private
 
   def app_host(service:)

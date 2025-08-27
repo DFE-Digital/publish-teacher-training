@@ -33,4 +33,5 @@ basic_auth:
 one_login:
   enabled: false
 
+current_recruitment_cycle_year: 2025
 STATE_CHANGE_SLACK_URL: https://example.com/webhook
