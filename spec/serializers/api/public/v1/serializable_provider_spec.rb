@@ -39,7 +39,7 @@ describe API::Public::V1::SerializableProvider do
   it { is_expected.to have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
 
   context "2026 cycle" do
-    let(:recruitment_cycle) { create(:recruitment_cycle, :next) }
+    let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
     let(:provider) { create(:provider, about_us: "about us", value_proposition: "value proposition", recruitment_cycle:) }
 
     it "returns updated train_with_us" do
@@ -49,9 +49,8 @@ describe API::Public::V1::SerializableProvider do
     end
   end
 
-
-  context "2026 cycle" do
-    let(:recruitment_cycle) { create(:recruitment_cycle, year: 2025) }
+  context "2025 cycle" do
+    let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2025) }
     let(:provider) { create(:provider, about_us: "about us", value_proposition: "value proposition", recruitment_cycle:) }
 
     it "returns updated train_with_us" do
