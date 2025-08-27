@@ -6,7 +6,7 @@
     <%= render partial: "find/courses/salary", locals: { course: @course } %>
   <% end %>
   <% if has_fees? %>
-   <% if FeatureFlag.active?(:long_form_content) || course.provider.recruitment_cycle.after_2025? %>
+   <% if course.version.to_i == 2 %>
     <%= render partial: "find/courses/v2/financial_support/fees_and_financials", locals: { course: @course } %>
    <% else %>
     <%= render Find::Courses::FeesComponent::View.new(course) %>

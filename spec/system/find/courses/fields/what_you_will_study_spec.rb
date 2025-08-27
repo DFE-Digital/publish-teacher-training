@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Viewing what you will study long form content", service: :find do
   before do
-    FeatureFlag.activate(:long_form_content)
     given_a_published_course_exists
   end
 
