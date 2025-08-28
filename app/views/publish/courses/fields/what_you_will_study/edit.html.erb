@@ -36,17 +36,17 @@
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
         <%= t(".page_title") %>
       </h1>
-      <% if @v1_enrichment %>
-        <%= render(
-    partial: "publish/courses/fields/last_cycle_recap",
-    locals: {
-      texts: [
-        [t(".about_this_course"), @v1_enrichment&.about_course],
-        [t(".how_placements_work"), @v1_enrichment&.how_school_placements_work],
-      ],
-    },
-  ) %>
-      <% end %>
+
+      <%= render(
+        partial: "publish/courses/fields/last_cycle_recap",
+        locals: {
+          texts: [
+            [t(".about_this_course"), @course&.about_course],
+            [t(".how_placements_work"), @course&.how_school_placements_work],
+          ],
+        },
+      ) %>
+
       <%= render(
         partial: "publish/courses/markdown_formatting",
         locals: {

@@ -42,11 +42,9 @@
         <%= t(".headline") %>
       </h1>
 
-      <% if @v1_enrichment %>
-        <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-          texts: [["About this course", @v1_enrichment.about_course], ["How placements work", @v1_enrichment.how_school_placements_work]],
-        } %>
-      <% end %>
+      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+        texts: [["About this course", @course.about_course], ["How placements work", @course.how_school_placements_work]],
+      } %>
 
       <aside data-qa="course__related_sidebar">
       <%= render(

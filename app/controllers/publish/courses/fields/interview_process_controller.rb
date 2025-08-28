@@ -10,7 +10,6 @@ module Publish
         def edit
           @interview_process_form = Publish::Fields::InterviewProcessForm.new(course_enrichment)
           @copied_fields = copy_content_check(::Courses::Copy::V2_INTERVIEW_PROCESS_FIELDS)
-          @v1_enrichment = course.enrichments.find_by(version: 1)
 
           @copied_fields_values = copied_fields_values if @copied_fields.present?
 
@@ -25,7 +24,6 @@ module Publish
 
             redirect_to redirect_path
           else
-            @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
             render :edit
           end

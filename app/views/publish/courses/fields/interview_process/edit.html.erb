@@ -41,11 +41,9 @@
         <%= t(".page_title") %>
       </h1>
 
-      <% if @v1_enrichment %>
-        <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-          texts: [["Interview process", @v1_enrichment.interview_process], ["Interview location", @v1_enrichment.interview_location]],
-        } %>
-      <% end %>
+      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+        texts: [["Interview process", @course.interview_process], ["Interview location", @course.interview_location]],
+      } %>
 
       <%= render partial: "publish/courses/markdown_formatting" %>
 

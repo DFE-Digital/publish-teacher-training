@@ -15,7 +15,6 @@ module Publish
         def edit
           @school_placement_form = Publish::Courses::Fields::SchoolPlacementForm.new(course_enrichment)
           @copied_fields = copy_content_check(::Courses::Copy::V2_SCHOOL_PLACEMENT_FIELDS)
-          @v1_enrichment = course.enrichments.find_by(version: 1)
           @copied_fields_values = copied_fields_values if @copied_fields.present?
           @school_placement_form.valid? if show_errors_on_publish?
         end
@@ -37,7 +36,6 @@ module Publish
             )
 
           else
-            @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
             render :edit
           end
