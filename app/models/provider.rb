@@ -96,6 +96,10 @@ class Provider < ApplicationRecord
     RecruitmentCycle.upcoming_cycles_open_to_publish?
   end
 
+  def can_be_rolled_over?
+    recruitment_cycle.next.present? && !recruitment_cycle.next.providers.exists?(provider_code:)
+  end
+
   # the providers that this provider is an accredited_provider for
   def training_providers
     Provider.where(id: current_accredited_courses.pluck(:provider_id))
