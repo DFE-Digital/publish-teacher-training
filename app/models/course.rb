@@ -612,11 +612,6 @@ class Course < ApplicationRecord
     latest_enrichment&.updated_at if is_withdrawn?
   end
 
-  def publish_sites
-    site_statuses.status_new_status.each(&:start!)
-    site_statuses.status_running.unpublished_on_ucas.each(&:published_on_ucas!)
-  end
-
   def publish_enrichment(current_user)
     enrichments.draft.each do |enrichment|
       enrichment.publish(current_user)
