@@ -147,6 +147,7 @@ feature "Adding a teacher degree apprenticeship course" do
     then_the_back_link_points_to_the_school_page
     and_i_choose_the_study_site
     # We skip the visa sponsorship question
+    then_i_am_on_the_start_date_page
     and_the_back_link_points_to_the_study_site_page
 
     and_i_choose_the_first_start_date
@@ -323,6 +324,10 @@ feature "Adding a teacher degree apprenticeship course" do
   def and_i_choose_the_study_site
     check provider.study_sites.first.location_name
     and_i_click_continue
+  end
+
+  def then_i_am_on_the_start_date_page
+    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_start_date_path(provider_code: provider.provider_code, recruitment_cycle_year:), ignore_query: true)
   end
 
   def and_the_back_link_points_to_the_study_site_page
