@@ -24,6 +24,12 @@
 
         <%= t(".page_intro_html") %>
 
+        <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+          texts: [["Why train with us", @provider.train_with_us]],
+        } %>
+
+        <%= render partial: "publish/courses/markdown_formatting" %>
+
         <%= f.govuk_text_area(:about_us,
           data: {
             input_preview_target: "input",
