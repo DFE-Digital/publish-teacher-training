@@ -92,8 +92,8 @@ module Find
       date(:first_deadline_banner)
     end
 
-    def self.apply_deadline
-      date(:apply_deadline)
+    def self.apply_deadline(year = current_year)
+      date(:apply_deadline, year)
     end
 
     def self.find_opens(year = current_year)
@@ -112,8 +112,8 @@ module Find
       date(:apply_opens, next_year)
     end
 
-    def self.mid_cycle
-      date(:find_opens, current_year) + 1.day
+    def self.mid_cycle(year = current_year)
+      date(:find_opens, year) + 1.day
     end
 
     def self.preview_mode?

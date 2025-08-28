@@ -7,8 +7,11 @@ feature "Viewing a findable course" do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.travel(Find::CycleTimetable.mid_cycle)
+    find_or_create(:recruitment_cycle, year: 2025)
+    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+    Timecop.travel(Find::CycleTimetable.mid_cycle(2025))
     FeatureFlag.activate(:bursaries_and_scholarships_announced)
+    FeatureFlag.deactivate(:long_form_content)
   end
 
   context "a course with international fees" do
@@ -17,7 +20,7 @@ feature "Viewing a findable course" do
     end
 
     scenario "course page shows correct course information" do
-      Timecop.freeze(Find::CycleTimetable.apply_deadline - 1.hour) do
+      Timecop.freeze(Find::CycleTimetable.apply_deadline(2025) - 1.hour) do
         when_i_visit_the_course_page
         then_i_should_see_the_course_information
         and_i_should_see_funding_options
@@ -26,7 +29,7 @@ feature "Viewing a findable course" do
 
     context "end of cycle" do
       before do
-        Timecop.freeze(Find::CycleTimetable.apply_deadline + 1.hour)
+        Timecop.freeze(Find::CycleTimetable.apply_deadline(2025) + 1.hour)
 
         when_i_visit_the_course_page
       end
