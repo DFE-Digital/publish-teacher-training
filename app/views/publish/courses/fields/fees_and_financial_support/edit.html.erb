@@ -36,17 +36,15 @@
         <%= t(".heading") %>
       </h1>
 
-      <% if @v1_enrichment %>
-        <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-          texts: [
-            [t(".fee_uk"), number_to_currency(@v1_enrichment.fee_uk_eu).to_s],
-            [@course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), number_to_currency(@v1_enrichment.fee_international).to_s],
-            [t(".fee_schedule"), @v1_enrichment.fee_schedule],
-            [t(".additional_fees"), @v1_enrichment.additional_fees],
-            [t(".financial_support"), @v1_enrichment.financial_support],
-          ],
-        } %>
-      <% end %>
+      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+        texts: [
+          [t(".fee_uk"), number_to_currency(@course.fee_uk_eu).to_s],
+          [@course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), number_to_currency(@course.fee_international).to_s],
+          [t(".fee_schedule"), @course.fee_schedule],
+          [t(".additional_fees"), @course.additional_fees],
+          [t(".financial_support"), @course.financial_support],
+        ],
+      } %>
 
       <%= render partial: "publish/courses/markdown_formatting" %>
 
