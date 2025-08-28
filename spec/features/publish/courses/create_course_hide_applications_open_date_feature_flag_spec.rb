@@ -5,7 +5,13 @@ require "rails_helper"
 feature "Adding a course with hide_applications_open_date active" do
   before do
     FeatureFlag.activate(:hide_applications_open_date)
+    FeatureFlag.deactivate(:long_form_content)
+    find_or_create(:recruitment_cycle, year: 2025)
+    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+    Timecop.travel(Find::CycleTimetable.mid_cycle(2025))
   end
+
+  after { Timecop.return }
 
   scenario "creating a degree awarding course from school direct provider" do
     given_i_am_authenticated_as_a_school_direct_provider_user
