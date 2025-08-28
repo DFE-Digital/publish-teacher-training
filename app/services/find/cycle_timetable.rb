@@ -92,8 +92,8 @@ module Find
       date(:first_deadline_banner)
     end
 
-    def self.apply_deadline
-      date(:apply_deadline)
+    def self.apply_deadline(year = current_year)
+      date(:apply_deadline, year)
     end
 
     def self.find_opens(year = current_year)
