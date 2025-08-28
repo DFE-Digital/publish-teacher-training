@@ -80,7 +80,7 @@ module Publish
       authorize @course
 
       if ::Courses::PublishService.new(course: @course, user: @current_user).call
-        flash[:success] = "Your course has been published."
+        flash[:success] = render_flash_message_content
 
         redirect_to publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
@@ -101,6 +101,10 @@ module Publish
     end
 
   private
+
+    def render_flash_message_content
+      @course.scheduled? ? "Your course has been scheduled." : "Your course has been published."
+    end
 
     def course_params
       if params.key? :course
