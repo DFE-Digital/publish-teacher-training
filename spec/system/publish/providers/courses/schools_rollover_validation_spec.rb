@@ -137,7 +137,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
   end
 
   def then_course_is_published
-    expect(page).to have_content("Your course has been published.")
+    expect(page).to have_content("Your course has been scheduled.")
     expect(course.reload.is_published?).to be(true)
   end
 end
