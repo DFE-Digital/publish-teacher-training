@@ -31,6 +31,24 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     expect(page).to have_content("Online")
   end
 
+  scenario "A user can see last years interview process and location" do
+    given_there_is_a_draft_course
+    given_there_is_the_same_published_course_in_last_year
+
+    when_i_visit_the_course_page
+    then_i_visit_the_interview_process_page
+    expect(page).to have_content("Last years interview process")
+    expect(page).to have_content("In person")
+  end
+
+  scenario "A user does NOT have a last years interview process and location" do
+    given_there_is_a_draft_course
+    when_i_visit_the_course_page
+    then_i_visit_the_interview_process_page
+    expect(page).not_to have_content("See what you wrote last cycle")
+    expect(page).not_to have_content("Last years interview process")
+  end
+
   def when_i_visit_the_course_page
     visit "/publish/organisations/#{@course.provider.provider_code}/#{@course.start_date.year}/courses/#{@course.course_code}"
     expect(page).to have_content(@course.name)
@@ -46,6 +64,12 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     choose "Online"
 
     click_link_or_button "Update interview process"
+  end
+
+  def then_i_visit_the_interview_process_page
+    all("a", text: "Change").last.click
+    expect(page).to have_content("What is the interview process? (optional)")
+    expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fields/interview-process")
   end
 
   def then_i_edit_the_interview_process_field(content: "Interview process content")
@@ -77,6 +101,22 @@ RSpec.describe "Editing a courses interview process with long form content", ser
       study_sites: [create(:site, :study_site)],
       applications_open_from: recruitment_cycle.application_start_date + 1.day,
       start_date: Date.new(recruitment_cycle.year.to_i, 9, 1),
+    )
+  end
+
+  def given_there_is_the_same_published_course_in_last_year
+    create(:recruitment_cycle, :previous) unless RecruitmentCycle.current.previous
+    provider_in_last_cycle = create(:provider, provider_code: @course.provider.provider_code, recruitment_cycle: RecruitmentCycle.current.previous)
+    user.providers << provider_in_last_cycle
+    course_enrichment = build(:course_enrichment, :v1, :published, interview_process: "Last years interview process")
+    @old_course = create(
+      :course,
+      :with_gcse_equivalency,
+      :can_sponsor_student_visa,
+      :without_validation,
+      provider: provider_in_last_cycle,
+      enrichments: [course_enrichment],
+      course_code: @course.course_code,
     )
   end
 
