@@ -159,7 +159,7 @@ RSpec.describe CourseEnrichment do
       it "is not valid to publish v2" do
         allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
         expect(record).not_to be_valid(:publish)
-        expect(record.errors[:placement_school_activities]).to include("can't be blank")
+        expect(record.errors[:placement_school_activities]).to include("^Enter what will trainees do while in their placement schools")
         expect(record.reload).to be_draft
       end
     end

@@ -17,19 +17,19 @@ feature "V2 Publishing a course with validation errors", type: :feature do
   end
 
   scenario "Placement selection criteria can't be blank error link navigates to the placement selection criteria field" do
-    click_link_in_error_summary("Placement selection criteria can't be blank")
+    click_link_in_error_summary("Enter how you decide which schools to place trainees in")
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{@course.course_code}/fields/where-you-will-train", ignore_query: true)
     expect(page).to have_content("Where you will train")
   end
 
   scenario "Duration per school can't be blank error link navigates to the duration per school field" do
-    click_link_in_error_summary("Duration per school can't be blank")
+    click_link_in_error_summary("Enter how much time trainees will spend in each school")
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{@course.course_code}/fields/where-you-will-train", ignore_query: true)
     expect(page).to have_content("Where you will train")
   end
 
   scenario "Placement school activities can't be blank error link navigates to the placement school activities field" do
-    click_link_in_error_summary("Placement school activities can't be blank")
+    click_link_in_error_summary("Enter what will trainees do while in their placement schools")
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{@course.course_code}/fields/school-placement", ignore_query: true)
     expect(page).to have_content("What you will do on school placements")
   end
