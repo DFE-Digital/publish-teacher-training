@@ -6,7 +6,7 @@ module Publish
       class InterviewProcessController < Publish::Courses::Fields::BaseController
         include CopyCourseContent
         before_action :authorise_with_pundit
-        before_action :last_cycle_enrichment, only: %i[edit update]
+        before_action :previous_cycle_enrichment, only: %i[edit update]
 
         def edit
           @interview_process_form = Publish::Fields::InterviewProcessForm.new(course_enrichment)
@@ -44,8 +44,8 @@ module Publish
           )
         end
 
-        def last_cycle_enrichment
-          @last_cycle_enrichment ||= RecruitmentCycle.current.previous&.providers&.find_by(
+        def previous_cycle_enrichment
+          @previous_cycle_enrichment ||= RecruitmentCycle.current.previous&.providers&.find_by(
             provider_code: @provider.provider_code,
           )&.courses&.find_by(
             course_code: course.course_code,

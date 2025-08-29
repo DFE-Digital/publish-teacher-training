@@ -33,10 +33,11 @@ RSpec.describe "Editing a courses interview process with long form content", ser
 
   scenario "A user can see last years interview process and location" do
     given_there_is_a_draft_course
-    given_there_is_the_same_published_course_in_last_year
+    and_there_is_the_same_published_course_in_last_year
 
     when_i_visit_the_course_page
-    then_i_visit_the_interview_process_page
+    and_i_click_to_change_the_interview_process_page
+
     expect(page).to have_content("Last years interview process")
     expect(page).to have_content("In person")
   end
@@ -44,7 +45,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
   scenario "A user does NOT have a last years interview process and location" do
     given_there_is_a_draft_course
     when_i_visit_the_course_page
-    then_i_visit_the_interview_process_page
+    and_i_click_to_change_the_interview_process_page
     expect(page).not_to have_content("See what you wrote last cycle")
     expect(page).not_to have_content("Last years interview process")
   end
@@ -66,7 +67,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     click_link_or_button "Update interview process"
   end
 
-  def then_i_visit_the_interview_process_page
+  def and_i_click_to_change_the_interview_process_page
     all("a", text: "Change").last.click
     expect(page).to have_content("What is the interview process? (optional)")
     expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fields/interview-process")
@@ -104,7 +105,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     )
   end
 
-  def given_there_is_the_same_published_course_in_last_year
+  def and_there_is_the_same_published_course_in_last_year
     create(:recruitment_cycle, :previous) unless RecruitmentCycle.current.previous
     provider_in_last_cycle = create(:provider, provider_code: @course.provider.provider_code, recruitment_cycle: RecruitmentCycle.current.previous)
     user.providers << provider_in_last_cycle
