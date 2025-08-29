@@ -1,5 +1,5 @@
 <%= render PageTitle.new(title: "sign_in.index") %>
-<%= render(NotificationBanner.new(text: t("publish.rollover_notification.text"), text_body: t("publish.rollover_notification.text_body"))) %>
+<%= render(NotificationBanner.new(text: t("publish.rollover_notification.text"), text_body: t("publish.rollover_notification.text_body_html", find_path: find_root_url, guidance_path: roll_over_courses_to_a_new_recruitment_cycle_path))) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= render partial: "default_signin_content" %>
