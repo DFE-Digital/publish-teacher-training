@@ -6,7 +6,6 @@ module "application_configuration" {
   azure_resource_prefix = var.azure_resource_prefix
   service_short         = var.service_short
   config_short          = var.config_short
-  secret_yaml_key       = var.key_vault_app_secret_name
   secret_variables      = local.app_secrets
   config_variables      = local.app_env_values
 }
