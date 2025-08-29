@@ -21,7 +21,10 @@ module Providers
         end
 
         # Reset accredited provider on Courses
-        training_provider.courses.each { it.update!(accredited_provider_code: nil) }
+        training_provider.courses.each do
+          it.accredited_provider_code = nil
+          it.save!(validate: false)
+        end
 
         # Update Provider attributes
         training_provider.update(accredited_provider_number: number, accredited: true)
