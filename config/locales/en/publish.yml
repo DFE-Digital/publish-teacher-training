@@ -3,9 +3,8 @@ en:
     course_information:
       text_body_html: The way you add information about courses has changed. <br> <a class="govuk-link" href="%{how_to_add_course_info_url}">Find out more about how to add course information.</a>
     rollover_notification:
-      text: "You can start rolling over your courses from early September."
-      text_body: "In early September, your courses will be ready to be rolled over to the 2025 to 2026 recruitment cycle. We will email you when you need to sign in to check and publish, or delete, your courses."
-    authentication:
+      text: "Action needed before 30 September: check and schedule your rolled over courses"
+      text_body_html: "On 30 September courses for the 2025 to 2026 recruitment cycle will be published on <a class='govuk-link' href='%{find_path}'> Find teacher training courses.</a> Before this, you need to check and schedule your rolled over courses. If you do not schedule your courses to be published, they will not be shown to candidates. <br><br> If you need help, you can read our <a class='govuk-link' href='%{guidance_path}'> guidance on rolling over courses to a new recruitment cycle</a>."
       magic_link:
         invalid_token: "Magic link could not be verified, please request a new one"
         expired: "Magic link has expired, please request a new one"
