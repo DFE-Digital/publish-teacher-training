@@ -4,6 +4,8 @@ module Publish
   module Providers
     module CourseFields
       class DisabilitySupportController < ApplicationController
+        before_action :last_cycle_provider, only: %i[edit update]
+
         def edit
           @disability_support_form = DisabilitySupportForm.new(
             provider,
@@ -32,6 +34,10 @@ module Publish
         end
 
       private
+
+        def last_cycle_provider
+          @last_cycle_provider ||= RecruitmentCycle.current.previous&.providers&.find_by(provider_code: @provider.provider_code)
+        end
 
         def redirect_params
           params.fetch(param_form_key, params).slice(

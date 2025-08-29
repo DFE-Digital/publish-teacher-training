@@ -25,7 +25,7 @@
         <%= t(".instructions_html") %>
 
         <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-            texts: [["Training with disabilities and other needs", RecruitmentCycle.current.previous&.providers&.find_by(provider_code: @provider.provider_code)&.train_with_disability]],
+            texts: [["Training with disabilities and other needs", @last_cycle_provider&.train_with_disability]],
         } %>
         <%= render partial: "publish/courses/markdown_formatting" %>
 

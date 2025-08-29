@@ -35,7 +35,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
   end
 
   def then_i_visit_the_disability_support_page
-    all("a", text: "Change")[1].click
+    click_link "Change details about training with disabilities and other needs"
     expect(page).to have_current_path("/publish/organisations/#{@provider.provider_code}/#{RecruitmentCycle.current.year}/training-with-disabilities/edit")
     expect(page).to have_content("Training with disabilities and other needs")
   end
