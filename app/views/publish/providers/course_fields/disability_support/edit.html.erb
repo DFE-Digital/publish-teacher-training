@@ -11,6 +11,7 @@
       ) do |f| %>
 
         <% content_for :before_content do %>
+
           <%= govuk_back_link_to(@disability_support_form.back_path) %>
         <% end %>
 
@@ -23,6 +24,11 @@
 
         <%= t(".instructions_html") %>
 
+        <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+            texts: [["Training with disabilities and other needs", RecruitmentCycle.current.previous&.providers&.find_by(provider_code: @provider.provider_code)&.train_with_disability]],
+        } %>
+        <%= render partial: "publish/courses/markdown_formatting" %>
+
         <%= f.govuk_text_area(:train_with_disability,
           form_group: { id: "train-with-disability" },
           data: {
@@ -31,7 +37,6 @@
             preview_output_target: "shared",
           },
           label: nil,
-          hint: -> { render partial: "publish/courses/markdown_formatting" },
           max_words: 250,
           rows: 15) %>
         <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
