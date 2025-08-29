@@ -94,11 +94,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
   end
   resource :environment_confirmations, path: "confirm-environment", only: %i[new create]
   resources :view_components, only: %i[index]
-  resources :recruitment_cycles do
-    member do
-      get :review_rollover
-      post :confirm_rollover
-    end
-  end
-  resources :candidates, only: %i[index]
+  resources :recruitment_cycles
+
+  get :input_preview, controller: :pages
 end
