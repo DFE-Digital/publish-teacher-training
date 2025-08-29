@@ -19,7 +19,6 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     when_i_visit_the_organisation_page
     then_i_visit_the_disability_support_page
     expect(page).to have_content("Training with disabilities and other needs")
-    save_and_open_page
     expect(page).to have_content(@previous_cycle_provider.train_with_disability)
   end
 
