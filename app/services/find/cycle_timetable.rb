@@ -112,8 +112,8 @@ module Find
       date(:apply_opens, next_year)
     end
 
-    def self.mid_cycle
-      date(:find_opens, current_year) + 1.day
+    def self.mid_cycle(year = current_year)
+      date(:find_opens, year) + 2.months
     end
 
     def self.preview_mode?
