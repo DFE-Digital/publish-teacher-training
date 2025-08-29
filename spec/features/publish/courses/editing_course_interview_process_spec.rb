@@ -66,7 +66,7 @@ private
   end
 
   def then_i_see_an_error_message
-    expect(page).to have_content("Reduce the word count for interview process").twice
+    expect(page).to have_content("Interview process must be 250 words or less").twice
   end
 
   def and_i_enter_invalid_data

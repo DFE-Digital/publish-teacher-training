@@ -124,7 +124,7 @@ class CourseEnrichment < ApplicationRecord
   validates :theoretical_training_activities, presence: true, on: :publish, if: -> { version == 2 }
   validates :theoretical_training_activities, words_count: { maximum: 150 }
 
-  validates :interview_process, words_count: { maximum: 200 }, if: -> { version == 2 }, on: :publish
+  validates :interview_process, words_count: { maximum: 200, message: :too_long }, if: -> { version == 2 }, on: :publish
 
   # v2 optional fields
   validates :theoretical_training_duration, words_count: { maximum: 50 }

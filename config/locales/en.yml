@@ -694,6 +694,14 @@ en:
               blank: "^Enter details about the qualifications needed"
             course_length:
               blank: "^Enter a course length"
+            placement_selection_criteria:
+              blank: "^Enter how you decide which schools to place trainees in"
+            interview_process:
+              too_long: "^'What is the interview process?' must be 200 words or less"
+            duration_per_school:
+              blank: "^Enter how much time trainees will spend in each school"
+            placement_school_activities:
+              blank: "^Enter what will trainees do while in their placement schools"
             provider_about_us:
               blank: "^Tell candidates about your organisation"
               too_long: "Details about your organisation must be 100 words or fewer"
@@ -1008,7 +1016,7 @@ en:
         publish/course_interview_process_form:
           attributes:
             interview_process:
-              too_long: Reduce the word count for interview process
+              too_long: Interview process must be 250 words or less
         publish/fields/interview_process_form:
           attributes:
             interview_process:
