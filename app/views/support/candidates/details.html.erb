@@ -1,0 +1,27 @@
+<%= render PageTitle.new(title: "support.candidates.details") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_candidates_path(page: params[:page])) %>
+<% end %>
+
+<h1 class="govuk-heading-l"><%= @candidate.email_address %></h1>
+
+<%= render TabNavigation.new(items: [
+  { name: t(".details"), url: details_support_candidate_path(@candidate), current: true },
+  { name: t(".saved_courses"), url: saved_courses_support_candidate_path(@candidate) },
+]) %>
+
+<%= govuk_summary_list do |list| %>
+  <% list.with_row do |row| %>
+    <% row.with_key text: t(".email_address") %>
+    <% row.with_value text: @candidate.email_address %>
+  <% end %>
+  <% list.with_row do |row| %>
+    <% row.with_key text: t(".created_at") %>
+    <% row.with_value text: @candidate.created_at.to_fs(:govuk_date_and_time) + " (#{time_ago_in_words(@candidate.created_at)} ago)" %>
+  <% end %>
+  <% list.with_row do |row| %>
+    <% row.with_key text: t(".last_logged_in") %>
+    <% row.with_value text: @candidate.sessions.last&.created_at&.to_fs(:govuk_date_and_time) || t(".never_logged_in") %>
+  <% end %>
+<% end %>
