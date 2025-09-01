@@ -2,5 +2,5 @@ en:
   publish:
     schools:
       school_summary_value_component:
-        check_schools: Check the schools for this course
+        check_schools: Review the schools for this course
         enter_schools: Enter schools for this course
