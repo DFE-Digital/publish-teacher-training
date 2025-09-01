@@ -31,7 +31,7 @@ dfe_signin:
 one_login:
   enabled: false
   # URL that the users are redirected to for signing in
-  idp_base_url: https://oidc.account.gov.uk
+  idp_base_url: https://oidc.account.gov.uk/
   # URL we use to end the Onne Login session on behalf of the user
   logout_url: https://oidc.account.gov.uk/logout
   # URL user is redirected to after logging out of One Login
