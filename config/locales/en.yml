@@ -51,6 +51,12 @@ en:
           content:
             type_of_provider: Your course will vary depending on whether the training provider is a university, a school or another organisation.
             find_out_how_to_choose_a_training_provider: Find out how to choose a training provider
+      school_placement_activities:
+        view:
+          heading: What to expect on school placements
+          content:
+            experience_and_mentorship: You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.
+            find_out_about_school_placement_activities: Find out what to expect on school placements
     privacy_notice:
       page_title: "%{service_name} privacy notice"
       read_info_html: "Read the Privacy information: %{link}"
