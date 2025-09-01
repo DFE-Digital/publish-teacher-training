@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Sending DFE Analytics events" do
+RSpec.describe "Sending DFE Analytics events" do
   before do
     allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
   end
