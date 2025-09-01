@@ -4,3 +4,17 @@ en:
       index:
         email_address: Email address
         created_at: Created at
+      details:
+        email_address: Email address
+        created_at: Created at
+        last_logged_in: Last login date
+        never_logged_in: Never logged in
+        details: Details
+        saved_courses: Saved courses
+      saved_courses:
+        details: Details
+        saved_courses: Saved courses
+        saved_at: Saved at
+        no_saved_courses: This candidate hasn’t saved any courses yet.
+        course: Course
+        provider: Provider

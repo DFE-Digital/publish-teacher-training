@@ -1,0 +1,36 @@
+<%= render PageTitle.new(title: "support.candidates.saved_courses") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_candidates_path(page: params[:page])) %>
+<% end %>
+
+<h1 class="govuk-heading-l"><%= @candidate.email_address %></h1>
+
+<%= render TabNavigation.new(items: [
+  { name: t(".details"), url: details_support_candidate_path(@candidate) },
+  { name: t(".saved_courses"), url: saved_courses_support_candidate_path(@candidate), current: true },
+]) %>
+
+<% if @saved_courses.present? %>
+  <%= govuk_table do |table| %>
+    <% table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell text: t(".course") %>
+        <% row.with_cell text: t(".provider") %>
+        <% row.with_cell text: t(".saved_at") %>
+      <% end %>
+    <% end %>
+    <% table.with_body do |body| %>
+      <% @saved_courses.each do |saved| %>
+        <% course = saved.try(:course) || saved %>
+        <% body.with_row do |row| %>
+          <% row.with_cell text: govuk_link_to(course.name_and_code, publish_provider_recruitment_cycle_course_url(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code)) %>
+          <% row.with_cell text: govuk_link_to(course.provider.provider_name, support_recruitment_cycle_provider_path(course.provider.recruitment_cycle_year, course.provider)) %>
+          <% row.with_cell text: saved.created_at.to_fs(:govuk_date_and_time) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <p class="govuk-body"><%= t(".no_saved_courses") %></p>
+<% end %>

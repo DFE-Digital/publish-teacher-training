@@ -268,7 +268,8 @@ en:
       show: "Recruitment cycles"
       change_cycle: "Change recruitment cycle"
     candidates:
-      index: "Candidates"
+      index: Candidates
+      show: Candidates
     users:
       index: "Users"
       new: "Personal details"
@@ -378,7 +379,9 @@ en:
             checks:
               show: "Check your answers"
         candidates:
-          index: "Candidates"
+          index: Candidates
+          details: View a candidate
+          saved_courses: Saved Courses
         users:
           index: "Users"
           show: "User overview"

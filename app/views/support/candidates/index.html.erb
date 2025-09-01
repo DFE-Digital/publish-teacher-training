@@ -12,7 +12,7 @@
   <% table.with_body do |body| %>
     <% @candidates.each do |candidate| %>
       <% body.with_row classes: %w[course-row] do |row| %>
-        <% row.with_cell text: candidate.email_address %>
+        <% row.with_cell text: govuk_link_to(candidate.email_address, details_support_candidate_path(candidate), class: "govuk-link") %>
         <% row.with_cell text: "#{candidate.created_at.to_fs(:govuk_date_and_time)} (#{time_ago_in_words(candidate.created_at)} ago)" %>
       <% end %>
     <% end %>
