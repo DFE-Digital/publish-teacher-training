@@ -45,6 +45,12 @@ en:
           content:
             find_out_more_about_school_placements: Find out more about where your school placements will take place
             discuss_your_preferences: The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.
+      how_to_choose_a_training_provider:
+        view:
+          heading: How to choose a training provider
+          content:
+            type_of_provider: Your course will vary depending on whether the training provider is a university, a school or another organisation.
+            find_out_how_to_choose_a_training_provider: Find out how to choose a training provider
     privacy_notice:
       page_title: "%{service_name} privacy notice"
       read_info_html: "Read the Privacy information: %{link}"
