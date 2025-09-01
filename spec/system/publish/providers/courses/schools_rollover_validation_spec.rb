@@ -66,21 +66,21 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
 
   def then_i_should_see_the_school_validation_error_summary_linking_to_publish_anchor
     expect(page).to have_content("There is a problem")
-    error_links = all("a", text: "Check the schools for this course")
+    error_links = all("a", text: "Review the schools for this course")
     expect(error_links.size).to eq(2)
     expect(error_links[0][:href]).to eq("/publish/organisations/ABC/2026/courses/XYZ/publish#school-summary-link")
     expect(error_links[1][:href]).to eq("/publish/organisations/ABC/2026/courses/XYZ/schools?display_errors=true")
   end
 
   def when_i_click_the_error_summary_link
-    all("a", text: "Check the schools for this course").first.click
+    all("a", text: "Review the schools for this course").first.click
   end
 
   def then_i_should_see_the_details_page_with_error_inset_for_schools
     within(".app-inset-text--error") do
       expect(page).to have_content("School A")
       expect(page).to have_content("School B")
-      school_link = page.find("a", text: "Check the schools for this course")
+      school_link = page.find("a", text: "Review the schools for this course")
       expect(school_link[:href]).to eq(
         schools_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
@@ -96,7 +96,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
     within(".app-inset-text--error") do
       expect(page).to have_content("School A")
       expect(page).to have_content("School B")
-      school_link = page.find("a", text: "Check the schools for this course")
+      school_link = page.find("a", text: "Review the schools for this course")
       expect(school_link[:href]).to eq(
         schools_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
@@ -110,7 +110,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
 
   def when_i_click_the_inset_link_to_schools_page
     within(".app-inset-text--error") do
-      page.find("a", text: "Check the schools for this course").click
+      page.find("a", text: "Review the schools for this course").click
     end
   end
 
@@ -126,7 +126,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
 
     expect(page).to have_content("There is a problem")
 
-    error_links = all("a", text: "Check the schools for this course")
+    error_links = all("a", text: "Review the schools for this course")
     expect(error_links).not_to be_empty
 
     expect(error_links.first[:href]).to eq("#publish-course-school-form-site-ids-field-error")
