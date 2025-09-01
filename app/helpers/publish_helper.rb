@@ -2,7 +2,7 @@
 
 module PublishHelper
   def markdown(source)
-    return "" if source.blank?
+    return "".html_safe if source.blank?
 
     render = Govuk::MarkdownRenderer
     # Options: https://github.com/vmg/redcarpet#and-its-like-really-simple-to-use
