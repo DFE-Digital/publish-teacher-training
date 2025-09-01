@@ -14,7 +14,6 @@
 
     <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
 
-    <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
 
     <% if course.published_how_school_placements_work.present? %>
       <%= markdown(course.published_how_school_placements_work) %>
@@ -23,5 +22,7 @@
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>
     <% end %>
+
+    <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
   </div>
 </div>

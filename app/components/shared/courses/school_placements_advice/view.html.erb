@@ -1,17 +1,6 @@
 <%= render Shared::AdviceComponent::View.new(title: t(".heading")) do %>
-  <% if course.salaried? && !course.provider.selectable_school? %>
-    <p class="govuk-body"><%= t(".content.salary") %></p>
-  <% elsif course.salaried? && course.provider.selectable_school? %>
-    <p class="govuk-body"><%= t(".content.salary_and_placement") %></p>
-  <% elsif course.fee? && course.provider.selectable_school? %>
-    <p class="govuk-body"><%= t(".content.fee_and_placement") %></p>
-  <% elsif course.fee? && !course.provider.selectable_school? %>
-    <p class="govuk-body"><%= t(".content.fee") %></p>
-  <% end %>
-
-  <% unless course.salaried? %>
-    <p class="govuk-body">
-      <%= govuk_link_to t(".content.find_out_more_about_school_placements"), t("find.get_into_teaching.url_school_placements") %>
-    </p>
-  <% end %>
+  <p class="govuk-body"><%= t(".content.discuss_your_preferences") %></p>
+  <p class="govuk-body">
+    <%= govuk_link_to t(".content.find_out_more_about_school_placements"), t("find.get_into_teaching.url_school_placements") %>
+  </p>
 <% end %>
