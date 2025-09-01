@@ -1,0 +1,6 @@
+<%= render Shared::AdviceComponent::View.new(title: t(".heading")) do %>
+  <p class="govuk-body"><%= t(".content.type_of_provider") %></p>
+  <p class="govuk-body">
+    <%= govuk_link_to t(".content.find_out_how_to_choose_a_training_provider"), t("find.get_into_teaching.url_type_of_course_provider") %>
+  </p>
+<% end %>
