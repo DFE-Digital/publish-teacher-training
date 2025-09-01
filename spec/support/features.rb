@@ -5,6 +5,7 @@ RSpec.configure do |config|
   config.include FeatureHelpers::Authentication, type: :system
   config.include FeatureHelpers::NewCourseParam, type: :feature
   config.include FeatureHelpers::GovukComponents, type: :feature
+  config.include FeatureHelpers::GovukComponents, type: :system
   config.include FeatureHelpers::CourseSteps, type: :feature
   config.include FeatureHelpers::PageWithQuery, type: :feature
   config.include DfESignInUserHelper, type: :feature
