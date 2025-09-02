@@ -154,7 +154,7 @@ module Find
     end
 
     def self.date(name, year = current_year)
-      real_schedule_for(year).fetch(name)
+      real_schedule_for(year.to_i).fetch(name)
     end
 
     def self.last_recruitment_cycle_year?(year)
