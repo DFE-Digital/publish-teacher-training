@@ -1,6 +1,5 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="section-interviews"><%= t(".page_title") %></h2>
-
   <div data-qa="course__interview_process">
     <% unless course.interview_location == "in person" || course.published_interview_location == "in person" %>
       <% if course.published_interview_location == "both" || course.interview_location == "both" %>
@@ -14,11 +13,15 @@
         <% end %>
       <% end %>
     <% end %>
-
     <% if course.interview_process.present? %>
       <%= markdown(course.interview_process) %>
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :interview_process, is_preview: preview?(params)) %>
     <% end %>
-  </div>
+    <% if course.interview_process.present? ||
+          course.interview_location.in?(%w[online both]) ||
+          course.published_interview_location.in?(%w[online both]) %>
+    <%= render Shared::Courses::InterviewPreparation::View.new(course) %>
+  <% end %>
+</div>
 </div>
