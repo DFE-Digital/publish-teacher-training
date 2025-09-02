@@ -47,10 +47,10 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/omniauth-govuk-one-login.git
-  revision: 4f7d5466ea60e29b6447041c603fa39afc8d58a1
-  tag: v1.5.0
+  revision: aff1a0e5eac9cb9bfdd2215f8da4ac77f390d1d7
+  tag: v1.5.1
   specs:
-    omniauth_govuk_one_login (1.5.0)
+    omniauth_govuk_one_login (1.5.1)
       faraday (~> 2.13)
       jwt (~> 2.10)
       omniauth (~> 2.1)
