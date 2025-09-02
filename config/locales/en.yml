@@ -63,6 +63,12 @@ en:
           content:
             what_to_expect: You'll spend most of your time teaching in a classroom, with some time dedicated to studying. This may include seminars, workshops and assignments.
             find_out_about_teacher_training: Find out what to expect in teacher training
+      interview_preparation:
+        view:
+          heading: Preparing for your interview
+          content:
+            interview_process: Interviews sometimes include a presentation, or maths or English tests to be completed in advance. The exact interview process will vary depending on the teacher training provider.
+            find_out_about_interview_preparation: Find out how to prepare for your interview
     privacy_notice:
       page_title: "%{service_name} privacy notice"
       read_info_html: "Read the Privacy information: %{link}"
