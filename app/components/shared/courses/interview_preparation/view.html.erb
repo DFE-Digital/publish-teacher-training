@@ -1,0 +1,6 @@
+<%= render Shared::AdviceComponent::View.new(title: t(".heading")) do %>
+  <p class="govuk-body"><%= t(".content.interview_process") %></p>
+  <p class="govuk-body">
+    <%= govuk_link_to t(".content.find_out_about_interview_preparation"), t("find.get_into_teaching.url_interview_preparation") %>
+  </p>
+<% end %>
