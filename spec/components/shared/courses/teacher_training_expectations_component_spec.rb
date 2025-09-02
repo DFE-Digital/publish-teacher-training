@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Shared::Courses::TeacherTrainingExpectations::View, type: :component do
+describe Shared::Courses::TeacherTrainingExpectationsComponent, type: :component do
   include Rails.application.routes.url_helpers
 
   context "fee paying course" do
