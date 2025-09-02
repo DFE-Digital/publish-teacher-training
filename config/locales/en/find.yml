@@ -177,6 +177,7 @@ en:
       url_choose_course: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course
       url_training_adviser: https://getintoteaching.education.gov.uk/teacher-training-advisers
       url_type_of_course_provider: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course#the-type-of-course-provider
+      url_initial_teacher_training: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training
     qualification:
       description_with_abbreviation:
         qts:
