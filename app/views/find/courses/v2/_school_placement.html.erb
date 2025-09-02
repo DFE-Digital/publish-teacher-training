@@ -6,7 +6,7 @@
       <% if course.support_and_mentorship.present? %>
         <%= markdown(course.support_and_mentorship) %>
       <% end %>
-      <%= render Shared::Courses::SchoolPlacementActivities::View.new(course) %>
+      <%= render Shared::Courses::SchoolPlacementActivitiesComponent.new(course) %>
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :school_placement, is_preview: preview?(params)) %>
     <% end %>

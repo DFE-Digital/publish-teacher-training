@@ -45,30 +45,26 @@ en:
           content:
             find_out_more_about_school_placements: Find out more about where your school placements will take place
             discuss_your_preferences: The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.
-      how_to_choose_a_training_provider:
-        view:
-          heading: How to choose a training provider
-          content:
-            type_of_provider: Your course will vary depending on whether the training provider is a university, a school or another organisation.
-            find_out_how_to_choose_a_training_provider: Find out how to choose a training provider
-      school_placement_activities:
-        view:
-          heading: What to expect on school placements
-          content:
-            experience_and_mentorship: You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.
-            find_out_about_school_placement_activities: Find out what to expect on school placements
-      teacher_training_expectations:
-        view:
-          heading: What to expect in teacher training
-          content:
-            what_to_expect: You'll spend most of your time teaching in a classroom, with some time dedicated to studying. This may include seminars, workshops and assignments.
-            find_out_about_teacher_training: Find out what to expect in teacher training
-      interview_preparation:
-        view:
-          heading: Preparing for your interview
-          content:
-            interview_process: Interviews sometimes include a presentation, or maths or English tests to be completed in advance. The exact interview process will vary depending on the teacher training provider.
-            find_out_about_interview_preparation: Find out how to prepare for your interview
+      how_to_choose_a_training_provider_component:
+        heading: How to choose a training provider
+        content:
+          type_of_provider: Your course will vary depending on whether the training provider is a university, a school or another organisation.
+          find_out_how_to_choose_a_training_provider: Find out how to choose a training provider
+      school_placement_activities_component:
+        heading: What to expect on school placements
+        content:
+          experience_and_mentorship: You will get hands-on experience of what it's like to be a teacher, and will have a dedicated mentor to support you throughout your training.
+          find_out_about_school_placement_activities: Find out what to expect on school placements
+      teacher_training_expectations_component:
+        heading: What to expect in teacher training
+        content:
+          what_to_expect: You'll spend most of your time teaching in a classroom, with some time dedicated to studying. This may include seminars, workshops and assignments.
+          find_out_about_teacher_training: Find out what to expect in teacher training
+      interview_preparation_component:
+        heading: Preparing for your interview
+        content:
+          interview_process: Interviews sometimes include a presentation, or maths or English tests to be completed in advance. The exact interview process will vary depending on the teacher training provider.
+          find_out_about_interview_preparation: Find out how to prepare for your interview
     privacy_notice:
       page_title: "%{service_name} privacy notice"
       read_info_html: "Read the Privacy information: %{link}"

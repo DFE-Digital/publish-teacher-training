@@ -5,7 +5,7 @@
   <% if course.theoretical_training_activities.present? || course.assessment_methods.present? %>
     <%= markdown(course.theoretical_training_activities) %>
     <%= markdown(course.assessment_methods) %>
-    <%= render Shared::Courses::TeacherTrainingExpectations::View.new(course) %>
+    <%= render Shared::Courses::TeacherTrainingExpectationsComponent.new(course) %>
   <% else %>
     <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :what_you_will_study, is_preview: preview?(params)) %>
   <% end %>
