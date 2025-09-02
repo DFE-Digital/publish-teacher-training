@@ -147,9 +147,12 @@ RSpec.configure do |config|
     driven_by Capybara.current_driver
   end
 
-  # Running test suite with time set to new cycle
   config.around do |example|
-    Timecop.travel(Time.local(2025, 10, 15, 9, 0)) do
+    if time = self.class.metadata[:travel] || example.metadata[:travel]
+      Timecop.travel(time) do
+        example.run
+      end
+    else
       example.run
     end
   end
