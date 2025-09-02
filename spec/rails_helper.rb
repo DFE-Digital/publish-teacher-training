@@ -148,7 +148,7 @@ RSpec.configure do |config|
   end
 
   config.around do |example|
-    if time = self.class.metadata[:travel] || example.metadata[:travel]
+    if (time = self.class.metadata[:travel] || example.metadata[:travel])
       Timecop.travel(time) do
         example.run
       end
