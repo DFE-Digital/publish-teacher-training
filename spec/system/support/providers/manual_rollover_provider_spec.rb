@@ -5,15 +5,10 @@ require "spec_helper"
 RSpec.describe "Manual provider rollover", service: :publish do
   include DfESignInUserHelper
 
-  let(:provider) { create(:provider, recruitment_cycle: current_recruitment_cycle) }
-  let(:user) { create(:user, :admin, providers: [provider]) }
-  let!(:current_recruitment_cycle) { RecruitmentCycle.current }
-  let!(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
-
   before do
-    Timecop.travel(Time.zone.local(2025, 1, 1))
-    driven_by(:rack_test)
-    sign_in_system_test(user:)
+    given_a_support_user_between_cycles
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+    sign_in_system_test(user: @user)
   end
 
   scenario "when manually rolling over a provider" do
@@ -31,8 +26,15 @@ RSpec.describe "Manual provider rollover", service: :publish do
     then_the_provider_is_rolled_over_successfully
   end
 
+  def given_a_support_user_between_cycles
+    @current_recruitment_cycle ||= RecruitmentCycle.current
+    @next_recruitment_cycle ||= create(:recruitment_cycle, :next)
+    @provider ||= create(:provider, recruitment_cycle: @current_recruitment_cycle)
+    @user ||= create(:user, :admin, providers: [@provider])
+  end
+
   def given_i_visit_the_provider_page
-    visit support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider)
+    visit support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider)
   end
 
   def when_i_click_rollover_provider_tab
@@ -42,8 +44,8 @@ RSpec.describe "Manual provider rollover", service: :publish do
   def then_i_see_the_rollover_confirmation_page
     expect(page).to have_current_path(
       manual_rollover_support_recruitment_cycle_provider_path(
-        provider.recruitment_cycle_year,
-        provider,
+        @provider.recruitment_cycle_year,
+        @provider,
       ),
     )
   end
@@ -76,10 +78,9 @@ RSpec.describe "Manual provider rollover", service: :publish do
 
   def then_the_provider_is_rolled_over_successfully
     expect(page).to have_content("Provider successfully rolled over to the next recruitment cycle.")
-    expect(page).to have_current_path(support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), ignore_query: true)
-
-    rolled_over_provider = next_recruitment_cycle.providers.find_by(provider_code: provider.provider_code)
+    expect(page).to have_current_path(support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), ignore_query: true)
+    rolled_over_provider = @next_recruitment_cycle.providers.find_by(provider_code: @provider.provider_code)
     expect(rolled_over_provider).to be_present
-    expect(rolled_over_provider.recruitment_cycle).to eq(next_recruitment_cycle)
+    expect(rolled_over_provider.recruitment_cycle).to eq(@next_recruitment_cycle)
   end
 end
