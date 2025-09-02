@@ -104,8 +104,8 @@ module Find
       date(:find_opens, next_year)
     end
 
-    def self.apply_opens
-      date(:apply_opens, current_year)
+    def self.apply_opens(year = current_year)
+      date(:apply_opens, year)
     end
 
     def self.apply_reopens
