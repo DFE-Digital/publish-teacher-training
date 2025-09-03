@@ -3,7 +3,7 @@
   <% if @provider.about_us.present? && @provider.value_proposition.present? %>
     <p class="govuk-body"><%= markdown(@provider.about_us) %></p>
     <p class="govuk-body"><%= markdown(@provider.value_proposition) %></p>
-    <%= render Shared::Courses::HowToChooseATrainingProviderComponent.new(course: @course) %>
+    <%= render Shared::Courses::HowToChooseATrainingProviderComponent.new(course: @course, is_preview: preview?(params)) %>
   <% else %>
     <%= render CoursePreview::MissingInformationComponent.new(course: @course, information_type: :train_with_us, is_preview: preview?(params)) %>
   <% end %>

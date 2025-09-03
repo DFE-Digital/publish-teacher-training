@@ -1,6 +1,10 @@
 <%= render Shared::AdviceComponent::View.new(title: t(".heading")) do %>
   <p class="govuk-body"><%= t(".content.type_of_provider") %></p>
   <p class="govuk-body">
-    <%= govuk_link_to t(".content.find_out_how_to_choose_a_training_provider"), t("find.get_into_teaching.url_type_of_course_provider") %>
+    <% if is_preview %>
+      <%= govuk_link_to t(".content.find_out_how_to_choose_a_training_provider"), t("find.get_into_teaching.url_type_of_course_provider") %>
+    <% else %>
+      <%= govuk_link_to t(".content.find_out_how_to_choose_a_training_provider"), find_track_click_path(utm: "how_to_choose_a_training_provider", url: t("find.get_into_teaching.url_type_of_course_provider")) %>
+    <% end %>
   </p>
 <% end %>
