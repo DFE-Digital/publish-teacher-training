@@ -1,6 +1,10 @@
 <%= render Shared::AdviceComponent::View.new(title: t(".heading")) do %>
   <p class="govuk-body"><%= t(".content.what_to_expect") %></p>
   <p class="govuk-body">
-    <%= govuk_link_to t(".content.find_out_about_teacher_training"), t("find.get_into_teaching.url_initial_teacher_training") %>
+    <% if is_preview %>
+      <%= govuk_link_to t(".content.find_out_about_teacher_training"), t("find.get_into_teaching.url_initial_teacher_training") %>
+    <% else %>
+      <%= govuk_link_to t(".content.find_out_about_teacher_training"), find_track_click_path(utm: "teacher_training_expectations", url: t("find.get_into_teaching.url_initial_teacher_training")) %>
+    <% end %>
   </p>
 <% end %>

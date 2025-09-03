@@ -21,7 +21,7 @@
     <% if course.interview_process.present? ||
           course.interview_location.in?(%w[online both]) ||
           course.published_interview_location.in?(%w[online both]) %>
-    <%= render Shared::Courses::InterviewPreparationComponent.new(course) %>
+    <%= render Shared::Courses::InterviewPreparationComponent.new(course:, is_preview: preview?(params)) %>
   <% end %>
 </div>
 </div>
