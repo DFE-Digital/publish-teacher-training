@@ -127,7 +127,7 @@ RSpec.describe DataHub::UpdateSitesFromGias::SchoolsGiasDiffQuery do
   end
 
   it "ignores sites in other recruitment cycles" do
-    other_cycle = create(:recruitment_cycle, year: 2031)
+    other_cycle = create(:recruitment_cycle, :next)
     other_provider = create(:provider, recruitment_cycle: other_cycle)
     site = create(:site, provider: other_provider, urn: "99912", location_name: "OtherCycle")
     create(:gias_school, urn: "99912", name: "Different")
