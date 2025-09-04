@@ -567,9 +567,23 @@ en:
         lead_school: "Lead school"
         university: "University"
       course_enrichment:
-        fee_uk_eu: "Course fee for UK and EU students"
-        fee_international: "Course fee for international students"
-        how_school_placements_work: How placements work
+        fee_uk_eu: "Course fees for UK and EU students"
+        fee_international: "Course fees for international students"
+        how_school_placements_work: Where you will train
+        where-time-school-study: How much time will they spend in theoretical training? (optional)
+        where-time-school-study-hint: For example one day of theoretical training each week
+        how-many-placements: How much time will they spend in each school?
+        how-trainees-placed: How do you decide which schools to place trainees in?
+        how-trainees-placed-hint: For example do you take commuting time into consideration?
+        where-study-site: Where will theoretical training take place? (optional)
+        where-study-site-hint: For example at a training location, university or online
+        what-trainee-do-in-school: What will trainees do while in their placement schools?
+        what-trainee-do-in-school-hint: For example observations, lesson planning, getting involved in school life
+        how-trainees-mentored: How will they be supported and mentored? (optional)
+        how-trainees-mentored-hint: For example how many mentors they will have, and how often they will meet
+        what-trainees-study: What will trainees do during their theoretical training?
+        what-trainees-study-hint: For example the curriculum, modules or topics covered
+        how-trainees-assessed: How will they be assessed? (optional)
         fee_details: Fees and financial support
         about_course: About this course
         what-trainee-do-in-school: What will trainees do while in their placement schools?

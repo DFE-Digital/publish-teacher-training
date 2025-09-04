@@ -36,17 +36,115 @@
         <%= t("publish.providers.fees_and_financial_support.edit.heading") %>
       </h1>
 
+    <div data-controller="input-preview">
+      <%= f.govuk_text_field(:fee_uk_eu,
+        form_group: { id: "fee-uk" },
+        label: { text: "Fee for UK students", size: "s" },
+        value: @copied_fields_values&.dig("fee_uk_eu"),
+        prefix_text: "£",
+        width: 5,
+        data: { qa: "course_fee_uk_eu",
+          input_preview_target: "input",
+          action: "input-preview#updatePreview",
+          preview_output_target: "currency1" }
+        ) %>
+
+      <%= f.govuk_text_field(:fee_international,
+        form_group: { id: "fee-international" },
+        label: { text: @course.can_sponsor_student_visa? ? "Fee for international students" : "Fee for international students (optional)", size: "s" },
+        value: @copied_fields_values&.dig("fee_international"),
+        prefix_text: "£",
+        width: 5,
+        data: {
+          qa: "course_fee_international",
+          input_preview_target: "input",
+          action: "input-preview#updatePreview",
+          preview_output_target: "currency2" }
+        ) %>
+
       <%= render partial: "guidance" %>
 
+      <aside data-qa="course__related_sidebar">
+    <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        ),
+      },
+    ) %>
+  </aside>
+
       <%= f.govuk_text_area(
-            :fee_details,
+            :fee_details1,
             label: { text: t("publish.providers.fees_and_financial_support.edit.label"), size: "s" },
-            hint: -> { render partial: "publish/courses/markdown_formatting" },
-            value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
-            rows: 15,
-            max_words: 250,
-            data: { qa: "course_fee_details" },
+            rows: 5,
+            max_words: 50,
+            data: { qa: "course_fee_details",
+              input_preview_target: "input",
+              action: "input-preview#updatePreview",
+              preview_output_target: "preview3" }
           ) %>
+
+      <%= f.govuk_text_area(
+          :fee_details2,
+          label: { text: t("publish.providers.fees_and_financial_support.edit.additional_costs"), size: "s" },
+          hint: { text: t("publish.providers.fees_and_financial_support.edit.additional_costs_hint"), size: "s" },
+          rows: 5,
+          max_words: 50,
+          data: { qa: "course_fee_details",
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview3" }
+        ) %>
+
+      <%= f.govuk_text_area(
+          :fee_details3,
+          label: { text: t("publish.providers.fees_and_financial_support.edit.org_financial_support"), size: "s" },
+          hint: { text: t("publish.providers.fees_and_financial_support.edit.org_financial_support_hint"), size: "s" },
+          rows: 5,
+          max_words: 50,
+          data: { qa: "course_fee_details",
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "preview3" }
+        ) %>
+
+        <div class="app-preview-container--heading">
+          <span class="govuk-body"><strong>Preview of what candidates will see</strong></span>
+        </div>
+        <div class="app-preview-container">
+        <p class="govuk-heading-m">Fees and financial support</p>
+
+       <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            UK citizens
+          </dt>
+          <dd class="govuk-summary-list__value" data-input-preview-target="preview" data-preview-target="currency1">
+          </dd>
+        </div>
+          <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Non-UK citizens
+          </dt>
+          <dd class="govuk-summary-list__value" data-input-preview-target="preview" data-preview-target="currency2">
+          </dd>
+        </div>
+      </dl>
+
+        <p class="govuk-body">
+          <div class="govuk-body" data-input-preview-target="preview">
+            <p class="govuk-body" data-input-preview-target="preview" data-preview-target="preview3">The text you type above will show here.</p>
+          </div>
+        </p>
+
+      </div>
+    </div>
+
       <%= f.govuk_submit t("publish.providers.fees_and_financial_support.edit.submit_button") %>
     <% end %>
     <p class="govuk-body">
@@ -60,17 +158,19 @@
           ) %>
     </p>
   </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-    <%= render(
-      partial: "publish/courses/related_sidebar",
-      locals: {
-        course: @course,
-        page_path: fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
-          @provider.provider_code,
-          @course.recruitment_cycle_year,
-          @course.course_code,
-        ),
-      },
-    ) %>
-  </aside>
+
+    <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+      <%= render(
+            partial: "publish/courses/related_sidebar_content",
+            locals: {
+              course: @course,
+              page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+              ),
+            },
+          ) %>
+    </aside>
+
 </div>
