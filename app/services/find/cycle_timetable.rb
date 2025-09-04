@@ -84,8 +84,8 @@ module Find
       current_year - 1
     end
 
-    def self.find_closes
-      date(:find_closes)
+    def self.find_closes(year = current_year)
+      date(:find_closes, year)
     end
 
     def self.first_deadline_banner
