@@ -30,8 +30,8 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
       expect(result.text).to include("You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.")
-      expect(result).to have_css(".app-callout__title", text: "How school placements work")
-      expect(result.text).to include("Check with the provider before applying. They may require you to find your own school or want to discuss your situation to help them choose a school you can travel to.")
+      expect(result).to have_css(".app-callout__title", text: "Where your school placements will take place")
+      expect(result.text).to include("The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.")
       expect(result.text).not_to include("Find out more about how school placements work")
     end
   end
@@ -59,9 +59,9 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
       expect(result.text).to include("You will spend a minimum of 24 weeks on school placements. This time is spread across at least 2 schools. You will also spend time in a location to study.")
-      expect(result).to have_css(".app-callout__title", text: "How school placements work")
-      expect(result.text).to include("Find out more about how school placements work")
-      expect(result.text).to include("The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.")
+      expect(result).to have_css(".app-callout__title", text: "Where your school placements will take place")
+      expect(result.text).to include("The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.")
+      expect(result.text).not_to include("Find out more about how school placements work")
     end
   end
 
@@ -73,9 +73,9 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       result = render_inline(described_class.new(course, coordinates, distance_from_location))
 
       expect(result.text).not_to include("Advice from Get Into Teaching")
-      expect(result.text).to include("You will be able to select a preferred placement school, but there is no guarantee you will be placed in the school you have chosen.")
-      expect(result.text).to include("Find out more about how school placements work")
-      expect(result.text).to include("The training provider will contact you to discuss your choice to help them select a location that suits you.")
+      expect(result).to have_css(".app-callout__title", text: "Where your school placements will take place")
+      expect(result.text).to include("The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.")
+      expect(result.text).not_to include("Find out more about how school placements work")
     end
   end
 

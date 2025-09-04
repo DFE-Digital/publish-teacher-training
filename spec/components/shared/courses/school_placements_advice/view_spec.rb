@@ -16,40 +16,12 @@ describe Shared::Courses::SchoolPlacementsAdvice::View, type: :component do
 
       result = render_inline(described_class.new(course))
 
-      expect(result).to have_css(".app-callout__title", text: "How school placements work")
-      expect(result.text).to include("Check with the provider before applying. They may require you to find your own school or want to discuss your situation to help them choose a school you can travel to.")
-      expect(result.text).not_to include("Find out more about how school placements work")
-    end
-  end
-
-  context "fee paying course" do
-    it "renders the correct content" do
-      provider = build(:provider, selectable_school: false)
-      course = build(
-        :course,
-        funding: "fee",
-        provider:,
-      ).decorate
-
-      result = render_inline(described_class.new(course))
-
-      expect(result).to have_css(".app-callout__title", text: "How school placements work")
-      expect(result.text).to include("The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.")
-      expect(result.text).to include("Find out more about how school placements work")
-    end
-  end
-
-  context "when the course allows selecting a placement location" do
-    it "displays the correct placement message" do
-      provider = build(:provider, selectable_school: true)
-      course = build(:course, provider:).decorate
-
-      result = render_inline(described_class.new(course))
-
-      expect(result.text).to include("You will be able to select a preferred placement school, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.")
-      expect(result.text).to include("Find out more about how school placements work")
-      expect(result.text).to include("The training provider will contact you to discuss your choice to help them select a location that suits you.")
-      expect(result.text).not_to include("Advice from Get Into Teaching")
+      expect(result).to have_css(".app-callout__title", text: "Where your school placements will take place")
+      expect(result).to have_css("p.govuk-body", text: "The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.")
+      expect(result).to have_link(
+        "Find out more about where your school placements will take place",
+        href: I18n.t("find.get_into_teaching.url_school_placements"),
+      )
     end
   end
 end

@@ -49,7 +49,7 @@ en:
       eligible_for_bursary: Find out whether you are eligible for a bursary.
       eligible_for_bursary_or_scholarship: Find out whether you are eligible for a bursary or scholarship.
       student_loans: Student loans
-      find_out_more_student_loans: Find out more about student loans for teacher training.
+      find_out_more_student_loans: Find out about student loans for teacher training.
       eligible_for_student_loan: You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.
       uk_citizens:
         title: Financial support for UK citizens
@@ -176,6 +176,9 @@ en:
       url_visas_for_non_uk_trainees: https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees
       url_choose_course: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course
       url_training_adviser: https://getintoteaching.education.gov.uk/teacher-training-advisers
+      url_type_of_course_provider: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course#the-type-of-course-provider
+      url_initial_teacher_training: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training
+      url_interview_preparation: https://getintoteaching.education.gov.uk/how-to-apply-for-teacher-training/teacher-training-interview
     qualification:
       description_with_abbreviation:
         qts:
