@@ -46,8 +46,15 @@ module CoursePreview
       include_examples "course with missing information", :fee_uk_eu, "Enter details about fees and financial support"
       include_examples "course with missing information", :gcse, "Enter GCSE and equivalency test requirements"
       include_examples "course with missing information", :how_school_placements_work, "Enter details about how placements work"
-      include_examples "course with missing information", :train_with_disability, "Enter details about training with disabilities and other needs"
-      include_examples "course with missing information", :train_with_us, "Enter details about the training provider"
+
+      context "in 2025 cycle", travel: Find::CycleTimetable.mid_cycle(2025) do
+        before do
+          allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+        end
+
+        include_examples "course with missing information", :train_with_disability, "Enter details about training with disabilities and other needs"
+        include_examples "course with missing information", :train_with_us, "Enter details about the training provider"
+      end
     end
   end
 end
