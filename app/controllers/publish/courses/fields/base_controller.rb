@@ -16,7 +16,7 @@ module Publish
 
         # Redirects to the course page if the long form content feature flag is not active
         def redirect_to_course_if_feature_disabled
-          unless FeatureFlag.active?(:long_form_content) || recruitment_cycle.after_2025?
+          unless FeatureFlag.active?(:long_form_content)
             redirect_to publish_provider_recruitment_cycle_course_path(
               provider.provider_code,
               recruitment_cycle.year,
