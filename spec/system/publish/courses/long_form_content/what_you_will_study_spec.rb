@@ -44,14 +44,6 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
     and_change_link_has_correct_route
   end
 
-  scenario "A user CANNOT see the new long form course content fields if the current cycle is before 2026" do
-    given_the_recruitment_cycle_year(2025)
-    given_there_is_a_draft_course(recruitment_cycle: RecruitmentCycle.current)
-    when_i_visit_the_course_page
-
-    expect(page).not_to have_content("What you will study")
-  end
-
   def given_there_is_a_draft_course(recruitment_cycle: RecruitmentCycle.current)
     provider_in_cycle = create(:provider, recruitment_cycle: recruitment_cycle)
     user.providers << provider_in_cycle

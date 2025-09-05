@@ -7,7 +7,7 @@ describe SupportTitleBar do
 
   let(:current_user) { build(:user, :admin) }
 
-  context "when not during rollover" do
+  context "when not during rollover", travel: Find::CycleTimetable.mid_cycle do
     before do
       render_inline(described_class.new(current_user:))
     end

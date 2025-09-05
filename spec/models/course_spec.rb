@@ -415,7 +415,7 @@ describe Course do
       end
 
       context "outside 2026 rollover period" do
-        let(:past_cycle) { RecruitmentCycle.find_by!(year: 2025) }
+        let(:past_cycle) { find_or_create(:recruitment_cycle, year: 2025) }
 
         it "does not add errors for sites on :publish" do
           course = create(:course, provider: build(:provider, recruitment_cycle: past_cycle))

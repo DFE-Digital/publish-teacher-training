@@ -5,12 +5,12 @@ require "rails_helper"
 describe RecruitmentCycle do
   subject { current_cycle }
 
-  before { allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2023) }
+  before { allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2022) }
 
   let(:current_cycle) { find_or_create(:recruitment_cycle) }
   let(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
 
-  its(:to_s) { is_expected.to eq("2023/24") }
+  its(:to_s) { is_expected.to eq("2022/23") }
 
   it "is valid with valid attributes" do
     expect(subject).to be_valid

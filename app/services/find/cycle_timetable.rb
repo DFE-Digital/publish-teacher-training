@@ -84,16 +84,16 @@ module Find
       current_year - 1
     end
 
-    def self.find_closes
-      date(:find_closes)
+    def self.find_closes(year = current_year)
+      date(:find_closes, year)
     end
 
     def self.first_deadline_banner
       date(:first_deadline_banner)
     end
 
-    def self.apply_deadline
-      date(:apply_deadline)
+    def self.apply_deadline(year = current_year)
+      date(:apply_deadline, year)
     end
 
     def self.find_opens(year = current_year)
@@ -104,8 +104,8 @@ module Find
       date(:find_opens, next_year)
     end
 
-    def self.apply_opens
-      date(:apply_opens, current_year)
+    def self.apply_opens(year = current_year)
+      date(:apply_opens, year)
     end
 
     def self.apply_reopens
@@ -154,7 +154,7 @@ module Find
     end
 
     def self.date(name, year = current_year)
-      real_schedule_for(year).fetch(name)
+      real_schedule_for(year.to_i).fetch(name)
     end
 
     def self.last_recruitment_cycle_year?(year)

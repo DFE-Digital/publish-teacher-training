@@ -79,7 +79,7 @@ describe CourseDecorator do
 
   context "recruitment cycles" do
     before do
-      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2019)
+      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2022)
     end
 
     context "for a course in the current cycle" do

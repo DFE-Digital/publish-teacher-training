@@ -147,6 +147,16 @@ RSpec.configure do |config|
     driven_by Capybara.current_driver
   end
 
+  config.around do |example|
+    if (time = self.class.metadata[:travel] || example.metadata[:travel])
+      Timecop.travel(time) do
+        example.run
+      end
+    else
+      example.run
+    end
+  end
+
 private
 
   def app_host(service:)

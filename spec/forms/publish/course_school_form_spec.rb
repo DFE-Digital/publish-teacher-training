@@ -14,7 +14,7 @@ module Publish
 
     subject { described_class.new(course, params:) }
 
-    describe "validations" do
+    describe "validations", travel: Find::CycleTimetable.mid_cycle(2026) do
       before { subject.valid? }
 
       it "validates :site_ids" do

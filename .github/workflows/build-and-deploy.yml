@@ -194,7 +194,7 @@ jobs:
         # Pass Settings compatible env vars to runs tests with
         # feature flag(s) enables
         # Separate mutliple flags with a space
-        feature-flags: [""]
+        feature-flags: ["", "SETTINGS__FEATURES__LONG_FORM_CONTENT=true"]
 
     steps:
       - name: Checkout

@@ -3,7 +3,9 @@
 require "rails_helper"
 
 feature "Editing about this course from the course preview page" do
-  scenario "I am redirected back to the preview page" do
+  scenario "I am redirected back to the preview page", travel: Find::CycleTimetable.mid_cycle(2025) do
+    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+    find_or_create(:recruitment_cycle, year: 2025)
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
 
