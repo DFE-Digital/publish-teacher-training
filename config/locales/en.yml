@@ -390,6 +390,8 @@ en:
         data_exports:
           index: "Data exports"
     filter:
+      candidates:
+        text_search: "Email address"
       providers:
         provider_search: "Provider name, code or UKPRN"
         course_search: "Course code"

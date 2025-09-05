@@ -20,6 +20,7 @@ private
     {
       User: %i[text_search user_type],
       Provider: %i[provider_search course_search accredited provider_type],
+      Candidate: %i[text_search],
     }[collection.klass.name.to_sym]
   end
 end

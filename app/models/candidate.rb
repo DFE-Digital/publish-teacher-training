@@ -9,6 +9,13 @@ class Candidate < ApplicationRecord
   has_many :saved_courses, dependent: :destroy
   has_many :saved_course_records, through: :saved_courses, source: :course
 
+  def self.search(query)
+    return all if query.blank?
+
+    pattern = "%#{ActiveRecord::Base.sanitize_sql_like(query)}%"
+    where("email_address ILIKE ?", pattern)
+  end
+
   def full_name
     email_address
   end
