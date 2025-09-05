@@ -2,21 +2,6 @@
 
 <h1 class="govuk-heading-l"><%= t("page_titles.candidates.index") %></h1>
 
-<%= govuk_table do |table| %>
-  <% table.with_head do |head| %>
-    <% head.with_row do |row| %>
-      <% row.with_cell text: t(".email_address") %>
-      <% row.with_cell text: t(".created_at") %>
-    <% end %>
-  <% end %>
-  <% table.with_body do |body| %>
-    <% @candidates.each do |candidate| %>
-      <% body.with_row classes: %w[course-row] do |row| %>
-        <% row.with_cell text: govuk_link_to(candidate.email_address, details_support_candidate_path(candidate), class: "govuk-link") %>
-        <% row.with_cell text: "#{candidate.created_at.to_fs(:govuk_date_and_time)} (#{time_ago_in_words(candidate.created_at)} ago)" %>
-      <% end %>
-    <% end %>
-  <% end %>
+<%= render PaginatedFilter.new(filter_params: @filter_params, collection: @candidates, pagy: @pagy) do %>
+  <%= render "candidates", candidates: @candidates %>
 <% end %>
-
-<%= govuk_pagination(pagy: @pagy) %>

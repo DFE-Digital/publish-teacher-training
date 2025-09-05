@@ -13,7 +13,7 @@ module Filters
   private
 
     def filter_attributes
-      "::Filters::#{filter_model}Attributes::View".constantize.new(filters:)
+      "::Filters::#{filter_model}Attributes".constantize.new(filters:)
     end
 
     def filter_label(filter)
@@ -51,7 +51,11 @@ module Filters
     end
 
     def reload_path
-      send(:"support_recruitment_cycle_#{filter_model.to_s.downcase.pluralize}_path")
+      if filter_model.to_s.downcase.pluralize == "candidates"
+        send(:"support_#{filter_model.to_s.downcase.pluralize}_path")
+      else
+        send(:"support_recruitment_cycle_#{filter_model.to_s.downcase.pluralize}_path")
+      end
     end
   end
 end
