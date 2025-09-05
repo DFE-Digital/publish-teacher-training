@@ -5,8 +5,8 @@ module Filters
     attr_accessor :filters
 
     def initialize(filters:)
-      @filters = filters
       super
+      @filters = filters
     end
   end
 end
