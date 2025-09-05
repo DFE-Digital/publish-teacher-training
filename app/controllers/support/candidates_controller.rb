@@ -3,7 +3,7 @@ module Support
     before_action :set_candidate, only: %i[details saved_courses]
 
     def index
-      @pagy, @candidates = pagy(Candidate.order(created_at: :desc))
+      @pagy, @candidates = pagy(filtered_candidates)
     end
 
     def details; end
@@ -13,6 +13,14 @@ module Support
     end
 
   private
+
+    def filtered_candidates
+      Support::Filter.call(model_data_scope: Candidate.order(:email_address), filter_params:)
+    end
+
+    def filter_params
+      @filter_params ||= params.except(:commit).permit(:text_search, :page, :commit)
+    end
 
     def set_candidate
       @candidate = Candidate.find(params[:id])

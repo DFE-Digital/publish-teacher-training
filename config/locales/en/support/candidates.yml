@@ -1,9 +1,6 @@
 en:
   support:
     candidates:
-      index:
-        email_address: Email address
-        created_at: Created at
       details:
         email_address: Email address
         created_at: Created at
@@ -18,3 +15,6 @@ en:
         no_saved_courses: This candidate hasn’t saved any courses yet.
         course: Course
         provider: Provider
+      candidates:
+        email_address: Email address
+        created_at: Created at
