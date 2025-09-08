@@ -1,28 +1,26 @@
 <%= f.govuk_error_summary %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l"><%= page_caption %></span>
     <h1 class="govuk-heading-l"><%= page_title %></h1>
-
     <div class="govuk-form-group">
       <%= f.govuk_text_field :year,
             class: "govuk-input--width-4",
-            label: { text: Support::RecruitmentCycleForm.human_attribute_name(:year), size: "s" } %>
+            label: { text: Support::RecruitmentCycleForm.human_attribute_name(:year), size: "s" }, 
+            hint: { text: Support::RecruitmentCycleForm.human_attribute_name(:year_description) }%>
     </div>
-
     <div class="govuk-form-group">
       <%= f.govuk_date_field :application_start_date,
                               class: "govuk-input--width-20",
-                              legend: { text: Support::RecruitmentCycleForm.human_attribute_name(:application_start_date), size: "s" } %>
+                              legend: { text: Support::RecruitmentCycleForm.human_attribute_name(:application_start_date), size: "s" },
+                              hint: { text: Support::RecruitmentCycleForm.human_attribute_name(:application_start_date_description) }  %>
     </div>
-
     <div class="govuk-form-group">
       <%= f.govuk_date_field :application_end_date,
                               class: "govuk-input--width-20",
-                              legend: { text: Support::RecruitmentCycleForm.human_attribute_name(:application_end_date), size: "s" } %>
+                              legend: { text: Support::RecruitmentCycleForm.human_attribute_name(:application_end_date), size: "s" },
+                              hint: { text: Support::RecruitmentCycleForm.human_attribute_name(:application_end_date_description) } %>
     </div>
-
     <div class="govuk-form-group">
       <%= f.govuk_date_field :available_for_support_users_from,
                               class: "govuk-input--width-20",
@@ -31,7 +29,6 @@
           text: Support::RecruitmentCycleForm.human_attribute_name(:available_for_support_users_from_description),
         } %>
     </div>
-
     <div class="govuk-form-group">
       <%= f.govuk_date_field :available_in_publish_from,
                               class: "govuk-input--width-20",
@@ -40,9 +37,7 @@
           text: Support::RecruitmentCycleForm.human_attribute_name(:available_in_publish_from_description),
         } %>
     </div>
-
     <%= f.govuk_submit t(".submit") %>
-
     <p class="govuk-body">
       <%= govuk_link_to t(".cancel"), support_recruitment_cycles_path, no_visited_state: true %>
     </p>
