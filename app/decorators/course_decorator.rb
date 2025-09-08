@@ -43,7 +43,13 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def open_or_closed_for_applications
-    object.open_for_applications? ? "Open" : "Closed"
+    if object.open_for_applications?
+      "Open"
+    elsif object.recruitment_cycle.application_start_date.future?
+      "Applications will open on #{govuk_short_ordinal(object.recruitment_cycle.application_start_date)}"
+    else
+      "Closed"
+    end
   end
 
   def saved_status_tag
