@@ -96,7 +96,7 @@ RSpec.describe "Editing a recruitment cycle", service: :publish do
   end
 
   def and_i_change_the_available_in_publish_from_date
-    within_fieldset "Available in publish from" do
+    within_fieldset "Available in Publish from" do
       fill_in "Day", with: RecruitmentCycle.current.available_for_support_users_from.day + 1
       fill_in "Month", with: RecruitmentCycle.current.available_for_support_users_from.month
     end
