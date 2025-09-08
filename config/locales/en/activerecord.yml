@@ -7,7 +7,8 @@ en:
         end_date: End date
         rollover_progress: Rollover progress
         status: Status
-        available_in_publish_from: Available in Publish
+        available_for_support_users_from: Available to support users from
+        available_in_publish_from: Available to providers from
       feedback:
         id: ID
         ease_of_use: Ease of use
