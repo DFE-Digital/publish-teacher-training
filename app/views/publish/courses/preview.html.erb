@@ -25,7 +25,7 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course:) %>
 
-    <% if FeatureFlag.active?(:long_form_content) || @provider.recruitment_cycle.after_2025? %>
+    <% if FeatureFlag.active?(:long_form_content) %>
       <%= render partial: "find/courses/v2/components" %>
     <% else %>
       <%= render partial: "find/courses/v1_components" %>

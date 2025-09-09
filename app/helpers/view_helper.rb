@@ -45,7 +45,7 @@ module ViewHelper
     fee_v2 = "#{field_base_url}/fees-and-financial-support".to_s
     fee_v1 = "#{base}/fees"
 
-    fees_url = FeatureFlag.active?(:long_form_content) || course.provider.recruitment_cycle.after_2025? ? fee_v2 : fee_v1
+    fees_url = FeatureFlag.active?(:long_form_content) ? fee_v2 : fee_v1
 
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
