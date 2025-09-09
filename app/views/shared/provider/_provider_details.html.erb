@@ -1,0 +1,12 @@
+<div class="govuk-grid-column-two-thirds">
+  <%= render Find::Courses::ContactDetailsComponent::View.new(course) %>
+
+  <% is_v2 = (course.respond_to?(:version) ? (course.version&.to_i == 2) : (course.latest_enrichment&.version == 2)) %>
+  <% if is_v2 %>
+    <% if course.provider.about_us.present? || course.provider.value_proposition.present? %>
+        <%= render partial: "find/courses/v2/train_with_us", locals: { provider: course.provider } %>
+    <% end %>
+  <% else %>
+    <%= render partial: "find/courses/about_the_provider", locals: { course: course } %>
+  <% end %>
+</div>
