@@ -143,21 +143,21 @@ private
     expect(page).to have_content(
       "The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.",
     )
-    expect(page).to have_content("Find out more about where your school placements will take place")
+    expect(page).to have_content("Find out more about where your school placements will take place.")
   end
 
   def then_i_see_salaried_course_school_placement_guidance
     expect(page).to have_content(
       "The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.",
     )
-    expect(page).to have_content("Find out more about where your school placements will take place")
+    expect(page).to have_content("Find out more about where your school placements will take place.")
   end
 
   def then_i_see_fee_based_course_school_placement_guidance
     expect(page).to have_content(
       "The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.",
     )
-    expect(page).to have_content("Find out more about where your school placements will take place")
+    expect(page).to have_content("Find out more about where your school placements will take place.")
   end
 
   def provider
