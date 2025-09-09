@@ -1,0 +1,19 @@
+{
+  "name": "find-publish-teacher-training-load-tests",
+  "version": "1.0.0",
+  "description": "Load testing for Teacher Training services (Find, API, Publish)",
+  "scripts": {
+    "find:dev": "k6 run --vus 5 --duration 10s --env ENVIRONMENT=local find/load-test.js",
+    "find:dev:baseline": "k6 run --env SCENARIO=baseline --env ENVIRONMENT=local find/load-test.js",
+    "find:dev:peak": "k6 run --env SCENARIO=peak-surge --env ENVIRONMENT=local find/load-test.js",
+    "find:dev:stress": "k6 run --env SCENARIO=stress --env ENVIRONMENT=local find/load-test.js",
+    "find:baseline": "k6 cloud --env SCENARIO=baseline --env ENVIRONMENT=staging find/load-test.js",
+    "find:peak": "k6 cloud --env SCENARIO=peak-surge --env ENVIRONMENT=staging find/load-test.js",
+    "find:stress": "k6 cloud --env SCENARIO=stress --env ENVIRONMENT=staging find/load-test.js",
+    "find:all": "npm run find:baseline && npm run find:peak && npm run find:stress",
+    "grafana:login": "k6 cloud login --token $K6_CLOUD_API_TOKEN"
+  },
+  "keywords": ["k6", "load-testing", "teacher-training", "dfe"],
+  "author": "DfE Team",
+  "license": "MIT"
+}
