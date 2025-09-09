@@ -20,7 +20,7 @@ describe Shared::Courses::TeacherTrainingExpectationsComponent, type: :component
       it "renders a trackable link" do
         result = render_inline(described_class.new(course: course, is_preview: false))
         expect(result).to have_link(
-          "Find out what to expect in teacher training",
+          "Find out what to expect in teacher training.",
           href: find_track_click_path(
             utm: "teacher_training_expectations",
             url: I18n.t("find.get_into_teaching.url_initial_teacher_training"),
@@ -34,7 +34,7 @@ describe Shared::Courses::TeacherTrainingExpectationsComponent, type: :component
         result = render_inline(described_class.new(course: course, is_preview: true))
 
         expect(result).to have_link(
-          "Find out what to expect in teacher training",
+          "Find out what to expect in teacher training.",
           href: I18n.t("find.get_into_teaching.url_initial_teacher_training"),
         )
       end

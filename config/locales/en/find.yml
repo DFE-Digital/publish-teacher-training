@@ -171,7 +171,7 @@ en:
       url_subject_knowledge_enhancement: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement
       url_events: https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?utm_source=find-postgraduate-teacher-training.service.gov.uk&utm_medium=referral&utm_campaign=find_start&utm_content=Autumn23events
       url_train_to_teach_as_international_candidate: https://getintoteaching.education.gov.uk/non-uk-teachers/train-to-teach-in-england-as-an-international-student
-      url_school_placements: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements
+      url_school_placements: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements#where-will-my-placements-take-place
       url_fund_your_training: https://getintoteaching.education.gov.uk/funding-and-support
       url_visas_for_non_uk_trainees: https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees
       url_choose_course: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course
@@ -179,6 +179,7 @@ en:
       url_type_of_course_provider: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course#the-type-of-course-provider
       url_initial_teacher_training: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/initial-teacher-training
       url_interview_preparation: https://getintoteaching.education.gov.uk/how-to-apply-for-teacher-training/teacher-training-interview
+      url_school_placement_activities: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements
     qualification:
       description_with_abbreviation:
         qts:

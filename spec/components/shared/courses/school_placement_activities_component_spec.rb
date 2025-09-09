@@ -21,10 +21,10 @@ describe Shared::Courses::SchoolPlacementActivitiesComponent, type: :component d
         result = render_inline(described_class.new(course: course, is_preview: false))
 
         expect(result).to have_link(
-          "Find out what to expect on school placements",
+          ".",
           href: find_track_click_path(
             utm: "school_placement_activities",
-            url: I18n.t("find.get_into_teaching.url_type_of_course_provider"),
+            url: I18n.t("find.get_into_teaching.url_school_placement_activities"),
           ),
         )
       end
@@ -35,8 +35,8 @@ describe Shared::Courses::SchoolPlacementActivitiesComponent, type: :component d
         result = render_inline(described_class.new(course: course, is_preview: true))
 
         expect(result).to have_link(
-          "Find out what to expect on school placements",
-          href: I18n.t("find.get_into_teaching.url_type_of_course_provider"),
+          "Find out what to expect on school placements.",
+          href: I18n.t("find.get_into_teaching.url_school_placement_activities"),
         )
       end
     end

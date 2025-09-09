@@ -21,7 +21,7 @@ describe Shared::Courses::InterviewPreparationComponent, type: :component do
         result = render_inline(described_class.new(course: course, is_preview: false))
 
         expect(result).to have_link(
-          "Find out how to prepare for your interview",
+          "Find out how to prepare for your interview.",
           href: find_track_click_path(
             utm: "interview_preparation",
             url: I18n.t("find.get_into_teaching.url_interview_preparation"),
@@ -35,7 +35,7 @@ describe Shared::Courses::InterviewPreparationComponent, type: :component do
         result = render_inline(described_class.new(course: course, is_preview: true))
 
         expect(result).to have_link(
-          "Find out how to prepare for your interview",
+          "Find out how to prepare for your interview.",
           href: I18n.t("find.get_into_teaching.url_interview_preparation"),
         )
       end
