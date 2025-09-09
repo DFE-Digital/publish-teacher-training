@@ -8,7 +8,7 @@ RSpec.describe "Copy course content - school placements", service: :publish do
   let(:user) { create(:user) }
 
   before do
-    Current.recruitment_cycle = find_or_create(:recruitment_cycle, year: 2026)
+    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     sign_in_system_test(user:)
   end
