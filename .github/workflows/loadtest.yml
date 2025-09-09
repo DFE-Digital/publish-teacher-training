@@ -2,6 +2,18 @@ name: Find & Publish Load Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      scenario:
+        description: 'Select which load test scenario to run'
+        required: true
+        default: 'quick'
+        type: choice
+        options:
+          - 'quick'
+          - 'baseline'
+          - 'peak'
+          - 'stress'
+          - 'all'
 
 jobs:
   load-testing:
@@ -16,10 +28,29 @@ jobs:
       - name: Set up k6
         uses: grafana/setup-k6@v0
 
-      - name: Go to load_testing directory
-        run: cd load_testing && cp .env.example .env
+      - name: Setup environment
+        working-directory: load_testing
+        run: cp .env.example .env
+
+      - name: Run QUICK test
+        if: ${{ github.event.inputs.scenario == 'quick' || github.event.inputs.scenario == 'all' }}
+        id: quick
+        working-directory: load_testing
+        run: |
+          echo "::group::Quick Test"
+          DASHBOARD_URL=$(k6 cloud --quiet \
+            --env SCENARIO=quick --env ENVIRONMENT=staging \
+            find/find-load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
+          echo "QUICK_DASHBOARD_URL=$DASHBOARD_URL" >> $GITHUB_ENV
+          echo "K6 Quick Load Test Dashboard: $DASHBOARD_URL"
+          echo "::endgroup::"
+
+      - name: Wait before BASELINE test
+        if: ${{ (github.event.inputs.scenario == 'baseline' || github.event.inputs.scenario == 'all') && (github.event.inputs.scenario == 'all' && steps.quick.conclusion == 'success') }}
+        run: sleep 30
 
       - name: Run BASELINE scenario in Grafana Cloud
+        if: ${{ github.event.inputs.scenario == 'baseline' || github.event.inputs.scenario == 'all' }}
         id: baseline
         working-directory: load_testing
         run: |
@@ -32,9 +63,11 @@ jobs:
           echo "::endgroup::"
 
       - name: Wait before PEAK test
+        if: ${{ (github.event.inputs.scenario == 'peak' || github.event.inputs.scenario == 'all') && (github.event.inputs.scenario == 'all' && steps.baseline.conclusion == 'success') }}
         run: sleep 30
 
       - name: Run PEAK SURGE scenario in Grafana Cloud
+        if: ${{ github.event.inputs.scenario == 'peak' || github.event.inputs.scenario == 'all' }}
         id: peak
         working-directory: load_testing
         run: |
@@ -47,9 +80,11 @@ jobs:
           echo "::endgroup::"
 
       - name: Wait before STRESS test
+        if: ${{ (github.event.inputs.scenario == 'stress' || github.event.inputs.scenario == 'all') && (github.event.inputs.scenario == 'all' && steps.peak.conclusion == 'success') }}
         run: sleep 30
 
       - name: Run STRESS scenario in Grafana Cloud
+        if: ${{ github.event.inputs.scenario == 'stress' || github.event.inputs.scenario == 'all' }}
         id: stress
         working-directory: load_testing
         run: |
@@ -65,6 +100,7 @@ jobs:
         run: |
           echo "=== K6 Cloud Test Dashboard Links ==="
           echo ""
-          echo "Baseline Dashboard: ${BASELINE_DASHBOARD_URL:-Not Found}"
-          echo "Peak Surge Dashboard: ${PEAK_DASHBOARD_URL:-Not Found}"
-          echo "Stress Dashboard: ${STRESS_DASHBOARD_URL:-Not Found}"
+          echo "Quick Test Dashboard: ${QUICK_DASHBOARD_URL:-Not Run}"
+          echo "Baseline Dashboard: ${BASELINE_DASHBOARD_URL:-Not Run}"
+          echo "Peak Surge Dashboard: ${PEAK_DASHBOARD_URL:-Not Run}"
+          echo "Stress Dashboard: ${STRESS_DASHBOARD_URL:-Not Run}"
