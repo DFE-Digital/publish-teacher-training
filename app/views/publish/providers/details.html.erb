@@ -33,7 +33,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= govuk_summary_list do |summary_list| %>
-      <% if FeatureFlag.active?(:long_form_content) || Current.recruitment_cycle.after_2025? %>
+      <% if FeatureFlag.active?(:long_form_content) %>
           <% enrichment_summary(
           summary_list,
           :provider,
