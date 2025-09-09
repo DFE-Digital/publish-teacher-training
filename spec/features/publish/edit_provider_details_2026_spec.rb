@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "Why Train With Us section in 2026 cycle +" do
   scenario "Provider user edits provider details" do
+    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
     given_i_am_a_provider_user_as_a_provider_user
     when_i_visit_the_details_page
     then_i_can_edit_info_about_training_with_us
@@ -12,7 +13,7 @@ feature "Why Train With Us section in 2026 cycle +" do
   end
 
   def given_i_am_a_provider_user_as_a_provider_user
-    @recruitment_cycle = create(:recruitment_cycle, :next)
+    @recruitment_cycle = find_or_create(:recruitment_cycle)
     @provider = create(:provider, recruitment_cycle: @recruitment_cycle)
     course = create(:course, :with_accrediting_provider, provider: @provider)
 

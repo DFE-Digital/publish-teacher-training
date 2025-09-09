@@ -11,8 +11,10 @@ RSpec.describe "Publish - Missing provider information in course", service: :pub
   # 5. Fill out the missing information
   # 6. Assert redirect back to the about provider page
   scenario "filling out missing information returns you to the preview" do
-    Timecop.travel Time.local(2025, 10, 1, 9, 0) do
-      given_i_am_authenticated(user: user_with_course_in_2026_cycle)
+    allow(FeatureFlag).to receive(:active?)
+    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+    Timecop.travel Find::CycleTimetable.mid_cycle do
+      given_i_am_authenticated(user: user_with_course)
       when_i_visit_the_publish_course_preview_page
       and_i_click_to_see_the_disability_information
       then_i_see_missing_information_link_for_provider_information
@@ -64,13 +66,12 @@ private
     @provider ||= @current_user.providers.first
   end
 
-  def user_with_course_in_2026_cycle
-    recruitment_cycle = find_or_create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago, available_for_support_users_from: 1.hour.ago)
+  def user_with_course
+    recruitment_cycle = find_or_create(:recruitment_cycle)
 
     @course = build(
       :course,
       :publishable,
-      applications_open_from: recruitment_cycle.application_end_date - 1.minute,
     )
 
     provider = create(
