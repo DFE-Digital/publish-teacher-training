@@ -21,9 +21,9 @@ export function courseDetailsJourney(environment, config) {
       const courseResponse = http.get(`${environment.baseUrl}${randomCourseLink}`);
       const isSuccess = findPerformanceCheck(courseResponse, 'Course Detail Page', config.expectedResponseTimes.courseDetails);
 
-      findContentCheck(courseResponse, 'Course information', 'course-info');
-      findContentCheck(courseResponse, 'How to apply', 'apply-section');
-      findContentCheck(courseResponse, 'Training provider', 'provider-info');
+      findContentCheck(courseResponse, 'Course summary', 'course-info');
+      findContentCheck(courseResponse, 'Apply for this course', 'apply-section');
+      findContentCheck(courseResponse, 'About the course', 'about-course');
 
       if (!isSuccess) {
         findErrorHandler(courseResponse, 'Course Detail Page');
@@ -40,8 +40,7 @@ export function courseDetailsJourney(environment, config) {
         const courseLink = courseLinks[0];
         const courseResponse = http.get(`${environment.baseUrl}${courseLink}`);
 
-        const hasApplyButton = courseResponse.body.includes('Apply for this course') ||
-                              courseResponse.body.includes('Apply now');
+        const hasApplyButton = courseResponse.body.includes('Apply for this course');
 
         findContentCheck(courseResponse, 'Apply', 'apply-button');
 

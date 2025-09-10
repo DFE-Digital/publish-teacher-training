@@ -41,7 +41,7 @@ export function searchAndFilterJourney(environment, config) {
       const response = http.get(`${environment.baseUrl}/results?${multiFilterParams}`);
       const isSuccess = findPerformanceCheck(response, 'Multi-Filter Search', config.expectedResponseTimes.search);
 
-      findContentCheck(response, 'part time', 'filter-validation');
+      findContentCheck(response, 'Part time (18 to 24 months)', 'filter-validation');
       findContentCheck(response, 'courses found', 'filtered-results');
 
       if (!isSuccess) {
@@ -64,7 +64,7 @@ export function searchAndFilterJourney(environment, config) {
       const isSuccess = findPerformanceCheck(response, 'Advanced Filter Search', config.expectedResponseTimes.search);
 
       findContentCheck(response, 'PGCE', 'qualification-filter');
-      findContentCheck(response, 'salary', 'funding-filter');
+      findContentCheck(response, 'Salary', 'funding-filter');
 
       if (!isSuccess) {
         findErrorHandler(response, 'Advanced Filter Search');
