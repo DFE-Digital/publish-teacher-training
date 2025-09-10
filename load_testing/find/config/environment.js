@@ -1,15 +1,11 @@
-console.log("ENVIRONMENT:", __ENV.ENVIRONMENT);
-console.log("FIND_LOCAL_URL:", __ENV.FIND_LOCAL_URL);
-console.log("FIND_STAGING_URL:", __ENV.FIND_STAGING_URL);
-
 const findEnvironments = {
   staging: {
-    baseUrl: __ENV.FIND_STAGING_URL,
+    baseUrl: 'https://staging.find-teacher-training-courses.service.gov.uk',
     name: 'staging-find',
     service: 'find'
   },
   local: {
-    baseUrl: __ENV.FIND_LOCAL_URL,
+    baseUrl: 'https://find.localhost',
     name: 'local-find',
     service: 'find'
   }
