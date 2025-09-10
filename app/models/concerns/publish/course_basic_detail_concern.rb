@@ -205,6 +205,8 @@ module Publish
         publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)
       when :level
         new_publish_provider_recruitment_cycle_courses_level_path(path_params)
+      when :design_technology
+        new_publish_provider_recruitment_cycle_courses_design_technology_path(path_params)
       when :modern_languages
         new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :engineers_teach_physics
