@@ -1,21 +1,21 @@
 import http from 'k6/http';
-import { check, sleep, group } from 'k6';
-import { performanceCheck } from '../../shared/utils/performance-checks.js';
+import { group, sleep } from 'k6';
+import { findPerformanceCheck, findContentCheck, findErrorHandler } from '../utils/checks.js';
 
 export function homepageJourney(environment, config) {
-  group('Find Homepage Journey', function() {
-    const response = http.get(`${environment.baseUrl}/`);
+  group('Find: Homepage Journey', function() {
+    group('Homepage Load', function() {
+      const response = http.get(`${environment.baseUrl}/`);
+      const isSuccess = findPerformanceCheck(response, 'Homepage', config.expectedResponseTimes.homepage);
 
-    performanceCheck(response, 'Find Homepage Load', config.expectedResponseTimes.homepage);
+      findContentCheck(response, 'Find teacher training courses', 'main-heading');
+      findContentCheck(response, 'Search', 'search-button');
 
-    check(response, {
-      'Find homepage loads successfully': (r) => r.status === 200,
-      'contains course search form': (r) => r.body.includes('Find teacher training courses'),
-      'has subject selection': (r) => r.body.includes('Subject'),
-      'has location search': (r) => r.body.includes('City, town or postcode'),
-      'has primary/secondary options': (r) => r.body.includes('Primary') && r.body.includes('Secondary')
+      if (!isSuccess) {
+        findErrorHandler(response, 'Homepage');
+      }
+
+      sleep(2);
     });
-
-    sleep(1);
   });
 }
