@@ -131,7 +131,7 @@ describe SubjectsCache do
 
       subjects = cache.all_subjects
 
-      expect(subjects.map(&:name)).to contain_exactly("Primary", "Primary with English", "Primary with geography and history", "Primary with mathematics", "Primary with modern languages", "Primary with physical education", "Primary with science", "Art and design", "Science", "Biology", "Business studies", "Chemistry", "Citizenship", "Classics", "Communication and media studies", "Computing", "Dance", "Design and technology", "Drama", "Economics", "English", "Geography", "Health and social care", "History", "Mathematics", "Music", "Philosophy", "Physical education", "Physics", "Psychology", "Religious education", "Social sciences", "Latin", "Ancient Greek", "Ancient Hebrew", "Physical education with an EBacc subject", "French", "German", "Italian", "Japanese", "Mandarin", "Russian", "Spanish", "Modern languages (other)", "Further education", "Biology", "Chemistry", "Physics", "History")
+      expect(subjects.map(&:name)).to contain_exactly("Primary", "Primary with English", "Primary with geography and history", "Primary with mathematics", "Primary with modern languages", "Primary with physical education", "Primary with science", "Art and design", "Science", "Biology", "Business studies", "Chemistry", "Citizenship", "Classics", "Communication and media studies", "Computing", "Dance", "Design and technology", "Drama", "Economics", "English", "Geography", "Health and social care", "History", "Mathematics", "Music", "Philosophy", "Physical education", "Physics", "Psychology", "Religious education", "Social sciences", "Latin", "Ancient Greek", "Ancient Hebrew", "Physical education with an EBacc subject", "French", "German", "Italian", "Japanese", "Mandarin", "Russian", "Spanish", "Modern languages (other)", "Further education", "Biology", "Chemistry", "Physics", "History", "Electronics", "Engineering", "Food technology", "Product Technology", "Textiles")
       expect(subjects.map(&:value)).to match_array(
         %w[
           00
@@ -183,6 +183,11 @@ describe SubjectsCache do
           F1
           F3
           V1
+          DTE
+          DTEN
+          DTF
+          DTP
+          DTT
         ],
       )
     end

@@ -1,0 +1,43 @@
+<% content_for :page_title, title_with_error_prefix("Pick all the specialisms for #{course.name_and_code}", course.errors.any?) %>
+
+<% content_for :before_content do %>
+
+  <% if params[:course][:subjects_ids].first == "29" %>
+    <%= govuk_back_link_to(
+      engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
+        course.provider_code, course.recruitment_cycle_year, course.course_code, course: { subjects_ids: course.subject_ids, master_subject_id: SecondarySubject.physics.id.to_s }
+      ),
+    ) %>
+  <% else %>
+    <%= govuk_back_link_to(
+      subjects_publish_provider_recruitment_cycle_course_path(
+        course.provider_code, course.recruitment_cycle_year, course.course_code
+      ),
+    ) %>
+  <% end %>
+<% end %>
+
+<%= render "publish/shared/errors" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: course,
+                  url: design_technology_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+                  method: :put do |form| %>
+
+      <%= render "publish/shared/course_creation_hidden_fields",
+        form:,
+        course_creation_params: params.fetch(:course, {}).slice(:subjects_ids),
+        except_keys: [] %>
+
+      <%= render "form_fields", form: %>
+
+      <%= form.submit course.is_running? ? "Save and publish changes" : "Save",
+        class: "govuk-button", data: { qa: "course__save" } %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+    </p>
+  </div>
+</div>

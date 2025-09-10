@@ -33,8 +33,7 @@ private
       courses_list
       level
       subjects
-      engineers_teach_physics
-      modern_languages
+    ] + special_steps + %i[
       age_range
       outcome
       school
@@ -51,8 +50,7 @@ private
       courses_list
       level
       subjects
-      engineers_teach_physics
-      modern_languages
+    ] + special_steps + %i[
       age_range
       outcome
       school
@@ -96,8 +94,7 @@ private
       courses_list
       level
       subjects
-      engineers_teach_physics
-      modern_languages
+    ] + special_steps + %i[
       age_range
       outcome
       funding_type
@@ -120,8 +117,7 @@ private
       courses_list
       level
       subjects
-      engineers_teach_physics
-      modern_languages
+    ] + special_steps + %i[
       age_range
       outcome
       funding_type
@@ -142,6 +138,23 @@ private
     steps = []
     steps << :accredited_provider if course.provider.accredited_partners.length == 1
     steps
+  end
+
+  def special_steps
+    physics_id = SecondarySubject.physics.id
+    ml_id = SecondarySubject.modern_languages.id
+    dt_id = SecondarySubject.design_technology.id
+
+    case course.master_subject_id
+    when dt_id
+      %i[design_technology modern_languages engineers_teach_physics]
+    when ml_id
+      %i[modern_languages design_technology engineers_teach_physics]
+    when physics_id
+      %i[engineers_teach_physics modern_languages design_technology]
+    else
+      %i[engineers_teach_physics modern_languages design_technology]
+    end
   end
 
   def visas_to_remove(course)

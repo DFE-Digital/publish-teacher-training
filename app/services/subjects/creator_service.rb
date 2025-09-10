@@ -6,11 +6,13 @@ module Subjects
                    secondary_subject: SecondarySubject,
                    further_education_subject: FurtherEducationSubject,
                    modern_languages_subject: ModernLanguagesSubject,
+                   design_technology_subject: DesignTechnologySubject,
                    discontinued_subject: DiscontinuedSubject)
       @primary_subject = primary_subject
       @secondary_subject = secondary_subject
       @further_education_subject = further_education_subject
       @modern_languages_subject = modern_languages_subject
+      @design_technology_subject = design_technology_subject
       @discontinued_subject = discontinued_subject
     end
 
@@ -73,10 +75,18 @@ module Subjects
         { subject_name: "Modern languages (other)", subject_code: "24" },
       ]
 
+      # NOTE: These subject_codes are contrived.
+      design_technology = [
+        { subject_name: "Electronics", subject_code: "DTE" },
+        { subject_name: "Engineering", subject_code: "DTEN" },
+        { subject_name: "Food technology", subject_code: "DTF" },
+        { subject_name: "Product Technology", subject_code: "DTP" },
+        { subject_name: "Textiles", subject_code: "DTT" },
+      ]
+
       further_education = [
         { subject_name: "Further education", subject_code: "41" },
       ]
-
       # old 2019 DfE subjects
       # English as a second or other language was removed because it is not an actual modern language and is not entitled to the financial incentives
 
@@ -96,6 +106,10 @@ module Subjects
 
       modern_languages.each do |subject|
         @modern_languages_subject.find_or_create_by!(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
+      end
+
+      design_technology.each do |subject|
+        @design_technology_subject.find_or_create_by!(subject_name: subject[:subject_name], subject_code: subject[:subject_code])
       end
 
       further_education.each do |subject|

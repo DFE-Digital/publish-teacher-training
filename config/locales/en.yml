@@ -664,6 +664,8 @@ en:
               duplicate: "^The second subject must be different to the first subject"
             modern_languages_subjects:
               select_a_language: "Select at least one language"
+            design_technology_subjects:
+              select_a_specialism: "Select at least one specialism"
             study_mode:
               blank: "^Select a study mode"
             applications_open_from:
