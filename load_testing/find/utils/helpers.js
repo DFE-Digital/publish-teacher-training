@@ -47,7 +47,6 @@ export function buildFindSearchParams (params) {
     })
   }
 
-  // Add UTM parameters to simulate real user behavior
   searchParams.append('utm_source', 'load_test')
   searchParams.append('utm_medium', 'k6_testing')
 
