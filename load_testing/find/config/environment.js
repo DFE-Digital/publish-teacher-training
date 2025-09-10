@@ -1,4 +1,9 @@
 const findEnvironments = {
+  qa: {
+    baseUrl: 'https://qa.find-teacher-training-courses.service.gov.uk',
+    name: 'qa-find',
+    service: 'find'
+  },
   staging: {
     baseUrl: 'https://staging.find-teacher-training-courses.service.gov.uk',
     name: 'staging-find',
