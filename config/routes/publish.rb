@@ -124,6 +124,10 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
           get "back"
           get "continue"
         end
+        resource :design_technology, on: :member, only: %i[new], controller: "courses/design_technology", path: "design-technology" do
+          get "back"
+          get "continue"
+        end
         resource :apprenticeship, on: :member, only: %i[new], controller: "courses/apprenticeship" do
           get "continue"
         end
@@ -248,6 +252,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
         get "/modern-languages", on: :member, to: "courses/modern_languages#edit"
         put "/modern-languages", on: :member, to: "courses/modern_languages#update"
+
+        get "/design-technology", on: :member, to: "courses/design_technology#edit"
+        put "/design-technology", on: :member, to: "courses/design_technology#update"
 
         get "/student-visa-sponsorship", on: :member, to: "courses/student_visa_sponsorship#edit"
         put "/student-visa-sponsorship", on: :member, to: "courses/student_visa_sponsorship#update"

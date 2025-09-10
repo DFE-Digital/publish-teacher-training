@@ -23,6 +23,7 @@ describe WorkflowStepService do
           subjects
           engineers_teach_physics
           modern_languages
+          design_technology
           age_range
           outcome
           funding_type
@@ -57,6 +58,7 @@ describe WorkflowStepService do
           subjects
           engineers_teach_physics
           modern_languages
+          design_technology
           age_range
           outcome
           funding_type
@@ -94,6 +96,7 @@ describe WorkflowStepService do
           subjects
           engineers_teach_physics
           modern_languages
+          design_technology
           age_range
           outcome
           funding_type
@@ -125,6 +128,7 @@ describe WorkflowStepService do
           subjects
           engineers_teach_physics
           modern_languages
+          design_technology
           age_range
           outcome
           funding_type
@@ -162,6 +166,7 @@ describe WorkflowStepService do
           subjects
           engineers_teach_physics
           modern_languages
+          design_technology
           age_range
           outcome
           school
@@ -189,6 +194,7 @@ describe WorkflowStepService do
           subjects
           engineers_teach_physics
           modern_languages
+          design_technology
           age_range
           outcome
           school
@@ -214,6 +220,7 @@ describe WorkflowStepService do
         subjects
         engineers_teach_physics
         modern_languages
+        design_technology
         age_range
         outcome
         school
@@ -260,6 +267,7 @@ describe WorkflowStepService do
         subjects
         engineers_teach_physics
         modern_languages
+        design_technology
         age_range
         outcome
         funding_type

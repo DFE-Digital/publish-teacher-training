@@ -32,6 +32,19 @@ module Publish
       def update
         authorize(provider)
 
+        next_subjects = updated_subject_list
+        if next_subjects.include?(design_technology_subject_id)
+          redirect_to(
+            design_technology_publish_provider_recruitment_cycle_course_path(
+              @course.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code,
+              course: { subjects_ids: next_subjects },
+            ),
+          )
+          return
+        end
+
         if course_subjects_form.save!
           course_updated_message("Subjects")
           redirect_to(
@@ -111,6 +124,10 @@ module Publish
 
       def selected_non_language_subject_ids
         non_language_subject_ids & params[:course][:subjects_ids]
+      end
+
+      def design_technology_subject_id
+        @design_technology_subject_id ||= SecondarySubject.design_technology.id
       end
     end
   end
