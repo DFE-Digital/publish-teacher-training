@@ -12,5 +12,4 @@ export const quickTestScenario = {
     scenario: 'quick',
     description: 'Super quick test - 10 users, 25 seconds'
   }
-};
-
+}

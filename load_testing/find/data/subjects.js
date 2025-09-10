@@ -14,8 +14,8 @@ const findSubjects = [
   '11', // Religious education
   'F0', // Science
   'W1', // Modern Languages
-  '13', // Music
-];
+  '13' // Music
+]
 
 const findLocations = [
   'London, UK',
@@ -28,7 +28,7 @@ const findLocations = [
   'Newcastle, UK',
   'Nottingham, UK',
   'Leicester, UK'
-];
+]
 
 const findProviders = [
   'University College London',
@@ -36,28 +36,28 @@ const findProviders = [
   'Birmingham City University',
   'Manchester Metropolitan University',
   'Leeds Beckett University'
-];
+]
 
-export function getRandomSubject() {
-  return findSubjects[Math.floor(Math.random() * findSubjects.length)];
+export function getRandomSubject () {
+  return findSubjects[Math.floor(Math.random() * findSubjects.length)]
 }
 
-export function getRandomLocation() {
-  return findLocations[Math.floor(Math.random() * findLocations.length)];
+export function getRandomLocation () {
+  return findLocations[Math.floor(Math.random() * findLocations.length)]
 }
 
-export function getRandomProvider() {
-  return findProviders[Math.floor(Math.random() * findProviders.length)];
+export function getRandomProvider () {
+  return findProviders[Math.floor(Math.random() * findProviders.length)]
 }
 
-export function getFindSubjects() {
-  return findSubjects;
+export function getFindSubjects () {
+  return findSubjects
 }
 
-export function getFindLocations() {
-  return findLocations;
+export function getFindLocations () {
+  return findLocations
 }
 
-export function getFindProviders() {
-  return findProviders;
+export function getFindProviders () {
+  return findProviders
 }
