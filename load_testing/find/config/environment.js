@@ -9,14 +9,14 @@ const findEnvironments = {
     name: 'local-find',
     service: 'find'
   }
-};
-
-export function getFindEnvironment() {
-  const env = __ENV.ENVIRONMENT || 'staging';
-  return findEnvironments[env] || findEnvironments.staging;
 }
 
-export function getFindConfig() {
+export function getFindEnvironment () {
+  const env = __ENV.ENVIRONMENT || 'staging'
+  return findEnvironments[env] || findEnvironments.staging
+}
+
+export function getFindConfig () {
   return {
     service: 'Find Teacher Training',
     expectedResponseTimes: {
@@ -37,5 +37,5 @@ export function getFindConfig() {
       projectID: __ENV.GRAFANA_PROJECT_ID || null,
       name: 'Find Teacher Training Load Test'
     }
-  };
+  }
 }
