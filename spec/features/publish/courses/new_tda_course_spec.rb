@@ -3,7 +3,7 @@
 require "rails_helper"
 
 feature "Adding a teacher degree apprenticeship course" do
-  scenario "creating a degree awarding course from school direct provider" do
+  scenario "creating a degree awarding course from school direct provider", travel: mid_cycle(2025) do
     given_i_am_authenticated_as_a_school_direct_provider_user
     when_i_visit_the_courses_page
     and_i_click_on_add_course
@@ -46,7 +46,7 @@ feature "Adding a teacher degree apprenticeship course" do
     then_the_course_is_published
   end
 
-  scenario "creating a degree awarding course from scitt provider" do
+  scenario "creating a degree awarding course from scitt provider", travel: mid_cycle(2025) do
     given_i_am_authenticated_as_a_scitt_provider_user
     when_i_visit_the_courses_page
     and_i_click_on_add_course
@@ -84,7 +84,7 @@ feature "Adding a teacher degree apprenticeship course" do
     then_the_course_is_published
   end
 
-  scenario "when choosing primary course" do
+  scenario "when choosing primary course", travel: mid_cycle(2025) do
     given_i_am_authenticated_as_a_school_direct_provider_user
     when_i_visit_the_courses_page
     and_i_click_on_add_course

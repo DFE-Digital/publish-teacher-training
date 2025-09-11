@@ -3,7 +3,7 @@
 require "rails_helper"
 
 feature "Editing about this course section" do
-  scenario "adding valid data" do
+  scenario "adding valid data", travel: mid_cycle(2025) do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_about_course_edit_page

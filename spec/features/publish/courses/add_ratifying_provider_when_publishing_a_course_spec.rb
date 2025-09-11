@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Publishing a course when course ratifying provider is invalid" do
+feature "Publishing a course when course ratifying provider is invalid", travel: Find::CycleTimetable.mid_cycle do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
