@@ -19,7 +19,6 @@ describe API::Public::V1::SerializableProvider do
   it { is_expected.to have_attribute(:provider_type).with_value(provider.provider_type) }
   it { is_expected.to have_attribute(:region_code).with_value(provider.region_code) }
   it { is_expected.to have_attribute(:train_with_disability).with_value(provider.train_with_disability) }
-  it { is_expected.to have_attribute(:train_with_us).with_value(provider.train_with_us) }
   it { is_expected.to have_attribute(:website).with_value(provider.website) }
 
   it { is_expected.to have_attribute(:accredited_body).with_value(provider.accredited?) }
@@ -40,12 +39,21 @@ describe API::Public::V1::SerializableProvider do
   it { is_expected.to have_attribute(:can_sponsor_student_visa).with_value(provider.can_sponsor_student_visa) }
 
   context "2026 cycle" do
-    let(:recruitment_cycle) { create(:recruitment_cycle, :next) }
+    let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
     let(:provider) { create(:provider, about_us: "about us", value_proposition: "value proposition", recruitment_cycle:) }
+
+    it "returns updated train_with_us", travel: find_opens(2026) do
+      expect(subject).to have_attribute(:train_with_us).with_value("about us\r\n\r\nvalue proposition")
+    end
+  end
+
+  context "2025 cycle", travel: mid_cycle(2025) do
+    let!(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
+    let!(:provider) { create(:provider, about_us: "about us", value_proposition: "value proposition", recruitment_cycle:) }
 
     it "returns updated train_with_us" do
       Timecop.travel(Find::CycleTimetable.find_reopens) do
-        expect(subject).to have_attribute(:train_with_us).with_value("about us\r\n\r\nvalue proposition")
+        expect(subject).to have_attribute(:train_with_us).with_value(provider.train_with_us)
       end
     end
   end
