@@ -1291,6 +1291,7 @@ en:
   time:
     formats:
       last_event: "%-d %B %Y at %l:%M%P"
+      govuk_short: "%-d%{ordinal} %B"
   get_into_teaching:
     tel: 0800 389 2500
     opening_times: "Monday to Friday, 8.30am to 5.30pm"

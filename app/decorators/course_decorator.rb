@@ -47,8 +47,8 @@ class CourseDecorator < ApplicationDecorator
   def open_or_closed_for_applications
     if object.open_for_applications?
       "Open"
-    elsif object.recruitment_cycle.application_start_date.future?
-      "Applications will open on #{govuk_short_ordinal(object.recruitment_cycle.application_start_date)}"
+    elsif Find::CycleTimetable.apply_opens(object.recruitment_cycle.year).future?
+      "Applications will open on #{govuk_short_ordinal(Find::CycleTimetable.apply_opens(object.recruitment_cycle.year))}"
     else
       "Closed"
     end
