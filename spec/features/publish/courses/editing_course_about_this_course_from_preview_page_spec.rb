@@ -3,7 +3,7 @@
 require "rails_helper"
 
 feature "Editing about this course from the course preview page" do
-  scenario "I am redirected back to the preview page" do
+  scenario "I am redirected back to the preview page", travel: mid_cycle(2025) do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
 

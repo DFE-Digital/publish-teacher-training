@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing visa sponsorship deadlines" do
+feature "Editing visa sponsorship deadlines", travel: mid_cycle do
   before do
     and_i_am_authenticated_as_a_lead_school_provider_user
   end
