@@ -22,8 +22,8 @@ FactoryBot.define do
     start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
     applications_open_from do
       Faker::Time.between(
-        from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 10, 1),
-        to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29),
+        from: provider.recruitment_cycle.application_start_date,
+        to: provider.recruitment_cycle.application_end_date,
       )
     end
     degree_grade { :two_one }
