@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe RolloverProgressQuery, type: :model do
-  let(:target_cycle) { create(:recruitment_cycle, year: "2026", application_start_date: Date.new(2025, 9, 1)) }
-  let(:previous_target_cycle) { RecruitmentCycle.current }
+  let!(:target_cycle) { create(:recruitment_cycle, year: "2026", application_start_date: Date.new(2025, 9, 1)) }
+  let!(:previous_target_cycle) { create(:recruitment_cycle, year: "2025", application_start_date: Date.new(2024, 9, 1)) }
   let(:rollover_progress) { described_class.new(target_cycle:) }
 
   let(:provider_with_own_course) { create(:provider, recruitment_cycle: previous_target_cycle) }
@@ -46,7 +46,8 @@ RSpec.describe RolloverProgressQuery, type: :model do
 
   describe "#initialize" do
     it "calculates previous_target_cycle" do
-      expect(rollover_progress.previous_target_cycle.attributes).to eq(previous_target_cycle.attributes)
+      # reloading the record because something in the test is setting the usec to be different from the value in the DB
+      expect(rollover_progress.previous_target_cycle.attributes).to eq(previous_target_cycle.reload.attributes)
     end
   end
 
