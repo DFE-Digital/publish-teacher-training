@@ -194,7 +194,9 @@ jobs:
         # Pass Settings compatible env vars to runs tests with
         # feature flag(s) enables
         # Separate mutliple flags with a space
-        feature-flags: [""]
+        feature-flags:
+          - ""
+          - "SETTINGS__CURRENT_RECRUITMENT_CYCLE_YEAR=2026"
 
     steps:
       - name: Checkout
