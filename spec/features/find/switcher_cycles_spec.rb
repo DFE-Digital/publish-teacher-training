@@ -5,6 +5,8 @@ require "rails_helper"
 feature "switcher cycle" do
   before do
     Timecop.freeze(2022, 10, 12)
+    allow(ENV).to receive(:[])
+    allow(ENV).to receive(:[]).with("ENABLE_SWITCHER").and_return("1")
   end
 
   scenario "Navigate to /cycle" do

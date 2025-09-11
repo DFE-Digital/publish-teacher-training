@@ -7,32 +7,23 @@ feature "Viewing a findable course" do
   include Rails.application.routes.url_helpers
 
   before do
-    Timecop.travel(Find::CycleTimetable.mid_cycle)
     FeatureFlag.activate(:bursaries_and_scholarships_announced)
   end
 
-  context "a course with international fees" do
+  context "a course with international fees", travel: mid_cycle(2025) do
     before do
       given_there_is_a_findable_course
     end
 
-    scenario "course page shows correct course information" do
-      Timecop.freeze(Find::CycleTimetable.apply_deadline - 1.hour) do
-        when_i_visit_the_course_page
-        then_i_should_see_the_course_information
-        and_i_should_see_funding_options
-      end
+    scenario "course page shows correct course information", travel: apply_deadline(2025) - 1.hour do
+      when_i_visit_the_course_page
+      then_i_should_see_the_course_information
+      and_i_should_see_funding_options
     end
 
-    context "end of cycle" do
+    context "end of cycle", travel: apply_deadline(2025) + 1.hour do
       before do
-        Timecop.freeze(Find::CycleTimetable.apply_deadline + 1.hour)
-
         when_i_visit_the_course_page
-      end
-
-      after do
-        Timecop.return
       end
 
       scenario "does not display the 'apply for this course' button" do
@@ -53,27 +44,21 @@ feature "Viewing a findable course" do
     end
   end
 
-  scenario "user sees no school placements" do
-    create(:recruitment_cycle, :next)
-    Timecop.travel(Find::CycleTimetable.find_opens) do
-      given_there_is_a_findable_course
-      and_the_provider_does_not_have_selectable_schools
-      when_i_visit_the_course_page
-      then_i_see_no_school_placements_link
-    end
+  scenario "user sees no school placements", travel: find_opens do
+    given_there_is_a_findable_course
+    and_the_provider_does_not_have_selectable_schools
+    when_i_visit_the_course_page
+    then_i_see_no_school_placements_link
   end
 
-  scenario "user sees selectable school placements" do
-    create(:recruitment_cycle, :next)
-    Timecop.travel(Find::CycleTimetable.find_opens) do
-      given_there_is_a_findable_course
-      and_the_provider_has_selectable_schools
-      when_i_visit_the_course_page
-      when_i_click("View list of school placements")
-      then_i_should_be_on_the_school_placements_page
-      when_i_click("Back to #{@course.name} (#{course.course_code})")
-      then_i_should_be_on_the_course_page
-    end
+  scenario "user sees selectable school placements", travel: find_opens do
+    given_there_is_a_findable_course
+    and_the_provider_has_selectable_schools
+    when_i_visit_the_course_page
+    when_i_click("View list of school placements")
+    then_i_should_be_on_the_school_placements_page
+    when_i_click("Back to #{@course.name} (#{course.course_code})")
+    then_i_should_be_on_the_course_page
   end
 
   scenario "user views provider and accredited_provider" do
@@ -321,7 +306,7 @@ private
   end
 
   def then_i_should_not_see_the_apply_button
-    expect(page).not_to have_link("Apply for this course", exact_text: true)
+    expect(page).to have_no_link("Apply for this course", exact_text: true)
     expect(find_course_show_page).to have_end_of_cycle_notice
   end
 
