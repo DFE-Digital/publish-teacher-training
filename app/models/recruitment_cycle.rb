@@ -35,13 +35,11 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   scope :upcoming_cycles_open_to_publish, lambda {
-    where("application_start_date > ?", Date.current)
-     .where("? BETWEEN available_in_publish_from AND application_start_date", Date.current)
+    where("? BETWEEN available_in_publish_from AND application_start_date", Date.current)
   }
 
   scope :upcoming_cycles_open_to_support, lambda {
-    where("application_start_date > ?", Date.current)
-     .where("? BETWEEN available_for_support_users_from AND application_start_date", Date.current)
+    where("? BETWEEN available_for_support_users_from AND application_start_date", Date.current)
   }
 
   def previous
