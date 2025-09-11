@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Publish - Courses page", service: :publish do
+RSpec.describe "Publish - Courses page", service: :publish, travel: mid_cycle do
   include DfESignInUserHelper
 
   let(:provider) { create(:provider, provider_name: "System Provider") }
