@@ -2,13 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Edit provider course details" do
-  around do |example|
-    Timecop.freeze(2021, 8, 1, 12) do
-      example.run
-    end
-  end
-
+RSpec.describe "Edit provider course details", travel: mid_cycle do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_with_courses
@@ -135,7 +129,7 @@ private
   end
 
   def valid_date_month
-    @valid_date_month ||= "6"
+    @valid_date_month ||= "9"
   end
 
   def invalid_date_month
@@ -233,7 +227,7 @@ private
 
   def and_it_contains_invalid_value_errors
     expect(support_provider_course_edit_page.error_summary.text).to include("Course code is already taken")
-    expect(support_provider_course_edit_page.error_summary.text).to include("June #{Settings.current_recruitment_cycle_year + 3} is not in the #{Settings.current_recruitment_cycle_year} cycle")
+    expect(support_provider_course_edit_page.error_summary.text).to include("September #{Settings.current_recruitment_cycle_year + 3} is not in the #{Settings.current_recruitment_cycle_year} cycle")
   end
 
   def and_it_contains_start_date_format_error
