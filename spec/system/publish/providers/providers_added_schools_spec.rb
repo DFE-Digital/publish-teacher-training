@@ -48,19 +48,13 @@ RSpec.describe "Publish - Providers - Added Schools page", service: :publish, ty
     )
   end
 
-  context "when the 2026 cycle has not yet started" do
-    let(:frozen_time) { Time.zone.local(2025, 6, 1, 12, 0, 0) }
-    let!(:recruitment_cycle) do
-      create(:recruitment_cycle, year: 2026, application_start_date: frozen_time + 2.months)
-    end
+  context "when the 2026 cycle has not yet started", travel: find_closes(2025) do
+    let!(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
 
     before do
-      given_time_is_frozen
       and_provider_is_linked_to_recruitment_cycle
       and_user_is_signed_in
     end
-
-    after { travel_back }
 
     scenario "shows the added schools" do
       when_i_visit_the_added_schools_page
@@ -73,30 +67,22 @@ RSpec.describe "Publish - Providers - Added Schools page", service: :publish, ty
   end
 
   context "when the 2026 cycle has started" do
-    let(:frozen_time) { Time.zone.local(2025, 6, 1, 12, 0, 0) }
     let!(:recruitment_cycle) do
-      create(:recruitment_cycle, year: 2026, application_start_date: frozen_time - 1.month)
+      find_or_create(:recruitment_cycle, year: 2026, application_start_date: 2.months.after(find_opens(2026)))
     end
 
     before do
-      given_time_is_frozen
       and_provider_is_linked_to_recruitment_cycle
       and_user_is_signed_in
     end
 
-    after { travel_back }
-
-    scenario "returns a 404 page" do
+    scenario "returns a 404 page", travel: mid_cycle(2026) do
       when_i_visit_the_added_schools_page
       then_i_see_a_404_page
     end
   end
 
 private
-
-  def given_time_is_frozen
-    travel_to frozen_time
-  end
 
   def and_provider_is_linked_to_recruitment_cycle
     provider.update!(recruitment_cycle:)
