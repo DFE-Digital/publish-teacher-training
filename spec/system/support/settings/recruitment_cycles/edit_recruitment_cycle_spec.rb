@@ -2,15 +2,12 @@
 
 require "spec_helper"
 
-RSpec.describe "Editing a recruitment cycle", service: :publish do
+RSpec.describe "Editing a recruitment cycle", service: :publish, travel: mid_cycle(2025) do
   include DfESignInUserHelper
   let(:provider) { create(:provider) }
   let(:user) { create(:user, :admin, providers: [provider]) }
 
   before do
-    Timecop.travel(Time.zone.local(2025, 1, 1))
-
-    driven_by(:rack_test)
     sign_in_system_test(user:)
 
     given_there_are_recruitment_cycles
@@ -40,9 +37,9 @@ RSpec.describe "Editing a recruitment cycle", service: :publish do
   end
 
   def given_there_are_recruitment_cycles
-    @previous_cycle = create(:recruitment_cycle, :previous)
+    @previous_cycle = find_or_create(:recruitment_cycle, :previous)
     @current_cycle = RecruitmentCycle.current
-    @upcoming_cycle = create(:recruitment_cycle, :next)
+    @upcoming_cycle = find_or_create(:recruitment_cycle, :next)
   end
 
   def given_i_visit_support_settings
@@ -97,8 +94,8 @@ RSpec.describe "Editing a recruitment cycle", service: :publish do
 
   def and_i_change_the_available_in_publish_from_date
     within_fieldset "Available in publish from" do
-      fill_in "Day", with: RecruitmentCycle.current.available_for_support_users_from.day + 1
-      fill_in "Month", with: RecruitmentCycle.current.available_for_support_users_from.month
+      fill_in "Day", with: RecruitmentCycle.current.available_for_support_users_from.succ.day
+      fill_in "Month", with: RecruitmentCycle.current.available_for_support_users_from.succ.month
     end
   end
 
@@ -114,8 +111,8 @@ RSpec.describe "Editing a recruitment cycle", service: :publish do
     expect(@upcoming_cycle.application_start_date.month).to eq(9)
     expect(@upcoming_cycle.application_end_date.day).to eq(5)
     expect(@upcoming_cycle.application_end_date.month).to eq(10)
-    expect(@upcoming_cycle.available_in_publish_from.day).to eq(RecruitmentCycle.current.available_for_support_users_from.day + 1)
-    expect(@upcoming_cycle.available_in_publish_from.month).to eq(RecruitmentCycle.current.available_for_support_users_from.month)
+    expect(@upcoming_cycle.available_in_publish_from.day).to eq(RecruitmentCycle.current.available_for_support_users_from.succ.day)
+    expect(@upcoming_cycle.available_in_publish_from.month).to eq(RecruitmentCycle.current.available_for_support_users_from.succ.month)
     expect(page).to have_content(@upcoming_cycle.year)
     expect(page).to have_content(I18n.l(@upcoming_cycle.application_start_date, format: :long))
     expect(page).to have_content(I18n.l(@upcoming_cycle.application_end_date, format: :long))

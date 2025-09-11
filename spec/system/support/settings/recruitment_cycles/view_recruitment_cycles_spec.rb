@@ -6,12 +6,9 @@ RSpec.describe "Viewing recruitment cycles", service: :publish do
   include DfESignInUserHelper
   let(:provider) { create(:provider) }
   let(:user) { create(:user, :admin, providers: [provider]) }
-  let!(:previous_recruitment_cycle) { create(:recruitment_cycle, year: "2024") }
+  let!(:previous_recruitment_cycle) { find_or_create(:recruitment_cycle, :previous) }
 
   before do
-    Timecop.travel(Time.zone.local(2025, 1, 1))
-
-    driven_by(:rack_test)
     sign_in_system_test(user:)
   end
 
@@ -34,9 +31,9 @@ RSpec.describe "Viewing recruitment cycles", service: :publish do
     first_row = first(:css, ".govuk-table tbody tr", visible: true)
 
     within(first_row) do
-      expect(page).to have_text("2025")
-      expect(page).to have_text("1 October 2024")
-      expect(page).to have_text("30 September 2025")
+      expect(page).to have_text(RecruitmentCycle.current.year)
+      expect(page).to have_text(RecruitmentCycle.current.application_start_date.to_fs(:govuk_date))
+      expect(page).to have_text(RecruitmentCycle.current.application_end_date.to_fs(:govuk_date))
       expect(page).to have_css(".govuk-tag.govuk-tag--green", text: "Current")
     end
   end
@@ -46,8 +43,8 @@ RSpec.describe "Viewing recruitment cycles", service: :publish do
 
     within(second_row) do
       expect(page).to have_text("2024")
-      expect(page).to have_text("1 October 2023")
-      expect(page).to have_text("30 September 2024")
+      expect(page).to have_text(previous_recruitment_cycle.application_start_date.to_fs(:govuk_date))
+      expect(page).to have_text(previous_recruitment_cycle.application_end_date.to_fs(:govuk_date))
       expect(page).to have_css(".govuk-tag.govuk-tag--grey", text: "Past")
     end
   end
