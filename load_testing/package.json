@@ -7,9 +7,10 @@
     "find:dev:baseline": "k6 run --env SCENARIO=baseline --env ENVIRONMENT=local find/load-test.js",
     "find:dev:peak": "k6 run --env SCENARIO=peak-surge --env ENVIRONMENT=local find/load-test.js",
     "find:dev:stress": "k6 run --env SCENARIO=stress --env ENVIRONMENT=local find/load-test.js",
-    "find:baseline": "k6 cloud --env SCENARIO=baseline --env ENVIRONMENT=staging find/load-test.js",
-    "find:peak": "k6 cloud --env SCENARIO=peak-surge --env ENVIRONMENT=staging find/load-test.js",
-    "find:stress": "k6 cloud --env SCENARIO=stress --env ENVIRONMENT=staging find/load-test.js",
+    "find:quick": "k6 run --env SCENARIO=quick --env ENVIRONMENT=staging find/load-test.js",
+    "find:baseline": "k6 run --env SCENARIO=baseline --env ENVIRONMENT=staging find/load-test.js",
+    "find:peak": "k6 run --env SCENARIO=peak-surge --env ENVIRONMENT=staging find/load-test.js",
+    "find:stress": "k6 run --env SCENARIO=stress --env ENVIRONMENT=staging find/load-test.js",
     "find:all": "npm run find:baseline && npm run find:peak && npm run find:stress",
     "grafana:login": "k6 cloud login --token $K6_CLOUD_API_TOKEN"
   },
