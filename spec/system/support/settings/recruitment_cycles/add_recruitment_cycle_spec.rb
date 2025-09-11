@@ -9,7 +9,7 @@ RSpec.describe "Adding a new recruitment cycle", service: :publish, travel: mid_
 
   before do
     # The test suite auto creates the current cycle, need to delete in 2026
-    RecruitmentCycle.find_by(year: 2026).destroy
+    RecruitmentCycle.find_by(year: 2026)&.destroy
     sign_in_system_test(user:)
   end
 
