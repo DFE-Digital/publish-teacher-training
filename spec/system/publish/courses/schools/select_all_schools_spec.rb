@@ -17,7 +17,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
     and_all_schools_should_be_assigned_to_the_course
   end
 
-  scenario "unselect all schools and update" do
+  scenario "unselect all schools and update", travel: mid_cycle(2026) do
     when_i_select_all_schools
     and_i_unselect_all_schools
     and_i_submit
@@ -114,7 +114,5 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
     @course = create(:course, provider:, sites:)
   end
 
-  attr_reader :course
-
-  attr_reader :provider
+  attr_reader :course, :provider
 end
