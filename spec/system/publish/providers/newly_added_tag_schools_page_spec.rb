@@ -1,12 +1,10 @@
 require "rails_helper"
 
-RSpec.describe "Publish - Schools: 'Newly added' tag for register import sites", service: :publish, type: :system do
+RSpec.describe "Publish - Schools: 'Newly added' tag for register import sites", service: :publish, travel: find_closes(2025) do
   include DfESignInUserHelper
 
-  let(:frozen_time) { Time.zone.local(2025, 6, 1, 12, 0, 0) }
-  let!(:recruitment_cycle) do
-    create(:recruitment_cycle, year: 2026, application_start_date: frozen_time + 2.months)
-  end
+  let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
+
   let(:provider) { create(:provider, provider_name: "Tag Provider", recruitment_cycle:) }
 
   let!(:site_one) do
@@ -31,14 +29,8 @@ RSpec.describe "Publish - Schools: 'Newly added' tag for register import sites",
 
   let(:user) { create(:user, providers: [provider]) }
 
-  before do
-    travel_to frozen_time
-    sign_in_system_test(user:)
-  end
-
-  after { travel_back }
-
   scenario "shows the 'Newly added' tag for register import only" do
+    sign_in_system_test(user:)
     when_i_visit_the_schools_page
 
     and_i_see_school_with_tag("Register Import School", "Newly added")
