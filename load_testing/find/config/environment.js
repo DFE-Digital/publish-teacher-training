@@ -33,7 +33,7 @@ export function getFindConfig () {
     thresholds: {
       http_req_duration: ['p(95)<3000'],
       http_req_failed: ['rate<0.01'],
-      find_errors: ['rate<0.01']
+      find_error_rate: ['rate<0.01']
     },
     cloudOptions: {
       distribution: {
