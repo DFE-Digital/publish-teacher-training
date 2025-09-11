@@ -7,7 +7,7 @@ describe SupportTitleBar do
 
   let(:current_user) { build(:user, :admin) }
 
-  context "when not during rollover" do
+  context "when not during rollover", travel: mid_cycle(2025) do
     before do
       render_inline(described_class.new(current_user:))
     end
@@ -21,9 +21,8 @@ describe SupportTitleBar do
     end
   end
 
-  context "when next cycle is available for support users" do
+  context "when next cycle is available for support users", travel: apply_opens(2024) do
     before do
-      create(:recruitment_cycle, :next, available_for_support_users_from: 1.day.ago)
       render_inline(described_class.new(current_user:))
     end
 
