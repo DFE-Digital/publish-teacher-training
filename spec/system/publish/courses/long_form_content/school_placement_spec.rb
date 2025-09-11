@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Publishing a course with long form content on the school placement route", service: :publish, type: "system" do
+RSpec.describe "Publishing a course with long form content on the school placement route", service: :publish, type: :system do
   include DfESignInUserHelper
 
   let(:user) { create(:user) }
@@ -160,7 +160,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
   end
 
   def when_i_visit_the_school_placement_page
-    visit "/publish/organisations/#{@course.provider.provider_code}/#{@course.start_date.year}/courses/#{@course.course_code}/fields/school-placement"
+    visit "/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle.year}/courses/#{@course.course_code}/fields/school-placement"
     expect(page).to have_content("What you will do on school placements") if FeatureFlag.active?(:long_form_content)
   end
 
