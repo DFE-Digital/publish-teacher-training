@@ -8,7 +8,7 @@ RSpec.describe "Support index" do
     and_today_is_before_next_cycle_available_for_support_users_date
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
-    click_link_or_button "Providers"
+    then_i_click_on_providers
     then_i_should_be_on_the_support_providers_page
 
     and_today_is_after_next_cycle_available_for_support_users_date
@@ -31,7 +31,7 @@ RSpec.describe "Support index" do
     and_today_is_before_next_cycle_available_for_support_users_date
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
-    click_link_or_button "Providers"
+    then_i_click_on_providers
     then_i_should_be_on_the_support_providers_page
   end
 
@@ -53,6 +53,10 @@ RSpec.describe "Support index" do
 
   alias_method :then_i_visit_the_support_index_page, :when_i_visit_the_support_index_page
 
+  def then_i_click_on_providers
+    click_link_or_button "Providers"
+  end
+
   def then_i_should_be_on_the_recruitment_cycle_switcher_page
     expect(support_recruitment_cycle_index_page).to have_link "#{Find::CycleTimetable.current_year} - current"
     expect(support_recruitment_cycle_index_page).to have_link Find::CycleTimetable.next_year
@@ -69,7 +73,7 @@ RSpec.describe "Support index" do
   def and_click_on_the_next_cycle
     expect(page).to have_link(RecruitmentCycle.next.year, href: support_recruitment_cycle_providers_path(RecruitmentCycle.next.year))
     within("main") do
-      click_link(RecruitmentCycle.next.year, match: :first)
+      click_link(RecruitmentCycle.next.year_range)
     end
   end
 
