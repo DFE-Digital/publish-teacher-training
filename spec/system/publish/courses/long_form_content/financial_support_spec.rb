@@ -6,6 +6,7 @@ RSpec.describe "Updating fees and financial support", service: :publish do
   include DfESignInUserHelper
 
   let(:user) { create(:user) }
+  let(:recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
 
   before do
     sign_in_system_test(user:)
@@ -57,28 +58,15 @@ RSpec.describe "Updating fees and financial support", service: :publish do
       and_all_the_fees_content_is_visible
     end
 
-    scenario "A user CAN see the new long form course content fields if the current cycle is 2026 or beyond" do
-      Timecop.travel(Find::CycleTimetable.mid_cycle) do
-        given_there_is_a_draft_course
-        when_i_visit_the_course_page
+    scenario "A user CAN see the new long form course content fields if the feature flag is enabled", travel: mid_cycle do
+      FeatureFlag.activate(:long_form_content)
 
-        then_the_old_summary_rows_are_visible
+      given_there_is_a_draft_course
+      when_i_visit_the_course_page
 
-        then_change_links_use_new_routes
-      end
-    end
-  end
+      then_the_old_summary_rows_are_visible
 
-  context "before longform content" do
-    scenario "A user CANT see the new long form course content fields if the current cycle is before 2026" do
-      Timecop.travel(Find::CycleTimetable.mid_cycle(2025)) do
-        given_there_is_a_draft_course
-        when_i_visit_the_course_page
-
-        then_the_summary_rows_are_visible
-
-        and_change_links_use_old_routes
-      end
+      then_change_links_use_new_routes
     end
   end
 
@@ -124,7 +112,7 @@ RSpec.describe "Updating fees and financial support", service: :publish do
   end
 
   def when_i_visit_the_course_page
-    visit "/publish/organisations/#{@course.provider.provider_code}/#{@course.start_date.year}/courses/#{@course.course_code}"
+    visit "/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle.year}/courses/#{@course.course_code}"
     expect(page).to have_content(@course.name)
   end
 
@@ -167,11 +155,6 @@ RSpec.describe "Updating fees and financial support", service: :publish do
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
-  end
-
-  def and_change_links_use_old_routes
-    page.find_link("Change fees and financial support").click
-    expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fees-and-financial-support")
   end
 
   def then_change_links_use_new_routes
