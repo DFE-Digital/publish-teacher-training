@@ -23,8 +23,8 @@ feature "Course show" do
       end
     end
 
-    context "when cycle is current" do
-      scenario "i can see the correct change links" do
+    context "when cycle is 2025 and the course is published" do
+      scenario "i can see the correct change links", travel: mid_cycle(2025) do
         given_we_are_not_in_rollover
         and_i_am_authenticated_as_a_provider_user
         and_there_is_a_published_course
@@ -33,13 +33,33 @@ feature "Course show" do
       end
     end
 
-    context "when cycle is next" do
-      scenario "i can see the correct change links" do
+    context "when it is during the 2026 schools migration" do
+      scenario "i can see the correct change links", travel: find_closes(2025) do
         given_we_are_in_rollover
         and_i_am_authenticated_as_a_provider_user_for_next_cycle
         and_there_is_a_scheduled_course
         when_i_visit_the_course_details_page
-        then_i_see_the_correct_change_links_for_the_next_cycle
+        then_i_see_the_change_links_without_schools
+      end
+    end
+
+    context "when schools are not reviewed or validated" do
+      scenario "i can see the correct change links", travel: mid_cycle(2025) do
+        given_we_are_in_rollover
+        and_i_am_authenticated_as_a_provider_user_for_next_cycle
+        and_there_is_a_published_course_with_unvalidated_schools
+        when_i_visit_the_course_details_page
+        then_i_see_the_change_links_without_schools
+      end
+    end
+
+    context "when rollover after 2025 and schools are validated" do
+      scenario "i can see the correct change links", travel: mid_cycle(2026) do
+        given_we_are_in_rollover
+        and_i_am_authenticated_as_a_provider_user_for_next_cycle
+        and_there_is_a_published_course
+        when_i_visit_the_course_details_page
+        then_i_see_the_correct_change_links_with_start_date
       end
     end
   end
@@ -70,7 +90,7 @@ private
   end
 
   def given_we_are_in_rollover
-    @next_recruitment_cycle = create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+    @next_recruitment_cycle = find_or_create(:recruitment_cycle, :next)
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -88,12 +108,17 @@ private
   end
 
   def and_there_is_a_published_physics_course
-    given_a_course_exists(:with_accrediting_provider, :secondary, master_subject_id: 29, funding: "apprenticeship", campaign_name: "engineers_teach_physics", start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
+    given_a_course_exists(:with_accrediting_provider, :secondary, schools_validated: true, master_subject_id: 29, funding: "apprenticeship", campaign_name: "engineers_teach_physics", start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
     given_a_site_exists(:full_time_vacancies, :findable)
   end
 
   def and_there_is_a_withdrawn_course
     given_a_course_exists(:with_accrediting_provider, start_date: Date.parse("2022 January"), funding: "apprenticeship", enrichments: [build(:course_enrichment, :withdrawn)])
+    given_a_site_exists(:full_time_vacancies, :findable)
+  end
+
+  def and_there_is_a_published_course_with_unvalidated_schools
+    given_a_course_exists(:with_accrediting_provider, schools_validated: false, funding: "apprenticeship", start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)])
     given_a_site_exists(:full_time_vacancies, :findable)
   end
 
@@ -184,6 +209,23 @@ private
     expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly("subjects", "age range", "outcome", "if full or part time", "schools", "can sponsor skilled_worker visa")
   end
 
+  def then_i_see_the_correct_change_links_with_start_date
+    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly("subjects", "age range", "outcome", "if full or part time", "schools", "can sponsor skilled_worker visa", "date course starts")
+  end
+
+  def then_i_see_the_change_links_without_schools
+    expect(
+      publish_provider_courses_details_page.change_link_texts,
+    ).to contain_exactly(
+      "subjects",
+      "age range",
+      "outcome",
+      "if full or part time",
+      "can sponsor skilled_worker visa",
+      "date course starts",
+    )
+  end
+
   def then_i_see_the_correct_change_links_for_the_next_cycle
     expect(
       publish_provider_courses_details_page.change_link_texts,
@@ -194,6 +236,7 @@ private
       "if full or part time",
       "can sponsor skilled_worker visa",
       "date course starts",
+      "schools",
     )
   end
 
