@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Accredited partnership flow" do
+feature "Accredited partnership flow", travel: Find::CycleTimetable.mid_cycle do
   before do
     given_i_am_a_lead_school_provider_user
     and_i_visit_the_root_path

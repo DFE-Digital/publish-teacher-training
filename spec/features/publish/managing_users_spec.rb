@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Adding user to organisation as a provider user" do
+feature "Adding user to organisation as a provider user", travel: Find::CycleTimetable.mid_cycle do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
