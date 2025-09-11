@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing course schools" do
+feature "Editing course schools", travel: mid_cycle(2026) do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
