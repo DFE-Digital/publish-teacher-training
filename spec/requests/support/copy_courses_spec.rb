@@ -14,7 +14,7 @@ RSpec.describe "Support::CopyCourses" do
   describe "GET new" do
     it "responds with 200" do
       login_user(user)
-      get "/support/2025/providers/#{source_provider.id}/copy_courses/new"
+      get "/support/#{RecruitmentCycle.current.year}/providers/#{source_provider.id}/copy_courses/new"
       expect(response).to have_http_status(:ok)
     end
   end

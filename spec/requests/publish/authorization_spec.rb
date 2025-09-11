@@ -19,7 +19,7 @@ describe "Provider authorization spec" do
         get publish_root_path
         expect(response).to redirect_to("/publish/organisations/A14")
         follow_redirect!
-        expect(response).to redirect_to("/publish/organisations/A14/2025/courses")
+        expect(response).to redirect_to("/publish/organisations/A14/#{recruitment_cycle.year}/courses")
         follow_redirect!
         expect(response).to have_http_status(:ok)
       end
