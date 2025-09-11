@@ -187,9 +187,11 @@ RSpec.describe Support::RecruitmentCycleForm do
 
     context "when year is not unique" do
       let(:params) { { year: } }
-      let(:year) { "2025" }
+      let(:year) { 2025 }
 
-      before { create(:recruitment_cycle, year:) }
+      before do
+        find_or_create(:recruitment_cycle, year:)
+      end
 
       it "is not valid" do
         expect(form).not_to be_valid
