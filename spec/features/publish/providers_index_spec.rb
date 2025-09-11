@@ -5,7 +5,7 @@ require "rails_helper"
 feature "Providers index" do
   after { travel_back }
 
-  scenario "view page as Mary - multi provider user" do
+  scenario "view page as Mary - multi provider user", travel: mid_cycle do
     given_we_are_not_in_rollover
     and_there_is_a_multi_provider_organisation
     and_i_am_authenticated_as_a_multi_provider_user
@@ -18,7 +18,7 @@ feature "Providers index" do
     i_should_see_the_provider_list
   end
 
-  scenario "view page as Colin - admin user" do
+  scenario "view page as Colin - admin user", travel: mid_cycle do
     given_we_are_not_in_rollover
     and_i_am_authenticated_as_an_admin_user
     and_there_are_providers
@@ -32,7 +32,7 @@ feature "Providers index" do
     i_should_see_the_change_organisation_link
   end
 
-  scenario "view page as Colin - admin user - during rollover" do
+  scenario "view page as Colin - admin user - during rollover", travel: find_opens do
     given_we_are_in_rollover
     and_there_are_providers
     and_today_is_before_next_cycle_available_for_support_users_date
@@ -132,21 +132,11 @@ feature "Providers index" do
   end
 
   def given_we_are_not_in_rollover
-    create(
-      :recruitment_cycle,
-      :next,
-      available_in_publish_from: 1.week.from_now,
-      available_for_support_users_from: 1.day.from_now,
-    )
+    find_or_create(:recruitment_cycle, :next)
   end
 
   def given_we_are_in_rollover
-    create(
-      :recruitment_cycle,
-      :next,
-      available_in_publish_from: 1.week.from_now,
-      available_for_support_users_from: 1.day.from_now,
-    )
+    create(:recruitment_cycle, :next)
   end
 
   def and_there_is_a_multi_provider_organisation
