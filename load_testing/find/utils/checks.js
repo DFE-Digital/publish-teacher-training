@@ -2,7 +2,6 @@ import { check, group } from 'k6'
 import { Trend, Rate, Counter } from 'k6/metrics'
 
 const findResponseTimes = new Trend('find_response_time_trend')
-const findErrorsRate = new Rate('find_errors')
 const findErrorRate = new Rate('find_error_rate')
 const findErrors4xx = new Rate('find_errors_4xx')
 const findErrors5xx = new Rate('find_errors_5xx')

@@ -1,5 +1,5 @@
-import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js';
-import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.2/index.js';
+import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js'
+import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.2/index.js'
 
 import { sleep, group } from 'k6'
 import { getFindEnvironment, getFindConfig } from './config/environment.js'
@@ -84,6 +84,6 @@ export function handleSummary (data) {
     'find-load-test-report.html': htmlReport(data, {
       title: 'Find Teacher Training Load Test Report'
     }),
-    'stdout': textSummary(data, { indent: ' ', enableColors: true })
+    stdout: textSummary(data, { indent: ' ', enableColors: true })
   }
 }
