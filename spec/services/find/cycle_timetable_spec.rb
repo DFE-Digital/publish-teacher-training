@@ -36,6 +36,38 @@ module Find
       end
     end
 
+    describe ".cycle_year_from_time" do
+      it "returns 2026 for a time in the middle of the 2026 cycle" do
+        time = Time.zone.local(2026, 1, 1, 12, 0, 0)
+        expect(described_class.cycle_year_from_time(time)).to eq(2026)
+      end
+
+      it "returns 2026 for the exact time find opens" do
+        time = Time.zone.local(2025, 9, 30, 9, 0, 0)
+        expect(described_class.cycle_year_from_time(time)).to eq(2026)
+      end
+
+      it "returns 2026 for a time just before find opens 2027" do
+        time = Time.zone.local(2026, 9, 29, 8, 59, 58)
+        expect(described_class.cycle_year_from_time(time)).to eq(2026)
+      end
+
+      it "returns 2027 for the exact time find opens" do
+        time = Time.zone.local(2026, 9, 29, 9, 0, 0)
+        expect(described_class.cycle_year_from_time(time)).to eq(2027)
+      end
+
+      it "returns nil for a time before any defined cycle" do
+        time = Time.zone.local(2019, 1, 1, 12, 0, 0)
+        expect(described_class.cycle_year_from_time(time)).to be_nil
+      end
+
+      it "returns nil for a time after the last defined cycle" do
+        time = Time.zone.local(2028, 1, 1, 12, 0, 0)
+        expect(described_class.cycle_year_from_time(time)).to be_nil
+      end
+    end
+
     describe ".next_year" do
       it "is 2022 if we are in the middle of the 2021 cycle" do
         Timecop.travel(Time.zone.local(2021, 1, 1, 12, 0, 0)) do
