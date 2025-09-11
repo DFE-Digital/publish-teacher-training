@@ -33,7 +33,7 @@ class CourseDecorator < ApplicationDecorator
       if current_cycle_and_open?
         h.govuk_link_to("View live course", h.find_course_url(provider.provider_code, object.course_code))
       else
-        "Course will go live on #{govuk_short_ordinal(Settings.next_cycle_open_date)}"
+        "Course will go live on #{Find::CycleTimetable.find_opens(object.recruitment_cycle.year).to_fs(:day_and_month)}"
       end
     else
       not_on_find
@@ -47,8 +47,8 @@ class CourseDecorator < ApplicationDecorator
   def open_or_closed_for_applications
     if object.open_for_applications?
       "Open"
-    elsif object.recruitment_cycle.application_start_date.future?
-      "Applications will open on #{govuk_short_ordinal(object.recruitment_cycle.application_start_date)}"
+    elsif Find::CycleTimetable.apply_opens(object.recruitment_cycle.year).future?
+      "Applications will open on #{Find::CycleTimetable.apply_opens(object.recruitment_cycle.year).to_fs(:day_and_month)}"
     else
       "Closed"
     end
