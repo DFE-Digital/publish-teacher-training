@@ -251,9 +251,9 @@ module Courses
     def location_scope
       return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
 
-      radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
       longitude = Float(params[:longitude])
+      radius_meters = radius_in_miles * 1609.34
 
       @applied_scopes[:location] = {
         latitude: latitude,
@@ -261,33 +261,33 @@ module Courses
         radius: radius_in_miles,
       }
 
+      point_sql = Course.sanitize_sql_array([
+        "ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)",
+        longitude,
+        latitude,
+      ])
+
       @scope
         .joins(site_statuses: :site)
-        .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
+        .where("site.coordinates IS NOT NULL")
         .where(
-          <<~SQL.squish, longitude, latitude, radius_in_meters
-            ST_DistanceSphere(
-              ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
-              ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-            ) <= ?
-          SQL
+          "ST_DWithin(site.coordinates, #{point_sql}::geography, ?)",
+          radius_meters,
         )
         .select(
-          Course.sanitize_sql_array(
-            [
-              <<~SQL.squish,
-                course.*,
-                MIN(ST_DistanceSphere(
-                  ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
-                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-                ) / 1609.344) AS minimum_distance_to_search_location
-              SQL
-              longitude,
-              latitude,
-            ],
-          ),
+          Course.sanitize_sql_array([
+            <<~SQL.squish,
+              course.*,
+              MIN(
+                ST_DistanceSphere(
+                  site.coordinates::geometry,
+                  #{point_sql}
+                ) / 1609.344
+              ) AS minimum_distance_to_search_location
+            SQL
+          ]),
         )
-        .group(:id)
+        .group("course.id")
         .order("minimum_distance_to_search_location ASC")
     end
 
