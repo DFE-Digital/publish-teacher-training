@@ -33,7 +33,7 @@ private
   end
 
   def when_i_visit_the_new_ratifying_providers_page
-    publish_courses_new_ratifying_provider_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: accredited_provider_params)
+    publish_courses_new_ratifying_provider_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), query: accredited_provider_params)
   end
 
   def when_i_select_an_accredited_provider
@@ -49,7 +49,7 @@ private
   end
 
   def then_i_am_met_with_the_applications_open_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/start-date/new", ignore_query: true)
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/start-date/new", ignore_query: true)
     expect(page).to have_content("Add course Course start date")
   end
 

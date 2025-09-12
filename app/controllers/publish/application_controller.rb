@@ -29,7 +29,7 @@ module Publish
     end
 
     def cycle_year
-      @cycle_year ||= params[:recruitment_cycle_year] || params[:year] || Settings.current_recruitment_cycle_year
+      @cycle_year ||= params[:recruitment_cycle_year] || params[:year] || Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
     end
 
     def show_errors_on_publish?
@@ -46,7 +46,7 @@ module Publish
     end
 
     def clear_previous_cycle_year_in_session
-      return if session[:cycle_year].to_i == Settings.current_recruitment_cycle_year
+      return if session[:cycle_year].to_i == Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
 
       session[:cycle_year] = nil
     end

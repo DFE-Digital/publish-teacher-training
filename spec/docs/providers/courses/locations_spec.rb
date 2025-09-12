@@ -13,7 +13,7 @@ describe "API" do
                 type: :string,
                 required: true,
                 description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg "1066") is provided',
-                example: Settings.current_recruitment_cycle_year
+                example: Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
       parameter name: :provider_code,
                 in: :path,
                 type: :string,
