@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Primary nav" do
+RSpec.describe "Primary nav" do
   scenario "view page as Anne - user with single provider" do
     and_i_am_authenticated_as_a_provider_user
     when_i_visit_the_courses_index_page
