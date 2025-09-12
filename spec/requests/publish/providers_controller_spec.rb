@@ -37,6 +37,7 @@ describe "Publish::ProvidersController" do
 
     context "when the user is authenticated during rollover period", travel: find_closes do
       it "renders the cycle selector" do
+        find_or_create(:recruitment_cycle, :next)
         login_user(user)
         get "/publish/organisations/#{provider.provider_code}"
         expect(response.parsed_body.text).to match("Recruitment cycles")
