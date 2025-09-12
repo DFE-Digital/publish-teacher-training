@@ -29,6 +29,7 @@ RSpec.describe "Support index" do
     given_we_have_a_next_cycle
     and_there_are_two_recruitment_cycles
     and_i_am_authenticated_as_an_admin_user
+    and_today_is_before_next_cycle_available_for_support_users_date
     when_i_visit_the_support_index_page
     then_i_should_be_on_the_support_providers_page
   end
@@ -92,10 +93,10 @@ RSpec.describe "Support index" do
   end
 
   def and_today_is_before_next_cycle_available_for_support_users_date
-    travel_to(1.day.before(RecruitmentCycle.next.available_for_support_users_from))
+    Timecop.travel(1.day.until(RecruitmentCycle.next.available_for_support_users_from))
   end
 
   def and_today_is_after_next_cycle_available_for_support_users_date
-    travel_to(1.day.since(RecruitmentCycle.next.available_for_support_users_from))
+    Timecop.travel(1.day.since(RecruitmentCycle.next.available_for_support_users_from))
   end
 end
