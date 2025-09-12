@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe RolloverProgressQuery, type: :model do
-  let!(:target_cycle) { create(:recruitment_cycle, year: "2026", application_start_date: Date.new(2025, 9, 1)) }
-  let!(:previous_target_cycle) { create(:recruitment_cycle, year: "2025", application_start_date: Date.new(2024, 9, 1)) }
+  let!(:target_cycle) { find_or_create(:recruitment_cycle, year: "2026") }
+  let!(:previous_target_cycle) { find_or_create(:recruitment_cycle, year: "2025") }
   let(:rollover_progress) { described_class.new(target_cycle:) }
 
   let(:provider_with_own_course) { create(:provider, recruitment_cycle: previous_target_cycle) }
