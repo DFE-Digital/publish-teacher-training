@@ -45,9 +45,9 @@ RSpec.describe "Adding a new recruitment cycle", service: :publish do
   def then_i_see_error_messages_for_missing_fields
     expect(page).to have_text("There is a problem")
     expect(page).to have_text("Enter a year")
-    expect(page).to have_text("Enter an application start date")
-    expect(page).to have_text("Enter an application end date")
-    expect(page).to have_text("Enter the date when courses will become available to users in Publish")
+    expect(page).to have_text("Enter the date that candidates will be able to start applying for courses")
+    expect(page).to have_text("Enter the date that applications close")
+    expect(page).to have_text("Enter the date when courses will become available to providers in Publish")
     expect(page).to have_text("Enter the date when courses will become available to support users (in Publish and Support)")
   end
 
