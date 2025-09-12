@@ -80,7 +80,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
     post "/request-access", on: :member, to: "providers/access_requests#create"
     get "schools"
 
-    resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year - 1}|#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "", only: [:show] do
+    resources :recruitment_cycles, param: :year, constraints: CycleYearConstraint.new, path: "", only: [:show] do
       get "/about", on: :member, to: "providers#about"
       put "/about", on: :member, to: "providers#update"
       get "/details", on: :member, to: "providers#details"
