@@ -17,6 +17,10 @@ module Courses
           SecondarySubject.modern_languages
         end
 
+        def design_technologies
+          DesignTechnologySubject.all
+        end
+
         def design_technology_subjects
           SecondarySubject.design_technology
         end
