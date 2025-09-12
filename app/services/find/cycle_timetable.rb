@@ -61,19 +61,26 @@ module Find
     def self.current_year
       now = Time.zone.now
 
-      current_year = CYCLE_DATES.keys.detect do |year|
-        return year if last_recruitment_cycle_year?(year)
-
-        now.between?(CYCLE_DATES[year][:find_opens], CYCLE_DATES[year + 1][:find_opens])
-      end
+      current_year = cycle_year_from_time(now)
 
       # If the cycle switcher has been set to 'find has reopened' then
       # we want to request next year's courses from the TTAPI
-      if SiteSetting.cycle_schedule.in? %i[today_is_after_find_opens today_is_between_find_opening_and_apply_opening]
+      if SiteSetting.cycle_schedule.in?(%i[today_is_after_find_opens today_is_between_find_opening_and_apply_opening])
         current_year + 1
       else
         current_year
       end
+    end
+
+    # Returns the recruitment cycle year for a given time
+    # Recruitment Cycles run from find opens to the find_opens in the next cycle
+    # If there is no next cycle, the end of the last cycle is when find_closes
+    def self.cycle_year_from_time(time)
+      CYCLE_DATES.each do |year, dates|
+        end_time = CYCLE_DATES[year + 1]&.dig(:find_opens) || dates[:find_closes]
+        return year if time.between?(dates[:find_opens], end_time - 1.second)
+      end
+      nil
     end
 
     def self.next_year
@@ -84,16 +91,16 @@ module Find
       current_year - 1
     end
 
-    def self.find_closes
-      date(:find_closes)
+    def self.find_closes(year = current_year)
+      date(:find_closes, year)
     end
 
     def self.first_deadline_banner
       date(:first_deadline_banner)
     end
 
-    def self.apply_deadline
-      date(:apply_deadline)
+    def self.apply_deadline(year = current_year)
+      date(:apply_deadline, year)
     end
 
     def self.find_opens(year = current_year)
@@ -104,8 +111,8 @@ module Find
       date(:find_opens, next_year)
     end
 
-    def self.apply_opens
-      date(:apply_opens, current_year)
+    def self.apply_opens(year = current_year)
+      date(:apply_opens, year)
     end
 
     def self.apply_reopens
@@ -154,7 +161,7 @@ module Find
     end
 
     def self.date(name, year = current_year)
-      real_schedule_for(year).fetch(name)
+      real_schedule_for(year.to_i).fetch(name)
     end
 
     def self.last_recruitment_cycle_year?(year)

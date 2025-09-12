@@ -1,12 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "Publish - Schools validation during 2026 rollover", service: :publish, type: :system do
+RSpec.describe "Publish - Schools validation during 2026 rollover", service: :publish, travel: find_closes(2025) do
   include DfESignInUserHelper
 
-  let(:frozen_time) { Time.zone.local(2025, 9, 10, 12, 0, 0) }
-  let!(:recruitment_cycle) do
-    create(:recruitment_cycle, year: 2026, application_start_date: frozen_time - 15.days)
-  end
+  let!(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
   let!(:provider) { create(:provider, recruitment_cycle:, provider_code: "ABC") }
   let!(:accredited_provider) { create(:provider, :accredited_provider, recruitment_cycle:) }
   let!(:site_one) { create(:site, provider:, location_name: "School A") }
@@ -15,11 +12,8 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
   let(:user)      { create(:user, providers: [provider]) }
 
   before do
-    travel_to frozen_time
     sign_in_system_test(user:)
   end
-
-  after { travel_back }
 
   scenario "Publishing from course page shows rollover school validation errors" do
     given_i_am_on_the_course_page

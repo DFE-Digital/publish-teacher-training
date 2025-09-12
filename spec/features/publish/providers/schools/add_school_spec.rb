@@ -3,7 +3,7 @@
 require "rails_helper"
 require_relative "provider_school_helper"
 
-feature "Adding a provider's schools" do
+feature "Adding a provider's schools", travel: mid_cycle(2026) do
   include ProviderSchoolHelper
   before do
     given_i_am_authenticated_as_a_provider_user

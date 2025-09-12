@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Accepting terms" do
+feature "Accepting terms", travel: mid_cycle do
   scenario "i can accept the terms and conditions" do
     given_i_am_a_user_who_has_not_accepted_the_terms
     when_i_visit_the_publish_service

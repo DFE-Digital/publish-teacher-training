@@ -77,11 +77,7 @@ describe CourseDecorator do
     expect(decorated_course.length).to eq("1 year")
   end
 
-  context "recruitment cycles" do
-    before do
-      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2019)
-    end
-
+  context "recruitment cycles", travel: mid_cycle(2022) do
     context "for a course in the current cycle" do
       it "knows which cycle it’s in" do
         expect(decorated_course.next_cycle?).to be(false)

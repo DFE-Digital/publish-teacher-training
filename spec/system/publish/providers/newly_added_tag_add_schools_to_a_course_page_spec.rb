@@ -1,12 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites when selecting schools", service: :publish, type: :system do
+RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites when selecting schools", service: :publish, travel: find_closes(2025) do
   include DfESignInUserHelper
 
-  let(:frozen_time) { Time.zone.local(2025, 6, 1, 12, 0, 0) }
-  let!(:recruitment_cycle) do
-    create(:recruitment_cycle, year: 2026, application_start_date: frozen_time + 2.months)
-  end
+  let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
   let(:provider) { create(:provider, provider_name: "Tag Provider", recruitment_cycle:) }
   let!(:course) { create(:course, provider:) }
 
@@ -33,11 +30,8 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
   let(:user) { create(:user, providers: [provider]) }
 
   before do
-    travel_to frozen_time
     sign_in_system_test(user:)
   end
-
-  after { travel_back }
 
   scenario "shows the 'Newly added' tag on school selection checkboxes only for register import, and not after rollover" do
     when_i_visit_edit_course_schools_page

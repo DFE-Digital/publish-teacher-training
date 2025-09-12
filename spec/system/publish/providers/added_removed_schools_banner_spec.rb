@@ -1,15 +1,12 @@
 require "rails_helper"
 
-RSpec.describe "Publish - Schools changes notification banner", service: :publish, type: :system do
+RSpec.describe "Publish - Schools changes notification banner", service: :publish, travel: mid_cycle(2025) do
   include DfESignInUserHelper
 
-  let(:frozen_time) { Time.zone.local(2025, 6, 1, 12, 0, 0) }
   let(:schools_page_path) do
     publish_provider_recruitment_cycle_schools_path(provider.provider_code, recruitment_cycle.year)
   end
-  let!(:recruitment_cycle) do
-    create(:recruitment_cycle, year: 2026, application_start_date: frozen_time + 2.months)
-  end
+  let!(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
   let(:provider) { create(:provider, provider_name: "Banner Provider", recruitment_cycle:) }
   let!(:site_one)   { create(:site, provider:, added_via: :register_import, location_name: "Added School 1") }
   let!(:site_two)   { create(:site, provider:, added_via: :register_import, location_name: "Added School 2") }
@@ -19,11 +16,8 @@ RSpec.describe "Publish - Schools changes notification banner", service: :publis
   let(:user) { create(:user, providers: [provider]) }
 
   before do
-    travel_to frozen_time
     sign_in_system_test(user:)
   end
-
-  after { travel_back }
 
   context "Provider has added and removed schools" do
     scenario "shows banner with both added and removed info" do

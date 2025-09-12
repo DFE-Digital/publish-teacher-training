@@ -5,6 +5,17 @@ require "rails_helper"
 feature "Course show" do
   include ActiveSupport::NumberHelper
 
+  before do
+    allow(FeatureFlag).to receive(:active?)
+    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
+  end
+
+  around do |example|
+    Timecop.travel(Find::CycleTimetable.apply_deadline(2025) - 1.hour) do
+      example.run
+    end
+  end
+
   scenario "i can view the course basic details" do
     given_i_am_authenticated_as_a_provider_user(course: build(:course))
     when_i_visit_the_course_page
@@ -15,7 +26,7 @@ feature "Course show" do
   describe "with a fee paying course" do
     context "bursaries and scholarships is announced" do
       before do
-        FeatureFlag.activate(:bursaries_and_scholarships_announced)
+        allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
       end
 
       scenario "i can view a fee course" do
@@ -85,6 +96,7 @@ feature "Course show" do
     scenario "i can view the unpublished partial and rollover" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: "salary"))
       given_there_is_a_next_recruitment_cycle
+      and_the_cycle_is_rollable
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_initial_draft_course
       and_i_should_see_the_course_button_panel
@@ -174,14 +186,11 @@ private
 
   def given_there_is_a_next_recruitment_cycle
     next_year = RecruitmentCycle.current.year.to_i + 1
-    create(
-      :recruitment_cycle,
-      year: next_year,
-      application_start_date: Date.new(next_year - 1, 10, 1),
-      application_end_date: Date.new(next_year, 9, 30),
-      available_for_support_users_from: 1.week.ago,
-      available_in_publish_from: 1.day.ago,
-    )
+    find_or_create(:recruitment_cycle, year: next_year)
+  end
+
+  def and_the_cycle_is_rollable
+    RecruitmentCycle.next.update(available_in_publish_from: 1.hour.ago)
   end
 
   def when_i_click_the_rollover_course_button
@@ -299,9 +308,9 @@ private
   end
 
   def and_there_is_the_provider_in_the_next_cycle
-    provider = create(:provider, recruitment_cycle: RecruitmentCycle.next, provider_code: @user.providers.first.provider_code, courses: [build(:course, :published)])
+    @next_cycle_provider = create(:provider, recruitment_cycle: RecruitmentCycle.next, provider_code: @user.providers.first.provider_code, courses: [build(:course, :published)])
 
-    @user.providers << provider
+    @user.providers << @next_cycle_provider
   end
 
   def when_i_visit_the_course_page
@@ -431,16 +440,7 @@ private
     )
   end
 
-  def next_cycle_provider
-    create(
-      :provider,
-      :next_recruitment_cycle,
-      provider_code: current_user.providers.first.provider_code,
-      courses: [build(:course, enrichments: [course_enrichments_published])],
-    ) do |provider|
-      current_user.providers << provider
-    end
-  end
+  attr_reader :next_cycle_provider
 
   def then_i_should_see_the_status_scheduled
     expect(publish_provider_courses_index_page).to have_scheduled_tag

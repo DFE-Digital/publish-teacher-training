@@ -27,7 +27,7 @@ RSpec.describe "Viewing long form course content for fees and financial support"
   def then_i_see_the_long_form_content
     enrichment = @course.enrichments.first
 
-    expect(page).to have_content("The course fees for 2025 to 2026 are as follows:")
+    expect(page).to have_content("The course fees for #{@course.cycle_range} are as follows:")
     expect(page).to have_content("£2,500")
     expect(page).to have_content("£3,500")
     expect(page).to have_content(enrichment.fee_schedule)
@@ -59,6 +59,6 @@ RSpec.describe "Viewing long form course content for fees and financial support"
       course_code: "F314",
       provider: build(:provider, provider_name: "York university", provider_code: "RO1"),
       subjects: [find_or_create(:secondary_subject, :art_and_design)],
-    )
+    ).decorate
   end
 end

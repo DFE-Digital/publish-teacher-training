@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Adding user to provider as an admin" do
+RSpec.describe "Adding user to provider as an admin", travel: mid_cycle do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider

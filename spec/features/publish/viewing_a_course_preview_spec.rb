@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Course show" do
+feature "Course show", travel: mid_cycle(2025) do
   include Rails.application.routes.url_helpers
 
   context "bursaries and scholarships is announced" do
@@ -10,18 +10,16 @@ feature "Course show" do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
     end
 
-    scenario "i can view the course basic details" do
-      Timecop.travel(Find::CycleTimetable.mid_cycle) do
-        given_i_am_authenticated(user: user_with_fee_based_course)
-        when_i_visit_the_publish_course_preview_page
-        then_i_see_the_course_preview_details
-        and_i_see_financial_support
-      end
+    scenario "i can view the course basic details", travel: mid_cycle do
+      given_i_am_authenticated(user: user_with_fee_based_course)
+      when_i_visit_the_publish_course_preview_page
+      then_i_see_the_course_preview_details
+      and_i_see_financial_support
     end
   end
 
   context "with empty sections" do
-    scenario "blank about the training provider" do
+    scenario "blank about the training provider", travel: 1.hour.before(first_deadline_banner) do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
       and_i_click_link_or_button(@course.provider_name)
@@ -113,13 +111,11 @@ feature "Course show" do
   end
 
   context "bursaries and scholarships is not announced" do
-    scenario "i can view the course basic details" do
-      Timecop.travel(Find::CycleTimetable.apply_deadline - 1.hour) do
-        given_i_am_authenticated(user: user_with_fee_based_course)
-        when_i_visit_the_publish_course_preview_page
-        then_i_see_the_course_preview_details
-        and_i_do_not_see_financial_support
-      end
+    scenario "i can view the course basic details", travel: first_deadline_banner - 1.hour do
+      given_i_am_authenticated(user: user_with_fee_based_course)
+      when_i_visit_the_publish_course_preview_page
+      then_i_see_the_course_preview_details
+      and_i_do_not_see_financial_support
     end
   end
 
@@ -134,39 +130,33 @@ feature "Course show" do
     end
   end
 
-  scenario "user sees no school placements" do
+  scenario "user sees no school placements", travel: find_opens(2026) do
     create(:recruitment_cycle, :next)
-    Timecop.travel(Find::CycleTimetable.find_opens) do
-      given_i_am_authenticated(user: user_with_fee_based_course)
-      provider.update(selectable_school: false)
-      when_i_visit_the_publish_course_preview_page
-      then_i_see_no_school_placements_link
-    end
+    given_i_am_authenticated(user: user_with_fee_based_course)
+    provider.update(selectable_school: false)
+    when_i_visit_the_publish_course_preview_page
+    then_i_see_no_school_placements_link
   end
 
-  scenario "user sees school placements" do
-    Timecop.travel(Find::CycleTimetable.find_opens) do
-      given_i_am_authenticated(user: user_with_fee_based_course)
-      when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button("View list of school placements")
-      then_i_should_be_on_the_school_placements_page
-      and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
-      then_i_should_be_back_on_the_preview_page
-    end
+  scenario "user sees school placements", travel: find_opens(2026) do
+    given_i_am_authenticated(user: user_with_fee_based_course)
+    when_i_visit_the_publish_course_preview_page
+    and_i_click_link_or_button("View list of school placements")
+    then_i_should_be_on_the_school_placements_page
+    and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
+    then_i_should_be_back_on_the_preview_page
   end
 
-  scenario "user views provider and accredited_provider" do
-    Timecop.travel(Find::CycleTimetable.mid_cycle) do
-      given_i_am_authenticated(user: user_with_fee_based_course)
-      when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button(@course.provider_name)
-      then_i_should_be_on_the_provider_page
-      and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
-      and_i_click_link_or_button(@course.accrediting_provider.provider_name)
-      then_i_should_be_on_the_accrediting_provider_page
-      and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
-      then_i_should_be_back_on_the_preview_page
-    end
+  scenario "user views provider and accredited_provider", travel: mid_cycle do
+    given_i_am_authenticated(user: user_with_fee_based_course)
+    when_i_visit_the_publish_course_preview_page
+    and_i_click_link_or_button(@course.provider_name)
+    then_i_should_be_on_the_provider_page
+    and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
+    and_i_click_link_or_button(@course.accrediting_provider.provider_name)
+    then_i_should_be_on_the_accrediting_provider_page
+    and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
+    then_i_should_be_back_on_the_preview_page
   end
 
 private
@@ -209,12 +199,17 @@ private
       "11 to 18",
     )
 
-    expect(publish_course_preview_page).to have_content(
-      "Up to 2 years - full time",
-    )
-    expect(publish_course_preview_page).to have_content(
-      course.applications_open_from.strftime("%-d %B %Y"),
-    )
+    within_summary_row "Course length" do
+      expect(publish_course_preview_page).to have_content(
+        "Up to 2 years - full time",
+      )
+    end
+
+    within_summary_row "Date you can apply from" do
+      expect(publish_course_preview_page).to have_content(
+        course.applications_open_from.strftime("%-d %B %Y"),
+      )
+    end
 
     expect(publish_course_preview_page).to have_content(
       "September #{recruitment_cycle.year}",
