@@ -28,7 +28,7 @@ private
   end
 
   def when_i_visit_the_new_primary_course_subject_page
-    publish_courses_new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: primary_subject_params)
+    publish_courses_new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), query: primary_subject_params)
   end
 
   def when_i_select_a_primary_subject(subject_type)
@@ -44,7 +44,7 @@ private
   end
 
   def then_i_am_met_with_the_age_range_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{params_with_subject}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/age-range/new?#{params_with_subject}")
     expect(page).to have_content("Age range")
   end
 

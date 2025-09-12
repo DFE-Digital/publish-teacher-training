@@ -66,7 +66,7 @@ feature "Editing course application status" do
   end
 
   def then_i_am_on_the_application_status_confirm_page
-    expect(page).to have_current_path("/publish/organisations/#{course.provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/application_status")
+    expect(page).to have_current_path("/publish/organisations/#{course.provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/#{course.course_code}/application_status")
   end
 
   def and_i_click_open_course
