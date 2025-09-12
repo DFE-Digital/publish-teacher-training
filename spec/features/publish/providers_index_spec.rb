@@ -87,7 +87,7 @@ feature "Providers index" do
   end
 
   def i_should_see_the_recruitment_cycle_text
-    expect(publish_title_bar_page.recruitment_cycle_text).to have_text("#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current")
+    expect(publish_title_bar_page.recruitment_cycle_text).to have_text("#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now).to_i - 1} to #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)} - current")
   end
 
   def and_today_is_before_next_cycle_available_for_support_users_date
@@ -115,7 +115,7 @@ feature "Providers index" do
   end
 
   def when_i_click_on_the_current_cycle_link
-    click_link_or_button "#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current"
+    click_link_or_button "#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now).to_i - 1} to #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)} - current"
   end
 
   def i_should_be_on_the_recruitment_cycle_switcher_page
@@ -123,7 +123,7 @@ feature "Providers index" do
   end
 
   def i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
-    expect(page).to have_current_path("/publish/organisations/#{current_user.providers.first.provider_code}/#{Settings.current_recruitment_cycle_year}/courses")
+    expect(page).to have_current_path("/publish/organisations/#{current_user.providers.first.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses")
     expect(page).to have_text "Courses"
   end
 
@@ -158,7 +158,7 @@ feature "Providers index" do
     publish_providers_index_page.search_input.set "Really big school (A01)"
     publish_providers_index_page.search_button.click
     expect(publish_provider_courses_index_page).to be_displayed
-    expect(publish_provider_courses_index_page.current_url).to end_with("A01/#{Settings.current_recruitment_cycle_year}/courses")
+    expect(publish_provider_courses_index_page.current_url).to end_with("A01/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses")
   end
 
   def i_should_see_the_pagination_link
@@ -200,7 +200,7 @@ feature "Providers index" do
   end
 
   def i_should_be_on_the_organisations_list
-    expect(page).to have_current_path("/?recruitment_cycle_year=#{Settings.current_recruitment_cycle_year}")
+    expect(page).to have_current_path("/?recruitment_cycle_year=#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}")
     expect(page).to have_text "Organisations"
   end
 

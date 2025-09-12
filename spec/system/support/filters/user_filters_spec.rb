@@ -48,7 +48,7 @@ private
   end
 
   def when_i_visit_the_support_users_index_page
-    support_users_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
+    support_users_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
   end
 
   def then_i_can_search_by_first_name

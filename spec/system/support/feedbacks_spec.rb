@@ -125,7 +125,7 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_am_on_the_support_homepage
-    expect(page).to have_current_path(support_recruitment_cycle_providers_path(Settings.current_recruitment_cycle_year))
+    expect(page).to have_current_path(support_recruitment_cycle_providers_path(Find::CycleTimetable.cycle_year_from_time(Time.zone.now)))
   end
 
   def then_i_see_first_page_of_feedback_with_pagination

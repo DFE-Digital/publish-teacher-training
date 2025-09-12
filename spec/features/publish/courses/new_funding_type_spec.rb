@@ -48,7 +48,7 @@ private
   end
 
   def when_i_visit_the_publish_courses_new_funding_type_page
-    publish_courses_new_funding_type_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: funding_type_params)
+    publish_courses_new_funding_type_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), query: funding_type_params)
   end
 
   def when_i_select_funding_type(funding_type)
@@ -80,7 +80,7 @@ private
   end
 
   def then_i_am_met_with_the_full_or_part_time_page(funding_type)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/full-part-time/new#{selected_params(funding_type)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/full-part-time/new#{selected_params(funding_type)}")
     expect(page).to have_content("Study pattern")
   end
 

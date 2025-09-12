@@ -12,11 +12,11 @@ class RecruitmentCycle < ApplicationRecord
 
   class << self
     def current_recruitment_cycle!
-      find_by!(year: Settings.current_recruitment_cycle_year)
+      find_by!(year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
     end
 
     def current_recruitment_cycle
-      find_by(year: Settings.current_recruitment_cycle_year)
+      find_by(year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
     end
     alias_method :current, :current_recruitment_cycle
 
@@ -31,7 +31,7 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def self.current_and_upcoming_cycles_open_to_publish
-    where(year: Settings.current_recruitment_cycle_year).or(upcoming_cycles_open_to_publish)
+    where(year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now)).or(upcoming_cycles_open_to_publish)
   end
 
   scope :upcoming_cycles_open_to_publish, lambda {
