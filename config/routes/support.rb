@@ -5,7 +5,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
 
   resources :feedbacks, only: %i[index show], path: "feedback", as: :feedback
 
-  resources :recruitment_cycle, only: %i[index], param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "" do
+  resources :recruitment_cycle, only: %i[index], param: :year, constraints: CycleYearConstraint.new, path: "" do
     namespace :providers do
       namespace :onboarding do
         resource :contacts, only: %i[new create]

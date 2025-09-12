@@ -5,7 +5,7 @@ require "rails_helper"
 describe RecruitmentCycle do
   subject { current_cycle }
 
-  before { allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2023) }
+  before { Timecop.travel(Find::CycleTimetable.mid_cycle(2023)) }
 
   let(:current_cycle) { find_or_create(:recruitment_cycle) }
   let(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
