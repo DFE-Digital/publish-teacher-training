@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Support index" do
-  after { travel_back }
-
   scenario "viewing support cycles page during rollover" do
     given_we_have_a_next_cycle
     and_there_are_two_recruitment_cycles
@@ -31,6 +29,7 @@ RSpec.describe "Support index" do
     given_we_have_a_next_cycle
     and_there_are_two_recruitment_cycles
     and_i_am_authenticated_as_an_admin_user
+    and_today_is_before_next_cycle_available_for_support_users_date
     when_i_visit_the_support_index_page
     then_i_should_be_on_the_support_providers_page
   end
@@ -40,12 +39,7 @@ RSpec.describe "Support index" do
   end
 
   def given_we_have_a_next_cycle
-    create(
-      :recruitment_cycle,
-      :next,
-      available_in_publish_from: 1.week.from_now,
-      available_for_support_users_from: 1.day.from_now,
-    )
+    find_or_create(:recruitment_cycle, :next)
   end
 
   def and_there_are_two_recruitment_cycles
@@ -99,10 +93,10 @@ RSpec.describe "Support index" do
   end
 
   def and_today_is_before_next_cycle_available_for_support_users_date
-    travel_to(RecruitmentCycle.next.available_for_support_users_from - 1.day)
+    Timecop.travel(1.day.until(RecruitmentCycle.next.available_for_support_users_from))
   end
 
   def and_today_is_after_next_cycle_available_for_support_users_date
-    travel_to(RecruitmentCycle.next.available_for_support_users_from + 1.day)
+    Timecop.travel(1.day.since(RecruitmentCycle.next.available_for_support_users_from))
   end
 end
