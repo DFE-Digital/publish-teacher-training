@@ -56,7 +56,7 @@ jobs:
         with:
           bundler-cache: true
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           cache: yarn
       - run: yarn install --frozen-lockfile
@@ -86,7 +86,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           cache: yarn
       - run: yarn install --frozen-lockfile
@@ -204,7 +204,7 @@ jobs:
         with:
           bundler-cache: true
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           cache: yarn
       - run: yarn install --frozen-lockfile
