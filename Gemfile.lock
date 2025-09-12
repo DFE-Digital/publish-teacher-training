@@ -137,6 +137,9 @@ GEM
       activemodel (= 8.0.2.1)
       activesupport (= 8.0.2.1)
       timeout (>= 0.4.0)
+    activerecord-postgis-adapter (11.0.0)
+      activerecord (~> 8.0.0)
+      rgeo-activerecord (~> 8.0.0)
     activestorage (8.0.2.1)
       actionpack (= 8.0.2.1)
       activejob (= 8.0.2.1)
@@ -617,6 +620,10 @@ GEM
       concurrent-ruby (~> 1.0)
     retriable (3.1.2)
     rexml (3.4.1)
+    rgeo (3.0.1)
+    rgeo-activerecord (8.0.0)
+      activerecord (>= 7.0)
+      rgeo (>= 3.0)
     rouge (4.1.2)
     rspec (3.13.1)
       rspec-core (~> 3.13.0)
@@ -805,6 +812,7 @@ PLATFORMS
 DEPENDENCIES
   aasm
   active_model_serializers
+  activerecord-postgis-adapter
   amazing_print
   audited (~> 5.4)
   awesome_print
