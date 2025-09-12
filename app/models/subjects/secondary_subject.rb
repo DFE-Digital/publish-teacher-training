@@ -10,9 +10,14 @@ class SecondarySubject < Subject
       @physics ||= find_by(subject_name: "Physics")
     end
 
+    def design_technology
+      @design_technology ||= find_by(subject_name: "Design and technology")
+    end
+
     def clear_cache
       @modern_languages = nil
       @physics = nil
+      @design_technology = nil
     end
   end
 end

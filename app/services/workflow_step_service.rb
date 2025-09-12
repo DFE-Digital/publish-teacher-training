@@ -35,6 +35,7 @@ private
       subjects
       engineers_teach_physics
       modern_languages
+      design_technology
       age_range
       outcome
       school
@@ -53,6 +54,7 @@ private
       subjects
       engineers_teach_physics
       modern_languages
+      design_technology
       age_range
       outcome
       school
@@ -98,6 +100,7 @@ private
       subjects
       engineers_teach_physics
       modern_languages
+      design_technology
       age_range
       outcome
       funding_type
@@ -122,6 +125,7 @@ private
       subjects
       engineers_teach_physics
       modern_languages
+      design_technology
       age_range
       outcome
       funding_type
