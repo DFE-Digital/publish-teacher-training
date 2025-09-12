@@ -97,3 +97,7 @@ Caddyfile
 # redis related
 dump.rdb
 /db/data_schema.rb
+
+# Load testing
+find-load-test-summary.json
+find-load-test-report.html
