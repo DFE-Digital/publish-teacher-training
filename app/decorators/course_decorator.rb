@@ -229,7 +229,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def current_cycle?
-    course.recruitment_cycle.year.to_i == Settings.current_recruitment_cycle_year
+    course.recruitment_cycle.year.to_i == Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
   end
 
   def current_cycle_and_open?
@@ -237,7 +237,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def next_cycle?
-    course.recruitment_cycle.year.to_i == Settings.current_recruitment_cycle_year + 1
+    course.recruitment_cycle.year.to_i == Find::CycleTimetable.cycle_year_from_time(Time.zone.now) + 1
   end
 
   def use_financial_support_placeholder?
@@ -472,7 +472,7 @@ class CourseDecorator < ApplicationDecorator
     bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
     scholarship = number_to_currency(financial_incentive&.scholarship)
 
-    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
+    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Find::CycleTimetable.cycle_year_from_time(Time.zone.now)) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
     return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
 
     return I18n.t("components.course.financial_incentives.bursary_and_scholarship", scholarship:, bursary_amount:) if bursary_amount.present? && scholarship.present?

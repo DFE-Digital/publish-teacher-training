@@ -46,11 +46,11 @@ private
   end
 
   def when_i_visit_the_support_provider_courses_index_page
-    support_provider_courses_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: provider.id)
+    support_provider_courses_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), provider_id: provider.id)
   end
 
   def when_i_visit_the_support_discarded_provider_courses_index_page
-    support_provider_courses_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: discarded_provider.id)
+    support_provider_courses_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), provider_id: discarded_provider.id)
   end
 
   def then_i_am_redirected_to_the_providers_page

@@ -12,7 +12,7 @@ RSpec.describe API::AccreditedProviderSuggestionsController do
       before do
         get :index, params: {
           query: "cl",
-          recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+          recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now),
         }
       end
 
@@ -27,7 +27,7 @@ RSpec.describe API::AccreditedProviderSuggestionsController do
       before do
         get :index, params: {
           query: "cla",
-          recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+          recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now),
         }
       end
 

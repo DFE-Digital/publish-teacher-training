@@ -80,7 +80,7 @@ private
   end
 
   def then_i_should_be_on_the_publish_courses_funding_type_edit_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/funding-type")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/#{course.course_code}/funding-type")
   end
 
   def and_i_am_authenticated_as_a_lead_school_provider_user
