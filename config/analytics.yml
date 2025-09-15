@@ -9,9 +9,9 @@ shared:
     - updated_at
   candidate:
     - id
-    - email_address
     - created_at
     - updated_at
+    # - email_address
   saved_course:
     - id
     - candidate_id
