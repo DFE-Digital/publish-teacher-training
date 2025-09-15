@@ -96,7 +96,7 @@ module Find
     end
 
     def cookie_name
-      Settings.cookie.candidate_session.name
+      Settings.cookies.candidate_session.name
     end
   end
 end
