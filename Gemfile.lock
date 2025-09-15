@@ -529,7 +529,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (6.6.1)
+    puma (7.0.3)
       nio4r (~> 2.0)
     pundit (2.5.0)
       activesupport (>= 3.0.0)
@@ -868,7 +868,7 @@ DEPENDENCIES
   pry
   pry-byebug
   pry-rails
-  puma (~> 6.6)
+  puma (~> 7.0)
   pundit
   rack-cors
   rails (= 8.0.2.1)
