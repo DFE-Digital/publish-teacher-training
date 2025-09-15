@@ -11,6 +11,7 @@ RSpec.describe "Support index" do
     and_today_is_before_next_cycle_available_for_support_users_date
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
+    and_choose_the_current_recruitment_cycle
     then_i_should_be_on_the_support_providers_page
 
     and_today_is_after_next_cycle_available_for_support_users_date
@@ -32,7 +33,12 @@ RSpec.describe "Support index" do
     and_there_are_two_recruitment_cycles
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
+    and_choose_the_current_recruitment_cycle
     then_i_should_be_on_the_support_providers_page
+  end
+
+  def and_choose_the_current_recruitment_cycle
+    click_link(text: " - current")
   end
 
   def then_i_should_be_on_the_support_providers_page
@@ -99,10 +105,10 @@ RSpec.describe "Support index" do
   end
 
   def and_today_is_before_next_cycle_available_for_support_users_date
-    travel_to(RecruitmentCycle.next.available_for_support_users_from - 1.day)
+    Timecop.travel(1.day.before(RecruitmentCycle.next.available_for_support_users_from))
   end
 
   def and_today_is_after_next_cycle_available_for_support_users_date
-    travel_to(RecruitmentCycle.next.available_for_support_users_from + 1.day)
+    Timecop.travel(1.day.until(RecruitmentCycle.next.available_for_support_users_from))
   end
 end
