@@ -19,6 +19,13 @@ export function findPerformanceCheck (response, name, threshold = 3000) {
   const isRateLimit = response.status === 429
   const isSuccess = response.status === 200 && response.timings.duration < threshold
 
+  const errorType = (() => {
+    if (is4xx) return '4xx'
+    if (is5xx) return '5xx'
+    if (isTimeout) return 'timeout'
+    return 'none'
+  })()
+
   findErrors4xx.add(is4xx)
   findErrors5xx.add(is5xx)
   findTimeouts.add(isTimeout)
@@ -38,7 +45,7 @@ export function findPerformanceCheck (response, name, threshold = 3000) {
     endpoint: name,
     service: 'find',
     success: isSuccess ? 'true' : 'false',
-    error_type: is4xx ? '4xx' : is5xx ? '5xx' : isTimeout ? 'timeout' : 'none'
+    error_type: errorType
   })
 
   return isSuccess
