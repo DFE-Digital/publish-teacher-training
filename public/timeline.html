@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment Cycle Timeline</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .current-time {
+            color: #666;
+            font-size: 14px;
+        }
+        .timeline-wrapper {
+            position: relative;
+            height: 350px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+            margin-bottom: 20px;
+        }
+        .timeline {
+            position: relative;
+            height: 100%;
+            width: 2640px; /* 264 days * 10px */
+            min-width: 100%;
+        }
+        .cycle-section {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-left: 2px solid;
+            border-right: 2px solid;
+            opacity: 0.3;
+        }
+        .cycle-2025 {
+            background: rgba(46, 204, 113, 0.15);
+            border-color: #2ecc71;
+        }
+        .cycle-2026 {
+            background: rgba(52, 152, 219, 0.15);
+            border-color: #3498db;
+        }
+        .cycle-2027 {
+            background: rgba(155, 89, 182, 0.15);
+            border-color: #9b59b6;
+        }
+        .cycle-label {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            font-size: 12px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 12px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+        .cycle-boundary {
+            position: absolute;
+            top: 50px;
+            bottom: 50px;
+            width: 2px;
+            background: #333;
+            opacity: 0.6;
+            z-index: 50;
+        }
+        .cycle-boundary-label {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .time-axis {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #333;
+        }
+        .today-line {
+            position: absolute;
+            top: 50px;
+            bottom: 50px;
+            width: 3px;
+            background: #e74c3c;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+        .today-label {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .time-labels {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            height: 30px;
+        }
+        .time-tick {
+            position: absolute;
+            bottom: 0;
+            height: 20px;
+            border-left: 1px solid #999;
+            font-size: 10px;
+            color: #666;
+            padding-left: 4px;
+        }
+        .event {
+            position: absolute;
+            transform: translateX(-50%);
+        }
+        .event.level-1 { bottom: 80px; }
+        .event.level-2 { bottom: 140px; }
+        .event.level-3 { bottom: 200px; }
+        .event-marker {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            background: #666;
+        }
+        .event-label {
+            background: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            white-space: nowrap;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            color: #333;
+            line-height: 1.3;
+        }
+        .event-label small {
+            font-size: 9px;
+            color: #666;
+            display: block;
+        }
+        .status {
+            background: #e8f4fd;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .controls button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .controls button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Recruitment Cycle Timeline</h1>
+            <div class="current-time" id="current-time"></div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="centerOnToday()">Center on Today</button>
+        </div>
+        
+        <div class="timeline-wrapper" id="timeline-wrapper">
+            <div class="timeline">
+                <div id="cycle-sections"></div>
+                <div id="cycle-boundaries"></div>
+                <div class="time-axis"></div>
+                <div class="today-line">
+                    <div class="today-label">TODAY</div>
+                </div>
+                <div class="time-labels" id="time-labels"></div>
+                <div id="events"></div>
+            </div>
+        </div>
+        
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        // Simple data structure
+        const timelineData = {
+            "2025": {
+                "find_opens": "2024-10-01T09:00:00",
+                "apply_opens": "2024-10-08T09:00:00", 
+                "first_deadline_banner": "2025-07-12T09:00:00",
+                "apply_deadline": "2025-09-16T18:00:00",
+                "find_closes": "2025-09-29T23:59:59"
+            },
+            "2026": {
+                "find_opens": "2025-09-30T09:00:00",
+                "apply_opens": "2025-10-07T09:00:00",
+                "first_deadline_banner": "2026-07-12T09:00:00", 
+                "apply_deadline": "2026-09-15T18:00:00",
+                "find_closes": "2026-09-28T23:59:59"
+            },
+            "2027": {
+                "find_opens": "2026-09-29T09:00:00",
+                "apply_opens": "2026-10-06T09:00:00",
+                "first_deadline_banner": "2027-07-12T09:00:00",
+                "apply_deadline": "2027-09-21T18:00:00", 
+                "find_closes": "2027-10-04T23:59:59"
+            }
+        };
+
+        // Global function to update data
+        window.setTimelineData = function(jsonData) {
+            Object.assign(timelineData, JSON.parse(jsonData));
+            renderTimeline();
+        };
+
+        const PIXELS_PER_DAY = 10;
+        let startDate, endDate;
+
+        function init() {
+            const now = new Date();
+            startDate = new Date(now.getTime() - (132 * 24 * 60 * 60 * 1000));
+            endDate = new Date(now.getTime() + (132 * 24 * 60 * 60 * 1000));
+            
+            renderTimeline();
+            setInterval(updateTime, 1000);
+        }
+
+        function renderTimeline() {
+            updateTime();
+            createCycleSections();
+            createCycleBoundaries();
+            createTimeLabels();
+            createEvents();
+            updateStatus();
+            centerOnToday();
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = 
+                now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+        }
+
+        function createCycleSections() {
+            const container = document.getElementById('cycle-sections');
+            container.innerHTML = '';
+
+            Object.entries(timelineData).forEach(([year, events]) => {
+                const eventDates = Object.values(events).map(dateString => new Date(dateString));
+                const cycleStart = new Date(Math.min(...eventDates));
+                const cycleEnd = new Date(Math.max(...eventDates));
+
+                // Only show if cycle overlaps with visible timeline
+                if (cycleEnd >= startDate && cycleStart <= endDate) {
+                    const visibleStart = new Date(Math.max(cycleStart, startDate));
+                    const visibleEnd = new Date(Math.min(cycleEnd, endDate));
+
+                    const startDays = Math.floor((visibleStart - startDate) / (24 * 60 * 60 * 1000));
+                    const endDays = Math.floor((visibleEnd - startDate) / (24 * 60 * 60 * 1000));
+
+                    const leftPos = startDays * PIXELS_PER_DAY;
+                    const width = (endDays - startDays + 1) * PIXELS_PER_DAY;
+
+                    const sectionEl = document.createElement('div');
+                    sectionEl.className = `cycle-section cycle-${year}`;
+                    sectionEl.style.left = leftPos + 'px';
+                    sectionEl.style.width = width + 'px';
+
+                    const labelEl = document.createElement('div');
+                    labelEl.className = 'cycle-label';
+                    labelEl.textContent = `${year} Recruitment Cycle`;
+                    sectionEl.appendChild(labelEl);
+
+                    container.appendChild(sectionEl);
+                }
+            });
+        }
+
+        function createCycleBoundaries() {
+            const container = document.getElementById('cycle-boundaries');
+            container.innerHTML = '';
+
+            const allBoundaries = [];
+
+            // Collect all cycle start dates
+            Object.entries(timelineData).forEach(([year, events]) => {
+                const eventDates = Object.values(events).map(dateString => new Date(dateString));
+                const cycleStart = new Date(Math.min(...eventDates));
+                allBoundaries.push({
+                    date: cycleStart,
+                    label: `${year} Cycle Starts`,
+                    type: 'start'
+                });
+            });
+
+            // Add boundaries for visible dates
+            allBoundaries.forEach(boundary => {
+                if (boundary.date >= startDate && boundary.date <= endDate) {
+                    const daysDiff = Math.floor((boundary.date - startDate) / (24 * 60 * 60 * 1000));
+                    const leftPos = daysDiff * PIXELS_PER_DAY;
+
+                    const boundaryEl = document.createElement('div');
+                    boundaryEl.className = 'cycle-boundary';
+                    boundaryEl.style.left = leftPos + 'px';
+
+                    const labelEl = document.createElement('div');
+                    labelEl.className = 'cycle-boundary-label';
+                    labelEl.textContent = boundary.label;
+                    boundaryEl.appendChild(labelEl);
+
+                    container.appendChild(boundaryEl);
+                }
+            });
+        }
+
+        function createTimeLabels() {
+            const container = document.getElementById('time-labels');
+            container.innerHTML = '';
+            
+            const totalDays = Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000));
+            
+            for (let day = 0; day <= totalDays; day += 7) {
+                const date = new Date(startDate.getTime() + (day * 24 * 60 * 60 * 1000));
+                const tick = document.createElement('div');
+                tick.className = 'time-tick';
+                tick.style.left = (day * PIXELS_PER_DAY) + 'px';
+                tick.textContent = date.toLocaleDateString('en', {month: 'short', day: 'numeric'});
+                container.appendChild(tick);
+            }
+        }
+
+        function createEvents() {
+            const container = document.getElementById('events');
+            container.innerHTML = '';
+
+            // Collect all events with their positions
+            const allEvents = [];
+            Object.entries(timelineData).forEach(([year, events]) => {
+                Object.entries(events).forEach(([eventType, dateString]) => {
+                    const eventDate = new Date(dateString);
+                    
+                    if (eventDate >= startDate && eventDate <= endDate) {
+                        const daysDiff = Math.floor((eventDate - startDate) / (24 * 60 * 60 * 1000));
+                        const leftPos = daysDiff * PIXELS_PER_DAY;
+                        
+                        allEvents.push({
+                            type: eventType,
+                            date: eventDate,
+                            year: year,
+                            leftPos: leftPos,
+                            level: 1 // Default level
+                        });
+                    }
+                });
+            });
+
+            // Sort by position
+            allEvents.sort((a, b) => a.leftPos - b.leftPos);
+
+            // Assign levels to prevent overlap
+            const MIN_SPACING = 80; // Minimum pixels between labels at same level
+            for (let i = 0; i < allEvents.length; i++) {
+                const currentEvent = allEvents[i];
+                
+                // Check for conflicts with previous events
+                for (let j = i - 1; j >= 0; j--) {
+                    const prevEvent = allEvents[j];
+                    const distance = currentEvent.leftPos - prevEvent.leftPos;
+                    
+                    if (distance < MIN_SPACING && currentEvent.level === prevEvent.level) {
+                        currentEvent.level = Math.min(prevEvent.level + 1, 3); // Max 3 levels
+                    }
+                }
+            }
+
+            // Create DOM elements
+            allEvents.forEach(event => {
+                const eventEl = document.createElement('div');
+                eventEl.className = `event level-${event.level}`;
+                eventEl.style.left = event.leftPos + 'px';
+                
+                const markerEl = document.createElement('div');
+                markerEl.className = 'event-marker';
+                
+                const labelEl = document.createElement('div');
+                labelEl.className = 'event-label';
+                labelEl.innerHTML = `${formatEventName(event.type)}<br><small>${event.year} Cycle (${event.date.getFullYear()})</small>`;
+                
+                eventEl.appendChild(markerEl);
+                eventEl.appendChild(labelEl);
+                container.appendChild(eventEl);
+            });
+        }
+
+        function formatEventName(eventType) {
+            const names = {
+                'find_opens': 'Find Opens',
+                'apply_opens': 'Apply Opens', 
+                'first_deadline_banner': 'Deadline Banner',
+                'apply_deadline': 'Apply Deadline',
+                'find_closes': 'Find Closes'
+            };
+            return names[eventType] || eventType;
+        }
+
+        function updateStatus() {
+            const now = new Date();
+            const statusEl = document.getElementById('status');
+            
+            let currentState = 'Unknown';
+            let nextEvent = null;
+            let nextEventDate = null;
+
+            // Find current state and next event
+            Object.entries(timelineData).forEach(([year, events]) => {
+                const eventList = Object.entries(events)
+                    .map(([type, dateString]) => ({type, date: new Date(dateString)}))
+                    .sort((a, b) => a.date - b.date);
+
+                for (let i = 0; i < eventList.length; i++) {
+                    const event = eventList[i];
+                    const nextInCycle = eventList[i + 1];
+
+                    if (now >= event.date && (!nextInCycle || now < nextInCycle.date)) {
+                        currentState = getStateName(event.type);
+                        if (nextInCycle) {
+                            nextEvent = nextInCycle.type;
+                            nextEventDate = nextInCycle.date;
+                        }
+                        return;
+                    }
+                    
+                    if (now < event.date && !nextEvent) {
+                        nextEvent = event.type;
+                        nextEventDate = event.date;
+                        return;
+                    }
+                }
+            });
+
+            let statusText = `<strong>Current State:</strong> ${currentState}`;
+            
+            if (nextEvent && nextEventDate) {
+                const timeDiff = nextEventDate - now;
+                const days = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
+                const hours = Math.floor((timeDiff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                statusText += `<br><strong>Next Event:</strong> ${formatEventName(nextEvent)} in ${days} days, ${hours} hours`;
+            }
+
+            statusEl.innerHTML = statusText;
+        }
+
+        function getStateName(eventType) {
+            const states = {
+                'find_opens': 'Find Active, Apply Closed',
+                'apply_opens': 'Find Active, Apply Active',
+                'first_deadline_banner': 'Find Active, Apply Active (Deadline Banner)',
+                'apply_deadline': 'Find Active, Apply Closed', 
+                'find_closes': 'Both Closed'
+            };
+            return states[eventType] || 'Unknown';
+        }
+
+        function centerOnToday() {
+            const wrapper = document.getElementById('timeline-wrapper');
+            const todayPosition = 132 * PIXELS_PER_DAY; // Today is at day 132
+            const wrapperWidth = wrapper.clientWidth;
+            wrapper.scrollLeft = todayPosition - (wrapperWidth / 2);
+        }
+
+        // Start the timeline
+        init();
+    </script>
+</body>
+</html>
