@@ -15,7 +15,7 @@ export function paginationJourney (environment, config) {
         config.expectedResponseTimes.pagination
       )
 
-      findContentCheck(response, 'courses found', 'Pagination')
+      findContentCheck(response, 'Pagination', 'courses found')
 
       if (!isSuccess) {
         findErrorHandler(response, `Find Pagination Page ${page}`)

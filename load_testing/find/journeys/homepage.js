@@ -8,8 +8,8 @@ export function homepageJourney (environment, config) {
       const response = http.get(`${environment.baseUrl}/`)
       const isSuccess = findPerformanceCheck(response, 'Homepage', config.expectedResponseTimes.homepage)
 
-      findContentCheck(response, 'Find teacher training courses', 'main-heading')
-      findContentCheck(response, 'Search', 'search-button')
+      findContentCheck(response, 'main-heading', 'Find teacher training courses')
+      findContentCheck(response, 'search-button', 'Search')
 
       if (!isSuccess) {
         findErrorHandler(response, 'Homepage')
