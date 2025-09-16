@@ -29,7 +29,7 @@ dfe_signin:
   user_search_url: https://support.signin.education.gov.uk/users
 
 one_login:
-  enabled: false
+  enabled: true
   # URL that the users are redirected to for signing in
   idp_base_url: https://oidc.account.gov.uk/
   # URL we use to end the Onne Login session on behalf of the user
