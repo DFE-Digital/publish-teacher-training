@@ -44,7 +44,7 @@ export function findPerformanceCheck (response, name, threshold = 3000) {
   return isSuccess
 }
 
-export function findContentCheck (response, expectedContent, checkName) {
+export function findContentCheck (response, checkName, expectedContent) {
   const hasContent = response.body.includes(expectedContent)
 
   if (!hasContent) {

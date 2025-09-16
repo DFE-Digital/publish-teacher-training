@@ -16,9 +16,9 @@ export function searchAndFilterJourney (environment, config) {
       const response = http.get(`${environment.baseUrl}/results?${basicSearchParams}`)
       const isSuccess = findPerformanceCheck(response, 'Basic Search', config.expectedResponseTimes.search)
 
-      findContentCheck(response, 'courses found', 'search-results')
-      findContentCheck(response, 'Filters', 'filter-options')
-      findContentCheck(response, 'Age group', 'course-listings')
+      findContentCheck(response, 'search-results', 'courses found')
+      findContentCheck(response, 'filter-options', 'Filters')
+      findContentCheck(response, 'course-listings', 'Age group')
 
       if (!isSuccess) {
         findErrorHandler(response, 'Basic Search')
@@ -40,8 +40,8 @@ export function searchAndFilterJourney (environment, config) {
       const response = http.get(`${environment.baseUrl}/results?${multiFilterParams}`)
       const isSuccess = findPerformanceCheck(response, 'Multi-Filter Search', config.expectedResponseTimes.search)
 
-      findContentCheck(response, 'Part time (18 to 24 months)', 'filter-validation')
-      findContentCheck(response, 'courses found', 'filtered-results')
+      findContentCheck(response, 'filter-validation', 'Part time (18 to 24 months)')
+      findContentCheck(response, 'filtered-results', 'courses found')
 
       if (!isSuccess) {
         findErrorHandler(response, 'Multi-Filter Search')
@@ -62,8 +62,8 @@ export function searchAndFilterJourney (environment, config) {
       const response = http.get(`${environment.baseUrl}/results?${advancedParams}`)
       const isSuccess = findPerformanceCheck(response, 'Advanced Filter Search', config.expectedResponseTimes.search)
 
-      findContentCheck(response, 'PGCE', 'qualification-filter')
-      findContentCheck(response, 'Salary', 'funding-filter')
+      findContentCheck(response, 'qualification-filter', 'PGCE')
+      findContentCheck(response, 'funding-filter', 'Salary')
 
       if (!isSuccess) {
         findErrorHandler(response, 'Advanced Filter Search')
