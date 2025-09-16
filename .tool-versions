@@ -8,3 +8,4 @@ azure-kubelogin      latest
 jq                   1.7.1
 make                 4.4.1
 caddy                2.9.1
+k6	                 1.2.3
