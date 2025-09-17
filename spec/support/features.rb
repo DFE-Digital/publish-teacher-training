@@ -7,6 +7,7 @@ RSpec.configure do |config|
   config.include FeatureHelpers::GovukComponents, type: :feature
   config.include FeatureHelpers::GovukComponents, type: :system
   config.include FeatureHelpers::CourseSteps, type: :feature
+  config.include FeatureHelpers::CourseSteps, type: :system
   config.include FeatureHelpers::PageWithQuery, type: :feature
   config.include DfESignInUserHelper, type: :feature
   config.include DfESignInUserHelper, type: :system

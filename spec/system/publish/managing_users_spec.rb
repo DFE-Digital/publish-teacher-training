@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Adding user to organisation as a provider user" do
+RSpec.describe "Adding user to organisation as a provider user" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
