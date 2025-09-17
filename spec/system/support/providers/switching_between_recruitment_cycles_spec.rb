@@ -5,7 +5,6 @@ require "rails_helper"
 RSpec.describe "Support index" do
   scenario "viewing support cycles page during rollover", travel: find_closes do
     given_we_have_a_next_cycle
-    and_there_are_two_recruitment_cycles
     and_today_is_before_next_cycle_available_for_support_users_date
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
@@ -25,9 +24,8 @@ RSpec.describe "Support index" do
     i_should_be_on_the_next_cycle_page
   end
 
-  scenario "viewing providers page when not in rollover", travel: mid_cycle do
+  scenario "viewing providers page when not in rollover" do
     given_we_have_a_next_cycle
-    and_there_are_two_recruitment_cycles
     and_i_am_authenticated_as_an_admin_user
     and_today_is_before_next_cycle_available_for_support_users_date
     when_i_visit_the_support_index_page
@@ -39,11 +37,6 @@ RSpec.describe "Support index" do
   end
 
   def given_we_have_a_next_cycle
-    find_or_create(:recruitment_cycle, :next)
-  end
-
-  def and_there_are_two_recruitment_cycles
-    find_or_create(:recruitment_cycle, :previous)
     find_or_create(:recruitment_cycle, :next)
   end
 
