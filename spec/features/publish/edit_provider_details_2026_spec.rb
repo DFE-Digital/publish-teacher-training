@@ -57,13 +57,13 @@ feature "Why Train With Us section in 2026 cycle +" do
 
   def then_i_can_edit_info_about_disabilities_and_other_needs
     visit(details_publish_provider_recruitment_cycle_path(provider_code: @provider.provider_code, year: @provider.recruitment_cycle_year))
-    click_link "Change details about training with disabilities and other needs"
+    click_link "Change details about training with disabilities"
 
     page.find("#publish-disability-support-form-train-with-disability-field").set("Updated: training with disabilities")
     click_button "Update training with disabilities"
 
     expect(page).to have_content "Your changes have been published"
-    within_summary_row "Training with disabilities and other needs" do
+    within_summary_row "Training with disabilities" do
       expect(page).to have_content "Updated: training with disabilities"
     end
   end
