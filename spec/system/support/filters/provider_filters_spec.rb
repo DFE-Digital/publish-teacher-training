@@ -49,7 +49,7 @@ private
   end
 
   def when_i_visit_the_providers_index_page
-    support_provider_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
+    support_provider_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
   end
 
   def then_i_can_search_by_provider_name

@@ -17,7 +17,7 @@ RSpec.describe "Authentication" do
   end
 
   def when_i_visit_the_support_interface
-    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
+    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
   end
 
   def then_i_am_expected_to_sign_in
@@ -29,6 +29,6 @@ RSpec.describe "Authentication" do
   end
 
   def then_i_can_access_the_support_interface
-    expect(page).to have_current_path support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
+    expect(page).to have_current_path support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
   end
 end

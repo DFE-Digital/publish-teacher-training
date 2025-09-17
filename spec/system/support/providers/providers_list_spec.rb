@@ -25,7 +25,7 @@ RSpec.describe "View providers" do
   end
 
   def when_i_visit_the_support_provider_index_page
-    support_provider_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
+    support_provider_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
   end
 
   def then_i_see_the_providers
@@ -33,7 +33,7 @@ RSpec.describe "View providers" do
   end
 
   def then_i_am_on_the_provider_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/providers/onboarding/new")
+    expect(page).to have_current_path("/support/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/providers/onboarding/new")
   end
 
   def and_i_click_on_add_provider
