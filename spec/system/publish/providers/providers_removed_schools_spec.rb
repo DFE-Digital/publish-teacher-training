@@ -54,7 +54,6 @@ RSpec.describe "Publish - Providers - Removed Schools page", service: :publish, 
     end
 
     before do
-      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
       and_provider_is_linked_to_recruitment_cycle
       and_user_is_signed_in
     end
