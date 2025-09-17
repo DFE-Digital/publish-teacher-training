@@ -55,7 +55,8 @@ RSpec.describe Courses::CopyToProviderService do
 
   it "sets the visa_sponsorship_application_deadline_at to nil" do
     course.can_sponsor_student_visa = true
-    course.visa_sponsorship_application_deadline_at = 1.week.before(Find::CycleTimetable.find_closes)
+    course.visa_sponsorship_application_deadline_at = 1.week.before(course.recruitment_cycle.application_end_date)
+
     course.save!(validate: false)
 
     service.execute(course:, new_provider:)
