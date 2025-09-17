@@ -196,7 +196,6 @@ jobs:
         # Separate mutliple flags with a space
         feature-flags:
           - ""
-          - "SETTINGS__CURRENT_RECRUITMENT_CYCLE_YEAR=2026"
 
     steps:
       - name: Checkout
