@@ -53,7 +53,7 @@
 
     <div class="govuk-width-container">
       <% if FeatureFlag.active?(:candidate_accounts) %>
-        <%= render GovukComponent::PhaseBannerComponent.new(tag: { text: Settings.environment.name, colour: phase_colour }, text: t(".feedback", link_to: govuk_link_to(t(".feedback_text"), new_find_feedback_path)).html_safe) %>
+        <%= render GovukComponent::PhaseBannerComponent.new(tag: { text: Settings.environment.label, colour: phase_colour }, text: t(".feedback", link_to: govuk_link_to(t(".feedback_text"), new_find_feedback_path)).html_safe) %>
       <% end %>
       <%= yield :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
