@@ -26,14 +26,14 @@ RSpec.describe "Support index" do
 
   scenario "viewing providers page when not in rollover" do
     given_we_have_a_next_cycle
-    and_i_am_authenticated_as_an_admin_user
     and_today_is_before_next_cycle_available_for_support_users_date
+    and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
     then_i_should_be_on_the_support_providers_page
   end
 
   def then_i_should_be_on_the_support_providers_page
-    expect(support_provider_index_page).to be_displayed
+    expect(page).to have_current_path "/support/#{RecruitmentCycle.current.year}/providers", ignore_query: true
   end
 
   def given_we_have_a_next_cycle
