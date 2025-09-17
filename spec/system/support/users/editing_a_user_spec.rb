@@ -33,7 +33,7 @@ private
   end
 
   def when_i_visit_the_support_user_edit_page
-    support_user_edit_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), id: @user.id)
+    support_user_edit_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), id: @user.id)
   end
 
   def and_i_fill_in_correct_details

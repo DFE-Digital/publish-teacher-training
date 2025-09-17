@@ -53,7 +53,7 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def and_i_visit_the_support_provider_school_show_page
-    support_provider_school_show_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), provider_id: @provider.id, id: @site.id)
+    support_provider_school_show_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: @provider.id, id: @site.id)
   end
 
   def and_there_is_a_provider_site

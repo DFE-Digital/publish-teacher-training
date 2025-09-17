@@ -52,7 +52,7 @@ module Publish
   private
 
     def cycle_year
-      session[:cycle_year] || params[:recruitment_cycle_year] || params[:year] || Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
+      session[:cycle_year] || params[:recruitment_cycle_year] || params[:year] || Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
     end
 
     def user

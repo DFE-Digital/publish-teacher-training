@@ -2,19 +2,19 @@
 
 module RecruitmentCycleHelper
   def current_recruitment_cycle_period_text
-    "#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now) - 1} to #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}"
+    "#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) - 1} to #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}"
   end
 
   def next_recruitment_cycle_period_text
-    "#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)} to #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now) + 1}"
+    "#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)} to #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1}"
   end
 
   def next_academic_cycle_period_text
-    "#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now) + 1} to #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now) + 2}"
+    "#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1} to #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 2}"
   end
 
   def previous_recruitment_cycle_period_text
-    "#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now) - 1} to #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}"
+    "#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) - 1} to #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}"
   end
 
   def hint_text_for_mid_cycle
@@ -38,7 +38,7 @@ module RecruitmentCycleHelper
   end
 
   def current_recruitment_cycle?(provider)
-    provider.recruitment_cycle_year.to_i == Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
+    provider.recruitment_cycle_year.to_i == Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
   end
 
   def rollover_active?

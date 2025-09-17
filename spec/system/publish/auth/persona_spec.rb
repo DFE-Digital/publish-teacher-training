@@ -27,7 +27,7 @@ RSpec.describe "Authentication with Personas" do
   end
 
   def when_i_go_to_support
-    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
+    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
   end
 
   def then_i_am_given_the_option_to_sign_in_with_a_persona

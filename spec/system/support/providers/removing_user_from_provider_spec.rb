@@ -26,7 +26,7 @@ private
   end
 
   def and_i_visit_the_support_provider_user_show_page
-    support_provider_user_show_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), id: @user.id, provider_id: @provider.id)
+    support_provider_user_show_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), id: @user.id, provider_id: @provider.id)
   end
 
   def and_i_click_the_remove_user_link

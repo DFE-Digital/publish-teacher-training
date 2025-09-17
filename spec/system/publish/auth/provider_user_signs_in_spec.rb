@@ -35,8 +35,8 @@ RSpec.describe "Authentication" do
   end
 
   def and_i_cannot_access_the_support_interface
-    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
-    expect(page).to have_current_path support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
+    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
+    expect(page).to have_current_path support_recruitment_cycle_providers_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
     expect(page.status_code).to eq(403)
     expect(page.find("h1")).to have_content("You are not permitted to see this page")
   end
