@@ -26,6 +26,9 @@ gem "draper"
 # Custom attributes for endpoints
 gem "active_model_serializers"
 
+# Access to features of the PostGIS geospatial extension
+gem "activerecord-postgis-adapter"
+
 # Pagination for frontend and API
 gem "pagy", "~> 9.4"
 
