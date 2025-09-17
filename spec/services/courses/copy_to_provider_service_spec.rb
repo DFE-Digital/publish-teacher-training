@@ -53,6 +53,16 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.can_sponsor_student_visa).to eq course.can_sponsor_student_visa
   end
 
+  it "sets the visa_sponsorship_application_deadline_at to nil" do
+    course.can_sponsor_student_visa = true
+    course.visa_sponsorship_application_deadline_at = 1.week.before(Find::CycleTimetable.find_closes)
+    course.save!(validate: false)
+
+    service.execute(course:, new_provider:)
+
+    expect(new_course.visa_sponsorship_application_deadline_at).to be_nil
+  end
+
   it "adds the copied course to @courses_copied" do
     service.execute(course:, new_provider:)
 
