@@ -49,7 +49,7 @@ private
 
   def when_i_visit_the_new_course_modern_languages_page(with_invalid_query: false)
     query = new_course_modern_languages_page_with_query(invalid: with_invalid_query)
-    publish_courses_new_modern_languages_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), query:)
+    publish_courses_new_modern_languages_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), query:)
   end
 
   def and_i_click_continue
@@ -83,7 +83,7 @@ private
 
   def then_i_am_met_with_the_age_range_page(with_invalid_params: false)
     params = selected_params(with_subjects: with_invalid_params)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/age-range/new#{params}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/courses/age-range/new#{params}")
     expect(page).to have_content("Age range")
   end
 

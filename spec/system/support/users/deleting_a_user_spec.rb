@@ -23,7 +23,7 @@ private
   end
 
   def when_i_visit_the_user_show_page(user_id)
-    support_user_show_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), id: user_id)
+    support_user_show_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), id: user_id)
   end
 
   def when_i_click_the_delete_button

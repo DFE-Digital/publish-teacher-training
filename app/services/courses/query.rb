@@ -215,7 +215,7 @@ module Courses
 
       @applied_scopes[:start_date] = params[:start_date]
 
-      current_recruitment_cycle_year = Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
+      current_recruitment_cycle_year = Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
       september_range = Date.new(current_recruitment_cycle_year, 9, 1)..Date.new(current_recruitment_cycle_year, 9, 30)
 
       case params[:start_date]

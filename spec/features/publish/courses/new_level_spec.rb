@@ -58,7 +58,7 @@ private
   end
 
   def and_i_visit_the_new_course_level_page
-    publish_courses_new_level_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now))
+    publish_courses_new_level_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
   end
 
   def given_i_select_primary_level
@@ -96,17 +96,17 @@ private
   end
 
   def then_i_am_met_with_the_primary_subjects_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/subjects/new#{primary_level_selected_params}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/courses/subjects/new#{primary_level_selected_params}")
     expect(page).to have_content("Subject")
   end
 
   def then_i_am_met_with_the_secondary_subjects_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/subjects/new#{secondary_level_selected_params}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/courses/subjects/new#{secondary_level_selected_params}")
     expect(page).to have_content("Subject")
   end
 
   def then_i_am_met_with_the_course_outcome_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/outcome/new#{further_education_level_selected_params}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/courses/outcome/new#{further_education_level_selected_params}")
     expect(page).to have_content("Qualification")
   end
 

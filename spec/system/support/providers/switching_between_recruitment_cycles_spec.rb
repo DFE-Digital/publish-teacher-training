@@ -56,8 +56,8 @@ RSpec.describe "Support index" do
   end
 
   def then_i_should_be_on_the_recruitment_cycle_switcher_page
-    expect(support_recruitment_cycle_index_page).to have_link "#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)} - current"
-    expect(support_recruitment_cycle_index_page).to have_link Find::CycleTimetable.cycle_year_from_time(Time.zone.now) + 1
+    expect(support_recruitment_cycle_index_page).to have_link "#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)} - current"
+    expect(support_recruitment_cycle_index_page).to have_link Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1
   end
 
   def and_should_not_see_the_switch_cycle_link
@@ -73,7 +73,7 @@ RSpec.describe "Support index" do
   end
 
   def i_should_see_the_current_cycle_page
-    expect(support_provider_index_page).to have_text "Recruitment cycle #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now) - 1} to #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)} - current"
+    expect(support_provider_index_page).to have_text "Recruitment cycle #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) - 1} to #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)} - current"
   end
 
   def when_click_the_switch_cycle_link
@@ -81,7 +81,7 @@ RSpec.describe "Support index" do
   end
 
   def i_should_be_on_the_next_cycle_page
-    expect(support_provider_index_page).to have_text "Recruitment cycle #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)} to #{Find::CycleTimetable.cycle_year_from_time(Time.zone.now) + 1}"
+    expect(support_provider_index_page).to have_text "Recruitment cycle #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)} to #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1}"
   end
 
   def and_i_should_see_the_pe_allocations_tab

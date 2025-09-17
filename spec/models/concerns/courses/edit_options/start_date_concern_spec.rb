@@ -73,7 +73,7 @@ describe Courses::EditOptions::StartDateConcern do
     end
 
     around do |example|
-      Timecop.freeze(Time.zone.local(Find::CycleTimetable.cycle_year_from_time(Time.zone.now), month, 1)) do
+      Timecop.freeze(Time.zone.local(Find::CycleTimetable.cycle_year_for_time(Time.zone.now), month, 1)) do
         example.run
       end
     end

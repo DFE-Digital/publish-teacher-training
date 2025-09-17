@@ -39,7 +39,7 @@ private
   end
 
   def when_i_visit_the_publish_courses_new_outcome_page
-    publish_courses_new_outcome_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_from_time(Time.zone.now), query: outcome_params)
+    publish_courses_new_outcome_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), query: outcome_params)
   end
 
   def when_i_select_an_outcome(outcome)
@@ -55,7 +55,7 @@ private
   end
 
   def then_i_am_met_with_the_funding_type_page(outcome)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_from_time(Time.zone.now)}/courses/funding-type/new#{selected_params(outcome)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/courses/funding-type/new#{selected_params(outcome)}")
     expect(page).to have_content("Funding type")
   end
 

@@ -36,19 +36,19 @@ private
   end
 
   def current_recruitment_cycle?
-    recruitment_cycle_year == Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
+    recruitment_cycle_year == Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
   end
 
   def next_recruitment_cycle?
-    recruitment_cycle_year == Find::CycleTimetable.cycle_year_from_time(Time.zone.now) + 1
+    recruitment_cycle_year == Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1
   end
 
   def current_recruitment_cycle_year
-    Find::CycleTimetable.cycle_year_from_time(Time.zone.now) - 1
+    Find::CycleTimetable.cycle_year_for_time(Time.zone.now) - 1
   end
 
   def next_recruitment_cycle_year
-    Find::CycleTimetable.cycle_year_from_time(Time.zone.now)
+    Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
   end
 
   def support_index_page
