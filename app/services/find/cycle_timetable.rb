@@ -78,7 +78,7 @@ module Find
     def self.cycle_year_for_time(time)
       CYCLE_DATES.each do |year, dates|
         end_time = CYCLE_DATES[year + 1]&.dig(:find_opens) || dates[:find_closes]
-        return year if time.between?(dates[:find_opens], end_time - 1.second)
+        return year if time >= dates[:find_opens] && time < end_time
       end
       nil
     end
