@@ -227,7 +227,7 @@ private
 
   def and_it_contains_invalid_value_errors
     expect(support_provider_course_edit_page.error_summary.text).to include("Course code is already taken")
-    expect(support_provider_course_edit_page.error_summary.text).to include("June #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 3} is not in the #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)} cycle")
+    expect(support_provider_course_edit_page.error_summary.text).to include("September #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 3} is not in the #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)} cycle")
   end
 
   def and_it_contains_start_date_format_error
