@@ -61,7 +61,7 @@ module Find
     def self.current_year
       now = Time.zone.now
 
-      current_year = cycle_year_from_time(now)
+      current_year = cycle_year_for_time(now)
 
       # If the cycle switcher has been set to 'find has reopened' then
       # we want to request next year's courses from the TTAPI
@@ -75,7 +75,7 @@ module Find
     # Returns the recruitment cycle year for a given time
     # Recruitment Cycles run from find opens to the find_opens in the next cycle
     # If there is no next cycle, the end of the last cycle is when find_closes
-    def self.cycle_year_from_time(time)
+    def self.cycle_year_for_time(time)
       CYCLE_DATES.each do |year, dates|
         end_time = CYCLE_DATES[year + 1]&.dig(:find_opens) || dates[:find_closes]
         return year if time.between?(dates[:find_opens], end_time - 1.second)
