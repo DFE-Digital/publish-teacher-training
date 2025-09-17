@@ -153,7 +153,7 @@ RSpec.configure do |config|
 
   config.before do |example|
     if (time = example.metadata[:travel])
-      year = Find::CycleTimetable.cycle_year_from_time(time)
+      year = Find::CycleTimetable.cycle_year_for_time(time)
       find_or_create(:recruitment_cycle, year:)
       allow(Settings).to receive(:current_recruitment_cycle_year)
         .and_return(year)
