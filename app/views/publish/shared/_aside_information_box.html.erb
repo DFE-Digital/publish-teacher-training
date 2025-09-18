@@ -5,9 +5,9 @@
 
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
-    <h2 class="govuk-heading-s">Your courses for the <%= "#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)} to #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1}" %> cycle</h2>
+    <h2 class="govuk-heading-s">Your courses for the <%= "#{Find::CycleTimetable.current_year} to #{Find::CycleTimetable.next_year}" %> cycle</h2>
     <p class="govuk-body">
-      Courses you publish for the <%= "#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)} to #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1}" %> cycle will be made available on <%= t("service_name.find") %> for candidates to view.
+      Courses you publish for the <%= "#{Find::CycleTimetable.current_year} to #{Find::CycleTimetable.next_year}" %> cycle will be made available on <%= t("service_name.find") %> for candidates to view.
     </p>
 
     <h2 class="govuk-heading-s">Support and guidance</h2>

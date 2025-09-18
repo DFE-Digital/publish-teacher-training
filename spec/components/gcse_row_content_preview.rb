@@ -2,7 +2,7 @@
 
 class GcseRowContentPreview < ViewComponent::Preview
   def incomplete
-    course = Course.new(course_code: "C0D3", provider: Provider.new(provider_code: "E2E", recruitment_cycle: RecruitmentCycle.new(year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))))
+    course = Course.new(course_code: "C0D3", provider: Provider.new(provider_code: "E2E", recruitment_cycle: RecruitmentCycle.new(year: Find::CycleTimetable.current_year)))
 
     render(GcseRowContent.new(course: course.decorate))
   end

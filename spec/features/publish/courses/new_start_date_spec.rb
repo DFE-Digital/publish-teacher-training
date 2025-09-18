@@ -23,11 +23,11 @@ private
   end
 
   def when_i_visit_the_publish_courses_new_start_date_page
-    publish_courses_new_start_date_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), query: start_date_params(provider))
+    publish_courses_new_start_date_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.current_year, query: start_date_params(provider))
   end
 
   def when_i_select_january
-    publish_courses_new_start_date_page.choose("January #{Find::CycleTimetable.cycle_year_for_time(Time.zone.now).to_i + 1}")
+    publish_courses_new_start_date_page.choose("January #{Find::CycleTimetable.next_year}")
   end
 
   def and_i_click_continue
@@ -39,7 +39,7 @@ private
   end
 
   def then_i_am_met_with_the_confirmation_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/courses/confirmation", ignore_query: true)
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/confirmation", ignore_query: true)
     expect(page).to have_content("Check your answers")
   end
 end

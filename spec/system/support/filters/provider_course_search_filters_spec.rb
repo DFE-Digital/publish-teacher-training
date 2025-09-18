@@ -83,7 +83,7 @@ private
   end
 
   def when_i_visit_the_providers_index_page
-    support_provider_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
+    support_provider_index_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year)
   end
 
   def and_when_i_click_apply_filters

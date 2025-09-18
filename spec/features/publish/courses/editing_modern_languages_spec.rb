@@ -60,7 +60,7 @@ private
 
   def when_i_visit_the_edit_course_modern_languages_page(with_invalid_query: false)
     query = edit_course_modern_languages_page_with_query(invalid: with_invalid_query)
-    publish_courses_modern_languages_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), course_code: course.course_code, query:)
+    publish_courses_modern_languages_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.current_year, course_code: course.course_code, query:)
   end
 
   def and_i_click_continue
@@ -93,7 +93,7 @@ private
   end
 
   def then_i_am_met_with_course_details_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/courses/#{course.course_code}/details")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/details")
   end
 
   def then_i_am_redirected_to_course_details_page

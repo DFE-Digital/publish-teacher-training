@@ -110,7 +110,7 @@ RSpec.describe "Multiple schools" do
   end
 
   def then_i_am_redirected_to_the_school_index
-    expect(page).to have_current_path(support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: provider.id))
+    expect(page).to have_current_path(support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id))
   end
 
   def and_i_see_that_all_schools_are_created
@@ -200,16 +200,16 @@ RSpec.describe "Multiple schools" do
   end
 
   def and_i_am_redirected_to_the_multiple_school_check_page
-    expect(page).to have_current_path support_recruitment_cycle_provider_schools_multiple_check_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: provider.id)
+    expect(page).to have_current_path support_recruitment_cycle_provider_schools_multiple_check_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id)
     expect(page).to have_text "Check your answers"
   end
 
   def when_i_visit_the_multiple_schools_new_page
-    visit new_support_recruitment_cycle_provider_schools_multiple_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: provider.id)
+    visit new_support_recruitment_cycle_provider_schools_multiple_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id)
   end
 
   def when_i_visit_a_provider_schools_page
-    visit support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: provider.id)
+    visit support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id)
   end
 
   def and_i_have_one_existing_school
@@ -279,11 +279,11 @@ RSpec.describe "Multiple schools" do
   end
 
   def when_i_am_redirected_to_the_schools_page
-    expect(page).to have_current_path support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: provider.id)
+    expect(page).to have_current_path support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id)
   end
 
   def and_i_am_on_the_enter_urns_page
-    expect(page).to have_current_path new_support_recruitment_cycle_provider_schools_multiple_path(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: provider.id)
+    expect(page).to have_current_path new_support_recruitment_cycle_provider_schools_multiple_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id)
   end
 
   alias_method :and_i_click_add_schools, :when_i_click_add_schools

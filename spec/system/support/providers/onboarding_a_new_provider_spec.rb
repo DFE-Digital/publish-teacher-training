@@ -134,7 +134,7 @@ private
   end
 
   def and_i_visit_the_onboarding_a_new_provider_page
-    visit "/support/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/providers/onboarding/new"
+    visit "/support/#{Find::CycleTimetable.current_year}/providers/onboarding/new"
   end
 
   def when_i_fill_in_a_valid_provider_contact_details
@@ -212,23 +212,23 @@ private
   end
 
   def then_i_am_redirected_to_provider_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/providers/#{Provider.last.id}")
+    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/#{Provider.last.id}")
   end
 
   def then_i_am_redirected_to_check_your_answer_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/providers/onboarding/check")
+    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/check")
   end
 
   def then_i_am_redirected_to_the_onboarding_contacts_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/providers/onboarding/contacts/new")
+    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/contacts/new")
   end
 
   def then_i_am_redirected_back_to_the_onboarding_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/providers/onboarding/new")
+    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/new")
   end
 
   def then_i_am_redirected_back_to_the_support_providers_index_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/providers")
+    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers")
   end
 
   def then_i_see_the_error_summary

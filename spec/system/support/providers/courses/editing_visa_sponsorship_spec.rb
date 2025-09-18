@@ -89,15 +89,15 @@ RSpec.describe "Editing visa sponsorship" do
   end
 
   def when_i_navigate_to_the_apprenticeship_course
-    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 3, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
+    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 3, recruitment_cycle_year: Find::CycleTimetable.current_year)
   end
 
   def when_i_navigate_to_the_salaried_course
-    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 2, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
+    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 2, recruitment_cycle_year: Find::CycleTimetable.current_year)
   end
 
   def when_i_navigate_to_the_fee_paying_course
-    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 1, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
+    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 1, recruitment_cycle_year: Find::CycleTimetable.current_year)
   end
 
   alias_method :and_i_navigate_to_the_same_fee_paying_course, :when_i_navigate_to_the_fee_paying_course

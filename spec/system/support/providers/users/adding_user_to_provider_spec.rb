@@ -53,11 +53,11 @@ RSpec.describe "Adding user to provider as an admin", travel: mid_cycle do
   end
 
   def given_i_visit_the_support_provider_users_index_page
-    support_provider_users_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: @provider.id)
+    support_provider_users_index_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: @provider.id)
   end
 
   def given_i_visit_the_support_provider_users_new_page
-    support_provider_users_new_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: @provider.id)
+    support_provider_users_new_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: @provider.id)
   end
 
   def and_i_continue
@@ -67,7 +67,7 @@ RSpec.describe "Adding user to provider as an admin", travel: mid_cycle do
   alias_method :when_i_continue, :and_i_continue
 
   def given_i_visit_the_support_provider_users_new_page
-    support_provider_user_users_new_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), provider_id: @provider.id)
+    support_provider_user_users_new_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: @provider.id)
   end
 
   def and_i_fill_in_first_name
@@ -133,7 +133,7 @@ RSpec.describe "Adding user to provider as an admin", travel: mid_cycle do
   end
 
   def and_i_am_still_on_the_same_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/providers/#{@provider.id}/users")
+    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/#{@provider.id}/users")
   end
 
   def given_i_am_authenticated_as_an_admin_user

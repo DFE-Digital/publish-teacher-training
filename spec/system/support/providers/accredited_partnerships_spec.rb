@@ -139,14 +139,14 @@ private
 
   def then_i_return_to_the_index_page
     expect(page).to have_current_path(support_recruitment_cycle_provider_accredited_partnerships_path(
-                                        recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now),
+                                        recruitment_cycle_year: Find::CycleTimetable.current_year,
                                         provider_id: @provider.id,
                                       ))
   end
 
   def and_i_visit_the_index_page
     visit support_recruitment_cycle_provider_accredited_partnerships_path(
-      recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now),
+      recruitment_cycle_year: Find::CycleTimetable.current_year,
       provider_id: @provider.id,
     )
   end

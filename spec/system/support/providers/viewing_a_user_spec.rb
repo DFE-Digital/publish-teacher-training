@@ -30,7 +30,7 @@ RSpec.describe "Viewing a user" do
 private
 
   def when_i_visit_the_support_provider_show_page
-    support_provider_show_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), id: @user.providers.first.id)
+    support_provider_show_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, id: @user.providers.first.id)
   end
 
   def and_there_is_a_user(user = nil)
@@ -68,6 +68,6 @@ private
   def and_i_see_the_users_details_with_last_login
     and_i_see_the_users_details
     expect(support_provider_user_show_page.date_last_signed_in.text).to eq(@user.last_login_date_utc.strftime("%d %B %Y at %I:%M%p"))
-    expect(support_provider_user_show_page.remove_user_link["href"]).to eq(delete_support_recruitment_cycle_provider_user_path(Find::CycleTimetable.cycle_year_for_time(Time.zone.now), @user.providers.first, @user))
+    expect(support_provider_user_show_page.remove_user_link["href"]).to eq(delete_support_recruitment_cycle_provider_user_path(Find::CycleTimetable.current_year, @user.providers.first, @user))
   end
 end

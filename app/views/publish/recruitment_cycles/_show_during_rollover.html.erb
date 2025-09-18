@@ -2,7 +2,7 @@
   <li>
     <%= govuk_link_to(
     "#{current_recruitment_cycle_period_text} - current",
-    publish_provider_recruitment_cycle_path(@provider.provider_code, Find::CycleTimetable.cycle_year_for_time(Time.zone.now)),
+    publish_provider_recruitment_cycle_path(@provider.provider_code, Find::CycleTimetable.current_year),
     data: { qa: "provider__courses__current_cycle" },
   ) %>
   </li>

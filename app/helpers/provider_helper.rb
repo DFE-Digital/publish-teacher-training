@@ -64,6 +64,6 @@ private
   end
 
   def is_current_cycle(cycle_year)
-    Find::CycleTimetable.cycle_year_for_time(Time.zone.now) == cycle_year.to_i
+    Find::CycleTimetable.current_year == cycle_year.to_i
   end
 end

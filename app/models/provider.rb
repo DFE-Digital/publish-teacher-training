@@ -366,7 +366,7 @@ class Provider < ApplicationRecord
   end
 
   def from_next_recruitment_cycle
-    Provider.joins(:recruitment_cycle).where(recruitment_cycle: { year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now).succ.to_s }).find_by(provider_code:)
+    Provider.joins(:recruitment_cycle).where(recruitment_cycle: { year: Find::CycleTimetable.next_year.to_s }).find_by(provider_code:)
   end
 
 private

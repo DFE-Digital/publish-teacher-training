@@ -32,7 +32,7 @@ private
   end
 
   def when_i_visit_the_publish_courses_new_schools_page
-    publish_courses_new_schools_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now), query: schools_params)
+    publish_courses_new_schools_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.current_year, query: schools_params)
   end
 
   def when_i_select_a_school
@@ -49,7 +49,7 @@ private
   end
 
   def then_i_am_met_with_the_accredited_provider_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.cycle_year_for_time(Time.zone.now)}/courses/ratifying-provider/new", ignore_query: true)
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/ratifying-provider/new", ignore_query: true)
     expect(page).to have_content("Accredited provider")
   end
 
