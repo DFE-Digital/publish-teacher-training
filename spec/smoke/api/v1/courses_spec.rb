@@ -9,7 +9,7 @@ describe "V1 Public API Smoke Tests", :aggregate_failures, :smoke do
 
   context "courses" do
     describe "GET /api/public/v1/recruitment_cycles/:recruitment_year/courses" do
-      let(:recruitment_year) { Find::CycleTimetable.cycle_year_for_time(Time.zone.now) }
+      let(:recruitment_year) { Find::CycleTimetable.current_year }
       let(:url) { "#{base_url}/api/public/v1/recruitment_cycles/#{recruitment_year}/courses?page[per_page]=1" }
 
       it "returns HTTP success" do

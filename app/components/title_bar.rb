@@ -31,11 +31,11 @@ private
   end
 
   def current_recruitment_cycle?
-    recruitment_cycle_year == Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
+    recruitment_cycle_year == Find::CycleTimetable.current_year
   end
 
   def next_recruitment_cycle?
-    recruitment_cycle_year == Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1
+    recruitment_cycle_year == Find::CycleTimetable.next_year
   end
 
   def recruitment_cycle_year
@@ -46,19 +46,23 @@ private
     RolloverPeriod.active?(current_user:)
   end
 
+  def previous_recruitment_cycle_year
+    Find::CycleTimetable.previous_year
+  end
+
   def current_recruitment_cycle_year
-    Find::CycleTimetable.cycle_year_for_time(Time.zone.now) - 1
+    Find::CycleTimetable.current_year
   end
 
   def next_recruitment_cycle_year
-    Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
+    Find::CycleTimetable.current_year
   end
 
   def recruitment_label
     if current_recruitment_cycle?
-      "- #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} - current"
+      "- #{previous_recruitment_cycle_year} to #{current_recruitment_cycle_year} - current"
     elsif next_recruitment_cycle?
-      "- #{current_recruitment_cycle_year + 1} to #{next_recruitment_cycle_year + 1}"
+      "- #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year}"
     end
   end
 end

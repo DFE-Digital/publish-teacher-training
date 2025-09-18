@@ -62,7 +62,7 @@ RSpec.describe "View filtered providers" do
   end
 
   def when_i_visit_the_support_provider_index_page
-    support_provider_index_page.load(recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
+    support_provider_index_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year)
   end
 
   def then_i_see_the_providers

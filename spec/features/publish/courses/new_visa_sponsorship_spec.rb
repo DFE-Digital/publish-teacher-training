@@ -57,7 +57,7 @@ private
   def when_i_visit_the_publish_course_confirmation_page
     publish_course_confirmation_page.load(
       provider_code: provider.provider_code,
-      recruitment_cycle_year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now),
+      recruitment_cycle_year: Find::CycleTimetable.current_year,
       query: confirmation_params(provider),
     )
   end
