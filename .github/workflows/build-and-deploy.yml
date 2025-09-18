@@ -21,16 +21,22 @@ jobs:
     runs-on: ubuntu-latest
     # Run if:
     # - It's main branch
-    # - It is a PR, don't run if it has a prototype label
-    # - It is a PR, don't run on opened if it has a deploy label
+    # - It must be a PR
+    # - It must not have the prototype label
+    # - When action is opened and does not contain deploy label
+    # - When action is labeled and the label is deploy
+    # - When action is reopened or synchronize
+    # These checks are designed to prevent the job running twice when opening a PR with the deploy label applied
     if: |
         github.ref == 'refs/heads/main' ||
         (
           github.event_name == 'pull_request' &&
           !contains(github.event.pull_request.labels.*.name, 'prototype') &&
           (
-            github.event.action != 'opened' ||
-            !contains(github.event.pull_request.labels.*.name, 'deploy')
+            (github.event.action == 'opened' && !contains(join(github.event.pull_request.labels.*.name, ','), 'deploy')) ||
+            (github.event.action == 'labeled' && github.event.label.name == 'deploy') ||
+            github.event.action == 'reopened' ||
+            github.event.action == 'synchronize'
           )
         )
     strategy:
