@@ -2,8 +2,8 @@ export const baselineScenario = {
   executor: 'ramping-vus',
   startVUs: 10,
   stages: [
-    { duration: '2m', target: 50 }, // Ramp up to normal load
-    { duration: '10m', target: 250 }, // Steady normal operations (Find service)
+    { duration: '2m', target: 40 }, // Ramp up to normal load
+    { duration: '10m', target: 80 }, // Steady normal operations (Find service)
     { duration: '2m', target: 0 } // Ramp down
   ],
   gracefulRampDown: '30s',
