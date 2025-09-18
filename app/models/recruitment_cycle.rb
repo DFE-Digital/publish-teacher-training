@@ -12,11 +12,11 @@ class RecruitmentCycle < ApplicationRecord
 
   class << self
     def current_recruitment_cycle!
-      find_by!(year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
+      find_by!(year: Find::CycleTimetable.current_year)
     end
 
     def current_recruitment_cycle
-      find_by(year: Find::CycleTimetable.cycle_year_for_time(Time.zone.now))
+      find_by(year: Find::CycleTimetable.current_year)
     end
     alias_method :current, :current_recruitment_cycle
 
