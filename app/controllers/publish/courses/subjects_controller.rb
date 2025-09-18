@@ -34,6 +34,17 @@ module Publish
               ),
             )
 
+          elsif selected_subject_ids.include?(design_technology_subject_id.to_s)
+            course.update(master_subject_id: params[:course][:master_subject_id])
+            redirect_to(
+              design_technology_publish_provider_recruitment_cycle_course_path(
+                @course.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+                course: { subjects_ids: selected_subject_ids },
+              ),
+            )
+
           elsif course.errors.none? && course_subjects_form.save!
             course_updated_message(section_key)
             # TODO: move this to the form?
@@ -80,6 +91,10 @@ module Publish
 
       def modern_languages_subject_id
         @modern_languages_subject_id ||= @course.edit_course_options[:modern_languages_subject].id
+      end
+
+      def design_technology_subject_id
+        @design_technology_subject_id ||= @course.edit_course_options[:design_technology_subjects].id
       end
 
       def selected_subject_ids

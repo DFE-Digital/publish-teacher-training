@@ -41,6 +41,8 @@ module Courses
     def call
       title = if course.further_education_course?
                 FURTHER_EDUCATION_TITLE
+              elsif course.is_design_technology_specialism? && course.master_subject_id == SecondarySubject.design_technology.id
+                generate_design_technology_title
               else
                 generated_title
               end
@@ -52,6 +54,27 @@ module Courses
   private
 
     attr_reader :course, :subjects
+
+    def generate_design_technology_title
+      dt_title = dt_title_with_specialisms
+
+      if course.subordinate_subject_id.present?
+        subordinate = subjects.find { |s| s.id == course.subordinate_subject_id }
+
+        if subordinate && subordinate.type != "DesignTechnologySubject" && subordinate != SecondarySubject.design_technology
+          subordinate_name = if course.is_modern_language_course? && course.subordinate_subject_id == SecondarySubject.modern_languages.id
+                               generate_modern_language_title
+                             else
+                               format_subject_name(subordinate)
+                             end
+
+          subordinate_name = downcase_if_not_language(subordinate_name)
+          dt_title += " with #{subordinate_name}"
+        end
+      end
+
+      dt_title
+    end
 
     def generated_title
       return "" if subjects.empty?
@@ -113,9 +136,45 @@ module Courses
     end
 
     def subjects_excluding_languages
-      @subjects_excluding_languages ||= (subjects - [SecondarySubject.modern_languages, languages].flatten).map do |s|
-        format_subject_name(s)
+      @subjects_excluding_languages ||= begin
+        names = []
+        subjects.each do |subject|
+          next if subject == SecondarySubject.modern_languages || subject.type == "ModernLanguagesSubject"
+
+          if subject == SecondarySubject.design_technology
+            names << if course.master_subject_id != SecondarySubject.design_technology.id
+                       generate_design_technology_subordinate_title
+                     else
+                       format_subject_name(subject)
+                     end
+            next
+          end
+
+          next if subject.type == "DesignTechnologySubject"
+
+          names << format_subject_name(subject)
+        end
+        names
       end
+    end
+
+    def generate_design_technology_subordinate_title
+      dt_title_with_specialisms
+    end
+
+    def dt_title_with_specialisms
+      names = design_technology_specialisms.map(&:to_s)
+      base = SecondarySubject.design_technology.to_s
+
+      return base if names.empty? || names.length > 2
+
+      return base + " (#{names[0]})" if names.length == 1
+
+      base + " (#{names.join(' and ')})"
+    end
+
+    def design_technology_specialisms
+      @design_technology_specialisms ||= subjects.select { |s| s.type == "DesignTechnologySubject" }
     end
   end
 end

@@ -370,6 +370,7 @@ class Course < ApplicationRecord
   validate :validate_applications_open_from, on: %i[publish update new], if: -> { provider.present? }
   validate :validate_modern_languages
   validate :validate_has_languages, if: :has_the_modern_languages_secondary_subject_type?
+  validate :validate_has_design_technology_subjects, if: :has_the_design_technology_secondary_subject_type?
   validate :validate_subject_count
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
@@ -673,6 +674,10 @@ class Course < ApplicationRecord
     further_education_course?
   end
 
+  def is_design_technology_specialism?
+    has_the_design_technology_secondary_subject_type? && has_any_design_technology_subject_type?
+  end
+
   def degree_section_complete?
     degree_grade.present?
   end
@@ -888,6 +893,10 @@ class Course < ApplicationRecord
 
   def has_any_modern_language_subject_type?
     course_subjects.any? { |cs| cs.subject.type == "ModernLanguagesSubject" }
+  end
+
+  def has_any_design_technology_subject_type?
+    course_subjects.any? { |cs| cs.subject.type == "DesignTechnologySubject" }
   end
 
   def current_published_enrichment
@@ -1125,6 +1134,21 @@ private
     errors.add(:modern_languages_subjects, :select_a_language) unless has_any_modern_language_subject_type?
   end
 
+  def validate_design_technology_subjects
+    errors.add(:subjects, "Design Technology subjects must also have the design_technology subject") if has_any_design_technology_subject_type? && !has_the_design_technology_secondary_subject_type?
+  end
+
+  def has_the_design_technology_secondary_subject_type?
+    raise "SecondarySubject not found" if SecondarySubject.nil?
+    raise "SecondarySubject.design_technology not found" if SecondarySubject.design_technology.nil?
+
+    course_subjects.any? { |cs| cs.subject&.id == SecondarySubject.design_technology.id }
+  end
+
+  def validate_has_design_technology_subjects
+    errors.add(:design_technology_subjects, :select_a_specialism) unless has_any_design_technology_subject_type?
+  end
+
   def validate_subject_count
     if course_subjects.empty?
       errors.add(:subjects, :course_creation)
@@ -1135,7 +1159,7 @@ private
     when "primary", "further_education"
       errors.add(:subjects, "has too many subjects") if course_subjects.count > 1
     when "secondary"
-      errors.add(:subjects, "has too many subjects") if course_subjects.count > 2 && !has_any_modern_language_subject_type?
+      errors.add(:subjects, "has too many subjects") if course_subjects.count > 2 && !has_any_modern_language_subject_type? && !has_any_design_technology_subject_type?
     end
   end
 

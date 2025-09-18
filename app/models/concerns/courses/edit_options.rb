@@ -32,6 +32,8 @@ module Courses
           subjects: potential_subjects,
           modern_languages:,
           modern_languages_subject:,
+          design_technologies:,
+          design_technology_subjects:,
         }.with_indifferent_access
       end
     end
