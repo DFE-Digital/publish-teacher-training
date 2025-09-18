@@ -7,6 +7,8 @@ feature "switcher cycle" do
     Timecop.freeze(2022, 10, 12)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("ENABLE_SWITCHER").and_return("1")
+    find_or_create(:recruitment_cycle, year: 2023)
+    find_or_create(:recruitment_cycle, year: 2024)
   end
 
   scenario "Navigate to /cycle" do
