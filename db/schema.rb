@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_12_151804) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_18_123144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -189,7 +189,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_151804) do
     t.index ["funding"], name: "index_course_on_funding"
     t.index ["is_send"], name: "index_course_on_is_send"
     t.index ["master_subject_id"], name: "index_course_on_master_subject_id"
+    t.index ["name", "provider_id", "course_code"], name: "idx_course_ordering_optimized", where: "(discarded_at IS NULL)"
     t.index ["program_type"], name: "index_course_on_program_type"
+    t.index ["provider_id", "application_status", "id"], name: "idx_course_provider_active", where: "(discarded_at IS NULL)"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
     t.index ["provider_id"], name: "index_course_on_provider_id"
     t.index ["qualification"], name: "index_course_on_qualification"
@@ -218,6 +220,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_151804) do
     t.integer "site_id"
     t.text "status"
     t.text "vac_status"
+    t.index ["course_id", "status", "publish"], name: "idx_course_site_published_filtered", where: "((status = 'R'::text) AND (publish = 'Y'::text))"
     t.index ["course_id"], name: "IX_course_site_course_id"
     t.index ["publish"], name: "index_course_site_on_publish"
     t.index ["site_id"], name: "IX_course_site_site_id"
@@ -379,6 +382,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_151804) do
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
     t.index ["provider_code"], name: "index_provider_on_provider_code", using: :gin
     t.index ["provider_name"], name: "index_provider_on_provider_name", using: :gin
+    t.index ["recruitment_cycle_id", "discarded_at", "id"], name: "idx_provider_cycle_discarded", where: "(discarded_at IS NULL)"
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
     t.index ["searchable"], name: "index_provider_on_searchable", using: :gin
     t.index ["synonyms"], name: "index_provider_on_synonyms", using: :gin
