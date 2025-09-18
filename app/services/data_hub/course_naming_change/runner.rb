@@ -1,0 +1,311 @@
+# frozen_string_literal: true
+
+require "csv"
+require "stringio"
+
+# DataHub namespace which stores import logs and summaries
+module DataHub
+  # Namespace for course naming change functionality
+  module CourseNamingChange
+    # Service object that applies bulk course renames defined in a CSV file and
+    # produces a summary report. It supports dry-run mode and surfaces warnings
+    # when the number of courses changed deviates significantly from the
+    # expected count provided in the file.
+    class Runner
+      COURSE_NAME_KEY = "course name"
+      COUNT_KEY = "count"
+      REPLACEMENT_KEY = "replacement name"
+      REPLACEMENT_ALTERNATE_KEY = "replacement"
+
+      DEFAULT_ABSOLUTE_WARNING_THRESHOLD = 5
+      DEFAULT_PERCENTAGE_WARNING_THRESHOLD = 0.2
+
+      # @param csv_path [String] path to the CSV describing course name changes
+      # @param recruitment_cycle [RecruitmentCycle] cycle whose courses are targeted
+      # @param dry_run [Boolean] when true no database writes are performed
+      # @param output [#puts] logger-like object used for streaming feedback
+      # @param absolute_warning_threshold [Integer] minimum difference that should raise a warning
+      # @param percentage_warning_threshold [Float] proportional difference (relative to expected) that should raise a warning
+      def initialize(csv_path:, recruitment_cycle:, dry_run:, output: $stdout, absolute_warning_threshold: DEFAULT_ABSOLUTE_WARNING_THRESHOLD, percentage_warning_threshold: DEFAULT_PERCENTAGE_WARNING_THRESHOLD)
+        raise ArgumentError, "csv_path must be provided" if csv_path.blank?
+        raise ArgumentError, "CSV file not found: #{csv_path}" unless File.exist?(csv_path)
+        raise ArgumentError, "recruitment_cycle must be provided" if recruitment_cycle.nil?
+
+        @csv_path = csv_path
+        @recruitment_cycle = recruitment_cycle
+        @dry_run = dry_run
+        @output = output
+        @absolute_warning_threshold = absolute_warning_threshold
+        @percentage_warning_threshold = percentage_warning_threshold
+      end
+
+      # Execute the CSV processing and return a report summarising the result.
+      #
+      # @return [DataHub::CourseNamingChange::Report]
+      def call
+        rows = []
+        summary_record = DataHub::CourseNamingChangeSummary.start!
+
+        begin
+          each_row_with_index do |raw_row, line_number|
+            normalized_row = normalize_row(raw_row)
+            course_name = normalized_row[COURSE_NAME_KEY]
+            replacement_name = normalized_row[REPLACEMENT_KEY] || normalized_row[REPLACEMENT_ALTERNATE_KEY]
+            expected_count = parse_expected_count(normalized_row[COUNT_KEY])
+
+            next if course_name.blank? && replacement_name.blank?
+
+            raise ArgumentError, "Row #{line_number}: course name is blank" if course_name.blank?
+
+            matched_courses = matching_courses_for(course_name)
+            actual_count = matched_courses.size
+
+            if replacement_name.blank?
+              warning_reason = "Replacement name missing; no changes applied"
+              row_result = RowResult.new(
+                line_number: line_number,
+                course_name: course_name,
+                replacement_name: course_name,
+                expected_count: expected_count,
+                actual_count: actual_count,
+                course_identifiers: identifiers_for(matched_courses),
+                warning: true,
+                warning_reason: warning_reason,
+              )
+
+              log_row(row_result)
+              rows << row_result
+              next
+            end
+
+            apply_replacement!(matched_courses, replacement_name) unless dry_run?
+
+            warning, warning_reason = evaluate_warning(expected_count, actual_count)
+
+            row_result = RowResult.new(
+              line_number: line_number,
+              course_name: course_name,
+              replacement_name: replacement_name,
+              expected_count: expected_count,
+              actual_count: actual_count,
+              course_identifiers: identifiers_for(matched_courses),
+              warning: warning,
+              warning_reason: warning_reason,
+            )
+
+            log_row(row_result)
+            rows << row_result
+          end
+
+          report = Report.new(rows: rows, dry_run: dry_run?)
+          log_summary(report)
+
+          summary_record.finish!(
+            short_summary: build_short_summary(report),
+            full_summary: build_full_summary(rows, report),
+          )
+
+          report
+        rescue StandardError => e
+          summary_record.fail!(e)
+          raise
+        end
+      end
+
+    private
+
+      attr_reader :csv_path,
+                  :recruitment_cycle,
+                  :dry_run,
+                  :output,
+                  :absolute_warning_threshold,
+                  :percentage_warning_threshold
+
+      alias_method :dry_run?, :dry_run
+
+      # Iterate through each CSV record, yielding row data alongside its 1-based
+      # line number (including the header).
+      #
+      # @yieldparam row [CSV::Row]
+      # @yieldparam line_number [Integer]
+      def each_row_with_index(&block)
+        return enum_for(__method__) unless block_given?
+
+        raw_content = File.binread(csv_path)
+        cleaned_content = raw_content.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+        cleaned_content.delete_prefix!("﻿")
+
+        csv_reader = CSV.new(StringIO.new(cleaned_content), headers: true)
+
+        csv_reader.each.with_index(2, &block)
+      end
+
+      # Convert CSV keys to lowercase strings without surrounding whitespace to
+      # simplify comparisons regardless of how headings are capitalised.
+      #
+      # @param row [CSV::Row]
+      # @return [Hash{String=>String,nil}]
+      def normalize_row(row)
+        row
+          .to_h
+          .transform_keys { |key| key.to_s.strip.downcase }
+          .transform_values { |value| sanitize_field(value) }
+      end
+
+      def sanitize_field(value)
+        return value unless value.is_a?(String)
+
+        # Had some encoding errors when I tried to import the CSV shared by Katie, below fixes this
+        value.encode("UTF-8", invalid: :replace, undef: :replace, replace: "").scrub
+      end
+
+      # Fetch all courses in the recruitment cycle whose `name` matches the CSV
+      # value exactly. Providers are eager-loaded so that identifiers can be
+      # generated later without extra queries.
+      #
+      # @param course_name [String]
+      # @return [Array<Course>]
+      def matching_courses_for(course_name)
+        recruitment_cycle
+          .courses
+          .kept
+          .includes(:provider)
+          .where(name: course_name)
+          .to_a
+      end
+
+      # Persist the replacement name on each provided course inside a single
+      # transaction. No work is performed when the list is empty.
+      #
+      # @param courses [Array<Course>]
+      # @param replacement_name [String]
+      # @return [void]
+      def apply_replacement!(courses, replacement_name)
+        return if courses.empty?
+
+        Course.transaction do
+          courses.each do |course|
+            course.update!(name: replacement_name)
+          end
+        end
+      end
+
+      # Convert the set of courses into human-readable identifiers combining the
+      # provider and course codes.
+      #
+      # @param courses [Array<Course>]
+      # @return [Array<String>]
+      def identifiers_for(courses)
+        courses.map { |course| "#{course.provider.provider_code}/#{course.course_code}" }
+      end
+
+      # Parse the expected count value from the CSV, returning nil for blank
+      # entries while raising an informative error for invalid input.
+      #
+      # @param value [String, nil]
+      # @return [Integer, nil]
+      def parse_expected_count(value)
+        return nil if value.blank?
+
+        Integer(value)
+      rescue ArgumentError
+        raise ArgumentError, "Unable to parse expected count '#{value}'"
+      end
+
+      # Determine whether a warning should be emitted for the difference between
+      # expected and actual counts using both absolute and proportional
+      # thresholds.
+      #
+      # @param expected_count [Integer, nil]
+      # @param actual_count [Integer]
+      # @return [Array<(Boolean, String, nil)>]
+      def evaluate_warning(expected_count, actual_count)
+        return [false, nil] if expected_count.nil?
+
+        difference = (actual_count - expected_count).abs
+        threshold = [absolute_warning_threshold, (expected_count * percentage_warning_threshold).ceil].max
+
+        if difference >= threshold
+          warning_reason = "Expected #{expected_count}, changed #{actual_count}, threshold #{threshold}"
+          [true, warning_reason]
+        else
+          [false, nil]
+        end
+      end
+
+      def build_short_summary(report)
+        {
+          "dry_run" => report.dry_run?,
+          "processed_rows" => report.processed_rows,
+          "total_expected" => report.total_expected,
+          "total_actual" => report.total_actual,
+          "total_difference" => report.total_difference,
+          "warnings" => report.warnings_count,
+        }
+      end
+
+      def build_full_summary(rows, report)
+        {
+          "dry_run" => report.dry_run?,
+          "generated_at" => Time.current.iso8601,
+          "rows" => rows.map(&:to_h),
+          "flagged_rows" => report.flagged_rows.map(&:line_number),
+        }
+      end
+
+      # Emit a per-row log line to aid support when reviewing results.
+      #
+      # @param row [DataHub::CourseNamingChange::RowResult]
+      # @return [void]
+      def log_row(row)
+        prefix = dry_run? ? "[DRY RUN]" : "[APPLY]"
+        expected_display = row.expected_count.nil? ? "n/a" : row.expected_count
+        diff_display = row.difference.nil? ? "n/a" : sprintf("%+d", row.difference)
+        identifiers = row.course_identifiers
+        identifiers = %w[none] if identifiers.empty?
+
+        message = sprintf(
+          "%s line=%d name='%s' -> '%s' expected=%s actual=%d diff=%s identifiers=%s",
+          prefix,
+          row.line_number,
+          row.course_name,
+          row.replacement_name,
+          expected_display,
+          row.actual_count,
+          diff_display,
+          identifiers.join(";"),
+        )
+
+        message = "#{message} WARNING: #{row.warning_reason}" if row.warning?
+
+        output.puts(message)
+      end
+
+      # Emit a summary once the CSV has been processed, highlighting any rows
+      # that exceeded the configured thresholds.
+      #
+      # @param report [DataHub::CourseNamingChange::Report]
+      # @return [void]
+      def log_summary(report)
+        prefix = report.dry_run? ? "[DRY RUN]" : "[APPLY]"
+
+        output.puts sprintf(
+          "%s processed_rows=%d expected_total=%d actual_total=%d diff=%+d",
+          prefix,
+          report.processed_rows,
+          report.total_expected,
+          report.total_actual,
+          report.total_difference,
+        )
+
+        return if report.flagged_rows.empty?
+
+        output.puts sprintf(
+          "%s WARNING rows exceeding threshold: %s",
+          prefix,
+          report.flagged_rows.map { |row| "line #{row.line_number}" }.join(", "),
+        )
+      end
+    end
+  end
+end
