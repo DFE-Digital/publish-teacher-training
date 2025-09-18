@@ -75,7 +75,7 @@ module FeatureHelpers
         "course[is_send]" => "0",
         "course[level]" => "secondary",
         "course[qualification]" => "pgde_with_qts",
-        "course[start_date]" => "October #{provider.recruitment_cycle_year.to_i - 1}",
+        "course[start_date]" => "October #{provider.recruitment_cycle_year.to_i + 1}",
         "course[study_mode][]" => "full_time_or_part_time",
         "course[subjects_ids][]" => "30",
         "course[sites_ids][]" => provider.sites.first.id,
