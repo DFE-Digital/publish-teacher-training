@@ -13,16 +13,34 @@ module Courses
     def initialize(params:)
       @params = params
       @applied_scopes = {}
-      @scope = RecruitmentCycle
-               .current
-               .courses
-               .joins(:site_statuses)
-               .where(
-                 site_statuses: {
-                   status: SiteStatus.statuses[:running],
-                   publish: SiteStatus.publishes[:published],
-                 },
-               )
+      @current_recruitment_cycle = RecruitmentCycle.current
+
+      @scope = Course
+                 .joins(
+                   <<~SQL,
+                     INNER JOIN (
+                       SELECT id, provider_name, provider_code, recruitment_cycle_id
+                       FROM provider
+                       WHERE recruitment_cycle_id = #{@current_recruitment_cycle.id}
+                         AND discarded_at IS NULL
+                     ) provider ON course.provider_id = provider.id
+                     INNER JOIN course_site site_statuses ON (
+                       site_statuses.course_id = course.id
+                       AND site_statuses.status = 'R'
+                       AND site_statuses.publish = 'Y'
+                     )
+                   SQL
+                 )
+                 .where(course: { discarded_at: nil })
+                 .where(
+                   provider: { recruitment_cycle_id: @current_recruitment_cycle.id },
+                 )
+                 .where(
+                   site_statuses: {
+                     status: SiteStatus.statuses[:running],
+                     publish: SiteStatus.publishes[:published],
+                   },
+                 )
     end
 
     def call
@@ -109,7 +127,7 @@ module Courses
 
       @applied_scopes[:excluded_courses] = excluded_course_codes
 
-      new_scope = @scope.joins(:provider)
+      new_scope = @scope
 
       excluded_course_codes
         .map { |excluded_course| ExcludedCourseParam.new(provider_code: excluded_course[:provider_code], course_code: excluded_course[:course_code]) }
@@ -306,7 +324,6 @@ module Courses
 
       @scope
         .select("course.*, provider.provider_name")
-        .joins(:provider)
         .order(
           {
             courses_table[:name] => :asc,
@@ -323,7 +340,6 @@ module Courses
 
       @scope
         .select("course.*, provider.provider_name")
-        .joins(:provider)
         .order(
           {
             courses_table[:name] => :desc,
@@ -340,7 +356,6 @@ module Courses
 
       @scope
         .select("course.*, provider.provider_name")
-        .joins(:provider)
         .order(
           {
             providers_table[:provider_name] => :asc,
@@ -357,7 +372,6 @@ module Courses
 
       @scope
         .select("course.*, provider.provider_name")
-        .joins(:provider)
         .order(
           {
             providers_table[:provider_name] => :desc,
