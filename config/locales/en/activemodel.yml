@@ -3,12 +3,15 @@ en:
     attributes:
       support/recruitment_cycle_form:
         year: Recruitment cycle year
+        year_description: Enter the year that recruitment finishes in. For example, if the recruitment cycle is 2026-2027 then you should enter 2027.
         application_start_date: Application start date
+        application_start_date_description: Enter the date that candidates will be able to start applying for courses.
         application_end_date: Application end date
+        application_end_date_description: Enter the date that applications close.
         available_for_support_users_from: Available for support users from
-        available_for_support_users_from_description:  Date when courses will become available to support users (in Support and in Publish).
-        available_in_publish_from: Available in publish from
-        available_in_publish_from_description: Date when courses will become available to users in Publish.
+        available_for_support_users_from_description: Date when courses will become available to support users (in Support and in Publish).
+        available_in_publish_from: Available in Publish from
+        available_in_publish_from_description: Date when courses will become available to providers in Publish.
       rollover_progress_query:
         providers_summary: Rolled over providers
         courses_summary: Rolled over courses
@@ -28,21 +31,21 @@ en:
               not_a_number: Enter a number
               taken: Year has already been taken
             application_start_date:
-              blank: Enter an application start date
+              blank: Enter the date that candidates will be able to start applying for courses
               application_end_date_after_start_date: Start date must be before the application end date
               invalid_date: Enter a valid date
             application_end_date:
-              blank: Enter an application end date
+              blank: Enter the date that applications close
               application_end_date_after_start_date: End date must be after the application start date
               invalid_date: Enter a valid date
             available_in_publish_from:
-              blank: Enter the date when courses will become available to users in Publish.
+              blank: Enter the date when courses will become available to providers in Publish
               invalid_date: Enter a valid date
-              after_available_for_support_users_from: Please choose a date after the courses become available to support users
+              after_available_for_support_users_from: Enter a date after the courses become available to support users
             available_for_support_users_from:
               blank: Enter the date when courses will become available to support users (in Publish and Support).
               invalid_date: Enter a valid date
-              before_available_in_publish_from: Please choose a date before the courses become available in Publish
+              before_available_in_publish_from: Enter a date before the courses become available to providers in Publish.
         support/review_rollover_form:
           attributes:
             confirmation:
