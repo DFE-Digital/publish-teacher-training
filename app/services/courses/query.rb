@@ -280,7 +280,7 @@ module Courses
       }
 
       @scope
-        .joins(site_statuses: :site)
+        .joins("INNER JOIN site ON site.id = site_statuses.site_id")
         .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
         .where(
           <<~SQL.squish, longitude, latitude, radius_in_meters
