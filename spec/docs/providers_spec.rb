@@ -16,7 +16,7 @@ describe "API" do
                 type: :string,
                 required: true,
                 description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg "1066") is provided',
-                example: Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
+                example: Find::CycleTimetable.current_year
       parameter name: :sort,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Sort" },
@@ -80,7 +80,7 @@ describe "API" do
                 type: :string,
                 required: true,
                 description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg "1066") is provided',
-                example: Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
+                example: Find::CycleTimetable.current_year
       parameter name: :provider_code,
                 in: :path,
                 type: :string,

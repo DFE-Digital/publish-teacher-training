@@ -13,9 +13,9 @@ private
 
   def title
     if current_recruitment_cycle?
-      "Recruitment cycle #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} - current"
+      "Recruitment cycle #{previous_recruitment_cycle_year} to #{current_recruitment_cycle_year} - current"
     else
-      "Recruitment cycle #{current_recruitment_cycle_year + 1} to #{next_recruitment_cycle_year + 1}"
+      "Recruitment cycle #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year}"
     end
   end
 
@@ -36,19 +36,23 @@ private
   end
 
   def current_recruitment_cycle?
-    recruitment_cycle_year == Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
+    recruitment_cycle_year == Find::CycleTimetable.current_year
   end
 
   def next_recruitment_cycle?
-    recruitment_cycle_year == Find::CycleTimetable.cycle_year_for_time(Time.zone.now) + 1
+    recruitment_cycle_year == Find::CycleTimetable.next_year
+  end
+
+  def previous_recruitment_cycle_year
+    Find::CycleTimetable.previous_year
   end
 
   def current_recruitment_cycle_year
-    Find::CycleTimetable.cycle_year_for_time(Time.zone.now) - 1
+    Find::CycleTimetable.current_year
   end
 
   def next_recruitment_cycle_year
-    Find::CycleTimetable.cycle_year_for_time(Time.zone.now)
+    Find::CycleTimetable.next_year
   end
 
   def support_index_page
