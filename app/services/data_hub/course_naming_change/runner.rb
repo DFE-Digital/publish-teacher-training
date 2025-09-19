@@ -19,6 +19,10 @@ module DataHub
           RecruitmentCycle.current
         end
 
+        # Normalise the absolute threshold value, falling back to the default.
+        #
+        # @param value [String, Integer, nil]
+        # @return [Integer]
         def parse_absolute_threshold(value)
           return DEFAULT_ABSOLUTE_WARNING_THRESHOLD if value.blank?
 
@@ -27,6 +31,10 @@ module DataHub
           raise ArgumentError, "Invalid ABSOLUTE_THRESHOLD: '#{value}'"
         end
 
+        # Normalise the percentage threshold value, falling back to the default.
+        #
+        # @param value [String, Float, nil]
+        # @return [Float]
         def parse_percentage_threshold(value)
           return DEFAULT_PERCENTAGE_WARNING_THRESHOLD if value.blank?
 
@@ -90,6 +98,9 @@ module DataHub
 
       alias_method :dry_run?, :dry_run
 
+      # Parse each CSV row into a RowResult collection.
+      #
+      # @return [Array<DataHub::CourseNamingChange::RowResult>]
       def process_rows
         rows = []
 
@@ -113,12 +124,22 @@ module DataHub
         rows
       end
 
+      # Build the summary report and emit the aggregated log output.
+      #
+      # @param rows [Array<DataHub::CourseNamingChange::RowResult>]
+      # @return [DataHub::CourseNamingChange::Report]
       def build_report(rows)
         Report.new(rows: rows, dry_run: dry_run?).tap do |report|
           log_summary(report)
         end
       end
 
+      # Persist the short and full summaries to the summary record.
+      #
+      # @param summary_record [DataHub::CourseNamingChangeSummary]
+      # @param rows [Array<DataHub::CourseNamingChange::RowResult>]
+      # @param report [DataHub::CourseNamingChange::Report]
+      # @return [void]
       def finalise_summary!(summary_record, rows, report)
         summary_record.finish!(
           short_summary: build_short_summary(report),
@@ -126,6 +147,13 @@ module DataHub
         )
       end
 
+      # Transform a CSV row into a RowResult, applying or simulating the change.
+      #
+      # @param line_number [Integer]
+      # @param course_name [String]
+      # @param replacement_name [String, nil]
+      # @param expected_count [Integer, nil]
+      # @return [DataHub::CourseNamingChange::RowResult]
       def process_row(line_number:, course_name:, replacement_name:, expected_count:)
         matched_courses = matching_courses_for(course_name)
         actual_count = matched_courses.size
@@ -153,14 +181,32 @@ module DataHub
         row_result
       end
 
+      # Determine whether the row can be ignored entirely.
+      #
+      # @param course_name [String, nil]
+      # @param replacement_name [String, nil]
+      # @return [Boolean]
       def skip_row?(course_name, replacement_name)
         course_name.blank? && replacement_name.blank?
       end
 
+      # Validate the presence of course name data for the given row.
+      #
+      # @param course_name [String]
+      # @param line_number [Integer]
+      # @return [void]
       def ensure_course_name!(course_name, line_number)
         raise ArgumentError, "Row #{line_number}: course name is blank" if course_name.blank?
       end
 
+      # Construct a RowResult when the replacement name is missing.
+      #
+      # @param line_number [Integer]
+      # @param course_name [String]
+      # @param expected_count [Integer, nil]
+      # @param actual_count [Integer]
+      # @param matched_courses [Array<Course>]
+      # @return [DataHub::CourseNamingChange::RowResult]
       def build_missing_replacement_row(line_number:, course_name:, expected_count:, actual_count:, matched_courses:)
         RowResult.new(
           line_number: line_number,
@@ -174,6 +220,15 @@ module DataHub
         )
       end
 
+      # Construct a RowResult when a replacement name is present. Applies the change unless in dry-run.
+      #
+      # @param line_number [Integer]
+      # @param course_name [String]
+      # @param replacement_name [String]
+      # @param expected_count [Integer, nil]
+      # @param matched_courses [Array<Course>]
+      # @param actual_count [Integer]
+      # @return [DataHub::CourseNamingChange::RowResult]
       def build_standard_row(line_number:, course_name:, replacement_name:, expected_count:, matched_courses:, actual_count:)
         apply_replacement!(matched_courses, replacement_name) unless dry_run?
 
@@ -196,6 +251,11 @@ module DataHub
       #
       # @yieldparam row [CSV::Row]
       # @yieldparam line_number [Integer]
+      # Iterate through the CSV content yielding each row and logical line number.
+      #
+      # @yieldparam row [CSV::Row]
+      # @yieldparam line_number [Integer]
+      # @return [Enumerator, nil]
       def each_row_with_index(&block)
         return enum_for(__method__) unless block_given?
 
@@ -220,6 +280,10 @@ module DataHub
           .transform_values { |value| sanitize_field(value) }
       end
 
+      # Ensure a field is UTF-8 encoded, replacing invalid bytes.
+      #
+      # @param value [Object]
+      # @return [Object]
       def sanitize_field(value)
         return value unless value.is_a?(String)
 
@@ -230,6 +294,10 @@ module DataHub
       # Fetch all courses in the recruitment cycle whose `name` matches the CSV
       # value exactly. Providers are eager-loaded so that identifiers can be
       # generated later without extra queries.
+      #
+      # @param course_name [String]
+      # @return [Array<Course>]
+      # Fetch courses whose name matches the CSV entry.
       #
       # @param course_name [String]
       # @return [Array<Course>]
@@ -244,6 +312,11 @@ module DataHub
 
       # Persist the replacement name on each provided course inside a single
       # transaction. No work is performed when the list is empty.
+      #
+      # @param courses [Array<Course>]
+      # @param replacement_name [String]
+      # @return [void]
+      # Persist the new name on matched courses inside a transaction.
       #
       # @param courses [Array<Course>]
       # @param replacement_name [String]
@@ -263,12 +336,20 @@ module DataHub
       #
       # @param courses [Array<Course>]
       # @return [Array<String>]
+      # Present a list of identifiers for reporting.
+      #
+      # @param courses [Array<Course>]
+      # @return [Array<String>]
       def identifiers_for(courses)
         courses.map { |course| "#{course.provider.provider_code}/#{course.course_code}" }
       end
 
       # Parse the expected count value from the CSV, returning nil for blank
       # entries while raising an informative error for invalid input.
+      #
+      # @param value [String, nil]
+      # @return [Integer, nil]
+      # Parse a numeric expected count, allowing blank values.
       #
       # @param value [String, nil]
       # @return [Integer, nil]
@@ -287,6 +368,11 @@ module DataHub
       # @param expected_count [Integer, nil]
       # @param actual_count [Integer]
       # @return [Array<(Boolean, String, nil)>]
+      # Decide whether the difference between expected and actual warrants a warning.
+      #
+      # @param expected_count [Integer, nil]
+      # @param actual_count [Integer]
+      # @return [Array<(Boolean, String)>]
       def evaluate_warning(expected_count, actual_count)
         return [false, nil] if expected_count.nil?
 
@@ -301,6 +387,10 @@ module DataHub
         end
       end
 
+      # Collate headline metrics for persistence.
+      #
+      # @param report [DataHub::CourseNamingChange::Report]
+      # @return [Hash]
       def build_short_summary(report)
         {
           "dry_run" => report.dry_run?,
@@ -312,6 +402,11 @@ module DataHub
         }
       end
 
+      # Collate detailed row information for persistence.
+      #
+      # @param rows [Array<DataHub::CourseNamingChange::RowResult>]
+      # @param report [DataHub::CourseNamingChange::Report]
+      # @return [Hash]
       def build_full_summary(rows, report)
         {
           "dry_run" => report.dry_run?,
@@ -322,6 +417,10 @@ module DataHub
       end
 
       # Emit a per-row log line to aid support when reviewing results.
+      #
+      # @param row [DataHub::CourseNamingChange::RowResult]
+      # @return [void]
+      # Emit a log line for a single processed row.
       #
       # @param row [DataHub::CourseNamingChange::RowResult]
       # @return [void]
@@ -351,6 +450,10 @@ module DataHub
 
       # Emit a summary once the CSV has been processed, highlighting any rows
       # that exceeded the configured thresholds.
+      #
+      # @param report [DataHub::CourseNamingChange::Report]
+      # @return [void]
+      # Emit a summary log line at the end of the run.
       #
       # @param report [DataHub::CourseNamingChange::Report]
       # @return [void]

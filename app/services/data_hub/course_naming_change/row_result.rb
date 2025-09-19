@@ -48,6 +48,9 @@ module DataHub
         actual_count - expected_count
       end
 
+      # Represent the row result as a serialisable hash structure.
+      #
+      # @return [Hash]
       def to_h
         {
           "line_number" => line_number,
