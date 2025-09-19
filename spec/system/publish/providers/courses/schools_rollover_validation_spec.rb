@@ -15,13 +15,15 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
   let(:user)      { create(:user, providers: [provider]) }
 
   before do
+    allow(FeatureFlag).to receive(:active?).and_return(false)
+    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
     travel_to frozen_time
     sign_in_system_test(user:)
   end
 
   after { travel_back }
 
-  scenario "Publishing from course page shows rollover school validation errors", :js_browser do
+  scenario "Publishing from course page shows rollover school validation errors" do
     given_i_am_on_the_course_page
     when_i_click_publish_course
     then_i_should_see_the_details_page_with_error_inset_for_schools
