@@ -38,7 +38,6 @@ class CourseEnrichment < ApplicationRecord
                  fee_schedule: [:string, { store_key: "FeeSchedule" }],
                  additional_fees: [:string, { store_key: "AdditionalFees" }]
 
-  before_validation :apply_publish_changes, on: :publish
   belongs_to :course
 
   scope :most_recent, -> { order(created_at: :desc, id: :desc) }
@@ -132,10 +131,6 @@ class CourseEnrichment < ApplicationRecord
 
   def has_been_published_before?
     last_published_timestamp_utc.present?
-  end
-
-  def apply_publish_changes
-    self.version = FeatureFlag.active?(:long_form_content)  ? 2 : 1
   end
 
   def publish(current_user)
