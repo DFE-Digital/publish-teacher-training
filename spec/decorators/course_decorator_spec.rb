@@ -95,6 +95,54 @@ describe CourseDecorator do
     end
   end
 
+  describe "#saved_status_tag" do
+    subject(:decorated) { course.decorate }
+
+    let(:provider) { create(:provider) }
+    let(:trait) { nil }
+    let(:course) do
+      if trait
+        extra_attrs = {}
+        extra_attrs[:site_statuses] = [build(:site_status, status: :suspended, site: build(:site))] if trait == :withdrawn
+        build(:course, trait, :secondary, { provider: }.merge(extra_attrs))
+      else
+        build(:course, :secondary, provider:)
+      end
+    end
+
+    it "returns Closed after apply deadline", travel: 1.day.after(apply_deadline) do
+      expect(decorated.saved_status_tag).to include("Closed")
+    end
+
+    it "returns Not yet open between find opening and apply opening", travel: 1.day.after(find_opens) do
+      expect(decorated.saved_status_tag).to include("Not yet open")
+    end
+
+    context "when provider closes course early" do
+      let(:trait) { :closed }
+
+      it "returns Closed when provider closes course early" do
+        expect(decorated.saved_status_tag).to include("Closed")
+      end
+    end
+
+    context "when the course is open" do
+      let(:trait) { :open }
+
+      it "returns Open by default", travel: 1.day.after(apply_opens) do
+        expect(decorated.saved_status_tag).to include("Open")
+      end
+    end
+
+    context "when the course is withdrawn" do
+      let(:trait) { :withdrawn }
+
+      it "returns Withdrawn when course is withdrawn" do
+        expect(decorated.saved_status_tag).to include("Withdrawn")
+      end
+    end
+  end
+
   # context "status tag" do
   #   let(:status_tag) { course.decorate.status_tag }
 
