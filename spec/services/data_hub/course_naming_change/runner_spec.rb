@@ -140,7 +140,7 @@ RSpec.describe DataHub::CourseNamingChange::Runner do
         header = "course name,tad subject,Count,replacement name\n"
         row = "Original name,ignored,2,Renamed course".dup.force_encoding("ASCII-8BIT")
         row << "\xC3".b
-        (header + row + "\n").force_encoding("ASCII-8BIT")
+        "#{header}#{row}\n".force_encoding("ASCII-8BIT")
       end
 
       it "sanitises invalid characters before processing" do
