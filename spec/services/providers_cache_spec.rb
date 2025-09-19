@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.describe ProvidersCache do
-  let(:cache_key) { "providers:list" }
+  let(:cycle_year) { 2026 }
+  let(:cache_key) { "providers:list:#{cycle_year}" }
   let(:expires_in) { 1.hour }
   let(:providers_cache) { described_class.new(expires_in: expires_in) }
 
@@ -14,7 +15,7 @@ RSpec.describe ProvidersCache do
   describe "#providers_list" do
     subject(:providers_list) { providers_cache.providers_list }
 
-    context "when cache is empty" do
+    context "when cache is empty", travel: mid_cycle(2026) do
       it "fetches providers from the database and stores them in the cache" do
         create(:provider, provider_name: "Test Provider", provider_code: "TP1", recruitment_cycle: RecruitmentCycle.current)
 
