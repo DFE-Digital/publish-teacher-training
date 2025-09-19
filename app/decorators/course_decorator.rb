@@ -48,6 +48,25 @@ class CourseDecorator < ApplicationDecorator
     object.open_for_applications? ? "Open" : "Closed"
   end
 
+  def saved_status_tag
+    text, colour = saved_status_text_and_colour
+    h.govuk_tag(text:, colour:)
+  end
+
+  def saved_status_text_and_colour
+    if object.is_withdrawn?
+      %w[Withdrawn red]
+    elsif Find::CycleTimetable.phase_in_time?(:today_is_after_apply_deadline_passed)
+      %w[Closed purple]
+    elsif Find::CycleTimetable.phase_in_time?(:today_is_between_find_opening_and_apply_opening)
+      ["Not yet open", "grey"]
+    elsif object.application_status_closed?
+      %w[Closed purple]
+    else
+      %w[Open turquoise]
+    end
+  end
+
   def a_level_change_path
     return if object.is_withdrawn?
 

@@ -8,7 +8,7 @@
               <%= saved_course.course.provider_name %>
             </span>
           </strong>
-          <span class="govuk-!-padding-left-2"><%= saved_course.course.decorate.status_tag %></span><br>
+          <span class="govuk-!-padding-left-2"><%= saved_course.course.decorate.saved_status_tag %></span><br>
           <span class="govuk-body-s"><%= saved_course.course.name_and_code %></span>
         </div>
         <%= button_to t(".delete"),
@@ -26,7 +26,7 @@
                 <%= saved_course.course.provider_name %>
               </span>
             </strong>
-            <span class="govuk-!-padding-left-2"><%= saved_course.course.decorate.status_tag %></span><br>
+            <span class="govuk-!-padding-left-2"><%= saved_course.course.decorate.saved_status_tag %></span><br>
             <span class="govuk-body-s"><%= saved_course.course.name_and_code %></span>
           </div>
           <%= button_to t(".delete"),
