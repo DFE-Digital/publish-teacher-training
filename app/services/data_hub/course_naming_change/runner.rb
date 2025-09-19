@@ -12,6 +12,30 @@ module DataHub
     # when the number of courses changed deviates significantly from the
     # expected count provided in the file.
     class Runner
+    class << self
+      def fetch_recruitment_cycle(year)
+        return RecruitmentCycle.find_by!(year:) if year.present?
+
+        RecruitmentCycle.current
+      end
+
+      def parse_absolute_threshold(value)
+        return DEFAULT_ABSOLUTE_WARNING_THRESHOLD if value.blank?
+
+        Integer(value)
+      rescue ArgumentError
+        raise ArgumentError, "Invalid ABSOLUTE_THRESHOLD: '#{value}'"
+      end
+
+      def parse_percentage_threshold(value)
+        return DEFAULT_PERCENTAGE_WARNING_THRESHOLD if value.blank?
+
+        Float(value)
+      rescue ArgumentError
+        raise ArgumentError, "Invalid PERCENTAGE_THRESHOLD: '#{value}'"
+      end
+    end
+
       COURSE_NAME_KEY = "course name"
       COUNT_KEY = "count"
       REPLACEMENT_KEY = "replacement name"
@@ -43,73 +67,16 @@ module DataHub
       #
       # @return [DataHub::CourseNamingChange::Report]
       def call
-        rows = []
         summary_record = DataHub::CourseNamingChangeSummary.start!
 
-        begin
-          each_row_with_index do |raw_row, line_number|
-            normalized_row = normalize_row(raw_row)
-            course_name = normalized_row[COURSE_NAME_KEY]
-            replacement_name = normalized_row[REPLACEMENT_KEY] || normalized_row[REPLACEMENT_ALTERNATE_KEY]
-            expected_count = parse_expected_count(normalized_row[COUNT_KEY])
+        rows = process_rows
+        report = build_report(rows)
+        finalise_summary!(summary_record, rows, report)
 
-            next if course_name.blank? && replacement_name.blank?
-
-            raise ArgumentError, "Row #{line_number}: course name is blank" if course_name.blank?
-
-            matched_courses = matching_courses_for(course_name)
-            actual_count = matched_courses.size
-
-            if replacement_name.blank?
-              warning_reason = "Replacement name missing; no changes applied"
-              row_result = RowResult.new(
-                line_number: line_number,
-                course_name: course_name,
-                replacement_name: course_name,
-                expected_count: expected_count,
-                actual_count: actual_count,
-                course_identifiers: identifiers_for(matched_courses),
-                warning: true,
-                warning_reason: warning_reason,
-              )
-
-              log_row(row_result)
-              rows << row_result
-              next
-            end
-
-            apply_replacement!(matched_courses, replacement_name) unless dry_run?
-
-            warning, warning_reason = evaluate_warning(expected_count, actual_count)
-
-            row_result = RowResult.new(
-              line_number: line_number,
-              course_name: course_name,
-              replacement_name: replacement_name,
-              expected_count: expected_count,
-              actual_count: actual_count,
-              course_identifiers: identifiers_for(matched_courses),
-              warning: warning,
-              warning_reason: warning_reason,
-            )
-
-            log_row(row_result)
-            rows << row_result
-          end
-
-          report = Report.new(rows: rows, dry_run: dry_run?)
-          log_summary(report)
-
-          summary_record.finish!(
-            short_summary: build_short_summary(report),
-            full_summary: build_full_summary(rows, report),
-          )
-
-          report
-        rescue StandardError => e
-          summary_record.fail!(e)
-          raise
-        end
+        report
+      rescue StandardError => e
+        summary_record.fail!(e)
+        raise
       end
 
     private
@@ -122,6 +89,107 @@ module DataHub
                   :percentage_warning_threshold
 
       alias_method :dry_run?, :dry_run
+
+      def process_rows
+        rows = []
+
+        each_row_with_index do |raw_row, line_number|
+          normalized_row = normalize_row(raw_row)
+          course_name = normalized_row[COURSE_NAME_KEY]
+          replacement_name = normalized_row[REPLACEMENT_KEY] || normalized_row[REPLACEMENT_ALTERNATE_KEY]
+          expected_count = parse_expected_count(normalized_row[COUNT_KEY])
+
+          next if skip_row?(course_name, replacement_name)
+
+          ensure_course_name!(course_name, line_number)
+          rows << process_row(
+            line_number: line_number,
+            course_name: course_name,
+            replacement_name: replacement_name,
+            expected_count: expected_count,
+          )
+        end
+
+        rows
+      end
+
+      def build_report(rows)
+        Report.new(rows: rows, dry_run: dry_run?).tap do |report|
+          log_summary(report)
+        end
+      end
+
+      def finalise_summary!(summary_record, rows, report)
+        summary_record.finish!(
+          short_summary: build_short_summary(report),
+          full_summary: build_full_summary(rows, report),
+        )
+      end
+
+      def process_row(line_number:, course_name:, replacement_name:, expected_count:)
+        matched_courses = matching_courses_for(course_name)
+        actual_count = matched_courses.size
+
+        row_result = if replacement_name.blank?
+                       build_missing_replacement_row(
+                         line_number: line_number,
+                         course_name: course_name,
+                         expected_count: expected_count,
+                         actual_count: actual_count,
+                         matched_courses: matched_courses,
+                       )
+                     else
+                       build_standard_row(
+                         line_number: line_number,
+                         course_name: course_name,
+                         replacement_name: replacement_name,
+                         expected_count: expected_count,
+                         matched_courses: matched_courses,
+                         actual_count: actual_count,
+                       )
+                     end
+
+        log_row(row_result)
+        row_result
+      end
+
+      def skip_row?(course_name, replacement_name)
+        course_name.blank? && replacement_name.blank?
+      end
+
+      def ensure_course_name!(course_name, line_number)
+        raise ArgumentError, "Row #{line_number}: course name is blank" if course_name.blank?
+      end
+
+      def build_missing_replacement_row(line_number:, course_name:, expected_count:, actual_count:, matched_courses:)
+        RowResult.new(
+          line_number: line_number,
+          course_name: course_name,
+          replacement_name: course_name,
+          expected_count: expected_count,
+          actual_count: actual_count,
+          course_identifiers: identifiers_for(matched_courses),
+          warning: true,
+          warning_reason: "Replacement name missing; no changes applied",
+        )
+      end
+
+      def build_standard_row(line_number:, course_name:, replacement_name:, expected_count:, matched_courses:, actual_count:)
+        apply_replacement!(matched_courses, replacement_name) unless dry_run?
+
+        warning, warning_reason = evaluate_warning(expected_count, actual_count)
+
+        RowResult.new(
+          line_number: line_number,
+          course_name: course_name,
+          replacement_name: replacement_name,
+          expected_count: expected_count,
+          actual_count: actual_count,
+          course_identifiers: identifiers_for(matched_courses),
+          warning: warning,
+          warning_reason: warning_reason,
+        )
+      end
 
       # Iterate through each CSV record, yielding row data alongside its 1-based
       # line number (including the header).
