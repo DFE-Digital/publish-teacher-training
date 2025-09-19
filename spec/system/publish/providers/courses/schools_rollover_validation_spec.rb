@@ -11,7 +11,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
   let!(:accredited_provider) { create(:provider, :accredited_provider, recruitment_cycle:) }
   let!(:site_one) { create(:site, provider:, location_name: "School A") }
   let!(:site_two) { create(:site, provider:, location_name: "School B") }
-  let!(:course)   { create(:course, :publishable, provider:, course_code: "XYZ", sites: [site_one, site_two], accrediting_provider: accredited_provider, enrichments: [build(:course_enrichment, :rolled_over)]) }
+  let!(:course)   { create(:course, :publishable, provider:, course_code: "XYZ", sites: [site_one, site_two], accrediting_provider: accredited_provider, enrichments: [build(:course_enrichment, :rolled_over), build(:course_enrichment, :rolled_over, :v2)]) }
   let(:user)      { create(:user, providers: [provider]) }
 
   before do
@@ -21,7 +21,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
 
   after { travel_back }
 
-  scenario "Publishing from course page shows rollover school validation errors" do
+  scenario "Publishing from course page shows rollover school validation errors", :js_browser do
     given_i_am_on_the_course_page
     when_i_click_publish_course
     then_i_should_see_the_details_page_with_error_inset_for_schools
@@ -66,14 +66,14 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
 
   def then_i_should_see_the_school_validation_error_summary_linking_to_publish_anchor
     expect(page).to have_content("There is a problem")
-    error_links = all("a", text: "Check the schools for this course")
+    error_links = page.find_all("a", text: "Check the schools for this course")
     expect(error_links.size).to eq(2)
-    expect(error_links[0][:href]).to eq("/publish/organisations/ABC/2026/courses/XYZ/publish#school-summary-link")
-    expect(error_links[1][:href]).to eq("/publish/organisations/ABC/2026/courses/XYZ/schools?display_errors=true")
+    expect(error_links[0][:href]).to match("/publish/organisations/ABC/2026/courses/XYZ/publish#school-summary-link")
+    expect(error_links[1][:href]).to match("/publish/organisations/ABC/2026/courses/XYZ/schools?display_errors=true")
   end
 
   def when_i_click_the_error_summary_link
-    all("a", text: "Check the schools for this course").first.click
+    page.find("a", text: "Check the schools for this course", match: :first).click
   end
 
   def then_i_should_see_the_details_page_with_error_inset_for_schools
@@ -81,7 +81,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
       expect(page).to have_content("School A")
       expect(page).to have_content("School B")
       school_link = page.find("a", text: "Check the schools for this course")
-      expect(school_link[:href]).to eq(
+      expect(school_link[:href]).to include(
         schools_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           recruitment_cycle.year,
@@ -97,7 +97,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
       expect(page).to have_content("School A")
       expect(page).to have_content("School B")
       school_link = page.find("a", text: "Check the schools for this course")
-      expect(school_link[:href]).to eq(
+      expect(school_link[:href]).to include(
         schools_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           recruitment_cycle.year,
@@ -129,7 +129,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
     error_links = all("a", text: "Check the schools for this course")
     expect(error_links).not_to be_empty
 
-    expect(error_links.first[:href]).to eq("#publish-course-school-form-site-ids-field-error")
+    expect(error_links.first[:href]).to include("#publish-course-school-form-site-ids-field-error")
   end
 
   def when_i_click_update_schools
