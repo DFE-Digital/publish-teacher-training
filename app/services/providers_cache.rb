@@ -8,7 +8,7 @@ class ProvidersCache
   end
 
   def providers_list
-    Rails.cache.fetch("providers:list", expires_in: expires_in) do
+    Rails.cache.fetch("providers:list:#{Find::CycleTimetable.current_year}", expires_in: expires_in) do
       RecruitmentCycle.current.providers
                       .by_name_ascending
                       .select(:id, :provider_name, :provider_code)
