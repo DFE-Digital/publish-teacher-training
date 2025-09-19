@@ -95,6 +95,52 @@ describe CourseDecorator do
     end
   end
 
+  describe "#saved_status_tag" do
+    subject(:decorated) { course.decorate }
+
+    let(:provider) { create(:provider) }
+    let(:course) { create(:course, :secondary, provider:) }
+
+    before do
+      allow(SiteSetting).to receive(:cycle_schedule).and_return(:real)
+    end
+
+    it "returns Closed after apply deadline" do
+      allow(Find::CycleTimetable).to receive(:phase_in_time?).and_return(false)
+      allow(Find::CycleTimetable).to receive(:phase_in_time?).with(:today_is_after_apply_deadline_passed).and_return(true)
+
+      expect(decorated.saved_status_tag).to include("Closed")
+    end
+
+    it "returns Not yet open between find opening and apply opening" do
+      allow(Find::CycleTimetable).to receive(:phase_in_time?).and_return(false)
+      allow(Find::CycleTimetable).to receive(:phase_in_time?).with(:today_is_between_find_opening_and_apply_opening).and_return(true)
+
+      expect(decorated.saved_status_tag).to include("Not yet open")
+    end
+
+    it "returns Closed when provider closes course early" do
+      allow(Find::CycleTimetable).to receive(:phase_in_time?).and_return(false)
+      allow(course).to receive(:application_status_closed?).and_return(true)
+
+      expect(decorated.saved_status_tag).to include("Closed")
+    end
+
+    it "returns Open by default" do
+      allow(Find::CycleTimetable).to receive(:phase_in_time?).and_return(false)
+      allow(course).to receive(:application_status_closed?).and_return(false)
+
+      expect(decorated.saved_status_tag).to include("Open")
+    end
+
+    it "returns Withdrawn when course is withdrawn" do
+      allow(Find::CycleTimetable).to receive(:phase_in_time?).and_return(false)
+      allow(course).to receive(:is_withdrawn?).and_return(true)
+
+      expect(decorated.saved_status_tag).to include("Withdrawn")
+    end
+  end
+
   # context "status tag" do
   #   let(:status_tag) { course.decorate.status_tag }
 
