@@ -12,29 +12,29 @@ module DataHub
     # when the number of courses changed deviates significantly from the
     # expected count provided in the file.
     class Runner
-    class << self
-      def fetch_recruitment_cycle(year)
-        return RecruitmentCycle.find_by!(year:) if year.present?
+      class << self
+        def fetch_recruitment_cycle(year)
+          return RecruitmentCycle.find_by!(year:) if year.present?
 
-        RecruitmentCycle.current
+          RecruitmentCycle.current
+        end
+
+        def parse_absolute_threshold(value)
+          return DEFAULT_ABSOLUTE_WARNING_THRESHOLD if value.blank?
+
+          Integer(value)
+        rescue ArgumentError
+          raise ArgumentError, "Invalid ABSOLUTE_THRESHOLD: '#{value}'"
+        end
+
+        def parse_percentage_threshold(value)
+          return DEFAULT_PERCENTAGE_WARNING_THRESHOLD if value.blank?
+
+          Float(value)
+        rescue ArgumentError
+          raise ArgumentError, "Invalid PERCENTAGE_THRESHOLD: '#{value}'"
+        end
       end
-
-      def parse_absolute_threshold(value)
-        return DEFAULT_ABSOLUTE_WARNING_THRESHOLD if value.blank?
-
-        Integer(value)
-      rescue ArgumentError
-        raise ArgumentError, "Invalid ABSOLUTE_THRESHOLD: '#{value}'"
-      end
-
-      def parse_percentage_threshold(value)
-        return DEFAULT_PERCENTAGE_WARNING_THRESHOLD if value.blank?
-
-        Float(value)
-      rescue ArgumentError
-        raise ArgumentError, "Invalid PERCENTAGE_THRESHOLD: '#{value}'"
-      end
-    end
 
       COURSE_NAME_KEY = "course name"
       COUNT_KEY = "count"
