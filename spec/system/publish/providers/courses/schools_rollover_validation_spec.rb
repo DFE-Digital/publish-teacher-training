@@ -11,7 +11,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
   let!(:accredited_provider) { create(:provider, :accredited_provider, recruitment_cycle:) }
   let!(:site_one) { create(:site, provider:, location_name: "School A") }
   let!(:site_two) { create(:site, provider:, location_name: "School B") }
-  let!(:course)   { create(:course, :publishable, provider:, course_code: "XYZ", sites: [site_one, site_two], accrediting_provider: accredited_provider, enrichments: [build(:course_enrichment, :rolled_over), build(:course_enrichment, :rolled_over, :v2)]) }
+  let!(:course)   { create(:course, :publishable, provider:, course_code: "XYZ", sites: [site_one, site_two], accrediting_provider: accredited_provider, enrichments: [build(:course_enrichment, :rolled_over)]) }
   let(:user)      { create(:user, providers: [provider]) }
 
   before do

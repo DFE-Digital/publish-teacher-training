@@ -101,10 +101,6 @@ class CourseEnrichment < ApplicationRecord
   validates :other_requirements, words_count: { maximum: 100 }
 
   # v2 validations
-  validates :describe_school, presence: true, on: :publish, if: -> { version == 2 }
-  validates :describe_school, words_count: { maximum: 100 }
-  validates :candidate_training_rationale, presence: true, on: :publish, if: -> { version == 2 }
-  validates :candidate_training_rationale, words_count: { maximum: 100 }
 
   validates :placement_selection_criteria, presence: true, on: :publish, if: -> { version == 2 }
   validates :placement_selection_criteria, words_count: { maximum: 50 }
@@ -139,7 +135,7 @@ class CourseEnrichment < ApplicationRecord
   end
 
   def apply_publish_changes
-    self.version = FeatureFlag.active?(:long_form_content) || course.provider.recruitment_cycle.after_2025? ? 2 : 1
+    self.version = FeatureFlag.active?(:long_form_content)  ? 2 : 1
   end
 
   def publish(current_user)
