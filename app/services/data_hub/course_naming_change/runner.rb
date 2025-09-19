@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "csv"
-require "stringio"
-
 # DataHub namespace which stores import logs and summaries
 module DataHub
   # Namespace for course naming change functionality
