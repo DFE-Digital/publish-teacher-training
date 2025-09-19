@@ -5,7 +5,6 @@ require "rails_helper"
 RSpec.describe "Support index" do
   scenario "viewing support cycles page during rollover", travel: find_closes do
     given_we_have_a_next_cycle
-    and_there_are_two_recruitment_cycles
     and_today_is_before_next_cycle_available_for_support_users_date
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
@@ -25,24 +24,19 @@ RSpec.describe "Support index" do
     i_should_be_on_the_next_cycle_page
   end
 
-  scenario "viewing providers page when not in rollover", travel: mid_cycle do
+  scenario "viewing providers page when not in rollover" do
     given_we_have_a_next_cycle
-    and_there_are_two_recruitment_cycles
+    and_today_is_before_next_cycle_available_for_support_users_date
     and_i_am_authenticated_as_an_admin_user
     when_i_visit_the_support_index_page
     then_i_should_be_on_the_support_providers_page
   end
 
   def then_i_should_be_on_the_support_providers_page
-    expect(support_provider_index_page).to be_displayed
+    expect(page).to have_current_path "/support/#{RecruitmentCycle.current.year}/providers", ignore_query: true
   end
 
   def given_we_have_a_next_cycle
-    find_or_create(:recruitment_cycle, :next)
-  end
-
-  def and_there_are_two_recruitment_cycles
-    find_or_create(:recruitment_cycle, :previous)
     find_or_create(:recruitment_cycle, :next)
   end
 
@@ -55,8 +49,8 @@ RSpec.describe "Support index" do
   end
 
   def then_i_should_be_on_the_recruitment_cycle_switcher_page
-    expect(support_recruitment_cycle_index_page).to have_link "#{Settings.current_recruitment_cycle_year} - current"
-    expect(support_recruitment_cycle_index_page).to have_link Settings.current_recruitment_cycle_year + 1
+    expect(support_recruitment_cycle_index_page).to have_link "#{Find::CycleTimetable.current_year} - current"
+    expect(support_recruitment_cycle_index_page).to have_link Find::CycleTimetable.next_year
   end
 
   def and_should_not_see_the_switch_cycle_link
@@ -72,7 +66,7 @@ RSpec.describe "Support index" do
   end
 
   def i_should_see_the_current_cycle_page
-    expect(support_provider_index_page).to have_text "Recruitment cycle #{Settings.current_recruitment_cycle_year - 1} to #{Settings.current_recruitment_cycle_year} - current"
+    expect(support_provider_index_page).to have_text "Recruitment cycle #{Find::CycleTimetable.previous_year} to #{Find::CycleTimetable.current_year} - current"
   end
 
   def when_click_the_switch_cycle_link
@@ -80,7 +74,7 @@ RSpec.describe "Support index" do
   end
 
   def i_should_be_on_the_next_cycle_page
-    expect(support_provider_index_page).to have_text "Recruitment cycle #{Settings.current_recruitment_cycle_year} to #{Settings.current_recruitment_cycle_year + 1}"
+    expect(support_provider_index_page).to have_text "Recruitment cycle #{Find::CycleTimetable.current_year} to #{Find::CycleTimetable.next_year}"
   end
 
   def and_i_should_see_the_pe_allocations_tab
@@ -92,10 +86,10 @@ RSpec.describe "Support index" do
   end
 
   def and_today_is_before_next_cycle_available_for_support_users_date
-    travel_to(1.day.before(RecruitmentCycle.next.available_for_support_users_from))
+    Timecop.travel(1.day.until(RecruitmentCycle.next.available_for_support_users_from))
   end
 
   def and_today_is_after_next_cycle_available_for_support_users_date
-    travel_to(1.day.since(RecruitmentCycle.next.available_for_support_users_from))
+    Timecop.travel(1.day.since(RecruitmentCycle.next.available_for_support_users_from))
   end
 end

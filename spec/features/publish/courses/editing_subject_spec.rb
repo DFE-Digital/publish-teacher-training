@@ -107,7 +107,7 @@ private
   end
 
   def when_i_visit_the_edit_course_subject_page
-    publish_courses_subjects_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, course_code: course.course_code)
+    publish_courses_subjects_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.current_year, course_code: course.course_code)
   end
 
   def when_i_select_a_primary_subject(subject_type)
@@ -143,14 +143,14 @@ private
   end
 
   def then_i_am_met_with_course_details_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/details")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/details")
   end
 
   def then_i_am_met_with_the_modern_languages_page(extra_subject = nil)
     expect(page).to have_current_path(
       [
         "/publish/organisations/#{provider.provider_code}/",
-        "#{Settings.current_recruitment_cycle_year}/",
+        "#{Find::CycleTimetable.current_year}/",
         "courses/#{course.course_code}/modern-languages?",
         params_with_subject(extra_subject).to_s,
       ].join,

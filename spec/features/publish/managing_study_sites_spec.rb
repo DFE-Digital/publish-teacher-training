@@ -97,7 +97,7 @@ feature "Managing a provider's study_sites" do
   end
 
   def and_i_am_on_the_study_sites_show_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites/#{site.id}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/study-sites/#{site.id}")
   end
   alias_method :then_i_am_on_the_study_site_show_page, :and_i_am_on_the_study_sites_show_page
 
@@ -130,7 +130,7 @@ feature "Managing a provider's study_sites" do
   end
 
   def then_i_am_on_the_index_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/study-sites")
   end
 
   def and_i_click_add_study_site
@@ -138,7 +138,7 @@ feature "Managing a provider's study_sites" do
   end
 
   def and_i_am_on_the_study_sites_check_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites/check")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/study-sites/check")
   end
 
   def and_i_click_the_link_to_enter_a_school_manually
@@ -200,7 +200,7 @@ feature "Managing a provider's study_sites" do
   end
 
   def then_i_am_on_the_study_sites_delete_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites/#{site.id}/delete")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/study-sites/#{site.id}/delete")
   end
 
   def when_i_click_cancel

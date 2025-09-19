@@ -52,11 +52,11 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def given_i_visit_the_support_provider_schools_index_page
-    support_provider_schools_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id)
+    support_provider_schools_index_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: @provider.id)
   end
 
   def then_i_am_on_the_school_search_page
-    expect(page).to have_current_path(search_support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id))
+    expect(page).to have_current_path(search_support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: @provider.id))
   end
 
   def when_i_search_with_an_empty_query

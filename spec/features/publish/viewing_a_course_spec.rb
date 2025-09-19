@@ -431,7 +431,7 @@ private
   end
 
   def next_recruitment_cycle_year
-    Settings.current_recruitment_cycle_year + 1
+    Find::CycleTimetable.next_year
   end
 
   def when_i_visit_the_next_cycle_courses_page

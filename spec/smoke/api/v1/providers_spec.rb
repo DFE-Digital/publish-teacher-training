@@ -5,7 +5,7 @@ require "spec_helper_smoke"
 describe "V1 Public API Smoke Tests", :aggregate_failures, :smoke do
   subject(:response) { HTTParty.get(url) }
 
-  let(:recruitment_year) { Settings.current_recruitment_cycle_year }
+  let(:recruitment_year) { Find::CycleTimetable.cycle_year_for_time(Time.zone.now) }
   let(:base_url) { Settings.api_url }
 
   context "providers" do

@@ -20,7 +20,7 @@ apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 
 
 one_login:
-  enabled: false
+  enabled: true
   # URL user is redirected to after logging out of One Login
   post_logout_url: <%= "https://find-#{ENV["APP_NAME_SUFFIX"]}.test.teacherservices.cloud" %>
 

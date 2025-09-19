@@ -59,7 +59,7 @@ private
 
   def when_i_visit_the_accredited_provider_search_page
     visit search_publish_provider_recruitment_cycle_accredited_providers_path(
-      recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+      recruitment_cycle_year: Find::CycleTimetable.current_year,
       provider_code: provider.provider_code,
     )
   end
@@ -83,7 +83,7 @@ private
   def then_i_am_taken_to_the_index_page
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_accredited_partnerships_path(
-        recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+        recruitment_cycle_year: Find::CycleTimetable.current_year,
         provider_code: provider.provider_code,
       ),
     )
@@ -142,7 +142,7 @@ private
   def then_i_am_taken_to_the_accredited_provider_search_page
     expect(page).to have_current_path(
       search_publish_provider_recruitment_cycle_accredited_providers_path(
-        recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+        recruitment_cycle_year: Find::CycleTimetable.current_year,
         provider_code: provider.provider_code,
       ),
     )
@@ -151,7 +151,7 @@ private
   def then_i_am_taken_to_the_accredited_provider_search_page_with_confirmation
     expect(page).to have_current_path(
       search_publish_provider_recruitment_cycle_accredited_providers_path(
-        recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+        recruitment_cycle_year: Find::CycleTimetable.current_year,
         provider_code: provider.provider_code,
         accredited_provider_id: @accredited_provider.id,
         goto_confirmation: true,
@@ -162,7 +162,7 @@ private
   def then_i_am_taken_to_the_accredited_provider_description_page
     expect(page).to have_current_path(
       new_publish_provider_recruitment_cycle_accredited_partnership_path(
-        recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+        recruitment_cycle_year: Find::CycleTimetable.current_year,
         provider_code: provider.provider_code,
         goto_confirmation: true,
       ),
@@ -176,7 +176,7 @@ private
   def then_i_am_taken_back_to_the_confirm_page
     expect(page).to have_current_path(
       check_publish_provider_recruitment_cycle_accredited_partnerships_path(
-        recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+        recruitment_cycle_year: Find::CycleTimetable.current_year,
         provider_code: provider.provider_code,
         accredited_provider_id: @accredited_provider.id,
       ),

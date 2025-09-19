@@ -99,8 +99,7 @@ private
   end
 
   def and_the_new_cycle_has_started
-    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2026)
-    Timecop.travel(1.day.after(find_opens(2025)))
+    Timecop.travel(1.day.after(find_opens(2026)))
     # Changing the time will log the user out
     # /lib/publish/authentication/user_session.rb:34
     visit_auth_sign_in_page

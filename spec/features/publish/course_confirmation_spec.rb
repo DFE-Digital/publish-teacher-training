@@ -142,7 +142,7 @@ private
   end
 
   def then_i_should_be_on_the_confirmation_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/confirmation", ignore_query: true)
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/confirmation", ignore_query: true)
   end
 
   def and_i_select_some_languages
@@ -173,7 +173,7 @@ private
   def when_i_visit_the_publish_course_confirmation_page
     publish_course_confirmation_page.load(
       provider_code: provider.provider_code,
-      recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+      recruitment_cycle_year: Find::CycleTimetable.current_year,
       query: confirmation_params(provider),
     )
   end
@@ -206,7 +206,7 @@ private
     expect_summary_list_to_include(key: "Funding type", value: "Salary (apprenticeship)")
     expect_summary_list_to_include(key: "Study pattern", value: "Full time or part time")
     expect_summary_list_to_include(key: "Employing school", value: site.location_name)
-    expect_summary_list_to_include(key: "Course start date", value: "October #{Settings.current_recruitment_cycle_year.to_i - 1}")
+    expect_summary_list_to_include(key: "Course start date", value: "October #{Find::CycleTimetable.next_year}")
   end
 
   def expect_summary_list_to_include(key:, value:)
@@ -224,7 +224,7 @@ private
   end
 
   def and_i_am_met_with_the_publish_courses_new_schools_page
-    expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/schools/new")
+    expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/schools/new")
   end
 
   def and_i_update_the_schools
@@ -232,7 +232,7 @@ private
   end
 
   def then_i_am_met_with_the_publish_course_confirmation_page
-    expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/confirmation")
+    expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/confirmation")
   end
 
   def and_i_select_no_student_visa
