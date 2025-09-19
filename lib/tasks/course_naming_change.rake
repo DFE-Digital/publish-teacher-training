@@ -7,10 +7,10 @@ namespace :course_naming do
     raise "CSV path required (pass as first argument or CSV_PATH env var)" if csv_path.blank?
 
     year = args[:year] || ENV["YEAR"]
-    absolute_threshold = parse_absolute_threshold(args[:absolute_threshold] || ENV["ABSOLUTE_THRESHOLD"])
-    percentage_threshold = parse_percentage_threshold(args[:percentage_threshold] || ENV["PERCENTAGE_THRESHOLD"])
+    absolute_threshold = DataHub::CourseNamingChange::Runner.parse_absolute_threshold(args[:absolute_threshold] || ENV["ABSOLUTE_THRESHOLD"])
+    percentage_threshold = DataHub::CourseNamingChange::Runner.parse_percentage_threshold(args[:percentage_threshold] || ENV["PERCENTAGE_THRESHOLD"])
 
-    recruitment_cycle = fetch_recruitment_cycle(year)
+    recruitment_cycle = DataHub::CourseNamingChange::Runner.fetch_recruitment_cycle(year)
 
     DataHub::CourseNamingChange::Runner.new(
       csv_path:,
@@ -28,9 +28,9 @@ namespace :course_naming do
     raise "CSV path required (pass as first argument or CSV_PATH env var)" if csv_path.blank?
 
     year = args[:year] || ENV["YEAR"]
-    absolute_threshold = parse_absolute_threshold(args[:absolute_threshold] || ENV["ABSOLUTE_THRESHOLD"])
-    percentage_threshold = parse_percentage_threshold(args[:percentage_threshold] || ENV["PERCENTAGE_THRESHOLD"])
-    recruitment_cycle = fetch_recruitment_cycle(year)
+    absolute_threshold = DataHub::CourseNamingChange::Runner.parse_absolute_threshold(args[:absolute_threshold] || ENV["ABSOLUTE_THRESHOLD"])
+    percentage_threshold = DataHub::CourseNamingChange::Runner.parse_percentage_threshold(args[:percentage_threshold] || ENV["PERCENTAGE_THRESHOLD"])
+    recruitment_cycle = DataHub::CourseNamingChange::Runner.fetch_recruitment_cycle(year)
 
     DataHub::CourseNamingChange::Runner.new(
       csv_path:,
@@ -40,29 +40,5 @@ namespace :course_naming do
       absolute_warning_threshold: absolute_threshold,
       percentage_warning_threshold: percentage_threshold,
     ).call
-  end
-end
-
-namespace :course_naming do
-  def fetch_recruitment_cycle(year)
-    return RecruitmentCycle.find_by!(year:) if year.present?
-
-    RecruitmentCycle.current
-  end
-
-  def parse_absolute_threshold(value)
-    return DataHub::CourseNamingChange::Runner::DEFAULT_ABSOLUTE_WARNING_THRESHOLD if value.blank?
-
-    Integer(value)
-  rescue ArgumentError
-    raise ArgumentError, "Invalid ABSOLUTE_THRESHOLD: '#{value}'"
-  end
-
-  def parse_percentage_threshold(value)
-    return DataHub::CourseNamingChange::Runner::DEFAULT_PERCENTAGE_WARNING_THRESHOLD if value.blank?
-
-    Float(value)
-  rescue ArgumentError
-    raise ArgumentError, "Invalid PERCENTAGE_THRESHOLD: '#{value}'"
   end
 end
