@@ -116,7 +116,7 @@ class Provider < ApplicationRecord
 
   scope :changed_since, lambda { |timestamp|
     if timestamp.present?
-      where("provider.changed_at > ?", timestamp)
+      where("provider.changed_at > ?", "'#{timestamp}'::timestamptz")
     else
       where.not(changed_at: nil)
     end.order(:changed_at, :id)

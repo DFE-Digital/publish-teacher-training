@@ -411,6 +411,7 @@ RSpec.describe API::Public::V1::ProvidersController do
           let(:filter) { { updated_since: (provider2.changed_at - 1.second).iso8601 } }
 
           it "returns 'Second' provider only" do
+            binding.pry
             expect(provider_names_in_response).to eq([provider2.provider_name])
           end
         end
