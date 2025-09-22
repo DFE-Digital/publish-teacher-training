@@ -55,7 +55,7 @@ private
   end
 
   def next_recruitment_cycle_year
-    Find::CycleTimetable.current_year
+    Find::CycleTimetable.next_year
   end
 
   def recruitment_label
