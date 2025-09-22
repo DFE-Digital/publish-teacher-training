@@ -238,9 +238,9 @@ class Course < ApplicationRecord
     where("lower(course.course_code) = ?", course_code.downcase)
   }
 
-  scope :changed_since, lambda { |timestamp|
-    if timestamp.present?
-      changed_at_since(timestamp)
+  scope :changed_since, lambda { |time|
+    if time.present?
+      changed_at_since(time)
     else
       where.not(changed_at: nil)
     end.order(:changed_at, :id)

@@ -29,8 +29,14 @@ module API
           @provider_name ||= params.dig(:filter, :provider_name) if params.dig(:filter, :provider_name)&.length&.> 2
         end
 
+        def updated_since_present?
+          params.dig(:filter, :updated_since).present?
+        end
+
         def updated_since
-          @updated_since ||= params.dig(:filter, :updated_since)
+          @updated_since ||= Time.iso8601(params.dig(:filter, :updated_since))
+        rescue ArgumentError
+          raise InvalidIso8601Error, "Invalid updated_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`"
         end
 
         def provider_types
@@ -67,7 +73,7 @@ module API
           @providers = recruitment_cycle.providers
 
           @providers = @providers.provider_name_search(provider_name) if provider_name.present?
-          @providers = @providers.changed_since(updated_since) if updated_since.present?
+          @providers = @providers.changed_since(updated_since) if updated_since_present?
           @providers = @providers.with_provider_types(provider_types) if provider_types.present?
           @providers = @providers.with_region_codes(region_codes) if region_codes.present?
           @providers = @providers.with_can_sponsor_skilled_worker_visa(true) if can_sponsor_skilled_worker_visa?

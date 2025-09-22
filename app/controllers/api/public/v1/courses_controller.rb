@@ -13,10 +13,10 @@ module API
           }
 
           render(**render_opts)
-        rescue ActiveRecord::StatementInvalid
+        rescue InvalidIso8601Error => e
           render json: {
             status: 400,
-            message: "Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`",
+            message: e.message,
           }, status: :bad_request
         end
 
