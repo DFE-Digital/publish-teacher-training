@@ -299,7 +299,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
           it "returns a 400 error message" do
             expect(response).to have_http_status(:bad_request)
-            expect(json_response["message"]).to eq("Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`")
+            expect(json_response["message"]).to eq("Invalid updated_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`")
           end
         end
       end
