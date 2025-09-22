@@ -34,7 +34,7 @@ class CourseSearchService
     scope = scope.with_funding_types(funding_types) if funding_types.any?
     scope = scope.with_degree_grades(degree_grades_accepted) if degrees_accepted?
     scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
-    scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
+    scope = scope.changed_since(updated_since) if updated_since_filter?
     scope = scope.can_sponsor_visa if can_sponsor_visa_filter?
     scope = scope.engineers_teach_physics if engineers_teach_physics_filter?
 
@@ -311,6 +311,12 @@ private
 
   def updated_since_filter?
     filter[:updated_since].present?
+  end
+
+  def updated_since
+    Time.iso8601(filter[:updated_since])
+  rescue ArgumentError
+    raise InvalidIso8601Error, "Invalid updated_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`"
   end
 
   def can_sponsor_visa_filter?
