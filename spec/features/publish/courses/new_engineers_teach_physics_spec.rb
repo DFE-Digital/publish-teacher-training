@@ -71,7 +71,7 @@ private
   end
 
   def when_i_visit_the_new_course_subject_page(level)
-    publish_courses_new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: level_params(level))
+    publish_courses_new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.current_year, query: level_params(level))
   end
 
   def and_i_select_a_subject(subject_type)
@@ -99,42 +99,42 @@ private
   end
 
   def then_i_am_met_with_the_engineers_teach_physics_page(_level, _subject_type)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{params_with_subject(:secondary, :physics)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/engineers-teach-physics/new?#{params_with_subject(:secondary, :physics)}")
     expect(page).to have_content("Engineers Teach Physics")
   end
 
   def then_i_am_met_with_the_engineers_teach_physics_page_with_etp(_level, _subject_type)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{params_with_etp(:secondary, :physics)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/engineers-teach-physics/new?#{params_with_etp(:secondary, :physics)}")
     expect(page).to have_content("Engineers Teach Physics")
   end
 
   def then_i_am_met_with_the_engineers_teach_physics_page_with_no_etp(_level, _subject_type)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{params_with_no_etp(:secondary, :physics)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/engineers-teach-physics/new?#{params_with_no_etp(:secondary, :physics)}")
     expect(page).to have_content("Engineers Teach Physics")
   end
 
   def then_i_am_met_with_the_engineers_teach_physics_with_languages_page(_level, _subject_type)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{modern_language_params_with_subject(:secondary, :physics)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/engineers-teach-physics/new?#{modern_language_params_with_subject(:secondary, :physics)}")
     expect(page).to have_content("Engineers Teach Physics")
   end
 
   def then_i_am_met_with_the_age_range_page(level, subject_type)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{params_with_etp(level, subject_type)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/age-range/new?#{params_with_etp(level, subject_type)}")
     expect(page).to have_content("Age range")
   end
 
   def then_i_am_met_with_the_age_range_page_with_latin(level, subject_type)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{form_params_with_latin(level, subject_type)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/age-range/new?#{form_params_with_latin(level, subject_type)}")
     expect(page).to have_content("Age range")
   end
 
   def then_i_am_met_with_the_modern_languages_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
     expect(page).to have_content("Languages")
   end
 
   def then_i_am_met_with_the_modern_languages_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
     expect(page).to have_content("Languages")
   end
 

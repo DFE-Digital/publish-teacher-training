@@ -42,7 +42,7 @@ class AddCourseButtonPreview < ViewComponent::Preview
     end
 
     def recruitment_cycle_year
-      Settings.current_recruitment_cycle_year
+      Find::CycleTimetable.current_year
     end
 
     def accredited?

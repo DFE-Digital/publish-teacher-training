@@ -27,6 +27,9 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
+# Allows us to call `mid_cycle` in the highest context in the specs
+extend CycleTimetableHelpers # rubocop:disable Style/MixinUsage
+
 # Allows response.parsed_body to parse JSONAPI responses
 # Doesn't work by default with RSpec.
 # https://github.com/jsonapi-rb/jsonapi-rails/blob/master/lib/jsonapi/rails/railtie.rb#L47
@@ -57,6 +60,7 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   # add `FactoryBot` methods
+  config.include CycleTimetableHelpers
   config.include FactoryBot::Syntax::Methods
   config.include RequestHelpers, type: :controller
   config.include ViewComponent::TestHelpers, type: :component
@@ -145,6 +149,23 @@ RSpec.configure do |config|
     Capybara.app_host = app_url(service:)
 
     driven_by Capybara.current_driver
+  end
+
+  config.before do |example|
+    if (time = example.metadata[:travel])
+      year = Find::CycleTimetable.cycle_year_for_time(time)
+      find_or_create(:recruitment_cycle, year:)
+    end
+  end
+
+  config.around do |example|
+    if (time = self.class.metadata[:travel] || example.metadata[:travel])
+      Timecop.travel(time) do
+        example.run
+      end
+    else
+      example.run
+    end
   end
 
 private

@@ -81,7 +81,7 @@ private
   end
 
   def then_i_should_be_taken_to_the_add_school_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/schools/check?school_id=#{@school_two.id}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/schools/check?school_id=#{@school_two.id}")
   end
 
   def and_i_search_with_an_invalid_query

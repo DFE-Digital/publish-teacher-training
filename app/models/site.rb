@@ -33,6 +33,7 @@ class Site < ApplicationRecord
   }
 
   validates :location_name, uniqueness: { scope: %i[provider_id site_type],
+                                          conditions: -> { where(discarded_at: nil) },
                                           message: lambda { |object, _data|
                                             "This #{object.site_type.humanize.downcase} has already been added"
                                           } }

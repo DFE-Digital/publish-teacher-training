@@ -34,7 +34,7 @@ RSpec.describe "Reverting a withdrawal" do
   end
 
   def when_i_navigate_to_the_withdrawn_course
-    visit edit_support_recruitment_cycle_provider_course_path(provider_id: @provider.id, id: @course.id, recruitment_cycle_year: Settings.current_recruitment_cycle_year)
+    visit edit_support_recruitment_cycle_provider_course_path(provider_id: @provider.id, id: @course.id, recruitment_cycle_year: Find::CycleTimetable.current_year)
   end
 
   def and_i_click_revert_withdrawal

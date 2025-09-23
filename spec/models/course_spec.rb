@@ -415,7 +415,7 @@ describe Course do
       end
 
       context "outside 2026 rollover period" do
-        let(:past_cycle) { RecruitmentCycle.find_by!(year: 2025) }
+        let(:past_cycle) { find_or_create(:recruitment_cycle, year: 2025) }
 
         it "does not add errors for sites on :publish" do
           course = create(:course, provider: build(:provider, recruitment_cycle: past_cycle))
@@ -687,7 +687,8 @@ describe Course do
 
       context "when next cycle is not available for publish users" do
         before do
-          create(:recruitment_cycle, :next, available_in_publish_from: 1.day.from_now)
+          create(:recruitment_cycle, :next)
+          Timecop.travel(1.day.until(RecruitmentCycle.next.available_in_publish_from))
         end
 
         it "returns false" do

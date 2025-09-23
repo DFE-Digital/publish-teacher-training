@@ -49,7 +49,7 @@ private
   end
 
   def when_i_visit_the_publish_courses_new_study_mode_page
-    publish_courses_new_study_mode_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: study_mode_params)
+    publish_courses_new_study_mode_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.current_year, query: study_mode_params)
   end
 
   def when_i_select_a_study_mode(study_mode)
@@ -66,7 +66,7 @@ private
   end
 
   def then_i_am_met_with_the_schools_page(study_mode)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/schools/new#{selected_params(study_mode)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/schools/new#{selected_params(study_mode)}")
     expect(page).to have_content("Schools")
   end
 

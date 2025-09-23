@@ -70,6 +70,16 @@ module Publish
           end
         end
 
+        context "discarded database user" do
+          let(:user) { create(:user, discarded_at: Time.zone.now) }
+
+          it "does not create a session and redirects to user_not_found" do
+            request_callback
+            expect(session["user"]).to be_nil
+            expect(response).to redirect_to(user_not_found_path)
+          end
+        end
+
         context "non existing database user" do
           let(:user) { build(:user) }
 

@@ -12,11 +12,11 @@ class RecruitmentCycle < ApplicationRecord
 
   class << self
     def current_recruitment_cycle!
-      find_by!(year: Settings.current_recruitment_cycle_year)
+      find_by!(year: Find::CycleTimetable.current_year.to_s)
     end
 
     def current_recruitment_cycle
-      find_by(year: Settings.current_recruitment_cycle_year)
+      find_by(year: Find::CycleTimetable.current_year.to_s)
     end
     alias_method :current, :current_recruitment_cycle
 
@@ -31,17 +31,15 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def self.current_and_upcoming_cycles_open_to_publish
-    where(year: Settings.current_recruitment_cycle_year).or(upcoming_cycles_open_to_publish)
+    where(year: Find::CycleTimetable.current_year).or(upcoming_cycles_open_to_publish)
   end
 
   scope :upcoming_cycles_open_to_publish, lambda {
-    where("application_start_date > ?", Date.current)
-     .where("? BETWEEN available_in_publish_from AND application_start_date", Date.current)
+    where("? BETWEEN available_in_publish_from AND application_start_date", Date.current)
   }
 
   scope :upcoming_cycles_open_to_support, lambda {
-    where("application_start_date > ?", Date.current)
-     .where("? BETWEEN available_for_support_users_from AND application_start_date", Date.current)
+    where("? BETWEEN available_for_support_users_from AND application_start_date", Date.current)
   }
 
   def previous

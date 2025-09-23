@@ -59,7 +59,7 @@ private
   end
 
   def when_i_visit_the_support_provider_show_page
-    support_provider_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @provider.id)
+    support_provider_show_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, id: @provider.id)
   end
 
   def then_i_can_view_provider_details
@@ -81,7 +81,7 @@ private
   end
 
   def then_i_am_on_the_support_provider_edit_contact_details_page
-    expect(URI(current_url).path).to eq("/support/#{Settings.current_recruitment_cycle_year}/providers/#{@provider.id}/contact-details/edit")
+    expect(URI(current_url).path).to eq("/support/#{Find::CycleTimetable.current_year}/providers/#{@provider.id}/contact-details/edit")
   end
 
   def when_i_fill_in_a_valid_email

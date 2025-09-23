@@ -2,13 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Edit provider course details" do
-  around do |example|
-    Timecop.freeze(2021, 8, 1, 12) do
-      example.run
-    end
-  end
-
+RSpec.describe "Edit provider course details", travel: mid_cycle do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_with_courses
@@ -101,7 +95,7 @@ private
   end
 
   def when_i_visit_the_support_provider_courses_index_page
-    support_provider_courses_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: provider.id)
+    support_provider_courses_index_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id)
   end
 
   def and_click_on_the_first_course_change_link
@@ -111,7 +105,7 @@ private
   alias_method :when_i_return_to_the_edit_page, :and_click_on_the_first_course_change_link
 
   def then_i_am_on_the_support_provider_course_edit_page
-    support_provider_course_edit_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: provider.id, course_id: provider.courses.first.id)
+    support_provider_course_edit_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id, course_id: provider.courses.first.id)
   end
 
   def course_code
@@ -135,7 +129,7 @@ private
   end
 
   def valid_date_month
-    @valid_date_month ||= "6"
+    @valid_date_month ||= "9"
   end
 
   def invalid_date_month
@@ -155,11 +149,11 @@ private
   end
 
   def valid_date_year
-    @valid_date_year ||= Settings.current_recruitment_cycle_year.to_i.to_s
+    @valid_date_year ||= Find::CycleTimetable.current_year.to_i.to_s
   end
 
   def invalid_date_year
-    @invalid_date_year ||= (Settings.current_recruitment_cycle_year.to_i + 3).to_s
+    @invalid_date_year ||= (Find::CycleTimetable.current_year.to_i + 3).to_s
   end
 
   def blank_value
@@ -233,7 +227,7 @@ private
 
   def and_it_contains_invalid_value_errors
     expect(support_provider_course_edit_page.error_summary.text).to include("Course code is already taken")
-    expect(support_provider_course_edit_page.error_summary.text).to include("June #{Settings.current_recruitment_cycle_year + 3} is not in the #{Settings.current_recruitment_cycle_year} cycle")
+    expect(support_provider_course_edit_page.error_summary.text).to include("September #{Find::CycleTimetable.current_year + 3} is not in the #{Find::CycleTimetable.current_year} cycle")
   end
 
   def and_it_contains_start_date_format_error

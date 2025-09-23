@@ -37,7 +37,7 @@ private
   end
 
   def when_i_visit_the_publish_courses_new_age_range_page
-    publish_courses_new_age_range_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: age_range_params)
+    publish_courses_new_age_range_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.current_year, query: age_range_params)
   end
 
   def when_i_select_an_age_range
@@ -62,7 +62,7 @@ private
   end
 
   def then_i_am_met_with_the_course_outcome_page(age_range)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/outcome/new#{selected_params(age_range)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/outcome/new#{selected_params(age_range)}")
     expect(page).to have_content("Qualification")
   end
 

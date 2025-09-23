@@ -25,7 +25,8 @@
     "globals": [
       "$",
       "google",
-      "Stimulus"
+      "Stimulus",
+      "__ENV"
     ]
   },
   "dependencies": {

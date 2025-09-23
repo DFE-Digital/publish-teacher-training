@@ -2,15 +2,14 @@
 
 require "spec_helper"
 
-RSpec.describe "Adding a new recruitment cycle", service: :publish do
+RSpec.describe "Adding a new recruitment cycle", service: :publish, travel: mid_cycle(2025) do
   include DfESignInUserHelper
   let(:provider) { create(:provider) }
   let(:user) { create(:user, :admin, providers: [provider]) }
 
   before do
-    Timecop.travel(Time.zone.local(2025, 1, 1))
-
-    driven_by(:rack_test)
+    # The test suite auto creates the current cycle, need to delete in 2026
+    RecruitmentCycle.find_by(year: 2026)&.destroy
     sign_in_system_test(user:)
   end
 

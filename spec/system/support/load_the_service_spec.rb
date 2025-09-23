@@ -12,7 +12,7 @@ RSpec.describe "Support", service: :publish do
     sign_in_system_test(user:)
   end
 
-  it "shows the support page" do
+  it "shows the support page", travel: mid_cycle do
     visit "/publish/organisations"
     click_on("Support console")
     expect(page).to have_current_path(%r{/support})

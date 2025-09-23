@@ -8,6 +8,7 @@ RSpec.describe "Saving a course", service: :find do
   end
 
   scenario "A signed-in candidate can save a course" do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
     when_i_view_a_course
     when_i_click_apply_for_this_course
 

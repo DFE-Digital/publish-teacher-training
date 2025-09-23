@@ -16,7 +16,7 @@ RSpec.describe "Support console feedback view", service: :support do
       then_i_see_recent_feedback_entries
     end
 
-    scenario "check for backlink presence and navigation on feedback page" do
+    scenario "check for backlink presence and navigation on feedback page", travel: mid_cycle do
       then_i_see_backlink_to_support_homepage
       click_link_or_button "Back"
       then_i_am_on_the_support_homepage
@@ -125,7 +125,7 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_am_on_the_support_homepage
-    expect(page).to have_current_path(support_recruitment_cycle_providers_path(Settings.current_recruitment_cycle_year))
+    expect(page).to have_current_path(support_recruitment_cycle_providers_path(Find::CycleTimetable.current_year))
   end
 
   def then_i_see_first_page_of_feedback_with_pagination

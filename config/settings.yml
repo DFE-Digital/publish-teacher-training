@@ -129,5 +129,7 @@ features:
 cookies:
   session:
     name: _teacher_training_courses_session
+  candidate_session:
+    name: candidate_session
 
 STATE_CHANGE_SLACK_URL: replace_me

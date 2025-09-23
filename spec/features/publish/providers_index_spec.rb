@@ -5,7 +5,7 @@ require "rails_helper"
 feature "Providers index" do
   after { travel_back }
 
-  scenario "view page as Mary - multi provider user" do
+  scenario "view page as Mary - multi provider user", travel: mid_cycle do
     given_we_are_not_in_rollover
     and_there_is_a_multi_provider_organisation
     and_i_am_authenticated_as_a_multi_provider_user
@@ -18,7 +18,7 @@ feature "Providers index" do
     i_should_see_the_provider_list
   end
 
-  scenario "view page as Colin - admin user" do
+  scenario "view page as Colin - admin user", travel: mid_cycle do
     given_we_are_not_in_rollover
     and_i_am_authenticated_as_an_admin_user
     and_there_are_providers
@@ -32,7 +32,7 @@ feature "Providers index" do
     i_should_see_the_change_organisation_link
   end
 
-  scenario "view page as Colin - admin user - during rollover" do
+  scenario "view page as Colin - admin user - during rollover", travel: find_opens do
     given_we_are_in_rollover
     and_there_are_providers
     and_today_is_before_next_cycle_available_for_support_users_date
@@ -87,7 +87,7 @@ feature "Providers index" do
   end
 
   def i_should_see_the_recruitment_cycle_text
-    expect(publish_title_bar_page.recruitment_cycle_text).to have_text("#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current")
+    expect(publish_title_bar_page.recruitment_cycle_text).to have_text("#{Find::CycleTimetable.previous_year} to #{Find::CycleTimetable.current_year} - current")
   end
 
   def and_today_is_before_next_cycle_available_for_support_users_date
@@ -115,7 +115,7 @@ feature "Providers index" do
   end
 
   def when_i_click_on_the_current_cycle_link
-    click_link_or_button "#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current"
+    click_link_or_button "#{Find::CycleTimetable.previous_year} to #{Find::CycleTimetable.current_year} - current"
   end
 
   def i_should_be_on_the_recruitment_cycle_switcher_page
@@ -123,7 +123,7 @@ feature "Providers index" do
   end
 
   def i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
-    expect(page).to have_current_path("/publish/organisations/#{current_user.providers.first.provider_code}/#{Settings.current_recruitment_cycle_year}/courses")
+    expect(page).to have_current_path("/publish/organisations/#{current_user.providers.first.provider_code}/#{Find::CycleTimetable.current_year}/courses")
     expect(page).to have_text "Courses"
   end
 
@@ -132,21 +132,11 @@ feature "Providers index" do
   end
 
   def given_we_are_not_in_rollover
-    create(
-      :recruitment_cycle,
-      :next,
-      available_in_publish_from: 1.week.from_now,
-      available_for_support_users_from: 1.day.from_now,
-    )
+    find_or_create(:recruitment_cycle, :next)
   end
 
   def given_we_are_in_rollover
-    create(
-      :recruitment_cycle,
-      :next,
-      available_in_publish_from: 1.week.from_now,
-      available_for_support_users_from: 1.day.from_now,
-    )
+    create(:recruitment_cycle, :next)
   end
 
   def and_there_is_a_multi_provider_organisation
@@ -168,7 +158,7 @@ feature "Providers index" do
     publish_providers_index_page.search_input.set "Really big school (A01)"
     publish_providers_index_page.search_button.click
     expect(publish_provider_courses_index_page).to be_displayed
-    expect(publish_provider_courses_index_page.current_url).to end_with("A01/#{Settings.current_recruitment_cycle_year}/courses")
+    expect(publish_provider_courses_index_page.current_url).to end_with("A01/#{Find::CycleTimetable.current_year}/courses")
   end
 
   def i_should_see_the_pagination_link
@@ -210,7 +200,7 @@ feature "Providers index" do
   end
 
   def i_should_be_on_the_organisations_list
-    expect(page).to have_current_path("/?recruitment_cycle_year=#{Settings.current_recruitment_cycle_year}")
+    expect(page).to have_current_path("/?recruitment_cycle_year=#{Find::CycleTimetable.current_year}")
     expect(page).to have_text "Organisations"
   end
 

@@ -78,12 +78,12 @@ module Find
     # Cookie management
     #
     def candidate_session
-      cookies.signed["candidate_session"] ||= new_cookie
-      cookies.signed["candidate_session"]
+      cookies.signed[cookie_name] ||= new_cookie
+      cookies.signed[cookie_name]
     end
 
     def reset_candidate_session
-      cookies.signed["candidate_session"] = new_cookie
+      cookies.signed[cookie_name] = new_cookie
     end
 
     def new_cookie
@@ -93,6 +93,10 @@ module Find
         same_site: :lax,
         secure: !Rails.env.in?(%(development test)),
       }
+    end
+
+    def cookie_name
+      Settings.cookies.candidate_session.name
     end
   end
 end

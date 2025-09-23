@@ -15,11 +15,11 @@ describe ViewHelper do
     end
 
     it "returns enrichment error URL for base error" do
-      expect(enrichment_error_url(provider_code: "A1", course:, field: "base", message: "Select if student visas can be sponsored")).to eq("/publish/organisations/A1/#{Settings.current_recruitment_cycle_year}/student-visa")
+      expect(enrichment_error_url(provider_code: "A1", course:, field: "base", message: "Select if student visas can be sponsored")).to eq("/publish/organisations/A1/#{Find::CycleTimetable.current_year}/student-visa")
     end
 
     it "returns the course applications open date url for the error" do
-      expect(enrichment_error_url(provider_code: provider.provider_code, course:, field: "applications_open_from")).to eq("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/applications-open")
+      expect(enrichment_error_url(provider_code: provider.provider_code, course:, field: "applications_open_from")).to eq("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/applications-open")
     end
   end
 

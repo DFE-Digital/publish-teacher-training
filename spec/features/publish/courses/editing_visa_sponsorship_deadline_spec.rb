@@ -2,13 +2,14 @@
 
 require "rails_helper"
 
-feature "Editing visa sponsorship deadlines" do
+feature "Editing visa sponsorship deadlines", travel: mid_cycle do
   before do
     and_i_am_authenticated_as_a_lead_school_provider_user
   end
 
   scenario "adds a deadline to a course without one" do
     given_a_course_exists_that_sponsors_visas_but_without_a_deadline
+    and_today_is_mid_cycle
     when_i_visit_the_basic_details_tab
     and_i_change_my_answer_to_require_visa_deadline("Yes")
     and_i_add_a_date
@@ -68,15 +69,16 @@ private
   end
 
   def and_i_add_a_date
-    @valid_date = Find::CycleTimetable.date(
-      :apply_deadline,
-      accrediting_provider.recruitment_cycle.year.to_i,
-    ) - 1.day
+    @valid_date = Find::CycleTimetable.date(:apply_deadline, accrediting_provider.recruitment_cycle.year.to_i) - 1.day
     fill_in "Year", with: @valid_date.year
     fill_in "Month", with: @valid_date.month
     fill_in "Day", with: @valid_date.day
 
     click_on "Update date"
+  end
+
+  def and_today_is_mid_cycle
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
   end
 
   def then_i_see_the_date_on_the_basic_details_tab

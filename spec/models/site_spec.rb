@@ -29,7 +29,34 @@ describe Site do
     it { is_expected.to validate_presence_of(:postcode) }
   end
 
-  it { expect(subject).to validate_uniqueness_of(:location_name).scoped_to(:provider_id, :site_type).with_message("This school has already been added") }
+  describe "uniqueness validation with discarded records" do
+    let(:existing_site) { create(:site, location_name: "Test School", provider: provider, site_type: "school") }
+
+    before do
+      existing_site.discard!
+    end
+
+    it "allows creating a new site with the same name as a discarded site" do
+      new_site = build(:site, location_name: "Test School", provider: provider, site_type: "school")
+      expect(new_site).to be_valid
+      expect { new_site.save! }.not_to raise_error
+    end
+
+    it "prevents creating duplicate sites when the original is not discarded" do
+      existing_site.undiscard!
+      new_site = build(:site, location_name: "Test School", provider: provider, site_type: "school")
+
+      expect(new_site).not_to be_valid
+      expect(new_site.errors[:location_name]).to include("This school has already been added")
+    end
+
+    context "with different site types" do
+      it "allows same name for different site types even when one is discarded" do
+        study_site = build(:site, :study_site, location_name: "Test School", provider: provider)
+        expect(study_site).to be_valid
+      end
+    end
+  end
 
   it "validates that URN cannot be letters" do
     subject.urn = "XXXXXX"

@@ -5,7 +5,7 @@ module Support
     def index
       @rollover_period = RolloverPeriod.new(current_user:)
 
-      redirect_to support_recruitment_cycle_providers_path(Settings.current_recruitment_cycle_year) unless @rollover_period.active?
+      redirect_to support_recruitment_cycle_providers_path(Find::CycleTimetable.current_year) unless @rollover_period.active?
     end
   end
 end

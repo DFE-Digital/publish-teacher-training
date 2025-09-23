@@ -12,7 +12,7 @@ feature "Opting into notifications" do
     then_neither_radio_button_is_selected
   end
 
-  scenario "user sets notification preferences for the first time" do
+  scenario "user sets notification preferences for the first time", travel: mid_cycle do
     and_i_select_yes
     then_i_should_see_my_preferences_have_been_saved
     and_the_users_preference_is_set

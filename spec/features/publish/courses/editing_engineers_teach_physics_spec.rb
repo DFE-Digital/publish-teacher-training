@@ -102,7 +102,7 @@ private
   end
 
   def when_i_visit_the_edit_course_subject_page
-    publish_courses_subjects_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, course_code: course.course_code)
+    publish_courses_subjects_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Find::CycleTimetable.current_year, course_code: course.course_code)
   end
 
   def when_i_select_a_subject(subject_type)
@@ -126,29 +126,29 @@ private
   end
 
   def then_i_am_met_with_course_details_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/details")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/details")
   end
 
   def then_i_return_to_the_edit_course_subject_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/subjects")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/subjects")
   end
 
   def then_i_return_to_the_edit_engineers_teach_physics_with_languages_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/engineers_teach_physics?#{course_subject_ids}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/engineers_teach_physics?#{course_subject_ids}")
   end
 
   def then_i_am_met_with_the_publish_courses_edit_engineers_teach_physics_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/engineers_teach_physics?#{params_with_subject}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/engineers_teach_physics?#{params_with_subject}")
     expect(page).to have_content("Engineers Teach Physics")
   end
 
   def then_i_am_met_with_the_edit_engineers_teach_physics_with_languages_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/engineers_teach_physics?#{modern_languages_with_form_params}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/engineers_teach_physics?#{modern_languages_with_form_params}")
     expect(page).to have_content("Engineers Teach Physics")
   end
 
   def then_i_am_met_with_the_edit_modern_languages_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/modern-languages?#{modern_languages_subject_ids}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/modern-languages?#{modern_languages_subject_ids}")
     expect(page).to have_content("Languages")
   end
 

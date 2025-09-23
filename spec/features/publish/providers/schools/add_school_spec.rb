@@ -3,7 +3,7 @@
 require "rails_helper"
 require_relative "provider_school_helper"
 
-feature "Adding a provider's schools" do
+feature "Adding a provider's schools", travel: mid_cycle(2026) do
   include ProviderSchoolHelper
   before do
     given_i_am_authenticated_as_a_provider_user
@@ -67,7 +67,7 @@ feature "Adding a provider's schools" do
   end
 
   def then_i_am_on_the_school_search_page
-    expect(page).to have_current_path(search_publish_provider_recruitment_cycle_schools_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_code: provider.provider_code))
+    expect(page).to have_current_path(search_publish_provider_recruitment_cycle_schools_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_code: provider.provider_code))
   end
 
   def when_i_search_with_an_empty_query

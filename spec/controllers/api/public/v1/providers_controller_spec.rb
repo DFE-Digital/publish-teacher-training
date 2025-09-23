@@ -539,7 +539,7 @@ RSpec.describe API::Public::V1::ProvidersController do
             "provider_type" => provider.provider_type,
             "region_code" => provider.region_code,
             "train_with_disability" => provider.train_with_disability,
-            "train_with_us" => provider.train_with_us,
+            "train_with_us" => train_with_us,
             "website" => provider.website,
             "accredited_body" => provider.accredited?,
             "changed_at" => provider.changed_at.iso8601,
@@ -580,6 +580,14 @@ RSpec.describe API::Public::V1::ProvidersController do
 
         it "returns the correct attributes for the provider" do
           expect(json_response["data"]).to include(expected_data)
+        end
+      end
+
+      def train_with_us
+        if provider.recruitment_cycle.after_2025?
+          [provider.about_us.to_s, provider.value_proposition.to_s].compact_blank.join("\r\n\r\n")
+        else
+          provider.train_with_us
         end
       end
     end

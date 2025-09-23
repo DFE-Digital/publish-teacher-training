@@ -6,7 +6,8 @@ RSpec.describe "Course preview", service: :publish do
   include Rails.application.routes.url_helpers
 
   before do
-    Current.recruitment_cycle = find_or_create(:recruitment_cycle, year: 2026)
+    allow(FeatureFlag).to receive(:active?)
+    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
   end
 
   scenario "Adding missing Where you will train from course preview" do
@@ -49,7 +50,7 @@ private
   end
 
   def then_i_am_redirected_back_to_the_preview_page
-    expect(page).to have_current_path("/publish/organisations/#{@provider.provider_code}/2026/courses/#{@course.course_code}/preview")
+    expect(page).to have_current_path("/publish/organisations/#{@provider.provider_code}/#{@recruitment_cycle.year}/courses/#{@course.course_code}/preview")
   end
 
   def and_i_see_the_where_you_will_train_content
