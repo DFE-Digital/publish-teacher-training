@@ -91,10 +91,16 @@
 <div class="govuk-grid-row govuk-!-margin-top-6">
   <div class="govuk-grid-column-full">
     <%= govuk_accordion(html_attributes: { class: "accordion-without-controls" }) do |accordion| %>
-      <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.tda.title"), class: "govuk-heading-m")) do %>
-        <p class="govuk-body"><%= t("find.search.tda.degree") %></p>
-        <p class="govuk-body"><%= govuk_link_to(t("find.search.tda.browse_tda_courses"), find_results_path({ minimum_degree_required: "no_degree_required", utm_source: "home", utm_medium: "teacher_degree_apprenticeship_courses", applications_open: true })) %></p>
-        <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.tda.teacher_degree_apprenticeships"), t("find.get_into_teaching.url_tda")) %>.</p>
+      <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.apprenticeships.title"), class: "govuk-heading-m")) do %>
+        <p class="govuk-body"><%= t("find.search.apprenticeships.description") %></p>
+        <p class="govuk-body"><%= t("find.search.apprenticeships.degree_html",
+          pgta_link: govuk_link_to(t("find.search.apprenticeships.pgta_link_text"),
+                               t("find.get_into_teaching.url_pgta"))) %></p>
+        <p class="govuk-body"><%= t("find.search.apprenticeships.no_degree_html",
+          tda_link: govuk_link_to(t("find.search.apprenticeships.tda_link_text"),
+                               t("find.get_into_teaching.url_tda"))) %></p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.apprenticeships.browse_apprenticeships_courses"), find_results_path({ minimum_degree_required: "show_all_courses", funding: "apprenticeship", utm_source: "home", utm_medium: "all_apprenticeship_courses", applications_open: true })) %></p>
+        <p class="govuk-body"><%= t("find.search.apprenticeships.find_the_right_apprenticeship") %></p>
       <% end %>
 
       <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.send.title"), class: "govuk-heading-m")) do %>

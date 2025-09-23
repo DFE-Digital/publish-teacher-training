@@ -223,7 +223,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
 
   def when_i_browse_teacher_degree_apprenticeship_courses
     and_all_accordions_are_open
-    click_link_or_button "Browse teacher degree apprenticeship courses."
+    click_link_or_button "Browse all apprenticeship courses."
   end
 
   def then_one_search_result_is_tracked_from_teacher_degree_apprenticeship_link

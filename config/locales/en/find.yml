@@ -81,10 +81,15 @@ en:
       get_help_and_support_html: |
         If you're thinking about teaching or are ready to apply, %{link} for free support.
       learn_about: Learn about
-      tda:
-        title: Teacher degree apprenticeships (TDA)
-        degree: Teach primary or secondary if you do not have a degree and are not studying for one.
-        browse_tda_courses: Browse teacher degree apprenticeship courses.
+      apprenticeships:
+        title: Apprenticeships
+        description: You can train to teach on an undergraduate or postgraduate apprenticeship. 
+        degree_html: If you have a degree or are studying for one you may be eligible for a %{pgta_link}
+        pgta_link_text: postgraduate teaching apprenticeship (PGTA).
+        no_degree_html: If you do not have a degree and are not studying for one you may be eligible for a %{tda_link}
+        tda_link_text: teacher degree apprenticeship (TDA).  
+        browse_apprenticeships_courses: Browse all apprenticeship courses.
+        find_the_right_apprenticeship: In order to find the right apprenticeship for you, you can filter courses by whether or not you have a degree. 
         teacher_degree_apprenticeships: teacher degree apprenticeships
       send:
         title: Special educational needs and disabilities (SEND)
@@ -153,6 +158,7 @@ en:
       train_to_be_a_teacher: Find out about the different ways to train to be a teacher (opens in a new tab)
       url_train_to_be_a_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher
       url_tda: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships
+      url_pgta: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/postgraduate-teaching-apprenticeships
       further_ed: https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/further-education-teachers
       early_years: https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/early-years-teachers
       url_engineers_teach_physics: https://getintoteaching.education.gov.uk/subjects/engineers-teach-physics
