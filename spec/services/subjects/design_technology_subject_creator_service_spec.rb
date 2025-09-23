@@ -5,11 +5,13 @@ require "rails_helper"
 describe Subjects::DesignTechnologySubjectCreatorService do
   let(:subject_area_spy) { spy }
   let(:design_technology_model) { spy }
+  let(:subjects_cache) { spy }
 
   let(:service) do
     described_class.new(
       subject_area: subject_area_spy,
       design_technology_subject: design_technology_model,
+      subjects_cache: subjects_cache,
     )
   end
 
@@ -22,5 +24,11 @@ describe Subjects::DesignTechnologySubjectCreatorService do
     expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Food technology", subject_code: "DTF")
     expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Product technology", subject_code: "DTP")
     expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Textiles", subject_code: "DTT")
+  end
+
+  it "expires the subjects cache after creating new subjects" do
+    service.execute
+
+    expect(subjects_cache).to have_received(:expire_cache)
   end
 end

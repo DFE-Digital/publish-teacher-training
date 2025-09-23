@@ -2,9 +2,10 @@
 
 module Subjects
   class DesignTechnologySubjectCreatorService
-    def initialize(subject_area: SubjectArea, design_technology_subject: DesignTechnologySubject)
+    def initialize(subject_area: SubjectArea, design_technology_subject: DesignTechnologySubject, subjects_cache: SubjectsCache.new)
       @subject_area = subject_area
       @design_technology_subject = design_technology_subject
+      @subjects_cache = subjects_cache
     end
 
     def execute
@@ -27,6 +28,8 @@ module Subjects
           subject_code: subject[:subject_code],
         )
       end
+
+      @subjects_cache.expire_cache
     end
   end
 end

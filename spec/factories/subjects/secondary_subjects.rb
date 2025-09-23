@@ -217,5 +217,30 @@ FactoryBot.define do
       subject_name { "Spanish" }
       subject_code { subjects["Spanish"] }
     end
+
+    trait :electronics do
+      subject_name { "Electronics" }
+      subject_code { "DTE" }
+    end
+
+    trait :engineering do
+      subject_name { "Engineering" }
+      subject_code { "DTEN" }
+    end
+
+    trait :food_technology do
+      subject_name { "Food technology" }
+      subject_code { "DTF" }
+    end
+
+    trait :product_technology do
+      subject_name { "Product technology" }
+      subject_code { "DTP" }
+    end
+
+    trait :textiles do
+      subject_name { "Textiles" }
+      subject_code { "DTT" }
+    end
   end
 end

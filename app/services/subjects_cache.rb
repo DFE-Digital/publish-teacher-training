@@ -36,4 +36,10 @@ class SubjectsCache
       end
     end
   end
+
+  def expire_cache
+    %w[subjects:primary subjects:secondary subjects:all].each do |key|
+      Rails.cache.delete(key)
+    end
+  end
 end
