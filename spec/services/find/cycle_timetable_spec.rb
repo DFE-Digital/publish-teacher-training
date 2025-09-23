@@ -48,7 +48,7 @@ module Find
       end
 
       it "returns 2026 for a time just before find opens 2027" do
-        time = Time.zone.local(2026, 9, 29, 8, 59, 58)
+        time = Find::CycleTimetable::LONDON.local(2026, 9, 29, 8, 59, 58)
         expect(described_class.cycle_year_for_time(time)).to eq(2026)
       end
 
@@ -85,16 +85,16 @@ module Find
     describe ".find_opens(year)" do
       context "when no argument is passed" do
         it "returns find_opens date for 2021" do
-          Timecop.travel(Time.zone.local(2021, 1, 1, 12, 0, 0)) do
-            expect(described_class.find_opens).to eq(Time.zone.local(2020, 10, 6, 9))
+          Timecop.travel(Find::CycleTimetable::LONDON.local(2021, 1, 1, 12, 0, 0)) do
+            expect(described_class.find_opens).to eq(Find::CycleTimetable::LONDON.local(2020, 10, 6, 9))
           end
         end
       end
 
       context "when passing 2024 as argument" do
         it "returns find_opens date for 2024" do
-          Timecop.travel(Time.zone.local(2021, 11, 1, 12, 0, 0)) do
-            expect(described_class.find_opens(2024)).to eq(Time.zone.local(2023, 10, 3, 9))
+          Timecop.travel(Find::CycleTimetable::LONDON.local(2021, 11, 1, 12, 0, 0)) do
+            expect(described_class.find_opens(2024)).to eq(Find::CycleTimetable::LONDON.local(2023, 10, 3, 9))
           end
         end
       end
@@ -102,13 +102,13 @@ module Find
 
     describe ".preview_mode?" do
       it "returns true when it is after the Apply deadline but before Find closes" do
-        Timecop.travel(Time.zone.local(2021, 9, 21, 19, 0, 0)) do
+        Timecop.travel(Find::CycleTimetable::LONDON.local(2021, 9, 21, 19, 0, 0)) do
           expect(described_class.preview_mode?).to be true
         end
       end
 
       it "returns false before the Apply deadline" do
-        Timecop.travel(Time.zone.local(2021, 9, 21, 17, 0, 0)) do
+        Timecop.travel(Find::CycleTimetable::LONDON.local(2021, 9, 21, 17, 0, 0)) do
           expect(described_class.preview_mode?).to be false
         end
       end
@@ -195,7 +195,7 @@ module Find
       end
 
       it "returns false before the apply_deadline" do
-        Timecop.travel(Time.zone.local(2021, 9, 21, 17, 0, 0)) do
+        Timecop.travel(Find::CycleTimetable::LONDON.local(2021, 9, 21, 17, 0, 0)) do
           expect(described_class.show_cycle_closed_banner?).to be false
         end
       end
