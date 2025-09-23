@@ -187,4 +187,14 @@ describe SubjectsCache do
       )
     end
   end
+
+  describe "#expire cache" do
+    it "deletes the relevant cache keys" do
+      expect(Rails.cache).to receive(:delete).with("subjects:primary")
+      expect(Rails.cache).to receive(:delete).with("subjects:secondary")
+      expect(Rails.cache).to receive(:delete).with("subjects:all")
+
+      cache.expire_cache
+    end
+  end
 end
