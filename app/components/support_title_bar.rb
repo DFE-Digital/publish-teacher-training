@@ -58,4 +58,12 @@ private
   def support_index_page
     request.path == "/support"
   end
+
+  def support_candidates_page
+    request.path == "/support/candidates"
+  end
+
+  def support_users_page
+    request.path == "/support/#{recruitment_cycle_year}/users"
+  end
 end
