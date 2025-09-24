@@ -9,61 +9,63 @@
   <% end %>
 <% end %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      <span class="govuk-caption-xl" data-qa="course__provider_name">
-        <%= smart_quotes(@course.provider.provider_name) %>
-      </span>
-      <%= @course.name_and_code %>
-    </h1>
+<%= cache("course-#{@course.id}-#{@course.changed_at.to_i}") do %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        <span class="govuk-caption-xl" data-qa="course__provider_name">
+          <%= smart_quotes(@course.provider.provider_name) %>
+        </span>
+        <%= @course.name_and_code %>
+      </h1>
+    </div>
   </div>
-</div>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <% if @course.application_status_closed? %>
-      <%= render partial: "find/courses/course_closed" %>
-    <% end %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <% if @course.application_status_closed? %>
+        <%= render partial: "find/courses/course_closed" %>
+      <% end %>
 
-    <% if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
-      <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        <div class="<%= @apply_action_column_class %>">
-          <%= render Find::Courses::ApplyComponent::View.new(
-                @course,
-                preview: preview?(params),
-                utm_content: "apply_course_button_top",
-              ) %>
-        </div>
-
-        <% if FeatureFlag.active?(:candidate_accounts) %>
-          <div class="govuk-grid-column-two-thirds-from-desktop">
-            <%= render "find/saved_courses/save_toggle" %>
+      <% if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+        <div class="govuk-grid-row govuk-!-margin-bottom-6">
+          <div class="<%= @apply_action_column_class %>">
+            <%= render Find::Courses::ApplyComponent::View.new(
+                  @course,
+                  preview: preview?(params),
+                  utm_content: "apply_course_button_top",
+                ) %>
           </div>
-        <% end %>
-      </div>
-    <% end %>
 
-    <%= render Find::Courses::SummaryComponent::View.new(@course) %>
+          <% if FeatureFlag.active?(:candidate_accounts) %>
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+              <%= render "find/saved_courses/save_toggle" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
 
-    <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
+      <%= render Find::Courses::SummaryComponent::View.new(@course) %>
 
-    <% if @course.version&.to_i == 2 %>
-      <%= render partial: "find/courses/v2/components", locals: { course: @course } %>
-    <% else %>
-      <%= render partial: "find/courses/v1_components", locals: { course: @course } %>
-    <% end %>
+      <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
-    <% if @course.teacher_degree_apprenticeship? %>
-      <%= render partial: "find/courses/tda_advice" %>
-    <% else %>
-      <%= render partial: "find/courses/advice", locals: { course: @course } %>
-    <% end %>
+      <% if @course.version&.to_i == 2 %>
+        <%= render partial: "find/courses/v2/components", locals: { course: @course } %>
+      <% else %>
+        <%= render partial: "find/courses/v1_components", locals: { course: @course } %>
+      <% end %>
 
-    <% if @course.application_status_closed? %>
-      <%= render partial: "find/courses/course_closed" %>
-    <% end %>
+      <% if @course.teacher_degree_apprenticeship? %>
+        <%= render partial: "find/courses/tda_advice" %>
+      <% else %>
+        <%= render partial: "find/courses/advice", locals: { course: @course } %>
+      <% end %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <% if @course.application_status_closed? %>
+        <%= render partial: "find/courses/course_closed" %>
+      <% end %>
+
+      <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    </div>
   </div>
-</div>
+<% end %>
