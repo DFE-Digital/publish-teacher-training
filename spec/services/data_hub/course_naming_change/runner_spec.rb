@@ -80,9 +80,7 @@ RSpec.describe DataHub::CourseNamingChange::Runner do
       let(:dry_run) { false }
 
       it "updates all matching courses in a transaction" do
-        report = nil
-
-        expect { report = runner.call }.to change(summary_scope, :count).by(1)
+        expect { runner.call }.to change(summary_scope, :count).by(1)
 
         expect(course_a.reload.name).to eq("Renamed course")
         expect(course_b.reload.name).to eq("Renamed course")
