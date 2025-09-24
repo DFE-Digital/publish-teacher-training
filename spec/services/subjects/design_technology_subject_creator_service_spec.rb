@@ -22,7 +22,7 @@ describe Subjects::DesignTechnologySubjectCreatorService do
     expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Electronics", subject_code: "DTE")
     expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Engineering", subject_code: "DTEN")
     expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Food technology", subject_code: "DTF")
-    expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Product technology", subject_code: "DTP")
+    expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Product design", subject_code: "DTP")
     expect(design_technology_model).to have_received(:find_or_create_by!).with(subject_name: "Textiles", subject_code: "DTT")
   end
 

@@ -234,7 +234,7 @@ FactoryBot.define do
     end
 
     trait :product_technology do
-      subject_name { "Product technology" }
+      subject_name { "Product design" }
       subject_code { "DTP" }
     end
 
