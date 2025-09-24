@@ -104,7 +104,11 @@ module Find
 
     def set_course
       @course = provider.courses.includes(
-        :enrichments,
+        :latest_enrichment,
+        :latest_published_enrichment,
+        :accrediting_provider,
+        :study_sites,
+        provider: [:recruitment_cycle],
         subjects: [:financial_incentive],
         site_statuses: [:site],
       ).find_by!(course_code: params[:course_code]&.upcase).decorate
