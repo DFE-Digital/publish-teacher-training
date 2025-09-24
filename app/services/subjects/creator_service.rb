@@ -80,7 +80,7 @@ module Subjects
         { subject_name: "Electronics", subject_code: "DTE" },
         { subject_name: "Engineering", subject_code: "DTEN" },
         { subject_name: "Food technology", subject_code: "DTF" },
-        { subject_name: "Product technology", subject_code: "DTP" },
+        { subject_name: "Product design", subject_code: "DTP" },
         { subject_name: "Textiles", subject_code: "DTT" },
       ]
 

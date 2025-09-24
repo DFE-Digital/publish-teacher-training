@@ -21,12 +21,6 @@ feature "selecting Design and technology specialisms" do
     then_i_am_met_with_the_modern_languages_page
   end
 
-  scenario "invalid entries" do
-    when_i_visit_the_new_course_design_technology_page
-    and_i_click_continue
-    then_i_am_met_with_errors
-  end
-
 private
 
   def given_i_am_authenticated_as_a_provider_user
@@ -103,10 +97,5 @@ private
     else
       raise "Unknown subject key: #{subject_key}"
     end
-  end
-
-  def then_i_am_met_with_errors
-    expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Select at least one specialism")
   end
 end

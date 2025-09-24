@@ -370,7 +370,6 @@ class Course < ApplicationRecord
   validate :validate_applications_open_from, on: %i[publish update new], if: -> { provider.present? }
   validate :validate_modern_languages
   validate :validate_has_languages, if: :has_the_modern_languages_secondary_subject_type?
-  validate :validate_has_design_technology_subjects, if: :has_the_design_technology_secondary_subject_type?
   validate :validate_subject_count
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
