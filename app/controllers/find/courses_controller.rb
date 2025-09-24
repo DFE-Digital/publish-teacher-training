@@ -18,6 +18,8 @@ module Find
       @saved_course = @candidate&.saved_courses&.find_by(course_id: @course.id)
 
       render_not_found unless @course.is_published?
+
+      @apply_action_column_class = apply_action_column_class
     end
 
     def confirm_apply; end
@@ -89,6 +91,16 @@ module Find
     end
 
   private
+
+    def apply_action_column_class
+      if FeatureFlag.active?(:candidate_accounts) && CycleTimetable.apply_deadline_passed
+        "govuk-grid-column-full"
+      elsif FeatureFlag.active?(:candidate_accounts) && !CycleTimetable.apply_deadline_passed
+        "govuk-grid-column-one-third-from-desktop"
+      else
+        "govuk-grid-column-one-half"
+      end
+    end
 
     def set_course
       @course = provider.courses.includes(

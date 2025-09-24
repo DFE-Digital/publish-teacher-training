@@ -28,7 +28,7 @@
 
     <% if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
       <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        <div class="<%= FeatureFlag.active?(:candidate_accounts) ? "govuk-grid-column-one-third-from-desktop" : "govuk-grid-column-one-half" %>">
+        <div class="<%= @apply_action_column_class %>">
           <%= render Find::Courses::ApplyComponent::View.new(
                 @course,
                 preview: preview?(params),
