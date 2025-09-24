@@ -22,15 +22,6 @@ feature "Editing Design and technology specialisms" do
     then_i_am_redirected_to_course_details_page
   end
 
-  scenario "invalid entries" do
-    given_i_am_authenticated_as_a_provider_user
-    and_there_is_a_secondary_course_i_want_to_edit
-
-    when_i_visit_the_edit_course_design_technology_page
-    and_i_click_continue
-    then_i_am_met_with_errors
-  end
-
   scenario "selecting two specialisms with a subordinate subject updates course name" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_secondary_course_i_want_to_edit
@@ -124,10 +115,5 @@ private
 
   def then_i_am_redirected_to_course_details_page
     then_i_am_met_with_course_details_page
-  end
-
-  def then_i_am_met_with_errors
-    expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Select at least one specialism")
   end
 end

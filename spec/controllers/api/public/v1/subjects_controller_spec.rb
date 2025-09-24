@@ -593,7 +593,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             "id" => "49",
             "type" => "subjects",
             "attributes" => {
-              "name" => "Product technology",
+              "name" => "Product design",
               "code" => "DTP",
               "bursary_amount" => nil,
               "early_career_payments" => nil,
@@ -684,7 +684,7 @@ RSpec.describe API::Public::V1::SubjectsController do
           "Primary with modern languages",
           "Primary with physical education",
           "Primary with science",
-          "Product technology",
+          "Product design",
           "Psychology",
           "Religious education",
           "Russian",
