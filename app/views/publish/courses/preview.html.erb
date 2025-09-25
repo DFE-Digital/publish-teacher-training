@@ -1,7 +1,7 @@
 <% content_for :page_title, "Preview: #{course.name_and_code} with #{@provider.provider_name}" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_courses_path(@course.provider_code, @course.recruitment_cycle.year)) %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle.year, @course.course_code)) %>
 <% end %>
 
 <%= govuk_notification_banner(title_text: t("notification_banner.info")) do |notification_banner| %>
