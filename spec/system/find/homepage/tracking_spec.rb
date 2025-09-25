@@ -38,10 +38,11 @@ RSpec.describe "Search results tracking", :js, service: :find do
     and_i_am_on_the_results_page
   end
 
-  scenario "when browse teacher degree apprenticeship courses" do
-    when_i_browse_teacher_degree_apprenticeship_courses
-    then_one_search_result_is_tracked_from_teacher_degree_apprenticeship_link
+  scenario "when browse apprenticeship courses" do
+    when_i_browse_all_apprenticeship_courses
+    then_one_search_result_is_tracked_from_browse_all_apprenticeship_courses_link
     and_i_am_on_the_results_page
+    then_i_see_only_apprenticeship_courses
   end
 
   scenario "when browse SEND primary courses" do
@@ -82,6 +83,15 @@ RSpec.describe "Search results tracking", :js, service: :find do
       course_code: "TDA1",
       provider: build(:provider, provider_name: "Bristol university", provider_code: "23T"),
       degree_grade: "not_required",
+    )
+    create(
+      :course,
+      :with_full_time_sites,
+      :open,
+      name: "PGTA History",
+      course_code: "PGTA1",
+      provider: build(:provider, provider_name: "Exeter university", provider_code: "EX1"),
+      funding: "apprenticeship",
     )
     create(
       :course,
@@ -139,7 +149,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
     wait_for do
       expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
         hash_including(
-          total: 6,
+          total: 7,
           page: 1,
           search_params: hash_including(applications_open: true),
           track_params: hash_including(utm_source: "home", utm_medium: "main_search"),
@@ -148,6 +158,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
             have_attributes(course_code: "2DTK", provider_code: "19S"),
             have_attributes(course_code: "F3D", provider_code: "JL1"),
             have_attributes(course_code: "TDA1", provider_code: "23T"),
+            have_attributes(course_code: "PGTA1", provider_code: "EX1"),
             have_attributes(course_code: "Y565", provider_code: "1UR"),
             have_attributes(course_code: "P123", provider_code: "PO1"),
           ),
@@ -221,24 +232,33 @@ RSpec.describe "Search results tracking", :js, service: :find do
     page.all(".govuk-accordion__section-button").map(&:click)
   end
 
-  def when_i_browse_teacher_degree_apprenticeship_courses
+  def when_i_browse_all_apprenticeship_courses
     and_all_accordions_are_open
     click_link_or_button "Browse all apprenticeship courses."
   end
 
-  def then_one_search_result_is_tracked_from_teacher_degree_apprenticeship_link
+  def then_one_search_result_is_tracked_from_browse_all_apprenticeship_courses_link
     wait_for do
       expect(Find::Analytics::SearchResultsEvent).to have_received(:new).with(
         hash_including(
           total: 1,
           page: 1,
-          search_params: hash_including(applications_open: true, minimum_degree_required: "no_degree_required"),
-          track_params: hash_including(utm_source: "home", utm_medium: "teacher_degree_apprenticeship_courses"),
+          search_params: hash_including(applications_open: true, minimum_degree_required: "show_all_courses", funding: "apprenticeship"),
+          track_params: hash_including(utm_source: "home", utm_medium: "all_apprenticeship_courses"),
           results: array_including(
             have_attributes(course_code: "TDA1", provider_code: "23T"),
           ),
         ),
       )
+    end
+  end
+
+  def then_i_see_only_apprenticeship_courses
+    within(".app-filter-layout__content") do
+      expect(page).to have_content("Mathematics")
+      expect(page).to have_content("PGTA History")
+      expect(page).not_to have_content("Biology")
+      expect(page).not_to have_content("Further Education")
     end
   end
 
