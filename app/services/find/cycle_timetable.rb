@@ -87,6 +87,14 @@ module Find
 
       raise "NoRecruitmentCycleExists: time #{time.to_fs(:db)}"
     end
+
+    # Return the cycle year of last cycle if it's less than 30 days ago
+    # Otherwise return nil
+    #
+    # @returns [year|nil]
+    def self.years_available_to_support
+      last_year = cycle_year_for_time(30.days.ago)
+      last_year if current_year != last_year
     end
 
     def self.next_year
@@ -193,16 +201,6 @@ module Find
 
     def self.real_schedule_for(year = current_year)
       CYCLE_DATES[year]
-    end
-
-    def self.fake_point_in_recruitment_cycle
-      %i[
-        today_is_mid_cycle
-        today_is_after_apply_deadline_passed
-        today_is_after_find_closes
-        today_is_after_find_opens
-        today_is_after_apply_opens
-      ]
     end
 
     private_class_method :last_recruitment_cycle_year?
