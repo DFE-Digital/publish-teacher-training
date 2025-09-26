@@ -1,0 +1,12 @@
+<ul class="govuk-list govuk-list--spaced">
+  <% @rollover_period.recruitment_cycles.each do |recruitment_cycle| %>
+    <% if recruitment_cycle.providers.exists?(provider_code: @provider.provider_code) %>
+      <li>
+        <%= govuk_link_to(
+            "#{recruitment_cycle.year_range}#{' - current' if recruitment_cycle.year.to_i == Find::CycleTimetable.current_year}",
+          publish_provider_recruitment_cycle_path(@provider.provider_code, recruitment_cycle.year),
+          ) %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

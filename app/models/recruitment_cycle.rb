@@ -34,12 +34,38 @@ class RecruitmentCycle < ApplicationRecord
     where(year: Find::CycleTimetable.current_year).or(upcoming_cycles_open_to_publish)
   end
 
+  # Old cycle closes for providers the moment the new cycle starts
   scope :upcoming_cycles_open_to_publish, lambda {
-    where("? BETWEEN available_in_publish_from AND application_start_date", Date.current)
+    where(":now >= available_in_publish_from AND year > :current_year",
+          now: Date.current,
+          current_year: Find::CycleTimetable.current_year)
   }
 
-  scope :upcoming_cycles_open_to_support, lambda {
-    where("? BETWEEN available_for_support_users_from AND application_start_date", Date.current)
+  # All cycles available to support at a given time
+  #
+  # - Current cycle always available and returned
+  # - Next/new cycle is available after 'available_for_support_users_from'
+  # - Last cycle is available if it ended fewer than 30 days ago
+  #
+  scope :cycles_open_to_support, lambda {
+    where(
+      "year in (:current_and_next_year) AND :now >= available_for_support_users_from",
+      current_and_next_year: [Find::CycleTimetable.current_year, Find::CycleTimetable.next_year],
+      now: Date.current,
+    ).or(
+      where(year: Find::CycleTimetable.years_available_to_support),
+    )
+  }
+
+  # Same as .cycles_open_to_support except it excludes the current cycle
+  scope :rollover_cycles_open_to_support, lambda {
+    where(
+      "year = :next_year AND :now >= available_for_support_users_from",
+      next_year: Find::CycleTimetable.next_year,
+      now: Date.current,
+    ).or(
+      where(year: Find::CycleTimetable.years_available_to_support),
+    )
   }
 
   def previous
@@ -106,7 +132,7 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def rollover_end
-    application_start_date + 1.month
+    30.days.after(Find::CycleTimetable.find_opens(year))
   end
 
   # TODO: remove once the 2022 rollover is complete

@@ -48,7 +48,7 @@ RSpec.describe "Publish - Providers - Added Schools page", service: :publish, ty
     )
   end
 
-  context "when the 2026 cycle has not yet started", travel: find_closes(2025) do
+  context "when the 2026 cycle has not yet started", travel: 1.hour.before(find_closes(2025)) do
     let!(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
 
     before do

@@ -48,7 +48,7 @@ RSpec.describe "Publish - Providers - Removed Schools page", service: :publish, 
     )
   end
 
-  context "when rollover period has not yet finished", travel: Find::CycleTimetable.find_closes(2025) do
+  context "when rollover period has not yet finished", travel: 1.hour.before(find_closes(2025)) do
     let!(:recruitment_cycle) do
       find_or_create(:recruitment_cycle, year: 2026)
     end

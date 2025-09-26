@@ -9,7 +9,7 @@ en:
       today_is_after_apply_deadline_passed:
         name: Apply deadline has passed
         description: Candidates can no longer submit any subsequent applications
-      today_is_after_find_closes:
+      now_is_before_find_opens:
         name: Find has closed
         description: Candidates can no longer browse courses on Find
       today_is_after_find_opens:

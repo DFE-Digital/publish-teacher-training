@@ -7,11 +7,11 @@ RSpec.describe Publish::SchoolsChangedBannerComponent, type: :component do
   end
 
   let(:recruitment_cycle) do
-    create(:recruitment_cycle, year: 2026, application_start_date: 2.months.from_now)
+    find_or_create(:recruitment_cycle, year: 2026)
   end
   let(:provider) { create(:provider, provider_code: "ABC", recruitment_cycle:) }
 
-  context "when both added and removed schools" do
+  context "when both added and removed schools", travel: 2.months.before(apply_opens(2026)) do
     before do
       create_list(:site, 2, provider:, added_via: :register_import)
       create_list(:site, 3, provider:, discarded_via_script: true)
@@ -70,13 +70,15 @@ RSpec.describe Publish::SchoolsChangedBannerComponent, type: :component do
     end
   end
 
-  context "once the cycle has started" do
-    let(:application_start_date) { 1.month.ago }
-    let(:recruitment_cycle) { create(:recruitment_cycle, year: 2026, application_start_date:) }
+  context "when the rollover period has ended", travel: 1.day.before(find_closes(2025)) do
+    let(:recruitment_cycle) { create(:recruitment_cycle, year: 2026) }
 
     it "does not render the banner" do
-      expect(render_inline(described_class.new(provider:)))
-        .not_to have_css(".govuk-notification-banner")
+      Timecop.travel(1.day.after(recruitment_cycle.rollover_end)) do
+        component = render_inline(described_class.new(provider:))
+        expect(component)
+          .not_to have_css(".govuk-notification-banner")
+      end
     end
   end
 

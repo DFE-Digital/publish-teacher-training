@@ -18,15 +18,15 @@ module RecruitmentCycleHelper
   end
 
   def hint_text_for_mid_cycle
-    "#{I18n.t('find.cycles.today_is_mid_cycle.description')} (#{Find::CycleTimetable.find_opens.to_fs(:govuk_date)} to #{Find::CycleTimetable.apply_deadline.to_fs(:govuk_date)})"
+    "#{I18n.t('find.cycles.today_is_mid_cycle.description')} (#{Find::CycleTimetable.find_opens.to_fs(:govuk_date_and_time)} to #{Find::CycleTimetable.apply_deadline.to_fs(:govuk_date)})"
   end
 
   def hint_text_for_after_apply_deadline_passed
     "#{I18n.t('find.cycles.today_is_after_apply_deadline_passed.description')} (#{Find::CycleTimetable.apply_deadline.to_fs(:govuk_date)} to #{Find::CycleTimetable.find_closes.to_fs(:govuk_date)})"
   end
 
-  def hint_text_for_today_is_after_find_closes
-    "#{I18n.t('find.cycles.today_is_after_find_closes.description')} (#{Find::CycleTimetable.find_closes.to_fs(:govuk_date)} to #{Find::CycleTimetable.find_reopens.to_fs(:govuk_date)})"
+  def hint_text_for_now_is_before_find_opens
+    "#{I18n.t('find.cycles.now_is_before_find_opens.description')} (#{Find::CycleTimetable.find_closes(Find::CycleTimetable.current_year).to_fs(:govuk_date_and_time)} to #{Find::CycleTimetable.find_opens(Find::CycleTimetable.next_year).to_fs(:govuk_date_and_time)})"
   end
 
   def hint_text_for_today_is_after_find_opens

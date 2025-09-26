@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Publish - Schools: 'Newly added' tag for register import sites", service: :publish, travel: find_closes(2025) do
+RSpec.describe "Publish - Schools: 'Newly added' tag for register import sites", service: :publish, travel: 1.hour.before(find_closes(2025)) do
   include DfESignInUserHelper
 
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }

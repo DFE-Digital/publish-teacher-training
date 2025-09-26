@@ -35,7 +35,7 @@ describe "Publish::ProvidersController" do
       end
     end
 
-    context "when the user is authenticated during rollover period", travel: find_closes do
+    context "when the user is authenticated during rollover period", travel: 1.hour.before(find_closes) do
       it "renders the cycle selector" do
         find_or_create(:recruitment_cycle, :next)
         login_user(user)

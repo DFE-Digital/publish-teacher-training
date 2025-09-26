@@ -11,7 +11,7 @@ module Find
         first_deadline_banner: LONDON.local(2021, 7, 12, 9),
         apply_1_deadline: LONDON.local(2021, 9, 7, 18),
         apply_deadline: LONDON.local(2021, 9, 21, 18),
-        find_closes: LONDON.local(2021, 10, 4, 23, 59, 59),
+        find_closes: LONDON.local(2021, 10, 4).end_of_day,
       },
       2022 => {
         find_opens: LONDON.local(2021, 10, 5, 9),
@@ -19,44 +19,43 @@ module Find
         first_deadline_banner: LONDON.local(2022, 8, 2, 9),
         apply_1_deadline: LONDON.local(2022, 9, 6, 18),
         apply_deadline: LONDON.local(2022, 9, 20, 18),
-        find_closes: LONDON.local(2022, 10, 3, 23, 59, 59),
+        find_closes: LONDON.local(2022, 10, 3).end_of_day,
       },
       2023 => {
         find_opens: LONDON.local(2022, 10, 4, 9),
         apply_opens: LONDON.local(2022, 10, 11, 9),
-
         first_deadline_banner: LONDON.local(2023, 8, 1, 9), # 5 weeks before Apply 1 deadline
         apply_1_deadline: LONDON.local(2023, 9, 5, 18), # First Tuesday of September
         apply_deadline: LONDON.local(2023, 9, 19, 18), # 2 weeks after Apply 1 deadline
-        find_closes: LONDON.local(2023, 10, 2, 23, 59, 59), # The evening before Find opens in the new cycle
+        find_closes: LONDON.local(2023, 10, 2).end_of_day, # The evening before Find opens in the new cycle
       },
       2024 => {
         find_opens: LONDON.local(2023, 10, 3, 9), # First Tuesday of October
         apply_opens: LONDON.local(2023, 10, 10, 9), # Second Tuesday of October
         first_deadline_banner: LONDON.local(2024, 7, 30, 9),
         apply_deadline: LONDON.local(2024, 9, 17, 18),
-        find_closes: LONDON.local(2024, 9, 30, 23, 59, 59), # The evening before Find opens in the new cycle
+        find_closes: LONDON.local(2024, 9, 30).end_of_day, # The evening before Find opens in the new cycle
       },
       2025 => {
         find_opens: LONDON.local(2024, 10, 1, 9), # CONFIRMED
         apply_opens: LONDON.local(2024, 10, 8, 9), # CONFIRMED
         first_deadline_banner: LONDON.local(2025, 7, 12, 9), # TBC
         apply_deadline: LONDON.local(2025, 9, 16, 18), # CONFIRMED
-        find_closes: LONDON.local(2025, 9, 29, 23, 59, 59), # CONFIRMED
+        find_closes: LONDON.local(2025, 9, 29).end_of_day, # CONFIRMED
       },
       2026 => {
         find_opens: LONDON.local(2025, 9, 30, 9), # CONFIRMED
         apply_opens: LONDON.local(2025, 10, 7, 9), # CONFIRMED
         first_deadline_banner: LONDON.local(2026, 7, 12, 9), # TBC
         apply_deadline: LONDON.local(2026, 9, 15, 18), # CONFIRMED
-        find_closes: LONDON.local(2026, 9, 28, 23, 59, 59), # CONFIRMED
+        find_closes: LONDON.local(2026, 9, 28).end_of_day, # CONFIRMED
       },
       2027 => {
         find_opens: LONDON.local(2026, 9, 29, 9), # CONFIRMED
         apply_opens: LONDON.local(2026, 10, 6, 9), # CONFIRMED
         first_deadline_banner: LONDON.local(2027, 7, 12, 9), # TBC
         apply_deadline: LONDON.local(2027, 9, 21, 18), # CONFIRMED
-        find_closes: LONDON.local(2027, 10, 4, 23, 59, 59), # CONFIRMED
+        find_closes: LONDON.local(2027, 10, 4).end_of_day, # CONFIRMED
       },
     }.freeze
 
@@ -67,7 +66,7 @@ module Find
 
       # If the cycle switcher has been set to 'find has reopened' then
       # we want to request next year's courses from the TTAPI
-      if SiteSetting.cycle_schedule.in?(%i[today_is_after_find_opens today_is_between_find_opening_and_apply_opening])
+      if SiteSetting.cycle_schedule.in?(%i[now_is_before_find_opens today_is_after_find_opens today_is_between_find_opening_and_apply_opening])
         current_year + 1
       else
         current_year
@@ -75,14 +74,27 @@ module Find
     end
 
     # Returns the recruitment cycle year for a given time
-    # Recruitment Cycles run from find opens to the find_opens in the next cycle
-    # If there is no next cycle, the end of the last cycle is when find_closes
+    #
+    # Recruitment Cycles run from the start of the day that find opens
+    # to the moment find closes (end of day)
+    # Error is raised if a time does not match a listed cycle
     def self.cycle_year_for_time(time)
       CYCLE_DATES.each do |year, dates|
-        end_time = CYCLE_DATES[year + 1]&.dig(:find_opens) || dates[:find_closes]
-        return year if time >= dates[:find_opens] && time < end_time
+        end_time = CYCLE_DATES[year + 1]&.dig(:find_opens)&.beginning_of_day || dates[:find_closes]&.end_of_day
+
+        return year if time >= dates[:find_opens]&.beginning_of_day && time < end_time
       end
-      nil
+
+      raise "NoRecruitmentCycleExists: time #{time.to_fs(:db)}"
+    end
+
+    # Return the cycle year of last cycle if it's less than 30 days ago
+    # Otherwise return nil
+    #
+    # @returns [year|nil]
+    def self.years_available_to_support
+      last_year = cycle_year_for_time(30.days.ago)
+      last_year if current_year != last_year
     end
 
     def self.next_year
@@ -129,7 +141,7 @@ module Find
       Time.zone.now.between?(apply_deadline, find_closes)
     end
 
-    def self.find_down? = phase_in_time?(:today_is_after_find_closes)
+    def self.find_down? = phase_in_time?(:now_is_before_find_opens)
 
     def self.mid_cycle? = phase_in_time?(:today_is_after_find_opens)
 
@@ -148,7 +160,7 @@ module Find
 
     def self.phases_in_time
       {
-        today_is_after_find_closes: LONDON.now.between?(find_closes, find_reopens),
+        now_is_before_find_opens: LONDON.now.between?(find_opens.beginning_of_day, find_opens),
         today_is_after_find_opens: LONDON.now.between?(find_opens, apply_deadline),
         today_is_mid_cycle: LONDON.now.between?(first_deadline_banner, apply_deadline),
         today_is_after_apply_deadline_passed: LONDON.now.between?(apply_deadline, find_closes),
@@ -189,16 +201,6 @@ module Find
 
     def self.real_schedule_for(year = current_year)
       CYCLE_DATES[year]
-    end
-
-    def self.fake_point_in_recruitment_cycle
-      %i[
-        today_is_mid_cycle
-        today_is_after_apply_deadline_passed
-        today_is_after_find_closes
-        today_is_after_find_opens
-        today_is_after_apply_opens
-      ]
     end
 
     private_class_method :last_recruitment_cycle_year?

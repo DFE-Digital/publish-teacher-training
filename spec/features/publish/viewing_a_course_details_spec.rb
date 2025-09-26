@@ -24,7 +24,7 @@ feature "Course show" do
     end
 
     context "when cycle is 2025 and the course is published" do
-      scenario "i can see the correct change links", travel: find_closes(2025) do
+      scenario "i can see the correct change links", travel: 1.day.before(find_closes(2025)) do
         given_a_next_recruitment_cycle_exists
         and_i_am_authenticated_as_a_provider_user
         and_rollover_has_not_started_yet
@@ -35,7 +35,7 @@ feature "Course show" do
     end
 
     context "when it is during the 2026 schools migration" do
-      scenario "i can see the correct change links with schools review", travel: find_closes(2025) do
+      scenario "i can see the correct change links with schools review", travel: 1.day.before(find_closes(2025)) do
         given_a_next_recruitment_cycle_exists
         and_i_am_authenticated_as_a_provider_user_for_next_cycle
         and_there_is_a_scheduled_course

@@ -37,6 +37,54 @@ describe RecruitmentCycle, travel: mid_cycle(2025) do
     it { is_expected.to have_many(:sites).through(:providers) }
   end
 
+  describe ".cycles_open_to_support" do
+    context "when we are before rollover" do
+      it "returns only the current cycle year", travel: mid_cycle do
+        expect(described_class.cycles_open_to_support.pluck(:year)).to contain_exactly(described_class.current.year)
+      end
+    end
+
+    context "when we are in rollover before end of cycle", travel: 1.day.before(find_closes) do
+      it "returns only the current year and the next year" do
+        next_cycle = find_or_create(:recruitment_cycle, :next)
+        find_or_create(:recruitment_cycle, :previous)
+        expect(described_class.cycles_open_to_support.pluck(:year)).to contain_exactly(described_class.current.year, next_cycle.year)
+      end
+    end
+
+    context "when we are in rollover before end of cycle", travel: 20.days.after(find_opens) do
+      it "returns only the current year and the previous" do
+        find_or_create(:recruitment_cycle, :next)
+        previous_cycle = find_or_create(:recruitment_cycle, :previous)
+        expect(described_class.cycles_open_to_support.pluck(:year)).to contain_exactly(described_class.current.year, previous_cycle.year)
+      end
+    end
+  end
+
+  describe ".rollover_cycles_open_to_support" do
+    context "when we are before rollover" do
+      it "returns empty", travel: mid_cycle do
+        expect(described_class.rollover_cycles_open_to_support).to be_empty
+      end
+    end
+
+    context "when we are in rollover before end of cycle", travel: 1.day.before(find_closes) do
+      it "returns only the next cycle year" do
+        next_cycle = find_or_create(:recruitment_cycle, :next)
+        find_or_create(:recruitment_cycle, :previous)
+        expect(described_class.rollover_cycles_open_to_support.pluck(:year)).to contain_exactly(next_cycle.year)
+      end
+    end
+
+    context "when we are in rollover before end of cycle", travel: 20.days.after(find_opens) do
+      it "returns only the previous cycle year" do
+        find_or_create(:recruitment_cycle, :next)
+        previous_cycle = find_or_create(:recruitment_cycle, :previous)
+        expect(described_class.rollover_cycles_open_to_support.pluck(:year)).to contain_exactly(previous_cycle.year)
+      end
+    end
+  end
+
   describe "#status" do
     context "when current cycle" do
       let(:recruitment_cycle) { build(:recruitment_cycle) }
