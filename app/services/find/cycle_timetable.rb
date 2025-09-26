@@ -40,11 +40,11 @@ module Find
         apply_opens: Time.zone.local(2024, 10, 8, 9), # CONFIRMED
         first_deadline_banner: Time.zone.local(2025, 7, 12, 9), # TBC
         apply_deadline: Time.zone.local(2025, 9, 16, 18), # CONFIRMED
-        find_closes: Time.zone.local(2025, 9, 29, 23, 59, 59), # CONFIRMED
+        find_closes: Time.zone.local(2025, 9, 29, 22, 59, 59), # CONFIRMED: Find closes at 11:59pm, adjusted to 10:59pm here to account for BST
       },
       2026 => {
-        find_opens: Time.zone.local(2025, 9, 30, 9), # CONFIRMED
-        apply_opens: Time.zone.local(2025, 10, 7, 9), # CONFIRMED
+        find_opens: Time.zone.local(2025, 9, 30, 8), # CONFIRMED: Find opens at 9am, adjusted to 8am here to account for BST
+        apply_opens: Time.zone.local(2025, 10, 7, 8), # CONFIRMED: Apply opens at 9am, adjusted to 8am here to account for BST
         first_deadline_banner: Time.zone.local(2026, 7, 12, 9), # TBC
         apply_deadline: Time.zone.local(2026, 9, 15, 18), # CONFIRMED
         find_closes: Time.zone.local(2026, 9, 28, 23, 59, 59), # CONFIRMED
