@@ -42,14 +42,14 @@ module Find
         expect(described_class.cycle_year_for_time(time)).to eq(2026)
       end
 
-      it "returns 2026 for the exact time find opens" do
-        time = Time.zone.local(2025, 9, 30, 9, 0, 0)
-        expect(described_class.cycle_year_for_time(time)).to eq(2026)
+      it "returns 2027 for a time just after find closes 2026" do
+        time = Time.zone.local(2026, 9, 29)
+        expect(described_class.cycle_year_for_time(time)).to eq(2027)
       end
 
-      it "returns 2026 for a time just before find opens 2027" do
+      it "returns 2027 for a time just before find opens 2027" do
         time = Find::CycleTimetable::LONDON.local(2026, 9, 29, 8, 59, 58)
-        expect(described_class.cycle_year_for_time(time)).to eq(2026)
+        expect(described_class.cycle_year_for_time(time)).to eq(2027)
       end
 
       it "returns 2027 for the exact time find opens" do
@@ -59,12 +59,14 @@ module Find
 
       it "returns nil for a time before any defined cycle" do
         time = Time.zone.local(2019, 1, 1, 12, 0, 0)
-        expect(described_class.cycle_year_for_time(time)).to be_nil
+        expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2019-01-01 12:00:00")
       end
 
       it "returns nil for a time after the last defined cycle" do
         time = Time.zone.local(2028, 1, 1, 12, 0, 0)
-        expect(described_class.cycle_year_for_time(time)).to be_nil
+        expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2028-01-01 12:00:00")
+      end
+    end
       end
     end
 
@@ -121,7 +123,7 @@ module Find
     end
 
     describe ".find_down?" do
-      it "returns true when it is after Find closes and before it reopens" do
+      it "returns true when it is after previous Find closes and before it opens" do
         Timecop.travel(Time.zone.local(2021, 10, 5, 1, 0, 0)) do
           expect(described_class.find_down?).to be true
         end

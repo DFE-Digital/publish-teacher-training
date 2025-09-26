@@ -66,7 +66,7 @@ module Find
 
       # If the cycle switcher has been set to 'find has reopened' then
       # we want to request next year's courses from the TTAPI
-      if SiteSetting.cycle_schedule.in?(%i[today_is_after_find_opens today_is_between_find_opening_and_apply_opening])
+      if SiteSetting.cycle_schedule.in?(%i[now_is_before_find_opens today_is_after_find_opens today_is_between_find_opening_and_apply_opening])
         current_year + 1
       else
         current_year
@@ -74,14 +74,19 @@ module Find
     end
 
     # Returns the recruitment cycle year for a given time
-    # Recruitment Cycles run from find opens to the find_opens in the next cycle
-    # If there is no next cycle, the end of the last cycle is when find_closes
+    #
+    # Recruitment Cycles run from the start of the day that find opens
+    # to the moment find closes (end of day)
+    # Error is raised if a time does not match a listed cycle
     def self.cycle_year_for_time(time)
       CYCLE_DATES.each do |year, dates|
-        end_time = CYCLE_DATES[year + 1]&.dig(:find_opens) || dates[:find_closes]
-        return year if time >= dates[:find_opens] && time < end_time
+        end_time = CYCLE_DATES[year + 1]&.dig(:find_opens)&.beginning_of_day || dates[:find_closes]&.end_of_day
+
+        return year if time >= dates[:find_opens]&.beginning_of_day && time < end_time
       end
-      nil
+
+      raise "NoRecruitmentCycleExists: time #{time.to_fs(:db)}"
+    end
     end
 
     def self.next_year
@@ -128,7 +133,7 @@ module Find
       Time.zone.now.between?(apply_deadline, find_closes)
     end
 
-    def self.find_down? = phase_in_time?(:today_is_after_find_closes)
+    def self.find_down? = phase_in_time?(:now_is_before_find_opens)
 
     def self.mid_cycle? = phase_in_time?(:today_is_after_find_opens)
 
@@ -147,7 +152,7 @@ module Find
 
     def self.phases_in_time
       {
-        today_is_after_find_closes: LONDON.now.between?(find_closes, find_reopens),
+        now_is_before_find_opens: LONDON.now.between?(find_opens.beginning_of_day, find_opens),
         today_is_after_find_opens: LONDON.now.between?(find_opens, apply_deadline),
         today_is_mid_cycle: LONDON.now.between?(first_deadline_banner, apply_deadline),
         today_is_after_apply_deadline_passed: LONDON.now.between?(apply_deadline, find_closes),
