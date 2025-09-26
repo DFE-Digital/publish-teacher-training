@@ -148,7 +148,7 @@ class CourseDecorator < ApplicationDecorator
   def excluded_from_bursary?
     object.subjects.present? &&
       # incorrect bursary eligibility only shows up on courses with 2 subjects
-      object.subjects.count == 2 &&
+      object.subjects.size == 2 &&
       has_excluded_course_name?
   end
 

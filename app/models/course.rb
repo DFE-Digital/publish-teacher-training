@@ -858,7 +858,7 @@ class Course < ApplicationRecord
   end
 
   def enrichment_attribute(enrichment_name)
-    enrichments.most_recent&.first&.public_send(enrichment_name)
+    latest_enrichment&.public_send(enrichment_name)
   end
 
   def remove_carat_from_error_messages
@@ -891,7 +891,7 @@ class Course < ApplicationRecord
   end
 
   def current_published_enrichment
-    enrichments.where(status: "published").order(last_published_timestamp_utc: :desc).first
+    latest_published_enrichment
   end
 
   def find_a_level_subject_requirement!(uuid)
