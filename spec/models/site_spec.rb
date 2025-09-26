@@ -42,12 +42,19 @@ describe Site do
       expect { new_site.save! }.not_to raise_error
     end
 
-    it "prevents creating duplicate sites when the original is not discarded" do
-      existing_site.undiscard!
-      new_site = build(:site, location_name: "Test School", provider: provider, site_type: "school")
+    it "allows creating duplicate schools with the same name under the same provider" do
+      new_school = build(:site, location_name: "Test Study Site", provider: provider, site_type: "school")
+
+      expect(new_school).to be_valid
+      expect { new_school.save! }.not_to raise_error
+    end
+
+    it "prevents creating duplicate study sites when the original is not discarded" do
+      create(:site, location_name: "Test Study Site", provider: provider, site_type: "study_site")
+      new_site = build(:site, location_name: "Test Study Site", provider: provider, site_type: "study_site")
 
       expect(new_site).not_to be_valid
-      expect(new_site.errors[:location_name]).to include("This school has already been added")
+      expect(new_site.errors[:location_name]).to include("This study site has already been added")
     end
 
     context "with different site types" do
