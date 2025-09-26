@@ -148,11 +148,11 @@ module Find
 
     def self.phases_in_time
       {
-        today_is_after_find_closes: Time.zone.now.between?(find_closes.in_time_zone("London") - 1.hour, find_reopens.in_time_zone("London") - 1.hour),
-        today_is_after_find_opens: Time.zone.now.between?(find_opens.in_time_zone("London") - 1.hour, apply_deadline),
-        today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_deadline),
-        today_is_after_apply_deadline_passed: Time.zone.now.between?(apply_deadline, find_closes),
-        today_is_between_find_opening_and_apply_opening: Time.zone.now.between?(find_opens, apply_opens),
+        today_is_after_find_closes: LONDON.now.between?(find_closes, find_reopens),
+        today_is_after_find_opens: LONDON.now.between?(find_opens, apply_deadline),
+        today_is_mid_cycle: LONDON.now.between?(first_deadline_banner, apply_deadline),
+        today_is_after_apply_deadline_passed: LONDON.now.between?(apply_deadline, find_closes),
+        today_is_between_find_opening_and_apply_opening: LONDON.now.between?(find_opens, apply_opens),
       }
     end
 
