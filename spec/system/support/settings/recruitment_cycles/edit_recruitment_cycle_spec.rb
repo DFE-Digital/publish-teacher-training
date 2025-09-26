@@ -93,7 +93,7 @@ RSpec.describe "Editing a recruitment cycle", service: :publish, travel: mid_cyc
   end
 
   def and_i_change_the_available_in_publish_from_date
-    within_fieldset "Available in publish from" do
+    within_fieldset "Available in Publish from" do
       fill_in "Day", with: RecruitmentCycle.current.available_for_support_users_from.succ.day
       fill_in "Month", with: RecruitmentCycle.current.available_for_support_users_from.succ.month
     end
