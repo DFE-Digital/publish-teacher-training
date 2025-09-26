@@ -36,7 +36,8 @@ class Site < ApplicationRecord
                                           conditions: -> { where(discarded_at: nil) },
                                           message: lambda { |object, _data|
                                             "This #{object.site_type.humanize.downcase} has already been added"
-                                          } }
+                                          } },
+                            if: -> { !school? }
   validates :location_name,
             :address1,
             :postcode,
