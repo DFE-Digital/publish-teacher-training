@@ -18,18 +18,18 @@ class RolloverPeriod
     next_cycles_available_for_support_users? || next_cycles_available_for_publish_users?
   end
 
-  def next_recruitment_cycles
+  def recruitment_cycles
     if current_user.admin?
-      RecruitmentCycle.upcoming_cycles_open_to_support
+      RecruitmentCycle.cycles_open_to_support
     else
-      RecruitmentCycle.upcoming_cycles_open_to_publish
-    end
+      RecruitmentCycle.current_and_upcoming_cycles_open_to_publish
+    end.sort_by(&:year)
   end
 
 private
 
   def next_cycles_available_for_support_users?
-    current_user.admin? && RecruitmentCycle.upcoming_cycles_open_to_support.exists?
+    current_user.admin? && RecruitmentCycle.rollover_cycles_open_to_support.exists?
   end
 
   def next_cycles_available_for_publish_users?
