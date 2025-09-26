@@ -50,6 +50,16 @@ module Publish
               course: { subjects_ids: form_params[:subjects_ids] },
             ),
           )
+        elsif form_params[:subjects_ids]&.include?(design_technology_id)
+          course.update(campaign_name: form_params[:campaign_name])
+          redirect_to(
+            design_technology_publish_provider_recruitment_cycle_course_path(
+              @course.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code,
+              course: { subjects_ids: form_params[:subjects_ids] },
+            ),
+          )
         elsif @engineers_teach_physics_form.save!
           course_updated_message(section_key)
           course.update(name: course.generate_name)
@@ -97,6 +107,10 @@ module Publish
 
       def modern_languages_id
         SecondarySubject.modern_languages.id.to_s
+      end
+
+      def design_technology_id
+        SecondarySubject.design_technology.id.to_s
       end
 
       def has_physics_subject?

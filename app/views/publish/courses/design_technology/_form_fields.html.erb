@@ -1,0 +1,41 @@
+<%= render "publish/shared/error_wrapper", error_keys: [:design_technology_subjects], data_qa: "course__design_technology_subjects" do %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading" data-qa="page-heading">
+        <% if course.course_code %>
+          <span class="govuk-caption-l"><%= course.name_and_code %></span>
+        <% end %>
+        Specialisms
+      </h1>
+    </legend>
+    <span class="govuk-hint">
+      Select all that apply
+    </span>
+    <%= render "publish/shared/error_messages", error_keys: [:design_technology_subjects] %>
+
+    <div class="govuk-form-group govuk-!-margin-top-2" data-qa="course__design_technologies">
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <% course.edit_course_options["design_technologies"].each do |specialism| %>
+          <div class="govuk-checkboxes__item">
+            <%= form.check_box(
+              :design_technology_ids,
+              {
+                checked: course.subject_present?(specialism),
+                class: "govuk-checkboxes__input",
+                multiple: true,
+                data: { qa: "checkbox_design_technology_#{specialism.subject_name}" },
+              },
+              specialism.id,
+              nil,
+            ) %>
+            <%= form.label(
+              "design_technology_ids_#{specialism.id}",
+              specialism.subject_name,
+              class: "govuk-label govuk-checkboxes__label",
+            ) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </fieldset>
+<% end %>
