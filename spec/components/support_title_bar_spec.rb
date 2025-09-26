@@ -21,8 +21,9 @@ describe SupportTitleBar do
     end
   end
 
-  context "when next cycle is available for support users", travel: apply_opens(2024) do
+  context "when next cycle is available for support users", travel: 1.hour.before(find_closes(2024)) do
     before do
+      find_or_create(:recruitment_cycle, :next)
       render_inline(described_class.new(current_user:))
     end
 

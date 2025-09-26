@@ -67,6 +67,18 @@ module Find
         expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2028-01-01 12:00:00")
       end
     end
+
+    describe ".years_available_to_support" do
+      context "when find opened 29 days ago" do
+        it "returns last year", travel: 29.days.since(find_opens) do
+          expect(described_class.years_available_to_support).to equal(described_class.previous_year)
+        end
+      end
+
+      context "when find opened 30 days ago" do
+        it "returns nil", travel: 30.days.since(find_opens) do
+          expect(described_class.years_available_to_support).to be_nil
+        end
       end
     end
 
