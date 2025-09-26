@@ -25,7 +25,7 @@ RSpec.describe ProvidersCache do
         expect(Rails.cache.fetch(cache_key)).to eq(first_result)
       end
 
-      it "fetches fresh results when recruitment cycle changes", travel: 15.minutes.before(find_opens(2026)) do
+      it "fetches fresh results when recruitment cycle changes", travel: 15.minutes.before(find_closes(2025)) do
         provider_2025 = create(:provider, provider_name: "Test Provider", provider_code: "TP1", recruitment_cycle: RecruitmentCycle.current)
         provider_2026 = create(:provider, provider_name: "Other Provider", provider_code: "TP2", recruitment_cycle: find_or_create(:recruitment_cycle, :next))
 
