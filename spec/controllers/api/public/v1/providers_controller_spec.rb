@@ -367,7 +367,7 @@ RSpec.describe API::Public::V1::ProvidersController do
         end
       end
 
-      context "with filter" do
+      context "with filter", travel: 2.days.before(find_closes) do
         let(:provider2) do
           Timecop.freeze(Time.zone.today + 1) do
             create(:accredited_provider,
