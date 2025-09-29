@@ -1,6 +1,7 @@
 en:
   find:
     courses:
+      fee_notice__next_academic_year: These figures are based on last year. Fees for courses starting in the 2026-2027 academic year will be confirmed soon.
       training_locations:
         view:
           distance: "%{distance} from %{location}"

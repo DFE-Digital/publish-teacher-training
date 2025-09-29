@@ -31,6 +31,8 @@
       <% end %>
     </div>
 
+    <div class="govuk-body govuk-!-font-weight-bold"><%= t("find.courses.fee_notice__next_academic_year") %></div>
+
     <% if course.fee_details.present? %>
       <div data-qa="course__fee_details">
         <%= markdown(fee_details) %>

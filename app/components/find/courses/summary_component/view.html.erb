@@ -11,6 +11,9 @@
       <% if fee_hint.present? %>
         <div class="govuk-hint govuk-!-font-size-16"><%= fee_hint %></div>
       <% end %>
+      <% if !course.salaried? && !course.apprenticeship? && !course.no_fee? %>
+        <div class="govuk-hint govuk-!-font-size-16"><%= t("find.courses.fee_notice__next_academic_year") %></div>
+      <% end %>
     <% end %>
   <% end %>
 
