@@ -90,7 +90,7 @@ feature "financial incentives call out boxes content" do
         select_course
 
         within('[data-qa="course__loan_details_non_uk"]') do
-          expect(page).to have_content("If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan.")
+          expect(page).to have_content("If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a student loan.")
         end
       end
     end
