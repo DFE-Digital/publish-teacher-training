@@ -2,11 +2,11 @@
 
 FactoryBot.define do
   design_technology_subjects = {
-    "Engineering" => "D420",
-    "Product design" => "D440",
-    "Food technology" => "D470",
-    "Textiles" => "D460",
-    "Graphics" => "D490",
+    "Engineering" => "DT420",
+    "Product design" => "DT440",
+    "Food technology" => "DT470",
+    "Textiles" => "DT460",
+    "Graphics" => "DT490",
   }
 
   factory :design_technology_subject do

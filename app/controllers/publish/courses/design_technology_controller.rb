@@ -20,15 +20,15 @@ module Publish
       def edit
         authorize(provider)
 
-        return if selected_non_design_technology_subjects_ids.include? design_technology_subject_id
-
-        redirect_to(
-          details_publish_provider_recruitment_cycle_course_path(
-            @course.provider_code,
-            @course.recruitment_cycle_year,
-            @course.course_code,
-          ),
-        )
+        unless selected_non_design_technology_subjects_ids.include?(design_technology_subject_id)
+          redirect_to(
+            details_publish_provider_recruitment_cycle_course_path(
+              @course.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code,
+            ),
+          )
+        end
       end
 
       def update
