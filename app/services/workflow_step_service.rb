@@ -33,7 +33,7 @@ private
       courses_list
       level
       subjects
-    ] + special_steps + %i[
+    ] + specialism_steps + %i[
       age_range
       outcome
       school
@@ -50,7 +50,7 @@ private
       courses_list
       level
       subjects
-    ] + special_steps + %i[
+    ] + specialism_steps + %i[
       age_range
       outcome
       school
@@ -94,7 +94,7 @@ private
       courses_list
       level
       subjects
-    ] + special_steps + %i[
+    ] + specialism_steps + %i[
       age_range
       outcome
       funding_type
@@ -117,7 +117,7 @@ private
       courses_list
       level
       subjects
-    ] + special_steps + %i[
+    ] + specialism_steps + %i[
       age_range
       outcome
       funding_type
@@ -140,7 +140,7 @@ private
     steps
   end
 
-  def special_steps
+  def specialism_steps
     physics_id = SecondarySubject.physics.id
     ml_id = SecondarySubject.modern_languages.id
     dt_id = SecondarySubject.design_technology.id

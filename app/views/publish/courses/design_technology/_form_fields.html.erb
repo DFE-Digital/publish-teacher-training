@@ -5,11 +5,11 @@
         <% if course.course_code %>
           <span class="govuk-caption-l"><%= course.name_and_code %></span>
         <% end %>
-        Specialisms
+        <%= t(".specialisms_title") %>
       </h1>
     </legend>
     <span class="govuk-hint">
-      Select all that apply
+      <%= t(".select_all_that_apply") %>
     </span>
     <%= render "publish/shared/error_messages", error_keys: [:design_technology_subjects] %>
 

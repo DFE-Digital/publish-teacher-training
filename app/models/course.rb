@@ -1133,19 +1133,11 @@ private
     errors.add(:modern_languages_subjects, :select_a_language) unless has_any_modern_language_subject_type?
   end
 
-  def validate_design_technology_subjects
-    errors.add(:subjects, "Design Technology subjects must also have the design_technology subject") if has_any_design_technology_subject_type? && !has_the_design_technology_secondary_subject_type?
-  end
-
   def has_the_design_technology_secondary_subject_type?
     raise "SecondarySubject not found" if SecondarySubject.nil?
     raise "SecondarySubject.design_technology not found" if SecondarySubject.design_technology.nil?
 
     course_subjects.any? { |cs| cs.subject&.id == SecondarySubject.design_technology.id }
-  end
-
-  def validate_has_design_technology_subjects
-    errors.add(:design_technology_subjects, :select_a_specialism) unless has_any_design_technology_subject_type?
   end
 
   def validate_subject_count
