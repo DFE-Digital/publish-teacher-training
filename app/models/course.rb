@@ -434,7 +434,7 @@ class Course < ApplicationRecord
   end
 
   def ratifying_provider_description
-    accrediting_provider&.train_with_us
+    accrediting_provider&.about_us
   end
 
   def publishable?
