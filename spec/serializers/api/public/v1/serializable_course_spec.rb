@@ -15,7 +15,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
 
   it { is_expected.to have_type("courses") }
 
-  it { is_expected.to have_attribute(:about_accredited_body).with_value(course.accrediting_provider.train_with_us) }
+  it { is_expected.to have_attribute(:about_accredited_body).with_value(course.accrediting_provider.about_us) }
   it { is_expected.to have_attribute(:about_course).with_value(course.latest_published_enrichment.about_course) }
   it { is_expected.to have_attribute(:accredited_body_code).with_value(course.accredited_provider_code) }
   it { is_expected.to have_attribute(:age_minimum).with_value(3) }

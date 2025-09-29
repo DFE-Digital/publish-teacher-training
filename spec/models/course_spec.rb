@@ -1745,13 +1745,13 @@ describe Course do
       let(:course) { create(:course, provider:, accrediting_provider:) }
 
       context "without any provider partnership" do
-        it { is_expected.to eq(accrediting_provider.train_with_us) }
+        it { is_expected.to eq(accrediting_provider.about_us) }
       end
 
       context "with accrediting_provider_enrichments" do
         let(:provider) { create(:provider, accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider)]) }
 
-        it { is_expected.to eq(accrediting_provider.train_with_us) }
+        it { is_expected.to eq(accrediting_provider.about_us) }
       end
     end
   end
