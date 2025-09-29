@@ -14,7 +14,7 @@ module RecruitmentCycleHelper
   end
 
   def previous_recruitment_cycle_period_text
-    "#{Find::CycleTimetable.next_year} to #{Find::CycleTimetable.current_year}"
+    "#{Find::CycleTimetable.previous_year - 1} to #{Find::CycleTimetable.previous_year}"
   end
 
   def hint_text_for_mid_cycle
