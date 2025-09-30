@@ -230,5 +230,27 @@ module Find
         end
       end
     end
+
+    describe ".next_find_opens" do
+      context "when find is closed in the 2025 cycle" do
+        it "returns find_opens(2025)", travel: 1.hour.after(find_closes(2024)) do
+          expect(described_class.next_find_opens).to eq(find_opens(2025))
+        end
+      end
+
+      context "before find is closed in the 2024 cycle" do
+        it "returns find_opens(2025)", travel: 1.hour.before(find_closes(2024)) do
+          expect(described_class.next_find_opens).to eq(find_opens(2025))
+        end
+      end
+
+      context "before find is closed in the 2050 cycle" do
+        it "returns nil" do
+          Timecop.travel(Time.local(2050, 10, 10, 9)) do
+            expect(described_class.next_find_opens).to be_nil
+          end
+        end
+      end
+    end
   end
 end

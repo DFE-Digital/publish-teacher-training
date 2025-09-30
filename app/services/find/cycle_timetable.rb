@@ -125,6 +125,18 @@ module Find
       date(:find_opens, next_year)
     end
 
+    # Next date find opens (either this cycle or next)
+    # return nil if no date is found
+    def self.next_find_opens
+      cycle = CYCLE_DATES.values.find do |year|
+        year[:find_opens] > LONDON.now
+      end
+
+      return nil if cycle.blank?
+
+      cycle[:find_opens]
+    end
+
     def self.apply_opens(year = current_year)
       date(:apply_opens, year)
     end
