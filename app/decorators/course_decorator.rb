@@ -34,7 +34,7 @@ class CourseDecorator < ApplicationDecorator
     if current_open_cycle?
       h.govuk_link_to("View live course", h.find_course_url(provider.provider_code, object.course_code))
     else
-      "No - live on #{govuk_short_ordinal(Settings.next_cycle_open_date)}"
+      "No - live on #{govuk_short_ordinal(Find::CycleTimetable.next_find_opens.to_date)}"
     end
   end
 
