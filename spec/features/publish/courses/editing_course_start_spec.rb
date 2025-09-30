@@ -20,7 +20,9 @@ feature "editing course start date" do
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
 
-  delegate :current_recruitment_cycle_year, to: :Settings
+  def current_recruitment_cycle_year
+    Find::CycleTimetable.current_year
+  end
 
   def and_there_is_a_course_i_want_to_edit
     given_a_course_exists
