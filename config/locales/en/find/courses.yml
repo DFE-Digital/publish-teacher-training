@@ -87,6 +87,7 @@ en:
           for_uk_citizens: for UK citizens
           for_non_uk_citizens: for Non-UK citizens
           fee_key: Fee or salary
+          bursary_key: Financial support
           fee_value:
             salary: Salary
             apprenticeship: Salary (apprenticeship)
