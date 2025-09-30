@@ -21,7 +21,7 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def status_tags
-    if current_recruitment_cycle_year?
+    if current_recruitment_cycle_year? || previous_recruitment_cycle?
       object.application_status_open? ? status_tags_for_vacancies : status_tags_for_no_vacancies
     else
       status_tags_for_rolled_over_courses
@@ -55,5 +55,9 @@ private
 
   def current_recruitment_cycle_year?
     course.in_current_cycle?
+  end
+
+  def previous_recruitment_cycle?
+    course.recruitment_cycle.year.to_i == Find::CycleTimetable.previous_year
   end
 end
