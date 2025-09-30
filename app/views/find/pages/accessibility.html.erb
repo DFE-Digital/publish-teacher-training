@@ -3,66 +3,61 @@
 <div class="govuk-width-container">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">Accessibility statement</h1>
+      <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
 
-      <p class="govuk-body">This statement applies to the <%= t("service_name.find") %> service (Find).</p>
+      <p class="govuk-body"><%= t(".find_service_statement", find_service: t("service_name.find")) %></p>
 
-      <h2 class="govuk-body">The service is run by the Department for Education (DfE). It’s designed to be used by as many people as possible. You should be able to:</h2>
+      <h2 class="govuk-body"><%= t(".service_details") %></h2>
 
-      <ul class="govuk-list govuk-list--bullet">
-        <li>change colours, contrast levels and fonts</li>
-        <li>zoom in up to 300% without problems</li>
-        <li>navigate the service using just a keyboard</li>
-        <li>navigate the service using speech recognition software</li>
-        <li>use the service using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
-      </ul>
+     <div><%= t(".what_users_can_do_html") %></div>
 
-      <p class="govuk-body">We’ve also made the text in the service as simple as possible to understand.</p>
+      <p class="govuk-body"><%= t(".simple_service") %></p>
 
       <p class="govuk-body">
-        <%= govuk_link_to "AbilityNet", "https://mcmw.abilitynet.org.uk/" %>
-        has advice on making your device easier to use if you have a disability.
+        <%= t(".device_advice_html",
+          device_advice_link: govuk_link_to(t(".device_advice_link_text"), t(".device_advice_url"))) %>
       </p>
 
-      <h2 class="govuk-heading-m">Feedback and contact information</h2>
+      <h2 class="govuk-heading-m"><%= t(".feedback_and_contact_heading") %></h2>
 
-      <p class="govuk-body">If you need to apply for teacher training in a different way, such as using a large print form, audio recording or Braille, email <%= bat_contact_mail_to %>.</p>
+      <p class="govuk-body"><%= t(".contact_us_html", bat_contact_email: bat_contact_mail_to) %></p>
 
-      <p class="govuk-body">We’ll respond within 5 working days.</p>
+      <p class="govuk-body"><%= t(".response_time") %></p>
 
-      <h2 class="govuk-heading-m">Reporting accessibility problems with this service</h2>
+      <h2 class="govuk-heading-m"><%= t(".reporting_problems_heading") %></h2>
 
-      <p class="govuk-body">We’re always looking to improve the accessibility of this service. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, email <%= bat_contact_mail_to %>.</p>
+      <p class="govuk-body"><%= t(".accessibility_issues_contact_html", bat_contact_email: bat_contact_mail_to) %></p>
 
-      <h2 class="govuk-heading-m">Enforcement procedure</h2>
+      <h2 class="govuk-heading-m"><%= t(".enforcement_procedure_heading") %></h2>
 
-      <p class="govuk-body">If you’re not happy with our response to a complaint, <%= govuk_link_to "contact the Equality Advisory and Support Service (EASS)", "https://www.equalityadvisoryservice.com/" %>.
+      <p class="govuk-body">
+        <%= t(".response_to_a_complaint_html",
+        response_to_a_complaint_link: govuk_link_to(t(".contact_eass_text"), t(".eass_url"))) %>
       </p>
 
-      <p class="govuk-body">The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’).</p>
+      <p class="govuk-body"><%= t(".ehrc_description") %></p>
 
-      <h2 class="govuk-heading-m">Technical information about this service’s accessibility</h2>
+      <h2 class="govuk-heading-m"><%= t(".technical_information_heading") %></h2>
 
-      <p class="govuk-body">The Department for Education is committed to making its services accessible,
-        in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations
-        2018.</p>
+      <p class="govuk-body"><%= t(".dfe_commitment") %></p>
 
-      <h3 class="govuk-heading-s">Compliance status</h3>
+      <h3 class="govuk-heading-s"><%= t(".compliance_status_heading") %></h3>
 
     <p class="govuk-body">
-      <%= t("service_name.find") %> is compliant with the <%= govuk_link_to "Web Content Accessibility Guidelines (WCAG) version 2.1 AA standard", "https://www.w3.org/TR/WCAG21/" %>.
+      <%= t(".compliance_status_html", find_service: t("service_name.find"),
+                                       wcag_link: govuk_link_to(t(".wcag_link_text"), t(".wcag_url"))) %>
     </p>
 
-    <h2 class="govuk-heading-m">What we’re doing to improve accessibility</h2>
+    <h2 class="govuk-heading-m"><%= t(".improving_accessibility") %></h2>
 
-      <p class="govuk-body">We’ll continue to test the accessibility of this service as it develops.
+      <p class="govuk-body"><%= t(".continue_testing") %>
       </p>
 
       <h2 class="govuk-heading-m">
-        Preparation of this statement
+        <%= t(".statement_preparation_heading") %>
       </h2>
 
-      <p class="govuk-body">This statement was reviewed and updated on 15 September 2025. The service was last tested in May 2022. The test was carried out by the Digital Accessibility Centre.
+      <p class="govuk-body"><%= t(".statement_date") %>
       </p>
     </div>
   </div>
