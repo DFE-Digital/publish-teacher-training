@@ -141,6 +141,7 @@ module Find
       Time.zone.now.between?(apply_deadline, find_closes)
     end
 
+    def self.find_open? = !phase_in_time?(:now_is_before_find_opens)
     def self.find_down? = phase_in_time?(:now_is_before_find_opens)
 
     def self.mid_cycle? = phase_in_time?(:today_is_after_find_opens)
