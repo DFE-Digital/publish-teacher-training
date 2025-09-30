@@ -210,6 +210,7 @@ en:
             bursaries_only_html: "Bursaries of %{bursary_amount} are available"
             scholarship_only_html: "Scholarships of %{scholarship_amount} are available"
       length_key: Course length
+      bursary_key: Financial support
       length_value:
         OneYear: 1 year
         TwoYears: Up to 2 years
