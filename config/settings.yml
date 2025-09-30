@@ -70,7 +70,6 @@ one_login:
   # Then convert them back to newlines for OpenSSL
   private_key: <%= ENV.fetch('ONE_LOGIN_PRIVATE_KEY', 'private_key').gsub("\n", '\n') %>
 
-current_recruitment_cycle_year: 2025
 next_cycle_open_date: 2025-09-30
 
 govuk_notify:

@@ -67,7 +67,7 @@ private
 
   def when_i_visit_the_edit_course_design_technology_page(with_invalid_query: false)
     query = edit_course_design_technology_page_with_query(invalid: with_invalid_query)
-    visit "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/design-technology?#{query.to_query}"
+    visit "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/design-technology?#{query.to_query}"
   end
 
   def when_i_visit_the_edit_course_design_technology_page_with_subordinate(subordinate_key)
@@ -82,7 +82,7 @@ private
       },
     )
 
-    visit "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/design-technology?#{query}"
+    visit "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/design-technology?#{query}"
   end
 
   def and_i_click_continue
@@ -98,7 +98,7 @@ private
   end
 
   def then_i_am_met_with_course_details_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/details")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/details")
   end
 
   def when_i_select_two_specialisms(first_label, second_label)

@@ -76,11 +76,11 @@ private
   end
 
   def when_i_visit_the_new_course_design_technology_page
-    visit "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/design-technology/new?#{new_course_design_technology_query_params}"
+    visit "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/design-technology/new?#{new_course_design_technology_query_params}"
   end
 
   def when_i_visit_the_new_course_design_technology_page_with_subordinate(subordinate_key)
-    visit "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/design-technology/new?#{new_course_design_technology_with_subordinate_query_params(subordinate_key)}"
+    visit "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/design-technology/new?#{new_course_design_technology_with_subordinate_query_params(subordinate_key)}"
   end
 
   def when_i_visit_the_new_engineers_teach_physics_page_with_subordinate(subordinate_key)
@@ -95,7 +95,7 @@ private
         subjects_ids: [physics.id, subordinate.id],
       },
     )
-    visit "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{query}"
+    visit "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/engineers-teach-physics/new?#{query}"
   end
 
   def when_i_select_a_design_technology_specialism
@@ -118,7 +118,7 @@ private
 
   def then_i_am_met_with_the_age_range_page
     expect(page).to have_current_path(
-      "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new",
+      "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/age-range/new",
       ignore_query: true,
     )
     expect(page).to have_content("Age range")
@@ -126,7 +126,7 @@ private
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path(
-      "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new",
+      "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/modern-languages/new",
       ignore_query: true,
     )
     expect(page).to have_content("Languages")
@@ -134,7 +134,7 @@ private
 
   def then_i_am_met_with_the_engineers_teach_physics_page
     expect(page).to have_current_path(
-      "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new",
+      "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/engineers-teach-physics/new",
       ignore_query: true,
     )
     expect(page).to have_content("Engineers Teach Physics")
@@ -142,7 +142,7 @@ private
 
   def then_i_am_met_with_the_design_technology_page
     expect(page).to have_current_path(
-      "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/design-technology/new",
+      "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/design-technology/new",
       ignore_query: true,
     )
     expect(page).to have_content("Specialisms")
@@ -160,7 +160,7 @@ private
 
   def then_the_course_name_shows_just_design_and_technology
     expect(page).to have_current_path(
-      "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{@course.course_code}/details",
+      "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{@course.course_code}/details",
       ignore_query: true,
     )
     within(".govuk-heading-l, h1") do
@@ -181,7 +181,7 @@ private
   end
 
   def when_i_visit_the_edit_course_design_technology_page
-    visit "/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{@course.course_code}/design-technology?#{edit_course_design_technology_query_params}"
+    visit "/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{@course.course_code}/design-technology?#{edit_course_design_technology_query_params}"
   end
 
   def edit_course_design_technology_query_params

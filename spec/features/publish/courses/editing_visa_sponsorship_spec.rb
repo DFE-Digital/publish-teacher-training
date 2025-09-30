@@ -3,12 +3,9 @@
 require "rails_helper"
 
 feature "Editing visa sponsorship" do
-  before do
-    and_i_am_authenticated_as_a_lead_school_provider_user
-  end
-
   context "fee paying course" do
     scenario "i can update the student visa" do
+      and_i_am_authenticated_as_a_lead_school_provider_user
       given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
       when_i_visit_the_course_publish_courses_student_visa_sponsorship_edit_page
       and_i_choose_yes_to_the_student_sponsorship_question
@@ -24,8 +21,9 @@ feature "Editing visa sponsorship" do
 
   context "salaried course" do
     scenario "i can update the skilled worker visa" do
-      given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
       and_i_am_in_mid_cycle
+      and_i_am_authenticated_as_a_lead_school_provider_user
+      given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
       when_i_visit_the_course_publish_courses_skilled_worker_visa_sponsorship_edit_page
       and_i_choose_yes_to_the_skilled_worker_sponsorship_question
       and_i_continue
