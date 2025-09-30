@@ -29,14 +29,12 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def on_find(provider = object.provider)
-    if object.findable?
-      if current_cycle_and_open?
-        h.govuk_link_to("View live course", h.find_course_url(provider.provider_code, object.course_code))
-      else
-        "No - live on #{govuk_short_ordinal(Settings.next_cycle_open_date)}"
-      end
+    return not_on_find unless object.findable?
+
+    if current_open_cycle?
+      h.govuk_link_to("View live course", h.find_course_url(provider.provider_code, object.course_code))
     else
-      not_on_find
+      "No - live on #{govuk_short_ordinal(Settings.next_cycle_open_date)}"
     end
   end
 
@@ -251,8 +249,8 @@ class CourseDecorator < ApplicationDecorator
     course.recruitment_cycle.year.to_i == Find::CycleTimetable.current_year
   end
 
-  def current_cycle_and_open?
-    current_cycle? && FeatureService.enabled?("rollover.has_current_cycle_started?")
+  def current_open_cycle?
+    current_cycle? && Find::CycleTimetable.find_open?
   end
 
   def next_cycle?

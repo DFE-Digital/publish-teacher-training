@@ -85,7 +85,7 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def current_and_open?
-    current? && FeatureService.enabled?("rollover.has_current_cycle_started?")
+    current? && Find::CycleTimetable.find_open?
   end
 
   def to_s
