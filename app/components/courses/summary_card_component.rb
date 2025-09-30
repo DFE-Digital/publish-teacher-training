@@ -78,7 +78,15 @@ module Courses
       end
     end
 
-    def fee_hint
+    def length_key
+      t(".length_key")
+    end
+
+    def bursary_key
+      t(".bursary_key")
+    end
+
+    def bursary_value
       return if course.salary? || course.apprenticeship? || hide_fee_hint?
 
       if financial_incentive.bursary_amount.present? && financial_incentive.scholarship.present?
@@ -98,10 +106,6 @@ module Courses
           scholarship_amount: number_to_currency(financial_incentive.scholarship),
         )
       end
-    end
-
-    def length_key
-      t(".length_key")
     end
 
     def length_value(course_length = enrichment.course_length)
