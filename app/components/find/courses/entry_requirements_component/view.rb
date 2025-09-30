@@ -37,7 +37,7 @@ module Find
           case course.level
           when "primary"
             "Grade #{course.gcse_grade_required} (C) in English, maths and science"
-          when "secondary"
+          when "secondary", "further_education"
             "Grade #{course.gcse_grade_required} (C) in English and maths"
           end
         end
