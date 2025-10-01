@@ -2,4 +2,5 @@ en:
   find:
     concerns:
       authentication:
-        unauthenticated_message: You must sign in to visit that page.
+        unauthenticated_message_html: You must %{sign_in_link} to visit that page.
+        sign_in: sign in
