@@ -50,7 +50,7 @@ module Find
 
     def request_authentication
       session["return_to_after_authenticating"] = request.url
-      flash_info_message = t("find.concerns.authentication.unauthenticated_message")
+      flash_info_message = t("find.concerns.authentication.unauthenticated_message_html", sign_in_link: view_context.govuk_link_to(t("find.concerns.authentication.sign_in"), Settings.one_login.profile_url))
 
       respond_to do |format|
         format.html do
