@@ -15,7 +15,7 @@ class ProviderPolicy
       if user.admin?
         scope.all
       else
-        scope.where(id: user.providers)
+        scope.where(id: user.providers.available_to_provider_user)
       end
     end
   end
@@ -34,7 +34,7 @@ class ProviderPolicy
   end
 
   def show?
-    user.admin? || user.providers.include?(provider)
+    user.admin? || user.providers.available_to_provider_user.include?(provider)
   end
 
   def show_any?
@@ -53,7 +53,7 @@ class ProviderPolicy
     return true if user.admin?
 
     accredited_partners_codes = provider.accredited_partners.pluck(:provider_code)
-    user_provider_codes = user.providers.pluck(:provider_code)
+    user_provider_codes = user.providers.available_to_provider_user.pluck(:provider_code)
 
     !(accredited_partners_codes & user_provider_codes).compact.empty?
   end
