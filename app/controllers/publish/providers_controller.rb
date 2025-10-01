@@ -91,7 +91,7 @@ module Publish
       @providers ||= if current_user.admin?
                        RecruitmentCycle.current.providers
                      else
-                       RecruitmentCycle.current.providers.where(id: current_user.providers)
+                       RecruitmentCycle.current.providers.where(id: current_user.providers.available_to_provider_user)
                      end
     end
 

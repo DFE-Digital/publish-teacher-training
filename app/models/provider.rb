@@ -138,7 +138,8 @@ class Provider < ApplicationRecord
       .or(where(provider_code: Course.findable.select(:accredited_provider_code)))
   }
 
-  scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle) }
+  scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_cycle) }
+  scope :available_to_provider_user, -> { where(recruitment_cycle: RecruitmentCycle.current_and_upcoming_cycles_open_to_publish) }
 
   scope :in_next_cycle, -> { where(recruitment_cycle: RecruitmentCycle.next_recruitment_cycle) }
 
