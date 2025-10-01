@@ -14,20 +14,18 @@ module Support
 
   private
 
+    ORDER_MAP = {
+      "created_at_desc" => { created_at: :desc },
+      "created_at_asc" => { created_at: :asc },
+    }.freeze
+
     def filtered_candidates
       scope = Support::Filter.call(model_data_scope: Candidate.all, filter_params:)
-      order_scope(scope)
+      apply_sort(scope)
     end
 
-    def order_scope(scope)
-      case params[:sort]
-      when "created_at_desc"
-        scope.order(created_at: :desc)
-      when "created_at_asc"
-        scope.order(created_at: :asc)
-      else
-        scope.order(:email_address)
-      end
+    def apply_sort(scope)
+      scope.order(ORDER_MAP.fetch(params[:sort], :email_address))
     end
 
     def filter_params
