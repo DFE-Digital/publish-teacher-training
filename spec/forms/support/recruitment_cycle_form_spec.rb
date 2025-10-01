@@ -54,12 +54,12 @@ RSpec.describe Support::RecruitmentCycleForm do
 
       it "is invalid without an application start date" do
         expect(form).not_to be_valid
-        expect(form.errors[:application_start_date]).to include("Enter an application start date")
+        expect(form.errors[:application_start_date]).to include("Enter the date that candidates will be able to start applying for courses")
       end
 
       it "is invalid without an application end date" do
         expect(form).not_to be_valid
-        expect(form.errors[:application_end_date]).to include("Enter an application end date")
+        expect(form.errors[:application_end_date]).to include("Enter the date that applications close")
       end
     end
 
@@ -156,10 +156,10 @@ RSpec.describe Support::RecruitmentCycleForm do
         form = described_class.new(params)
         expect(form).not_to be_valid
         expect(form.errors[:available_for_support_users_from]).to include(
-          "Please choose a date before the courses become available in Publish",
+          "Enter a date before the courses become available to providers in Publish.",
         )
         expect(form.errors[:available_in_publish_from]).to include(
-          "Please choose a date after the courses become available to support users",
+          "Enter a date after the courses become available to support users",
         )
       end
     end
@@ -180,7 +180,7 @@ RSpec.describe Support::RecruitmentCycleForm do
 
       it "is invalid" do
         expect(form).not_to be_valid
-        expect(form.errors[:application_start_date]).to include("Enter an application start date")
+        expect(form.errors[:application_start_date]).to include("Enter the date that candidates will be able to start applying for courses")
         expect(form.errors[:available_for_support_users_from]).to include("Enter the date when courses will become available to support users (in Publish and Support).")
       end
     end
