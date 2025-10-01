@@ -4,44 +4,39 @@ module Courses
   module EditOptions
     module StartDateConcern
       extend ActiveSupport::Concern
+
       included do
         def start_date_options
-          recruitment_year = provider.recruitment_cycle.year.to_i
+          cycle_year = provider.recruitment_cycle.year.to_i
+          options = (1..12).map { |m| "#{Date::MONTHNAMES[m]} #{cycle_year}" } +
+            (1..7).map { |m| "#{Date::MONTHNAMES[m]} #{cycle_year + 1}" }
 
-          available_options = [
-            "January #{recruitment_year}",
-            "February #{recruitment_year}",
-            "March #{recruitment_year}",
-            "April #{recruitment_year}",
-            "May #{recruitment_year}",
-            "June #{recruitment_year}",
-            "July #{recruitment_year}",
-            "August #{recruitment_year}",
-            "September #{recruitment_year}",
-            "October #{recruitment_year}",
-            "November #{recruitment_year}",
-            "December #{recruitment_year}",
+          return options if persisted?
 
-            "January #{recruitment_year + 1}",
-            "February #{recruitment_year + 1}",
-            "March #{recruitment_year + 1}",
-            "April #{recruitment_year + 1}",
-            "May #{recruitment_year + 1}",
-            "June #{recruitment_year + 1}",
-            "July #{recruitment_year + 1}",
-          ]
+          index = options.index(sliced_label_for_today(cycle_year))
 
-          if instance_of?(Course) && persisted?
-            available_options
-          else
-            starting_index = available_options.find_index "#{Date::MONTHNAMES[DateTime.now.month]} #{Find::CycleTimetable.current_year}"
-
-            available_options[starting_index..available_options.size]
-          end
+          index.blank? ? options : options[index..]
         end
 
         def show_start_date?
           !is_published?
+        end
+
+      private
+
+        def sliced_label_for_today(cycle_year)
+          today = Time.zone.today
+
+          if today.year < cycle_year
+            # We're before the cycle opens, so slice at "January <cycle_year>"
+            "#{Date::MONTHNAMES[1]} #{cycle_year}"
+          elsif today.year == cycle_year
+            # In cycle year, slice at the actual month
+            "#{Date::MONTHNAMES[today.month]} #{cycle_year}"
+          else
+            # Default to first month
+            "#{Date::MONTHNAMES[1]} #{cycle_year}"
+          end
         end
       end
     end

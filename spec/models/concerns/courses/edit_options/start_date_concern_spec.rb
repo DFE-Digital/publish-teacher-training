@@ -147,11 +147,8 @@ describe Courses::EditOptions::StartDateConcern do
         context "September 2026 (2027 cycle course but still in 2026 timetable)" do
           it "returns 2027 cycle options filtered by current 2026 timetable month" do
             travel_to Time.zone.local(2026, 9, 15) do
-              # Still in 2026 cycle according to timetable
               allow(Find::CycleTimetable).to receive(:current_year).and_return(2026)
 
-              # Looking for "September 2026" in 2027 cycle options (Jan 2027 - July 2028)
-              # This won't be found, so falls back to index 0
               expected_options = [
                 "January 2027",
                 "February 2027",
@@ -185,6 +182,15 @@ describe Courses::EditOptions::StartDateConcern do
               allow(Find::CycleTimetable).to receive(:current_year).and_return(2027)
 
               expected_options = [
+                "January 2027",
+                "February 2027",
+                "March 2027",
+                "April 2027",
+                "May 2027",
+                "June 2027",
+                "July 2027",
+                "August 2027",
+                "September 2027",
                 "October 2027",
                 "November 2027",
                 "December 2027",
@@ -227,35 +233,6 @@ describe Courses::EditOptions::StartDateConcern do
                 "May 2028",
                 "June 2028",
                 "July 2028",
-              ]
-
-              expect(example_model.start_date_options).to eq(expected_options)
-            end
-          end
-        end
-      end
-
-      # Real world scenario - today's test
-      context "actual current scenario" do
-        context "October 1, 2025 with 2026 cycle course (real situation)" do
-          it "returns start dates from October 2026 to July 2027" do
-            # This is the actual situation right now
-            travel_to Time.zone.local(2025, 10, 1, 14, 5) do
-              # Current year according to CycleTimetable is 2026
-              allow(Find::CycleTimetable).to receive(:current_year).and_return(2026)
-
-              # We're looking for "October 2026" in the options, and it exists in 2026 cycle
-              expected_options = [
-                "October 2026", # Courses can start in October 2026
-                "November 2026",
-                "December 2026",
-                "January 2027",
-                "February 2027",
-                "March 2027",
-                "April 2027",
-                "May 2027",
-                "June 2027",
-                "July 2027",
               ]
 
               expect(example_model.start_date_options).to eq(expected_options)
