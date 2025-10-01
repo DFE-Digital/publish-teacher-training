@@ -15,11 +15,23 @@ module Support
   private
 
     def filtered_candidates
-      Support::Filter.call(model_data_scope: Candidate.order(:email_address), filter_params:)
+      scope = Support::Filter.call(model_data_scope: Candidate.all, filter_params:)
+      order_scope(scope)
+    end
+
+    def order_scope(scope)
+      case params[:sort]
+      when "created_at_desc"
+        scope.order(created_at: :desc)
+      when "created_at_asc"
+        scope.order(created_at: :asc)
+      else
+        scope.order(:email_address)
+      end
     end
 
     def filter_params
-      @filter_params ||= params.except(:commit).permit(:text_search, :page, :commit)
+      @filter_params ||= params.except(:commit).permit(:text_search, :page, :commit, :sort)
     end
 
     def set_candidate
