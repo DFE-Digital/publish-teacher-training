@@ -18,7 +18,8 @@ module Find
         terminate_session
         flash[:success] = t(".sign_out")
 
-        if Settings.one_login.enabled
+        # Double clicking Sign out causes exception when Current.session has already been destroyed
+        if Settings.one_login.enabled && Current.session
           redirect_to(logout_request(Current.session.id_token).redirect_uri, allow_other_host: true)
         else
           redirect_to(find_root_path)
