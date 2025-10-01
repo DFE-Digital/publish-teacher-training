@@ -28,7 +28,7 @@ module Courses
           today = Time.zone.today
 
           if today.year < cycle_year
-            # We're before the cycle opens, so slice at "January <cycle_year>"
+            # We're before January starts, so slice at "January <cycle_year>"
             "#{Date::MONTHNAMES[1]} #{cycle_year}"
           elsif today.year == cycle_year
             # In cycle year, slice at the actual month
