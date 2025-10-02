@@ -8,6 +8,25 @@ module Authentications
 
     def options
       if one_login?
+        ## Debugging govuk one login session validations
+        unless Rails.env.production?
+          OmniAuth.config.before_request_phase = lambda do |env|
+            r = Rack::Request.new(env)
+            Rails.logger.tagged("DebugOmniAuth::Request") do
+              Rails.logger.info("DebugOmniAuth: session_keys: #{r.session.keys}")
+              Rails.logger.info("DebugOmniAuth: omniauth.params: #{r.session['omniauth.params']}")
+            end
+          end
+          OmniAuth.config.before_callback_phase = lambda do |env|
+            r = Rack::Request.new(env)
+
+            Rails.logger.tagged("DebugOmniAuth::Callback") do
+              Rails.logger.info("DebugOmniAuth: session_keys: #{r.session.keys}")
+              Rails.logger.info("DebugOmniAuth: omniauth.params: #{r.session['omniauth.params']}")
+              Rails.logger.info("DebugOmniAuth: oidc: #{r.session['oidc']}")
+            end
+          end
+        end
         {
           name: :"one-login",
           client_id: Settings.one_login.identifier,
