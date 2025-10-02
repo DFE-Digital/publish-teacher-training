@@ -47,5 +47,15 @@ describe FeatureFlag do
 
       expect(described_class.active?("test_feature")).to be(true)
     end
+
+    context "when the production environment" do
+      before do
+        allow(Rails.env).to receive(:production?).and_return(true)
+      end
+
+      it "notifies Slack" do
+        expect { described_class.activate("test_feature") }.to have_enqueued_job(SlackNotificationJob)
+      end
+    end
   end
 end
