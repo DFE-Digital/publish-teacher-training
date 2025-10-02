@@ -51,9 +51,9 @@ class FeatureFlag
     def notify_slack(feature_name, feature_activated)
       return unless Rails.env.production?
 
-      SlackNotificationJob.perform_now(
+      SlackNotificationJob.perform_later(
         I18n.t(slack_notification_i18n_key(feature_activated), feature_name: feature_name.humanize),
-        support_feature_flags_path,
+        Rails.application.routes.url_helpers.support_feature_flags_path,
       )
     end
 
