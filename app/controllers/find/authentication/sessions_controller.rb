@@ -29,7 +29,7 @@ module Find
       def failure
         Sentry.capture_message("One Login failure", extra: {
           error_type: params[:message],
-          provider: params[:provider],
+          strategy: params[:strategy],
         })
 
         render "errors/omniauth"
