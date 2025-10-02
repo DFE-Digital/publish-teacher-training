@@ -35,7 +35,7 @@ one_login:
   # URL we use to end the Onne Login session on behalf of the user
   logout_url: https://oidc.account.gov.uk/logout
   # URL user is redirected to after logging out of One Login
-  post_logout_url: https://find-teacher-training-courses.service.gov.uk/
+  post_logout_url: https://find-teacher-training-courses.service.gov.uk
   # URL of the users profile
   profile_url: https://home.account.gov.uk
 
