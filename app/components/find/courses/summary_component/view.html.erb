@@ -8,12 +8,16 @@
     <% row.with_value do %>
       <%= fee_value %>
 
-      <% if fee_hint.present? %>
-        <div class="govuk-hint govuk-!-font-size-16"><%= fee_hint %></div>
-      <% end %>
       <% if !course.salaried? && !course.apprenticeship? && !course.no_fee? %>
         <div class="govuk-hint govuk-!-font-size-16"><%= t("find.courses.fee_notice__next_academic_year") %></div>
       <% end %>
+    <% end %>
+  <% end %>
+
+  <% if bursary_value.present? %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: bursary_key) %>
+      <% row.with_value(text: bursary_value) %>
     <% end %>
   <% end %>
 
