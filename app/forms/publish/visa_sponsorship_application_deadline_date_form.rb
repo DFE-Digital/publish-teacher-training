@@ -49,7 +49,7 @@ module Publish
     end
 
     def set_date
-      @date = DateTime.new(year.to_i, month.to_i, day.to_i)
+      @date = Time.zone.local(year.to_i, month.to_i, day.to_i)
                       .end_of_day
     end
 

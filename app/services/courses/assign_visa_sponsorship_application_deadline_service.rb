@@ -14,7 +14,7 @@ module Courses
       return unless deadline_date_params_are_sent
 
       course.visa_sponsorship_application_deadline_at = if visa_sponsorship_application_deadline_required?(course)
-                                                          DateTime.new(year.to_i, month.to_i, day.to_i)
+                                                          Time.zone.local(year.to_i, month.to_i, day.to_i)
                                                                   .end_of_day
                                                         end
     rescue Date::Error
