@@ -1184,7 +1184,7 @@ private
   def visa_sponsorship_application_deadline_in_recruitment_cycle_year
     return if visa_sponsorship_application_deadline_at.nil?
 
-    if visa_sponsorship_application_deadline_at.respond_to?(:to_datetime)
+    if visa_sponsorship_application_deadline_at.respond_to?(:to_time)
       start_date = provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9)
       end_date = provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18)
 
