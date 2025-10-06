@@ -215,12 +215,6 @@ Rake/DuplicateTask:
     - 'Rakefile'
     - 'lib/tasks/brakeman.rake'
 
-# Offense count: 43
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: AllowCoercion.
-Style/DateTime:
-  Enabled: false
-
 # Offense count: 2
 # Configuration parameters: MinBranchesCount.
 Style/HashLikeCase:

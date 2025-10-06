@@ -12,7 +12,7 @@ module FeatureFlagsHelper
     last_updated = FeatureFlag.last_updated(feature_name)
 
     if last_updated
-      formatted_date = DateTime.parse(last_updated).to_fs(:govuk_date_and_time)
+      formatted_date = Time.zone.parse(last_updated).to_fs(:govuk_date_and_time)
 
       "Changed to #{feature_flag_text(feature_name)} at #{formatted_date}"
     else
