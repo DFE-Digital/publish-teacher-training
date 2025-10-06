@@ -60,7 +60,7 @@ module NotificationService
             .with(
               course,
               user,
-              Time.zone.now,
+              be_within(1.second).of(Time.zone.now),
             ).and_return(mailer = double)
           expect(mailer).to receive(:deliver_later)
         end
