@@ -245,10 +245,11 @@ describe Courses::CreationService do
     end
 
     it "create the primary course" do
-      valid_course_params.except("is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
+      valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
         expect(subject.public_send(key)).to eq(value)
       end
 
+      expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
       expect(subject.is_send).to be(true)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
@@ -265,10 +266,11 @@ describe Courses::CreationService do
       end
 
       it "create the primary course" do
-        valid_course_params.except("is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
+        valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
           expect(subject.public_send(key)).to eq(value)
         end
 
+        expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
         expect(subject.is_send).to be(true)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
@@ -304,10 +306,11 @@ describe Courses::CreationService do
     end
 
     it "create the secondary course" do
-      valid_course_params.except("is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
+      valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
         expect(subject.send(key)).to eq(value)
       end
 
+      expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
       expect(subject.is_send).to be(false)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
@@ -324,10 +327,11 @@ describe Courses::CreationService do
       end
 
       it "create the secondary course" do
-        valid_course_params.except("is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
+        valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
           expect(subject.public_send(key)).to eq(value)
         end
 
+        expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
         expect(subject.is_send).to be(false)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
@@ -360,6 +364,7 @@ describe Courses::CreationService do
       end
 
       it "creates a course" do
+        expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
         expect(subject.is_send).to be(false)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
@@ -390,6 +395,7 @@ describe Courses::CreationService do
     end
 
     it "create the further_education course" do
+      expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
       expect(subject.is_send).to be(true)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
@@ -410,10 +416,11 @@ describe Courses::CreationService do
       end
 
       it "create the further_education course" do
-        valid_course_params.except("is_send", "sites_ids", "study_sites_ids", "course_code", "study_mode").each do |key, value|
+        valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "course_code", "study_mode").each do |key, value|
           expect(subject.send(key)).to eq(value)
         end
 
+        expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
         expect(subject.is_send).to be(true)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
