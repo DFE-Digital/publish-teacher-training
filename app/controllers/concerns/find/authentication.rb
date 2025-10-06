@@ -50,16 +50,14 @@ module Find
 
     def request_authentication
       session["return_to_after_authenticating"] = request.url
-      flash_info_message = t("find.concerns.authentication.unauthenticated_message_html", sign_in_link: view_context.govuk_link_to(t("find.concerns.authentication.sign_in"), Settings.one_login.profile_url))
 
       respond_to do |format|
         format.html do
-          redirect_to find_root_path, flash: { info: flash_info_message }
+          redirect_to Settings.one_login.profile_url, allow_other_host: true
         end
 
         format.json do
-          session["flash_info"] = flash_info_message
-          render json: { redirect: find_root_path }, status: :unauthorized
+          render json: { redirect: Settings.one_login.profile_url }, status: :unauthorized
         end
       end
     end
