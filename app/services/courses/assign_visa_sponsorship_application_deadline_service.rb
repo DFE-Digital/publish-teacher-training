@@ -15,7 +15,6 @@ module Courses
 
       course.visa_sponsorship_application_deadline_at = if visa_sponsorship_application_deadline_required?(course)
                                                           DateTime.new(year.to_i, month.to_i, day.to_i)
-                                                                  .in_time_zone("London")
                                                                   .end_of_day
                                                         end
     rescue Date::Error
