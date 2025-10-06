@@ -485,7 +485,7 @@ class Course < ApplicationRecord
   end
 
   def open_for_applications?
-    applications_open_from.present? && applications_open_from <= Time.now.utc && findable? && application_status_open?
+    applications_open_from.present? && applications_open_from <= Time.zone.now.utc && findable? && application_status_open?
   end
 
   def has_vacancies?
@@ -504,7 +504,7 @@ class Course < ApplicationRecord
     site_statuses.where(status: :running)
   end
 
-  def update_changed_at(timestamp: Time.now.utc)
+  def update_changed_at(timestamp: Time.zone.now.utc)
     # Changed_at represents changes to related records as well as course
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the course record.

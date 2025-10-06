@@ -191,13 +191,6 @@ Rails/SkipsModelValidations:
   Exclude:
     - 'spec/services/authentication_service_spec.rb'
 
-# Offense count: 53
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: strict, flexible
-Rails/TimeZone:
-  Enabled: false
-
 # Offense count: 3
 # Configuration parameters: Severity, Environments.
 # Environments: development, test, production

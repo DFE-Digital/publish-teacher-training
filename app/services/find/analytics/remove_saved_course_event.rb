@@ -14,7 +14,7 @@ module Find
           namespace: "find",
           candidate_id:,
           course_id:,
-          timestamp: Time.now.utc,
+          timestamp: Time.zone.now.utc,
           referer: request.referer,
         }
       end

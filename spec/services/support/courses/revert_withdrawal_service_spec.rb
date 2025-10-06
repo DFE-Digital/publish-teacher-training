@@ -16,7 +16,7 @@ RSpec.describe Support::Courses::RevertWithdrawalService do
     end
 
     it "sets the time stamp to the current time" do
-      expect(course.enrichments.max_by(&:created_at).last_published_timestamp_utc).to be_within(1.minute).of(Time.now.utc)
+      expect(course.enrichments.max_by(&:created_at).last_published_timestamp_utc).to be_within(1.minute).of(Time.zone.now.utc)
     end
 
     it "closes the course for applications" do
