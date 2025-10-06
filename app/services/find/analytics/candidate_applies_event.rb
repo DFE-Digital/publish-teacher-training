@@ -15,7 +15,7 @@ module Find
           candidate_id:,
           course_id:,
           was_course_saved: was_course_saved?,
-          timestamp: Time.now.utc,
+          timestamp: Time.zone.now.utc,
         }
       end
 

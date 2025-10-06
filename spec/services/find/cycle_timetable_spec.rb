@@ -246,7 +246,7 @@ module Find
 
       context "before find is closed in the 2050 cycle" do
         it "returns nil" do
-          Timecop.travel(Time.local(2050, 10, 10, 9)) do
+          Timecop.travel(Time.zone.local(2050, 10, 10, 9)) do
             expect(described_class.next_find_opens).to be_nil
           end
         end

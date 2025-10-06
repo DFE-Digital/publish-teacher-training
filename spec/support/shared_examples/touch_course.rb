@@ -9,7 +9,7 @@ shared_examples "Touch course" do |model_factory|
     it "sets changed_at on the parent course to the current time" do
       Timecop.freeze do
         model.save
-        expect(model.course.changed_at).to be_within(1.second).of(Time.now.utc)
+        expect(model.course.changed_at).to be_within(1.second).of(Time.zone.now.utc)
       end
     end
 

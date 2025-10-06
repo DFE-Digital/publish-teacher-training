@@ -63,7 +63,7 @@ RSpec.describe Courses::PublishService do
       end
 
       it "updates course.changed_at" do
-        expect(course.changed_at).to be_within(1.second).of(Time.now.utc)
+        expect(course.changed_at).to be_within(1.second).of(Time.zone.now.utc)
       end
     end
 
