@@ -50,7 +50,6 @@ module Publish
 
     def set_date
       @date = DateTime.new(year.to_i, month.to_i, day.to_i)
-                      .in_time_zone("London")
                       .end_of_day
     end
 
