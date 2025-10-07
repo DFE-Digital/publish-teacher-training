@@ -23,6 +23,7 @@ module Subjects
             "Japanese",
             "Mandarin",
             "Modern languages (other)",
+            "Modern Languages",
             "Russian",
             "French",
             "Spanish",
