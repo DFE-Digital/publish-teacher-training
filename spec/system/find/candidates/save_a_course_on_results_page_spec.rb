@@ -22,7 +22,7 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
 
     then_i_save_the_course
 
-    then_i_am_prompted_to_sign_in
+    then_i_am_redirected_to_one_login_sign_in
   end
 
   def when_i_sign_in_as_a_candidate
@@ -49,9 +49,9 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     expect(page).to have_content("Saved")
   end
 
-  def then_i_am_prompted_to_sign_in
-    expect(page).to have_content("You must sign in to visit that page.")
-    expect(page).to have_current_path(find_root_path)
+  def then_i_am_redirected_to_one_login_sign_in
+    expect(page).to have_current_path("https://signin.integration.account.gov.uk/sign-in-or-create")
+    expect(page).to have_content("Create your GOV.UK One Login or sign in")
   end
 
   def given_a_published_course_exists
