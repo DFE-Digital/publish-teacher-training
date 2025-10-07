@@ -65,7 +65,7 @@ en:
           title: "Non-UK citizens: applying for salaried courses"
           competitive: You can apply for a salaried teacher training course. However, these courses are limited in number and very competitive.
           entry_requirements: Before you apply, contact the teacher training provider to check you meet the entry requirements.
-        unlikely_to_get_help: If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a student loan.
+        unlikely_to_get_help: If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan
         what_support: Find out what financial support is available to non-UK citizens.
     search:
       primary: Primary (ages 3 to 11)
@@ -83,13 +83,13 @@ en:
       learn_about: Learn about
       apprenticeships:
         title: Apprenticeships
-        description: You can train to teach on an undergraduate or postgraduate apprenticeship. 
+        description: You can train to teach on an undergraduate or postgraduate apprenticeship.
         degree_html: If you have a degree or are studying for one you may be eligible for a %{pgta_link}
         pgta_link_text: postgraduate teaching apprenticeship (PGTA).
         no_degree_html: If you do not have a degree and are not studying for one you may be eligible for a %{tda_link}
-        tda_link_text: teacher degree apprenticeship (TDA).  
+        tda_link_text: teacher degree apprenticeship (TDA).
         browse_apprenticeships_courses: Browse all apprenticeship courses.
-        find_the_right_apprenticeship: In order to find the right apprenticeship for you, you can filter courses by whether or not you have a degree. 
+        find_the_right_apprenticeship: In order to find the right apprenticeship for you, you can filter courses by whether or not you have a degree.
         teacher_degree_apprenticeships: teacher degree apprenticeships
       send:
         title: Special educational needs and disabilities (SEND)
