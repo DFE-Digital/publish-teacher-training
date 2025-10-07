@@ -11,6 +11,8 @@ module Courses
     end
 
     def execute(course)
+      return unless deadline_date_params_are_sent
+
       course.visa_sponsorship_application_deadline_at = if visa_sponsorship_application_deadline_required?(course)
                                                           DateTime.new(year.to_i, month.to_i, day.to_i)
                                                                   .in_time_zone("London")
@@ -37,6 +39,10 @@ module Courses
 
     def day
       @course_params["visa_sponsorship_application_deadline_at(3i)"]
+    end
+
+    def deadline_date_params_are_sent
+      @course_params.key?("visa_sponsorship_application_deadline_at(1i)")
     end
   end
 end
