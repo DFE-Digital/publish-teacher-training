@@ -10,11 +10,16 @@ module Courses
       @course_params = course_params
     end
 
+    # We use DateTime here instead of Time.zone because DateTime is better at
+    # validating dates.
+    # Time.zone.local(2026, 2, 31) # => => 2026-03-03 00:00:00.000000000 GMT +00:00
+    # DateTime.new(2026, 2, 31) # => Date::Error: invalid date (Date::Error)
     def execute(course)
       return unless deadline_date_params_are_sent
 
       course.visa_sponsorship_application_deadline_at = if visa_sponsorship_application_deadline_required?(course)
-                                                          Time.zone.local(year.to_i, month.to_i, day.to_i)
+                                                          DateTime.new(year.to_i, month.to_i, day.to_i) # rubocop:disable Style/DateTime
+                                                                  .in_time_zone
                                                                   .end_of_day
                                                         end
     rescue Date::Error
