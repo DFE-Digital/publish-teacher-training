@@ -5,6 +5,7 @@ en:
         all:
           or: or
           special_education_needs: Only show courses with a SEND specialism
+          online_interviews: Only show courses that offer online interviews
           applications_open: Only show courses open for applications
           further_education: Further education courses
           can_sponsor_visa: Only show courses with visa sponsorship
@@ -40,6 +41,7 @@ en:
           qualifications_html: Qualification awarded<span class="govuk-visually-hidden"> filter</span>
           minimum_degree_required_html: Degree grade<span class="govuk-visually-hidden"> filter</span>
           special_education_needs_html: Special educational needs<span class="govuk-visually-hidden"> filter</span>
+          online_interviews_html: Online interviews<span class="govuk-visually-hidden"> filter</span>
           funding_html: Fee or salary<span class="govuk-visually-hidden"> filter</span>
           applications_open_html: Applications open<span class="govuk-visually-hidden"> filter</span>
           start_date_html: Start date<span class="govuk-visually-hidden"> filter</span>

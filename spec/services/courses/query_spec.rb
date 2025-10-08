@@ -17,6 +17,46 @@ RSpec.describe Courses::Query do
       end
     end
 
+    context "when filter for interview location (online)" do
+      let!(:course_with_online_interviews) do
+        create(:course, :with_full_time_sites, name: "Course Online").tap do |course|
+          create(:course_enrichment, :published, :v2, course:, interview_location: "online")
+        end
+      end
+
+      let!(:course_with_both_interviews) do
+        create(:course, :with_full_time_sites, name: "Course Both").tap do |course|
+          create(:course_enrichment, :published, :v2, course:, interview_location: "both")
+        end
+      end
+
+      let!(:course_in_person_only) do
+        create(:course, :with_full_time_sites, name: "Course In person").tap do |course|
+          create(:course_enrichment, :published, :v2, course:, interview_location: "in person")
+        end
+      end
+
+      let!(:course_without_published_enrichment) do
+        create(:course, :with_full_time_sites, name: "Course Draft only").tap do |course|
+          create(:course_enrichment, :initial_draft, :v2, course:, interview_location: "online")
+        end
+      end
+
+      let(:params) { { interview_location: "online" } }
+
+      it "returns courses whose latest published enrichment offers online or both" do
+        expect(results).to match_collection(
+          [course_with_both_interviews, course_with_online_interviews],
+          attribute_names: %w[name],
+        )
+      end
+
+      it "excludes courses with only in-person interviews or no published enrichment" do
+        expect(results).not_to include(course_in_person_only)
+        expect(results).not_to include(course_without_published_enrichment)
+      end
+    end
+
     context "when no filters or sorting are applied" do
       let!(:findable_course) { create(:course, :with_full_time_sites) }
       let!(:another_course) { create(:course, :with_full_time_sites) }

@@ -52,6 +52,7 @@ class CourseEnrichment < ApplicationRecord
 
   scope :most_recent, -> { order(created_at: :desc, id: :desc) }
   scope :draft, -> { where(status: "draft").or(rolled_over) }
+  scope :online_interviews, -> { where("(json_data->>'InterviewLocation') IN (?)", %w[online both]) }
 
   def draft?
     status.in? %w[draft rolled_over]

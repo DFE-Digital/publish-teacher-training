@@ -48,6 +48,7 @@ module Courses
       @scope = engineers_teach_physics_scope
       @scope = subjects_scope
       @scope = study_modes_scope
+      @scope = interview_location_scope
       @scope = qualifications_scope
       @scope = further_education_scope
       @scope = minimum_degree_required_scope
@@ -226,6 +227,16 @@ module Courses
       @applied_scopes[:funding] = params[:funding]
 
       @scope.where(funding: params[:funding])
+    end
+
+    def interview_location_scope
+      return @scope if params[:interview_location].blank?
+
+      @applied_scopes[:interview_location] = params[:interview_location]
+
+      @scope
+        .joins(:latest_published_enrichment)
+        .merge(CourseEnrichment.online_interviews)
     end
 
     def start_date_scope

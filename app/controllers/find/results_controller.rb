@@ -48,6 +48,7 @@ module Find
         :radius,
         :engineers_teach_physics,
         :send_courses,
+        :interview_location,
         :sortby,
         :subject_code,
         :subject_name,
