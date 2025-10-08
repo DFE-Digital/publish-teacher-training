@@ -7,6 +7,7 @@ module Courses
     attribute :can_sponsor_visa, :boolean
     attribute :engineers_teach_physics
     attribute :funding
+    attribute :interview_location
     attribute :latitude
     attribute :level
     attribute :location

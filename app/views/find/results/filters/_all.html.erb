@@ -91,6 +91,10 @@
     <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t(".special_education_needs"), size: "s" } %>
   <% end %>
 
+  <%= form.govuk_check_boxes_fieldset :interview_location, multiple: false, legend: { text: t(".online_interviews_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
+    <%= form.govuk_check_box :interview_location, "online", multiple: false, label: { text: t(".online_interviews"), size: "s" } %>
+  <% end %>
+
   <%= form.govuk_check_boxes_fieldset :funding, legend: { text: t(".funding_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
     <%= form.govuk_check_box :funding, "fee", label: { text: t(".funding_options.fee"), size: "s" }, include_hidden: false %>
     <%= form.govuk_check_box :funding, "salary", label: { text: t(".funding_options.salary"), size: "s" }, include_hidden: false %>

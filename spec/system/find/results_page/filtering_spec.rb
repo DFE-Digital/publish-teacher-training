@@ -70,6 +70,15 @@ RSpec.describe "Search Results", :js, service: :find do
     and_the_special_education_needs_filter_is_checked
   end
 
+  scenario "when I filter by online interviews" do
+    given_there_are_courses_offering_online_interviews
+    and_there_are_courses_that_offer_in_person_only_interviews
+    when_i_visit_the_find_results_page
+    and_i_filter_by_online_interviews
+    then_i_see_only_courses_with_online_interviews
+    and_the_online_interviews_filter_is_checked
+  end
+
   def given_there_are_courses_that_sponsor_visa
     create(:course, :with_full_time_sites, :can_sponsor_skilled_worker_visa, name: "Biology", course_code: "S872")
     create(:course, :with_full_time_sites, :can_sponsor_student_visa, name: "Chemistry", course_code: "K592")
@@ -261,5 +270,43 @@ RSpec.describe "Search Results", :js, service: :find do
 
   def and_the_special_education_needs_filter_is_checked
     expect(page).to have_checked_field("Only show courses with a SEND specialism", visible: :all)
+  end
+
+  def given_there_are_courses_offering_online_interviews
+    create(:course, :with_full_time_sites, name: "Biology Online", course_code: "BOL1").tap do |course|
+      create(:course_enrichment, :published, :v2, course:, interview_location: "online")
+    end
+
+    create(:course, :with_full_time_sites, name: "Chemistry Both", course_code: "CBOT").tap do |course|
+      create(:course_enrichment, :published, :v2, course:, interview_location: "both")
+    end
+  end
+
+  def and_there_are_courses_that_offer_in_person_only_interviews
+    create(:course, :with_full_time_sites, name: "Physics In person", course_code: "PIP1").tap do |course|
+      create(:course_enrichment, :published, :v2, course:, interview_location: "in person")
+    end
+
+    create(:course, :with_full_time_sites, name: "Draft Only Online", course_code: "DOON").tap do |course|
+      create(:course_enrichment, :initial_draft, :v2, course:, interview_location: "online")
+    end
+  end
+
+  def and_i_filter_by_online_interviews
+    check "Only show courses that offer online interviews", visible: :all
+    and_i_apply_the_filters
+  end
+
+  def then_i_see_only_courses_with_online_interviews
+    with_retry do
+      expect(results).to have_content("Biology Online (BOL1)")
+      expect(results).to have_content("Chemistry Both (CBOT)")
+      expect(results).to have_no_content("Physics In person (PIP1)")
+      expect(results).to have_no_content("Draft Only Online (DOON)")
+    end
+  end
+
+  def and_the_online_interviews_filter_is_checked
+    expect(page).to have_checked_field("Only show courses that offer online interviews", visible: :all)
   end
 end
