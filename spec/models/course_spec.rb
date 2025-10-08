@@ -50,7 +50,7 @@ describe Course do
     it "sets changed_at to the current time" do
       Timecop.freeze do
         course.touch
-        expect(course.provider.changed_at).to be_within(1.second).of Time.zone.now.utc
+        expect(course.provider.changed_at).to be_within(1.second).of Time.zone.now
       end
     end
 
@@ -897,7 +897,7 @@ describe Course do
         course = create(:course, changed_at: 1.hour.ago)
         course.touch
         expect(course.changed_at).to eq course.updated_at
-        expect(course.changed_at).to be_within(1.second).of Time.zone.now.utc
+        expect(course.changed_at).to be_within(1.second).of Time.zone.now
       end
     end
   end
@@ -1139,7 +1139,7 @@ describe Course do
 
       let(:site_statuses) { [] }
 
-      let(:applications_open_from) { Time.zone.now.utc }
+      let(:applications_open_from) { Time.zone.now }
       let(:application_status) { :open }
 
       let(:course) do
@@ -1155,7 +1155,7 @@ describe Course do
         end
 
         context "applications_open_from is in future" do
-          let(:applications_open_from) { Time.zone.now.utc + 1.day }
+          let(:applications_open_from) { Time.zone.now + 1.day }
 
           its(:open_for_applications?) { is_expected.to be false }
         end
@@ -1170,7 +1170,7 @@ describe Course do
           end
 
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.zone.now.utc + 1.day }
+            let(:applications_open_from) { Time.zone.now + 1.day }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
@@ -1191,7 +1191,7 @@ describe Course do
           end
 
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.zone.now.utc + 1.day }
+            let(:applications_open_from) { Time.zone.now + 1.day }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
@@ -1211,7 +1211,7 @@ describe Course do
           end
 
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.zone.now.utc + 1.day }
+            let(:applications_open_from) { Time.zone.now + 1.day }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
@@ -1252,7 +1252,7 @@ describe Course do
 
       let(:site_statuses) { [] }
 
-      let(:applications_open_from) { Time.zone.now.utc }
+      let(:applications_open_from) { Time.zone.now }
       let(:application_status) { :open }
 
       let(:course) do
@@ -1268,7 +1268,7 @@ describe Course do
         end
 
         context "applications_open_from is in future" do
-          let(:applications_open_from) { Time.zone.now.utc + 1.day }
+          let(:applications_open_from) { Time.zone.now + 1.day }
 
           its(:open_for_applications?) { is_expected.to be false }
         end
@@ -1283,7 +1283,7 @@ describe Course do
           end
 
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.zone.now.utc + 1.day }
+            let(:applications_open_from) { Time.zone.now + 1.day }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
@@ -1304,7 +1304,7 @@ describe Course do
           end
 
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.zone.now.utc + 1.day }
+            let(:applications_open_from) { Time.zone.now + 1.day }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
@@ -1324,7 +1324,7 @@ describe Course do
           end
 
           context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.zone.now.utc + 1.day }
+            let(:applications_open_from) { Time.zone.now + 1.day }
 
             its(:open_for_applications?) { is_expected.to be false }
           end

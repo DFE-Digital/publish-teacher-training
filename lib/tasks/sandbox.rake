@@ -31,7 +31,7 @@ namespace :sandbox do
 
       provider = current_recruitment_cycle.providers.find_by(provider_name:)
       user = User
-             .create_with(first_name:, last_name:, accept_terms_date_utc: Time.zone.now.utc)
+             .create_with(first_name:, last_name:, accept_terms_date_utc: Time.zone.now)
              .find_or_create_by(email:)
 
       if provider.blank?

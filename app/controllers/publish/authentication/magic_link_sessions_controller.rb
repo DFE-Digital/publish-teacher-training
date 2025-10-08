@@ -59,7 +59,7 @@ module Publish
 
       def update_user
         user.update!(
-          last_login_date_utc: Time.zone.now.utc,
+          last_login_date_utc: Time.zone.now,
           magic_link_token: nil,
           magic_link_token_sent_at: nil,
         )

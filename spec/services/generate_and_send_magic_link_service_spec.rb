@@ -12,7 +12,7 @@ describe GenerateAndSendMagicLinkService do
     described_class.call(user:)
 
     expect(user.magic_link_token).to eq uuid
-    expect(user.magic_link_token_sent_at).to be_within(4.seconds).of(Time.zone.now.utc)
+    expect(user.magic_link_token_sent_at).to be_within(4.seconds).of(Time.zone.now)
   end
 
   it "sends the magic link email" do

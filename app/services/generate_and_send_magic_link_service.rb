@@ -17,7 +17,7 @@ private
 
   def generate_magic_link_token(user)
     user.magic_link_token = SecureRandom.uuid
-    user.magic_link_token_sent_at = Time.zone.now.utc
+    user.magic_link_token_sent_at = Time.zone.now
     user.save!
   end
 

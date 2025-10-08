@@ -5,9 +5,9 @@ FactoryBot.define do
     email { Faker::Internet.email }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    first_login_date_utc { Faker::Time.backward(days: 1).utc }
-    welcome_email_date_utc { Faker::Time.backward(days: 1).utc }
-    accept_terms_date_utc { Faker::Time.backward(days: 1).utc }
+    first_login_date_utc { Faker::Time.backward(days: 1) }
+    welcome_email_date_utc { Faker::Time.backward(days: 1) }
+    accept_terms_date_utc { Faker::Time.backward(days: 1) }
     sign_in_user_id { SecureRandom.uuid }
     state { "rolled_over" }
 
@@ -50,11 +50,11 @@ FactoryBot.define do
 
     trait :with_magic_link_token do
       magic_link_token { SecureRandom.uuid }
-      magic_link_token_sent_at { Time.zone.now.utc }
+      magic_link_token_sent_at { Time.zone.now }
     end
 
     trait :discarded do
-      discarded_at { Time.zone.now.utc }
+      discarded_at { Time.zone.now }
     end
   end
 end
