@@ -32,7 +32,7 @@ describe Contact do
 
     it "touches the provider" do
       contacts.first.save
-      expect(provider.reload.changed_at).to be_within(1.second).of Time.zone.now.utc
+      expect(provider.reload.changed_at).to be_within(1.second).of Time.zone.now
     end
 
     it { is_expected.to validate_presence_of(:name) }

@@ -135,7 +135,7 @@ describe Site do
     it "sets changed_at to the current time" do
       Timecop.freeze do
         site.touch
-        expect(site.provider.changed_at).to be_within(1.second).of(Time.zone.now.utc)
+        expect(site.provider.changed_at).to be_within(1.second).of(Time.zone.now)
       end
     end
 

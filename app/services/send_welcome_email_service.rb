@@ -19,7 +19,7 @@ class SendWelcomeEmailService
       .deliver_later
 
     current_user.update(
-      welcome_email_date_utc: Time.zone.now.utc,
+      welcome_email_date_utc: Time.zone.now,
     )
   rescue MissingFirstNameError => e
     Sentry.capture_exception(e)

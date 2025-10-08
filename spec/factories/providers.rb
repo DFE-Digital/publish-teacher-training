@@ -83,7 +83,7 @@ FactoryBot.define do
     end
 
     trait :discarded do
-      discarded_at { Time.zone.now.utc }
+      discarded_at { Time.zone.now }
     end
 
     trait :previous_recruitment_cycle do
