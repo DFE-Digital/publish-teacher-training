@@ -49,8 +49,13 @@ module Publish
     end
 
     def set_date
-      @date = Time.zone.local(year.to_i, month.to_i, day.to_i)
-                      .end_of_day
+      # We use DateTime here instead of Time.zone because DateTime is better at
+      # validating dates.
+      # Time.zone.local(2026, 2, 31) # => => 2026-03-03 00:00:00.000000000 GMT +00:00
+      # DateTime.new(2026, 2, 31) # => Date::Error: invalid date (Date::Error)
+      @date = DateTime.new(year.to_i, month.to_i, day.to_i) # rubocop:disable Style/DateTime
+        .in_time_zone
+        .end_of_day
     end
 
     def within_range
