@@ -28,7 +28,7 @@ Subjects::FinancialIncentiveCreatorService.new(year:).execute
 superuser = User.create!(
   first_name: "Super",
   last_name: "Admin",
-  accept_terms_date_utc: Time.zone.now.utc,
+  accept_terms_date_utc: Time.zone.now,
   email: "super.admin@education.gov.uk", # matches authentication.rb
   state: "rolled_over",
   admin: true,
