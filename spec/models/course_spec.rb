@@ -686,13 +686,12 @@ describe Course do
       end
 
       context "when next cycle is not available for publish users" do
-        before do
-          create(:recruitment_cycle, :next)
-          Timecop.travel(1.day.until(RecruitmentCycle.next.available_in_publish_from))
-        end
-
         it "returns false" do
-          expect(create(:course)).not_to be_manually_rollable
+          create(:recruitment_cycle, :next)
+
+          Timecop.travel(1.day.until(RecruitmentCycle.next.available_in_publish_from)) do
+            expect(create(:course)).not_to be_manually_rollable
+          end
         end
       end
     end
