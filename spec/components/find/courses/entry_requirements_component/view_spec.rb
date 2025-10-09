@@ -34,35 +34,101 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
   end
 
-  context "when physics is selected" do
-    let(:subject_name) { :physics }
+  shared_examples "non-ske subjects degree requirements" do |subject_name|
+    let(:subject_name) { subject_name[:subject_name] }
+    let(:course) { build(:course, subjects:, additional_degree_subject_requirements: false) }
 
-    it "renders correct message" do
-      expect(result.text).to include(ske_text)
+    context "when additional degree subject requirements is not selected" do
+      it "renders correct message" do
+        expect(result.text).not_to include(ske_text)
+      end
+
+      it "does not render additional subject requirements text" do
+        expect(result.text).not_to include(course.degree_subject_requirements)
+      end
+
+      it "renders the correct link" do
+        render_inline(described_class.new(course: course.decorate))
+
+        within(".govuk-details__summary") do
+          expect(result).to have_no_link(ske_url_name, href: ske_url)
+        end
+      end
     end
 
-    it "renders the correct link" do
-      render_inline(described_class.new(course: course.decorate))
+    context "when additional degree subject requirements is selected" do
+      let(:course) { build(:course, subjects:, additional_degree_subject_requirements: true) }
 
-      within(".govuk-details__summary") do
-        expect(result).to have_link(ske_url_name, href: ske_url)
+      it "renders the SKE text" do
+        expect(result.text).not_to include(ske_text)
+      end
+
+      it "renders the custom additional subject requirements text" do
+        expect(result.text).not_to include(course.degree_subject_requirements)
+      end
+
+      it "renders the correct link" do
+        render_inline(described_class.new(course: course.decorate))
+
+        within(".govuk-details__summary") do
+          expect(result).to have_no_link(ske_url_name, href: ske_url)
+        end
       end
     end
   end
 
-  context "when mathematics is selected" do
-    let(:subject_name) { :mathematics }
+  shared_examples "ske subjects degree requirements" do |subject_name|
+    let(:subject_name) { subject_name[:subject_name] }
+    let(:course) { build(:course, subjects:, additional_degree_subject_requirements: false) }
 
-    it "renders the correct message" do
-      expect(result.text).to include(ske_text)
+    context "when additional degree subject requirements is not selected" do
+      it "renders correct message" do
+        expect(result.text).to include(ske_text)
+      end
+
+      it "does not render additional subject requirements text" do
+        expect(result.text).to include(course.degree_subject_requirements)
+      end
+
+      it "renders the correct link" do
+        render_inline(described_class.new(course: course.decorate))
+
+        within(".govuk-details__summary") do
+          expect(result).to have_link(ske_url_name, href: ske_url)
+        end
+      end
     end
 
-    it "renders the correct link" do
-      render_inline(described_class.new(course: course.decorate))
+    context "when additional degree subject requirements is selected" do
+      let(:course) { build(:course, subjects:, additional_degree_subject_requirements: true) }
 
-      within(".govuk-details__summary") do
-        expect(result).to have_link(ske_url_name, href: ske_url)
+      it "renders the SKE text" do
+        expect(result.text).to include(ske_text)
       end
+
+      it "renders the custom additional subject requirements text" do
+        expect(result.text).to include(course.degree_subject_requirements)
+      end
+
+      it "renders the correct link" do
+        render_inline(described_class.new(course: course.decorate))
+
+        within(".govuk-details__summary") do
+          expect(result).to have_link(ske_url_name, href: ske_url)
+        end
+      end
+    end
+  end
+
+  describe "Text output for all SKE subjects" do
+    %i[mathematics chemistry physics computing french german spanish].each do |subject_name|
+      include_examples "ske subjects degree requirements", subject_name:
+    end
+  end
+
+  describe "Text output for non SKE subjects" do
+    %i[drama classics geography].each do |subject_name|
+      include_examples "non-ske subjects degree requirements", subject_name:
     end
   end
 
@@ -70,7 +136,9 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     let(:subjects) { [build(:secondary_subject, :german), build(:secondary_subject, :spanish)] }
 
     it "renders correct message" do
-      expect(result.text).to include(ske_text)
+      within(result.css(".govuk-details__summary", text: "Degree subject requirements")) do
+        expect(result.text).to include(ske_text)
+      end
     end
 
     it "renders the correct link" do
