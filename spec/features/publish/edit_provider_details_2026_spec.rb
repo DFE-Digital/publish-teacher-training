@@ -3,8 +3,15 @@
 require "rails_helper"
 
 feature "Why Train With Us section in 2026 cycle +" do
+  before do
+    FeatureFlag.activate(:long_form_content)
+  end
+
+  after do
+    FeatureFlag.deactivate(:long_form_content)
+  end
+
   scenario "Provider user edits provider details" do
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
     given_i_am_a_provider_user_as_a_provider_user
     when_i_visit_the_details_page
     then_i_can_edit_info_about_training_with_us

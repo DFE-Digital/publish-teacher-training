@@ -9,12 +9,17 @@ RSpec.describe "Publishing a course with long form content on the school placeme
 
   before do
     sign_in_system_test(user:)
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+    FeatureFlag.activate(:long_form_content)
+  end
+
+  after do
+    FeatureFlag.deactivate(:long_form_content)
+    FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
   end
 
   scenario "A user gets redirected to the course page if the long form content feature flag is not active" do
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
-    allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
+    FeatureFlag.deactivate(:long_form_content)
+    FeatureFlag.activate(:bursaries_and_scholarships_announced)
     given_there_is_a_draft_course
     when_i_visit_the_school_placement_page
     expect(page).to have_current_path(
@@ -117,7 +122,6 @@ RSpec.describe "Publishing a course with long form content on the school placeme
   end
 
   scenario "A user can see his changes in the dynamic preview when the field support_and_mentorship is changed", :js do
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
     given_there_is_a_draft_course
     when_i_visit_the_school_placement_page
     then_i_should_see_something_in_the_preview("The text you type above will show here.")
@@ -126,7 +130,6 @@ RSpec.describe "Publishing a course with long form content on the school placeme
   end
 
   scenario "A user can see his changes in the dynamic preview when the field placement_school_activities is changed", :js do
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
     given_there_is_a_draft_course
     when_i_visit_the_school_placement_page
     then_i_should_see_something_in_the_preview("The text you type above will show here.")
@@ -135,7 +138,6 @@ RSpec.describe "Publishing a course with long form content on the school placeme
   end
 
   scenario "A user can see his changes in the dynamic preview when the field placement_school_activities and support_and_mentorship is changed", :js do
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
     given_there_is_a_draft_course
     when_i_visit_the_school_placement_page
     then_i_should_see_something_in_the_preview("The text you type above will show here.")
@@ -144,7 +146,6 @@ RSpec.describe "Publishing a course with long form content on the school placeme
   end
 
   scenario "A user can see his changes in the dynamic preview should return the default message if all text is deleted", :js do
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
     given_there_is_a_draft_course
     when_i_visit_the_school_placement_page
     then_i_should_see_something_in_the_preview("The text you type above will show here.")
