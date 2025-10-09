@@ -1,6 +1,8 @@
 <%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
   <% notification_banner.with_heading(
-    text: "This service will be unavailable on Thursday 25 September for a short period between 5:30pm and 6pm, while we carry out maintenance",
+    text: "Service disruption today Thursday 9 October",
   ) %>
-  <p class="govuk-body">If you have any questions, contact us at <%= govuk_mail_to bat_contact_email_address %>.</p>
+  <p class="govuk-body">
+    All Department for Education services are experiencing intermittent issues. Your experience may be interrupted.
+  </p>
 <% end %>
