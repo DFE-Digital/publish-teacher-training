@@ -9,7 +9,7 @@ feature "Maintenance banner" do
 
       visit find_root_path
 
-      expect(page).to have_content "This service will be unavailable on"
+      expect(page).to have_content "Service disruption today Thursday 9 October"
     end
   end
 
@@ -20,7 +20,7 @@ feature "Maintenance banner" do
       visit find_root_path
 
       expect(page).to have_content "Find teacher training courses"
-      expect(page).to have_no_content "This service will be unavailable on"
+      expect(page).to have_no_content "Service disruption today Thursday 9 October"
     end
   end
 end
