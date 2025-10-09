@@ -1,6 +1,6 @@
 <% content_for :page_title, @provider.rolled_over? ? "Courses – #{@recruitment_cycle.title}" : "Courses" %>
 <%= content_for :before_content, render_breadcrumbs(:courses) %>
-<% if Date.current >= Date.new(2025, 9, 1) %>
+<% if Find::CycleTimetable.phase_in_time?(:now_is_before_find_opens) %>
   <%= render(NotificationBanner.new(
     text: t("publish.rollover_notification.text"),
     text_body: t(
