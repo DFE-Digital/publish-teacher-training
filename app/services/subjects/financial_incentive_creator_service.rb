@@ -19,6 +19,9 @@ module Subjects
             scholarship: "31000",
           },
           [
+            "Ancient Greek",
+            "Ancient Hebrew",
+            "Latin",
             "Italian",
             "Japanese",
             "Mandarin",
