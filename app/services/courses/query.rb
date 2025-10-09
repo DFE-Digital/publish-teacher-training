@@ -236,7 +236,7 @@ module Courses
 
       @scope
         .joins(:latest_published_enrichment)
-        .merge(CourseEnrichment.online_interviews)
+        .where("(course_enrichment.json_data->>'InterviewLocation') IN (?)", %w[online both])
     end
 
     def start_date_scope
