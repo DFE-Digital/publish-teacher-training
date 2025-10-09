@@ -58,6 +58,7 @@
       <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <%= render(FlashBanner.new(flash:)) %>
+        <%= render Find::MaintenanceBannerComponent.new %>
 
         <%= yield %>
       </main>
