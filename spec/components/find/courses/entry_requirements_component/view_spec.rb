@@ -273,6 +273,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
           :course,
           :engineers_teach_physics,
           :secondary,
+          additional_degree_subject_requirements: true,
+          subjects: [build(:secondary_subject, :physics)],
           provider: build(:provider, provider_code: "U80"),
         )
 
@@ -345,12 +347,13 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
   end
 
-  context "when the provider requires a 2:2 and specifies additional requirements" do
+  context "when the provider requires a 2:2 and specifies additional requirements and has SKE subject" do
     it "renders correct message" do
       course = build(
         :course,
         degree_grade: "two_two",
         additional_degree_subject_requirements: true,
+        subjects: [build(:secondary_subject, :physics)],
         degree_subject_requirements: "Certificate must be printed on green paper.",
       )
       result = render_inline(described_class.new(course: course.decorate))
