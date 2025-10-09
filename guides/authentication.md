@@ -8,7 +8,7 @@ The Find service is publicly available. We are in the process of looking into ad
 
 ### Basic Auth
 
-The Publish QA environment is protected by basic auth. The username and password can be provided by a Find/Publish team member.
+The Publish QA and Review environments are protected by basic auth. The username and password can be provided by a Find/Publish team member.
 
 ### DfE Sign in
 
