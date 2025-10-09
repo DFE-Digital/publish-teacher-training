@@ -249,7 +249,7 @@ private
     expect(find_course_show_page.required_qualifications).to have_content(
       "2:1 bachelor’s degree or above or equivalent qualification",
     )
-    expect(find_course_show_page.required_qualifications).to have_content(
+    expect(find_course_show_page.required_qualifications).not_to have_content(
       "Certificate must be print in blue ink",
     )
 
