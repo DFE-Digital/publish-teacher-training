@@ -23,7 +23,7 @@ We follow a [Kanban](https://www.atlassian.com/agile/kanban) development process
 We currently have the following team meetings:
 
 - Daily Standup - We have a daily 15-minute [standup](https://www.atlassian.com/agile/scrum/standups) meeting for each team member to share progress, potential blockers, and current work-in-progress with the other team members. All multi-disciplinary team members attend this meeting.
-- Weekly Dev Check-Ins - We have a meeting every Wednesday to discuss developer-oriented tasks and pain points. Only developers attend this meeting.
+- Weekly Dev Check-Ins - We have a meeting once a week to discuss developer-oriented tasks and pain points. Only developers attend this meeting.
 - Bi-Weekly Retrospective - We have a [retrospective](https://www.atlassian.com/agile/scrum/retrospectives) meeting every 2 weeks. We typically highlight "what went well?", "what could be better?", "what should we change?" All multi-disciplinary team members attend this meeting.
 - Weekly Support Handover - We have a 15-minute support handover meeting every Monday. Only the developer on the support rotation from last week, the developer on support for this week, and the backup support developer attend this meeting.
 
@@ -37,6 +37,8 @@ Each developer spends a week as the support developer. We cycle through all memb
 - We use [this Trello board](https://trello.com/b/StWME7Ig/ops-support-find-apply-ticket-tracker) to monitor and track incoming support tickets that require developer or Policy support.
 
 In order to gain access to the Production and Sandbox environments, you will need to create a [PIM Request](https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management) via the Azure console.
+
+It is the responsibility of the Support developer to manage open dependabot PRs
 
 ## Tech Stack
 
