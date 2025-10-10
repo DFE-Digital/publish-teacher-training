@@ -28,5 +28,8 @@ authentication:
   secret: secret
   mode: persona
 
+basic_auth:
+  enabled: true
+
 skylight:
   enable: false
