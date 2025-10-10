@@ -114,9 +114,9 @@ class Provider < ApplicationRecord
     where("lower(provider_code) = ?", provider_code.to_s.downcase).first!
   }
 
-  scope :changed_since, lambda { |timestamp|
-    if timestamp.present?
-      where("provider.changed_at > ?", timestamp)
+  scope :changed_since, lambda { |time|
+    if time.present?
+      where("provider.changed_at > ?", time)
     else
       where.not(changed_at: nil)
     end.order(:changed_at, :id)
@@ -311,7 +311,7 @@ class Provider < ApplicationRecord
     has_attribute?("included_accredited_courses_count") ? included_accredited_courses_count : 0
   end
 
-  def update_changed_at(timestamp: Time.now.utc)
+  def update_changed_at(timestamp: Time.zone.now)
     # Changed_at represents changes to related records as well as provider
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the provider record.

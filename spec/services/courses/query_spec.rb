@@ -1291,22 +1291,22 @@ RSpec.describe Courses::Query do
     context "when searching by start date" do
       let(:current_recruitment_cycle_year) { RecruitmentCycle.current.year.to_i }
       let!(:january_course) do
-        create(:course, :with_full_time_sites, name: "Art and design", start_date: DateTime.new(current_recruitment_cycle_year, 1, 1))
+        create(:course, :with_full_time_sites, name: "Art and design", start_date: Time.zone.local(current_recruitment_cycle_year, 1, 1))
       end
       let!(:august_course) do
-        create(:course, :with_full_time_sites, name: "Biology", start_date: DateTime.new(current_recruitment_cycle_year, 8, 1))
+        create(:course, :with_full_time_sites, name: "Biology", start_date: Time.zone.local(current_recruitment_cycle_year, 8, 1))
       end
       let!(:beginning_of_september_course) do
-        create(:course, :with_full_time_sites, name: "Computing", start_date: DateTime.new(current_recruitment_cycle_year, 9, 1))
+        create(:course, :with_full_time_sites, name: "Computing", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 1))
       end
       let!(:middle_of_september_course) do
-        create(:course, :with_full_time_sites, name: "English", start_date: DateTime.new(current_recruitment_cycle_year, 9, 15))
+        create(:course, :with_full_time_sites, name: "English", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 15))
       end
       let!(:end_of_september_course) do
-        create(:course, :with_full_time_sites, name: "Primary with english", start_date: DateTime.new(current_recruitment_cycle_year, 9, 30))
+        create(:course, :with_full_time_sites, name: "Primary with english", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 30))
       end
       let!(:october_course) do
-        create(:course, :with_full_time_sites, name: "Spanish", start_date: DateTime.new(current_recruitment_cycle_year, 10, 1))
+        create(:course, :with_full_time_sites, name: "Spanish", start_date: Time.zone.local(current_recruitment_cycle_year, 10, 1))
       end
 
       context "when searching for only september courses" do

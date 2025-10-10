@@ -238,9 +238,9 @@ class Course < ApplicationRecord
     where("lower(course.course_code) = ?", course_code.downcase)
   }
 
-  scope :changed_since, lambda { |timestamp|
-    if timestamp.present?
-      changed_at_since(timestamp)
+  scope :changed_since, lambda { |time|
+    if time.present?
+      changed_at_since(time)
     else
       where.not(changed_at: nil)
     end.order(:changed_at, :id)
@@ -485,7 +485,7 @@ class Course < ApplicationRecord
   end
 
   def open_for_applications?
-    applications_open_from.present? && applications_open_from <= Time.now.utc && findable? && application_status_open?
+    applications_open_from.present? && applications_open_from <= Time.zone.now && findable? && application_status_open?
   end
 
   def has_vacancies?
@@ -504,7 +504,7 @@ class Course < ApplicationRecord
     site_statuses.where(status: :running)
   end
 
-  def update_changed_at(timestamp: Time.now.utc)
+  def update_changed_at(timestamp: Time.zone.now)
     # Changed_at represents changes to related records as well as course
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the course record.
@@ -1184,7 +1184,7 @@ private
   def visa_sponsorship_application_deadline_in_recruitment_cycle_year
     return if visa_sponsorship_application_deadline_at.nil?
 
-    if visa_sponsorship_application_deadline_at.respond_to?(:to_datetime)
+    if visa_sponsorship_application_deadline_at.respond_to?(:to_time)
       start_date = provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9)
       end_date = provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18)
 

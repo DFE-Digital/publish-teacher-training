@@ -19,7 +19,7 @@ FactoryBot.define do
     level { :primary }
     age_range_in_years { "3_to_7" }
     resulting_in_pgce_with_qts
-    start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
+    start_date { Time.zone.local(provider.recruitment_cycle.year.to_i, 9, 1) }
     applications_open_from do
       Faker::Time.between(
         from: provider.recruitment_cycle.application_start_date,

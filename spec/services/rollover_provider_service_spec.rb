@@ -53,8 +53,8 @@ describe RolloverProviderService do
         find_or_create(
           :recruitment_cycle,
           year: 1.year.from_now.year,
-          application_start_date: DateTime.new(Date.current.year.to_i + 1, 10, 1),
-          application_end_date: DateTime.new(Date.current.year.to_i + 2, 9, 30),
+          application_start_date: Time.zone.local(Date.current.year.to_i + 1, 10, 1),
+          application_end_date: Time.zone.local(Date.current.year.to_i + 2, 9, 30),
         )
       end
 

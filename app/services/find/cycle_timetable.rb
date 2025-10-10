@@ -2,60 +2,58 @@
 
 module Find
   class CycleTimetable
-    LONDON = ActiveSupport::TimeZone["London"]
-
     CYCLE_DATES = {
       2021 => {
-        find_opens: LONDON.local(2020, 10, 6, 9),
-        apply_opens: LONDON.local(2020, 10, 13, 9),
-        first_deadline_banner: LONDON.local(2021, 7, 12, 9),
-        apply_1_deadline: LONDON.local(2021, 9, 7, 18),
-        apply_deadline: LONDON.local(2021, 9, 21, 18),
-        find_closes: LONDON.local(2021, 10, 4).end_of_day,
+        find_opens: Time.zone.local(2020, 10, 6, 9),
+        apply_opens: Time.zone.local(2020, 10, 13, 9),
+        first_deadline_banner: Time.zone.local(2021, 7, 12, 9),
+        apply_1_deadline: Time.zone.local(2021, 9, 7, 18),
+        apply_deadline: Time.zone.local(2021, 9, 21, 18),
+        find_closes: Time.zone.local(2021, 10, 4).end_of_day,
       },
       2022 => {
-        find_opens: LONDON.local(2021, 10, 5, 9),
-        apply_opens: LONDON.local(2021, 10, 12, 9),
-        first_deadline_banner: LONDON.local(2022, 8, 2, 9),
-        apply_1_deadline: LONDON.local(2022, 9, 6, 18),
-        apply_deadline: LONDON.local(2022, 9, 20, 18),
-        find_closes: LONDON.local(2022, 10, 3).end_of_day,
+        find_opens: Time.zone.local(2021, 10, 5, 9),
+        apply_opens: Time.zone.local(2021, 10, 12, 9),
+        first_deadline_banner: Time.zone.local(2022, 8, 2, 9),
+        apply_1_deadline: Time.zone.local(2022, 9, 6, 18),
+        apply_deadline: Time.zone.local(2022, 9, 20, 18),
+        find_closes: Time.zone.local(2022, 10, 3).end_of_day,
       },
       2023 => {
-        find_opens: LONDON.local(2022, 10, 4, 9),
-        apply_opens: LONDON.local(2022, 10, 11, 9),
-        first_deadline_banner: LONDON.local(2023, 8, 1, 9), # 5 weeks before Apply 1 deadline
-        apply_1_deadline: LONDON.local(2023, 9, 5, 18), # First Tuesday of September
-        apply_deadline: LONDON.local(2023, 9, 19, 18), # 2 weeks after Apply 1 deadline
-        find_closes: LONDON.local(2023, 10, 2).end_of_day, # The evening before Find opens in the new cycle
+        find_opens: Time.zone.local(2022, 10, 4, 9),
+        apply_opens: Time.zone.local(2022, 10, 11, 9),
+        first_deadline_banner: Time.zone.local(2023, 8, 1, 9), # 5 weeks before Apply 1 deadline
+        apply_1_deadline: Time.zone.local(2023, 9, 5, 18), # First Tuesday of September
+        apply_deadline: Time.zone.local(2023, 9, 19, 18), # 2 weeks after Apply 1 deadline
+        find_closes: Time.zone.local(2023, 10, 2).end_of_day, # The evening before Find opens in the new cycle
       },
       2024 => {
-        find_opens: LONDON.local(2023, 10, 3, 9), # First Tuesday of October
-        apply_opens: LONDON.local(2023, 10, 10, 9), # Second Tuesday of October
-        first_deadline_banner: LONDON.local(2024, 7, 30, 9),
-        apply_deadline: LONDON.local(2024, 9, 17, 18),
-        find_closes: LONDON.local(2024, 9, 30).end_of_day, # The evening before Find opens in the new cycle
+        find_opens: Time.zone.local(2023, 10, 3, 9), # First Tuesday of October
+        apply_opens: Time.zone.local(2023, 10, 10, 9), # Second Tuesday of October
+        first_deadline_banner: Time.zone.local(2024, 7, 30, 9),
+        apply_deadline: Time.zone.local(2024, 9, 17, 18),
+        find_closes: Time.zone.local(2024, 9, 30).end_of_day, # The evening before Find opens in the new cycle
       },
       2025 => {
-        find_opens: LONDON.local(2024, 10, 1, 9), # CONFIRMED
-        apply_opens: LONDON.local(2024, 10, 8, 9), # CONFIRMED
-        first_deadline_banner: LONDON.local(2025, 7, 12, 9), # TBC
-        apply_deadline: LONDON.local(2025, 9, 16, 18), # CONFIRMED
-        find_closes: LONDON.local(2025, 9, 29).end_of_day, # CONFIRMED
+        find_opens: Time.zone.local(2024, 10, 1, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2024, 10, 8, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2025, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2025, 9, 16, 18), # CONFIRMED
+        find_closes: Time.zone.local(2025, 9, 29).end_of_day, # CONFIRMED
       },
       2026 => {
-        find_opens: LONDON.local(2025, 9, 30, 9), # CONFIRMED
-        apply_opens: LONDON.local(2025, 10, 7, 9), # CONFIRMED
-        first_deadline_banner: LONDON.local(2026, 7, 12, 9), # TBC
-        apply_deadline: LONDON.local(2026, 9, 15, 18), # CONFIRMED
-        find_closes: LONDON.local(2026, 9, 28).end_of_day, # CONFIRMED
+        find_opens: Time.zone.local(2025, 9, 30, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2025, 10, 7, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2026, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2026, 9, 15, 18), # CONFIRMED
+        find_closes: Time.zone.local(2026, 9, 28).end_of_day, # CONFIRMED
       },
       2027 => {
-        find_opens: LONDON.local(2026, 9, 29, 9), # CONFIRMED
-        apply_opens: LONDON.local(2026, 10, 6, 9), # CONFIRMED
-        first_deadline_banner: LONDON.local(2027, 7, 12, 9), # TBC
-        apply_deadline: LONDON.local(2027, 9, 21, 18), # CONFIRMED
-        find_closes: LONDON.local(2027, 10, 4).end_of_day, # CONFIRMED
+        find_opens: Time.zone.local(2026, 9, 29, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2026, 10, 6, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2027, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2027, 9, 21, 18), # CONFIRMED
+        find_closes: Time.zone.local(2027, 10, 4).end_of_day, # CONFIRMED
       },
     }.freeze
 
@@ -129,7 +127,7 @@ module Find
     # return nil if no date is found
     def self.next_find_opens
       cycle = CYCLE_DATES.values.find do |year|
-        year[:find_opens] > LONDON.now
+        year[:find_opens] > Time.zone.now
       end
 
       return nil if cycle.blank?
@@ -173,11 +171,11 @@ module Find
 
     def self.phases_in_time
       {
-        now_is_before_find_opens: LONDON.now.between?(find_opens.beginning_of_day, find_opens),
-        today_is_after_find_opens: LONDON.now.between?(find_opens, apply_deadline),
-        today_is_mid_cycle: LONDON.now.between?(first_deadline_banner, apply_deadline),
-        today_is_after_apply_deadline_passed: LONDON.now.between?(apply_deadline, find_closes),
-        today_is_between_find_opening_and_apply_opening: LONDON.now.between?(find_opens, apply_opens),
+        now_is_before_find_opens: Time.zone.now.between?(find_opens.beginning_of_day, find_opens),
+        today_is_after_find_opens: Time.zone.now.between?(find_opens, apply_deadline),
+        today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_deadline),
+        today_is_after_apply_deadline_passed: Time.zone.now.between?(apply_deadline, find_closes),
+        today_is_between_find_opening_and_apply_opening: Time.zone.now.between?(find_opens, apply_opens),
       }
     end
 

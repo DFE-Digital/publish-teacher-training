@@ -37,37 +37,37 @@ RSpec.describe "when filtering by start date", :js, service: :find do
       :course,
       :with_full_time_sites,
       name: "Art and design",
-      start_date: DateTime.new(current_recruitment_cycle_year, 1, 1),
+      start_date: Time.zone.local(current_recruitment_cycle_year, 1, 1),
     )
     @august_course = create(
       :course,
       :with_full_time_sites,
       name: "Biology",
-      start_date: DateTime.new(current_recruitment_cycle_year, 8, 1),
+      start_date: Time.zone.local(current_recruitment_cycle_year, 8, 1),
     )
     @beginning_of_september_course = create(
       :course,
       :with_full_time_sites,
       name: "Computing",
-      start_date: DateTime.new(current_recruitment_cycle_year, 9, 1),
+      start_date: Time.zone.local(current_recruitment_cycle_year, 9, 1),
     )
     @middle_of_september_course = create(
       :course,
       :with_full_time_sites,
       name: "English",
-      start_date: DateTime.new(current_recruitment_cycle_year, 9, 15),
+      start_date: Time.zone.local(current_recruitment_cycle_year, 9, 15),
     )
     @end_of_september_course = create(
       :course,
       :with_full_time_sites,
       name: "Primary with english",
-      start_date: DateTime.new(current_recruitment_cycle_year, 9, 30),
+      start_date: Time.zone.local(current_recruitment_cycle_year, 9, 30),
     )
     @october_course = create(
       :course,
       :with_full_time_sites,
       name: "Spanish",
-      start_date: DateTime.new(current_recruitment_cycle_year, 10, 1),
+      start_date: Time.zone.local(current_recruitment_cycle_year, 10, 1),
     )
   end
 
