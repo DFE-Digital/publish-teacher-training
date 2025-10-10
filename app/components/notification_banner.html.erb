@@ -6,7 +6,7 @@
   </div>
   <div class="govuk-notification-banner__content">
     <p class="govuk-notification-banner__heading">
-      <%= text %>
+      <%= text&.html_safe %>
     </p>
     <% if text_body.present? %>
       <p class="govuk-body">
