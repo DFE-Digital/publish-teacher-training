@@ -17,11 +17,11 @@
           </p>
         <% end %>
 
-        <% if course.degree_subject_requirements.present? %>
+        <% if subject_knowledge_enhancement_content? %>
           <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".degree_subject_requirements")) do %>
-            <p class="govuk-body">
+            <% if course.degree_subject_requirements %>
               <%= helpers.markdown(course.degree_subject_requirements) %>
-            </p>
+            <% end %>
 
             <% if course.secondary_course? %>
               <% if course.engineers_teach_physics? %>
@@ -30,7 +30,6 @@
                 </p>
               <% end %>
             <% end %>
-
             <% if subject_knowledge_enhancement_content? %>
               <p class="govuk-body">
                 If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
