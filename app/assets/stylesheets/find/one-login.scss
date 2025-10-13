@@ -21,4 +21,8 @@
 
   background: none;
   border: none;
+
+  @include govuk-media-query($until: desktop) {
+  color: govuk-colour("black");
+  }
 }
