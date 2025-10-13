@@ -1,6 +1,5 @@
 <% course ||= @course %>
 <% saved_course ||= @saved_course %>
-
 <% if current_page?(find_results_path) %>
   <div data-controller="save-course"
        data-save-course-course-id-value="<%= course.id %>"
@@ -9,10 +8,10 @@
        data-save-course-unsave-url-value="<%= saved_course ? find_candidate_saved_course_path(saved_course) : "" %>"
        data-save-course-saved-icon-url-value="<%= asset_path("icon-saved.svg") %>"
        data-save-course-unsaved-icon-url-value="<%= asset_path("icon-save.svg") %>">
-
-    <button class="unstyled-button results-save-course-button__unstyled-button" data-action="click->save-course#toggle">
-      <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
-        <%= image_tag(
+    <% if @candidate.present? %>
+      <button class="unstyled-button results-save-course-button__unstyled-button" data-action="click->save-course#toggle">
+        <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
+          <%= image_tag(
               saved_course ? "icon-saved.svg" : "icon-save.svg",
               alt: saved_course ? t(".course_saved") : t(".save_this_course"),
               width: 24,
@@ -20,14 +19,16 @@
               class: "govuk-!-margin-right-2 govuk-!-padding-top-0",
               data: { save_course_target: "icon" },
             ) %>
-
-        <span class="govuk-heading-s govuk-!-margin-0 save-course-button__text"
+          <span class="govuk-heading-s govuk-!-margin-0 save-course-button__text"
               data-save-course-target="text">
-          <%= saved_course ? t(".course_saved") : t(".save_this_course") %>
-        </span>
-      </div>
-    </button>
-  </div>
+            <%= saved_course ? t(".course_saved") : t(".save_this_course") %>
+          </span>
+        </div>
+      </button>
+    </div>
+  <% else %>
+    <%= render partial: "find/courses/one_login_save_button" %>
+  <% end %>
 <% else %>
   <% if saved_course %>
     <%= render partial: "find/courses/unsave_button", locals: { saved_course: saved_course } %>

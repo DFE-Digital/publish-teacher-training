@@ -6,6 +6,7 @@ module Find
     include DfE::Analytics::Requests
     include Authentication
     include Errorable
+    include OneLoginHelper
 
     layout "find"
 
