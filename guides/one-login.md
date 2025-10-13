@@ -15,6 +15,7 @@ This document describes the authentication process for candidates in **Find**. T
 - [One Login Admin Tool](https://admin.sign-in.service.gov.uk/sign-in/enter-email-address)
 
 ### FindDeveloper
+
 **FindDeveloper** is a custom OmniAuth strategy designed specifically for use in development and non-production environments. It mimics the authentication flow of **One Login** but is used to simplify local development and testing.
 
 - [OmniAuth Documentation](https://github.com/omniauth/omniauth)
@@ -23,7 +24,7 @@ This document describes the authentication process for candidates in **Find**. T
 
 Both **One Login** and **FindDeveloper** use the **OAuth 2.0** and **OpenID Connect** protocols to handle authorization and authentication. The primary difference is that **FindDeveloper** is a mock authentication strategy used to simulate the behavior of **One Login** in development and testing environments.
 
-### Protocols in Use
+### Terminology
 
 | Term                     | Explanation                                              |
 |--------------------------|----------------------------------------------------------|
@@ -33,6 +34,15 @@ Both **One Login** and **FindDeveloper** use the **OAuth 2.0** and **OpenID Conn
 | **omniauth-govuk-one-login** | An OmniAuth plugin specifically for integrating with One Login via OpenID Connect. |
 | **FindDeveloper**         | A custom OmniAuth strategy for development environments. |
 
+
+---
+
+Find service users One Login only to authenticate the user, not to prove their identity. As such, the claims and scopes we define are minimal.
+
+| Field            | Value         |
+| ---              | ---           |
+| Scope            | OpenID, Email |
+| Vectors of Trust | P0            |
 ---
 
 ## Authentication Flow
@@ -49,12 +59,13 @@ The authentication flow is largely the same for both providers, but with differe
    - The application uses the `LogoutUtility` from **GovukOneLogin** to send a logout request to One Login.
    - For **FindDeveloper**, the logout flow is simulated.
 
-3. **Backdoor Logout**:
-   - We provide a public endpoint that One Login can call with a signed request containing the user's UID. This triggers a logout request via the **BackdoorLogoutUtility**.
+1. **Backchannel Logout**:
+   - We provide a public endpoint that One Login can call with a signed request containing the user's UID. This triggers a logout request via the `BackdoorLogoutUtility`.
    - For **FindDeveloper**, this functionality is also simulated.
+   - The path that One Login sends the logout request to in our application is `/auth/one-login/backchannel-logout`
 
 4. **Passive Authentication**:
-   - **TBC** (To be confirmed).
+   - This was a planned feature where a user with an existing One Login session could load the Find service without a Find session and be seamlessly authenticated through passive authentication. This is not a feature that One Login have made available and so we must actively authenticate, which means the user must click Sign in and One Login will respond with the necessary response to sign the user into Find.
 
 ---
 
@@ -91,6 +102,9 @@ When either provider returns an error, the app redirects to `/auth/failure`. The
 
 ## Environment-Specific Setup
 
+We use the Settings to configure our One Login local configuration. The main configuration is in `config/settings.yml` and all environments inherit conifiguration from here in the `config/settings/*` directory. We can enable or disable One Login for QA or review apps here.
+
+
 ### **One Login (Production)**
 - **Production Environment**: The app uses the **One Login** provider.
 - **Configuration**: One Login is configured in the **One Login Admin Tool**.
@@ -126,6 +140,7 @@ If you want to enable One Login in environments such as QA, a review app, or loc
 
 3. In the **One Login Admin Tool**, complete the following:
    - Set the **Redirect URL**: `https://HOSTNAME/auth/one-login/callback`
+   - Set the **Backchannel logout URL**: `https://HOSTNAME/auth/one-login/backchannel-logout`
    - Upload the **Public Key PEM** file.
 
 1. Set the necessary values in the review environment:
