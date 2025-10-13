@@ -149,6 +149,17 @@ If you want to enable One Login in environments such as QA, a review app, or loc
    - Set `ONE_LOGIN_CLIENT_ID`.
 
 
+
+### One Login Header
+
+The header in Find is displays the Sign in button when the user is not signed in and displays the links to the users One Login profile and a Sign out button when the user is signed in. The header is defined in `Govuk::OneLoginHeaderComponent`.
+The javascript and css is copied from the header maintained by One Login team.
+
+The current version we use is v3.0.1.
+
+https://github.com/govuk-one-login/service-header
+
+
 ### Setup in QA
 
 Public Key 
