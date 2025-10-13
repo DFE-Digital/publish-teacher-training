@@ -8,6 +8,7 @@ module Find
       education-ni.gov.uk
       teachinscotland.scot
       educators.wales
+      enic.org.uk
     ].freeze
 
     def track_click
