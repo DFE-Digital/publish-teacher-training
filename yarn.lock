@@ -1943,16 +1943,16 @@ govuk-frontend@^5.0.0:
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.11.1.tgz#06cd64d2bbe0bfd26aa8ce393a348bff14c59f4f"
   integrity sha512-hJJFpaer4MZLvz/2F9RZ7xZ6FqlzpxL9aw6YWOGK3F1tn419xj2WcVXwOC8Bcj/dc/LanknbWJDGkb+IdkuhTQ==
 
-govuk-frontend@^5.11.1, govuk-frontend@^5.9.0:
+govuk-frontend@^5.11.1:
   version "5.13.0"
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.13.0.tgz#11126d32a9ef0db17b19276253746da1ade4338b"
   integrity sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg==
 
-govuk-one-login/service-header@govuk-one-login/service-header#v3.0.1:
-  version "3.0.1"
-  resolved "https://codeload.github.com/govuk-one-login/service-header/tar.gz/12e31a02ad0c2b3a10e25d305b5e9a2bc541ab19"
+govuk-one-login/service-header@govuk-one-login/service-header#v3.1.1:
+  version "3.1.1"
+  resolved "https://codeload.github.com/govuk-one-login/service-header/tar.gz/da714835e44d10534e3aae31de0168782e0c15ba"
   dependencies:
-    govuk-frontend "^5.9.0"
+    govuk-frontend "^5.11.1"
     nunjucks "^3.2.4"
 
 graceful-fs@^4.1.15:
