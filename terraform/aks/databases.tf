@@ -1,3 +1,4 @@
+#test
 module "redis_worker" {
   source = "./vendor/modules/aks//aks/redis"
 
