@@ -5,9 +5,15 @@
   border: none;
 }
 
+.one-login-header__button-form {
+  display: contents;
+}
+
 // Make a button look like a link
 .one-login-header__button-link {
   @include govuk-link-common;
+
+  display: block;
 
   &:not(:hover) {
     text-decoration: none;
