@@ -155,6 +155,4 @@
   - site_statuses_reassigned
   - site_statuses_merged
   - site_statuses_removed
-  - study_site_placements_reassigned
-  - study_site_placements_removed
   - deduplicated_groups

@@ -15,8 +15,6 @@ RSpec.describe DataHub::SitesDeduplicationProcessSummary, type: :model do
         site_statuses_reassigned: 4,
         site_statuses_merged: 1,
         site_statuses_removed: 1,
-        study_site_placements_reassigned: 2,
-        study_site_placements_removed: 1,
       },
       full_summary: {
         deduplicated_groups: [
@@ -27,8 +25,6 @@ RSpec.describe DataHub::SitesDeduplicationProcessSummary, type: :model do
             site_status_reassignments: [{ site_status_id: 99, course_id: 100 }],
             site_status_merges: [],
             site_status_removals: [],
-            study_site_placement_reassignments: [],
-            study_site_placement_removals: [],
           },
         ],
       },
@@ -43,8 +39,6 @@ RSpec.describe DataHub::SitesDeduplicationProcessSummary, type: :model do
     expect(summary.site_statuses_reassigned).to eq(4)
     expect(summary.site_statuses_merged).to eq(1)
     expect(summary.site_statuses_removed).to eq(1)
-    expect(summary.study_site_placements_reassigned).to eq(2)
-    expect(summary.study_site_placements_removed).to eq(1)
     expect(summary.deduplicated_groups.first["primary_site_id"]).to eq(10)
   end
 end
