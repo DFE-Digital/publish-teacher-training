@@ -1,8 +1,7 @@
 @import "govuk-one-login/service-header/dist/styles/service-header-no-imports";
 
-// If there's only one list-item, do not put a border on it
-.one-login-header__nav__list-item:only-of-type {
-  border: none;
+.rebranded-one-login-header__nav__link-content {
+  min-height: 30px;
 }
 
 .one-login-header__button-form {
