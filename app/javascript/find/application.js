@@ -1,7 +1,7 @@
 // Entry point for the build script in your package.json
 import jQuery from 'jquery'
 import { initAll } from 'govuk-frontend'
-import { initCrossServiceHeader } from './one-login-header'
+import { initCrossServiceHeader } from 'govuk-one-login/service-header'
 
 import { Application } from '@hotwired/stimulus'
 import FilterSearchController from './controllers/filter_search_controller'
