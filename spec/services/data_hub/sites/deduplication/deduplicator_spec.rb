@@ -151,7 +151,9 @@ RSpec.describe DataHub::Sites::Deduplication::Deduplicator do
 
     context "when duplicate sites are study sites" do
       let(:primary) do
-        create(:site, :study_site, provider:, location_name: "Placement", postcode: "EC1A 1BB", urn: "99001")
+        build(:site, :study_site, provider:, location_name: "Placement", postcode: "EC1A 1BB", urn: "99001").tap do |site|
+          site.save(validate: false) # bypass name uniqueness validation
+        end
       end
 
       let(:duplicate) do

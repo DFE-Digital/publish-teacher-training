@@ -15,7 +15,7 @@ RSpec.describe DataHub::Sites::Deduplication::Executor do
 
     executor = described_class.new(site_scope: Site.where(id: [primary.id, duplicate.id]), dry_run: false)
 
-    expect { executor.execute }.to change { DataHub::SitesDeduplicationProcessSummary.count }.by(1)
+    expect { executor.execute }.to change(DataHub::SitesDeduplicationProcessSummary, :count).by(1)
 
     process_summary = DataHub::SitesDeduplicationProcessSummary.order(:created_at).last
 
