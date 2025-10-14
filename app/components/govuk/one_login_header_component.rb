@@ -16,19 +16,30 @@ module Govuk
     end
 
     def sign_out_link
-      button_to("Sign out", find_sign_out_path, class: %w[
-        one-login-header__nav__link--one-login
-        one-login-header__button-link
-        one-login-header__nav__link
-      ], method: :delete)
+      button_to(find_sign_out_path,
+                class: %w[
+                  one-login-header__button-link
+                  rebranded-one-login-header__nav__link
+                ],
+                form_class: %w[
+                  one-login-header__button-form
+                ],
+                method: :delete) do
+                  tag.span("Sign out", class: %w[rebranded-one-login-header__nav__link-content])
+                end
     end
 
     def sign_in_link
-      button_to("Sign in", path, class: %w[
-        one-login-header__nav__link--one-login
-        one-login-header__button-link
-        one-login-header__nav__link
-      ], method: :post)
+      button_to(path,
+                class: %w[
+                  one-login-header__button-link
+                  rebranded-one-login-header__nav__link
+                ],
+                form_class: %w[
+                  one-login-header__button-form
+                ], method: :post) do
+                  tag.span("Sign in", class: %w[rebranded-one-login-header__nav__link-content])
+                end
     end
 
     def path
