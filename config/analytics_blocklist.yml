@@ -150,3 +150,11 @@
   - updated_address3
   - dry_run
   - site_updates
+  - duplicate_groups_processed
+  - duplicate_sites_discarded
+  - site_statuses_reassigned
+  - site_statuses_merged
+  - site_statuses_removed
+  - study_site_placements_reassigned
+  - study_site_placements_removed
+  - deduplicated_groups
