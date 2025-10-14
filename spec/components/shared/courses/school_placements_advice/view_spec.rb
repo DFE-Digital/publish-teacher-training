@@ -20,7 +20,7 @@ describe Shared::Courses::SchoolPlacementsAdvice::View, type: :component do
       expect(result).to have_css("p.govuk-body", text: "The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.")
       expect(result).to have_link(
         "Find out more about where your school placements will take place.",
-        href: I18n.t("find.get_into_teaching.url_school_placements"),
+        href: find_track_click_path(url: I18n.t("find.get_into_teaching.url_school_placements")),
       )
     end
   end
