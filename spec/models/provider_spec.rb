@@ -233,7 +233,7 @@ describe Provider do
   end
 
   describe "#changed_since" do
-    context "with a provider that has been changed after the given timestamp" do
+    context "with a provider that has been changed after the given time" do
       subject { described_class.changed_since(10.minutes.ago) }
 
       let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
@@ -241,16 +241,16 @@ describe Provider do
       it { is_expected.to include provider }
     end
 
-    context "with a provider that has been changed less than a second after the given timestamp" do
-      subject { described_class.changed_since(timestamp) }
+    context "with a provider that has been changed less than a second after the given time" do
+      subject { described_class.changed_since(time) }
 
-      let(:timestamp) { 5.minutes.ago }
-      let(:provider) { create(:provider, changed_at: timestamp + 0.001.seconds) }
+      let(:time) { 5.minutes.ago }
+      let(:provider) { create(:provider, changed_at: time + 0.001.seconds) }
 
       it { is_expected.to include provider }
     end
 
-    context "with a provider that has been changed exactly at the given timestamp" do
+    context "with a provider that has been changed exactly at the given time" do
       subject { described_class.changed_since(publish_time) }
 
       let(:publish_time) { 10.minutes.ago }
@@ -259,7 +259,7 @@ describe Provider do
       it { expect(subject).not_to include provider }
     end
 
-    context "with a provider that has been changed before the given timestamp" do
+    context "with a provider that has been changed before the given time" do
       subject { described_class.changed_since(10.minutes.ago) }
 
       let(:provider) { create(:provider, changed_at: 1.hour.ago) }
@@ -324,17 +324,17 @@ describe Provider do
     end
 
     it "sets changed_at to the given time" do
-      timestamp = 1.hour.ago
-      provider.update_changed_at(timestamp:)
-      expect(provider.changed_at).to be_within(1.second).of(timestamp)
+      time = 1.hour.ago
+      provider.update_changed_at(time:)
+      expect(provider.changed_at).to be_within(1.second).of(time)
     end
 
     it "leaves updated_at unchanged" do
-      timestamp = 1.hour.ago
-      provider.update updated_at: timestamp
+      time = 1.hour.ago
+      provider.update updated_at: time
 
       provider.update_changed_at
-      expect(provider.updated_at).to be_within(1.second).of(timestamp)
+      expect(provider.updated_at).to be_within(1.second).of(time)
     end
   end
 

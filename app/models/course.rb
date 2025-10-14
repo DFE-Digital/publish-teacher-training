@@ -504,11 +504,11 @@ class Course < ApplicationRecord
     site_statuses.where(status: :running)
   end
 
-  def update_changed_at(timestamp: Time.zone.now)
+  def update_changed_at(time: Time.zone.now)
     # Changed_at represents changes to related records as well as course
     # itself, so we don't want to alter the semantics of updated_at which
     # represents changes to just the course record.
-    update_columns changed_at: timestamp
+    update_columns changed_at: time
     touch_provider
   end
 
