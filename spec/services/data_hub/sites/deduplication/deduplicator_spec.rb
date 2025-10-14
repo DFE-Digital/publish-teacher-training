@@ -113,7 +113,7 @@ RSpec.describe DataHub::Sites::Deduplication::Deduplicator do
         expect(primary_status.reload.site).to eq(primary)
         expect(duplicate_status.reload.site).to eq(duplicate)
 
-        expect(summary[:dry_run]).to eq(true)
+        expect(summary[:dry_run]).to be(true)
         expect(summary[:site_statuses_reassigned]).to eq(1)
         expect(summary[:duplicate_sites_discarded]).to eq(1)
       end
