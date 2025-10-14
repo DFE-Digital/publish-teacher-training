@@ -25,7 +25,7 @@ module Govuk
                   one-login-header__button-form
                 ],
                 method: :delete) do
-                  tag.span("Sign out", class: %w[rebranded-one-login-header__nav__link-content])
+                  tag.div("Sign out", class: %w[rebranded-one-login-header__nav__link-content])
                 end
     end
 
