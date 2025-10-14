@@ -11,13 +11,7 @@
 
 // Make a button look like a link
 .one-login-header__button-link {
-  @include govuk-link-common;
-
-  display: block;
-
-  &:not(:hover) {
-    text-decoration: none;
-  }
+  display: inline;
 
   font-size: inherit;
 
@@ -29,6 +23,37 @@
   border: none;
 
   @include govuk-media-query($until: desktop) {
-  color: govuk-colour("black");
+    color: govuk-colour("black");
   }
+
+  &:not(:hover) {
+    text-decoration: none;
+  }
+
+  // These hoveer/active styles are copy and pasted from the src of
+  // govuk-one-login/service-header/dist/styles/service-header-no-imports
+  // So that our Sign out button has the underline effect on hover same as the profile link
+  // "GOV.UK One Login" does
+  // https://github.com/govuk-one-login/service-header/issues/85
+  &:hover,
+  &:active {
+    text-decoration: none;
+
+    &::after {
+      display: block;
+
+      background-color: govuk-colour("white");
+    }
+  }
+
+  &:focus {
+    box-shadow: none;
+
+    &::after {
+      display: block;
+
+      background-color: $govuk-focus-text-colour;
+    }
+  }
+
 }
