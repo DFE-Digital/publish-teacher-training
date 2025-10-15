@@ -14,9 +14,13 @@ module Subjects
           %w[Mathematics] => {
             bursary_amount: "29000",
           },
-          %w[Physics Chemistry Computing] => {
+          %w[Chemistry Computing Physics] => {
             bursary_amount: "29000",
             scholarship: "31000",
+          },
+          %w[French German Spanish] => {
+            bursary_amount: "20000",
+            scholarship: "22000",
           },
           [
             "Ancient Greek",
@@ -28,17 +32,13 @@ module Subjects
             "Modern languages (other)",
             "Modern Languages",
             "Russian",
-            "French",
-            "Spanish",
-            "German",
           ] => {
             bursary_amount: "20000",
-            scholarship: "22000",
           },
           ["Design and technology"] => {
             bursary_amount: "20000",
           },
-          %w[Geography Biology] => {
+          %w[Biology Geography] => {
             bursary_amount: "5000",
           },
         },
