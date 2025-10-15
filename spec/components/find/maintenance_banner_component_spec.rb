@@ -9,7 +9,7 @@ module Find
         FeatureFlag.activate(:maintenance_banner)
         result = render_inline(described_class.new)
 
-        expect(result.text).to have_content "Service disruption today Thursday 9 October"
+        expect(result.text).to have_content "This service will be unavailable on"
       end
     end
 
