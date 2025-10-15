@@ -1,0 +1,19 @@
+<%= tag.div(class: default_classes) do %>
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title">
+      <%= t("find.concerns.authentication.important") %>
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <%= form_tag(one_login_path, method: :post, class: "govuk-notification-banner__heading") do %>
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <%= t("find.concerns.authentication.unauthenticated_message_before") %>
+      <%= button_tag(
+          t("find.concerns.authentication.sign_in"),
+          type: "submit",
+          class: "govuk-link unstyled-button govuk-notification-banner__heading"
+        ) %>
+      <%= t("find.concerns.authentication.unauthenticated_message_after") %>
+    <% end %>
+  </div>
+<% end %>

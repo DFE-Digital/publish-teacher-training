@@ -50,15 +50,14 @@ module Find
 
     def request_authentication
       session["return_to_after_authenticating"] = request.url
-      flash_info_message = t("find.concerns.authentication.unauthenticated_message")
 
       respond_to do |format|
         format.html do
-          redirect_to find_root_path, flash: { info: flash_info_message }
+          redirect_to find_root_path, flash: { sign_in: "You must sign in to visit this page." }
         end
 
         format.json do
-          session["flash_info"] = flash_info_message
+          session["flash_sign_in"] = "You must sign in to visit this page."
           render json: { redirect: find_root_path }, status: :unauthorized
         end
       end
