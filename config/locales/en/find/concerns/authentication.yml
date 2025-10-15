@@ -2,4 +2,7 @@ en:
   find:
     concerns:
       authentication:
-        unauthenticated_message: You must sign in to visit that page.
+        important: Important
+        unauthenticated_message_before: You must
+        sign_in: sign in
+        unauthenticated_message_after: to visit that page.
