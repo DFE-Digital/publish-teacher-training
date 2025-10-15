@@ -57,5 +57,4 @@ module "postgres" {
   azure_maintenance_window       = var.postgres_azure_maintenance_window
   server_version                 = "14"
   server_postgis_version         = "14-3.2"
-  server_docker_image            = "postgis/postgis:14-3.2"
 }
