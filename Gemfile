@@ -130,7 +130,7 @@ gem "jsbundling-rails", "~> 1.3"
 gem "propshaft"
 
 # for sending analytics data to the analytics platform
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.8"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.9"
 
 # Provides an accessible and lightweight autocomplete component for forms
 gem "dfe-autocomplete", github: "DFE-Digital/dfe-autocomplete", tag: "v0.2.1"
