@@ -38,4 +38,4 @@ jobs:
         azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
 
     - name: Disable maintenance app
-      run: make ${{ inputs.environment }} disable-maintenance
+      run: make ci ${{ inputs.environment }} disable-maintenance

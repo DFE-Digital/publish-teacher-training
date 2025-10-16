@@ -47,6 +47,6 @@ jobs:
         azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
 
     - name: Deploy maintenance app
-      run: make ${{ inputs.environment }} maintenance-fail-over
+      run: make ci ${{ inputs.environment }} maintenance-fail-over
       env:
         MAINTENANCE_IMAGE_TAG: ${{steps.build-image.outputs.tag}}
