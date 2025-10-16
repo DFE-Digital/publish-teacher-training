@@ -1,7 +1,7 @@
 // Entry point for your Sass build
 @import "../govuk_style_setup";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min";
-@import "./one-login";
+@import "../one-login";
 
 @import "../components/accordion";
 @import "../components/autocomplete";
@@ -21,7 +21,6 @@
 @import "./components/filter";
 @import "./components/filter-search";
 @import "./components/filters";
-@import "./components/map";
 @import "./components/no_saved_courses_box";
 @import "./components/promoted-link";
 @import "./components/quick-link-card";
