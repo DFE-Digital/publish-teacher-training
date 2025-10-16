@@ -1,3 +1,5 @@
-<%= render Shared::AdviceComponent::View.new(title: t(".heading")) do %>
-  <p class="govuk-body"><%= t(".content.accredited_provider_definition") %></p>
+<% if course.accredited_provider_code.present? && course.accredited_provider_code != course.provider_code %>
+  <%= render Shared::AdviceComponent::View.new(title: t(".heading")) do %>
+    <p class="govuk-body"><%= t(".content.accredited_provider_definition") %></p>
+  <% end %>
 <% end %>
