@@ -23,6 +23,9 @@ scope module: :publish do
   get "/how-to-use-this-service", to: "pages#how_to_use_this_service"
   get "/add-course-information", to: "pages#add_course_information", as: :add_course_information
 
+  # for course preview links to work
+  get "track_click", to: "track#track_click"
+
   scope path: "how-to-use-this-service" do
     get "/add-an-organisation", to: "pages#add_an_organisation", as: :add_an_organisation
     get "/add-and-remove-users", to: "pages#add_and_remove_users", as: :add_and_remove_users

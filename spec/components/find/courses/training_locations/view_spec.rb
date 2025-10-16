@@ -81,7 +81,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
 
       it "renders a link to the find path" do
         expect(subject).to have_link("View list of school placements",
-                                     href: url_helpers.find_placements_path(course.provider_code, course.course_code))
+                                     href: url_helpers.find_track_click_path(url: url_helpers.find_placements_path(course.provider_code, course.course_code)))
       end
     end
   end
