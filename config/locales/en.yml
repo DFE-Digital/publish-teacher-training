@@ -65,6 +65,10 @@ en:
         content:
           interview_process: Interviews sometimes include a presentation, or maths or English tests to be completed in advance. The exact interview process will vary depending on the teacher training provider.
           find_out_about_interview_preparation: Find out how to prepare for your interview.
+      what_is_an_accredited_provider_component:
+        heading: What is an accredited provider?
+        content:
+          accredited_provider_definition: Accredited providers are organisations approved by the government to manage teacher training and recommend candidates for qualified teacher status (QTS). They oversee the quality of the training, while training providers focus on delivering it.
     privacy_notice:
       page_title: "%{service_name} privacy notice"
       read_info_html: "Read the Privacy information: %{link}"
