@@ -33,6 +33,10 @@ class GiasSchool < ApplicationRecord
     }
   end
 
+  def full_address
+    [name, address1, address2, address3, town, postcode].compact_blank.join(", ")
+  end
+
 private
 
   def searchable_vector_value

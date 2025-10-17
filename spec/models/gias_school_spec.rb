@@ -38,4 +38,48 @@ describe GiasSchool do
       )
     end
   end
+
+  describe "#full_address" do
+    it "includes location name in full address" do
+      gias_school = build(
+        :gias_school,
+        name: "Southampton High School",
+        address1: "5",
+        address2: "Long Lane",
+        address3: "Holbury",
+        town: "Southampton",
+        postcode: "SO45 2PA",
+      )
+      expect(gias_school.full_address).to eq("Southampton High School, 5, Long Lane, Holbury, Southampton, SO45 2PA")
+    end
+
+    it "skip nil attributes" do
+      gias_school = build(
+        :gias_school,
+        name: "Southampton High School",
+        address1: nil,
+        address2: "Long Lane",
+        address3: "Holbury",
+        town: "Southampton",
+        postcode: "SO45 2PA",
+      )
+      expect(gias_school.full_address).to eq("Southampton High School, Long Lane, Holbury, Southampton, SO45 2PA")
+    end
+
+    context "address is missing" do
+      it "returns an empty string" do
+        gias_school = build(
+          :gias_school,
+          name: "",
+          address1: "",
+          address2: "",
+          address3: "",
+          town: "",
+          postcode: "",
+        )
+
+        expect(gias_school.full_address).to eq("")
+      end
+    end
+  end
 end
