@@ -12,7 +12,7 @@ class GeocoderService
     obj.longitude = result.longitude
 
     region_code = COUNTY_TO_REGION_CODE[result.district]
-    obj.region_code = region_code if region_code.present?
+    obj.region_code = region_code if region_code.present? && obj.respond_to?(:region_code=)
 
     obj.save!(validate: !force)
   end
