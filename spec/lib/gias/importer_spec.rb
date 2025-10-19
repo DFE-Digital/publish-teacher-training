@@ -91,4 +91,97 @@ RSpec.describe Gias::Importer do
       end
     end
   end
+
+  context "when existing school has coordinates but CSV has blank coordinates" do
+    let!(:school_with_coords) do
+      GiasSchool.create(
+        urn: "200000",
+        name: "School with Coordinates",
+        address1: "123 Main St",
+        town: "London",
+        postcode: "SW1A 1AA",
+        latitude: 51.5,
+        longitude: -0.1,
+      )
+    end
+
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        200000,Updated School Name,02,4,1,2,3,11,10079319,456 New St,,,London,,SW1A 1AA,www.example.com,02012345678,,
+      CSV_DATA
+    end
+
+    it "preserves existing coordinates when CSV has blank values" do
+      subject
+
+      expect(school_with_coords.reload).to have_attributes(
+        name: "Updated School Name",
+        address1: "456 New St",
+        latitude: 51.5, # Preserved
+        longitude: -0.1, # Preserved
+      )
+    end
+  end
+
+  context "when existing school has no coordinates and CSV has blank coordinates" do
+    let!(:school_without_coords) do
+      GiasSchool.create(
+        urn: "300000",
+        name: "School without Coordinates",
+        address1: "789 Test Ave",
+        town: "Manchester",
+        postcode: "M1 1AA",
+        latitude: nil,
+        longitude: nil,
+      )
+    end
+
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        300000,Updated School,02,4,1,2,3,11,10079319,789 Test Ave,,,Manchester,,M1 1AA,www.example.com,02012345678,,
+      CSV_DATA
+    end
+
+    it "keeps coordinates as nil when both existing and CSV are blank" do
+      subject
+
+      expect(school_without_coords.reload).to have_attributes(
+        name: "Updated School",
+        latitude: nil,
+        longitude: nil,
+      )
+    end
+  end
+
+  context "when CSV has coordinates and existing school has none" do
+    let!(:school_without_coords) do
+      GiasSchool.create(
+        urn: "400000",
+        name: "School to be geocoded",
+        address1: "999 New Rd",
+        town: "Birmingham",
+        postcode: "B1 1AA",
+        latitude: nil,
+        longitude: nil,
+      )
+    end
+
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        400000,School to be geocoded,02,4,1,2,3,11,10079319,999 New Rd,,,Birmingham,,B1 1AA,www.example.com,02012345678,52.4862,-1.8904
+      CSV_DATA
+    end
+
+    it "updates with coordinates from CSV" do
+      subject
+
+      expect(school_without_coords.reload).to have_attributes(
+        latitude: 52.4862,
+        longitude: -1.8904,
+      )
+    end
+  end
 end
