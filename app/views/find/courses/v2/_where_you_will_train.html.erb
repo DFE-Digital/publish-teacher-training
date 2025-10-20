@@ -13,25 +13,43 @@
     <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
 
     <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
-    <% if course.published_placement_selection_criteria.present? || course.published_duration_per_school.present? || course.published_theoretical_training_location.present? || course.published_theoretical_training_duration.present? %>
-    <div data-qa="course__school_placement">
-        <% if course.published_placement_selection_criteria.present? %>
-            <%= markdown(course.published_placement_selection_criteria) %>
+    <% if preview?(course) %>
+      <div data-qa="course__school_placement">
+        <% if course.placement_selection_criteria.present? %>
+            <%= markdown(course.placement_selection_criteria) %>
         <% end %>
 
-        <% if course.published_duration_per_school.present? %>
-            <%= markdown(course.published_duration_per_school) %>
+        <% if course.duration_per_school.present? %>
+            <%= markdown(course.duration_per_school) %>
         <% end %>
 
-        <% if course.published_theoretical_training_location.present? %>
-            <%= markdown(course.published_theoretical_training_location) %>
+        <% if course.theoretical_training_location.present? %>
+            <%= markdown(course.theoretical_training_location) %>
         <% end %>
 
-        <% if course.published_theoretical_training_duration.present? %>
-            <%= markdown(course.published_theoretical_training_duration) %>
+        <% if course.theoretical_training_duration.present? %>
+            <%= markdown(course.theoretical_training_duration) %>
         <% end %>
-    </div>
+
+        <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :where_you_will_train, is_preview: !where_you_will_train_present?(course)) %>
+      </div>
     <% else %>
-        <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :where_you_will_train, is_preview: preview?(params)) %>
+    <div data-qa="course__school_placement">
+      <% if course.published_placement_selection_criteria.present? %>
+          <%= markdown(course.published_placement_selection_criteria) %>
+      <% end %>
+
+      <% if course.published_duration_per_school.present? %>
+          <%= markdown(course.published_duration_per_school) %>
+      <% end %>
+
+      <% if course.published_theoretical_training_location.present? %>
+          <%= markdown(course.published_theoretical_training_location) %>
+      <% end %>
+
+      <% if course.published_theoretical_training_duration.present? %>
+          <%= markdown(course.published_theoretical_training_duration) %>
+      <% end %>
+    </div>
     <% end %>
 </div>
