@@ -41,26 +41,15 @@ module Sites
       attr_reader :dry_run, :args, :logger
 
       def build_provider_scope
-        provider_codes = parse_env_list(ENV["PROVIDER_CODES"])
         provider_ids = parse_env_list(ENV["PROVIDER_IDS"]).map(&:to_i)
         provider_ids << args[:provider_id].to_i if args[:provider_id].present?
         provider_ids.reject!(&:zero?)
 
-        recruitment_cycle_year = args[:recruitment_cycle_year] || ENV["RECRUITMENT_CYCLE_YEAR"]
-
-        provider_scope = Provider.all
-        provider_filter_applied = provider_codes.any? || provider_ids.any?
-
-        if recruitment_cycle_year.present? && !provider_filter_applied
-          provider_scope = provider_scope.joins(:recruitment_cycle).where(recruitment_cycles: { year: recruitment_cycle_year })
-        elsif recruitment_cycle_year.present? && provider_filter_applied
-          logger.info("Recruitment cycle filter ignored because provider filters were supplied.")
+        if provider_ids.empty?
+          raise ArgumentError, "You must supply at least one provider ID via PROVIDER_IDS or the task argument."
         end
 
-        provider_scope = provider_scope.where(provider_code: provider_codes) if provider_codes.any?
-        provider_scope = provider_scope.where(id: provider_ids) if provider_ids.any?
-
-        provider_scope
+        Provider.where(id: provider_ids)
       end
 
       def print_summary(process_summary)
