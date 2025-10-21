@@ -37,7 +37,7 @@ module Gias
 
     def preserve_coordinates?(gias_school, school_record)
       gias_school.latitude.present? && gias_school.longitude.present? &&
-        school_record["latitude"].blank? && school_record["longitude"].blank?
+        (school_record["latitude"].blank? || school_record["longitude"].blank?)
     end
   end
 end
