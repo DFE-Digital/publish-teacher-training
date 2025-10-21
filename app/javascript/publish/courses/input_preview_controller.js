@@ -21,6 +21,8 @@ export default class extends Controller {
 
     // Group inputs by their preview target (individual or shared).
     this.inputTargets.forEach(input => {
+      // For radio inputs, only consider the checked option
+      if (input.type === 'radio' && !input.checked) return
       // Each input can declare a data attribute for its preview target.
       // If `data-preview-output-target` is set on the input, use that; otherwise use 'shared'.
       const previewKey = input.dataset.previewOutputTarget || 'shared'
@@ -59,6 +61,23 @@ export default class extends Controller {
           // If there's a value, prefix it with £; if not, leave it blank.
           previewContent = sanitizedValue ? `£${sanitizedValue}` : ''
           return // Skip further processing for currency fields.
+        }
+
+        // Special case: interview location radios
+        if (key === 'interview_location') {
+          const normalized = (rawContent || '').toLowerCase()
+          const onlineMsg = previewEl.dataset.onlineMessage
+          const bothMsg = previewEl.dataset.bothMessage
+          const bothHint = previewEl.dataset.bothHint
+
+          if (normalized === 'online') {
+            previewContent = `<div class="govuk-inset-text"><p>${onlineMsg}</p></div>`
+          } else if (normalized === 'both') {
+            previewContent = `<div class="govuk-inset-text"><p class="govuk-!-margin-bottom-0">${bothMsg}</p><p class="govuk-hint govuk-!-margin-top-0">${bothHint}</p></div>`
+          } else {
+            previewContent = ''
+          }
+          return
         }
 
         // **Default case**: Render rich text preview with basic formatting.
@@ -113,9 +132,10 @@ export default class extends Controller {
         previewContent += blockHtml
       })
 
-      // If the preview content is empty after processing, we can set a default message.
+      // If the preview content is empty after processing, we can set a default message,
+      // except for interview_location where empty should remain empty (e.g. In person).
       const previewContentWithoutTags = previewContent.replace(/<[^>]*>/g, '')
-      if (previewContentWithoutTags === '') {
+      if (previewContentWithoutTags === '' && key !== 'interview_location') {
         previewContent = '<p>The text you type above will show here.</p>'
       };
       // Finally, update the preview element's HTML with the compiled content.
