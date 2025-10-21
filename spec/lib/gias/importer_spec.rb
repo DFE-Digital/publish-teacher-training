@@ -184,4 +184,64 @@ RSpec.describe Gias::Importer do
       )
     end
   end
+
+  context "when CSV latitude is blank but longitude has value and existing school has both coordinates" do
+    let!(:school_with_coords) do
+      GiasSchool.create(
+        urn: "500000",
+        name: "School with Both Coordinates",
+        address1: "111 Test St",
+        town: "Leeds",
+        postcode: "LS1 1AA",
+        latitude: 53.8008,
+        longitude: -1.5491,
+      )
+    end
+
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        500000,School with Both Coordinates,02,4,1,2,3,11,10079319,111 Test St,,,Leeds,,LS1 1AA,www.example.com,02012345678,,-1.9000
+      CSV_DATA
+    end
+
+    it "preserves both existing coordinates when CSV latitude is blank" do
+      subject
+
+      expect(school_with_coords.reload).to have_attributes(
+        latitude: 53.8008,  # Preserved
+        longitude: -1.5491, # Preserved (not -1.9000)
+      )
+    end
+  end
+
+  context "when CSV longitude is blank but latitude has value and existing school has both coordinates" do
+    let!(:school_with_coords) do
+      GiasSchool.create(
+        urn: "600000",
+        name: "Another School with Coordinates",
+        address1: "222 Sample Rd",
+        town: "Bristol",
+        postcode: "BS1 1AA",
+        latitude: 51.4545,
+        longitude: -2.5879,
+      )
+    end
+
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        600000,Another School with Coordinates,02,4,1,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,51.9000,
+      CSV_DATA
+    end
+
+    it "preserves both existing coordinates when CSV longitude is blank" do
+      subject
+
+      expect(school_with_coords.reload).to have_attributes(
+        latitude: 51.4545,  # Preserved (not 51.9000)
+        longitude: -2.5879, # Preserved
+      )
+    end
+  end
 end
