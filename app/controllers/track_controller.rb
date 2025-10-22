@@ -52,7 +52,11 @@ private
 
     uri = URI.parse(url)
 
-    return url if uri.relative? || host_allowed?(uri.host)
+    if uri.relative? && uri.host.blank? && uri.scheme.blank?
+      return url
+    end
+
+    return url if uri.host.present? && host_allowed?(uri.host)
 
     find_root_path
   rescue URI::InvalidURIError => e
