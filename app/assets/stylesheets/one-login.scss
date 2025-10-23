@@ -21,8 +21,13 @@
   background: none;
   border: none;
 
-  @include govuk-media-query($until: desktop) {
-    color: govuk-colour("black");
+  @include govuk-media-query($until: tablet) {
+    // arbitrary values to make the like appear the same as GOV.UK One Login link
+    height: 20px;
+
+    padding: 0;
+
+    color: govuk-colour("blue");
   }
 
   &:not(:hover) {
