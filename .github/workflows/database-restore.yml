@@ -104,7 +104,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::Clear user data"
-          psql -d ${DATABASE_NAME} -f db/scripts/sanitise.sql
+          psql -d ${DATABASE_NAME} -v ON_ERROR_STOP=1 -f db/scripts/sanitise.sql
             if [ $? -ne 0 ]; then
               echo "db/scripts/sanitise.sql failed" >&2
               exit 1
