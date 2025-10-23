@@ -1,5 +1,4 @@
 DELETE FROM session;
-DELETE FROM access_request;
 DELETE FROM audit;
 
 UPDATE "user"
