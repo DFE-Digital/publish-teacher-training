@@ -17,23 +17,23 @@
           </p>
         <% end %>
 
-        <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".degree_subject_requirements")) do %>
-          <% if course.degree_subject_requirements %>
-            <%= helpers.markdown(course.degree_subject_requirements) %>
-          <% end %>
+        <% if course.degree_subject_requirements.present? || subject_knowledge_enhancement_content? %>
+          <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".degree_subject_requirements")) do %>
+            <% if course.degree_subject_requirements %>
+              <%= helpers.markdown(course.degree_subject_requirements) %>
+            <% end %>
 
-          <% if course.secondary_course? %>
-            <% if course.engineers_teach_physics? %>
+            <% if course.secondary_course? && course.engineers_teach_physics? %>
               <p class="govuk-body">
                 This <%= govuk_link_to "Engineers teach physics", find_track_click_path(url: t("find.get_into_teaching.url_engineers_teach_physics")) %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
               </p>
             <% end %>
-          <% end %>
 
-          <% if subject_knowledge_enhancement_content? %>
-            <p class="govuk-body">
-              If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", find_track_click_path(url: t("find.get_into_teaching.url_subject_knowledge_enhancement")) %>
-            </p>
+            <% if subject_knowledge_enhancement_content? %>
+              <p class="govuk-body">
+                If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", find_track_click_path(url: t("find.get_into_teaching.url_subject_knowledge_enhancement")) %>
+              </p>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
