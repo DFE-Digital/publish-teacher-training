@@ -36,15 +36,11 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
   shared_examples "non-ske subjects degree requirements" do |subject_name|
     let(:subject_name) { subject_name[:subject_name] }
-    let(:course) { build(:course, subjects:, additional_degree_subject_requirements: false) }
+    let(:course) { build(:course, subjects:, additional_degree_subject_requirements: false, degree_subject_requirements: nil) }
 
     context "when additional degree subject requirements is not selected" do
       it "renders correct message" do
         expect(result.text).not_to include(ske_text)
-      end
-
-      it "does not render additional subject requirements text" do
-        expect(result.text).not_to include(course.degree_subject_requirements)
       end
 
       it "renders the correct link" do
@@ -57,14 +53,14 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
 
     context "when additional degree subject requirements is selected" do
-      let(:course) { build(:course, subjects:, additional_degree_subject_requirements: true) }
+      let(:course) { build(:course, subjects:, additional_degree_subject_requirements: true, degree_subject_requirements: "additional degree requirements") }
 
-      it "renders the SKE text" do
+      it "does not render the SKE text" do
         expect(result.text).not_to include(ske_text)
       end
 
       it "renders the custom additional subject requirements text" do
-        expect(result.text).not_to include(course.degree_subject_requirements)
+        expect(result.text).to include(course.degree_subject_requirements)
       end
 
       it "renders the correct link" do
