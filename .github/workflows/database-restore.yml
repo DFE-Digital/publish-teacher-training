@@ -105,6 +105,10 @@ jobs:
 
           echo "::group::Clear user data"
           psql -d ${DATABASE_NAME} -f db/scripts/sanitise.sql
+            if [ $? -ne 0 ]; then
+              echo "db/scripts/sanitise.sql failed" >&2
+              exit 1
+            fi
           echo "::endgroup::"
 
           echo "::group::Integration setup"
