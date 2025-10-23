@@ -9,13 +9,19 @@ class SupportTitleBar < ViewComponent::Base
     @current_user = current_user
   end
 
+  def render?
+    params[:recruitment_cycle_year].present?
+  end
+
 private
 
   def title
     if current_recruitment_cycle?
       "Recruitment cycle #{previous_recruitment_cycle_year} to #{current_recruitment_cycle_year} - current"
-    else
-      "Recruitment cycle #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year}"
+    elsif next_recruitment_cycle?
+      "Recruitment cycle #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} - next"
+    elsif previous_recruitment_cycle?
+      "Recruitment cycle #{previous_recruitment_cycle_year - 1} to #{previous_recruitment_cycle_year} - previous"
     end
   end
 
@@ -41,6 +47,10 @@ private
 
   def next_recruitment_cycle?
     recruitment_cycle_year == Find::CycleTimetable.next_year
+  end
+
+  def previous_recruitment_cycle?
+    recruitment_cycle_year == Find::CycleTimetable.previous_year
   end
 
   def previous_recruitment_cycle_year
