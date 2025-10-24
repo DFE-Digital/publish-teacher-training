@@ -519,6 +519,10 @@ class CourseDecorator < ApplicationDecorator
     object.ratifying_provider_description
   end
 
+  def accrediting_provider_value_proposition
+    object.ratifying_provider_value_proposition
+  end
+
   def has_physical_education_subject?
     subjects.map(&:subject_name).include?("Physical education")
   end

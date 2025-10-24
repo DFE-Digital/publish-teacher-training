@@ -437,6 +437,10 @@ class Course < ApplicationRecord
     accrediting_provider&.about_us
   end
 
+  def ratifying_provider_value_proposition
+    accrediting_provider&.value_proposition
+  end
+
   def publishable?
     valid? :publish
   end
