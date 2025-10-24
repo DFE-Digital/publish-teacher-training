@@ -1,0 +1,63 @@
+@import "govuk-one-login/service-header/dist/styles/service-header-no-imports";
+
+.rebranded-one-login-header__nav__link-content {
+  min-height: 30px;
+}
+
+.one-login-header__button-form {
+  display: contents;
+}
+
+// Make a button look like a link
+.one-login-header__button-link {
+  display: inline;
+
+  font-size: inherit;
+
+  color: govuk-colour("white");
+
+  cursor: pointer;
+
+  background: none;
+  border: none;
+
+  @include govuk-media-query($until: tablet) {
+    // arbitrary values to make the like appear the same as GOV.UK One Login link
+    height: 20px;
+
+    padding: 0;
+
+    color: govuk-colour("blue");
+  }
+
+  &:not(:hover) {
+    text-decoration: none;
+  }
+
+  // These hoveer/active styles are copy and pasted from the src of
+  // govuk-one-login/service-header/dist/styles/service-header-no-imports
+  // So that our Sign out button has the underline effect on hover same as the profile link
+  // "GOV.UK One Login" does
+  // https://github.com/govuk-one-login/service-header/issues/85
+  &:hover,
+  &:active {
+    text-decoration: none;
+
+    &::after {
+      display: block;
+
+      background-color: govuk-colour("white");
+    }
+  }
+
+  &:focus {
+    box-shadow: none;
+
+    &::after {
+      display: block;
+
+      background-color: $govuk-focus-text-colour;
+    }
+  }
+
+}
