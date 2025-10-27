@@ -20,6 +20,9 @@
 .env.local
 .env.*.local
 
+#Ignore .pem files
+*.pem
+
 # Developer config
 Procfile.local
 
