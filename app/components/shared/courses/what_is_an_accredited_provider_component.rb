@@ -9,6 +9,10 @@ module Shared
         super
         @course = course
       end
+
+      def render?
+        course.accredited_provider_code.present? && course.accredited_provider_code != course.provider_code
+      end
     end
   end
 end
