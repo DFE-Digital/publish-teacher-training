@@ -9,16 +9,6 @@ RSpec.describe CourseEnrichment do
   end
 
   describe "defaults" do
-    it "defaults version to 1" do
-      expect(build(:course_enrichment).version).to eq 1
-    end
-  end
-
-  describe "default v2 if feature flag is enabled" do
-    before do
-      allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
-    end
-
     it "defaults version to 2" do
       expect(build(:course_enrichment).version).to eq 2
     end
@@ -157,7 +147,7 @@ RSpec.describe CourseEnrichment do
       let(:course) { create(:course) }
 
       it "is not valid to publish v2" do
-        allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
+        record.update!(version: 2)
         expect(record).not_to be_valid(:publish)
         expect(record.errors[:placement_school_activities]).to include("^Enter what will trainees do while in their placement schools")
         expect(record.reload).to be_draft

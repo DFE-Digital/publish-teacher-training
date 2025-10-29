@@ -151,7 +151,7 @@ class CourseEnrichment < ApplicationRecord
   end
 
   def apply_publish_changes
-    self.version = 2
+    self.version ||= 2
   end
 
   def publish(current_user)
