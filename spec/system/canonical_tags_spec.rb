@@ -63,7 +63,7 @@ RSpec.describe "Canonical tags" do
   end
 
   def and_i_click_an_anchor_tag
-    click_link_or_button "Where you will train"
+    click_link_or_button "Interview process"
   end
 
   def then_the_page_contains_canonical_tags_for_a_course
