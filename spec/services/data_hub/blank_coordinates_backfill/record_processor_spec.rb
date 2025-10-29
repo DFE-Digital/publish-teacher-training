@@ -6,6 +6,10 @@ RSpec.describe DataHub::BlankCoordinatesBackfill::RecordProcessor, type: :servic
   let(:geocoder) { DataHub::Geocoder::DryRun.new }
 
   before do
+    allow(geocoder).to receive(:rand).with(no_args).and_return(0.1)
+    allow(geocoder).to receive(:rand).with(49.9..60.8).and_return(51.509865, 53.800755)
+    allow(geocoder).to receive(:rand).with(-8.6..1.8).and_return(-0.118092, -1.549077)
+
     process_summary.initialize_summary!(total_records: 1, batch_size: 40, dry_run: true)
   end
 
