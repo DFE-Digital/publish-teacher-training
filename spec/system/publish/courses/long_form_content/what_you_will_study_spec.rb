@@ -12,8 +12,6 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
   end
 
   scenario "A user CAN'T update the 'What you will study' page if theoretcial training activities section is blank" do
-    FeatureFlag.activate(:long_form_content)
-
     given_there_is_a_draft_course
     when_i_visit_the_course_page
     then_i_edit_the_what_you_will_study_fields(theoretical_training_activities: "", assessment_methods: "Some assessment methods")
@@ -22,8 +20,6 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
   end
 
   scenario "A user CANNOT update the 'What you will study' page if the theoretical training activities field and/or the assessment method field is over the word count" do
-    FeatureFlag.activate(:long_form_content)
-
     given_there_is_a_draft_course
     when_i_visit_the_course_page
     then_i_edit_the_what_you_will_study_fields(theoretical_training_activities: generate_text(151), assessment_methods: generate_text(51))
@@ -33,8 +29,6 @@ RSpec.describe "Publishing a course with long form content", service: :publish d
   end
 
   scenario "A user CAN see the new 'What you will study' content fields if the current cycle in 2026 or beyond" do
-    FeatureFlag.activate(:long_form_content)
-
     given_the_recruitment_cycle_year(2026)
     given_there_is_a_draft_course(recruitment_cycle: RecruitmentCycle.current)
     when_i_visit_the_course_page
