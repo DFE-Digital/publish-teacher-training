@@ -38,7 +38,6 @@ module CoursePreview
 
       shared_examples "course with missing information" do |information_type, text|
         it "renders link for missing #{information_type}" do
-          allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
           render_inline(described_class.new(course:, information_type:, is_preview: true))
 
           expect(page).to have_link(text, href: hrefs[information_type])
