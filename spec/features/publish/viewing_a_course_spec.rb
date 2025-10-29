@@ -7,7 +7,6 @@ feature "Course show" do
 
   before do
     allow(FeatureFlag).to receive(:active?)
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
   end
 
   around do |example|
