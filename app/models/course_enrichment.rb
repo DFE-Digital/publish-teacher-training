@@ -5,8 +5,7 @@ class CourseEnrichment < ApplicationRecord
   include RecruitmentCycleHelper
   enum :status, { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }
 
-  # Default to version 2 if the feature flag is active, otherwise default to version 1
-  attribute :version, :integer, default: -> { FeatureFlag.active?(:long_form_content) ? 2 : 1 }
+  attribute :version, :integer, default: 2
 
   INTERVIEW_LOCATION_VALUES = ["online", "in person", "both", nil].freeze
 
@@ -152,7 +151,7 @@ class CourseEnrichment < ApplicationRecord
   end
 
   def apply_publish_changes
-    self.version = FeatureFlag.active?(:long_form_content) ? 2 : 1
+    self.version = 2
   end
 
   def publish(current_user)

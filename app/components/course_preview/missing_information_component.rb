@@ -45,19 +45,11 @@ module CoursePreview
     def provider_train_with_disability_link = edit_publish_provider_recruitment_cycle_disability_support_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true)
 
     def train_with_us_link
-      if FeatureFlag.active?(:long_form_content)
-        edit_publish_provider_recruitment_cycle_why_train_with_us_path(provider_code, recruitment_cycle_year, course_code:, goto_provider: true)
-      else
-        about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_provider: true, anchor: "train-with-us")
-      end
+      edit_publish_provider_recruitment_cycle_why_train_with_us_path(provider_code, recruitment_cycle_year, course_code:, goto_provider: true)
     end
 
     def train_with_disability_link
-      if FeatureFlag.active?(:long_form_content)
-        edit_publish_provider_recruitment_cycle_disability_support_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true)
-      else
-        about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true, anchor: "train-with-disability")
-      end
+      edit_publish_provider_recruitment_cycle_disability_support_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true)
     end
   end
 end
