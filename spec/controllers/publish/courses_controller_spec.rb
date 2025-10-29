@@ -12,7 +12,7 @@ module Publish
         :course,
         :with_gcse_equivalency,
         :with_accrediting_provider,
-        enrichments: [build(:course_enrichment, :initial_draft)],
+        enrichments: [build(:course_enrichment, :initial_draft, :v2)],
         sites: [create(:site, location_name: "location 1")],
         study_sites: [create(:site, :study_site)],
         provider:,
@@ -40,9 +40,7 @@ module Publish
         let(:v2_enrichment) { create(:course_enrichment, :v2, status: "draft", course:) }
 
         before do
-          allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
           v1_enrichment
-          allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
           v2_enrichment
         end
 
