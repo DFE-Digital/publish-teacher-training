@@ -4,16 +4,18 @@
       <%= t("find.concerns.authentication.important") %>
     </h2>
   </div>
-  <div class="govuk-notification-banner__content">
-    <%= form_tag(one_login_path, method: :post, class: "govuk-notification-banner__heading") do %>
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-      <%= t("find.concerns.authentication.unauthenticated_message_before") %>
-      <%= button_tag(
+  <div class="one-login-banner__container">
+    <div class="govuk-notification-banner__content">
+      <%= form_tag(one_login_path, method: :post, class: "govuk-notification-banner__heading") do %>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <%= t("find.concerns.authentication.unauthenticated_message_before") %>
+        <%= button_tag(
           t("find.concerns.authentication.sign_in"),
           type: "submit",
-          class: "govuk-link unstyled-button govuk-notification-banner__heading",
+          class: "govuk-link unstyled-button govuk-notification-banner__heading one-login__button-link--sign-in",
         ) %>
-      <%= t("find.concerns.authentication.unauthenticated_message_after") %>
-    <% end %>
+        <%= t("find.concerns.authentication.unauthenticated_message_after") %>
+      <% end %>
+    </div>
   </div>
 <% end %>
