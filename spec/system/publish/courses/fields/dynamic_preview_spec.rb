@@ -8,7 +8,6 @@ RSpec.describe "Dynamic preview", service: :publish do
   let(:user) { create(:user) }
 
   before do
-    FeatureFlag.activate(:long_form_content)
     sign_in_system_test(user:)
   end
 
