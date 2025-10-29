@@ -10,20 +10,8 @@ module Publish
       class BaseController < ::Publish::ApplicationController
         include CopyCourseContent
         before_action :authorise_with_pundit
-        before_action :redirect_to_course_if_feature_disabled
 
       private
-
-        # Redirects to the course page if the long form content feature flag is not active
-        def redirect_to_course_if_feature_disabled
-          unless FeatureFlag.active?(:long_form_content)
-            redirect_to publish_provider_recruitment_cycle_course_path(
-              provider.provider_code,
-              recruitment_cycle.year,
-              course.course_code,
-            )
-          end
-        end
 
         # Authorises the user with Pundit
         def authorise_with_pundit
