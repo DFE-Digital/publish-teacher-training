@@ -180,7 +180,7 @@ class Course < ApplicationRecord
       latest_draft_enrichment || new(new_draft_attributes)
     end
 
-    def new_draft_attributes(draft_version = 2)
+    def new_draft_attributes
       latest_published_enrichment = most_recent.published.first
 
       new_enrichment_attributes = if latest_published_enrichment.present?
@@ -194,7 +194,7 @@ class Course < ApplicationRecord
                                   end
 
       new_enrichment_attributes.merge(
-        { status: :draft, last_published_timestamp_utc: nil, version: draft_version },
+        { status: :draft, last_published_timestamp_utc: nil, version: 2 },
       )
     end
   end
