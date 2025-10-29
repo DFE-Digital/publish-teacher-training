@@ -16,8 +16,10 @@ describe "#publishable?" do
     expect(course.errors.messages).to eq(
       { sites: ["^Select at least one school"],
         accrediting_provider: ["Select an accredited provider"],
-        about_course: ["^Enter information about this course"],
-        how_school_placements_work: ["^Enter details about how placements work"],
+        placement_selection_criteria: ["^Enter how you decide which schools to place trainees in"],
+        duration_per_school: ["^Enter how much time trainees will spend in each school"],
+        placement_school_activities: ["^Enter what will trainees do while in their placement schools"],
+        theoretical_training_activities: ["^Enter details about theoretical training activities"],
         course_length: ["^Enter a course length"],
         salary_details: ["^Enter details about the salary for this course"],
         base: ["Enter GCSE requirements"] },
@@ -38,7 +40,7 @@ describe "#publishable?" do
   end
 
   context "with enrichment" do
-    let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
+    let(:enrichment) { build(:course_enrichment, :subsequent_draft, :v2, created_at: 1.day.ago) }
     let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
     let(:course) do
       create(:course, :with_gcse_equivalency, :with_accrediting_provider, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status], study_sites: [study_site])
