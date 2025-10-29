@@ -1,0 +1,10 @@
+// make 'sign in' link blue in One Login banner component and remove bottom margin
+.one-login__button-link--sign-in {
+  margin-bottom: 0;
+
+  color: govuk-colour("blue", "600");
+}
+
+.one-login-banner__container .govuk-notification-banner__content {
+  @include govuk-media-query($from: tablet);
+}
