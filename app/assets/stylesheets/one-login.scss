@@ -1,16 +1,16 @@
 @import "govuk-one-login/service-header/dist/styles/service-header-no-imports";
 
-.rebranded-one-login-header__nav__link-content {
-  min-height: 30px;
-}
-
 .one-login-header__button-form {
   display: contents;
 }
 
 // Make a button look like a link
+// in the One Login Gov.uk header
 .one-login-header__button-link {
   display: inline;
+
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 
   font-size: inherit;
 
@@ -21,43 +21,81 @@
   background: none;
   border: none;
 
+  &:focus,
+  &:active {
+    color: govuk-colour("black");
+
+    text-decoration: none;
+
+    outline: 3px solid transparent;
+
+    background-color: govuk-colour("yellow");
+  }
+
   @include govuk-media-query($until: tablet) {
     // arbitrary values to make the like appear the same as GOV.UK One Login link
-    height: 20px;
-
     padding: 0;
 
     color: govuk-colour("blue");
-  }
 
-  &:not(:hover) {
-    text-decoration: none;
-  }
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 0.1578em;
+    }
 
-  // These hoveer/active styles are copy and pasted from the src of
-  // govuk-one-login/service-header/dist/styles/service-header-no-imports
-  // So that our Sign out button has the underline effect on hover same as the profile link
-  // "GOV.UK One Login" does
-  // https://github.com/govuk-one-login/service-header/issues/85
-  &:hover,
-  &:active {
-    text-decoration: none;
+    &:focus,
+    &:active {
+      text-decoration: none;
 
-    &::after {
-      display: block;
-
-      background-color: govuk-colour("white");
+      box-shadow:
+        0 -2px govuk-colour("yellow"),
+        0 4px govuk-colour("black");
     }
   }
 
-  &:focus {
-    box-shadow: none;
+  @include govuk-media-query($from: tablet) {
+    // These hover/active styles are copy and pasted from the src of
+    // govuk-one-login/service-header/dist/styles/service-header-no-imports
+    // So that our Sign out button has the underline effect on hover same as the profile link
+    // "GOV.UK One Login" does
+    // https://github.com/govuk-one-login/service-header/issues/85
+
+    // Make button fill the vertical space in the Gov.uk header
+    & .rebranded-one-login-header__nav__link-content {
+      min-height: 30px;
+    }
 
     &::after {
-      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 15px;
 
-      background-color: $govuk-focus-text-colour;
+      display: none;
+
+      width: calc(100% - 30px);
+      height: 3px;
+
+      content: "";
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      &::after {
+        display: block;
+
+        background-color: govuk-colour("white");
+      }
+    }
+
+    &:active,
+    &:focus,
+    &:focus:hover,
+    &:active:hover {
+      &::after {
+        background-color: govuk-colour("black");
+      }
     }
   }
-
 }
