@@ -5,11 +5,6 @@ require "rails_helper"
 RSpec.describe "Course preview", service: :publish do
   include Rails.application.routes.url_helpers
 
-  before do
-    allow(FeatureFlag).to receive(:active?)
-    allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
-  end
-
   scenario "Adding missing Where you will train from course preview" do
     given_i_am_authenticated(user: user_with_no_course_enrichments)
     when_i_visit_the_publish_course_preview_page

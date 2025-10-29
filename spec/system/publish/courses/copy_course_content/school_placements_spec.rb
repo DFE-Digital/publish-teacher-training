@@ -8,14 +8,12 @@ RSpec.describe "Copy course content - school placements", service: :publish do
   let(:user) { create(:user) }
 
   before do
-    FeatureFlag.activate(:long_form_content)
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     sign_in_system_test(user:)
   end
 
   after do
     Timecop.return
-    FeatureFlag.deactivate(:long_form_content)
   end
 
   scenario "Copy financial details content from one course to another", :js do

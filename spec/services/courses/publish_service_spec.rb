@@ -36,9 +36,7 @@ RSpec.describe Courses::PublishService do
     let(:v2_enrichment) { create(:course_enrichment, :v2, status: "draft", course:) }
 
     before do
-      allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
       v1_enrichment
-      allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(true)
       v2_enrichment
     end
 

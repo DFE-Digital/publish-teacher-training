@@ -13,8 +13,6 @@ RSpec.describe "Updating fees and financial support", service: :publish do
   end
 
   context "long form content enabled" do
-    before { FeatureFlag.activate(:long_form_content) }
-
     scenario "A user CANT update fees and financial support page if fees are blank" do
       given_there_is_a_draft_course
       when_i_visit_the_course_page
@@ -59,8 +57,6 @@ RSpec.describe "Updating fees and financial support", service: :publish do
     end
 
     scenario "A user CAN see the new long form course content fields if the feature flag is enabled", travel: mid_cycle do
-      FeatureFlag.activate(:long_form_content)
-
       given_there_is_a_draft_course
       when_i_visit_the_course_page
 
