@@ -2,7 +2,6 @@ require "rails_helper"
 
 feature "V2 Publishing a course with validation errors", type: :feature do
   before do
-    FeatureFlag.activate(:long_form_content)
     given_i_am_authenticated_as_a_provider_user
     and_there_is_an_invalid_course_i_want_to_publish
     provider.update_columns(train_with_disability: nil, about_us: nil, value_proposition: nil)
