@@ -30,24 +30,23 @@ module CoursePreview
         how_school_placements_work: school_placements_publish_provider_recruitment_cycle_course_path(
           provider_code, recruitment_cycle_year, course_code, goto_preview: true
         ),
-        train_with_us: about_publish_provider_recruitment_cycle_path(
-          provider_code, recruitment_cycle_year, course_code:, goto_provider: true, anchor: "train-with-us"
+        train_with_us: edit_publish_provider_recruitment_cycle_why_train_with_us_path(
+          provider_code, recruitment_cycle_year, course_code:, goto_provider: true
         ),
-        train_with_disability: about_publish_provider_recruitment_cycle_path(
-          provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true, anchor: "train-with-disability"
+        train_with_disability: edit_publish_provider_recruitment_cycle_disability_support_path(
+          provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true
         ),
       }
     end
 
     shared_examples "course with missing information" do |information_type, text|
       it "renders link for missing #{information_type}" do
-        allow(FeatureFlag).to receive(:active?).with(:long_form_content).and_return(false)
         render_inline(described_class.new(course:, information_type:, is_preview: true))
         expect(page).to have_link(text, href: hrefs[information_type])
       end
     end
 
-    context "when longform content is disabled" do
+    context "missing information links" do
       include_examples "course with missing information", :about_this_course, "Enter course details"
       include_examples "course with missing information", :degree, "Enter degree requirements"
       include_examples "course with missing information", :fee_uk_eu, "Enter details about fees and financial support"
