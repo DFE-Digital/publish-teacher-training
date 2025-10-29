@@ -9,26 +9,10 @@ RSpec.describe "Publishing a course with long form content on the school placeme
 
   before do
     sign_in_system_test(user:)
-    FeatureFlag.activate(:long_form_content)
   end
 
   after do
-    FeatureFlag.deactivate(:long_form_content)
     FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
-  end
-
-  scenario "A user gets redirected to the course page if the long form content feature flag is not active" do
-    FeatureFlag.deactivate(:long_form_content)
-    FeatureFlag.activate(:bursaries_and_scholarships_announced)
-    given_there_is_a_draft_course
-    when_i_visit_the_school_placement_page
-    expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_course_path(
-        @course.provider.provider_code,
-        @course.start_date.year,
-        @course.course_code,
-      ),
-    )
   end
 
   scenario "A user visits the course page and clicks on the school placement link" do
@@ -162,7 +146,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
 
   def when_i_visit_the_school_placement_page
     visit "/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle.year}/courses/#{@course.course_code}/fields/school-placement"
-    expect(page).to have_content("What you will do on school placements") if FeatureFlag.active?(:long_form_content)
+    expect(page).to have_content("What you will do on school placements")
   end
 
   def then_i_should_see_something_in_the_preview(text)
