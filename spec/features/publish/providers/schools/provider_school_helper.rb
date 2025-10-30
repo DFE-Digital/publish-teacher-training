@@ -14,7 +14,7 @@ module ProviderSchoolHelper
     )
   end
 
-  def then_i_should_see_a_list_of_schools
+  def then_i_see_a_list_of_schools
     expect(publish_schools_index_page.schools.size).to eq(1)
 
     expect(publish_schools_index_page.schools.first.name).to have_text(site.location_name)

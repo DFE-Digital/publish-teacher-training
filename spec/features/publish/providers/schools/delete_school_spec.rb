@@ -8,7 +8,7 @@ feature "Delete a provider's schools" do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_schools_page
-    then_i_should_see_a_list_of_schools
+    then_i_see_a_list_of_schools
   end
 
   scenario "with no associated courses" do
