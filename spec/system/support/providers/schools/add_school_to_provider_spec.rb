@@ -16,20 +16,38 @@ RSpec.describe "Adding school to provider as an admin" do
       then_i_am_on_the_school_search_page
 
       when_i_search_with_an_empty_query
-      then_i_should_see_an_error_message
+      then_i_see_an_error_message
 
       when_i_search_with_an_unmatched_query
-      then_i_should_see_a_no_results_message
+      then_i_see_a_no_results_message
       then_i_click_change_your_search
 
       when_i_search_with_an_partial_query
-      then_i_should_see_school_options
+      then_i_see_school_options
 
       when_i_choose_the_school_i_want_to_add
       then_i_see_the_confirmation_page
 
       when_i_click_add_school
       then_i_see_a_confirmation_message
+      and_the_school_is_in_the_database
+    end
+
+    scenario "attempting to add a school with duplicate URN" do
+      given_the_provider_already_has_a_school_with_the_same_urn
+      given_i_visit_the_support_provider_schools_index_page
+      and_i_click_add_school
+      then_i_am_on_the_school_search_page
+
+      when_i_search_with_an_partial_query
+      then_i_see_school_options
+
+      when_i_choose_the_school_i_want_to_add
+      then_i_see_the_confirmation_page
+
+      when_i_click_add_school
+      then_i_see_a_duplicate_urn_error
+      and_the_school_is_not_added_to_the_database
     end
   end
 
@@ -64,7 +82,7 @@ RSpec.describe "Adding school to provider as an admin" do
     click_continue
   end
 
-  def then_i_should_see_an_error_message
+  def then_i_see_an_error_message
     within(".govuk-error-summary") do
       expect(page).to have_content("There is a problem")
       expect(page).to have_content("Enter a URN (unique reference number) or school name")
@@ -76,7 +94,7 @@ RSpec.describe "Adding school to provider as an admin" do
     click_continue
   end
 
-  def then_i_should_see_a_no_results_message
+  def then_i_see_a_no_results_message
     expect(page).to have_content("No results found for ‘zzz’")
   end
 
@@ -85,7 +103,7 @@ RSpec.describe "Adding school to provider as an admin" do
     click_continue
   end
 
-  def then_i_should_see_school_options
+  def then_i_see_school_options
     expect(page).to have_content("1 result found for ‘Dis’")
   end
 
@@ -118,5 +136,34 @@ RSpec.describe "Adding school to provider as an admin" do
 
   def click_continue
     click_link_or_button "Continue"
+  end
+
+  def given_the_provider_already_has_a_school_with_the_same_urn
+    # Create an existing site with the same URN as the GIAS school we're trying to add
+    @provider.sites.create!(
+      location_name: "Existing School with Same URN",
+      urn: @gias_school.urn,
+      address1: "Different Street",
+      town: "Different Town",
+      postcode: "SW1A 2AA",
+      site_type: :school,
+    )
+    @initial_school_count = @provider.sites.count
+  end
+
+  def then_i_see_a_duplicate_urn_error
+    # Check for validation error on the page
+    expect(page).to have_content("URN is in use by another location")
+  end
+
+  def and_the_school_is_not_added_to_the_database
+    expect(@provider.sites.count).to eq(@initial_school_count)
+  end
+
+  def and_the_school_is_in_the_database
+    expect(@provider.sites.count).to eq(1)
+    added_school = @provider.sites.find_by(urn: @gias_school.urn)
+    expect(added_school).to be_present
+    expect(added_school.location_name).to eq(@gias_school.name)
   end
 end
