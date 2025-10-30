@@ -26,7 +26,7 @@ RSpec.describe Publish::SchoolsChangedBannerComponent, type: :component do
     end
   end
 
-  context "only added schools" do
+  context "only added schools", travel: 2.months.before(apply_opens(2026)) do
     before { create(:site, provider: provider, added_via: :register_import) }
 
     it "shows added section and link, not removed" do
@@ -38,7 +38,7 @@ RSpec.describe Publish::SchoolsChangedBannerComponent, type: :component do
     end
   end
 
-  context "only removed schools" do
+  context "only removed schools", travel: 2.months.before(apply_opens(2026)) do
     before { create_list(:site, 2, provider: provider, discarded_via_script: true) }
 
     it "shows removed section and link, not added" do
@@ -50,7 +50,7 @@ RSpec.describe Publish::SchoolsChangedBannerComponent, type: :component do
     end
   end
 
-  context "no added or removed schools" do
+  context "no added or removed schools", travel: 2.months.before(apply_opens(2026)) do
     it "shows the minimal banner only" do
       expect(rendered).to have_text("Important")
       expect(rendered).not_to have_text("We have added")
