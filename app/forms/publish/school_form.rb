@@ -23,7 +23,7 @@ module Publish
       @model
     end
 
-    validate :location_name_unique_to_provider
+    validate :urn_unique_to_provider
     validates :location_name, presence: true
     validates :address1, presence: true
     validates :town, presence: true
@@ -41,13 +41,15 @@ module Publish
       site.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
     end
 
-    def location_name_unique_to_provider
+    def urn_unique_to_provider
+      return if urn.blank?
+
       sibling_sites = if site.study_site?
                         provider.study_sites - [site]
                       else
                         provider.sites - [site]
                       end
-      errors.add(:location_name, "Name is in use by another location") if location_name.in?(sibling_sites.pluck(:location_name))
+      errors.add(:urn, "URN is in use by another location") if urn.in?(sibling_sites.pluck(:urn))
     end
   end
 end
