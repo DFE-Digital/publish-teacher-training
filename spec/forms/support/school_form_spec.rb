@@ -93,7 +93,7 @@ describe Support::SchoolForm, type: :model do
       end
     end
 
-    include_examples "urn uniqueness validation"
+    include_examples "school urn uniqueness validation"
   end
 
   describe "save!" do

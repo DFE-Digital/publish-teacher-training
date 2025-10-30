@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-shared_examples "urn uniqueness validation" do
+shared_examples "school urn uniqueness validation" do
   describe "urn uniqueness" do
     context "when URN is blank" do
       before { params[:urn] = "" }
@@ -20,14 +20,12 @@ shared_examples "urn uniqueness validation" do
       end
     end
 
-    context "when another school site has the same URN" do
+    context "when another school has the same URN" do
       let!(:existing_site) do
         create(:site, provider:, urn: "123456", site_type: :school)
       end
 
-      before do
-        params[:urn] = "123456"
-      end
+      before { params[:urn] = "123456" }
 
       it "is invalid" do
         expect(subject).not_to be_valid
@@ -40,15 +38,10 @@ shared_examples "urn uniqueness validation" do
         create(:site, provider:, urn: "123456", site_type: :study_site)
       end
 
-      context "and the new site is a school" do
-        before do
-          params[:urn] = "123456"
-          params[:site_type] = :school
-        end
+      before { params[:urn] = "123456" }
 
-        it "is valid (schools and study sites have separate namespaces)" do
-          expect(subject).to be_valid
-        end
+      it "is valid (schools and study sites have separate namespaces)" do
+        expect(subject).to be_valid
       end
     end
 
@@ -71,30 +64,13 @@ shared_examples "urn uniqueness validation" do
     context "when a site from a different provider has the same URN" do
       let(:other_provider) { create(:provider) }
       let!(:other_site) do
-        create(:site, provider: other_provider, urn: "123456")
+        create(:site, provider: other_provider, urn: "123456", site_type: :school)
       end
 
       before { params[:urn] = "123456" }
 
       it "is valid (URN only needs to be unique within provider)" do
         expect(subject).to be_valid
-      end
-    end
-
-    context "when editing a study site" do
-      let!(:existing_study_site) do
-        create(:site, provider:, urn: "111111", site_type: :study_site)
-      end
-      let!(:another_study_site) do
-        create(:site, provider:, urn: "123456", site_type: :study_site)
-      end
-      let(:site) { provider.study_sites.build(site_type: :study_site) }
-
-      before { params[:urn] = "123456" }
-
-      it "is invalid when duplicating another study site URN" do
-        expect(subject).not_to be_valid
-        expect(subject.errors[:urn]).to include("URN is in use by another location")
       end
     end
 
