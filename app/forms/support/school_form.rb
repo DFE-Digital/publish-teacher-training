@@ -24,7 +24,7 @@ module Support
       @model
     end
 
-    validate :location_name_unique_to_provider
+    validate :urn_unique_to_provider
     validates :location_name, presence: true
     validates :address1, presence: true
     validates :town, presence: true
@@ -42,14 +42,15 @@ module Support
 
   private
 
-    def location_name_unique_to_provider
-      sibling_sites, location = if site.study_site?
-                                  [provider.study_sites - [site], "site"]
-                                else
-                                  [provider.sites - [site], "school"]
-                                end
+    def urn_unique_to_provider
+      return if urn.blank?
 
-      errors.add(:location_name, "This #{location} has already been added") if location_name.in?(sibling_sites.pluck(:location_name))
+      sibling_sites = if site.study_site?
+                        provider.study_sites - [site]
+                      else
+                        provider.sites - [site]
+                      end
+      errors.add(:urn, "URN is in use by another location") if urn.in?(sibling_sites.pluck(:urn))
     end
 
     def form_store_key
