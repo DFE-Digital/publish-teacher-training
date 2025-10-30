@@ -1,0 +1,18 @@
+en:
+  activemodel:
+    errors:
+      models:
+        support/study_site_form:
+          attributes:
+            location_name:
+              blank: "Enter a name"
+              taken: "Name is taken"
+            address1:
+              blank: "Enter address line 1"
+            town:
+              blank: "Enter a town or city"
+            postcode:
+              blank: "Enter a postcode"
+              invalid: "Enter a real postcode"
+            urn:
+              format: "URN must be 5 or 6 numbers"
