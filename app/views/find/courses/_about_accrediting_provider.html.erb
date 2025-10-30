@@ -2,6 +2,7 @@
   <%= t(".heading", provider_name: course.accrediting_provider.provider_name) %>
 </h1>
 <div data-qa="course__about_accrediting_provider">
-  <%= markdown(course.about_accrediting_provider + course.accrediting_provider_value_proposition) %>
+  <%= markdown(course.about_accrediting_provider) %>
+  <%= markdown(course.accrediting_provider_value_proposition) %>
 </div>
 <%= render Shared::Courses::WhatIsAnAccreditedProviderComponent.new(course: @course) %>
