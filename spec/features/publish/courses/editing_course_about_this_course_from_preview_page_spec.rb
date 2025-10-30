@@ -3,18 +3,18 @@
 require "rails_helper"
 
 feature "Editing about this course from the course preview page" do
-  scenario "I am redirected back to the preview page", travel: mid_cycle(2025) do
+  scenario "I am redirected back to the course page", travel: mid_cycle(2025) do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
 
     when_i_visit_the_about_this_course_preview_page
-    and_i_click_course_summary
-    then_i_see_the_about_this_course_page
+    and_i_click_what_you_will_study_missing_link
+    then_i_see_the_what_you_will_study_page
 
-    when_i_add_a_course_summary
+    when_i_add_what_you_will_study_content
     and_i_submit_the_form
-    then_i_am_on_the_preview_page
-    and_i_see_the_change_i_made
+    then_i_am_on_the_course_page
+    and_i_see_the_what_you_will_study_change_i_made
   end
 
 private
@@ -35,37 +35,37 @@ private
     )
   end
 
-  def and_i_click_course_summary
-    click_on "Enter course details"
+  def and_i_click_what_you_will_study_missing_link
+    click_on "Enter details about what you will study"
   end
 
-  def then_i_see_the_about_this_course_page
-    expect(page).to have_content "About this course"
-    expect(page).to have_current_path about_this_course_publish_provider_recruitment_cycle_course_path(
+  def then_i_see_the_what_you_will_study_page
+    expect(page).to have_content "What you will study"
+    expect(page).to have_current_path fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
       course.course_code,
     ), ignore_query: true
   end
 
-  def when_i_add_a_course_summary
-    fill_in "About this course", with: "La la la, about this course"
+  def when_i_add_what_you_will_study_content
+    fill_in "What will trainees do during their theoretical training?", with: "La la la, what you will study"
   end
 
   def and_i_submit_the_form
-    click_on "Update about this course"
+    click_on "Update what you will study"
   end
 
-  def then_i_am_on_the_preview_page
-    expect(page).to have_current_path preview_publish_provider_recruitment_cycle_course_path(
+  def then_i_am_on_the_course_page
+    expect(page).to have_current_path publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
       course.course_code,
     ), ignore_query: true
   end
 
-  def and_i_see_the_change_i_made
-    expect(page).to have_content "La la la, about this course"
+  def and_i_see_the_what_you_will_study_change_i_made
+    expect(page).to have_content "La la la, what you will study"
   end
 
   def provider
