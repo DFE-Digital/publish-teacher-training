@@ -19,7 +19,7 @@ module Publish
     private
 
       def new_form
-        @study_site_form = ::Support::SchoolForm.new(provider, site)
+        @study_site_form = ::Support::StudySiteForm.new(provider, site)
       end
 
       def site
