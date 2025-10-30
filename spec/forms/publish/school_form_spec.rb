@@ -215,7 +215,7 @@ module Publish
         end
       end
 
-      include_examples "urn uniqueness validation"
+      include_examples "school urn uniqueness validation"
 
       describe "optional fields" do
         before do
