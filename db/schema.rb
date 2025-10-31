@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_211737) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_28_144035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -493,6 +493,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_211737) do
     t.text "subject_code"
     t.text "subject_name"
     t.bigint "subject_group_id"
+    t.jsonb "match_synonyms", default: []
+    t.index ["match_synonyms"], name: "index_subject_on_match_synonyms", using: :gin
     t.index ["subject_code"], name: "index_subject_on_subject_code"
     t.index ["subject_group_id"], name: "index_subject_on_subject_group_id"
     t.index ["subject_name"], name: "index_subject_on_subject_name"
