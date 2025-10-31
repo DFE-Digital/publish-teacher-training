@@ -5,7 +5,7 @@ RSpec.describe DataHub::DiscardInvalidSchools::SiteDiscarder do
   let(:provider) { create(:provider) }
 
   context "for site with missing URN" do
-    let(:site) { create(:site, provider:, urn: nil) }
+    let(:site) { build(:site, provider:, urn: nil).tap { |s| s.save(validate: false) } }
 
     it "returns reason :no_urn and discards site", :aggregate_failures do
       result = described_class.new(site:).call

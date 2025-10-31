@@ -6,7 +6,7 @@ RSpec.describe DataHub::Sites::Deduplication::Executor do
   it "records the deduplication outcome in a process summary" do
     provider = create(:provider)
     primary = create(:site, provider:, location_name: "Example School", postcode: "SW1A 1AA", urn: "12345")
-    duplicate = create(:site, provider:, location_name: "Example School", postcode: "SW1A 1AA", urn: "12345")
+    duplicate = build(:site, provider:, location_name: "Example School", postcode: "SW1A 1AA", urn: "12345").tap { it.save(validate: false) }
 
     create(:site_status, site: primary, course: create(:course, provider:), status: "running", publish: "N", vac_status: "F")
 
