@@ -49,7 +49,7 @@ RSpec.describe "Saving a course", service: :find do
   end
 
   def then_i_am_prompted_to_sign_in
-    expect(page).to have_content("You must sign in to visit that page.")
+    expect(page).to have_content("You must sign in to save a course.")
     expect(page).to have_current_path(find_root_path)
   end
 

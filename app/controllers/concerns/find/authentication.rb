@@ -53,11 +53,11 @@ module Find
 
       respond_to do |format|
         format.html do
-          redirect_to find_root_path, flash: { sign_in: "You must sign in to visit that page." }
+          redirect_to find_root_path, flash: { sign_in: "You must sign in to save a course." }
         end
 
         format.json do
-          session["flash_sign_in"] = "You must sign in to visit that page."
+          session["flash_sign_in"] = "You must sign in to save a course."
           render json: { redirect: find_root_path }, status: :unauthorized
         end
       end
