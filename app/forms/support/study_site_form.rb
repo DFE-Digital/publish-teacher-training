@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class SchoolForm < Form
+  class StudySiteForm < Form
     FIELDS = %i[
       gias_school_id
       location_name
@@ -24,6 +24,7 @@ module Support
       @model
     end
 
+    validate :location_name_unique_to_provider
     validate :urn_unique_to_provider
     validates :location_name, presence: true
     validates :address1, presence: true
@@ -42,11 +43,21 @@ module Support
 
   private
 
+    def location_name_unique_to_provider
+      sibling_sites, location = if site.study_site?
+                                  [provider.study_sites - [site], "site"]
+                                else
+                                  [provider.sites - [site], "school"]
+                                end
+
+      errors.add(:location_name, "This #{location} has already been added") if location_name.in?(sibling_sites.pluck(:location_name))
+    end
+
     def urn_unique_to_provider
       return if urn.blank?
 
-      sibling_sites = provider.sites - [site]
-      errors.add(:urn, "This school has already been added") if urn.in?(sibling_sites.pluck(:urn))
+      sibling_sites = provider.study_sites - [site]
+      errors.add(:urn, "This study site has already been added") if urn.in?(sibling_sites.pluck(:urn))
     end
 
     def form_store_key

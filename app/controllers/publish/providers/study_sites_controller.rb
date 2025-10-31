@@ -13,16 +13,16 @@ module Publish
       def show; end
 
       def new
-        @study_site_form = ::Support::SchoolForm.new(provider, @site, params: gias_school_params)
+        @study_site_form = ::Support::StudySiteForm.new(provider, @site, params: gias_school_params)
         @study_site_form.clear_stash
       end
 
       def edit
-        @study_site_form = ::Publish::SchoolForm.new(site)
+        @study_site_form = ::Publish::StudySiteForm.new(site)
       end
 
       def create
-        @study_site_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
+        @study_site_form = ::Support::StudySiteForm.new(provider, @site, params: site_params(:support_study_site_form))
         if @study_site_form.stash
           redirect_to publish_provider_recruitment_cycle_check_study_site_path
         else
@@ -31,7 +31,7 @@ module Publish
       end
 
       def update
-        @study_site_form = ::Publish::SchoolForm.new(site, params: site_params(:publish_school_form))
+        @study_site_form = ::Publish::StudySiteForm.new(site, params: site_params(:publish_study_site_form))
 
         if @study_site_form.save!
           course_updated_message("Study site")
@@ -63,7 +63,7 @@ module Publish
       end
 
       def site_params(param_form_key)
-        params.expect(param_form_key => ::Publish::SchoolForm::FIELDS)
+        params.expect(param_form_key => ::Publish::StudySiteForm::FIELDS)
       end
 
       def gias_school_params

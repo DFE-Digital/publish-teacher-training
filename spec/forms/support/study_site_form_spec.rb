@@ -2,18 +2,17 @@
 
 require "rails_helper"
 
-describe Support::SchoolForm, type: :model do
+describe Support::StudySiteForm, type: :model do
   subject { described_class.new(provider, site, params:) }
 
   let(:provider) { create(:provider) }
-  let(:site) { provider.sites.build }
+  let(:site) { provider.study_sites.build(site_type: :study_site) }
   let(:params) do
     {
-      location_name: "The location",
+      location_name: "The study site",
       address1: "My street",
       town: "My town",
       postcode: "TR1 1UN",
-      urn: "123456",
     }
   end
 
@@ -28,80 +27,49 @@ describe Support::SchoolForm, type: :model do
       end
     end
 
-    context "with missing address1" do
+    context "with existing provider.study_sites location_name" do
+      let!(:study_site1) { create(:site, provider:, location_name: "Hogwarts Study Site", site_type: :study_site) }
+      let(:params) do
+        {
+          location_name: study_site1.location_name,
+          address1: "My street",
+          town: "My town",
+          postcode: "TR1 1UN",
+        }
+      end
+
       it "is invalid" do
-        params["address1"] = ""
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ address1: ["Enter address line 1"] })
+        expect(subject.errors[:location_name]).to include("This site has already been added")
       end
     end
 
-    context "with missing town" do
-      it "is invalid" do
-        params["town"] = ""
-        expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ town: ["Enter a town or city"] })
+    context "when a school has the same name" do
+      let!(:existing_school) do
+        create(:site, provider:, location_name: "Same Name", site_type: :school)
       end
-    end
-
-    context "with missing postcode" do
-      it "is invalid" do
-        params["postcode"] = ""
-        expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ postcode: ["Enter a postcode", "Enter a real postcode"] })
+      let(:params) do
+        {
+          location_name: "Same Name",
+          address1: "My street",
+          town: "My town",
+          postcode: "TR1 1UN",
+        }
       end
-    end
 
-    context "with invalid postcodes" do
-      it "is invalid" do
-        params["postcode"] = "tr1"
-        expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ postcode: ["Enter a real postcode"] })
-
-        params["postcode"] = "tr11"
-        expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ postcode: ["Enter a real postcode"] })
-
-        params["postcode"] = "tr11u"
-        expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ postcode: ["Enter a real postcode"] })
-      end
-    end
-
-    context "with valid postcode" do
-      it "is valid" do
-        params["postcode"] = "tr11un"
+      it "is valid (schools and study sites have separate namespaces)" do
         expect(subject).to be_valid
       end
     end
 
-    context "with invalid urns" do
-      it "is invalid" do
-        params["urn"] = "123"
-        expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ urn: ["URN must be 5 or 6 numbers"] })
-
-        params["urn"] = "qwert"
-        expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ urn: ["URN must be 5 or 6 numbers"] })
-      end
-    end
-
-    context "with valid urn" do
-      it "is valid" do
-        params["urn"] = "12345"
-        expect(subject).to be_valid
-      end
-    end
-
-    include_examples "school urn uniqueness validation"
+    include_examples "study site urn uniqueness validation"
   end
 
   describe "save!" do
     context "valid form" do
       it "updates the provider location with the new details" do
         expect { subject.save! }
-          .to change(site, :location_name).to("The location")
+          .to change(site, :location_name).to("The study site")
           .and change(site, :address1).to("My street")
           .and change(site, :town).to("My town")
           .and change(site, :postcode).to("TR1 1UN")
