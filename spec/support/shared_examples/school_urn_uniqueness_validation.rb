@@ -76,10 +76,10 @@ shared_examples "school urn uniqueness validation" do
 
     context "when multiple sites have blank URNs" do
       let!(:site_without_urn_a) do
-        create(:site, provider:, urn: nil, site_type: :school, code: "-")
+        create(:site, :main_site, provider:)
       end
       let!(:site_without_urn_b) do
-        create(:site, provider:, urn: "", site_type: :school, code: "-")
+        create(:site, :main_site, provider:, urn: "")
       end
 
       before { params[:urn] = nil }
