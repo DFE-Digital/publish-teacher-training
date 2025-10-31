@@ -54,7 +54,9 @@ RSpec.describe "Support::CopyCourses" do
         expect(response).to redirect_to(support_recruitment_cycle_provider_courses_path(year, target_provider.id))
         follow_redirect!
 
-        expect(response.parsed_body.css(".govuk-notification-banner--warning").text).to match(sprintf("Courses not copied: %s", source_provider.courses.map(&:course_code).to_sentence))
+        # Warning messages use the base notification banner (not --success)
+        notification_banners = response.parsed_body.css(".govuk-notification-banner:not(.govuk-notification-banner--success)")
+        expect(notification_banners.text).to match(sprintf("Courses not copied: %s", source_provider.courses.map(&:course_code).to_sentence))
       end
     end
 
