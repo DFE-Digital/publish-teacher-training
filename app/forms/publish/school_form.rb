@@ -44,12 +44,7 @@ module Publish
     def urn_unique_to_provider
       return if urn.blank?
 
-      sibling_sites = if site.study_site?
-                        provider.study_sites - [site]
-                      else
-                        provider.sites - [site]
-                      end
-      errors.add(:urn, "URN is in use by another location") if urn.in?(sibling_sites.pluck(:urn))
+      errors.add(:urn, "This school has already been added") if urn.in?(site.siblings.kept.pluck(:urn))
     end
   end
 end
