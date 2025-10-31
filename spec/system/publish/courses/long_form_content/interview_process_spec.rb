@@ -8,7 +8,6 @@ RSpec.describe "Editing a courses interview process with long form content", ser
   let(:user) { create(:user) }
 
   before do
-    FeatureFlag.activate(:long_form_content)
     sign_in_system_test(user:)
   end
 

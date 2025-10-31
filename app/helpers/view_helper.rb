@@ -42,11 +42,7 @@ module ViewHelper
     accrediting_provider = ratifying_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)
 
     field_base_url = "#{base}/fields"
-    fee_v2 = "#{field_base_url}/fees-and-financial-support".to_s
-    fee_v1 = "#{base}/fees"
-
-    fees_url = FeatureFlag.active?(:long_form_content) ? fee_v2 : fee_v1
-
+    fees_url = "#{field_base_url}/fees-and-financial-support".to_s
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
     else
