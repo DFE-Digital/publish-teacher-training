@@ -7,9 +7,13 @@ RSpec.describe DataHub::DiscardInvalidSchools::SiteFilter do
   let!(:valid_site)           { create(:site, provider:, urn: "11111", location_name: "Valid School") }
   let!(:main_site_with_urn)   { create(:site, :main_site, provider:, location_name: "Main Site") }
   let!(:non_gias_site)        { create(:site, provider:, urn: "99999", location_name: "Not in GIAS") }
-  let!(:missing_urn_site)     { create(:site, provider:, urn: nil, location_name: "No URN School") }
   let!(:closed_gias_site)     { create(:site, provider:, urn: "22222", location_name: "Closed GIAS School") }
-  let!(:empty_urn_site)       { create(:site, provider:, urn: "", location_name: "Empty URN School") }
+  let!(:missing_urn_site) do
+    build(:site, provider:, urn: nil, location_name: "No URN School").tap { |s| s.save(validate: false) }
+  end
+  let!(:empty_urn_site) do
+    build(:site, provider:, urn: "", location_name: "Empty URN School").tap { |s| s.save(validate: false) }
+  end
 
   before do
     create(:gias_school, urn: "11111") # Valid (open)
