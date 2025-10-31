@@ -29,7 +29,7 @@ shared_examples "school urn uniqueness validation" do
 
       it "is invalid" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:urn]).to include("URN is in use by another location")
+        expect(subject.errors[:urn]).to include("This school has already been added")
       end
     end
 
@@ -76,10 +76,10 @@ shared_examples "school urn uniqueness validation" do
 
     context "when multiple sites have blank URNs" do
       let!(:site_without_urn_a) do
-        create(:site, provider:, urn: nil, site_type: :school)
+        create(:site, provider:, urn: nil, site_type: :school, code: "-")
       end
       let!(:site_without_urn_b) do
-        create(:site, provider:, urn: "", site_type: :school)
+        create(:site, provider:, urn: "", site_type: :school, code: "-")
       end
 
       before { params[:urn] = nil }
@@ -110,7 +110,7 @@ shared_examples "school urn uniqueness validation" do
 
       it "shows uniqueness error" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:urn]).to include("URN is in use by another location")
+        expect(subject.errors[:urn]).to include("This school has already been added")
         expect(subject.errors[:urn]).not_to include("URN must be 5 or 6 numbers")
       end
     end

@@ -29,7 +29,7 @@ shared_examples "study site urn uniqueness validation" do
 
       it "is invalid" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:urn]).to include("URN is in use by another location")
+        expect(subject.errors[:urn]).to include("This study site has already been added")
       end
     end
 
@@ -110,7 +110,7 @@ shared_examples "study site urn uniqueness validation" do
 
       it "shows uniqueness error" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:urn]).to include("URN is in use by another location")
+        expect(subject.errors[:urn]).to include("This study site has already been added")
         expect(subject.errors[:urn]).not_to include("URN must be 5 or 6 numbers")
       end
     end

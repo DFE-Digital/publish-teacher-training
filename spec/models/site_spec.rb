@@ -65,6 +65,56 @@ describe Site do
     end
   end
 
+  describe "URN uniqueness validation" do
+    context "for schools" do
+      it "prevents duplicate URNs within the same provider" do
+        create(:site, :school, urn: "123456", provider: provider)
+        duplicate_school = build(:site, :school, urn: "123456", provider: provider)
+
+        expect(duplicate_school).not_to be_valid
+        expect(duplicate_school.errors[:urn]).to include("This school has already been added")
+      end
+
+      it "allows same URN across different providers" do
+        other_provider = create(:provider)
+        create(:site, :school, urn: "123456", provider: provider)
+        school_in_other_provider = build(:site, :school, urn: "123456", provider: other_provider)
+
+        expect(school_in_other_provider).to be_valid
+      end
+
+      it "allows creating a new school with the same URN as a discarded school" do
+        existing_school = create(:site, :school, urn: "123456", provider: provider)
+        existing_school.discard!
+
+        new_school = build(:site, :school, urn: "123456", provider: provider)
+        expect(new_school).to be_valid
+      end
+
+      it "allows blank URN when code is '-' (main site)" do
+        main_site = build(:site, :school, urn: nil, code: "-", provider: provider)
+        expect(main_site).to be_valid
+      end
+
+      it "does not allow blank URN for regular schools" do
+        school = build(:site, :school, urn: nil, provider: provider)
+        school.code = "A" # Ensure it's not a main site
+
+        expect(school).not_to be_valid
+        expect(school.errors[:urn]).to include("This school has already been added")
+      end
+    end
+
+    context "for study sites" do
+      it "does not validate URN uniqueness" do
+        create(:site, :study_site, urn: "123456", provider: provider)
+        duplicate_study_site = build(:site, :study_site, urn: "123456", provider: provider)
+
+        expect(duplicate_study_site).to be_valid
+      end
+    end
+  end
+
   it "validates that URN cannot be letters" do
     subject.urn = "XXXXXX"
     subject.valid?

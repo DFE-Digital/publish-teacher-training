@@ -13,6 +13,7 @@ describe Support::SchoolForm, type: :model do
       address1: "My street",
       town: "My town",
       postcode: "TR1 1UN",
+      urn: "123456",
     }
   end
 
