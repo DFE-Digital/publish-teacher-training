@@ -16,6 +16,11 @@ en:
         created_at: Created at
     errors:
       models:
+        site:
+          attributes:
+            urn:
+              # This validation only applies to schools, not study sites
+              blank: This school has already been added
         authentication:
           attributes:
             authenticable:
