@@ -38,6 +38,12 @@ class Site < ApplicationRecord
                                             "This #{object.site_type.humanize.downcase} has already been added"
                                           } },
                             if: -> { !school? }
+  validates :urn, uniqueness: { scope: :provider_id,
+                                conditions: -> { where(discarded_at: nil, site_type: :school) },
+                                message: "This school has already been added" },
+                  allow_blank: true,
+                  if: :school?
+  validates :urn, presence: true, if: -> { school? && code != "-" }
   validates :location_name,
             :address1,
             :postcode,

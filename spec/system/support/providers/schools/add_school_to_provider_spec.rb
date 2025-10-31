@@ -153,7 +153,7 @@ RSpec.describe "Adding school to provider as an admin" do
 
   def then_i_see_a_duplicate_urn_error
     # Check for validation error on the page
-    expect(page).to have_content("URN is in use by another location")
+    expect(page).to have_content("This school has already been added")
   end
 
   def and_the_school_is_not_added_to_the_database

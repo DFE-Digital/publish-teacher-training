@@ -7,7 +7,7 @@ RSpec.describe DataHub::DiscardInvalidSchools::Executor do
   let(:year) { recruitment_cycle.year }
   let!(:provider) { create(:provider, recruitment_cycle:) }
 
-  let!(:site_no_urn) { create(:site, provider:, urn: nil, location_name: "Random School") }
+  let!(:site_no_urn) { create(:site, provider:, urn: nil, code: "-", location_name: "Random School") }
   let!(:site_invalid_urn) { create(:site, provider:, urn: "12345", location_name: "Some School") }
 
   before do
