@@ -23,7 +23,7 @@ RSpec.describe DataHub::Sites::Deduplication::Deduplicator do
       end
 
       let(:duplicate) do
-        create(:site, provider:, location_name: "Example School", postcode: "SW1A 1AA", urn: "12345")
+        build(:site, provider:, location_name: "Example School", postcode: "SW1A 1AA", urn: "12345").tap { |s| s.save(validate: false) }
       end
 
       let!(:primary_status) do
@@ -56,7 +56,7 @@ RSpec.describe DataHub::Sites::Deduplication::Deduplicator do
       end
 
       let(:duplicate) do
-        create(:site, provider:, location_name: "Shared School", postcode: "BN1 1AA", urn: "77777")
+        build(:site, provider:, location_name: "Shared School", postcode: "BN1 1AA", urn: "77777").tap { |s| s.save(validate: false) }
       end
 
       let(:course) { create(:course, provider:, study_mode: :full_time_or_part_time) }
@@ -92,7 +92,7 @@ RSpec.describe DataHub::Sites::Deduplication::Deduplicator do
       end
 
       let(:duplicate) do
-        create(:site, provider:, location_name: "Dry School", postcode: "LS1 1UR", urn: "88888")
+        build(:site, provider:, location_name: "Dry School", postcode: "LS1 1UR", urn: "88888").tap { |s| s.save(validate: false) }
       end
 
       let!(:primary_status) do
@@ -121,11 +121,11 @@ RSpec.describe DataHub::Sites::Deduplication::Deduplicator do
 
     context "when school sites are missing URNs" do
       let(:primary) do
-        create(:site, provider:, urn: nil, location_name: "No URN A", postcode: "SW1A 1AA")
+        build(:site, provider:, urn: nil, location_name: "No URN A", postcode: "SW1A 1AA").tap { |s| s.save(validate: false) }
       end
 
       let(:duplicate) do
-        create(:site, provider:, urn: nil, location_name: "No URN B", postcode: "SW1A 1AA")
+        build(:site, provider:, urn: nil, location_name: "No URN B", postcode: "SW1A 1AA").tap { |s| s.save(validate: false) }
       end
 
       let!(:duplicate_status) do

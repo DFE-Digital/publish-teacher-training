@@ -4,7 +4,7 @@ RSpec.describe DataHub::DiscardInvalidSchools::DryRunSiteDiscarder do
   let(:provider) { create(:provider) }
 
   context "with nil URN" do
-    let(:site) { create(:site, provider:, urn: nil) }
+    let(:site) { build(:site, provider:, urn: nil).tap { |s| s.save(validate: false) } }
 
     it "returns result with reason :no_urn without discarding" do
       result = described_class.new(site:).call
