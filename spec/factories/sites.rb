@@ -26,6 +26,11 @@ FactoryBot.define do
       site_type { "study_site" }
     end
 
+    trait :main_site do
+      code { "-" }
+      urn { nil }
+    end
+
     after(:build) do |site, evaluator|
       if evaluator.age.present?
         site.created_at = evaluator.age
