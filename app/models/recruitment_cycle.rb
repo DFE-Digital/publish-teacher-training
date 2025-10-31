@@ -34,6 +34,7 @@ class RecruitmentCycle < ApplicationRecord
     where(year: Find::CycleTimetable.current_year).or(upcoming_cycles_open_to_publish)
   end
 
+  scope :current_cycle, -> { where(year: Find::CycleTimetable.current_year) }
   # Old cycle closes for providers the moment the new cycle starts
   scope :upcoming_cycles_open_to_publish, lambda {
     where(":now >= available_in_publish_from AND year > :current_year",
