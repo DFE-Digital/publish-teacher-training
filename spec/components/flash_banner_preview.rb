@@ -21,6 +21,10 @@ class FlashBannerPreview < ViewComponent::Preview
     render(FlashBanner.new(flash: flash(:info)))
   end
 
+  def with_sign_in
+    render(FlashBanner.new(flash: { sign_in: "You must sign in to save a course." }))
+  end
+
 private
 
   def flash(type, flash_value: "Provider #{type}")
