@@ -92,7 +92,7 @@ describe Site do
       end
 
       it "allows blank URN when code is '-' (main site)" do
-        main_site = build(:site, :school, urn: nil, code: "-", provider: provider)
+        main_site = build(:site, :main_site, provider: provider)
         expect(main_site).to be_valid
       end
 
