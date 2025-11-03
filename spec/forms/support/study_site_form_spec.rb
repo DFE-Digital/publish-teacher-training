@@ -40,7 +40,7 @@ describe Support::StudySiteForm, type: :model do
 
       it "is invalid" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:location_name]).to include("This study site has already been added")
+        expect(subject.errors[:location_name]).to include("Name is taken")
       end
     end
 
