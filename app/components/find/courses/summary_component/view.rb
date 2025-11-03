@@ -8,7 +8,7 @@ module Find
         include ::ViewHelper
         include PreviewHelper
 
-        attr_reader :course
+        attr_reader :course, :enrichment
 
         delegate :accrediting_provider,
                  :provider,
@@ -26,9 +26,10 @@ module Find
                  :can_sponsor_skilled_worker_visa,
                  :no_fee?, to: :course
 
-        def initialize(course)
+        def initialize(course, enrichment)
           super
           @course = course
+          @enrichment = enrichment
         end
 
         def fee_value
@@ -93,11 +94,11 @@ module Find
 
       private
 
-        def uk_fees(fee_uk = course.enrichment_attribute(:fee_uk_eu))
+        def uk_fees(fee_uk = enrichment&.fee_uk_eu)
           t(".fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
         end
 
-        def international_fees(fee_international = course.enrichment_attribute(:fee_international))
+        def international_fees(fee_international = enrichment&.fee_international)
           t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
         end
 

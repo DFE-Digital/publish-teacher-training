@@ -2,9 +2,9 @@
   <h2 class="govuk-heading-l" id="section-what-you-will-study">
     <%= t(".heading") %>
   </h2>
-  <% if course.theoretical_training_activities.present? || course.assessment_methods.present? %>
-    <%= markdown(course.theoretical_training_activities) %>
-    <%= markdown(course.assessment_methods) %>
+  <% if enrichment.present? && (enrichment.theoretical_training_activities.present? || enrichment.assessment_methods.present? || (preview?(params) && (enrichment.theoretical_training_activities.present? || enrichment.assessment_methods.present?))) %>
+    <%= markdown(enrichment.theoretical_training_activities) %>
+    <%= markdown(enrichment.assessment_methods) %>
     <%= render Shared::Courses::TeacherTrainingExpectationsComponent.new(course:, is_preview: preview?(params)) %>
   <% else %>
     <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :what_you_will_study, is_preview: preview?(params)) %>

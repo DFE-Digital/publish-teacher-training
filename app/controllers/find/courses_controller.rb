@@ -20,6 +20,8 @@ module Find
       render_not_found unless @course.is_published?
 
       @apply_action_column_class = apply_action_column_class
+
+      @enrichment = @course.latest_published_enrichment
     end
 
     def confirm_apply; end

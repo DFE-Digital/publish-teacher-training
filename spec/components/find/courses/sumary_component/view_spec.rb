@@ -9,8 +9,9 @@ module Find
         it "renders sub sections" do
           provider = build(:provider).decorate
           course = create(:course, :fee, :draft_enrichment, applications_open_from: Time.zone.tomorrow, provider:).decorate
+          enrichment = course.latest_draft_enrichment
 
-          result = render_inline(described_class.new(course))
+          result = render_inline(described_class.new(course, enrichment))
           expect(result.text).to include(
             "Fee or salary",
             "Course length",
@@ -24,9 +25,10 @@ module Find
 
         context "when teacher degree apprenticeship course has incorrect fees" do
           it "does not render fees" do
-            course = create(:course, :apprenticeship, :published_teacher_degree_apprenticeship, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+            enrichment = create(:course_enrichment, fee_uk_eu: 9250)
+            course = create(:course, :apprenticeship, :published_teacher_degree_apprenticeship, enrichments: [enrichment]).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
             expect(result.text).not_to include("£9,250")
             expect(result.text).to include("Fee or salary")
             expect(result.text).to include("Salary (apprenticeship)")
@@ -35,13 +37,10 @@ module Find
 
         context "applications open date has not passed" do
           it "renders the 'Date you can apply from'" do
-            course = build(
-              :course,
-              applications_open_from: Time.zone.tomorrow,
-              provider: build(:provider),
-            ).decorate
+            enrichment = create(:course_enrichment)
+            course = create(:course, enrichments: [enrichment], applications_open_from: Time.zone.tomorrow, provider: build(:provider)).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).to include("Date you can apply from")
           end
@@ -49,13 +48,10 @@ module Find
 
         context "applications open date has passed" do
           it "does not render the 'Date you can apply from'" do
-            course = build(
-              :course,
-              applications_open_from: Time.zone.yesterday,
-              provider: build(:provider),
-            ).decorate
+            enrichment = create(:course_enrichment)
+            course = create(:course, enrichments: [enrichment], applications_open_from: Time.zone.yesterday, provider: build(:provider)).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).not_to include("Date you can apply from")
           end
@@ -63,13 +59,10 @@ module Find
 
         context "applications open date is today" do
           it "does not render the 'Date you can apply from'" do
-            course = build(
-              :course,
-              applications_open_from: Time.zone.today,
-              provider: build(:provider),
-            ).decorate
+            enrichment = create(:course_enrichment)
+            course = create(:course, enrichments: [enrichment], applications_open_from: Time.zone.today, provider: build(:provider)).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).not_to include("Date you can apply from")
           end
@@ -77,13 +70,10 @@ module Find
 
         context "a course has an accrediting provider that is not the provider" do
           it "renders the accredited provider" do
-            course = build(
-              :course,
-              provider: build(:provider),
-              accrediting_provider: build(:provider),
-            ).decorate
+            enrichment = create(:course_enrichment)
+            course = create(:course, enrichments: [enrichment], provider: build(:provider), accrediting_provider: build(:provider)).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).to include(
               "Accredited by",
@@ -93,15 +83,12 @@ module Find
 
         context "the course provider and accrediting provider are the same" do
           it "does not render the accredited provider" do
-            provider = build(:provider)
+            enrichment = create(:course_enrichment)
+            provider = create(:provider)
 
-            course = build(
-              :course,
-              provider:,
-              accrediting_provider: provider,
-            ).decorate
+            course = create(:course, enrichments: [enrichment], provider:, accrediting_provider: provider).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).not_to include(
               "Accredited provider",
@@ -111,13 +98,10 @@ module Find
 
         context "secondary course" do
           it "renders the age range and level" do
-            course = build(
-              :course,
-              :secondary,
-              provider: build(:provider),
-            ).decorate
+            enrichment = create(:course_enrichment)
+            course = create(:course, :secondary, enrichments: [enrichment], provider: build(:provider)).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).to include("11 to 18 - secondary")
           end
@@ -125,12 +109,10 @@ module Find
 
         context "non-secondary course" do
           it "render the age range only" do
-            course = build(
-              :course,
-              provider: build(:provider),
-            ).decorate
+            enrichment = create(:course_enrichment)
+            course = create(:course, enrichments: [enrichment], provider: build(:provider)).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).to include("3 to 7")
           end
@@ -138,9 +120,10 @@ module Find
 
         context "when there are UK fees" do
           it "renders the uk fees" do
-            course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+            enrichment = create(:course_enrichment, fee_uk_eu: 9250)
+            course = create(:course, :fee, enrichments: [enrichment]).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
             expect(result.text).to include("Fee or salary")
             expect(result.text).to include("£9,250 fee for UK citizens")
           end
@@ -148,18 +131,20 @@ module Find
 
         context "when there are international fees" do
           it "renders the international fees" do
-            course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
+            enrichment = create(:course_enrichment, fee_international: 14_000)
+            course = create(:course, :fee, enrichments: [enrichment]).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
             expect(result.text).to include("£14,000 fee for Non-UK citizens")
           end
         end
 
         context "when there are uk fees but no international fees" do
-          it "renders the uk fees and not the internation fee label" do
-            course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)]).decorate
+          it "renders the uk fees and not the international fee label" do
+            enrichment = create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)
+            course = create(:course, :fee, enrichments: [enrichment]).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).to include("£9,250 fee for UK citizens")
             expect(result.text).not_to include("fee for Non-UK citizens")
@@ -168,9 +153,10 @@ module Find
 
         context "when there are international fees but no uk fees" do
           it "renders the international fees but not the uk fee label" do
-            course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)]).decorate
+            enrichment = create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)
+            course = create(:course, :fee, enrichments: [enrichment]).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).not_to include("fee for UK citizens")
             expect(result.text).to include("£14,000 fee for Non-UK citizens")
@@ -179,9 +165,10 @@ module Find
 
         context "when there are no fees" do
           it "does not render the row" do
-            course = create(:course, :salary, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]).decorate
+            enrichment = create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)
+            course = create(:course, :salary, enrichments: [enrichment]).decorate
 
-            result = render_inline(described_class.new(course))
+            result = render_inline(described_class.new(course, enrichment))
 
             expect(result.text).not_to include("for UK citizens")
             expect(result.text).not_to include("£14,000 for Non-UK citizens")

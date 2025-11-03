@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "Publishing courses", travel: mid_cycle(2026) do
   before do
+    FeatureFlag.activate(:long_form_content)
     given_i_am_authenticated_as_a_provider_user
   end
 
@@ -71,7 +72,7 @@ feature "Publishing courses", travel: mid_cycle(2026) do
       :with_accrediting_provider,
       :closed,
       accrediting_provider:,
-      enrichments: [build(:course_enrichment, :initial_draft)],
+      enrichments: [build(:course_enrichment, :v2, :initial_draft, interview_location: "in person")],
       sites: [build(:site, location_name: "location 1")],
       study_sites: [build(:site, :study_site)],
     )
@@ -83,7 +84,7 @@ feature "Publishing courses", travel: mid_cycle(2026) do
       :with_accrediting_provider,
       :closed,
       accrediting_provider:,
-      enrichments: [create(:course_enrichment, :rolled_over)],
+      enrichments: [create(:course_enrichment, :v2, :rolled_over)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
@@ -93,14 +94,14 @@ feature "Publishing courses", travel: mid_cycle(2026) do
     given_a_course_exists(
       :with_accrediting_provider,
       accrediting_provider:,
-      enrichments: [create(:course_enrichment, :initial_draft)],
+      enrichments: [create(:course_enrichment, :v2, :initial_draft)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
   end
 
   def and_there_is_a_published_course
-    given_a_course_exists(enrichments: [create(:course_enrichment, :published)])
+    given_a_course_exists(enrichments: [create(:course_enrichment, :v2, :published)])
   end
 
   def when_i_visit_the_course_page
@@ -126,13 +127,60 @@ feature "Publishing courses", travel: mid_cycle(2026) do
   end
 
   def when_i_make_some_new_changes
-    visit school_placements_publish_provider_recruitment_cycle_course_path(
+    # Interview process and location
+    visit fields_interview_process_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
       course.course_code,
     )
-    fill_in "How placements work", with: "some new information about school placements"
-    click_on "Update how placements work"
+    fill_in "What is the interview process? (optional)", with: "some new interview process content"
+    choose "Online"
+    click_on "Update interview process"
+
+    # What you will study
+    visit fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(
+      provider.provider_code,
+      course.recruitment_cycle_year,
+      course.course_code,
+    )
+    fill_in "What will trainees do during their theoretical training?", with: "some new theoretical training content"
+    fill_in "How will they be assessed? (optional)", with: "some new assessment methods content"
+    click_on "Update what you will study"
+
+    # What you will do on school placements
+    visit fields_school_placement_publish_provider_recruitment_cycle_course_path(
+      provider.provider_code,
+      course.recruitment_cycle_year,
+      course.course_code,
+    )
+    fill_in "What will trainees do while in their placement schools?", with: "some new what will trainees do on placements content"
+    fill_in "How will they be supported and mentored? (optional)", with: "some new how will they be supported and mentored content"
+    click_on "Update what you will do on school placements"
+
+    # Where you will train
+    visit fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(
+      provider.provider_code,
+      course.recruitment_cycle_year,
+      course.course_code,
+    )
+    fill_in "How do you decide which schools to place trainees in?", with: "some new how do you decide which schools to place trainees in content"
+    fill_in "How much time will they spend in each school?", with: "some new how much time will they spend in each school content"
+    fill_in "Where will theoretical training take place? (optional)", with: "some new where will theoretical training take place content"
+    fill_in "How much time will they spend in theoretical training? (optional)", with: "some new how much time will they spend in theoretical training content"
+    click_on "Update where you will train"
+
+    # Fees and financial support
+    visit fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+      provider.provider_code,
+      course.recruitment_cycle_year,
+      course.course_code,
+    )
+    fill_in "Fee for UK citizens", with: "10000"
+    fill_in "Fee for non-UK citizens", with: "9000"
+    fill_in "When are the fees due? Is there a payment schedule? (optional)", with: "some new when are the fees due content"
+    fill_in "Are there any additional fees or costs? (optional)", with: "some new additional fees or costs content"
+    fill_in "Does your organisation offer any financial support? (optional)", with: "some new financial support content"
+    click_on "Update fees and financial support"
   end
 
   def then_i_should_see_the_unpublished_changes_message
@@ -144,12 +192,48 @@ feature "Publishing courses", travel: mid_cycle(2026) do
   end
 
   def and_i_do_not_see_the_unpublished_content_on_find
-    expect(page).to have_no_content("some new information about school placements")
+    expect(page).to have_no_content("some new interview process content")
+    expect(page).to have_no_content("Online interviews are available for this course")
+
+    expect(page).to have_no_content("some new theoretical training content")
+    expect(page).to have_no_content("some new assessment methods content")
+
+    expect(page).to have_no_content("some new what will trainees do on placements content")
+    expect(page).to have_no_content("some new how will they be supported and mentored content")
+
+    expect(page).to have_no_content("some new how do you decide which schools to place trainees in content")
+    expect(page).to have_no_content("some new how much time will they spend in each school content")
+    expect(page).to have_no_content("some new where will theoretical training take place content")
+    expect(page).to have_no_content("some new how much time will they spend in theoretical training content")
+
+    expect(page).to have_no_content("£10,000")
+    expect(page).to have_no_content("£9,000")
+    expect(page).to have_no_content("some new when are the fees due content")
+    expect(page).to have_no_content("some new additional fees or costs content")
+    expect(page).to have_no_content("some new financial support content")
   end
 
   def then_i_see_the_content_on_find
     visit find_course_url(provider.provider_code, course.course_code)
-    expect(page).to have_content("some new information about school placements")
+    expect(page).to have_content("some new interview process content")
+    expect(page).to have_content("Online interviews are available for this course")
+
+    expect(page).to have_content("some new theoretical training content")
+    expect(page).to have_content("some new assessment methods content")
+
+    expect(page).to have_content("some new what will trainees do on placements content")
+    expect(page).to have_content("some new how will they be supported and mentored content")
+
+    expect(page).to have_content("some new how do you decide which schools to place trainees in content")
+    expect(page).to have_content("some new how much time will they spend in each school content")
+    expect(page).to have_content("some new where will theoretical training take place content")
+    expect(page).to have_content("some new how much time will they spend in theoretical training content")
+
+    expect(page).to have_content("£10,000")
+    expect(page).to have_content("£9,000")
+    expect(page).to have_content("some new when are the fees due content")
+    expect(page).to have_content("some new additional fees or costs content")
+    expect(page).to have_content("some new financial support content")
   end
 
   def when_i_return_to_publish

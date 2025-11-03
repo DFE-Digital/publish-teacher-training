@@ -44,7 +44,7 @@
       </div>
     <% end %>
 
-    <%= render Find::Courses::SummaryComponent::View.new(@course) %>
+    <%= render Find::Courses::SummaryComponent::View.new(@course, @enrichment) %>
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 

@@ -1,26 +1,26 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="section-interviews"><%= t(".page_title") %></h2>
   <div data-qa="course__interview_process">
-    <% unless course.interview_location == "in person" || course.published_interview_location == "in person" %>
-      <% if course.published_interview_location == "both" || course.interview_location == "both" %>
+    <% unless enrichment.present? && enrichment.interview_location == "in person" || enrichment.present? && enrichment.interview_location == "in person" %>
+      <% if enrichment.present? && enrichment.interview_location == "both" || enrichment.present? && enrichment.interview_location == "both" %>
         <%= govuk_inset_text do %>
           <%= t(".online_interview") %>
           <p class="govuk-hint"><%= t(".individual_circumstances") %></p>
         <% end %>
-      <% elsif course.published_interview_location == "online" || course.interview_location == "online" %>
+      <% elsif enrichment.present? && enrichment.interview_location == "online" || enrichment.present? && enrichment.interview_location == "online" %>
         <%= govuk_inset_text do %>
           <%= t(".online_interview") %>
         <% end %>
       <% end %>
     <% end %>
-    <% if course.interview_process.present? %>
-      <%= markdown(course.interview_process) %>
+    <% if enrichment.present? && enrichment.interview_process.present? %>
+      <%= markdown(enrichment.interview_process) %>
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :interview_process, is_preview: preview?(params)) %>
     <% end %>
-    <% if course.interview_process.present? ||
-          course.interview_location.in?(%w[online both]) ||
-          course.published_interview_location.in?(%w[online both]) %>
+    <% if enrichment.present? &&
+          enrichment.interview_process.present? ||
+          enrichment.present? && enrichment.interview_location.in?(%w[online both]) %>
     <%= render Shared::Courses::InterviewPreparationComponent.new(course:, is_preview: preview?(params)) %>
   <% end %>
 </div>
