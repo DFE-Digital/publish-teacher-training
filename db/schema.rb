@@ -493,7 +493,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_144035) do
     t.text "subject_code"
     t.text "subject_name"
     t.bigint "subject_group_id"
-    t.jsonb "match_synonyms", default: []
+    t.string "match_synonyms", default: [], array: true
     t.index ["match_synonyms"], name: "index_subject_on_match_synonyms", using: :gin
     t.index ["subject_code"], name: "index_subject_on_subject_code"
     t.index ["subject_group_id"], name: "index_subject_on_subject_group_id"
