@@ -106,4 +106,8 @@ class Site < ApplicationRecord
   def to_s
     "#{location_name} (code: #{code})"
   end
+
+  def siblings
+    Site.where(site_type:, provider_id:).where.not(id:)
+  end
 end

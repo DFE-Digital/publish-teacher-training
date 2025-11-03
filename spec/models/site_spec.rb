@@ -129,6 +129,59 @@ describe Site do
     end
   end
 
+  describe "#siblings" do
+    let(:provider) { create(:provider) }
+    let(:other_provider) { create(:provider) }
+    let(:site) { create(:site, :school, provider: provider) }
+
+    it "returns sites with the same site_type and provider_id" do
+      sibling_site = create(:site, :school, provider: provider)
+
+      expect(site.siblings).to include(sibling_site)
+    end
+
+    it "excludes the current site itself" do
+      create(:site, :school, provider: provider)
+
+      expect(site.siblings).not_to include(site)
+    end
+
+    it "does not return sites with different site_type" do
+      study_site = create(:site, :study_site, provider: provider)
+
+      expect(site.siblings).not_to include(study_site)
+    end
+
+    it "does not return sites from different providers" do
+      site_from_other_provider = create(:site, :school, provider: other_provider)
+
+      expect(site.siblings).not_to include(site_from_other_provider)
+    end
+
+    it "returns empty relation when there are no siblings" do
+      expect(site.siblings).to be_empty
+    end
+
+    it "returns multiple siblings when they exist" do
+      sibling1 = create(:site, :school, provider: provider)
+      sibling2 = create(:site, :school, provider: provider)
+
+      expect(site.siblings).to contain_exactly(sibling1, sibling2)
+    end
+
+    context "with study sites" do
+      let(:study_site) { create(:site, :study_site, provider: provider) }
+
+      it "returns only study site siblings" do
+        sibling_study_site = create(:site, :study_site, provider: provider)
+        school_site = create(:site, :school, provider: provider)
+
+        expect(study_site.siblings).to include(sibling_study_site)
+        expect(study_site.siblings).not_to include(school_site)
+      end
+    end
+  end
+
   describe "#touch_provider" do
     let(:site) { create(:site) }
 
