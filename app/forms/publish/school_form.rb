@@ -44,7 +44,7 @@ module Publish
     def urn_unique_to_provider
       return if urn.blank?
 
-      errors.add(:urn, "This school has already been added") if urn.in?(site.siblings.kept.pluck(:urn))
+      errors.add(:urn, :taken) if urn.in?(site.siblings.kept.pluck(:urn))
     end
   end
 end

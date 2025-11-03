@@ -19,7 +19,7 @@ feature "Managing a provider's study_sites" do
       when_i_click_add_study_site
       and_i_click_the_link_to_enter_a_school_manually
       and_i_set_existing_name_details
-      then_i_see_an_error_message("This study site has already been added")
+      then_i_see_an_error_message("Name is taken")
       and_the_study_site_is_not_added
     end
 

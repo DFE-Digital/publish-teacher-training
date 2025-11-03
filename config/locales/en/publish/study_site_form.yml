@@ -16,3 +16,4 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "URN must be 5 or 6 numbers"
+              taken: "This study site has already been added"

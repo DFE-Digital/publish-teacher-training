@@ -44,13 +44,13 @@ module Support
   private
 
     def location_name_unique_to_provider
-      errors.add(:location_name, "This study site has already been added") if location_name.in?(site.siblings.kept.pluck(:location_name))
+      errors.add(:location_name, :taken) if location_name.in?(site.siblings.kept.pluck(:location_name))
     end
 
     def urn_unique_to_provider
       return if urn.blank?
 
-      errors.add(:urn, "This study site has already been added") if urn.in?(site.siblings.kept.pluck(:urn))
+      errors.add(:urn, :taken) if urn.in?(site.siblings.kept.pluck(:urn))
     end
 
     def form_store_key

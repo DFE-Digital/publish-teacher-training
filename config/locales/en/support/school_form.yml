@@ -1,0 +1,8 @@
+en:
+  activemodel:
+    errors:
+      models:
+        support/school_form:
+          attributes:
+            urn:
+              taken: "This school has already been added"
