@@ -14,20 +14,20 @@
 
     <% if preview?(course) %>
       <div data-qa="course__school_placement">
-        <% if course.placement_selection_criteria.present? %>
-            <%= markdown(course.placement_selection_criteria) %>
+        <% if enrichment.present? && enrichment.placement_selection_criteria.present? %>
+            <%= markdown(enrichment.placement_selection_criteria) %>
         <% end %>
 
-        <% if course.duration_per_school.present? %>
-            <%= markdown(course.duration_per_school) %>
+        <% if enrichment.present? && enrichment.duration_per_school.present? %>
+            <%= markdown(enrichment.duration_per_school) %>
         <% end %>
 
-        <% if course.theoretical_training_location.present? %>
-            <%= markdown(course.theoretical_training_location) %>
+        <% if enrichment.present? && enrichment.theoretical_training_location.present? %>
+            <%= markdown(enrichment.theoretical_training_location) %>
         <% end %>
 
-        <% if course.theoretical_training_duration.present? %>
-            <%= markdown(course.theoretical_training_duration) %>
+        <% if enrichment.present? && enrichment.theoretical_training_duration.present? %>
+            <%= markdown(enrichment.theoretical_training_duration) %>
         <% end %>
 
         <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :where_you_will_train, is_preview: !where_you_will_train_present?(course)) %>

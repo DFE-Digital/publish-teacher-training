@@ -7,7 +7,7 @@
   <% end %>
   <% if has_fees? %>
    <% if course.version.to_i == 2 %>
-    <%= render partial: "find/courses/v2/financial_support/fees_and_financials", locals: { course: @course } %>
+    <%= render partial: "find/courses/v2/financial_support/fees_and_financials", locals: { course: @course, enrichment: enrichment } %>
    <% else %>
     <%= render Find::Courses::FeesComponent::View.new(course) %>
    <% end %>

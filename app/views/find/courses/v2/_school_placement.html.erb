@@ -1,10 +1,10 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="section-school-placement"><%= t("find.courses.v2.school_placement.heading") %> </h2>
   <div data-qa="course__school_placement">
-    <% if course.placement_school_activities.present? %>
-      <%= markdown(course.placement_school_activities) %>
-      <% if course.support_and_mentorship.present? %>
-        <%= markdown(course.support_and_mentorship) %>
+    <% if enrichment.present? && enrichment.placement_school_activities.present? %>
+      <%= markdown(enrichment.placement_school_activities) %>
+      <% if enrichment.present? && enrichment.support_and_mentorship.present? %>
+        <%= markdown(enrichment.support_and_mentorship) %>
       <% end %>
       <%= render Shared::Courses::SchoolPlacementActivitiesComponent.new(course:, is_preview: preview?(params)) %>
     <% else %>

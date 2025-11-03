@@ -7,7 +7,7 @@ module Shared
         class View < ViewComponent::Base
           include PublishHelper
 
-          attr_reader :course
+          attr_reader :course, :enrichment
 
           delegate :salaried?,
                    :excluded_from_bursary?,
@@ -16,9 +16,10 @@ module Shared
                    :has_fees?,
                    :financial_support, to: :course
 
-          def initialize(course)
+          def initialize(course, enrichment)
             super
             @course = course
+            @enrichment = enrichment
           end
         end
       end
