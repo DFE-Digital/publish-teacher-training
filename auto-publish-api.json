@@ -3,7 +3,7 @@
   "description": "This API provides access to teacher training course data, allowing consumers to search and retrieve information about teacher training courses across England.",
   "overview": "The Teacher Training API enables external systems to access and integrate teacher training course information. It supports querying courses by various criteria including location, subject, and provider.",
   "schemaUrl": "https://api.publish-teacher-training-courses.service.gov.uk/api-docs/public_v1/api_spec.json",
-  "schemaType": "openapi+json",
+  "schemaType": "openapi",
   "backendType": "http",
   "majorVersion": "v1",
   "visibility": "Public",
