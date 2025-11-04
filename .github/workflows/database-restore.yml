@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: Environment to backup. No sanitised backup or restore will occur.
+        description: Environment to backup. When skip-backup is false, no sanitised backup or restore will occur for manual runs.
         required: true
         default: qa
         type: choice
@@ -15,6 +15,16 @@ on:
           - staging
           - sandbox
           - production
+      skip-backup:
+        description: Skip backup step and run sanitise using existing backup file. When enabled, sanitisation will run and upload a sanitised backup.
+        required: false
+        type: boolean
+        default: false
+      skip-restore:
+        description: Skip restore step. When skip-backup is true, set to false to also run restore after sanitisation (default is true - sanitise only, no restore).
+        required: false
+        type: boolean
+        default: true
       backup-file:
         description: |
           Backup file name (without extension). Default is ptt_[env]_adhoc_YYYY-MM-DD. Set it explicitly when backing up a point-in-time (PTR) server. (Optional)
@@ -29,6 +39,8 @@ env:
   SERVICE_NAME: publish
   SERVICE_SHORT: ptt
   TF_VARS_PATH: terraform/aks/workspace_variables
+  SKIP_BACKUP: ${{ inputs.skip-backup || 'false' }}
+  SKIP_RESTORE: ${{ inputs.skip-restore || 'false' }}
 
 permissions:
   id-token: write
@@ -77,7 +89,35 @@ jobs:
           fi
           echo "BACKUP_FILE=${BACKUP_FILE}" >> $GITHUB_ENV
 
+      - name: Azure Login
+        if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set Connection String
+        if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
+        shell: bash
+        run: |
+          STORAGE_CONN_STR=$(az storage account show-connection-string -g ${{ env.RESOURCE_GROUP_NAME }} -n ${{ env.STORAGE_ACCOUNT_NAME }} --query 'connectionString')
+          echo "::add-mask::$STORAGE_CONN_STR"
+          echo "AZURE_STORAGE_CONNECTION_STRING=$STORAGE_CONN_STR" >> $GITHUB_ENV
+
+      - name: Download existing backup from Azure Storage
+        if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
+        shell: bash
+        run: |
+          az storage blob download \
+            --connection-string "$AZURE_STORAGE_CONNECTION_STRING" \
+            --container-name database-backup \
+            --name "${{ env.BACKUP_FILE }}.sql.gz" \
+            --file "${{ env.BACKUP_FILE }}.sql.gz" \
+            --output none
+
       - name: Backup ${{ env.DEPLOY_ENV }} postgres
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP != 'true')
         uses: DFE-Digital/github-actions/backup-postgres@master
         with:
           storage-account: ${{ env.STORAGE_ACCOUNT_NAME }}
@@ -93,11 +133,11 @@ jobs:
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Set env variable
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
         run: echo "SANITISED_FILE_NAME=publish_sanitised_$(date +"%F")" >> $GITHUB_ENV
 
       - name: Sanitise the Database backup
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
         run: |
           echo "::group::Restore backup to intermediate database"
           createdb ${DATABASE_NAME} && gzip -d --to-stdout ${{ env.BACKUP_FILE }}.sql.gz | psql -d ${DATABASE_NAME}
@@ -129,7 +169,7 @@ jobs:
           PGPORT: 5432
 
       - name: Upload Backup to Azure Storage
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
         run: |
           az storage blob upload --container-name database-backup \
           --file ${SANITISED_FILE_NAME}.sql.gz --name ${SANITISED_FILE_NAME}.sql.gz --overwrite \
@@ -138,7 +178,6 @@ jobs:
 
   restore:
     needs: [backup]
-    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     environment:
       name: ${{ matrix.environment }}
@@ -150,9 +189,11 @@ jobs:
         environment: [qa, staging]
     steps:
       - name: Checkout
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true') && env.SKIP_RESTORE == 'false'
         uses: actions/checkout@v5
 
       - name: Restore database
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true') && env.SKIP_RESTORE == 'false'
         id: restore
         uses: ./.github/actions/restore/
         with:
