@@ -1,0 +1,46 @@
+{
+  "displayName": "Teacher Training Courses API",
+  "description": "This API provides access to teacher training course data, allowing consumers to search and retrieve information about teacher training courses across England.",
+  "overview": "The Teacher Training API enables external systems to access and integrate teacher training course information. It supports querying courses by various criteria including location, subject, and provider.",
+  "schemaUrl": "https://api.publish-teacher-training-courses.service.gov.uk/api-docs/public_v1/api_spec.json",
+  "schemaType": "openapi+json",
+  "backendType": "http",
+  "majorVersion": "v1",
+  "visibility": "Public",
+  "tags": "teacher;training;education;courses;",
+  "classification": "Public facing",
+  "serviceLevel": "24/7",
+  "technology": "REST, Ruby",
+  "usage": "Publicly available API for accessing teacher training course data.",
+  "environments": [
+    {
+      "name": "dev",
+      "baseUrl": "https://qa.publish-teacher-training-courses.service.gov.uk/api",
+      "visibility": "Internal",
+      "enabled": true
+    },
+    {
+      "name": "staging",
+      "baseUrl": "https://staging.publish-teacher-training-courses.service.gov.uk/api",
+      "visibility": "Internal",
+      "enabled": true
+    },
+    {
+      "name": "live",
+      "baseUrl": "https://api.publish-teacher-training-courses.service.gov.uk/api/public",
+      "visibility": "Public",
+      "enabled": true
+    }
+  ],
+  "releases": [
+    {
+      "isCurrent": true,
+      "name": "Version 1.0",
+      "tag": "Live",
+      "availableFrom": "2020-06-01",
+      "availableTo": null,
+      "notes": "Initial release of the Teacher Training Courses API with full course search and retrieval capabilities."
+    }
+  ]
+}
+
