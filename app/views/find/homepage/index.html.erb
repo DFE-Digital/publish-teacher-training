@@ -17,7 +17,7 @@
              form_field: form.govuk_select(
                :subject_code,
                options_for_select(
-                 dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code]),
+                 dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code match_synonyms]),
                  form.object.subject_code,
                ),
                label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" },
