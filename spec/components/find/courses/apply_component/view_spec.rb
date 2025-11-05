@@ -65,7 +65,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
 
         result = render_inline(described_class.new(course, preview: false))
 
-        expect(result.text).to include "Non-UK citizens, apply by #{deadline.to_fs(:govuk_date)}"
+        expect(result.text).to include "Non-UK citizens, apply before #{deadline.to_fs(:govuk_date)}"
       end
     end
   end
