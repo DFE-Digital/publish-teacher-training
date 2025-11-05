@@ -97,6 +97,38 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_london_is_displayed_in_text_field
   end
 
+  scenario "search by subject synonym" do
+    given_mathematics_has_synonyms
+    when_i_visit_the_results_page
+    when_i_search_for_a_mathematics_synonym
+    then_i_can_see_the_mathematics_option
+    when_i_click_search
+    then_i_see_only_mathematics_courses
+  end
+
+  def given_mathematics_has_synonyms
+    mathematics_subject = Subject.find_by!(subject_name: "Mathematics")
+
+    DataHub::Subjects::AddMatchSynonyms.new(
+      subject: mathematics_subject,
+      synonyms: %w[Maths math],
+    ).call
+  end
+
+  def when_i_search_for_a_mathematics_synonym
+    fill_in "Subject", with: "maths"
+  end
+
+  def when_i_click_search
+    click_link_or_button "Search"
+  end
+
+  def then_i_can_see_the_mathematics_option
+    subject_suggestions = page.all("#subject-code-field__listbox li").map(&:text)
+
+    expect(subject_suggestions).to include("Mathematics")
+  end
+
   def when_i_filter_by_courses_that_sponsor_visa
     check "Only show courses with visa sponsorship", visible: :all
   end
