@@ -178,6 +178,7 @@ en:
           add_school_to_account: If needed, you can add new schools to your account.
       study_site_search:
         new:
+          caption: Add study site
           title: Enter a school, university, college, URN or postcode
           cannot_find: I cannot find the site - enter manually
       training_partners:
