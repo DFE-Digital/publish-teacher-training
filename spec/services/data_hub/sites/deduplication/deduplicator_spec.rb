@@ -37,7 +37,7 @@ RSpec.describe DataHub::Sites::Deduplication::Deduplicator do
       let(:outcome) { deduplicate_outcome(sites: [primary, duplicate]) }
       let(:summary) { summary_for(outcome) }
 
-      it "reassigns site statuses to the primary site and discards duplicates" do
+      it "reassigns site statuses to the primary site and discards duplicates becuase primary id is smaller" do
         outcome
 
         expect(duplicate_status.reload.site).to eq(primary)
@@ -146,6 +146,48 @@ RSpec.describe DataHub::Sites::Deduplication::Deduplicator do
         expect(primary.reload.discarded?).to be(false)
         expect(duplicate.reload.discarded?).to be(false)
         expect(duplicate_status.reload.site).to eq(duplicate)
+      end
+    end
+
+    context "when sites are missing URNs but duplicates are main sites" do
+      # Create primary site with no URN, code: '-', no site_statuses
+      # Create duplicate site with no URN, code: '-', no site_statuses
+      # Create non-main site with no URN, code: 'T'
+
+      let(:primary) do
+        build(:site, provider:, urn: nil, location_name: "Main site", postcode: "SW1A 1AA", code: "-").tap { |s| s.save(validate: false) }
+      end
+
+      let(:duplicate) do
+        build(:site, provider:, urn: nil, location_name: "Main site", postcode: "SW1A 1AA", code: "-").tap { |s| s.save(validate: false) }
+      end
+
+      let(:non_main_site_no_urn) do
+        build(:site, provider:, urn: nil, location_name: "No URN", postcode: "SW1A 1AA", code: "T").tap { |s| s.save(validate: false) }
+      end
+
+      let(:course) { create(:course, provider:) }
+
+      let(:outcome) { deduplicate_outcome(sites: [primary, duplicate]) }
+      let(:summary) { summary_for(outcome) }
+
+      before do
+        primary
+        duplicate
+        non_main_site_no_urn
+      end
+
+      it "deduplicates main sites but not other sites without URNs" do
+        outcome
+
+        expect(outcome.groups).not_to be_empty
+
+        expect(summary[:duplicate_groups_processed]).to eq(1)
+        expect(summary[:duplicate_sites_discarded]).to eq(1)
+
+        expect(primary.reload.discarded?).to be(false)
+        expect(duplicate.reload.discarded?).to be(true)
+        expect(non_main_site_no_urn.reload.discarded?).to be(false)
       end
     end
 
