@@ -62,7 +62,7 @@ module DataHub
 
           site_scope.find_each do |site|
             next unless site.school?
-            next if site.urn.blank?
+            next if site.urn.blank? && site.code != "-"
 
             grouped[deduplication_key_for(site)] << site
           end
