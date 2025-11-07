@@ -81,7 +81,7 @@ feature "Searching for a study site from the GIAS list" do
   end
 
   def when_i_search_for_a_school_with_a_valid_query
-    fill_in "publish-providers-schools-search-form-query-field", with: @school.name
+    fill_in "publish-providers-schools-search-form-query-field-error", with: @school.name
     click_continue
   end
 
