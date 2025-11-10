@@ -241,5 +241,3 @@ group :test do
   gem "capybara", ">= 2.15"
   gem "launchy"
 end
-
-gem "getoptlong", "~> 0.2.1"
