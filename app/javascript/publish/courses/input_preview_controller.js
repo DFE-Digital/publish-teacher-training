@@ -94,17 +94,33 @@ export default class extends Controller {
           }
         }
 
+        // Helper function to flush the current paragraph if it has content.
+        let currentParagraph = ''
+        const flushParagraph = () => {
+          // If there's content in currentParagraph, wrap it in <p> tags and append to blockHtml.
+          if (currentParagraph.trim() !== '') {
+            // Check for non-whitespace content
+            blockHtml += `<p>${currentParagraph.trim()}</p>`
+            currentParagraph = '' // Reset currentParagraph after flushing.
+          }
+        }
+
         // Process each line of the input text.
-        lines.forEach(line => {
+        lines.forEach((line) => {
           // Check if the line starts with "* " indicating a bullet point (markdown-style list).
           const bulletMatch = line.match(/^\* (.+)$/)
           if (bulletMatch) {
+            // First, flush any pending paragraph before starting a list.
+            flushParagraph()
             // This line is a bullet list item.
             // bulletMatch[1] contains the text after "* ".
             let text = bulletMatch[1]
             // Convert any [link text](URL) to an anchor tag with govuk-link class.
             // This regex finds markdown links and replaces with <a href="URL">text</a>.
-            text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="govuk-link" href="$2">$1</a>')
+            text = text.replace(
+              /\[([^\]]+)\]\(([^)]+)\)/g,
+              '<a class="govuk-link" href="$2">$1</a>'
+            )
             // Add the formatted text as a list item.
             currentListItems.push(`<li>${text}</li>`)
             // (Note: We don't flush here because consecutive bullets stay in the same list.)
@@ -114,18 +130,29 @@ export default class extends Controller {
             flushList()
 
             if (line.trim() === '') {
+              // Flush any existing paragraph before handling a blank line.
+              flushParagraph()
+              // Just in case, ensure any open list is closed.
+              flushList()
               // If the line is blank (only whitespace), preserve an empty paragraph for spacing.
               blockHtml += '<p></p>'
             } else {
               // For a normal line of text, convert markdown-style links to <a> tags as above.
-              const processedLine = line.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a class="govuk-link" href="$2">$1</a>')
-              // Wrap the line in a paragraph tag.
-              blockHtml += `<p>${processedLine}</p>`
+              const processedLine = line.replace(
+                /\[([^\]]+)\]\(([^)]+)\)/g,
+                '<a class="govuk-link" href="$2">$1</a>'
+              )
+              // Accumulate lines into the current paragraph.
+              // If currentParagraph already has text, add a space before appending the new line.
+              currentParagraph = currentParagraph
+                ? `${currentParagraph} ${processedLine}`
+                : processedLine
             }
           }
         })
 
-        // After iterating through lines, flush any remaining list items to close the final list (if any).
+        // After iterating through lines, flush any remaining list/paragraph items to close the final list/paragraph (if any).
+        flushParagraph()
         flushList()
 
         // Append this input's processed HTML block to the overall preview content.
