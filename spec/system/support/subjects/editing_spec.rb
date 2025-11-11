@@ -47,7 +47,8 @@ RSpec.describe "Add match synonyms to subjects" do
     and_i_click_update_subject
     then_i_am_redirected_to_the_subject_page
     when_i_click_change_synonyms
-    when_i_submit_without_entering_synonyms
+    when_i_enter_empty_synonyms
+    and_i_click_update_subject
     then_i_am_redirected_to_the_subject_page
     and_i_see_no_synonyms_listed
   end
@@ -152,6 +153,10 @@ RSpec.describe "Add match synonyms to subjects" do
     fill_in "subject[match_synonyms_text]", with: "Maths\n\n\nMath\n\nNumeracy\n"
   end
 
+  def when_i_enter_empty_synonyms
+    fill_in "subject[match_synonyms_text]", with: ""
+  end
+
   def and_i_see_only_non_blank_synonyms
     within(".govuk-summary-list") do
       synonym_row = page.find(".govuk-summary-list__row", text: "Match synonyms")
@@ -165,10 +170,6 @@ RSpec.describe "Add match synonyms to subjects" do
     mathematics.reload
     expect(mathematics.match_synonyms).to contain_exactly("Maths", "Math", "Numeracy")
     expect(mathematics.match_synonyms.length).to eq(3)
-  end
-
-  def when_i_submit_without_entering_synonyms
-    click_link_or_button "Update subject"
   end
 
   def mathematics

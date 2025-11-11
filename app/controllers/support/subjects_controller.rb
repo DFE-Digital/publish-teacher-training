@@ -13,7 +13,7 @@ module Support
     def edit; end
 
     def update
-      DataHub::Subjects::AddMatchSynonyms.new(subject: @subject, synonyms:).call
+      DataHub::Subjects::UpdateMatchSynonyms.new(subject: @subject, synonyms:).call
 
       redirect_to support_subject_path(@subject),
                   flash: { success: t("support.flash.updated", resource: Subject.name) }
