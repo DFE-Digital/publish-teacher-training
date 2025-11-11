@@ -1,24 +1,25 @@
 <h1 class="govuk-heading-l">
-  <%= t('.page_title') %>
+  <%= t(".page_title") %>
 </h1>
 
-<%= govuk_table do |table| %>
-  <% table.with_head do |head| %>
-    <% head.with_row do |row| %>
-      <% row.with_cell(text: Subject.human_attribute_name(:subject_code)) %>
-      <% row.with_cell(text: Subject.human_attribute_name(:subject_name)) %>
-      <% row.with_cell(text: Subject.human_attribute_name(:subject_group)) %>
+<%= render PaginatedFilter.new(filter_params: @filter_params, collection: @subjects, pagy: @pagy) do %>
+  <%= govuk_table do |table| %>
+    <% table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell(text: Subject.human_attribute_name(:subject_code)) %>
+        <% row.with_cell(text: Subject.human_attribute_name(:subject_name)) %>
+        <% row.with_cell(text: Subject.human_attribute_name(:subject_group)) %>
+      <% end %>
     <% end %>
-  <% end %>
-  <% table.with_body do |body| %>
-    <% @subjects.each do |subject| %>
-      <% body.with_row do |row| %>
-        <%= row.with_cell(text: subject.subject_code) %>
-        <%= row.with_cell(text: govuk_link_to(subject.subject_name, support_subject_path(subject))) %>
-        <%= row.with_cell(text: subject.subject_group&.name) %>
+
+    <% table.with_body do |body| %>
+      <% @subjects.each do |subject| %>
+        <% body.with_row do |row| %>
+          <%= row.with_cell(text: subject.subject_code) %>
+          <%= row.with_cell(text: govuk_link_to(subject.subject_name, support_subject_path(subject))) %>
+          <%= row.with_cell(text: subject.subject_group&.name) %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
 <% end %>
-
-<%= govuk_pagination(pagy: @pagy) %>

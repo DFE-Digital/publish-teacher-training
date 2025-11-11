@@ -411,6 +411,8 @@ en:
         data_exports:
           index: "Data exports"
     filter:
+      subjects:
+        text_search: 'Subject name'
       candidates:
         text_search: "Email address"
       providers:
