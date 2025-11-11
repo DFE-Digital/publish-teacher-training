@@ -1,6 +1,6 @@
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
-    text: t('.back_link_text'),
+    text: t(".back_link_text"),
     href: support_subjects_path,
   ) %>
 <% end %>
@@ -33,4 +33,3 @@
         row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: Subject.human_attribute_name(:match_synonyms))
       end
     end %>
-
