@@ -42,6 +42,12 @@ class Subject < ApplicationRecord
     type == "SecondarySubject"
   end
 
+  def match_synonyms_text
+    return "" if match_synonyms.blank?
+
+    Array(match_synonyms).compact_blank.join("\n")
+  end
+
   def to_sym
     subject_name.parameterize.underscore.to_sym
   end

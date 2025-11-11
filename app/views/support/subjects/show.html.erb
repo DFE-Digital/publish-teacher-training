@@ -1,0 +1,36 @@
+<%= content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: t('.back_link_text'),
+    href: support_subjects_path,
+  ) %>
+<% end %>
+
+<h1 class="govuk-heading-l"><%= @subject.subject_name %></h1>
+
+<%= render TabNavigation.new(items: [
+  { name: "Details", url: support_subject_path(@subject) },
+]) %>
+
+<%= render GovukComponent::SummaryListComponent.new do |component|
+      component.with_row do |row|
+        row.with_key { Subject.human_attribute_name(:subject_code) }
+        row.with_value(text: @subject.subject_code)
+      end
+
+      component.with_row do |row|
+        row.with_key { Subject.human_attribute_name(:subject_name) }
+        row.with_value(text: @subject.subject_name)
+      end
+
+      component.with_row do |row|
+        row.with_key { Subject.human_attribute_name(:subject_group) }
+        row.with_value(text: @subject.subject_group&.name)
+      end
+
+      component.with_row do |row|
+        row.with_key { Subject.human_attribute_name(:match_synonyms) }
+        row.with_value(text: @subject.match_synonyms)
+        row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: Subject.human_attribute_name(:match_synonyms))
+      end
+    end %>
+

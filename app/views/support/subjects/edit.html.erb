@@ -1,0 +1,23 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_subject_path(@subject)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @subject, url: support_subject_path(@subject), scope: :subject, local: true do |f| %>
+      <h1 class="govuk-heading-l"><%= @subject.subject_name %></h1>
+
+      <%= f.govuk_text_area :match_synonyms_text,
+          label: { text: Subject.human_attribute_name(:match_synonyms) },
+          hint: { text: "Enter one synonym per line. These will be added to the existing synonyms for matching purposes." },
+          rows: 8,
+          value: @subject.match_synonyms_text %>
+
+      <%= f.govuk_submit t("support.update_resource", resource: 'subject') %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_subject_path(@subject)) %>
+    </p>
+  </div>
+</div>
