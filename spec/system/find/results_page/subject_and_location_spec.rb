@@ -109,7 +109,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   def given_mathematics_has_synonyms
     mathematics_subject = Subject.find_by!(subject_name: "Mathematics")
 
-    DataHub::Subjects::AddMatchSynonyms.new(
+    DataHub::Subjects::UpdateMatchSynonyms.new(
       subject: mathematics_subject,
       synonyms: %w[Maths math],
     ).call
