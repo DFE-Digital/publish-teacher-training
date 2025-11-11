@@ -1,0 +1,10 @@
+en:
+  support:
+    subjects:
+      index:
+        page_title: 'Subjects'
+      show:
+        page_title: 'Subject'
+        back_link_text: 'All subjects records'
+      edit:
+        page_title: 'Edit subject'
