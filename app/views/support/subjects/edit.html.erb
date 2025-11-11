@@ -9,7 +9,7 @@
 
       <%= f.govuk_text_area :match_synonyms_text,
           label: { text: Subject.human_attribute_name(:match_synonyms) },
-          hint: { text: "Enter one synonym per line. These will be added to the existing synonyms for matching purposes." },
+          hint: { text: "Enter one synonym per line." },
           rows: 8,
           value: @subject.match_synonyms_text %>
 
