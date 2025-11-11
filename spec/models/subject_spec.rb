@@ -49,51 +49,51 @@ describe Subject do
     end
   end
 
-  describe '#match_synonyms_text' do
-    context 'when match_synonyms is nil' do
+  describe "#match_synonyms_text" do
+    context "when match_synonyms is nil" do
       subject { build(:secondary_subject, :mathematics, match_synonyms: nil) }
 
-      it 'returns an empty string' do
+      it "returns an empty string" do
         expect(subject.match_synonyms_text).to eq("")
       end
     end
 
-    context 'when match_synonyms is an empty array' do
+    context "when match_synonyms is an empty array" do
       subject { build(:secondary_subject, :mathematics, match_synonyms: []) }
 
-      it 'returns an empty string' do
+      it "returns an empty string" do
         expect(subject.match_synonyms_text).to eq("")
       end
     end
 
-    context 'when match_synonyms contains a single synonym' do
-      subject { build(:secondary_subject, :mathematics, match_synonyms: ['Mathematics']) }
+    context "when match_synonyms contains a single synonym" do
+      subject { build(:secondary_subject, :mathematics, match_synonyms: %w[Mathematics]) }
 
-      it 'returns the synonym without newlines' do
+      it "returns the synonym without newlines" do
         expect(subject.match_synonyms_text).to eq("Mathematics")
       end
     end
 
-    context 'when match_synonyms contains multiple synonyms' do
-      subject { build(:secondary_subject, :mathematics, match_synonyms: ['Maths', 'Mathematics', 'Math']) }
+    context "when match_synonyms contains multiple synonyms" do
+      subject { build(:secondary_subject, :mathematics, match_synonyms: %w[Maths Mathematics Math]) }
 
-      it 'returns synonyms separated by newlines' do
+      it "returns synonyms separated by newlines" do
         expect(subject.match_synonyms_text).to eq("Maths\nMathematics\nMath")
       end
     end
 
-    context 'when match_synonyms contains synonyms with special characters' do
-      subject { build(:secondary_subject, :mathematics, match_synonyms: ['Physical Education', 'P.E.', 'PE & Sport']) }
+    context "when match_synonyms contains synonyms with special characters" do
+      subject { build(:secondary_subject, :mathematics, match_synonyms: ["Physical Education", "P.E.", "PE & Sport"]) }
 
-      it 'preserves special characters and spacing' do
+      it "preserves special characters and spacing" do
         expect(subject.match_synonyms_text).to eq("Physical Education\nP.E.\nPE & Sport")
       end
     end
 
-    context 'when match_synonyms contains empty strings (edge case)' do
-      subject { build(:secondary_subject, :mathematics, match_synonyms: ['', 'Maths', '']) }
+    context "when match_synonyms contains empty strings (edge case)" do
+      subject { build(:secondary_subject, :mathematics, match_synonyms: ["", "Maths", ""]) }
 
-      it 'includes empty strings as newlines' do
+      it "includes empty strings as newlines" do
         expect(subject.match_synonyms_text).to eq("Maths")
       end
     end

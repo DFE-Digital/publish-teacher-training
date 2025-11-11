@@ -17,14 +17,24 @@ module Support
     def update
       @subject = Subject.find(params[:id])
 
-      DataHub::Subjects::AddMatchSynonyms.new(subject: @subject, synonyms:).call
+      if synonyms.present?
+        DataHub::Subjects::AddMatchSynonyms.new(subject: @subject, synonyms:).call
+      end
 
       redirect_to support_subject_path(@subject),
-        success: t("support.flash.updated", resource: Subject.name)
+                  success: t("support.flash.updated", resource: Subject.name)
+    end
+
+    def match_synonyms_text
+      @match_synonyms_text ||= params.dig(:subject, :match_synonyms_text)
     end
 
     def synonyms
-      params.dig(:subject, :match_synonyms_text).permit
+      return [] if match_synonyms_text.blank?
+
+      match_synonyms_text.split(/[\r\n]+/)
+                    .map(&:strip)
+                    .reject(&:blank?)
     end
   end
 end
