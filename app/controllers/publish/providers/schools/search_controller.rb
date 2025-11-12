@@ -61,7 +61,7 @@ module Publish
 
         def school
           @school ||= begin
-            gias_school = GiasSchool.find(school_id)
+            gias_school = GiasSchool.available.find(school_id)
             @provider.sites.school.build(gias_school.school_attributes)
           end
         end

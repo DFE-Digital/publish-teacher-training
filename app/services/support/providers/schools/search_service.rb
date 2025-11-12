@@ -24,7 +24,7 @@ module Support
         attr_reader :query, :limit
 
         def specified_schools
-          schools = GiasSchool.open
+          schools = GiasSchool.available
           schools = schools.search(query) if query
           schools = schools.limit(limit) if limit
           schools.reorder(:name)
