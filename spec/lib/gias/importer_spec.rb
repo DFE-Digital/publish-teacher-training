@@ -289,4 +289,30 @@ RSpec.describe Gias::Importer do
       expect { subject }.to change { school_with_coords.reload.status_code }.from("closed").to("open")
     end
   end
+
+  context "when csv school is 'closed' and record is doesn't exist" do
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        600000,Another School with Coordinates,02,4,2,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,51.9000,
+      CSV_DATA
+    end
+
+    it "does not create a new 'closed' record" do
+      expect { subject }.not_to(change(GiasSchool, :count))
+    end
+  end
+
+  context "when csv school is 'proposed_to_open' and record is doesn't exist" do
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        600000,Another School with Coordinates,02,4,4,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,51.9000,
+      CSV_DATA
+    end
+
+    it "does not create a new 'proposed_to_open' record" do
+      expect { subject }.not_to(change(GiasSchool, :count))
+    end
+  end
 end
