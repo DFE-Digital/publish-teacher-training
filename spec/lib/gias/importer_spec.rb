@@ -8,13 +8,13 @@ RSpec.describe Gias::Importer do
   let(:test_csv) { file_fixture("lib/gias/transformed.csv") }
 
   let(:school) do
-    GiasSchool.create(
-      urn: "100000",
-      name: "Old Name",
-      address1: "Old address",
-      town: "Old town",
-      postcode: "OL 123",
-    )
+    create(:gias_school,
+           :open,
+           urn: "100000",
+           name: "Old Name",
+           address1: "Old address",
+           town: "Old town",
+           postcode: "OL 123")
   end
 
   it "updates the GiasSchool with the same urn" do
@@ -25,7 +25,7 @@ RSpec.describe Gias::Importer do
         name: "The Aldgate School",
         type_code: "02",
         group_code: "4",
-        status_code: "1",
+        status_code: "open",
         phase_code: "2",
         minimum_age: "3",
         maximum_age: "11",
@@ -65,7 +65,7 @@ RSpec.describe Gias::Importer do
             name: "The Aldgate School",
             type_code: "02",
             group_code: "4",
-            status_code: "1",
+            status_code: "open",
             phase_code: "2",
             minimum_age: "3",
             maximum_age: "11",
@@ -94,15 +94,14 @@ RSpec.describe Gias::Importer do
 
   context "when existing school has coordinates but CSV has blank coordinates" do
     let!(:school_with_coords) do
-      GiasSchool.create(
-        urn: "200000",
-        name: "School with Coordinates",
-        address1: "123 Main St",
-        town: "London",
-        postcode: "SW1A 1AA",
-        latitude: 51.5,
-        longitude: -0.1,
-      )
+      create(:gias_school,
+             urn: "200000",
+             name: "School with Coordinates",
+             address1: "123 Main St",
+             town: "London",
+             postcode: "SW1A 1AA",
+             latitude: 51.5,
+             longitude: -0.1)
     end
 
     let!(:test_csv) do
@@ -126,15 +125,14 @@ RSpec.describe Gias::Importer do
 
   context "when existing school has no coordinates and CSV has blank coordinates" do
     let!(:school_without_coords) do
-      GiasSchool.create(
-        urn: "300000",
-        name: "School without Coordinates",
-        address1: "789 Test Ave",
-        town: "Manchester",
-        postcode: "M1 1AA",
-        latitude: nil,
-        longitude: nil,
-      )
+      create(:gias_school,
+             urn: "300000",
+             name: "School without Coordinates",
+             address1: "789 Test Ave",
+             town: "Manchester",
+             postcode: "M1 1AA",
+             latitude: nil,
+             longitude: nil)
     end
 
     let!(:test_csv) do
@@ -157,15 +155,14 @@ RSpec.describe Gias::Importer do
 
   context "when CSV has coordinates and existing school has none" do
     let!(:school_without_coords) do
-      GiasSchool.create(
-        urn: "400000",
-        name: "School to be geocoded",
-        address1: "999 New Rd",
-        town: "Birmingham",
-        postcode: "B1 1AA",
-        latitude: nil,
-        longitude: nil,
-      )
+      create(:gias_school,
+             urn: "400000",
+             name: "School to be geocoded",
+             address1: "999 New Rd",
+             town: "Birmingham",
+             postcode: "B1 1AA",
+             latitude: nil,
+             longitude: nil)
     end
 
     let!(:test_csv) do
@@ -187,15 +184,14 @@ RSpec.describe Gias::Importer do
 
   context "when CSV latitude is blank but longitude has value and existing school has both coordinates" do
     let!(:school_with_coords) do
-      GiasSchool.create(
-        urn: "500000",
-        name: "School with Both Coordinates",
-        address1: "111 Test St",
-        town: "Leeds",
-        postcode: "LS1 1AA",
-        latitude: 53.8008,
-        longitude: -1.5491,
-      )
+      create(:gias_school,
+             urn: "500000",
+             name: "School with Both Coordinates",
+             address1: "111 Test St",
+             town: "Leeds",
+             postcode: "LS1 1AA",
+             latitude: 53.8008,
+             longitude: -1.5491)
     end
 
     let!(:test_csv) do
@@ -217,15 +213,14 @@ RSpec.describe Gias::Importer do
 
   context "when CSV longitude is blank but latitude has value and existing school has both coordinates" do
     let!(:school_with_coords) do
-      GiasSchool.create(
-        urn: "600000",
-        name: "Another School with Coordinates",
-        address1: "222 Sample Rd",
-        town: "Bristol",
-        postcode: "BS1 1AA",
-        latitude: 51.4545,
-        longitude: -2.5879,
-      )
+      create(:gias_school,
+             urn: "600000",
+             name: "Another School with Coordinates",
+             address1: "222 Sample Rd",
+             town: "Bristol",
+             postcode: "BS1 1AA",
+             latitude: 51.4545,
+             longitude: -2.5879)
     end
 
     let!(:test_csv) do
@@ -242,6 +237,56 @@ RSpec.describe Gias::Importer do
         latitude: 51.4545,  # Preserved (not 51.9000)
         longitude: -2.5879, # Preserved
       )
+    end
+  end
+
+  context "when csv school is closed and record is open" do
+    let!(:school_with_coords) do
+      create(:gias_school,
+             :open,
+             urn: "600000",
+             name: "Another School with Coordinates",
+             address1: "222 Sample Rd",
+             town: "Bristol",
+             postcode: "BS1 1AA",
+             latitude: 51.4545,
+             longitude: -2.5879)
+    end
+
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        600000,Another School with Coordinates,02,4,2,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,51.9000,
+      CSV_DATA
+    end
+
+    it "closes the record" do
+      expect { subject }.to change { school_with_coords.reload.status_code }.from("open").to("closed")
+    end
+  end
+
+  context "when csv school is open and record is closed" do
+    let!(:school_with_coords) do
+      create(:gias_school,
+             :closed,
+             urn: "600000",
+             name: "Another School with Coordinates",
+             address1: "222 Sample Rd",
+             town: "Bristol",
+             postcode: "BS1 1AA",
+             latitude: 51.4545,
+             longitude: -2.5879)
+    end
+
+    let!(:test_csv) do
+      StringIO.new(<<~CSV_DATA)
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
+        600000,Another School with Coordinates,02,4,1,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,51.9000,
+      CSV_DATA
+    end
+
+    it "opens the record" do
+      expect { subject }.to change { school_with_coords.reload.status_code }.from("closed").to("open")
     end
   end
 end
