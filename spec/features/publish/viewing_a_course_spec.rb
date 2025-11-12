@@ -23,28 +23,11 @@ feature "Course show" do
   end
 
   describe "with a fee paying course" do
-    context "bursaries and scholarships is announced" do
-      before do
-        allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
-      end
-
-      scenario "i can view a fee course" do
-        given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
-        when_i_visit_the_course_page
-        then_i_should_see_the_description_of_the_fee_course
-        and_i_should_see_the_course_financial_incentives
-        and_i_should_see_the_course_button_panel
-      end
-    end
-
-    context "bursaries and scholarships is not announced" do
-      scenario "i can view a fee course" do
-        given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
-        when_i_visit_the_course_page
-        then_i_should_see_the_description_of_the_fee_course
-        and_i_should_see_the_course_has_no_financial_incentives_information
-        and_i_should_see_the_course_button_panel
-      end
+    scenario "i can view a fee course" do
+      given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
+      when_i_visit_the_course_page
+      then_i_should_see_the_description_of_the_fee_course
+      and_i_should_see_the_course_button_panel
     end
   end
 
@@ -273,7 +256,14 @@ private
   end
 
   def course_enrichment
-    @course_enrichment ||= build(:course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000)
+    @course_enrichment ||= build(
+      :course_enrichment,
+      :v2,
+      :published,
+      course_length: :TwoYears,
+      fee_uk_eu: 9250,
+      fee_international: 14_000,
+    )
   end
 
   def financial_incentive
@@ -281,11 +271,18 @@ private
   end
 
   def course_enrichment_unpublished_changes
-    @course_enrichment_unpublished_changes ||= build(:course_enrichment, :subsequent_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000)
+    @course_enrichment_unpublished_changes ||= build(
+      :course_enrichment,
+      :v2,
+      :subsequent_draft,
+      course_length: :TwoYears,
+      fee_uk_eu: 9250,
+      fee_international: 14_000,
+    )
   end
 
   def course_enrichment_initial_draft
-    @course_enrichment_initial_draft ||= build(:course_enrichment, :initial_draft)
+    @course_enrichment_initial_draft ||= build(:course_enrichment, :v2, :initial_draft)
   end
 
   def course_enrichment_rolled_over
@@ -319,88 +316,50 @@ private
   end
 
   def then_i_should_see_the_description_of_the_unpublished_changes_course
-    expect(publish_provider_courses_show_page.about_course).to have_content(
-      course_enrichment_unpublished_changes.about_course,
-    )
+    expect(page).to have_content(course_enrichment_unpublished_changes.placement_selection_criteria)
+    expect(page).to have_content(course_enrichment_unpublished_changes.theoretical_training_activities)
   end
 
   def then_i_should_see_the_description_of_the_initial_draft_course
-    expect(publish_provider_courses_show_page.about_course).to have_content(
-      course_enrichment_initial_draft.about_course,
-    )
+    expect(page).to have_content(course_enrichment_initial_draft.placement_selection_criteria)
 
     expect(publish_provider_courses_show_page.content_status).to have_content(
       "Draft",
     )
   end
 
-  def and_i_should_see_the_course_financial_incentives
-    expect(publish_provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10_000))
-  end
-
   def and_i_should_see_the_course_has_no_financial_incentives_information
-    expect(publish_provider_courses_show_page.financial_incentives).to have_content("Information not yet available")
+    expect(page).to have_content(number_to_currency(10_000))
   end
 
   def then_i_should_see_the_description_of_the_fee_course
-    expect(publish_provider_courses_show_page.title).to have_content(
-      "#{course.name} (#{course.course_code})",
-    )
-    expect(publish_provider_courses_show_page.about_course).to have_content(
-      course_enrichment.about_course,
-    )
-    expect(publish_provider_courses_show_page.interview_process).to have_content(
-      course_enrichment.interview_process,
-    )
-    expect(publish_provider_courses_show_page.how_school_placements_work).to have_content(
-      course_enrichment.how_school_placements_work,
-    )
-    expect(publish_provider_courses_show_page.course_length).to have_content(
-      "Up to 2 years",
-    )
-    expect(publish_provider_courses_show_page.fee_uk_eu).to have_content(
-      "£9,250",
-    )
-    expect(publish_provider_courses_show_page.fee_international).to have_content(
-      "£14,000",
-    )
-    expect(publish_provider_courses_show_page.fee_details).to have_content(
-      course_enrichment.fee_details,
-    )
-
-    expect(publish_provider_courses_show_page).not_to have_salary_details
-
-    expect(publish_provider_courses_show_page).to have_degree
-    expect(publish_provider_courses_show_page).to have_gcse
+    expect(page).to have_content("#{course.name} (#{course.course_code})")
+    expect(page).to have_content(course_enrichment.placement_selection_criteria)
+    expect(page).to have_content(course_enrichment.duration_per_school)
+    expect(page).to have_content(course_enrichment.theoretical_training_location)
+    expect(page).to have_content(course_enrichment.theoretical_training_duration)
+    expect(page).to have_content(course_enrichment.theoretical_training_activities)
+    expect(page).to have_content(course_enrichment.assessment_methods)
+    expect(page).to have_content(course_enrichment.interview_process)
+    expect(page).to have_content("£9,250")
+    expect(page).to have_content("£14,000")
+    expect(page).not_to have_content(course_enrichment.salary_details)
+    expect(page).to have_content("Degree")
+    expect(page).to have_content("GCSE")
   end
 
   def then_i_should_see_the_description_of_the_salary_course
-    expect(publish_provider_courses_show_page.title).to have_content(
-      "#{course.name} (#{course.course_code})",
-    )
-
-    expect(publish_provider_courses_show_page.about_course).to have_content(
-      course_enrichment.about_course,
-    )
-    expect(publish_provider_courses_show_page.interview_process).to have_content(
-      course_enrichment.interview_process,
-    )
-    expect(publish_provider_courses_show_page.how_school_placements_work).to have_content(
-      course_enrichment.how_school_placements_work,
-    )
-    expect(publish_provider_courses_show_page.course_length).to have_content(
-      "Up to 2 years",
-    )
-    expect(publish_provider_courses_show_page).not_to have_fee_uk_eu
-
-    expect(publish_provider_courses_show_page).not_to have_fee_international
-
-    expect(publish_provider_courses_show_page).not_to have_fee_details
-    expect(publish_provider_courses_show_page.salary_details).to have_content(
-      course_enrichment.salary_details,
-    )
-    expect(publish_provider_courses_show_page).to have_degree
-    expect(publish_provider_courses_show_page).to have_gcse
+    expect(page).to have_content("#{course.name} (#{course.course_code})")
+    expect(page).to have_content(course_enrichment.placement_selection_criteria)
+    expect(page).to have_content(course_enrichment.duration_per_school)
+    expect(page).to have_content(course_enrichment.theoretical_training_location)
+    expect(page).to have_content(course_enrichment.theoretical_training_duration)
+    expect(page).to have_content(course_enrichment.theoretical_training_activities)
+    expect(page).to have_content(course_enrichment.assessment_methods)
+    expect(page).to have_content(course_enrichment.interview_process)
+    expect(page).to have_content(course_enrichment.salary_details)
+    expect(page).to have_content("Degree")
+    expect(page).to have_content("GCSE")
   end
 
   def and_i_should_see_the_course_as(status_tag)
@@ -421,7 +380,7 @@ private
       :secondary,
       enrichments: [course_enrichment],
       funding: "fee",
-      subjects: [build(:secondary_subject, bursary_amount: 10_000)],
+      subjects: [build(:secondary_subject, :spanish)],
     )
   end
 
