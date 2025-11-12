@@ -1,5 +1,6 @@
 en:
   find:
+    metadescription: Search for teaching courses in England. Search by location, subject, primary, secondary or further education.
     cycles:
       real:
         name: Same as production environment
