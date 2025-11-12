@@ -26,13 +26,14 @@ module Publish
 
         context "database has open and closed schools" do
           let(:open_school) { create(:gias_school) }
+          let(:proposed_to_close_school) { create(:gias_school, status_code: :proposed_to_close) }
 
           before do
             create(:gias_school, :closed)
           end
 
           it "only returns schools that are open" do
-            expect(described_class.call.schools).to match([open_school])
+            expect(described_class.call.schools).to contain_exactly(open_school, proposed_to_close_school)
           end
         end
 
