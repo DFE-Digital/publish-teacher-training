@@ -60,6 +60,6 @@ RSpec.describe "View pages" do
     visit find_candidate_saved_courses_path
 
     expect(page).to have_current_path(find_root_path)
-    expect(page).to have_content("You must sign in to save a course.")
+    expect(page).to have_content("You must sign in to visit that page.")
   end
 end

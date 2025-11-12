@@ -17,7 +17,7 @@ describe Find::OneLoginBannerComponent do
     end
 
     it "has the correct content" do
-      expect(component).to have_text(/You must\s*sign in\s*to save a course\./)
+      expect(component).to have_text(/You must\s*sign in\s*to visit that page\./)
       expect(component).to have_button("sign in")
       expect(component).to have_css(".govuk-notification-banner__heading")
     end
