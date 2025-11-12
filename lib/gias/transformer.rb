@@ -96,7 +96,7 @@ module Gias
       end
 
       def valid?
-        northing_and_easting_present? && open? && in_england?
+        northing_and_easting_present? && in_england?
       end
 
       def transformed_row
@@ -106,10 +106,6 @@ module Gias
       end
 
     private
-
-      def open?
-        OPEN_SCHOOL_CODES.include? row.fetch("EstablishmentStatus (code)")
-      end
 
       def in_england?
         NON_ENGLISH_ESTABLISHMENTS.exclude?(row.fetch("TypeOfEstablishment (code)"))
