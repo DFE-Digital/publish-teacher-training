@@ -11,7 +11,7 @@ class ProviderURNIdentificationService
 
   def call
     existing_provider_urns = provider.sites.school.pluck(:urn).compact
-    real_urns = GiasSchool.where(urn: urns).pluck(:urn)
+    real_urns = GiasSchool.available.where(urn: urns).pluck(:urn)
 
     duplicate_urns = existing_provider_urns & real_urns
     new_urns = real_urns - existing_provider_urns
