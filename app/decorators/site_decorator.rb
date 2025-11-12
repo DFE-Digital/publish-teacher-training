@@ -5,11 +5,11 @@ class SiteDecorator < Draper::Decorator
   delegate_all
 
   def full_address(join_on_separator = ", ")
-    smart_quotes([object.address1, object.address2, object.address3, object.town, object.address4, object.postcode].compact_blank.join(join_on_separator).html_safe)
+    smart_quotes([object.address1, object.address2, object.address3, object.town, object.address4, object.postcode].compact_blank.join(join_on_separator))
   end
 
   def full_address_on_seperate_lines
-    full_address("<br>")
+    full_address("\n")
   end
 
   def location_name

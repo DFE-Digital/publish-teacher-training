@@ -24,7 +24,7 @@
 
               component.with_row do |row|
                 row.with_key { t("publish.providers.study_sites.address") }
-                row.with_value(text: @site.decorate.full_address_on_seperate_lines)
+                row.with_value(text: simple_format(@site.decorate.full_address_on_seperate_lines, {}, wrapper_tag: :div))
                 row.with_action(text: t("change"), href: edit_publish_provider_recruitment_cycle_study_site_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id), classes: "address", visually_hidden_text: t("publish.providers.study_sites.address"))
               end
             end %>

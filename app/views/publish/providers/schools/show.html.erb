@@ -23,7 +23,7 @@
 
             component.with_row do |row|
               row.with_key { t(".address") }
-              row.with_value(text: simple_format(@site.address.compact_blank.join("\n"), {}, wrapper_tag: "div"))
+              row.with_value(text: simple_format(@site.decorate.full_address_on_seperate_lines, {}, wrapper_tag: :div))
             end
           end %>
       <p class="govuk-body">
