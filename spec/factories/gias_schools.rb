@@ -7,14 +7,14 @@ FactoryBot.define do
     address1 { Faker::Address.street_address }
     town { Faker::Address.city }
     postcode { Faker::Address.postcode }
-    status_code { GiasSchool::ESTABLISHMENT_OPEN_STATUS_CODE }
+    status_code { GiasSchool.status_codes["open"] }
 
     trait :open do
-      status_code { GiasSchool::ESTABLISHMENT_OPEN_STATUS_CODE }
+      status_code { GiasSchool.status_codes["open"] }
     end
 
     trait :closed do
-      status_code { nil }
+      status_code { GiasSchool.status_codes["closed"] }
     end
   end
 end

@@ -4,7 +4,7 @@ class GiasSchool < ApplicationRecord
   include PgSearch::Model
   include VectorSearchable
 
-  ESTABLISHMENT_OPEN_STATUS_CODE = "1"
+  ESTABLISHMENT_OPEN_STATUS_CODE = %w[open proposed_to_close].freeze
 
   validates :urn, :name, presence: true
   validates :urn, uniqueness: { case_sensitive: false }
@@ -19,6 +19,13 @@ class GiasSchool < ApplicationRecord
                   }
 
   scope :open, -> { where(status_code: ESTABLISHMENT_OPEN_STATUS_CODE) }
+
+  enum :status_code, {
+    open: "1",
+    closed: "2",
+    proposed_to_close: "3",
+    proposed_to_open: "4",
+  }
 
   def school_attributes
     {
