@@ -22,7 +22,7 @@
 
             component.with_row do |row|
               row.with_key { t(".address") }
-              row.with_value(text: simple_format(@site.decorate.full_address_on_seperate_lines.gsub(",", "\n"), nil, wrapper_tag: "span"))
+              row.with_value(text: simple_format(@site.decorate.full_address_on_seperate_lines, nil, wrapper_tag: "div"))
             end
           end %>
 
