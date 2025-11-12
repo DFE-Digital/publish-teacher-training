@@ -42,4 +42,19 @@ describe ProviderURNIdentificationService do
       expect(subject[:new_urns]).to eq(new_urns)
     end
   end
+
+  describe "one urn is closed" do
+    let(:closed_school) { create(:gias_school, :closed) }
+    let(:new_urns) { create_list(:gias_school, 2).pluck(:urn) }
+    let(:existing_school) { create(:gias_school) }
+    let(:urns) { new_urns + [closed_school.urn] + [existing_school.urn] }
+
+    it "returns correct hash" do
+      provider.sites.create(existing_school.school_attributes)
+
+      expect(subject[:unfound_urns]).to eq([closed_school.urn])
+      expect(subject[:duplicate_urns]).to eq([existing_school.urn])
+      expect(subject[:new_urns]).to eq(new_urns)
+    end
+  end
 end
