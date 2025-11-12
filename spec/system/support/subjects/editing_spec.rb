@@ -65,13 +65,6 @@ RSpec.describe "Add match synonyms to subjects" do
     visit support_subjects_path
   end
 
-  def and_i_do_not_see_all_subjects_on_first_page
-    Subject.count
-    displayed_rows = page.all("table tbody tr").count
-
-    expect(displayed_rows).to be <= 25
-  end
-
   def when_i_search_for_mathematics
     fill_in "text_search", with: "Mathematics"
     click_link_or_button "Apply filters"
