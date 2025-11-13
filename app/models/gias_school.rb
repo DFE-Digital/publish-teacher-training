@@ -25,6 +25,70 @@ class GiasSchool < ApplicationRecord
     proposed_to_open: "4",
   }
 
+  enum :type_code, {
+    community_school: "1",
+    voluntary_aided_school: "2",
+    voluntary_controlled_school: "3",
+    foundation_school: "5",
+    city_technical_college: "6",
+    community_special_school: "7",
+    other_independent_special_school: "10",
+    other_independent_school: "11",
+    other_foundation_school: "12",
+    pupil_referral_unit: "14",
+    local_authority_nursery_school: "15",
+    further_education: "18",
+    secure_units: "24",
+    offshore_units: "25",
+    service_childrens_education: "26",
+    miscellaneous: "27",
+    academy_sponsor_led: "28",
+    heis: "29",
+    welsh_establishment: "30",
+    sixth_form_centres: "31",
+    special_post_16_intitutions: "32",
+    academy_special_sponsor_led: "33",
+    academy_converter: "34",
+    free_schools: "35",
+    free_special_schools: "36",
+    british_schools_overseas: "37",
+    free_schools_16_to_19: "39",
+    university_technical_colleges: "40",
+    studio_schools: "41",
+    academy_alternative_provider_converter: "42",
+    academy_alternative_provision_sponsor_led: "43",
+    academy_special_converter: "44",
+    academy_16_to_19_converter: "45",
+    academy_16_to_19_sponsor_led: "46",
+    online_provider: "49",
+    institute_funded_by_other_gov_dept: "56",
+    academy_secure_16_to_19: "57",
+  }, suffix: :type
+
+  enum :group_code, {
+    colleges: "1",
+    universities: "2",
+    independent_schools: "3",
+    local_authority_schools: "4",
+    special_schools: "5",
+    welsh_schools: "6",
+    other_types: "9",
+    academies: "10",
+    free_schools: "11",
+    online_provider: "13",
+  }
+
+  enum :phase_code, {
+    not_applicable: "0",
+    nursery: "1",
+    primary: "2",
+    middle_deemed_primary: "3",
+    secondary: "4",
+    middle_deemed_secondary: "5",
+    sixteen_plus: "6",
+    all_through: "7",
+  }
+
   def school_attributes
     {
       location_name: name,
