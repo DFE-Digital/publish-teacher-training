@@ -111,11 +111,24 @@ FactoryBot.define do
 
     trait :without_content do
       fee_uk_eu { nil }
+      fee_international { nil }
       about_course { nil }
       required_qualifications { nil }
       how_school_placements_work { nil }
       salary_details { nil }
       course_length { nil }
+      interview_process { nil }
+      placement_selection_criteria { nil }
+      duration_per_school { nil }
+      theoretical_training_location { nil }
+      theoretical_training_duration { nil }
+      placement_school_activities { nil }
+      support_and_mentorship { nil }
+      assessment_methods { nil }
+      fee_schedule { nil }
+      additional_fees { nil }
+      theoretical_training_activities { nil }
+      interview_location { nil }
     end
 
     trait :with_fee_based_course do
