@@ -11,15 +11,22 @@ feature "Publishing courses errors" do
     and_i_click_the_publish_link
     then_i_see_validation_errors
 
-    when_i_click_the_about_course_error
-    then_i_am_on_the_about_course_page
-    when_i_complete_the_about_course
+    when_i_click_the_publish_link
+    and_i_click_the_theoretical_training_activities_error
+    then_i_am_on_the_what_you_will_study_page
+    when_i_complete_theoretical_training_activities
     then_i_am_on_the_course_page
 
     when_i_click_the_publish_link
-    and_i_click_the_school_placements_error
-    then_i_am_on_the_school_placements_page
-    when_i_complete_the_school_placements
+    and_i_click_the_placement_school_activities_error
+    then_i_am_on_the_where_you_will_train_page
+    when_i_complete_placement_school_activities
+    then_i_am_on_the_course_page
+
+    when_i_click_the_publish_link
+    and_i_click_the_what_you_will_do_on_placements_error
+    then_i_am_on_the_school_placement_page
+    when_i_complete_what_you_will_do_on_placements
     then_i_am_on_the_course_page
 
     when_i_click_the_publish_link
@@ -55,16 +62,6 @@ feature "Publishing courses errors" do
     expect(page).to have_content("Your course has been published.")
   end
 
-  def when_i_complete_the_school_placements
-    fill_in "publish-course-school-placements-form-how-school-placements-work-field-error", with: "School placements information"
-    click_link_or_button "Update how placements work"
-  end
-
-  def when_i_complete_the_about_course
-    fill_in "publish-course-about-this-course-form-about-course-field-error", with: "About course information"
-    click_link_or_button "Update about this course"
-  end
-
   def when_i_complete_the_course_length
     choose "1 year"
     click_link_or_button "Update course length"
@@ -93,8 +90,6 @@ feature "Publishing courses errors" do
 
   def then_i_see_validation_errors
     within ".govuk-error-summary" do
-      expect(page).to have_content("Enter information about this course")
-      expect(page).to have_content("Enter details about how placements work")
       expect(page).to have_content("Enter a course length")
       expect(page).to have_content("Enter details about the salary for this course")
       expect(page).to have_content("Enter degree requirements")
@@ -102,16 +97,54 @@ feature "Publishing courses errors" do
     end
   end
 
-  def when_i_click_the_about_course_error
+  def and_i_click_the_what_you_will_do_on_placements_error
     within ".govuk-error-summary" do
-      page.find_link("Enter information about this course").click
+      page.find_link("Enter what will trainees do while in their placement schools").click
     end
   end
 
-  def and_i_click_the_school_placements_error
+  def then_i_am_on_the_school_placement_page
+    expect(page).to have_current_path(/fields\/school-placement/, ignore_query: true)
+    expect(page).to have_content("What you will do on school placements")
+  end
+
+  def and_i_click_the_placement_school_activities_error
     within ".govuk-error-summary" do
-      page.find_link("Enter details about how placements work").click
+      page.find_link("Enter how you decide which schools to place trainees in").click
     end
+  end
+
+  def when_i_complete_what_you_will_do_on_placements
+    fill_in "What will trainees do while in their placement schools?", with: "learn"
+    click_link_or_button "Update what you will do on school placements"
+  end
+
+  def then_i_am_on_the_where_you_will_train_page
+    expect(page).to have_current_path(/fields\/where-you-will-train/, ignore_query: true)
+    expect(page).to have_content("Where you will train")
+  end
+
+  def when_i_complete_placement_school_activities
+    fill_in "How do you decide which schools to place trainees in?", with: "Observe, team-teach, plan and deliver lessons"
+    fill_in "How much time will they spend in each school?", with: "12 weeks per school"
+
+    click_link_or_button "Update where you will train"
+  end
+
+  def and_i_click_the_theoretical_training_activities_error
+    within ".govuk-error-summary" do
+      page.find_link("Enter details about theoretical training activities").click
+    end
+  end
+
+  def then_i_am_on_the_what_you_will_study_page
+    expect(page).to have_current_path(/fields\/what-you-will-study/, ignore_query: true)
+    expect(page).to have_content("What you will study")
+  end
+
+  def when_i_complete_theoretical_training_activities
+    fill_in "What will trainees do during their theoretical training?", with: "Curriculum design, assessment theory, and pedagogy seminars"
+    click_link_or_button "Update what you will study"
   end
 
   def and_i_click_the_course_length_error
@@ -136,14 +169,6 @@ feature "Publishing courses errors" do
     within ".govuk-error-summary" do
       page.find_link("Enter GCSE requirements").click
     end
-  end
-
-  def then_i_am_on_the_about_course_page
-    expect(page).to have_current_path(/about-this-course/)
-  end
-
-  def then_i_am_on_the_school_placements_page
-    expect(page).to have_current_path(/school-placements/)
   end
 
   def then_i_am_on_the_course_length_page
