@@ -463,19 +463,28 @@ feature "Adding a teacher degree apprenticeship course" do
   end
 
   def and_i_add_course_details
-    publish_provider_courses_show_page.about_course.find_link(
-      text: "Change details about this course",
-    ).click
+    and_i_add_what_you_will_study_details
+    and_i_add_where_you_will_train_details
+    and_i_add_what_will_you_will_do_on_placements
+  end
 
-    fill_in "About this course", with: "Details about this course"
-    click_on "Update about this course"
+  def and_i_add_what_you_will_study_details
+    all("a", text: "Change", visible: :all)[4].click
+    fill_in "What will trainees do during their theoretical training?", with: "blah blah trainees will do during theoretical training"
+    click_on "Update what you will study"
+  end
 
-    publish_provider_courses_show_page.how_school_placements_work.find_link(
-      text: "Change details about how placements work",
-    ).click
+  def and_i_add_where_you_will_train_details
+    all("a", text: "Change", visible: :all)[2].click
+    fill_in "How do you decide which schools to place trainees in?", with: "blah blah trainees will do on placements"
+    fill_in "How much time will they spend in each school?", with: "10 hours per week"
+    click_on "Update where you will train"
+  end
 
-    fill_in "How placements work", with: "School placements information"
-    click_on "Update how placements work"
+  def and_i_add_what_will_you_will_do_on_placements
+    all("a", text: "Change", visible: :all)[3].click
+    fill_in "What will trainees do while in their placement schools?", with: "blah blah trainees will do on placements"
+    click_on "Update what you will do on school placements"
   end
 
   def and_i_add_salary_information
