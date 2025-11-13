@@ -26,12 +26,12 @@ class GiasSchool < ApplicationRecord
   }
 
   enum :type_code, {
-    community_school: "1",
-    voluntary_aided_school: "2",
-    voluntary_controlled_school: "3",
-    foundation_school: "5",
-    city_technical_college: "6",
-    community_special_school: "7",
+    community_school: "01",
+    voluntary_aided_school: "02",
+    voluntary_controlled_school: "03",
+    foundation_school: "05",
+    city_technical_college: "06",
+    community_special_school: "07",
     other_independent_special_school: "10",
     other_independent_school: "11",
     other_foundation_school: "12",
