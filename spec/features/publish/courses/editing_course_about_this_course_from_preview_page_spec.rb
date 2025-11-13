@@ -24,7 +24,10 @@ private
   end
 
   def and_there_is_a_course_i_want_to_edit
-    given_a_course_exists(enrichments: [build(:course_enrichment, :published, about_course: nil)])
+    given_a_course_exists(
+      funding: "salary",
+      enrichments: [build(:course_enrichment, :published, about_course: nil)],
+    )
   end
 
   def when_i_visit_the_about_this_course_preview_page

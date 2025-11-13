@@ -22,7 +22,6 @@ feature "Course show", travel: mid_cycle(2025) do
     scenario "blank about the training provider", travel: 1.hour.before(first_deadline_banner) do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button(@course.provider_name)
       and_i_click_link_or_button("Enter details about the training provider")
       then_i_should_be_on_about_your_organisation_page
       and_i_click_link_or_button("Back")
@@ -31,7 +30,7 @@ feature "Course show", travel: mid_cycle(2025) do
       then_i_see_markdown_formatting_guidance_for_each_field
       and_i_submit_a_valid_about_your_organisation
       then_i_should_be_back_on_the_provider_page
-      then_i_should_see_the_updated_content("test training with your organisation")
+      then_i_should_see_the_updated_content("a good one")
     end
 
     scenario "blank training with disabilities and other needs" do
@@ -39,11 +38,8 @@ feature "Course show", travel: mid_cycle(2025) do
       when_i_visit_the_publish_course_preview_page
       and_i_click_link_or_button("Find out about training with disabilities and other needs at #{@course.provider_name}")
       and_i_click_link_or_button("Enter details about training with disabilities and other needs")
-      then_i_should_be_on_about_your_organisation_page
-      and_i_click_link_or_button("Back")
       then_i_should_be_on_the_training_with_disabilities_page
-      and_i_click_link_or_button("Enter details about training with disabilities and other needs")
-      and_i_submit_a_valid_about_your_organisation
+      and_i_submit_a_valid_about_training_with_disabilities
       then_i_should_be_on_the_training_with_disabilities_page
       then_i_should_see_the_updated_content("test training with disabilities")
       and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
@@ -53,11 +49,11 @@ feature "Course show", travel: mid_cycle(2025) do
     scenario "blank school placements section" do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button("Enter details about how placements work")
+      and_i_click_link_or_button("Enter details about what you will do on school placements")
       and_i_click_link_or_button("Back")
-      and_i_click_link_or_button("Enter details about how placements work")
+      and_i_click_link_or_button("Enter details about what you will do on school placements")
       and_i_submit_a_valid_form
-      and_i_see_the_correct_banner
+      and_i_click_link_or_button("Preview course")
       and_i_see_the_new_course_text
       then_i_should_be_back_on_the_preview_page
     end
@@ -86,17 +82,6 @@ feature "Course show", travel: mid_cycle(2025) do
       then_i_should_be_back_on_the_preview_page
     end
 
-    scenario "blank school placements" do
-      given_i_am_authenticated(user: user_with_no_course_enrichments)
-      when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button("Enter details about how placements work")
-      and_i_click_link_or_button("Back")
-      and_i_click_link_or_button("Enter details about how placements work")
-      and_i_submit_a_valid_form
-      and_i_see_the_correct_banner
-      then_i_should_be_back_on_the_preview_page
-    end
-
     scenario "blank fees uk eu" do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
@@ -104,7 +89,7 @@ feature "Course show", travel: mid_cycle(2025) do
       and_i_click_link_or_button("Back")
       and_i_click_link_or_button("Enter details about fees and financial support")
       and_i_submit_a_valid_course_fees
-      and_i_see_the_correct_banner
+      and_i_click_link_or_button("Preview course")
       and_i_see_the_the_course_fee
       then_i_should_be_back_on_the_preview_page
     end
@@ -169,13 +154,9 @@ private
   end
 
   def then_i_see_markdown_formatting_guidance_for_each_field
-    %w[#publish-about-your-organisation-form-train-with-us-hint #publish-about-your-organisation-form-train-with-disability-hint].each do |section_id|
-      within("div#{section_id}") do
-        page.find("span", text: "How to create links and bullet points")
-        expect(page).to have_content "How to create a link"
-        expect(page).to have_content "How to create bullet points"
-      end
-    end
+    expect(page).to have_content "How to create links and bullet points"
+    expect(page).to have_content "How to create a link"
+    expect(page).to have_content "How to create bullet points"
   end
 
   def then_i_see_the_course_preview_details
@@ -217,33 +198,17 @@ private
 
     expect(publish_course_preview_page).not_to have_vacancies
 
-    expect(publish_course_preview_page.about_course).to have_content(
-      decorated_course.about_course,
-    )
-
     expect(publish_course_preview_page.interview_process).to have_content(
       decorated_course.interview_process,
-    )
-
-    expect(publish_course_preview_page.school_placements).to have_content(
-      decorated_course.how_school_placements_work,
     )
 
     expect(publish_course_preview_page).to have_content(
       "The course fees for #{recruitment_cycle.year} to #{recruitment_cycle.year.to_i + 1} are as follows",
     )
 
-    expect(publish_course_preview_page.uk_fees).to have_content(
-      "£9,250",
-    )
+    expect(page).to have_content("£9,250 fee for UK citizens")
 
-    expect(publish_course_preview_page.international_fees).to have_content(
-      "£14,000",
-    )
-
-    expect(publish_course_preview_page.fee_details).to have_content(
-      decorated_course.fee_details,
-    )
+    expect(page).to have_content("£14,000 fee for Non-UK citizens")
 
     expect(publish_course_preview_page).not_to have_salary_details
 
@@ -268,7 +233,7 @@ private
   end
 
   def user_with_custom_address_requested_via_zendesk
-    course = build(:course, course_code: "X104")
+    course = build(:course, course_code: "X104", enrichments: [build(:course_enrichment, :v2, :initial_draft)])
     provider = build(
       :provider, provider_code: "28T", courses: [course]
     )
@@ -298,8 +263,8 @@ private
     sites = [site1, site2, site3, site4, site5]
     site_statuses = [site_status1, site_status2, site_status3, site_status4, site_status5]
 
-    course_enrichment = build(
-      :course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000
+    course_enrichment = create(
+      :course_enrichment, :v2, :initial_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000
     )
 
     accrediting_provider = build(:accredited_provider)
@@ -321,7 +286,7 @@ private
     )
 
     provider = build(
-      :provider, sites:, study_sites: [study_site], courses: [course], accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider)]
+      :provider, sites:, study_sites: [study_site], courses: [course], accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider)], about_us: "a good one"
     )
 
     create(
@@ -334,11 +299,12 @@ private
 
   def user_with_no_course_enrichments
     provider = create(
-      :provider, train_with_disability: nil, train_with_us: nil
+      :provider, train_with_disability: nil, about_us: nil
     )
 
     course = create(
-      :course, :secondary, :with_accrediting_provider, provider:, degree_grade: nil, funding: "fee", additional_degree_subject_requirements: nil
+      :course, :secondary, :with_accrediting_provider, provider:, degree_grade: nil, funding: "fee", additional_degree_subject_requirements: nil,
+                                                       enrichments: [create(:course_enrichment, :v2, :initial_draft, :without_content)]
     )
 
     provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider)
@@ -398,7 +364,7 @@ private
   end
 
   def then_i_should_be_on_about_your_organisation_page
-    expect(page).to have_text("About your organisation")
+    expect(page).to have_text("What kind of organisation is #{provider.provider_name}?")
   end
 
   def then_i_should_be_back_on_the_preview_page
@@ -411,23 +377,29 @@ private
     )
   end
 
-  def and_i_submit_a_valid_about_your_organisation
-    fill_in "Training with your organisation", with: "test training with your organisation"
-    fill_in "Training with disabilities and other needs", with: "test training with disabilities"
+  def and_i_submit_a_valid_about_training_with_disabilities
+    page.find("#publish-disability-support-form-train-with-disability-field").set("test training with disabilities")
 
-    click_link_or_button "Save and publish"
+    click_link_or_button "Update training with disabilities"
+  end
+
+  def and_i_submit_a_valid_about_your_organisation
+    fill_in "What kind of organisation is #{provider.provider_name}?", with: "a good one"
+    fill_in "Why should candidates choose to train with you?", with: "test why candidates should choose to train with you"
+
+    click_link_or_button "Update why train with us"
   end
 
   def and_i_submit_a_valid_form
-    fill_in "How placements work", with: "great placement"
+    fill_in "What will trainees do while in their placement schools?", with: "great placement"
 
-    click_link_or_button "Update how placements work"
+    click_link_or_button "Update what you will do on school placements"
   end
 
   def and_i_submit_a_valid_course_fees
-    fill_in "Fee for UK students", with: "100"
+    fill_in "Fee for UK citizens", with: "100"
 
-    click_link_or_button "Update course fees"
+    click_link_or_button "Update fees and financial support"
   end
 
   def provider
@@ -468,9 +440,7 @@ private
   end
 
   def then_i_should_be_on_the_provider_page
-    expect(publish_course_preview_page.train_with_us).to have_content(
-      provider.train_with_us,
-    )
+    expect(page).to have_content(provider.about_us)
 
     expect(publish_course_preview_page).to have_content(
       provider.email,
@@ -512,18 +482,7 @@ private
   end
 
   def then_i_should_be_on_the_training_with_disabilities_page
-    expect(publish_course_preview_page.train_with_disability).to have_content(
-      provider.train_with_disability,
-    )
-
-    expect(page).to have_link(
-      "Contact #{course.provider_name}",
-      href: provider_publish_provider_recruitment_cycle_course_path(
-        @course.provider_code,
-        @course.recruitment_cycle_year,
-        @course.course_code,
-      ),
-    )
+    expect(page).to have_content("Training with disabilities and other needs")
   end
 
   def then_i_see_no_school_placements_link
