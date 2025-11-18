@@ -75,9 +75,8 @@ gem "discard"
 # Gov Notify
 gem "govuk_notify_rails"
 
-# Run jobs in the background. Good enough until we know we need more firepower
-# (i.e. SideKiq)
-gem "sidekiq"
+# Run jobs in the background.
+gem "sidekiq", "~> 6.5"
 gem "sidekiq-cron"
 
 # Semantic Logger makes logs pretty
