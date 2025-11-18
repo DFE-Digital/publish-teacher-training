@@ -46,9 +46,7 @@ module Find
         def potential_study_sites_text
           return "Not listed yet" if course.study_sites.none?
 
-          if coordinates
-            distance_text
-          elsif course.study_sites.one?
+          if course.study_sites.one?
             "1 study site"
           else
             "#{course.study_sites.size} potential study sites"
