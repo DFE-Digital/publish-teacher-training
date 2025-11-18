@@ -3,7 +3,6 @@ import jQuery from 'jquery'
 import { initAll } from 'govuk-frontend'
 
 import autocompleteSetup from './autocomplete'
-import initLocationsMap from './locations-map'
 import FilterToggle from './filters'
 
 import { Application } from '@hotwired/stimulus'
@@ -12,7 +11,6 @@ import SelectAllCheckboxesController from './controllers/select_all_checkboxes_c
 
 window.jQuery = jQuery
 window.$ = jQuery
-window.initLocationsMap = initLocationsMap
 
 initAll()
 FilterToggle.init()
