@@ -18,7 +18,7 @@ private
 
   def allowed_search_params_keys
     {
-      User: %i[text_search user_type],
+      User: %i[text_search user_type status],
       Provider: %i[provider_search course_search accredited provider_type],
       Candidate: %i[text_search],
     }[collection.klass.name.to_sym]
