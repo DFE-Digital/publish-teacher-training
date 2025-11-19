@@ -25,7 +25,7 @@ module Gias
 
         gias_school.assign_attributes(school_record)
 
-        next if gias_school.new_record? && (gias_school.closed? || gias_school.proposed_to_open?)
+        next if gias_school.new_record? && gias_school.closed?
 
         if gias_school.changed?
           gias_school.save!

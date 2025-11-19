@@ -311,8 +311,8 @@ RSpec.describe Gias::Importer do
       CSV_DATA
     end
 
-    it "does not create a new 'proposed_to_open' record" do
-      expect { subject }.not_to(change(GiasSchool, :count))
+    it "creates a new 'proposed_to_open' record" do
+      expect { subject }.to(change(GiasSchool, :count).by(1))
     end
   end
 end

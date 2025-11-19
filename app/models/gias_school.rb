@@ -16,7 +16,13 @@ class GiasSchool < ApplicationRecord
                     },
                   }
 
-  scope :available, -> { where(status_code: [GiasSchool.status_codes[:open], GiasSchool.status_codes[:proposed_to_close]]) }
+  scope :available, lambda {
+    where(status_code: [
+      GiasSchool.status_codes[:open],
+      GiasSchool.status_codes[:proposed_to_open],
+      GiasSchool.status_codes[:proposed_to_close],
+    ])
+  }
 
   enum :status_code, {
     open: "1",
