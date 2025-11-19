@@ -10,6 +10,23 @@ describe GiasSchool do
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_uniqueness_of(:urn).case_insensitive }
 
+  context "scopes" do
+    describe ".available" do
+      it "returns open and proposed_to_open, not closed or proposed_to_close" do
+        open = create(:gias_school, :open)
+        proposed_close = create(:gias_school, status_code: :proposed_to_close)
+
+        closed = create(:gias_school, :closed)
+        proposed_open = create(:gias_school, status_code: :proposed_to_open)
+
+        result = described_class.available.ids
+
+        expect(result).to contain_exactly(open.id, proposed_close.id)
+        expect(result).not_to contain_exactly(closed.id, proposed_open.id)
+      end
+    end
+  end
+
   context "callbacks" do
     it "updates the tsvector column with relevant info when the school is updated" do
       school = create(:gias_school)
