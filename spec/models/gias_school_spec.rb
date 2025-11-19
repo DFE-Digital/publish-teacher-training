@@ -21,8 +21,8 @@ describe GiasSchool do
 
         result = described_class.available.ids
 
-        expect(result).to contain_exactly(open.id, proposed_close.id)
-        expect(result).not_to contain_exactly(closed.id, proposed_open.id)
+        expect(result).to contain_exactly(open.id, proposed_close.id, proposed_open.id)
+        expect(result).not_to contain_exactly(closed.id)
       end
     end
   end
