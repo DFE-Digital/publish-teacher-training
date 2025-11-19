@@ -429,6 +429,11 @@ en:
         user_types:
           admin: "Admin User"
           provider: "Provider User"
+        status: "Status"
+        statuses:
+          all: "All"
+          active: "Active"
+          discarded: "Deleted"
     course:
       financial_incentives:
         none: "None available"

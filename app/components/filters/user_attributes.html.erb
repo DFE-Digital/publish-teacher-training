@@ -12,3 +12,15 @@
     </div>
   <% end %>
 </div>
+
+<div class="govuk-form-group">
+  <%= label_tag "status", t("components.filter.users.status"), class: "govuk-label govuk-label--s" %>
+  <div class="govuk-radios">
+    <% [%w[all All], %w[active Active], %w[discarded Deleted]].each do |value, text| %>
+      <div class="govuk-radios__item">
+        <%= radio_button_tag "status", value, (checked?(filters, :status, value) || (filters.blank? && value == "active")), id: "status-#{value}", class: "govuk-radios__input" %>
+        <%= label_tag "status-#{value}", text, class: "govuk-label govuk-radios__label" %>
+      </div>
+    <% end %>
+  </div>
+</div>

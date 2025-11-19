@@ -60,6 +60,21 @@ module Support
       records.accredited
     end
 
+    def status_filter(records, status)
+      return records unless status
+
+      case status
+      when "all"
+        records.with_discarded
+      when "discarded"
+        records.discarded
+      when "active"
+        records.kept
+      else
+        records
+      end
+    end
+
     def filter_records
       filtered_records = model_data_scope
 
@@ -69,6 +84,7 @@ module Support
       filtered_records = provider_accredited_type(filtered_records, filter_params[:accredited])
       filtered_records = course_search(filtered_records, filter_params[:course_search]) if filtered_records.respond_to?(:course_search)
       filtered_records = user_type(filtered_records, filter_params[:user_type]) if filtered_records.respond_to?(:admins)
+      filtered_records = status_filter(filtered_records, filter_params[:status]) if filtered_records.respond_to?(:with_discarded) || filtered_records.respond_to?(:kept)
 
       filtered_records
     end

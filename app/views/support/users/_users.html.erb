@@ -4,6 +4,7 @@
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Email</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Provider count</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Status</th>
     </tr>
   </thead>
 
@@ -12,7 +13,11 @@
       <tr class="govuk-table__row user-row">
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= govuk_link_to user.full_name, support_recruitment_cycle_user_path(params[:recruitment_cycle_year], user) %>
+            <% if user.discarded? %>
+              <%= user.full_name %>
+            <% else %>
+              <%= govuk_link_to user.full_name, support_recruitment_cycle_user_path(params[:recruitment_cycle_year], user) %>
+            <% end %>
           </span>
         </td>
         <td class="govuk-table__cell">
@@ -23,6 +28,15 @@
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= user.providers.in_cycle(@recruitment_cycle).count %>
+          </span>
+        </td>
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <% if user.discarded? %>
+              <%= govuk_tag(text: "Deleted", colour: "red") %>
+            <% else %>
+              <%= govuk_tag(text: "Active", colour: "green") %>
+            <% end %>
           </span>
         </td>
       </tr>
