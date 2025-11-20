@@ -22,7 +22,8 @@
         <p class="govuk-body" data-qa="flash__success__body"><%= value["body"].html_safe %></p>
       <% end %>
     <% elsif key.to_s == "sign_in" %>
-      <%= render(Find::OneLoginBannerComponent.new) %>
+      <% reason = (flash[:sign_in_reason] || :general).to_sym %>
+      <%= render(Find::OneLoginBannerComponent.new(reason:)) %>
     <% end %>
   <% end %>
 <% end %>
