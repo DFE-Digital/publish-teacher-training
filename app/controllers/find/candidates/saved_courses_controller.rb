@@ -100,6 +100,10 @@ module Find
         flash_options = error ? { flash: { error: { message: error } } } : {}
         redirect_to find_course_path(**options), **flash_options
       end
+
+      def reason_for_request
+        :general
+      end
     end
   end
 end

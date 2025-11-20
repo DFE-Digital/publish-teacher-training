@@ -53,13 +53,24 @@ module Find
 
       respond_to do |format|
         format.html do
-          redirect_to find_root_path, flash: { sign_in: "You must sign in to visit that page." }
+          flash[:sign_in] = "You must sign in to visit that page."
+          flash[:sign_in_reason] = reason_for_request
+          redirect_to find_root_path
         end
 
         format.json do
           session["flash_sign_in"] = "You must sign in to visit that page."
+          session["flash_sign_in_reason"] = reason_for_request_from_json
           render json: { redirect: find_root_path }, status: :unauthorized
         end
+      end
+    end
+
+    def reason_for_request_from_json
+      if request.path.start_with?("/candidate/saved-courses")
+        :save_course
+      else
+        :general
       end
     end
 

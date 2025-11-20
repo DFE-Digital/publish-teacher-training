@@ -36,5 +36,21 @@ describe Find::OneLoginBannerComponent do
       expect(button.text).to eq("sign in")
       expect(button[:type]).to eq("submit")
     end
+
+    context "when the user has tried to save a course / the reason is :save_course" do
+      before { render_inline(described_class.new(reason: :save_course)) }
+
+      it "has the correct content" do
+        expect(component).to have_text(/You must\s*sign in\s*to save a course\./)
+      end
+    end
+
+    context "when the user has NOT tried to save a course but tried to access another authenticated page / reason is :general" do
+      before { render_inline(described_class.new(reason: :general)) }
+
+      it "has the correct content" do
+        expect(component).to have_text(/You must\s*sign in\s*to visit that page\./)
+      end
+    end
   end
 end
