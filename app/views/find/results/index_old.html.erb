@@ -1,0 +1,141 @@
+<%= content_for :page_title, t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
+
+<h1 class="govuk-heading-xl">
+  <%= t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
+</h1>
+
+<%= render Courses::QueryDebugHeaderComponent.new(
+  results: @results,
+  applied_filters: @courses_query.applied_scopes,
+  latitude: @search_params[:latitude],
+  longitude: @search_params[:longitude],
+  debug: params[:debug],
+) %>
+
+<%= form_with model: @search_courses_form, scope: "", url: find_results_path, method: :get do |form| %>
+  <%= form.hidden_field :utm_source, value: "results" %>
+
+  <div class="app-filter-layout" data-controller="visibility" data-visibility-visible-class="app-filter-layout__filter--open">
+    <div class="app-filter-layout__filter app-filter" data-visibility-target="container">
+      <div class="app-filter__header">
+        <h2 class="govuk-heading-m">Filters</h2>
+
+        <button type="button" class="app-filter__close" data-visibility-target="trigger" data-action="visibility#hide" aria-expanded="false">
+          Close
+          <span class="govuk-visually-hidden"> filter menu</span>
+        </button>
+      </div>
+
+      <%= render "find/results/filters/all", form: %>
+    </div>
+
+    <div class="app-filter-layout__content">
+      <%= render partial: "find/results/courses_guidance/show" %>
+
+      <div class="app-search-results-controls">
+        <div class="govuk-form-group" data-controller="subjects-autocomplete">
+          <%= render DfE::Autocomplete::View.new(
+             form,
+             attribute_name: :subject_code,
+             form_field: form.govuk_select(
+               :subject_code,
+               options_for_select(
+                 dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code match_synonyms]),
+                 form.object.subject_code,
+               ),
+               label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" },
+             ),
+           ) %>
+        </div>
+
+        <%= form.govuk_text_field :location,
+          label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
+          form_group: {
+            "data-controller" => "locations-autocomplete",
+            "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path,
+          },
+          autocomplete: "off",
+          data: { locations_autocomplete_target: "input" } %>
+
+        <%= form.govuk_collection_select :radius, form.object.radius_options, :value, :name,
+          label: { text: t("helpers.label.courses_search_form.radius"), size: "s" } %>
+
+        <details class="govuk-details" data-module="govuk-details" <%= "open" if form.object.provider_name.present? %>>
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              Search by training provider
+            </span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <div class="govuk-form-group" data-controller="provider-autocomplete">
+              <%= render Find::AutocompleteComponent.new(
+                form_field: form.govuk_select(
+                  :provider_code,
+                  dfe_autocomplete_options(form.object.providers_list, synonyms_fields: %i[code]),
+                  label: { text: t("helpers.label.courses_search_form.provider"), size: "s" },
+                ),
+              ) %>
+            </div>
+          </div>
+        </details>
+
+        <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), name: "utm_medium", value: "search" %>
+      </div>
+
+      <% if @results.present? %>
+        <div class="app-search-results-header">
+          <div class="app-search-results-header__sort">
+            <% if @search_params[:location].present? %>
+              <p class="govuk-body">
+                <%= I18n.t("helpers.label.courses_search_form.ordering.location") %>
+              </p>
+            <% else %>
+              <%= form.govuk_collection_select(
+                  :order,
+                  form.object.ordering_options,
+                  :id,
+                  :name,
+                  label: { text: t("helpers.label.courses_search_form.ordering.non_location"), class: "govuk-!-display-inline-block" },
+                  role: "listbox", form_group: {}
+                ) %>
+
+              <%= form.govuk_submit t("helpers.submit.courses_search_form.order", class: "govuk-!-display-inline-block"), name: "utm_medium", value: "sort" %>
+            <% end %>
+          </div>
+
+          <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
+            Filter results
+          </button>
+        </div>
+
+        <ul class="app-search-results">
+          <% @results.each do |course| %>
+            <%= render Courses::SummaryCardComponent.new(
+              candidate: @candidate,
+              course:,
+              location: @search_params[:formatted_address] || @search_params[:location],
+              visa_sponsorship: @search_params[:can_sponsor_visa],
+            ) %>
+
+            <%= render Courses::SchoolDistancesDebugComponent.new(
+              course:,
+              latitude: @search_params[:latitude],
+              longitude: @search_params[:longitude],
+              debug: params[:debug],
+            ) %>
+          <% end %>
+        </ul>
+
+        <%= render partial: "find/results/courses_guidance/show" %>
+        <%= govuk_pagination(pagy: @pagy) %>
+      <% else %>
+        <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
+          Filter results
+        </button>
+
+        <%= render Courses::NoResultsComponent.new(search_params: @search_params) %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
