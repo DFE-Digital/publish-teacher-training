@@ -3,9 +3,7 @@ $govuk-images-path: "/";
 $govuk-new-typography-scale: true;
 
 @import "govuk-frontend/dist/govuk/all";
-@import "@ministryofjustice/frontend/moj/all";
 
-$moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 $mobile-small-start: 400px;
 $mobile-small-end: 401px;
 $mobile-big-start: 500px;

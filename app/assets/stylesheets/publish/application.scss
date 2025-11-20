@@ -1,5 +1,7 @@
 // Entry point for your Sass build
 @import "../govuk_style_setup";
+@import "@ministryofjustice/frontend/moj/all";
+$moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min";
 @import "../one-login";
 
