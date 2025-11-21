@@ -52,11 +52,6 @@
   }
 }
 
-.app-filter__toggle,
-.app-filter__close {
-  display: none;
-}
-
 .app-filter-layout__content {
   @include govuk-media-query(desktop) {
     float: right;

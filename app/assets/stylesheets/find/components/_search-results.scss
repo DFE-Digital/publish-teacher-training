@@ -6,6 +6,24 @@
   border-top: 1px solid $govuk-border-colour;
 }
 
+.app-search-results-controls {
+  padding: $govuk-gutter-half;
+
+  background-color: govuk-colour('light-grey');
+
+  .autocomplete__input {
+    background-color: govuk-colour('white');
+  }
+
+  .govuk-form-group {
+    margin-bottom: govuk-spacing(4);
+  }
+
+  .govuk-button {
+    margin-bottom: 0;
+  }
+}
+
 .app-search-results__item {
   @include govuk-responsive-margin(4, "bottom");
   display: block;

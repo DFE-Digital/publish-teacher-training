@@ -6,6 +6,10 @@
   display: block;
 
   background-color: govuk-colour("light-grey");
+
+  > :last-child {
+    margin-bottom: 0;
+  }
 }
 
 .app-card--blue {
@@ -76,4 +80,10 @@
 .app-card__secondary-count {
   @include govuk-font($size: 36, $weight: bold);
   display: block;
+}
+
+.app-card--dashed {
+  padding: govuk-spacing(6);
+
+  border: 5px dashed $govuk-border-colour;
 }

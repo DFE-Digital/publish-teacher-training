@@ -6,24 +6,6 @@
 @import "@ministryofjustice/frontend/moj/objects/scrollable-pane";
 @import "@ministryofjustice/frontend/moj/components/filter/filter";
 
-.app-search-results-controls {
-  padding: $govuk-gutter-half;
-
-  background-color: govuk-colour('light-grey');
-
-  .autocomplete__input {
-    background-color: govuk-colour('white');
-  }
-
-  .govuk-form-group {
-    margin-bottom: govuk-spacing(4);
-  }
-
-  .govuk-button {
-    margin-bottom: 0;
-  }
-}
-
 .app-filter {
   box-shadow: none;
 
