@@ -1,16 +1,22 @@
 <% course ||= @course %>
 <% saved_course ||= @saved_course %>
+<% url = saved_course ? find_candidate_saved_course_path(saved_course) : find_candidate_saved_courses_path %>
+<% method = saved_course ? :delete : :post %>
 
 <% if current_page?(find_results_path) %>
-  <div data-controller="save-course"
-       data-save-course-course-id-value="<%= course.id %>"
-       data-save-course-saved-value="<%= saved_course.present? %>"
-       data-save-course-save-url-value="<%= find_candidate_saved_courses_path %>"
-       data-save-course-unsave-url-value="<%= saved_course ? find_candidate_saved_course_path(saved_course) : "" %>"
-       data-save-course-saved-icon-url-value="<%= asset_path("icon-saved.svg") %>"
-       data-save-course-unsaved-icon-url-value="<%= asset_path("icon-save.svg") %>">
+  <%= form_with url:,
+                method:,
+                data: {
+    controller: "save-course",
+    save_course_course_id_value: course.id,
+    save_course_saved_value: saved_course.present?,
+    save_course_save_url_value: find_candidate_saved_courses_path,
+    save_course_unsave_url_value: saved_course ? find_candidate_saved_course_path(saved_course) : "",
+    save_course_saved_icon_url_value: asset_path("icon-saved.svg"),
+    save_course_unsaved_icon_url_value: asset_path("icon-save.svg"),
+  } do |f| %>
 
-    <button class="unstyled-button results-save-course-button__unstyled-button" data-action="click->save-course#toggle">
+  <%= f.button class: "unstyled-button results-save-course-button__unstyled-button", data: { action: "click->save-course#toggle" }, value: course.id, name: "course_id" do %>
       <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
         <%= image_tag(
               saved_course ? "icon-saved.svg" : "icon-save.svg",
@@ -26,8 +32,8 @@
           <%= saved_course ? t(".course_saved") : t(".save_this_course") %>
         </span>
       </div>
-    </button>
-  </div>
+    <% end %>
+  <% end %>
 <% else %>
   <% if saved_course %>
     <%= render partial: "find/courses/unsave_button", locals: { saved_course: saved_course } %>
