@@ -9,7 +9,7 @@
 
   <% if @saved_courses.empty? %>
     <div class="govuk-grid-column-full">
-      <div class="no-saved-courses-box">
+      <div class="app-card app-card--dashed">
         <h2 class="govuk-heading-m"><%= t(".no_saved_courses") %></h2>
         <p class="govuk-body">
           <%= t(".empty_state_html", link: govuk_link_to(t(".find_saved_courses"), find_root_path)) %>
