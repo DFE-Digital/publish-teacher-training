@@ -1126,6 +1126,104 @@ RSpec.describe Courses::Query do
       end
     end
 
+    context "when location search with same placement schools" do
+      let(:london) { build(:location, :london) }
+      let(:shared_site) { create(:site, latitude: london.latitude, longitude: london.longitude) }
+
+      let(:zebra_provider) { create(:provider, provider_name: "Zebra University") }
+      let(:apple_provider) { create(:provider, provider_name: "Apple University") }
+      let(:middle_provider) { create(:provider, provider_name: "Middle University") }
+
+      let!(:course_at_shared_site_zebra) do
+        create(
+          :course,
+          name: "Mathematics",
+          provider: zebra_provider,
+          site_statuses: [
+            create(:site_status, :findable, site: shared_site),
+          ],
+        )
+      end
+
+      let!(:course_at_shared_site_apple) do
+        create(
+          :course,
+          name: "Biology",
+          provider: apple_provider,
+          site_statuses: [
+            create(:site_status, :findable, site: shared_site),
+          ],
+        )
+      end
+
+      let!(:course_at_shared_site_middle) do
+        create(
+          :course,
+          name: "Chemistry",
+          provider: middle_provider,
+          site_statuses: [
+            create(:site_status, :findable, site: shared_site),
+          ],
+        )
+      end
+
+      it "orders courses at the same placement school by provider name A-Z" do
+        params = { latitude: london.latitude, longitude: london.longitude, radius: 10 }
+        results = described_class.call(params:)
+
+        expect(results).to match_collection(
+          [
+            course_at_shared_site_apple,
+            course_at_shared_site_middle,
+            course_at_shared_site_zebra,
+          ],
+          attribute_names: %w[name provider_name],
+        )
+      end
+
+      context "when courses are at different distances with some sharing placement schools" do
+        let(:nearby_site) { create(:site, latitude: london.latitude + 0.01, longitude: london.longitude + 0.01) }
+
+        let(:yankee_provider) { create(:provider, provider_name: "Yankee University") }
+        let(:bravo_provider) { create(:provider, provider_name: "Bravo University") }
+
+        let!(:course_at_nearby_site_yankee) do
+          create(
+            :course,
+            name: "Physics",
+            provider: yankee_provider,
+            site_statuses: [
+              create(:site_status, :findable, site: nearby_site),
+            ],
+          )
+        end
+
+        let!(:course_at_nearby_site_bravo) do
+          create(
+            :course,
+            name: "English",
+            provider: bravo_provider,
+            site_statuses: [
+              create(:site_status, :findable, site: nearby_site),
+            ],
+          )
+        end
+
+        it "orders by distance first, then by provider name for same distance" do
+          params = { latitude: london.latitude, longitude: london.longitude, radius: 10 }
+          results = described_class.call(params:)
+
+          expect(results.map { |c| c.provider.provider_name }).to eq([
+            "Apple University",
+            "Middle University",
+            "Zebra University",
+            "Bravo University",
+            "Yankee University",
+          ])
+        end
+      end
+    end
+
     describe "SQL injection tests for location search" do
       let(:london) { build(:location, :london) }
       let(:valid_latitude) { 51.5074 }

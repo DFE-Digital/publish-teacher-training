@@ -306,6 +306,7 @@ module Courses
             [
               <<~SQL.squish,
                 course.*,
+                provider.provider_name,
                 MIN(ST_DistanceSphere(
                   ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
                   ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
@@ -316,8 +317,8 @@ module Courses
             ],
           ),
         )
-        .group(:id)
-        .order("minimum_distance_to_search_location ASC")
+        .group(:id, "provider.provider_name")
+        .order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC")
     end
 
     def default_ordering_scope
