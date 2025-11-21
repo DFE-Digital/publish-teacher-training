@@ -135,7 +135,7 @@ gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.15.10"
 gem "dfe-autocomplete", github: "DFE-Digital/dfe-autocomplete", tag: "v0.2.1"
 
 # For running data migrations
-gem "data_migrate", "11.3.0"
+gem "data_migrate", "11.3.1"
 
 # For outgoing http requests
 gem "http"
