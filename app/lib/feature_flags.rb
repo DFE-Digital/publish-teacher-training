@@ -10,6 +10,7 @@ class FeatureFlags
       [:candidate_accounts, "Enable candidate accounts feature", "Find and Publish team"],
       [:long_form_content, "Enable long form content", "Find and Publish team"],
       [:course_sites_updated_email_notification, "Send email notifications when a course's associated schools are updated", "Find and Publish team"],
+      [:find_filtering_and_sorting, "Enable updated filtering and sorting designs on Find service", "Find and Publish team"],
     ]
   end
 end

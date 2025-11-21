@@ -1,0 +1,20 @@
+en:
+  find:
+    results:
+      index:
+        page_title:
+          zero: "No courses found"
+          one: "1 course found"
+          other: "%{formatted_count} courses found"
+      index_old:
+        page_title:
+          zero: "No courses found"
+          one: "1 course found"
+          other: "%{formatted_count} courses found"
+      courses_guidance:
+        show:
+          heading: "Not sure which course is right for you?"
+          links:
+            choose_course: "Find out how to choose a course"
+            training_adviser: "Get a free teacher training adviser"
+            events: "Talk to teacher training providers at an event near you"
