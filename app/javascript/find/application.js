@@ -12,6 +12,12 @@ import RemoteAutocompleteController from './controllers/remote_autocomplete_cont
 import LocationsAutocompleteController from './controllers/locations_autocomplete_controller'
 import VisibilityController from './controllers/visibility_controller'
 
+document.body.className +=
+  ' js-enabled' +
+  ('noModule' in HTMLScriptElement.prototype
+    ? ' govuk-frontend-supported'
+    : '')
+
 window.Stimulus = Application.start()
 
 Stimulus.register('filter-search', FilterSearchController)
@@ -21,7 +27,10 @@ Stimulus.register('remote-autocomplete', RemoteAutocompleteController)
 Stimulus.register('locations-autocomplete', LocationsAutocompleteController)
 Stimulus.register('visibility', VisibilityController)
 Stimulus.register('provider-autocomplete', ProviderAutocompleteController)
-Stimulus.register('radius-quick-link-suggestions', RadiusQuickLinkSuggestionsController)
+Stimulus.register(
+  'radius-quick-link-suggestions',
+  RadiusQuickLinkSuggestionsController
+)
 
 initAll()
 initCrossServiceHeader()

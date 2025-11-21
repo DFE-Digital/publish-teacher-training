@@ -31,8 +31,6 @@
   <body class="govuk-template__body">
     <%= govuk_skip_link %>
 
-    <%= render "layouts/add_js_enabled_class_to_body" %>
-
     <% if FeatureFlag.active?(:candidate_accounts) %>
       <%= render Govuk::OneLoginHeaderComponent.new(current_user: Current.session&.sessionable) %>
       <%= govuk_service_navigation(service_name: t("service_name.find"), service_url: find_root_path) do |nav|
