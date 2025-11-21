@@ -31,6 +31,11 @@ module Find
       if session[:flash_info].present?
         flash[:info] = session.delete(:flash_info)
         flash.discard(:info)
+
+      elsif session[:flash_sign_in].present?
+        flash[:sign_in] = session.delete(:flash_sign_in)
+        flash[:sign_in_reason] = session.delete(:flash_sign_in_reason)
+        flash.discard(:sign_in)
       end
     end
 
