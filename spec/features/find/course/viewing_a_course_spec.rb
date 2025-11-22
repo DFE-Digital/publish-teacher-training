@@ -189,6 +189,14 @@ private
       "#{@course.name} (#{@course.course_code})",
     )
 
+    expect(page).to have_content(@course.latest_published_enrichment.interview_process)
+    expect(page).to have_content(@course.latest_published_enrichment.theoretical_training_location)
+    expect(page).to have_content(@course.latest_published_enrichment.theoretical_training_duration)
+    expect(page).to have_content(@course.latest_published_enrichment.theoretical_training_activities)
+    expect(page).to have_content(@course.latest_published_enrichment.assessment_methods)
+    expect(page).to have_content(@course.latest_published_enrichment.placement_selection_criteria)
+    expect(page).to have_content(@course.latest_published_enrichment.duration_per_school)
+
     expect(find_course_show_page.sub_title).to have_content(
       provider.provider_name,
     )
@@ -214,10 +222,6 @@ private
     )
 
     expect(find_course_show_page).not_to have_vacancies
-
-    expect(find_course_show_page.interview_process).to have_content(
-      @course.latest_published_enrichment.interview_process,
-    )
 
     expect(page).to have_content("£9,250 fee for UK citizens")
 
@@ -356,6 +360,8 @@ private
 
   def then_i_should_be_on_the_provider_page
     expect(page).to have_content(provider.about_us)
+
+    expect(page).to have_content(provider.value_proposition)
 
     expect(find_course_show_page).to have_content(
       provider.email,

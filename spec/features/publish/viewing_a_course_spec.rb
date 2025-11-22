@@ -5,10 +5,6 @@ require "rails_helper"
 feature "Course show" do
   include ActiveSupport::NumberHelper
 
-  before do
-    allow(FeatureFlag).to receive(:active?)
-  end
-
   around do |example|
     Timecop.travel(Find::CycleTimetable.apply_deadline(2025) - 1.hour) do
       example.run
