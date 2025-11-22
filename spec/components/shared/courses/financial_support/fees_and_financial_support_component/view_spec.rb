@@ -78,7 +78,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
       result = render_inline(described_class.new(course, enrichment))
 
-      expect(result.text).to include("Some fee details")
+      expect(result.text).to include("Enter details about fees and financial support")
     end
   end
 end

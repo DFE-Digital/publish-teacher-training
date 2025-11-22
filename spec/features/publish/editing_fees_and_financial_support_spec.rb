@@ -26,16 +26,6 @@ feature "Editing fees and financial support section" do
     then_i_see_an_error_message
   end
 
-  scenario "I see the guidance on the page" do
-    given_i_am_authenticated_as_a_provider_user
-    and_there_is_a_course_i_want_to_edit
-    when_i_visit_the_fees_and_financial_support_edit_page
-    then_i_see_guidance
-
-    when_i_expand_the_guidance_section
-    then_i_see_more_information
-  end
-
 private
 
   def given_i_am_authenticated_as_a_provider_user
@@ -53,7 +43,7 @@ private
   end
 
   def when_i_visit_the_fees_and_financial_support_edit_page
-    visit fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+    visit fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
       course.course_code,
@@ -65,27 +55,39 @@ private
   end
 
   def then_i_see_the_new_fees_and_financial_support_information
-    expect(find_field("Fees and financial support").value).to eq "Here is very useful information fees and financial support"
+    expect(find_field("When are the fees due? Is there a payment schedule? (optional)").value).to eq "fee schedule"
+    expect(find_field("Are there any additional fees or costs? (optional)").value).to eq "additional fees"
+    expect(find_field("Does your organisation offer any financial support? (optional)").value).to eq "financial support"
   end
 
   def then_fees_and_financial_support_data_has_changed
     expect(page).to have_content "Fees and financial support updated"
-    expect(page).to have_content "Here is very useful information fees and financial support"
+    expect(page).to have_content "fee schedule"
+    expect(page).to have_content "additional fees"
+    expect(page).to have_content "financial support"
 
     enrichment = course.reload.enrichments.find_or_initialize_draft
-    expect(enrichment.fee_details).to eq("Here is very useful information fees and financial support")
+    expect(enrichment.fee_schedule).to eq("fee schedule")
+    expect(enrichment.additional_fees).to eq("additional fees")
+    expect(enrichment.financial_support).to eq("financial support")
   end
 
   def then_i_see_an_error_message
-    expect(page).to have_content("Reduce the word count for fees and financial support").twice
+    expect(page).to have_content("Fee schedule must be 50 words or less")
+    expect(page).to have_content("Additional fees must be 50 words or less")
+    expect(page).to have_content("Financial support must be 50 words or less")
   end
 
   def and_i_enter_too_many_words
-    fill_in "Fees and financial support", with: Faker::Lorem.sentence(word_count: 251)
+    fill_in "When are the fees due? Is there a payment schedule? (optional)", with: Faker::Lorem.sentence(word_count: 51)
+    fill_in "Are there any additional fees or costs? (optional)", with: Faker::Lorem.sentence(word_count: 51)
+    fill_in "Does your organisation offer any financial support? (optional)", with: Faker::Lorem.sentence(word_count: 51)
   end
 
   def when_i_enter_information_into_the_fees_and_financial_support_field
-    fill_in "Fees and financial support (optional)", with: "Here is very useful information fees and financial support"
+    fill_in "When are the fees due? Is there a payment schedule? (optional)", with: "fee schedule"
+    fill_in "Are there any additional fees or costs? (optional)", with: "additional fees"
+    fill_in "Does your organisation offer any financial support? (optional)", with: "financial support"
   end
 
   def then_i_see_guidance

@@ -4,7 +4,6 @@ require "rails_helper"
 
 feature "Publishing courses", travel: mid_cycle(2026) do
   before do
-    FeatureFlag.activate(:long_form_content)
     given_i_am_authenticated_as_a_provider_user
   end
 

@@ -136,6 +136,7 @@ private
       enrichments: [
         build(
           :course_enrichment,
+          :v2,
           :published,
           course_length: "OneYear",
           fee_uk_eu: "9250",
@@ -198,29 +199,13 @@ private
 
     expect(find_course_show_page).not_to have_vacancies
 
-    expect(find_course_show_page.about_course).to have_content(
-      @course.latest_published_enrichment.about_course,
-    )
-
     expect(find_course_show_page.interview_process).to have_content(
       @course.latest_published_enrichment.interview_process,
     )
 
-    expect(find_course_show_page.school_placements).to have_content(
-      @course.latest_published_enrichment.how_school_placements_work,
-    )
+    expect(page).to have_content("£9,250 fee for UK citizens")
 
-    expect(find_course_show_page.uk_fees).to have_content(
-      "£9,250",
-    )
-
-    expect(find_course_show_page.international_fees).to have_content(
-      "£9,250",
-    )
-
-    expect(find_course_show_page.fee_details).to have_content(
-      @course.decorate.fee_details,
-    )
+    expect(page).to have_content("£9,250 fee for Non-UK citizens")
 
     expect(find_course_show_page).not_to have_salary_details
 
@@ -256,8 +241,6 @@ private
     expect(find_course_show_page).to have_content(
       "Training with disabilities",
     )
-
-    expect(find_course_show_page.school_placements).to have_no_content("Suspended site with vacancies")
 
     expect(find_course_show_page).to have_link("View list of school placements")
 
@@ -354,9 +337,7 @@ private
   end
 
   def then_i_should_be_on_the_provider_page
-    expect(find_course_show_page.train_with_us).to have_content(
-      provider.train_with_us,
-    )
+    expect(page).to have_content(provider.about_us)
 
     expect(find_course_show_page).to have_content(
       provider.email,
