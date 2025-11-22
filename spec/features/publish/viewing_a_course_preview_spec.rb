@@ -286,7 +286,7 @@ private
     )
 
     provider = build(
-      :provider, sites:, study_sites: [study_site], courses: [course], accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider)], about_us: "a good one"
+      :provider, sites:, study_sites: [study_site], courses: [course], accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider)]
     )
 
     create(
