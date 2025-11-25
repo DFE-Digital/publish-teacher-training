@@ -115,7 +115,7 @@ gem "govuk_design_system_formbuilder", "~> 5.11"
 gem "omniauth", "~> 2.1"
 gem "omniauth_govuk_one_login", github: "DFE-Digital/omniauth-govuk-one-login", tag: "v1.5.1"
 gem "omniauth_openid_connect", "~> 0.8"
-gem "omniauth-rails_csrf_protection", "~> 1.0"
+gem "omniauth-rails_csrf_protection", "~> 2.0"
 
 # Data integration with BigQuery
 gem "google-cloud-bigquery"
