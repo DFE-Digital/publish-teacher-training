@@ -248,6 +248,9 @@ shared:
     - updated_at
   user:
     - id
+    - email
+    - first_name
+    - last_name
     - sign_in_user_id
     - first_login_date_utc
     - last_login_date_utc
