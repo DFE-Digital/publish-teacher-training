@@ -900,7 +900,6 @@ DEPENDENCIES
   schema_to_scaffold
   selenium-webdriver
   sentry-rails
-  sentry-ruby
   sentry-sidekiq
   shoulda-matchers (~> 7.0)
   sidekiq (~> 6.5)
