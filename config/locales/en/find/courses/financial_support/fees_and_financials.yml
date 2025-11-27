@@ -1,0 +1,10 @@
+en:
+  find:
+    courses:
+      financial_support:
+        fees_and_financials:
+          course_fees: The course fee for UK citizens in %{cycle_range} are %{fee}.
+          international_course_fees: The course fees for non-UK citizens in %{cycle_range} are %{fee}.
+          uk_citizens: UK citizens
+          non_uk_citizens: Non-UK citizens
+
