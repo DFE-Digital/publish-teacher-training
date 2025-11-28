@@ -21,10 +21,6 @@
         <div class="app-filter__header">
           <h2 class="govuk-heading-m"><%= t(".filter_results") %></h2>
 
-          <button type="button" class="app-filter__close" data-visibility-target="trigger" data-action="visibility#hide" aria-expanded="false">
-            Close
-            <span class="govuk-visually-hidden"> filter menu</span>
-          </button>
         </div>
 
         <%= render "find/results/filters/all", form: %>
