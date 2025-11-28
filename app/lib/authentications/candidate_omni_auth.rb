@@ -12,7 +12,7 @@ module Authentications
           name: :"one-login",
           client_id: Settings.one_login.identifier,
           idp_base_url: Settings.one_login.idp_base_url,
-          # scope: "openid,email", # default
+          scope: "openid email",
           # vtr: ["Cl.Cm"], # default
           redirect_uri:,
           private_key:,

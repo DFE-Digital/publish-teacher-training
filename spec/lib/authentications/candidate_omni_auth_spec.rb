@@ -37,6 +37,7 @@ module Authentications
             name: :"one-login",
             client_id: Settings.one_login.identifier,
             idp_base_url: Settings.one_login.idp_base_url,
+            scope: "openid email",
             redirect_uri: "http://find.localhost/auth/one-login/callback",
             private_key: nil,
           }
