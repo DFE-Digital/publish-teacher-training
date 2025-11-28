@@ -11,6 +11,7 @@ import RadiusQuickLinkSuggestionsController from './controllers/radius_quick_lin
 import RemoteAutocompleteController from './controllers/remote_autocomplete_controller'
 import LocationsAutocompleteController from './controllers/locations_autocomplete_controller'
 import VisibilityController from './controllers/visibility_controller'
+import DetailsComponentController from './controllers/details_component_controller'
 
 document.body.className +=
   ' js-enabled' +
@@ -26,6 +27,7 @@ Stimulus.register('subjects-autocomplete', SubjectsAutocompleteController)
 Stimulus.register('remote-autocomplete', RemoteAutocompleteController)
 Stimulus.register('locations-autocomplete', LocationsAutocompleteController)
 Stimulus.register('visibility', VisibilityController)
+Stimulus.register('details-component', DetailsComponentController)
 Stimulus.register('provider-autocomplete', ProviderAutocompleteController)
 Stimulus.register(
   'radius-quick-link-suggestions',
