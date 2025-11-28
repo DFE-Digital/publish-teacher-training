@@ -10,6 +10,20 @@ en:
           further_education: Further education courses
           can_sponsor_visa: Only show courses with visa sponsorship
           engineers_teach_physics: Only show Engineers teach physics courses
+          filter_by: Filter by
+          filter_title_engineers_physics: Engineers teach physics
+          filter_title_primary_html: Primary<br aria-hidden="true">(ages 3 to 11)
+          filter_title_secondary_html: Secondary<br aria-hidden="true">(ages 11 to 18)
+          filter_title_further_html: Further education<br aria-hidden="true">(ages 16 and over)
+          filter_title_send_html: Special educational needs<br aria-hidden="true">(SEND)
+          filter_title_fee: Fee or salary
+          filter_title_mode: Full time or part time
+          filter_title_qualification: Qualification
+          filter_title_degree: Degree grade
+          filter_title_visa: Visa Sponsorship
+          filter_title_interviews: Online interviews
+          filter_title_start_date: Start Date
+          filter_title_provider: Training provider
           apply_filter: Apply filters
           study_type_options:
             full_time: Full time (12 months)

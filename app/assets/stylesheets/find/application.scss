@@ -2,6 +2,8 @@
 @import "../govuk_style_setup";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min";
 @import "../one-login";
+// Treat this as a library. It may become distributed by Gov.uk
+@import "./components/filter-panel";
 
 @import "../components/accordion";
 @import "../components/autocomplete";
@@ -16,9 +18,10 @@
 @import "../components/callout";
 
 @import "./components/accordion";
+@import "./components/details-component";
 @import "./components/feedback";
 @import "./components/filter-layout";
-@import "./components/filter";
+@import "./components/filter-panel-overrides";
 @import "./components/old-filter";
 @import "./components/old-filter-layout";
 @import "./components/quick-link-card";

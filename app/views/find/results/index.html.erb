@@ -16,21 +16,16 @@
   <%= form_with model: @search_courses_form, scope: "", url: find_results_path, method: :get do |form| %>
     <%= form.hidden_field :utm_source, value: "results" %>
 
-    <div class="app-filter-layout" data-controller="visibility" data-visibility-visible-class="app-filter-layout__filter--open">
-      <div class="app-filter-layout__filter app-filter" data-visibility-target="container">
-        <div class="app-filter__header">
-          <h2 class="govuk-heading-m">Filters</h2>
+    <div class="app-filter-layout">
+      <div class="govuk-grid-column-one-third">
+        <div class="govuk-grid-row">
+          <h2 class="govuk-heading-m"><%= t(".filter_results") %></h2>
 
-          <button type="button" class="app-filter__close" data-visibility-target="trigger" data-action="visibility#hide" aria-expanded="false">
-            Close
-            <span class="govuk-visually-hidden"> filter menu</span>
-          </button>
+          <%= render "find/results/filters/all", form: %>
         </div>
-
-        <%= render "find/results/filters/all", form: %>
       </div>
 
-      <div class="app-filter-layout__content">
+      <div class="govuk-grid-column-two-thirds">
         <%= render partial: "find/results/courses_guidance/show" %>
 
         <div class="app-search-results-controls">
@@ -61,26 +56,6 @@
           <%= form.govuk_collection_select :radius, form.object.radius_options, :value, :name,
           label: { text: t("helpers.label.courses_search_form.radius"), size: "s" } %>
 
-          <details class="govuk-details" data-module="govuk-details" <%= "open" if form.object.provider_name.present? %>>
-            <summary class="govuk-details__summary">
-              <span class="govuk-details__summary-text">
-                Search by training provider
-              </span>
-            </summary>
-
-            <div class="govuk-details__text">
-              <div class="govuk-form-group" data-controller="provider-autocomplete">
-                <%= render Find::AutocompleteComponent.new(
-                form_field: form.govuk_select(
-                  :provider_code,
-                  dfe_autocomplete_options(form.object.providers_list, synonyms_fields: %i[code]),
-                  label: { text: t("helpers.label.courses_search_form.provider"), size: "s" },
-                ),
-              ) %>
-              </div>
-            </div>
-          </details>
-
           <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), name: "utm_medium", value: "search" %>
         </div>
 
@@ -106,7 +81,7 @@
             </div>
 
             <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
-              Filter results
+              <%= t(".filter_results") %>
             </button>
           </div>
 

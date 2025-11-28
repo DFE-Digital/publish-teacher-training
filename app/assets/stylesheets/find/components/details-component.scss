@@ -1,0 +1,25 @@
+[data-controller="details-component"] {
+  .app-c-filter-section + section {
+    display: none;
+  }
+
+  .app-c-filter-section:has(.app-c-filter-panel__button[aria-expanded="true"]) {
+    + section {
+      display: block;
+    }
+
+    &::before {
+      transform: translateY(30%) rotate(-45deg) scale(1);
+    }
+  }
+
+  @include govuk-media-query($from: tablet) {
+    .app-c-filter-section.app-c-filter-section__summary {
+      display: none;
+
+      + section {
+        display: block;
+      }
+    }
+  }
+}
