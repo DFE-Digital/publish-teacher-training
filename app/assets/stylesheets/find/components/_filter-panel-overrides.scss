@@ -1,0 +1,35 @@
+.app-c-filter-panel__top {
+  margin-bottom: govuk-spacing(2);
+
+  .app-c-filter-panel__button-inner > .app-c-filter-section__summary-heading {
+    font-weight: 700;
+  }
+
+  .govuk-hint {
+    margin: 0;
+  }
+}
+
+.app-c-filter-panel__button[aria-expanded] {
+  &:focus {
+    box-shadow: none;
+  }
+
+  &::before {
+    display: none;
+  }
+}
+
+.app-c-filter-panel__header {
+  border: 0;
+}
+
+.app-c-filter-section {
+  :focus-visible {
+    outline: none;
+  }
+
+  .govuk-form-group {
+    margin-bottom: 10px;
+  }
+}
