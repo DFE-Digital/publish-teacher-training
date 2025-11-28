@@ -16,17 +16,16 @@
   <%= form_with model: @search_courses_form, scope: "", url: find_results_path, method: :get do |form| %>
     <%= form.hidden_field :utm_source, value: "results" %>
 
-    <div class="app-filter-layout" data-controller="visibility" data-visibility-visible-class="app-filter-layout__filter--open">
-      <div class="app-filter-layout__filter app-filter" data-visibility-target="container">
-        <div class="app-filter__header">
+    <div class="app-filter-layout">
+      <div class="govuk-grid-column-one-third">
+        <div class="govuk-grid-row">
           <h2 class="govuk-heading-m"><%= t(".filter_results") %></h2>
 
+          <%= render "find/results/filters/all", form: %>
         </div>
-
-        <%= render "find/results/filters/all", form: %>
       </div>
 
-      <div class="app-filter-layout__content">
+      <div class="govuk-grid-column-two-thirds">
         <%= render partial: "find/results/courses_guidance/show" %>
 
         <div class="app-search-results-controls">
