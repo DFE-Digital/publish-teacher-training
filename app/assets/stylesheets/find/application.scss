@@ -2,6 +2,8 @@
 @import "../govuk_style_setup";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min";
 @import "../one-login";
+// Treat this as a library. It may become distributed by Gov.uk
+@import "./components/filter-panel";
 
 @import "../components/accordion";
 @import "../components/autocomplete";
