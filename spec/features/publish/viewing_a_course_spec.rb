@@ -254,7 +254,6 @@ private
   def course_enrichment
     @course_enrichment ||= build(
       :course_enrichment,
-      :v2,
       :published,
       course_length: :TwoYears,
       fee_uk_eu: 9250,
@@ -269,7 +268,6 @@ private
   def course_enrichment_unpublished_changes
     @course_enrichment_unpublished_changes ||= build(
       :course_enrichment,
-      :v2,
       :subsequent_draft,
       course_length: :TwoYears,
       fee_uk_eu: 9250,
@@ -278,7 +276,7 @@ private
   end
 
   def course_enrichment_initial_draft
-    @course_enrichment_initial_draft ||= build(:course_enrichment, :v2, :initial_draft)
+    @course_enrichment_initial_draft ||= build(:course_enrichment, :initial_draft)
   end
 
   def course_enrichment_rolled_over

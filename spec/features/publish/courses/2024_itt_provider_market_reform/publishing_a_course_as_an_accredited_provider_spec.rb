@@ -24,7 +24,7 @@ feature "Publishing a course when course when accrediting_provider is nil" do
   def and_there_is_a_draft_course_without_accrediting_provider
     given_a_course_exists(
       :with_gcse_equivalency,
-      enrichments: [create(:course_enrichment, :v2, :initial_draft)],
+      enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )

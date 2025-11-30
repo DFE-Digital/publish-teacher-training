@@ -47,7 +47,6 @@ RSpec.describe "Viewing long form course content for fees and financial support"
         build(
           :course_enrichment,
           :published,
-          :v2,
           fee_uk_eu: 2500,
           fee_international: 3500,
           fee_schedule: "Fee schedule",

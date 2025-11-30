@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :course_enrichment do
     course
     status { :draft }
+    version { 2 }
     about_course { Faker::Lorem.sentence }
     course_length do
       # samples taken from real data
@@ -67,23 +68,20 @@ FactoryBot.define do
       ].sample
     end
 
+    placement_selection_criteria { Faker::Lorem.sentence }
+    duration_per_school { Faker::Lorem.sentence }
+    theoretical_training_location { Faker::Lorem.sentence }
+    theoretical_training_duration { Faker::Lorem.sentence }
+    placement_school_activities { Faker::Lorem.sentence }
+    support_and_mentorship { Faker::Lorem.sentence }
+    assessment_methods { Faker::Lorem.sentence }
+    fee_schedule { Faker::Lorem.sentence }
+    additional_fees { Faker::Lorem.sentence }
+    theoretical_training_activities { Faker::Lorem.sentence }
+    interview_location { "both" }
+
     trait :v1 do
       version { 1 }
-    end
-
-    trait :v2 do
-      version { 2 }
-      placement_selection_criteria { Faker::Lorem.sentence }
-      duration_per_school { Faker::Lorem.sentence }
-      theoretical_training_location { Faker::Lorem.sentence }
-      theoretical_training_duration { Faker::Lorem.sentence }
-      placement_school_activities { Faker::Lorem.sentence }
-      support_and_mentorship { Faker::Lorem.sentence }
-      assessment_methods { Faker::Lorem.sentence }
-      fee_schedule { Faker::Lorem.sentence }
-      additional_fees { Faker::Lorem.sentence }
-      theoretical_training_activities { Faker::Lorem.sentence }
-      interview_location { "both" }
     end
 
     trait :rolled_over do

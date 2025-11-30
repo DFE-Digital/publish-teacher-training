@@ -89,8 +89,8 @@ feature "viewing courses in various states" do
     @course ||= create(
       :course,
       enrichments: [
-        build(:course_enrichment, :v2, :published),
-        build(:course_enrichment, :v2, :subsequent_draft),
+        build(:course_enrichment, :published),
+        build(:course_enrichment, :subsequent_draft),
       ],
     )
   end

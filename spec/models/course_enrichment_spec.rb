@@ -16,7 +16,7 @@ RSpec.describe CourseEnrichment do
 
   describe "overwrites default version" do
     it "can be set to 2" do
-      expect(build(:course_enrichment, :v2).version).to eq 2
+      expect(build(:course_enrichment).version).to eq 2
     end
 
     it "can be set to 1" do
@@ -147,7 +147,7 @@ RSpec.describe CourseEnrichment do
       let(:course) { create(:course) }
 
       it "is not valid to publish v2" do
-        record.update!(version: 2)
+        record.update!(version: 2, placement_school_activities: nil)
         expect(record).not_to be_valid(:publish)
         expect(record.errors[:placement_school_activities]).to include("^Enter what will trainees do while in their placement schools")
         expect(record.reload).to be_draft

@@ -20,7 +20,13 @@ RSpec.shared_examples "versioned_presence_field" do |field:, required_in:, word_
       let(:version) { ver }
       let(:provider) { build(:provider) }
       let(:course)  { build(:course, funding: "fee", provider:) }
-      let(:record)  { build(:course_enrichment, "v#{version}".to_sym, course:, provider:) }
+      let(:record)  do
+        if version == 1
+          build(:course_enrichment, :v1, course:, provider:)
+        else
+          build(:course_enrichment, course:, provider:)
+        end
+      end
 
       context "presence_field" do
         before do

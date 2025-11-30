@@ -71,7 +71,6 @@ RSpec.describe "Viewing long form course content for the interview process", ser
         build(
           :course_enrichment,
           :published,
-          :v2,
           interview_process: "The interview process is a 72 stage process",
           interview_location:,
         ),

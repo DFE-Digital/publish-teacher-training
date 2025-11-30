@@ -83,7 +83,6 @@ RSpec.describe "Copy course content - financial support and fees", service: :pub
         build(
           :course_enrichment,
           :initial_draft,
-          :v2,
           fee_uk_eu: 5,
           fee_international: 8,
           fee_schedule: "Apple",

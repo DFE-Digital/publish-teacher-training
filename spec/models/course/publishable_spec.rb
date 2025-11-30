@@ -40,7 +40,7 @@ describe "#publishable?" do
   end
 
   context "with enrichment" do
-    let(:enrichment) { build(:course_enrichment, :subsequent_draft, :v2, created_at: 1.day.ago) }
+    let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
     let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
     let(:course) do
       create(:course, :with_gcse_equivalency, :with_accrediting_provider, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status], study_sites: [study_site])
