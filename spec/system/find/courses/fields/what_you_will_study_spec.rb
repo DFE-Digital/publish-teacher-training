@@ -50,7 +50,6 @@ RSpec.describe "Viewing what you will study long form content", service: :find d
         build(
           :course_enrichment,
           :published,
-          :v2,
           theoretical_training_activities: "Theoretical training activities content",
           assessment_methods: "Assessment methods content",
         ),

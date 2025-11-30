@@ -233,7 +233,7 @@ private
   end
 
   def user_with_custom_address_requested_via_zendesk
-    course = build(:course, course_code: "X104", enrichments: [build(:course_enrichment, :v2, :initial_draft)])
+    course = build(:course, course_code: "X104", enrichments: [build(:course_enrichment, :initial_draft)])
     provider = build(
       :provider, provider_code: "28T", courses: [course]
     )
@@ -264,7 +264,7 @@ private
     site_statuses = [site_status1, site_status2, site_status3, site_status4, site_status5]
 
     course_enrichment = create(
-      :course_enrichment, :v2, :initial_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000
+      :course_enrichment, :initial_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000
     )
 
     accrediting_provider = build(:accredited_provider)
@@ -304,7 +304,7 @@ private
 
     course = create(
       :course, :secondary, :with_accrediting_provider, provider:, degree_grade: nil, funding: "fee", additional_degree_subject_requirements: nil,
-                                                       enrichments: [create(:course_enrichment, :v2, :initial_draft, :without_content)]
+                                                       enrichments: [create(:course_enrichment, :initial_draft, :without_content)]
     )
 
     provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider)

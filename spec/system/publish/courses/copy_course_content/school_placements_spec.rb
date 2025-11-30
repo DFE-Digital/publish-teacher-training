@@ -68,7 +68,6 @@ RSpec.describe "Copy course content - school placements", service: :publish do
         build(
           :course_enrichment,
           :initial_draft,
-          :v2,
           placement_school_activities: "Apple",
           support_and_mentorship: "Pear",
         ),

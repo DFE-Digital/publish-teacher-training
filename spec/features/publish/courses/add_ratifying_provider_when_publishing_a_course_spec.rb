@@ -70,7 +70,7 @@ feature "Publishing a course when course ratifying provider is invalid", travel:
   def and_there_is_a_draft_course_without_accrediting_provider
     given_a_course_exists(
       :with_gcse_equivalency,
-      enrichments: [create(:course_enrichment, :v2, :initial_draft)],
+      enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
@@ -80,7 +80,7 @@ feature "Publishing a course when course ratifying provider is invalid", travel:
     given_a_course_exists(
       :with_gcse_equivalency,
       accrediting_provider: provider,
-      enrichments: [create(:course_enrichment, :v2, :initial_draft)],
+      enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )

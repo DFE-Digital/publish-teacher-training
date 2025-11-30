@@ -68,7 +68,6 @@ RSpec.describe "Copy course content - interview process", service: :publish do
         build(
           :course_enrichment,
           :initial_draft,
-          :v2,
           interview_location: "both",
           interview_process: "Apple",
         ),

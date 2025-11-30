@@ -71,7 +71,7 @@ feature "Publishing courses", travel: mid_cycle(2026) do
       :with_accrediting_provider,
       :closed,
       accrediting_provider:,
-      enrichments: [build(:course_enrichment, :v2, :initial_draft, interview_location: "in person")],
+      enrichments: [build(:course_enrichment, :initial_draft, interview_location: "in person")],
       sites: [build(:site, location_name: "location 1")],
       study_sites: [build(:site, :study_site)],
     )
@@ -83,7 +83,7 @@ feature "Publishing courses", travel: mid_cycle(2026) do
       :with_accrediting_provider,
       :closed,
       accrediting_provider:,
-      enrichments: [create(:course_enrichment, :v2, :rolled_over)],
+      enrichments: [create(:course_enrichment, :rolled_over)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
@@ -93,14 +93,14 @@ feature "Publishing courses", travel: mid_cycle(2026) do
     given_a_course_exists(
       :with_accrediting_provider,
       accrediting_provider:,
-      enrichments: [create(:course_enrichment, :v2, :initial_draft)],
+      enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
   end
 
   def and_there_is_a_published_course
-    given_a_course_exists(enrichments: [create(:course_enrichment, :v2, :published)])
+    given_a_course_exists(enrichments: [create(:course_enrichment, :published)])
   end
 
   def when_i_visit_the_course_page

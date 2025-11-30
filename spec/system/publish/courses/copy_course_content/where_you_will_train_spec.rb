@@ -78,7 +78,6 @@ RSpec.describe "Copy course content - where you will train", service: :publish d
         build(
           :course_enrichment,
           :initial_draft,
-          :v2,
           placement_selection_criteria: "Banana",
           duration_per_school: "Apple",
           theoretical_training_location: "Orange",

@@ -136,7 +136,6 @@ private
       enrichments: [
         build(
           :course_enrichment,
-          :v2,
           :published,
           course_length: "OneYear",
           fee_uk_eu: "9250",

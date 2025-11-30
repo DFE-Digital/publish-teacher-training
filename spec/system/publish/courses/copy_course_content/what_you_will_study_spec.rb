@@ -68,7 +68,6 @@ RSpec.describe "Copy course content - what you will study", service: :publish do
         build(
           :course_enrichment,
           :initial_draft,
-          :v2,
           theoretical_training_activities: "Banana",
           assessment_methods: "Apple",
         ),

@@ -20,25 +20,25 @@ RSpec.describe Courses::Query do
     context "when filter for interview location (online)" do
       let!(:course_with_online_interviews) do
         create(:course, :with_full_time_sites, name: "Course Online").tap do |course|
-          create(:course_enrichment, :published, :v2, course:, interview_location: "online")
+          create(:course_enrichment, :published, course:, interview_location: "online")
         end
       end
 
       let!(:course_with_both_interviews) do
         create(:course, :with_full_time_sites, name: "Course Both").tap do |course|
-          create(:course_enrichment, :published, :v2, course:, interview_location: "both")
+          create(:course_enrichment, :published, course:, interview_location: "both")
         end
       end
 
       let!(:course_in_person_only) do
         create(:course, :with_full_time_sites, name: "Course In person").tap do |course|
-          create(:course_enrichment, :published, :v2, course:, interview_location: "in person")
+          create(:course_enrichment, :published, course:, interview_location: "in person")
         end
       end
 
       let!(:course_without_published_enrichment) do
         create(:course, :with_full_time_sites, name: "Course Draft only").tap do |course|
-          create(:course_enrichment, :initial_draft, :v2, course:, interview_location: "online")
+          create(:course_enrichment, :initial_draft, course:, interview_location: "online")
         end
       end
 

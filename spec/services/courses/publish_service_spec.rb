@@ -33,7 +33,7 @@ RSpec.describe Courses::PublishService do
   describe "publishing during rollover" do
     let(:course) { create(:course, :unpublished, :with_accrediting_provider, :with_gcse_equivalency, uuid:) }
     let(:v1_enrichment) { create(:course_enrichment, :v1, status: "rolled_over", course:) }
-    let(:v2_enrichment) { create(:course_enrichment, :v2, status: "draft", course:) }
+    let(:v2_enrichment) { create(:course_enrichment, status: "draft", course:) }
 
     before do
       v1_enrichment

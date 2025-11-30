@@ -12,7 +12,7 @@ module Publish
         :course,
         :with_gcse_equivalency,
         :with_accrediting_provider,
-        enrichments: [build(:course_enrichment, :initial_draft, :v2)],
+        enrichments: [build(:course_enrichment, :initial_draft)],
         sites: [create(:site, location_name: "location 1")],
         study_sites: [create(:site, :study_site)],
         provider:,
@@ -37,7 +37,7 @@ module Publish
 
       describe "When rolled over v1 enrichment exists" do
         let(:v1_enrichment) { create(:course_enrichment, :v1, status: "rolled_over", course:) }
-        let(:v2_enrichment) { create(:course_enrichment, :v2, status: "draft", course:) }
+        let(:v2_enrichment) { create(:course_enrichment, status: "draft", course:) }
 
         before do
           v1_enrichment
