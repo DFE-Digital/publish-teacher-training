@@ -62,16 +62,19 @@ RSpec.describe "when I filter by funding type", :js, service: :find do
   end
 
   def and_i_filter_by_salaried_courses
+    page.find("h3", text: "Filter by\nFee or salary").click
     check "Salary", visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_fee_courses
+    page.find("h3", text: "Filter by\nFee or salary").click
     check "Fee - no salary", visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_apprenticeship_courses
+    page.find("h3", text: "Filter by\nFee or salary").click
     check "Teaching apprenticeship - with salary", visible: :all
     and_i_apply_the_filters
   end

@@ -254,7 +254,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
   end
 
   def then_i_see_only_apprenticeship_courses
-    within(".app-filter-layout__content") do
+    within(".app-search-results") do
       expect(page).to have_content("Mathematics")
       expect(page).to have_content("PGTA History")
       expect(page).not_to have_content("Biology")

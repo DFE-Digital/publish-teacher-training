@@ -52,15 +52,6 @@ RSpec.describe "Search Results", :js, service: :find do
     and_i_see_that_two_courses_are_found
   end
 
-  scenario "when I filter by applications open" do
-    given_there_are_courses_open_for_applications
-    and_there_are_courses_that_are_closed_for_applications
-    when_i_visit_the_find_results_page
-    and_i_filter_by_courses_open_for_applications
-    then_i_see_only_courses_that_are_open_for_applications
-    and_the_open_for_application_filter_is_checked
-  end
-
   scenario "when I filter by special educational needs" do
     given_there_are_courses_with_special_education_needs
     and_there_are_courses_that_with_no_special_education_needs
@@ -98,17 +89,6 @@ RSpec.describe "Search Results", :js, service: :find do
     create(:course, :with_full_time_sites, qualification: "pgce", name: "Dance", course_code: "C115")
     create(:course, :with_full_time_sites, qualification: "pgde", name: "Physics", course_code: "3CXN")
     create(:course, :with_full_time_sites, qualification: "undergraduate_degree_with_qts", name: "Mathemathics", course_code: "4RTU")
-  end
-
-  def given_there_are_courses_open_for_applications
-    create(:course, :with_full_time_sites, :open, name: "Biology", course_code: "S872")
-    create(:course, :with_full_time_sites, :open, name: "Chemistry", course_code: "K592")
-    create(:course, :with_full_time_sites, :open, name: "Computing", course_code: "L364")
-  end
-
-  def and_there_are_courses_that_are_closed_for_applications
-    create(:course, :with_full_time_sites, :closed, name: "Dance", course_code: "C115")
-    create(:course, :with_full_time_sites, :closed, name: "Physics", course_code: "3CXN")
   end
 
   def given_there_are_courses_with_special_education_needs
@@ -162,11 +142,6 @@ RSpec.describe "Search Results", :js, service: :find do
   def and_i_filter_by_qts_with_pgce_or_pgde_courses
     page.find("h3", text: "Filter by\nQualification").click
     check "QTS with PGCE or PGDE", visible: :all
-    and_i_apply_the_filters
-  end
-
-  def and_i_filter_by_courses_open_for_applications
-    check "Only show courses open for applications", visible: :all
     and_i_apply_the_filters
   end
 
@@ -257,22 +232,8 @@ RSpec.describe "Search Results", :js, service: :find do
     end
   end
 
-  def then_i_see_only_courses_that_are_open_for_applications
-    with_retry do
-      expect(results).to have_content("Biology (S872)")
-      expect(results).to have_content("Chemistry (K592)")
-      expect(results).to have_content("Computing (L364)")
-      expect(results).to have_no_content("Dance (C115)")
-      expect(results).to have_no_content("Physics (3CXN)")
-    end
-  end
-
   def and_the_visa_sponsorship_filter_is_checked
     expect(page).to have_checked_field("Only show courses with visa sponsorship", visible: :all)
-  end
-
-  def and_the_open_for_application_filter_is_checked
-    expect(page).to have_checked_field("Only show courses open for applications", visible: :all)
   end
 
   def and_the_special_education_needs_filter_is_checked

@@ -26,20 +26,10 @@ RSpec.describe "when I filter by subject", :js, service: :find do
   end
 
   scenario "filter by specific secondary subjects" do
-    and_i_search_for_the_mathematics_option
-    then_i_can_only_see_the_mathematics_option
-    when_i_clear_my_search_for_secondary_options
-    then_i_can_see_all_secondary_options
     when_i_filter_by_mathematics
     then_i_see_only_mathematics_courses
     and_the_mathematics_secondary_option_is_checked
     and_i_see_that_there_is_one_course_found
-
-    when_i_search_for_specific_secondary_options
-    then_i_can_only_see_options_that_i_searched
-
-    when_i_clear_my_search_for_secondary_options
-    then_i_can_see_all_secondary_options
   end
 
   scenario "filter by many secondary subjects" do
@@ -62,49 +52,27 @@ RSpec.describe "when I filter by subject", :js, service: :find do
     visit(find_results_path(subjects: %w[G1]))
   end
 
-  def and_i_search_for_the_mathematics_option
-    page.find('[data-filter-search-target="searchInput"]').set("Math")
-  end
-
-  def then_i_can_only_see_the_mathematics_option
-    expect(secondary_options).to eq(%w[Mathematics])
-  end
-
-  def then_i_can_see_all_secondary_options
-    expect(secondary_options.size).to eq(37)
-  end
-
-  def when_i_search_for_specific_secondary_options
-    page.find('[data-filter-search-target="searchInput"]').set("Com")
-  end
-
-  def then_i_can_only_see_options_that_i_searched
-    expect(secondary_options).to eq(["Communication and media studies", "Computing"])
-  end
-
-  def when_i_clear_my_search_for_secondary_options
-    with_retry do
-      page.find('[data-filter-search-target="searchInput"]').set("")
-    end
-  end
-
   def when_i_filter_by_primary
+    page.find("h3", text: "Filter by\nPrimary\n(ages 3 to 11)").click
     check "Primary", visible: :all
     and_i_apply_the_filters
   end
 
   def when_i_filter_by_primary_with_science_too
+    page.find("h3", text: "Filter by\nPrimary\n(ages 3 to 11)").click
     check "Primary with science", visible: :all
     and_i_apply_the_filters
   end
 
   def when_i_filter_by_mathematics
+    page.find("h3", text: "Filter by\nSecondary\n(ages 11 to 18)").click
     check "Mathematics", visible: :all
     and_i_apply_the_filters
   end
   alias_method :and_i_filter_by_mathematics, :when_i_filter_by_mathematics
 
   def and_i_filter_by_chemistry
+    page.find("h3", text: "Filter by\nSecondary\n(ages 11 to 18)").click
     check "Chemistry", visible: :all
     and_i_apply_the_filters
   end
@@ -150,9 +118,5 @@ RSpec.describe "when I filter by subject", :js, service: :find do
 
   def and_the_chemistry_secondary_option_is_checked
     expect(page).to have_checked_field("Chemistry", visible: :all)
-  end
-
-  def secondary_options
-    page.all('[data-filter-search-target="optionsList"]', wait: 2).flat_map { |subject| subject.text.split("\n") }
   end
 end

@@ -63,14 +63,16 @@ RSpec.describe "when searching for engineers teach physics", :js, service: :find
   end
 
   def then_engineers_teach_physics_filter_is_not_visible
-    expect(page).to have_no_content("Only show Engineers teach physics courses")
+    expect(page).to have_no_content("Engineers teach physics")
   end
 
   def when_i_check_physics
+    page.find("h3", text: "Filter by\nSecondary\n(ages 11 to 18)").click
     check "Physics", visible: :all
   end
 
   def when_i_uncheck_physics
+    page.find("h3", text: "Filter by\nSecondary\n(ages 11 to 18)").click
     uncheck "Physics", visible: :all
   end
 
@@ -84,10 +86,11 @@ RSpec.describe "when searching for engineers teach physics", :js, service: :find
   end
 
   def then_engineers_teach_physics_filter_is_visible
-    expect(page).to have_content("Only show Engineers teach physics courses")
+    expect(page).to have_content("Engineers teach physics")
   end
 
   def when_i_check_engineers_teach_physics_only_filter
+    page.find("h3", text: "Filter by\nEngineers teach physics").click
     check "Only show Engineers teach physics courses", visible: :all
   end
 

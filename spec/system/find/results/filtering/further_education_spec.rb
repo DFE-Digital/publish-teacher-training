@@ -47,6 +47,7 @@ RSpec.describe "when I filter by further education only courses", :js, service: 
   end
 
   def and_i_filter_by_further_education_courses
+    page.find("h3", text: "Filter by\nFurther education\n(ages 16 and over)").click
     check "Further education courses", visible: :all
     and_i_apply_the_filters
   end
