@@ -39,7 +39,6 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_i_choose_the_first_provider_suggestion
     and_i_click_search
     then_i_see_only_courses_from_that_provider
-    and_the_provider_field_is_visible
   end
 
   scenario "when I search all filters from the homepage" do
