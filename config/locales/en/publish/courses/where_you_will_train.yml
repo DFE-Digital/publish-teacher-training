@@ -1,0 +1,6 @@
+en:
+  publish:
+    courses:
+      where_you_will_train:
+        label: Where you will train
+        hidden_text: where you will train

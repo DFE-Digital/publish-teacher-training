@@ -48,11 +48,7 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
-    <% if @course.version&.to_i == 2 %>
-      <%= render partial: "find/courses/v2/components", locals: { course: @course } %>
-    <% else %>
-      <%= render partial: "find/courses/v1_components", locals: { course: @course } %>
-    <% end %>
+    <%= render partial: "find/courses/components", locals: { course: @course } %>
 
     <% if @course.teacher_degree_apprenticeship? %>
       <%= render partial: "find/courses/tda_advice" %>
