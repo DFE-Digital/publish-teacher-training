@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
-  config.define_derived_metadata(file_path: Regexp.new("/spec/system/find/results/")) do |metadata|
+  config.define_derived_metadata(file_path: Regexp.new("/spec/system/find/(results|homepage)/")) do |metadata|
     metadata[:filtering_sorting] = true
   end
 
