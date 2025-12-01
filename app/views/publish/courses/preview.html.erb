@@ -25,7 +25,7 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course:) %>
 
-  <%= render partial: "find/courses/v2/components" %>
+    <%= render partial: "find/courses/components", locals: { course: } %>
 
     <%= render partial: "find/courses/advice", locals: { course: } %>
 
