@@ -131,6 +131,10 @@ RSpec.configure do |config|
 
   ActiveJob::Base.queue_adapter = :test
 
+  config.before(:each, :filtering_sorting) do
+    FeatureFlag.activate(:find_filtering_and_sorting)
+  end
+
   config.before(:each, type: :request) do
     service = self.class.metadata[:service]
 
