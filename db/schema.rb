@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_28_144035) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_27_145726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -409,6 +409,34 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_144035) do
     t.index ["provider_id"], name: "index_provider_ucas_preference_on_provider_id"
   end
 
+  create_table "providers_onboarding_form_request", force: :cascade do |t|
+    t.string "status", default: "pending", null: false
+    t.text "form_name", null: false
+    t.bigint "support_agent_id"
+    t.string "zendesk_link"
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.jsonb "provider_metadata", default: {}
+    t.text "email_address", null: false
+    t.text "first_name", null: false
+    t.text "last_name", null: false
+    t.string "organisation_name", null: false
+    t.text "address_line_1", null: false
+    t.text "address_line_2"
+    t.text "address_line_3"
+    t.text "town_or_city", null: false
+    t.text "county"
+    t.text "postcode", null: false
+    t.text "phone_number", null: false
+    t.text "contact_email_address", null: false
+    t.text "organisation_website", null: false
+    t.string "ukprn", null: false
+    t.boolean "accredited_provider", null: false
+    t.string "urn", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_providers_onboarding_form_request_on_uuid", unique: true
+  end
+
   create_table "recruitment_cycle", force: :cascade do |t|
     t.string "year"
     t.date "application_start_date", null: false
@@ -571,6 +599,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_144035) do
   add_foreign_key "organisation_user", "user", name: "FK_organisation_user_user_user_id"
   add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
+  add_foreign_key "providers_onboarding_form_request", "user", column: "support_agent_id", name: "FK_onboarding_request_user_support_agent_id"
   add_foreign_key "saved_course", "candidate"
   add_foreign_key "saved_course", "course"
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
