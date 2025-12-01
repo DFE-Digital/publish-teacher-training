@@ -121,31 +121,37 @@ RSpec.describe "when I filter by minimum degree", :js, service: :find do
   end
 
   def and_i_filter_courses_requiring_two_two_degree
+    page.find("h3", text: "Filter by\nDegree grade").click
     choose "2:2", visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_courses_requiring_pass_grade
+    page.find("h3", text: "Filter by\nDegree grade").click
     choose "Pass", visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_courses_with_no_degree_requirement
+    page.find("h3", text: "Filter by\nDegree grade").click
     choose "No degree", visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_courses_with_show_all_courses_requirement
+    page.find("h3", text: "Filter by\nDegree grade").click
     choose "Show all courses", visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_courses_requiring_two_one_degree
+    page.find("h3", text: "Filter by\nDegree grade").click
     choose "2:1 or First", visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_courses_requiring_third_class_grade
+    page.find("h3", text: "Filter by\nDegree grade").click
     choose "Third", visible: :all
     and_i_apply_the_filters
   end
