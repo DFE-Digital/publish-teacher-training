@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
+  config.define_derived_metadata(file_path: Regexp.new("/spec/system/find/results/")) do |metadata|
+    metadata[:filtering_sorting] = true
+  end
+
   config.define_derived_metadata(file_path: Regexp.new("/spec/(system|features)/find")) do |metadata|
     metadata[:service] = :find
 
