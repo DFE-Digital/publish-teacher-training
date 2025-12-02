@@ -134,7 +134,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
     let(:query) { "London, UK" }
 
     it "returns the formatted cache key" do
-      expect(coordinates_query.cache_key).to eq("geolocation:query:london-uk")
+      expect(coordinates_query.cache_key).to eq("geolocation:query:v2:london-uk")
     end
   end
 end

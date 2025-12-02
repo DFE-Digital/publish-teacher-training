@@ -253,13 +253,55 @@ module ResultsHelper
   end
 
   def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:london-uk")).to eq(
+    expect(Rails.cache.read("geolocation:query:v2:london-uk")).to eq(
       {
         formatted_address: "London, UK",
         latitude: 51.5072178,
         longitude: -0.1275862,
         country: "England",
         types: %w[locality political],
+        place_id: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
+        address_components: [
+          {
+            "long_name" => "London",
+            "short_name" => "London",
+            "types" => %w[
+              locality
+              political
+            ],
+          },
+          {
+            "long_name" => "London",
+            "short_name" => "London",
+            "types" => %w[
+              postal_town
+            ],
+          },
+          {
+            "long_name" => "Greater London",
+            "short_name" => "Greater London",
+            "types" => %w[
+              administrative_area_level_2
+              political
+            ],
+          },
+          {
+            "long_name" => "England",
+            "short_name" => "England",
+            "types" => %w[
+              administrative_area_level_1
+              political
+            ],
+          },
+          {
+            "long_name" => "United Kingdom",
+            "short_name" => "GB",
+            "types" => %w[
+              country
+              political
+            ],
+          },
+        ],
       },
     )
   end
