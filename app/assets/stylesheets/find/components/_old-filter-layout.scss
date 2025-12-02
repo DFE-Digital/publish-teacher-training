@@ -14,7 +14,7 @@
     }
   }
 
-  .js-enabled {
+  .js-enabled & {
     .app-filter-layout__filter {
       outline: 0 none;
 
