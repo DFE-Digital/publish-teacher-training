@@ -1,6 +1,5 @@
 <% if enrichment.fee_uk_eu.present? && !enrichment.fee_international.present? %>
   <p class="govuk-body"><%= t(".course_fees", cycle_range: course.cycle_range, fee: number_to_currency(course.fee_uk_eu)) %></p>
-  <div class="govuk-body govuk-!-font-weight-bold"><%= t("find.courses.fee_notice__next_academic_year") %></div>
 <% else %>
   <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :fees_and_financials, is_preview: preview?(params)) %>
 <% end %>
@@ -28,7 +27,6 @@
     </tr>
     </tbody>
   </table>
-  <div class="govuk-body govuk-!-font-weight-bold"><%= t("find.courses.fee_notice__next_academic_year") %></div>
 <% end %>
 
 <% if enrichment.fee_schedule.present? %>
