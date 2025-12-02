@@ -17,6 +17,9 @@ inherit_from:
   - 'config/rubocop/rspec.yml'
   - 'config/rubocop/naming.yml'
 
+require:
+  - ./lib/rubocop/cop/rspec/no_feature_flag_activate
+
 AllCops:
   ParserEngine: parser_prism
   TargetRubyVersion: 3.4
