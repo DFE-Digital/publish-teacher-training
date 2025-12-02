@@ -7,10 +7,6 @@
     <% row.with_key(text: t(".fee_key")) %>
     <% row.with_value do %>
       <%= fee_value %>
-
-      <% if !course.salaried? && !course.apprenticeship? && !course.no_fee? %>
-        <div class="govuk-hint govuk-!-font-size-16"><%= t("find.courses.fee_notice__next_academic_year") %></div>
-      <% end %>
     <% end %>
   <% end %>
 
