@@ -167,6 +167,7 @@ group :development, :test do
   gem "erb_lint", require: false
   gem "rubocop-factory_bot", require: false
   gem "rubocop-govuk", require: false
+  gem "rubocop-rspec", require: false
   gem "rubocop-rspec_rails", require: false
 
   # run specs in parallel

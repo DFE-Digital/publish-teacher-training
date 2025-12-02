@@ -895,6 +895,7 @@ DEPENDENCIES
   rspec_junit_formatter
   rubocop-factory_bot
   rubocop-govuk
+  rubocop-rspec
   rubocop-rspec_rails
   rubypants
   schema_to_scaffold
