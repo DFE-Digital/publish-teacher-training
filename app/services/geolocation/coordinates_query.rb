@@ -99,7 +99,7 @@ module Geolocation
     end
 
     def cache_key
-      "geolocation:query:#{@query.parameterize}"
+      "geolocation:query:v2:#{@query.parameterize}"
     end
   end
 end

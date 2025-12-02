@@ -30,6 +30,8 @@ module Courses
     attribute :country
     attribute :formatted_address
     attribute :types
+    attribute :place_id
+    attribute :address_components
 
     # Old parameters #
     attribute :age_group
