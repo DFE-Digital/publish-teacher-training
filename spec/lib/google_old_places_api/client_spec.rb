@@ -77,6 +77,48 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             longitude: -0.1275862,
             country: "England",
             types: %w[locality political],
+            place_id: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
+            address_components: [
+              {
+                "long_name" => "London",
+                "short_name" => "London",
+                "types" => %w[
+                  locality
+                  political
+                ],
+              },
+              {
+                "long_name" => "London",
+                "short_name" => "London",
+                "types" => %w[
+                  postal_town
+                ],
+              },
+              {
+                "long_name" => "Greater London",
+                "short_name" => "Greater London",
+                "types" => %w[
+                  administrative_area_level_2
+                  political
+                ],
+              },
+              {
+                "long_name" => "England",
+                "short_name" => "England",
+                "types" => %w[
+                  administrative_area_level_1
+                  political
+                ],
+              },
+              {
+                "long_name" => "United Kingdom",
+                "short_name" => "GB",
+                "types" => %w[
+                  country
+                  political
+                ],
+              },
+            ],
           },
         )
       end
@@ -138,6 +180,41 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             longitude: -3.188267,
             country: "Scotland",
             types: %w[locality political],
+            place_id: "ChIJIyaYpQC4h0gRJxfnfHsU8mQ",
+            address_components: [
+              {
+                "long_name" => "Edinburgh",
+                "short_name" => "Edinburgh",
+                "types" => %w[
+                  locality
+                  political
+                ],
+              },
+              {
+                "long_name" => "Edinburgh",
+                "short_name" => "Edinburgh",
+                "types" => %w[
+                  administrative_area_level_2
+                  political
+                ],
+              },
+              {
+                "long_name" => "Scotland",
+                "short_name" => "Scotland",
+                "types" => %w[
+                  administrative_area_level_1
+                  political
+                ],
+              },
+              {
+                "long_name" => "United Kingdom",
+                "short_name" => "GB",
+                "types" => %w[
+                  country
+                  political
+                ],
+              },
+            ],
           },
         )
       end
@@ -165,6 +242,48 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             longitude: -5.93012,
             country: "Northern Ireland",
             types: %w[locality political],
+            place_id: "ChIJO4rQ1_3_YEgRMcXH7ywWVy4",
+            address_components: [
+              {
+                "long_name" => "Belfast",
+                "short_name" => "Belfast",
+                "types" => %w[
+                  locality
+                  political
+                ],
+              },
+              {
+                "long_name" => "Belfast",
+                "short_name" => "Belfast",
+                "types" => %w[
+                  postal_town
+                ],
+              },
+              {
+                "long_name" => "Belfast",
+                "short_name" => "Belfast",
+                "types" => %w[
+                  administrative_area_level_2
+                  political
+                ],
+              },
+              {
+                "long_name" => "Northern Ireland",
+                "short_name" => "Northern Ireland",
+                "types" => %w[
+                  administrative_area_level_1
+                  political
+                ],
+              },
+              {
+                "long_name" => "United Kingdom",
+                "short_name" => "GB",
+                "types" => %w[
+                  country
+                  political
+                ],
+              },
+            ],
           },
         )
       end
@@ -192,6 +311,41 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             longitude: -3.1680962,
             country: "Wales",
             types: %w[locality political],
+            place_id: "ChIJ9VPsNNQCbkgRDmeGZdsGNBQ",
+            address_components: [
+              {
+                "long_name" => "Cardiff",
+                "short_name" => "Cardiff",
+                "types" => %w[
+                  locality
+                  political
+                ],
+              },
+              {
+                "long_name" => "Cardiff",
+                "short_name" => "Cardiff",
+                "types" => %w[
+                  administrative_area_level_2
+                  political
+                ],
+              },
+              {
+                "long_name" => "Wales",
+                "short_name" => "Wales",
+                "types" => %w[
+                  administrative_area_level_1
+                  political
+                ],
+              },
+              {
+                "long_name" => "United Kingdom",
+                "short_name" => "GB",
+                "types" => %w[
+                  country
+                  political
+                ],
+              },
+            ],
           },
         )
       end

@@ -60,6 +60,8 @@ module GoogleOldPlacesAPI
         longitude: result.dig("geometry", "location", "lng"),
         country: extract_country(result),
         types: result["types"],
+        place_id: result["place_id"],
+        address_components: result["address_components"],
       }
     end
 

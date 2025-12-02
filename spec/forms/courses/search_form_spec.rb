@@ -465,4 +465,79 @@ RSpec.describe Courses::SearchForm do
       end
     end
   end
+
+  describe "geolocation attributes" do
+    let(:form) do
+      described_class.new(
+        location: "London NW9, UK",
+        country: "England",
+        formatted_address: "London NW9, UK",
+        types: %w[postal_code postal_code_prefix],
+        place_id: "ChIJC4iPheEQdkgRq-Ruf49iSEo",
+        address_components: [
+          {
+            "long_name" => "NW9",
+            "short_name" => "NW9",
+            "types" => %w[postal_code postal_code_prefix],
+          },
+          {
+            "long_name" => "London",
+            "short_name" => "London",
+            "types" => %w[postal_town],
+          },
+          {
+            "long_name" => "Greater London",
+            "short_name" => "Greater London",
+            "types" => %w[administrative_area_level_2 political],
+          },
+          {
+            "long_name" => "England",
+            "short_name" => "England",
+            "types" => %w[administrative_area_level_1 political],
+          },
+          {
+            "long_name" => "United Kingdom",
+            "short_name" => "GB",
+            "types" => %w[country political],
+          },
+        ],
+      )
+    end
+
+    it "assigns geolocation attributes" do
+      expect(form.country).to eq("England")
+      expect(form.formatted_address).to eq("London NW9, UK")
+      expect(form.types).to eq(%w[postal_code postal_code_prefix])
+      expect(form.place_id).to eq("ChIJC4iPheEQdkgRq-Ruf49iSEo")
+      expect(form.address_components).to eq(
+        [
+          {
+            "long_name" => "NW9",
+            "short_name" => "NW9",
+            "types" => %w[postal_code postal_code_prefix],
+          },
+          {
+            "long_name" => "London",
+            "short_name" => "London",
+            "types" => %w[postal_town],
+          },
+          {
+            "long_name" => "Greater London",
+            "short_name" => "Greater London",
+            "types" => %w[administrative_area_level_2 political],
+          },
+          {
+            "long_name" => "England",
+            "short_name" => "England",
+            "types" => %w[administrative_area_level_1 political],
+          },
+          {
+            "long_name" => "United Kingdom",
+            "short_name" => "GB",
+            "types" => %w[country political],
+          },
+        ],
+      )
+    end
+  end
 end
