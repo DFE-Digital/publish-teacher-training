@@ -5,6 +5,11 @@ require "spec_helper"
 RSpec.describe "Viewing feature flags" do
   let(:user) { create(:user, :admin) }
 
+  before do
+    # FeatureFlag#active? is stubbed by default, this unstubs it
+    allow(FeatureFlag).to receive(:active?).and_call_original
+  end
+
   scenario "I view all feature flags" do
     given_i_am_authenticated
     when_i_navigate_to_the_feature_flags_page

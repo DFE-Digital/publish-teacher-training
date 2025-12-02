@@ -3,6 +3,11 @@
 require "rails_helper"
 
 describe FeatureFlag do
+  before do
+    # FeatureFlag#active? is stubbed by default, this unstubs it
+    allow(described_class).to receive(:active?).and_call_original
+  end
+
   describe ".active?" do
     before do
       allow(FeatureFlags).to receive(:all).and_return([[:test_feature, "It's a test feature", "Jasmine Java"]])
