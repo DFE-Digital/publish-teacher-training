@@ -131,6 +131,10 @@ RSpec.configure do |config|
 
   ActiveJob::Base.queue_adapter = :test
 
+  config.before do
+    allow(FeatureFlag).to receive(:active?)
+  end
+
   config.before(:each, type: :request) do
     service = self.class.metadata[:service]
 
