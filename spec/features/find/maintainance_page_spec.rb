@@ -9,8 +9,9 @@ feature "Maintenance mode" do
 
   context "given the maintenance_mode feature flag is active and i arrive at the site" do
     scenario "sends me to the maintenance page" do
-      FeatureFlag.activate(:maintenance_mode)
-      FeatureFlag.activate(:maintenance_banner)
+      allow(FeatureFlag).to receive(:active?)
+      allow(FeatureFlag).to receive(:active?).with(:maintenance_mode).and_return(true)
+      allow(FeatureFlag).to receive(:active?).with(:maintenance_banner).and_return(true)
 
       visit find_root_path
 
@@ -31,7 +32,7 @@ feature "Maintenance mode" do
 
   context "given the maintenance_mode feature flag is active and I visit the feature flag page" do
     scenario "sends me to the feature flags page" do
-      FeatureFlag.activate(:maintenance_mode)
+      allow(FeatureFlag).to receive(:active?).with(:maintenance_mode).and_return(true)
 
       visit support_feature_flags_path
 

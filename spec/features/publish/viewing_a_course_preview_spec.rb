@@ -7,7 +7,7 @@ feature "Course show", travel: mid_cycle(2025) do
 
   context "bursaries and scholarships is announced" do
     before do
-      FeatureFlag.activate(:bursaries_and_scholarships_announced)
+      allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
     end
 
     scenario "i can view the course basic details", travel: mid_cycle do

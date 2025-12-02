@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Deleting a saved course", service: :find do
   before do
-    FeatureFlag.activate(:candidate_accounts)
+    allow(FeatureFlag).to receive(:active?).with(:candidate_accounts).and_return(true)
     CandidateAuthHelper.mock_auth
     given_a_published_course_exists
   end

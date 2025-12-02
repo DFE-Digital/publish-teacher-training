@@ -7,7 +7,7 @@ feature "Viewing a findable course" do
   include Rails.application.routes.url_helpers
 
   before do
-    FeatureFlag.activate(:bursaries_and_scholarships_announced)
+    allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
   end
 
   context "a course with international fees", travel: mid_cycle(2025) do

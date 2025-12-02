@@ -178,7 +178,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
 
     before do
-      FeatureFlag.activate(:bursaries_and_scholarships_announced)
+      allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
     end
 
     context "when course funding is salary" do

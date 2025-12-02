@@ -5,7 +5,7 @@ require "rails_helper"
 feature "Maintenance banner" do
   context "given the maintenance_mode feature flag is active and i arrive at the site" do
     scenario "sends me to the maintenance page" do
-      FeatureFlag.activate(:maintenance_banner)
+      allow(FeatureFlag).to receive(:active?).with(:maintenance_banner).and_return(true)
 
       visit find_root_path
 

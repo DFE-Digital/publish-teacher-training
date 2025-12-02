@@ -6,7 +6,7 @@ module Find
   describe MaintenanceBannerComponent, type: :component do
     context "when the `maintenance_mode` flag is active" do
       it "renders the correct content" do
-        FeatureFlag.activate(:maintenance_banner)
+        allow(FeatureFlag).to receive(:active?).with(:maintenance_banner).and_return(true)
         result = render_inline(described_class.new)
 
         expect(result.text).to have_content "This service will be unavailable on"

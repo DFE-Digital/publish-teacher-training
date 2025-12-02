@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Candidate Sign in" do
   before do
-    FeatureFlag.activate(:candidate_accounts)
+    allow(FeatureFlag).to receive(:active?).with(:candidate_accounts).and_return(true)
     CandidateAuthHelper.mock_auth
   end
 

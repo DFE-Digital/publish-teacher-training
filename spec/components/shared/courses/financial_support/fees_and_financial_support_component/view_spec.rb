@@ -36,7 +36,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
   context "Courses with bursary" do
     it "renders the bursary section if the course has a bursary" do
-      FeatureFlag.activate(:bursaries_and_scholarships_announced)
+      allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
       enrichment = create(:course_enrichment)
       course = create(:course, :secondary, funding: "fee", enrichments: [enrichment], name: "History", subjects: [build(:secondary_subject, bursary_amount: "2000"), build(:secondary_subject)]).decorate
 
@@ -49,7 +49,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
   context "Courses with scholarship and bursary" do
     it "renders the scholarships and bursary section" do
-      FeatureFlag.activate(:bursaries_and_scholarships_announced)
+      allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
       enrichment = create(:course_enrichment)
       course = create(:course, :secondary, funding: "fee", enrichments: [enrichment], name: "History", subjects: [build(:secondary_subject, bursary_amount: "2000", scholarship: "1000"), build(:secondary_subject)]).decorate
 

@@ -1097,7 +1097,7 @@ describe CourseDecorator do
 
     context "bursaries and scholarships is announced" do
       before do
-        FeatureFlag.activate(:bursaries_and_scholarships_announced)
+        allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
       end
 
       context "course has no financial incentive" do

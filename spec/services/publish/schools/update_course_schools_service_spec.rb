@@ -52,7 +52,7 @@ module Publish
           let(:updated_site_names) { provider.sites.order(:location_name).map(&:location_name) }
 
           context "when feature flag is enabled" do
-            before { FeatureFlag.activate(:course_sites_updated_email_notification) }
+            before { allow(FeatureFlag).to receive(:active?).with(:course_sites_updated_email_notification).and_return(true) }
 
             it "calls the CourseSitesUpdated notification service" do
               expect(NotificationService::CourseSitesUpdated).to receive(:call)

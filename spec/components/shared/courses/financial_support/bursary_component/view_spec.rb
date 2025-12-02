@@ -7,7 +7,7 @@ describe Shared::Courses::FinancialSupport::BursaryComponent::View, type: :compo
 
   context "bursaries_and_scholarships_announced feature flag is on" do
     before do
-      FeatureFlag.activate(:bursaries_and_scholarships_announced)
+      allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
       render_inline(described_class.new(course))
     end
 

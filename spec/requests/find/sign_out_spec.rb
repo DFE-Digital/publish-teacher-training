@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe "DELETE /sign-out for OneLogin Strategy", service: :find do
   before do
-    FeatureFlag.activate(:candidate_accounts)
+    allow(FeatureFlag).to receive(:active?).with(:candidate_accounts).and_return(true)
     allow(Settings.one_login).to receive(:enabled).and_return(true)
   end
 

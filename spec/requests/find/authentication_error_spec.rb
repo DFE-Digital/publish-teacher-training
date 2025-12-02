@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Authentication error", service: :find, type: :request do
   before do
     create(:find_developer_candidate)
-    FeatureFlag.activate(:candidate_accounts)
+    allow(FeatureFlag).to receive(:active?).with(:candidate_accounts).and_return(true)
 
     CandidateAuthHelper.mock_error_auth
   end

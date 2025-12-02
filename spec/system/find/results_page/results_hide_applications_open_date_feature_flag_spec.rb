@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "When hide_applications_open_date feature flag is active", service: :find do
   before do
-    FeatureFlag.activate(:hide_applications_open_date)
+    allow(FeatureFlag).to receive(:active?).with(:hide_applications_open_date).and_return(true)
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     when_i_visit_the_results_page
   end

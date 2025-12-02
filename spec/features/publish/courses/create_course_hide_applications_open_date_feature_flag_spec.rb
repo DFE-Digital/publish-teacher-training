@@ -4,7 +4,7 @@ require "rails_helper"
 
 feature "Adding a course with hide_applications_open_date active" do
   before do
-    FeatureFlag.activate(:hide_applications_open_date)
+    allow(FeatureFlag).to receive(:active?).with(:hide_applications_open_date).and_return(true)
   end
 
   scenario "creating a degree awarding course from school direct provider" do

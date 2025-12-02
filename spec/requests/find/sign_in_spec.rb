@@ -5,7 +5,7 @@ require "rails_helper"
 describe "/auth/find-developer", service: :find do
   context "when page parameter is invalid" do
     before do
-      FeatureFlag.activate(:candidate_accounts)
+      allow(FeatureFlag).to receive(:active?).with(:candidate_accounts).and_return(true)
       CandidateAuthHelper.mock_auth
     end
 

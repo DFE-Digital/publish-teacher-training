@@ -15,7 +15,7 @@ module Find
 
     context "when the `bursaries_and_scholarships_announced` flag is active" do
       it "does not render" do
-        FeatureFlag.activate(:bursaries_and_scholarships_announced)
+        allow(FeatureFlag).to receive(:active?).with(:bursaries_and_scholarships_announced).and_return(true)
         result = render_inline(described_class.new)
 
         expect(result.text).to be_blank
