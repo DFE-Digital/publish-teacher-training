@@ -53,9 +53,6 @@
           autocomplete: "off",
           data: { locations_autocomplete_target: "input" } %>
 
-          <%= form.govuk_collection_select :radius, form.object.radius_options, :value, :name,
-          label: { text: t("helpers.label.courses_search_form.radius"), size: "s" } %>
-
           <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), name: "utm_medium", value: "search" %>
         </div>
 
