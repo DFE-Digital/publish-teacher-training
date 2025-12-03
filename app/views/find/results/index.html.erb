@@ -61,25 +61,6 @@
 
         <% if @results.present? %>
           <div class="app-search-results-header">
-            <div class="app-search-results-header__sort">
-              <% if @search_params[:location].present? %>
-                <p class="govuk-body">
-                  <%= I18n.t("helpers.label.courses_search_form.ordering.location") %>
-                </p>
-              <% else %>
-                <%= form.govuk_collection_select(
-                  :order,
-                  form.object.ordering_options,
-                  :id,
-                  :name,
-                  label: { text: t("helpers.label.courses_search_form.ordering.non_location"), class: "govuk-!-display-inline-block" },
-                  role: "listbox", form_group: {}
-                ) %>
-
-                <%= form.govuk_submit t("helpers.submit.courses_search_form.order", class: "govuk-!-display-inline-block"), name: "utm_medium", value: "sort" %>
-              <% end %>
-            </div>
-
             <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
               <%= t(".filter_results") %>
             </button>
