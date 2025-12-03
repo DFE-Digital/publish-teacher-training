@@ -164,16 +164,16 @@
     - email_address
     - first_name
     - last_name
-    - organisation_name
+    - provider_name
     - address_line_1
     - address_line_2
     - address_line_3
     - town_or_city
     - county
     - postcode
-    - phone_number
+    - telephone
     - contact_email_address
-    - organisation_website
+    - website
     - ukprn
     - accredited_provider
     - urn
