@@ -307,13 +307,40 @@ module ResultsHelper
   end
 
   def and_the_cornwall_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:cornwall-uk")).to eq(
+    expect(Rails.cache.read("geolocation:query:v2:cornwall-uk")).to eq(
       {
         formatted_address: "Cornwall, UK",
         latitude: 50.5036299,
         longitude: -4.6524982,
         country: "England",
         types: %w[administrative_area_level_2 political],
+        place_id: "ChIJyQ4nv_C3akgRcUVL2YU8Qm4",
+        address_components: [
+          {
+            "long_name" => "Cornwall",
+            "short_name" => "Cornwall",
+            "types" => %w[
+              administrative_area_level_2
+              political
+            ],
+          },
+          {
+            "long_name" => "England",
+            "short_name" => "England",
+            "types" => %w[
+              administrative_area_level_1
+              political
+            ],
+          },
+          {
+            "long_name" => "United Kingdom",
+            "short_name" => "GB",
+            "types" => %w[
+              country
+              political
+            ],
+          },
+        ],
       },
     )
   end
