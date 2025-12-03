@@ -12,6 +12,7 @@ en:
           engineers_teach_physics: Only show Engineers teach physics courses
           filter_by: Filter by
           filter_title_sort_by: Sort by
+          filter_title_search_radius: Location search radius
           filter_title_engineers_physics: Engineers teach physics
           filter_title_primary_html: Primary<br aria-hidden="true">(ages 3 to 11)
           filter_title_secondary_html: Secondary<br aria-hidden="true">(ages 11 to 18)
@@ -30,6 +31,10 @@ en:
             distance: Nearest distance
             course_name_ascending: Course name (a to z)
             provider_name_ascending: Training provider (a to z)
+          radius_options:
+            miles:
+              one: "%{count} mile"
+              other: "%{count} miles"
           study_type_options:
             full_time: Full time (12 months)
             part_time: Part time (18 to 24 months)
