@@ -25,7 +25,7 @@ describe Enrichments::CopyToCourseService do
   describe "the copied enrichment" do
     subject { new_course.enrichments.first }
 
-    its(:about_course) { is_expected.to eq published_enrichment.about_course }
+    its(:theoretical_training_activities) { is_expected.to eq published_enrichment.theoretical_training_activities }
     its(:last_published_timestamp_utc) { is_expected.to be_nil }
     it { is_expected.to be_rolled_over }
   end

@@ -619,11 +619,11 @@ describe Course do
 
       context "invalid_enrichment" do
         let(:course) { create(:course, enrichments: [invalid_enrichment]) }
-        let(:invalid_enrichment) { build(:course_enrichment, about_course: "") }
+        let(:invalid_enrichment) { build(:course_enrichment, theoretical_training_activities: "") }
 
         before do
           subject
-          invalid_enrichment.about_course = Faker::Lorem.sentence(word_count: 1000)
+          invalid_enrichment.theoretical_training_activities = Faker::Lorem.words(number: 200).join(" ")
           subject.valid?
         end
 
@@ -676,7 +676,7 @@ describe Course do
     describe "publishable?" do
       context "invalid enrichment" do
         let(:course) { create(:course, enrichments: [invalid_enrichment]) }
-        let(:invalid_enrichment) { create(:course_enrichment, about_course: "") }
+        let(:invalid_enrichment) { create(:course_enrichment, placement_school_activities: "") }
 
         before do
           subject.publishable?
@@ -1736,7 +1736,6 @@ describe Course do
     describe "#find_or_initialize_draft" do
       copyable_enrichment_attributes =
         %w[
-          about_course
           course_length
           fee_details
           fee_international

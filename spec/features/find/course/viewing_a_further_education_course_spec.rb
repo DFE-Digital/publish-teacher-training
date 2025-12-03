@@ -143,7 +143,6 @@ private
           fee_details: "Optional fee details",
           interview_process: "Some helpful guidance about the interview process",
           how_school_placements_work: "Some info about how placements work",
-          about_course: "This is a course",
           required_qualifications: "You need some qualifications for this course",
         ),
       ],

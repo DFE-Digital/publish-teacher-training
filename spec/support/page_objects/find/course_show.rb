@@ -11,7 +11,6 @@ module PageObjects
       element :accredited_provider, "[data-qa=course__ratifying_provider]"
       element :provider_website, "[data-qa=course__provider_website]"
       element :vacancies, "[data-qa=course__vacancies]"
-      element :about_course, "[data-qa=course__about_course]"
       element :interview_process, "[data-qa=course__interview_process]"
       element :school_placements, "[data-qa=course__about_schools]"
       element :uk_fees, "[data-qa=course__uk_fees]"

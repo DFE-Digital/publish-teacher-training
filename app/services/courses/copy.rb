@@ -15,10 +15,6 @@ module Courses
       ["Degree subject requirements", "degree_subject_requirements"],
     ].freeze
 
-    ABOUT_THIS_COURSE_FIELDS = [
-      ["About this course", "about_course"],
-    ].freeze
-
     SCHOOL_PLACEMENT_FIELDS = [
       "What you will do on school placements", "placement_school_activities"
     ].freeze

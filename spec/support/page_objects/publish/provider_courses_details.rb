@@ -8,7 +8,6 @@ module PageObjects
     class ProviderCoursesDetails < PageObjects::Base
       set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/details"
 
-      section :about_course, Sections::SummaryList, '[data-qa="enrichment__about_course"]'
       section :level, Sections::SummaryList, '[data-qa="course__level"]'
       section :is_send, Sections::SummaryList, '[data-qa="course__is_send"]'
       section :subjects, Sections::SummaryList, '[data-qa="course__subjects"]'

@@ -5,7 +5,6 @@ FactoryBot.define do
     course
     status { :draft }
     version { 2 }
-    about_course { Faker::Lorem.sentence }
     course_length do
       # samples taken from real data
       [
@@ -82,6 +81,7 @@ FactoryBot.define do
 
     trait :v1 do
       version { 1 }
+      about_course { Faker::Lorem.sentence }
     end
 
     trait :rolled_over do
@@ -110,7 +110,6 @@ FactoryBot.define do
     trait :without_content do
       fee_uk_eu { nil }
       fee_international { nil }
-      about_course { nil }
       required_qualifications { nil }
       how_school_placements_work { nil }
       salary_details { nil }

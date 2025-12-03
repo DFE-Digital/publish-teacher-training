@@ -7,9 +7,6 @@
     <li><%= govuk_link_to t(".what_you_will_study"), "#section-what-you-will-study" %></li>
   <% end %>
   <li><%= govuk_link_to (salaried? ? t(".salary_and_financial_support") : t(".fees_and_financial_support")), "#section-financial-support" %></li>
-  <% if about_course.present? || preview? %>
-    <li><%= govuk_link_to t(".course_details"), "#section-about" %></li>
-  <% end %>
   <% if interview_process.present? %>
     <li><%= govuk_link_to t(".interview_process"), "#section-interviews" %></li>
   <% end %>

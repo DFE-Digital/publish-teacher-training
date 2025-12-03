@@ -130,29 +130,6 @@ en:
             </ul>
           where_you_will_train: Where you will train
           summary_text: See what we include in this section
-      about_course:
-        edit:
-          about_this_course: About this course
-          page_title: About this course - %{course_name_and_code}
-          submit_button: Update about this course
-          description: >
-            The course summary appears at the top of the course page. Use it to show how this course is different from others, this helps candidates understand whether it is right for them.
-          candidates_say_section_html:
-            <p class="govuk-body">Candidates say the most important information is:</p>
-            <ul class="govuk-list govuk-list--bullet">
-            <li>how and where they will spend their time</li>
-            <li>how the course is structured, for example which specific modules or areas are taught</li>
-            <li>how they will be supported, for example tutors and mentoring</li>
-            <li>the qualification and experience they will have at the end of the course</li>
-            <ul>
-          remember_to_section_html: <p class="govuk-body">Remember to:</p>
-            <ul class="govuk-list govuk-list--bullet">
-            <li>keep it brief and to the point, people struggle with long blocks of writing online</li>
-            <li>use bullet points, headings and paragraphs to make your writing easy to read</li>
-            <li>spell out acronyms the first time you use them, for example, ITT, NQT, SCITT</li>
-            <li>link to your organisation's website for people who want more detail about who you are and what you do</li>
-            </ul>
-          view_examples: View examples of great course summaries
       study_mode:
         form:
           select_all_that_apply: Select all that apply

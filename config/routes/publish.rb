@@ -185,9 +185,6 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/a-levels-or-equivalency-tests/a-level-equivalencies", to: "courses/a_level_requirements/a_level_equivalencies#new", as: :a_levels_a_level_equivalencies
         post "/a-levels-or-equivalency-tests/a-level-equivalencies", to: "courses/a_level_requirements/a_level_equivalencies#create"
 
-        get "/about-this-course", on: :member, to: "courses/about_this_course#edit"
-        patch "/about-this-course", on: :member, to: "courses/about_this_course#update"
-
         get "/fields/school-placement", on: :member, to: "courses/fields/school_placement#edit"
         patch "/fields/school-placement", on: :member, to: "courses/fields/school_placement#update"
 
