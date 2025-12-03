@@ -10,16 +10,16 @@ class CreateProvidersOnboardingFormRequest < ActiveRecord::Migration[8.0]
       t.text :email_address, null: false
       t.text :first_name, null: false
       t.text :last_name, null: false
-      t.string :organisation_name, null: false
+      t.string :provider_name, null: false
       t.text :address_line_1, null: false
       t.text :address_line_2
       t.text :address_line_3
       t.text :town_or_city, null: false
       t.text :county
       t.text :postcode, null: false
-      t.text :phone_number, null: false
+      t.text :telephone, null: false
       t.text :contact_email_address, null: false
-      t.text :organisation_website, null: false
+      t.text :website, null: false
       t.string :ukprn, null: false
       t.boolean :accredited_provider, null: false
       t.string :urn, null: false

@@ -12,10 +12,10 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
     it { is_expected.to validate_presence_of(:form_name) }
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
-    it { is_expected.to validate_presence_of(:organisation_name) }
+    it { is_expected.to validate_presence_of(:provider_name) }
     it { is_expected.to validate_presence_of(:address_line_1) }
     it { is_expected.to validate_presence_of(:town_or_city) }
-    it { is_expected.to validate_presence_of(:organisation_website) }
+    it { is_expected.to validate_presence_of(:website) }
     it { is_expected.to validate_inclusion_of(:accredited_provider).in_array([true, false]) }
     it { is_expected.to belong_to(:support_agent).class_name("User").optional }
 
@@ -62,14 +62,14 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
         end
       end
 
-      context "phone number" do
-        it "rejects invalid phone number" do
-          subject.phone_number = "INVALID"
+      context "telephone" do
+        it "rejects invalid telephone" do
+          subject.telephone = "INVALID"
           expect(subject).not_to be_valid
         end
 
-        it "accepts valid phone number" do
-          subject.phone_number = "+441234567890"
+        it "accepts valid telephone" do
+          subject.telephone = "+441234567890"
           expect(subject).to be_valid
         end
       end
@@ -100,14 +100,14 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
         end
       end
 
-      context "organisation website" do
-        it "accepts a valid organisation website URL" do
-          subject.organisation_website = "https://www.provider.org"
+      context "provider website" do
+        it "accepts a valid provider website URL" do
+          subject.website = "https://www.provider.org"
           expect(subject).to be_valid
         end
 
-        it "rejects an invalid organisation website URL" do
-          subject.organisation_website = "www.provider.org"
+        it "rejects an invalid provider website URL" do
+          subject.website = "www.provider.org"
           expect(subject).not_to be_valid
         end
       end
