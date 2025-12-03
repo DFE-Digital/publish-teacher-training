@@ -35,6 +35,26 @@
       </div>
     </details>
 
+    <%# Search radius %>
+    <% if params[:location].present? %>
+    <details class="app-c-filter-section">
+      <summary class="app-c-filter-section__summary">
+        <h3 class="app-c-filter-section__summary-heading">
+          <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
+          <%= t(".filter_title_search_radius") %>
+        </h3>
+      </summary>
+      <div class="app-c-filter-section__content">
+        <%= form.govuk_radio_buttons_fieldset :radius, legend: { text: t(".filter_title_search_radius"), hidden: true }, class: "govuk-radios--small", multiple: false do %>
+          <%= form.govuk_radio_button :radius, "10", label: { text: t(".radius_options.miles", count: 10) } %>
+          <%= form.govuk_radio_button :radius, "20", label: { text: t(".radius_options.miles", count: 20) } %>
+          <%= form.govuk_radio_button :radius, "50", label: { text: t(".radius_options.miles", count: 50) } %>
+          <%= form.govuk_radio_button :radius, "100", label: { text: t(".radius_options.miles", count: 100) } %>
+        <% end %>
+      </div>
+    </details>
+    <% end %>
+
     <% if @search_courses_form.search_for_physics? %>
       <details class="app-c-filter-section">
         <summary class="app-c-filter-section__summary">
