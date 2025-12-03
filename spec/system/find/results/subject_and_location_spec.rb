@@ -179,18 +179,6 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     )
   end
 
-  def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:london-uk")).to eq(
-      {
-        formatted_address: "London, UK",
-        latitude: 51.5072178,
-        longitude: -0.1275862,
-        country: "England",
-        types: %w[locality political],
-      },
-    )
-  end
-
   def when_i_start_typing_london_location
     stub_request(
       :get,
