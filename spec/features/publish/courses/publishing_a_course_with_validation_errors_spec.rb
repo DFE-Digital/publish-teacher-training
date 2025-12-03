@@ -193,7 +193,7 @@ feature "Publishing courses errors" do
       :salary,
       degree_grade: nil,
       accrediting_provider:,
-      enrichments: [create(:course_enrichment, :without_content, about_course: "")],
+      enrichments: [create(:course_enrichment, :without_content)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )

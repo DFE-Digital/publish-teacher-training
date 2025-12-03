@@ -16,8 +16,8 @@ describe ApplicationHelper do
       end
 
       it "returns correct content" do
-        expect(enrichment_error_link(:course, "about_course", "Something about the course"))
-          .to eq("<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--error\"><a class=\"govuk-link\" href=\"/publish/organisations/#{@provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/about-this-course?display_errors=true#publish-course-information-form-about-course-field-error\">Something about the course</a></div>")
+        expect(enrichment_error_link(:course, "course_length", "Something course length"))
+          .to eq("<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--error\"><a class=\"govuk-link\" href=\"/publish/organisations/#{@provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/length?display_errors=true#course_length-error\">Something course length</a></div>")
       end
     end
   end
@@ -40,21 +40,19 @@ describe ApplicationHelper do
     end
 
     context "with errors" do
-      let(:error_message) { "Enter something about the course" }
-
       before do
         @provider = build_stubbed(:provider)
         @course = build_stubbed(:course, provider: @provider)
-        @errors = { about_course: [error_message] }
+        @errors = { course_length: ["Enter course length"] }
 
-        enrichment_summary(summary_list, :course, "About course", "", [:about_course])
+        enrichment_summary(summary_list, :course, "Course length", "", [:course_length])
       end
 
       it "renders a value containing an error link within inset text" do
-        expect(subject).to have_css(".govuk-summary-list__key", text: "About course")
-        expect(subject).to have_css(".govuk-summary-list__value > .app-inset-text--error > a", text: error_message)
+        expect(subject).to have_css(".govuk-summary-list__key", text: "Course length")
+        expect(subject).to have_css(".govuk-summary-list__value > .app-inset-text--error > a", text: "Enter course length")
 
-        expect(subject).to have_link(error_message, href: "/publish/organisations/#{@provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/about-this-course?display_errors=true#publish-course-information-form-about-course-field-error")
+        expect(subject).to have_link("Enter course length", href: "/publish/organisations/#{@provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/length?display_errors=true#course_length-error")
       end
     end
   end

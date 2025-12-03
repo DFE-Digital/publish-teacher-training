@@ -406,12 +406,6 @@ class CourseDecorator < ApplicationDecorator
     object.enrichment_attribute(:financial_support)
   end
 
-  def published_about_course
-    return unless current_published_enrichment
-
-    current_published_enrichment[:about_course]
-  end
-
   def published_placement_selection_criteria
     return unless current_published_enrichment
 

@@ -11,7 +11,6 @@ module PageObjects
 
       sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li"
 
-      section :about_course, Sections::SummaryList, '[data-qa="enrichment__about_course"]'
       section :interview_process, Sections::SummaryList, '[data-qa="enrichment__interview_process"]'
       section :how_school_placements_work, Sections::SummaryList, '[data-qa="enrichment__how_school_placements_work"]'
       section :fee_uk_eu, Sections::SummaryList, '[data-qa="enrichment__fee_uk_eu"]'

@@ -603,7 +603,6 @@ en:
         fee_international: "Course fee for international students"
         how_school_placements_work: How placements work
         fee_details: Fees and financial support
-        about_course: About this course
         what-trainee-do-in-school: What will trainees do while in their placement schools?
         what-trainee-do-in-school-hint: For example observations, lesson planning, getting involved in school life
         what-trainee-do-in-school-success: What you will do on school placements
@@ -718,8 +717,6 @@ en:
               greater_than_or_equal_to: "must be greater than or equal to £0"
               less_than_or_equal_to: "must be less than or equal to £100,000"
               not_an_integer: "must not include pence, like 1000 or 1500"
-            about_course:
-              blank: "^Enter information about this course"
             theoretical_training_activities:
               blank: "^Enter details about theoretical training activities"
             how_school_placements_work:
@@ -1055,11 +1052,6 @@ en:
           attributes:
             interview_process:
               too_long: Interview process must be 200 words or less
-        publish/course_about_this_course_form:
-          attributes:
-            about_course:
-              blank: Enter information about this course
-              too_long: Reduce the word count for about this course
         publish/fields/what_you_will_study_form:
           attributes:
             theoretical_training_activities:

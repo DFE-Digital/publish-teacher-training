@@ -12,7 +12,6 @@ module Find
 
         def mock_course
           FakeCourse.new(provider: Provider.new(provider_code: "DFE", website: "wwww.awesomeprovider@aol.com", train_with_disability: "foo"),
-                         about_course: "foo",
                          how_school_placements_work: "bar",
                          placements_heading: "School placements",
                          about_accrediting_provider: "foo",
@@ -23,7 +22,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :about_course, :how_school_placements_work, :placements_heading, :about_accrediting_provider, :salaried, :interview_process, :application_status_open)
+          attr_accessor(:provider, :how_school_placements_work, :placements_heading, :about_accrediting_provider, :salaried, :interview_process, :application_status_open)
 
           def training_locations?
             true

@@ -162,7 +162,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     provider_in_cycle = create(:provider, recruitment_cycle: recruitment_cycle)
     user.providers << provider_in_cycle
 
-    @course_enrichment ||= build(:course_enrichment, :v1, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil)
+    @course_enrichment ||= build(:course_enrichment, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil)
 
     @course = create(
       :course,
@@ -180,8 +180,6 @@ RSpec.describe "Publishing a course with long form content on the school placeme
   end
 
   def then_i_should_not_see_the_fields_from_the_last_cycle
-    expect(page).not_to have_content("About this course")
-    expect(page).not_to have_content(@course_enrichment.about_course)
     expect(page).not_to have_content("How placements work")
     expect(page).not_to have_content(@course_enrichment.how_school_placements_work)
   end
@@ -192,8 +190,6 @@ RSpec.describe "Publishing a course with long form content on the school placeme
   end
 
   def then_i_should_see_the_fields_from_the_last_cycle
-    expect(page).to have_content("About this course")
-    expect(page).to have_content(@course_enrichment.about_course)
     expect(page).to have_content("How placements work")
     expect(page).to have_content(@course_enrichment.how_school_placements_work)
   end
