@@ -12,6 +12,7 @@ RSpec.describe "Searching in Scotland", :js, service: :find do
 
   scenario "when searching for courses in Scotland and none found" do
     when_i_enter_edinburgh_as_the_location
+    click_link_or_button "Search"
     and_i_set_the_radius_to_10_miles
     when_i_search_courses_in_scotland
     then_i_see_scotland_no_results_content
@@ -19,7 +20,8 @@ RSpec.describe "Searching in Scotland", :js, service: :find do
 
   scenario "when searching for courses in Scotland and one found" do
     when_i_enter_edinburgh_as_the_location
-    and_i_set_the_radius_to_200_miles
+    click_link_or_button "Search"
+    and_i_set_the_radius_to_100_miles
     when_i_search_courses_in_scotland
     then_i_do_not_see_scotland_no_results_content
     and_i_see_a_course_in_newcastle
@@ -52,12 +54,14 @@ RSpec.describe "Searching in Scotland", :js, service: :find do
     click_link_or_button "Search"
   end
 
-  def and_i_set_the_radius_to_200_miles
-    select "200 miles", from: "radius"
+  def and_i_set_the_radius_to_100_miles
+    page.find("h3", text: "Filter by Location search radius", normalize_ws: true).click
+    choose("100 miles", visible: :hidden)
   end
 
   def and_i_set_the_radius_to_10_miles
-    select "10 miles", from: "radius"
+    page.find("h3", text: "Filter by Location search radius", normalize_ws: true).click
+    choose("10 miles", visible: :hidden)
   end
 
   def and_i_see_the_service_is_only_for_courses_in_england
