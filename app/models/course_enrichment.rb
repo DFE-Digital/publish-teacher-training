@@ -56,10 +56,6 @@ class CourseEnrichment < ApplicationRecord
     status.in? %w[draft rolled_over]
   end
 
-  # About this course
-  validates :about_course, presence: true, on: :publish, if: -> { version == 1 }
-  validates :about_course, words_count: { maximum: 400 }
-
   validates :interview_process, words_count: { maximum: 250 }, if: -> { version == 1 }, on: :publish
 
   validates :how_school_placements_work, presence: true, on: :publish, if: -> { version == 1 }

@@ -28,11 +28,6 @@ RSpec.describe CourseEnrichment do
   # Versioned fields
   #
   it_behaves_like "versioned_presence_field",
-                  field: :about_course,
-                  required_in: { 1 => true, 2 => false }, # This is required in v1 but not in v2
-                  word_limit: 400
-
-  it_behaves_like "versioned_presence_field",
                   field: :interview_process,
                   required_in: { 1 => false, 2 => false },
                   word_limit: [250, 200]
