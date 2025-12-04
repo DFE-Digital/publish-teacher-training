@@ -133,7 +133,8 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def and_the_default_radius_for_postcode_is_selected
-    expect(page).to have_select("Search radius", selected: "10 miles")
+    page.find("h3", text: "Filter by Location search radius", normalize_ws: true).click
+    expect(page).to have_checked_field("10 miles", visible: :hidden)
   end
 
   def and_i_am_on_the_results_page_with_postcode_location_as_parameter
