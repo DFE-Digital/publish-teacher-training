@@ -39,19 +39,6 @@ en:
       a_level_component:
         view:
           equivalency_tests: Equivalency tests
-      contents_component:
-        view:
-          course_details: About the course
-          where_you_will_train: Where you will train
-          training_with_disabilities: Training with disabilities
-          fees_and_financial_support: Fees and financial support
-          salary_and_financial_support: Salary and financial support
-          salary: Salary
-          what_you_will_study: What you will study
-          interview_process: Interview process
-          support_and_advice: Support and advice
-          apply: Apply
-          heading: Contents
       entry_requirements_component:
         view:
           heading: Entry requirements

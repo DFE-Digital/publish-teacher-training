@@ -34,7 +34,6 @@ Naming/MethodName:
 # Offense count: 5
 RSpec/AnyInstance:
   Exclude:
-    - 'spec/components/find/courses/contents_component/view_spec.rb'
     - 'spec/support/stubbed_find_constraint.rb'
     - 'spec/support/stubbed_publish_constraint.rb'
     - 'spec/support/with_stubbed_stdout.rb'
