@@ -110,66 +110,6 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_i_click_search
   end
 
-  def and_the_postcode_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:v2:beacon-road-marazion-tr17-0hf-uk")).to eq(
-      {
-        formatted_address: "Beacon Rd, Marazion TR17 0HF, UK",
-        latitude: 50.1239982,
-        longitude: -5.4740404,
-        country: "England",
-        types: %w[route],
-        place_id: "EiBCZWFjb24gUmQsIE1hcmF6aW9uIFRSMTcgMEhGLCBVSyIuKiwKFAoSCRvag2JO22pIERxjkfOXy64rEhQKEgm7RO9iTttqSBHwdKK3m8px3w",
-        address_components: [
-          {
-            "long_name" => "Beacon Road",
-            "short_name" => "Beacon Rd",
-            "types" => %w[
-              route
-            ],
-          },
-          {
-            "long_name" => "Marazion",
-            "short_name" => "Marazion",
-            "types" => %w[
-              postal_town
-            ],
-          },
-          {
-            "long_name" => "Cornwall",
-            "short_name" => "Cornwall",
-            "types" => %w[
-              administrative_area_level_2
-              political
-            ],
-          },
-          {
-            "long_name" => "England",
-            "short_name" => "England",
-            "types" => %w[
-              administrative_area_level_1
-              political
-            ],
-          },
-          {
-            "long_name" => "United Kingdom",
-            "short_name" => "GB",
-            "types" => %w[
-              country
-              political
-            ],
-          },
-          {
-            "long_name" => "TR17 0HF",
-            "short_name" => "TR17 0HF",
-            "types" => %w[
-              postal_code
-            ],
-          },
-        ],
-      },
-    )
-  end
-
   def then_i_see_only_courses_within_selected_location_within_default_radius
     expect(results).to have_content(@postcode_primary_course.name_and_code)
     expect(results).to have_content(@postcode_mathematics_course.name_and_code)

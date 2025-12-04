@@ -5,9 +5,8 @@ module Find
     after_action :store_result_fullpath_for_backlinks, :send_analytics_event, only: [:index]
 
     def index
-      coordinates = Geolocation::CoordinatesQuery.new(location_params).call
-
-      @search_courses_form = ::Courses::SearchForm.new(search_courses_params.merge(coordinates))
+      @coordinates_result = Geolocation::CoordinatesQuery.new(location_params).call
+      @search_courses_form = ::Courses::SearchForm.new(search_form_params)
       @search_params = @search_courses_form.search_params
       @courses_query = ::Courses::Query.new(params: @search_params.dup)
       @courses = @courses_query.call
@@ -36,6 +35,10 @@ module Find
         track_params: params.permit(:utm_source, :utm_medium),
         results: @results,
       ).send_event
+    end
+
+    def search_form_params
+      search_courses_params.merge(@coordinates_result.to_h)
     end
 
     def search_courses_params
