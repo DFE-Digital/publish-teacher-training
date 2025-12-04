@@ -253,93 +253,56 @@ module ResultsHelper
   end
 
   def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:v2:london-uk")).to eq(
+    expect(Rails.cache.read("geolocation:coordinates:v2:london-uk")).to eq(
       {
         formatted_address: "London, UK",
         latitude: 51.5072178,
         longitude: -0.1275862,
         country: "England",
         types: %w[locality political],
-        place_id: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
-        address_components: [
-          {
-            "long_name" => "London",
-            "short_name" => "London",
-            "types" => %w[
-              locality
-              political
-            ],
-          },
-          {
-            "long_name" => "London",
-            "short_name" => "London",
-            "types" => %w[
-              postal_town
-            ],
-          },
-          {
-            "long_name" => "Greater London",
-            "short_name" => "Greater London",
-            "types" => %w[
-              administrative_area_level_2
-              political
-            ],
-          },
-          {
-            "long_name" => "England",
-            "short_name" => "England",
-            "types" => %w[
-              administrative_area_level_1
-              political
-            ],
-          },
-          {
-            "long_name" => "United Kingdom",
-            "short_name" => "GB",
-            "types" => %w[
-              country
-              political
-            ],
-          },
-        ],
+        postal_code: nil,
+        postal_town: "London",
+        route: nil,
+        locality: "London",
+        administrative_area_level_1: "England",
+        administrative_area_level_4: nil,
       },
     )
   end
 
   def and_the_cornwall_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:v2:cornwall-uk")).to eq(
+    expect(Rails.cache.read("geolocation:coordinates:v2:cornwall-uk")).to eq(
       {
         formatted_address: "Cornwall, UK",
         latitude: 50.5036299,
         longitude: -4.6524982,
         country: "England",
         types: %w[administrative_area_level_2 political],
-        place_id: "ChIJyQ4nv_C3akgRcUVL2YU8Qm4",
-        address_components: [
-          {
-            "long_name" => "Cornwall",
-            "short_name" => "Cornwall",
-            "types" => %w[
-              administrative_area_level_2
-              political
-            ],
-          },
-          {
-            "long_name" => "England",
-            "short_name" => "England",
-            "types" => %w[
-              administrative_area_level_1
-              political
-            ],
-          },
-          {
-            "long_name" => "United Kingdom",
-            "short_name" => "GB",
-            "types" => %w[
-              country
-              political
-            ],
-          },
+        postal_code: nil,
+        postal_town: nil,
+        route: nil,
+        locality: nil,
+        administrative_area_level_1: "England",
+        administrative_area_level_4: nil,
+      },
+    )
+  end
+
+  def and_the_postcode_location_search_for_coordinates_is_cached
+    expect(Rails.cache.read("geolocation:coordinates:v2:beacon-road-marazion-tr17-0hf-uk")).to eq(
+      {
+        formatted_address: "Beacon Rd, Marazion TR17 0HF, UK",
+        latitude: 50.1239982,
+        longitude: -5.4740404,
+        country: "England",
+        postal_code: "TR17 0HF",
+        postal_town: "Marazion",
+        route: "Beacon Road",
+        locality: nil,
+        administrative_area_level_1: "England",
+        administrative_area_level_4: nil,
+        types: %w[
+          route
         ],
       },
     )
