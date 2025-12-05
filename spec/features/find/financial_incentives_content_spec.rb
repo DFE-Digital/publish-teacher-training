@@ -46,13 +46,23 @@ feature "financial incentives call out boxes content" do
     end
 
     context "given the course is salaried" do
-      scenario "renders the salaried content" do
+      scenario "renders the salaried content for QTS with PGCE" do
         given_there_is_a_findable_course(funding: "salary")
         when_i_visit_the_find_results_page
         select_course
 
         within('[data-qa="course__salary_details"]') do
-          expect(page).to have_content("You will be paid a salary during this course. Financial support such as bursaries, scholarships and student loans is not available.")
+          expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You may also have to pay for your PGCE. You can discuss salary details with the provider at interview.")
+        end
+      end
+
+      scenario "renders the salaried content for QTS only" do
+        given_there_is_a_findable_course(funding: "salary", qualification: "qts")
+        when_i_visit_the_find_results_page
+        select_course
+
+        within('[data-qa="course__salary_details"]') do
+          expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You can discuss salary details with the provider at interview.")
         end
       end
     end
@@ -113,12 +123,13 @@ feature "financial incentives call out boxes content" do
     find_results_page.load
   end
 
-  def given_there_is_a_findable_course(bursary_amount: nil, scholarship_amount: nil, funding: "fee", subject: :chemistry)
+  def given_there_is_a_findable_course(bursary_amount: nil, scholarship_amount: nil, funding: "fee", qualification: "pgce_with_qts", subject: :chemistry)
     @course = create(
       :course,
       :secondary,
       :with_scitt,
       funding:,
+      qualification:,
       provider:,
       accrediting_provider:,
       site_statuses: [build(:site_status, :full_time_vacancies, :findable)],

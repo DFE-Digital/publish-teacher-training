@@ -56,9 +56,13 @@ en:
         title: Financial support for UK citizens
         salaried_courses:
           title: How salaried courses work
-          paid_salary: You will be paid a salary during this course. Financial support such as bursaries, scholarships and student loans is not available.
+          salary_heading: Salary
+          financial_support_heading: Financial support
+          paid_salary: You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You can discuss salary details with the provider at interview.
+          paid_salary_pgce_with_qts: You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You may also have to pay for your PGCE. You can discuss salary details with the provider at interview.
           pay_scale: Find out more about national pay scales for unqualified teachers.
-          competitive: Places on salaried courses are limited and very competitive. Check your eligibility with the training provider and apply as soon as possible.
+          competitive: Places on salaried courses are highly competitive, so check your eligibility with the training provider and apply as soon as possible.
+          financial_support: Financial support, including bursaries, scholarships, and student loans, is not available for salaried courses.
           find_out_more: Find out more about salaried courses.
       non_uk_citizens:
         title: Financial support for non-UK citizens

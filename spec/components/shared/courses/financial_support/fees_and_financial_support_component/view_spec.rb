@@ -6,7 +6,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
   context "Salaried courses" do
     it "renders salaried course section if the course has a salary" do
       enrichment = create(:course_enrichment)
-      course = create(:course, funding: "salary", enrichments: [enrichment]).decorate
+      course = create(:course, funding: "salary", qualification: "pgce_with_qts", enrichments: [enrichment]).decorate
 
       result = render_inline(described_class.new(course, enrichment))
 
