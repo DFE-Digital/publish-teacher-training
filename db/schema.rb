@@ -411,29 +411,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_27_145726) do
 
   create_table "providers_onboarding_form_request", force: :cascade do |t|
     t.string "status", default: "pending", null: false
-    t.text "form_name", null: false
-    t.bigint "support_agent_id"
+    t.string "form_name", null: false
     t.string "zendesk_link"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.jsonb "provider_metadata", default: {}
-    t.text "email_address"
-    t.text "first_name"
-    t.text "last_name"
+    t.string "email_address"
+    t.string "first_name"
+    t.string "last_name"
     t.string "provider_name"
     t.text "address_line_1"
     t.text "address_line_2"
     t.text "address_line_3"
-    t.text "town_or_city"
-    t.text "county"
-    t.text "postcode"
-    t.text "telephone"
-    t.text "contact_email_address"
-    t.text "website"
+    t.string "town_or_city"
+    t.string "county"
+    t.string "postcode"
+    t.string "telephone"
+    t.string "contact_email_address"
+    t.string "website"
     t.string "ukprn"
     t.boolean "accredited_provider"
     t.string "urn"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "support_agent_id"
+    t.index ["support_agent_id"], name: "index_providers_onboarding_form_request_on_support_agent_id"
     t.index ["uuid"], name: "index_providers_onboarding_form_request_on_uuid", unique: true
   end
 
