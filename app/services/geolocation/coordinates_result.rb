@@ -12,7 +12,7 @@ module Geolocation
                 :locality,
                 :administrative_area_level_1,
                 :administrative_area_level_4,
-                :types
+                :address_types
 
     def initialize(
       formatted_address: nil,
@@ -25,7 +25,7 @@ module Geolocation
       locality: nil,
       administrative_area_level_1: nil,
       administrative_area_level_4: nil,
-      types: nil
+      address_types: nil
     )
       @formatted_address = formatted_address
       @latitude = latitude
@@ -37,7 +37,7 @@ module Geolocation
       @locality = locality
       @administrative_area_level_1 = administrative_area_level_1
       @administrative_area_level_4 = administrative_area_level_4
-      @types = types
+      @address_types = address_types
     end
 
     def to_h
@@ -52,7 +52,7 @@ module Geolocation
         locality:,
         administrative_area_level_1:,
         administrative_area_level_4:,
-        types:,
+        address_types:,
       }
     end
   end

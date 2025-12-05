@@ -35,7 +35,7 @@ module Courses
     attribute :locality
     attribute :administrative_area_level_1
     attribute :administrative_area_level_4
-    attribute :types
+    attribute :address_types
 
     # Old parameters #
     attribute :age_group
@@ -160,10 +160,10 @@ module Courses
 
     PHYSICS_SUBJECT_CODE = "F3"
 
+    SMALL_RADIUS_TYPES = %w[postal_code street_address route sublocality locality].freeze
     def locality?
       # @see https://developers.google.com/maps/documentation/geocoding/requests-geocoding#Types
-      small_radius = %w[postal_code street_address route sublocality locality]
-      types && (types & small_radius).present?
+      address_types && (address_types & SMALL_RADIUS_TYPES).present?
     end
 
     def search_for_physics?
