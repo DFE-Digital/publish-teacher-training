@@ -144,7 +144,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
           locality: "Manchester",
           administrative_area_level_1: "England",
           administrative_area_level_4: "Manchester",
-          types: %w[
+          address_types: %w[
             locality
             political
           ],
@@ -218,7 +218,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
           locality: "London",
           administrative_area_level_1: "England",
           administrative_area_level_4: "City of Westminster",
-          types: [],
+          address_types: [],
         }
       end
 
@@ -408,7 +408,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
         locality: "London",
         administrative_area_level_1: "England",
         administrative_area_level_4: "City of Westminster",
-        types: [],
+        address_types: [],
       }
     end
 
