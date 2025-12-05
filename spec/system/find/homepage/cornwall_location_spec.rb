@@ -46,4 +46,9 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     then_i_see_mathematics_courses_in_48_miles_from_penzance_that_sponsors_visa
     and_i_am_on_the_results_page_with_mathematics_subject_and_cornwall_location_and_sponsor_visa_as_parameter
   end
+
+  def and_the_default_radius_is_selected
+    page.find("h3", text: "Location search radius", normalize_ws: true).click
+    expect(page).to have_checked_field("50 miles", visible: :hidden)
+  end
 end

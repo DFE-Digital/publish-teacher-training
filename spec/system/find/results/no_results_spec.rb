@@ -36,7 +36,7 @@ RSpec.describe "No search results", :js, service: :find do
 
   def given_courses_exist
     romford = build(:location, :romford)
-    bristol = build(:location, :bristol)
+    reading = build(:location, :reading)
 
     create(
       :course,
@@ -49,8 +49,8 @@ RSpec.describe "No search results", :js, service: :find do
     create(
       :course,
       :secondary,
-      name: "Mathematics - Bristol",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: bristol.latitude, longitude: bristol.longitude))],
+      name: "Mathematics - Reading",
+      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: reading.latitude, longitude: reading.longitude))],
       subjects: [find_or_create(:secondary_subject, :mathematics)],
     )
   end
@@ -85,21 +85,22 @@ RSpec.describe "No search results", :js, service: :find do
 
     fill_in "Subject", with: "Mathematics"
     fill_in "City, town or postcode", with: "London"
-    and_i_set_the_radius_to_10_miles
     stub_geocode_request("London")
+    and_i_click_search
+    and_i_set_the_radius_to_10_miles
     and_i_click_search
   end
 
   def then_i_see_radius_quick_links
     expect(page).to have_content("No courses found")
     expect(page).to have_content("Try browsing for 'Mathematics' in a wider location search")
-    expect(page).to have_content("200 miles (1 course)")
+    expect(page).to have_content("100 miles (1 course)")
   end
 
   def then_i_click_on_radius_quick_link
-    click_link "200 miles (1 course)"
+    click_link "100 miles (1 course)"
     expect(page).to have_content("1 course found")
-    expect(page).to have_content("Mathematics - Bristol")
+    expect(page).to have_content("Mathematics - Reading")
   end
 
   def when_i_search_courses_in_england
@@ -107,6 +108,7 @@ RSpec.describe "No search results", :js, service: :find do
 
     fill_in "City, town or postcode", with: "London"
     stub_geocode_request("London")
+    and_i_click_search
     and_i_set_the_radius_to_10_miles
     and_i_click_search
   end
@@ -185,7 +187,8 @@ RSpec.describe "No search results", :js, service: :find do
   end
 
   def when_i_set_the_radius_to_10_miles
-    select "10 miles", from: "radius"
+    page.find("h3", text: "Location search radius", normalize_ws: true).click
+    choose "10 miles", visible: :hidden
   end
   alias_method :and_i_set_the_radius_to_10_miles, :when_i_set_the_radius_to_10_miles
 
