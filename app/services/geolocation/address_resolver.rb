@@ -4,36 +4,30 @@ module Geolocation
   # Geocode a location query into normalized coordinates.
   #
   # Handles caching of geocoding results and wraps the response in a
-  # {CoordinatesResult} object. Normalizes provider-specific API responses
+  # hash object. Normalizes provider-specific API responses
   # into a common hash format, ensuring location service agnosticism.
   #
   # @example
-  #   query = Geolocation::CoordinatesQuery.new("London")
+  #   query = Geolocation::AddressResolver.new("London")
   #   result = query.call
-  #   # => #<Geolocation::CoordinatesResult latitude=51.5, longitude=-0.1, ...>
+  #   # => { latitude: '' ... }
   #
   # @attr_reader query [String] The location query string
   # @attr_reader logger [Logger] Logger instance for debug/info output
   # @attr_reader cache [ActiveSupport::Cache::Store] Cache store for results
   # @attr_reader client [GoogleOldPlacesAPI::Client] Geocoding API client
   # @attr_reader cache_expiration [ActiveSupport::Duration] Cache TTL
-  class CoordinatesQuery
+  class AddressResolver
     attr_reader :query, :logger, :cache, :client, :cache_expiration
 
     # Initialize a new geocoding query.
     #
     # @param query [String] The location to geocode
-    # @param logger [Logger] Rails logger (default: Rails.logger)
-    # @param cache [ActiveSupport::Cache::Store] Cache store (default: Rails.cache)
-    # @param client [#geocode] Geocoding API client (default: GoogleOldPlacesAPI::Client.new)
-    # @param cache_expiration [ActiveSupport::Duration] Cache TTL (default: 30.days)
-    def initialize(
-      query,
-      logger: Rails.logger,
-      cache: Rails.cache,
-      client: GoogleOldPlacesAPI::Client.new,
-      cache_expiration: 30.days
-    )
+    # @param logger [Logger] Rails logger
+    # @param cache [ActiveSupport::Cache::Store] Cache store
+    # @param client [#geocode] Geocoding API client
+    # @param cache_expiration [ActiveSupport::Duration] Cache TTL
+    def initialize(query, logger:, cache:, client:, cache_expiration:)
       @query = query
       @logger = logger
       @cache = cache
@@ -43,34 +37,34 @@ module Geolocation
 
     # Geocode the query with caching.
     #
-    # @return [CoordinatesResult] Coordinates wrapped in result object
+    # @return [Hash] Client results wrapped in hash object
     def call
       return blank_result if query.blank?
 
-      cached_hash = cache.read(cache_key)
+      cached_data || fetch_and_cache
+    end
 
-      if cached_hash.present?
-        log("Cache HIT for: '#{query}' | Key: #{cache_key} | Cached: #{cached_hash.inspect}")
-
-        return CoordinatesResult.new(**cached_hash)
+    def cached_data
+      cache.read(cache_key).tap do |cached_data|
+        if cached_data
+          log("Cache HIT for: '#{query}' | Key: #{cache_key} | Cached: #{cached_data.inspect}")
+        else
+          log("Cache MISS for: '#{query}' | Key: #{cache_key}")
+        end
       end
-
-      fetch_and_cache
     end
 
     def fetch_and_cache
-      coordinates = fetch_coordinates
-      return blank_result unless valid_coordinates?(coordinates)
+      data = fetch_coordinates
+      return blank_result unless valid_address?(data)
 
-      cache.write(cache_key, coordinates, expires_in: @cache_expiration)
+      cache.write(cache_key, data, expires_in: @cache_expiration)
 
-      log("Cache MISS for: '#{query}' | Key: #{cache_key} | Caching: #{coordinates.inspect}")
-
-      CoordinatesResult.new(**coordinates)
+      data
     end
 
-    def valid_coordinates?(coordinates)
-      coordinates.present? && coordinates[:latitude].present? && coordinates[:longitude].present?
+    def valid_address?(data)
+      data.present? && data[:latitude].present? && data[:longitude].present?
     end
 
     # This method is wrapped in a `rescue` block to handle any exceptions
@@ -98,15 +92,17 @@ module Geolocation
     end
 
     def blank_result
-      CoordinatesResult.new(
-        formatted_address: nil,
+      {
         latitude: nil,
         longitude: nil,
-      )
+        formatted_address: nil,
+        country: nil,
+        address_types: [],
+      }
     end
 
     def cache_key
-      "geolocation:coordinates:v2:#{@query.parameterize}"
+      "geolocation:address_resolver:#{@query.parameterize}"
     end
 
     def log(message)

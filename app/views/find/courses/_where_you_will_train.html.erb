@@ -12,7 +12,7 @@
 
     <%= render Find::Courses::TrainingLocations::View.new(
       course:,
-      coordinates: @coordinates.to_h,
+      address: @address,
       distance_from_location: @distance_from_location,
       preview: preview?(params),
     ) %>

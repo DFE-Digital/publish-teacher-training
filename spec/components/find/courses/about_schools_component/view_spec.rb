@@ -4,16 +4,20 @@ require "rails_helper"
 
 describe Find::Courses::AboutSchoolsComponent::View, type: :component do
   include Rails.application.routes.url_helpers
-  coordinates = { latitude: 51.509865, longitude: -0.118092, formatted_address: "London, UK" }
-  distance_from_location = 10
+
+  let(:address) do
+    Geolocation::Address.new(
+      latitude: 51.509865, longitude: -0.118092, formatted_address: "London, UK",
+    )
+  end
+  let(:distance_from_location) { 10 }
 
   context "invalid program type" do
     it "renders the component" do
       provider = build(:provider)
-      course = build(:course,
-                     provider:).decorate
+      course = build(:course, provider:).decorate
 
-      result = render_inline(described_class.new(course, coordinates, distance_from_location))
+      result = render_inline(described_class.new(course, address, distance_from_location))
       expect(result.text).to include("Enter details about how placements work")
     end
   end
@@ -27,7 +31,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
         provider:,
       ).decorate
 
-      result = render_inline(described_class.new(course, coordinates, distance_from_location))
+      result = render_inline(described_class.new(course, address, distance_from_location))
 
       expect(result.text).to include("You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.")
       expect(result).to have_css(".app-callout__title", text: "Where your school placements will take place")
@@ -41,7 +45,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       course = build(:course,
                      funding: "apprenticeship").decorate
 
-      result = render_inline(described_class.new(course, coordinates, distance_from_location))
+      result = render_inline(described_class.new(course, address, distance_from_location))
 
       expect(result.text).to include("You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.")
     end
@@ -56,7 +60,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
         provider:,
       ).decorate
 
-      result = render_inline(described_class.new(course, coordinates, distance_from_location))
+      result = render_inline(described_class.new(course, address, distance_from_location))
 
       expect(result.text).to include("You will spend a minimum of 24 weeks on school placements. This time is spread across at least 2 schools. You will also spend time in a location to study.")
       expect(result).to have_css(".app-callout__title", text: "Where your school placements will take place")
@@ -70,7 +74,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       provider = build(:provider, selectable_school: true)
       course = build(:course, provider:).decorate
 
-      result = render_inline(described_class.new(course, coordinates, distance_from_location))
+      result = render_inline(described_class.new(course, address, distance_from_location))
 
       expect(result.text).not_to include("Advice from Get Into Teaching")
       expect(result).to have_css(".app-callout__title", text: "Where your school placements will take place")
@@ -87,7 +91,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
                      site_statuses: [
                        build(:site_status, site: build(:site)),
                      ]).decorate
-      result = render_inline(described_class.new(course, coordinates, distance_from_location))
+      result = render_inline(described_class.new(course, address, distance_from_location))
 
       expect(result.text).to include("Enter details about how placements work")
     end

@@ -7,17 +7,17 @@ module Find
         include PublishHelper
         include PreviewHelper
 
-        attr_reader :course, :coordinates, :distance_from_location, :preview
+        attr_reader :course, :address, :distance_from_location, :preview
 
         delegate :published_how_school_placements_work,
                  :program_type,
                  :study_sites,
                  :site_statuses, to: :course
 
-        def initialize(course, coordinates, distance_from_location, preview: false)
+        def initialize(course, address, distance_from_location, preview: false)
           super
           @course = course
-          @coordinates = coordinates
+          @address = address
           @distance_from_location = distance_from_location
           @preview = preview
         end
