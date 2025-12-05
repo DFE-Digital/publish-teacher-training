@@ -38,6 +38,10 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_i_click_search
     then_i_see_courses_up_to_20_miles_distance
     and_the_20_miles_radius_is_selected
+
+    when_i_click_first_result
+    then_i_am_on_course_page
+    and_i_can_see_the_distance_from_london
   end
 
   scenario "when I filter by location and subject" do
@@ -331,30 +335,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     ).to eq("London, UK")
   end
 
-private
-
-  def results
-    page.first(".app-search-results")
-  end
-
-  def stub_london_location_search
-    stub_request(
-      :get,
-      "https://maps.googleapis.com/maps/api/geocode/json?address=London,%20UK&components=country:UK&key=replace_me&language=en",
-    )
-      .with(
-        headers: {
-          "Accept" => "*/*",
-          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-          "Connection" => "keep-alive",
-          "Keep-Alive" => "30",
-          "User-Agent" => "Faraday v#{Faraday::VERSION}",
-        },
-      )
-      .to_return(
-        status: 200,
-        body: file_fixture("google_old_places_api_client/geocode/london.json").read,
-        headers: { "Content-Type" => "application/json" },
-      )
+  def when_i_click_first_result
+    results.first("a").click
   end
 end
