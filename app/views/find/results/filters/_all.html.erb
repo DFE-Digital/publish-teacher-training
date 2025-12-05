@@ -26,7 +26,7 @@
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :order, legend: { text: t(".filter_title_sort_by"), hidden: true }, class: "govuk-radios--small", multiple: false do %>
           <% if params[:location].present? %>
-          <%= form.govuk_radio_button :order, "nearest_distance", label: { text: t(".sort_by_labels.distance") } %>
+          <%= form.govuk_radio_button :order, "distance", label: { text: t(".sort_by_labels.distance") } %>
           <% end %>
           <%= form.govuk_radio_button :order, "course_name_ascending", label: { text: t(".sort_by_labels.course_name_ascending") } %>
           <%= form.govuk_radio_button :order, "provider_name_ascending", label: { text: t(".sort_by_labels.provider_name_ascending") } %>

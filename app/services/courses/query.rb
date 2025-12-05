@@ -290,7 +290,7 @@ module Courses
         radius: radius_in_miles,
       }
 
-      @scope
+      @scope = @scope
         .joins("INNER JOIN site ON site.id = site_statuses.site_id")
         .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
         .where(
@@ -318,7 +318,9 @@ module Courses
           ),
         )
         .group(:id, "provider.provider_name")
-        .order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC")
+
+      @scope = @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC") if !FeatureFlag.active?(:find_filtering_and_sorting) || params[:order] == "distance"
+      @scope
     end
 
     def default_ordering_scope
