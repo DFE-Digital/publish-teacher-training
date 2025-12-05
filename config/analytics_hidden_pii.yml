@@ -11,3 +11,7 @@ shared:
     - sign_in_user_id
   session:
     - ip_address
+  providers_onboarding_form_request:
+    - email_address
+    - first_name
+    - last_name
