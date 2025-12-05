@@ -82,7 +82,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             locality: "London",
             administrative_area_level_1: "England",
             administrative_area_level_4: nil,
-            types: %w[
+            address_types: %w[
               locality
               political
             ],
@@ -152,7 +152,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             locality: "Edinburgh",
             administrative_area_level_1: "Scotland",
             administrative_area_level_4: nil,
-            types: %w[
+            address_types: %w[
               locality
               political
             ],
@@ -188,7 +188,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             locality: "Belfast",
             administrative_area_level_1: "Northern Ireland",
             administrative_area_level_4: nil,
-            types: %w[
+            address_types: %w[
               locality
               political
             ],
@@ -224,7 +224,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             locality: "Cardiff",
             administrative_area_level_1: "Wales",
             administrative_area_level_4: nil,
-            types: %w[
+            address_types: %w[
               locality
               political
             ],

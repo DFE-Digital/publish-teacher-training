@@ -259,7 +259,7 @@ module ResultsHelper
         latitude: 51.5072178,
         longitude: -0.1275862,
         country: "England",
-        types: %w[locality political],
+        address_types: %w[locality political],
         postal_code: nil,
         postal_town: "London",
         route: nil,
@@ -277,7 +277,7 @@ module ResultsHelper
         latitude: 50.5036299,
         longitude: -4.6524982,
         country: "England",
-        types: %w[administrative_area_level_2 political],
+        address_types: %w[administrative_area_level_2 political],
         postal_code: nil,
         postal_town: nil,
         route: nil,
@@ -301,9 +301,7 @@ module ResultsHelper
         locality: nil,
         administrative_area_level_1: "England",
         administrative_area_level_4: nil,
-        types: %w[
-          route
-        ],
+        address_types: %w[route],
       },
     )
   end
