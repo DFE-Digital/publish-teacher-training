@@ -1,4 +1,4 @@
-# # frozen_string_literal: true
+# frozen_string_literal: true
 
 require "rails_helper"
 
@@ -12,6 +12,7 @@ RSpec.describe "Searching in Wales", :js, service: :find do
 
   scenario "when searching for courses in Wales and none found" do
     when_i_enter_cardiff_as_the_location
+    when_i_search_courses_in_wales
     and_i_set_the_radius_to_10_miles
     when_i_search_courses_in_wales
     then_i_see_wales_no_results_content
@@ -19,6 +20,7 @@ RSpec.describe "Searching in Wales", :js, service: :find do
 
   scenario "when searching for courses in Wales and one found" do
     when_i_enter_cardiff_as_the_location
+    when_i_search_courses_in_wales
     and_i_set_the_radius_to_50_miles
     when_i_search_courses_in_wales
     then_i_do_not_see_wales_no_results_content
@@ -53,11 +55,13 @@ RSpec.describe "Searching in Wales", :js, service: :find do
   end
 
   def and_i_set_the_radius_to_50_miles
-    select "50 miles", from: "radius"
+    page.find("h3", text: "Location search radius").click
+    choose "50 miles"
   end
 
   def and_i_set_the_radius_to_10_miles
-    select "10 miles", from: "radius"
+    page.find("h3", text: "Location search radius").click
+    choose "10 miles"
   end
 
   def and_i_see_the_service_is_only_for_courses_in_england

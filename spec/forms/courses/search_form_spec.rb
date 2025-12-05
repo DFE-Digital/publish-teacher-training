@@ -273,6 +273,42 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    ###
+    ### FILTERING AND SORTING FEATURE FLAG
+    ###
+    describe "Filtering and sorting enabled" do
+      before do
+        allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
+      end
+
+      context "when location is blank and order is distance" do
+        let(:form) { described_class.new(location: "", order: "distance") }
+
+        it "forces the ordering to be by course_name_ascending" do
+          expect(form.search_params).to eq({ order: "course_name_ascending" })
+        end
+      end
+
+      context "when location is present" do
+        let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending") }
+
+        it "forces the ordering to be by distance" do
+          expect(form.search_params).to eq({ formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
+        end
+      end
+
+      context "when location is blank and order is blank" do
+        let(:form) { described_class.new(location: "", order: "") }
+
+        it "forces the ordering to be by course_name_ascending" do
+          expect(form.search_params).to eq({ order: "course_name_ascending" })
+        end
+      end
+    end
+    ###
+    ### END FILTERING AND SORTING FEATURE FLAG
+    ###
+
     context "when ordering is provided" do
       context "when new params" do
         let(:form) { described_class.new(order: "course_name_ascending") }

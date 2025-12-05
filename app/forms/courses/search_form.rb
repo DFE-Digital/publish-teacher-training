@@ -77,6 +77,19 @@ module Courses
     end
 
     def order
+      if FeatureFlag.active?(:find_filtering_and_sorting)
+        # User removes location from their search
+        if location.blank? && super == "distance"
+          return self.order = "course_name_ascending"
+        # User wants to search by location - always distance
+        elsif location.present?
+          return self.order = "distance"
+        # Otherwise if order is blank, set to course name
+        elsif super.blank?
+          return self.order = "course_name_ascending"
+        end
+      end
+
       return super if sortby.blank?
 
       sort_by_transformation || super
@@ -115,7 +128,7 @@ module Courses
     RADIUS_VALUES = [1, 5, 10, 15, 20, 25, 50, 100, 200].freeze
     DEFAULT_RADIUS = 50
     SMALL_RADIUS = 10
-    LONDON_RADIUS = 15
+    LONDON_RADIUS = proc { FeatureFlag.active?(:find_filtering_and_sorting) ? 20 : 15 }
 
     def radius_options
       RADIUS_VALUES.map do |value|
@@ -130,7 +143,7 @@ module Courses
       return super if super.present?
 
       if london?
-        LONDON_RADIUS
+        LONDON_RADIUS.call
       elsif locality?
         SMALL_RADIUS
       else
