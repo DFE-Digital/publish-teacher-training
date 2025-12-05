@@ -118,6 +118,8 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
 
     expect(results).to have_no_content(@cornwall_primary_course.name_and_code)
     expect(results).to have_no_content(@cornwall_mathematics_course.name_and_code)
+    expect(results).to have_no_content(@london_mathematics_course.name_and_code)
+    expect(results).to have_no_content(@london_primary_course.name_and_code)
   end
 
   def and_the_default_radius_for_postcode_is_selected
