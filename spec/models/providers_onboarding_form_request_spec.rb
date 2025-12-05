@@ -130,6 +130,26 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
           expect(record.errors[:website]).to include("Enter a website address in the correct format, like https://www.example.com")
         end
       end
+
+      # Custom validation for support agent being an admin user
+      context "Non-admin support agent" do
+        let(:non_admin_user) { create(:user, admin: false) }
+        let(:record) { build(:providers_onboarding_form_request, support_agent: non_admin_user) }
+
+        it "is not valid and adds an error on support_agent" do
+          expect(record).not_to be_valid
+          expect(record.errors[:support_agent]).to include("must be an admin user")
+        end
+      end
+
+      context "Support agent is an admin user" do
+        let(:admin_user) { create(:user, admin: true, email: "admin@education.gov.uk") }
+        let(:record) { build(:providers_onboarding_form_request, support_agent: admin_user) }
+
+        it "is valid" do
+          expect(record).to be_valid
+        end
+      end
     end
   end
 end
