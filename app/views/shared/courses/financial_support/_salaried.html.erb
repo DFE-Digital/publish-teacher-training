@@ -1,23 +1,26 @@
 <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
   <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.salaried_courses.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--orange" }) do %>
-
     <div data-qa="course__salary_details">
-      <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.paid_salary") %></p>
-
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.pay_scale"), find_track_click_path(utm_content: "uk_citizens_salaried_national_pay_scales", url: t("find.links.national_pay_scales"))) %></p>
-
       <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.competitive") %></p>
+      <h4 class="govuk-heading-s"><%= t("find.financial_support.uk_citizens.salaried_courses.salary_heading") %></h4>
+      <% if course.qualification == "pgce_with_qts" %>
+        <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.paid_salary_pgce_with_qts") %></p>
+      <% else %>
+        <!-- pgde_with_qts, undergraduate_degree_with_qts, qts -->
+        <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.paid_salary") %></p>
+      <% end %>
+      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.pay_scale"), find_track_click_path(utm_content: "uk_citizens_salaried_national_pay_scales", url: t("find.links.national_pay_scales"))) %></p>
+      <h4 class="govuk-heading-s"><%= t("find.financial_support.uk_citizens.salaried_courses.financial_support_heading") %></h4>
+      <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.financial_support") %></p>
       <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.find_out_more"), find_track_click_path(utm_content: "uk_citizens_salaried_teacher_salaries", url: t("find.get_into_teaching.url_teacher_salaries"))) %></p>
     </div>
   <% end %>
 <% end %>
-
 <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
   <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.non_uk_citizens.salaried_courses.title"), class: "govuk-heading-m")) do %>
     <div data-qa="course__salary_details_non_uk">
       <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.competitive") %></p>
       <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.entry_requirements") %></p>
-
       <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_salaried_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
     </div>
   <% end %>

@@ -13,7 +13,7 @@
    <% end %>
   <% end %>
   <% if salaried? %>
-    <%= render partial: "shared/courses/financial_support/salaried" %>
+    <%= render partial: "shared/courses/financial_support/salaried", locals: { course: @course } %>
   <% elsif excluded_from_bursary? %>
     <%= render partial: "shared/courses/financial_support/loan" %>
   <% elsif bursary_only? %>
