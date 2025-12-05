@@ -62,12 +62,13 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     expect(results).to have_content(@romford_primary_course.name_and_code)
     expect(results).to have_content(@romford_mathematics_course.name_and_code)
 
-    expect(results).to have_no_content(@watford_primary_course.name_and_code)
-    expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
+    expect(results).to have_content(@watford_primary_course.name_and_code)
+    expect(results).to have_content(@watford_mathematics_course.name_and_code)
   end
 
   def and_the_london_radius_is_selected
-    expect(page).to have_select("Search radius", selected: "15 miles")
+    page.find("h3", text: "Filter by Location search radius", normalize_ws: true).click
+    expect(page).to have_checked_field("20 miles", visible: :hidden)
   end
 
   def and_i_am_on_the_results_page_with_london_location_as_parameter
