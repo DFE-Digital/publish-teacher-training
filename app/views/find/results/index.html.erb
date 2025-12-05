@@ -62,7 +62,7 @@
               <%= render Courses::SummaryCardComponent.new(
               candidate: @candidate,
               course:,
-              location: @search_params[:formatted_address] || @search_params[:location],
+              location: @search_params[:formatted_address],
               visa_sponsorship: @search_params[:can_sponsor_visa],
             ) %>
 
