@@ -22,6 +22,6 @@ We use geolocation services in two ways.
 We take user input for a place or region in the UK to search for courses. This query is sent to Google and returns the responses to the user.
 When the user chooses an option and submits their selection we then need to get the coordtinates for that place.
 
-### `Geolocation::CoordinatesQuery`
+### `Geolocation::AddressResolver`
 
 We take the autocompleted place name from the `Geolocation::Suggestions` and use that to fetch the coordinates of the place from the geocode API in Google.

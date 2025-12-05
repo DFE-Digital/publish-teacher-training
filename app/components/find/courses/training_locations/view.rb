@@ -7,12 +7,12 @@ module Find
         include PublishHelper
         include PreviewHelper
 
-        attr_reader :course, :coordinates, :distance_from_location, :preview
+        attr_reader :course, :address, :distance_from_location, :preview
 
-        def initialize(course:, coordinates:, distance_from_location:, preview: false)
+        def initialize(course:, address:, distance_from_location:, preview: false)
           super
           @course = course
-          @coordinates = coordinates
+          @address = address
           @distance_from_location = distance_from_location
           @preview = preview
         end
@@ -30,7 +30,7 @@ module Find
         end
 
         def potential_placements_text
-          if coordinates
+          if address
             distance_text
           else
             content_tag(:span, I18n.t(".find.courses.training_locations.view.search_help_#{course.funding}"), class: "govuk-hint govuk-!-font-size-16")
@@ -38,7 +38,7 @@ module Find
         end
 
         def guaranteed_text
-          return unless coordinates
+          return unless address
 
           I18n.t(".find.courses.training_locations.view.guaranteed") if course.fee? || course.salary?
         end
@@ -61,7 +61,7 @@ module Find
           I18n.t(
             ".find.courses.training_locations.view.distance",
             distance: content_tag(:span, pluralize(distance_from_location, "mile"), class: "govuk-!-font-weight-bold"),
-            location: content_tag(:span, sanitize(coordinates[:formatted_address]), class: "govuk-!-font-weight-bold"),
+            location: content_tag(:span, sanitize(address.formatted_address), class: "govuk-!-font-weight-bold"),
           ).html_safe
         end
 

@@ -12,7 +12,7 @@
       </p>
     <% end %>
 
-    <%= render Find::Courses::TrainingLocations::View.new(course:, coordinates: @coordinates, distance_from_location: @distance_from_location, preview: preview?(params)) %>
+    <%= render Find::Courses::TrainingLocations::View.new(course:, address: @address, distance_from_location: @distance_from_location, preview: preview?(params)) %>
 
     <% if course.published_how_school_placements_work.present? %>
       <%= markdown(course.published_how_school_placements_work) %>

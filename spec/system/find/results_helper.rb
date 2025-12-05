@@ -253,7 +253,7 @@ module ResultsHelper
   end
 
   def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:coordinates:v2:london-uk")).to eq(
+    expect(Rails.cache.read("geolocation:address_resolver:london-uk")).to eq(
       {
         formatted_address: "London, UK",
         latitude: 51.5072178,
@@ -271,7 +271,7 @@ module ResultsHelper
   end
 
   def and_the_cornwall_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:coordinates:v2:cornwall-uk")).to eq(
+    expect(Rails.cache.read("geolocation:address_resolver:cornwall-uk")).to eq(
       {
         formatted_address: "Cornwall, UK",
         latitude: 50.5036299,
@@ -289,7 +289,7 @@ module ResultsHelper
   end
 
   def and_the_postcode_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:coordinates:v2:beacon-road-marazion-tr17-0hf-uk")).to eq(
+    expect(Rails.cache.read("geolocation:address_resolver:beacon-road-marazion-tr17-0hf-uk")).to eq(
       {
         formatted_address: "Beacon Rd, Marazion TR17 0HF, UK",
         latitude: 50.1239982,

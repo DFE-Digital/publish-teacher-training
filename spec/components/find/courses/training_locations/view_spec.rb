@@ -3,12 +3,16 @@
 require "rails_helper"
 
 describe Find::Courses::TrainingLocations::View, type: :component do
-  subject { render_inline(described_class.new(course:, preview:, coordinates:, distance_from_location:)) }
+  subject { render_inline(described_class.new(course:, preview:, address:, distance_from_location:)) }
 
-  let(:coordinates) { { latitude: 51.509865, longitude: -0.118092, formatted_address: "Some Address" } }
+  let(:address) do
+    Geolocation::Address.new(
+      latitude: 51.509865, longitude: -0.118092, formatted_address: "Some Address",
+    )
+  end
   let(:distance_from_location) { 10 }
   let(:preview) { false }
-  let(:component) { described_class.new(course:, preview:, coordinates:, distance_from_location:) }
+  let(:component) { described_class.new(course:, preview:, address:, distance_from_location:) }
 
   describe "#render" do
     let(:study_site) { course.study_sites.first.decorate }
