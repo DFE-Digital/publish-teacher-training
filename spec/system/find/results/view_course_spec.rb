@@ -118,7 +118,6 @@ RSpec.describe "Search results - view a course", :js, service: :find do
         subject_name: "Art and design",
         subject_code: "W1",
         location: "",
-        radius: "50",
         order: "course_name_ascending",
         provider_name: "",
         provider_code: "",

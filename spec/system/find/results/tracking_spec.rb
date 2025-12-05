@@ -205,11 +205,12 @@ RSpec.describe "Search results tracking", :js, service: :find do
   end
 
   def when_i_sort_by_provider_ascending
-    select "Training provider (A-Z)"
+    page.find("h3", text: "Sort by").click
+    choose "Training provider (a to z)"
   end
 
   def and_i_click_sort
-    click_link_or_button "Sort"
+    click_link_or_button "Apply filters"
   end
 
   def then_search_result_order_is_tracked
