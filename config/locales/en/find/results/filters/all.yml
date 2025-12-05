@@ -28,7 +28,7 @@ en:
           filter_title_provider: Training provider
           apply_filter: Apply filters
           sort_by_labels:
-            distance: Nearest distance
+            distance: Distance
             course_name_ascending: Course name (a to z)
             provider_name_ascending: Training provider (a to z)
           radius_options:
