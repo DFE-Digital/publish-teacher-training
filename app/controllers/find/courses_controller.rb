@@ -30,8 +30,8 @@ module Find
       @coordinates = Geolocation::CoordinatesQuery.new(params[:location]).call
       @distance_from_location ||= ::Courses::NearestSchoolQuery.new(
         courses: [@course],
-        latitude: @coordinates[:latitude],
-        longitude: @coordinates[:longitude],
+        latitude: @coordinates.latitude,
+        longitude: @coordinates.longitude,
       ).call.first.distance_to_search_location.ceil
     end
 
