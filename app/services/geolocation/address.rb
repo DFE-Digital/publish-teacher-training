@@ -36,7 +36,8 @@ module Geolocation
                 :route,
                 :locality,
                 :administrative_area_level_1,
-                :administrative_area_level_4
+                :administrative_area_level_4,
+                :address_types
 
     # Initialize a new Address.
     #
@@ -125,6 +126,7 @@ module Geolocation
         locality:,
         administrative_area_level_1:,
         administrative_area_level_4:,
+        address_types:,
       }
     end
   end
