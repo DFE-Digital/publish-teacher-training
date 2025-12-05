@@ -115,11 +115,7 @@ module Courses
     RADIUS_VALUES = [1, 5, 10, 15, 20, 25, 50, 100, 200].freeze
     DEFAULT_RADIUS = 50
     SMALL_RADIUS = 10
-    LONDON_RADIUS = if FeatureFlag.active?(:find_filtering_and_sorting)
-                      20
-                    else
-                      15
-                    end
+    LONDON_RADIUS = proc { FeatureFlag.active?(:find_filtering_and_sorting) ? 20 : 15 }
 
     def radius_options
       RADIUS_VALUES.map do |value|
@@ -134,7 +130,7 @@ module Courses
       return super if super.present?
 
       if london?
-        LONDON_RADIUS
+        LONDON_RADIUS.call
       elsif locality?
         SMALL_RADIUS
       else
