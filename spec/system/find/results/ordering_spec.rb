@@ -17,13 +17,6 @@ RSpec.describe "Search results ordering", :js, service: :find do
     then_i_see_the_remaining_courses_ordered_by_course_name_ascending
 
     when_i_visit_the_find_results_page
-    and_i_sort_courses_from_z_to_a
-    then_the_courses_are_ordered_by_course_name_descending
-
-    when_i_click_on_the_second_page
-    then_i_see_the_remaining_courses_ordered_by_course_name_descending
-
-    when_i_visit_the_find_results_page
     and_i_sort_courses_from_a_to_z
     then_the_courses_are_ordered_by_course_name_ascending
 
@@ -35,25 +28,6 @@ RSpec.describe "Search results ordering", :js, service: :find do
     when_i_visit_the_find_results_page
 
     and_i_sort_providers_from_a_to_z
-    then_the_courses_are_ordered_by_provider_name_ascending
-
-    and_i_sort_providers_from_z_to_a
-    then_the_courses_are_ordered_by_provider_name_descending
-  end
-
-  scenario "sorting by course name using the old parameter" do
-    when_i_visit_the_find_results_page_using_the_old_course_name_descending
-    then_the_courses_are_ordered_by_course_name_descending
-
-    when_i_visit_the_find_results_page_using_the_old_course_name_ascending
-    then_the_courses_are_ordered_by_course_name_ascending
-  end
-
-  scenario "sorting by provider name using the old parameter" do
-    when_i_visit_the_find_results_page_using_the_old_provider_name_descending
-    then_the_courses_are_ordered_by_provider_name_descending
-
-    when_i_visit_the_find_results_page_using_the_old_provider_name_ascending
     then_the_courses_are_ordered_by_provider_name_ascending
   end
 
@@ -89,22 +63,6 @@ RSpec.describe "Search results ordering", :js, service: :find do
     visit find_results_path
   end
 
-  def when_i_visit_the_find_results_page_using_the_old_course_name_descending
-    visit find_results_path(sortby: "course_desc")
-  end
-
-  def when_i_visit_the_find_results_page_using_the_old_course_name_ascending
-    visit find_results_path(sortby: "course_asc")
-  end
-
-  def when_i_visit_the_find_results_page_using_the_old_provider_name_descending
-    visit find_results_path(sortby: "provider_desc")
-  end
-
-  def when_i_visit_the_find_results_page_using_the_old_provider_name_ascending
-    visit find_results_path(sortby: "provider_asc")
-  end
-
   def when_i_click_on_the_second_page
     click_link_or_button "2"
   end
@@ -121,36 +79,16 @@ RSpec.describe "Search results ordering", :js, service: :find do
     )
   end
 
-  def then_i_see_the_remaining_courses_ordered_by_course_name_descending
-    expect(result_titles).to eq(
-      [
-        "Cambridge University Dance (23XF)",
-        "Warwick University Computing (23TT)",
-        "Warwick University Chemistry (X121)",
-        "Essex University Art and Design (23XC)",
-        "Warwick University Art and Design (X100)",
-      ],
-    )
-  end
-
-  def and_i_sort_courses_from_z_to_a
-    select "Course name (Z-A)", from: "Sorted by"
-    click_link_or_button "Sort"
-  end
-
   def and_i_sort_courses_from_a_to_z
-    select "Course name (A-Z)", from: "Sorted by"
-    click_link_or_button "Sort"
+    page.find("h3", text: "Sort by", normalize_ws: true).click
+    choose "Course name (a to z)", visible: :hidden
+    click_link_or_button "Apply filters"
   end
 
   def and_i_sort_providers_from_a_to_z
-    select "Training provider (A-Z)", from: "Sorted by"
-    click_link_or_button "Sort"
-  end
-
-  def and_i_sort_providers_from_z_to_a
-    select "Training provider (Z-A)", from: "Sorted by"
-    click_link_or_button "Sort"
+    page.find("h3", text: "Sort by", normalize_ws: true).click
+    choose "Training provider (a to z)", visible: :hidden
+    click_link_or_button "Apply filters"
   end
 
   def then_the_courses_are_ordered_by_course_name_ascending
@@ -170,23 +108,6 @@ RSpec.describe "Search results ordering", :js, service: :find do
     )
   end
 
-  def then_the_courses_are_ordered_by_course_name_descending
-    expect(result_titles).to eq(
-      [
-        "NIoT Psychology (23X7)",
-        "Essex University Physics (23XB)",
-        "Oxford University Philosophy (T3XK)",
-        "Cambridge University Music (23XD)",
-        "Essex University Mathematics (23X9)",
-        "NIoT History (23X8)",
-        "Oxford University Geography (23XJ)",
-        "Oxford University English (23XK)",
-        "NIoT Economics (23TX)",
-        "Warwick University Drama (AB21)",
-      ],
-    )
-  end
-
   def then_the_courses_are_ordered_by_provider_name_ascending
     expect(result_titles).to eq(
       [
@@ -200,23 +121,6 @@ RSpec.describe "Search results ordering", :js, service: :find do
         "NIoT Psychology (23X7)",
         "Oxford University English (23XK)",
         "Oxford University Geography (23XJ)",
-      ],
-    )
-  end
-
-  def then_the_courses_are_ordered_by_provider_name_descending
-    expect(result_titles).to eq(
-      [
-        "Warwick University Art and Design (X100)",
-        "Warwick University Chemistry (X121)",
-        "Warwick University Computing (23TT)",
-        "Warwick University Drama (AB21)",
-        "Oxford University English (23XK)",
-        "Oxford University Geography (23XJ)",
-        "Oxford University Philosophy (T3XK)",
-        "NIoT Economics (23TX)",
-        "NIoT History (23X8)",
-        "NIoT Psychology (23X7)",
       ],
     )
   end
