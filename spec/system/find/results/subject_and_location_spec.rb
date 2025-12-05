@@ -26,16 +26,13 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_the_location_suggestions_for_london_is_cached
 
     when_i_select_the_first_suggestion
+
+    and_i_click_to_search_courses_in_london
     and_i_set_the_radius_to_10_miles
     and_the_10_mile_radius_is_selected
     and_i_click_to_search_courses_in_london
     then_i_only_see_courses_within_a_10_mile_radius
     and_the_location_search_for_coordinates_is_cached
-
-    when_i_increase_the_radius_to_15_miles
-    and_i_click_search
-    then_i_see_courses_up_to_15_miles_distance
-    and_the_15_miles_radius_is_selected
 
     when_i_increase_the_radius_to_20_miles
     and_i_click_search
@@ -48,13 +45,12 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     then_i_see_location_suggestions("London, UK")
 
     when_i_select_the_first_suggestion
-    and_i_set_the_radius_to_10_miles
     and_i_click_to_search_courses_in_london
-    then_i_only_see_courses_within_a_10_mile_radius
+    then_i_see_courses_up_to_20_miles_distance
 
     and_select_primary_subject
     and_i_click_search
-    then_i_see_only_courses_within_selected_location_and_primary_subject_within_a_10_mile_radius
+    then_i_see_only_courses_within_selected_location_and_primary_subject_within_a_20_mile_radius
   end
 
   scenario "when I filter by subject" do
@@ -74,24 +70,28 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   scenario "when search results update after filter changes" do
     when_i_search_for_math
     and_i_choose_the_first_subject_suggestion
-    and_i_set_the_radius_to_10_miles
+    and_i_click_search
+    then_i_do_not_see_the_location_filter
 
     when_i_start_typing_london_location
     then_i_see_location_suggestions("London, UK")
-
     when_i_select_the_first_suggestion
-    and_i_increase_the_radius_to_15_miles
     and_i_click_to_search_courses_in_london
 
+    when_i_increase_the_radius_to_20_miles
     when_i_filter_by_courses_that_sponsor_visa
     and_i_click_apply_filters
 
-    then_i_see_mathematics_courses_in_15_miles_from_london_that_sponsors_visa
+    then_i_see_mathematics_courses_in_20_miles_from_london_that_sponsors_visa
+  end
+
+  def then_i_do_not_see_the_location_filter
+    expect(page).to have_no_content("Location search radius")
   end
 
   scenario 'when searching "London, UK" using old location parameters' do
     when_i_search_courses_in_london_using_old_parameters
-    then_i_see_courses_up_to_15_miles_distance
+    then_i_see_courses_up_to_20_miles_distance
     and_the_location_search_for_coordinates_is_cached
     and_london_is_displayed_in_text_field
   end
@@ -121,6 +121,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   def when_i_click_search
     click_link_or_button "Search"
   end
+  alias_method :and_i_click_search, :when_i_click_search
 
   def then_i_can_see_the_mathematics_option
     subject_suggestions = page.all("#subject-code-field__listbox li").map(&:text)
@@ -230,45 +231,22 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def and_the_10_mile_radius_is_selected
-    expect(page).to have_select("Search radius", selected: "10 miles")
-  end
-
-  def and_the_15_miles_radius_is_selected
-    expect(page).to have_select("Search radius", selected: "15 miles")
+    expect(page).to have_checked_field("10 miles", visible: :hidden)
   end
 
   def and_the_20_miles_radius_is_selected
-    expect(page).to have_select("Search radius", selected: "20 miles")
+    expect(page).to have_checked_field("20 miles", visible: :hidden)
   end
-
-  def and_i_click_search
-    click_link_or_button "Search"
-  end
-
-  def when_i_increase_the_radius_to_15_miles
-    select "15 miles", from: "radius"
-  end
-  alias_method :and_i_increase_the_radius_to_15_miles, :when_i_increase_the_radius_to_15_miles
 
   def when_i_set_the_radius_to_10_miles
-    select "10 miles", from: "radius"
+    page.find("h3", text: "Location search radius").click
+    choose "10 miles"
   end
   alias_method :and_i_set_the_radius_to_10_miles, :when_i_set_the_radius_to_10_miles
 
-  def then_i_see_courses_up_to_15_miles_distance
-    with_retry do
-      expect(results).to have_content(@london_primary_course.name_and_code)
-      expect(results).to have_content(@london_mathematics_course.name_and_code)
-      expect(results).to have_content(@romford_primary_course.name_and_code)
-      expect(results).to have_content(@romford_mathematics_course.name_and_code)
-
-      expect(results).to have_no_content(@watford_primary_course.name_and_code)
-      expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
-    end
-  end
-
   def when_i_increase_the_radius_to_20_miles
-    select "20 miles", from: "radius"
+    page.find("h3", text: "Location search radius").click
+    choose "20 miles"
   end
 
   def then_i_see_courses_up_to_20_miles_distance
@@ -292,13 +270,13 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     page.find('input[name="subject_name"]').native.send_keys(:return)
   end
 
-  def then_i_see_only_courses_within_selected_location_and_primary_subject_within_a_10_mile_radius
+  def then_i_see_only_courses_within_selected_location_and_primary_subject_within_a_20_mile_radius
     with_retry do
       expect(results).to have_content(@london_primary_course.name_and_code)
       expect(results).to have_no_content(@london_mathematics_course.name_and_code)
-      expect(results).to have_no_content(@romford_primary_course.name_and_code)
+      expect(results).to have_content(@romford_primary_course.name_and_code)
       expect(results).to have_no_content(@romford_mathematics_course.name_and_code)
-      expect(results).to have_no_content(@watford_primary_course.name_and_code)
+      expect(results).to have_content(@watford_primary_course.name_and_code)
       expect(results).to have_no_content(@watford_mathematics_course.name_and_code)
     end
   end
@@ -319,7 +297,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     end
   end
 
-  def then_i_see_mathematics_courses_in_15_miles_from_london_that_sponsors_visa
+  def then_i_see_mathematics_courses_in_20_miles_from_london_that_sponsors_visa
     with_retry do
       expect(results).to have_content(@london_mathematics_course.name_and_code)
 
@@ -369,10 +347,6 @@ private
 
   def results
     page.first(".app-search-results")
-  end
-
-  def search_params
-    query_params(URI(page.current_url)).symbolize_keys.except(:utm_source, :utm_medium)
   end
 
   def stub_london_location_search
