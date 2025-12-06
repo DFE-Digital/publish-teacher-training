@@ -37,6 +37,7 @@ module Geolocation
                 :route,
                 :locality,
                 :administrative_area_level_1,
+                :administrative_area_level_2,
                 :administrative_area_level_4,
                 :address_types
 
@@ -63,6 +64,7 @@ module Geolocation
       route: nil,
       locality: nil,
       administrative_area_level_1: nil,
+      administrative_area_level_2: nil,
       administrative_area_level_4: nil,
       address_types: []
     )
@@ -75,6 +77,7 @@ module Geolocation
       @route = route
       @locality = locality
       @administrative_area_level_1 = administrative_area_level_1
+      @administrative_area_level_2 = administrative_area_level_2
       @administrative_area_level_4 = administrative_area_level_4
       @address_types = address_types
       @query = query.to_s
@@ -130,6 +133,7 @@ module Geolocation
         route:,
         locality:,
         administrative_area_level_1:,
+        administrative_area_level_2:,
         administrative_area_level_4:,
         address_types:,
       }
@@ -144,8 +148,8 @@ module Geolocation
       return [route, postal_town].compact.join(", ") if landmark?
       return [postal_code, postal_town].compact.join(", ") if postcode_area?
       return [administrative_area_level_4, postal_town].compact.join(", ") if district_only?
-      return administrative_area_level_1 if county?
       return [route, postal_town].compact.join(", ") if street_name?
+      return administrative_area_level_2 if has_type?("administrative_area_level_2")
 
       formatted_address.to_s.gsub(/, UK/, "")
     end
@@ -186,12 +190,12 @@ module Geolocation
       route.present? && route.match?(/university|college|school/i)
     end
 
-    def county?
-      administrative_area_level_1.present? && postal_code.blank? && route.blank? && locality.blank?
-    end
-
     def street_name?
       route.present? && postal_town.present? && postal_code.blank?
+    end
+
+    def has_type?(*types)
+      types.any? { |type| address_types.include?(type) }
     end
   end
 end

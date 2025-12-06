@@ -281,6 +281,7 @@ module ResultsHelper
         route: nil,
         locality: "London",
         administrative_area_level_1: "England",
+        administrative_area_level_2: "Greater London",
         administrative_area_level_4: nil,
       },
     )
@@ -299,6 +300,7 @@ module ResultsHelper
         route: nil,
         locality: nil,
         administrative_area_level_1: "England",
+        administrative_area_level_2: "Cornwall",
         administrative_area_level_4: nil,
       },
     )
@@ -316,6 +318,7 @@ module ResultsHelper
         route: "Beacon Road",
         locality: nil,
         administrative_area_level_1: "England",
+        administrative_area_level_2: "Cornwall",
         administrative_area_level_4: nil,
         address_types: %w[route],
       },
@@ -446,7 +449,7 @@ module ResultsHelper
 
   def then_i_see_mathematics_courses_in_48_miles_from_penzance_that_sponsors_visa
     expect(results).to have_content(@penzance_mathematics_course.name_and_code)
-    expect(results).to have_content("48 miles from Cornwall, UK")
+    expect(results).to have_content("48 miles from Cornwall")
 
     expect(results).to have_no_content(@penzance_primary_course.name_and_code)
   end

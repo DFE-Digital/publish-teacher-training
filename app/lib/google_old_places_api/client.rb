@@ -64,6 +64,7 @@ module GoogleOldPlacesAPI
         route: extract_address_component(result, "route"),
         locality: extract_address_component(result, "locality"),
         administrative_area_level_1: extract_address_component(result, "administrative_area_level_1"),
+        administrative_area_level_2: extract_address_component(result, "administrative_area_level_2"),
         administrative_area_level_4: extract_address_component(result, "administrative_area_level_4"),
         address_types: result["types"],
       }

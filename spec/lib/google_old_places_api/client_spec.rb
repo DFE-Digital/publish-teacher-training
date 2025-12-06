@@ -81,6 +81,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             route: nil,
             locality: "London",
             administrative_area_level_1: "England",
+            administrative_area_level_2: "Greater London",
             administrative_area_level_4: nil,
             address_types: %w[
               locality
@@ -151,6 +152,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             route: nil,
             locality: "Edinburgh",
             administrative_area_level_1: "Scotland",
+            administrative_area_level_2: "Edinburgh",
             administrative_area_level_4: nil,
             address_types: %w[
               locality
@@ -187,6 +189,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             route: nil,
             locality: "Belfast",
             administrative_area_level_1: "Northern Ireland",
+            administrative_area_level_2: "Belfast",
             administrative_area_level_4: nil,
             address_types: %w[
               locality
@@ -223,6 +226,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             route: nil,
             locality: "Cardiff",
             administrative_area_level_1: "Wales",
+            administrative_area_level_2: "Cardiff",
             administrative_area_level_4: nil,
             address_types: %w[
               locality
