@@ -5,6 +5,11 @@ FactoryBot.define do
     latitude { 0.0 }
     longitude { 0.0 }
 
+    trait :belfast do
+      latitude { 54.5972 }
+      longitude { -5.93012 }
+    end
+
     trait :bristol do
       latitude { 51.4545 }
       longitude { -2.5879 }

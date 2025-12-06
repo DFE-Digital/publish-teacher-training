@@ -29,7 +29,14 @@ module Courses
     # Coordinates #
     attribute :country
     attribute :formatted_address
-    attribute :types
+    attribute :postal_code
+    attribute :postal_town
+    attribute :route
+    attribute :locality
+    attribute :administrative_area_level_1
+    attribute :administrative_area_level_2
+    attribute :administrative_area_level_4
+    attribute :address_types
 
     # Old parameters #
     attribute :age_group
@@ -142,13 +149,13 @@ module Courses
       formatted_address == "London, UK"
     end
 
+    PHYSICS_SUBJECT_CODE = "F3"
+
+    SMALL_RADIUS_TYPES = %w[postal_code street_address route sublocality locality].freeze
     def locality?
       # @see https://developers.google.com/maps/documentation/geocoding/requests-geocoding#Types
-      small_radius = %w[postal_code street_address route sublocality locality]
-      types && (types & small_radius).present?
+      address_types && (address_types & SMALL_RADIUS_TYPES).present?
     end
-
-    PHYSICS_SUBJECT_CODE = "F3"
 
     def search_for_physics?
       PHYSICS_SUBJECT_CODE.in?(Array(subjects)) || subject_code == PHYSICS_SUBJECT_CODE

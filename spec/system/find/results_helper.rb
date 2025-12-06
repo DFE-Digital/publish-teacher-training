@@ -12,6 +12,7 @@ module ResultsHelper
       :course,
       :primary,
       :open,
+      :published,
       name: "Primary - TR17 0HF",
       provider: create(:provider, provider_name: "First university"),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: postcode.latitude, longitude: postcode.longitude))],
@@ -22,6 +23,7 @@ module ResultsHelper
       :course,
       :primary,
       :open,
+      :published,
       name: "Primary - London",
       provider: create(:provider, provider_name: "First university"),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
@@ -32,6 +34,7 @@ module ResultsHelper
       :course,
       :primary,
       :open,
+      :published,
       name: "Primary - Penzance",
       provider: create(:provider, provider_name: "First university"),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: penzance.latitude, longitude: penzance.longitude))],
@@ -42,6 +45,7 @@ module ResultsHelper
       :course,
       :primary,
       :open,
+      :published,
       name: "Primary - Cornwall",
       provider: create(:provider, provider_name: "First university"),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: cornwall.latitude, longitude: cornwall.longitude))],
@@ -52,6 +56,7 @@ module ResultsHelper
       :course,
       :secondary,
       :open,
+      :published,
       name: "Mathematics - TR17 0HF",
       provider: create(:provider, provider_name: "First university"),
       can_sponsor_student_visa: true,
@@ -63,6 +68,7 @@ module ResultsHelper
       :course,
       :secondary,
       :open,
+      :published,
       name: "Mathematics - Penzance",
       provider: create(:provider, provider_name: "First university"),
       can_sponsor_student_visa: true,
@@ -74,6 +80,7 @@ module ResultsHelper
       :course,
       :secondary,
       :open,
+      :published,
       name: "Mathematics - Cornwall",
       provider: create(:provider, provider_name: "First university"),
       can_sponsor_student_visa: true,
@@ -85,6 +92,7 @@ module ResultsHelper
       :course,
       :secondary,
       :open,
+      :published,
       name: "Mathematics - London",
       can_sponsor_student_visa: true,
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
@@ -115,6 +123,7 @@ module ResultsHelper
       :course,
       :primary,
       :open,
+      :published,
       name: "Primary - London",
       provider: create(:provider, provider_name: "First university"),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
@@ -125,6 +134,7 @@ module ResultsHelper
       :course,
       :primary,
       :open,
+      :published,
       name: "Primary - Romford",
       provider: create(:provider, provider_name: "Second university"),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
@@ -135,6 +145,7 @@ module ResultsHelper
       :course,
       :primary,
       :open,
+      :published,
       name: "Primary - Watford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
       subjects: [primary_subject],
@@ -145,6 +156,7 @@ module ResultsHelper
       :primary,
       :can_not_sponsor_visa,
       :open,
+      :published,
       name: "Primary - Edinburgh",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
       subjects: [primary_subject],
@@ -154,6 +166,7 @@ module ResultsHelper
       :course,
       :secondary,
       :open,
+      :published,
       name: "Mathematics - London",
       can_sponsor_student_visa: true,
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
@@ -165,6 +178,7 @@ module ResultsHelper
       :secondary,
       :can_not_sponsor_visa,
       :open,
+      :published,
       name: "Mathematics - Romford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
       subjects: [mathematics_subject],
@@ -175,6 +189,7 @@ module ResultsHelper
       :secondary,
       :can_not_sponsor_visa,
       :open,
+      :published,
       name: "Mathematics - Watford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
       subjects: [mathematics_subject],
@@ -185,6 +200,7 @@ module ResultsHelper
       :secondary,
       :can_not_sponsor_visa,
       :open,
+      :published,
       name: "Mathematics - Edinburgh",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
       subjects: [mathematics_subject],
@@ -253,25 +269,58 @@ module ResultsHelper
   end
 
   def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:london-uk")).to eq(
+    expect(Rails.cache.read("geolocation:address_resolver:london-uk")).to eq(
       {
         formatted_address: "London, UK",
         latitude: 51.5072178,
         longitude: -0.1275862,
         country: "England",
-        types: %w[locality political],
+        address_types: %w[locality political],
+        postal_code: nil,
+        postal_town: "London",
+        route: nil,
+        locality: "London",
+        administrative_area_level_1: "England",
+        administrative_area_level_2: "Greater London",
+        administrative_area_level_4: nil,
       },
     )
   end
 
   def and_the_cornwall_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:cornwall-uk")).to eq(
+    expect(Rails.cache.read("geolocation:address_resolver:cornwall-uk")).to eq(
       {
         formatted_address: "Cornwall, UK",
         latitude: 50.5036299,
         longitude: -4.6524982,
         country: "England",
-        types: %w[administrative_area_level_2 political],
+        address_types: %w[administrative_area_level_2 political],
+        postal_code: nil,
+        postal_town: nil,
+        route: nil,
+        locality: nil,
+        administrative_area_level_1: "England",
+        administrative_area_level_2: "Cornwall",
+        administrative_area_level_4: nil,
+      },
+    )
+  end
+
+  def and_the_postcode_location_search_for_coordinates_is_cached
+    expect(Rails.cache.read("geolocation:address_resolver:beacon-road-marazion-tr17-0hf-uk")).to eq(
+      {
+        formatted_address: "Beacon Rd, Marazion TR17 0HF, UK",
+        latitude: 50.1239982,
+        longitude: -5.4740404,
+        country: "England",
+        postal_code: "TR17 0HF",
+        postal_town: "Marazion",
+        route: "Beacon Road",
+        locality: nil,
+        administrative_area_level_1: "England",
+        administrative_area_level_2: "Cornwall",
+        administrative_area_level_4: nil,
+        address_types: %w[route],
       },
     )
   end
@@ -400,7 +449,7 @@ module ResultsHelper
 
   def then_i_see_mathematics_courses_in_48_miles_from_penzance_that_sponsors_visa
     expect(results).to have_content(@penzance_mathematics_course.name_and_code)
-    expect(results).to have_content("48 miles from Cornwall, UK")
+    expect(results).to have_content("48 miles from Cornwall")
 
     expect(results).to have_no_content(@penzance_primary_course.name_and_code)
   end
@@ -456,7 +505,7 @@ module ResultsHelper
   end
 
   def then_i_see_only_courses_from_that_provider
-    expect(results).to have_content("First university")
+    expect(page).to have_content("First university")
 
     providers = Provider.where.not(provider_name: "First university")
 

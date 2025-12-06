@@ -40,12 +40,12 @@ module GoogleOldPlacesAPI
     end
 
     # @see https://developers.google.com/maps/documentation/geocoding/start
-    def geocode(location_name)
+    def geocode(query)
       response = get(
         endpoint: "geocode/json",
         params: {
           key: @api_key,
-          address: location_name,
+          address: query,
           components: "country:UK",
           language: "en",
         },
@@ -59,7 +59,14 @@ module GoogleOldPlacesAPI
         latitude: result.dig("geometry", "location", "lat"),
         longitude: result.dig("geometry", "location", "lng"),
         country: extract_country(result),
-        types: result["types"],
+        postal_code: extract_address_component(result, "postal_code"),
+        postal_town: extract_address_component(result, "postal_town"),
+        route: extract_address_component(result, "route"),
+        locality: extract_address_component(result, "locality"),
+        administrative_area_level_1: extract_address_component(result, "administrative_area_level_1"),
+        administrative_area_level_2: extract_address_component(result, "administrative_area_level_2"),
+        administrative_area_level_4: extract_address_component(result, "administrative_area_level_4"),
+        address_types: result["types"],
       }
     end
 
@@ -78,6 +85,15 @@ module GoogleOldPlacesAPI
       address_components = Array(result["address_components"]).pluck("long_name")
 
       (address_components & (DEVOLVED_NATIONS + %w[England])).first
+    end
+
+    def extract_address_component(response, type)
+      comp = address_components(response).find { |c| Array(c["types"]).include?(type) }
+      comp&.dig("long_name")
+    end
+
+    def address_components(response)
+      response.fetch("address_components", [])
     end
   end
 end

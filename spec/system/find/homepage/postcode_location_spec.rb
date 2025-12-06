@@ -110,18 +110,6 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_i_click_search
   end
 
-  def and_the_postcode_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:beacon-road-marazion-tr17-0hf-uk")).to eq(
-      {
-        formatted_address: "Beacon Rd, Marazion TR17 0HF, UK",
-        latitude: 50.1239982,
-        longitude: -5.4740404,
-        country: "England",
-        types: %w[route],
-      },
-    )
-  end
-
   def then_i_see_only_courses_within_selected_location_within_default_radius
     expect(results).to have_content(@postcode_primary_course.name_and_code)
     expect(results).to have_content(@postcode_mathematics_course.name_and_code)
@@ -158,7 +146,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
 
   def then_i_see_mathematics_courses_in_3_miles_from_postcode_that_sponsors_visa
     expect(results).to have_content(@postcode_mathematics_course.name_and_code)
-    expect(results).to have_content("3 miles from Beacon Rd, Marazion TR17 0HF, UK")
+    expect(results).to have_content("3 miles from Beacon Road, Marazion")
 
     expect(results).to have_no_content(@penzance_primary_course.name_and_code)
   end

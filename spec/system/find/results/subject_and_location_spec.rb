@@ -41,6 +41,10 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_i_click_search
     then_i_see_courses_up_to_20_miles_distance
     and_the_20_miles_radius_is_selected
+
+    when_i_click_first_result
+    then_i_am_on_course_page
+    and_i_can_see_the_distance_from_london
   end
 
   scenario "when I filter by location and subject" do
@@ -175,18 +179,6 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
           types: %w[locality political],
         },
       ],
-    )
-  end
-
-  def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:query:london-uk")).to eq(
-      {
-        formatted_address: "London, UK",
-        latitude: 51.5072178,
-        longitude: -0.1275862,
-        country: "England",
-        types: %w[locality political],
-      },
     )
   end
 
@@ -365,11 +357,19 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     ).to eq("London, UK")
   end
 
-private
-
-  def results
-    page.first(".app-search-results")
+  def when_i_click_first_result
+    results.first("a").click
   end
+
+  def then_i_am_on_course_page
+    expect(page).to have_current_path(%r{\A/course/[A-Z0-9]+/[A-Z0-9]+\z}, ignore_query: true)
+  end
+
+  def and_i_can_see_the_distance_from_london
+    expect(page).to have_content("1 mile from London")
+  end
+
+private
 
   def search_params
     query_params(URI(page.current_url)).symbolize_keys.except(:utm_source, :utm_medium)

@@ -250,7 +250,7 @@ RSpec.describe Courses::SearchForm do
     end
 
     context "when empty coordinates and subjects" do
-      let(:form) { described_class.new(types: [], subject_code: "", subject_name: "") }
+      let(:form) { described_class.new(address_types: [], subject_code: "", subject_name: "") }
 
       it "returns empty search params" do
         expect(form.search_params).to eq({})
@@ -266,10 +266,10 @@ RSpec.describe Courses::SearchForm do
     end
 
     context "when location is provided with administrative_area_level type and no radius" do
-      let(:form) { described_class.new(location: "Cornwall, UK", latitude: 51.53328, longitude: -0.1734435, types: %w[administrative_area_level_2]) }
+      let(:form) { described_class.new(location: "Cornwall, UK", latitude: 51.53328, longitude: -0.1734435, address_types: %w[administrative_area_level_2]) }
 
       it "returns the large area radius" do
-        expect(form.search_params).to eq(location: "Cornwall, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50, types: %w[administrative_area_level_2])
+        expect(form.search_params).to eq(location: "Cornwall, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50, address_types: %w[administrative_area_level_2])
       end
     end
 
@@ -427,6 +427,23 @@ RSpec.describe Courses::SearchForm do
       it "returns the correct search params with location details" do
         expect(form.location).to eq("London NW9, UK")
       end
+    end
+  end
+
+  describe "geolocation attributes" do
+    let(:form) do
+      described_class.new(
+        location: "London NW9, UK",
+        country: "England",
+        formatted_address: "London NW9, UK",
+        address_types: %w[postal_code postal_code_prefix],
+      )
+    end
+
+    it "assigns geolocation attributes" do
+      expect(form.country).to eq("England")
+      expect(form.formatted_address).to eq("London NW9, UK")
+      expect(form.address_types).to eq(%w[postal_code postal_code_prefix])
     end
   end
 end

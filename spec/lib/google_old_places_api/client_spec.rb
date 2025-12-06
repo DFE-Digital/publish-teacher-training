@@ -67,7 +67,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
           )
       end
 
-      it "returns the correct location details" do
+      it "returns the normalized common hash" do
         result = client.geocode(query)
 
         expect(result).to eq(
@@ -76,7 +76,17 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             latitude: 51.5072178,
             longitude: -0.1275862,
             country: "England",
-            types: %w[locality political],
+            postal_code: nil,
+            postal_town: "London",
+            route: nil,
+            locality: "London",
+            administrative_area_level_1: "England",
+            administrative_area_level_2: "Greater London",
+            administrative_area_level_4: nil,
+            address_types: %w[
+              locality
+              political
+            ],
           },
         )
       end
@@ -128,7 +138,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
           )
       end
 
-      it "returns the correct location details" do
+      it "returns the normalized common hash" do
         result = client.geocode(query)
 
         expect(result).to eq(
@@ -137,7 +147,17 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             latitude: 55.953252,
             longitude: -3.188267,
             country: "Scotland",
-            types: %w[locality political],
+            postal_code: nil,
+            postal_town: nil,
+            route: nil,
+            locality: "Edinburgh",
+            administrative_area_level_1: "Scotland",
+            administrative_area_level_2: "Edinburgh",
+            administrative_area_level_4: nil,
+            address_types: %w[
+              locality
+              political
+            ],
           },
         )
       end
@@ -155,7 +175,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
           )
       end
 
-      it "returns the correct location details" do
+      it "returns the normalized common hash" do
         result = client.geocode(query)
 
         expect(result).to eq(
@@ -164,7 +184,17 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             latitude: 54.59728500000001,
             longitude: -5.93012,
             country: "Northern Ireland",
-            types: %w[locality political],
+            postal_code: nil,
+            postal_town: "Belfast",
+            route: nil,
+            locality: "Belfast",
+            administrative_area_level_1: "Northern Ireland",
+            administrative_area_level_2: "Belfast",
+            administrative_area_level_4: nil,
+            address_types: %w[
+              locality
+              political
+            ],
           },
         )
       end
@@ -182,7 +212,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
           )
       end
 
-      it "returns the correct location details" do
+      it "returns the normalized common hash" do
         result = client.geocode(query)
 
         expect(result).to eq(
@@ -191,7 +221,17 @@ RSpec.describe GoogleOldPlacesAPI::Client do
             latitude: 51.483707,
             longitude: -3.1680962,
             country: "Wales",
-            types: %w[locality political],
+            postal_code: nil,
+            postal_town: nil,
+            route: nil,
+            locality: "Cardiff",
+            administrative_area_level_1: "Wales",
+            administrative_area_level_2: "Cardiff",
+            administrative_area_level_4: nil,
+            address_types: %w[
+              locality
+              political
+            ],
           },
         )
       end
