@@ -5,7 +5,7 @@ module Find
     after_action :store_result_fullpath_for_backlinks, :send_analytics_event, only: [:index]
 
     def index
-      @coordinates_result = Geolocation::Address.query(location_params)
+      @address = Geolocation::Address.query(location_params)
 
       @search_courses_form = ::Courses::SearchForm.new(search_form_params)
       @search_params = @search_courses_form.search_params
@@ -39,7 +39,7 @@ module Find
     end
 
     def search_form_params
-      search_courses_params.merge(@coordinates_result.to_h)
+      search_courses_params.merge(@address.to_h)
     end
 
     def search_courses_params

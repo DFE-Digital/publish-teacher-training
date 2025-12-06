@@ -27,7 +27,8 @@ module Geolocation
   # @attr_reader administrative_area_level_1 [String] State/province/region
   # @attr_reader administrative_area_level_4 [String] District or county
   class Address
-    attr_reader :formatted_address,
+    attr_reader :query,
+                :formatted_address,
                 :latitude,
                 :longitude,
                 :country,
@@ -52,6 +53,7 @@ module Geolocation
     # @param administrative_area_level_1 [String, nil] State/province
     # @param district [String, nil] District/county
     def initialize(
+      query: nil,
       formatted_address: nil,
       latitude: nil,
       longitude: nil,
@@ -75,6 +77,7 @@ module Geolocation
       @administrative_area_level_1 = administrative_area_level_1
       @administrative_area_level_4 = administrative_area_level_4
       @address_types = address_types
+      @query = query.to_s
     end
 
     # Query and resolve an address from a location string.
@@ -108,7 +111,9 @@ module Geolocation
         cache_expiration:,
       )
 
-      new(**resolver.call)
+      address_data = resolver.call.merge(query: query_string)
+
+      new(**address_data)
     end
 
     # Export as a hash suitable for caching or form serialization.
@@ -128,6 +133,65 @@ module Geolocation
         administrative_area_level_4:,
         address_types:,
       }
+    end
+
+    def short_address
+      return route if train_station?
+      return route if university?
+      return postal_code if full_postcode?
+      return locality if city_only?
+      return [postal_code, postal_town].compact.join(", ") if partial_postcode?
+      return [route, postal_town].compact.join(", ") if landmark?
+      return [postal_code, postal_town].compact.join(", ") if postcode_area?
+      return [administrative_area_level_4, postal_town].compact.join(", ") if district_only?
+      return administrative_area_level_1 if county?
+      return [route, postal_town].compact.join(", ") if street_name?
+
+      formatted_address.to_s.gsub(/, UK/, "")
+    end
+
+  private
+
+    def full_postcode?
+      postal_code.present? && UKPostcode.parse(query).full_valid?
+    rescue StandardError
+      false
+    end
+
+    def city_only?
+      locality.present? && postal_code.blank? && route.blank? && administrative_area_level_4.blank?
+    end
+
+    def partial_postcode?
+      postal_code.present? && !full_postcode? && !postcode_area?
+    end
+
+    def landmark?
+      route.present? && postal_code.present? && route != locality
+    end
+
+    def postcode_area?
+      postal_code.present? && postal_town.present?
+    end
+
+    def district_only?
+      administrative_area_level_4.present? && postal_code.blank? && route.blank?
+    end
+
+    def train_station?
+      route.present? && route.match?(/(station|terminus|cross|platform)/i) && postal_code.present?
+    end
+
+    def university?
+      route.present? && route.match?(/university|college|school/i)
+    end
+
+    def county?
+      administrative_area_level_1.present? && postal_code.blank? && route.blank? && locality.blank?
+    end
+
+    def street_name?
+      route.present? && postal_town.present? && postal_code.blank?
     end
   end
 end

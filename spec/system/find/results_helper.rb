@@ -122,6 +122,7 @@ module ResultsHelper
     @london_primary_course = create(
       :course,
       :primary,
+      :open,
       :published,
       name: "Primary - London",
       provider: create(:provider, provider_name: "First university"),
@@ -132,6 +133,7 @@ module ResultsHelper
     @romford_primary_course = create(
       :course,
       :primary,
+      :open,
       :published,
       name: "Primary - Romford",
       provider: create(:provider, provider_name: "Second university"),
@@ -142,6 +144,7 @@ module ResultsHelper
     @watford_primary_course = create(
       :course,
       :primary,
+      :open,
       :published,
       name: "Primary - Watford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
@@ -152,6 +155,7 @@ module ResultsHelper
       :course,
       :primary,
       :can_not_sponsor_visa,
+      :open,
       :published,
       name: "Primary - Edinburgh",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
@@ -161,6 +165,7 @@ module ResultsHelper
     @london_mathematics_course = create(
       :course,
       :secondary,
+      :open,
       :published,
       name: "Mathematics - London",
       can_sponsor_student_visa: true,
@@ -172,6 +177,7 @@ module ResultsHelper
       :course,
       :secondary,
       :can_not_sponsor_visa,
+      :open,
       :published,
       name: "Mathematics - Romford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
@@ -182,6 +188,7 @@ module ResultsHelper
       :course,
       :secondary,
       :can_not_sponsor_visa,
+      :open,
       :published,
       name: "Mathematics - Watford",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
@@ -192,6 +199,7 @@ module ResultsHelper
       :course,
       :secondary,
       :can_not_sponsor_visa,
+      :open,
       :published,
       name: "Mathematics - Edinburgh",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
@@ -494,7 +502,7 @@ module ResultsHelper
   end
 
   def then_i_see_only_courses_from_that_provider
-    expect(results).to have_content("First university")
+    expect(page).to have_content("First university")
 
     providers = Provider.where.not(provider_name: "First university")
 
