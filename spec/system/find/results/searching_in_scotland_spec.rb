@@ -29,7 +29,7 @@ RSpec.describe "Searching in Scotland", :js, service: :find do
 
   def and_i_see_a_course_in_newcastle
     expect(page).to have_content(@newcastle_course.name_and_code)
-    expect(page).to have_content("92 miles from Edinburgh, UK")
+    expect(page).to have_content("92 miles from Edinburgh")
   end
 
   def given_courses_exist
