@@ -34,6 +34,7 @@ module Courses
     attribute :route
     attribute :locality
     attribute :administrative_area_level_1
+    attribute :administrative_area_level_2
     attribute :administrative_area_level_4
     attribute :address_types
 

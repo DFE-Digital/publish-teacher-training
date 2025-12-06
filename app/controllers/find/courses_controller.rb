@@ -13,7 +13,7 @@ module Find
     before_action :set_course, only: %i[show confirm_apply]
 
     def show
-      distance_from_location if params[:location]
+      distance_from_location if params[:location].present?
 
       @saved_course = @candidate&.saved_courses&.find_by(course_id: @course.id)
 
