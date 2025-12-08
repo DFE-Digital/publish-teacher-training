@@ -96,6 +96,10 @@ module Courses
     end
 
     def minimum_degree_required
+      if FeatureFlag.active?(:find_filtering_and_sorting) && super.nil?
+        return self.minimum_degree_required = "show_all_courses"
+      end
+
       return super if degree_required.nil? && university_degree_status.nil?
 
       university_degree_status_transformation || degree_required_transformation || super
