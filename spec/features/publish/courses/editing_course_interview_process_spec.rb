@@ -43,7 +43,7 @@ private
   end
 
   def when_i_visit_the_interview_process_edit_page
-    visit interview_process_publish_provider_recruitment_cycle_course_path(
+    visit fields_interview_process_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
       course.course_code,
@@ -55,7 +55,7 @@ private
   end
 
   def then_i_see_the_new_interview_process_information
-    expect(find_field("Interview process").value).to eq "Here is very useful information interview process"
+    expect(find_field("What is the interview process? (optional)").value).to eq "Here is very useful information interview process"
   end
 
   def then_interview_process_data_has_changed
@@ -66,15 +66,15 @@ private
   end
 
   def then_i_see_an_error_message
-    expect(page).to have_content("Interview process must be 250 words or less").twice
+    expect(page).to have_content("Interview process must be 200 words or less").twice
   end
 
   def and_i_enter_invalid_data
-    fill_in "Interview process", with: Faker::Lorem.sentence(word_count: 251)
+    fill_in "What is the interview process? (optional)", with: Faker::Lorem.sentence(word_count: 201)
   end
 
   def when_i_enter_information_into_the_interview_process_field
-    fill_in "Interview process (optional)", with: "Here is very useful information interview process"
+    fill_in "What is the interview process? (optional)", with: "Here is very useful information interview process"
   end
 
   def provider

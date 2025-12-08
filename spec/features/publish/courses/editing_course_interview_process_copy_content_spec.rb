@@ -58,7 +58,7 @@ private
   end
 
   def when_i_submit_with_too_many_words
-    fill_in "Interview process", with: Faker::Lorem.sentence(word_count: 251)
+    fill_in "What is the interview process? (optional)", with: Faker::Lorem.sentence(word_count: 251)
     click_on "Update interview process"
   end
 
@@ -90,9 +90,9 @@ private
 
   def and_i_see_the_warning_that_changes_are_not_saved
     expect(page).to have_content "Your changes are not yet saved"
-    expect(page).to have_content "We have copied this field from #{copied_course_name_and_code}:"
-    expect(page).to have_link "Interview process"
-    expect(page).to have_content "Please check it and make your changes before saving"
+    expect(page).to have_content "We have copied these fields from #{copied_course_name_and_code}:"
+    expect(page).to have_link "What is the interview process?"
+    expect(page).to have_content "Please check them and make your changes before saving"
   end
 
   def and_i_do_not_see_the_warning_that_changes_are_not_saved
@@ -100,25 +100,25 @@ private
   end
 
   def and_the_warning_has_a_link_to_the_interview_process_input_field
-    href = find_link("Interview process")[:href]
-    interview_process_id = (find_field "Interview process")[:id]
+    href = find_link("What is the interview process?")[:href]
+    interview_process_id = (find_field "What is the interview process?")[:id]
     expect(interview_process_id).to eq(href.remove("#"))
   end
 
   def then_i_see_the_copied_course_data
-    expect(find_field("Interview process").value).to eq @copied_course.enrichments.first.interview_process
+    expect(find_field("What is the interview process? (optional)").value).to eq @copied_course.enrichments.first.interview_process
   end
 
   def then_i_do_not_see_copied_course_data
-    expect(find_field("Interview process").value).to eq @course.enrichments.first.interview_process
+    expect(find_field("What is the interview process? (optional)").value).to eq @course.enrichments.first.interview_process
   end
 
   def when_i_click_on_the_link_in_the_warning_box
-    click_on "Interview process"
+    click_on "What is the interview process?"
   end
 
   def when_i_visit_the_interview_process_edit_page
-    visit interview_process_publish_provider_recruitment_cycle_course_path(
+    visit fields_interview_process_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
       course.course_code,
