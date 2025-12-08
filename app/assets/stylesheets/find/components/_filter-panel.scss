@@ -1,4 +1,9 @@
 // stylelint-disable declaration-no-important, number-max-precision, color-named,selector-no-qualifying-type
+
+.govuk-heading-m:has(+ [data-controller="details-component"]) {
+  margin-bottom: 0;
+}
+
 .app-c-filter-panel__action--clear[hidden] {
   display: none !important;
 }
