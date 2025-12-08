@@ -1,8 +1,10 @@
-.filtering-sorting {
+.old-styles {
   .app-search-results {
     @include govuk-responsive-padding(4, "top");
     padding-left: 0;
     margin: 0;
+
+    border-top: 1px solid $govuk-border-colour;
   }
 
   .app-search-results-controls {
