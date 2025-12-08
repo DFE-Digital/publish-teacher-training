@@ -1,6 +1,6 @@
 module API
   class RadiusQuickLinkSuggestionsController < PublicAPIController
-    MAX_RADIUS = Courses::SearchForm::RADIUS_VALUES.max
+    MAX_RADIUS = proc { Courses::SearchForm.radius_values.max }
     MAX_COURSES_COUNT = 100
 
     def index
@@ -19,9 +19,9 @@ module API
     end
 
     def bucket_counts_from_largest_search_radius
-      radius_links_query = Courses::Query.call(params: params.merge(radius: MAX_RADIUS)).limit(MAX_COURSES_COUNT + 1)
+      radius_links_query = Courses::Query.call(params: params.merge(radius: MAX_RADIUS.call)).limit(MAX_COURSES_COUNT + 1)
 
-      Courses::SearchForm::RADIUS_VALUES.filter_map do |radius|
+      Courses::SearchForm.radius_values.filter_map do |radius|
         count = radius_links_query.count do |course|
           course.respond_to?(:minimum_distance_to_search_location) && course.minimum_distance_to_search_location.to_f <= radius
         end

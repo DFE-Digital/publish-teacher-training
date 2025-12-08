@@ -34,7 +34,7 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
         ])
       end
 
-      it "returns quick link suggestions for 50 and 100 mile buckets" do
+      it "returns quick link suggestions for 50, 100, and 200 mile buckets" do
         get "/api/radius_quick_link_suggestions", params: search_params
 
         expect(response).to have_http_status(:ok)
@@ -43,6 +43,7 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
         expect(json.map { |l| l["text"] }).to include(
           a_string_matching(/^50 miles \(1 course\)/i),
           a_string_matching(/^100 miles \(2 courses\)/i),
+          a_string_matching(/^200 miles \(3 courses\)/i),
         )
       end
     end
@@ -62,7 +63,7 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
         expect(response).to have_http_status(:ok)
         json = JSON.parse(response.body)
         expect(json.length).to eq(1)
-        expect(json.first["text"]).to match(/^10 miles \(more than 100 courses\)/i)
+        expect(json.first["text"]).to match(/^1 mile \(more than 100 courses\)/i)
       end
     end
   end
