@@ -285,7 +285,7 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(location: "", order: "distance") }
 
         it "forces the ordering to be by course_name_ascending" do
-          expect(form.search_params).to eq({ order: "course_name_ascending" })
+          expect(form.search_params).to eq({ order: "course_name_ascending", minimum_degree_required: "show_all_courses" })
         end
       end
 
@@ -293,7 +293,7 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending") }
 
         it "forces the ordering to be by distance" do
-          expect(form.search_params).to eq({ formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
         end
       end
 
@@ -301,7 +301,7 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(location: "", order: "") }
 
         it "forces the ordering to be by course_name_ascending" do
-          expect(form.search_params).to eq({ order: "course_name_ascending" })
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending" })
         end
       end
     end
