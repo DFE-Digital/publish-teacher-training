@@ -10,10 +10,10 @@ module API
   private
 
     def no_results_quick_links
-      Array.wrap(bucket_counts_from_largest_search_radius.slice_after { it[:count].to_i >= MAX_COURSES_COUNT }.first).map do
+      Array.wrap(bucket_counts_from_largest_search_radius.slice_after { it[:count].to_i >= MAX_COURSES_COUNT }.first).map do |values|
         {
-          text: t(".radius_in_miles", count: it[:radius], course_count: course_count_translation(count: it[:count])),
-          url: find_results_path(**request.query_parameters, radius: it[:radius]),
+          text: t(".radius_in_miles", count: values[:radius], course_count: course_count_translation(count: values[:count])),
+          url: find_results_path(**request.query_parameters.tap { |q| q["radius"] = values[:radius] }),
         }
       end
     end
