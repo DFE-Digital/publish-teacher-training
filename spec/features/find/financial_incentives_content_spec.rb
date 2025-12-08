@@ -51,7 +51,7 @@ feature "financial incentives call out boxes content" do
         when_i_visit_the_find_results_page
         select_course
 
-        within('[data-qa="course__salary_details"]') do
+        within(".course-salary-details") do
           expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You may also have to pay for your PGCE. You can discuss salary details with the provider at interview.")
         end
       end
@@ -61,7 +61,7 @@ feature "financial incentives call out boxes content" do
         when_i_visit_the_find_results_page
         select_course
 
-        within('[data-qa="course__salary_details"]') do
+        within(".course-salary-details") do
           expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You can discuss salary details with the provider at interview.")
         end
       end
@@ -111,7 +111,7 @@ feature "financial incentives call out boxes content" do
         when_i_visit_the_find_results_page
         select_course
 
-        within('[data-qa="course__salary_details_non_uk"]') do
+        within(".course-salary-details-non-uk") do
           expect(page).to have_content("You can apply for a salaried teacher training course. However, these courses are limited in number and very competitive.")
           expect(page).to have_content("Before you apply, contact the teacher training provider to check you meet the entry requirements.")
         end
