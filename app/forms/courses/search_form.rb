@@ -125,13 +125,16 @@ module Courses
     end
 
     RadiusOption = Struct.new(:value, :name, keyword_init: true)
-    RADIUS_VALUES = [1, 5, 10, 15, 20, 25, 50, 100, 200].freeze
     DEFAULT_RADIUS = 50
     SMALL_RADIUS = 10
     LONDON_RADIUS = proc { FeatureFlag.active?(:find_filtering_and_sorting) ? 20 : 15 }
 
+    def self.radius_values
+      FeatureFlag.active?(:find_filtering_and_sorting) ? [10, 20, 50, 100].freeze : [1, 5, 10, 15, 20, 25, 50, 100, 200].freeze
+    end
+
     def radius_options
-      RADIUS_VALUES.map do |value|
+      self.class.radius_values.map do |value|
         RadiusOption.new(
           value:,
           name: I18n.t("helpers.label.courses_search_form.radius_options.miles", count: value),
