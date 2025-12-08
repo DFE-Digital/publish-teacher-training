@@ -57,12 +57,6 @@
         </div>
 
         <% if @results.present? %>
-          <div class="app-search-results-header">
-            <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
-              <%= t(".filter_results") %>
-            </button>
-          </div>
-
           <ul class="app-search-results">
             <% @results.each do |course| %>
               <%= render Courses::SummaryCardComponent.new(
