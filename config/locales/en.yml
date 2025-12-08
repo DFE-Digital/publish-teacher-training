@@ -1044,10 +1044,6 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "URN must be 5 or 6 numbers"
-        publish/course_interview_process_form:
-          attributes:
-            interview_process:
-              too_long: Interview process must be 250 words or less
         publish/fields/interview_process_form:
           attributes:
             interview_process:

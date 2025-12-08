@@ -10,7 +10,7 @@ module Publish
 
         def edit
           @interview_process_form = Publish::Fields::InterviewProcessForm.new(course_enrichment)
-          @copied_fields = copy_content_check(::Courses::Copy::V2_INTERVIEW_PROCESS_FIELDS)
+          @copied_fields = copy_content_check(::Courses::Copy::INTERVIEW_PROCESS_FIELDS)
 
           @copied_fields_values = copied_fields_values if @copied_fields.present?
 
