@@ -25,10 +25,6 @@ module Courses
     ].freeze
 
     INTERVIEW_PROCESS_FIELDS = [
-      ["Interview process", "interview_process"],
-    ].freeze
-
-    V2_INTERVIEW_PROCESS_FIELDS = [
       ["Where will the interviews take place?", "interview_location"],
       ["What is the interview process?", "interview_process"],
     ].freeze
