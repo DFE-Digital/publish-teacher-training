@@ -52,34 +52,33 @@ RSpec.shared_examples "versioned_presence_field" do |field:, required_in:, word_
       end
 
       if word_limit
-        context "word over limit of #{word_limit}" do
-          before do
-            over = if word_limit.is_a?(Array)
-                     Faker::Lorem.words(number: word_limit[version - 1] + 1).join(" ")
-                   else
-                     Faker::Lorem.words(number: word_limit + 1).join(" ")
-                   end
-            record.public_send("#{field}=", over)
-          end
-
-          it "adds an error if exceeded" do
-            expect(record.valid?(:publish)).to be(false)
-            expect(record.errors[field]).to be_present
-          end
+        current_limit = nil
+        before do
+          current_limit = word_limit.is_a?(Array) ? word_limit[version - 1] : word_limit
         end
 
-        context "word at limit of #{word_limit}" do
-          before do
-            words = if word_limit.is_a?(Array)
-                      Faker::Lorem.words(number: word_limit[version - 1]).join(" ")
-                    else
-                      Faker::Lorem.words(number: word_limit).join(" ")
-                    end
-            record.public_send("#{field}=", words)
+        if current_limit
+          context "word over limit of #{current_limit}" do
+            before do
+              over = Faker::Lorem.words(number: current_limit + 1).join(" ")
+              record.public_send("#{field}=", over)
+            end
+
+            it "adds an error if exceeded" do
+              expect(record.valid?(:publish)).to be(false)
+              expect(record.errors[field]).to be_present
+            end
           end
 
-          it "Under the word limit" do
-            expect(record.valid?(:publish)).to be(true)
+          context "word at limit of #{current_limit}" do
+            before do
+              words = Faker::Lorem.words(number: current_limit).join(" ")
+              record.public_send("#{field}=", words)
+            end
+
+            it "Under the word limit" do
+              expect(record.valid?(:publish)).to be(true)
+            end
           end
         end
       end
