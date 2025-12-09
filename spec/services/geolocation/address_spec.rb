@@ -127,7 +127,7 @@ RSpec.describe Geolocation::Address do
       end
 
       it "returns station name" do
-        expect(address.short_address).to eq("King's Cross St Pancras")
+        expect(address.short_address).to eq("King's Cross St Pancras, London")
       end
     end
 
