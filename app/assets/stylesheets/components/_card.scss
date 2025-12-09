@@ -12,6 +12,10 @@
   }
 }
 
+.app-card--inset {
+  border-left: govuk-spacing(1) solid govuk-colour("orange");
+}
+
 .app-card--blue {
   color: govuk-colour("white");
 
