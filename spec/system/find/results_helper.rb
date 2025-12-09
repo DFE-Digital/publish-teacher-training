@@ -578,5 +578,14 @@ module ResultsHelper
         body: file_fixture("google_old_places_api_client/geocode/london.json").read,
         headers: { "Content-Type" => "application/json" },
       )
+
+    stub_request(
+      :get,
+      "https://maps.googleapis.com/maps/api/geocode/json?address=London&components=country:UK&key=replace_me&language=en",
+    ).to_return(
+      status: 200,
+      body: file_fixture("google_old_places_api_client/geocode/london.json").read,
+      headers: { "Content-Type" => "application/json" },
+    )
   end
 end

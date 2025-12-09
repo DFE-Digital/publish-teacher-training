@@ -33,6 +33,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_i_click_to_search_courses_in_london
     then_i_only_see_courses_within_a_10_mile_radius
     and_the_location_search_for_coordinates_is_cached
+    and_the_result_headers_are_visible
 
     when_i_increase_the_radius_to_20_miles
     and_i_click_search
@@ -150,54 +151,8 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     when_i_start_typing_non_existent_city_location
   end
 
-  def when_i_start_typing_non_existent_city_location
-    stub_request(
-      :get,
-      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=NonExistentCity&key=replace_me&language=en&types=geocode",
-    ).with(
-      headers: {
-        "Accept" => "*/*",
-        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-        "Connection" => "keep-alive",
-        "Keep-Alive" => "30",
-        "User-Agent" => "Faraday v#{Faraday::VERSION}",
-      },
-    ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/non_existent_city.json"), headers: { "Content-Type" => "application/json" })
-
-    fill_in "City, town or postcode", with: "NonExistentCity"
-  end
-
   def then_i_see_no_autocomplete_suggestions
     expect(page).to have_css("#location-field__listbox", visible: :hidden)
-  end
-
-  def and_the_location_suggestions_for_london_is_cached
-    expect(Rails.cache.read("geolocation:suggestions:lon")).to eq(
-      [
-        {
-          name: "London, UK",
-          place_id: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
-          types: %w[locality political],
-        },
-      ],
-    )
-  end
-
-  def when_i_start_typing_london_location
-    stub_request(
-      :get,
-      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=Lon&key=replace_me&language=en&types=geocode",
-    ).with(
-      headers: {
-        "Accept" => "*/*",
-        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-        "Connection" => "keep-alive",
-        "Keep-Alive" => "30",
-        "User-Agent" => "Faraday v#{Faraday::VERSION}",
-      },
-    ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/london.json"), headers: { "Content-Type" => "application/json" })
-
-    fill_in "City, town or postcode", with: "Lon"
   end
 
   def when_i_select_the_first_suggestion
@@ -332,10 +287,23 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   def and_london_is_displayed_in_text_field
     expect(
       page.find_field("City, town or postcode").value,
-    ).to eq("London, UK")
+    ).to eq("London")
   end
 
   def when_i_click_first_result
     results.first("a").click
+  end
+
+  def then_i_am_on_course_page
+    expect(page).to have_current_path(%r{\A/course/[A-Z0-9]+/[A-Z0-9]+\z}, ignore_query: true)
+  end
+
+  def and_i_can_see_the_distance_from_london
+    expect(page).to have_content("1 mile from London")
+  end
+
+  def and_the_result_headers_are_visible
+    expect(page.title).to eq("2 courses in London - Find teacher training courses - GOV.UK")
+    expect(page).to have_content("2 courses in London")
   end
 end

@@ -2,10 +2,6 @@ en:
   find:
     results:
       index:
-        page_title:
-          zero: "No courses found"
-          one: "1 course found"
-          other: "%{formatted_count} courses found"
         filter_results: Filter results
       index_old:
         page_title:

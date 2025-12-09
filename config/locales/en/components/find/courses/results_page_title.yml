@@ -1,0 +1,13 @@
+en:
+  find:
+    courses:
+      results_page_title:
+        view:
+          page_title_with_location:
+            zero: "No courses found"
+            one: "1 course in %{location}"
+            other: "%{formatted_count} courses in %{location}"
+          page_title_without_location:
+            zero: "No courses found"
+            one: "1 course found"
+            other: "%{formatted_count} courses found"
