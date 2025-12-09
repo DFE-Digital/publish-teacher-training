@@ -26,10 +26,10 @@
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :order, legend: { text: t(".filter_title_sort_by"), hidden: true }, class: "govuk-radios--small", multiple: false do %>
           <% if params[:location].present? %>
-          <%= form.govuk_radio_button :order, "distance", label: { text: t(".sort_by_labels.distance") } %>
+          <%= form.govuk_radio_button :order, "distance", label: { text: t(".sort_by_labels.distance") }, form: form_id %>
           <% end %>
-          <%= form.govuk_radio_button :order, "course_name_ascending", label: { text: t(".sort_by_labels.course_name_ascending") } %>
-          <%= form.govuk_radio_button :order, "provider_name_ascending", label: { text: t(".sort_by_labels.provider_name_ascending") } %>
+          <%= form.govuk_radio_button :order, "course_name_ascending", label: { text: t(".sort_by_labels.course_name_ascending") }, form: form_id %>
+          <%= form.govuk_radio_button :order, "provider_name_ascending", label: { text: t(".sort_by_labels.provider_name_ascending") }, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -45,10 +45,10 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :radius, legend: { text: t(".filter_title_search_radius"), hidden: true }, class: "govuk-radios--small", multiple: false do %>
-          <%= form.govuk_radio_button :radius, "10", label: { text: t(".radius_options.miles", count: 10) } %>
-          <%= form.govuk_radio_button :radius, "20", label: { text: t(".radius_options.miles", count: 20) } %>
-          <%= form.govuk_radio_button :radius, "50", label: { text: t(".radius_options.miles", count: 50) } %>
-          <%= form.govuk_radio_button :radius, "100", label: { text: t(".radius_options.miles", count: 100) } %>
+          <%= form.govuk_radio_button :radius, "10", label: { text: t(".radius_options.miles", count: 10) }, form: form_id %>
+          <%= form.govuk_radio_button :radius, "20", label: { text: t(".radius_options.miles", count: 20) }, form: form_id %>
+          <%= form.govuk_radio_button :radius, "50", label: { text: t(".radius_options.miles", count: 50) }, form: form_id %>
+          <%= form.govuk_radio_button :radius, "100", label: { text: t(".radius_options.miles", count: 100) }, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -68,7 +68,7 @@
           legend: { text: t(".engineers_teach_physics_html"), hidden: true },
           class: "govuk-checkboxes--small",
           hidden: false do %>
-            <%= form.govuk_check_box :engineers_teach_physics, "true", multiple: false, label: { text: t(".engineers_teach_physics") } %>
+            <%= form.govuk_check_box :engineers_teach_physics, "true", multiple: false, label: { text: t(".engineers_teach_physics") }, form: form_id %>
           <% end %>
         </div>
       </details>
@@ -93,7 +93,8 @@
             <% form.object.primary_subjects.each do |subject| %>
               <%= form.govuk_check_box :subjects,
               subject.subject_code,
-              label: { text: subject.subject_name } %>
+              label: { text: subject.subject_name },
+              form: form_id %>
             <% end %>
           </div>
         <% end %>
@@ -126,7 +127,8 @@
             <% form.object.secondary_subjects.each do |subject| %>
               <%= form.govuk_check_box :subjects,
               subject.subject_code,
-              label: { text: subject.subject_name } %>
+              label: { text: subject.subject_name },
+              form: form_id %>
             <% end %>
           </div>
         <% end %>
@@ -142,8 +144,8 @@
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
-        <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t(".further_education_html"), hidden: true }, hint: { text: t(".hint.further_education"), class: "govuk-!-font-size-16", hidden: true }, class: "govuk-checkboxes--small", multiple: false  do %>
-          <%= form.govuk_check_box :level, "further_education", label: { text: t(".further_education") }, multiple: false %>
+        <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t(".further_education_html"), hidden: true }, hint: { text: t(".hint.further_education"), class: "govuk-!-font-size-16", hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
+          <%= form.govuk_check_box :level, "further_education", label: { text: t(".further_education") }, multiple: false, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -158,7 +160,7 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t(".special_education_needs_html"), hidden: true }, class: "govuk-checkboxes--small", hidden: false do %>
-          <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t(".special_education_needs") } %>
+          <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t(".special_education_needs") }, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -172,9 +174,9 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :funding, legend: { text: t(".funding_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
-          <%= form.govuk_check_box :funding, "fee", label: { text: t(".funding_options.fee") }, include_hidden: false %>
-          <%= form.govuk_check_box :funding, "salary", label: { text: t(".funding_options.salary") }, include_hidden: false %>
-          <%= form.govuk_check_box :funding, "apprenticeship", label: { text: t(".funding_options.apprenticeship") }, include_hidden: false %>
+          <%= form.govuk_check_box :funding, "fee", label: { text: t(".funding_options.fee") }, include_hidden: false, form: form_id %>
+          <%= form.govuk_check_box :funding, "salary", label: { text: t(".funding_options.salary") }, include_hidden: false, form: form_id %>
+          <%= form.govuk_check_box :funding, "apprenticeship", label: { text: t(".funding_options.apprenticeship") }, include_hidden: false, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -188,9 +190,9 @@
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
-        <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t(".study_type_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false  do %>
-          <%= form.govuk_check_box :study_types, "full_time", label: { text: t(".study_type_options.full_time") }, include_hidden: false %>
-          <%= form.govuk_check_box :study_types, "part_time", label: { text: t(".study_type_options.part_time") }, include_hidden: false %>
+        <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t(".study_type_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
+          <%= form.govuk_check_box :study_types, "full_time", label: { text: t(".study_type_options.full_time") }, include_hidden: false, form: form_id %>
+          <%= form.govuk_check_box :study_types, "part_time", label: { text: t(".study_type_options.part_time") }, include_hidden: false, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -205,8 +207,8 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :qualifications, legend: { text: t(".qualifications_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
-          <%= form.govuk_check_box :qualifications, "qts", label: { text: t(".qualification_options.qts") }, include_hidden: false %>
-          <%= form.govuk_check_box :qualifications, "qts_with_pgce_or_pgde", label: { text: t(".qualification_options.qts_with_pgce_or_pgde") }, include_hidden: false %>
+          <%= form.govuk_check_box :qualifications, "qts", label: { text: t(".qualification_options.qts") }, include_hidden: false, form: form_id %>
+          <%= form.govuk_check_box :qualifications, "qts_with_pgce_or_pgde", label: { text: t(".qualification_options.qts_with_pgce_or_pgde") }, include_hidden: false, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -221,13 +223,13 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t(".minimum_degree_required_html"), hidden: true }, hint: { text: t(".hint.degree_grade"), class: "govuk-!-font-size-16", hidden: true }, class: "govuk-radios--small", multiple: false do %>
-          <%= form.govuk_radio_button :minimum_degree_required, "two_one", label: { text: t(".minimum_degree_required_options.two_one") } %>
-          <%= form.govuk_radio_button :minimum_degree_required, "two_two", label: { text: t(".minimum_degree_required_options.two_two") } %>
-          <%= form.govuk_radio_button :minimum_degree_required, "third_class", label: { text: t(".minimum_degree_required_options.third_class") } %>
-          <%= form.govuk_radio_button :minimum_degree_required, "pass", label: { text: t(".minimum_degree_required_options.pass") } %>
-          <%= form.govuk_radio_button :minimum_degree_required, "no_degree_required", label: { text: t(".minimum_degree_required_options.no_degree_required") } %>
+          <%= form.govuk_radio_button :minimum_degree_required, "two_one", label: { text: t(".minimum_degree_required_options.two_one") }, form: form_id %>
+          <%= form.govuk_radio_button :minimum_degree_required, "two_two", label: { text: t(".minimum_degree_required_options.two_two") }, form: form_id %>
+          <%= form.govuk_radio_button :minimum_degree_required, "third_class", label: { text: t(".minimum_degree_required_options.third_class") }, form: form_id %>
+          <%= form.govuk_radio_button :minimum_degree_required, "pass", label: { text: t(".minimum_degree_required_options.pass") }, form: form_id %>
+          <%= form.govuk_radio_button :minimum_degree_required, "no_degree_required", label: { text: t(".minimum_degree_required_options.no_degree_required") }, form: form_id %>
           <p class="govuk-body govuk-!-margin-bottom-0"><%= t(".or") %></p>
-          <%= form.govuk_radio_button :minimum_degree_required, "show_all_courses", label: { text: t(".minimum_degree_required_options.show_all_courses") } %>
+          <%= form.govuk_radio_button :minimum_degree_required, "show_all_courses", label: { text: t(".minimum_degree_required_options.show_all_courses") }, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -246,7 +248,7 @@
         legend: { text: t(".can_sponsor_visa_html"), hidden: true },
         class: "govuk-checkboxes--small",
         hidden: false do %>
-          <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t(".can_sponsor_visa") } %>
+          <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t(".can_sponsor_visa") }, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -261,7 +263,7 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :interview_location, multiple: false, legend: { text: t(".online_interviews_html"), hidden: true }, class: "govuk-checkboxes--small", hidden: false do %>
-          <%= form.govuk_check_box :interview_location, "online", multiple: false, label: { text: t(".online_interviews") } %>
+          <%= form.govuk_check_box :interview_location, "online", multiple: false, label: { text: t(".online_interviews") }, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -276,8 +278,8 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :start_date, legend: { text: t(".start_date_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
-          <%= form.govuk_check_box :start_date, "september", label: { text: t(".start_date_options.september", recruitment_cycle_year: Find::CycleTimetable.current_year) }, include_hidden: false %>
-          <%= form.govuk_check_box :start_date, "all_other_dates", label: { text: t(".start_date_options.all_other_dates") }, include_hidden: false %>
+          <%= form.govuk_check_box :start_date, "september", label: { text: t(".start_date_options.september", recruitment_cycle_year: Find::CycleTimetable.current_year) }, include_hidden: false, form: form_id %>
+          <%= form.govuk_check_box :start_date, "all_other_dates", label: { text: t(".start_date_options.all_other_dates") }, include_hidden: false, form: form_id %>
         <% end %>
       </div>
     </details>
@@ -295,13 +297,14 @@
           :provider_code,
           dfe_autocomplete_options(form.object.providers_list, synonyms_fields: %i[code]),
           label: { text: "Provider name", class: "govuk-!-font-weight-regular" },
+          form: form_id,
         ),
       ) %>
       </div>
     </details>
 
     <div class="app-c-filter-panel__actions app-c-filter-panel__actions--single">
-      <%= form.govuk_submit t(".apply_filter"), name: "utm_medium", value: "apply_filters_bottom" %>
+      <%= form.govuk_submit t(".apply_filter"), name: "utm_medium", value: "apply_filters_bottom", form: form_id %>
     </div>
   </section>
 </div>
