@@ -1,8 +1,9 @@
 <div class="filtering-sorting">
-  <%= content_for :page_title, t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
+  <%= content_for :page_title,
+    strip_tags(render(Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address))) %>
 
   <h1 class="govuk-heading-xl">
-    <%= t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
+    <%= render(Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address)) %>
   </h1>
 
   <%= render Courses::QueryDebugHeaderComponent.new(
@@ -51,7 +52,7 @@
             "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path,
           },
           autocomplete: "off",
-          data: { locations_autocomplete_target: "input" } %>
+          data: { locations_autocomplete_target: "input" }, value: @address.short_address %>
 
           <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), name: "utm_medium", value: "search" %>
         </div>
