@@ -120,7 +120,6 @@ RSpec.describe "Search results - view a course", :js, service: :find do
         minimum_degree_required: "show_all_courses",
         location: "",
         order: "course_name_ascending",
-        provider_name: "",
         provider_code: "",
       },
     )
