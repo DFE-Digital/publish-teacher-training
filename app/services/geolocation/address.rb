@@ -183,7 +183,7 @@ module Geolocation
     end
 
     def train_station?
-      route.present? && route.match?(/(station|terminus|cross|platform)/i) && postal_code.present?
+      route.present? && route.match?(/(station|terminus|platform)/i) && postal_code.present?
     end
 
     def university?
