@@ -3,7 +3,7 @@
     <% head.with_row do |row| %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:id)) %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:form_name)) %>
-      <%# row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:form_link)) %>
+      <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:form_link)) %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:zendesk_link)) %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:support_agent)) %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:status)) %>
@@ -15,7 +15,12 @@
       <% body.with_row do |row| %>
         <% row.with_cell(text: request.id) %>
         <% row.with_cell(text: request.form_name) %>
-        <% row.with_cell(text: request.zendesk_link) %>
+        <% row.with_cell do %>
+          <%= govuk_link_to(request.form_link, request.form_link) %>
+        <% end %>
+        <% row.with_cell do %>
+          <%= govuk_link_to(request.zendesk_link, request.zendesk_link) %>
+        <% end %>
         <% if request.support_agent.present? %>
           <% row.with_cell(text: request.support_agent) %>
         <% else %>
