@@ -15,10 +15,12 @@ module Find
 
       def event_data
         {
-          candidate_id:,
-          course_id:,
-          timestamp: Time.zone.now.utc,
-          referer: request.referer,
+          data: {
+            candidate_id:,
+            course_id:,
+            timestamp: Time.zone.now.utc,
+            referer: request.referer,
+          },
         }
       end
     end

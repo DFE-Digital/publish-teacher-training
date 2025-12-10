@@ -8,9 +8,9 @@ module Find
       attr_accessor :request
 
       def initialize(attributes = {})
-        @event = DfE::Analytics::Event.new
-
         super
+
+        @event = DfE::Analytics::Event.new
       end
 
       def send_event

@@ -16,11 +16,13 @@ module Find
 
       def event_data
         {
-          total:,
-          page:,
-          search_params:,
-          track_params:,
-          visible_courses:,
+          data: {
+            total:,
+            page:,
+            search_params:,
+            track_params:,
+            visible_courses:,
+          },
         }
       end
 
