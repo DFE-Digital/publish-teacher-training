@@ -21,7 +21,7 @@ module Publish
           @interview_process_form = Publish::Fields::InterviewProcessForm.new(course_enrichment, params: interview_process_params)
 
           if @interview_process_form.save!
-            course_updated_message I18n.t("publish.providers.interview_process.edit.interview_process_success")
+            course_updated_message I18n.t("publish.courses.fields.interview_process.edit.interview_process_success")
 
             redirect_to redirect_path
           else
