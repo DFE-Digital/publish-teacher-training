@@ -7,4 +7,5 @@ en:
       settings: Settings
       subjects: Subjects
       feedbacks: Feedback
+      onboarding: Onboarding
       phase_banner_text: "This is a new service – your %{feedback_link} will help us to improve it."
