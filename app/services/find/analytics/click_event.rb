@@ -10,7 +10,7 @@ module Find
       end
 
       def namespace
-        namespace = request.referer.scan(/(find|publish)/).flatten.first
+        namespace = request.referer&.scan(/(find|publish)/)&.flatten&.first
         namespace || "unknown"
       end
 
