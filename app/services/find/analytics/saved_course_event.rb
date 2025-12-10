@@ -9,9 +9,12 @@ module Find
         :saved_course
       end
 
+      def namespace
+        "find"
+      end
+
       def event_data
         {
-          namespace: "find",
           candidate_id:,
           course_id:,
           timestamp: Time.zone.now.utc,
