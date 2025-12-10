@@ -1,56 +1,7 @@
 .filtering-sorting {
   .app-search-results {
-    @include govuk-responsive-padding(4, "top");
     padding-left: 0;
     margin: 0;
-  }
-
-  .app-search-results-controls {
-    background-color: govuk-colour("light-grey");
-
-    .autocomplete__input {
-      background-color: govuk-colour("white");
-    }
-
-    .govuk-form-group {
-      margin-bottom: govuk-spacing(4);
-    }
-
-    .govuk-button {
-      margin-bottom: 0;
-    }
-
-    .govuk-heading-l {
-      padding: 30px 30px 0;
-      margin: 0;
-    }
-
-    .app-find-search {
-      display: flex;
-
-      flex-direction: column;
-
-      gap: govuk-spacing(4);
-
-      padding: 30px;
-
-      .govuk-form-group {
-        padding: 0;
-        margin: 0;
-      }
-
-      > * {
-        flex-grow: 1;
-      }
-
-      @include govuk-media-query($from: "desktop") {
-        flex-direction: row;
-
-        > * {
-          align-self: flex-end;
-        }
-      }
-    }
   }
 
   .app-search-results__item {
@@ -77,52 +28,53 @@
 
     text-decoration: underline;
   }
+}
 
-  .app-search-results-header {
-    padding: govuk-spacing(2) 0;
+.filtering-sorting .app-search__controls {
+  @include govuk-responsive-padding(5);
 
-    border-top: 1px solid $govuk-border-colour;
+  margin-bottom: govuk-spacing(4);
 
-    @include govuk-media-query($from: "desktop") {
-      display: flex;
+  background-color: govuk-colour("light-grey");
 
-      align-items: center;
-      justify-content: space-between;
-    }
+  .autocomplete__input {
+    background-color: govuk-colour("white");
   }
 
-  .app-search-results-header__sort {
-    display: flex;
+  .govuk-form-group {
+    margin-bottom: govuk-spacing(4);
+  }
 
-    flex-wrap: wrap;
+  .govuk-button {
+    margin-bottom: 0;
+  }
+}
 
-    align-items: baseline;
+.filtering-sorting .app-search__controls .app-find-search {
+  display: flex;
 
-    * {
-      margin: 0 govuk-spacing(1);
-    }
+  flex-direction: column;
 
-    .govuk-button {
-      top: -1px;
-    }
+  gap: govuk-spacing(4);
 
-    @include govuk-media-query($until: "mobile") {
-      .govuk-label {
-        margin-bottom: govuk-spacing(2);
-      }
-    }
+  .govuk-form-group {
+    padding: 0;
+    margin: 0;
+  }
 
-    @include govuk-media-query($until: "tablet") {
-      .govuk-select {
-        flex: 1;
+  > * {
+    flex-grow: 1;
+  }
 
-        margin: 0;
-      }
+  > :last-child {
+    flex-grow: 0;
+  }
 
-      .govuk-button {
-        margin: 0;
-        margin-top: govuk-spacing(2);
-      }
+  @include govuk-media-query($from: "desktop") {
+    flex-direction: row;
+
+    > * {
+      align-self: flex-end;
     }
   }
 }
