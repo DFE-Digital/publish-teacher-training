@@ -1,0 +1,8 @@
+en:
+  support:
+    providers_onboarding_form_requests:
+      index:
+        title: Providers Onboarding Requests
+        heading: Provider Onboarding Requests
+      requests_table:
+        unassigned: Unassigned
