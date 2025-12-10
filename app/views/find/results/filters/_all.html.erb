@@ -30,6 +30,7 @@
           <% end %>
           <%= form.govuk_radio_button :order, "course_name_ascending", label: { text: t(".sort_by_labels.course_name_ascending") }, form: form_id %>
           <%= form.govuk_radio_button :order, "provider_name_ascending", label: { text: t(".sort_by_labels.provider_name_ascending") }, form: form_id %>
+          <%= form.govuk_radio_button :order, "start_date_ascending", label: { text: t(".sort_by_labels.start_date") }, form: form_id %>
         <% end %>
       </div>
     </details>

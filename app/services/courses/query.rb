@@ -67,6 +67,7 @@ module Courses
         @scope = course_name_descending_order_scope
         @scope = provider_name_ascending_order_scope
         @scope = provider_name_descending_order_scope
+        @scope = start_date_ascending_order_scope
       end
 
       log_query_info
@@ -373,6 +374,23 @@ module Courses
         .order(
           {
             providers_table[:provider_name] => :asc,
+            courses_table[:name] => :asc,
+            courses_table[:course_code] => :asc,
+          },
+        )
+    end
+
+    def start_date_ascending_order_scope
+      return @scope unless params[:order] == "start_date_ascending"
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select("course.*, provider.provider_name")
+        .order(
+          {
+            courses_table[:start_date] => :asc,
+            providers_table[:provider_name] => :desc,
             courses_table[:name] => :asc,
             courses_table[:course_code] => :asc,
           },
