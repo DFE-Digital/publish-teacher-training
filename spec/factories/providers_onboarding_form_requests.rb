@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :providers_onboarding_form_request do
     status { "pending" }
     form_name { "Onboarding Form" }
+    form_link { "https://example.com/onboarding-form" }
     support_agent_id { nil }
     zendesk_link { "https://zendesk.example.com/ticket/123" }
     uuid { SecureRandom.uuid }
