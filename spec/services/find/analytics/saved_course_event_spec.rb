@@ -19,6 +19,12 @@ RSpec.describe Find::Analytics::SavedCourseEvent do
     end
   end
 
+  describe "#namespace" do
+    it "returns 'find'" do
+      expect(subject.namespace).to eq("find")
+    end
+  end
+
   describe "#event_data" do
     let(:attributes) do
       {
@@ -35,11 +41,12 @@ RSpec.describe Find::Analytics::SavedCourseEvent do
         allow(Time).to receive(:now).and_return(frozen_time)
 
         expect(subject.event_data).to eq(
-          namespace: "find",
-          candidate_id: 1360,
-          course_id: 2,
-          timestamp: frozen_time,
-          referer: "/results",
+          data: {
+            candidate_id: 1360,
+            course_id: 2,
+            timestamp: frozen_time,
+            referer: "/results",
+          },
         )
       end
     end

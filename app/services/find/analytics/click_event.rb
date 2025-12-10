@@ -9,6 +9,11 @@ module Find
         :track_click
       end
 
+      def namespace
+        namespace = request.referer.scan(/(find|publish)/).flatten.first
+        namespace || "unknown"
+      end
+
       def event_data
         {
           data: {
