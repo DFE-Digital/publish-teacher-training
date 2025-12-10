@@ -61,9 +61,11 @@
 </div>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-third app-filter-layout">
-    <h2 class="govuk-heading-m"><%= t(".filter_results") %></h2>
-    <%= render "find/results/filters/all", form_id: "find-search-form", form: %>
+  <div class="govuk-grid-column-one-third">
+    <div class="app-filter">
+      <h2 class="app-filter__heading govuk-heading-m"><%= t(".filter_results") %></h2>
+      <%= render "find/results/filters/all", form_id: "find-search-form", form: %>
+    </div>
   </div>
 
   <div class="govuk-grid-column-two-thirds">
@@ -78,21 +80,16 @@
             visa_sponsorship: @search_params[:can_sponsor_visa],
           ) %>
 
-        <%= render Courses::SchoolDistancesDebugComponent.new(
-          course:,
-          latitude: @search_params[:latitude],
-          longitude: @search_params[:longitude],
-          debug: params[:debug],
-        ) %>
+          <%= render Courses::SchoolDistancesDebugComponent.new(
+            course:,
+            latitude: @search_params[:latitude],
+            longitude: @search_params[:longitude],
+            debug: params[:debug],
+          ) %>
+        <% end %>
       </ul>
-    <% end %>
-
     <%= govuk_pagination(pagy: @pagy) %>
   <% else %>
-    <button type="button" class="govuk-button govuk-button--secondary app-filter__toggle govuk-!-margin-top-5" aria-haspopup="true" aria-expanded="false" data-visibility-target="trigger" data-action="visibility#show">
-      Filter results
-    </button>
-
     <%= render Courses::NoResultsComponent.new(search_params: @search_params) %>
   <% end %>
   </div>
