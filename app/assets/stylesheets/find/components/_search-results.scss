@@ -6,6 +6,14 @@
     * {
       font-weight: 700;
     }
+
+    .govuk-body {
+      @include govuk-font($size: 16);
+
+      @include govuk-media-query($from: tablet) {
+        @include govuk-font($size: 19);
+      }
+    }
   }
 
   .app-search-results {
