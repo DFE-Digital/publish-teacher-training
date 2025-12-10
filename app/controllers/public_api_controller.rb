@@ -6,4 +6,9 @@ class PublicAPIController < ActionController::API
   include Pagy::Backend
   include ErrorHandlers::Pagy
   include Pundit::Authorization
+
+  # DFE Analytics namespace
+  def current_namespace
+    "find_api"
+  end
 end
