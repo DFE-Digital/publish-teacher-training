@@ -31,6 +31,7 @@ en:
             distance: Distance
             course_name_ascending: Course name (a to z)
             provider_name_ascending: Training provider (a to z)
+            start_date: Soonest start date
           radius_options:
             miles:
               one: "%{count} mile"
