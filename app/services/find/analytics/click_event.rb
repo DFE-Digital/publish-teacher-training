@@ -10,7 +10,12 @@ module Find
       end
 
       def event_data
-        { utm_content:, url: }
+        {
+          data: {
+            utm_content:,
+            url:,
+          },
+        }
       end
     end
   end

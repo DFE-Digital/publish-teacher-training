@@ -15,10 +15,12 @@ module Find
 
       def event_data
         {
-          candidate_id:,
-          course_id:,
-          was_course_saved: was_course_saved?,
-          timestamp: Time.zone.now.utc,
+          data: {
+            candidate_id:,
+            course_id:,
+            was_course_saved: was_course_saved?,
+            timestamp: Time.zone.now.utc,
+          },
         }
       end
 
