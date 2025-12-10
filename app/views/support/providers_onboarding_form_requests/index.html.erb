@@ -1,0 +1,10 @@
+<% content_for :page_title, t(".title") %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_root_path) %>
+<% end %>
+<h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+<% if flash[:alert] %>
+  <div class="alert"><%= flash[:alert] %></div>
+<% end %>
+<%= render "requests_table", providers_onboarding_form_requests: @providers_onboarding_form_requests %>
+<%= govuk_pagination(pagy: @pagy) %>
