@@ -77,22 +77,12 @@ module Courses
     end
 
     def order
-      if FeatureFlag.active?(:find_filtering_and_sorting)
-        # User removes location from their search
-        if location.blank? && super == "distance"
-          return self.order = "course_name_ascending"
-        # User wants to search by location - always distance
-        elsif location.present?
-          return self.order = "distance"
-        # Otherwise if order is blank, set to course name
-        elsif super.blank?
-          return self.order = "course_name_ascending"
-        end
-      end
-
-      return super if sortby.blank?
-
-      sort_by_transformation || super
+      OrderingStrategy.new(
+        location:,
+        current_order: super,
+        sortby:,
+        find_filtering_and_sorting: FeatureFlag.active?(:find_filtering_and_sorting),
+      ).call
     end
 
     def minimum_degree_required
