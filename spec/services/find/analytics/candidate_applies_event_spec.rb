@@ -19,6 +19,12 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
     end
   end
 
+  describe "#namespace" do
+    it "returns 'find'" do
+      expect(subject.namespace).to eq("find")
+    end
+  end
+
   describe "#event_data" do
     context "when a non signed in candidate applies for a course that they have not saved" do
       let(:attributes) do
@@ -33,11 +39,12 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
         allow(Time).to receive(:now).and_return(frozen_time)
 
         expect(subject.event_data).to eq(
-          namespace: "find",
-          candidate_id: nil,
-          course_id: 2,
-          was_course_saved: false,
-          timestamp: frozen_time,
+          data: {
+            candidate_id: nil,
+            course_id: 2,
+            was_course_saved: false,
+            timestamp: frozen_time,
+          },
         )
       end
     end
@@ -61,11 +68,12 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
 
       it "returns a hash with all the event information" do
         expect(subject.event_data).to eq(
-          namespace: "find",
-          candidate_id: candidate.id,
-          course_id: course.id,
-          was_course_saved: true,
-          timestamp: frozen_time,
+          data: {
+            candidate_id: candidate.id,
+            course_id: course.id,
+            was_course_saved: true,
+            timestamp: frozen_time,
+          },
         )
       end
     end
@@ -88,11 +96,12 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
 
       it "returns a hash with all the event information" do
         expect(subject.event_data).to eq(
-          namespace: "find",
-          candidate_id: candidate.id,
-          course_id: course.id,
-          was_course_saved: false,
-          timestamp: frozen_time,
+          data: {
+            candidate_id: candidate.id,
+            course_id: course.id,
+            was_course_saved: false,
+            timestamp: frozen_time,
+          },
         )
       end
     end

@@ -19,6 +19,12 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
     end
   end
 
+  describe "#namespace" do
+    it "returns 'find'" do
+      expect(subject.namespace).to eq("find")
+    end
+  end
+
   describe "#event_data" do
     let(:attributes) do
       {
@@ -44,20 +50,21 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
         allow(request).to receive(:referer).and_return("/")
 
         expect(subject.event_data).to eq(
-          namespace: "find",
-          total: 1360,
-          page: 2,
-          visible_courses: [
-            { code: "abc", provider_code: "RST" },
-            { code: "def", provider_code: "UVW" },
-          ],
-          search_params: {
-            send_courses: true,
-            can_sponsor_visa: true,
-          },
-          track_params: {
-            utm_source: "homepage",
-            utm_medium: "search-form",
+          data: {
+            total: 1360,
+            page: 2,
+            visible_courses: [
+              { code: "abc", provider_code: "RST" },
+              { code: "def", provider_code: "UVW" },
+            ],
+            search_params: {
+              send_courses: true,
+              can_sponsor_visa: true,
+            },
+            track_params: {
+              utm_source: "homepage",
+              utm_medium: "search-form",
+            },
           },
         )
       end
@@ -70,20 +77,21 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
 
       it "returns a hash with all the results information and no referer" do
         expect(subject.event_data).to eq(
-          namespace: "find",
-          total: 1360,
-          page: 2,
-          visible_courses: [
-            { code: "abc", provider_code: "RST" },
-            { code: "def", provider_code: "UVW" },
-          ],
-          search_params: {
-            send_courses: true,
-            can_sponsor_visa: true,
-          },
-          track_params: {
-            utm_source: "results",
-            utm_medium: "no_referer",
+          data: {
+            total: 1360,
+            page: 2,
+            visible_courses: [
+              { code: "abc", provider_code: "RST" },
+              { code: "def", provider_code: "UVW" },
+            ],
+            search_params: {
+              send_courses: true,
+              can_sponsor_visa: true,
+            },
+            track_params: {
+              utm_source: "results",
+              utm_medium: "no_referer",
+            },
           },
         )
       end
@@ -96,22 +104,23 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
 
       it "returns a hash with all the results information and course referer" do
         expect(subject.event_data).to eq(
-          namespace: "find",
-          total: 1360,
-          page: 2,
-          visible_courses: [
-            { code: "abc", provider_code: "RST" },
-            { code: "def", provider_code: "UVW" },
-          ],
-          search_params: {
-            send_courses: true,
-            can_sponsor_visa: true,
-          },
-          track_params: {
-            utm_source: "course",
-            utm_medium: "course_view",
-            code: "2DTK",
-            provider_code: "19S",
+          data: {
+            total: 1360,
+            page: 2,
+            visible_courses: [
+              { code: "abc", provider_code: "RST" },
+              { code: "def", provider_code: "UVW" },
+            ],
+            search_params: {
+              send_courses: true,
+              can_sponsor_visa: true,
+            },
+            track_params: {
+              utm_source: "course",
+              utm_medium: "course_view",
+              code: "2DTK",
+              provider_code: "19S",
+            },
           },
         )
       end
