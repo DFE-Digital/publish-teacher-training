@@ -9,9 +9,12 @@ module Find
         :candidate_applies
       end
 
+      def namespace
+        "find"
+      end
+
       def event_data
         {
-          namespace: "find",
           candidate_id:,
           course_id:,
           was_course_saved: was_course_saved?,

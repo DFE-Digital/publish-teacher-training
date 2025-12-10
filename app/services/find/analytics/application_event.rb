@@ -19,6 +19,7 @@ module Find
             @event
               .with_type(event_name)
               .with_request_details(request)
+              .with_namespace(namespace)
               .with_data(event_data),
           ],
         )

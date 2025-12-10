@@ -10,9 +10,12 @@ module Find
         :search_results
       end
 
+      def namespace
+        "find"
+      end
+
       def event_data
         {
-          namespace: "find",
           total:,
           page:,
           search_params:,
