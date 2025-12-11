@@ -185,16 +185,14 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/a-levels-or-equivalency-tests/a-level-equivalencies", to: "courses/a_level_requirements/a_level_equivalencies#new", as: :a_levels_a_level_equivalencies
         post "/a-levels-or-equivalency-tests/a-level-equivalencies", to: "courses/a_level_requirements/a_level_equivalencies#create"
 
-        get "/fields/school-placement", on: :member, to: "courses/fields/school_placement#edit"
-        patch "/fields/school-placement", on: :member, to: "courses/fields/school_placement#update"
-
-        get "/school-placements", on: :member, to: "courses/school_placements#edit"
-        patch "/school-placements", on: :member, to: "courses/school_placements#update"
         get "/placements", on: :member, to: "courses/school_placements#index", as: :placements
         get "/length", on: :member, to: "courses/length#edit"
         patch "/length", on: :member, to: "courses/length#update"
         get "/fees-and-financial-support", on: :member, to: "courses/fees_and_financial_support#edit"
         patch "/fees-and-financial-support", on: :member, to: "courses/fees_and_financial_support#update"
+
+        get "/fields/school-placement", on: :member, to: "courses/fields/school_placement#edit"
+        patch "/fields/school-placement", on: :member, to: "courses/fields/school_placement#update"
 
         get "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#edit"
         patch "/fields/fees-and-financial-support", on: :member, to: "courses/fields/fees_and_financial_support#update"

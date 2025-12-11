@@ -451,8 +451,6 @@ en:
           text: "Enter details about fees and financial support"
         gcse:
           text: "Enter GCSE and equivalency test requirements"
-        how_school_placements_work:
-          text: "Enter details about how placements work"
         train_with_disability:
           text: "Enter details about training with disabilities and other needs"
         train_with_us:
@@ -601,7 +599,6 @@ en:
       course_enrichment:
         fee_uk_eu: "Course fee for UK and EU students"
         fee_international: "Course fee for international students"
-        how_school_placements_work: How placements work
         fee_details: Fees and financial support
         what-trainee-do-in-school: What will trainees do while in their placement schools?
         what-trainee-do-in-school-hint: For example observations, lesson planning, getting involved in school life
@@ -719,8 +716,6 @@ en:
               not_an_integer: "must not include pence, like 1000 or 1500"
             theoretical_training_activities:
               blank: "^Enter details about theoretical training activities"
-            how_school_placements_work:
-              blank: "^Enter details about how placements work"
             required_qualifications:
               blank: "^Enter details about the qualifications needed"
             course_length:
@@ -1055,11 +1050,6 @@ en:
               too_long: "'What will trainees do during their theoretical training?' must be 150 words or less"
             assessment_methods:
               too_long: "'How will they be assessed?' must be 50 words or less"
-        publish/course_school_placements_form:
-          attributes:
-            how_school_placements_work:
-              blank: Enter details about how placements work
-              too_long: Reduce the word count for how placements work
         publish/course_fees_and_financial_support_form:
           attributes:
             fee_details:
