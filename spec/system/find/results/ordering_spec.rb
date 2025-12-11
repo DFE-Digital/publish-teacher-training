@@ -38,6 +38,29 @@ RSpec.describe "Search results ordering", :js, service: :find do
     then_the_courses_are_ordered_by_start_date
   end
 
+  scenario "sorting by lowest fee" do
+    when_i_visit_the_find_results_page
+
+    given_the_courses_have_fees
+
+    and_i_sort_lowest_fee
+    then_the_courses_are_ordered_by_lowest_fee
+  end
+
+  def given_the_courses_have_fees
+    warwick_provider   = Provider.find_by(provider_name: "Warwick University")
+    niot_provider      = Provider.find_by(provider_name: "NIoT")
+    essex_provider     = Provider.find_by(provider_name: "Essex University")
+    cambridge_provider = Provider.find_by(provider_name: "Cambridge University")
+    oxford_provider    = Provider.find_by(provider_name: "Oxford University")
+
+    CourseEnrichment.joins(:course).where(course: { provider: oxford_provider }).update_all("json_data = jsonb_set(json_data, '{FeeUkEu}', '10000', false)")
+    CourseEnrichment.joins(:course).where(course: { provider: niot_provider }).update_all("json_data = jsonb_set(json_data, '{FeeUkEu}', 'null', false)")
+    CourseEnrichment.joins(:course).where(course: { provider: cambridge_provider }).update_all("json_data = jsonb_set(json_data, '{FeeUkEu}', '100', false)")
+    CourseEnrichment.joins(:course).where(course: { provider: essex_provider }).update_all("json_data = jsonb_set(json_data, '{FeeUkEu}', '500', false)")
+    CourseEnrichment.joins(:course).where(course: { provider: warwick_provider }).update_all("json_data = jsonb_set(json_data, '{FeeUkEu}', '5', false)")
+  end
+
   def given_there_are_published_courses
     warwick_provider = create(:provider, provider_name: "Warwick University")
     niot_provider = create(:provider, provider_name: "NIoT")
@@ -46,27 +69,27 @@ RSpec.describe "Search results ordering", :js, service: :find do
     oxford_provider = create(:provider, provider_name: "Oxford University")
 
     with_options start_date: 5.days.from_now, provider: warwick_provider do
-      create(:course, :with_full_time_sites, name: "Computing", course_code: "23TT")
-      create(:course, :with_full_time_sites, name: "Art and Design", course_code: "X100")
-      create(:course, :with_full_time_sites, name: "Drama", course_code: "AB21")
-      create(:course, :with_full_time_sites, name: "Chemistry", course_code: "X121")
+      create(:course, :published, :with_full_time_sites, name: "Computing", course_code: "23TT")
+      create(:course, :published, :with_full_time_sites, name: "Art and Design", course_code: "X100")
+      create(:course, :published, :with_full_time_sites, name: "Drama", course_code: "AB21")
+      create(:course, :published, :with_full_time_sites, name: "Chemistry", course_code: "X121")
     end
 
     with_options start_date: 1.day.from_now, provider: niot_provider do
-      create(:course, :with_full_time_sites, name: "Economics", course_code: "23TX")
-      create(:course, :with_full_time_sites, name: "Psychology", course_code: "23X7")
-      create(:course, :with_full_time_sites, name: "History", course_code: "23X8")
+      create(:course, :published, :with_full_time_sites, name: "Economics", course_code: "23TX")
+      create(:course, :published, :with_full_time_sites, name: "Psychology", course_code: "23X7")
+      create(:course, :published, :with_full_time_sites, name: "History", course_code: "23X8")
     end
 
     with_options start_date: 2.days.from_now, provider: essex_provider do
-      create(:course, :with_full_time_sites, name: "Mathematics", course_code: "23X9")
-      create(:course, :with_full_time_sites, name: "Physics", course_code: "23XB")
-      create(:course, :with_full_time_sites, name: "Art and Design", course_code: "23XC")
+      create(:course, :published, :with_full_time_sites, name: "Mathematics", course_code: "23X9")
+      create(:course, :published, :with_full_time_sites, name: "Physics", course_code: "23XB")
+      create(:course, :published, :with_full_time_sites, name: "Art and Design", course_code: "23XC")
     end
 
     with_options start_date: 4.days.from_now, provider: cambridge_provider do
-      create(:course, :with_full_time_sites, name: "Music", course_code: "23XD")
-      create(:course, :with_full_time_sites, name: "Dance", course_code: "23XF")
+      create(:course, :published, :with_full_time_sites, name: "Music", course_code: "23XD")
+      create(:course, :published, :with_full_time_sites, name: "Dance", course_code: "23XF")
     end
 
     with_options start_date: 3.days.from_now, provider: oxford_provider do
@@ -111,6 +134,12 @@ RSpec.describe "Search results ordering", :js, service: :find do
   def and_i_sort_start_date
     page.find("h3", text: "Sort by", normalize_ws: true).click
     choose "Soonest start date", visible: :hidden
+    click_link_or_button "Apply filters"
+  end
+
+  def and_i_sort_lowest_fee
+    page.find("h3", text: "Sort by", normalize_ws: true).click
+    choose "Lowest fee", visible: :hidden
     click_link_or_button "Apply filters"
   end
 
@@ -161,6 +190,23 @@ RSpec.describe "Search results ordering", :js, service: :find do
         "Oxford University Geography (23XJ)",
         "Oxford University Philosophy (T3XK)",
         "Cambridge University Dance (23XF)",
+      ],
+    )
+  end
+
+  def then_the_courses_are_ordered_by_lowest_fee
+    expect(result_titles).to eq(
+      [
+        "Warwick University Art and Design (X100)",
+        "Warwick University Chemistry (X121)",
+        "Warwick University Computing (23TT)",
+        "Warwick University Drama (AB21)",
+        "Cambridge University Dance (23XF)",
+        "Cambridge University Music (23XD)",
+        "Essex University Art and Design (23XC)",
+        "Essex University Mathematics (23X9)",
+        "Essex University Physics (23XB)",
+        "NIoT Economics (23TX)",
       ],
     )
   end
