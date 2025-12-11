@@ -21,11 +21,7 @@
         <% row.with_cell do %>
           <%= govuk_link_to(request.zendesk_link, request.zendesk_link) %>
         <% end %>
-        <% if request.support_agent.present? %>
-          <% row.with_cell(text: request.support_agent) %>
-        <% else %>
-          <% row.with_cell(text: "Unassigned") %>
-        <% end %>
+        <% row.with_cell(text: request.support_agent&.name || t(".unassigned")) %>
         <% row.with_cell do %>
           <%= govuk_tag(text: request.status.titleize, colour: status_colour(request.status)) %>
         <% end %>
