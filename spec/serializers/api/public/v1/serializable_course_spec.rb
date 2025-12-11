@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe API::Public::V1::SerializableCourse do
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  let(:enrichment) { build(:course_enrichment, :published) }
+  let(:enrichment) { build(:course_enrichment, :published, about_course: "About the course") }
   let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], funding: "apprenticeship") }
   let(:resource) { described_class.new(object: course) }
 
@@ -15,6 +15,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
 
   it { is_expected.to have_type("courses") }
 
+  it { is_expected.to have_attribute(:about_course).with_value(nil) }
   it { is_expected.to have_attribute(:about_accredited_body).with_value(course.accrediting_provider.about_us) }
   it { is_expected.to have_attribute(:accredited_body_code).with_value(course.accredited_provider_code) }
   it { is_expected.to have_attribute(:age_minimum).with_value(3) }
@@ -52,7 +53,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:code).with_value(course.course_code) }
   it { is_expected.to have_attribute(:course_length).with_value(course.latest_published_enrichment.course_length) }
   it { is_expected.to have_attribute(:created_at).with_value(course.created_at.iso8601) }
-  it { is_expected.to have_attribute(:fee_details).with_value(course.latest_published_enrichment.fee_details) }
+  it { is_expected.to have_attribute(:fee_details).with_value(nil) }
   it { is_expected.to have_attribute(:fee_international).with_value(course.latest_published_enrichment.fee_international) }
   it { is_expected.to have_attribute(:fee_domestic).with_value(course.latest_published_enrichment.fee_uk_eu) }
   it { is_expected.to have_attribute(:findable).with_value(course.findable?) }
@@ -108,4 +109,19 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:accept_maths_gcse_equivalency).with_value(course.accept_maths_gcse_equivalency) }
   it { is_expected.to have_attribute(:accept_science_gcse_equivalency).with_value(course.accept_science_gcse_equivalency) }
   it { is_expected.to have_attribute(:additional_gcse_equivalencies).with_value(course.additional_gcse_equivalencies) }
+
+  context "when the latest published enrichment is version 1" do
+    let(:enrichment) do
+      build(
+        :course_enrichment,
+        :published,
+        :v1,
+        about_course: "Legacy about course",
+        fee_details: "Legacy fee details",
+      )
+    end
+
+    it { is_expected.to have_attribute(:about_course).with_value(enrichment.about_course) }
+    it { is_expected.to have_attribute(:fee_details).with_value(enrichment.fee_details) }
+  end
 end
