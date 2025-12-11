@@ -31,8 +31,6 @@ feature "Editing how placements work" do
     and_there_is_a_course_i_want_to_edit
     and_school_placement_is_selectable
     when_i_visit_the_publish_course_information_edit_page
-    and_i_click_to_see_more_guidance
-    then_i_see_selectable_school_placement_guidance
   end
 
   scenario "I can view additional guidance for this section when course is salaried" do
@@ -40,8 +38,6 @@ feature "Editing how placements work" do
     and_there_is_a_salaried_course_i_want_to_edit
     and_school_placement_is_not_selectable
     when_i_visit_the_publish_course_information_edit_page
-    and_i_click_to_see_more_guidance
-    then_i_see_salaried_course_school_placement_guidance
   end
 
   scenario "I can view additional guidance for this section when course is fee based" do
@@ -49,15 +45,9 @@ feature "Editing how placements work" do
     and_there_is_a_fee_based_course_i_want_to_edit
     and_school_placement_is_not_selectable
     when_i_visit_the_publish_course_information_edit_page
-    and_i_click_to_see_more_guidance
-    then_i_see_fee_based_course_school_placement_guidance
   end
 
 private
-
-  def and_i_click_to_see_more_guidance
-    page.find("span", text: "See what we include in this section").click
-  end
 
   def then_i_see_markdown_formatting_guidance
     page.find("span", text: "How to create links and bullet points")
@@ -94,7 +84,7 @@ private
   end
 
   def when_i_visit_the_publish_course_information_edit_page
-    visit school_placements_publish_provider_recruitment_cycle_course_path(
+    visit fields_school_placement_publish_provider_recruitment_cycle_course_path(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
       code: @course.course_code,
@@ -102,62 +92,41 @@ private
   end
 
   def when_i_enter_school_placements_information
-    @school_placements = "This is a new school placements"
+    @school_placements = "This is what trainees will do while in their placement schools"
 
-    fill_in "How placements work", with: @school_placements
+    fill_in "What will trainees do while in their placement schools?", with: @school_placements
   end
 
   def and_i_submit_with_too_many_words
-    fill_in "How placements work", with: Faker::Lorem.sentence(word_count: 351)
+    fill_in "What will trainees do while in their placement schools?", with: Faker::Lorem.sentence(word_count: 151)
     and_i_submit
   end
 
   def and_i_submit_without_any_data
-    fill_in "How placements work", with: ""
+    fill_in "What will trainees do while in their placement schools?", with: ""
     and_i_submit
   end
 
   def and_i_submit
-    click_on "Update how placements work"
+    click_on "Update what you will do on school placements"
   end
 
   def then_i_see_a_success_message
-    expect(page).to have_content "How placements work updated"
+    expect(page).to have_content "What you will do on school placements updated"
   end
 
   def and_the_course_information_is_updated
     enrichment = course.reload.enrichments.find_or_initialize_draft
 
-    expect(enrichment.how_school_placements_work).to eq(@school_placements)
+    expect(enrichment.placement_school_activities).to eq(@school_placements)
   end
 
   def then_i_see_an_error_message_about_reducing_word_count
-    expect(page).to have_content("Reduce the word count for how placements work").twice
+    expect(page).to have_content("'What will trainees do while in their placement schools?' must be 150 words or less").twice
   end
 
   def then_i_see_an_error_message_about_entering_data
-    expect(page).to have_content("Enter details about how placements work").twice
-  end
-
-  def then_i_see_selectable_school_placement_guidance
-    expect(page).to have_content(
-      "The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.",
-    )
-    expect(page).to have_content("Find out more about where your school placements will take place.")
-  end
-
-  def then_i_see_salaried_course_school_placement_guidance
-    expect(page).to have_content(
-      "The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.",
-    )
-    expect(page).to have_content("Find out more about where your school placements will take place.")
-  end
-
-  def then_i_see_fee_based_course_school_placement_guidance
-    expect(page).to have_content(
-      "The training provider will contact you to discuss your preferences, to help them select placement schools you can travel to.",
-    )
-    expect(page).to have_content("Find out more about where your school placements will take place.")
+    expect(page).to have_content("Enter what will trainees do while in their placement schools").twice
   end
 
   def provider
