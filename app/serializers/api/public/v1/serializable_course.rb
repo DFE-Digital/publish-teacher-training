@@ -9,9 +9,16 @@ module API
         }.freeze
 
         class << self
+          # Attributes that should be nullified when the enrichment is version 2
+          NULLIFY_ENRICHMENT_ATTRIBUTES = %i[about_course fee_details].freeze
+
           def enrichment_attribute(name, enrichment_name = name)
             attribute name do
-              @object.latest_published_enrichment&.public_send(enrichment_name)
+              if NULLIFY_ENRICHMENT_ATTRIBUTES.include?(name) && @object.latest_published_enrichment&.version == 2
+                nil
+              else
+                @object.latest_published_enrichment&.public_send(enrichment_name)
+              end
             end
           end
         end
