@@ -142,7 +142,6 @@ private
           fee_international: "9250",
           fee_details: "Optional fee details",
           interview_process: "Some helpful guidance about the interview process",
-          how_school_placements_work: "Some info about how placements work",
           required_qualifications: "You need some qualifications for this course",
         ),
       ],
