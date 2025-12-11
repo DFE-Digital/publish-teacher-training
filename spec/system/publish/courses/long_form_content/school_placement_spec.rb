@@ -162,7 +162,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     provider_in_cycle = create(:provider, recruitment_cycle: recruitment_cycle)
     user.providers << provider_in_cycle
 
-    @course_enrichment ||= build(:course_enrichment, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil)
+    @course_enrichment ||= build(:course_enrichment, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil, how_school_placements_work: "How placements work")
 
     @course = create(
       :course,
