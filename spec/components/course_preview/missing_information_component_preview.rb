@@ -6,7 +6,6 @@ module CoursePreview
        degree
        fee_uk_eu
        gcse
-       how_school_placements_work
        train_with_disability
        train_with_us].each do |information_type|
       define_method information_type do
