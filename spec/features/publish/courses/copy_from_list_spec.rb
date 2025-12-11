@@ -61,7 +61,7 @@ feature "Copying course information" do
   end
 
   def when_i_visit_the_how_school_placements_work_page
-    visit school_placements_publish_provider_recruitment_cycle_course_path(
+    visit fields_school_placement_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       provider.recruitment_cycle_year,
       course.course_code,
@@ -92,13 +92,14 @@ feature "Copying course information" do
 
   def then_i_see_an_alert_that_the_changes_are_not_saved_yet
     expect(page).to have_content "Your changes are not yet saved"
-    expect(page).to have_content "We have copied this field from #{@course_to_copy}"
+    expect(page).to have_content "We have copied these fields from #{@course_to_copy}"
   end
 
   def and_i_can_see_the_new_content
     copied_course_code = @course_to_copy.match(/\((.*?)\)/)[1]
     @copied_course = Course.find_by(course_code: copied_course_code)
-    expect(page).to have_content(@copied_course.enrichments.first.how_school_placements_work)
+    expect(page).to have_content(@copied_course.enrichments.first.placement_school_activities)
+    expect(page).to have_content(@copied_course.enrichments.first.support_and_mentorship)
   end
 
   def provider
