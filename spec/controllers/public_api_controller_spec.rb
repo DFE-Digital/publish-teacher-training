@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+
 RSpec.describe PublicAPIController, type: :controller do
   describe "default behaviors" do
     it "includes DfE::Analytics::Requests" do
