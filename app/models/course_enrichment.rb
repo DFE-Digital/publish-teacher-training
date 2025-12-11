@@ -56,9 +56,6 @@ class CourseEnrichment < ApplicationRecord
     status.in? %w[draft rolled_over]
   end
 
-  validates :how_school_placements_work, presence: true, on: :publish, if: -> { version == 1 }
-  validates :how_school_placements_work, words_count: { maximum: 350 }
-
   # Course length and fees
   validates :course_length, presence: true, on: :publish
 

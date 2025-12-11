@@ -312,10 +312,6 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  def placements_heading
-    CourseEnrichment.human_attribute_name("how_school_placements_work")
-  end
-
   def length_and_fees_or_salary_heading
     heading = has_fees? ? "course_length_and_fees_heading" : "course_length_and_salary_heading"
 

@@ -29,10 +29,6 @@ module Courses
       ["What is the interview process?", "interview_process"],
     ].freeze
 
-    SCHOOL_PLACEMENTS_FIELDS_V1 = [
-      ["How placements work", "how_school_placements_work"],
-    ].freeze
-
     FEES_FINANCIAL_SUPPORT_FIELDS = [
       ["Fees and financial support", "fee_details"],
     ].freeze
