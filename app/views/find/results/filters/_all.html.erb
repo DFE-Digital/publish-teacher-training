@@ -32,7 +32,8 @@
           <%= form.govuk_radio_button :order, "provider_name_ascending", label: { text: t(".sort_by_labels.provider_name_ascending") }, form: form_id %>
           <%= form.govuk_radio_button :order, "start_date_ascending", label: { text: t(".sort_by_labels.start_date") }, form: form_id %>
           <% if form.object.funding.blank? || form.object.funding.include?("fee") %>
-            <%= form.govuk_radio_button :order, "fee_ascending", label: { text: t(".sort_by_labels.fee_ascending") }, form: form_id %>
+            <%= form.govuk_radio_button :order, "fee_uk_ascending", label: { text: t(".sort_by_labels.fee_uk_ascending") }, form: form_id %>
+            <%= form.govuk_radio_button :order, "fee_intl_ascending", label: { text: t(".sort_by_labels.fee_intl_ascending") }, form: form_id %>
           <% end %>
         <% end %>
       </div>

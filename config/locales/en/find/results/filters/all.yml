@@ -32,7 +32,8 @@ en:
             course_name_ascending: Course name (a to z)
             provider_name_ascending: Training provider (a to z)
             start_date: Soonest start date
-            fee_ascending: Lowest fee
+            fee_uk_ascending: Lowest fee for UK citizens
+            fee_intl_ascending: Lowest fee for non-UK citizens
           radius_options:
             miles:
               one: "%{count} mile"
