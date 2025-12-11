@@ -51,7 +51,6 @@ FactoryBot.define do
         "You can find information about tuition fee loans and other financial help on the Gov.uk website - (https://www.gov.uk/student-finance)",
       ].sample
     end
-    how_school_placements_work { Faker::Lorem.sentence }
     interview_process { Faker::Lorem.sentence }
     required_qualifications { Faker::Educator.degree }
     # Technically, salary_details should align with whether the course is
@@ -81,6 +80,7 @@ FactoryBot.define do
 
     trait :v1 do
       version { 1 }
+      how_school_placements_work { Faker::Lorem.sentence }
       about_course { Faker::Lorem.sentence }
     end
 
