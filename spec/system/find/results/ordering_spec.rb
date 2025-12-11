@@ -38,16 +38,25 @@ RSpec.describe "Search results ordering", :js, service: :find do
     then_the_courses_are_ordered_by_start_date
   end
 
-  scenario "sorting by lowest fee" do
+  scenario "sorting by lowest fee UK citizens" do
     when_i_visit_the_find_results_page
 
-    given_the_courses_have_fees
+    when_the_courses_have_uk_fees
 
-    and_i_sort_lowest_fee
-    then_the_courses_are_ordered_by_lowest_fee
+    and_i_sort_lowest_uk_fee
+    then_the_courses_are_ordered_by_lowest_uk_fee
   end
 
-  def given_the_courses_have_fees
+  scenario "sorting by lowest fee international citizens" do
+    when_i_visit_the_find_results_page
+
+    when_the_courses_have_intl_fees
+
+    and_i_sort_lowest_intl_fee
+    then_the_courses_are_ordered_by_lowest_intl_fee
+  end
+
+  def when_the_courses_have_uk_fees
     warwick_provider   = Provider.find_by(provider_name: "Warwick University")
     niot_provider      = Provider.find_by(provider_name: "NIoT")
     essex_provider     = Provider.find_by(provider_name: "Essex University")
@@ -59,6 +68,20 @@ RSpec.describe "Search results ordering", :js, service: :find do
     CourseEnrichment.joins(:course).where(course: { provider: cambridge_provider }).update_all("json_data = jsonb_set(json_data, '{FeeUkEu}', '100', false)")
     CourseEnrichment.joins(:course).where(course: { provider: essex_provider }).update_all("json_data = jsonb_set(json_data, '{FeeUkEu}', '500', false)")
     CourseEnrichment.joins(:course).where(course: { provider: warwick_provider }).update_all("json_data = jsonb_set(json_data, '{FeeUkEu}', '5', false)")
+  end
+
+  def when_the_courses_have_intl_fees
+    warwick_provider   = Provider.find_by(provider_name: "Warwick University")
+    niot_provider      = Provider.find_by(provider_name: "NIoT")
+    essex_provider     = Provider.find_by(provider_name: "Essex University")
+    cambridge_provider = Provider.find_by(provider_name: "Cambridge University")
+    oxford_provider    = Provider.find_by(provider_name: "Oxford University")
+
+    CourseEnrichment.joins(:course).where(course: { provider: oxford_provider }).update_all("json_data = jsonb_set(json_data, '{FeeInternational}', 'null', false)")
+    CourseEnrichment.joins(:course).where(course: { provider: niot_provider }).update_all("json_data = jsonb_set(json_data, '{FeeInternational}', '100', false)")
+    CourseEnrichment.joins(:course).where(course: { provider: cambridge_provider }).update_all("json_data = jsonb_set(json_data, '{FeeInternational}', '10000', false)")
+    CourseEnrichment.joins(:course).where(course: { provider: essex_provider }).update_all("json_data = jsonb_set(json_data, '{FeeInternational}', '5', false)")
+    CourseEnrichment.joins(:course).where(course: { provider: warwick_provider }).update_all("json_data = jsonb_set(json_data, '{FeeInternational}', '500', false)")
   end
 
   def given_there_are_published_courses
@@ -137,9 +160,15 @@ RSpec.describe "Search results ordering", :js, service: :find do
     click_link_or_button "Apply filters"
   end
 
-  def and_i_sort_lowest_fee
+  def and_i_sort_lowest_uk_fee
     page.find("h3", text: "Sort by", normalize_ws: true).click
-    choose "Lowest fee", visible: :hidden
+    choose "Lowest fee for UK citizens", visible: :hidden
+    click_link_or_button "Apply filters"
+  end
+
+  def and_i_sort_lowest_intl_fee
+    page.find("h3", text: "Sort by", normalize_ws: true).click
+    choose "Lowest fee for non-UK citizens", visible: :hidden
     click_link_or_button "Apply filters"
   end
 
@@ -194,7 +223,7 @@ RSpec.describe "Search results ordering", :js, service: :find do
     )
   end
 
-  def then_the_courses_are_ordered_by_lowest_fee
+  def then_the_courses_are_ordered_by_lowest_uk_fee
     expect(result_titles).to eq(
       [
         "Warwick University Art and Design (X100)",
@@ -207,6 +236,23 @@ RSpec.describe "Search results ordering", :js, service: :find do
         "Essex University Mathematics (23X9)",
         "Essex University Physics (23XB)",
         "NIoT Economics (23TX)",
+      ],
+    )
+  end
+
+  def then_the_courses_are_ordered_by_lowest_intl_fee
+    expect(result_titles).to eq(
+      [
+        "Essex University Art and Design (23XC)",
+        "Essex University Mathematics (23X9)",
+        "Essex University Physics (23XB)",
+        "NIoT Economics (23TX)",
+        "NIoT History (23X8)",
+        "NIoT Psychology (23X7)",
+        "Warwick University Art and Design (X100)",
+        "Warwick University Chemistry (X121)",
+        "Warwick University Computing (23TT)",
+        "Warwick University Drama (AB21)",
       ],
     )
   end
