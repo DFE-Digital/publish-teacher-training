@@ -43,8 +43,8 @@ RSpec.describe "Filter users" do
 private
 
   def and_there_are_users
-    @user = create(:user)
-    @admin_user = create(:user, :admin)
+    @user = create(:user, first_name: "ProviderUserFirstName")
+    @admin_user = create(:user, :admin, first_name: "AdminUserFirstName")
   end
 
   def when_i_visit_the_support_users_index_page
