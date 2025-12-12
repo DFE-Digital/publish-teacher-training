@@ -10,7 +10,7 @@ FactoryBot.define do
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
     region_code { "london" }
-    urn { Faker::Number.number(digits: [5, 6].sample) }
+    sequence(:urn, 100_000, &:to_s)
     uuid { Faker::Internet.uuid }
     site_type { "school" }
 
