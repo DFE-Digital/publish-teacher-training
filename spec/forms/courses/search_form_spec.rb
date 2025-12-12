@@ -289,11 +289,19 @@ RSpec.describe Courses::SearchForm do
         end
       end
 
-      context "when location is present" do
+      context "when location is present and order is blank" do
+        let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK") }
+
+        it "defaults the ordering to distance" do
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
+        end
+      end
+
+      context "when location is present and order is explicitly set" do
         let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending") }
 
-        it "forces the ordering to be by distance" do
-          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
+        it "respects the user's ordering choice" do
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending", radius: 20 })
         end
       end
 
