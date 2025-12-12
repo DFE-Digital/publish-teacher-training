@@ -7,7 +7,7 @@ module API
         include PagyPagination
 
         def current_namespace
-          "find_api"
+          "publish_api"
         end
 
       private

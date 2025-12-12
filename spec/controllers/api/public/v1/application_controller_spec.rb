@@ -19,7 +19,7 @@ RSpec.describe API::Public::V1::ApplicationController, type: :controller do
 
   describe "#current_namespace" do
     it "returns 'find_api'" do
-      expect(controller.current_namespace).to eq("find_api")
+      expect(controller.current_namespace).to eq("publish_api")
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe API::Public::V1::ApplicationController, type: :controller do
       controller_class = controller_name.constantize
 
       it "current_namespace for child controller #{controller_name}" do
-        expect(controller_class.new.current_namespace).to eq("find_api")
+        expect(controller_class.new.current_namespace).to eq("publish_api")
       end
     end
   end
