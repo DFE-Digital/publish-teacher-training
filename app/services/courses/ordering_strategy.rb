@@ -19,7 +19,7 @@ module Courses
     end
 
     def new_feature_order
-      return "distance" if @location.present?
+      return "distance" if @location.present? && @current_order.blank?
       return "course_name_ascending" if current_order_fee? && @funding&.exclude?("fee")
       return "course_name_ascending" if @current_order.blank?
       return "course_name_ascending" if @location.blank? && @current_order == "distance"
