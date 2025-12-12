@@ -96,6 +96,10 @@ feature "Course show", travel: mid_cycle(2025) do
   end
 
   context "bursaries and scholarships is not announced" do
+    before do
+      FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
+    end
+
     scenario "i can view the course basic details", travel: first_deadline_banner - 1.hour do
       given_i_am_authenticated(user: user_with_fee_based_course)
       when_i_visit_the_publish_course_preview_page
