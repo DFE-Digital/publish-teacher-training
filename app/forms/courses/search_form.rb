@@ -86,6 +86,7 @@ module Courses
     def order
       OrderingStrategy.new(
         location:,
+        funding: funding,
         current_order: super,
         sortby:,
         find_filtering_and_sorting: FeatureFlag.active?(:find_filtering_and_sorting),

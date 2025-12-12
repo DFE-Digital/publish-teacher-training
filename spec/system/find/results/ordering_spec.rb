@@ -56,6 +56,26 @@ RSpec.describe "Search results ordering", :js, service: :find do
     then_the_courses_are_ordered_by_lowest_intl_fee
   end
 
+  scenario "ordered by fee but user then filters salary only" do
+    when_i_visit_the_find_results_page
+
+    when_the_courses_have_intl_fees
+    and_i_sort_lowest_intl_fee
+    then_the_courses_are_ordered_by_lowest_intl_fee
+    when_i_filter_by_salaried_courses
+    then_the_salaried_courses_are_ordered_by_course_name_ascending
+  end
+
+  def when_i_filter_by_salaried_courses
+    page.find("h3", text: "Filter by\nFee or salary").click
+    check "Salary", visible: :all
+    and_i_apply_the_filters
+  end
+
+  def and_i_apply_the_filters
+    click_link_or_button "Apply filters", match: :first
+  end
+
   def when_the_courses_have_uk_fees
     warwick_provider   = Provider.find_by(provider_name: "Warwick University")
     niot_provider      = Provider.find_by(provider_name: "NIoT")
@@ -99,25 +119,25 @@ RSpec.describe "Search results ordering", :js, service: :find do
     end
 
     with_options start_date: 1.day.from_now, provider: niot_provider do
-      create(:course, :published, :with_full_time_sites, name: "Economics", course_code: "23TX")
+      create(:course, :salary, :published, :with_full_time_sites, name: "Economics", course_code: "23TX")
       create(:course, :published, :with_full_time_sites, name: "Psychology", course_code: "23X7")
       create(:course, :published, :with_full_time_sites, name: "History", course_code: "23X8")
     end
 
     with_options start_date: 2.days.from_now, provider: essex_provider do
-      create(:course, :published, :with_full_time_sites, name: "Mathematics", course_code: "23X9")
+      create(:course, :salary, :published, :with_full_time_sites, name: "Mathematics", course_code: "23X9")
       create(:course, :published, :with_full_time_sites, name: "Physics", course_code: "23XB")
       create(:course, :published, :with_full_time_sites, name: "Art and Design", course_code: "23XC")
     end
 
     with_options start_date: 4.days.from_now, provider: cambridge_provider do
-      create(:course, :published, :with_full_time_sites, name: "Music", course_code: "23XD")
+      create(:course, :salary, :published, :with_full_time_sites, name: "Music", course_code: "23XD")
       create(:course, :published, :with_full_time_sites, name: "Dance", course_code: "23XF")
     end
 
     with_options start_date: 3.days.from_now, provider: oxford_provider do
-      create(:course, :with_full_time_sites, name: "Geography", course_code: "23XJ")
-      create(:course, :with_full_time_sites, name: "English", course_code: "23XK")
+      create(:course, :salary, :with_full_time_sites, name: "Geography", course_code: "23XJ")
+      create(:course, :salary, :with_full_time_sites, name: "English", course_code: "23XK")
       create(:course, :with_full_time_sites, name: "Philosophy", course_code: "T3XK")
     end
   end
@@ -185,6 +205,18 @@ RSpec.describe "Search results ordering", :js, service: :find do
         "Oxford University English (23XK)",
         "Oxford University Geography (23XJ)",
         "NIoT History (23X8)",
+      ],
+    )
+  end
+
+  def then_the_salaried_courses_are_ordered_by_course_name_ascending
+    expect(result_titles).to eq(
+      [
+        "NIoT Economics (23TX)",
+        "Oxford University English (23XK)",
+        "Oxford University Geography (23XJ)",
+        "Essex University Mathematics (23X9)",
+        "Cambridge University Music (23XD)",
       ],
     )
   end
