@@ -141,7 +141,6 @@ private
           fee_uk_eu: "9250",
           fee_international: "9250",
           fee_details: "Optional fee details",
-          how_school_placements_work: "Some info about how placements work",
           interview_process: "Some helpful guidance about the interview process",
           placement_selection_criteria: "How we select placements",
           duration_per_school: "12 weeks per school",

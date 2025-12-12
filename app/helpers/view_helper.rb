@@ -62,7 +62,6 @@ module ViewHelper
 
       {
         theoretical_training_activities: "#{base}/fields/what-you-will-study?display_errors=true#theoretical-training-activities-error",
-        how_school_placements_work: "#{base}/school-placements?display_errors=true#publish-course-information-form-how-school-placements-work-field-error",
         placement_school_activities: "#{field_base_url}/school-placement?display_errors=true#placement_school_activities-error",
         support_and_mentorship: "#{field_base_url}/school-placement?display_errors=true#support_and_mentorship-error",
         fee_uk_eu: "#{fees_url}?display_errors=true#fee-error",
