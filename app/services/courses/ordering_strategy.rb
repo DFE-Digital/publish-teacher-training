@@ -1,7 +1,8 @@
 module Courses
   class OrderingStrategy
-    def initialize(location:, current_order:, sortby:, find_filtering_and_sorting:)
+    def initialize(location:, funding:, current_order:, sortby:, find_filtering_and_sorting:)
       @location = location
+      @funding = funding
       @current_order = current_order
       @sortby = sortby
       @find_filtering_and_sorting = find_filtering_and_sorting
@@ -19,10 +20,15 @@ module Courses
 
     def new_feature_order
       return "distance" if @location.present?
+      return "course_name_ascending" if current_order_fee? && @funding&.exclude?("fee")
       return "course_name_ascending" if @current_order.blank?
       return "course_name_ascending" if @location.blank? && @current_order == "distance"
 
       @current_order
+    end
+
+    def current_order_fee?
+      @current_order&.match?(/fee/)
     end
 
     SORT_BY_MAPPING = {
