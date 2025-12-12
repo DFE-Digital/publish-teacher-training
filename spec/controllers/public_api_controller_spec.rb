@@ -19,7 +19,7 @@ RSpec.describe PublicAPIController, type: :controller do
 
   describe "#current_namespace" do
     it "returns 'find_api'" do
-      expect(controller.current_namespace).to eq("find_api")
+      expect(controller.current_namespace).to eq("find")
     end
   end
 end

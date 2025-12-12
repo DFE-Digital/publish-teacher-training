@@ -9,6 +9,6 @@ class PublicAPIController < ActionController::API
 
   # DFE Analytics namespace
   def current_namespace
-    "find_api"
+    "find"
   end
 end
