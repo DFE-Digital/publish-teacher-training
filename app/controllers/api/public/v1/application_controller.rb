@@ -6,6 +6,10 @@ module API
       class ApplicationController < PublicAPIController
         include PagyPagination
 
+        def current_namespace
+          "find_api"
+        end
+
       private
 
         def recruitment_cycle
