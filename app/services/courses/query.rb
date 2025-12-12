@@ -67,6 +67,9 @@ module Courses
         @scope = course_name_descending_order_scope
         @scope = provider_name_ascending_order_scope
         @scope = provider_name_descending_order_scope
+        @scope = start_date_ascending_order_scope
+        @scope = fee_uk_ascending_order_scope
+        @scope = fee_intl_ascending_order_scope
       end
 
       log_query_info
@@ -379,6 +382,59 @@ module Courses
         )
     end
 
+    def start_date_ascending_order_scope
+      return @scope unless params[:order] == "start_date_ascending"
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select("course.*, provider.provider_name")
+        .order(
+          {
+            courses_table[:start_date] => :asc,
+            providers_table[:provider_name] => :desc,
+            courses_table[:name] => :asc,
+            courses_table[:course_code] => :asc,
+          },
+        )
+    end
+
+    def fee_uk_ascending_order_scope
+      return @scope unless params[:order] == "fee_uk_ascending"
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select("course.*, provider.provider_name, (course_enrichment.json_data->>'FeeUkEu')::integer as uk_fee")
+        .joins(:latest_published_enrichment)
+        .order(
+          {
+            "uk_fee" => :asc,
+            courses_table[:name] => :asc,
+            providers_table[:provider_name] => :desc,
+            courses_table[:course_code] => :asc,
+          },
+        )
+    end
+
+    def fee_intl_ascending_order_scope
+      return @scope unless params[:order] == "fee_intl_ascending"
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select("course.*, provider.provider_name, (course_enrichment.json_data->>'FeeInternational')::integer as intl_fee")
+        .joins(:latest_published_enrichment)
+        .order(
+          {
+            "intl_fee" => :asc,
+            courses_table[:name] => :asc,
+            providers_table[:provider_name] => :desc,
+            courses_table[:course_code] => :asc,
+          },
+        )
+    end
+
     def provider_name_descending_order_scope
       return @scope unless params[:order] == "provider_name_descending"
 
@@ -413,6 +469,10 @@ module Courses
 
     def providers_table
       Provider.arel_table
+    end
+
+    def enrichments_table
+      CourseEnrichment.arel_table
     end
 
     ExcludedCourseParam = Data.define(:provider_code, :course_code) do
