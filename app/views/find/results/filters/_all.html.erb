@@ -16,12 +16,22 @@
   </div>
 
   <section aria-labelledby="filter-and-sort" data-details-component-target="content" id="details-component-content">
+    <%# Hidden fields to track explicit filter selections - sticky once true %>
+    <%= form.hidden_field :order_explicitly_set, form: form_id %>
+    <%= form.hidden_field :radius_explicitly_set, form: form_id %>
+    <%= form.hidden_field :minimum_degree_required_explicitly_set, form: form_id %>
+
     <%# Sort by %>
     <details class="app-c-filter-section">
       <summary class="app-c-filter-section__summary">
         <h3 class="app-c-filter-section__summary-heading">
           <%= t(".filter_title_sort_by") %>
         </h3>
+        <% if form.object.explicitly_set_order? %>
+          <span class="app-c-filter-section__count govuk-hint">
+            1 selected
+          </span>
+        <% end %>
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :order, legend: { text: t(".filter_title_sort_by"), hidden: true }, class: "govuk-radios--small", multiple: false do %>
@@ -47,6 +57,11 @@
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_search_radius") %>
         </h3>
+        <% if form.object.explicitly_set_radius? %>
+          <span class="app-c-filter-section__count govuk-hint">
+            1 selected
+          </span>
+        <% end %>
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :radius, legend: { text: t(".filter_title_search_radius"), hidden: true }, class: "govuk-radios--small", multiple: false do %>
@@ -227,6 +242,11 @@
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_degree") %>
         </h3>
+        <% if form.object.explicitly_set_minimum_degree_required? %>
+          <span class="app-c-filter-section__count govuk-hint">
+            1 selected
+          </span>
+        <% end %>
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t(".minimum_degree_required_html"), hidden: true }, hint: { text: t(".hint.degree_grade"), class: "govuk-!-font-size-16", hidden: true }, class: "govuk-radios--small", multiple: false do %>

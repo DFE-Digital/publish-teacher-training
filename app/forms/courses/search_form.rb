@@ -26,6 +26,11 @@ module Courses
     attribute :subjects
     attribute :excluded_courses
 
+    # Explicitly set flags - these are "sticky" once true #
+    attribute :order_explicitly_set, :boolean, default: false
+    attribute :radius_explicitly_set, :boolean, default: false
+    attribute :minimum_degree_required_explicitly_set, :boolean, default: false
+
     # Coordinates #
     attribute :country
     attribute :formatted_address
@@ -52,6 +57,56 @@ module Courses
 
     delegate :primary_subjects, :primary_subject_codes, :secondary_subjects, :secondary_subject_codes, :all_subjects, to: :subjects_cache
     delegate :providers_list, to: :providers_cache
+
+    # Sticky flag getters - true if incoming param was true OR value differs from default
+    def order_explicitly_set
+      super || order_differs_from_default?
+    end
+
+    def radius_explicitly_set
+      super || radius_differs_from_default?
+    end
+
+    def minimum_degree_required_explicitly_set
+      super || minimum_degree_required_differs_from_default?
+    end
+
+    # Badge display uses the same logic as the sticky flags
+    alias_method :explicitly_set_order?, :order_explicitly_set
+    alias_method :explicitly_set_radius?, :radius_explicitly_set
+    alias_method :explicitly_set_minimum_degree_required?, :minimum_degree_required_explicitly_set
+
+    def order_differs_from_default?
+      order != default_order
+    end
+
+    def radius_differs_from_default?
+      return false if location.blank?
+
+      radius.to_s != default_radius.to_s
+    end
+
+    def minimum_degree_required_differs_from_default?
+      minimum_degree_required != default_minimum_degree_required
+    end
+
+    def default_order
+      location.present? ? "distance" : "course_name_ascending"
+    end
+
+    def default_radius
+      if london?
+        LONDON_RADIUS.call
+      elsif locality?
+        SMALL_RADIUS
+      else
+        DEFAULT_RADIUS
+      end
+    end
+
+    def default_minimum_degree_required
+      "show_all_courses"
+    end
 
     def initialize(attributes = {})
       super
@@ -95,7 +150,7 @@ module Courses
 
     def minimum_degree_required
       if FeatureFlag.active?(:find_filtering_and_sorting) && super.nil?
-        return self.minimum_degree_required = "show_all_courses"
+        return self.minimum_degree_required = default_minimum_degree_required
       end
 
       return super if degree_required.nil? && university_degree_status.nil?
@@ -147,13 +202,7 @@ module Courses
     def radius
       return super if super.present?
 
-      if london?
-        LONDON_RADIUS.call
-      elsif locality?
-        SMALL_RADIUS
-      else
-        DEFAULT_RADIUS
-      end
+      default_radius
     end
 
     def london?
