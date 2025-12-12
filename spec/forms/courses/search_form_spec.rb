@@ -312,6 +312,14 @@ RSpec.describe Courses::SearchForm do
           expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending" })
         end
       end
+
+      context "when location is present, ordered by fee, but fee funding is removed" do
+        let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "fee_uk_ascending", funding: %w[salary]) }
+
+        it "resets the ordering to distance" do
+          expect(form.search_params[:order]).to eq("distance")
+        end
+      end
     end
     ###
     ### END FILTERING AND SORTING FEATURE FLAG
