@@ -10,18 +10,18 @@ feature "Editing funding type" do
   context "fee based" do
     scenario "i can update the course fee" do
       and_there_is_a_course_i_want_to_edit(:fee_type_based)
-      when_i_visit_the_course_fee_edit_page
+      when_i_visit_the_fees_and_financial_support_page
       and_i_update_the_fee
-      and_i_submit_the(publish_course_fee_edit_page)
-      then_i_should_see_the_correct_success_message("Course fees updated")
+      and_i_submit_fees_and_financial_support
+      then_i_should_see_the_correct_success_message("Fees and financial support updated")
       and_the_course_fee_is_updated
     end
 
     scenario "updating with invalid data" do
       and_there_is_a_course_i_want_to_edit(:fee_type_based)
-      when_i_visit_the_course_fee_edit_page
+      when_i_visit_the_fees_and_financial_support_page
       and_i_set_an_incorrect_fee_amount
-      and_i_submit_the(publish_course_fee_edit_page)
+      and_i_submit_fees_and_financial_support
       then_i_should_see_an_error_message_for_the_course_fee
     end
   end
@@ -53,9 +53,9 @@ feature "Editing funding type" do
     given_a_course_exists(type, enrichments: [build(:course_enrichment, :published, course_length: "OneYear")])
   end
 
-  def when_i_visit_the_course_fee_edit_page
-    publish_course_fee_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+  def when_i_visit_the_fees_and_financial_support_page
+    visit fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+      provider.provider_code, provider.recruitment_cycle_year, course.course_code
     )
   end
 
@@ -66,13 +66,13 @@ feature "Editing funding type" do
   end
 
   def then_i_should_see_the_reuse_content
-    expect(publish_course_fee_edit_page).to have_use_content
+    expect(page).to have_selector('[data-qa="copy-course-warning"]')
   end
 
   def and_i_update_the_fee
     @new_uk_fee = 10_000
 
-    publish_course_fee_edit_page.uk_fee.set(@new_uk_fee)
+    fill_in "Fee for UK citizens", with: @new_uk_fee
   end
 
   def and_i_update_the_salary_details
@@ -82,13 +82,16 @@ feature "Editing funding type" do
   end
 
   def and_i_set_an_incorrect_fee_amount
-    publish_course_fee_edit_page.uk_fee.set(120_000)
-
-    publish_course_fee_edit_page.international_fee.set("abcde")
+    fill_in "Fee for UK citizens", with: 120_000
+    fill_in "Fee for non-UK citizens (optional)", with: "abcde"
   end
 
   def and_i_set_incorrect_salary_information
     publish_course_salary_edit_page.salary_details.set(nil)
+  end
+
+  def and_i_submit_fees_and_financial_support
+    click_on "Update fees and financial support"
   end
 
   def and_i_submit_the(form_page)
@@ -100,7 +103,7 @@ feature "Editing funding type" do
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content("Course fees updated")
+    expect(page).to have_content("Fees and financial support updated")
   end
 
   def and_the_course_fee_is_updated
@@ -116,12 +119,11 @@ feature "Editing funding type" do
   end
 
   def then_i_should_see_an_error_message_for_the_course_fee
-    expect(publish_course_fee_edit_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/course_fee_form.attributes.fee_uk_eu.less_than_or_equal_to"),
+    expect(page).to have_content(
+      I18n.t("activemodel.errors.models.publish/fields/fees_and_financial_support_form.attributes.fee_uk_eu.less_than_or_equal_to"),
     )
-
-    expect(publish_course_fee_edit_page.error_messages).to include(
-      "Course fees for international students must be a valid number",
+    expect(page).to have_content(
+      I18n.t("activemodel.errors.models.publish/fields/fees_and_financial_support_form.attributes.fee_international.not_a_number"),
     )
   end
 
