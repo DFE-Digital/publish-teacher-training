@@ -65,7 +65,6 @@ module Publish
     def reset_enrichment_attributes
       {
         skilled_worker: {
-          fee_details: nil,
           fee_international: nil,
           fee_uk_eu: nil,
           financial_support: nil,
