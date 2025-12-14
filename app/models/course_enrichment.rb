@@ -77,8 +77,6 @@ class CourseEnrichment < ApplicationRecord
                             less_than_or_equal_to: 100_000 },
             if: :is_fee_based?
 
-  validates :fee_details, words_count: { maximum: 250 }, if: :is_fee_based?
-
   validates :financial_support,
             words_count: { maximum: 250 }, on: :publish,
             if: -> { is_fee_based? && version == 1 }

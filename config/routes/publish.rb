@@ -188,8 +188,6 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/placements", on: :member, to: "courses/school_placements#index", as: :placements
         get "/length", on: :member, to: "courses/length#edit"
         patch "/length", on: :member, to: "courses/length#update"
-        get "/fees-and-financial-support", on: :member, to: "courses/fees_and_financial_support#edit"
-        patch "/fees-and-financial-support", on: :member, to: "courses/fees_and_financial_support#update"
 
         get "/fields/school-placement", on: :member, to: "courses/fields/school_placement#edit"
         patch "/fields/school-placement", on: :member, to: "courses/fields/school_placement#update"
@@ -206,8 +204,6 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#edit"
         patch "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#update"
 
-        get "/fees", on: :member, to: "courses/fees#edit"
-        patch "/fees", on: :member, to: "courses/fees#update"
         get "/salary", on: :member, to: "courses/salary#edit"
         patch "/salary", on: :member, to: "courses/salary#update"
 

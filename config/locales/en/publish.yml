@@ -86,19 +86,6 @@ en:
       course_fees:
         edit:
           course_fees: Course fees
-      fees_and_financial_support:
-        edit:
-          heading: Fees and financial support (optional)
-          label: Fees and financial support (optional)
-          page_title: Fees and financial support (optional) - %{course_name_and_code}
-          submit_button: Update fees and financial support
-          summary_link: See what we include in this section
-          guidance_html:
-            <p class="govuk-body">Candidates find it helpful to know when fees are due, payment schedules, top up fees
-            and other costs like books and transport.</p>
-            <p class="govuk-body">You can also tell them about any financial support your institution offers.</p>
-            <p class="govuk-body">Do not include information about financial support available from the government
-            like student loans or bursaries.</p>
       school_placements:
         edit:
           page_title: How placements work - %{course_name_and_code}
