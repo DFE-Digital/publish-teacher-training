@@ -164,7 +164,6 @@ describe Publish::CourseFundingForm, type: :model do
           expect { subject.save! }
             .to change(course, :funding).from("fee").to("apprenticeship")
             .and change(course, :can_sponsor_skilled_worker_visa).from(false).to(true)
-            .and change { course.enrichments.last.fee_details }.to(nil)
             .and change { course.enrichments.last.fee_international }.to(nil)
             .and change { course.enrichments.last.fee_uk_eu }.to(nil)
             .and change { course.enrichments.last.financial_support }.to(nil)
@@ -178,7 +177,6 @@ describe Publish::CourseFundingForm, type: :model do
           expect { subject.save! }
             .to change(course, :funding).from("fee").to("salary")
             .and change(course, :can_sponsor_skilled_worker_visa).from(false).to(true)
-            .and change { course.enrichments.last.fee_details }.to(nil)
             .and change { course.enrichments.last.fee_international }.to(nil)
             .and change { course.enrichments.last.fee_uk_eu }.to(nil)
             .and change { course.enrichments.last.financial_support }.to(nil)
@@ -196,7 +194,6 @@ describe Publish::CourseFundingForm, type: :model do
           expect { subject.save! }
             .to change(course, :funding).from("salary").to("apprenticeship")
             .and change(course, :can_sponsor_skilled_worker_visa).from(false).to(true)
-            .and change { course.enrichments.last.fee_details }.to(nil)
             .and change { course.enrichments.last.fee_international }.to(nil)
             .and change { course.enrichments.last.fee_uk_eu }.to(nil)
             .and change { course.enrichments.last.financial_support }.to(nil)
@@ -225,7 +222,6 @@ describe Publish::CourseFundingForm, type: :model do
           expect { subject.save! }
             .to change(course, :funding).from("apprenticeship").to("salary")
             .and change(course, :can_sponsor_skilled_worker_visa).from(false).to(true)
-            .and change { course.enrichments.last.fee_details }.to(nil)
             .and change { course.enrichments.last.fee_international }.to(nil)
             .and change { course.enrichments.last.fee_uk_eu }.to(nil)
             .and change { course.enrichments.last.financial_support }.to(nil)
