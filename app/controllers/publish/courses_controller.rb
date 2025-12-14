@@ -72,7 +72,8 @@ module Publish
       @provider = provider
       @course = @course.decorate
 
-      @enrichment = @course.latest_draft_enrichment
+      # Ensure we always have an enrichment instance for preview rendering
+      @enrichment = @course.latest_draft_enrichment || @course.enrichments.find_or_initialize_draft
 
       authorize @course
     end
