@@ -22,7 +22,6 @@ scope module: :publish do
   get "/terms-conditions", to: "pages#terms", as: :terms
   get "/how-to-use-this-service", to: "pages#how_to_use_this_service"
   get "/add-course-information", to: "pages#add_course_information", as: :add_course_information
-  resources :provider_onboarding_form, only: %i[show update], param: :uuid, path: "provider-onboarding-form"
 
   # for course preview links to work
   get "track_click", to: "track#track_click"
@@ -69,6 +68,8 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
   patch "/accept-terms", to: "terms#update"
 
   resources :notifications, path: "/notifications", controller: "notifications", only: %i[index update]
+
+  resources :provider_onboarding_form, only: %i[show update], param: :uuid, path: "provider-onboarding-form"
 
   resources :providers, path: "organisations", param: :code, only: [:show] do
     resource :check_user, only: %i[show update], controller: "users_check", path: "users/check"
