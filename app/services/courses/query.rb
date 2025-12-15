@@ -24,23 +24,20 @@ module Courses
                        WHERE recruitment_cycle_id = #{@current_recruitment_cycle.id}
                          AND discarded_at IS NULL
                      ) provider ON course.provider_id = provider.id
-                     INNER JOIN course_site site_statuses ON (
-                       site_statuses.course_id = course.id
-                       AND site_statuses.status = 'R'
-                       AND site_statuses.publish = 'Y'
-                     )
                    SQL
                  )
                  .where(course: { discarded_at: nil })
                  .where(
                    provider: { recruitment_cycle_id: @current_recruitment_cycle.id },
                  )
-                 .where(
-                   site_statuses: {
-                     status: SiteStatus.statuses[:running],
-                     publish: SiteStatus.publishes[:published],
-                   },
-                 )
+                 .where(<<~SQL)
+                   EXISTS (
+                     SELECT 1 FROM course_site
+                     WHERE course_site.course_id = course.id
+                       AND course_site.status = 'R'
+                       AND course_site.publish = 'Y'
+                   )
+                 SQL
     end
 
     def call
@@ -281,7 +278,7 @@ module Courses
     end
 
     def location_scope
-      return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
+      return @scope if params[:latitude].blank? || params[:longitude].blank?
 
       radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
@@ -294,7 +291,14 @@ module Courses
       }
 
       @scope = @scope
-        .joins("INNER JOIN site ON site.id = site_statuses.site_id")
+        .joins(<<~SQL)
+          INNER JOIN course_site site_statuses ON (
+            site_statuses.course_id = course.id
+            AND site_statuses.status = 'R'
+            AND site_statuses.publish = 'Y'
+          )
+          INNER JOIN site ON site.id = site_statuses.site_id
+        SQL
         .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
         .where(
           <<~SQL.squish, longitude, latitude, radius_in_meters
