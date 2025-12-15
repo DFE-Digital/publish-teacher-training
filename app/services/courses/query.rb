@@ -238,7 +238,7 @@ module Courses
       @applied_scopes[:interview_location] = params[:interview_location]
 
       @scope
-        .joins(:latest_published_enrichment)
+        .with_latest_published_enrichment
         .where("(course_enrichment.json_data->>'InterviewLocation') IN (?)", %w[online both])
     end
 
@@ -424,7 +424,7 @@ module Courses
 
       @scope
         .select("course.*, provider.provider_name, (course_enrichment.json_data->>'FeeInternational')::integer as intl_fee")
-        .joins(:latest_published_enrichment)
+        .with_latest_published_enrichment
         .order(
           {
             "intl_fee" => :asc,

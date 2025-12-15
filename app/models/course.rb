@@ -209,6 +209,19 @@ class Course < ApplicationRecord
     joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin:))
   }
 
+  scope :with_latest_published_enrichment, lambda {
+    joins(<<~SQL.squish)
+      INNER JOIN LATERAL (
+        SELECT *
+        FROM course_enrichment
+        WHERE course_enrichment.course_id = course.id
+          AND course_enrichment.status = 1
+        ORDER BY course_enrichment.last_published_timestamp_utc DESC
+        LIMIT 1
+      ) course_enrichment ON true
+    SQL
+  }
+
   scope :by_name_ascending, lambda {
     order(name: :asc)
   }
