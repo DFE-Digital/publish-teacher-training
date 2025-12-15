@@ -399,16 +399,26 @@ module Courses
         )
     end
 
+    def funding_sorting
+      Arel.sql(<<-SQL)
+        case funding
+        when 'fee' then 0
+        else 1
+        end fee_funding
+      SQL
+    end
+
     def fee_uk_ascending_order_scope
       return @scope unless params[:order] == "fee_uk_ascending"
 
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select("course.*, provider.provider_name, (course_enrichment.json_data->>'FeeUkEu')::integer as uk_fee")
-        .joins(:latest_published_enrichment)
+        .select("course.*, #{funding_sorting}, provider.provider_name, (course_enrichment.json_data->>'FeeUkEu')::integer as uk_fee")
+        .with_latest_published_enrichment
         .order(
           {
+            "fee_funding" => :asc,
             "uk_fee" => :asc,
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :desc,
@@ -423,10 +433,11 @@ module Courses
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select("course.*, provider.provider_name, (course_enrichment.json_data->>'FeeInternational')::integer as intl_fee")
+        .select("course.*, #{funding_sorting}, provider.provider_name, (course_enrichment.json_data->>'FeeInternational')::integer as intl_fee")
         .with_latest_published_enrichment
         .order(
           {
+            "fee_funding" => :asc,
             "intl_fee" => :asc,
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :desc,
