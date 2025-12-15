@@ -4,7 +4,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
   root to: "recruitment_cycle#index"
 
   resources :feedbacks, only: %i[index show], path: "feedback", as: :feedback
-  resources :providers_onboarding_form_requests, only: %i[index new create show update]
+  resources :providers_onboarding_form_requests, only: %i[index new create show update], path: "providers-onboarding-form-requests", as: :providers_onboarding_form_requests
 
   resources :subjects, except: %i[create destroy]
 

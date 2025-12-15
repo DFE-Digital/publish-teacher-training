@@ -7,3 +7,8 @@ en:
       requests_table:
         unassigned: Unassigned
         not_available: Not available
+      new:
+        title: New Provider Onboarding Request
+        heading: Generate a new provider onboarding request
+      create:
+        success_message_html: "Onboarding form generated successfully: %{form_link}"

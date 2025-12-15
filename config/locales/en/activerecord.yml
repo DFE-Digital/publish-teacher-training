@@ -34,6 +34,8 @@ en:
               too_long: Feedback is too long (maximum is 1200 characters)
         providers_onboarding_form_request:
           attributes:
+            form_name:
+              blank: "Enter a name for the onboarding form. This is for internal reference only."
             website:
               url: "Enter a website address in the correct format, like https://www.example.com"
             ukprn:
