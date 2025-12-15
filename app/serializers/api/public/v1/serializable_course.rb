@@ -10,7 +10,7 @@ module API
 
         class << self
           # Attributes that should be nullified when the enrichment is version 2
-          NULLIFY_ENRICHMENT_ATTRIBUTES = %i[about_course fee_details].freeze
+          NULLIFY_ENRICHMENT_ATTRIBUTES = %i[about_course fee_details how_school_placements_work].freeze
 
           def enrichment_attribute(name, enrichment_name = name)
             attribute name do
