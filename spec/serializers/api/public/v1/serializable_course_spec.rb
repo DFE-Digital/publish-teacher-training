@@ -118,10 +118,12 @@ RSpec.describe API::Public::V1::SerializableCourse do
         :v1,
         about_course: "Legacy about course",
         fee_details: "Legacy fee details",
+        how_school_placements_work: "Legacy how school placements work",
       )
     end
 
     it { is_expected.to have_attribute(:about_course).with_value(enrichment.about_course) }
     it { is_expected.to have_attribute(:fee_details).with_value(enrichment.fee_details) }
+    it { is_expected.to have_attribute(:how_school_placements_work).with_value(enrichment.how_school_placements_work) }
   end
 end
