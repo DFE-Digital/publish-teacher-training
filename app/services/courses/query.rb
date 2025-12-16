@@ -328,7 +328,13 @@ module Courses
     def default_ordering_scope
       return @scope if params[:order].present?
 
-      params[:order] = "course_name_ascending"
+      # This is technically handled in the SearchForm that passes params to
+      # this class But it's implemented here too to keep the unit tests passing
+      params[:order] = if @applied_scopes[:location].present?
+                         "distance"
+                       else
+                         "course_name_ascending"
+                       end
 
       @scope
     end
