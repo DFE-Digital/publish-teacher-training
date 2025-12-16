@@ -421,8 +421,9 @@ module Courses
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select("course.*, #{funding_sorting}, provider.provider_name, (course_enrichment.json_data->>'FeeUkEu')::integer as uk_fee")
+        .select("course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeUkEu')::integer) as uk_fee")
         .with_latest_published_enrichment
+        .group("course.id, provider.id, provider.provider_name")
         .order(
           {
             "fee_funding" => :asc,
@@ -440,8 +441,9 @@ module Courses
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select("course.*, #{funding_sorting}, provider.provider_name, (course_enrichment.json_data->>'FeeInternational')::integer as intl_fee")
+        .select("course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeInternational')::integer) as intl_fee")
         .with_latest_published_enrichment
+        .group("course.id, provider.id, provider.provider_name")
         .order(
           {
             "fee_funding" => :asc,
