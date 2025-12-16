@@ -2,7 +2,8 @@ en:
   support:
     providers_onboarding_form_requests:
       index:
-        title: Providers Onboarding Requests
+        title: Provider Onboarding Requests
         heading: Provider Onboarding Requests
       requests_table:
         unassigned: Unassigned
+        not_available: Not available
