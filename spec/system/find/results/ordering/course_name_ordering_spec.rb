@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require_relative "ordering_helper"
 
 RSpec.describe "Search results ordering by course name", :js, service: :find do
+  include OrderingHelper
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
   end
@@ -30,6 +32,13 @@ RSpec.describe "Search results ordering by course name", :js, service: :find do
     given_there_are_courses_with_same_name_and_provider
     when_i_visit_the_find_results_page
     then_courses_are_sorted_by_code_within_same_name_and_provider
+  end
+
+  scenario "ordering courses by name when location is present" do
+    given_there_are_courses_at_different_locations
+    when_i_visit_the_find_results_page_with_london_location
+    and_i_sort_by_course_name_a_to_z
+    then_the_courses_are_ordered_by_name_not_distance
   end
 
   def given_there_are_courses_with_different_names
@@ -87,7 +96,31 @@ RSpec.describe "Search results ordering by course name", :js, service: :find do
     ])
   end
 
-  def result_titles
-    page.all(".govuk-summary-card__title", minimum: 1).map { |element| element.text.split("\n").join(" ") }
+  def given_there_are_courses_at_different_locations
+    london = build(:location, :london)
+    romford = build(:location, :romford)
+
+    provider = create(:provider, provider_name: "Test Provider")
+
+    # Closer to London but later alphabetically
+    create(:course, :published,
+           provider:,
+           name: "Zoology",
+           course_code: "ZOO1",
+           site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))])
+
+    # Further from London but earlier alphabetically
+    create(:course, :published,
+           provider:,
+           name: "Art",
+           course_code: "ART1",
+           site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))])
+  end
+
+  def then_the_courses_are_ordered_by_name_not_distance
+    expect(result_titles).to eq([
+      "Test Provider Art (ART1)",
+      "Test Provider Zoology (ZOO1)",
+    ])
   end
 end
