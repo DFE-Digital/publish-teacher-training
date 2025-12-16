@@ -58,16 +58,14 @@ module Courses
       @scope = location_scope
       @scope = excluded_courses_scope
 
-      if @applied_scopes[:location].blank?
-        @scope = default_ordering_scope
-        @scope = course_name_ascending_order_scope
-        @scope = course_name_descending_order_scope
-        @scope = provider_name_ascending_order_scope
-        @scope = provider_name_descending_order_scope
-        @scope = start_date_ascending_order_scope
-        @scope = fee_uk_ascending_order_scope
-        @scope = fee_intl_ascending_order_scope
-      end
+      # Ordering
+      @scope = default_ordering_scope
+      @scope = distance_ascending_order_scope
+      @scope = course_name_ascending_order_scope
+      @scope = provider_name_ascending_order_scope
+      @scope = start_date_ascending_order_scope
+      @scope = fee_uk_ascending_order_scope
+      @scope = fee_intl_ascending_order_scope
 
       log_query_info
 
@@ -325,9 +323,6 @@ module Courses
           ),
         )
         .group(:id, "provider.provider_name")
-
-      @scope = @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC") if !FeatureFlag.active?(:find_filtering_and_sorting) || params[:order] == "distance"
-      @scope
     end
 
     def default_ordering_scope
@@ -336,6 +331,14 @@ module Courses
       params[:order] = "course_name_ascending"
 
       @scope
+    end
+
+    def distance_ascending_order_scope
+      return @scope unless params[:order] == "distance"
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC")
     end
 
     def course_name_ascending_order_scope
