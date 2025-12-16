@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require_relative "ordering_helper"
 
 RSpec.describe "Search results ordering by international fee", :js, service: :find do
+  include OrderingHelper
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
   end
@@ -33,6 +35,13 @@ RSpec.describe "Search results ordering by international fee", :js, service: :fi
     when_i_visit_the_find_results_page
     and_i_sort_by_lowest_international_fee
     then_the_latest_enrichment_fee_is_used_for_ordering
+  end
+
+  scenario "ordering courses by lowest international fee when location is present" do
+    given_there_are_fee_courses_at_different_locations_with_different_international_fees
+    when_i_visit_the_find_results_page_with_london_location
+    and_i_sort_by_lowest_international_fee
+    then_the_courses_are_ordered_by_international_fee_not_distance
   end
 
   def given_there_are_fee_courses_with_different_international_fees
@@ -153,7 +162,33 @@ RSpec.describe "Search results ordering by international fee", :js, service: :fi
     ])
   end
 
-  def result_titles
-    page.all(".govuk-summary-card__title", minimum: 1).map { |element| element.text.split("\n").join(" ") }
+  def given_there_are_fee_courses_at_different_locations_with_different_international_fees
+    london = build(:location, :london)
+    romford = build(:location, :romford)
+
+    provider = create(:provider, provider_name: "Test Provider")
+
+    # Closer to London but more expensive
+    create(:course, :published,
+           provider:,
+           name: "Expensive Course",
+           course_code: "EXP1",
+           site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
+           enrichments: [build(:course_enrichment, :published, fee_international: 15_000)])
+
+    # Further from London but cheaper
+    create(:course, :published,
+           provider:,
+           name: "Cheap Course",
+           course_code: "CHP1",
+           site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
+           enrichments: [build(:course_enrichment, :published, fee_international: 5000)])
+  end
+
+  def then_the_courses_are_ordered_by_international_fee_not_distance
+    expect(result_titles).to eq([
+      "Test Provider Cheap Course (CHP1)",
+      "Test Provider Expensive Course (EXP1)",
+    ])
   end
 end
