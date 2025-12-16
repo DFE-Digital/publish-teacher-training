@@ -6,5 +6,5 @@
 <% if flash[:alert] %>
   <div class="alert"><%= flash[:alert] %></div>
 <% end %>
-<%= render "requests_table", providers_onboarding_form_requests: @providers_onboarding_form_requests %>
+<%= render "requests_table", requests: @requests %>
 <%= govuk_pagination(pagy: @pagy) %>

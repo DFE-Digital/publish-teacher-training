@@ -17,13 +17,13 @@ RSpec.describe "Support console providers onboarding form requests", service: :s
       then_i_see_recent_providers_onboarding_form_requests_entries
     end
 
-    scenario "check for backlink presence and navigation on feedback page", travel: mid_cycle do
+    scenario "check for backlink presence and navigation on the onboarding page", travel: mid_cycle do
       then_i_see_backlink_to_support_homepage
       click_link_or_button "Back"
       then_i_am_on_the_support_homepage
     end
 
-    context "with more than one page of feedback" do
+    context "with more than one page of requests" do
       before do
         create_list(:providers_onboarding_form_request, 15)
         when_i_visit_the_providers_onboarding_form_requests_page
@@ -44,7 +44,7 @@ RSpec.describe "Support console providers onboarding form requests", service: :s
           visit support_root_path
         end
 
-        scenario "Onboarding tab is not visible" do
+        scenario "Onboarding tab is visible" do
           expect(page).to have_link("Onboarding")
         end
       end
@@ -89,8 +89,9 @@ RSpec.describe "Support console providers onboarding form requests", service: :s
       ProvidersOnboardingFormRequest.order(created_at: :desc).limit(10).each do |request|
         expect(page).to have_content(request.id)
         expect(page).to have_content(request.form_name)
-        expect(page).to have_content(request.form_link)
-        expect(page).to have_content(request.zendesk_link)
+        expect(page).to have_link("View form", href: request.form_link)
+        expect(page).to have_link("View zendesk ticket", href: request.zendesk_link).or have_content("Not available")
+        expect(page).to have_content(request.support_agent.present? ? request.support_agent.name : "Unassigned")
         expect(page).to have_content(request.status.titleize)
         expect(page).to have_content(request.created_at.strftime("%d %B %Y"))
       end
