@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_10_143637) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_16_113043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -209,6 +209,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_10_143637) do
     t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "course_id", null: false
     t.integer "version"
+    t.index ["course_id", "last_published_timestamp_utc"], name: "ix_enrichment_latest_published", order: { last_published_timestamp_utc: :desc }, where: "(status = 1)"
     t.index ["course_id"], name: "index_course_enrichment_on_course_id"
     t.index ["created_by_user_id"], name: "IX_course_enrichment_created_by_user_id"
     t.index ["updated_by_user_id"], name: "IX_course_enrichment_updated_by_user_id"
