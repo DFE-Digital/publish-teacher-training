@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require_relative "ordering_helper"
 
 RSpec.describe "Search results ordering by start date", :js, service: :find do
+  include OrderingHelper
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
   end
@@ -83,9 +85,5 @@ RSpec.describe "Search results ordering by start date", :js, service: :find do
       "Test Provider Alpha Course (ALP1)",
       "Test Provider Zebra Course (ZEB1)",
     ])
-  end
-
-  def result_titles
-    page.all(".govuk-summary-card__title", minimum: 1).map { |element| element.text.split("\n").join(" ") }
   end
 end
