@@ -1,0 +1,26 @@
+<div class="app-c-filter-summary">
+  <h3 class="govuk-heading-s app-c-filter-summary__heading">Active filters</h3>
+
+  <ul class="app-c-filter-summary__remove-filters">
+    <% active_filters.each do |filter| %>
+      <li>
+        <%= govuk_link_to(
+            content_tag(:span, class: "app-c-filter-summary__remove-filter-text") do
+              concat content_tag(:span, "Remove filter", class: "govuk-visually-hidden")
+              concat filter.formatted_value
+            end,
+            find_results_path(search_params.merge(filter.remove_params)),
+            class: "app-c-filter-summary__remove-filter",
+          ) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <p class="govuk-body">
+    <%= govuk_link_to(
+      "Clear all",
+      find_results_path,
+      class: "app-c-filter-summary__clear-filters govuk-link govuk-link--no-visited-state",
+    ) %>
+  </p>
+</div>
