@@ -20,5 +20,18 @@ module Courses
         nil
       end
     end
+
+    def ==(other)
+      id == other.id &&
+        raw_value == other.raw_value &&
+        value == other.value &&
+        remove_params == other.remove_params
+    end
+
+    alias_method :eql?, :==
+
+    def hash
+      [id, raw_value, value, remove_params].hash
+    end
   end
 end
