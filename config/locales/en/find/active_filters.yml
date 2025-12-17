@@ -1,0 +1,40 @@
+en:
+  courses:
+    active_filters:
+      can_sponsor_visa:
+        true: Courses with visa sponsorship
+      engineers_teach_physics:
+        true: Courses with engineer teach physics
+      funding:
+        fee: Fee-paying courses
+        salary: Courses with a salary
+        apprenticeship: Apprenticeships courses
+      interview_location:
+        online: Courses with online interviews
+      level:
+        further_education: Further education
+      minimum_degree_required:
+        two_one: "Degree grade: 2:1 or first"
+        two_two: "Degree grade: 2:2"
+        third_class: "Degree grade: Third"
+        pass: "Degree grade: Pass"
+        no_degree_required: "Degree grade: No degree"
+      order:
+        course_name_ascending: "Sort by: Course (a to z)"
+        provider_name_ascending: "Sort by: Provider (a to z)"
+      qualifications:
+        qts: "Qualification: QTS only"
+        qts_with_pgce_or_pgde: "Qualification: QTS with PGCE or PGDE"
+      radius:
+        10: "Search radius: 10 miles"
+        20: "Search radius: 20 miles"
+        50: "Search radius: 50 miles"
+        100: "Search radius: 100 miles"
+      send_courses:
+        true: Courses with a SEND specialism
+      start_date:
+        september: "Start date: September"
+        all_other_dates: "Start date: All other dates"
+      study_types:
+        full_time: Full-time
+        part_time: Part-time

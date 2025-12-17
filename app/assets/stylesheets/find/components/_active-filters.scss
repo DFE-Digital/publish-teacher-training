@@ -1,0 +1,136 @@
+.app-c-filter-summary__heading {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.31579;
+  margin: 0 0 15px 0;
+  padding: 0;
+  color: #0b0c0c;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 1.375;
+    margin-bottom: 12px;
+  }
+}
+
+.app-c-filter-summary__remove-filters {
+  list-style: none;
+  margin: 0 0 15px 0;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 10px;
+
+    @media (max-width: 768px) {
+      display: block;
+      margin-right: 0;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.app-c-filter-summary__remove-filter {
+  border: 1px solid #b1b4b6;
+  border-radius: 0.3125em;
+  padding: 5px 10px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: #0b0c0c;
+  background-color: #f3f2f1;
+  line-height: 1.3157894737;
+  text-align: left;
+  cursor: pointer;
+
+  &::before {
+    content: "×";
+    color: #0b0c0c;
+    display: inline-block;
+    font-size: 20px;
+    line-height: 1;
+    margin-right: 10px;
+    position: relative;
+    top: 1px;
+  }
+
+  &:hover {
+    background-color: #f3f2f1;
+    border-color: #0b0c0c;
+    text-decoration: none;
+  }
+
+  &:focus {
+    background-color: #fd0;
+    box-shadow: 0 2px 0 #0b0c0c;
+    outline: 3px solid #fd0;
+    outline-offset: 0;
+  }
+
+  &:active {
+    background-color: #e8e8e6;
+  }
+
+  @media (max-width: 768px) {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.app-c-filter-summary__remove-filter-text {
+  color: #0b0c0c;
+  font-family: "GDS Transport", arial, sans-serif;
+  font-weight: 400;
+  font-size: 1.1875rem;
+  display: inline;
+  text-decoration: inherit;
+}
+
+.app-c-filter-summary__clear-filters {
+  display: inline-block;
+
+  &:link,
+  &:visited {
+    color: #1d70b8;
+  }
+
+  &:hover {
+    color: #105a92;
+    text-decoration: none;
+  }
+
+  &:focus {
+    background-color: #fd0;
+    box-shadow: 0 2px 0 #0b0c0c;
+    outline: 3px solid #fd0;
+    outline-offset: 0;
+  }
+
+  &:active {
+    color: #0b0c0c;
+  }
+
+  @media (max-width: 768px) {
+    display: block;
+    margin-top: 12px;
+  }
+}
+
+.govuk-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.govuk-link--no-visited-state:visited {
+  color: #1d70b8;
+}
+
