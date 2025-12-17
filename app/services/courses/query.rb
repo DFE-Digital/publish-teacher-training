@@ -363,22 +363,6 @@ module Courses
         )
     end
 
-    def course_name_descending_order_scope
-      return @scope unless params[:order] == "course_name_descending"
-
-      @applied_scopes[:order] = params[:order]
-
-      @scope
-        .select("course.*, provider.provider_name")
-        .order(
-          {
-            courses_table[:name] => :desc,
-            providers_table[:provider_name] => :asc,
-            courses_table[:course_code] => :asc,
-          },
-        )
-    end
-
     def provider_name_ascending_order_scope
       return @scope unless params[:order] == "provider_name_ascending"
 
@@ -456,22 +440,6 @@ module Courses
             "intl_fee" => :asc,
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :desc,
-            courses_table[:course_code] => :asc,
-          },
-        )
-    end
-
-    def provider_name_descending_order_scope
-      return @scope unless params[:order] == "provider_name_descending"
-
-      @applied_scopes[:order] = params[:order]
-
-      @scope
-        .select("course.*, provider.provider_name")
-        .order(
-          {
-            providers_table[:provider_name] => :desc,
-            courses_table[:name] => :asc,
             courses_table[:course_code] => :asc,
           },
         )
