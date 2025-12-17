@@ -37,6 +37,7 @@ module Courses
     attribute :administrative_area_level_2
     attribute :administrative_area_level_4
     attribute :address_types
+    attribute :short_address
 
     # Old parameters #
     attribute :age_group
@@ -190,6 +191,47 @@ module Courses
       return old_qualification_transformation if qualification.present?
 
       super
+    end
+
+    def active_filters
+      @active_filters ||= Courses::ActiveFilterExtractor.new(
+        search_form: self,
+        search_params: search_params.except(*%i[
+          location
+          formatted_address
+          postal_code
+          postal_town
+          latitude
+          longitude
+          country
+          route
+          locality
+          administrative_area_level_1
+          administrative_area_level_2
+          administrative_area_level_4
+          address_types
+        ]),
+      ).call
+    end
+
+    def minimum_degree_required_options
+      %w[two_one two_two third_class pass no_degree_required]
+    end
+
+    def funding_options
+      %w[fee salary apprenticeship]
+    end
+
+    def qualification_options
+      %w[qts qts_with_pgce_or_pgde]
+    end
+
+    def start_date_options
+      %w[september all_other_dates]
+    end
+
+    def study_type_options
+      %w[full_time part_time]
     end
 
   private

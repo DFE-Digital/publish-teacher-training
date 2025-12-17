@@ -498,4 +498,100 @@ RSpec.describe Courses::SearchForm do
       expect(form.address_types).to eq(%w[postal_code postal_code_prefix])
     end
   end
+
+  describe "#active_filters" do
+    it "returns an empty array when no filters are active" do
+      search_form = described_class.new
+
+      active_filters = search_form.active_filters
+
+      expect(active_filters).to eq([])
+    end
+
+    it "excludes non-filter address fields from active filters" do
+      search_form = described_class.new(
+        order: "course_name_ascending",
+        level: "all",
+        minimum_degree_required: "show_all_courses",
+        applications_open: true,
+        location: "London",
+        formatted_address: "London, UK",
+        postal_code: "SW1A 1AA",
+        latitude: 51.501,
+        longitude: -0.141,
+        country: "United Kingdom",
+        route: "The Mall",
+        locality: "London",
+        administrative_area_level_1: "Greater London",
+        administrative_area_level_2: "Westminster",
+        administrative_area_level_4: "St James's",
+        address_types: %w[locality],
+      )
+
+      active_filters = search_form.active_filters
+
+      expect(active_filters).to eq([])
+    end
+
+    it "returns the same object on subsequent calls" do
+      search_form = described_class.new(
+        funding: %w[fee],
+      )
+
+      first_call = search_form.active_filters
+      second_call = search_form.active_filters
+
+      expect(first_call).to equal(second_call)
+    end
+  end
+
+  describe "#minimum_degree_required_options" do
+    it "returns all minimum degree options" do
+      search_form = described_class.new
+
+      options = search_form.minimum_degree_required_options
+
+      expect(options).to eq(%w[two_one two_two third_class pass no_degree_required])
+    end
+  end
+
+  describe "#funding_options" do
+    it "returns all funding options" do
+      search_form = described_class.new
+
+      options = search_form.funding_options
+
+      expect(options).to eq(%w[fee salary apprenticeship])
+    end
+  end
+
+  describe "#qualification_options" do
+    it "returns all qualification options" do
+      search_form = described_class.new
+
+      options = search_form.qualification_options
+
+      expect(options).to eq(%w[qts qts_with_pgce_or_pgde])
+    end
+  end
+
+  describe "#start_date_options" do
+    it "returns all start date options" do
+      search_form = described_class.new
+
+      options = search_form.start_date_options
+
+      expect(options).to eq(%w[september all_other_dates])
+    end
+  end
+
+  describe "#study_type_options" do
+    it "returns all study type options" do
+      search_form = described_class.new
+
+      options = search_form.study_type_options
+
+      expect(options).to eq(%w[full_time part_time])
+    end
+  end
 end

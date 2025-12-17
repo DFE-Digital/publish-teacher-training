@@ -1,3 +1,5 @@
+<%= render Find::Courses::ActiveFilters::View.new(search_form: form.object) %>
+
 <div data-controller="details-component" class="app-c-filter-panel__top">
   <div class="app-c-filter-section app-c-filter-section__summary">
     <div class="app-c-filter-panel__header">
@@ -23,6 +25,7 @@
           <%= t(".filter_title_sort_by") %>
         </h3>
       </summary>
+
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :order, legend: { text: t(".filter_title_sort_by"), hidden: true }, class: "govuk-radios--small", multiple: false do %>
           <% if params[:location].present? %>
@@ -181,9 +184,9 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :funding, legend: { text: t(".funding_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
-          <%= form.govuk_check_box :funding, "fee", label: { text: t(".funding_options.fee") }, include_hidden: false, form: form_id %>
-          <%= form.govuk_check_box :funding, "salary", label: { text: t(".funding_options.salary") }, include_hidden: false, form: form_id %>
-          <%= form.govuk_check_box :funding, "apprenticeship", label: { text: t(".funding_options.apprenticeship") }, include_hidden: false, form: form_id %>
+          <% form.object.funding_options.each do |funding_option| %>
+            <%= form.govuk_check_box :funding, funding_option, label: { text: t(".funding_options.#{funding_option}") }, include_hidden: false, form: form_id %>
+          <% end %>
         <% end %>
       </div>
     </details>
@@ -198,8 +201,9 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t(".study_type_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
-          <%= form.govuk_check_box :study_types, "full_time", label: { text: t(".study_type_options.full_time") }, include_hidden: false, form: form_id %>
-          <%= form.govuk_check_box :study_types, "part_time", label: { text: t(".study_type_options.part_time") }, include_hidden: false, form: form_id %>
+          <% form.object.study_type_options.each do |study_type_option| %>
+            <%= form.govuk_check_box :study_types, study_type_option, label: { text: t(".study_type_options.#{study_type_option}") }, include_hidden: false, form: form_id %>
+          <% end %>
         <% end %>
       </div>
     </details>
@@ -214,9 +218,10 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :qualifications, legend: { text: t(".qualifications_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
-          <%= form.govuk_check_box :qualifications, "qts", label: { text: t(".qualification_options.qts") }, include_hidden: false, form: form_id %>
-          <%= form.govuk_check_box :qualifications, "qts_with_pgce_or_pgde", label: { text: t(".qualification_options.qts_with_pgce_or_pgde") }, include_hidden: false, form: form_id %>
-        <% end %>
+          <% form.object.qualification_options.each do |qualification_option| %>
+            <%= form.govuk_check_box :qualifications, qualification_option, label: { text: t(".qualification_options.#{qualification_option}") }, include_hidden: false, form: form_id %>
+          <% end %>
+       <% end %>
       </div>
     </details>
 
@@ -230,11 +235,10 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t(".minimum_degree_required_html"), hidden: true }, hint: { text: t(".hint.degree_grade"), class: "govuk-!-font-size-16", hidden: true }, class: "govuk-radios--small", multiple: false do %>
-          <%= form.govuk_radio_button :minimum_degree_required, "two_one", label: { text: t(".minimum_degree_required_options.two_one") }, form: form_id %>
-          <%= form.govuk_radio_button :minimum_degree_required, "two_two", label: { text: t(".minimum_degree_required_options.two_two") }, form: form_id %>
-          <%= form.govuk_radio_button :minimum_degree_required, "third_class", label: { text: t(".minimum_degree_required_options.third_class") }, form: form_id %>
-          <%= form.govuk_radio_button :minimum_degree_required, "pass", label: { text: t(".minimum_degree_required_options.pass") }, form: form_id %>
-          <%= form.govuk_radio_button :minimum_degree_required, "no_degree_required", label: { text: t(".minimum_degree_required_options.no_degree_required") }, form: form_id %>
+          <% form.object.minimum_degree_required_options.each do |minimum_degree_required_option| %>
+            <%= form.govuk_radio_button :minimum_degree_required, minimum_degree_required_option, label: { text: t(".minimum_degree_required_options.#{minimum_degree_required_option}") }, form: form_id %>
+          <% end %>
+
           <p class="govuk-body govuk-!-margin-bottom-0"><%= t(".or") %></p>
           <%= form.govuk_radio_button :minimum_degree_required, "show_all_courses", label: { text: t(".minimum_degree_required_options.show_all_courses") }, form: form_id %>
         <% end %>
@@ -285,8 +289,9 @@
       </summary>
       <div class="app-c-filter-section__content">
         <%= form.govuk_check_boxes_fieldset :start_date, legend: { text: t(".start_date_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
-          <%= form.govuk_check_box :start_date, "september", label: { text: t(".start_date_options.september", recruitment_cycle_year: Find::CycleTimetable.current_year) }, include_hidden: false, form: form_id %>
-          <%= form.govuk_check_box :start_date, "all_other_dates", label: { text: t(".start_date_options.all_other_dates") }, include_hidden: false, form: form_id %>
+          <% form.object.start_date_options.each do |start_date_option| %>
+            <%= form.govuk_check_box :start_date, start_date_option, label: { text: t(".start_date_options.#{start_date_option}", recruitment_cycle_year: Find::CycleTimetable.current_year) }, include_hidden: false, form: form_id %>
+          <% end %>
         <% end %>
       </div>
     </details>
