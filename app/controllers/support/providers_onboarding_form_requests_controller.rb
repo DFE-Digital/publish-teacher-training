@@ -6,7 +6,7 @@ module Support
 
     def index
       # Fetches all requests ordered by creation date, paginated and passes to view to display as a table
-      @pagy, @requests = pagy(ProvidersOnboardingFormRequest.order(created_at: :desc))
+      @pagy, @requests = pagy(ProvidersOnboardingFormRequest.includes(:support_agent).order(created_at: :desc))
     end
 
     def new
