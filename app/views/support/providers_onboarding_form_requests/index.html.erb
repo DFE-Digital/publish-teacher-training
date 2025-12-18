@@ -3,6 +3,6 @@
   <%= govuk_back_link_to(support_root_path) %>
 <% end %>
 <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
-<%= govuk_link_to "Generate onboarding form", new_support_providers_onboarding_form_request_path, class:"govuk-button govuk-button--primary" %>
+<%= govuk_link_to "Generate onboarding form", new_support_providers_onboarding_form_request_path, class: "govuk-button govuk-button--primary" %>
 <%= render "requests_table", onboarding_requests: @onboarding_requests %>
 <%= govuk_pagination(pagy: @pagy) %>
