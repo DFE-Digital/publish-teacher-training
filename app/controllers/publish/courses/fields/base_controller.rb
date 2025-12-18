@@ -32,6 +32,22 @@ module Publish
         def course_enrichment
           @course_enrichment ||= course.enrichments.find_or_initialize_draft
         end
+
+        def redirect_after_edit
+          if goto_preview?
+            redirect_to preview_publish_provider_recruitment_cycle_course_path(
+              provider.provider_code,
+              recruitment_cycle.year,
+              course.course_code,
+            )
+          else
+            redirect_to publish_provider_recruitment_cycle_course_path(
+              provider.provider_code,
+              recruitment_cycle.year,
+              course.course_code,
+            )
+          end
+        end
       end
     end
   end
