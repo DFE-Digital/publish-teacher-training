@@ -165,6 +165,11 @@ class Course < ApplicationRecord
            source: :subject,
            class_name: "ModernLanguagesSubject"
 
+  has_one :latest_unpublished_enrichment,
+          -> { where(status: %i[rolled_over draft]).order(updated_at: :desc) },
+          class_name: "CourseEnrichment",
+          inverse_of: :course
+
   has_one :latest_draft_enrichment,
           -> { where(status: :draft).order(updated_at: :desc) },
           class_name: "CourseEnrichment",
