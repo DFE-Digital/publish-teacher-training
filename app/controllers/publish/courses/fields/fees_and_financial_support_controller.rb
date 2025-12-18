@@ -26,19 +26,7 @@ module Publish
           if @fees_and_financial_support_form.save!
             course_updated_message "Fees and financial support"
 
-            if goto_preview?
-              redirect_to preview_publish_provider_recruitment_cycle_course_path(
-                provider.provider_code,
-                recruitment_cycle.year,
-                course.course_code,
-              )
-            else
-              redirect_to publish_provider_recruitment_cycle_course_path(
-                provider.provider_code,
-                recruitment_cycle.year,
-                course.course_code,
-              )
-            end
+            redirect_after_edit
           else
             @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from

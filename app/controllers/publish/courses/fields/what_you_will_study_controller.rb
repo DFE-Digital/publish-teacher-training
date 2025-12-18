@@ -22,16 +22,8 @@ module Publish
           )
           if @what_you_will_study_form.save!
             course_updated_message CourseEnrichment.human_attribute_name("what_you_will_study")
-            if goto_preview?
-              redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code,
-                                                                                 recruitment_cycle.year,
-                                                                                 course.course_code)
 
-            else
-              redirect_to publish_provider_recruitment_cycle_course_path(provider.provider_code,
-                                                                         recruitment_cycle.year,
-                                                                         course.course_code)
-            end
+            redirect_after_edit
           else
             fetch_course_list_to_copy_from
             render :edit

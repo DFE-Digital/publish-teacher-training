@@ -21,19 +21,7 @@ module Publish
           if @where_you_will_train_form.save!
             course_updated_message "Where you will train"
 
-            if goto_preview?
-              redirect_to preview_publish_provider_recruitment_cycle_course_path(
-                provider_code: provider.provider_code,
-                recruitment_cycle_year: provider.recruitment_cycle_year,
-                code: course.course_code,
-              )
-            else
-              redirect_to publish_provider_recruitment_cycle_course_path(
-                provider.provider_code,
-                recruitment_cycle.year,
-                course.course_code,
-              )
-            end
+            redirect_after_edit
           else
             fetch_course_list_to_copy_from
             render :edit

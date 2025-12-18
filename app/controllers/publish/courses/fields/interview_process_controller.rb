@@ -23,19 +23,7 @@ module Publish
           if @interview_process_form.save!
             course_updated_message I18n.t("publish.courses.fields.interview_process.edit.interview_process_success")
 
-            if goto_preview?
-              redirect_to preview_publish_provider_recruitment_cycle_course_path(
-                provider.provider_code,
-                recruitment_cycle.year,
-                course.course_code,
-              )
-            else
-              redirect_to publish_provider_recruitment_cycle_course_path(
-                provider.provider_code,
-                recruitment_cycle.year,
-                course.course_code,
-              )
-            end
+            redirect_after_edit
           else
             fetch_course_list_to_copy_from
             render :edit
