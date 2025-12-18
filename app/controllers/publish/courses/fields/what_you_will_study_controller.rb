@@ -2,7 +2,7 @@
 module Publish
   module Courses
     module Fields
-      class WhatYouWillStudyController < ApplicationController
+      class WhatYouWillStudyController < BaseController
         include CopyCourseContent
         before_action :authorise_user
         def edit
