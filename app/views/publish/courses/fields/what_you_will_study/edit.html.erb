@@ -20,6 +20,8 @@
           method: :patch,
           local: true,
         ) do |f| %>
+
+      <%= f.hidden_field :goto_preview, value: params[:goto_preview] %>
       <% content_for :before_content do %>
         <%= govuk_back_link_to(
               back_link_path(

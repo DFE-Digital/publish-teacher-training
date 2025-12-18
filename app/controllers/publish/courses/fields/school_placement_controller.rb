@@ -28,13 +28,19 @@ module Publish
 
           if @school_placement_form.save!
             course_updated_message CourseEnrichment.human_attribute_name("what-trainee-do-in-school-success")
-
-            redirect_to publish_provider_recruitment_cycle_course_path(
-              provider.provider_code,
-              recruitment_cycle.year,
-              course.course_code,
-            )
-
+            if goto_preview?
+              redirect_to preview_publish_provider_recruitment_cycle_course_path(
+                provider.provider_code,
+                recruitment_cycle.year,
+                course.course_code,
+              )
+            else
+              redirect_to publish_provider_recruitment_cycle_course_path(
+                provider.provider_code,
+                recruitment_cycle.year,
+                course.course_code,
+              )
+            end
           else
             fetch_course_list_to_copy_from
             render :edit
@@ -49,6 +55,10 @@ module Publish
             :placement_school_activities,
             :support_and_mentorship,
           )
+        end
+
+        def goto_preview?
+          params["publish_courses_fields_school_placement_form"][:goto_preview] == "true"
         end
       end
     end
