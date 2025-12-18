@@ -53,7 +53,6 @@ feature "Course show", travel: mid_cycle(2025) do
       and_i_click_link_or_button("Back")
       and_i_click_link_or_button("Enter details about what you will do on school placements")
       and_i_submit_a_valid_form
-      and_i_click_link_or_button("Preview course")
       and_i_see_the_new_course_text
       then_i_should_be_back_on_the_preview_page
     end
@@ -89,7 +88,6 @@ feature "Course show", travel: mid_cycle(2025) do
       and_i_click_link_or_button("Back")
       and_i_click_link_or_button("Enter details about fees and financial support")
       and_i_submit_a_valid_course_fees
-      and_i_click_link_or_button("Preview course")
       and_i_see_the_the_course_fee
       then_i_should_be_back_on_the_preview_page
     end
