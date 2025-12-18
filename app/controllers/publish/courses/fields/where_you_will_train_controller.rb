@@ -21,7 +21,7 @@ module Publish
           if @where_you_will_train_form.save!
             course_updated_message "Where you will train"
 
-            if params["publish_fields_where_you_will_train_form"][:goto_preview] == "true"
+            if goto_preview?
               redirect_to preview_publish_provider_recruitment_cycle_course_path(
                 provider_code: provider.provider_code,
                 recruitment_cycle_year: provider.recruitment_cycle_year,
@@ -45,6 +45,10 @@ module Publish
         def where_you_will_train_params
           params
             .expect(publish_fields_where_you_will_train_form: [*Publish::Fields::WhereYouWillTrainForm::FIELDS])
+        end
+
+        def goto_preview?
+          params["publish_fields_where_you_will_train_form"][:goto_preview] == "true"
         end
       end
     end
