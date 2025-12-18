@@ -23,7 +23,19 @@ module Publish
           if @interview_process_form.save!
             course_updated_message I18n.t("publish.courses.fields.interview_process.edit.interview_process_success")
 
-            redirect_to redirect_path
+            if goto_preview?
+              redirect_to preview_publish_provider_recruitment_cycle_course_path(
+                provider.provider_code,
+                recruitment_cycle.year,
+                course.course_code,
+              )
+            else
+              redirect_to publish_provider_recruitment_cycle_course_path(
+                provider.provider_code,
+                recruitment_cycle.year,
+                course.course_code,
+              )
+            end
           else
             fetch_course_list_to_copy_from
             render :edit
@@ -36,14 +48,6 @@ module Publish
           params.expect(publish_fields_interview_process_form: [*Publish::Fields::InterviewProcessForm::FIELDS])
         end
 
-        def redirect_path
-          publish_provider_recruitment_cycle_course_path(
-            provider.provider_code,
-            recruitment_cycle.year,
-            course.course_code,
-          )
-        end
-
         def previous_cycle_enrichment
           @previous_cycle_enrichment ||= RecruitmentCycle.current.previous&.providers&.find_by(
             provider_code: @provider.provider_code,
@@ -52,6 +56,10 @@ module Publish
           )&.enrichments&.where(
             status: "published",
           )&.last
+        end
+
+        def goto_preview?
+          params["publish_fields_interview_process_form"][:goto_preview] == "true"
         end
       end
     end
