@@ -16,9 +16,12 @@ module Courses
 
     def process_attribute(attribute, value)
       return [] if value.blank?
-      return [] if skip_condition?(attribute) || skip_default?(attribute, value) || skip_invalid?(attribute, value)
+      return [] if skip_condition?(attribute) || skip_default?(attribute, value)
 
-      build_filters(attribute, value)
+      valid_values = filter_valid_values(attribute, value)
+      return [] if valid_values.blank?
+
+      build_filters(attribute, valid_values)
     end
 
     def skip_condition?(attribute)
@@ -36,12 +39,12 @@ module Courses
       default.is_a?(Proc) ? default.call(@search_params) : default
     end
 
-    def skip_invalid?(attribute, value)
-      valid_values = resolve_valid_values(attribute)
-      return false unless valid_values
+    def filter_valid_values(attribute, value)
+      valid_values_set = resolve_valid_values(attribute)
+      return value unless valid_values_set # No validation rules = accept all
 
-      values_to_validate = Array(value)
-      values_to_validate.any? { |val| !valid_values.include?(val) }
+      values_to_check = Array(value)
+      values_to_check.select { |val| valid_values_set.include?(val) }
     end
 
     def resolve_valid_values(attribute)

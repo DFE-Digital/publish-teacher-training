@@ -236,7 +236,7 @@ RSpec.describe Courses::ActiveFilterExtractor do
 
     context "when params contain invalid values" do
       it "skips invalid subject values" do
-        search_form = Courses::SearchForm.new(subjects: %w[00 99])
+        search_form = Courses::SearchForm.new(subjects: %w[00 999999999999])
         search_params = search_form.search_params
 
         extractor = described_class.new(
@@ -246,7 +246,14 @@ RSpec.describe Courses::ActiveFilterExtractor do
 
         active_filters = extractor.call
 
-        expect(active_filters).to eq([])
+        expect(active_filters).to eq([
+          Courses::ActiveFilter.new(
+            id: :subjects,
+            raw_value: "00",
+            value: "Primary",
+            remove_params: { subjects: nil },
+          ),
+        ])
       end
 
       it "skips invalid provider code" do

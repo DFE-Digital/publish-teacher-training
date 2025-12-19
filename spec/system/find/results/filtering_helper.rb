@@ -55,6 +55,39 @@ module FilteringHelper
     click_link_or_button "Search"
   end
 
+  def filtering(filter_name)
+    # Find the details section containing this filter
+    filter_section = page.find("details", text: filter_name)
+    summary = filter_section.find("summary")
+
+    # Open if not already open
+    if ActiveModel::Type::Boolean.new.cast(filter_section[:open]).blank?
+      summary.click
+      sleep 0.1 # Wait for animation
+    end
+
+    # Execute the block (choose, select, fill_in, etc.)
+    yield
+  rescue StandardError
+    open_all_details_javascript
+    sleep 0.1
+    yield
+  end
+
+  def open_all_details
+    page.all("details").find_each do |details|
+      open_details(details)
+    end
+  end
+
+  def open_all_details_javascript
+    page.execute_script(<<~JS)
+      document.querySelectorAll('details').forEach(details => {
+        details.open = true;
+      });
+    JS
+  end
+
 private
 
   def results
