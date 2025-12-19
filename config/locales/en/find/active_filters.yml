@@ -4,7 +4,7 @@ en:
       can_sponsor_visa:
         true: Courses with visa sponsorship
       engineers_teach_physics:
-        true: Courses with engineer teach physics
+        true: Engineers teach physics
       funding:
         fee: Fee-paying courses
         salary: Courses with a salary
