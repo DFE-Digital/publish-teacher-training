@@ -308,8 +308,10 @@
       </div>
     </details>
 
-    <div class="app-c-filter-panel__actions app-c-filter-panel__actions--single">
+    <div class="app-c-filter-panel__actions <%= "app-c-filter-panel__actions--single" if form.object.active_filters.blank? %>">
       <%= form.govuk_submit t(".apply_filter"), name: "utm_medium", value: "apply_filters_bottom", form: form_id %>
+
+      <%= render Find::Courses::ClearAllFilters::View.new(search_form: form.object, html_class: "app-c-filter-panel__action--clear") %>
     </div>
   </section>
 </div>
