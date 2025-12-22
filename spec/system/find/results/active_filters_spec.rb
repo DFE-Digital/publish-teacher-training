@@ -361,7 +361,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def when_the_user_clicks_clear_all
-    click_link "Clear all"
+    click_link "Clear all", match: :first
   end
 
   def when_the_user_changes_radius_to(radius, location:)
