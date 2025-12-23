@@ -54,6 +54,12 @@ module Courses
     delegate :primary_subjects, :primary_subject_codes, :secondary_subjects, :secondary_subject_codes, :all_subjects, to: :subjects_cache
     delegate :providers_list, to: :providers_cache
 
+    MINIMUM_DEGREE_REQUIRED_OPTIONS = %w[two_one two_two third_class pass no_degree_required].freeze
+    FUNDING_OPTIONS = %w[fee salary apprenticeship].freeze
+    QUALIFICATION_OPTIONS = %w[qts qts_with_pgce_or_pgde].freeze
+    START_DATE_OPTIONS = %w[september all_other_dates].freeze
+    STUDY_TYPE_OPTIONS = %w[full_time part_time].freeze
+
     def initialize(attributes = {})
       super
 
@@ -198,23 +204,23 @@ module Courses
     end
 
     def minimum_degree_required_options
-      %w[two_one two_two third_class pass no_degree_required]
+      MINIMUM_DEGREE_REQUIRED_OPTIONS
     end
 
     def funding_options
-      %w[fee salary apprenticeship]
+      FUNDING_OPTIONS
     end
 
     def qualification_options
-      %w[qts qts_with_pgce_or_pgde]
+      QUALIFICATION_OPTIONS
     end
 
     def start_date_options
-      %w[september all_other_dates]
+      START_DATE_OPTIONS
     end
 
     def study_type_options
-      %w[full_time part_time]
+      STUDY_TYPE_OPTIONS
     end
 
   private
