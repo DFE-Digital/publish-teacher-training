@@ -522,7 +522,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_all_expected_filters_are_displayed
-    expect(active_filters).to contain_exactly("Primary", "Primary with English", "Art and design", "Further education", "Fee-paying courses", "Courses with a salary", "Full-time", "Part-time", "Qualification: QTS only", "Qualification: QTS with PGCE or PGDE", "Degree grade: 2:1 or first", "Courses with visa sponsorship", "Courses with online interviews", "London", "Search radius: 20 miles", "Courses with a SEND specialism", "Biology")
+    expect(active_filters).to contain_exactly("Primary", "Primary with English", "Art and design", "Further education", "Fee-paying courses", "Courses with a salary", "Full-time", "Part-time", "Qualification: QTS only", "Qualification: QTS with PGCE or PGDE", "Degree grade: 2:1 or first", "Courses with visa sponsorship", "Courses with online interviews", "London", "Courses with a SEND specialism", "Biology")
   end
 
   def find_filter_remove_button(text)

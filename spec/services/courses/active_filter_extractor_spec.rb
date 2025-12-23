@@ -2,6 +2,153 @@ require "rails_helper"
 
 RSpec.describe Courses::ActiveFilterExtractor do
   describe "#call" do
+    context "sort filter by certain priority" do
+      it "sorts active filters in the correct order" do
+        search_params = {
+          can_sponsor_visa: true,
+          funding: %w[fee salary apprenticeship],
+          interview_location: "online",
+          level: "further_education",
+          minimum_degree_required: "two_two",
+          order: "distance",
+          qualifications: %w[qts qts_with_pgce_or_pgde],
+          radius: "10",
+          send_courses: true,
+          study_types: %w[full_time part_time],
+          subject_code: "00",
+          subject_name: "Primary",
+          subjects: %w[01 C1 08],
+          short_address: "Bristol",
+        }
+
+        search_form = Courses::SearchForm.new(search_params)
+
+        extractor = described_class.new(
+          search_params: search_params,
+          search_form: search_form,
+        )
+
+        active_filters = extractor.call
+
+        expect(active_filters).to eq([
+          Courses::ActiveFilter.new(
+            id: :short_address,
+            raw_value: "Bristol",
+            value: "Bristol",
+            remove_params: { location: nil, radius: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :radius,
+            raw_value: "10",
+            value: "10",
+            remove_params: { radius: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :subjects,
+            raw_value: "01",
+            value: "Primary with English",
+            remove_params: { subjects: %w[C1 08] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :subjects,
+            raw_value: "C1",
+            value: "Biology",
+            remove_params: { subjects: %w[01 08] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :subjects,
+            raw_value: "08",
+            value: "Business studies",
+            remove_params: { subjects: %w[01 C1] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :subject_code,
+            raw_value: "00",
+            value: "Primary",
+            remove_params: { subject_code: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :subject_name,
+            raw_value: "Primary",
+            value: "Primary",
+            remove_params: { subject_name: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :level,
+            raw_value: "further_education",
+            value: "further_education",
+            remove_params: { level: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :send_courses,
+            raw_value: true,
+            value: true,
+            remove_params: { send_courses: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :funding,
+            raw_value: "fee",
+            value: "fee",
+            remove_params: { funding: %w[salary apprenticeship] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :funding,
+            raw_value: "salary",
+            value: "salary",
+            remove_params: { funding: %w[fee apprenticeship] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :funding,
+            raw_value: "apprenticeship",
+            value: "apprenticeship",
+            remove_params: { funding: %w[fee salary] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :study_types,
+            raw_value: "full_time",
+            value: "full_time",
+            remove_params: { study_types: %w[part_time] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :study_types,
+            raw_value: "part_time",
+            value: "part_time",
+            remove_params: { study_types: %w[full_time] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :qualifications,
+            raw_value: "qts",
+            value: "qts",
+            remove_params: { qualifications: %w[qts_with_pgce_or_pgde] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :qualifications,
+            raw_value: "qts_with_pgce_or_pgde",
+            value: "qts_with_pgce_or_pgde",
+            remove_params: { qualifications: %w[qts] },
+          ),
+          Courses::ActiveFilter.new(
+            id: :minimum_degree_required,
+            raw_value: "two_two",
+            value: "two_two",
+            remove_params: { minimum_degree_required: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :can_sponsor_visa,
+            raw_value: true,
+            value: true,
+            remove_params: { can_sponsor_visa: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :interview_location,
+            raw_value: "online",
+            value: "online",
+            remove_params: { interview_location: nil },
+          ),
+        ])
+      end
+    end
+
     context "when params are empty or default" do
       it "returns an empty array when there are no params" do
         search_form = Courses::SearchForm.new
@@ -730,6 +877,220 @@ RSpec.describe Courses::ActiveFilterExtractor do
         )
 
         expect(active_filters).to eq([expected_filter])
+      end
+    end
+
+    context "radius" do
+      it "skips default radius for london for filtering and sorting" do
+        FeatureFlag.activate(:find_filtering_and_sorting)
+
+        search_form = Courses::SearchForm.new(
+          location: "London, UK",
+          short_address: "London",
+          formatted_address: "London, UK",
+          radius: 20,
+        )
+
+        extractor = described_class.new(
+          search_params: { short_address: "London", radius: 20 },
+          search_form:,
+        )
+
+        active_filters = extractor.call
+
+        expect(active_filters).to eq(
+          [
+            Courses::ActiveFilter.new(
+              id: :short_address,
+              value: "London",
+              raw_value: "London",
+              remove_params: { location: nil, radius: nil },
+            ),
+          ],
+        )
+      end
+
+      it "displays non-default radius for london" do
+        search_form = Courses::SearchForm.new(
+          location: "London, UK",
+          short_address: "London",
+          formatted_address: "London, UK",
+          radius: 50,
+        )
+
+        extractor = described_class.new(
+          search_params: { short_address: "London", radius: 50 },
+          search_form:,
+        )
+
+        active_filters = extractor.call
+
+        expected_filter = Courses::ActiveFilter.new(
+          id: :radius,
+          raw_value: 50,
+          value: 50,
+          remove_params: { radius: nil },
+        )
+
+        expect(active_filters).to include(expected_filter)
+      end
+
+      it "skips default radius for locality search" do
+        search_form = Courses::SearchForm.new(
+          location: "SW1A 1AA",
+          short_address: "Locality",
+          formatted_address: "Locality",
+          postal_code: "SW1A 1AA",
+          address_types: %w[postal_code],
+          radius: 10,
+        )
+        search_params = search_form.search_params
+
+        extractor = described_class.new(
+          search_params:,
+          search_form:,
+        )
+
+        active_filters = extractor.call
+
+        expect(active_filters).to eq(
+          [
+            Courses::ActiveFilter.new(
+              id: :short_address,
+              raw_value: "Locality",
+              value: "Locality",
+              remove_params: { location: nil, radius: nil },
+            ),
+          ],
+        )
+      end
+
+      it "displays non-default radius for locality search" do
+        search_form = Courses::SearchForm.new(
+          short_address: "SW1A 1AA",
+          location: "SW1A 1AA",
+          formatted_address: "South",
+          postal_code: "SW1A 1AA",
+          address_types: %w[postal_code],
+          radius: 20,
+        )
+        search_params = search_form.search_params
+
+        extractor = described_class.new(
+          search_params:,
+          search_form:,
+        )
+
+        active_filters = extractor.call
+
+        expected_filter = Courses::ActiveFilter.new(
+          id: :radius,
+          raw_value: 20,
+          value: 20,
+          remove_params: { radius: nil },
+        )
+
+        expect(active_filters).to include(expected_filter)
+      end
+
+      it "skips default radius for general search" do
+        search_form = Courses::SearchForm.new(
+          location: "Bristol",
+          short_address: "Bristol",
+          formatted_address: "Bristol, UK",
+          radius: 50,
+        )
+        search_params = search_form.search_params
+
+        extractor = described_class.new(
+          search_params:,
+          search_form:,
+        )
+
+        active_filters = extractor.call
+
+        expect(active_filters).to eq(
+          [
+            Courses::ActiveFilter.new(
+              id: :short_address,
+              raw_value: "Bristol",
+              value: "Bristol",
+              remove_params: { location: nil, radius: nil },
+            ),
+          ],
+        )
+      end
+
+      it "displays non-default radius for general search" do
+        search_form = Courses::SearchForm.new(
+          location: "Bristol",
+          short_address: "Bristol",
+          formatted_address: "Bristol, UK",
+          radius: 100,
+        )
+        search_params = search_form.search_params
+
+        extractor = described_class.new(
+          search_params: search_params,
+          search_form: search_form,
+        )
+
+        active_filters = extractor.call
+
+        expected_filter = Courses::ActiveFilter.new(
+          id: :radius,
+          raw_value: 100,
+          value: 100,
+          remove_params: { radius: nil },
+        )
+
+        expect(active_filters).to include(expected_filter)
+      end
+
+      it "skips radius when no location is present" do
+        search_form = Courses::SearchForm.new(radius: "50")
+        search_params = search_form.search_params
+
+        extractor = described_class.new(
+          search_params: search_params,
+          search_form: search_form,
+        )
+
+        active_filters = extractor.call
+        expect(active_filters).to eq([])
+      end
+
+      it "formats radius with miles label" do
+        search_form = Courses::SearchForm.new(
+          location: "London, UK",
+          short_address: "London",
+          formatted_address: "London, UK",
+          radius: 100,
+        )
+        search_params = search_form.search_params
+
+        extractor = described_class.new(
+          search_params:,
+          search_form:,
+        )
+
+        active_filters = extractor.call
+        expect(active_filters).to eq(
+          [
+            Courses::ActiveFilter.new(
+              id: :short_address,
+              raw_value: "London",
+              value: "London",
+              remove_params: { location: nil, radius: nil },
+            ),
+            Courses::ActiveFilter.new(
+              id: :radius,
+              raw_value: 100,
+              value: 100,
+              remove_params: { radius: nil },
+            ),
+          ],
+        )
       end
     end
   end
