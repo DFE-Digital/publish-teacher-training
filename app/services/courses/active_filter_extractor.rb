@@ -31,7 +31,7 @@ module Courses
         .compact
         .reject { |filter| filter.formatted_value.blank? }
 
-      sort_filters(filters)
+      sort_filters(filters).uniq(&:formatted_value)
     end
 
   private

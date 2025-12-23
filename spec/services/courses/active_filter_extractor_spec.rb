@@ -68,12 +68,6 @@ RSpec.describe Courses::ActiveFilterExtractor do
             remove_params: { subject_code: nil },
           ),
           Courses::ActiveFilter.new(
-            id: :subject_name,
-            raw_value: "Primary",
-            value: "Primary",
-            remove_params: { subject_name: nil },
-          ),
-          Courses::ActiveFilter.new(
             id: :level,
             raw_value: "further_education",
             value: "further_education",
@@ -146,6 +140,28 @@ RSpec.describe Courses::ActiveFilterExtractor do
             remove_params: { interview_location: nil },
           ),
         ])
+      end
+    end
+
+    context "when subjects are duplicated" do
+      it "remove duplicates" do
+        search_params = {
+          subject_code: "00",
+          subject_name: "Primary",
+          subjects: %w[00 00 00],
+        }
+        search_form = Courses::SearchForm.new
+
+        extractor = described_class.new(
+          search_params:,
+          search_form:,
+        )
+
+        expect(extractor.call).to eq(
+          [
+            Courses::ActiveFilter.new(id: :subjects, value: "Primary", raw_value: "00", remove_params: { subjects: nil }),
+          ],
+        )
       end
     end
 
