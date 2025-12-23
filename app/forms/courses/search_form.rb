@@ -138,7 +138,7 @@ module Courses
     def radius_options
       self.class.radius_values.map do |value|
         RadiusOption.new(
-          value:,
+          value: value.to_i,
           name: I18n.t("helpers.label.courses_search_form.radius_options.miles", count: value),
         )
       end

@@ -2,14 +2,14 @@ require "rails_helper"
 
 RSpec.describe Courses::DefaultRadius do
   describe "#call" do
-    it "returns nil when no location" do
+    it "returns default when no location" do
       radius = described_class.new(
         location: nil,
         formatted_address: nil,
         address_types: nil,
       ).call
 
-      expect(radius).to be_nil
+      expect(radius).to be 50
     end
 
     it "returns london radius when formatted_address is london UK" do
