@@ -11,8 +11,6 @@ module Courses
     end
 
     def call
-      return nil if location.blank?
-
       if london?
         london_radius
       elsif locality?
