@@ -86,7 +86,9 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
       scenario "radius filter is shown only when location is present" do
         given_the_user_searches_for_location_with_radius("London", "20")
         then_location_filter_is_displayed("London")
-        and_radius_filter_is_displayed("Search radius: 20 miles")
+        then_the_active_filters_are_visible("London")
+        when_the_user_changes_radius_to("50", location: "London")
+        and_radius_filter_is_displayed("Search radius: 50 miles")
       end
 
       scenario "changing radius updates the active filter" do
