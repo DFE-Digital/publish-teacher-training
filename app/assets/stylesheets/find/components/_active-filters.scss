@@ -3,7 +3,7 @@
   margin: 0 0 15px;
 
   font-size: 19px;
-  font-weight: 700;
+  font-weight: 400;
 
   line-height: 1.3158;
 
@@ -11,8 +11,6 @@
 
   @media (max-width: 768px) {
     margin-bottom: 12px;
-
-    font-size: 16px;
 
     line-height: 1.375;
   }
@@ -31,16 +29,16 @@
     margin-bottom: 10px;
 
     @media (max-width: 768px) {
-      display: block;
+      display: inline-block;
 
-      margin-right: 0;
-      margin-bottom: 12px;
+      margin-right: 8px;
+      margin-bottom: 8px;
     }
   }
 }
 
 .app-c-filter-summary__remove-filter {
-  display: flex;
+  display: inline-flex;
 
   align-items: center;
 
@@ -66,9 +64,11 @@
 
     display: inline-block;
 
-    margin-right: 10px;
+    margin-right: 0;
 
-    font-size: 20px;
+    font-size: 22px;
+
+    padding-right: 5px;
 
     line-height: 1;
 
@@ -97,11 +97,9 @@
   }
 
   @media (max-width: 768px) {
-    display: block;
+    display: inline-flex;
 
-    width: 100%;
-
-    text-align: left;
+    white-space: nowrap;
   }
 }
 
@@ -171,4 +169,3 @@
 .govuk-link--no-visited-state:visited {
   color: #1d70b8;
 }
-
