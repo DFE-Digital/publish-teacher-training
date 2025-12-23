@@ -70,7 +70,8 @@ module Courses
 
     def skip_default?(attribute, value)
       default = resolve_default(attribute)
-      value == default
+
+      value.to_s == default.to_s
     end
 
     def resolve_default(attribute)

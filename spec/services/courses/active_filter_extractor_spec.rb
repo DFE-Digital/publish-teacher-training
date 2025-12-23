@@ -1060,17 +1060,11 @@ RSpec.describe Courses::ActiveFilterExtractor do
         expect(active_filters).to eq([])
       end
 
-      it "formats radius with miles label" do
-        search_form = Courses::SearchForm.new(
-          location: "London, UK",
-          short_address: "London",
-          formatted_address: "London, UK",
-          radius: 100,
-        )
-        search_params = search_form.search_params
+      it "returns radius as string and location" do
+        search_form = Courses::SearchForm.new
 
         extractor = described_class.new(
-          search_params:,
+          search_params: { short_address: "London", radius: "100" },
           search_form:,
         )
 
@@ -1085,8 +1079,8 @@ RSpec.describe Courses::ActiveFilterExtractor do
             ),
             Courses::ActiveFilter.new(
               id: :radius,
-              raw_value: 100,
-              value: 100,
+              raw_value: "100",
+              value: "100",
               remove_params: { radius: nil },
             ),
           ],
