@@ -148,27 +148,10 @@ module Courses
     def radius
       return super if super.present?
 
-      if london?
-        LONDON_RADIUS.call
-      elsif locality?
-        SMALL_RADIUS
-      else
-        DEFAULT_RADIUS
-      end
-    end
-
-    def london?
-      formatted_address == "London, UK"
+      DefaultRadius.new(location:, formatted_address:, address_types:).call
     end
 
     PHYSICS_SUBJECT_CODE = "F3"
-
-    SMALL_RADIUS_TYPES = %w[postal_code street_address route sublocality locality].freeze
-    def locality?
-      # @see https://developers.google.com/maps/documentation/geocoding/requests-geocoding#Types
-      address_types && (address_types & SMALL_RADIUS_TYPES).present?
-    end
-
     def search_for_physics?
       PHYSICS_SUBJECT_CODE.in?(Array(subjects)) || subject_code == PHYSICS_SUBJECT_CODE
     end
