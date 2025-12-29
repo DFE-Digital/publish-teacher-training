@@ -61,32 +61,33 @@ jobs:
             exit 0
           fi
 
+          CARD_ID=""
+
           # If REF looks like a Trello card shortlink (8 alnum) or a full card id (24 hex), use it directly.
           if [[ "$REF" =~ ^[A-Za-z0-9]{8}$ || "$REF" =~ ^[0-9a-fA-F]{24}$ ]]; then
-            echo "card_id=$REF" >> "$GITHUB_OUTPUT"
-            exit 0
+            CARD_ID="$REF"
+          else
+            if [[ -z "${TRELLO_BOARD_IDS:-}" ]]; then
+              echo "Missing secrets.TRELLO_BOARD_IDS (comma-separated board IDs to search)." >&2
+              exit 1
+            fi
+
+            # Search Trello cards on the board(s) for the reference (e.g. TRELLO-123).
+            RESP="$(curl -sS --get "https://api.trello.com/1/search" \
+              --data-urlencode "query=$REF" \
+              --data-urlencode "idBoards=$TRELLO_BOARD_IDS" \
+              --data-urlencode "modelTypes=cards" \
+              --data-urlencode "cards_limit=10" \
+              --data-urlencode "card_fields=name" \
+              --data-urlencode "key=$TRELLO_KEY" \
+              --data-urlencode "token=$TRELLO_TOKEN")"
+
+            # Pick the first card whose name contains the reference (case-insensitive).
+            CARD_ID="$(echo "$RESP" | jq -r --arg ref "$REF" '.cards[] | select(.name | test($ref;"i")) | .id' | head -n 1)"
           fi
-
-          if [[ -z "${TRELLO_BOARD_IDS:-}" ]]; then
-            echo "Missing secrets.TRELLO_BOARD_IDS (comma-separated board IDs to search)." >&2
-            exit 1
-          fi
-
-          # Search Trello cards on the board(s) for the reference (e.g. TRELLO-123).
-          RESP="$(curl -sS --get "https://api.trello.com/1/search" \
-            --data-urlencode "query=$REF" \
-            --data-urlencode "idBoards=$TRELLO_BOARD_IDS" \
-            --data-urlencode "modelTypes=cards" \
-            --data-urlencode "cards_limit=10" \
-            --data-urlencode "card_fields=name" \
-            --data-urlencode "key=$TRELLO_KEY" \
-            --data-urlencode "token=$TRELLO_TOKEN")"
-
-          # Pick the first card whose name contains the reference (case-insensitive).
-          CARD_ID="$(echo "$RESP" | jq -r --arg ref "$REF" '.cards[] | select(.name | test($ref;"i")) | .id' | head -n 1)"
 
           if [[ -z "$CARD_ID" || "$CARD_ID" == "null" ]]; then
-            echo "Could not find a Trello card on board(s) [$TRELLO_BOARD_IDS] containing: $REF" >&2
+            echo "Could not find a Trello card containing: $REF" >&2
             echo "Make sure the card title includes the reference exactly (e.g. ... [TRELLO-123] ...)." >&2
             exit 1
           fi
