@@ -72,7 +72,7 @@ module Publish
       @provider = provider
       @course = @course.decorate
 
-      @enrichment = @course.latest_draft_enrichment
+      @enrichment = @course.latest_unpublished_enrichment
 
       authorize @course
     end

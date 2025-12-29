@@ -26,12 +26,7 @@ module Publish
           if @fees_and_financial_support_form.save!
             course_updated_message "Fees and financial support"
 
-            redirect_to publish_provider_recruitment_cycle_course_path(
-              provider.provider_code,
-              recruitment_cycle.year,
-              course.course_code,
-            )
-
+            redirect_after_edit
           else
             @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
@@ -48,6 +43,10 @@ module Publish
         def fees_and_financial_support_params
           params
             .expect(publish_fields_fees_and_financial_support_form: [*Publish::Fields::FeesAndFinancialSupportForm::FIELDS])
+        end
+
+        def goto_preview?
+          params["publish_fields_fees_and_financial_support_form"][:goto_preview] == "true"
         end
       end
     end

@@ -2,7 +2,7 @@
 module Publish
   module Courses
     module Fields
-      class WhatYouWillStudyController < ApplicationController
+      class WhatYouWillStudyController < BaseController
         include CopyCourseContent
         before_action :authorise_user
         def edit
@@ -22,10 +22,8 @@ module Publish
           )
           if @what_you_will_study_form.save!
             course_updated_message CourseEnrichment.human_attribute_name("what_you_will_study")
-            redirect_to publish_provider_recruitment_cycle_course_path(provider.provider_code,
-                                                                       recruitment_cycle.year,
-                                                                       course.course_code)
 
+            redirect_after_edit
           else
             fetch_course_list_to_copy_from
             render :edit
@@ -52,6 +50,10 @@ module Publish
 
         def course_enrichment
           @course_enrichment ||= course.enrichments.find_or_initialize_draft
+        end
+
+        def goto_preview?
+          params["publish_fields_what_you_will_study_form"][:goto_preview] == "true"
         end
       end
     end
