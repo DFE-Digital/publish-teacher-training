@@ -91,7 +91,23 @@ jobs:
             exit 1
           fi
 
+          CARD_DETAIL="$(curl -sS "https://api.trello.com/1/cards/${CARD_ID}" \
+            --get \
+            --data-urlencode "fields=name,shortUrl" \
+            --data-urlencode "key=$TRELLO_KEY" \
+            --data-urlencode "token=$TRELLO_TOKEN")"
+
+          CARD_URL="$(echo "$CARD_DETAIL" | jq -r '.shortUrl')"
+          CARD_NAME="$(echo "$CARD_DETAIL" | jq -r '.name')"
+
+          if [[ -z "$CARD_URL" || "$CARD_URL" == "null" ]]; then
+            echo "Unable to fetch Trello card URL for card $CARD_ID" >&2
+            exit 1
+          fi
+
           echo "card_id=$CARD_ID" >> "$GITHUB_OUTPUT"
+          echo "card_url=$CARD_URL" >> "$GITHUB_OUTPUT"
+          echo "card_name=$CARD_NAME" >> "$GITHUB_OUTPUT"
 
       - name: Attach PR to Trello card
         if: steps.resolve.outputs.skip != 'true'
@@ -115,3 +131,49 @@ jobs:
             --data-urlencode "token=${TRELLO_TOKEN}" \
             --data-urlencode "url=${PR_URL}" \
             --data-urlencode "name=GitHub PR #${PR_NUM}"
+
+      - name: Comment Trello link on PR
+        if: steps.resolve.outputs.skip != 'true' && github.event.pull_request.head.repo.fork == false
+        uses: actions/github-script@v7
+        env:
+          CARD_URL: ${{ steps.resolve.outputs.card_url }}
+          CARD_NAME: ${{ steps.resolve.outputs.card_name }}
+        with:
+          script: |
+            const cardUrl = process.env.CARD_URL;
+            if (!cardUrl) {
+              core.info("No Trello card URL available; skipping comment.");
+              return;
+            }
+            const cardName = process.env.CARD_NAME || "Trello card";
+            const marker = "<!-- trello-link -->";
+            const body = `${marker}\nLinked Trello card: [${cardName}](${cardUrl})`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100
+            });
+
+            const existing = comments.find((comment) =>
+              comment.body && comment.body.includes(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body
+              });
+            }
