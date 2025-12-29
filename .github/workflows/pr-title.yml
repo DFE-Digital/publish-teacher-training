@@ -127,6 +127,16 @@ jobs:
             exit 1
           fi
 
+          EXISTING="$(curl -sS "https://api.trello.com/1/cards/${CARD_ID}/attachments" \
+            --get \
+            --data-urlencode "key=${TRELLO_KEY}" \
+            --data-urlencode "token=${TRELLO_TOKEN}")"
+
+          if echo "$EXISTING" | jq -e --arg url "$PR_URL" '.[] | select(.url == $url)' >/dev/null; then
+            echo "Trello card already contains attachment for ${PR_URL}; skipping."
+            exit 0
+          fi
+
           curl -sS -X POST "https://api.trello.com/1/cards/${CARD_ID}/attachments" \
             --data-urlencode "key=${TRELLO_KEY}" \
             --data-urlencode "token=${TRELLO_TOKEN}" \
