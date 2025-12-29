@@ -37,6 +37,7 @@ module Courses
     attribute :administrative_area_level_2
     attribute :administrative_area_level_4
     attribute :address_types
+    attribute :short_address
 
     # Old parameters #
     attribute :age_group
@@ -52,6 +53,12 @@ module Courses
 
     delegate :primary_subjects, :primary_subject_codes, :secondary_subjects, :secondary_subject_codes, :all_subjects, to: :subjects_cache
     delegate :providers_list, to: :providers_cache
+
+    MINIMUM_DEGREE_REQUIRED_OPTIONS = %w[two_one two_two third_class pass no_degree_required].freeze
+    FUNDING_OPTIONS = %w[fee salary apprenticeship].freeze
+    QUALIFICATION_OPTIONS = %w[qts qts_with_pgce_or_pgde].freeze
+    START_DATE_OPTIONS = %w[september all_other_dates].freeze
+    STUDY_TYPE_OPTIONS = %w[full_time part_time].freeze
 
     def initialize(attributes = {})
       super
@@ -137,7 +144,7 @@ module Courses
     def radius_options
       self.class.radius_values.map do |value|
         RadiusOption.new(
-          value:,
+          value: value.to_i,
           name: I18n.t("helpers.label.courses_search_form.radius_options.miles", count: value),
         )
       end
@@ -146,27 +153,10 @@ module Courses
     def radius
       return super if super.present?
 
-      if london?
-        LONDON_RADIUS.call
-      elsif locality?
-        SMALL_RADIUS
-      else
-        DEFAULT_RADIUS
-      end
-    end
-
-    def london?
-      formatted_address == "London, UK"
+      DefaultRadius.new(location:, formatted_address:, address_types:).call
     end
 
     PHYSICS_SUBJECT_CODE = "F3"
-
-    SMALL_RADIUS_TYPES = %w[postal_code street_address route sublocality locality].freeze
-    def locality?
-      # @see https://developers.google.com/maps/documentation/geocoding/requests-geocoding#Types
-      address_types && (address_types & SMALL_RADIUS_TYPES).present?
-    end
-
     def search_for_physics?
       PHYSICS_SUBJECT_CODE.in?(Array(subjects)) || subject_code == PHYSICS_SUBJECT_CODE
     end
@@ -189,6 +179,47 @@ module Courses
       return old_qualification_transformation if qualification.present?
 
       super
+    end
+
+    def active_filters
+      @active_filters ||= Courses::ActiveFilterExtractor.new(
+        search_form: self,
+        search_params: search_params.except(*%i[
+          location
+          formatted_address
+          postal_code
+          postal_town
+          latitude
+          longitude
+          country
+          route
+          locality
+          administrative_area_level_1
+          administrative_area_level_2
+          administrative_area_level_4
+          address_types
+        ]),
+      ).call
+    end
+
+    def minimum_degree_required_options
+      MINIMUM_DEGREE_REQUIRED_OPTIONS
+    end
+
+    def funding_options
+      FUNDING_OPTIONS
+    end
+
+    def qualification_options
+      QUALIFICATION_OPTIONS
+    end
+
+    def start_date_options
+      START_DATE_OPTIONS
+    end
+
+    def study_type_options
+      STUDY_TYPE_OPTIONS
     end
 
   private
