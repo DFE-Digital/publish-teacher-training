@@ -28,9 +28,9 @@
   - `refactor`: production refactors such as renaming variables or restructuring code.
   - `test`: adding or refactoring tests only.
   - `chore`: maintenance tasks such as build or tooling updates.
-  - `deps`: dependency updates (gems, npm packages, GitHub Actions etc). Dependabot PRs automatically use `[DEPENDABOT]` for the Trello reference.
+  - `deps`: dependency updates (gems, npm packages, GitHub Actions etc). Dependabot PRs continue to use their default titles; the workflow skips enforcement for them.
 - Keep the short description concise (<= 72 characters when possible) and ensure the topic reflects the area touched, e.g. `feat(Topic)[TRELLO-123]: allow providers to filter results`.
-- The value inside `[...]` must match a Trello reference that appears in the card title (e.g. `[TRELLO-123]` or the card shortlink). A GitHub Action uses this reference to automatically attach the PR URL to the card. If the reference cannot be resolved, the workflow fails and you will need to fix the title or the Trello card name before merging.
+- The value inside `[...]` must match a Trello reference that appears in the card title (e.g. `[TRELLO-123]` or the card shortlink). A GitHub Action uses this reference to automatically attach the PR URL to the card for human-authored PRs. Dependabot PRs are excluded from this automation. If the reference cannot be resolved, the workflow fails and you will need to fix the title or the Trello card name before merging.
 
 ### PR Description
 
