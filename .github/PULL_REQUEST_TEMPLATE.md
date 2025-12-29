@@ -1,3 +1,6 @@
+> **PR title format:** `<prefix>(<Topic>)[<Trello ticket ID>]: <short description>` using one of `feat|fix|docs|style|refactor|test|chore|deps`.
+<!-- EXAMPLE: feat(LongForm)[sXTR9dq2]: New interview process validation -->
+
 ## Context
 
 <!-- Why are you making this change? What might surprise someone about it? -->
