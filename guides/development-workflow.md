@@ -30,6 +30,7 @@
   - `chore`: maintenance tasks such as build or tooling updates.
   - `deps`: dependency updates (gems, npm packages, GitHub Actions etc). Dependabot PRs automatically use `[DEPENDABOT]` for the Trello reference.
 - Keep the short description concise (<= 72 characters when possible) and ensure the topic reflects the area touched, e.g. `feat(Topic)[TRELLO-123]: allow providers to filter results`.
+- The value inside `[...]` must match a Trello reference that appears in the card title (e.g. `[TRELLO-123]` or the card shortlink). A GitHub Action uses this reference to automatically attach the PR URL to the card. If the reference cannot be resolved, the workflow fails and you will need to fix the title or the Trello card name before merging.
 
 ### PR Description
 
