@@ -10,6 +10,7 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
   # Ensure that the support agent is an admin user
   validate :support_agent_is_admin, if: :support_agent_id?
   validates :form_name, presence: true
+  validates :form_link, presence: true, on: :update
 
   # These fields need to be validated once the form details are submitted by the provider i.e. status changes to 'submitted'
   with_options if: :submitted? do
