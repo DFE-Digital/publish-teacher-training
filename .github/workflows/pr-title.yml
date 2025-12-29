@@ -1,0 +1,49 @@
+name: PR Title Check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Normalise Dependabot PR titles
+        if: ${{ github.actor == 'dependabot[bot]' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const originalTitle = pr.title || "";
+            const bumpMatch = originalTitle.match(/^Bump\s+(.+?)\s+(?:from|to)\s+/i);
+            const rawTopic = bumpMatch ? bumpMatch[1] : "Dependencies";
+            const topic = rawTopic.replace(/[^A-Za-z0-9_.-]+/g, "-");
+            const shortDescription = originalTitle.trim()
+              ? originalTitle.trim().replace(/^Bump\s+/i, "bump ")
+              : "dependency updates";
+            const newTitle = `deps(${topic})[DEPENDABOT]: ${shortDescription}`;
+            if (newTitle !== originalTitle) {
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                title: newTitle
+              });
+            }
+      - name: Validate PR title format
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title || "";
+            const pattern = /^(feat|fix|docs|style|refactor|test|chore|deps)\([^()\r\n]+\)\[[^\[\]\r\n]+\]: .{1,}$/;
+            if (!pattern.test(title)) {
+              core.setFailed(
+                `PR title "${title}" must match <prefix>(<Topic>)[<Trello ticket ID>]: <short description>`
+              );
+            }

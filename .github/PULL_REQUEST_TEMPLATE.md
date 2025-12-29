@@ -1,3 +1,5 @@
+> **PR title format:** `<prefix>(<Topic>)[<Trello ticket ID>]: <short description>` using one of `feat|fix|docs|style|refactor|test|chore|deps`.
+
 ## Context
 
 <!-- Why are you making this change? What might surprise someone about it? -->

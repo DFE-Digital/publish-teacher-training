@@ -19,9 +19,17 @@
 
 ### PR Title
 
-- The PR title should describe the change in a single line.
-
-- The PR title should be less than or equal to 72 characters long, if possible. This is a guideline, not a strict rule.
+- Use the following format so Trello tickets can be synced automatically: `<prefix>(<topic>)[<Trello ticket ID>]: <short description>`.
+- Supported prefixes describe the type of change and should match the list below:
+  - `feat`: new feature for users (not tooling-only changes).
+  - `fix`: bug fixes visible to users (not build script tweaks).
+  - `docs`: documentation-only changes.
+  - `style`: formatting / linting adjustments without production behaviour changes.
+  - `refactor`: production refactors such as renaming variables or restructuring code.
+  - `test`: adding or refactoring tests only.
+  - `chore`: maintenance tasks such as build or tooling updates.
+  - `deps`: dependency updates (gems, npm packages, GitHub Actions etc). Dependabot PRs automatically use `[DEPENDABOT]` for the Trello reference.
+- Keep the short description concise (<= 72 characters when possible) and ensure the topic reflects the area touched, e.g. `feat(Topic)[TRELLO-123]: allow providers to filter results`.
 
 ### PR Description
 
