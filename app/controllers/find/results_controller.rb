@@ -9,7 +9,11 @@ module Find
 
       @search_courses_form = ::Courses::SearchForm.new(search_form_params)
       @search_params = @search_courses_form.search_params
-      @courses_query = ::Courses::Query.new(params: @search_params.dup)
+      @courses_query = if FeatureFlag.active?(:find_filtering_and_sorting)
+                         ::Courses::Query.new(params: @search_params.dup)
+                       else
+                         ::Courses::OldQuery.new(params: @search_params.dup)
+                       end
       @courses = @courses_query.call
       @courses_count = @courses_query.count
 

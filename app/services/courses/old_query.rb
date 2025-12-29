@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Courses
-  class Query
+  class OldQuery
     DEFAULT_RADIUS_IN_MILES = 10
 
     attr_reader :applied_scopes, :scope, :params
@@ -24,20 +24,23 @@ module Courses
                        WHERE recruitment_cycle_id = #{@current_recruitment_cycle.id}
                          AND discarded_at IS NULL
                      ) provider ON course.provider_id = provider.id
+                     INNER JOIN course_site site_statuses ON (
+                       site_statuses.course_id = course.id
+                       AND site_statuses.status = 'R'
+                       AND site_statuses.publish = 'Y'
+                     )
                    SQL
                  )
                  .where(course: { discarded_at: nil })
                  .where(
                    provider: { recruitment_cycle_id: @current_recruitment_cycle.id },
                  )
-                 .where(<<~SQL)
-                   EXISTS (
-                     SELECT 1 FROM course_site
-                     WHERE course_site.course_id = course.id
-                       AND course_site.status = 'R'
-                       AND course_site.publish = 'Y'
-                   )
-                 SQL
+                 .where(
+                   site_statuses: {
+                     status: SiteStatus.statuses[:running],
+                     publish: SiteStatus.publishes[:published],
+                   },
+                 )
     end
 
     def call
@@ -58,14 +61,13 @@ module Courses
       @scope = location_scope
       @scope = excluded_courses_scope
 
-      # Ordering
-      @scope = default_ordering_scope
-      @scope = distance_ascending_order_scope
-      @scope = course_name_ascending_order_scope
-      @scope = provider_name_ascending_order_scope
-      @scope = start_date_ascending_order_scope
-      @scope = fee_uk_ascending_order_scope
-      @scope = fee_intl_ascending_order_scope
+      if @applied_scopes[:location].blank?
+        @scope = default_ordering_scope
+        @scope = course_name_ascending_order_scope
+        @scope = course_name_descending_order_scope
+        @scope = provider_name_ascending_order_scope
+        @scope = provider_name_descending_order_scope
+      end
 
       log_query_info
 
@@ -233,7 +235,7 @@ module Courses
       @applied_scopes[:interview_location] = params[:interview_location]
 
       @scope
-        .with_latest_published_enrichment
+        .joins(:latest_published_enrichment)
         .where("(course_enrichment.json_data->>'InterviewLocation') IN (?)", %w[online both])
     end
 
@@ -276,7 +278,7 @@ module Courses
     end
 
     def location_scope
-      return @scope if params[:latitude].blank? || params[:longitude].blank?
+      return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
 
       radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
@@ -288,15 +290,8 @@ module Courses
         radius: radius_in_miles,
       }
 
-      @scope = @scope
-        .joins(<<~SQL)
-          INNER JOIN course_site site_statuses ON (
-            site_statuses.course_id = course.id
-            AND site_statuses.status = 'R'
-            AND site_statuses.publish = 'Y'
-          )
-          INNER JOIN site ON site.id = site_statuses.site_id
-        SQL
+      @scope
+        .joins("INNER JOIN site ON site.id = site_statuses.site_id")
         .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
         .where(
           <<~SQL.squish, longitude, latitude, radius_in_meters
@@ -323,28 +318,15 @@ module Courses
           ),
         )
         .group(:id, "provider.provider_name")
+        .order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC")
     end
 
     def default_ordering_scope
       return @scope if params[:order].present?
 
-      # This is technically handled in the SearchForm that passes params to
-      # this class But it's implemented here too to keep the unit tests passing
-      params[:order] = if @applied_scopes[:location].present?
-                         "distance"
-                       else
-                         "course_name_ascending"
-                       end
+      params[:order] = "course_name_ascending"
 
       @scope
-    end
-
-    def distance_ascending_order_scope
-      return @scope unless params[:order] == "distance"
-
-      @applied_scopes[:order] = params[:order]
-
-      @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC")
     end
 
     def course_name_ascending_order_scope
@@ -357,6 +339,22 @@ module Courses
         .order(
           {
             courses_table[:name] => :asc,
+            providers_table[:provider_name] => :asc,
+            courses_table[:course_code] => :asc,
+          },
+        )
+    end
+
+    def course_name_descending_order_scope
+      return @scope unless params[:order] == "course_name_descending"
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select("course.*, provider.provider_name")
+        .order(
+          {
+            courses_table[:name] => :desc,
             providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
           },
@@ -379,8 +377,8 @@ module Courses
         )
     end
 
-    def start_date_ascending_order_scope
-      return @scope unless params[:order] == "start_date_ascending"
+    def provider_name_descending_order_scope
+      return @scope unless params[:order] == "provider_name_descending"
 
       @applied_scopes[:order] = params[:order]
 
@@ -388,58 +386,8 @@ module Courses
         .select("course.*, provider.provider_name")
         .order(
           {
-            courses_table[:start_date] => :asc,
             providers_table[:provider_name] => :desc,
             courses_table[:name] => :asc,
-            courses_table[:course_code] => :asc,
-          },
-        )
-    end
-
-    def funding_sorting
-      Arel.sql(<<-SQL)
-        case funding
-        when 'fee' then 0
-        else 1
-        end fee_funding
-      SQL
-    end
-
-    def fee_uk_ascending_order_scope
-      return @scope unless params[:order] == "fee_uk_ascending"
-
-      @applied_scopes[:order] = params[:order]
-
-      @scope
-        .select("course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeUkEu')::integer) as uk_fee")
-        .with_latest_published_enrichment
-        .group("course.id, provider.id, provider.provider_name")
-        .order(
-          {
-            "fee_funding" => :asc,
-            "uk_fee" => :asc,
-            courses_table[:name] => :asc,
-            providers_table[:provider_name] => :desc,
-            courses_table[:course_code] => :asc,
-          },
-        )
-    end
-
-    def fee_intl_ascending_order_scope
-      return @scope unless params[:order] == "fee_intl_ascending"
-
-      @applied_scopes[:order] = params[:order]
-
-      @scope
-        .select("course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeInternational')::integer) as intl_fee")
-        .with_latest_published_enrichment
-        .group("course.id, provider.id, provider.provider_name")
-        .order(
-          {
-            "fee_funding" => :asc,
-            "intl_fee" => :asc,
-            courses_table[:name] => :asc,
-            providers_table[:provider_name] => :desc,
             courses_table[:course_code] => :asc,
           },
         )
@@ -463,10 +411,6 @@ module Courses
 
     def providers_table
       Provider.arel_table
-    end
-
-    def enrichments_table
-      CourseEnrichment.arel_table
     end
 
     ExcludedCourseParam = Data.define(:provider_code, :course_code) do
