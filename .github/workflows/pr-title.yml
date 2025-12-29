@@ -50,6 +50,11 @@ jobs:
         run: |
           set -euo pipefail
 
+          if [[ -z "${TRELLO_KEY:-}" || -z "${TRELLO_TOKEN:-}" ]]; then
+            echo "Missing Trello API credentials (secrets.TRELLO_KEY / secrets.TRELLO_TOKEN)." >&2
+            exit 1
+          fi
+
           # Allow Dependabot PR convention without trying to attach.
           if [[ "$REF" == "DEPENDABOT" ]]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
@@ -99,6 +104,11 @@ jobs:
           PR_NUM: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
+
+          if [[ -z "${TRELLO_KEY:-}" || -z "${TRELLO_TOKEN:-}" ]]; then
+            echo "Missing Trello API credentials (secrets.TRELLO_KEY / secrets.TRELLO_TOKEN)." >&2
+            exit 1
+          fi
 
           curl -sS -X POST "https://api.trello.com/1/cards/${CARD_ID}/attachments" \
             --data-urlencode "key=${TRELLO_KEY}" \
