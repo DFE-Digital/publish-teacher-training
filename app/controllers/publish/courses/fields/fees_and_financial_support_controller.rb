@@ -10,7 +10,7 @@ module Publish
 
         def edit
           @fees_and_financial_support_form = Publish::Fields::FeesAndFinancialSupportForm.new(course_enrichment)
-          @copied_fields = copy_content_check(::Courses::Copy::V2_FEES_AND_FINANCIAL_SUPPORT_FIELDS)
+          @copied_fields = copy_content_check(::Courses::Copy::FEES_AND_FINANCIAL_SUPPORT_FIELDS)
           @v1_enrichment = course.enrichments.find_by(version: 1)
 
           @copied_fields_values = copied_fields_values if @copied_fields.present?

@@ -468,12 +468,6 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:fee_international]
   end
 
-  def published_fee_details
-    return unless current_published_enrichment
-
-    current_published_enrichment[:fee_details]
-  end
-
   def published_financial_support
     return unless current_published_enrichment
 

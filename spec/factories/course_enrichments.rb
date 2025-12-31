@@ -30,14 +30,6 @@ FactoryBot.define do
         "Academic Year",
       ].sample
     end
-    fee_details do
-      [
-        "This apprenticeship programme is funded via the apprentice levy from eligible schools.",
-        "You will not have to pay these fees upfront. Eligible UK and EU students can apply for a tuition fee loan to cover the cost of tuition fees from the government.",
-        "Student grants are available to eligible applicants.",
-        "Fees are made payable to the University.",
-      ].sample
-    end
     fee_uk_eu         { Faker::Number.within(range: 0..100_000).to_i }
     fee_international { Faker::Number.within(range: 0..100_000).to_i }
     financial_support do
@@ -82,6 +74,14 @@ FactoryBot.define do
       version { 1 }
       how_school_placements_work { Faker::Lorem.sentence }
       about_course { Faker::Lorem.sentence }
+      fee_details do
+        [
+          "This apprenticeship programme is funded via the apprentice levy from eligible schools.",
+          "You will not have to pay these fees upfront. Eligible UK and EU students can apply for a tuition fee loan to cover the cost of tuition fees from the government.",
+          "Student grants are available to eligible applicants.",
+          "Fees are made payable to the University.",
+        ].sample
+      end
     end
 
     trait :rolled_over do

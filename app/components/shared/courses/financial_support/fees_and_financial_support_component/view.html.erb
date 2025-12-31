@@ -6,11 +6,7 @@
     <%= render partial: "find/courses/salary", locals: { course: @course } %>
   <% end %>
   <% if has_fees? %>
-   <% if course.version.to_i == 2 %>
     <%= render partial: "find/courses/financial_support/fees_and_financials", locals: { course: @course, enrichment: enrichment } %>
-   <% else %>
-    <%= render Find::Courses::FeesComponent::View.new(course) %>
-   <% end %>
   <% end %>
   <% if salaried? %>
     <%= render partial: "shared/courses/financial_support/salaried", locals: { course: @course } %>

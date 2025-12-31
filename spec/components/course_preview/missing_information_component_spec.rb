@@ -19,7 +19,7 @@ module CoursePreview
           degree: degrees_start_publish_provider_recruitment_cycle_course_path(
             provider_code, recruitment_cycle_year, course_code, goto_preview: true
           ),
-          fee_uk_eu: fees_publish_provider_recruitment_cycle_course_path(
+          fees_and_financials: fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
             provider_code, recruitment_cycle_year, course_code, goto_preview: true
           ),
           gcse: gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(
@@ -39,7 +39,7 @@ module CoursePreview
       end
 
       include_examples "course with missing information", :degree, "Enter degree requirements"
-      include_examples "course with missing information", :fee_uk_eu, "Enter details about fees and financial support"
+      include_examples "course with missing information", :fees_and_financials, "Enter details about fees and financial support"
       include_examples "course with missing information", :gcse, "Enter GCSE and equivalency test requirements"
       include_examples "course with missing information", :train_with_us, "Enter details about the training provider"
       include_examples "course with missing information", :train_with_disability, "Enter details about training with disabilities and other needs"
