@@ -65,10 +65,6 @@ feature "Editing funding type" do
     )
   end
 
-  def then_i_should_see_the_reuse_content
-    expect(page).to have_selector('[data-qa="copy-course-warning"]')
-  end
-
   def and_i_update_the_fee
     @new_uk_fee = 10_000
 
