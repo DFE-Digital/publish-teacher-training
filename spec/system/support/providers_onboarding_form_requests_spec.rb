@@ -93,7 +93,7 @@ RSpec.describe "Support console providers onboarding form requests", service: :s
         expect(page).to have_link("View zendesk ticket", href: request.zendesk_link).or have_content("Not available")
         expect(page).to have_content(request.support_agent.present? ? request.support_agent.name : "Unassigned")
         expect(page).to have_content(request.status.titleize)
-        expect(page).to have_content(request.created_at.strftime("%d %B %Y"))
+        expect(page).to have_content(request.created_at.strftime("%-d %B %Y"))
       end
     end
 
