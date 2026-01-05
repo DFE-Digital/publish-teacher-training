@@ -53,7 +53,7 @@ module Publish
         end
 
         def goto_preview?
-          params["publish_fields_what_you_will_study_form"][:goto_preview] == "true"
+          params.dig(:publish_fields_what_you_will_study_form, :goto_preview) == "true"
         end
       end
     end
