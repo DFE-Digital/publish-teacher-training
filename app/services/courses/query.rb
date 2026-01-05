@@ -389,7 +389,7 @@ module Courses
         .order(
           {
             courses_table[:start_date] => :asc,
-            providers_table[:provider_name] => :desc,
+            providers_table[:provider_name] => :asc,
             courses_table[:name] => :asc,
             courses_table[:course_code] => :asc,
           },
@@ -419,7 +419,7 @@ module Courses
             "fee_funding" => :asc,
             "uk_fee" => :asc,
             courses_table[:name] => :asc,
-            providers_table[:provider_name] => :desc,
+            providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
           },
         )
@@ -439,7 +439,7 @@ module Courses
             "fee_funding" => :asc,
             "intl_fee" => :asc,
             courses_table[:name] => :asc,
-            providers_table[:provider_name] => :desc,
+            providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
           },
         )
