@@ -46,7 +46,7 @@ module Publish
         end
 
         def goto_preview?
-          params["publish_fields_fees_and_financial_support_form"][:goto_preview] == "true"
+          params.dig(:publish_fields_fees_and_financial_support_form, :goto_preview) == "true"
         end
       end
     end
