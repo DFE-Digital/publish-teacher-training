@@ -17,28 +17,50 @@
 }
 
 .app-c-filter-summary__remove-filters {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+  justify-content: flex-start;
+
   padding: 0;
-  margin: 0 0 15px;
+  margin-block-start: 0;
 
   list-style: none;
 
   li {
-    display: inline-block;
-
-    margin-right: 15px;
-    margin-bottom: 10px;
-
     @media (max-width: 768px) {
-      display: inline-block;
-
       margin-right: 8px;
       margin-bottom: 8px;
     }
   }
+
+  .govuk-visually-hidden {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    border: 0;
+
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .govuk-link--no-visited-state:visited {
+    color: #1d70b8;
+  }
 }
 
 .app-c-filter-summary__remove-filter {
-  display: inline-flex;
+  display: flex;
 
   align-items: center;
 
@@ -145,26 +167,4 @@
 
     margin-top: 12px;
   }
-}
-
-.govuk-visually-hidden {
-  position: absolute;
-
-  width: 1px;
-  height: 1px;
-
-  padding: 0;
-  margin: -1px;
-
-  overflow: hidden;
-
-  white-space: nowrap;
-
-  border: 0;
-
-  clip: rect(0, 0, 0, 0);
-}
-
-.govuk-link--no-visited-state:visited {
-  color: #1d70b8;
 }

@@ -4,6 +4,7 @@
 @import "../one-login";
 // Treat this as a library. It may become distributed by Gov.uk
 @import "./components/filter-panel";
+@import "./components/active-filters";
 
 @import "../components/accordion";
 @import "../components/autocomplete";
@@ -18,7 +19,6 @@
 @import "../components/callout";
 
 @import "./components/accordion";
-@import "./components/active-filters";
 @import "./components/details-component";
 @import "./components/feedback";
 @import "./components/filter-layout";
