@@ -68,6 +68,23 @@ module Courses
       @providers_cache = ProvidersCache.new
     end
 
+    def filter_counts
+      p_subjects, s_subjects = subjects&.partition { primary_subject_codes.include?(it) }
+
+      {
+        primary_subjects: p_subjects&.count,
+        secondary_subjects: s_subjects&.count,
+        funding_chosen: funding&.count,
+        send_chosen: send_courses && 1 || nil,
+        qualifications_chosen: qualifications&.count,
+        interview_chosen: interview_location && 1 || nil,
+        start_date_chosen: start_date&.count,
+        sponsor_visa_chosen: can_sponsor_visa && 1 || nil,
+        study_types_chosen: study_types&.count,
+        level_chosen: level && 1 || nil,
+      }
+    end
+
     def excluded_courses=(attributes)
       super(attributes.is_a?(Hash) ? attributes.values : attributes)
     end
