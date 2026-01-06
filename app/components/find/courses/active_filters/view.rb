@@ -2,19 +2,17 @@ module Find
   module Courses
     module ActiveFilters
       class View < ViewComponent::Base
-        attr_reader :search_form, :search_params
+        attr_reader :active_filters, :search_params
 
-        delegate :active_filters, to: :search_form
-
-        def initialize(search_form:)
-          @search_form = search_form
-          @search_params = search_form.search_params || {}
-
+        def initialize(active_filters:, search_params: {})
           super
+
+          @active_filters = active_filters
+          @search_params = search_params
         end
 
         def render?
-          @search_form.active_filters.present?
+          @active_filters.present?
         end
       end
     end

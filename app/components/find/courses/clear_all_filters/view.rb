@@ -2,20 +2,17 @@ module Find
   module Courses
     module ClearAllFilters
       class View < ViewComponent::Base
-        attr_reader :search_form, :search_params, :html_class
+        attr_reader :active_filters, :html_class
 
-        delegate :active_filters, to: :search_form
-
-        def initialize(search_form:, html_class: "app-c-filter-summary__clear-filters")
-          @search_form = search_form
-          @search_params = search_form.search_params || {}
-          @html_class = html_class
-
+        def initialize(active_filters:, html_class: "app-c-filter-summary__clear-filters")
           super
+
+          @active_filters = active_filters
+          @html_class = html_class
         end
 
         def render?
-          @search_form.active_filters.present?
+          @active_filters.present?
         end
       end
     end

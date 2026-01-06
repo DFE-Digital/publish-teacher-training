@@ -43,7 +43,7 @@ module Find
     end
 
     def search_form_params
-      search_courses_params.merge(@address.to_h.merge(short_address: @address.short_address))
+      search_courses_params.merge(@address.params)
     end
 
     def search_courses_params
