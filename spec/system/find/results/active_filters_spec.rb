@@ -339,7 +339,6 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
       subject_name: "",
       subject_code: "",
       location: "London, UK",
-      order: "course_name_ascending",
       subjects: %w[00 01 W1 C1],
       level: "further_education",
       send_courses: "true",
