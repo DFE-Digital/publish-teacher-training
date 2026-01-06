@@ -89,6 +89,12 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_primary_html") %>
+
+          <% if @filter_counts[:primary_subjects].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:primary_subjects] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -116,6 +122,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_secondary_html") %>
+          <% if @filter_counts[:secondary_subjects].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:secondary_subjects] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -150,6 +161,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_further_html") %>
+          <% if @filter_counts[:level_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:level_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -165,6 +181,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_send_html") %>
+          <% if @filter_counts[:send_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:send_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -180,6 +201,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_fee") %>
+          <% if @filter_counts[:funding_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:funding_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -197,6 +223,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_mode") %>
+          <% if @filter_counts[:study_types_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:study_types_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -214,6 +245,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_qualification") %>
+          <% if @filter_counts[:qualifications_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:qualifications_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -251,6 +287,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_visa") %>
+          <% if @filter_counts[:sponsor_visa_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:sponsor_visa_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -270,6 +311,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_interviews") %>
+          <% if @filter_counts[:interview_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:interview_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
@@ -285,6 +331,11 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_start_date") %>
+          <% if @filter_counts[:start_date_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:start_date_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
