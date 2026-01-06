@@ -119,6 +119,10 @@ module Geolocation
       new(**address_data)
     end
 
+    def params
+      to_h.merge(short_address:)
+    end
+
     # Export as a hash suitable for caching or form serialization.
     #
     # @return [Hash] Hash with address attributes

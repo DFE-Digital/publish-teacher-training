@@ -133,7 +133,6 @@ module Courses
         order: proc { |params| params[:short_address].present? ? "distance" : "course_name_ascending" },
         level: "all",
         minimum_degree_required: "show_all_courses",
-        applications_open: true,
         radius: proc { |_params|
           DefaultRadius.new(
             location: @search_form.location,

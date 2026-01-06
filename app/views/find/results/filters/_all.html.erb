@@ -1,4 +1,4 @@
-<%= render Find::Courses::ActiveFilters::View.new(search_form: form.object) %>
+<%= render Find::Courses::ActiveFilters::View.new(active_filters: form.object.active_filters, search_params: form.object.search_params) %>
 
 <div data-controller="details-component" class="app-c-filter-panel__top">
   <div class="app-c-filter-section app-c-filter-section__summary">
@@ -311,7 +311,7 @@
     <div class="app-c-filter-panel__actions <%= "app-c-filter-panel__actions--single" if form.object.active_filters.blank? %>">
       <%= form.govuk_submit t(".apply_filter"), name: "utm_medium", value: "apply_filters_bottom", form: form_id, class: "app-c-filter-panel__action--submit" %>
 
-      <%= render Find::Courses::ClearAllFilters::View.new(search_form: form.object, html_class: "app-c-filter-panel__action--clear") %>
+      <%= render Find::Courses::ClearAllFilters::View.new(active_filters: form.object.active_filters, html_class: "app-c-filter-panel__action--clear") %>
     </div>
   </section>
 </div>
