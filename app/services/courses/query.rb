@@ -396,6 +396,9 @@ module Courses
         )
     end
 
+    # Salary courses should not have a fee_uk_eu value but many do. In order to
+    # prevent our sorting from placing Salary course in amongst the Fee courses
+    # during sorting, we initially sort by funding type here
     def funding_sorting
       Arel.sql(<<-SQL)
         case funding
