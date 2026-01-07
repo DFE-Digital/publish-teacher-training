@@ -6,7 +6,7 @@
 
   color: $govuk-text-colour;
 
-  @media (max-width: 40.0625em) {
+  @include govuk-media-query($until: tablet) {
     margin-bottom: govuk-spacing(2);
   }
 }
@@ -89,7 +89,7 @@
     background-color: govuk-colour("light-grey");
   }
 
-  @media (max-width: 40.0625em) {
+  @include govuk-media-query($until: tablet) {
     display: inline-flex;
   }
 }
@@ -130,7 +130,7 @@
     color: $govuk-link-active-colour;
   }
 
-  @media (max-width: 40.0625em) {
+  @include govuk-media-query($until: tablet) {
     display: block;
 
     margin-top: govuk-spacing(2);
