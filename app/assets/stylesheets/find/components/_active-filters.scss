@@ -1,16 +1,15 @@
 .app-active-filters__heading {
   padding: 0;
-  margin: 0 0 15px;
+  margin: 0 0 govuk-spacing(3);
 
-  font-size: 19px;
-  font-weight: 400;
+  @include govuk-font($size: 19);
 
   line-height: 1.3158;
 
-  color: #0b0c0c;
+  color: $govuk-text-colour;
 
-  @media (max-width: 768px) {
-    margin-bottom: 12px;
+  @media (max-width: 40.0625em) {
+    margin-bottom: govuk-spacing(2);
 
     line-height: 1.375;
   }
@@ -21,7 +20,7 @@
 
   flex-wrap: wrap;
 
-  gap: 10px;
+  gap: govuk-spacing(2);
   justify-content: flex-start;
 
   padding: 0;
@@ -30,25 +29,11 @@
   list-style: none;
 
   .govuk-visually-hidden {
-    position: absolute;
-
-    width: 1px;
-    height: 1px;
-
-    padding: 0;
-    margin: -1px;
-
-    overflow: hidden;
-
-    white-space: nowrap;
-
-    border: 0;
-
-    clip: rect(0, 0, 0, 0);
+    @include govuk-visually-hidden;
   }
 
   .govuk-link--no-visited-state:visited {
-    color: #1d70b8;
+    color: $govuk-link-colour;
   }
 }
 
@@ -57,11 +42,11 @@
 
   align-items: center;
 
-  padding: 5px 10px;
+  padding: govuk-spacing(1) govuk-spacing(2);
 
   line-height: 1.3158;
 
-  color: #0b0c0c;
+  color: $govuk-text-colour;
 
   text-align: left;
 
@@ -69,8 +54,8 @@
 
   cursor: pointer;
 
-  background-color: #f3f2f1;
-  border: 1px solid #b1b4b6;
+  background-color: govuk-colour("light-grey");
+  border: 1px solid $govuk-border-colour;
   border-radius: 0.3125em;
 
   &::before {
@@ -79,14 +64,14 @@
 
     display: inline-block;
 
-    padding-right: 5px;
+    padding-right: govuk-spacing(1);
     margin-right: 0;
 
     font-size: 22px;
 
     line-height: 1;
 
-    color: #0b0c0c;
+    color: $govuk-text-colour;
 
     content: "×";
   }
@@ -94,23 +79,23 @@
   &:hover {
     text-decoration: none;
 
-    background-color: #f3f2f1;
-    border-color: #0b0c0c;
+    background-color: govuk-colour("light-grey");
+    border-color: $govuk-text-colour;
   }
 
   &:focus {
-    outline: 3px solid #ffdd00;
+    outline: 3px solid $govuk-focus-colour;
     outline-offset: 0;
 
-    background-color: #ffdd00;
-    box-shadow: 0 2px 0 #0b0c0c;
+    background-color: $govuk-focus-colour;
+    box-shadow: 0 2px 0 $govuk-text-colour;
   }
 
   &:active {
-    background-color: #e8e8e6;
+    background-color: govuk-colour("light-grey");
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 40.0625em) {
     display: inline-flex;
   }
 }
@@ -118,11 +103,9 @@
 .app-active-filters__remove-filter-text {
   display: inline;
 
-  font-family: "GDS Transport", arial, sans-serif;
-  font-size: 1.1875rem;
-  font-weight: 400;
+  @include govuk-font($size: 19, $weight: regular);
 
-  color: #0b0c0c;
+  color: $govuk-text-colour;
 
   text-decoration: inherit;
 }
@@ -132,30 +115,30 @@
 
   &:link,
   &:visited {
-    color: #1d70b8;
+    color: $govuk-link-colour;
   }
 
   &:hover {
-    color: #105a92;
+    color: $govuk-link-hover-colour;
 
     text-decoration: none;
   }
 
   &:focus {
-    outline: 3px solid #ffdd00;
+    outline: 3px solid $govuk-focus-colour;
     outline-offset: 0;
 
-    background-color: #ffdd00;
-    box-shadow: 0 2px 0 #0b0c0c;
+    background-color: $govuk-focus-colour;
+    box-shadow: 0 2px 0 $govuk-text-colour;
   }
 
   &:active {
-    color: #0b0c0c;
+    color: $govuk-link-active-colour;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 40.0625em) {
     display: block;
 
-    margin-top: 12px;
+    margin-top: govuk-spacing(2);
   }
 }
