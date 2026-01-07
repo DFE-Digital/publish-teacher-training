@@ -70,6 +70,13 @@ module Courses
     def filter_counts
       p_subjects, s_subjects = subjects&.partition { primary_subject_codes.include?(it) }
 
+      # Default ordering is distance when location is present or course_name otherwise
+      ordering_chosen = if location.present?
+                          order == "distance" ? nil : 1
+                        else
+                          order == "course_name_ascending" ? nil : 1
+                        end
+
       {
         primary_subjects: p_subjects&.count,
         secondary_subjects: s_subjects&.count,
@@ -77,6 +84,7 @@ module Courses
         send_chosen: send_courses && 1 || nil,
         qualifications_chosen: qualifications&.count,
         interview_chosen: interview_location && 1 || nil,
+        ordering_chosen:,
         start_date_chosen: start_date&.count,
         sponsor_visa_chosen: can_sponsor_visa && 1 || nil,
         study_types_chosen: study_types&.count,
