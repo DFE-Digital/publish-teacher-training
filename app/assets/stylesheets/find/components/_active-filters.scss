@@ -4,14 +4,10 @@
 
   @include govuk-font($size: 19);
 
-  line-height: 1.3158;
-
   color: $govuk-text-colour;
 
   @media (max-width: 40.0625em) {
     margin-bottom: govuk-spacing(2);
-
-    line-height: 1.375;
   }
 }
 
@@ -43,8 +39,6 @@
   align-items: center;
 
   padding: govuk-spacing(1) govuk-spacing(2);
-
-  line-height: 1.3158;
 
   color: $govuk-text-colour;
 
