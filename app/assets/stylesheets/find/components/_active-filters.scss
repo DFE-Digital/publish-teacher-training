@@ -29,13 +29,6 @@
 
   list-style: none;
 
-  li {
-    @media (max-width: 768px) {
-      margin-right: 8px;
-      margin-bottom: 8px;
-    }
-  }
-
   .govuk-visually-hidden {
     position: absolute;
 
@@ -119,8 +112,6 @@
 
   @media (max-width: 768px) {
     display: inline-flex;
-
-    white-space: nowrap;
   }
 }
 
