@@ -70,6 +70,8 @@ module Courses
 
     def filter_counts
       p_subjects, s_subjects = subjects&.partition { primary_subject_codes.include?(it) }
+      primary_subect_count = p_subjects.count if p_subjects&.count&.positive?
+      secondary_subect_count = s_subjects.count if s_subjects&.count&.positive?
 
       # Default ordering is distance when location is present or course_name otherwise
       ordering_chosen = if location.present?
@@ -81,8 +83,8 @@ module Courses
       radius_chosen = (london? && radius == LONDON_RADIUS.call.to_s) || (locality? && radius == SMALL_RADIUS.to_s) || radius == DEFAULT_RADIUS.to_s ? 1 : nil
 
       {
-        primary_subjects: p_subjects&.count,
-        secondary_subjects: s_subjects&.count,
+        primary_subjects: primary_subect_count,
+        secondary_subjects: secondary_subect_count,
         funding_chosen: funding&.count,
         send_chosen: send_courses && 1 || nil,
         qualifications_chosen: qualifications&.count,
