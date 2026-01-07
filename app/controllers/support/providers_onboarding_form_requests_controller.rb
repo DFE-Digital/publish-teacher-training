@@ -15,14 +15,18 @@ module Support
     end
 
     def create
-      @onboarding_request = ProvidersOnboardingFormRequest.new(request_params)
-      @onboarding_request.uuid = SecureRandom.uuid
-      @onboarding_request.status = "pending"
+      # Creates a new onboarding form request with UUID, status, and form link
+      @onboarding_request = ProvidersOnboardingFormRequest.new(request_params).tap do |form|
+        form.uuid = SecureRandom.uuid
+        form.status = "pending"
+        form.form_link = publish_provider_onboarding_url(uuid: form.uuid)
+      end
+
+      # Fetches admin users for support agent selection in the form
       @admin_users = User.where(admin: true).order(:first_name, :last_name)
-      @onboarding_request.form_link = publish_provider_onboarding_form_url(uuid: @onboarding_request.uuid)
 
       if @onboarding_request.save
-        redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".success_message_html", form_link: @onboarding_request.form_link) }
+        redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".success_message_html", form_name: @onboarding_request.form_name) }
       else
         render :new
       end
@@ -44,16 +48,8 @@ module Support
     end
 
     def request_params
-      # Strong params for onboarding request (to be used in next ticket)
+      # Strong params for onboarding request
       params.require(:providers_onboarding_form_request).permit(:form_name, :zendesk_link, :support_agent_id)
-    end
-
-    def onboarding_request_params
-      params.require(:providers_onboarding_form_request).permit(
-        :provider_name, :zendesk_link, :email_address, :first_name, :last_name,
-        :address_line_1, :town_or_city, :postcode, :telephone, :contact_email_address,
-        :website, :ukprn, :accredited_provider, :urn, :support_agent_id
-      )
     end
   end
 end

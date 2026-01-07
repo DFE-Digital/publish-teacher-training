@@ -96,8 +96,7 @@ module ProvidersOnboardingFormRequestsHelper
   end
 
   def then_i_see_success_message_with_form_link
-    expect(page).to have_content("Onboarding form generated successfully:")
-    expect(page).to have_content(ProvidersOnboardingFormRequest.last.form_link)
+    expect(page).to have_content("Onboarding form generated successfully for")
   end
 
   def then_i_see_form_name_and_link_in_table_listing(form_name:)
