@@ -85,6 +85,7 @@ module Courses
         qualifications_chosen: qualifications&.count,
         interview_chosen: interview_location && 1 || nil,
         ordering_chosen:,
+        degree_chosen: minimum_degree_required == "show_all_courses" ? nil : 1,
         start_date_chosen: start_date&.count,
         sponsor_visa_chosen: can_sponsor_visa && 1 || nil,
         study_types_chosen: study_types&.count,
