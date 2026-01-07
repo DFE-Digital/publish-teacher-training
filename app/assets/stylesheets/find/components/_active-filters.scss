@@ -107,29 +107,6 @@
 .app-active-filters__clear-filters {
   display: inline-block;
 
-  &:link,
-  &:visited {
-    color: $govuk-link-colour;
-  }
-
-  &:hover {
-    color: $govuk-link-hover-colour;
-
-    text-decoration: none;
-  }
-
-  &:focus {
-    outline: 3px solid $govuk-focus-colour;
-    outline-offset: 0;
-
-    background-color: $govuk-focus-colour;
-    box-shadow: 0 2px 0 $govuk-text-colour;
-  }
-
-  &:active {
-    color: $govuk-link-active-colour;
-  }
-
   @include govuk-media-query($until: tablet) {
     display: block;
 
