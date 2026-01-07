@@ -22,6 +22,12 @@
       <summary class="app-c-filter-section__summary">
         <h3 class="app-c-filter-section__summary-heading">
           <%= t(".filter_title_sort_by") %>
+
+          <% if @filter_counts[:ordering_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:ordering_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
 
