@@ -133,6 +133,7 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_secondary_html") %>
+
           <% if @filter_counts[:secondary_subjects].present? %>
             <span class="app-c-filter-section__count govuk-hint">
               <%= @filter_counts[:secondary_subjects] %> selected
@@ -370,6 +371,12 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_provider") %>
+
+          <% if @filter_counts[:provider].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:provider] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="govuk-form-group" data-controller="provider-autocomplete">

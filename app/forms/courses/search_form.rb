@@ -89,6 +89,7 @@ module Courses
         interview_chosen: interview_location && 1 || nil,
         ordering_chosen:,
         radius_chosen:,
+        provider: (provider_code || provider_name).presence && 1,
         degree_chosen: minimum_degree_required == "show_all_courses" ? nil : 1,
         start_date_chosen: start_date&.count,
         sponsor_visa_chosen: can_sponsor_visa && 1 || nil,
