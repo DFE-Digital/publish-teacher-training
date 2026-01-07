@@ -243,7 +243,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 1,
           page: 1,
-          search_params: hash_including(applications_open: true, minimum_degree_required: "show_all_courses", funding: "apprenticeship"),
+          search_params: hash_including(applications_open: true, minimum_degree_required: "show_all_courses", funding: %w[apprenticeship]),
           track_params: hash_including(utm_source: "home", utm_medium: "all_apprenticeship_courses"),
           results: array_including(
             have_attributes(course_code: "TDA1", provider_code: "23T"),
