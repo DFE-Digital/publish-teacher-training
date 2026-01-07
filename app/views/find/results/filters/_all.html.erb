@@ -272,6 +272,12 @@
         <h3 class="app-c-filter-section__summary-heading">
           <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
           <%= t(".filter_title_degree") %>
+
+          <% if @filter_counts[:degree_chosen].present? %>
+            <span class="app-c-filter-section__count govuk-hint">
+              <%= @filter_counts[:degree_chosen] %> selected
+            </span>
+          <% end %>
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
