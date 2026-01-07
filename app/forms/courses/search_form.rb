@@ -77,6 +77,8 @@ module Courses
                           order == "course_name_ascending" ? nil : 1
                         end
 
+      radius_chosen = (london? && radius == LONDON_RADIUS.call.to_s) || (locality? && radius == SMALL_RADIUS.to_s) || radius == DEFAULT_RADIUS.to_s ? 1 : nil
+
       {
         primary_subjects: p_subjects&.count,
         secondary_subjects: s_subjects&.count,
@@ -85,6 +87,7 @@ module Courses
         qualifications_chosen: qualifications&.count,
         interview_chosen: interview_location && 1 || nil,
         ordering_chosen:,
+        radius_chosen:,
         degree_chosen: minimum_degree_required == "show_all_courses" ? nil : 1,
         start_date_chosen: start_date&.count,
         sponsor_visa_chosen: can_sponsor_visa && 1 || nil,
