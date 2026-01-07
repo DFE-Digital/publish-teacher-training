@@ -382,8 +382,8 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_all_active_filters_are_displayed
-    expect(page).to have_css(".app-c-filter-summary__heading", text: "Active filters")
-    expect(page).to have_css(".app-c-filter-summary__remove-filter", minimum: 10)
+    expect(page).to have_css(".app-active-filters__heading", text: "Active filters")
+    expect(page).to have_css(".app-active-filters__remove-filter", minimum: 10)
   end
 
   def then_fee_funding_filter_is_removed
@@ -396,7 +396,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_all_active_filters_are_cleared
-    expect(page).not_to have_css(".app-c-filter-summary__remove-filter")
+    expect(page).not_to have_css(".app-active-filters__remove-filter")
   end
 
   def and_user_sees_only_default_state
@@ -456,7 +456,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def and_each_can_be_removed_individually
-    expect(all(".app-c-filter-summary__remove-filter").count).to be >= 2
+    expect(all(".app-active-filters__remove-filter").count).to be >= 2
   end
 
   def then_primary_filter_is_removed
@@ -517,7 +517,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def active_filters
-    page.all(".app-c-filter-summary li a").map { |element| element.text.split("\n") }
+    page.all(".app-active-filters li a").map { |element| element.text.split("\n") }
       .flatten
       .reject { |element| element.include?("Remove") }
   end
@@ -527,7 +527,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def find_filter_remove_button(text)
-    page.find(".app-c-filter-summary__remove-filter", text:)
+    page.find(".app-active-filters__remove-filter", text:)
   end
 
   def subjects_to_codes(*subjects)

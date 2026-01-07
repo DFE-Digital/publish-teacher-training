@@ -1,16 +1,16 @@
-<div class="app-c-filter-summary">
-  <h3 class="govuk-heading-s app-c-filter-summary__heading">Active filters</h3>
+<div class="app-active-filters">
+  <h3 class="govuk-heading-s app-active-filters__heading">Active filters</h3>
 
-  <ul class="app-c-filter-summary__remove-filters">
+  <ul class="app-active-filters__remove-filters">
     <% active_filters.each do |filter| %>
       <li>
         <%= govuk_link_to(
-            content_tag(:span, class: "app-c-filter-summary__remove-filter-text") do
+            content_tag(:span, class: "app-active-filters__remove-filter-text") do
               concat content_tag(:span, "Remove filter", class: "govuk-visually-hidden")
               concat filter.formatted_value
             end,
             find_results_path(search_params.merge(filter.remove_params)),
-            class: "app-c-filter-summary__remove-filter",
+            class: "app-active-filters__remove-filter",
           ) %>
       </li>
     <% end %>

@@ -1,4 +1,4 @@
-.app-c-filter-summary__heading {
+.app-active-filters__heading {
   padding: 0;
   margin: 0 0 15px;
 
@@ -16,7 +16,7 @@
   }
 }
 
-.app-c-filter-summary__remove-filters {
+.app-active-filters__remove-filters {
   display: flex;
 
   flex-wrap: wrap;
@@ -52,7 +52,7 @@
   }
 }
 
-.app-c-filter-summary__remove-filter {
+.app-active-filters__remove-filter {
   display: flex;
 
   align-items: center;
@@ -115,7 +115,7 @@
   }
 }
 
-.app-c-filter-summary__remove-filter-text {
+.app-active-filters__remove-filter-text {
   display: inline;
 
   font-family: "GDS Transport", arial, sans-serif;
@@ -127,7 +127,7 @@
   text-decoration: inherit;
 }
 
-.app-c-filter-summary__clear-filters {
+.app-active-filters__clear-filters {
   display: inline-block;
 
   &:link,
