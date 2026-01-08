@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Provider details rendering by version" do
+RSpec.describe "Provider details rendering by version" do
   scenario "renders v2 provider content when latest enrichment version is 2" do
     provider = create(:provider, about_us: "About us v2", value_proposition: "Our offer v2")
     course = create(:course, :secondary, provider:)

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing contact details" do
+RSpec.describe "Editing contact details" do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_contact_details_page

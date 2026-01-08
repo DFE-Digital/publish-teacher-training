@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Providers index" do
+RSpec.describe "Providers index" do
   after { travel_back }
 
   scenario "view page as Mary - multi provider user", travel: mid_cycle do
