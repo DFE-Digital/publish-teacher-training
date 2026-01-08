@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Course show" do
+RSpec.describe "Course show" do
   include ActiveSupport::NumberHelper
 
   around do |example|

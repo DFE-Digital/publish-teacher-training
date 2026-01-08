@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Course show", travel: mid_cycle(2025) do
+RSpec.describe "Course show", travel: mid_cycle(2025) do
   include Rails.application.routes.url_helpers
 
   context "bursaries and scholarships is announced" do
