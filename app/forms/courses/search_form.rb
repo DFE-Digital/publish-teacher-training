@@ -69,21 +69,21 @@ module Courses
 
     def filter_counts
       {
-        primary_subjects: primary_subject_filter_count,
-        secondary_subjects: secondary_subject_filter_count,
-        funding_chosen: funding&.count,
-        send_chosen: boolean_filter_count(send_courses),
-        qualifications_chosen: qualifications&.count,
-        interview_chosen: boolean_filter_count(interview_location),
-        ordering_chosen: ordering_filter_count,
-        radius_chosen: radius_filter_count,
-        provider: boolean_filter_count(provider_code || provider_name),
-        teach_physics: boolean_filter_count(engineers_teach_physics),
         degree_chosen: degree_filter_count,
-        start_date_chosen: start_date&.count,
-        sponsor_visa_chosen: boolean_filter_count(can_sponsor_visa),
-        study_types_chosen: study_types&.count,
+        funding_chosen: funding&.count,
+        interview_chosen: boolean_filter_count(interview_location),
         level_chosen: boolean_filter_count(level),
+        ordering_chosen: ordering_filter_count,
+        primary_subjects: primary_subject_filter_count,
+        provider: boolean_filter_count(provider_code || provider_name),
+        qualifications_chosen: qualifications&.count,
+        radius_chosen: radius_filter_count,
+        secondary_subjects: secondary_subject_filter_count,
+        send_chosen: boolean_filter_count(send_courses),
+        sponsor_visa_chosen: boolean_filter_count(can_sponsor_visa),
+        start_date_chosen: start_date&.count,
+        study_types_chosen: study_types&.count,
+        teach_physics: boolean_filter_count(engineers_teach_physics),
       }
     end
 
