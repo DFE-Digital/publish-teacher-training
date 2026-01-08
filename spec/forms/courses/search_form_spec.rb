@@ -621,21 +621,21 @@ RSpec.describe Courses::SearchForm do
 
       it "returns nil for all counts" do
         expect(form.filter_counts).to eq({
+          degree: nil,
+          funding: nil,
+          interview: nil,
+          level: nil,
+          ordering: nil,
           primary_subjects: nil,
-          secondary_subjects: nil,
-          funding_chosen: nil,
-          send_chosen: nil,
-          qualifications_chosen: nil,
-          interview_chosen: nil,
-          ordering_chosen: nil,
-          radius_chosen: nil,
           provider: nil,
+          qualifications: nil,
+          radius: nil,
+          secondary_subjects: nil,
+          send_courses: nil,
+          sponsor_visa: nil,
+          start_date: nil,
+          study_types: nil,
           teach_physics: nil,
-          degree_chosen: nil,
-          start_date_chosen: nil,
-          sponsor_visa_chosen: nil,
-          study_types_chosen: nil,
-          level_chosen: nil,
         })
       end
     end
@@ -671,15 +671,15 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(funding: %w[fee salary]) }
 
       it "returns the count of funding options" do
-        expect(form.filter_counts[:funding_chosen]).to eq(2)
+        expect(form.filter_counts[:funding]).to eq(2)
       end
     end
 
     context "with send_courses selected" do
       let(:form) { described_class.new(send_courses: true) }
 
-      it "returns 1 for send_chosen" do
-        expect(form.filter_counts[:send_chosen]).to eq(1)
+      it "returns 1 for send_courses" do
+        expect(form.filter_counts[:send_courses]).to eq(1)
       end
     end
 
@@ -687,15 +687,15 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(qualifications: %w[qts qts_with_pgce_or_pgde]) }
 
       it "returns the count of qualifications" do
-        expect(form.filter_counts[:qualifications_chosen]).to eq(2)
+        expect(form.filter_counts[:qualifications]).to eq(2)
       end
     end
 
     context "with interview_location selected" do
       let(:form) { described_class.new(interview_location: "online") }
 
-      it "returns 1 for interview_chosen" do
-        expect(form.filter_counts[:interview_chosen]).to eq(1)
+      it "returns 1 for interview" do
+        expect(form.filter_counts[:interview]).to eq(1)
       end
     end
 
@@ -703,32 +703,32 @@ RSpec.describe Courses::SearchForm do
       context "when location is present and order is not distance" do
         let(:form) { described_class.new(location: "London, UK", order: "course_name_ascending") }
 
-        it "returns 1 for ordering_chosen" do
-          expect(form.filter_counts[:ordering_chosen]).to eq(1)
+        it "returns 1 for ordering" do
+          expect(form.filter_counts[:ordering]).to eq(1)
         end
       end
 
       context "when location is present and order is distance (default)" do
         let(:form) { described_class.new(location: "London, UK", order: "distance") }
 
-        it "returns nil for ordering_chosen" do
-          expect(form.filter_counts[:ordering_chosen]).to be_nil
+        it "returns nil for ordering" do
+          expect(form.filter_counts[:ordering]).to be_nil
         end
       end
 
       context "when no location and order is course_name_ascending (default)" do
         let(:form) { described_class.new(order: "course_name_ascending") }
 
-        it "returns nil for ordering_chosen" do
-          expect(form.filter_counts[:ordering_chosen]).to be_nil
+        it "returns nil for ordering" do
+          expect(form.filter_counts[:ordering]).to be_nil
         end
       end
 
       context "when no location and order is not the default" do
         let(:form) { described_class.new(order: "provider_name_ascending") }
 
-        it "returns 1 for ordering_chosen" do
-          expect(form.filter_counts[:ordering_chosen]).to eq(1)
+        it "returns 1 for ordering" do
+          expect(form.filter_counts[:ordering]).to eq(1)
         end
       end
     end
@@ -737,32 +737,32 @@ RSpec.describe Courses::SearchForm do
       context "when using default radius (10)" do
         let(:form) { described_class.new(address_types: %w[locality], location: "Manchester, UK", radius: "10") }
 
-        it "returns 0 for radius_chosen" do
-          expect(form.filter_counts[:radius_chosen]).to be_nil
+        it "returns 0 for radius" do
+          expect(form.filter_counts[:radius]).to be_nil
         end
       end
 
       context "when using non-default radius" do
         let(:form) { described_class.new(address_types: %w[locality], location: "Manchester, UK", radius: "100") }
 
-        it "returns nil for radius_chosen" do
-          expect(form.filter_counts[:radius_chosen]).to eq(1)
+        it "returns nil for radius" do
+          expect(form.filter_counts[:radius]).to eq(1)
         end
       end
 
       context "when London and using London default radius (20)" do
         let(:form) { described_class.new(location: "London, UK", formatted_address: "London, UK", radius: "20") }
 
-        it "returns 1 for radius_chosen" do
-          expect(form.filter_counts[:radius_chosen]).to be_nil
+        it "returns 1 for radius" do
+          expect(form.filter_counts[:radius]).to be_nil
         end
       end
 
       context "when locality and using small radius (10)" do
         let(:form) { described_class.new(location: "SW1A 1AA", address_types: %w[postal_code], radius: "10") }
 
-        it "returns 1 for radius_chosen" do
-          expect(form.filter_counts[:radius_chosen]).to be_nil
+        it "returns 1 for radius" do
+          expect(form.filter_counts[:radius]).to be_nil
         end
       end
     end
@@ -797,16 +797,16 @@ RSpec.describe Courses::SearchForm do
       context "when show_all_courses (default)" do
         let(:form) { described_class.new(minimum_degree_required: "show_all_courses") }
 
-        it "returns nil for degree_chosen" do
-          expect(form.filter_counts[:degree_chosen]).to be_nil
+        it "returns nil for degree" do
+          expect(form.filter_counts[:degree]).to be_nil
         end
       end
 
       context "when specific degree requirement selected" do
         let(:form) { described_class.new(minimum_degree_required: "two_one") }
 
-        it "returns 1 for degree_chosen" do
-          expect(form.filter_counts[:degree_chosen]).to eq(1)
+        it "returns 1 for degree" do
+          expect(form.filter_counts[:degree]).to eq(1)
         end
       end
     end
@@ -815,15 +815,15 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(start_date: %w[september_2025 january_2026]) }
 
       it "returns the count of start dates" do
-        expect(form.filter_counts[:start_date_chosen]).to eq(2)
+        expect(form.filter_counts[:start_date]).to eq(2)
       end
     end
 
     context "with can_sponsor_visa selected" do
       let(:form) { described_class.new(can_sponsor_visa: true) }
 
-      it "returns 1 for sponsor_visa_chosen" do
-        expect(form.filter_counts[:sponsor_visa_chosen]).to eq(1)
+      it "returns 1 for sponsor_visa" do
+        expect(form.filter_counts[:sponsor_visa]).to eq(1)
       end
     end
 
@@ -831,15 +831,15 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(study_types: %w[full_time part_time]) }
 
       it "returns the count of study types" do
-        expect(form.filter_counts[:study_types_chosen]).to eq(2)
+        expect(form.filter_counts[:study_types]).to eq(2)
       end
     end
 
     context "with level selected" do
       let(:form) { described_class.new(level: "further_education") }
 
-      it "returns 1 for level_chosen" do
-        expect(form.filter_counts[:level_chosen]).to eq(1)
+      it "returns 1 for level" do
+        expect(form.filter_counts[:level]).to eq(1)
       end
     end
   end
