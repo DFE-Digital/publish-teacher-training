@@ -77,7 +77,7 @@
               course:,
               location: @search_params[:formatted_address] || @search_params[:location],
               short_address: @address.short_address,
-              show_start_date: (params[:start_date] & %w[jan_to_aug september oct_to_jul]).present?,
+              show_start_date: @show_start_date,
               visa_sponsorship: @search_params[:can_sponsor_visa],
             ) %>
 
