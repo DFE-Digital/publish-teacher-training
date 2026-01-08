@@ -236,7 +236,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def given_the_user_visits_results_with_invalid_funding
-    visit find_results_path(funding: "invalid_funding")
+    visit find_results_path(funding: %w[invalid_funding])
   end
 
   def given_the_user_visits_results_with_invalid_study_types
