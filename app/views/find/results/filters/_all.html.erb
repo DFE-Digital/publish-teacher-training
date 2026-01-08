@@ -1,12 +1,11 @@
 <%= render Find::Courses::ActiveFilters::View.new(active_filters: form.object.active_filters, search_params: form.object.search_params) %>
 
 <div data-controller="details-component" class="app-c-filter-panel__top">
-  <div class="app-c-filter-section app-c-filter-section__summary">
+  <div class="app-c-filter-section app-c-filter-section__summary" data-action="click->details-component#toggle">
     <div class="app-c-filter-panel__header">
       <button
          id="filter-and-sort"
          data-details-component-target="button"
-         data-action="click->details-component#toggle"
          type="button"
          class="app-c-filter-panel__button govuk-link app-c-filter-panel__button-inner"
          aria-expanded="true"
