@@ -610,4 +610,237 @@ RSpec.describe Courses::SearchForm do
       expect(options).to eq(%w[full_time part_time])
     end
   end
+
+  describe "#filter_counts" do
+    before do
+      allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
+    end
+
+    context "with no filters selected" do
+      let(:form) { described_class.new }
+
+      it "returns nil for all counts" do
+        expect(form.filter_counts).to eq({
+          primary_subjects: nil,
+          secondary_subjects: nil,
+          funding_chosen: nil,
+          send_chosen: nil,
+          qualifications_chosen: nil,
+          interview_chosen: nil,
+          ordering_chosen: nil,
+          radius_chosen: nil,
+          provider: nil,
+          teach_physics: nil,
+          degree_chosen: nil,
+          start_date_chosen: nil,
+          sponsor_visa_chosen: nil,
+          study_types_chosen: nil,
+          level_chosen: nil,
+        })
+      end
+    end
+
+    context "with primary subjects selected" do
+      let(:form) { described_class.new(subjects: %w[00 01]) }
+
+      it "returns the count of primary subjects" do
+        expect(form.filter_counts[:primary_subjects]).to eq(2)
+        expect(form.filter_counts[:secondary_subjects]).to be_nil
+      end
+    end
+
+    context "with secondary subjects selected" do
+      let(:form) { described_class.new(subjects: %w[C1 F1]) }
+
+      it "returns the count of secondary subjects" do
+        expect(form.filter_counts[:secondary_subjects]).to eq(2)
+        expect(form.filter_counts[:primary_subjects]).to be_nil
+      end
+    end
+
+    context "with mixed primary and secondary subjects" do
+      let(:form) { described_class.new(subjects: %w[00 C1 F1]) }
+
+      it "returns counts for both" do
+        expect(form.filter_counts[:primary_subjects]).to eq(1)
+        expect(form.filter_counts[:secondary_subjects]).to eq(2)
+      end
+    end
+
+    context "with funding selected" do
+      let(:form) { described_class.new(funding: %w[fee salary]) }
+
+      it "returns the count of funding options" do
+        expect(form.filter_counts[:funding_chosen]).to eq(2)
+      end
+    end
+
+    context "with send_courses selected" do
+      let(:form) { described_class.new(send_courses: true) }
+
+      it "returns 1 for send_chosen" do
+        expect(form.filter_counts[:send_chosen]).to eq(1)
+      end
+    end
+
+    context "with qualifications selected" do
+      let(:form) { described_class.new(qualifications: %w[qts qts_with_pgce_or_pgde]) }
+
+      it "returns the count of qualifications" do
+        expect(form.filter_counts[:qualifications_chosen]).to eq(2)
+      end
+    end
+
+    context "with interview_location selected" do
+      let(:form) { described_class.new(interview_location: "online") }
+
+      it "returns 1 for interview_chosen" do
+        expect(form.filter_counts[:interview_chosen]).to eq(1)
+      end
+    end
+
+    context "with ordering" do
+      context "when location is present and order is not distance" do
+        let(:form) { described_class.new(location: "London, UK", order: "course_name_ascending") }
+
+        it "returns 1 for ordering_chosen" do
+          expect(form.filter_counts[:ordering_chosen]).to eq(1)
+        end
+      end
+
+      context "when location is present and order is distance (default)" do
+        let(:form) { described_class.new(location: "London, UK", order: "distance") }
+
+        it "returns nil for ordering_chosen" do
+          expect(form.filter_counts[:ordering_chosen]).to be_nil
+        end
+      end
+
+      context "when no location and order is course_name_ascending (default)" do
+        let(:form) { described_class.new(order: "course_name_ascending") }
+
+        it "returns nil for ordering_chosen" do
+          expect(form.filter_counts[:ordering_chosen]).to be_nil
+        end
+      end
+
+      context "when no location and order is not the default" do
+        let(:form) { described_class.new(order: "provider_name_ascending") }
+
+        it "returns 1 for ordering_chosen" do
+          expect(form.filter_counts[:ordering_chosen]).to eq(1)
+        end
+      end
+    end
+
+    context "with radius" do
+      context "when using default radius (10)" do
+        let(:form) { described_class.new(address_types: %w[locality], location: "Manchester, UK", radius: "10") }
+
+        it "returns 0 for radius_chosen" do
+          expect(form.filter_counts[:radius_chosen]).to be_nil
+        end
+      end
+
+      context "when using non-default radius" do
+        let(:form) { described_class.new(address_types: %w[locality], location: "Manchester, UK", radius: "100") }
+
+        it "returns nil for radius_chosen" do
+          expect(form.filter_counts[:radius_chosen]).to eq(1)
+        end
+      end
+
+      context "when London and using London default radius (20)" do
+        let(:form) { described_class.new(location: "London, UK", formatted_address: "London, UK", radius: "20") }
+
+        it "returns 1 for radius_chosen" do
+          expect(form.filter_counts[:radius_chosen]).to be_nil
+        end
+      end
+
+      context "when locality and using small radius (10)" do
+        let(:form) { described_class.new(location: "SW1A 1AA", address_types: %w[postal_code], radius: "10") }
+
+        it "returns 1 for radius_chosen" do
+          expect(form.filter_counts[:radius_chosen]).to be_nil
+        end
+      end
+    end
+
+    context "with provider selected" do
+      context "when provider_code is present" do
+        let(:form) { described_class.new(provider_code: "ABC") }
+
+        it "returns 1 for provider" do
+          expect(form.filter_counts[:provider]).to eq(1)
+        end
+      end
+
+      context "when provider_name is present" do
+        let(:form) { described_class.new(provider_name: "University of London") }
+
+        it "returns 1 for provider" do
+          expect(form.filter_counts[:provider]).to eq(1)
+        end
+      end
+    end
+
+    context "with engineers_teach_physics selected" do
+      let(:form) { described_class.new(subjects: %w[F3], engineers_teach_physics: "true") }
+
+      it "returns 1 for teach_physics" do
+        expect(form.filter_counts[:teach_physics]).to eq(1)
+      end
+    end
+
+    context "with degree requirement" do
+      context "when show_all_courses (default)" do
+        let(:form) { described_class.new(minimum_degree_required: "show_all_courses") }
+
+        it "returns nil for degree_chosen" do
+          expect(form.filter_counts[:degree_chosen]).to be_nil
+        end
+      end
+
+      context "when specific degree requirement selected" do
+        let(:form) { described_class.new(minimum_degree_required: "two_one") }
+
+        it "returns 1 for degree_chosen" do
+          expect(form.filter_counts[:degree_chosen]).to eq(1)
+        end
+      end
+    end
+
+    context "with start_date selected" do
+      let(:form) { described_class.new(start_date: %w[september_2025 january_2026]) }
+
+      it "returns the count of start dates" do
+        expect(form.filter_counts[:start_date_chosen]).to eq(2)
+      end
+    end
+
+    context "with can_sponsor_visa selected" do
+      let(:form) { described_class.new(can_sponsor_visa: true) }
+
+      it "returns 1 for sponsor_visa_chosen" do
+        expect(form.filter_counts[:sponsor_visa_chosen]).to eq(1)
+      end
+    end
+
+    context "with study_types selected" do
+      let(:form) { described_class.new(study_types: %w[full_time part_time]) }
+
+      it "returns the count of study types" do
+        expect(form.filter_counts[:study_types_chosen]).to eq(2)
+      end
+    end
+
+    context "with level selected" do
+      let(:form) { described_class.new(level: "further_education") }
+
+      it "returns 1 for level_chosen" do
+        expect(form.filter_counts[:level_chosen]).to eq(1)
+      end
+    end
+  end
 end

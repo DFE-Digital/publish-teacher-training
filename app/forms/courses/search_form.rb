@@ -80,7 +80,7 @@ module Courses
                           order == "course_name_ascending" ? nil : 1
                         end
 
-      radius_chosen = (london? && radius == LONDON_RADIUS.call.to_s) || (locality? && radius == SMALL_RADIUS.to_s) || radius == DEFAULT_RADIUS.to_s ? 1 : nil
+      radius_chosen = location.blank? || DefaultRadius.new(location:, formatted_address:, address_types:).call.to_s == radius ? nil : 1
 
       {
         primary_subjects: primary_subect_count,
