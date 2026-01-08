@@ -68,35 +68,22 @@ module Courses
     end
 
     def filter_counts
-      p_subjects, s_subjects = subjects&.partition { primary_subject_codes.include?(it) }
-      primary_subect_count = p_subjects.count if p_subjects&.count&.positive?
-      secondary_subect_count = s_subjects.count if s_subjects&.count&.positive?
-
-      # Default ordering is distance when location is present or course_name otherwise
-      ordering_chosen = if location.present?
-                          order == "distance" ? nil : 1
-                        else
-                          order == "course_name_ascending" ? nil : 1
-                        end
-
-      radius_chosen = location.blank? || DefaultRadius.new(location:, formatted_address:, address_types:).call.to_s == radius ? nil : 1
-
       {
-        primary_subjects: primary_subect_count,
-        secondary_subjects: secondary_subect_count,
+        primary_subjects: primary_subject_filter_count,
+        secondary_subjects: secondary_subject_filter_count,
         funding_chosen: funding&.count,
-        send_chosen: send_courses && 1 || nil,
+        send_chosen: boolean_filter_count(send_courses),
         qualifications_chosen: qualifications&.count,
-        interview_chosen: interview_location && 1 || nil,
-        ordering_chosen:,
-        radius_chosen:,
-        provider: (provider_code || provider_name).presence && 1,
-        teach_physics: engineers_teach_physics.presence && 1,
-        degree_chosen: minimum_degree_required == "show_all_courses" ? nil : 1,
+        interview_chosen: boolean_filter_count(interview_location),
+        ordering_chosen: ordering_filter_count,
+        radius_chosen: radius_filter_count,
+        provider: boolean_filter_count(provider_code || provider_name),
+        teach_physics: boolean_filter_count(engineers_teach_physics),
+        degree_chosen: degree_filter_count,
         start_date_chosen: start_date&.count,
-        sponsor_visa_chosen: can_sponsor_visa && 1 || nil,
+        sponsor_visa_chosen: boolean_filter_count(can_sponsor_visa),
         study_types_chosen: study_types&.count,
-        level_chosen: level && 1 || nil,
+        level_chosen: boolean_filter_count(level),
       }
     end
 
@@ -257,6 +244,40 @@ module Courses
     end
 
   private
+
+    def boolean_filter_count(value)
+      value.presence ? 1 : nil
+    end
+
+    def primary_subject_filter_count
+      return if subjects.blank?
+
+      primary_count = subjects.count { primary_subject_codes.include?(it) }
+      primary_count if primary_count.positive?
+    end
+
+    def secondary_subject_filter_count
+      return if subjects.blank?
+
+      secondary_count = subjects.count { secondary_subject_codes.include?(it) }
+      secondary_count if secondary_count.positive?
+    end
+
+    def ordering_filter_count
+      default_order = location.present? ? "distance" : "course_name_ascending"
+      order == default_order ? nil : 1
+    end
+
+    def radius_filter_count
+      return if location.blank?
+
+      default_radius = DefaultRadius.new(location:, formatted_address:, address_types:).call.to_s
+      radius == default_radius ? nil : 1
+    end
+
+    def degree_filter_count
+      minimum_degree_required == "show_all_courses" ? nil : 1
+    end
 
     def transform_old_parameters(params)
       params.tap do
