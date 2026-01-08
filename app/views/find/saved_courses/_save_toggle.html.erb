@@ -5,16 +5,24 @@
   <div data-controller="save-course"
        data-save-course-course-id-value="<%= course.id %>"
        data-save-course-saved-value="<%= saved_course.present? %>"
+       data-save-course-authenticated-value="<%= authenticated? %>"
        data-save-course-save-url-value="<%= find_candidate_saved_courses_path %>"
        data-save-course-unsave-url-value="<%= saved_course ? find_candidate_saved_course_path(saved_course) : "" %>"
        data-save-course-saved-icon-url-value="<%= asset_path("icon-saved.svg") %>"
-       data-save-course-unsaved-icon-url-value="<%= asset_path("icon-save.svg") %>">
+       data-save-course-unsaved-icon-url-value="<%= asset_path("icon-save.svg") %>"
+       data-save-course-saved-text-value="<%= t(".course_saved") %>"
+       data-save-course-save-text-value="<%= t(".save_this_course") %>"
+       data-save-course-sign-in-to-save-text-value="<%= t(".sign_in_to_save_this_course") %>">
 
     <button class="unstyled-button results-save-course-button__unstyled-button" data-action="click->save-course#toggle">
       <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
         <%= image_tag(
               saved_course ? "icon-saved.svg" : "icon-save.svg",
-              alt: saved_course ? t(".course_saved") : t(".save_this_course"),
+              alt: if saved_course
+                     t(".course_saved")
+                   else
+                     (authenticated? ? t(".save_this_course") : t(".sign_in_to_save_this_course"))
+                   end,
               width: 24,
               height: 24,
               class: "govuk-!-margin-right-2 govuk-!-padding-top-0",
@@ -23,7 +31,11 @@
 
         <span class="govuk-heading-s govuk-!-margin-0 save-course-button__text"
               data-save-course-target="text">
-          <%= saved_course ? t(".course_saved") : t(".save_this_course") %>
+          <%= if saved_course
+                t(".course_saved")
+              else
+                (authenticated? ? t(".save_this_course") : t(".sign_in_to_save_this_course"))
+              end %>
         </span>
       </div>
     </button>

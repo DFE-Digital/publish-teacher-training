@@ -5,10 +5,13 @@
 
   <button type="submit" class="unstyled-button">
     <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
-      <%= image_tag "icon-save.svg", alt: t(".save_this_course"), width: 24, height: 24,
-                                     class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
+      <%= image_tag "icon-save.svg",
+                    alt: authenticated? ? t(".save_this_course") : t(".sign_in_to_save_this_course"),
+                    width: 24,
+                    height: 24,
+                    class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
       <span class="govuk-heading-s govuk-!-margin-0 save-course-button__text">
-        <%= t(".save_this_course") %>
+        <%= authenticated? ? t(".save_this_course") : t(".sign_in_to_save_this_course") %>
       </span>
     </div>
   </button>
