@@ -20,6 +20,8 @@ module Courses
       start_date
     ].freeze
 
+    attr_reader :search_params
+
     def initialize(search_params:, search_form:)
       @search_params = search_params
       @search_form = search_form
@@ -109,14 +111,8 @@ module Courses
         id: attribute,
         raw_value: current_value,
         value: resolve_formatted_value(attribute, current_value),
-        remove_params: compute_removal_params(attribute, current_value, all_values),
+        remove_params: RemovalParams.new(search_params:, attribute:, current_value:, all_values:).call,
       )
-    end
-
-    def compute_removal_params(attribute, current_value, all_values)
-      remaining_values = Array(all_values) - [current_value]
-
-      { attribute => remaining_values.presence }
     end
 
     def build_location_filter(value)
