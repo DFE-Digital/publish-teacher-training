@@ -2,7 +2,7 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
-    attr_reader :course, :location, :visa_sponsorship, :short_address, :show_start_date
+    attr_reader :course, :location, :visa_sponsorship, :short_address
 
     def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil)
       @course = course

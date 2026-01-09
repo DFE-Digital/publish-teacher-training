@@ -674,7 +674,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it "displays the start date row" do
+        it "displays the start date row with month and year" do
           expect(summary_card_content).to include("Start date")
           expect(summary_card_content).to include("September 2025")
         end
