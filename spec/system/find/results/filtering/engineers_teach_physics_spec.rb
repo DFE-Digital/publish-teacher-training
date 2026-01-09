@@ -57,6 +57,9 @@ RSpec.describe "when searching for engineers teach physics", :js, service: :find
     fill_in "Subject", with: ""
     page.find('input[name="subject_name"]').send_keys(:backspace)
     page.find('input[name="subject_name"]').send_keys(:escape)
+    filtering("Secondary") do
+      uncheck "Physics"
+    end
   end
 
   def and_i_select_the_first_subject_suggestion
