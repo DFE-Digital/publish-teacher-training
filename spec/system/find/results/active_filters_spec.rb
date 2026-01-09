@@ -215,6 +215,25 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
         then_all_expected_filters_are_displayed
       end
     end
+
+    context "when searching for subjects" do
+      before { given_courses_exist_in_various_locations }
+
+      scenario "searching subjects through the main search" do
+        given_the_user_visits_results
+        when_user_search_main_subject("Primary")
+        then_the_active_filters_are_visible("Primary")
+        and_primary_filter_is_visible
+        and_i_can_only_see_primary_courses
+        when_user_clicks_on_active_filter("Primary")
+        then_no_active_filters_are_displayed
+        and_i_can_see_all_courses
+      end
+    end
+  end
+
+  def given_the_user_visits_results
+    visit find_results_path
   end
 
   def given_the_user_visits_results_with_all_filters
@@ -526,6 +545,36 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
     expect(active_filters).to contain_exactly("Primary", "Primary with English", "Art and design", "Further education", "Fee-paying courses", "Courses with a salary", "Full-time", "Part-time", "Qualification: QTS only", "Qualification: QTS with PGCE or PGDE", "Degree grade: 2:1 or first", "Courses with visa sponsorship", "Courses with online interviews", "London", "Courses with a SEND specialism", "Biology")
   end
 
+  def when_user_search_main_subject(subject)
+    fill_in "Subject", with: subject
+    click_link_or_button "Search"
+  end
+
+  def and_primary_filter_is_visible
+    filtering("Primary") do
+      expect(page).to have_checked_field("Primary", visible: :all)
+    end
+  end
+
+  def and_i_can_only_see_primary_courses
+    expect(results).to include(
+      a_string_matching(/Primary/),
+    )
+  end
+
+  def when_user_clicks_on_active_filter(filter)
+    within(".app-active-filters") do
+      click_link_or_button filter
+    end
+  end
+
+  def and_i_can_see_all_courses
+    expect(results).to include(
+      a_string_matching(/Mathematics/),
+      a_string_matching(/Primary/),
+    )
+  end
+
   def find_filter_remove_button(text)
     page.find(".app-active-filters__remove-filter", text:)
   end
@@ -546,5 +595,9 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
       "Mathematics" => "Mathematics",
       "English" => "English",
     }[subject]
+  end
+
+  def results
+    page.all(".app-search-result__course-name").map(&:text)
   end
 end
