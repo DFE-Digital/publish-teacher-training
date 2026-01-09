@@ -57,7 +57,8 @@ module Courses
     MINIMUM_DEGREE_REQUIRED_OPTIONS = %w[two_one two_two third_class pass no_degree_required].freeze
     FUNDING_OPTIONS = %w[fee salary apprenticeship].freeze
     QUALIFICATION_OPTIONS = %w[qts qts_with_pgce_or_pgde].freeze
-    START_DATE_OPTIONS = %w[september all_other_dates].freeze
+    OLD_START_DATE_OPTIONS = %w[september all_other_dates].freeze
+    START_DATE_OPTIONS = %w[jan_to_aug september oct_to_jul].freeze
     STUDY_TYPE_OPTIONS = %w[full_time part_time].freeze
 
     def initialize(attributes = {})
@@ -216,7 +217,7 @@ module Courses
     end
 
     def start_date_options
-      START_DATE_OPTIONS
+      FeatureFlag.active?(:find_filtering_and_sorting) ? START_DATE_OPTIONS : OLD_START_DATE_OPTIONS
     end
 
     def study_type_options

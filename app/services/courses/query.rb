@@ -243,16 +243,24 @@ module Courses
       @applied_scopes[:start_date] = params[:start_date]
 
       current_recruitment_cycle_year = Find::CycleTimetable.current_year
-      september_range = Time.zone.local(current_recruitment_cycle_year, 9, 1).all_month
+      next_recruitment_cycle_year = Find::CycleTimetable.next_year
+      ranges = []
 
-      case params[:start_date]
-      when %w[september]
-        @scope = @scope.where(start_date: september_range)
-      when %w[all_other_dates]
-        @scope = @scope.where.not(start_date: september_range)
-      else
-        @scope
+      if params[:start_date].include?("jan_to_aug")
+        jan_to_aug_range = (Time.zone.local(current_recruitment_cycle_year, 1, 1)..Time.zone.local(current_recruitment_cycle_year, 8, 31))
+        ranges << jan_to_aug_range
       end
+      if params[:start_date].include?("september")
+        september_range = Time.zone.local(current_recruitment_cycle_year, 9, 1).all_month
+        ranges << september_range
+      end
+      if params[:start_date].include?("oct_to_jul")
+        oct_to_jul_range = (Time.zone.local(current_recruitment_cycle_year, 10, 1)..Time.zone.local(next_recruitment_cycle_year, 7, 31))
+        ranges << oct_to_jul_range
+      end
+      return @scope if ranges.empty?
+
+      @scope = @scope.where(start_date: ranges)
     end
 
     def provider_scope
