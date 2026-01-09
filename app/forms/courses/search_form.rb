@@ -244,6 +244,13 @@ module Courses
       STUDY_TYPE_OPTIONS
     end
 
+    def subjects
+      all_subjects = Array(super)
+
+      all_subjects << subject_code unless subject_code.blank? || subject_code.in?(all_subjects)
+      all_subjects
+    end
+
   private
 
     def boolean_filter_count(value)

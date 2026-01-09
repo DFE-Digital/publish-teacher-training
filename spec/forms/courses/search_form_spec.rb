@@ -843,4 +843,30 @@ RSpec.describe Courses::SearchForm do
       end
     end
   end
+
+  describe "#subjects" do
+    context "when subjects and subject code is nil" do
+      it "returns empty" do
+        expect(described_class.new.subjects).to be_empty
+      end
+    end
+
+    context "when only subject code has a value" do
+      it "returns subject code in the subjects" do
+        expect(described_class.new(subject_code: "01").subjects).to eq(%w[01])
+      end
+    end
+
+    context "when subject code and subject has a value" do
+      it "returns subject code in the subjects" do
+        expect(described_class.new(subject_code: "01", subjects: %w[00]).subjects).to eq(%w[00 01])
+      end
+    end
+
+    context "when subject code is already in subjects" do
+      it "returns subject code in the subjects" do
+        expect(described_class.new(subject_code: "00", subjects: %w[00 01]).subjects).to eq(%w[00 01])
+      end
+    end
+  end
 end
