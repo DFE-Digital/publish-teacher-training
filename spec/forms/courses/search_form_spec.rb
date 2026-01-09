@@ -576,12 +576,28 @@ RSpec.describe Courses::SearchForm do
   end
 
   describe "#start_date_options" do
-    it "returns all start date options" do
-      search_form = described_class.new
+    context "when find_filtering_and_sorting feature flag is active" do
+      before { FeatureFlag.activate(:find_filtering_and_sorting) }
 
-      options = search_form.start_date_options
+      it "returns the new start date options" do
+        search_form = described_class.new
 
-      expect(options).to eq(%w[september all_other_dates])
+        options = search_form.start_date_options
+
+        expect(options).to eq(%w[jan_to_aug september oct_to_jul])
+      end
+    end
+
+    context "when find_filtering_and_sorting feature flag is inactive" do
+      before { FeatureFlag.deactivate(:find_filtering_and_sorting) }
+
+      it "returns the old start date options" do
+        search_form = described_class.new
+
+        options = search_form.start_date_options
+
+        expect(options).to eq(%w[september all_other_dates])
+      end
     end
   end
 
