@@ -1,0 +1,190 @@
+name: PR Title and Trello Check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+jobs:
+  validate:
+    if: ${{ github.actor != 'dependabot[bot]' && !contains(github.event.pull_request.labels.*.name, 'prototype') }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Validate PR title format
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title || "";
+            const pattern = /^(feat|fix|docs|style|refactor|test|chore|deps)\([^()\r\n]+\)\[[^\[\]\r\n]+\]: .{1,}$/;
+            if (!pattern.test(title)) {
+              core.setFailed(
+                `PR title "${title}" must match <prefix>(<Topic>)[<Trello ticket ID>]: <short description>`
+              );
+            }
+      - name: Extract Trello reference
+        id: extract
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title || "";
+            const match = title.match(/\[([^[\]\r\n]+)\]/);
+            if (!match) {
+              core.setFailed("Unable to find a Trello reference in the PR title.");
+              return;
+            }
+            core.setOutput("trello_ref", match[1].trim());
+      - name: Resolve Trello card ID
+        id: resolve
+        shell: bash
+        env:
+          TRELLO_KEY: ${{ secrets.TRELLO_KEY }}
+          TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
+          # Comma-separated board IDs, e.g. "5ab...,6cd..."
+          TRELLO_BOARD_IDS: ${{ secrets.TRELLO_BOARD_IDS }}
+          REF: ${{ steps.extract.outputs.trello_ref }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${TRELLO_KEY:-}" || -z "${TRELLO_TOKEN:-}" ]]; then
+            echo "Missing Trello API credentials (secrets.TRELLO_KEY / secrets.TRELLO_TOKEN)." >&2
+            exit 1
+          fi
+
+          # Allow Dependabot PR convention without trying to attach.
+          if [[ "$REF" == "DEPENDABOT" ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          CARD_ID=""
+
+          # If REF looks like a Trello card shortlink (8 alnum) or a full card id (24 hex), use it directly.
+          if [[ "$REF" =~ ^[A-Za-z0-9]{8}$ || "$REF" =~ ^[0-9a-fA-F]{24}$ ]]; then
+            CARD_ID="$REF"
+          else
+            if [[ -z "${TRELLO_BOARD_IDS:-}" ]]; then
+              echo "Missing secrets.TRELLO_BOARD_IDS (comma-separated board IDs to search)." >&2
+              exit 1
+            fi
+
+            # Search Trello cards on the board(s) for the reference (e.g. TRELLO-123).
+            RESP="$(curl -sS --get "https://api.trello.com/1/search" \
+              --data-urlencode "query=$REF" \
+              --data-urlencode "idBoards=$TRELLO_BOARD_IDS" \
+              --data-urlencode "modelTypes=cards" \
+              --data-urlencode "cards_limit=10" \
+              --data-urlencode "card_fields=name" \
+              --data-urlencode "key=$TRELLO_KEY" \
+              --data-urlencode "token=$TRELLO_TOKEN")"
+
+            # Pick the first card whose name contains the reference (case-insensitive).
+            CARD_ID="$(echo "$RESP" | jq -r --arg ref "$REF" '.cards[] | select(.name | test($ref;"i")) | .id' | head -n 1)"
+          fi
+
+          if [[ -z "$CARD_ID" || "$CARD_ID" == "null" ]]; then
+            echo "Could not find a Trello card containing: $REF" >&2
+            echo "Make sure the card title includes the reference exactly (e.g. ... [TRELLO-123] ...)." >&2
+            exit 1
+          fi
+
+          CARD_DETAIL="$(curl -sS "https://api.trello.com/1/cards/${CARD_ID}" \
+            --get \
+            --data-urlencode "fields=name,shortUrl" \
+            --data-urlencode "key=$TRELLO_KEY" \
+            --data-urlencode "token=$TRELLO_TOKEN")"
+
+          CARD_URL="$(echo "$CARD_DETAIL" | jq -r '.shortUrl')"
+          CARD_NAME="$(echo "$CARD_DETAIL" | jq -r '.name')"
+
+          if [[ -z "$CARD_URL" || "$CARD_URL" == "null" ]]; then
+            echo "Unable to fetch Trello card URL for card $CARD_ID" >&2
+            exit 1
+          fi
+
+          echo "card_id=$CARD_ID" >> "$GITHUB_OUTPUT"
+          echo "card_url=$CARD_URL" >> "$GITHUB_OUTPUT"
+          echo "card_name=$CARD_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Attach PR to Trello card
+        if: steps.resolve.outputs.skip != 'true'
+        shell: bash
+        env:
+          TRELLO_KEY: ${{ secrets.TRELLO_KEY }}
+          TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
+          CARD_ID: ${{ steps.resolve.outputs.card_id }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUM: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${TRELLO_KEY:-}" || -z "${TRELLO_TOKEN:-}" ]]; then
+            echo "Missing Trello API credentials (secrets.TRELLO_KEY / secrets.TRELLO_TOKEN)." >&2
+            exit 1
+          fi
+
+          EXISTING="$(curl -sS "https://api.trello.com/1/cards/${CARD_ID}/attachments" \
+            --get \
+            --data-urlencode "key=${TRELLO_KEY}" \
+            --data-urlencode "token=${TRELLO_TOKEN}")"
+
+          if echo "$EXISTING" | jq -e --arg url "$PR_URL" '.[] | select(.url == $url)' >/dev/null; then
+            echo "Trello card already contains attachment for ${PR_URL}; skipping."
+            exit 0
+          fi
+
+          curl -sS -X POST "https://api.trello.com/1/cards/${CARD_ID}/attachments" \
+            --data-urlencode "key=${TRELLO_KEY}" \
+            --data-urlencode "token=${TRELLO_TOKEN}" \
+            --data-urlencode "url=${PR_URL}" \
+            --data-urlencode "name=GitHub PR #${PR_NUM}"
+
+      - name: Comment Trello link on PR
+        if: steps.resolve.outputs.skip != 'true' && github.event.pull_request.head.repo.fork == false
+        uses: actions/github-script@v7
+        env:
+          CARD_URL: ${{ steps.resolve.outputs.card_url }}
+          CARD_NAME: ${{ steps.resolve.outputs.card_name }}
+        with:
+          script: |
+            const cardUrl = process.env.CARD_URL;
+            if (!cardUrl) {
+              core.info("No Trello card URL available; skipping comment.");
+              return;
+            }
+            const cardName = process.env.CARD_NAME || "Trello card";
+            const marker = "<!-- trello-link -->";
+            const body = `${marker}\nLinked Trello card: [${cardName}](${cardUrl})`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100
+            });
+
+            const existing = comments.find((comment) =>
+              comment.body && comment.body.includes(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body
+              });
+            }
