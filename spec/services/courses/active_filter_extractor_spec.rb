@@ -17,7 +17,7 @@ RSpec.describe Courses::ActiveFilterExtractor do
           study_types: %w[full_time part_time],
           subject_code: "00",
           subject_name: "Primary",
-          subjects: %w[01 C1 08],
+          subjects: %w[00 01 C1 08],
           short_address: "Bristol",
         }
 
@@ -45,27 +45,27 @@ RSpec.describe Courses::ActiveFilterExtractor do
           ),
           Courses::ActiveFilter.new(
             id: :subjects,
+            raw_value: "00",
+            value: "Primary",
+            remove_params: { subject_code: nil, subjects: %w[01 C1 08], subject_name: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :subjects,
             raw_value: "01",
             value: "Primary with English",
-            remove_params: { subjects: %w[C1 08] },
+            remove_params: { subjects: %w[00 C1 08] },
           ),
           Courses::ActiveFilter.new(
             id: :subjects,
             raw_value: "C1",
             value: "Biology",
-            remove_params: { subjects: %w[01 08] },
+            remove_params: { subjects: %w[00 01 08] },
           ),
           Courses::ActiveFilter.new(
             id: :subjects,
             raw_value: "08",
             value: "Business studies",
-            remove_params: { subjects: %w[01 C1] },
-          ),
-          Courses::ActiveFilter.new(
-            id: :subject_code,
-            raw_value: "00",
-            value: "Primary",
-            remove_params: { subject_code: nil },
+            remove_params: { subjects: %w[00 01 C1] },
           ),
           Courses::ActiveFilter.new(
             id: :level,
@@ -159,7 +159,12 @@ RSpec.describe Courses::ActiveFilterExtractor do
 
         expect(extractor.call).to eq(
           [
-            Courses::ActiveFilter.new(id: :subjects, value: "Primary", raw_value: "00", remove_params: { subjects: nil }),
+            Courses::ActiveFilter.new(
+              id: :subjects,
+              value: "Primary",
+              raw_value: "00",
+              remove_params: { subjects: nil, subject_code: nil, subject_name: nil },
+            ),
           ],
         )
       end
@@ -1101,6 +1106,102 @@ RSpec.describe Courses::ActiveFilterExtractor do
             ),
           ],
         )
+      end
+    end
+
+    context "when only search by subject code" do
+      it "clears both subject_code and subjects containing that code" do
+        search_params = {
+          subject_code: "00",
+          subject_name: "Primary",
+        }
+
+        search_form = Courses::SearchForm.new(search_params)
+        active_filters = described_class.new(
+          search_params: search_params,
+          search_form: search_form,
+        ).call
+
+        expect(active_filters).to eq(
+          [
+            Courses::ActiveFilter.new(
+              id: :subject_code,
+              raw_value: "00",
+              value: "Primary",
+              remove_params: { subjects: nil, subject_code: nil, subject_name: nil },
+            ),
+          ],
+        )
+      end
+    end
+
+    describe "subject_code and subjects synchronization" do
+      context "when removing subject_code filter" do
+        it "clears both subject_code and subjects containing that code" do
+          search_params = {
+            subject_code: "00",
+            subject_name: "Primary",
+            subjects: %w[00 01 C1],
+          }
+
+          search_form = Courses::SearchForm.new(search_params)
+          extractor = described_class.new(
+            search_params: search_params,
+            search_form: search_form,
+          )
+
+          active_filters = extractor.call
+
+          expect(active_filters).to eq(
+            [
+              Courses::ActiveFilter.new(
+                id: :subjects,
+                raw_value: "00",
+                value: "Primary",
+                remove_params: { subjects: %w[01 C1], subject_code: nil, subject_name: nil },
+              ),
+              Courses::ActiveFilter.new(
+                id: :subjects,
+                raw_value: "01",
+                value: "Primary with English",
+                remove_params: { subjects: %w[00 C1] },
+              ),
+              Courses::ActiveFilter.new(
+                id: :subjects,
+                raw_value: "C1",
+                value: "Biology",
+                remove_params: { subjects: %w[00 01] },
+              ),
+            ],
+          )
+        end
+
+        it "removes subject_code and all subjects if only that code exists in subjects" do
+          search_params = {
+            subject_code: "C1",
+            subject_name: "Biology",
+            subjects: %w[C1],
+          }
+
+          search_form = Courses::SearchForm.new(search_params)
+          extractor = described_class.new(
+            search_params: search_params,
+            search_form: search_form,
+          )
+
+          active_filters = extractor.call
+
+          expect(active_filters).to eq(
+            [
+              Courses::ActiveFilter.new(
+                id: :subjects,
+                raw_value: "C1",
+                value: "Biology",
+                remove_params: { subjects: nil, subject_code: nil, subject_name: nil },
+              ),
+            ],
+          )
+        end
       end
     end
   end
