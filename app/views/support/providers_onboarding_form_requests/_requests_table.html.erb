@@ -11,7 +11,7 @@
     <% end %>
   <% end %>
   <% table.with_body do |body| %>
-    <% @requests.each do |request| %>
+    <% onboarding_requests.each do |request| %>
       <% body.with_row do |row| %>
         <% row.with_cell(text: request.id) %>
         <% row.with_cell(text: request.form_name) %>

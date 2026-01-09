@@ -6,15 +6,30 @@ module Support
 
     def index
       # Fetches all requests ordered by creation date, paginated and passes to view to display as a table
-      @pagy, @requests = pagy(ProvidersOnboardingFormRequest.includes(:support_agent).order(created_at: :desc))
+      @pagy, @onboarding_requests = pagy(ProvidersOnboardingFormRequest.includes(:support_agent).order(created_at: :desc))
     end
 
     def new
-      # Placeholder: form for creating a new onboarding request will be implemented in next ticket
+      @onboarding_request = ProvidersOnboardingFormRequest.new
+      @admin_users = User.where(admin: true).order(:first_name, :last_name)
     end
 
     def create
-      # Placeholder: logic for creating a new onboarding request will be implemented in next ticket
+      # Creates a new onboarding form request with UUID, status, and form link
+      @onboarding_request = ProvidersOnboardingFormRequest.new(request_params).tap do |form|
+        form.uuid = SecureRandom.uuid
+        form.status = "pending"
+        form.form_link = publish_provider_onboarding_url(uuid: form.uuid)
+      end
+
+      # Fetches admin users for support agent selection in the form
+      @admin_users = User.where(admin: true).order(:first_name, :last_name)
+
+      if @onboarding_request.save
+        redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".success_message_html", form_name: @onboarding_request.form_name) }
+      else
+        render :new
+      end
     end
 
     def show
@@ -29,12 +44,12 @@ module Support
 
     def set_request
       # Finds the request by id param for show and update actions
-      @request = ProvidersOnboardingFormRequest.find(params[:id])
+      @onboarding_request = ProvidersOnboardingFormRequest.find(params[:id])
     end
 
     def request_params
-      # Strong params for onboarding request (to be used in next ticket)
-      params.require(:providers_onboarding_form_request).permit(:form_name, :zendesk_link, :support_agent_id, :status)
+      # Strong params for onboarding request
+      params.require(:providers_onboarding_form_request).permit(:form_name, :zendesk_link, :support_agent_id)
     end
   end
 end

@@ -1,0 +1,6 @@
+<% content_for :page_title, t(".title") %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_providers_onboarding_form_requests_path) %>
+<% end %>
+<h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+<%= render "provider_onboarding_form", onboarding_request: @onboarding_request %>
