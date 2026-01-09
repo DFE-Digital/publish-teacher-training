@@ -5,10 +5,14 @@ export default class extends Controller {
   static values = {
     courseId: String,
     saved: Boolean,
+    authenticated: Boolean,
     saveUrl: String,
     unsaveUrl: String,
     savedIconUrl: String,
-    unsavedIconUrl: String
+    unsavedIconUrl: String,
+    savedText: String,
+    saveText: String,
+    signInToSaveText: String
   }
 
   toggle (event) {
@@ -73,8 +77,12 @@ export default class extends Controller {
     this.savedValue = saved
 
     this.iconTarget.src = saved ? this.savedIconUrlValue : this.unsavedIconUrlValue
-    this.iconTarget.alt = saved ? 'Saved' : 'Save'
-    this.textTarget.textContent = saved ? 'Saved' : 'Save'
+    this.iconTarget.alt = saved ? this.savedTextValue : this.unsavedText()
+    this.textTarget.textContent = saved ? this.savedTextValue : this.unsavedText()
+  }
+
+  unsavedText () {
+    return this.authenticatedValue ? this.saveTextValue : this.signInToSaveTextValue
   }
 
   setLoadingState (disabled) {
