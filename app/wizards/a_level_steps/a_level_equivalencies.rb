@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module ALevelSteps
-  class ALevelEquivalencies < DfE::Wizard::Step
+  class ALevelEquivalencies
+    include DfE::Wizard::Step
+
     delegate :exit_path, to: :wizard
     attr_accessor :accept_a_level_equivalency, :additional_a_level_equivalencies
 

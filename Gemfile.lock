@@ -30,12 +30,13 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-wizard.git
-  revision: 859236dacbede69359d6df1b2965dd6fbcb8b9d6
-  tag: v0.1.1
+  revision: 5e7631d3fd8cc9015e44bf6542b8429113f11c3d
+  tag: v1.0.0.beta
   specs:
-    dfe-wizard (0.1.1)
+    dfe-wizard (1.0.0.beta)
       activemodel
       activesupport
+      ruby-graphviz
 
 GIT
   remote: https://github.com/DFE-Digital/jsonapi-rails.git

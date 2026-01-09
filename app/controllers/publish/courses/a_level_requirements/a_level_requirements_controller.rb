@@ -5,26 +5,13 @@ module Publish
     module ALevelRequirements
       class ALevelRequirementsController < ApplicationController
         before_action :assign_course, :verify_teacher_degree_apprenticeship_course
+        before_action :assign_wizard
 
         def new
-          @wizard = ALevelsWizard.new(
-            current_step:,
-            provider: @provider,
-            course: @course,
-            step_params:,
-          )
-
           @wizard.valid_step? if params[:display_errors].present?
         end
 
         def create
-          @wizard = ALevelsWizard.new(
-            current_step:,
-            provider: @provider,
-            course: @course,
-            step_params:,
-          )
-
           if @wizard.save
             add_flash_message
             redirect_to @wizard.next_step_path
@@ -34,6 +21,19 @@ module Publish
         end
 
       private
+
+        def assign_wizard
+          @wizard = ALevelsWizard.new(
+            current_step:,
+            provider: @provider,
+            course: @course,
+            step_params:,
+          )
+
+          StateStores::ALevels.new(
+            repository: DfE::Wizard::Repository::Session.new(session:, key: :a_levels),
+          )
+        end
 
         def add_flash_message; end
 

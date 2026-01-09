@@ -46,6 +46,7 @@
 
     <%= render Find::Courses::SummaryComponent::View.new(@course, @enrichment) %>
 
+    <% # binding.pry %>
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
     <%= render partial: "find/courses/components", locals: { course: @course } %>

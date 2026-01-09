@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module ALevelSteps
-  class ConsiderPendingALevel < DfE::Wizard::Step
+  class ConsiderPendingALevel
+    include DfE::Wizard::Step
     attr_accessor :pending_a_level
 
     validates :pending_a_level, presence: true

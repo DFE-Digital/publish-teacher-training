@@ -1,23 +1,28 @@
 # frozen_string_literal: true
 
-class ALevelsWizard < DfE::Wizard::Base
+class ALevelsWizard
+  include DfE::Wizard
+
   attr_accessor :provider, :course
 
   delegate :course_code, to: :course
   delegate :provider_code, :recruitment_cycle_year, to: :course
   delegate :destroy, to: :store
 
-  steps do
-    [
-      { what_a_level_is_required: ALevelSteps::WhatALevelIsRequired },
-      { add_a_level_to_a_list: ALevelSteps::AddALevelToAList },
-      { remove_a_level_subject_confirmation: ALevelSteps::RemoveALevelSubjectConfirmation },
-      { consider_pending_a_level: ALevelSteps::ConsiderPendingALevel },
-      { a_level_equivalencies: ALevelSteps::ALevelEquivalencies },
-    ]
+  def steps_processor
+    DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
+      graph.root :what_a_level_is_required
+      graph.add_node :what_a_level_is_required, ALevelSteps::WhatALevelIsRequired
+      graph.add_node :add_a_level_to_a_list, ALevelSteps::AddALevelToAList
+      graph.add_node :remove_a_level_subject_confirmation, ALevelSteps::RemoveALevelSubjectConfirmation
+      graph.add_node :consider_pending_a_level, ALevelSteps::ConsiderPendingALevel
+      graph.add_node :a_level_equivalencies, ALevelSteps::ALevelEquivalencies
+
+      graph.add_edge from: :what_a_level_is_required, to: :add_a_level_to_a_list
+    end
   end
 
-  store ALevelsWizardStore
+  # store ALevelsWizardStore
 
   # Default argument passed to all the routing in this wizard
   # All course editing specific is done through the URL

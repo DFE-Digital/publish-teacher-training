@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module ALevelSteps
-  class RemoveALevelSubjectConfirmation < DfE::Wizard::Step
+  class RemoveALevelSubjectConfirmation
+    include DfE::Wizard::Step
     delegate :course, :exit_path, to: :wizard
     attr_accessor :uuid, :confirmation, :other_subject
     attr_writer :subject

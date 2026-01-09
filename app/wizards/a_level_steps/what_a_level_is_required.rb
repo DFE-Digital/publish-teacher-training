@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module ALevelSteps
-  class WhatALevelIsRequired < DfE::Wizard::Step
+  class WhatALevelIsRequired
+    include DfE::Wizard::Step
+
     MAXIMUM_GRADE_CHARACTERS = 50
     attr_accessor :subject, :other_subject, :minimum_grade_required
     attr_writer :uuid

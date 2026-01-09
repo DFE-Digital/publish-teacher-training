@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module ALevelSteps
-  class AddALevelToAList < DfE::Wizard::Step
+  class AddALevelToAList
+    include DfE::Wizard::Step
     attr_accessor :add_another_a_level
     attr_writer :subjects
 
