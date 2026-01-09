@@ -1,7 +1,13 @@
 .app-c-filter-panel__top {
   margin-bottom: govuk-spacing(2);
 
+  .app-c-filter-section__summary-heading {
+    margin-bottom: govuk-spacing(1);
+  }
+
   .app-c-filter-panel__button-inner > .app-c-filter-section__summary-heading {
+    margin-bottom: 0;
+
     font-weight: $govuk-font-weight-bold;
   }
 
