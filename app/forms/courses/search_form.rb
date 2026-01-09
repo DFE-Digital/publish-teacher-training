@@ -67,6 +67,26 @@ module Courses
       @providers_cache = ProvidersCache.new
     end
 
+    def filter_counts
+      {
+        degree: degree_filter_count,
+        funding: funding&.count,
+        interview: boolean_filter_count(interview_location),
+        level: boolean_filter_count(level),
+        ordering: ordering_filter_count,
+        primary_subjects: primary_subject_filter_count,
+        provider: boolean_filter_count(provider_code || provider_name),
+        qualifications: qualifications&.count,
+        radius: radius_filter_count,
+        secondary_subjects: secondary_subject_filter_count,
+        send_courses: boolean_filter_count(send_courses),
+        sponsor_visa: boolean_filter_count(can_sponsor_visa),
+        start_date: start_date&.count,
+        study_types: study_types&.count,
+        teach_physics: boolean_filter_count(engineers_teach_physics),
+      }
+    end
+
     def excluded_courses=(attributes)
       super(attributes.is_a?(Hash) ? attributes.values : attributes)
     end
@@ -224,6 +244,40 @@ module Courses
     end
 
   private
+
+    def boolean_filter_count(value)
+      value.presence ? 1 : nil
+    end
+
+    def primary_subject_filter_count
+      return if subjects.blank?
+
+      primary_count = subjects.count { primary_subject_codes.include?(it) }
+      primary_count if primary_count.positive?
+    end
+
+    def secondary_subject_filter_count
+      return if subjects.blank?
+
+      secondary_count = subjects.count { secondary_subject_codes.include?(it) }
+      secondary_count if secondary_count.positive?
+    end
+
+    def ordering_filter_count
+      default_order = location.present? ? "distance" : "course_name_ascending"
+      order == default_order ? nil : 1
+    end
+
+    def radius_filter_count
+      return if location.blank?
+
+      default_radius = DefaultRadius.new(location:, formatted_address:, address_types:).call.to_s
+      radius == default_radius ? nil : 1
+    end
+
+    def degree_filter_count
+      minimum_degree_required == "show_all_courses" ? nil : 1
+    end
 
     def transform_old_parameters(params)
       params.tap do

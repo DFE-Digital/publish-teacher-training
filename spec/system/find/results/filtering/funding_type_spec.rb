@@ -58,7 +58,7 @@ RSpec.describe "when I filter by funding type", :js, service: :find do
   end
 
   def when_i_visit_the_find_results_page_using_old_salary_parameter
-    visit(find_results_path(funding: "salary"))
+    visit(find_results_path(funding: %w[salary]))
   end
 
   def and_i_filter_by_salaried_courses

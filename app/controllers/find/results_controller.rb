@@ -16,6 +16,7 @@ module Find
                        end
       @courses = @courses_query.call
       @courses_count = @courses_query.count
+      @filter_counts = @search_courses_form.filter_counts
 
       @pagy, @results = pagy(@courses, count: @courses_count, page:)
       respond_to do |format|
