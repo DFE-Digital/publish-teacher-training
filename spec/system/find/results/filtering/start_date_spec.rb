@@ -6,9 +6,17 @@ require_relative "../filtering_helper"
 RSpec.describe "when filtering by start date", :js, service: :find do
   include FilteringHelper
   before do
+    FeatureFlag.activate(:find_filtering_and_sorting)
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     given_courses_exist_with_varied_start_dates
     when_i_visit_the_find_results_page
+  end
+
+  scenario "filtering by January to August start date" do
+    when_i_filter_by_january_to_august_start_date
+    and_i_apply_the_filters
+    then_i_see_only_courses_starting_in_january_to_august
+    and_i_see_that_two_courses_are_found
   end
 
   scenario "filtering by September start date" do
@@ -18,10 +26,10 @@ RSpec.describe "when filtering by start date", :js, service: :find do
     and_i_see_that_three_courses_are_found
   end
 
-  scenario "filtering by all other start dates" do
-    when_i_filter_by_non_september_start_dates
+  scenario "filtering by October to July start date" do
+    when_i_filter_by_october_to_july_start_date
     and_i_apply_the_filters
-    then_i_see_only_courses_not_starting_in_september
+    then_i_see_only_courses_starting_in_october_to_july
     and_i_see_that_three_courses_are_found
   end
 
@@ -29,7 +37,7 @@ RSpec.describe "when filtering by start date", :js, service: :find do
     when_i_filter_by_all_start_date_options
     and_i_apply_the_filters
     then_i_see_all_courses_regardless_of_start_date
-    and_i_see_that_six_courses_are_found
+    and_i_see_that_eight_courses_are_found
   end
 
   def given_courses_exist_with_varied_start_dates
@@ -69,6 +77,32 @@ RSpec.describe "when filtering by start date", :js, service: :find do
       name: "Spanish",
       start_date: Time.zone.local(current_recruitment_cycle_year, 10, 1),
     )
+    @next_year_january_course = create(
+      :course,
+      :with_full_time_sites,
+      name: "Mathematics",
+      start_date: Time.zone.local(next_recruitment_cycle_year, 1, 15),
+    )
+    @next_year_july_course = create(
+      :course,
+      :with_full_time_sites,
+      name: "Physics",
+      start_date: Time.zone.local(next_recruitment_cycle_year, 7, 1),
+    )
+  end
+
+  def then_i_see_only_courses_starting_in_january_to_august
+    with_retry do
+      expect(results).to have_content(@january_course.name)
+      expect(results).to have_content(@august_course.name)
+
+      expect(results).to have_no_content(@beginning_of_september_course.name)
+      expect(results).to have_no_content(@middle_of_september_course.name)
+      expect(results).to have_no_content(@end_of_september_course.name)
+      expect(results).to have_no_content(@october_course.name)
+      expect(results).to have_no_content(@next_year_january_course.name)
+      expect(results).to have_no_content(@next_year_july_course.name)
+    end
   end
 
   def then_i_see_only_courses_starting_in_september
@@ -80,15 +114,19 @@ RSpec.describe "when filtering by start date", :js, service: :find do
       expect(results).to have_no_content(@january_course.name)
       expect(results).to have_no_content(@august_course.name)
       expect(results).to have_no_content(@october_course.name)
+      expect(results).to have_no_content(@next_year_january_course.name)
+      expect(results).to have_no_content(@next_year_july_course.name)
     end
   end
 
-  def then_i_see_only_courses_not_starting_in_september
+  def then_i_see_only_courses_starting_in_october_to_july
     with_retry do
-      expect(results).to have_content(@january_course.name)
-      expect(results).to have_content(@august_course.name)
       expect(results).to have_content(@october_course.name)
+      expect(results).to have_content(@next_year_january_course.name)
+      expect(results).to have_content(@next_year_july_course.name)
 
+      expect(results).to have_no_content(@january_course.name)
+      expect(results).to have_no_content(@august_course.name)
       expect(results).to have_no_content(@beginning_of_september_course.name)
       expect(results).to have_no_content(@middle_of_september_course.name)
       expect(results).to have_no_content(@end_of_september_course.name)
@@ -97,8 +135,9 @@ RSpec.describe "when filtering by start date", :js, service: :find do
 
   def when_i_filter_by_all_start_date_options
     page.find("h3", text: "Filter by\nStart Date").click
-    check "All other dates", visible: :all
+    check "January to August #{current_recruitment_cycle_year}", visible: :all
     check "September #{current_recruitment_cycle_year}", visible: :all
+    check "October #{current_recruitment_cycle_year} to July #{next_recruitment_cycle_year}", visible: :all
   end
 
   def then_i_see_all_courses_regardless_of_start_date
@@ -109,21 +148,32 @@ RSpec.describe "when filtering by start date", :js, service: :find do
       expect(results).to have_content(@beginning_of_september_course.name)
       expect(results).to have_content(@middle_of_september_course.name)
       expect(results).to have_content(@end_of_september_course.name)
+      expect(results).to have_content(@next_year_january_course.name)
+      expect(results).to have_content(@next_year_july_course.name)
     end
   end
 
-  def and_i_see_that_six_courses_are_found
-    expect(page).to have_content("6 courses found")
-    expect(page).to have_title("6 courses found")
+  def and_i_see_that_eight_courses_are_found
+    expect(page).to have_content("8 courses found")
+    expect(page).to have_title("8 courses found")
   end
 
-  def when_i_filter_by_non_september_start_dates
+  def when_i_filter_by_january_to_august_start_date
     page.find("h3", text: "Filter by\nStart Date").click
-    check "All other dates", visible: :all
+    check "January to August #{current_recruitment_cycle_year}", visible: :all
+  end
+
+  def when_i_filter_by_october_to_july_start_date
+    page.find("h3", text: "Filter by\nStart Date").click
+    check "October #{current_recruitment_cycle_year} to July #{next_recruitment_cycle_year}", visible: :all
   end
 
   def when_i_filter_by_september_start_date
     page.find("h3", text: "Filter by\nStart Date").click
     check "September #{current_recruitment_cycle_year}", visible: :all
+  end
+
+  def next_recruitment_cycle_year
+    current_recruitment_cycle_year + 1
   end
 end

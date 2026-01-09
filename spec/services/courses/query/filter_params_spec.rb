@@ -495,6 +495,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when searching by start date" do
     let(:current_recruitment_cycle_year) { RecruitmentCycle.current.year.to_i }
+    let(:next_recruitment_cycle_year) { current_recruitment_cycle_year + 1 }
     let!(:january_course) do
       create(:course, :with_full_time_sites, name: "Art and design", start_date: Time.zone.local(current_recruitment_cycle_year, 1, 1))
     end
@@ -513,6 +514,26 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let!(:october_course) do
       create(:course, :with_full_time_sites, name: "Spanish", start_date: Time.zone.local(current_recruitment_cycle_year, 10, 1))
     end
+    let!(:next_year_january_course) do
+      create(:course, :with_full_time_sites, name: "Mathematics", start_date: Time.zone.local(next_recruitment_cycle_year, 1, 15))
+    end
+    let!(:next_year_july_course) do
+      create(:course, :with_full_time_sites, name: "Physics", start_date: Time.zone.local(next_recruitment_cycle_year, 7, 31))
+    end
+
+    context "when searching for january to august courses" do
+      let(:params) { { start_date: %w[jan_to_aug] } }
+
+      it "returns courses that start between January and August" do
+        expect(results).to match_collection(
+          [
+            january_course,
+            august_course,
+          ],
+          attribute_names: %w[id name start_date],
+        )
+      end
+    end
 
     context "when searching for only september courses" do
       let(:params) { { start_date: %w[september] } }
@@ -529,35 +550,31 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
 
-    context "when searching for all other course start dates" do
-      let(:params) { { start_date: %w[all_other_dates] } }
+    context "when searching for october to july courses" do
+      let(:params) { { start_date: %w[oct_to_jul] } }
 
-      it "returns courses that starts in all other months except september" do
-        expect(results).to match_collection(
-          [
-            january_course,
-            august_course,
-            october_course,
-          ],
-          attribute_names: %w[id name start_date],
+      it "returns courses that start between October and July of the following year" do
+        expect(results).to contain_exactly(
+          october_course,
+          next_year_january_course,
+          next_year_july_course,
         )
       end
     end
 
     context "when searching for all options" do
-      let(:params) { { start_date: %w[september all_other_dates] } }
+      let(:params) { { start_date: %w[jan_to_aug september oct_to_jul] } }
 
       it "returns all courses" do
-        expect(results).to match_collection(
-          [
-            january_course,
-            august_course,
-            beginning_of_september_course,
-            middle_of_september_course,
-            end_of_september_course,
-            october_course,
-          ],
-          attribute_names: %w[id name start_date],
+        expect(results).to contain_exactly(
+          january_course,
+          august_course,
+          beginning_of_september_course,
+          middle_of_september_course,
+          end_of_september_course,
+          october_course,
+          next_year_january_course,
+          next_year_july_course,
         )
       end
     end
@@ -566,16 +583,15 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       let(:params) { { start_date: %w[something] } }
 
       it "returns all courses" do
-        expect(results).to match_collection(
-          [
-            january_course,
-            august_course,
-            beginning_of_september_course,
-            middle_of_september_course,
-            end_of_september_course,
-            october_course,
-          ],
-          attribute_names: %w[id name start_date],
+        expect(results).to contain_exactly(
+          january_course,
+          august_course,
+          beginning_of_september_course,
+          middle_of_september_course,
+          end_of_september_course,
+          october_course,
+          next_year_january_course,
+          next_year_july_course,
         )
       end
     end

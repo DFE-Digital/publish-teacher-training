@@ -56,8 +56,9 @@ en:
             salary: Salary
             apprenticeship: Teaching apprenticeship - with salary
           start_date_options:
+            jan_to_aug: January to August %{recruitment_cycle_year}
             september: "September %{recruitment_cycle_year}"
-            all_other_dates: All other dates
+            oct_to_jul: October %{recruitment_cycle_year} to July %{next_recruitment_cycle_year}
           hint:
             primary: (ages 3 to 11)
             further_education: (ages 16 and over)
