@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing fees and financial support section" do
+RSpec.describe "Editing fees and financial support section" do
   scenario "adding valid data" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit

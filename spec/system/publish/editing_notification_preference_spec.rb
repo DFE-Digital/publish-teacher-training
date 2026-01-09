@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Opting into notifications" do
+RSpec.describe "Opting into notifications" do
   before do
     given_i_am_authenticated_as_an_accredited_provider_user
     when_i_visit_accredited_provider_page

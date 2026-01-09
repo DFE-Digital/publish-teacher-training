@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Searching for a school from the GIAS list" do
+RSpec.describe "Searching for a school from the GIAS list" do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_are_schools_in_the_database

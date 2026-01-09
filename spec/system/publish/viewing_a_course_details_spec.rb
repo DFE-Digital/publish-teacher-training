@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Course show" do
+RSpec.describe "Course show" do
   describe "published course" do
     scenario "i can view the course basic details" do
       given_i_am_authenticated_as_a_provider_user

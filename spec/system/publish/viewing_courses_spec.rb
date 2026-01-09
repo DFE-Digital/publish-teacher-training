@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Managing a provider's courses" do
+RSpec.describe "Managing a provider's courses" do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_courses_page

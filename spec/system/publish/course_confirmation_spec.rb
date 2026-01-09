@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "course confirmation" do
+RSpec.describe "course confirmation" do
   context "lead school" do
     before do
       given_i_am_authenticated_as_a_provider_user

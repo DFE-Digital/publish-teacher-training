@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Managing a provider's study_sites" do
+RSpec.describe "Managing a provider's study_sites" do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_study_sites_page
