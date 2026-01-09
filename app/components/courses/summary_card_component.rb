@@ -2,7 +2,7 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
-    attr_reader :course, :location, :visa_sponsorship, :short_address, :show_start_date
+    attr_reader :course, :location, :visa_sponsorship, :short_address
 
     def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil)
       @course = course
@@ -157,6 +157,10 @@ module Courses
 
     def search_by_location?
       @location.present? && course.respond_to?(:minimum_distance_to_search_location)
+    end
+
+    def show_start_date?
+      FeatureFlag.active?(:find_filtering_and_sorting) && @show_start_date
     end
 
   private
