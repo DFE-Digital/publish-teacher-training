@@ -20,8 +20,10 @@
               saved_course ? "icon-saved.svg" : "icon-save.svg",
               alt: if saved_course
                      t(".course_saved")
+                   elsif authenticated?
+                     t(".save_this_course")
                    else
-                     (authenticated? ? t(".save_this_course") : t(".sign_in_to_save_this_course"))
+                     t(".sign_in_to_save_this_course")
                    end,
               width: 24,
               height: 24,
@@ -33,8 +35,10 @@
               data-save-course-target="text">
           <%= if saved_course
                 t(".course_saved")
+              elsif authenticated?
+                t(".save_this_course")
               else
-                (authenticated? ? t(".save_this_course") : t(".sign_in_to_save_this_course"))
+                t(".sign_in_to_save_this_course")
               end %>
         </span>
       </div>

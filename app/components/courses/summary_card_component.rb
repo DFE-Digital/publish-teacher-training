@@ -29,14 +29,14 @@ module Courses
       end
 
       classes = [
-        ("govuk-grid-column-three-quarters" if save_toggle_button),
+        ("govuk-grid-column-one-half" if save_toggle_button),
         ("govuk-!-padding-left-2" unless save_toggle_button),
       ].compact.join(" ")
 
       content_tag(:div, class: "govuk-grid-row") do
         safe_join([
           content_tag(:div, course_link, class: classes),
-          content_tag(:div, save_toggle_button || "", class: "govuk-grid-column-one-quarter govuk-!-padding-top-2 govuk-!-padding-right-0"),
+          content_tag(:div, save_toggle_button || "", class: "govuk-grid-column-one-half govuk-!-padding-top-2 govuk-!-padding-right-0"),
         ])
       end
     end

@@ -76,13 +76,11 @@ export default class extends Controller {
   updateUI (saved) {
     this.savedValue = saved
 
-    this.iconTarget.src = saved ? this.savedIconUrlValue : this.unsavedIconUrlValue
-    this.iconTarget.alt = saved ? this.savedTextValue : this.unsavedText()
-    this.textTarget.textContent = saved ? this.savedTextValue : this.unsavedText()
-  }
+    const text = saved ? this.savedTextValue : (this.authenticatedValue ? this.saveTextValue : this.signInToSaveTextValue)
 
-  unsavedText () {
-    return this.authenticatedValue ? this.saveTextValue : this.signInToSaveTextValue
+    this.iconTarget.src = saved ? this.savedIconUrlValue : this.unsavedIconUrlValue
+    this.iconTarget.alt = text
+    this.textTarget.textContent = text
   }
 
   setLoadingState (disabled) {
