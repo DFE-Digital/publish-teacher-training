@@ -244,6 +244,8 @@ module Courses
       STUDY_TYPE_OPTIONS
     end
 
+    # When a subject is searched as main subject,
+    # the matching subject filter is automatically selected.
     def subjects
       all_subjects = Array(super)
 
