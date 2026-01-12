@@ -562,6 +562,49 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
 
+    context "when searching for january to august and september courses" do
+      let(:params) { { start_date: %w[jan_to_aug september] } }
+
+      it "returns courses that start between January and September" do
+        expect(results).to contain_exactly(
+          january_course,
+          august_course,
+          beginning_of_september_course,
+          middle_of_september_course,
+          end_of_september_course,
+        )
+      end
+    end
+
+    context "when searching for september and october to july courses" do
+      let(:params) { { start_date: %w[september oct_to_jul] } }
+
+      it "returns courses that start from September onwards" do
+        expect(results).to contain_exactly(
+          beginning_of_september_course,
+          middle_of_september_course,
+          end_of_september_course,
+          october_course,
+          next_year_january_course,
+          next_year_july_course,
+        )
+      end
+    end
+
+    context "when searching for january to august and october to july courses" do
+      let(:params) { { start_date: %w[jan_to_aug oct_to_jul] } }
+
+      it "returns courses excluding september" do
+        expect(results).to contain_exactly(
+          january_course,
+          august_course,
+          october_course,
+          next_year_january_course,
+          next_year_july_course,
+        )
+      end
+    end
+
     context "when searching for all options" do
       let(:params) { { start_date: %w[jan_to_aug september oct_to_jul] } }
 
