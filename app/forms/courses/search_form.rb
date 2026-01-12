@@ -204,7 +204,7 @@ module Courses
     end
 
     def active_filters
-      @active_filters ||= Courses::ActiveFilterExtractor.new(
+      @active_filters ||= Courses::ActiveFilters::Extractor.new(
         search_form: self,
         search_params: search_params.except(*%i[
           location

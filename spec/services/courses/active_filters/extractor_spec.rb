@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Courses::ActiveFilterExtractor do
+RSpec.describe Courses::ActiveFilters::Extractor do
   describe "#call" do
     context "sort filter by certain priority" do
       it "sorts active filters in the correct order" do
