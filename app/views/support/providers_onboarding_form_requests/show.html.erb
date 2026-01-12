@@ -1,0 +1,81 @@
+<% content_for :page_title, "Provider details" %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_providers_onboarding_form_requests_path) %>
+<% end %>
+<span class="govuk-caption-l"><%= t(".caption") %></span>
+<h1 class="govuk-heading-l"><%= t(".provider_details", form_name: @onboarding_request.form_name) %></h1>
+<!-- Organisation Details -->
+<h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".organisation_details") %></h2>
+<%= govuk_summary_list(actions: false) do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Provider name" } %>
+    <% row.with_value { @onboarding_request.provider_name.presence } %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "UK provider reference number (UKPRN)" } %>
+    <% row.with_value { @onboarding_request.ukprn.presence } %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Is the organisation an accredited provider?" } %>
+    <% row.with_value { @onboarding_request.accredited_provider ? "Yes" : "No" } %> <!-- need to map the Yes or No to the boolean value? -->
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Unique reference number (URN)" } %>
+    <% row.with_value { @onboarding_request.urn.presence } %>
+  <% end %>
+<% end %>
+<!-- Contact Details -->
+<h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".contact_details") %></h2>
+<%= govuk_summary_list(actions: false) do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Contact email address" } %>
+    <% row.with_value { @onboarding_request.contact_email_address.presence } %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Telephone number" } %>
+    <% row.with_value { @onboarding_request.telephone.presence } %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Website" } %>
+    <% row.with_value { @onboarding_request.website.presence } %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Address" } %>
+    <% row.with_value(text: simple_format(@onboarding_request.full_address_on_separate_lines, {}, wrapper_tag: :div)) %>
+  <% end %>
+<% end %>
+<!-- User Details -->
+<h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".user_details") %></h2>
+<%= govuk_summary_list(actions: false) do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Email address" } %>
+    <% row.with_value { @onboarding_request.email_address.presence } %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "First name" } %>
+    <% row.with_value { @onboarding_request.first_name.presence } %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { "Last name" } %>
+    <% row.with_value { @onboarding_request.last_name.presence } %>
+  <% end %>
+<% end %>
+<div class="govuk-button-group">
+  <%= button_to "Accept",
+      support_providers_onboarding_form_request_path(@onboarding_request, status: "accept"),
+      method: :patch,
+      class: "govuk-button",
+      form_class: "inline-form" %>
+  <%= button_to "Reject",
+      support_providers_onboarding_form_request_path(@onboarding_request, status: "reject"),
+      method: :patch,
+      class: "govuk-button govuk-button--warning govuk-!-margin-left-2",
+      form_class: "inline-form" %>
+</div>
+<p class="govuk-body">
+  <%= govuk_link_to(
+            t("cancel"),
+            support_providers_onboarding_form_requests_path,
+          ) %>
+</p>
+</div>

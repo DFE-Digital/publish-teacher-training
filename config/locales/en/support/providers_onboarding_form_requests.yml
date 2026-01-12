@@ -20,3 +20,12 @@ en:
         heading: Generate a new provider onboarding request
       create:
         success_message_html: "Onboarding form generated successfully for %{form_name}"
+      update:
+        updated_status_message_html: "Status updated to %{updated_status} for %{form_name}"
+        error_message_html: "Failed to update status for %{form_name}"
+      show: 
+        caption: Add a provider
+        provider_details: Provider details for %{form_name}
+        organisation_details: Organisation details
+        contact_details: Contact details
+        user_details: User details
