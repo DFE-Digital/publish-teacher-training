@@ -11,7 +11,7 @@ module Support
 
     def new
       @onboarding_request = ProvidersOnboardingFormRequest.new
-      @admin_users = User.where(admin: true).order(:first_name, :last_name)
+      @admin_users = User.where(admin: true).order(:email)
     end
 
     def create
@@ -23,7 +23,7 @@ module Support
       end
 
       # Fetches admin users for support agent selection in the form
-      @admin_users = User.where(admin: true).order(:first_name, :last_name)
+      @admin_users = User.where(admin: true).order(:email)
 
       if @onboarding_request.save
         redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".success_message_html", form_name: @onboarding_request.form_name) }

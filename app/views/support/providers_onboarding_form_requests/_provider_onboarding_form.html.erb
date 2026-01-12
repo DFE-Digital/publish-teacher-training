@@ -2,13 +2,13 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: onboarding_request, url: support_providers_onboarding_form_requests_path, local: true do |f| %>
       <%= f.govuk_error_summary %>
-      <%= f.govuk_text_field :form_name, label: { text: "Form name", size: "s" }, hint: { text: "This is to help the support team identify the request and is for internal reference only" } %>
+      <%= f.govuk_text_field :form_name, label: { text: t(".form_name"), size: "s" }, hint: { text: t(".form_name_hint") } %>
       <%= f.govuk_collection_select :support_agent_id,
     @admin_users, :id, :email,
-    options: { include_blank: "Select a support agent" },
-    label: { text: "Support agent (optional)", size: "s" },
-    hint: { text: "Select the support agent who will handle this request" } %>
-      <%= f.govuk_text_field :zendesk_link, label: { text: "Zendesk link (optional)", size: "s" } %>
+    options: { include_blank: t(".support_agent_blank") },
+    label: { text: t(".support_agent"), size: "s" },
+    hint: { text: t(".support_agent_hint") } %>
+      <%= f.govuk_text_field :zendesk_link, label: { text: t(".zendesk_link"), size: "s" } %>
       <%= f.govuk_submit "Submit" %>
       <p class="govuk-body">
         <%= govuk_link_to(t("cancel"), support_providers_onboarding_form_requests_path) %>
