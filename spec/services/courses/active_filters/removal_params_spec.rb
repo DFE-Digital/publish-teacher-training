@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Courses::RemovalParams do
+RSpec.describe Courses::ActiveFilters::RemovalParams do
   describe "#call" do
     context "with subject_code attribute" do
       it "clears subject_code and removes it from subjects array" do
