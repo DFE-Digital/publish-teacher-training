@@ -108,4 +108,11 @@ module ProvidersOnboardingFormRequestsHelper
     expect(ProvidersOnboardingFormRequest.last.support_agent).to be_blank
     expect(ProvidersOnboardingFormRequest.last.zendesk_link).to be_blank
   end
+
+  def then_i_do_not_see_non_admin_user_in_support_agent_dropdown(non_admin_user)
+    expect(page).not_to have_select(
+      "Support agent (optional)",
+      with_options: [non_admin_user.email],
+    )
+  end
 end

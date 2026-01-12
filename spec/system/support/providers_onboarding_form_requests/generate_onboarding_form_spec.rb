@@ -60,5 +60,11 @@ RSpec.describe "Support console providers onboarding form requests - generating 
       then_i_expect_support_agent_and_zendesk_link_to_be_blank
       then_last_request_has_valid_uuid
     end
+
+    scenario "only admins are listed in the support agent dropdown" do
+      non_admin_user = create(:user, admin: false, email: "non_admin@example.com")
+      when_i_click_to_generate_a_new_onboarding_form
+      then_i_do_not_see_non_admin_user_in_support_agent_dropdown(non_admin_user)
+    end
   end
 end

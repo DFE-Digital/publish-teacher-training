@@ -1,6 +1,13 @@
 en:
   support:
     providers_onboarding_form_requests:
+      provider_onboarding_form:
+        form_name: Form name
+        form_name_hint: This is to help the support team identify the request and is for internal reference only.
+        support_agent: Support agent (optional)
+        support_agent_hint: Select the support agent who will handle this request.
+        support_agent_blank: Select a support agent
+        zendesk_link: Zendesk link (optional)
       index:
         title: Provider Onboarding Requests
         heading: Provider Onboarding Requests
