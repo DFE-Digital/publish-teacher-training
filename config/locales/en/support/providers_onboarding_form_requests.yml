@@ -12,6 +12,7 @@ en:
         title: Provider Onboarding Requests
         heading: Provider Onboarding Requests
       requests_table:
+        form_link: Form link
         unassigned: Unassigned
         not_available: Not available
       new:
