@@ -38,6 +38,7 @@ class GiasSchool < ApplicationRecord
     foundation_school: "05",
     city_technical_college: "06",
     community_special_school: "07",
+    non_maintained_special_school: "08",
     other_independent_special_school: "10",
     other_independent_school: "11",
     other_foundation_school: "12",
