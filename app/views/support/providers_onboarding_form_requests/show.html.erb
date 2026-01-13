@@ -9,19 +9,19 @@
 <%= govuk_summary_list(actions: false) do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Provider name" } %>
-    <% row.with_value { @onboarding_request.provider_name.presence } %>
+    <% row.with_value { @onboarding_request.provider_name } %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "UK provider reference number (UKPRN)" } %>
-    <% row.with_value { @onboarding_request.ukprn.presence } %>
+    <% row.with_value { @onboarding_request.ukprn } %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Is the organisation an accredited provider?" } %>
-    <% row.with_value { @onboarding_request.accredited_provider ? "Yes" : "No" } %> <!-- need to map the Yes or No to the boolean value? -->
+    <% row.with_value { @onboarding_request.accredited_provider ? "Yes" : "No" } %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Unique reference number (URN)" } %>
-    <% row.with_value { @onboarding_request.urn.presence } %>
+    <% row.with_value { @onboarding_request.urn } %>
   <% end %>
 <% end %>
 <!-- Contact Details -->
@@ -29,15 +29,15 @@
 <%= govuk_summary_list(actions: false) do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Contact email address" } %>
-    <% row.with_value { @onboarding_request.contact_email_address.presence } %>
+    <% row.with_value { @onboarding_request.contact_email_address } %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Telephone number" } %>
-    <% row.with_value { @onboarding_request.telephone.presence } %>
+    <% row.with_value { @onboarding_request.telephone } %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Website" } %>
-    <% row.with_value { @onboarding_request.website.presence } %>
+    <% row.with_value { @onboarding_request.website } %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Address" } %>
@@ -49,15 +49,15 @@
 <%= govuk_summary_list(actions: false) do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Email address" } %>
-    <% row.with_value { @onboarding_request.email_address.presence } %>
+    <% row.with_value { @onboarding_request.email_address } %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "First name" } %>
-    <% row.with_value { @onboarding_request.first_name.presence } %>
+    <% row.with_value { @onboarding_request.first_name } %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Last name" } %>
-    <% row.with_value { @onboarding_request.last_name.presence } %>
+    <% row.with_value { @onboarding_request.last_name } %>
   <% end %>
 <% end %>
 <div class="govuk-button-group">

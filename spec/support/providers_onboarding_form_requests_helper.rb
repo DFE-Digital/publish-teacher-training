@@ -11,6 +11,7 @@ module ProvidersOnboardingFormRequestsHelper
   def when_i_visit_the_providers_onboarding_form_requests_page
     visit support_providers_onboarding_form_requests_path
   end
+  alias_method :then_i_am_on_the_providers_onboarding_form_requests_page, :when_i_visit_the_providers_onboarding_form_requests_page
 
   def then_i_see_providers_onboarding_form_requests_table
     expect(page).to have_content("Provider Onboarding Requests")
@@ -85,6 +86,10 @@ module ProvidersOnboardingFormRequestsHelper
     click_link_or_button "Submit"
   end
 
+  def then_i_click_cancel
+    click_link "Cancel"
+  end
+
   def then_i_see_validation_error_message_for_missing_form_name
     expect(page).to have_content("There is a problem")
     expect(page).to have_content("Enter a name for the onboarding form. This is for internal reference only.")
@@ -114,5 +119,67 @@ module ProvidersOnboardingFormRequestsHelper
       "Support agent (optional)",
       with_options: [non_admin_user.email],
     )
+  end
+
+  def when_i_visit_the_show_page_for(onboarding_request)
+    visit support_providers_onboarding_form_request_path(onboarding_request)
+  end
+
+  def then_i_am_on_the_show_page_for(onboarding_request)
+    expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+  end
+
+  def then_i_see_all_provider_details_for(onboarding_request)
+    # Page heading
+    expect(page).to have_content("Provider details")
+    expect(page).to have_content(onboarding_request.form_name)
+    # Organisation details
+    expect(page).to have_content("Provider name")
+    expect(page).to have_content(onboarding_request.provider_name)
+    expect(page).to have_content("UK provider reference number (UKPRN)")
+    expect(page).to have_content(onboarding_request.ukprn)
+    expect(page).to have_content("Is the organisation an accredited provider?")
+    expect(page).to have_content(onboarding_request.accredited_provider ? "Yes" : "No")
+    expect(page).to have_content("Unique reference number (URN)")
+    expect(page).to have_content(onboarding_request.urn)
+    # Contact details
+    expect(page).to have_content("Contact email address")
+    expect(page).to have_content(onboarding_request.contact_email_address)
+    expect(page).to have_content("Telephone number")
+    expect(page).to have_content(onboarding_request.telephone)
+    expect(page).to have_content("Website")
+    expect(page).to have_content(onboarding_request.website)
+    # Address (check each line separately for multi-line rendering)
+    expect(page).to have_content(onboarding_request.address_line_1)
+    expect(page).to have_content(onboarding_request.address_line_2)
+    expect(page).to have_content(onboarding_request.town_or_city)
+    expect(page).to have_content(onboarding_request.postcode)
+    # User details
+    expect(page).to have_content("Email address")
+    expect(page).to have_content(onboarding_request.email_address)
+    expect(page).to have_content("First name")
+    expect(page).to have_content(onboarding_request.first_name)
+    expect(page).to have_content("Last name")
+    expect(page).to have_content(onboarding_request.last_name)
+  end
+
+  def then_i_see_action_buttons_and_cancel_link
+    expect(page).to have_button("Accept")
+    expect(page).to have_button("Reject")
+    expect(page).to have_link("Cancel", href: support_providers_onboarding_form_requests_path)
+  end
+
+  def when_i_click_accept
+    click_button "Accept"
+  end
+
+  def when_i_click_reject
+    click_button "Reject"
+  end
+
+  def then_status_should_be(updated_status, onboarding_request)
+    within("tr", text: onboarding_request.form_name) do
+      expect(page).to have_content(updated_status)
+    end
   end
 end
