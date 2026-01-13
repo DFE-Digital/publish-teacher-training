@@ -1,6 +1,12 @@
 <div class="filtering-sorting">
-  <%= content_for :page_title,
-    strip_tags(render(Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address))) %>
+  <%= content_for(
+        :page_title,
+        strip_tags(
+          render(
+            Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address, search_form: @search_courses_form),
+          ),
+        ),
+      ) %>
 
   <%= render Courses::QueryDebugHeaderComponent.new(
   results: @results,
@@ -20,7 +26,7 @@
     <div class="govuk-grid-column-full">
       <div class="app-search__controls">
         <h1 class="govuk-heading-l">
-          <%= render(Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address)) %>
+          <%= render(Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address, search_form: @search_courses_form)) %>
         </h1>
 
         <%= form_with model: @search_courses_form, scope: "", id: "find-search-form", url: find_results_path, method: :get do |form_object| %>

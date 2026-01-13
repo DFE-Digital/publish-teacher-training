@@ -3,11 +3,28 @@ en:
     courses:
       results_page_title:
         view:
-          page_title_with_location:
-            zero: "No courses found"
-            one: "1 course in %{location}"
-            other: "%{formatted_count} courses in %{location}"
           page_title_without_location:
             zero: "No courses found"
             one: "1 course found"
             other: "%{formatted_count} courses found"
+          page_title_with_location:
+            zero: "No courses found"
+            one: "1 course in %{location}"
+            other: "%{formatted_count} courses in %{location}"
+          page_title_with_distance:
+            zero: "No courses found"
+            one: "1 course within %{radius} miles of %{location}"
+            other: "%{formatted_count} courses within %{radius} miles of %{location}"
+          page_title_with_subject:
+            zero: "No courses found"
+            one: "1 %{subject} course"
+            other: "%{formatted_count} %{subject} courses"
+          page_title_with_subject_and_location:
+            zero: "No courses found"
+            one: "1 %{subject} course in %{location}"
+            other: "%{formatted_count} %{subject} courses in %{location}"
+          page_title_with_subject_and_distance:
+            zero: "No courses found"
+            one: "1 %{subject} course within %{radius} miles of %{location}"
+            other: "%{formatted_count} %{subject} courses within %{radius} miles of %{location}"
+

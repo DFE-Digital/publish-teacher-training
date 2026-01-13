@@ -158,6 +158,10 @@ module Geolocation
       formatted_address.to_s.gsub(/, UK/, "")
     end
 
+    def distance_search?
+      landmark? || (postcode_area? && route.present?)
+    end
+
   private
 
     def full_postcode?
