@@ -26,5 +26,13 @@ FactoryBot.define do
       accredited_provider { [true, false].sample }
       urn { Faker::Number.number(digits: 6).to_s }
     end
+
+    trait :closed do
+      status { "closed" }
+    end
+
+    trait :rejected do
+      status { "rejected" }
+    end
   end
 end

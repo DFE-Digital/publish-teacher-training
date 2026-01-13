@@ -39,10 +39,10 @@ module Support
         case params[:status]
         when "accept" then "closed"
         when "reject" then "rejected"
-        else params[:status]
         end
 
-      if @onboarding_request.update(status: updated_status)
+      # Redirects to listing page with success or error message based on whether the update was successful
+      if updated_status && @onboarding_request.update(status: updated_status)
         redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".updated_status_message_html", updated_status: updated_status.humanize, form_name: @onboarding_request.form_name) }
       else
         redirect_to support_providers_onboarding_form_requests_path, flash: { error: t(".error_message_html", form_name: @onboarding_request.form_name) }
@@ -59,15 +59,6 @@ module Support
     def request_params
       # Strong params for onboarding request
       params.require(:providers_onboarding_form_request).permit(:form_name, :zendesk_link, :support_agent_id)
-    end
-
-    # Params for updating onboarding form details (to be used in next ticket)
-    def onboarding_request_params
-      params.require(:providers_onboarding_form_request).permit(
-        :provider_name, :zendesk_link, :email_address, :first_name, :last_name,
-        :address_line_1, :town_or_city, :postcode, :telephone, :contact_email_address,
-        :website, :ukprn, :accredited_provider, :urn, :support_agent_id
-      )
     end
   end
 end
