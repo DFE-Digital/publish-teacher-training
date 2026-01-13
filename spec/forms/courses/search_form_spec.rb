@@ -745,7 +745,7 @@ RSpec.describe Courses::SearchForm do
       context "when using non-default radius" do
         let(:form) { described_class.new(address_types: %w[locality], location: "Manchester, UK", radius: "100") }
 
-        it "returns nil for radius" do
+        it "returns 1 for radius" do
           expect(form.filter_counts[:radius]).to eq(1)
         end
       end
@@ -866,6 +866,43 @@ RSpec.describe Courses::SearchForm do
     context "when subject code is already in subjects" do
       it "returns subject code in the subjects" do
         expect(described_class.new(subject_code: "00", subjects: %w[00 01]).subjects).to eq(%w[00 01])
+      end
+    end
+  end
+
+  describe "#radius" do
+    context "when valid radius" do
+      it "returns radius" do
+        FeatureFlag.activate(:find_filtering_and_sorting)
+
+        [10, 20, 50, 100].each do |valid_radius|
+          search_form = described_class.new(radius: valid_radius)
+          expect(search_form.radius).to eq(valid_radius)
+        end
+
+        FeatureFlag.deactivate(:find_filtering_and_sorting)
+        [1, 5, 10, 15, 20, 25, 50, 100, 200].each do |valid_radius|
+          search_form = described_class.new(radius: valid_radius)
+          expect(search_form.radius).to eq(valid_radius)
+        end
+      end
+    end
+
+    context "when invalid radius" do
+      it "returns radius" do
+        FeatureFlag.activate(:find_filtering_and_sorting)
+
+        [1, 5, 15, "not-allowed", 999, "other-value", -9].each do |invalid_radius|
+          search_form = described_class.new(radius: invalid_radius)
+          expect(search_form.radius).to eq(50)
+        end
+
+        FeatureFlag.deactivate(:find_filtering_and_sorting)
+
+        ["not-allowed", 999, "other-value", -9].each do |invalid_radius|
+          search_form = described_class.new(radius: invalid_radius)
+          expect(search_form.radius).to eq(50)
+        end
       end
     end
   end

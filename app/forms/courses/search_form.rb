@@ -173,9 +173,15 @@ module Courses
     end
 
     def radius
-      return super if super.present?
+      radius_value = super
 
-      DefaultRadius.new(location:, formatted_address:, address_types:).call
+      return radius_value if radius_value.present? && radius_value.to_i.in?(self.class.radius_values)
+
+      default_radius
+    end
+
+    def default_radius
+      @default_radius ||= DefaultRadius.new(location:, formatted_address:, address_types:).call
     end
 
     PHYSICS_SUBJECT_CODE = "F3"
@@ -279,10 +285,9 @@ module Courses
     end
 
     def radius_filter_count
-      return if location.blank?
+      return if location.blank? || attributes["radius"].blank? || radius.to_s == default_radius.to_s
 
-      default_radius = DefaultRadius.new(location:, formatted_address:, address_types:).call.to_s
-      radius == default_radius ? nil : 1
+      1
     end
 
     def degree_filter_count

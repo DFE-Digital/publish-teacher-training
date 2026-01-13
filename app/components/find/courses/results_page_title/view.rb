@@ -46,11 +46,11 @@ module Find
         end
 
         def subject_single?
-          subjects.count == 1
+          subjects.count == 1 && subject_name.present?
         end
 
         def subject_name
-          return if subjects.blank? || subjects.count > 1
+          return unless subjects.count == 1
 
           @subject_name ||= Subject.find_by(subject_code: subjects.first)&.subject_name
         end

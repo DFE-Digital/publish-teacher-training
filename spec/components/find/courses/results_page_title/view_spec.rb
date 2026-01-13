@@ -570,4 +570,198 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
       end
     end
   end
+
+  describe "security" do
+    describe "SQL injection protection" do
+      context "when subject code contains SQL injection attempt" do
+        let(:address) { Geolocation::Address.new(formatted_address: nil) }
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: ["F3' OR '1'='1"],
+            subject_name: nil,
+            radius: nil,
+          )
+        end
+        let(:courses_count) { 10 }
+
+        it "rejects invalid subject code format" do
+          expect(result).to eq("10 courses found")
+        end
+      end
+
+      context "when subject code contains only special characters" do
+        let(:address) { Geolocation::Address.new(formatted_address: nil) }
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: ["'; DROP TABLE subjects; --"],
+            subject_name: nil,
+            radius: nil,
+          )
+        end
+        let(:courses_count) { 5 }
+
+        it "rejects malicious subject code" do
+          expect(Subject.count).to be > 0
+          expect(result).to eq("5 courses found")
+        end
+      end
+
+      context "when subject code is too long" do
+        let(:address) { Geolocation::Address.new(formatted_address: nil) }
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: ["F3#{'X' * 100}"],
+            subject_name: nil,
+            radius: nil,
+          )
+        end
+        let(:courses_count) { 7 }
+
+        it "rejects subject code exceeding max length" do
+          expect(result).to eq("7 courses found")
+        end
+      end
+
+      context "when subject code contains lowercase letters" do
+        let(:address) { Geolocation::Address.new(formatted_address: nil) }
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: %w[f3],
+            subject_name: nil,
+            radius: nil,
+          )
+        end
+        let(:courses_count) { 8 }
+
+        it "rejects invalid subject code format (lowercase)" do
+          expect(result).to eq("8 courses found")
+        end
+      end
+    end
+
+    describe "radius validation protection" do
+      let(:address) do
+        Geolocation::Address.new(
+          formatted_address: "Great Russell St, London WC1B 3DG, UK",
+          latitude: 51.5194133,
+          longitude: -0.1269566,
+          country: "England",
+          postal_code: "WC1B 3DG",
+          postal_town: "London",
+          route: "Great Russell Street",
+          locality: nil,
+          administrative_area_level_1: "England",
+          administrative_area_level_2: "Greater London",
+          administrative_area_level_4: nil,
+          address_types: %w[establishment museum point_of_interest tourist_attraction],
+        )
+      end
+
+      context "when radius is negative" do
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: [],
+            subject_name: nil,
+            radius: -999,
+          )
+        end
+        let(:courses_count) { 10 }
+
+        it "defaults to safe radius of 50" do
+          expect(result).to include("10 courses within 50 miles of Great Russell Street, London")
+        end
+      end
+
+      context "when radius is extremely large" do
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: [],
+            subject_name: nil,
+            radius: 999_999_999,
+          )
+        end
+        let(:courses_count) { 15 }
+
+        it "defaults to safe radius of 50" do
+          expect(result).to include("15 courses within 50 miles of Great Russell Street, London")
+        end
+      end
+
+      context "when radius is not an allowed value" do
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: [],
+            subject_name: nil,
+            radius: 37,
+          )
+        end
+        let(:courses_count) { 12 }
+
+        it "defaults to safe radius of 50" do
+          expect(result).to include("12 courses within 50 miles of Great Russell Street, London")
+        end
+      end
+
+      context "when radius is a string" do
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: [],
+            subject_name: nil,
+            radius: "this-is-not-allowed!",
+          )
+        end
+        let(:courses_count) { 8 }
+
+        it "safely converts and defaults to 50 if invalid" do
+          expect(result).to include("8 courses within 50 miles of Great Russell Street, London")
+        end
+      end
+
+      context "when radius is zero" do
+        let(:search_form) do
+          Courses::SearchForm.new(
+            subjects: [],
+            subject_name: nil,
+            radius: 0,
+          )
+        end
+        let(:courses_count) { 5 }
+
+        it "defaults to safe radius of 50" do
+          expect(result).to include("5 courses within 50 miles of Great Russell Street, London")
+        end
+      end
+    end
+
+    context "when subject contains HTML tags" do
+      let(:address) { Geolocation::Address.new(formatted_address: nil) }
+      let(:search_form) do
+        Courses::SearchForm.new(
+          subjects: ["<img src=x onerror=\"alert('xss')\">Physics</img>"],
+          radius: nil,
+        )
+      end
+      let(:courses_count) { 5 }
+
+      it "ignores subjects" do
+        expect(result).to eq("5 courses found")
+      end
+    end
+
+    context "when search_form.subjects is not an array" do
+      let(:address) { Geolocation::Address.new(formatted_address: nil) }
+      let(:search_form) do
+        Courses::SearchForm.new(
+          subjects: "F3",
+          subject_name: nil,
+          radius: nil,
+        )
+      end
+      let(:courses_count) { 6 }
+
+      it "safely converts to array" do
+        expect(result).to eq("6 physics courses")
+      end
+    end
+  end
 end
