@@ -76,7 +76,15 @@ export default class extends Controller {
   updateUI (saved) {
     this.savedValue = saved
 
-    const text = saved ? this.savedTextValue : (this.authenticatedValue ? this.saveTextValue : this.signInToSaveTextValue)
+    let text
+
+    if (saved) {
+      text = this.savedTextValue
+    } else if (this.authenticatedValue) {
+      text = this.saveTextValue
+    } else {
+      text = this.signInToSaveTextValue
+    }
 
     this.iconTarget.src = saved ? this.savedIconUrlValue : this.unsavedIconUrlValue
     this.iconTarget.alt = text
