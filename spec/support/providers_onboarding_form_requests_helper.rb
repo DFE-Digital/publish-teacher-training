@@ -95,8 +95,8 @@ module ProvidersOnboardingFormRequestsHelper
     expect(ProvidersOnboardingFormRequest.last.form_link).to match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)
   end
 
-  def then_i_see_success_message_with_form_link
-    expect(page).to have_content("Onboarding form generated successfully for")
+  def then_i_see_success_message_with_form_link(form_name:)
+    expect(page).to have_content("Onboarding form generated successfully for #{form_name}")
   end
 
   def then_i_see_form_name_and_link_in_table_listing(form_name:)

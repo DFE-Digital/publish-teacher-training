@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_16_113043) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_13_165020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -435,7 +435,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_16_113043) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "support_agent_id"
-    t.string "form_link"
     t.index ["support_agent_id"], name: "index_providers_onboarding_form_request_on_support_agent_id"
     t.index ["uuid"], name: "index_providers_onboarding_form_request_on_uuid", unique: true
   end

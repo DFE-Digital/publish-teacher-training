@@ -15,18 +15,14 @@ module Support
     end
 
     def create
-      # Creates a new onboarding form request with UUID, status, and form link
-      @onboarding_request = ProvidersOnboardingFormRequest.new(request_params).tap do |form|
-        form.uuid = SecureRandom.uuid
-        form.status = "pending"
-        form.form_link = publish_provider_onboarding_url(uuid: form.uuid)
-      end
+      @onboarding_request = ProvidersOnboardingFormRequest.new(request_params)
 
       # Fetches admin users for support agent selection in the form
       @admin_users = User.where(admin: true).order(:email)
 
       if @onboarding_request.save
-        redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".success_message_html", form_name: @onboarding_request.form_name) }
+        redirect_to support_providers_onboarding_form_requests_path,
+                    flash: { success: t(".success_message_html", form_name: @onboarding_request.form_name) }
       else
         render :new
       end

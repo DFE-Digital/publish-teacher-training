@@ -9,16 +9,52 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
     before { create(:providers_onboarding_form_request) } # for uniqueness validation
 
     # Unconditional validations (when support agent generates the form request)
-    it { is_expected.to validate_presence_of(:uuid) }
-    it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
-    it { is_expected.to validate_presence_of(:status) }
     it { is_expected.to validate_presence_of(:form_name) }
     it { is_expected.to belong_to(:support_agent).class_name("User").optional }
+
+    it "does not allow duplicate uuids" do
+      existing = create(:providers_onboarding_form_request)
+      duplicate = build(
+        :providers_onboarding_form_request,
+        uuid: existing.uuid,
+      )
+
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:uuid]).to be_present
+    end
 
     it "raises an error when status is not in the enum keys" do
       expect {
         described_class.new(status: "invalid_status")
       }.to raise_error(ArgumentError, /'invalid_status' is not a valid status/)
+    end
+
+    it "generates a uuid before validation on create" do
+      record = described_class.new(form_name: "Test Form")
+      expect(record.uuid).to be_nil
+
+      record.validate
+
+      expect(record.uuid).to be_present
+    end
+
+    it "accepts valid zendesk link" do
+      record = build(
+        :providers_onboarding_form_request,
+        zendesk_link: "https://becomingateacher.zendesk.com/agent/tickets/6789490",
+      )
+
+      expect(record).to be_valid
+    end
+
+    it "rejects invalid zendesk link" do
+      record = build(
+        :providers_onboarding_form_request,
+        zendesk_link: "https://example-zendesk-link.com",
+      )
+
+      expect(record).not_to be_valid
+      expect(record.errors[:zendesk_link]).to include("Must be a valid Zendesk URL")
     end
 
     # Conditional validations (when provider submits the form details)
@@ -150,6 +186,17 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
           expect(record).to be_valid
         end
       end
+    end
+  end
+
+  describe "#form_link" do
+    let(:request) { create(:providers_onboarding_form_request) }
+
+    it "returns the publish provider onboarding URL for the uuid" do
+      expected_url =
+        Rails.application.routes.url_helpers.publish_provider_onboarding_url(uuid: request.uuid)
+
+      expect(request.form_link).to eq(expected_url)
     end
   end
 end

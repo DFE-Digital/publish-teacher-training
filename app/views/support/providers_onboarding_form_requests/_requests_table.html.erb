@@ -3,7 +3,7 @@
     <% head.with_row do |row| %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:id)) %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:form_name), width: "one-quarter") %>
-      <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:form_link), width: "one-quarter") %>
+      <% row.with_cell(header: true, text: t(".form_link"), width: "one-quarter") %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:zendesk_link), width: "one-quarter") %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:support_agent), width: "one-quarter") %>
       <% row.with_cell(header: true, text: ProvidersOnboardingFormRequest.human_attribute_name(:status), width: "one-quarter") %>
