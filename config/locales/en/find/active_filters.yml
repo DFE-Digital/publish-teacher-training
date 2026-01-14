@@ -22,6 +22,9 @@ en:
       order:
         course_name_ascending: "Sort by: Course (a to z)"
         provider_name_ascending: "Sort by: Provider (a to z)"
+        start_date_ascending: "Sort by: Soonest start date"
+        fee_uk_ascending: "Sort by: Lowest fee for UK citizens"
+        fee_intl_ascending: "Sort by: Lowest fee for non-UK citizens"
       qualifications:
         qts: "Qualification: QTS only"
         qts_with_pgce_or_pgde: "Qualification: QTS with PGCE or PGDE"
@@ -33,8 +36,9 @@ en:
       send_courses:
         true: Courses with a SEND specialism
       start_date:
-        september: "Start date: September"
-        all_other_dates: "Start date: All other dates"
+        september: "Start date: September %{current_recruitment_cycle_year} only"
+        jan_to_aug: "Start date: January to August %{current_recruitment_cycle_year}"
+        oct_to_jul: "Start date: October %{current_recruitment_cycle_year} to July %{next_recruitment_cycle_year}"
       study_types:
         full_time: Full-time
         part_time: Part-time
