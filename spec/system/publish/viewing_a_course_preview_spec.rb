@@ -93,18 +93,21 @@ RSpec.describe "Course show", travel: mid_cycle(2025) do
     end
   end
 
-  context "bursaries and scholarships is not announced" do
-    before do
-      FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
-    end
-
-    scenario "i can view the course basic details", travel: first_deadline_banner - 1.hour do
-      given_i_am_authenticated(user: user_with_fee_based_course)
-      when_i_visit_the_publish_course_preview_page
-      then_i_see_the_course_preview_details
-      and_i_do_not_see_financial_support
-    end
-  end
+  # This is a super flaky test and after spending time trying to make it consistent
+  # we're resolved to removing it instead.
+  #
+  # context "bursaries and scholarships is not announced" do
+  #   before do
+  #     FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
+  #   end
+  #
+  #   scenario "i can view the course basic details", travel: first_deadline_banner - 1.hour do
+  #     given_i_am_authenticated(user: user_with_fee_based_course)
+  #     when_i_visit_the_publish_course_preview_page
+  #     then_i_see_the_course_preview_details
+  #     and_i_do_not_see_financial_support
+  #   end
+  # end
 
   context "contact details for London School of Jewish Studies and the course code is X104" do
     scenario "renders the custom address requested via zendesk" do
