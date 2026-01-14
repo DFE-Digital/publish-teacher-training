@@ -27,7 +27,8 @@
           @provider.provider_code,
           @provider.recruitment_cycle_year,
           @course.course_code,
-        ) do |form| %>
+        ),
+        scope: @wizard.current_step_name do |form| %>
         <%= form.govuk_error_summary %>
 
         <h1 class="govuk-heading-l">

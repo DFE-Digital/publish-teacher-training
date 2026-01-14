@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "dfe/wizard/steps_processor/base"
+
 module Publish
   module Courses
     module ALevelRequirements
@@ -12,7 +14,7 @@ module Publish
         end
 
         def create
-          if @wizard.save
+          if @wizard.save_current_step
             add_flash_message
             redirect_to @wizard.next_step_path
           else
@@ -23,15 +25,17 @@ module Publish
       private
 
         def assign_wizard
-          @wizard = ALevelsWizard.new(
-            current_step:,
-            provider: @provider,
-            course: @course,
-            step_params:,
+          state_store = "StateStores::#{controller_name.camelcase}Store".constantize.new(
+            repository: DfE::Wizard::Repository::Session.new(
+              session:,
+              key: :a_levels,
+            ),
           )
 
-          StateStores::ALevels.new(
-            repository: DfE::Wizard::Repository::Session.new(session:, key: :a_levels),
+          @wizard = ALevelsWizard.new(
+            current_step:,
+            current_step_params: params,
+            state_store:,
           )
         end
 

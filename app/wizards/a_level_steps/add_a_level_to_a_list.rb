@@ -8,6 +8,10 @@ module ALevelSteps
 
     MAXIMUM_NUMBER_OF_A_LEVEL_SUBJECTS = 4
 
+    attribute :recruitment_cycle_year, :string
+    attribute :provider_code, :string
+    attribute :course_code, :string
+
     validates :add_another_a_level, presence: true, unless: :maximum_number_of_a_level_subjects?
 
     def self.permitted_params

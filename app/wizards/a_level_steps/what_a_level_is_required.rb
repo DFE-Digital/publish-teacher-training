@@ -5,10 +5,18 @@ module ALevelSteps
     include DfE::Wizard::Step
 
     MAXIMUM_GRADE_CHARACTERS = 50
-    attr_accessor :subject, :other_subject, :minimum_grade_required
+    # attr_accessor :subject, :other_subject, :minimum_grade_required
     attr_writer :uuid
 
     Subject = Struct.new(:name, keyword_init: true)
+
+    attribute :recruitment_cycle_year, :string
+    attribute :provider_code, :string
+    attribute :course_code, :string
+
+    attribute :subject, :string
+    attribute :other_subject, :string
+    attribute :minimum_grade_required, :string
 
     validates :subject, presence: true
     validates :other_subject, presence: true, if: -> { subject == "other_subject" }
@@ -24,10 +32,6 @@ module ALevelSteps
 
     def uuid
       @uuid ||= SecureRandom.uuid
-    end
-
-    def next_step
-      :add_a_level_to_a_list
     end
   end
 end
