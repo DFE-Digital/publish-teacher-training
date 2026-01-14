@@ -12,30 +12,10 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
     it { is_expected.to validate_presence_of(:form_name) }
     it { is_expected.to belong_to(:support_agent).class_name("User").optional }
 
-    it "does not allow duplicate uuids" do
-      existing = create(:providers_onboarding_form_request)
-      duplicate = build(
-        :providers_onboarding_form_request,
-        uuid: existing.uuid,
-      )
-
-      expect(duplicate).not_to be_valid
-      expect(duplicate.errors[:uuid]).to be_present
-    end
-
     it "raises an error when status is not in the enum keys" do
       expect {
         described_class.new(status: "invalid_status")
       }.to raise_error(ArgumentError, /'invalid_status' is not a valid status/)
-    end
-
-    it "generates a uuid before validation on create" do
-      record = described_class.new(form_name: "Test Form")
-      expect(record.uuid).to be_nil
-
-      record.validate
-
-      expect(record.uuid).to be_present
     end
 
     it "accepts valid zendesk link" do
@@ -55,6 +35,11 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
 
       expect(record).not_to be_valid
       expect(record.errors[:zendesk_link]).to include("Must be a valid Zendesk URL")
+    end
+
+    it "has a UUID assigned by the database after create" do
+      record = create(:providers_onboarding_form_request)
+      expect(record.uuid).to be_present
     end
 
     # Conditional validations (when provider submits the form details)
