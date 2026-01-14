@@ -14,7 +14,12 @@ module Courses
       return value if id.in?(%i[provider_code subjects subject_code subject_name short_address])
 
       begin
-        translated = I18n.t(".courses.active_filters.#{id}.#{raw_value}")
+        this_year = Find::CycleTimetable.current_year
+        next_year = Find::CycleTimetable.next_year
+        translated = I18n.t(".courses.active_filters.#{id}.#{raw_value}",
+                            current_recruitment_cycle_year: this_year,
+                            next_recruitment_cycle_year: next_year)
+
         translated.starts_with?("Translation missing") ? nil : translated
       rescue StandardError
         nil

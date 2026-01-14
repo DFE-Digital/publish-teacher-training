@@ -641,6 +641,10 @@ RSpec.describe Courses::ActiveFilters::Extractor do
     end
 
     context "with start_date options" do
+      before do
+        allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
+      end
+
       it "resolves all start_date_options values as valid filters" do
         search_form = Courses::SearchForm.new
         search_form.start_date_options.each do |start_date|
@@ -685,6 +689,31 @@ RSpec.describe Courses::ActiveFilters::Extractor do
             raw_value: degree,
             value: degree,
             remove_params: { minimum_degree_required: nil },
+          )
+
+          expect(active_filters).to eq([expected_filter])
+        end
+      end
+    end
+
+    context "with order options" do
+      %w[start_date_ascending fee_uk_ascending fee_intl_ascending].each do |order_value|
+        it "resolves #{order_value} as a valid filter" do
+          form_with_order = Courses::SearchForm.new(order: order_value)
+          search_params = form_with_order.search_params
+
+          extractor = described_class.new(
+            search_params:,
+            search_form: form_with_order,
+          )
+
+          active_filters = extractor.call
+
+          expected_filter = Courses::ActiveFilter.new(
+            id: :order,
+            raw_value: order_value,
+            value: order_value,
+            remove_params: { order: nil },
           )
 
           expect(active_filters).to eq([expected_filter])
