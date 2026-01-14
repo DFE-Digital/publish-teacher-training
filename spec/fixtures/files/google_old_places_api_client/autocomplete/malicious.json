@@ -1,0 +1,10 @@
+{
+  "predictions": [
+    {
+      "description": "<h2><a href='test.com'>test.ca</a></h2>",
+      "place_id": "attackers-choice",
+      "types": ["locality", "political"]
+    }
+  ],
+  "status": "OK"
+}
