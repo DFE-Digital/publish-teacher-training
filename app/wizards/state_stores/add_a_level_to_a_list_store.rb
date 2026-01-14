@@ -13,5 +13,9 @@ module StateStores
 
       course.save
     end
+
+    def another_a_level_needed?
+      add_another_a_level == "yes"
+    end
   end
 end

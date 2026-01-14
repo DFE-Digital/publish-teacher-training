@@ -3,7 +3,6 @@
 module StateStores
   class WhatALevelIsRequiredStore
     include DfE::Wizard::StateStore
-    # delegate :uuid, :subject, :minimum_grade_required, :other_subject, to: :current_step
 
     def save
       if existing_a_level_subject?

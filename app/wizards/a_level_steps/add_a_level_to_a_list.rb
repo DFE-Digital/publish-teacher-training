@@ -3,16 +3,13 @@
 module ALevelSteps
   class AddALevelToAList
     include DfE::Wizard::Step
-    attr_accessor :add_another_a_level
     attr_writer :subjects
 
     MAXIMUM_NUMBER_OF_A_LEVEL_SUBJECTS = 4
 
-    attribute :recruitment_cycle_year, :string
-    attribute :provider_code, :string
-    attribute :course_code, :string
+    attribute :add_another_a_level, :string
 
-    validates :add_another_a_level, presence: true, unless: :maximum_number_of_a_level_subjects?
+    # validates :add_another_a_level, presence: true, unless: :maximum_number_of_a_level_subjects?
 
     def self.permitted_params
       [
@@ -27,14 +24,6 @@ module ALevelSteps
 
     def subjects
       Array(@subjects)
-    end
-
-    def next_step
-      if add_another_a_level == "yes"
-        :what_a_level_is_required
-      else
-        :consider_pending_a_level
-      end
     end
   end
 end

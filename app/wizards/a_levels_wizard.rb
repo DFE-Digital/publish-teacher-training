@@ -7,7 +7,7 @@ class ALevelsWizard
 
   # delegate :course_code, to: :course
   # delegate :provider_code, :recruitment_cycle_year, to: :course
-  # delegate :destroy, to: :store
+  delegate :another_a_level_needed?, to: :state_store
 
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
@@ -19,6 +19,7 @@ class ALevelsWizard
       graph.add_node :a_level_equivalencies, ALevelSteps::ALevelEquivalencies
 
       graph.add_edge from: :what_a_level_is_required, to: :add_a_level_to_a_list
+
       graph.add_conditional_edge(
         from: :add_a_level_to_a_list,
         when: :another_a_level_needed?,
@@ -33,10 +34,12 @@ class ALevelsWizard
       wizard: self,
       namespace: "publish-provider-recruitment-cycle-course-a-levels-or-equivalency-tests",
     ) do |config|
+      config.wizard.instance_variable_get(:@current_step_params).slice("recruitment_cycle_year", "provider_code", "course_code").to_h => { recruitment_cycle_year:, provider_code:, course_code: }
+
       config.default_path_arguments = {
-        recruitment_cycle_year: state_store.recruitment_cycle_year,
-        provider_code: state_store.provider_code,
-        course_code: state_store.course_code,
+        recruitment_cycle_year: recruitment_cycle_year,
+        provider_code: provider_code,
+        course_code: course_code,
       }
     end
   end

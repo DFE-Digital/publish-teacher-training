@@ -10,10 +10,6 @@ module ALevelSteps
 
     Subject = Struct.new(:name, keyword_init: true)
 
-    attribute :recruitment_cycle_year, :string
-    attribute :provider_code, :string
-    attribute :course_code, :string
-
     attribute :subject, :string
     attribute :other_subject, :string
     attribute :minimum_grade_required, :string
