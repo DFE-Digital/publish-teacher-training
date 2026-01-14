@@ -17,7 +17,7 @@ module Support
     def create
       @onboarding_request = ProvidersOnboardingFormRequest.new(request_params)
 
-      # Fetches admin users for support agent selection in the form
+      # Fetches admin users for support agent selection in the form which is re-rendered if save fails due to validation errors
       @admin_users = User.where(admin: true).order(:email)
 
       if @onboarding_request.save

@@ -6,8 +6,6 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
   # 3 fields need to be stored once the support team instantiate a form request
   # Every onboarding form request is optionally handled by/assigned a support agent (User)
   belongs_to :support_agent, class_name: "User", optional: true
-
-  validates :uuid, presence: true, uniqueness: true
   validates :status, presence: true, inclusion: { in: statuses.keys }
   # Ensure that the support agent is an admin user
   validate :support_agent_is_admin, if: :support_agent_id?
@@ -16,9 +14,6 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     with: ZENDESK_URL_REGEX,
     message: "Must be a valid Zendesk URL",
   }, allow_blank: true
-
-  # Ensure defaults are present before validations run
-  before_validation :set_defaults, on: :create
 
   # These fields need to be validated once the form details are submitted by the provider i.e. status changes to 'submitted'
   with_options if: :submitted? do
@@ -39,10 +34,6 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
   end
 
 private
-
-  def set_defaults
-    self.uuid ||= SecureRandom.uuid
-  end
 
   # Custom validation to check if the support agent is an admin user
   def support_agent_is_admin
