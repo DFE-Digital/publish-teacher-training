@@ -99,7 +99,7 @@ RSpec.describe "No search results", :js, service: :find do
 
   def then_i_click_on_radius_quick_link
     click_link "100 miles (1 course)"
-    expect(page).to have_content("1 course in London")
+    expect(page).to have_title("1 mathematics course in London - Find teacher training courses - GOV.UK")
     expect(page).to have_content("Mathematics - Reading")
   end
 

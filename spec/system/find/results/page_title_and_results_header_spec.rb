@@ -79,6 +79,7 @@ RSpec.describe "Search results page title", :js, service: :find do
 
     then_i_see_page_title("1 mathematics course within 50 miles of Great Russell Street, London")
 
+    when_i_search_for_landmark
     and_i_set_the_radius_to_100_miles
     and_i_click_search
     then_i_see_page_title("1 mathematics course within 100 miles of Great Russell Street, London")

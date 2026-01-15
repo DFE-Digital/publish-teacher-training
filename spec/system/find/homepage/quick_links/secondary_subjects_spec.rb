@@ -66,7 +66,7 @@ RSpec.describe "Secondary subjects quick link", service: :find do
   end
 
   def then_i_see_only_see_chemistry_courses
-    expect(page).to have_content("1 course found")
+    expect(page).to have_title("1 chemistry course")
   end
 
   def then_i_see_errors
