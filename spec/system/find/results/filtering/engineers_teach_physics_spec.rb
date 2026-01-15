@@ -20,13 +20,13 @@ RSpec.describe "when searching for engineers teach physics", :js, service: :find
     and_i_apply_the_filters
     then_engineers_teach_physics_filter_is_visible
     and_physics_and_engineers_teach_physics_courses_are_visible
-    and_i_see_that_two_courses_are_found
+    and_i_see_that_two_physics_courses_are_found
 
     when_i_check_engineers_teach_physics_only_filter
     and_i_apply_the_filters
     then_engineers_teach_physics_filter_is_visible
     and_only_engineers_teach_physics_courses_are_visible
-    and_i_see_that_there_is_one_course_found
+    and_i_see_that_there_is_one_physics_course_found
 
     when_i_uncheck_physics
     and_i_apply_the_filters
@@ -42,7 +42,7 @@ RSpec.describe "when searching for engineers teach physics", :js, service: :find
     and_i_click_search
     then_engineers_teach_physics_filter_is_visible
     and_physics_and_engineers_teach_physics_courses_are_visible
-    and_i_see_that_two_courses_are_found
+    and_i_see_that_two_physics_courses_are_found
 
     and_i_remove_the_subject
     and_i_click_search
@@ -110,5 +110,15 @@ RSpec.describe "when searching for engineers teach physics", :js, service: :find
   def and_i_see_that_ten_courses_are_found
     expect(page).to have_content("10 courses found")
     expect(page).to have_title("10 courses found")
+  end
+
+  def and_i_see_that_there_is_one_physics_course_found
+    expect(page).to have_content("1 physics course")
+    expect(page).to have_title("1 physics course")
+  end
+
+  def and_i_see_that_two_physics_courses_are_found
+    expect(page).to have_content("2 physics courses")
+    expect(page).to have_title("2 physics courses")
   end
 end

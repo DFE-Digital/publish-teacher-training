@@ -16,7 +16,7 @@ RSpec.describe "when I filter by subject", :js, service: :find do
     when_i_filter_by_primary
     then_i_see_only_primary_specific_courses
     and_the_primary_option_is_checked
-    and_i_see_that_there_is_one_course_found
+    and_i_see_that_there_is_one_primary_course_found
 
     when_i_filter_by_primary_with_science_too
     then_i_see_primary_and_primary_with_science_courses
@@ -29,7 +29,7 @@ RSpec.describe "when I filter by subject", :js, service: :find do
     when_i_filter_by_mathematics
     then_i_see_only_mathematics_courses
     and_the_mathematics_secondary_option_is_checked
-    and_i_see_that_there_is_one_course_found
+    and_i_see_that_there_is_one_mathematics_course_found
   end
 
   scenario "filter by many secondary subjects" do
@@ -45,7 +45,7 @@ RSpec.describe "when I filter by subject", :js, service: :find do
     when_i_visit_the_find_results_page_passing_mathematics_in_the_params
     then_i_see_only_mathematics_courses
     and_the_mathematics_secondary_option_is_checked
-    and_i_see_that_there_is_one_course_found
+    and_i_see_that_there_is_one_mathematics_course_found
   end
 
   def when_i_visit_the_find_results_page_passing_mathematics_in_the_params
@@ -118,5 +118,15 @@ RSpec.describe "when I filter by subject", :js, service: :find do
 
   def and_the_chemistry_secondary_option_is_checked
     expect(page).to have_checked_field("Chemistry", visible: :all)
+  end
+
+  def and_i_see_that_there_is_one_primary_course_found
+    expect(page.title).to eq("1 primary course - Find teacher training courses - GOV.UK")
+    expect(page.find("h1").text).to eq("1 primary course")
+  end
+
+  def and_i_see_that_there_is_one_mathematics_course_found
+    expect(page.title).to eq("1 mathematics course - Find teacher training courses - GOV.UK")
+    expect(page.find("h1").text).to eq("1 mathematics course")
   end
 end

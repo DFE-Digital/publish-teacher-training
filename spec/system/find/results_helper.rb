@@ -326,18 +326,7 @@ module ResultsHelper
   end
 
   def when_i_start_typing_cornwall_location
-    stub_request(
-      :get,
-      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=Corn&key=replace_me&language=en&types=geocode",
-    ).with(
-      headers: {
-        "Accept" => "*/*",
-        "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-        "Connection" => "keep-alive",
-        "Keep-Alive" => "30",
-        "User-Agent" => "Faraday v#{Faraday::VERSION}",
-      },
-    ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/cornwall.json"), headers: { "Content-Type" => "application/json" })
+    stub_autocomplete_cornwall
 
     fill_in "City, town or postcode", with: "Corn"
   end
@@ -346,6 +335,26 @@ module ResultsHelper
     stub_autocomplete_london
 
     fill_in "City, town or postcode", with: "Lon"
+  end
+
+  def stub_autocomplete_cornwall
+    stub_request(
+      :get,
+      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=Corn&key=replace_me&language=en&types=geocode",
+    ).to_return(
+      status: 200,
+      body: file_fixture("google_old_places_api_client/autocomplete/cornwall.json"),
+      headers: { "Content-Type" => "application/json" },
+    )
+
+    stub_request(
+      :get,
+      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=Cornwall&key=replace_me&language=en&types=geocode",
+    ).to_return(
+      status: 200,
+      body: file_fixture("google_old_places_api_client/autocomplete/cornwall.json"),
+      headers: { "Content-Type" => "application/json" },
+    )
   end
 
   def stub_autocomplete_london
@@ -375,6 +384,44 @@ module ResultsHelper
           "User-Agent" => "Faraday v2.14.0",
         },
       ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/london.json"), headers: { "Content-Type" => "application/json" })
+  end
+
+  def stub_autocomplete_request(value)
+    stub_request(
+      :get,
+      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=#{value}&key=replace_me&language=en&types=geocode",
+    ).to_return(
+      status: 200,
+      body: file_fixture(
+        "google_old_places_api_client/autocomplete/#{value.to_s.humanize.parameterize.underscore}.json",
+      ),
+      headers: { "Content-Type" => "application/json" },
+    )
+
+    stub_request(
+      :get,
+      "https://maps.googleapis.com/maps/api/place/autocomplete/json?components=country:uk&input=#{value}&key=replace_me&language=en&types=geocode",
+    )
+      .with(
+        headers: {
+          "Accept" => "*/*",
+          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Connection" => "keep-alive",
+          "Keep-Alive" => "30",
+          "User-Agent" => "Faraday v2.14.0",
+        },
+      ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/#{value.humanize.parameterize.underscore}.json"), headers: { "Content-Type" => "application/json" })
+  end
+
+  def stub_geocode_request(location)
+    stub_request(
+      :get,
+      %r{https://maps.googleapis.com/maps/api/geocode/json.*address=#{location.split.join('%20')}},
+    ).to_return(
+      status: 200,
+      body: file_fixture("google_old_places_api_client/geocode/#{location.humanize.parameterize.underscore}.json").read,
+      headers: { "Content-Type" => "application/json" },
+    )
   end
 
   def then_i_see_location_suggestions(content)
@@ -570,6 +617,16 @@ module ResultsHelper
           "User-Agent" => "Faraday v#{Faraday::VERSION}",
         },
       )
+      .to_return(
+        status: 200,
+        body: file_fixture("google_old_places_api_client/geocode/cornwall.json").read,
+        headers: { "Content-Type" => "application/json" },
+      )
+
+    stub_request(
+      :get,
+      "https://maps.googleapis.com/maps/api/geocode/json?address=Cornwall&components=country:UK&key=replace_me&language=en",
+    )
       .to_return(
         status: 200,
         body: file_fixture("google_old_places_api_client/geocode/cornwall.json").read,
