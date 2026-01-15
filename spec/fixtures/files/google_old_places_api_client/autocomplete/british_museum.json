@@ -1,0 +1,45 @@
+{
+  "predictions": [
+    {
+      "description": "British Museum Reading Room, Great Russell Street, London, UK",
+      "matched_substrings": [
+        {
+          "length": 14,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJe7okOjIbdkgRTvHZjwD7UuM",
+      "reference": "ChIJe7okOjIbdkgRTvHZjwD7UuM",
+      "structured_formatting": {
+        "main_text": "British Museum Reading Room",
+        "main_text_matched_substrings": [
+          {
+            "length": 14,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "Great Russell Street, London, UK"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "British Museum Reading Room"
+        },
+        {
+          "offset": 29,
+          "value": "Great Russell Street"
+        },
+        {
+          "offset": 51,
+          "value": "London"
+        },
+        {
+          "offset": 59,
+          "value": "UK"
+        }
+      ],
+      "types": ["geocode", "premise"]
+    }
+  ],
+  "status": "OK"
+}
