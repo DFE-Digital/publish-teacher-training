@@ -67,7 +67,7 @@ RSpec.describe "Primary subjects quick link", service: :find do
   end
 
   def then_i_see_only_see_primary_with_english_courses
-    expect(page).to have_content("1 course found")
+    expect(page.find("h1").text).to eq("1 primary with english course")
   end
 
   def then_i_see_all_primary_courses
