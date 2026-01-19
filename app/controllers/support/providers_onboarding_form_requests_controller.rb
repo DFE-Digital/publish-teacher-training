@@ -2,6 +2,7 @@
 
 module Support
   class ProvidersOnboardingFormRequestsController < Support::ApplicationController
+    UPDATE_STATUS = { accept: "closed", reject: "rejected" }.freeze
     before_action :set_request, only: %i[show update]
 
     def index
@@ -34,13 +35,6 @@ module Support
     end
 
     def update
-      # Updates the status of the onboarding request based on action taken by support agent
-      updated_status =
-        case params[:status]
-        when "accept" then "closed"
-        when "reject" then "rejected"
-        end
-
       # Redirects to listing page with success or error message based on whether the update was successful
       if updated_status && @onboarding_request.update(status: updated_status)
         redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".updated_status_message_html", updated_status: updated_status.humanize, form_name: @onboarding_request.form_name) }
@@ -54,6 +48,11 @@ module Support
     def set_request
       # Finds the request by id param for show and update actions
       @onboarding_request = ProvidersOnboardingFormRequest.find(params[:id])
+    end
+
+    # Determines the updated status based on the status param passed in the request from the details/show page
+    def updated_status
+      @updated_status ||= UPDATE_STATUS.fetch(params[:status].to_sym, nil) # nil will be returned if no status
     end
 
     def request_params
