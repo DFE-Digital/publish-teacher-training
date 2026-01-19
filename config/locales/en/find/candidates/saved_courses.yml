@@ -8,6 +8,9 @@ en:
           find_saved_courses: Find a course
           empty_state_html: "%{link} and start saving courses you may want to review and apply for later."
         create:
+          success_message_title: Course saved
+          view_saved_courses: View saved courses
+          success_message_html: "%{provider_name} - %{course_name_and_code}. %{view_saved_courses_link}"
           save_failed: Failed to save course
         destroy:
           success_message_title: Saved course deleted

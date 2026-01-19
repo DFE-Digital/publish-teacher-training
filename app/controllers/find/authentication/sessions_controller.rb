@@ -7,8 +7,15 @@ module Find
         candidate = Find::CandidateAuthenticator.new(oauth: omniauth).call
 
         if start_new_session_for candidate, omniauth
-          flash[:success] = t(".sign_in")
-          redirect_to(session["return_to_after_authenticating"] || find_root_path, allow_remote_host: false)
+          course_saved = false
+          if (course_id = session.delete("save_course_id_after_authenticating")).present? && (course = Course.find_by(id: course_id))
+            Find::SaveCourseService.call(candidate: candidate, course: course)
+            flash[:success_with_body] = course_saved_flash(course)
+            course_saved = true
+          end
+
+          flash[:success] = t(".sign_in") unless course_saved
+          redirect_to(session.delete("return_to_after_authenticating") || find_root_path, allow_remote_host: false)
         else
           redirect_to find_root_path, flash: { warning: t(".authentication_error") }
         end
@@ -59,6 +66,23 @@ module Find
 
       def logout_utility
         OmniAuth::GovukOneLogin::LogoutUtility.new(end_session_endpoint: Settings.one_login.logout_url)
+      end
+
+      def course_saved_flash(course)
+        view_saved_courses_link = view_context.govuk_link_to(
+          I18n.t("find.candidates.saved_courses.create.view_saved_courses"),
+          find_candidate_saved_courses_path,
+        )
+
+        {
+          title: I18n.t("find.candidates.saved_courses.create.success_message_title"),
+          body: I18n.t(
+            "find.candidates.saved_courses.create.success_message_html",
+            provider_name: course.provider_name,
+            course_name_and_code: course.name_and_code,
+            view_saved_courses_link: view_saved_courses_link,
+          ),
+        }
       end
     end
   end

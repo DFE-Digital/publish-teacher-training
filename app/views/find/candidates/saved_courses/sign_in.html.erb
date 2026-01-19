@@ -1,0 +1,18 @@
+<%= content_for :page_title, t(".page_title") %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_back_link_to(find_course_path(provider_code: @course.provider_code, course_code: @course.course_code)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= t(".heading") %></h1>
+
+    <p class="govuk-body"><%= t(".body") %></p>
+
+    <%= form_tag(@one_login_path, method: :post) do %>
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <%= button_tag t(".continue"), type: "submit", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>

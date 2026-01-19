@@ -1,18 +1,33 @@
-<%= form_with url: find_candidate_saved_courses_path,
-              method: :post do %>
+<% if authenticated? %>
+  <%= form_with url: find_candidate_saved_courses_path,
+                method: :post do %>
 
-  <%= hidden_field_tag :course_id, course.id %>
+    <%= hidden_field_tag :course_id, course.id %>
 
-  <button type="submit" class="unstyled-button">
+    <button type="submit" class="unstyled-button">
+      <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
+        <%= image_tag "icon-save.svg",
+                      alt: t(".save_this_course"),
+                      width: 24,
+                      height: 24,
+                      class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
+        <span class="govuk-heading-s govuk-!-margin-0 save-course-button__text">
+          <%= t(".save_this_course") %>
+        </span>
+      </div>
+    </button>
+  <% end %>
+<% else %>
+  <%= link_to sign_in_find_candidate_saved_courses_path(course_id: course.id), class: "unstyled-button" do %>
     <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
       <%= image_tag "icon-save.svg",
-                    alt: authenticated? ? t(".save_this_course") : t(".sign_in_to_save_this_course"),
+                    alt: t(".sign_in_to_save_this_course"),
                     width: 24,
                     height: 24,
                     class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
       <span class="govuk-heading-s govuk-!-margin-0 save-course-button__text">
-        <%= authenticated? ? t(".save_this_course") : t(".sign_in_to_save_this_course") %>
+        <%= t(".sign_in_to_save_this_course") %>
       </span>
     </div>
-  </button>
+  <% end %>
 <% end %>
