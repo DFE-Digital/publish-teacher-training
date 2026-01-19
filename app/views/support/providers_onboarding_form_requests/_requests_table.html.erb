@@ -16,7 +16,7 @@
         <% row.with_cell(text: request.id) %>
         <% row.with_cell(text: request.form_name) %>
         <% row.with_cell do %>
-          <%= govuk_link_to("View form", request.form_link) %>
+          <%= govuk_link_to("View form", publish_provider_onboarding_path(request.uuid)) %>
         <% end %>
         <% row.with_cell(text: request.zendesk_link.present? ? govuk_link_to("View zendesk ticket", request.zendesk_link) : t(".not_available")) %>
         <% row.with_cell(text: request.support_agent.present? ? "#{request.support_agent.first_name} #{request.support_agent.last_name}" : t(".unassigned")) %>
