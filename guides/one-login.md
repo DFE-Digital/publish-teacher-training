@@ -148,6 +148,21 @@ If you want to enable One Login in environments such as QA, a review app, or loc
    - Set `ONE_LOGIN_PRIVATE_KEY`.
    - Set `ONE_LOGIN_CLIENT_ID`.
 
+### Troubleshooting
+
+#### “Trust chain validation failed”
+
+This error is returned by One Login when the request cannot be validated against the signing key/certificate configured for the integration.
+
+Common causes:
+- The app is using placeholder values (e.g. `ONE_LOGIN_CLIENT_ID=client_id` or `ONE_LOGIN_PRIVATE_KEY=private_key`).
+- The private key does not match the public key uploaded in the One Login Admin Tool.
+- The redirect/backchannel URLs configured in the Admin Tool do not match what the app is sending.
+
+Fix:
+- Ensure `ONE_LOGIN_CLIENT_ID` and `ONE_LOGIN_PRIVATE_KEY` are set for your environment.
+- Ensure the **public key** derived from `ONE_LOGIN_PRIVATE_KEY` is uploaded to the integration in the Admin Tool.
+- Ensure the integration redirect URL matches the app callback (`/auth/one-login/callback`), including scheme/host.
 
 
 ### One Login Header
@@ -162,7 +177,7 @@ https://github.com/govuk-one-login/service-header
 
 ### Setup in QA
 
-Public Key 
+Public Key
 ```
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqiJ/SiyVGRWzdQZSp4wViLtshGUclpyxoc8yw0N5/vZqt1N3XuN/WKiqsI9iI362/3MIfbUnrkc9q39aE9O6nDNkHchrscas5ri7n0rRiElKAi1QEHIaanH7kUbC8kg8v7ZTSzygbJOdNlRicMxUcaXqFLZjaWxs9Gog6D3A/yUaxTJih6ILQbrZ8KpMKyG/cl3BoAKrYpQeiVM0n0+kv2irLQitmm7D79uohxCyJYioWYEDUMLmrcMX42zm0fkoVfb6MBwk1Y0E69/B/hIczJHSER3z1roUPHLI67uqRJgjw04cqdRuBzYDWvWXeguk6mRpimMCqtdkBjpImuViqQIDAQAB
 ```

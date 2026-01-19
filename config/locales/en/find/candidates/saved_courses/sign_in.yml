@@ -1,0 +1,10 @@
+en:
+  find:
+    candidates:
+      saved_courses:
+        sign_in:
+          page_title: Sign in to save this course
+          heading: Sign in to save this course
+          body: You need a GOV.UK One Login to sign in and save a course. You can create an account if you do not already have one.
+          continue: Continue
+

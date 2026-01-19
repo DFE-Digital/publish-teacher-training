@@ -4,9 +4,28 @@ module Find
       before_action :require_authentication
       after_action :send_saved_course_analytics_event, only: [:create]
       after_action :send_remove_saved_course_analytics_event, only: [:destroy]
+      skip_before_action :require_authentication, only: %i[sign_in]
 
       def index
         @saved_courses = @candidate.saved_courses
+      end
+
+      def sign_in
+        @course = Course.find(params[:course_id])
+        @one_login_path = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
+
+        if authenticated?
+          SaveCourseService.call(candidate: @candidate, course: @course)
+          flash[:success_with_body] = course_saved_flash(@course)
+          redirect_to find_course_path(provider_code: @course.provider_code, course_code: @course.course_code) and return
+        end
+
+        session["return_to_after_authenticating"] = find_course_path(
+          provider_code: @course.provider_code,
+          course_code: @course.course_code,
+        )
+
+        session["save_course_id_after_authenticating"] = @course.id
       end
 
       def create
@@ -99,6 +118,23 @@ module Find
 
         flash_options = error ? { flash: { error: { message: error } } } : {}
         redirect_to find_course_path(**options), **flash_options
+      end
+
+      def course_saved_flash(course)
+        view_saved_courses_link = view_context.govuk_link_to(
+          t("find.candidates.saved_courses.create.view_saved_courses"),
+          find_candidate_saved_courses_path,
+        )
+
+        {
+          title: t("find.candidates.saved_courses.create.success_message_title"),
+          body: t(
+            "find.candidates.saved_courses.create.success_message_html",
+            provider_name: course.provider_name,
+            course_name_and_code: course.name_and_code,
+            view_saved_courses_link: view_saved_courses_link,
+          ),
+        }
       end
 
       def reason_for_request
