@@ -17,16 +17,18 @@
           @provider.provider_code,
           @provider.recruitment_cycle_year,
           @course.course_code,
-          uuid: @wizard.current_step.uuid,
-        ), method: :delete do |form| %>
-        <%= form.govuk_error_summary %>
+          uuid: current_step.uuid,
+        ), method: :delete,
+       scope: current_step_name do |form| %>
+      <%= form.govuk_error_summary %>
 
-        <%= form.govuk_radio_buttons_fieldset :confirmation, legend: { size: "l", text: t("course.#{@wizard.current_step.model_name.i18n_key}.heading", subject: @wizard.current_step.subject), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>
-          <%= form.govuk_radio_button :confirmation, :yes, link_errors: true %>
-          <%= form.govuk_radio_button :confirmation, :no %>
-        <% end %>
+      <%= form.hidden_field(:uuid, value: params[:uuid]) %>
+      <%= form.govuk_radio_buttons_fieldset :confirmation, legend: { size: "l", text: t("course.#{@wizard.current_step.model_name.i18n_key}.heading", subject: @wizard.current_step.subject), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>
+        <%= form.govuk_radio_button :confirmation, :yes, link_errors: true %>
+        <%= form.govuk_radio_button :confirmation, :no %>
+      <% end %>
 
-        <%= form.submit t("continue"), class: "govuk-button" %>
+      <%= form.submit t("continue"), class: "govuk-button" %>
     <% end %>
   </div>
 </div>

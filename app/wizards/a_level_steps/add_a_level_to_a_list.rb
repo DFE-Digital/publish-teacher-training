@@ -23,7 +23,7 @@ module ALevelSteps
     end
 
     def subjects
-      Array(@subjects)
+      wizard.state_store.subjects
     end
   end
 end

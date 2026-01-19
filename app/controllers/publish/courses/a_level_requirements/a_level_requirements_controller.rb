@@ -9,6 +9,14 @@ module Publish
         before_action :assign_course, :verify_teacher_degree_apprenticeship_course
         before_action :assign_wizard
 
+        helper_method def current_step
+          @wizard.current_step
+        end
+
+        helper_method def current_step_name
+          controller_name.to_sym
+        end
+
         def new
           @wizard.valid_step? if params[:display_errors].present?
         end
@@ -25,18 +33,23 @@ module Publish
       private
 
         def assign_wizard
-          state_store = "StateStores::#{controller_name.camelcase}Store".constantize.new(
-            repository: DfE::Wizard::Repository::Session.new(
-              session:,
-              key: :a_levels,
+          state_store = StateStores::ALevelStore.new(
+            repository: DfE::Wizard::Repository::Model.new(
+              record: @course,
             ),
           )
 
           @wizard = ALevelsWizard.new(
-            current_step:,
-            current_step_params: params,
+            current_step: current_step_name,
+            current_step_params: defined?(step_params) && step_params || params,
             state_store:,
-          )
+          ).tap do |wizard|
+            wizard.recruitment_cycle_year = params[:recruitment_cycle_year]
+            wizard.provider_code = params[:provider_code]
+            wizard.course_code = params[:course_code]
+          end
+
+          @wizard
         end
 
         def add_flash_message; end
@@ -54,10 +67,6 @@ module Publish
         def assign_course
           @course = provider.courses.find_by!(course_code: params[:course_code])
           @course_decorator = CourseDecorator.new(@course)
-        end
-
-        def current_step
-          controller_name.to_sym
         end
       end
     end

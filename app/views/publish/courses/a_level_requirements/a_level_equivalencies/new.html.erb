@@ -27,7 +27,8 @@
           @provider.provider_code,
           @provider.recruitment_cycle_year,
           @course.course_code,
-        ) do |form| %>
+        ),
+        scope: @wizard.current_step_name do |form| %>
         <%= form.govuk_error_summary %>
 
         <%= form.govuk_radio_buttons_fieldset :accept_a_level_equivalency, legend: { size: "l", text: t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>

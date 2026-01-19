@@ -17,7 +17,6 @@ module Find
         end
 
         def qualification_required
-          # binding.pry
           if course.teacher_degree_apprenticeship?
             t(".a_levels")
           else

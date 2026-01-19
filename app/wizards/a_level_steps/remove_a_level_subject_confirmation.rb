@@ -3,9 +3,11 @@
 module ALevelSteps
   class RemoveALevelSubjectConfirmation
     include DfE::Wizard::Step
-    delegate :course, :exit_path, to: :wizard
-    attr_accessor :uuid, :confirmation, :other_subject
-    attr_writer :subject
+
+    attribute :uuid, :string
+    attribute :minimum_grade_required, :string
+    attribute :confirmation, :string
+    attribute :other_subject, :string
 
     validates :uuid, presence: true
 
@@ -18,10 +20,9 @@ module ALevelSteps
     end
 
     def subject
-      ALevelSubjectRequirementRowComponent.new(
-        subject: @subject,
-        other_subject:,
-      ).subject_name
+      hash = wizard.state_store.repository.record.a_level_subject_requirements.find { it["uuid"] == uuid }
+
+      I18n.t("helpers.label.what_a_level_is_required.subject_options.#{hash.fetch('subject', nil)}")
     end
 
     def next_step
