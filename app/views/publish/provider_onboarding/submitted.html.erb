@@ -1,0 +1,29 @@
+<% content_for :page_title, t(".title") %>
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-panel govuk-panel--confirmation">
+          <h1 class="govuk-panel__title">
+            <%= t(".submitted_message", organisation_name: @onboarding_request.provider_name) %>
+          </h1>
+        </div>
+        <h2 class="govuk-heading-m"><%= t(".what_happens_next") %></h2>
+        <p class="govuk-body">
+          <%= t(".form_sent") %>
+        </p>
+        <p class="govuk-body">
+          <%= t(".next_steps") %>
+        </p>
+        <h2 class="govuk-heading-m"><%= t(".get_help") %></h2>
+        <p class="govuk-body">
+          <%= t(".contact_support_html",
+            support_email: mail_to(t(".support_email"), class: "govuk-link")
+          ) %>
+        </p>
+        <p class="govuk-body">
+          <%= t(".close_window") %>
+        </div>
+      </div>
+    </main>
+  </div>

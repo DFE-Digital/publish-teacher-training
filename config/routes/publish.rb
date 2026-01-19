@@ -70,6 +70,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
   resources :notifications, path: "/notifications", controller: "notifications", only: %i[index update]
 
   resources :provider_onboarding, only: %i[show update], param: :uuid, path: "provider-onboarding"
+  get "provider-onboarding/:uuid/submitted", to: "provider_onboarding#submitted", as: :provider_onboarding_submitted
 
   resources :providers, path: "organisations", param: :code, only: [:show] do
     resource :check_user, only: %i[show update], controller: "users_check", path: "users/check"

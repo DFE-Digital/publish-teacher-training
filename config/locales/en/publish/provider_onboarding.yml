@@ -1,0 +1,47 @@
+en:
+  publish:
+    provider_onboarding:
+      show:
+        title: Provider onboarding form
+        heading: Provider onboarding form
+      onboarding_form:
+        caption: Add a provider
+        heading: Add an organisation to Publish
+        organisation_details: Organisation details
+        organisation_name: Organisation name
+        organisation_name_hint: Enter your organisation name, ideally your operating name. The name you enter here will be shown on Find teacher training courses (Find)
+        ukprn: UK provider reference number (UKPRN)
+        ukprn_hint_html: You can find your UKPRN on the %{ukrlp_link}
+        urn: Unique reference number (URN)
+        urn_hint_html: You can find your URN on the %{get_information_schools_link}
+        contact_details: Contact details
+        contact_email_address: Contact email address
+        contact_email_address_hint: This will be shown in the 'Contact details' section of your course pages on Find
+        telephone: Phone number
+        telephone_hint: This will be shown in the 'Contact details' section of your course pages on Find. Candidates can use this to contact you if they have any questions
+        website: Organisation website
+        website_hint: Candidates will be able to link to your website from your course pages on Find
+        address_line_1: Address line 1
+        address_line_1_hint: This address will be displayed in the 'Contact details' section of your course pages on Find. You can edit this once signed in to your account
+        address_line_2: Address line 2 (optional)
+        address_line_3: Address line 3 (optional)
+        town_city: Town or city
+        county: County
+        postcode: Postcode
+        user_details: User details
+        email_address: Email address
+        email_address_hint: This will be the first user of Publish and Manage. You'll be able to add more users once your organisation has been added
+        first_name: First name
+        last_name: Last name
+      submitted:
+        title: Onboarding request submitted
+        heading: Onboarding request submitted
+        submitted_message: Provider onboarding request submitted for %{organisation_name}
+        what_happens_next: What happens next
+        form_sent: We've sent your form to the Publish support team.
+        next_steps: They will contact you either to confirm the onboarding process is complete, or to ask for more information.
+        get_help: Get help with the onboarding process
+        contact_support_html: If you have any questions about the provider onboarding process, please contact the Publish support team at %{support_email}.
+        support_email: becomingateacher@digital.education.gov.uk
+        close_window: You can close this window or tab.
+
