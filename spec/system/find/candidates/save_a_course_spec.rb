@@ -19,6 +19,7 @@ RSpec.describe "Saving a course", service: :find do
     when_i_visit_a_course_without_signing_in
 
     then_i_am_prompted_to_sign_in_and_course_is_saved
+    then_i_can_see_the_course_in_my_saved_courses
   end
 
   def when_i_sign_in_as_a_candidate
@@ -60,7 +61,12 @@ RSpec.describe "Saving a course", service: :find do
 
     expect(page).to have_content("Course saved")
     expect(page).to have_link("View saved courses", href: find_candidate_saved_courses_path)
-    expect(page).to have_content("#{@course.provider_name} #{@course.name_and_code}")
+  end
+
+  def then_i_can_see_the_course_in_my_saved_courses
+    click_link_or_button("View saved courses")
+    expect(page).to have_current_path(find_candidate_saved_courses_path)
+    expect(page).to have_content("York university Open Art and design (SEND) (F314)")
   end
 
   def click_on_first_course
