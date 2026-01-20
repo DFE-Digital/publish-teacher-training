@@ -17,9 +17,8 @@ RSpec.describe "Saving a course", service: :find do
 
   scenario "An unauthenticated visitor is prompted to sign in when trying to save a course" do
     when_i_visit_a_course_without_signing_in
-    then_i_save_the_course_as_an_unauthenticated_visitor
 
-    then_i_am_prompted_to_sign_in
+    then_i_am_prompted_to_sign_in_and_course_is_saved
   end
 
   def when_i_sign_in_as_a_candidate
@@ -53,10 +52,15 @@ RSpec.describe "Saving a course", service: :find do
     expect(page).to have_content("Course saved")
   end
 
-  def then_i_am_prompted_to_sign_in
+  def then_i_am_prompted_to_sign_in_and_course_is_saved
     expect(page).to have_content("Sign in to save this course")
+    click_link_or_button("Sign in to save this course")
+
     click_link_or_button("Continue")
+
     expect(page).to have_content("Course saved")
+    expect(page).to have_link("View saved courses", href: find_candidate_saved_courses_path)
+    expect(page).to have_content("#{@course.provider_name} #{@course.name_and_code}")
   end
 
   def click_on_first_course
