@@ -5,9 +5,8 @@ module ALevelSteps
     include DfE::Wizard::Step
 
     attribute :uuid, :string
-    attribute :minimum_grade_required, :string
     attribute :confirmation, :string
-    attribute :other_subject, :string
+    validates :confirmation, inclusion: { in: %w[yes no] }
 
     validates :uuid, presence: true
 
@@ -16,7 +15,7 @@ module ALevelSteps
     end
 
     def self.permitted_params
-      %i[uuid subject other_subject confirmation]
+      %i[uuid confirmation]
     end
 
     def subject

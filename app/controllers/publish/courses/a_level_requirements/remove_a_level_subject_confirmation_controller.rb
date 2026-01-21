@@ -16,7 +16,7 @@ module Publish
 
         def step_params
           params[current_step_name] ||= ActionController::Parameters.new
-          params[current_step_name].merge!(params.permit!.to_h.slice(:uuid, :subject, :other_subject))
+          params[current_step_name].merge!(params.permit!.to_h.slice(:uuid))
           params
         end
       end
