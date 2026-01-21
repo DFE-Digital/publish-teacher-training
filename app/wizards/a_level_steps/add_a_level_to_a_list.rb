@@ -1,9 +1,6 @@
-# frozen_string_literal: true
-
 module ALevelSteps
   class AddALevelToAList
     include DfE::Wizard::Step
-    attr_writer :subjects
 
     MAXIMUM_NUMBER_OF_A_LEVEL_SUBJECTS = 4
 

@@ -5,7 +5,6 @@ module ALevelSteps
     include DfE::Wizard::Step
 
     MAXIMUM_GRADE_CHARACTERS = 50
-    # attr_accessor :subject, :other_subject, :minimum_grade_required
 
     Subject = Struct.new(:name, keyword_init: true)
 

@@ -7,6 +7,7 @@ module ALevelSteps
 
     MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS = 250
     validates :accept_a_level_equivalency, presence: true
+    validates :accept_a_level_equivalency, inclusion: { in: %w[yes no] }
 
     validates :additional_a_level_equivalencies,
               words_count: {
@@ -31,8 +32,13 @@ module ALevelSteps
       )
     end
 
+    # Getter for initializing the radio button
+    def accept_a_level_equivalency
+      wizard.state_store.equivalent_a_level
+    end
+
     def accept_a_level_equivalency?
-      accept_a_level_equivalency == "yes"
+      attributes["accept_a_level_equivalency"] == "yes"
     end
   end
 end
