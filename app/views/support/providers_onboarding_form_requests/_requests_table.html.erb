@@ -14,11 +14,19 @@
     <% onboarding_requests.each do |request| %>
       <% body.with_row do |row| %>
         <% row.with_cell(text: request.id) %>
-        <% row.with_cell(text: request.form_name) %>
+        <% row.with_cell do %>
+          <% if request.submitted? %>
+            <%= link_to request.form_name,
+                support_providers_onboarding_form_request_path(request),
+                class: "govuk-link" %>
+          <% else %>
+            <%= request.form_name %>
+          <% end %>
+        <% end %>
         <% row.with_cell do %>
           <%= govuk_link_to("View form", publish_provider_onboarding_path(request.uuid)) %>
         <% end %>
-        <% row.with_cell(text: request.zendesk_link.present? ? govuk_link_to("View zendesk ticket", request.zendesk_link) : t(".not_available")) %>
+        <% row.with_cell(text: request.zendesk_link.present? ? govuk_link_to(t(".view_zendesk_ticket"), request.zendesk_link) : t(".not_available")) %>
         <% row.with_cell(text: request.support_agent.present? ? "#{request.support_agent.first_name} #{request.support_agent.last_name}" : t(".unassigned")) %>
         <% row.with_cell do %>
           <%= govuk_tag(text: request.status.titleize, colour: status_colour(request.status)) %>
