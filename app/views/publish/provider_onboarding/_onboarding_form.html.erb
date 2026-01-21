@@ -25,7 +25,7 @@
             ),
           ),
         } %>
-      <%= f.govuk_radio_buttons_fieldset :accredited_provider, legend: { text: "Are you an accredited provider?" } do %>
+      <%= f.govuk_radio_buttons_fieldset :accredited_provider, legend: { text: "Are you an accredited provider?" }, id: "providers-onboarding-form-request-accredited-provider-field-error" do %>
         <%= f.govuk_radio_button :accredited_provider, true, label: { text: "Yes" } %>
         <%= f.govuk_radio_button :accredited_provider, false, label: { text: "No" } %>
       <% end %>
