@@ -34,7 +34,7 @@ module Publish
 
         def assign_wizard
           state_store = StateStores::ALevelStore.new(
-            repository: DfE::Wizard::Repository::Model.new(
+            repository: Repositories::ALevelRepository.new(
               record: @course,
             ),
           )

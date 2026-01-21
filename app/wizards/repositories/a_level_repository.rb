@@ -25,5 +25,9 @@ module Repositories
 
       data
     end
+
+    def excluded_columns
+      [:uuid]
+    end
   end
 end
