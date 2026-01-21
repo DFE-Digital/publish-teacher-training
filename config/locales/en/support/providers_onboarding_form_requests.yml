@@ -15,6 +15,7 @@ en:
         form_link: Form link
         unassigned: Unassigned
         not_available: Not available
+        view_zendesk_ticket: View Zendesk ticket
       new:
         title: New Provider Onboarding Request
         heading: Generate a new provider onboarding request
