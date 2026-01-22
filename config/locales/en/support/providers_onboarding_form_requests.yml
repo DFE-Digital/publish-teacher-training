@@ -24,7 +24,7 @@ en:
       update:
         updated_status_message_html: "Status updated to %{updated_status} for %{form_name}"
         error_message_html: "Failed to update status for %{form_name}"
-      show: 
+      show:
         caption: Add a provider
         provider_details: Provider details for %{form_name}
         onboarding_details: Onboarding details
@@ -32,7 +32,7 @@ en:
         contact_details: Contact details
         user_details: User details
         form_link: Form link
-        view_form: View form
+        view_provider_form: View provider form
         zendesk_link: Zendesk link
         view_zendesk_ticket: View Zendesk ticket
         not_available: Not available
