@@ -10,31 +10,34 @@ RSpec.describe "Saving a course", service: :find do
   scenario "A signed-in candidate can save a course" do
     when_i_sign_in_as_a_candidate
     when_i_view_a_course
-    then_i_save_the_course
+    when_i_save_the_course
 
-    then_the_course_is_saved
+    then_i_see_course_saved_banner
   end
 
   scenario "An unauthenticated visitor is prompted to sign in when trying to save a course" do
     when_i_visit_a_course_without_signing_in
 
-    then_i_am_prompted_to_sign_in_and_course_is_saved
+    when_i_sign_in_to_save_this_course
+    when_i_continue_sign_in
+
+    then_i_see_course_saved_banner
+    then_i_see_view_saved_courses_link
     then_i_can_see_the_course_in_my_saved_courses
   end
 
   scenario "An unauthenticated visitor is redirected safely when the course no longer exists after sign in" do
     when_i_visit_a_course_without_signing_in
 
-    expect(page).to have_content("Sign in to save this course")
-    click_link_or_button("Sign in to save this course")
+    when_i_sign_in_to_save_this_course
 
     @course.destroy!
 
-    click_link_or_button("Continue")
+    when_i_continue_sign_in
 
-    expect(page).to have_current_path(find_root_path)
-    expect(page).not_to have_content("Course saved")
-    expect(page).to have_content("Failed to save course")
+    then_i_am_redirected_to_find_root
+    then_i_do_not_see_course_saved_banner
+    then_i_see_failed_to_save_course
   end
 
   scenario "An unauthenticated visitor sees an error if saving the course fails" do
@@ -42,13 +45,12 @@ RSpec.describe "Saving a course", service: :find do
 
     when_i_visit_a_course_without_signing_in
 
-    expect(page).to have_content("Sign in to save this course")
-    click_link_or_button("Sign in to save this course")
-    click_link_or_button("Continue")
+    when_i_sign_in_to_save_this_course
+    when_i_continue_sign_in
 
-    expect(page).to have_current_path(find_course_path(provider_code: @course.provider_code, course_code: @course.course_code))
-    expect(page).to have_content("Failed to save course")
-    expect(page).not_to have_content("Course saved")
+    then_i_am_redirected_to_course_page(@course)
+    then_i_see_failed_to_save_course
+    then_i_do_not_see_course_saved_banner
   end
 
   scenario "Saving a course is idempotent when it is already saved" do
@@ -57,12 +59,11 @@ RSpec.describe "Saving a course", service: :find do
 
     when_i_visit_a_course_without_signing_in
 
-    expect(page).to have_content("Sign in to save this course")
-    click_link_or_button("Sign in to save this course")
-    click_link_or_button("Continue")
+    when_i_sign_in_to_save_this_course
+    when_i_continue_sign_in
 
-    expect(page).to have_content("Course saved")
-    expect(SavedCourse.where(candidate_id: candidate.id, course_id: @course.id).count).to eq(1)
+    then_i_see_course_saved_banner
+    then_the_course_is_saved_once_for(candidate:, course: @course)
   end
 
   scenario "Saving a course fires the saved course analytics event" do
@@ -71,15 +72,17 @@ RSpec.describe "Saving a course", service: :find do
     allow(Find::Analytics::SavedCourseEvent).to receive(:new).and_return(analytics_event)
 
     when_i_visit_a_course_without_signing_in
-    then_i_am_prompted_to_sign_in_and_course_is_saved
+    when_i_sign_in_to_save_this_course
+    when_i_continue_sign_in
+    then_i_see_course_saved_banner
 
-    expect(analytics_event).to have_received(:send_event).at_least(:once)
+    then_saved_course_analytics_event_is_sent(analytics_event)
   end
 
   def when_i_sign_in_as_a_candidate
     visit "/"
     click_link_or_button "Sign in"
-    expect(page).to have_content("You have been successfully signed in.")
+    then_i_see_signed_in_success_message
   end
 
   def when_i_view_a_course
@@ -93,27 +96,37 @@ RSpec.describe "Saving a course", service: :find do
     click_on_first_course
   end
 
-  def then_i_save_the_course
+  def when_i_save_the_course
     expect(page).to have_content("Save this course for later")
     click_link_or_button("Save this course for later")
   end
 
-  def then_i_save_the_course_as_an_unauthenticated_visitor
+  def when_i_sign_in_to_save_this_course
     expect(page).to have_content("Sign in to save this course")
     click_link_or_button("Sign in to save this course")
   end
 
-  def then_the_course_is_saved
-    expect(page).to have_content("Course saved")
-  end
-
-  def then_i_am_prompted_to_sign_in_and_course_is_saved
-    expect(page).to have_content("Sign in to save this course")
-    click_link_or_button("Sign in to save this course")
-
+  def when_i_continue_sign_in
     click_link_or_button("Continue")
+  end
 
+  def then_i_see_signed_in_success_message
+    expect(page).to have_content("You have been successfully signed in.")
+  end
+
+  def then_i_see_course_saved_banner
     expect(page).to have_content("Course saved")
+  end
+
+  def then_i_do_not_see_course_saved_banner
+    expect(page).not_to have_content("Course saved")
+  end
+
+  def then_i_see_failed_to_save_course
+    expect(page).to have_content("Failed to save course")
+  end
+
+  def then_i_see_view_saved_courses_link
     expect(page).to have_link("View saved courses", href: find_candidate_saved_courses_path)
   end
 
@@ -122,6 +135,22 @@ RSpec.describe "Saving a course", service: :find do
     expect(page).to have_current_path(find_candidate_saved_courses_path)
     expect(page).to have_content("York university")
     expect(page).to have_content("Art and design (SEND) (F314)")
+  end
+
+  def then_i_am_redirected_to_find_root
+    expect(page).to have_current_path(find_root_path)
+  end
+
+  def then_i_am_redirected_to_course_page(course)
+    expect(page).to have_current_path(find_course_path(provider_code: course.provider_code, course_code: course.course_code))
+  end
+
+  def then_the_course_is_saved_once_for(candidate:, course:)
+    expect(SavedCourse.where(candidate_id: candidate.id, course_id: course.id).count).to eq(1)
+  end
+
+  def then_saved_course_analytics_event_is_sent(analytics_event)
+    expect(analytics_event).to have_received(:send_event).at_least(:once)
   end
 
   def click_on_first_course
