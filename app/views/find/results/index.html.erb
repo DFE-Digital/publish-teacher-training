@@ -3,7 +3,7 @@
         :page_title,
         strip_tags(
           render(
-            Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address, search_form: @search_courses_form),
+            Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address, subjects: @search_courses_form.subjects, radius: @search_courses_form.radius),
           ),
         ),
       ) %>
@@ -26,7 +26,7 @@
     <div class="govuk-grid-column-full">
       <div class="app-search__controls">
         <h1 class="govuk-heading-l">
-          <%= render(Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address, search_form: @search_courses_form)) %>
+          <%= render(Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address, subjects: @search_courses_form.subjects, radius: @search_courses_form.radius)) %>
         </h1>
 
         <%= form_with model: @search_courses_form, scope: "", id: "find-search-form", url: find_results_path, method: :get do |form_object| %>

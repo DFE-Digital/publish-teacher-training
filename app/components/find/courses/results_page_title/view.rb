@@ -1,15 +1,16 @@
-# frozen_string_literal: true
-
 module Find
   module Courses
     module ResultsPageTitle
       class View < ViewComponent::Base
-        def initialize(courses_count:, address:, search_form:)
+        attr_reader :subjects, :radius
+
+        def initialize(courses_count:, address:, subjects:, radius:)
           super
 
           @courses_count = courses_count
           @address = address
-          @search_form = search_form
+          @subjects = Array(subjects).compact_blank
+          @radius = radius
         end
 
         def content
@@ -19,7 +20,7 @@ module Find
       private
 
         def translation_key
-          case [location_present?, subject_single?]
+          case [location_present?, subject_name.present?]
           in [false, false]
             ".page_title_without_location"
           in [false, true]
@@ -37,7 +38,7 @@ module Find
             formatted_count:,
             location: @address.short_address,
             subject: subject_name&.downcase,
-            radius: radius_value,
+            radius:,
           }
         end
 
@@ -45,26 +46,14 @@ module Find
           @address.formatted_address.present?
         end
 
-        def subject_single?
-          subjects.count == 1 && subject_name.present?
-        end
-
         def subject_name
-          return unless subjects.count == 1
+          return unless @subjects.count == 1
 
           @subject_name ||= Subject.find_by(subject_code: subjects.first)&.subject_name
         end
 
-        def subjects
-          @subjects ||= Array(@search_form.subjects).compact_blank
-        end
-
         def distance_search?
           @address.distance_search?
-        end
-
-        def radius_value
-          @search_form.radius
         end
 
         def formatted_count
