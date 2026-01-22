@@ -42,6 +42,11 @@ class Subject < ApplicationRecord
     type == "SecondarySubject"
   end
 
+  LANGUAGE_SUBJECT_CODES = %w[Q3 A1 A2 15 18 19 A0 20 21 22 17].freeze
+  def language_subject?
+    subject_code.in?(LANGUAGE_SUBJECT_CODES)
+  end
+
   def match_synonyms_text
     return "" if match_synonyms.blank?
 

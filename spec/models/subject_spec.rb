@@ -98,4 +98,22 @@ describe Subject do
       end
     end
   end
+
+  describe "#language_subject?" do
+    context "when subject is language" do
+      subject { build(:secondary_subject, :english) }
+
+      it "returns true" do
+        expect(subject).to be_language_subject
+      end
+    end
+
+    context "when subject is not language" do
+      subject { build(:secondary_subject, :mathematics) }
+
+      it "returns false" do
+        expect(subject).not_to be_language_subject
+      end
+    end
+  end
 end
