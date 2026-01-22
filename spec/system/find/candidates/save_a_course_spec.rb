@@ -22,6 +22,60 @@ RSpec.describe "Saving a course", service: :find do
     then_i_can_see_the_course_in_my_saved_courses
   end
 
+  scenario "An unauthenticated visitor is redirected safely when the course no longer exists after sign in" do
+    when_i_visit_a_course_without_signing_in
+
+    expect(page).to have_content("Sign in to save this course")
+    click_link_or_button("Sign in to save this course")
+
+    @course.destroy!
+
+    click_link_or_button("Continue")
+
+    expect(page).to have_current_path(find_root_path)
+    expect(page).not_to have_content("Course saved")
+    expect(page).to have_content("Failed to save course")
+  end
+
+  scenario "An unauthenticated visitor sees an error if saving the course fails" do
+    allow(Find::SaveCourseService).to receive(:call).and_return(nil)
+
+    when_i_visit_a_course_without_signing_in
+
+    expect(page).to have_content("Sign in to save this course")
+    click_link_or_button("Sign in to save this course")
+    click_link_or_button("Continue")
+
+    expect(page).to have_current_path(find_course_path(provider_code: @course.provider_code, course_code: @course.course_code))
+    expect(page).to have_content("Failed to save course")
+    expect(page).not_to have_content("Course saved")
+  end
+
+  scenario "Saving a course is idempotent when it is already saved" do
+    candidate = create(:find_developer_candidate)
+    create(:saved_course, candidate:, course: @course)
+
+    when_i_visit_a_course_without_signing_in
+
+    expect(page).to have_content("Sign in to save this course")
+    click_link_or_button("Sign in to save this course")
+    click_link_or_button("Continue")
+
+    expect(page).to have_content("Course saved")
+    expect(SavedCourse.where(candidate_id: candidate.id, course_id: @course.id).count).to eq(1)
+  end
+
+  scenario "Saving a course fires the saved course analytics event" do
+    analytics_event = instance_double(Find::Analytics::SavedCourseEvent)
+    allow(analytics_event).to receive(:send_event)
+    allow(Find::Analytics::SavedCourseEvent).to receive(:new).and_return(analytics_event)
+
+    when_i_visit_a_course_without_signing_in
+    then_i_am_prompted_to_sign_in_and_course_is_saved
+
+    expect(analytics_event).to have_received(:send_event).at_least(:once)
+  end
+
   def when_i_sign_in_as_a_candidate
     visit "/"
     click_link_or_button "Sign in"
@@ -66,7 +120,8 @@ RSpec.describe "Saving a course", service: :find do
   def then_i_can_see_the_course_in_my_saved_courses
     click_link_or_button("View saved courses")
     expect(page).to have_current_path(find_candidate_saved_courses_path)
-    expect(page).to have_content("York university Open Art and design (SEND) (F314)")
+    expect(page).to have_content("York university")
+    expect(page).to have_content("Art and design (SEND) (F314)")
   end
 
   def click_on_first_course

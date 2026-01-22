@@ -12,7 +12,7 @@ module Find
 
       def sign_in
         @course = Course.find(params[:course_id])
-        @one_login_path = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
+        @login_path = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
 
         if authenticated?
           SaveCourseService.call(candidate: @candidate, course: @course)
@@ -20,12 +20,26 @@ module Find
           redirect_to find_course_path(provider_code: @course.provider_code, course_code: @course.course_code) and return
         end
 
-        session["return_to_after_authenticating"] = find_course_path(
-          provider_code: @course.provider_code,
-          course_code: @course.course_code,
-        )
-
         session["save_course_id_after_authenticating"] = @course.id
+      end
+
+      def after_auth
+        course_id = session.delete("save_course_id_after_authenticating")
+        return redirect_to(find_root_path) if course_id.blank?
+
+        @course = Course.find_by(id: course_id)
+        return redirect_to(find_root_path, flash: { error: save_failed_flash }) unless @course
+
+        saved_course = SaveCourseService.call(candidate: @candidate, course: @course)
+
+        if saved_course
+          flash[:success_with_body] = course_saved_flash(@course)
+          send_saved_course_analytics_event
+        else
+          flash[:error] = save_failed_flash
+        end
+
+        redirect_to_course(@course)
       end
 
       def create
@@ -135,6 +149,10 @@ module Find
             view_saved_courses_link: view_saved_courses_link,
           ),
         }
+      end
+
+      def save_failed_flash
+        { message: t("find.candidates.saved_courses.after_auth.save_failed") }
       end
 
       def reason_for_request

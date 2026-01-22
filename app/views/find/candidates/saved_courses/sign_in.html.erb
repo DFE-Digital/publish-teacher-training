@@ -10,8 +10,7 @@
 
     <p class="govuk-body"><%= t(".body") %></p>
 
-    <%= form_tag(@one_login_path, method: :post) do %>
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= form_tag(@login_path, method: :post) do %>
       <%= button_tag t(".continue"), type: "submit", class: "govuk-button" %>
     <% end %>
   </div>
