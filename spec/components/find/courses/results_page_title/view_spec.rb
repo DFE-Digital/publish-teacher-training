@@ -72,6 +72,35 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
       end
     end
 
+    context "when language subjects" do
+      it "render subject name capital" do
+        {
+          "Q3" => "English",
+          "A1" => "Ancient Greek",
+          "A2" => "Ancient Hebrew",
+          "15" => "French",
+          "18" => "Italian",
+          "19" => "Japanese",
+          "A0" => "Latin",
+          "20" => "Mandarin",
+          "21" => "Russian",
+          "22" => "Spanish",
+          "17" => "German",
+        }.each do |subject_code, subject_name|
+          result = render_inline(
+            described_class.new(
+              courses_count: 10,
+              address:,
+              subjects: [subject_code],
+              radius: nil,
+            ),
+          ).text.strip
+
+          expect(result).to eq("10 #{subject_name} courses")
+        end
+      end
+    end
+
     context "when many results" do
       let(:courses_count) { 10 }
 

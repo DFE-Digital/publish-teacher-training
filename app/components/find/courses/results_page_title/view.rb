@@ -37,7 +37,7 @@ module Find
             count: @courses_count,
             formatted_count:,
             location: @address.short_address,
-            subject: subject_name&.downcase,
+            subject: subject_name,
             radius:,
           }
         end
@@ -49,7 +49,15 @@ module Find
         def subject_name
           return unless @subjects.count == 1
 
-          @subject_name ||= Subject.find_by(subject_code: subjects.first)&.subject_name
+          @subject ||= Subject.find_by(subject_code: subjects.first)
+
+          return unless @subject
+
+          if @subject.language_subject?
+            @subject.subject_name
+          else
+            @subject.subject_name.downcase
+          end
         end
 
         def distance_search?
