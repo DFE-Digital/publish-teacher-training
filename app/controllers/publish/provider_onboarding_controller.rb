@@ -2,7 +2,9 @@
 
 module Publish
   class ProviderOnboardingController < ApplicationController
-    skip_after_action :verify_authorized # No authorization required for provider onboarding form
+    # Skip authentication and authorisation for provider onboarding form
+    skip_before_action :authenticate, raise: false
+    skip_after_action :verify_authorized
     before_action :set_onboarding_request
 
     def show; end
