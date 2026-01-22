@@ -47,6 +47,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
       resources :saved_courses, only: %i[index create destroy], path: "saved-courses" do
         post :undo, on: :collection
         get :sign_in, on: :collection
+        get :after_auth, on: :collection
       end
     end
   end
