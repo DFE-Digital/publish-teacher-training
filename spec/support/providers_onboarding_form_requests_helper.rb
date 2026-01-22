@@ -17,8 +17,6 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).to have_content("Provider Onboarding Requests")
     expect(page).to have_content("Id")
     expect(page).to have_content("Form name")
-    expect(page).to have_content("Form link")
-    expect(page).to have_content("Zendesk link")
     expect(page).to have_content("Status")
     expect(page).to have_content("Created at")
   end
@@ -27,8 +25,6 @@ module ProvidersOnboardingFormRequestsHelper
     ProvidersOnboardingFormRequest.order(created_at: :desc).limit(10).each do |request|
       expect(page).to have_content(request.id)
       expect(page).to have_content(request.form_name)
-      expect(page).to have_link("View form", href: request.form_link)
-      expect(page).to have_link("View zendesk ticket", href: request.zendesk_link).or have_content("Not available")
       expect(page).to have_content(request.support_agent.present? ? request.support_agent.name : "Unassigned")
       expect(page).to have_content(request.status.titleize)
       expect(page).to have_content(request.created_at.strftime("%-d %B %Y"))
@@ -70,6 +66,12 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).to have_current_path(support_providers_onboarding_form_requests_path)
   end
 
+  def then_i_am_on_the_provider_onboarding_details_page(request)
+    expect(page).to have_current_path(
+      support_providers_onboarding_form_request_path(request),
+    )
+  end
+
   def then_i_see_fields_on_new_onboarding_form_request_page
     expect(page).to have_current_path(new_support_providers_onboarding_form_request_path)
     expect(page).to have_content("Generate a new provider onboarding request")
@@ -104,14 +106,25 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).to have_content("Onboarding form generated successfully for #{form_name}")
   end
 
-  def then_i_see_form_name_and_link_in_table_listing(form_name:)
-    expect(page).to have_content(form_name)
-    expect(page).to have_link("View form", href: ProvidersOnboardingFormRequest.last.form_link)
+  def then_i_see_form_name_and_link(request)
+    expect(page).to have_content(request.form_name)
+    expect(page).to have_link(
+      "View form",
+      href: publish_provider_onboarding_path(request.uuid),
+    )
   end
 
   def then_i_expect_support_agent_and_zendesk_link_to_be_blank
     expect(ProvidersOnboardingFormRequest.last.support_agent).to be_blank
     expect(ProvidersOnboardingFormRequest.last.zendesk_link).to be_blank
+  end
+
+  def then_i_expect_zendesk_link_to_be_blank
+    expect(ProvidersOnboardingFormRequest.last.zendesk_link).to be_blank
+  end
+
+  def then_i_expect_support_agent_to_be_blank
+    expect(ProvidersOnboardingFormRequest.last.support_agent).to be_blank
   end
 
   def then_i_do_not_see_non_admin_user_in_support_agent_dropdown(non_admin_user)
@@ -133,6 +146,9 @@ module ProvidersOnboardingFormRequestsHelper
     # Page heading
     expect(page).to have_content("Provider details")
     expect(page).to have_content(onboarding_request.form_name)
+    # Onboadring details
+    expect(page).to have_content("Form link")
+    expect(page).to have_content("Zendesk link")
     # Organisation details
     expect(page).to have_content("Provider name")
     expect(page).to have_content(onboarding_request.provider_name)

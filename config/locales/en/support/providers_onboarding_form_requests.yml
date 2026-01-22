@@ -27,6 +27,12 @@ en:
       show: 
         caption: Add a provider
         provider_details: Provider details for %{form_name}
+        onboarding_details: Onboarding details
         organisation_details: Organisation details
         contact_details: Contact details
         user_details: User details
+        form_link: Form link
+        view_form: View form
+        zendesk_link: Zendesk link
+        view_zendesk_ticket: View Zendesk ticket
+        not_available: Not available
