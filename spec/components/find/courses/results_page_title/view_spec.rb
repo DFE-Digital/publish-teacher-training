@@ -6,12 +6,14 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
       described_class.new(
         courses_count:,
         address:,
-        search_form:,
+        subjects:,
+        radius:,
       ),
     ).text.strip
   end
 
-  let(:search_form) { Courses::SearchForm.new }
+  let(:subjects) { [] }
+  let(:radius) { nil }
 
   describe "no location, no subject" do
     let(:address) { Geolocation::Address.new(formatted_address: nil) }
@@ -51,13 +53,8 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
   describe "no location, 1 subject entered" do
     let(:address) { Geolocation::Address.new(formatted_address: nil) }
-    let(:search_form) do
-      Courses::SearchForm.new(
-        subjects: %w[F3],
-        subject_name: "Physics",
-        radius: nil,
-      )
-    end
+    let(:subjects) { %w[F3] }
+    let(:radius) { nil }
 
     context "when no results" do
       let(:courses_count) { 0 }
@@ -94,13 +91,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
   describe "no location, 2+ subjects entered" do
     let(:address) { Geolocation::Address.new(formatted_address: nil) }
-    let(:search_form) do
-      Courses::SearchForm.new(
-        subjects: %w[F3 I1],
-        subject_name: nil,
-        radius: nil,
-      )
-    end
+    let(:subjects) { %w[F3 I1] }
 
     context "when many results" do
       let(:courses_count) { 25 }
@@ -200,9 +191,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
         locality: "London",
       )
     end
-    let(:search_form) do
-      Courses::SearchForm.new(subjects: [], subject_name: nil, radius: 20)
-    end
+    let(:radius) { 20 }
 
     context "when no results" do
       let(:courses_count) { 0 }
@@ -238,17 +227,8 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
       end
     end
 
-    context "when search form radius not provided" do
-      let(:search_form) { Courses::SearchForm.new(subjects: [], subject_name: nil, radius: nil) }
-      let(:courses_count) { 5 }
-
-      it "uses default radius of 50" do
-        expect(result).to include("5 courses within 50 miles of")
-      end
-    end
-
     context "when search form radius is 10 miles" do
-      let(:search_form) { Courses::SearchForm.new(subjects: [], subject_name: nil, radius: 10) }
+      let(:radius) { 10 }
       let(:courses_count) { 3 }
 
       it "renders page title with correct radius" do
@@ -257,7 +237,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
     end
 
     context "when search form radius is 100 miles" do
-      let(:search_form) { Courses::SearchForm.new(subjects: [], subject_name: nil, radius: 100) }
+      let(:radius) { 100 }
       let(:courses_count) { 50 }
 
       it "renders page title with correct radius" do
@@ -275,13 +255,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
         route: nil,
       )
     end
-    let(:search_form) do
-      Courses::SearchForm.new(
-        subjects: %w[F3],
-        subject_name: "Physics",
-        radius: nil,
-      )
-    end
+    let(:subjects) { %w[F3] }
 
     context "when no results" do
       let(:courses_count) { 0 }
@@ -326,13 +300,8 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
         locality: "London",
       )
     end
-    let(:search_form) do
-      Courses::SearchForm.new(
-        subjects: %w[G1],
-        subject_name: "Mathematics",
-        radius: 15,
-      )
-    end
+    let(:subjects) { %w[G1] }
+    let(:radius) { 15 }
 
     context "when 1 result" do
       let(:courses_count) { 1 }
@@ -359,21 +328,6 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
         expect(result).to include("3,500 mathematics courses within 15 miles of")
       end
     end
-
-    context "when search form radius not provided" do
-      let(:search_form) do
-        Courses::SearchForm.new(
-          subjects: %w[G1],
-          subject_name: "Mathematics",
-          radius: nil,
-        )
-      end
-      let(:courses_count) { 12 }
-
-      it "uses default radius of 50" do
-        expect(result).to include("12 mathematics courses within 50 miles of")
-      end
-    end
   end
 
   describe "location and 2+ subjects entered" do
@@ -385,13 +339,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
         route: nil,
       )
     end
-    let(:search_form) do
-      Courses::SearchForm.new(
-        subjects: %w[F3 D3 C1],
-        subject_name: nil,
-        radius: nil,
-      )
-    end
+    let(:subjects) { %w[F3 D3 C1] }
 
     context "when results exist" do
       let(:courses_count) { 30 }
@@ -420,13 +368,8 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
         locality: "London",
       )
     end
-    let(:search_form) do
-      Courses::SearchForm.new(
-        subjects: %w[F3 D3],
-        subject_name: nil,
-        radius: 20,
-      )
-    end
+    let(:subjects) { %w[F3 D3] }
+    let(:radius) { 20 }
 
     context "when results exist" do
       let(:courses_count) { 20 }
@@ -450,13 +393,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
     context "when subject is empty string in array" do
       let(:address) { Geolocation::Address.new(formatted_address: nil) }
-      let(:search_form) do
-        Courses::SearchForm.new(
-          subjects: [""],
-          subject_name: nil,
-          radius: nil,
-        )
-      end
+      let(:subjects)  { [""] }
       let(:courses_count) { 5 }
 
       it "treats as no subject" do
@@ -466,13 +403,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
     context "when subject is nil in array" do
       let(:address) { Geolocation::Address.new(formatted_address: nil) }
-      let(:search_form) do
-        Courses::SearchForm.new(
-          subjects: [nil, "F3"],
-          subject_name: "Physics",
-          radius: nil,
-        )
-      end
+      let(:subjects) { [nil, "F3"] }
       let(:courses_count) { 3 }
 
       it "treats as single subject (after compacting)" do
@@ -482,13 +413,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
     context "when subject name is nil but has subjects in filtering" do
       let(:address) { Geolocation::Address.new(formatted_address: nil) }
-      let(:search_form) do
-        Courses::SearchForm.new(
-          subjects: %w[F3],
-          subject_name: nil,
-          radius: nil,
-        )
-      end
+      let(:subjects) { %w[F3] }
       let(:courses_count) { 3 }
 
       it "returns as single subject" do
@@ -513,13 +438,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
   describe "pluralization with subjects" do
     let(:address) { Geolocation::Address.new(formatted_address: nil) }
-    let(:search_form) do
-      Courses::SearchForm.new(
-        subjects: %w[F3],
-        subject_name: "Physics",
-        radius: nil,
-      )
-    end
+    let(:subjects) { %w[F3] }
 
     context "with 1 course" do
       let(:courses_count) { 1 }
@@ -545,14 +464,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
         locality: "London",
       )
     end
-    let(:search_form) do
-      Courses::SearchForm.new(
-        subjects: %w[F3],
-        subject_name: "Physics",
-        radius: nil,
-        location: "London, UK",
-      )
-    end
+    let(:subjects) { %w[F3] }
 
     context "with 1 course" do
       let(:courses_count) { 1 }
@@ -575,13 +487,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
     describe "SQL injection protection" do
       context "when subject code contains SQL injection attempt" do
         let(:address) { Geolocation::Address.new(formatted_address: nil) }
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: ["F3' OR '1'='1"],
-            subject_name: nil,
-            radius: nil,
-          )
-        end
+        let(:subjects) { ["F3' OR '1'='1"] }
         let(:courses_count) { 10 }
 
         it "rejects invalid subject code format" do
@@ -591,13 +497,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
       context "when subject code contains only special characters" do
         let(:address) { Geolocation::Address.new(formatted_address: nil) }
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: ["'; DROP TABLE subjects; --"],
-            subject_name: nil,
-            radius: nil,
-          )
-        end
+        let(:subjects) { ["'; DROP TABLE subjects; --"] }
         let(:courses_count) { 5 }
 
         it "rejects malicious subject code" do
@@ -608,13 +508,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
       context "when subject code is too long" do
         let(:address) { Geolocation::Address.new(formatted_address: nil) }
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: ["F3#{'X' * 100}"],
-            subject_name: nil,
-            radius: nil,
-          )
-        end
+        let(:subjects) { ["F3#{'X' * 100}"] }
         let(:courses_count) { 7 }
 
         it "rejects subject code exceeding max length" do
@@ -624,13 +518,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
       context "when subject code contains lowercase letters" do
         let(:address) { Geolocation::Address.new(formatted_address: nil) }
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: %w[f3],
-            subject_name: nil,
-            radius: nil,
-          )
-        end
+        let(:subjects) { %w[f3] }
         let(:courses_count) { 8 }
 
         it "rejects invalid subject code format (lowercase)" do
@@ -639,108 +527,9 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
       end
     end
 
-    describe "radius validation protection" do
-      let(:address) do
-        Geolocation::Address.new(
-          formatted_address: "Great Russell St, London WC1B 3DG, UK",
-          latitude: 51.5194133,
-          longitude: -0.1269566,
-          country: "England",
-          postal_code: "WC1B 3DG",
-          postal_town: "London",
-          route: "Great Russell Street",
-          locality: nil,
-          administrative_area_level_1: "England",
-          administrative_area_level_2: "Greater London",
-          administrative_area_level_4: nil,
-          address_types: %w[establishment museum point_of_interest tourist_attraction],
-        )
-      end
-
-      context "when radius is negative" do
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: [],
-            subject_name: nil,
-            radius: -999,
-          )
-        end
-        let(:courses_count) { 10 }
-
-        it "defaults to safe radius of 50" do
-          expect(result).to include("10 courses within 50 miles of Great Russell Street, London")
-        end
-      end
-
-      context "when radius is extremely large" do
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: [],
-            subject_name: nil,
-            radius: 999_999_999,
-          )
-        end
-        let(:courses_count) { 15 }
-
-        it "defaults to safe radius of 50" do
-          expect(result).to include("15 courses within 50 miles of Great Russell Street, London")
-        end
-      end
-
-      context "when radius is not an allowed value" do
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: [],
-            subject_name: nil,
-            radius: 37,
-          )
-        end
-        let(:courses_count) { 12 }
-
-        it "defaults to safe radius of 50" do
-          expect(result).to include("12 courses within 50 miles of Great Russell Street, London")
-        end
-      end
-
-      context "when radius is a string" do
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: [],
-            subject_name: nil,
-            radius: "this-is-not-allowed!",
-          )
-        end
-        let(:courses_count) { 8 }
-
-        it "safely converts and defaults to 50 if invalid" do
-          expect(result).to include("8 courses within 50 miles of Great Russell Street, London")
-        end
-      end
-
-      context "when radius is zero" do
-        let(:search_form) do
-          Courses::SearchForm.new(
-            subjects: [],
-            subject_name: nil,
-            radius: 0,
-          )
-        end
-        let(:courses_count) { 5 }
-
-        it "defaults to safe radius of 50" do
-          expect(result).to include("5 courses within 50 miles of Great Russell Street, London")
-        end
-      end
-    end
-
     context "when subject contains HTML tags" do
       let(:address) { Geolocation::Address.new(formatted_address: nil) }
-      let(:search_form) do
-        Courses::SearchForm.new(
-          subjects: ["<img src=x onerror=\"alert('xss')\">Physics</img>"],
-          radius: nil,
-        )
-      end
+      let(:subjects) { ["<img src=x onerror=\"alert('xss')\">Physics</img>"] }
       let(:courses_count) { 5 }
 
       it "ignores subjects" do
@@ -750,13 +539,7 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
 
     context "when search_form.subjects is not an array" do
       let(:address) { Geolocation::Address.new(formatted_address: nil) }
-      let(:search_form) do
-        Courses::SearchForm.new(
-          subjects: "F3",
-          subject_name: nil,
-          radius: nil,
-        )
-      end
+      let(:subjects) { "F3" }
       let(:courses_count) { 6 }
 
       it "safely converts to array" do
