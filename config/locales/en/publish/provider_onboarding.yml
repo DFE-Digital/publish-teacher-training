@@ -5,6 +5,7 @@ en:
         title: Provider onboarding form
         heading: Provider onboarding form
       onboarding_form:
+        already_submitted: This form has already been submitted and can no longer be edited.
         caption: Add a provider
         heading: Add an organisation to Publish
         organisation_details: Organisation details
@@ -40,6 +41,7 @@ en:
         what_happens_next: What happens next
         form_sent: We've sent your form to the Publish support team.
         next_steps: They will contact you either to confirm the onboarding process is complete, or to ask for more information.
+        no_edits: This form cannot be edited.
         get_help: Get help with the onboarding process
         contact_support_html: If you have any questions about the provider onboarding process, please contact the Publish support team at %{support_email}.
         support_email: becomingateacher@digital.education.gov.uk
