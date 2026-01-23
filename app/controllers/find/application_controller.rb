@@ -25,6 +25,10 @@ module Find
       "find"
     end
 
+    def current_user
+      candidate
+    end
+
   private
 
     def promote_flash_info
