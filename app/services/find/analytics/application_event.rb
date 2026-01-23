@@ -19,10 +19,15 @@ module Find
             @event
               .with_type(event_name)
               .with_request_details(request)
+              .with_user(current_user)
               .with_namespace(namespace)
               .with_data(event_data),
           ],
         )
+      end
+
+      def current_user
+        Current.user
       end
     end
   end
