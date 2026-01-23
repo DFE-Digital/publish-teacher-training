@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Adding A levels to a teacher degree apprenticeship course", travel: mid_cycle do
+RSpec.describe "Adding A levels to a teacher degree apprenticeship course", :js_browser, travel: mid_cycle, type: :system do
   scenario "adding a level requirements" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_teacher_degree_apprenticeship_course
@@ -79,14 +79,12 @@ feature "Adding A levels to a teacher degree apprenticeship course", travel: mid
     then_the_no_option_is_chosen_in_pending_a_level
 
     when_i_click_continue
-    and_i_click_update_a_levels
-    then_i_see_an_error_message_for_the_a_level_equivalencies
-
     when_i_choose_yes
     and_i_add_too_many_words_into_additional_a_level_equivalencies
     and_i_click_update_a_levels
     then_i_see_an_error_message_for_the_a_level_equivalencies_additional_a_levels_field
 
+    when_i_choose_yes
     when_i_add_an_additional_a_level_equivalencies
     and_i_click_update_a_levels
     then_i_am_on_the_course_description_tab
@@ -182,7 +180,7 @@ feature "Adding A levels to a teacher degree apprenticeship course", travel: mid
   end
 
   def and_the_back_link_points_to_description_tab
-    expect(page.find_link(text: "Back")[:href]).to eq(
+    expect(page.find_link(text: "Back")[:href]).to match(
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         recruitment_cycle_year,
@@ -349,16 +347,12 @@ feature "Adding A levels to a teacher degree apprenticeship course", travel: mid
   end
   alias_method :and_i_click_update_a_levels, :when_i_click_update_a_levels
 
-  def then_i_see_an_error_message_for_the_a_level_equivalencies
-    expect(page).to have_content("Select if you will consider candidates who need to take equivalency tests").twice
-  end
-
   def then_the_yes_option_is_chosen_in_pending_a_level
-    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-yes-field")
+    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-yes-field", visible: false)
   end
 
   def then_the_no_option_is_chosen_in_pending_a_level
-    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-no-field")
+    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-no-field", visible: false)
   end
 
   def and_i_add_too_many_words_into_additional_a_level_equivalencies

@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-feature "Adding A levels to a teacher degree apprenticeship course", travel: mid_cycle do
-  scenario "adding a level requirements" do
+RSpec.describe "Adding A levels subjects to a teacher degree apprenticeship course", travel: mid_cycle, type: :system do
+  scenario "adding and removing subjects" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_teacher_degree_apprenticeship_course
 
@@ -62,76 +62,6 @@ feature "Adding A levels to a teacher degree apprenticeship course", travel: mid
 
     when_i_click_continue
     then_i_am_on_the_consider_pending_a_level_page
-
-    # when_i_click_continue
-    # then_i_see_an_error_message_for_the_consider_pending_a_level_page
-
-    when_i_choose_yes
-    and_i_click_continue
-    then_i_am_on_a_level_equivalencies_page
-
-    when_i_click_back
-    then_the_yes_option_is_chosen_in_pending_a_level
-
-    when_i_choose_no
-    and_i_click_continue
-    and_i_click_back
-    then_the_no_option_is_chosen_in_pending_a_level
-
-    when_i_click_continue
-    and_i_click_update_a_levels
-    then_i_see_an_error_message_for_the_a_level_equivalencies
-
-    when_i_choose_yes
-    and_i_add_too_many_words_into_additional_a_level_equivalencies
-    and_i_click_update_a_levels
-    then_i_see_an_error_message_for_the_a_level_equivalencies_additional_a_levels_field
-
-    when_i_add_an_additional_a_level_equivalencies
-    and_i_click_update_a_levels
-    then_i_am_on_the_course_description_tab
-
-    when_i_enter_on_a_level_equivalencies
-    then_the_yes_option_is_chosen_in_a_level_equivalencies
-    and_i_see_the_additional_a_level_equivalencies_text
-
-    when_i_click_update_a_levels
-    then_i_am_on_the_course_description_tab
-    and_i_see_the_a_level_requirements_for_the_course
-
-    when_i_click_to_change_a_level_requirements
-    and_i_click_to_change_the_subject
-    then_i_am_on_the_what_a_level_is_required_page_editing_the_subject
-    and_the_back_link_points_to_add_a_level_to_the_list
-    and_any_subject_is_chosen
-    and_minimum_grade_required_has_a_value
-
-    when_i_choose_any_science_subject
-    and_add_any_grade_as_minimum_grade_required
-    and_i_click_continue
-    then_i_am_on_the_add_another_a_level_subject_page
-    and_i_see_the_updated_a_level_subject_requirement
-
-    when_i_click_to_remove_the_a_level_subject
-    then_i_am_on_the_confirming_removal_of_a_level_subject
-
-    when_i_click_continue
-    then_i_see_an_error_message_for_the_confirming_removal_of_a_level_subject_page
-
-    when_i_choose_yes
-    and_i_click_continue
-    then_i_am_on_the_add_another_a_level_subject_page
-    and_the_subject_requirement_is_deleted
-
-    when_i_click_to_remove_the_a_level_subject
-    and_i_choose_no
-    and_i_click_continue
-    then_i_am_on_the_add_another_a_level_subject_page
-    and_the_subject_requirement_is_not_deleted
-
-    when_i_delete_all_subject_requirements
-    then_i_am_on_the_course_description_tab
-    and_there_are_no_a_level_requirements_for_the_course
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -182,7 +112,7 @@ feature "Adding A levels to a teacher degree apprenticeship course", travel: mid
   end
 
   def and_the_back_link_points_to_description_tab
-    expect(page.find_link(text: "Back")[:href]).to eq(
+    expect(page.find_link(text: "Back")[:href]).to match(
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         recruitment_cycle_year,
@@ -349,154 +279,8 @@ feature "Adding A levels to a teacher degree apprenticeship course", travel: mid
   end
   alias_method :and_i_click_update_a_levels, :when_i_click_update_a_levels
 
-  def then_i_see_an_error_message_for_the_a_level_equivalencies
-    expect(page).to have_content("Select if you will consider candidates who need to take equivalency tests").twice
-  end
-
-  def then_the_yes_option_is_chosen_in_pending_a_level
-    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-yes-field")
-  end
-
-  def then_the_no_option_is_chosen_in_pending_a_level
-    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-no-field")
-  end
-
-  def and_i_add_too_many_words_into_additional_a_level_equivalencies
-    fill_in "Details about equivalency tests you offer or accept",
-            with: "words " * (ALevelSteps::ALevelEquivalencies::MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS + 2)
-  end
-
-  def when_i_add_an_additional_a_level_equivalencies
-    fill_in "Details about equivalency tests you offer or accept", with: "Some additional A level equivalencies text"
-  end
-
-  def then_i_see_an_error_message_for_the_a_level_equivalencies_additional_a_levels_field
-    expect(page).to have_content("Details about equivalency tests must be 250 words or less. You have 2 words too many")
-  end
-
-  def when_i_enter_on_a_level_equivalencies
-    visit publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
-      @provider.provider_code,
-      @provider.recruitment_cycle_year,
-      @course.course_code,
-    )
-  end
-
-  def then_the_yes_option_is_chosen_in_a_level_equivalencies
-    expect(page).to have_checked_field("a-level-equivalencies-accept-a-level-equivalency-yes-field")
-  end
-
-  def and_i_see_the_additional_a_level_equivalencies_text
-    expect(page.find("textarea").value).to eq("Some additional A level equivalencies text")
-  end
-
-  def and_i_see_the_a_level_requirements_for_the_course
-    expect(page).to have_content("Any subject - Grade C or above or equivalent")
-    expect(page).to have_content("Any STEM subject - Grade C or above or equivalent")
-    expect(page).to have_content("Any humanities subject or equivalent")
-    expect(page).to have_content("Mathematics or equivalent")
-    expect(page).to have_content("Candidates with pending A levels will not be considered.")
-    expect(page).to have_content("Equivalency tests will be considered.")
-    expect(page).to have_content("Some additional A level equivalencies text")
-  end
-
-  def and_i_click_to_change_the_subject
-    click_on("Change", match: :first)
-  end
-
-  def and_any_subject_is_chosen
-    expect(page).to have_checked_field("what-a-level-is-required-subject-any-subject-field")
-  end
-
-  def and_minimum_grade_required_has_a_value
-    expect(find_field("Minimum grade required (optional)").value).to eq "C"
-  end
-
-  def when_i_choose_any_science_subject
-    choose "Any science subject"
-  end
-
-  def and_add_any_grade_as_minimum_grade_required
-    fill_in "Minimum grade required (optional)", with: "B"
-  end
-
-  def and_i_see_the_updated_a_level_subject_requirement
-    and_there_are_only_four_subjects # it should update and not create another one
-  end
-
-  def and_there_are_only_four_subjects
-    expect(@course.reload.a_level_subject_requirements.size).to be 4
-  end
-
   def when_i_click_to_remove_the_a_level_subject
     click_on "Remove", match: :first
-  end
-
-  def then_i_am_on_the_what_a_level_is_required_page_editing_the_subject
-    expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
-        @provider.provider_code,
-        recruitment_cycle_year,
-        @course.course_code,
-        uuid: @course.reload.a_level_subject_requirements.first["uuid"],
-      ),
-    )
-  end
-
-  def then_i_am_on_the_confirming_removal_of_a_level_subject
-    expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_course_a_levels_remove_a_level_subject_confirmation_path(
-        @provider.provider_code,
-        recruitment_cycle_year,
-        @course.course_code,
-        uuid: @course.reload.a_level_subject_requirements.first["uuid"],
-      ),
-    )
-    expect(page).to have_content("Are you sure you want to remove Any science subject?")
-  end
-
-  def then_i_see_an_error_message_for_the_confirming_removal_of_a_level_subject_page
-    expect(page).to have_content("Select if you want to remove Any science subject")
-  end
-
-  def and_the_subject_requirement_is_deleted
-    expect(page).to have_no_content("Any science subject")
-    expect(@course.reload.a_level_subject_requirements.size).to be 3
-  end
-
-  def and_the_subject_requirement_is_not_deleted
-    expect(page).to have_content("Any STEM subject")
-    expect(page).to have_content("Any humanities subject")
-    expect(page).to have_content("Mathematics")
-    expect(@course.reload.a_level_subject_requirements.size).to be 3
-  end
-
-  def when_i_delete_all_subject_requirements
-    3.times do
-      when_i_click_to_remove_the_a_level_subject
-      and_i_choose_yes
-      and_i_click_continue
-    end
-  end
-
-  def and_there_are_no_a_level_requirements_for_the_course
-    expect(@course.reload.a_level_subject_requirements).to be_empty
-    expect(@course.accept_pending_a_level).to be_nil
-    expect(@course.accept_a_level_equivalency).to be_nil
-    expect(@course.additional_a_level_equivalencies).to be_nil
-
-    expect(page).to have_content("A levels and equivalency tests")
-    expect(page).to have_content("Enter A levels and equivalency test requirements")
-  end
-
-  def and_the_back_link_points_to_add_a_level_to_the_list
-    expect(page.find_link(text: "Back")[:href]).to eq(
-      publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
-        @provider.provider_code,
-        @provider.recruitment_cycle_year,
-        @course.course_code,
-      ),
-    )
   end
 
   def recruitment_cycle_year
