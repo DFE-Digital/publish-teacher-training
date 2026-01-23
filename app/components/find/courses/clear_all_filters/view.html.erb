@@ -1,5 +1,5 @@
 <%= govuk_link_to(
   "Clear all",
-  find_results_path,
+  find_results_path(utm_source:, utm_medium:),
   class: "#{html_class} govuk-link--no-visited-state",
 ) %>
