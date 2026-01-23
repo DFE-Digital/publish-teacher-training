@@ -7,7 +7,10 @@ module Publish
         before_action :load_a_level_subject_requirement, :verify_maximum_a_level_subject_requirements
 
         def step_params
-          params[current_step] = ActionController::Parameters.new(@a_level_subject_requirement) if @a_level_subject_requirement.present?
+          return unless action == "new"
+
+          load_a_level_subject_requirement
+          params[current_step_name] = ActionController::Parameters.new(@a_level_subject_requirement) if @a_level_subject_requirement.present?
           params
         end
 

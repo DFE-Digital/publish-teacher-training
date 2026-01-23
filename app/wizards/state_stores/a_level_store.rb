@@ -7,11 +7,17 @@ module StateStores
     end
 
     def pending_a_level
-      repository.record.accept_pending_a_level ? "no" : "yes"
+      case repository.record.accept_pending_a_level
+      when TrueClass then "yes"
+      when FalseClass then "no"
+      end
     end
 
     def equivalent_a_level
-      repository.record.accept_a_level_equivalency ? "no" : "yes"
+      case repository.record.accept_a_level_equivalency
+      when TrueClass then "yes"
+      when FalseClass then "no"
+      end
     end
 
     def another_a_level_needed?

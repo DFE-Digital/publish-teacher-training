@@ -6,7 +6,9 @@ module ALevelSteps
 
     attribute :add_another_a_level, :string
 
-    # validates :add_another_a_level, presence: true, unless: :maximum_number_of_a_level_subjects?
+    validates :add_another_a_level, presence: true, unless: :maximum_number_of_a_level_subjects?
+    validates :add_another_a_level, presence: true, unless: :maximum_number_of_a_level_subjects?
+    validates :add_another_a_level, inclusion: { in: %w[yes no] }, unless: :maximum_number_of_a_level_subjects?
 
     def self.permitted_params
       [

@@ -8,7 +8,7 @@ module Operations
     end
 
     def execute
-      if current_step.pending_a_level == "yes"
+      if current_step.accepting_pending_a_level?
         repository.record.update(accept_pending_a_level: true)
       else
         repository.record.update(accept_pending_a_level: false)

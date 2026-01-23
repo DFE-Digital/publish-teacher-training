@@ -37,6 +37,7 @@ class ALevelsWizard
       b.on_step(:what_a_level_is_required, use: [DfE::Wizard::Operations::Validate, ::Operations::ALevelOperation, DfE::Wizard::Operations::Persist])
       b.on_step(:remove_a_level_subject_confirmation, use: [::Operations::RemoveALevelSubject])
       b.on_step(:consider_pending_a_level, use: [DfE::Wizard::Operations::Validate, ::Operations::ConsiderPendingALevel])
+      b.on_step(:a_level_equivalencies, use: [DfE::Wizard::Operations::Validate, ::Operations::ALevelEquivalencies])
     end
   end
 
