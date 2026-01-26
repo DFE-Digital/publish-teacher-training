@@ -10,5 +10,12 @@ RSpec.shared_examples "an analytics event" do
       subject.send_event
       expect(subject.event_name).to have_been_enqueued_as_analytics_events
     end
+
+    it "assigns the Current user from the session" do
+      sessionable = build_stubbed(:candidate)
+      Current.session = build_stubbed(:session, sessionable:)
+
+      expect(subject.send_event.arguments.dig(0, 0, "user_id")).to eq(sessionable.id)
+    end
   end
 end
