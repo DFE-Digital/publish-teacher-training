@@ -109,7 +109,7 @@ module ProvidersOnboardingFormRequestsHelper
   def then_i_see_form_name_and_link(request)
     expect(page).to have_content(request.form_name)
     expect(page).to have_link(
-      "View form",
+      "View provider form",
       href: publish_provider_onboarding_path(request.uuid),
     )
   end

@@ -1,39 +1,45 @@
-<% if flash[:info].blank? &&
+<!-- Notification for already submitted form (new provider users) -->
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if flash[:info].blank? &&
       @onboarding_request.errors.empty? &&
       !(pending_for_public? || admin_user?) %>
-<div class="govuk-inset-text govuk-inset-text--warning">
-  <strong><%= t(".already_submitted") %></strong>
+    <div class="govuk-inset-text govuk-inset-text--warning">
+      <strong><%= t(".already_submitted") %></strong>
+    </div>
+  <% end %>
 </div>
-<% end %>
+</div>
 <span class="govuk-caption-l"><%= t(".caption") %></span>
 <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <% can_edit = editable_by_current_user? %>
     <%= form_with model: onboarding_request,
-              url: publish_provider_onboarding_path(onboarding_request.uuid),
-              method: :patch,
-              local: true do |f| %>
+                  url: publish_provider_onboarding_path(onboarding_request.uuid),
+                  method: :patch,
+                  local: true do |f| %>
       <%= f.govuk_error_summary %>
       <!-- Organisation Details -->
       <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".organisation_details") %></h2>
-      <%= f.govuk_text_field :provider_name, label: { text: t(".organisation_name"), size: "s" }, hint: { text: t(".organisation_name_hint") } %>
+      <%= f.govuk_text_field :provider_name, label: { text: t(".organisation_name"), size: "s" }, hint: { text: t(".organisation_name_hint") }, disabled: !can_edit %>
       <%= f.govuk_text_field :ukprn,
         label: { text: t(".ukprn"), size: "s" },
         hint: {
           text: t(
             ".ukprn_hint_html",
             ukrlp_link: link_to(
-              "UK register of learning providers",  
+              "UK register of learning providers",
               "https://www.ukrlp.co.uk",
               class: "govuk-link",
               target: "_blank",
               rel: "noopener",
             ),
           ),
-        } %>
+        }, disabled: !can_edit %>
       <%= f.govuk_radio_buttons_fieldset :accredited_provider, legend: { text: "Are you an accredited provider?" }, id: "providers-onboarding-form-request-accredited-provider-field-error" do %>
-        <%= f.govuk_radio_button :accredited_provider, true, label: { text: "Yes" } %>
-        <%= f.govuk_radio_button :accredited_provider, false, label: { text: "No" } %>
+        <%= f.govuk_radio_button :accredited_provider, true, label: { text: "Yes" }, disabled: !can_edit %>
+        <%= f.govuk_radio_button :accredited_provider, false, label: { text: "No" }, disabled: !can_edit %>
       <% end %>
       <%= f.govuk_text_field :urn,
         label: { text: t(".urn"), size: "s" },
@@ -41,31 +47,34 @@
           text: t(
             ".urn_hint_html",
             get_information_schools_link: link_to(
-              "Get information about schools",  
+              "Get information about schools",
               "https://www.get-information-schools.service.gov.uk",
               class: "govuk-link",
               target: "_blank",
               rel: "noopener",
             ),
           ),
-        } %>
+        }, disabled: !can_edit %>
       <!-- Contact Details -->
       <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".contact_details") %></h2>
-      <%= f.govuk_text_field :contact_email_address, label: { text: t(".contact_email_address"), size: "s" }, hint: { text: t(".contact_email_address_hint") } %>
-      <%= f.govuk_text_field :telephone, label: { text: t(".telephone"), size: "s" }, hint: { text: t(".telephone_hint") } %>
-      <%= f.govuk_text_field :website, label: { text: t(".website"), size: "s" }, hint: { text: t(".website_hint") } %>
-      <%= f.govuk_text_field :address_line_1, label: { text: t(".address_line_1"), size: "s" }, hint: { text: t(".address_line_1_hint") } %>
-      <%= f.govuk_text_field :address_line_2, label: { text: t(".address_line_2"), size: "s" } %>
-      <%= f.govuk_text_field :address_line_3, label: { text: t(".address_line_3"), size: "s" } %>
-      <%= f.govuk_text_field :town_or_city, label: { text: t(".town_city"), size: "s" } %>
-      <%= f.govuk_text_field :county, label: { text: t(".county"), size: "s" } %>
-      <%= f.govuk_text_field :postcode, label: { text: t(".postcode"), size: "s" } %>
+      <%= f.govuk_text_field :contact_email_address, label: { text: t(".contact_email_address"), size: "s" }, hint: { text: t(".contact_email_address_hint") }, disabled: !can_edit %>
+      <%= f.govuk_text_field :telephone, label: { text: t(".telephone"), size: "s" }, hint: { text: t(".telephone_hint") }, disabled: !can_edit %>
+      <%= f.govuk_text_field :website, label: { text: t(".website"), size: "s" }, hint: { text: t(".website_hint") }, disabled: !can_edit %>
+      <%= f.govuk_text_field :address_line_1, label: { text: t(".address_line_1"), size: "s" }, hint: { text: t(".address_line_1_hint") }, disabled: !can_edit %>
+      <%= f.govuk_text_field :address_line_2, label: { text: t(".address_line_2"), size: "s" }, disabled: !can_edit %>
+      <%= f.govuk_text_field :address_line_3, label: { text: t(".address_line_3"), size: "s" }, disabled: !can_edit %>
+      <%= f.govuk_text_field :town_or_city, label: { text: t(".town_city"), size: "s" }, disabled: !can_edit %>
+      <%= f.govuk_text_field :county, label: { text: t(".county"), size: "s" }, disabled: !can_edit %>
+      <%= f.govuk_text_field :postcode, label: { text: t(".postcode"), size: "s" }, disabled: !can_edit %>
       <!-- User Details -->
       <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".user_details") %></h2>
-      <%= f.govuk_text_field :email_address, label: { text: t(".email_address"), size: "s" }, hint: { text: t(".email_address_hint") } %>
-      <%= f.govuk_text_field :first_name, label: { text: t(".first_name"), size: "s" } %>
-      <%= f.govuk_text_field :last_name, label: { text: t(".last_name"), size: "s" } %>
-      <%= f.govuk_submit "Submit" %>
+      <%= f.govuk_text_field :email_address, label: { text: t(".email_address"), size: "s" }, hint: { text: t(".email_address_hint") }, disabled: !can_edit %>
+      <%= f.govuk_text_field :first_name, label: { text: t(".first_name"), size: "s" }, disabled: !can_edit %>
+      <%= f.govuk_text_field :last_name, label: { text: t(".last_name"), size: "s" }, disabled: !can_edit %>
+      <!-- Submit button will be removed for public users if form already submitted -->
+      <% if can_edit %>
+        <%= f.govuk_submit "Submit" %>
+      <% end %>
     <% end %>
   </div>
 </div>

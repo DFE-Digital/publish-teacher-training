@@ -30,7 +30,7 @@ module Publish
     # Page displayed after successful submission of the onboarding form by the provider
     def submitted; end
 
-    helper_method :pending_for_public?, :admin_user?
+    helper_method :pending_for_public?, :admin_user?, :editable_by_current_user?
 
   private
 
@@ -38,12 +38,13 @@ module Publish
       @onboarding_request = ProvidersOnboardingFormRequest.find_by!(uuid: params[:uuid])
     end
 
-    # Check if the onboarding request is still pending for public users
+    # Check if the onboarding request is still pending for public users (i.e. not yet submitted)
     def pending_for_public?
       @onboarding_request.status == "pending"
     end
 
-    # Ensure that only pending forms can be edited by the public or admin users can edit the form regardless of status
+    # If someone tries to submit an already-submitted form and they aren’t an admin this runs
+    # Public users cannot submit again — the form becomes locked. Only admin users can bypass that.
     def ensure_can_edit
       return if editable_by_current_user?
 
@@ -52,6 +53,7 @@ module Publish
     end
 
     # Check if the form is editable by the current user
+    # Public users can edit only if the form is pending and Admin users can edit regardless of status
     def editable_by_current_user?
       pending_for_public? || admin_user?
     end
