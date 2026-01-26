@@ -212,7 +212,7 @@ group :development do
   # Static analysis
   gem "brakeman"
 
-  gem "listen", ">= 3.0.5", "< 3.10"
+  gem "listen", ">= 3.0.5", "< 3.11"
 
   # error handling
   gem "better_errors"
