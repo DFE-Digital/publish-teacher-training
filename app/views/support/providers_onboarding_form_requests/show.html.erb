@@ -13,9 +13,7 @@
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { t(".zendesk_link") } %>
-    <% row.with_value {
-      @onboarding_request.zendesk_link.blank? ? t(".not_available") :
-        govuk_link_to(t(".view_zendesk_ticket"), @onboarding_request.zendesk_link) } %>
+    <% row.with_value { @onboarding_request.zendesk_link.blank? ? t(".not_available") : govuk_link_to(t(".view_zendesk_ticket"), @onboarding_request.zendesk_link) } %>
   <% end %>
 <% end %>
 <!-- Organisation Details -->
