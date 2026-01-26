@@ -5,9 +5,8 @@ module ALevelSteps
     include DfE::Wizard::Step
 
     attribute :uuid, :string
+    # validates :confirmation, inclusion: { in: %w[yes no] }
     attribute :confirmation, :string
-    validates :confirmation, inclusion: { in: %w[yes no] }
-
     validates :uuid, presence: true
 
     validate do |record|

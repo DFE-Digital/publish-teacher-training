@@ -43,7 +43,7 @@
             <%= summary_list.with_row do |row| %>
               <%= row.with_key(classes: "govuk-!-font-weight-regular") { render ALevelSubjectRequirementRowComponent.new(subject) } %>
               <%= row.with_action(text: "Change", href:
-                    publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
+                    publish_provider_recruitment_cycle_course_edit_a_levels_what_a_level_is_required_path(
                       @provider.provider_code,
                       @provider.recruitment_cycle_year,
                       @course.course_code,

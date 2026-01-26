@@ -1,21 +1,17 @@
 module Operations
+  # This operation is a no-op placeholder.
+  # The actual removal logic is handled by ALevelSubjectRemovalRepository#transform_for_write,
+  # which filters out the subject with the matching uuid when confirmation is "yes".
+  # When confirmation is "no", no changes are made.
+  # The Persist operation then saves the transformed data.
   class RemoveALevelSubject
-    attr_reader :repository, :current_step
-
     def initialize(repository:, step:)
       @repository = repository
-      @current_step = step
+      @step = step
     end
 
     def execute
-      if current_step.confirmation == "yes"
-
-        updated_subjects = repository.record.a_level_subject_requirements.reject { it["uuid"] == current_step.uuid }
-        repository.record.update(a_level_subject_requirements: updated_subjects)
-        { success: true }
-      else
-        { success: false }
-      end
+      { success: true }
     end
   end
 end

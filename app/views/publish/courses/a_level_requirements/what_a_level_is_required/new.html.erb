@@ -27,7 +27,8 @@
       url: publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
           @provider.provider_code,
           @provider.recruitment_cycle_year,
-          @course.course_code),
+          @course.course_code,
+          @a_level_subject_requirement.present? ? current_step.uuid : nil),
           scope: current_step_name
           ) do |form| %>
         <%= form.govuk_error_summary %>

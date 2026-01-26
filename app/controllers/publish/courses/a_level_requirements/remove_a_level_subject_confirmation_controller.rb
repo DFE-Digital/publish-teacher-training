@@ -19,6 +19,17 @@ module Publish
           params[current_step_name].merge!(params.permit!.to_h.slice(:uuid))
           params
         end
+
+      private
+
+        def state_store
+          StateStores::ALevelStore.new(
+            repository: Repositories::ALevelSubjectRemovalRepository.new(
+              record: @course,
+              params:,
+            ),
+          )
+        end
       end
     end
   end

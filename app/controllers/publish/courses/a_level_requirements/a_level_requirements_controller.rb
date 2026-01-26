@@ -18,7 +18,7 @@ module Publish
         end
 
         def new
-          @wizard.valid_step? if params[:display_errors].present?
+          @wizard.current_step_valid? if params[:display_errors].present?
         end
 
         def create
@@ -32,13 +32,15 @@ module Publish
 
       private
 
-        def assign_wizard
-          state_store = StateStores::ALevelStore.new(
+        def state_store
+          StateStores::ALevelStore.new(
             repository: Repositories::ALevelRepository.new(
               record: @course,
             ),
           )
+        end
 
+        def assign_wizard
           @wizard = ALevelsWizard.new(
             current_step: current_step_name,
             current_step_params: defined?(step_params) && step_params || params,
@@ -48,8 +50,6 @@ module Publish
             wizard.provider_code = params[:provider_code]
             wizard.course_code = params[:course_code]
           end
-
-          @wizard
         end
 
         def add_flash_message; end
