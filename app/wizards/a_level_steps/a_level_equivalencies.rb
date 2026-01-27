@@ -32,17 +32,8 @@ module ALevelSteps
       )
     end
 
-    # Getter for initializing the radio button
-    def accept_a_level_equivalency
-      if wizard.state_store.equivalent_a_level.nil?
-        attributes["accept_a_level_equivalency"]
-      else
-        wizard.state_store.equivalent_a_level
-      end
-    end
-
     def accept_a_level_equivalency?
-      attributes["accept_a_level_equivalency"] == "yes"
+      accept_a_level_equivalency == "yes"
     end
   end
 end

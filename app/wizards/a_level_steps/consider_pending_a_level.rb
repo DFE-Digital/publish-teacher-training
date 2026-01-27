@@ -13,18 +13,8 @@ module ALevelSteps
       %i[pending_a_level]
     end
 
-    # Getter for initializing the radio button
-    def pending_a_level
-      if wizard.state_store.pending_a_level.nil?
-        attributes["pending_a_level"]
-      else
-        wizard.state_store.pending_a_level
-      end
-    end
-
-    # Operations methods
     def accepting_pending_a_level?
-      attributes["pending_a_level"] == "yes"
+      pending_a_level == "yes"
     end
   end
 end

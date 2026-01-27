@@ -5,8 +5,8 @@ module ALevelSteps
     include DfE::Wizard::Step
 
     attribute :uuid, :string
-    # validates :confirmation, inclusion: { in: %w[yes no] }
     attribute :confirmation, :string
+
     validates :uuid, presence: true
 
     validate do |record|
@@ -21,28 +21,6 @@ module ALevelSteps
       hash = wizard.state_store.repository.record.a_level_subject_requirements.find { it["uuid"] == uuid }
 
       I18n.t("helpers.label.what_a_level_is_required.subject_options.#{hash.fetch('subject', nil)}")
-    end
-
-    def next_step
-      if deletion_confirmed? && no_a_level_subject_requirements?
-        :exit
-      else
-        :add_a_level_to_a_list
-      end
-    end
-
-    def deletion_confirmed?
-      confirmation == "yes"
-    end
-
-    def no_a_level_subject_requirements?
-      a_level_subject_requirements.empty?
-    end
-
-  private
-
-    def a_level_subject_requirements
-      Array(course.a_level_subject_requirements)
     end
   end
 end

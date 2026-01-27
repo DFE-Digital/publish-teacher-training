@@ -10,7 +10,8 @@ module Repositories
     def transform_for_read(data)
       data.merge!(@virtual_attributes || {}).deep_symbolize_keys
 
-      data[:pending_a_level] = data[:accept_pending_a_level]
+      data[:pending_a_level] = boolean_to_string(data[:accept_pending_a_level])
+      data[:accept_a_level_equivalency] = boolean_to_string(data[:accept_a_level_equivalency])
       data[:subjects] = data[:a_level_subject_requirements]
 
       data.deep_symbolize_keys
@@ -21,13 +22,39 @@ module Repositories
 
       data.except!(*VIRTUAL_ATTRIBUTES)
 
-      data[:accept_pending_a_level] = data[:pending_a_level] unless data[:pending_a_level].nil?
+      if data[:pending_a_level].nil?
+        data.delete(:pending_a_level)
+      else
+        data[:accept_pending_a_level] = string_to_boolean(data.delete(:pending_a_level))
+      end
+
+      if data[:accept_a_level_equivalency].nil?
+        data.delete(:accept_a_level_equivalency)
+      else
+        data[:accept_a_level_equivalency] = string_to_boolean(data[:accept_a_level_equivalency])
+      end
 
       data
     end
 
     def excluded_columns
       [:uuid]
+    end
+
+  private
+
+    def boolean_to_string(value)
+      case value
+      when true then "yes"
+      when false then "no"
+      end
+    end
+
+    def string_to_boolean(value)
+      case value
+      when "yes" then true
+      when "no" then false
+      end
     end
   end
 end
