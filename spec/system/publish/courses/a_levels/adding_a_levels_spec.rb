@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Adding A levels to a TDA course", :travel => mid_cycle, type: :system do
+RSpec.describe "Adding A levels to a TDA course", travel: mid_cycle, type: :system do
   scenario "adding A level requirements to a course" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_tda_course
@@ -45,7 +45,7 @@ RSpec.describe "Adding A levels to a TDA course", :travel => mid_cycle, type: :s
     and_i_see_the_a_level_requirements_displayed
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, providers: [build(:provider, provider_type: "lead_school")])
@@ -61,7 +61,7 @@ RSpec.describe "Adding A levels to a TDA course", :travel => mid_cycle, type: :s
     publish_provider_courses_show_page.load(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: recruitment_cycle_year,
-      course_code: @course.course_code
+      course_code: @course.course_code,
     )
   end
 
@@ -78,9 +78,9 @@ RSpec.describe "Adding A levels to a TDA course", :travel => mid_cycle, type: :s
       publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
+        @course.course_code,
       ),
-      ignore_query: true
+      ignore_query: true,
     )
   end
 
@@ -101,9 +101,9 @@ RSpec.describe "Adding A levels to a TDA course", :travel => mid_cycle, type: :s
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
+        @course.course_code,
       ),
-      ignore_query: true
+      ignore_query: true,
     )
   end
 
@@ -137,8 +137,8 @@ RSpec.describe "Adding A levels to a TDA course", :travel => mid_cycle, type: :s
       publish_provider_recruitment_cycle_course_a_levels_consider_pending_a_level_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
@@ -151,8 +151,8 @@ RSpec.describe "Adding A levels to a TDA course", :travel => mid_cycle, type: :s
       publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
@@ -173,8 +173,8 @@ RSpec.describe "Adding A levels to a TDA course", :travel => mid_cycle, type: :s
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
