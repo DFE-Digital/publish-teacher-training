@@ -13,14 +13,6 @@ module Find
       def sign_in
         @course = Course.find(params[:course_id])
         @login_path = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
-
-        if authenticated?
-          SaveCourseService.call(candidate: @candidate, course: @course)
-          flash[:success_with_body] = course_saved_flash(@course)
-          redirect_to find_course_path(provider_code: @course.provider_code, course_code: @course.course_code) and return
-        end
-
-        session["save_course_id_after_authenticating"] = @course.id
       end
 
       def after_auth
