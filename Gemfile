@@ -148,7 +148,7 @@ gem "colorize"
 # for running SQL queries
 gem "blazer"
 
-gem "dfe-wizard", require: "dfe/wizard", github: "DFE-Digital/dfe-wizard", tag: "v1.0.0.beta"
+gem "dfe-wizard", require: "dfe/wizard", github: "DFE-Digital/dfe-wizard", ref: "c7680087"
 
 group :development, :test do
   # Prettyprint in console
