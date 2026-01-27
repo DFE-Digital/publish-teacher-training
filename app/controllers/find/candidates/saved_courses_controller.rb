@@ -13,10 +13,13 @@ module Find
       def sign_in
         @course = Course.find(params[:course_id])
         @login_path = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
+        @return_to = safe_results_return_to(params[:return_to])
       end
 
       def after_auth
         course_id = session.delete("save_course_id_after_authenticating")
+        return_to = safe_results_return_to(session.delete("save_course_return_to_after_authenticating"))
+
         return redirect_to(find_root_path) if course_id.blank?
 
         @course = Course.find_by(id: course_id)
@@ -31,7 +34,11 @@ module Find
           flash[:error] = save_failed_flash
         end
 
-        redirect_to_course(@course)
+        if return_to.present?
+          redirect_to return_to, allow_other_host: false
+        else
+          redirect_to_course(@course)
+        end
       end
 
       def create
@@ -145,6 +152,14 @@ module Find
 
       def save_failed_flash
         { message: t("find.candidates.saved_courses.after_auth.save_failed") }
+      end
+
+      def safe_results_return_to(value)
+        return nil unless value.is_a?(String)
+        return nil unless value.start_with?("/results")
+        return nil if value.start_with?("//")
+
+        value
       end
 
       def reason_for_request
