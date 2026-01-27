@@ -8,7 +8,7 @@ module Find
 
         if start_new_session_for candidate, omniauth
           if session["save_course_id_after_authenticating"].present?
-            redirect_to after_auth_find_candidate_saved_courses_path, allow_remote_host: false
+            redirect_to after_auth_find_candidate_saved_courses_path
           else
             flash[:success] = t(".sign_in")
             redirect_to(session.delete("return_to_after_authenticating") || find_root_path, allow_remote_host: false)

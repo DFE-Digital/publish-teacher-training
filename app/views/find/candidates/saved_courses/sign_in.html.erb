@@ -11,6 +11,7 @@
     <p class="govuk-body"><%= t(".body") %></p>
 
     <%= form_tag(@login_path, method: :post) do %>
+      <%= hidden_field_tag :course_id, @course.id %>
       <%= button_tag t(".continue"), type: "submit", class: "govuk-button" %>
     <% end %>
   </div>

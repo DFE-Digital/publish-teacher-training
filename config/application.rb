@@ -14,6 +14,7 @@ require "active_support/core_ext/integer/time"
 require "view_component/compile_cache"
 require "govuk/components"
 require_relative "../app/middleware/request_logging_tags"
+require_relative "../app/middleware/store_save_course_intent"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -71,6 +72,10 @@ module ManageCoursesBackend
 
     config.log_tags = []
     config.log_level = Settings.log_level
+
+    # Capture candidate "save course" intent during OmniAuth request phase (CSRF-protected POST).
+    # Must run after the session middleware so `env["rack.session"]` is available.
+    config.middleware.insert_after ActionDispatch::Session::CookieStore, StoreSaveCourseIntent
 
     # Insert the middlware at the end of the stack
     config.middleware.use RequestLoggingTags
