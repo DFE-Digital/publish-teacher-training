@@ -3,7 +3,7 @@
 require "rails_helper"
 
 # rubocop:disable Capybara/VisibilityMatcher
-RSpec.describe "Adding A levels to a teacher degree apprenticeship course", :js_browser, travel: mid_cycle, type: :system do
+RSpec.describe "Adding A levels to a teacher degree apprenticeship course", travel: mid_cycle, type: :system do
   scenario "adding a level requirements" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_teacher_degree_apprenticeship_course
