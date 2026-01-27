@@ -10,7 +10,7 @@ RSpec.describe ALevelSteps::AddALevelToAList do
   let(:subjects) { [] }
 
   before do
-    allow(wizard_step).to receive(:wizard).and_return(wizard)
+    allow(wizard_step).to receive(:wizard).and_return(wizard) # rubocop:disable RSpec/SubjectStub
   end
 
   describe "validations" do

@@ -15,7 +15,7 @@ RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
   let(:wizard) { instance_double(ALevelsWizard, state_store:) }
 
   before do
-    allow(wizard_step).to receive(:wizard).and_return(wizard)
+    allow(wizard_step).to receive(:wizard).and_return(wizard) # rubocop:disable RSpec/SubjectStub
   end
 
   describe "validations" do
@@ -48,7 +48,7 @@ RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
         wizard_step.uuid = uuid
         wizard_step.confirmation = nil
         expect(wizard_step).not_to be_valid
-        # Note: The step currently shows the I18n translation of "other_subject" rather than
+        # NOTE: The step currently shows the I18n translation of "other_subject" rather than
         # the actual other_subject value. This is a known limitation.
         expect(wizard_step.errors[:confirmation]).to include("Select if you want to remove Choose a subject")
       end

@@ -63,12 +63,12 @@ RSpec.describe Repositories::ALevelRepository do
 
     it "converts pending_a_level string 'yes' to accept_pending_a_level boolean true" do
       result = repository.transform_for_write({ pending_a_level: "yes" })
-      expect(result[:accept_pending_a_level]).to eq(true)
+      expect(result[:accept_pending_a_level]).to be(true)
     end
 
     it "converts pending_a_level string 'no' to accept_pending_a_level boolean false" do
       result = repository.transform_for_write({ pending_a_level: "no" })
-      expect(result[:accept_pending_a_level]).to eq(false)
+      expect(result[:accept_pending_a_level]).to be(false)
     end
 
     it "does not transform pending_a_level when nil" do
@@ -78,12 +78,12 @@ RSpec.describe Repositories::ALevelRepository do
 
     it "converts accept_a_level_equivalency string 'yes' to boolean true" do
       result = repository.transform_for_write({ accept_a_level_equivalency: "yes" })
-      expect(result[:accept_a_level_equivalency]).to eq(true)
+      expect(result[:accept_a_level_equivalency]).to be(true)
     end
 
     it "converts accept_a_level_equivalency string 'no' to boolean false" do
       result = repository.transform_for_write({ accept_a_level_equivalency: "no" })
-      expect(result[:accept_a_level_equivalency]).to eq(false)
+      expect(result[:accept_a_level_equivalency]).to be(false)
     end
 
     it "does not transform accept_a_level_equivalency when nil" do
