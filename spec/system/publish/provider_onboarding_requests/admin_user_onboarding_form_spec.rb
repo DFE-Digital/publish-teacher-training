@@ -7,10 +7,12 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
   scenario "revisiting a submitted onboarding form as an admin user" do
     given_i_am_an_admin_user
     when_i_visit_the_onboarding_form
+    then_i_see_a_back_link_to_show_page
     then_i_do_not_see_already_submitted_message
     then_i_see_the_completed_form_fields
     and_i_see_the_submit_button
     and_i_can_edit_the_form_if_needed
+    then_i_see_a_back_link_to_show_page
   end
 
   # Helper methods
@@ -21,6 +23,13 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
 
   def when_i_visit_the_onboarding_form
     visit publish_provider_onboarding_path(onboarding_request.uuid)
+  end
+
+  def then_i_see_a_back_link_to_show_page
+    expect(page).to have_link(
+      "Back",
+      href: support_providers_onboarding_form_request_path(onboarding_request),
+    )
   end
 
   def then_i_do_not_see_already_submitted_message
