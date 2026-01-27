@@ -1,7 +1,7 @@
 <%= content_for :page_title, t(".page_title") %>
 
 <%= content_for(:before_content) do %>
-  <%= govuk_back_link_to(find_course_path(provider_code: @course.provider_code, course_code: @course.course_code)) %>
+  <%= govuk_back_link_to(@return_to.presence || find_course_path(provider_code: @course.provider_code, course_code: @course.course_code)) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -12,6 +12,9 @@
 
     <%= form_tag(@login_path, method: :post) do %>
       <%= hidden_field_tag :course_id, @course.id %>
+      <% if @return_to.present? %>
+        <%= hidden_field_tag :return_to, @return_to %>
+      <% end %>
       <%= button_tag t(".continue"), type: "submit", class: "govuk-button" %>
     <% end %>
   </div>
