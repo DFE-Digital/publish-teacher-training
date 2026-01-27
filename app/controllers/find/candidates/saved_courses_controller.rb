@@ -18,9 +18,14 @@ module Find
 
       def after_auth
         course_id = session.delete("save_course_id_after_authenticating")
+        raw_return_to = session.delete("save_course_return_to_raw_after_authenticating")
         return_to = safe_results_return_to(session.delete("save_course_return_to_after_authenticating"))
 
         return redirect_to(find_root_path) if course_id.blank?
+
+        if raw_return_to.present? && return_to.nil?
+          return redirect_to(find_root_path, flash: { error: save_failed_flash })
+        end
 
         @course = Course.find_by(id: course_id)
         return redirect_to(find_root_path, flash: { error: save_failed_flash }) unless @course

@@ -7,6 +7,7 @@
 class StoreSaveCourseIntent
   SAVE_COURSE_SESSION_KEY = "save_course_id_after_authenticating"
   SAVE_COURSE_RETURN_TO_SESSION_KEY = "save_course_return_to_after_authenticating"
+  SAVE_COURSE_RETURN_TO_RAW_SESSION_KEY = "save_course_return_to_raw_after_authenticating"
 
   def initialize(app)
     @app = app
@@ -22,6 +23,7 @@ class StoreSaveCourseIntent
 
       if session
         session[SAVE_COURSE_SESSION_KEY] = course_id
+        session[SAVE_COURSE_RETURN_TO_RAW_SESSION_KEY] = return_to if return_to.present?
         session[SAVE_COURSE_RETURN_TO_SESSION_KEY] = return_to if safe_results_return_to?(return_to)
       end
     end

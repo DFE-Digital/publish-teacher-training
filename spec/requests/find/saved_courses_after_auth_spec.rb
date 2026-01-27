@@ -41,4 +41,62 @@ RSpec.describe "GET /candidate/saved-courses/after_auth", service: :find do
     expect(response.body).to include("Course saved")
     expect(SavedCourse.count).to eq(1)
   end
+
+  it "redirects back to return_to when present (results page flow)" do
+    CandidateAuthHelper.mock_auth
+    create(:find_developer_candidate)
+
+    course = create(
+      :course,
+      :with_full_time_sites,
+      :secondary,
+      :with_special_education_needs,
+      :published,
+      :open,
+      provider: build(:provider, provider_name: "York university", provider_code: "RO1"),
+    )
+
+    get "/candidate/saved-courses/sign_in", params: { course_id: course.id, return_to: find_results_path }
+    post "/auth/find-developer", params: { course_id: course.id, return_to: find_results_path }
+
+    follow_redirect! # to callback
+    follow_redirect! # to after_auth
+
+    expect(response).to redirect_to(find_results_path)
+
+    follow_redirect! # to results page
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("Course saved")
+    expect(SavedCourse.count).to eq(1)
+  end
+
+  it "treats an unsafe return_to value as a failure and redirects to the root with an error flash" do
+    CandidateAuthHelper.mock_auth
+    create(:find_developer_candidate)
+
+    course = create(
+      :course,
+      :with_full_time_sites,
+      :secondary,
+      :with_special_education_needs,
+      :published,
+      :open,
+      provider: build(:provider, provider_name: "York university", provider_code: "RO1"),
+    )
+
+    get "/candidate/saved-courses/sign_in", params: { course_id: course.id, return_to: "/malicious_url" }
+    post "/auth/find-developer", params: { course_id: course.id, return_to: "/malicious_url" }
+
+    follow_redirect! # to callback
+    follow_redirect! # to after_auth
+
+    expect(response).to redirect_to(find_root_path)
+
+    follow_redirect! # to root
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("Failed to save course")
+    expect(SavedCourse.count).to eq(0)
+  end
 end
