@@ -1,3 +1,8 @@
+<% if admin_user? %>
+  <% content_for :before_content do %>
+    <%= govuk_back_link_to(support_providers_onboarding_form_request_path(@onboarding_request)) %>
+  <% end %>
+<% end %>
 <!-- Notification for already submitted form (new provider users) -->
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

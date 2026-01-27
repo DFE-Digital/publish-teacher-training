@@ -1,4 +1,9 @@
 <% content_for :page_title, t(".title") %>
+<% if admin_user? %>
+  <% content_for :before_content do %>
+    <%= govuk_back_link_to(support_providers_onboarding_form_request_path(@onboarding_request)) %>
+  <% end %>
+<% end %>
 <div class="govuk-width-container">
   <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
     <div class="govuk-grid-row">
@@ -15,7 +20,7 @@
         <p class="govuk-body">
           <%= t(".next_steps") %>
         </p>
-          <p class="govuk-body">
+        <p class="govuk-body">
           <%= t(".no_edits") %>
         </p>
         <h2 class="govuk-heading-m"><%= t(".get_help") %></h2>
