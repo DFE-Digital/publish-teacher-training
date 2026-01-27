@@ -12,14 +12,15 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: @wizard.current_step, url:
-        publish_provider_recruitment_cycle_course_a_levels_remove_a_level_subject_confirmation_path(
-          @provider.provider_code,
-          @provider.recruitment_cycle_year,
-          @course.course_code,
-          uuid: current_step.uuid,
-        ), method: :delete,
-       scope: current_step_name do |form| %>
+    <%= form_with model: @wizard.current_step,
+                  scope: current_step_name,
+                  method: :delete,
+                  url: publish_provider_recruitment_cycle_course_a_levels_remove_a_level_subject_confirmation_path(
+                         @provider.provider_code,
+                         @provider.recruitment_cycle_year,
+                         @course.course_code,
+                         uuid: current_step.uuid,
+                       ) do |form| %>
       <%= form.govuk_error_summary %>
 
       <%= form.hidden_field(:uuid, value: params[:uuid]) %>

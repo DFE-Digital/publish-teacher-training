@@ -22,41 +22,40 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(
-      model: current_step,
-      url: publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
-          @provider.provider_code,
-          @provider.recruitment_cycle_year,
-          @course.course_code,
-          @a_level_subject_requirement.present? ? current_step.uuid : nil),
-          scope: current_step_name
-          ) do |form| %>
-        <%= form.govuk_error_summary %>
+    <%= form_with(model: current_step,
+                  scope: current_step_name,
+                  url: publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
+                         @provider.provider_code,
+                         @provider.recruitment_cycle_year,
+                         @course.course_code,
+                         @a_level_subject_requirement.present? ? current_step.uuid : nil,
+                       )) do |form| %>
+      <%= form.govuk_error_summary %>
 
-        <% if @a_level_subject_requirement.present? %>
-          <%= form.hidden_field(:uuid) %>
+      <% if @a_level_subject_requirement.present? %>
+        <%= form.hidden_field(:uuid) %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">
+          <%= @course_decorator.name_and_code %>
+        </span>
+        <%= t("course.#{current_step.model_name.i18n_key}.heading") %>
+      </h1>
+
+      <%= form.govuk_radio_buttons_fieldset :subject do %>
+        <%= form.govuk_radio_button :subject, :any_subject, link_errors: true %>
+        <%= form.govuk_radio_button :subject, :any_stem_subject %>
+        <%= form.govuk_radio_button :subject, :any_modern_foreign_language %>
+        <%= form.govuk_radio_button :subject, :any_humanities_subject %>
+        <%= form.govuk_radio_button :subject, :any_science_subject %>
+        <%= form.govuk_radio_divider %>
+        <%= form.govuk_radio_button :subject, :other_subject do %>
+          <%= form.govuk_collection_select :other_subject, current_step.subjects_list, :name, :name, options: { prompt: t("helpers.label.#{current_step.model_name.i18n_key}.other_subject_prompt") } %>
         <% end %>
+      <% end %>
 
-        <h1 class="govuk-heading-l">
-          <span class="govuk-caption-l">
-            <%= @course_decorator.name_and_code %>
-          </span>
-          <%= t("course.#{current_step.model_name.i18n_key}.heading") %>
-        </h1>
-
-        <%= form.govuk_radio_buttons_fieldset :subject do %>
-          <%= form.govuk_radio_button :subject, :any_subject, link_errors: true %>
-          <%= form.govuk_radio_button :subject, :any_stem_subject %>
-          <%= form.govuk_radio_button :subject, :any_modern_foreign_language %>
-          <%= form.govuk_radio_button :subject, :any_humanities_subject %>
-          <%= form.govuk_radio_button :subject, :any_science_subject %>
-          <%= form.govuk_radio_divider %>
-          <%= form.govuk_radio_button :subject, :other_subject do %>
-            <%= form.govuk_collection_select :other_subject, current_step.subjects_list, :name, :name, options: { prompt: t("helpers.label.#{current_step.model_name.i18n_key}.other_subject_prompt") } %>
-          <% end %>
-        <% end %>
-
-        <%= form.govuk_text_field :minimum_grade_required, label: { size: "s" }, width: "one-quarter" %>
+      <%= form.govuk_text_field :minimum_grade_required, label: { size: "s" }, width: "one-quarter" %>
 
       <%= form.submit t("continue"), class: "govuk-button" %>
     <% end %>

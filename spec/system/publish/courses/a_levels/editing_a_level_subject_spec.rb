@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Editing A level subject requirements", :travel => mid_cycle, type: :system do
+RSpec.describe "Editing A level subject requirements", travel: mid_cycle, type: :system do
   scenario "editing an existing A level subject requirement" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_tda_course_with_a_level_requirements
@@ -25,7 +25,7 @@ RSpec.describe "Editing A level subject requirements", :travel => mid_cycle, typ
     and_no_duplicate_was_created
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, providers: [build(:provider, provider_type: "lead_school")])
@@ -41,10 +41,10 @@ RSpec.describe "Editing A level subject requirements", :travel => mid_cycle, typ
       provider: @provider,
       a_level_subject_requirements: [
         { "uuid" => @subject_uuid, "subject" => "any_subject", "minimum_grade_required" => "C" },
-        { "uuid" => SecureRandom.uuid, "subject" => "any_stem_subject", "minimum_grade_required" => "B" }
+        { "uuid" => SecureRandom.uuid, "subject" => "any_stem_subject", "minimum_grade_required" => "B" },
       ],
       accept_pending_a_level: false,
-      accept_a_level_equivalency: true
+      accept_a_level_equivalency: true,
     )
   end
 
@@ -52,7 +52,7 @@ RSpec.describe "Editing A level subject requirements", :travel => mid_cycle, typ
     publish_provider_courses_show_page.load(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: recruitment_cycle_year,
-      course_code: @course.course_code
+      course_code: @course.course_code,
     )
   end
 
@@ -65,9 +65,9 @@ RSpec.describe "Editing A level subject requirements", :travel => mid_cycle, typ
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
+        @course.course_code,
       ),
-      ignore_query: true
+      ignore_query: true,
     )
   end
 
@@ -86,8 +86,8 @@ RSpec.describe "Editing A level subject requirements", :travel => mid_cycle, typ
         @provider.provider_code,
         recruitment_cycle_year,
         @course.course_code,
-        uuid: @subject_uuid
-      )
+        uuid: @subject_uuid,
+      ),
     )
   end
 
@@ -96,8 +96,8 @@ RSpec.describe "Editing A level subject requirements", :travel => mid_cycle, typ
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system do
+RSpec.describe "A levels back navigation", travel: mid_cycle, type: :system do
   scenario "back navigation preserves selections" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_tda_course
@@ -34,7 +34,7 @@ RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system d
     and_the_no_option_is_selected_for_pending
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, providers: [build(:provider, provider_type: "lead_school")])
@@ -50,7 +50,7 @@ RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system d
     visit publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
       @provider.provider_code,
       recruitment_cycle_year,
-      @course.course_code
+      @course.course_code,
     )
   end
 
@@ -59,8 +59,8 @@ RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system d
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
@@ -75,9 +75,9 @@ RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system d
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
+        @course.course_code,
       ),
-      ignore_query: true
+      ignore_query: true,
     )
   end
 
@@ -94,8 +94,8 @@ RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system d
       publish_provider_recruitment_cycle_course_a_levels_consider_pending_a_level_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
@@ -108,8 +108,8 @@ RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system d
       publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 
@@ -118,7 +118,7 @@ RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system d
   end
 
   def and_the_yes_option_is_selected_for_pending
-    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-yes-field", visible: false)
+    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-yes-field", visible: :all)
   end
 
   def when_i_choose_no_for_pending_a_levels
@@ -126,7 +126,7 @@ RSpec.describe "A levels back navigation", :travel => mid_cycle, type: :system d
   end
 
   def and_the_no_option_is_selected_for_pending
-    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-no-field", visible: false)
+    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-no-field", visible: :all)
   end
 
   def recruitment_cycle_year

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Adding A levels validation errors", :travel => mid_cycle, type: :system do
+RSpec.describe "Adding A levels validation errors", travel: mid_cycle, type: :system do
   scenario "validation errors when adding A level requirements" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_tda_course
@@ -34,7 +34,7 @@ RSpec.describe "Adding A levels validation errors", :travel => mid_cycle, type: 
     then_i_see_the_word_limit_error
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, providers: [build(:provider, provider_type: "lead_school")])
@@ -50,7 +50,7 @@ RSpec.describe "Adding A levels validation errors", :travel => mid_cycle, type: 
     visit publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
       @provider.provider_code,
       recruitment_cycle_year,
-      @course.course_code
+      @course.course_code,
     )
   end
 
@@ -78,9 +78,9 @@ RSpec.describe "Adding A levels validation errors", :travel => mid_cycle, type: 
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
+        @course.course_code,
       ),
-      ignore_query: true
+      ignore_query: true,
     )
   end
 
@@ -101,8 +101,8 @@ RSpec.describe "Adding A levels validation errors", :travel => mid_cycle, type: 
       publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 

@@ -348,11 +348,11 @@ RSpec.describe "Adding A levels to a teacher degree apprenticeship course", trav
   alias_method :and_i_click_update_a_levels, :when_i_click_update_a_levels
 
   def then_the_yes_option_is_chosen_in_pending_a_level
-    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-yes-field", visible: false)
+    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-yes-field", visible: :all)
   end
 
   def then_the_no_option_is_chosen_in_pending_a_level
-    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-no-field", visible: false)
+    expect(page).to have_checked_field("consider-pending-a-level-pending-a-level-no-field", visible: :all)
   end
 
   def and_i_add_too_many_words_into_additional_a_level_equivalencies
@@ -377,7 +377,7 @@ RSpec.describe "Adding A levels to a teacher degree apprenticeship course", trav
   end
 
   def then_the_yes_option_is_chosen_in_a_level_equivalencies
-    expect(page).to have_checked_field("a-level-equivalencies-accept-a-level-equivalency-yes-field", visible: false)
+    expect(page).to have_checked_field("a-level-equivalencies-accept-a-level-equivalency-yes-field", visible: :all)
   end
 
   def and_i_see_the_additional_a_level_equivalencies_text

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Maximum A level subjects limit", :travel => mid_cycle, type: :system do
+RSpec.describe "Maximum A level subjects limit", travel: mid_cycle, type: :system do
   scenario "maximum of four A level subjects can be added" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_tda_course
@@ -27,7 +27,7 @@ RSpec.describe "Maximum A level subjects limit", :travel => mid_cycle, type: :sy
     and_the_back_link_points_to_description_tab
   end
 
-  private
+private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, providers: [build(:provider, provider_type: "lead_school")])
@@ -43,7 +43,7 @@ RSpec.describe "Maximum A level subjects limit", :travel => mid_cycle, type: :sy
     visit publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
       @provider.provider_code,
       recruitment_cycle_year,
-      @course.course_code
+      @course.course_code,
     )
   end
 
@@ -58,9 +58,9 @@ RSpec.describe "Maximum A level subjects limit", :travel => mid_cycle, type: :sy
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
+        @course.course_code,
       ),
-      ignore_query: true
+      ignore_query: true,
     )
   end
 
@@ -109,8 +109,8 @@ RSpec.describe "Maximum A level subjects limit", :travel => mid_cycle, type: :sy
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         recruitment_cycle_year,
-        @course.course_code
-      )
+        @course.course_code,
+      ),
     )
   end
 

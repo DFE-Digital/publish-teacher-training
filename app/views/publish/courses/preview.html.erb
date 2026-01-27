@@ -23,7 +23,6 @@
 
     <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
 
-
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course:) %>
 
     <%= render partial: "find/courses/components", locals: { course: } %>
