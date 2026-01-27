@@ -12,6 +12,7 @@ updates:
     ignore:
       - dependency-name: audited
       - dependency-name: sidekiq
+      - dependency-name: mock_redis
   - package-ecosystem: npm
     directory: "/"
     schedule:
