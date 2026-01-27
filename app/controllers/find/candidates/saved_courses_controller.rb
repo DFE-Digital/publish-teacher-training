@@ -13,25 +13,25 @@ module Find
       def sign_in
         @course = Course.find(params[:course_id])
         @login_path = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
+        @return_to = safe_results_return_to(params[:return_to])
       end
 
       def after_auth
-        course_id = session.delete("save_course_id_after_authenticating")
-        return redirect_to(find_root_path) if course_id.blank?
+        intent = consume_save_course_intent
+        return redirect_to(find_root_path) if intent[:course_id].blank?
+        return redirect_to(find_root_path, flash: { error: save_failed_flash }) if intent[:invalid_return_to]
 
-        @course = Course.find_by(id: course_id)
+        @course = Course.find_by(id: intent[:course_id])
         return redirect_to(find_root_path, flash: { error: save_failed_flash }) unless @course
 
-        saved_course = SaveCourseService.call(candidate: @candidate, course: @course)
-
-        if saved_course
+        if save_course_for_candidate(@course)
           flash[:success_with_body] = course_saved_flash(@course)
           send_saved_course_analytics_event
         else
           flash[:error] = save_failed_flash
         end
 
-        redirect_to_course(@course)
+        redirect_after_save(@course, intent[:return_to])
       end
 
       def create
@@ -145,6 +145,38 @@ module Find
 
       def save_failed_flash
         { message: t("find.candidates.saved_courses.after_auth.save_failed") }
+      end
+
+      def consume_save_course_intent
+        course_id = session.delete("save_course_id_after_authenticating")
+        invalid_return_to = session.delete("save_course_return_to_invalid_after_authenticating").present?
+        return_to = safe_results_return_to(session.delete("save_course_return_to_after_authenticating"))
+
+        {
+          course_id: course_id,
+          invalid_return_to: invalid_return_to,
+          return_to: return_to,
+        }
+      end
+
+      def save_course_for_candidate(course)
+        SaveCourseService.call(candidate: @candidate, course: course).present?
+      end
+
+      def redirect_after_save(course, return_to)
+        if return_to.present?
+          redirect_to return_to, allow_other_host: false
+        else
+          redirect_to_course(course)
+        end
+      end
+
+      def safe_results_return_to(value)
+        return nil unless value.is_a?(String)
+        return nil unless value.start_with?("/results")
+        return nil if value.start_with?("//")
+
+        value
       end
 
       def reason_for_request
