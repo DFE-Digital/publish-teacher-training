@@ -57,6 +57,12 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/open-api-rswag.git
+  revision: 5ea1670d79b93d363b0f4a735da92e29a0aa1efd
+  tag: 2.0.5
+  specs:
+
+GIT
+  remote: https://github.com/DFE-Digital/open-api-rswag.git
   revision: b39fb1bdc9fef1c3beca52b0d0c61072c2597bae
   tag: v0.2.0
   specs:
