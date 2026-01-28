@@ -1,0 +1,108 @@
+<% content_for :page_title, t(".title") %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_onboarding_path(@onboarding_request.uuid)) %>
+<% end %>
+<span class="govuk-caption-l"><%= t(".caption") %></span>
+<h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+<!-- Organisation details -->
+<h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".organisation_details") %></h2>
+<%= govuk_summary_list do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".provider_name") } %>
+    <% row.with_value { @onboarding_request.provider_name } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-provider-name-field"),
+                       visually_hidden_text: "provider name") %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".ukprn") } %>
+    <% row.with_value { @onboarding_request.ukprn } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-ukprn-field"),
+                       visually_hidden_text: "UKPRN") %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".accredited_provider") } %>
+    <% row.with_value { @onboarding_request.accredited_provider? ? "Yes" : "No" } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-accredited-provider-field"),
+                       visually_hidden_text: "accredited provider status") %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".urn") } %>
+    <% row.with_value { @onboarding_request.urn } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-urn-field"),
+                       visually_hidden_text: "URN") %>
+  <% end %>
+<% end %>
+<!-- Contact Details -->
+<h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".contact_details") %></h2>
+<%= govuk_summary_list do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".contact_email_address") } %>
+    <% row.with_value { @onboarding_request.contact_email_address } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-contact-email-address-field"),
+                       visually_hidden_text: "contact email address") %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".telephone") } %>
+    <% row.with_value { @onboarding_request.telephone } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-telephone-field"),
+                       visually_hidden_text: "telephone number") %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".website") } %>
+    <% row.with_value { @onboarding_request.website } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-website-field"),
+                       visually_hidden_text: "website") %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".address") } %>
+    <% row.with_value(text: simple_format(@onboarding_request.full_address_on_separate_lines,
+                                         {}, wrapper_tag: :div)) %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-address-line-1-field"),
+                       visually_hidden_text: "address") %>
+  <% end %>
+<% end %>
+<!-- User Details -->
+<h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".user_details") %></h2>
+<%= govuk_summary_list do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".email_address") } %>
+    <% row.with_value { @onboarding_request.email_address } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-email-address-field"),
+                       visually_hidden_text: "email address") %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".first_name") } %>
+    <% row.with_value { @onboarding_request.first_name } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-first-name-field"),
+                       visually_hidden_text: "first name") %>
+  <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key { t(".last_name") } %>
+    <% row.with_value { @onboarding_request.last_name } %>
+    <% row.with_action(text: t("change"),
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-last-name-field"),
+                       visually_hidden_text: "last name") %>
+  <% end %>
+<% end %>
+<!-- Submit button -->
+<div class="govuk-button-group govuk-!-margin-top-8">
+  <%= form_with url: confirm_publish_provider_onboarding_path(@onboarding_request.uuid),
+                method: :post,
+                local: true do |f| %>
+    <%= f.govuk_submit t(".submit") %>
+  <% end %>
+</div>
+<p class="govuk-body">
+  <%= govuk_link_to(t(".cancel"), publish_provider_onboarding_path(@onboarding_request.uuid)) %>
+</p>
+</div>
