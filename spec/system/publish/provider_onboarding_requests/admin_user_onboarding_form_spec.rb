@@ -68,7 +68,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
     click_button "Submit"
 
     expect(page).to have_current_path(
-      publish_provider_onboarding_submitted_path(onboarding_request.uuid),
+      submitted_publish_provider_onboarding_path(onboarding_request.uuid),
     )
 
     onboarding_request.reload
