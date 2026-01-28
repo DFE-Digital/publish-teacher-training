@@ -2,8 +2,8 @@
 shared:
   authentication:
     - subject_key
-  # candidate:
-  #   - email_address
+  candidate:
+    - email_address
   user:
     - email
     - first_name
