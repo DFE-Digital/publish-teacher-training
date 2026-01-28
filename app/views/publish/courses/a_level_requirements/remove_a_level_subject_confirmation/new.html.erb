@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix(t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), @wizard.current_step.errors && @wizard.current_step.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix(t("course.#{current_step.model_name.i18n_key}.heading"), current_step.errors && current_step.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
@@ -12,21 +12,24 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: @wizard.current_step, url:
-        publish_provider_recruitment_cycle_course_a_levels_remove_a_level_subject_confirmation_path(
-          @provider.provider_code,
-          @provider.recruitment_cycle_year,
-          @course.course_code,
-          uuid: @wizard.current_step.uuid,
-        ), method: :delete do |form| %>
-        <%= form.govuk_error_summary %>
+    <%= form_with model: current_step,
+                  scope: current_step_name,
+                  method: :delete,
+                  url: publish_provider_recruitment_cycle_course_a_levels_remove_a_level_subject_confirmation_path(
+                         @provider.provider_code,
+                         @provider.recruitment_cycle_year,
+                         @course.course_code,
+                         uuid: current_step.uuid,
+                       ) do |form| %>
+      <%= form.govuk_error_summary %>
 
-        <%= form.govuk_radio_buttons_fieldset :confirmation, legend: { size: "l", text: t("course.#{@wizard.current_step.model_name.i18n_key}.heading", subject: @wizard.current_step.subject), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>
-          <%= form.govuk_radio_button :confirmation, :yes, link_errors: true %>
-          <%= form.govuk_radio_button :confirmation, :no %>
-        <% end %>
+      <%= form.hidden_field(:uuid, value: params[:uuid]) %>
+      <%= form.govuk_radio_buttons_fieldset :confirmation, legend: { size: "l", text: t("course.#{current_step.model_name.i18n_key}.heading", subject: current_step.subject), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>
+        <%= form.govuk_radio_button :confirmation, :yes, link_errors: true %>
+        <%= form.govuk_radio_button :confirmation, :no %>
+      <% end %>
 
-        <%= form.submit t("continue"), class: "govuk-button" %>
+      <%= form.submit t("continue"), class: "govuk-button" %>
     <% end %>
   </div>
 </div>

@@ -7,11 +7,29 @@ module Publish
         before_action :load_a_level_subject_requirement, :verify_maximum_a_level_subject_requirements
 
         def step_params
-          params[current_step] = ActionController::Parameters.new(@a_level_subject_requirement) if @a_level_subject_requirement.present?
+          return unless action_name == "new"
+
+          load_a_level_subject_requirement
+          params[current_step_name] = ActionController::Parameters.new(@a_level_subject_requirement) if @a_level_subject_requirement.present?
           params
         end
 
+        def edit
+          render :new
+        end
+
       private
+
+        def state_store
+          return super if action_name == "new"
+
+          StateStores::ALevelStore.new(
+            repository: Repositories::ALevelSubjectRepository.new(
+              record: @course,
+              params:,
+            ),
+          )
+        end
 
         def add_flash_message
           flash[:success] = t("course.#{@wizard.current_step.model_name.i18n_key}.success_message")
@@ -32,7 +50,7 @@ module Publish
         end
 
         def no_uuid?
-          params[:uuid].blank? && params.dig(current_step, :uuid).blank?
+          params[:uuid].blank? && params.dig(current_step_name, :uuid).blank?
         end
       end
     end
