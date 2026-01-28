@@ -4,8 +4,6 @@
   - id
   - provider_id
   - organisation_id
-  :candidate:
-  - email_address
   :audit:
   - id
   - auditable_id
