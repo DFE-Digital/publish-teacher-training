@@ -91,7 +91,7 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
         it "rejects invalid postcode" do
           record.postcode = "INVALID"
           expect(record).not_to be_valid
-          expect(record.errors[:postcode]).to include("Postcode is not valid (for example, BN1 1AA)")
+          expect(record.errors[:postcode]).to include("Postcode is not valid, (for example, BN1 1AA)")
         end
 
         it "accepts valid postcode" do

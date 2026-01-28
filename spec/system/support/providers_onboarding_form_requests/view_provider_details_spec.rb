@@ -20,6 +20,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
 
     scenario "I can view all details submitted in the onboarding request" do
       then_i_am_on_the_show_page_for(onboarding_request)
+      then_i_see_form_name_and_link(onboarding_request)
       then_i_see_all_provider_details_for(onboarding_request)
       then_i_see_action_buttons_and_cancel_link
     end

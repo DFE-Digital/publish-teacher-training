@@ -36,9 +36,29 @@ en:
           attributes:
             form_name:
               blank: "Enter a name for the onboarding form. This is for internal reference only."
+            provider_name:
+              blank: "Enter your organisation name"
             website:
+              blank: "Enter a website address"
               url: "Enter a website address in the correct format, like https://www.example.com"
             ukprn:
+              blank: "Enter your UK provider reference number (UKPRN)"
               contains_eight_numbers_starting_with_one: "Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678"
+            accredited_provider:
+              inclusion: "Select whether you are an accredited provider"
+            address_line_1:
+              blank: "Enter the first line of your address"
+            town_or_city:
+              blank: "Enter your town or city"
+            postcode:
+              blank: "Enter a valid postcode, for example, BN1 1AA"
+              invalid: "Postcode is not valid, (for example, BN1 1AA)"
             telephone:
+              blank: "Enter a telephone number"
               invalid: "Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192"
+              too_long: "Telephone number is too long. Enter a valid telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192"
+              too_short: "Telephone number is too short. Enter a valid telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192"
+            first_name:
+              blank: "Enter your first name"
+            last_name:
+              blank: "Enter your last name"

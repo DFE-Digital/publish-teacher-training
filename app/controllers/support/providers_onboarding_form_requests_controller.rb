@@ -21,8 +21,9 @@ module Support
       # Fetches admin users for support agent selection in the form which is re-rendered if save fails due to validation errors
       @admin_users = User.where(admin: true).order(:email)
 
+      # Redirects to show page with success message if save is successful, otherwise re-renders the new form
       if @onboarding_request.save
-        redirect_to support_providers_onboarding_form_requests_path,
+        redirect_to support_providers_onboarding_form_request_path(@onboarding_request),
                     flash: { success: t(".success_message_html", form_name: @onboarding_request.form_name) }
       else
         render :new

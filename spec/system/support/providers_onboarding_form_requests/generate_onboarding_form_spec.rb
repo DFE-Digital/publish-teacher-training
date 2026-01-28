@@ -23,7 +23,7 @@ RSpec.describe "Support console providers onboarding form requests - generating 
       then_i_see_fields_on_new_onboarding_form_request_page
     end
 
-    scenario "when onboarding request is submitted successfully, support user is redirected to onboarding requests listing page with success message" do
+    scenario "when onboarding request is submitted successfully, support user is redirected to the onboarding request details page with a success message" do
       when_i_click_to_generate_a_new_onboarding_form
 
       fill_in "Form name", with: "Test Onboarding Form"
@@ -31,9 +31,9 @@ RSpec.describe "Support console providers onboarding form requests - generating 
 
       then_i_click_submit_button
 
-      then_i_am_on_providers_onboarding_form_requests_listing_page
+      then_i_am_on_the_provider_onboarding_details_page(ProvidersOnboardingFormRequest.last)
       then_i_see_success_message_with_form_link(form_name: "Test Onboarding Form")
-      then_i_see_form_name_and_link_in_table_listing(form_name: "Test Onboarding Form")
+      then_i_see_form_name_and_link(ProvidersOnboardingFormRequest.last)
       then_last_request_has_valid_uuid
     end
 
@@ -54,11 +54,14 @@ RSpec.describe "Support console providers onboarding form requests - generating 
 
       then_i_click_submit_button
 
-      then_i_am_on_providers_onboarding_form_requests_listing_page
+      then_i_am_on_the_provider_onboarding_details_page(ProvidersOnboardingFormRequest.last)
       then_i_see_success_message_with_form_link(form_name: "Onboarding Form Without Agent and Zendesk")
-      then_i_see_form_name_and_link_in_table_listing(form_name: "Onboarding Form Without Agent and Zendesk")
-      then_i_expect_support_agent_and_zendesk_link_to_be_blank
+      then_i_see_form_name_and_link(ProvidersOnboardingFormRequest.last)
+      then_i_expect_zendesk_link_to_be_blank
       then_last_request_has_valid_uuid
+      then_i_click_back_button
+      then_i_am_on_providers_onboarding_form_requests_listing_page
+      then_i_expect_support_agent_to_be_blank
     end
 
     scenario "only admins are listed in the support agent dropdown" do
