@@ -76,7 +76,7 @@
       <%= f.govuk_text_field :last_name, label: { text: t(".last_name"), size: "s" }, disabled: !can_edit %>
       <!-- Submit button will be removed for public users if form already submitted -->
       <% if can_edit %>
-        <%= f.govuk_submit "Submit" %>
+        <%= f.govuk_submit t(".continue") %>
       <% end %>
     <% end %>
   </div>

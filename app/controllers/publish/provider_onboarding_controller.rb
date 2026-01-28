@@ -3,22 +3,38 @@
 module Publish
   class ProviderOnboardingController < ApplicationController
     # Public link: skip authentication and authorisation for provider onboarding form
-    skip_before_action :authenticate, only: %i[show update submitted], raise: false
-    skip_after_action :verify_authorized, only: %i[show update submitted]
+    skip_before_action :authenticate, only: %i[show update submitted check_answers confirm], raise: false
+    skip_after_action :verify_authorized, only: %i[show update submitted check_answers confirm]
     before_action :set_onboarding_request
-    before_action :ensure_can_edit, only: %i[update]
+    before_action :ensure_can_edit, only: %i[update confirm]
 
     def show; end
 
     # Handles the submission of the onboarding form by the provider
     def update
-      # Try to submit the form with the provided parameters and current user's admin status
-      # If successful, redirect to the submitted page; otherwise, re-render the form with errors
-      if @onboarding_request.submit(admin_user?, onboarding_request_params)
-        redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
+      @onboarding_request.assign_attributes(onboarding_request_params)
+
+      # Enable validation of provider-related fields even though status is not yet changed to 'submitted' (to ensure presence/format validations run on form page)
+      @onboarding_request.validate_provider_fields = true
+
+      # Save and redirect to submitted page or re-render the form with errors
+      if @onboarding_request.save
+        redirect_to check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
       else
         render :show
       end
+    end
+
+    def check_answers; end
+
+    def confirm
+      # If the form is being submitted for the first time, update status to 'submitted'.
+      # Admin user edits keep the existing status.
+      if pending_for_public?
+        @onboarding_request.update!(status: "submitted")
+      end
+
+      redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
     end
 
     # Page displayed after successful submission of the onboarding form by the provider
@@ -29,7 +45,7 @@ module Publish
   private
 
     def set_onboarding_request
-      @onboarding_request = ProvidersOnboardingFormRequest.find_by!(uuid: params[:uuid])
+      @onboarding_request = ProvidersOnboardingFormRequest.find_by!(uuid: params[:uuid]).decorate
     end
 
     # Check if the onboarding request is still pending for public users (i.e. not yet submitted)

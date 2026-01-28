@@ -34,6 +34,7 @@ en:
         email_address_hint: This will be the first user of Publish and Manage. You'll be able to add more users once your organisation has been added
         first_name: First name
         last_name: Last name
+        continue: Continue
       submitted:
         title: Onboarding request submitted
         heading: Onboarding request submitted
@@ -46,4 +47,24 @@ en:
         contact_support_html: If you have any questions about the provider onboarding process, please contact the Publish support team at %{support_email}.
         support_email: becomingateacher@digital.education.gov.uk
         close_window: You can close this window or tab.
-
+      check_answers:
+        title: Check your answers before submitting
+        caption: Add a provider
+        heading: Check your answers
+        organisation_details: Organisation details
+        contact_details: Contact details
+        user_details: User details
+        change: Change
+        submit: Submit
+        cancel: Cancel
+        provider_name: Provider name
+        ukprn: UK provider reference number (UKPRN)
+        accredited_provider: Is the organisation an accredited provider?
+        urn: Unique reference number (URN)
+        contact_email_address: Contact email address
+        telephone: Phone number
+        website: Website
+        address: Address
+        email_address: Email address
+        first_name: First name
+        last_name: Last name
