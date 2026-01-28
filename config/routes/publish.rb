@@ -71,6 +71,8 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
   resources :provider_onboarding, param: :uuid, path: "provider-onboarding", only: %i[show update] do
     get :submitted, on: :member
+    get :check_answers, on: :member
+    post :confirm, on: :member
   end
 
   resources :providers, path: "organisations", param: :code, only: [:show] do
