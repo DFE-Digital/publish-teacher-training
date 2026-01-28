@@ -32,13 +32,6 @@ class ALevelsWizard
     end
   end
 
-  def steps_operator
-    DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |b|
-      b.on_step(:consider_pending_a_level, use: [DfE::Wizard::Operations::Validate, ::Operations::ConsiderPendingALevel])
-      b.on_step(:a_level_equivalencies, use: [DfE::Wizard::Operations::Validate, ::Operations::ALevelEquivalencies])
-    end
-  end
-
   def route_strategy
     DfE::Wizard::RouteStrategy::ConfigurableRoutes.new(
       wizard: self,
