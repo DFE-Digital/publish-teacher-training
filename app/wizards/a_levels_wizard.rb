@@ -34,7 +34,6 @@ class ALevelsWizard
 
   def steps_operator
     DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |b|
-      # b.on_step(:what_a_level_is_required, use: [DfE::Wizard::Operations::Validate, ::Operations::ALevelOperation, DfE::Wizard::Operations::Persist])
       b.on_step(:remove_a_level_subject_confirmation, use: [DfE::Wizard::Operations::Validate, ::Operations::RemoveALevelSubject, DfE::Wizard::Operations::Persist])
       b.on_step(:consider_pending_a_level, use: [DfE::Wizard::Operations::Validate, ::Operations::ConsiderPendingALevel])
       b.on_step(:a_level_equivalencies, use: [DfE::Wizard::Operations::Validate, ::Operations::ALevelEquivalencies])
