@@ -59,6 +59,7 @@ class GiasSchool < ApplicationRecord
     free_schools: "35",
     free_special_schools: "36",
     british_schools_overseas: "37",
+    free_schools_alternative_provision: "38",
     free_schools_16_to_19: "39",
     university_technical_colleges: "40",
     studio_schools: "41",
