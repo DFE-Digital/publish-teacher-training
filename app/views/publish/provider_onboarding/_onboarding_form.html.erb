@@ -6,14 +6,12 @@
 <!-- Notification for already submitted form (new provider users) -->
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if flash[:info].blank? &&
-      @onboarding_request.errors.empty? &&
-      !(pending_for_public? || admin_user?) %>
-    <div class="govuk-inset-text govuk-inset-text--warning">
-      <strong><%= t(".already_submitted") %></strong>
-    </div>
-  <% end %>
-</div>
+    <% if show_already_submitted_notice? %>
+      <div class="govuk-inset-text govuk-inset-text--warning">
+        <strong><%= t(".already_submitted") %></strong>
+      </div>
+    <% end %>
+  </div>
 </div>
 <span class="govuk-caption-l"><%= t(".caption") %></span>
 <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
