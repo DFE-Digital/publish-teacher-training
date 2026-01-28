@@ -8,6 +8,7 @@ class ProvidersOnboardingFormRequestDecorator < Draper::Decorator
      object.address_line_2,
      object.address_line_3,
      object.town_or_city,
+     object.county,
      object.postcode]
       .compact_blank
       .join(join_on_separator)
