@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dfe/wizard/steps_processor/base"
-
 module Publish
   module Courses
     module ALevelRequirements
