@@ -8,7 +8,7 @@
   <div class="govuk-grid-column-two-thirds">
     <% if show_already_submitted_notice? %>
       <div class="govuk-inset-text govuk-inset-text--warning">
-        <strong><%= t(".already_submitted") %></strong>
+        <strong><%= t(".already_submitted_html", support_email: mail_to(t(".support_email"))) %></strong>
       </div>
     <% end %>
   </div>
