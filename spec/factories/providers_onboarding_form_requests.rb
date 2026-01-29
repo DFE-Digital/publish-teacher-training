@@ -38,5 +38,11 @@ FactoryBot.define do
     trait :rejected do
       status { "rejected" }
     end
+
+    trait :validate_provider_fields do
+      after(:build) do |record|
+        record.validate_provider_fields = true
+      end
+    end
   end
 end
