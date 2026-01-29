@@ -18,7 +18,7 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
   attr_accessor :validate_provider_fields
 
   # These fields need to be validated once the form details are submitted by the provider i.e. status changes to 'submitted'
-  with_options if: :validate_provider_fields do
+  with_options if: :run_provider_validations do
     validates :provider_name, presence: true
     validates :ukprn, ukprn_format: { allow_blank: false }
     validates :accredited_provider, inclusion: { in: [true, false] }
@@ -48,8 +48,8 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
 private
 
   # Determine if provider-related fields need to be validated
-  def validate_provider_fields?
-    submitted? || Activemodel::Type::Boolean.new.cast(@validate_provider_fields)
+  def run_provider_validations
+    submitted? || ActiveModel::Type::Boolean.new.cast(@validate_provider_fields)
   end
 
   # Custom validation to check if the support agent is an admin user
