@@ -17,7 +17,7 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
 
   attr_accessor :validate_provider_fields
 
-  # These fields need to be validated once the form details are submitted by the provider i.e. status changes to 'submitted'
+  # These fields need to be validated once the form details are submitted by the provider i.e. when the provider clicks 'Continue' on the form page or 'Submit' on the check answers page
   with_options if: :run_provider_validations do
     validates :provider_name, presence: true
     validates :ukprn, ukprn_format: { allow_blank: false }

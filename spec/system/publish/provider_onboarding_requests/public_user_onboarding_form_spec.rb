@@ -190,7 +190,8 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
   end
 
   def and_i_see_already_submitted_message
-    expect(page).to have_content("This form has already been submitted and can no longer be edited. Please contact the Publish support team if you need assistance.")
+    support_email = "becomingateacher@digital.education.gov.uk"
+    expect(page).to have_content("This form has already been submitted and can no longer be edited. If you need assistance, please contact the Publish support team at #{support_email}.")
     expect(page).to have_css(".govuk-inset-text.govuk-inset-text--warning")
   end
 
