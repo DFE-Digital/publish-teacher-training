@@ -12,13 +12,9 @@ module Publish
 
     # Handles the submission of the onboarding form by the provider
     def update
-      @onboarding_request.assign_attributes(onboarding_request_params)
-
-      # Only first-time public submissions should move to submitted
-      @onboarding_request.status = :submitted if pending_for_public?
-
-      # Save and redirect to submitted page or re-render the form with errors
-      if @onboarding_request.save
+      # Try to submit the form with the provided parameters and current user's admin status
+      # If successful, redirect to the submitted page; otherwise, re-render the form with errors
+      if @onboarding_request.submit(admin_user?, onboarding_request_params)
         redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
       else
         render :show

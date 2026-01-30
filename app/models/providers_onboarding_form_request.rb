@@ -36,6 +36,13 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     Rails.application.routes.url_helpers.publish_provider_onboarding_url(uuid: uuid)
   end
 
+  def submit(admin_user, parameters)
+    assign_attributes(parameters)
+    # If the current status is pending and the submitter is not an admin, change status to submitted and saves
+    self.status = :submitted if pending? && !admin_user
+    save
+  end
+
 private
 
   # Custom validation to check if the support agent is an admin user
