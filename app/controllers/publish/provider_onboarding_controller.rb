@@ -12,13 +12,9 @@ module Publish
 
     # Handles the submission of the onboarding form by the provider
     def update
-      @onboarding_request.assign_attributes(onboarding_request_params)
-
-      # Enable validation of provider-related fields even though status is not yet changed to 'submitted' (to ensure presence/format validations run on form page)
-      @onboarding_request.validate_provider_fields = true
-
-      # Save and redirect to submitted page or re-render the form with errors
-      if @onboarding_request.save
+      # Update the onboarding request with submitted form details and validate provider fields
+      # If successful, redirect to the check your answers page; otherwise, re-render the form with errors
+      if @onboarding_request.update_form_details(onboarding_request_params)
         redirect_to check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
       else
         render :show
@@ -28,13 +24,13 @@ module Publish
     def check_answers; end
 
     def confirm
-      # If the form is being submitted for the first time, update status to 'submitted'.
-      # Admin user edits keep the existing status.
-      if pending_for_public?
-        @onboarding_request.update!(status: "submitted")
+      # Submit the onboarding request and change its status to 'submitted' if valid (and not an admin user)
+      if @onboarding_request.submit(admin_user?)
+        redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
+      else
+        # if submission fails (e.g. validations), re-render the check your answers page with errors
+        render :check_answers
       end
-
-      redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
     end
 
     # Page displayed after successful submission of the onboarding form by the provider
@@ -45,6 +41,7 @@ module Publish
   private
 
     def set_onboarding_request
+      # Find the onboarding request by UUID and decorate it for use in views (ProvidersOnboardingFormRequestDecorator)
       @onboarding_request = ProvidersOnboardingFormRequest.find_by!(uuid: params[:uuid]).decorate
     end
 

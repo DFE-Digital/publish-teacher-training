@@ -15,6 +15,7 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     message: "Must be a valid Zendesk URL",
   }, allow_blank: true
 
+  # Virtual flag to trigger provider field validations during form updates
   attr_accessor :validate_provider_fields
 
   # These fields need to be validated once the form details are submitted by the provider i.e. when the provider clicks 'Continue' on the form page or 'Submit' on the check answers page
@@ -38,16 +39,22 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     Rails.application.routes.url_helpers.publish_provider_onboarding_url(uuid: uuid)
   end
 
-  def submit(admin_user, parameters)
-    assign_attributes(parameters)
-    # If the current status is pending and the submitter is not an admin, change status to submitted and saves
+  # Update the form details with the provided params and trigger provider field validations
+  def update_form_details(params)
+    assign_attributes(params)
+    self.validate_provider_fields = true
+    save
+  end
+
+  # Submit the onboarding form request and change its status to 'submitted' if valid and not an admin user
+  def submit(admin_user)
     self.status = :submitted if pending? && !admin_user
     save
   end
 
 private
 
-  # Determine if provider-related fields need to be validated
+  # Determine if provider-related fields need to be validated based on the submission status or the validation flag
   def run_provider_validations
     submitted? || ActiveModel::Type::Boolean.new.cast(@validate_provider_fields)
   end
