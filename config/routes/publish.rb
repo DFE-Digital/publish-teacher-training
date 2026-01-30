@@ -180,10 +180,12 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/age_range", on: :member, to: "courses/age_range#edit"
         put "/age_range", on: :member, to: "courses/age_range#update"
 
-        get "/a-levels-or-equivalency-tests/what-a-level-is-required(/:uuid)", to: "courses/a_level_requirements/what_a_level_is_required#new", as: :a_levels_what_a_level_is_required
+        get "/a-levels-or-equivalency-tests/what-a-level-is-required", to: "courses/a_level_requirements/what_a_level_is_required#new", as: :a_levels_what_a_level_is_required
+        get "/a-levels-or-equivalency-tests/what-a-level-is-required/:uuid/edit", to: "courses/a_level_requirements/what_a_level_is_required#edit", as: :edit_a_levels_what_a_level_is_required
         post "/a-levels-or-equivalency-tests/what-a-level-is-required", to: "courses/a_level_requirements/what_a_level_is_required#create"
         get "/a-levels-or-equivalency-tests/add-a-level-to-list", to: "courses/a_level_requirements/add_a_level_to_a_list#new", as: :a_levels_add_a_level_to_a_list
         post "/a-levels-or-equivalency-tests/add-a-level-to-list", to: "courses/a_level_requirements/add_a_level_to_a_list#create"
+        post "/a-levels-or-equivalency-tests/what-a-level-is-required/:uuid", to: "courses/a_level_requirements/what_a_level_is_required#create"
         get "/a-levels-or-equivalency-tests/remove-a-level-subject-confirmation/:uuid", to: "courses/a_level_requirements/remove_a_level_subject_confirmation#new", as: :a_levels_remove_a_level_subject_confirmation
         delete "/a-levels-or-equivalency-tests/remove-a-level-subject-confirmation/:uuid", to: "courses/a_level_requirements/remove_a_level_subject_confirmation#destroy"
         get "/a-levels-or-equivalency-tests/consider-pending-a-level", to: "courses/a_level_requirements/consider_pending_a_level#new", as: :a_levels_consider_pending_a_level
