@@ -3,24 +3,10 @@
 require "rails_helper"
 
 RSpec.describe ALevelSteps::ALevelEquivalencies do
-  subject(:wizard_step) { described_class.new(wizard:) }
-
-  let(:provider) { create(:provider) }
-  let(:course) { create(:course, :with_teacher_degree_apprenticeship, provider:) }
-  let(:wizard) do
-    ALevelsWizard.new(
-      current_step: :a_level_equivalencies,
-      provider:,
-      course:,
-      step_params: ActionController::Parameters.new(
-        consider_pending_a_level: ActionController::Parameters.new(step_params),
-      ),
-    )
-  end
-  let(:step_params) { {} }
+  subject(:wizard_step) { described_class.new }
 
   describe "#valid?" do
-    context "when pending_a_level is present" do
+    context "when accept_a_level_equivalency is present" do
       it "is valid" do
         wizard_step.accept_a_level_equivalency = "yes"
         expect(wizard_step).to be_valid
@@ -30,8 +16,9 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
       end
     end
 
-    context "when pending_a_level is not present" do
+    context "when accept_a_level_equivalency is not present" do
       it "is not valid" do
+        wizard_step.accept_a_level_equivalency = nil
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors.added?(:accept_a_level_equivalency, :blank)).to be true
       end
@@ -68,10 +55,6 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
     end
 
     context "when additional_a_level_equivalencies is too long and no equivalencies" do
-      let(:excess_words) { 5 }
-      let(:word_limit) { 250 }
-      let(:long_text) { "word " * (word_limit + excess_words) }
-
       it "does not validate max words" do
         wizard_step.accept_a_level_equivalency = "no"
         wizard_step.additional_a_level_equivalencies = "word " * 500
@@ -86,9 +69,15 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
     end
   end
 
-  describe "#next_step" do
-    it "returns the correct next step" do
-      expect(wizard_step.next_step).to eq(:exit)
+  describe "#accept_a_level_equivalency?" do
+    it "returns true when accept_a_level_equivalency is 'yes'" do
+      wizard_step.accept_a_level_equivalency = "yes"
+      expect(wizard_step.accept_a_level_equivalency?).to be true
+    end
+
+    it "returns false when accept_a_level_equivalency is 'no'" do
+      wizard_step.accept_a_level_equivalency = "no"
+      expect(wizard_step.accept_a_level_equivalency?).to be false
     end
   end
 end
