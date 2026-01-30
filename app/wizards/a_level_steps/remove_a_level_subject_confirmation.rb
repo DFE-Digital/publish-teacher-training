@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 module ALevelSteps
-  class RemoveALevelSubjectConfirmation < DfE::Wizard::Step
-    delegate :course, :exit_path, to: :wizard
-    attr_accessor :uuid, :confirmation, :other_subject
-    attr_writer :subject
+  class RemoveALevelSubjectConfirmation
+    include DfE::Wizard::Step
+
+    attribute :uuid, :string
+    attribute :confirmation, :string
 
     validates :uuid, presence: true
 
@@ -13,36 +14,13 @@ module ALevelSteps
     end
 
     def self.permitted_params
-      %i[uuid subject other_subject confirmation]
+      %i[uuid confirmation]
     end
 
     def subject
-      ALevelSubjectRequirementRowComponent.new(
-        subject: @subject,
-        other_subject:,
-      ).subject_name
-    end
+      hash = wizard.state_store.repository.record.find_a_level_subject_requirement!(uuid)
 
-    def next_step
-      if deletion_confirmed? && no_a_level_subject_requirements?
-        :exit
-      else
-        :add_a_level_to_a_list
-      end
-    end
-
-    def deletion_confirmed?
-      confirmation == "yes"
-    end
-
-    def no_a_level_subject_requirements?
-      a_level_subject_requirements.empty?
-    end
-
-  private
-
-    def a_level_subject_requirements
-      Array(course.a_level_subject_requirements)
+      I18n.t("helpers.label.what_a_level_is_required.subject_options.#{hash.fetch('subject', nil)}")
     end
   end
 end
