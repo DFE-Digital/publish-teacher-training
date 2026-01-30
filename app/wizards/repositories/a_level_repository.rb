@@ -4,6 +4,7 @@ module Repositories
 
     VIRTUAL_ATTRIBUTES = %i[
       add_another_a_level
+      confirmation
     ].freeze
 
     def transform_for_read(step_data)
