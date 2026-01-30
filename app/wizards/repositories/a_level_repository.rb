@@ -11,6 +11,8 @@ module Repositories
       step_data.merge!(@virtual_attributes || {}).deep_symbolize_keys
 
       step_data[:pending_a_level] = boolean_to_string(step_data[:accept_pending_a_level])
+      step_data[:accept_a_level_equivalency] = boolean_to_string(step_data[:accept_a_level_equivalency])
+
       step_data.deep_symbolize_keys
     end
 
@@ -23,6 +25,12 @@ module Repositories
         model_data.delete(:pending_a_level)
       else
         model_data[:accept_pending_a_level] = string_to_boolean(model_data.delete(:pending_a_level))
+      end
+
+      if model_data[:accept_a_level_equivalency].nil?
+        model_data.delete(:accept_a_level_equivalency)
+      else
+        model_data[:accept_a_level_equivalency] = string_to_boolean(model_data[:accept_a_level_equivalency])
       end
 
       model_data
