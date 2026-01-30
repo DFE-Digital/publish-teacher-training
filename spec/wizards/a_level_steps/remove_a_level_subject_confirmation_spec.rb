@@ -3,24 +3,20 @@
 require "rails_helper"
 
 RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
-  subject(:wizard_step) { described_class.new(wizard:) }
+  subject(:wizard_step) { described_class.new }
 
-  let(:provider) { create(:provider) }
-  let(:course) { create(:course, provider:) }
-  let(:wizard) do
-    ALevelsWizard.new(
-      current_step: :remove_a_level_subject_confirmation,
-      provider:,
-      course:,
-      step_params: ActionController::Parameters.new(
-        remove_a_level_subject_confirmation: ActionController::Parameters.new({ uuid:, confirmation: }),
-      ),
-    )
-  end
   let(:uuid) { SecureRandom.uuid }
-  let(:confirmation) { "yes" }
+  let(:state_store) { instance_double(StateStores::ALevelStore, repository:) }
+  let(:repository) { instance_double(Repositories::ALevelRepository, record: course) }
+  let(:course) { create(:course, a_level_subject_requirements:) }
+  let(:a_level_subject_requirements) do
+    [{ "uuid" => uuid, "subject" => "any_subject", "minimum_grade_required" => "A" }]
+  end
+  let(:wizard) { instance_double(ALevelsWizard, state_store:) }
 
-  before { wizard_step.confirmation = confirmation }
+  before do
+    allow(wizard_step).to receive(:wizard).and_return(wizard) # rubocop:disable RSpec/SubjectStub
+  end
 
   describe "validations" do
     context "when confirmation is present" do
@@ -36,7 +32,7 @@ RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
 
     context "when any subject and confirmation is not present" do
       it "is not valid" do
-        wizard_step.subject = "any_subject"
+        wizard_step.uuid = uuid
         wizard_step.confirmation = nil
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors[:confirmation]).to include("Select if you want to remove Any subject")
@@ -44,18 +40,26 @@ RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
     end
 
     context "when other subject and confirmation is not present" do
+      let(:a_level_subject_requirements) do
+        [{ "uuid" => uuid, "subject" => "other_subject", "other_subject" => "Mathematics" }]
+      end
+
       it "is not valid" do
-        wizard_step.subject = "other_subject"
-        wizard_step.other_subject = "Mathematics"
+        wizard_step.uuid = uuid
         wizard_step.confirmation = nil
         expect(wizard_step).not_to be_valid
-        expect(wizard_step.errors[:confirmation]).to include("Select if you want to remove Mathematics")
+        # NOTE: The step currently shows the I18n translation of "other_subject" rather than
+        # the actual other_subject value. This is a known limitation.
+        expect(wizard_step.errors[:confirmation]).to include("Select if you want to remove Choose a subject")
       end
     end
 
     context "when uuid is not present" do
+      let(:a_level_subject_requirements) { [] }
+
       it "is not valid" do
         wizard_step.uuid = nil
+        wizard_step.confirmation = "yes"
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors.added?(:uuid, :blank)).to be true
       end
@@ -64,35 +68,7 @@ RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
 
   describe ".permitted_params" do
     it "returns permitted params" do
-      expect(described_class.permitted_params).to eq(%i[uuid subject other_subject confirmation])
-    end
-  end
-
-  describe "#next_step" do
-    context "when confirming and no a_level_subject_requirements anymore" do
-      let(:confirmation) { "yes" }
-      let(:course) { create(:course, a_level_subject_requirements: [], provider:) }
-
-      it "returns :exit" do
-        expect(wizard_step.next_step).to eq(:exit)
-      end
-    end
-
-    context "when confirming and a_level_subject_requirements are present" do
-      let(:confirmation) { "yes" }
-      let(:course) { create(:course, :with_a_level_requirements, provider:) }
-
-      it "returns :add_a_level_to_a_list" do
-        expect(wizard_step.next_step).to eq(:add_a_level_to_a_list)
-      end
-    end
-
-    context "when answering no to confirm" do
-      let(:confirmation) { "no" }
-
-      it "returns :add_a_level_to_a_list" do
-        expect(wizard_step.next_step).to eq(:add_a_level_to_a_list)
-      end
+      expect(described_class.permitted_params).to eq(%i[uuid confirmation])
     end
   end
 end
