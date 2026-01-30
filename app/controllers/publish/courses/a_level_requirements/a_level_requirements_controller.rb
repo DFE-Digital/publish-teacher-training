@@ -5,27 +5,22 @@ module Publish
     module ALevelRequirements
       class ALevelRequirementsController < ApplicationController
         before_action :assign_course, :verify_teacher_degree_apprenticeship_course
+        before_action :assign_wizard
+
+        helper_method def current_step
+          @wizard.current_step
+        end
+
+        helper_method def current_step_name
+          controller_name.to_sym
+        end
 
         def new
-          @wizard = ALevelsWizard.new(
-            current_step:,
-            provider: @provider,
-            course: @course,
-            step_params:,
-          )
-
-          @wizard.valid_step? if params[:display_errors].present?
+          @wizard.current_step_valid? if params[:display_errors].present?
         end
 
         def create
-          @wizard = ALevelsWizard.new(
-            current_step:,
-            provider: @provider,
-            course: @course,
-            step_params:,
-          )
-
-          if @wizard.save
+          if @wizard.save_current_step
             add_flash_message
             redirect_to @wizard.next_step_path
           else
@@ -34,6 +29,26 @@ module Publish
         end
 
       private
+
+        def state_store
+          StateStores::ALevelStore.new(
+            repository: Repositories::ALevelRepository.new(
+              record: @course,
+            ),
+          )
+        end
+
+        def assign_wizard
+          @wizard = ALevelsWizard.new(
+            current_step: current_step_name,
+            current_step_params: step_params,
+            state_store:,
+          ).tap do |wizard|
+            wizard.recruitment_cycle_year = params[:recruitment_cycle_year]
+            wizard.provider_code = params[:provider_code]
+            wizard.course_code = params[:course_code]
+          end
+        end
 
         def add_flash_message; end
 
@@ -52,8 +67,8 @@ module Publish
           @course_decorator = CourseDecorator.new(@course)
         end
 
-        def current_step
-          controller_name.to_sym
+        def step_params
+          params
         end
       end
     end

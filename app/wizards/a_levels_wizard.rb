@@ -3,6 +3,8 @@
 class ALevelsWizard
   include DfE::Wizard
 
+  attr_accessor :recruitment_cycle_year, :provider_code, :course_code
+
   delegate :another_a_level_needed?, to: :state_store
 
   def steps_processor
