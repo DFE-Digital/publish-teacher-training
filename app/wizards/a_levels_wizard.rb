@@ -3,6 +3,8 @@
 class ALevelsWizard
   include DfE::Wizard
 
+  delegate :another_a_level_needed?, to: :state_store
+
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
       graph.conditional_root(potential_root: %i[add_a_level_to_a_list what_a_level_is_required]) do |state_store|
