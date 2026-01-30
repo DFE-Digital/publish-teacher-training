@@ -7,15 +7,7 @@ module Publish
         before_action :load_a_level_subject_requirement
 
         def destroy
-          @wizard = ALevelsWizard.new(
-            current_step:,
-            provider: @provider,
-            course: @course,
-            step_params:,
-          )
-
-          if @wizard.valid_step?
-            @wizard.destroy
+          if @wizard.save_current_step
             redirect_to @wizard.next_step_path
           else
             render :new
@@ -23,9 +15,20 @@ module Publish
         end
 
         def step_params
-          params[current_step] ||= ActionController::Parameters.new
-          params[current_step].merge!(@a_level_subject_requirement.slice(:uuid, :subject, :other_subject))
+          params[current_step_name] ||= ActionController::Parameters.new
+          params[current_step_name].merge!(params.permit!.to_h.slice(:uuid))
           params
+        end
+
+      private
+
+        def state_store
+          StateStores::ALevelStore.new(
+            repository: Repositories::ALevelSubjectRemovalRepository.new(
+              record: @course,
+              uuid: params[:uuid],
+            ),
+          )
         end
       end
     end
