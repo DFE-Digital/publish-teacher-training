@@ -12,6 +12,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 require "capybara/rspec"
 require "capybara/rails"
+require "dfe/wizard/test/r_spec_matchers"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Pull in all the files in spec/support automatically.
@@ -68,6 +69,7 @@ RSpec.configure do |config|
   config.include ActiveJob::TestHelper, type: :request
   config.include ActiveSupport::Testing::TimeHelpers
   config.include SystemRetryHelper, type: :system
+  config.include DfE::Wizard::Test::RSpecMatchers, type: :wizard
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   config.before(:suite) do
