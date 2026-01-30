@@ -59,12 +59,14 @@ module Publish
         def load_a_level_subject_requirement
           return if params[:uuid].blank?
 
-          @a_level_subject_requirement = @course.find_a_level_subject_requirement!(params[:uuid])
+          assign_course
+
+          @subject_requirement = @course.find_a_level_subject_requirement!(params[:uuid])
         end
 
         def assign_course
-          @course = provider.courses.find_by!(course_code: params[:course_code])
-          @course_decorator = CourseDecorator.new(@course)
+          @course ||= provider.courses.find_by!(course_code: params[:course_code])
+          @course_decorator ||= CourseDecorator.new(@course) # rubocop:disable Naming/MemoizedInstanceVariableName
         end
 
         def step_params
