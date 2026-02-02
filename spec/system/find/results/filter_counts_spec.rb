@@ -118,7 +118,7 @@ RSpec.describe "Filter counts on search results", :js, service: :find do
   end
 
   def and_i_filter_by_visa_sponsorship
-    page.find("h3", text: "Filter by\nVisa Sponsorship").click
+    page.find("h3", text: "Filter by\nVisa sponsorship").click
     check "Only show courses with visa sponsorship", visible: :all
     and_i_apply_the_filters
   end
@@ -174,7 +174,7 @@ RSpec.describe "Filter counts on search results", :js, service: :find do
   end
 
   def then_i_see_the_visa_filter_count
-    within("details", text: "Visa Sponsorship") do
+    within("details", text: "Visa sponsorship") do
       expect(page).to have_content("1 selected")
     end
   end

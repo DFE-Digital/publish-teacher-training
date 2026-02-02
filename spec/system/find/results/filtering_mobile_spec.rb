@@ -143,11 +143,11 @@ RSpec.describe "Search Results on small viewport", :js, service: :find do
   end
 
   def and_i_cannot_see_the_filter_disclosures
-    expect(page).to have_no_content("Filter by\nVisa Sponsorship")
+    expect(page).to have_no_content("Filter by\nVisa sponsorship")
   end
 
   def then_i_can_see_the_filter_disclosures
-    expect(page).to have_content("Filter by\nVisa Sponsorship")
+    expect(page).to have_content("Filter by\nVisa sponsorship")
   end
 
   def when_i_click_the_filter_and_sort_button
@@ -191,7 +191,7 @@ RSpec.describe "Search Results on small viewport", :js, service: :find do
   end
 
   def and_i_filter_by_courses_that_sponsor_visa
-    page.find("h3", text: "Filter by\nVisa Sponsorship").click
+    page.find("h3", text: "Filter by\nVisa sponsorship").click
     check "Only show courses with visa sponsorship", visible: :all
     and_i_apply_the_filters
   end

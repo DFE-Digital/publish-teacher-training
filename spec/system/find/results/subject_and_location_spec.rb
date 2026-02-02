@@ -135,7 +135,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def when_i_filter_by_courses_that_sponsor_visa
-    page.find("h3", text: "Filter by\nVisa Sponsorship").click
+    page.find("h3", text: "Filter by\nVisa sponsorship").click
     check "Only show courses with visa sponsorship", visible: :all
   end
 
