@@ -81,6 +81,16 @@ module Find
     end
 
     def safe_results_return_to_from_referer
+      # When the results-page "Save" button is clicked while unauthenticated, the request comes in
+      # as JSON (fetch). We respond with a redirect URL that the browser follows.
+      #
+      # This helper derives a safe `return_to` from the HTTP Referer so users can be sent back to
+      # the same results page after signing in.
+      #
+      # Security notes:
+      # - We only allow same-host URLs to avoid open redirect issues.
+      # - We only allow paths under `/results` to avoid redirecting to arbitrary internal pages.
+      # - Invalid/absent referers simply result in no `return_to` being used.
       return nil if request.referer.blank?
 
       uri = URI.parse(request.referer)
