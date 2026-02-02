@@ -1,0 +1,17 @@
+digraph A_levels_wizard {
+  rankdir=LR;
+  bgcolor="#ffffff";
+  node [shape=box, style="rounded,filled", fillcolor="#e8f4f8", fontname="Helvetica"];
+  edge [fontname="Helvetica", fontsize=10];
+  what_a_level_is_required [label="What A Level Is Required"];
+  add_a_level_to_a_list [label="Add A Level To A List"];
+  remove_a_level_subject_confirmation [label="Remove A Level Subject Confirmation"];
+  consider_pending_a_level [label="Consider Pending A Level"];
+  a_level_equivalencies [label="A Level Equivalencies"];
+  what_a_level_is_required -> add_a_level_to_a_list [style=solid];
+  remove_a_level_subject_confirmation -> add_a_level_to_a_list [style=solid];
+  consider_pending_a_level -> a_level_equivalencies [style=solid];
+  a_level_equivalencies -> course_edit [style=solid];
+  add_a_level_to_a_list -> what_a_level_is_required [label="condition\nyes", style=dashed, color=blue];
+  add_a_level_to_a_list -> consider_pending_a_level [label="condition\nno", style=dashed, color=blue];
+}
