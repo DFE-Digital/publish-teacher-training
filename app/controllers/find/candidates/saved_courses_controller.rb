@@ -17,7 +17,7 @@ module Find
       end
 
       def after_auth
-        intent = consume_save_course_intent
+        intent = extract_save_course_intent
         return redirect_to(find_root_path) if intent[:course_id].blank?
         return redirect_to(find_root_path, flash: { error: save_failed_flash }) if intent[:invalid_return_to]
 
@@ -147,7 +147,7 @@ module Find
         { message: t("find.candidates.saved_courses.after_auth.save_failed") }
       end
 
-      def consume_save_course_intent
+      def extract_save_course_intent
         course_id = session.delete("save_course_id_after_authenticating")
         invalid_return_to = session.delete("save_course_return_to_invalid_after_authenticating").present?
         return_to = safe_results_return_to(session.delete("save_course_return_to_after_authenticating"))
