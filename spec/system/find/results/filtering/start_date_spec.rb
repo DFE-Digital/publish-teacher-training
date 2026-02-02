@@ -134,7 +134,7 @@ RSpec.describe "when filtering by start date", :js, service: :find do
   end
 
   def when_i_filter_by_all_start_date_options
-    page.find("h3", text: "Filter by\nStart Date").click
+    page.find("h3", text: "Filter by\nStart date").click
     check "January to August #{current_recruitment_cycle_year}", visible: :all
     check "September #{current_recruitment_cycle_year}", visible: :all
     check "October #{current_recruitment_cycle_year} to July #{next_recruitment_cycle_year}", visible: :all
@@ -159,17 +159,17 @@ RSpec.describe "when filtering by start date", :js, service: :find do
   end
 
   def when_i_filter_by_january_to_august_start_date
-    page.find("h3", text: "Filter by\nStart Date").click
+    page.find("h3", text: "Filter by\nStart date").click
     check "January to August #{current_recruitment_cycle_year}", visible: :all
   end
 
   def when_i_filter_by_october_to_july_start_date
-    page.find("h3", text: "Filter by\nStart Date").click
+    page.find("h3", text: "Filter by\nStart date").click
     check "October #{current_recruitment_cycle_year} to July #{next_recruitment_cycle_year}", visible: :all
   end
 
   def when_i_filter_by_september_start_date
-    page.find("h3", text: "Filter by\nStart Date").click
+    page.find("h3", text: "Filter by\nStart date").click
     check "September #{current_recruitment_cycle_year}", visible: :all
   end
 
