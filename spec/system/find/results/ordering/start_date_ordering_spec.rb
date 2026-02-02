@@ -96,10 +96,14 @@ RSpec.describe "Search results ordering by start date", :js, service: :find do
   end
 
   def then_the_start_date_is_not_shown
-    expect(page).to have_no_content("Start date")
+    within(".app-search-results") do
+      expect(page).to have_no_content("Start date")
+    end
   end
 
   def then_the_start_date_is_shown_on_each_course
-    expect(page).to have_content("Start date", count: 3)
+    within(".app-search-results") do
+      expect(page).to have_content("Start date", count: 3)
+    end
   end
 end
