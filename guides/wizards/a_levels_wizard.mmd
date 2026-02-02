@@ -1,0 +1,12 @@
+flowchart TD
+  what_a_level_is_required["What A Level Is Required"]
+  add_a_level_to_a_list["Add A Level To A List"]
+  remove_a_level_subject_confirmation["Remove A Level Subject Confirmation"]
+  consider_pending_a_level["Consider Pending A Level"]
+  a_level_equivalencies["A Level Equivalencies"]
+  what_a_level_is_required --> add_a_level_to_a_list
+  remove_a_level_subject_confirmation --> add_a_level_to_a_list
+  consider_pending_a_level --> a_level_equivalencies
+  a_level_equivalencies --> course_edit
+  add_a_level_to_a_list -->|another_a_level_needed?: ✓ yes| what_a_level_is_required
+  add_a_level_to_a_list -->|another_a_level_needed?: ✗ no| consider_pending_a_level
