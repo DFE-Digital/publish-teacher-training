@@ -56,7 +56,7 @@ module Find
           if @subject.language_subject?
             @subject.subject_name
           else
-            @subject.subject_name.downcase
+            @subject.subject_name.downcase.gsub("english", "English")
           end
         end
 

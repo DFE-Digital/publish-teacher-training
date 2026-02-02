@@ -101,6 +101,15 @@ RSpec.describe Find::Courses::ResultsPageTitle::View, type: :component do
       end
     end
 
+    context "when subject is Primary with English" do
+      let(:subjects) { %w[01] }
+      let(:courses_count) { 10 }
+
+      it "renders subject with lowercase primary and uppercase English" do
+        expect(result).to eq("10 primary with English courses")
+      end
+    end
+
     context "when many results" do
       let(:courses_count) { 10 }
 
