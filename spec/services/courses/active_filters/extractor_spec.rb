@@ -1231,6 +1231,19 @@ RSpec.describe Courses::ActiveFilters::Extractor do
             ],
           )
         end
+
+        it "removes subject name when name is not a subject" do
+          search_params = {
+            subject_name: "Subject that does not exist",
+          }
+          search_form = Courses::SearchForm.new(search_params)
+          extractor = described_class.new(
+            search_params: search_params,
+            search_form: search_form,
+          )
+          active_filters = extractor.call
+          expect(active_filters).to eq([])
+        end
       end
     end
   end
