@@ -63,7 +63,7 @@ en:
             primary: (ages 3 to 11)
             further_education: (ages 16 and over)
             secondary: (ages 11 to 18)
-            degree_grade: Select your degree (or expected degree)
+            degree_grade: Select your degree (or expected grade)
           can_sponsor_visa_html: Visa sponsorship<span class="govuk-visually-hidden"> filter</span>
           study_type_html: Study type<span class="govuk-visually-hidden"> filter</span>
           qualifications_html: Qualification awarded<span class="govuk-visually-hidden"> filter</span>

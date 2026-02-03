@@ -288,7 +288,7 @@
         <% end %>
       </summary>
       <div class="app-c-filter-section__content">
-        <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t(".minimum_degree_required_html"), hidden: true }, hint: { text: t(".hint.degree_grade"), class: "govuk-!-font-size-16", hidden: true }, class: "govuk-radios--small", multiple: false do %>
+        <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t(".minimum_degree_required_html"), hidden: true }, hint: { text: t(".hint.degree_grade") }, class: "govuk-radios--small", multiple: false do %>
           <% form.object.minimum_degree_required_options.each do |minimum_degree_required_option| %>
             <%= form.govuk_radio_button :minimum_degree_required, minimum_degree_required_option, label: { text: t(".minimum_degree_required_options.#{minimum_degree_required_option}") }, form: form_id %>
           <% end %>
