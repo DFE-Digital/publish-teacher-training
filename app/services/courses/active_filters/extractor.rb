@@ -149,6 +149,7 @@ module Courses
       def value_resolvers
         {
           subjects: ->(form) { form.all_subjects.map(&:value) },
+          subject_name: ->(form) { form.all_subjects.map(&:value) },
           subject_code: ->(form) { form.all_subjects.map(&:value) },
           provider_code: ->(form) { form.providers_list.map(&:code) },
           funding: ->(form) { form.funding_options },
