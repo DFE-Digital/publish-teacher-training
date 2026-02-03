@@ -5,11 +5,16 @@
 <span class="govuk-caption-l"><%= t(".caption") %></span>
 <h1 class="govuk-heading-l"><%= t(".provider_details", form_name: @onboarding_request.form_name) %></h1>
 <!-- Onboarding Details -->
-<h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".onboarding_details") %></h2>
-<%= govuk_summary_list(actions: false) do |summary_list| %>
+<%= govuk_summary_list do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { t(".form_link") } %>
-    <% row.with_value { govuk_link_to(t(".view_provider_form"), publish_provider_onboarding_path(@onboarding_request.uuid)) } %>
+    <% row.with_value do %>
+      <%= govuk_link_to(
+            t(".view_provider_form"),
+            publish_provider_onboarding_path(@onboarding_request.uuid)
+          ) %>
+    <% end %>
+    <% row.with_action(text: "Copy link", href: "#", classes: "copy-btn", html_attributes: { hidden: true, data: { copy_text: publish_provider_onboarding_url(@onboarding_request.uuid) } }) %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { t(".zendesk_link") } %>

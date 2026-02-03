@@ -8,6 +8,7 @@ import FilterToggle from './filters'
 import { Application } from '@hotwired/stimulus'
 import InputPreviewController from './courses/input_preview_controller'
 import SelectAllCheckboxesController from './controllers/select_all_checkboxes_controller'
+import "./copy_link";
 
 window.jQuery = jQuery
 window.$ = jQuery
