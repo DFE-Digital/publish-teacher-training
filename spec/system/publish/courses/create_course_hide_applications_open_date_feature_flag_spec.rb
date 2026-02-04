@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Adding a course with hide_applications_open_date active" do
+RSpec.describe "Adding a course with hide_applications_open_date active" do
   before do
     FeatureFlag.activate(:hide_applications_open_date)
   end

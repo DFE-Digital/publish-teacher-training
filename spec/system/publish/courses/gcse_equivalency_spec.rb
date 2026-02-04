@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "GCSE equivalency requirements" do
+RSpec.describe "GCSE equivalency requirements" do
   scenario "a provider completes the gcse equivalency requirements section" do
     given_i_am_authenticated(user: user_with_courses)
     when_i_visit_the_course_publish_courses_gcse_requirements_page(course:)

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Deleting courses" do
+RSpec.describe "Deleting courses" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
