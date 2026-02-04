@@ -1,23 +1,7 @@
 <% content_for :page_title, title_with_error_prefix(t("course.#{current_step.model_name.i18n_key}.heading"), current_step.errors && current_step.errors.any?) %>
 
 <% content_for :before_content do %>
-  <% if current_step.maximum_number_of_a_level_subjects? %>
-    <%= govuk_back_link_to(
-        publish_provider_recruitment_cycle_course_path(
-          @provider.provider_code,
-          @provider.recruitment_cycle_year,
-          @course.course_code,
-        ),
-      ) %>
-  <% else %>
-    <%= govuk_back_link_to(
-        publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
-          @provider.provider_code,
-          @provider.recruitment_cycle_year,
-          @course.course_code,
-        ),
-      ) %>
-  <% end %>
+  <%= govuk_back_link_to(@wizard.previous_step_path(fallback: @wizard.resolve_step_path(:course_edit))) %>
 <% end %>
 
 <div class="govuk-grid-row">
