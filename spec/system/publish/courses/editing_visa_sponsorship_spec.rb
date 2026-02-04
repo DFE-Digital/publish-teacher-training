@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing visa sponsorship" do
+RSpec.describe "Editing visa sponsorship" do
   context "fee paying course" do
     scenario "i can update the student visa" do
       and_i_am_authenticated_as_a_lead_school_provider_user

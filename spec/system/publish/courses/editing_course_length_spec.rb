@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing course length" do
+RSpec.describe "Editing course length" do
   scenario "I enter invalid data" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_without_a_length_i_want_to_edit

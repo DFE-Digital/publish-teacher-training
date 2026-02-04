@@ -2,13 +2,13 @@
 
 require "rails_helper"
 
-feature "Editing fees and financial support section, copying content from another course" do
-  scenario "source course has fees and financial support data to copy" do
+RSpec.describe "Editing subject requirements section, copying content from another course" do
+  scenario "source course has gces requirements data to copy" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     and_there_is_a_course_with_data_i_want_to_copy
 
-    when_i_visit_the_fees_and_financial_support_edit_page
+    when_i_visit_the_subject_requirements_edit_page
     and_i_select_the_other_course_from_the_copy_content_dropdown
 
     then_i_see_the_copied_course_data
@@ -21,8 +21,8 @@ feature "Editing fees and financial support section, copying content from anothe
     and_there_is_a_course_i_want_to_edit
     and_there_is_a_course_with_data_i_want_to_copy
 
-    when_i_visit_the_fees_and_financial_support_edit_page
-    when_i_submit_with_too_much_data
+    when_i_visit_the_subject_requirements_edit_page
+    when_i_submit_without_data
     then_i_can_still_copy_content_from_another_course
   end
 
@@ -36,9 +36,8 @@ private
     given_a_course_exists(:secondary, additional_degree_subject_requirements: nil, degree_subject_requirements: nil)
   end
 
-  def when_i_submit_with_too_much_data
-    fill_in "When are the fees due? Is there a payment schedule? (optional)", with: "a " * 51
-    click_on "Update fees and financial support"
+  def when_i_submit_without_data
+    click_on "Update degree requirements"
   end
 
   def then_i_can_still_copy_content_from_another_course
@@ -50,10 +49,10 @@ private
 
   def and_there_is_a_course_with_data_i_want_to_copy
     @copied_course ||= create(
-      :course,
-      :secondary,
-      :published,
+      :course, :secondary,
       provider: current_user.providers.first,
+      additional_degree_subject_requirements: true,
+      degree_subject_requirements: "Some degree requirements"
     )
   end
 
@@ -71,26 +70,23 @@ private
   def and_i_see_the_warning_that_changes_are_not_saved
     expect(page).to have_content "Your changes are not yet saved"
     expect(page).to have_content "We have copied these fields from #{copied_course_name_and_code}:"
-    expect(page).to have_link "When are the fees due?"
-    expect(page).to have_link "Are there any additional fees or costs?"
-    expect(page).to have_link "Does your organisation offer any financial support?"
+    expect(page).to have_link "Additional degree subject requirements"
+    expect(page).to have_link "Degree subject requirements"
     expect(page).to have_content "Please check them and make your changes before saving"
   end
 
   def and_links_in_warning_match_input_ids
-    expect(find_link("When are the fees due?")[:href].remove("#")).to eq(find_field("When are the fees due? Is there a payment schedule? (optional)")[:id])
-    expect(find_link("Are there any additional fees or costs?")[:href].remove("#")).to eq(find_field("Are there any additional fees or costs? (optional)")[:id])
-    expect(find_link("Does your organisation offer any financial support?")[:href].remove("#")).to eq(find_field("Does your organisation offer any financial support? (optional)")[:id])
+    expect(find_link("Additional degree subject requirements")[:href].remove("#")).to eq(find_field("No")[:id])
+    expect(find_link("Degree subject requirements")[:href].remove("#")).to eq(find_field("Degree subject requirements")[:id])
   end
 
   def then_i_see_the_copied_course_data
-    expect(find_field("When are the fees due? Is there a payment schedule? (optional)").value).to eq @copied_course.enrichment_attribute("fee_schedule")
-    expect(find_field("Are there any additional fees or costs? (optional)").value).to eq @copied_course.enrichment_attribute("additional_fees")
-    expect(find_field("Does your organisation offer any financial support? (optional)").value).to eq @copied_course.enrichment_attribute("financial_support")
+    expect(find_field("Yes")).to be_checked
+    expect(find_field("Degree subject requirements").value).to eq "Some degree requirements"
   end
 
-  def when_i_visit_the_fees_and_financial_support_edit_page
-    visit fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+  def when_i_visit_the_subject_requirements_edit_page
+    visit degrees_subject_requirements_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
       course.course_code,

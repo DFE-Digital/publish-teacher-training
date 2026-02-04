@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing school placements section, copying content from another course" do
+RSpec.describe "Editing school placements section, copying content from another course" do
   scenario "source course has both placement_school_activities and support_and_mentorship fields" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit

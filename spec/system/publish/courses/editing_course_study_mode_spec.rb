@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing course study mode" do
+RSpec.describe "Editing course study mode" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

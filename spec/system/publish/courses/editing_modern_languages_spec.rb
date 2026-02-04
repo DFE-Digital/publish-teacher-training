@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "selecting a subject" do
+RSpec.describe "selecting a subject" do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_secondary_course_i_want_to_edit

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing GCSE requirements section, copying content from another course" do
+RSpec.describe "Editing GCSE requirements section, copying content from another course" do
   scenario "source course has gces requirements data to copy" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
