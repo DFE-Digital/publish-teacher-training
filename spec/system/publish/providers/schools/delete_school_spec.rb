@@ -3,7 +3,7 @@
 require "rails_helper"
 require_relative "provider_school_helper"
 
-feature "Delete a provider's schools" do
+RSpec.describe "Delete a provider's schools" do
   include ProviderSchoolHelper
   before do
     given_i_am_authenticated_as_a_provider_user
