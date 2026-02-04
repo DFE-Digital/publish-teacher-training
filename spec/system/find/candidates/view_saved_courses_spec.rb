@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Viewing my saved courses", service: :find do
   before do
     FeatureFlag.activate(:candidate_accounts)
+    FeatureFlag.activate(:bursaries_and_scholarships_announced)
     CandidateAuthHelper.mock_auth
     given_a_published_course_exists
   end
@@ -44,6 +45,14 @@ RSpec.describe "Viewing my saved courses", service: :find do
           course_code: @course.course_code,
         ),
       )
+
+      expect(page).to have_content("Fee or salary")
+      expect(page).to have_content("£9,535")
+      expect(page).to have_content("fee for UK citizens")
+      expect(page).to have_content("£17,500")
+      expect(page).to have_content("fee for Non-UK citizens")
+      expect(page).to have_content("Bursaries")
+      expect(page).to have_content("£29,000")
     end
   end
 
@@ -56,7 +65,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
       and_i_have_saved_courses
       then_i_visit_my_saved_courses
 
-      then_i_should_see_in_first_saved_course_row("Closed")
+      then_i_should_see_in_first_saved_course_row("Not accepting applications")
     end
 
     scenario "Find has re-opened but Apply hasn’t opened yet shows Not yet open" do
@@ -79,7 +88,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
       and_i_have_saved_courses
       then_i_visit_my_saved_courses
 
-      then_i_should_see_in_first_saved_course_row("Closed")
+      then_i_should_see_in_first_saved_course_row("Not accepting applications")
     end
 
     scenario "Withdrawn course shows Withdrawn" do
@@ -115,7 +124,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def within_first_saved_course_row(&block)
-    within(all(".govuk-table__row").first, &block)
+    within(all(".govuk-summary-card").first, &block)
   end
 
   def then_i_should_see_in_first_saved_course_row(text)
@@ -125,6 +134,8 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def given_a_published_course_exists
+    physics = create(:secondary_subject, :physics, bursary_amount: 29_000)
+
     @course = create(
       :course,
       :with_full_time_sites,
@@ -135,7 +146,9 @@ RSpec.describe "Viewing my saved courses", service: :find do
       name: "Art and design (SEND)",
       course_code: "F314",
       provider: build(:provider),
-      subjects: [find_or_create(:secondary_subject, :art_and_design)],
+      subjects: [physics],
+      master_subject_id: physics.id,
+      enrichments: [create(:course_enrichment, :published, fee_uk_eu: 9535, fee_international: 17_500)],
     )
   end
 

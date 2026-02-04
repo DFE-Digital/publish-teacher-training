@@ -54,6 +54,8 @@ class CourseDecorator < ApplicationDecorator
 
   def saved_status_tag
     text, colour = saved_status_text_and_colour
+    return if text.blank?
+
     h.govuk_tag(text:, colour:)
   end
 
@@ -61,13 +63,13 @@ class CourseDecorator < ApplicationDecorator
     if object.is_withdrawn?
       %w[Withdrawn red]
     elsif Find::CycleTimetable.phase_in_time?(:today_is_after_apply_deadline_passed)
-      %w[Closed purple]
+      ["Not accepting applications", "purple"]
     elsif Find::CycleTimetable.phase_in_time?(:today_is_between_find_opening_and_apply_opening)
       ["Not yet open", "grey"]
     elsif object.application_status_closed?
-      %w[Closed purple]
+      ["Not accepting applications", "purple"]
     else
-      %w[Open turquoise]
+      [nil, nil]
     end
   end
 
