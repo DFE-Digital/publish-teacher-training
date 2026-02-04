@@ -267,6 +267,8 @@ module GovukTechDocs
       end
 
       def get_schema_link(schema)
+        return unless schema.respond_to?(:node_context)
+
         schema_name = get_schema_name schema.node_context.source_location.to_s
         return if schema_name.nil?
 
