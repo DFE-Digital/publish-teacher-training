@@ -32,6 +32,7 @@
         <%= form_with model: @search_courses_form, scope: "", id: "find-search-form", url: find_results_path, method: :get do |form_object| %>
           <% form = form_object %>
           <%= form.hidden_field :utm_source, value: "results" %>
+          <%= form.hidden_field :previous_location_category, value: @search_courses_form.location_category %>
 
           <div class="app-find-search">
             <div class="govuk-form-group" data-controller="subjects-autocomplete">

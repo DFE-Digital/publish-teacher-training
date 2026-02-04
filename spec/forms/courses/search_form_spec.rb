@@ -906,4 +906,150 @@ RSpec.describe Courses::SearchForm do
       end
     end
   end
+
+  describe "#location_category_changed?" do
+    before do
+      allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
+    end
+
+    context "when both previous and current location categories are nil" do
+      let(:form) { described_class.new(previous_location_category: nil, location: nil) }
+
+      it "returns false" do
+        expect(form.location_category_changed?).to be false
+      end
+    end
+
+    context "when previous is nil and current is regional" do
+      let(:form) do
+        described_class.new(
+          previous_location_category: "",
+          location: "Cornwall, UK",
+          formatted_address: "Cornwall, UK",
+          address_types: %w[administrative_area_level_2 political],
+        )
+      end
+
+      it "returns true" do
+        expect(form.location_category_changed?).to be true
+      end
+    end
+
+    context "when previous is london and current is regional" do
+      let(:form) do
+        described_class.new(
+          previous_location_category: "london",
+          location: "Cornwall, UK",
+          formatted_address: "Cornwall, UK",
+          address_types: %w[administrative_area_level_2 political],
+        )
+      end
+
+      it "returns true" do
+        expect(form.location_category_changed?).to be true
+      end
+    end
+
+    context "when previous and current are both regional" do
+      let(:form) do
+        described_class.new(
+          previous_location_category: "regional",
+          location: "Cornwall, UK",
+          formatted_address: "Cornwall, UK",
+          address_types: %w[administrative_area_level_2 political],
+        )
+      end
+
+      it "returns false" do
+        expect(form.location_category_changed?).to be false
+      end
+    end
+
+    context "when previous is regional and current is nil (location removed)" do
+      let(:form) do
+        described_class.new(
+          previous_location_category: "regional",
+          location: nil,
+        )
+      end
+
+      it "returns true" do
+        expect(form.location_category_changed?).to be true
+      end
+    end
+  end
+
+  describe "resetting defaults when location category changes" do
+    before do
+      allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
+    end
+
+    describe "#order" do
+      context "when location category changed from nil to regional" do
+        let(:form) do
+          described_class.new(
+            previous_location_category: "",
+            location: "Cornwall, UK",
+            formatted_address: "Cornwall, UK",
+            address_types: %w[administrative_area_level_2 political],
+            order: "course_name_ascending",
+          )
+        end
+
+        it "resets to distance (location default)" do
+          expect(form.order).to eq("distance")
+        end
+      end
+
+      context "when location category unchanged" do
+        let(:form) do
+          described_class.new(
+            previous_location_category: "regional",
+            location: "Cornwall, UK",
+            formatted_address: "Cornwall, UK",
+            address_types: %w[administrative_area_level_2 political],
+            order: "course_name_ascending",
+          )
+        end
+
+        it "preserves user selection" do
+          expect(form.order).to eq("course_name_ascending")
+        end
+      end
+    end
+
+    describe "#radius" do
+      context "when location category changed from london to regional" do
+        let(:form) do
+          described_class.new(
+            previous_location_category: "london",
+            location: "Cornwall, UK",
+            formatted_address: "Cornwall, UK",
+            address_types: %w[administrative_area_level_2 political],
+            radius: "20",
+          )
+        end
+
+        it "resets to regional default (50)" do
+          expect(form.radius).to eq(50)
+        end
+      end
+
+      context "when location category unchanged" do
+        let(:form) do
+          described_class.new(
+            previous_location_category: "regional",
+            location: "Cornwall, UK",
+            formatted_address: "Cornwall, UK",
+            address_types: %w[administrative_area_level_2 political],
+            radius: "10",
+          )
+        end
+
+        it "preserves user selection" do
+          expect(form.radius).to eq("10")
+        end
+      end
+    end
+  end
 end
