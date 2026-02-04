@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "selecting a level" do
+RSpec.describe "selecting a level" do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_i_visit_the_new_course_level_page

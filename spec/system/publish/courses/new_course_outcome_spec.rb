@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "selecting a course outcome" do
+RSpec.describe "selecting a course outcome" do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_publish_courses_new_outcome_page
