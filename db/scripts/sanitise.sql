@@ -13,3 +13,10 @@ UPDATE "candidate"
        SET email_address=concat('anonimized-candidate-',id,'@example.com')
        WHERE email_address NOT LIKE '%@digital.education.gov.uk'
              AND email_address NOT LIKE '%@education.gov.uk';
+
+UPDATE "providers_onboarding_form_request"
+       SET email_address=concat('anonimized-user-',id,'@example.org'),
+           first_name='anon',
+           last_name='anon'
+        WHERE email_address NOT LIKE '%@digital.education.gov.uk'
+             AND email_address NOT LIKE '%@education.gov.uk';
