@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "new course" do
+RSpec.describe "new course" do
   scenario "creates the correct course in the next cycle" do
     # This is intended to be a test which will go through the entire flow
     # and ensure that the correct page gets displayed at the end
