@@ -7,7 +7,11 @@ module Find
       skip_before_action :require_authentication, only: %i[sign_in]
 
       def index
-        @saved_courses = @candidate.saved_courses
+        saved_courses = @candidate.saved_courses
+          .includes(course: :latest_published_enrichment)
+          .order(created_at: :desc)
+
+        @pagy, @saved_courses = pagy(saved_courses)
       end
 
       def sign_in

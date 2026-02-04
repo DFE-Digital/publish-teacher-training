@@ -7,6 +7,11 @@ en:
           no_saved_courses: You have no saved courses
           find_saved_courses: Find a course
           empty_state_html: "%{link} and start saving courses you may want to review and apply for later."
+          applications_heading: Your applications
+          applications_body_html: View and manage your applications on the %{link}.
+          applications_link_text: Apply for teacher training website
+          applications_url: https://www.gov.uk/apply-for-teacher-training
+          applications_utm_content: saved_courses_applications
         create:
           success_message_title: Course saved
           view_saved_courses: View saved courses

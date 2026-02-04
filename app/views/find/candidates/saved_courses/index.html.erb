@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
+    <h1 class="govuk-heading-l">
       <%= t(".page_title") %>
     </h1>
   </div>
@@ -18,13 +18,23 @@
     </div>
   <% else %>
     <div class="govuk-grid-column-full">
-      <table class="govuk-table">
-        <tbody class="govuk-table__body">
-          <% @saved_courses.each do |saved_course| %>
-            <%= render partial: "find/candidates/saved_courses/saved_course_row", locals: { saved_course: } %>
-          <% end %>
-        </tbody>
-      </table>
+      <ul class="govuk-list">
+        <% @saved_courses.each do |saved_course| %>
+          <%= render SavedCourses::SummaryCardComponent.new(saved_course:) %>
+        <% end %>
+      </ul>
+
+      <%= govuk_pagination(pagy: @pagy) %>
     </div>
   <% end %>
+
+  <div class="govuk-grid-column-full">
+    <%= govuk_inset_text classes: "app-callout app-callout--blue" do %>
+      <h3><%= t(".applications_heading") %></h3>
+      <%= t(
+        ".applications_body_html",
+        link: govuk_link_to(t(".applications_link_text"), t(".applications_url")),
+      ) %>
+    <% end %>
+  </div>
 </div>
