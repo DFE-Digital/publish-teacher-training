@@ -98,7 +98,7 @@ RSpec.describe "Editing degree requirements" do
     end
 
     context "copying content from another course" do
-      let!(:course2) do
+      let!(:course_two) do
         create(
           :course,
           provider:,
@@ -108,7 +108,7 @@ RSpec.describe "Editing degree requirements" do
         )
       end
 
-      let!(:course3) do
+      let!(:course_three) do
         create(
           :course,
           provider:,
@@ -121,7 +121,7 @@ RSpec.describe "Editing degree requirements" do
       scenario "all fields get copied if all are present" do
         given_a_course_exists(:secondary, degree_subject_requirements: "Maths A Level")
         when_i_visit_the_degrees_subject_requirements_page
-        publish_degree_subject_requirement_page.copy_content.copy(course2)
+        publish_degree_subject_requirement_page.copy_content.copy(course_two)
 
         [
           "Your changes are not yet saved",
@@ -133,13 +133,13 @@ RSpec.describe "Editing degree requirements" do
 
         expect(publish_degree_subject_requirement_page.radio_yes).to be_checked
         expect(publish_degree_subject_requirement_page.radio_no).not_to be_checked
-        expect(publish_degree_subject_requirement_page.requirements.text).to eq(course2.degree_subject_requirements)
+        expect(publish_degree_subject_requirement_page.requirements.text).to eq(course_two.degree_subject_requirements)
       end
 
       scenario "with all fields empty" do
         given_a_course_exists(:secondary, degree_subject_requirements: "Maths A Level")
         when_i_visit_the_degrees_subject_requirements_page
-        publish_degree_subject_requirement_page.copy_content.copy(course3)
+        publish_degree_subject_requirement_page.copy_content.copy(course_three)
 
         expect(publish_degree_subject_requirement_page).not_to have_copy_content_warning
       end
