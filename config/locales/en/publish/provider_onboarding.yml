@@ -52,6 +52,7 @@ en:
         title: Check your answers before submitting
         caption: Add a provider
         heading: Check your answers
+        error_summary_title: There is a problem
         organisation_details: Organisation details
         contact_details: Contact details
         user_details: User details
