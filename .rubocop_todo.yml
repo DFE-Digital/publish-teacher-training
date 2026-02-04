@@ -73,7 +73,6 @@ RSpec/IndexedLet:
     - 'spec/controllers/api/accredited_provider_suggestions_controller_spec.rb'
     - 'spec/controllers/api/public/v1/providers_controller_spec.rb'
     - 'spec/controllers/api/school_suggestions_controller_spec.rb'
-    - 'spec/features/publish/courses/editing_degree_requirements_spec.rb'
     - 'spec/forms/publish/course_school_form_spec.rb'
     - 'spec/models/course/withdraw_spec.rb'
     - 'spec/models/course_spec.rb'
