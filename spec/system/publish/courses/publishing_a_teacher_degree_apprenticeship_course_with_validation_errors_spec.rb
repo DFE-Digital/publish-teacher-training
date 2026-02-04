@@ -28,7 +28,8 @@ RSpec.describe "Publishing courses errors" do
     when_i_click_on_the_pending_a_level_error
     then_i_am_on_the_consider_pending_a_level_page
     and_i_see_the_pending_a_level_error
-    and_the_back_link_points_to_the_course_page
+
+    and_the_back_link_points_to_the_add_a_level_to_a_list_page
 
     when_i_choose_yes
     and_i_click_continue
@@ -39,7 +40,7 @@ RSpec.describe "Publishing courses errors" do
 
     when_i_click_on_the_a_level_equivalencies
     then_i_am_on_the_a_level_equivalencies_page
-    and_the_back_link_points_to_the_course_page
+    and_the_back_link_points_to_the_pending_a_level_page
 
     when_i_choose_yes
     and_i_click_update_a_levels
@@ -281,9 +282,19 @@ RSpec.describe "Publishing courses errors" do
     expect(@course.reload.is_published?).to be true
   end
 
-  def and_the_back_link_points_to_the_course_page
+  def and_the_back_link_points_to_the_add_a_level_to_a_list_page
     expect(page.find_link(text: "Back")[:href]).to eq(
-      publish_provider_recruitment_cycle_course_path(
+      publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
+        @provider.provider_code,
+        recruitment_cycle_year,
+        @course.course_code,
+      ),
+    )
+  end
+
+  def and_the_back_link_points_to_the_pending_a_level_page
+    expect(page.find_link(text: "Back")[:href]).to eq(
+      publish_provider_recruitment_cycle_course_a_levels_consider_pending_a_level_path(
         @provider.provider_code,
         recruitment_cycle_year,
         @course.course_code,
