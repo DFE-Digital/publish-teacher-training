@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "selecting a physics subject" do
+RSpec.describe "selecting a physics subject" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

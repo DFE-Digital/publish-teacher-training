@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "choosing a start date" do
+RSpec.describe "choosing a start date" do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_publish_courses_new_start_date_page

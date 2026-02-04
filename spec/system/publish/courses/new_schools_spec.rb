@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "selection schools" do
+RSpec.describe "selection schools" do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_that_sites_exist

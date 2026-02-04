@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "selecting Design and technology specialisms" do
+RSpec.describe "selecting Design and technology specialisms" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
