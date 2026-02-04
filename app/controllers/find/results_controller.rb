@@ -62,6 +62,7 @@ module Find
         :lq,
         :minimum_degree_required,
         :order,
+        :previous_location_category,
         :provider_code,
         :provider_name,
         :radius,

@@ -49,6 +49,9 @@ module Courses
     attribute :study_type
     attribute :university_degree_status, :boolean
 
+    # Location category tracking #
+    attribute :previous_location_category
+
     attr_accessor :providers_cache, :subjects_cache
 
     delegate :primary_subjects, :primary_subject_codes, :secondary_subjects, :secondary_subject_codes, :all_subjects, to: :subjects_cache
@@ -115,7 +118,7 @@ module Courses
       OrderingStrategy.new(
         location:,
         funding: funding,
-        current_order: super,
+        current_order: location_category_changed? ? nil : super,
         sortby:,
         find_filtering_and_sorting: FeatureFlag.active?(:find_filtering_and_sorting),
       ).call
@@ -173,15 +176,34 @@ module Courses
     end
 
     def radius
+      return default_radius.call if location_category_changed?
+
       radius_value = super
 
       return radius_value if radius_value.present? && radius_value.to_i.in?(self.class.radius_values)
 
-      default_radius
+      default_radius.call
     end
 
     def default_radius
-      @default_radius ||= DefaultRadius.new(location:, formatted_address:, address_types:).call
+      @default_radius ||= DefaultRadius.new(location:, formatted_address:, address_types:)
+    end
+
+    delegate :location_category, to: :default_radius
+
+    def location_category_changed?
+      # Only check for category change if previous_location_category was submitted
+      # (nil means first visit, "" means form was submitted with no location)
+      return false if attributes["previous_location_category"].nil?
+
+      prev = previous_location_category.presence
+      current = location_category
+
+      # No change if both are nil/blank (no location before, no location now)
+      return false if prev.nil? && current.nil?
+
+      # Changed if different (including nil -> something or something -> nil)
+      prev != current
     end
 
     PHYSICS_SUBJECT_CODE = "F3"
@@ -285,7 +307,7 @@ module Courses
     end
 
     def radius_filter_count
-      return if location.blank? || attributes["radius"].blank? || radius.to_s == default_radius.to_s
+      return if location.blank? || attributes["radius"].blank? || radius.to_s == default_radius.call.to_s
 
       1
     end

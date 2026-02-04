@@ -20,6 +20,14 @@ module Courses
       end
     end
 
+    def location_category
+      return nil if location.blank?
+      return "london" if london?
+      return "locality" if locality?
+
+      "regional"
+    end
+
   private
 
     attr_reader :location, :formatted_address, :address_types

@@ -66,4 +66,46 @@ RSpec.describe Courses::DefaultRadius do
       expect(radius).to eq(10)
     end
   end
+
+  describe "#location_category" do
+    it "returns nil when no location" do
+      category = described_class.new(
+        location: nil,
+        formatted_address: nil,
+        address_types: nil,
+      ).location_category
+
+      expect(category).to be_nil
+    end
+
+    it "returns 'london' for London location" do
+      category = described_class.new(
+        location: "London, UK",
+        formatted_address: "London, UK",
+        address_types: %w[locality political],
+      ).location_category
+
+      expect(category).to eq("london")
+    end
+
+    it "returns 'locality' for postal code location" do
+      category = described_class.new(
+        location: "SW1A 1AA",
+        formatted_address: "Westminster, London SW1A 1AA, UK",
+        address_types: %w[postal_code],
+      ).location_category
+
+      expect(category).to eq("locality")
+    end
+
+    it "returns 'regional' for general locations like Cornwall" do
+      category = described_class.new(
+        location: "Cornwall, UK",
+        formatted_address: "Cornwall, UK",
+        address_types: %w[administrative_area_level_2 political],
+      ).location_category
+
+      expect(category).to eq("regional")
+    end
+  end
 end
