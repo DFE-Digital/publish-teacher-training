@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Publishing courses errors" do
+RSpec.describe "Publishing courses errors" do
   scenario "The error links target the correct pages" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_an_invalid_course_i_want_to_publish

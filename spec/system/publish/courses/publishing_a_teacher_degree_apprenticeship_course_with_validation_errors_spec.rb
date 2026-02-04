@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Publishing courses errors" do
+RSpec.describe "Publishing courses errors" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
