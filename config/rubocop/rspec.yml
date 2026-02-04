@@ -131,6 +131,7 @@ RSpec/EmptyExampleGroup:
 
 RSpec/SpecFilePathFormat:
   Exclude:
+    - 'spec/wizards/**/steps/**/*'
     - 'spec/services/support/filters/filter_spec.rb'
     - 'spec/services/subjects/populate_subject_areas_service_spec.rb'
     - 'spec/services/stores_user_store_spec.rb'
