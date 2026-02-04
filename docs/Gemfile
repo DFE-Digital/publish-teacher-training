@@ -7,7 +7,7 @@ source "https://rubygems.org"
 ruby "~> 3.4.2"
 
 # Include the tech docs gem
-gem "govuk_tech_docs", git: "https://github.com/DFE-Digital/tech-docs-gem"
+gem "govuk_tech_docs", git: "https://github.com/alphagov/tech-docs-gem"
 
 group :test do
   gem "capybara"
