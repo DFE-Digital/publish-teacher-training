@@ -30,6 +30,18 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     and_i_do_not_see_the_continue_button
   end
 
+  scenario "seeing errors on the check your answers page when submission fails" do
+    when_i_visit_the_onboarding_form
+    and_i_fill_in_valid_onboarding_details
+    then_i_click_the_continue_button
+    then_i_am_on_the_check_your_answers_page
+
+    and_the_onboarding_request_becomes_invalid_before_submit
+    and_i_submit_the_onboarding_form
+
+    then_i_see_the_error_summary_on_check_answers
+  end
+
   # Helper methods
 
   def when_i_visit_the_onboarding_form
@@ -215,5 +227,31 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
 
   def and_i_do_not_see_the_continue_button
     expect(page).not_to have_button("Continue")
+  end
+
+  def and_the_onboarding_request_becomes_invalid_before_submit
+    # Simulate the data becoming invalid between CYA and submit
+    onboarding_request.update!(ukprn: "123")
+    onboarding_request.update!(postcode: "invalid-postcode")
+  end
+
+  def then_i_see_the_error_summary_on_check_answers
+    # Still on the confirm URL because the controller does `render :check_answers`
+    expect(page).to have_current_path(
+      confirm_publish_provider_onboarding_path(onboarding_request.uuid),
+    )
+
+    # The content is the check your answers page
+    expect(page).to have_content("Check your answers")
+
+    # GOV.UK error summary container
+    expect(page).to have_css(".govuk-error-summary")
+
+    # Generic error summary heading (from your view)
+    expect(page).to have_content("There is a problem")
+
+    # Displays real validation message from en.yml
+    expect(page).to have_content("Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1")
+    expect(page).to have_content("Postcode is not valid, (for example, BN1 1AA)")
   end
 end
