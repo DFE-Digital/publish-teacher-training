@@ -104,7 +104,7 @@ module GovukTechDocs
         properties.each do |property|
           # Must be a schema be referenced by another schema
           # And not a property of a schema
-          if property.node_context.referenced_by.to_s.include?("#/components/schemas") &&
+          if property.node_context.source_location.to_s.include?("#/components/schemas") &&
               property.node_context.source_location.to_s.exclude?("/properties/")
             schema_name = get_schema_name(property.node_context.source_location.to_s)
           end
