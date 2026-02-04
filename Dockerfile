@@ -1,9 +1,10 @@
-FROM ruby:2.7.5-alpine3.15 AS middleman
+FROM ruby:3.4.2-alpine3.20 AS middleman
 RUN apk add --no-cache libxml2
 RUN apk add --update --no-cache npm git build-base
 
 COPY docs/Gemfile docs/Gemfile.lock /
 
+RUN bundle config --local without "test"
 RUN bundle install --jobs=4
 
 COPY docs /docs
