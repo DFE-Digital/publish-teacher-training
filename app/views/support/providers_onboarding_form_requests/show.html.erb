@@ -11,7 +11,7 @@
     <% row.with_value do %>
       <%= govuk_link_to(
             t(".view_provider_form"),
-            publish_provider_onboarding_path(@onboarding_request.uuid)
+            publish_provider_onboarding_path(@onboarding_request.uuid),
           ) %>
     <% end %>
     <% row.with_action(text: "Copy link", href: "#", classes: "copy-btn", html_attributes: { hidden: true, data: { copy_text: publish_provider_onboarding_url(@onboarding_request.uuid) } }) %>
