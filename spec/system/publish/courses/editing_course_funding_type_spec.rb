@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing funding type" do
+RSpec.describe "Editing funding type" do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing interview process section, copying content from another course" do
+RSpec.describe "Editing interview process section, copying content from another course" do
   context 'source course has "interview process" data' do
     scenario 'source course has "about course" data' do
       given_i_am_authenticated_as_a_provider_user

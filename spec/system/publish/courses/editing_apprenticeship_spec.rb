@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing apprenticeship" do
+RSpec.describe "Editing apprenticeship" do
   before do
     and_i_am_authenticated_as_accredited_provider_provider_user
   end

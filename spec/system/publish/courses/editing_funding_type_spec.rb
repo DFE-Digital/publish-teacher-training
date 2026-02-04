@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing funding type" do
+RSpec.describe "Editing funding type" do
   context "with visa sponsorship deadline feature flag activated" do
     before do
       and_i_am_authenticated_as_a_lead_school_provider_user

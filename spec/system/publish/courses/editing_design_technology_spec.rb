@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing Design and technology specialisms" do
+RSpec.describe "Editing Design and technology specialisms" do
   scenario "selecting a specialism saves and returns to details" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_secondary_course_i_want_to_edit
