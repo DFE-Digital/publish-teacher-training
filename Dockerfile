@@ -15,7 +15,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:3.4.2-alpine3.20
+FROM ruby:3.4.8-alpine3.23
 
 RUN apk add --no-cache libxml2 yaml-dev
 
@@ -37,7 +37,7 @@ ADD .ruby-version $APP_HOME/.ruby-version
 
 RUN apk add --update --no-cache --virtual build-dependencies \
   build-base && \
-  apk add --update --no-cache libpq yarn && \
+  apk add --update --no-cache libpq nodejs yarn && \
   bundle install --jobs=4 && \
   rm -rf /usr/local/bundle/cache && \
   apk del build-dependencies
