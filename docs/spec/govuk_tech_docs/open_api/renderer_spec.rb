@@ -116,7 +116,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
       let(:document) { Openapi3Parser.load(spec) }
 
       it "renders first anyOf reference example" do
-        schema = document.paths["/widgets"].get.node_data["responses"]["200"]["content"]["application/json"]["schema"]
+        schema = document.paths["/widgets"].get.responses["200"].content["application/json"].schema
 
         json = subject.json_output(schema)
         hash = JSON.parse(json)
