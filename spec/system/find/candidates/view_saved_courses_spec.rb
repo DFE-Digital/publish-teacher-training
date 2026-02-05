@@ -51,8 +51,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
       expect(page).to have_content("fee for UK citizens")
       expect(page).to have_content("£17,500")
       expect(page).to have_content("fee for Non-UK citizens")
-      expect(page).to have_content("Bursaries")
-      expect(page).to have_content("£29,000")
+      expect(page).to have_content("Scholarships of £22,000 or bursaries of £20,000 are available")
     end
   end
 
@@ -134,7 +133,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def given_a_published_course_exists
-    physics = create(:secondary_subject, :physics, bursary_amount: 29_000)
+    physics = create(:secondary_subject, :physics, bursary_amount: 20_000, scholarship: 22_000)
 
     @course = create(
       :course,
