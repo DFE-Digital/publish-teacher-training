@@ -199,6 +199,8 @@ module GovukTechDocs
       end
 
       def servers
+        return [] unless document.root_source.data.key?("servers")
+
         document.servers
       end
 
