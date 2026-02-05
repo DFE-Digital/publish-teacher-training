@@ -2,7 +2,7 @@
   "name": "teacher-training-api",
   "private": true,
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "type": "module",
   "scripts": {
