@@ -8,5 +8,5 @@ GovukTechDocs.configure(self)
 activate :open_api
 
 configure :build do
-  activate :relative_assets
+  set :http_prefix, "/docs/"
 end
