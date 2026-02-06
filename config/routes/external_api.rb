@@ -2,8 +2,8 @@
 
 get "/", to: redirect("/docs/")
 
-mount OpenApi::Rswag::Ui::Engine => "/api-docs"
-mount OpenApi::Rswag::Api::Engine => "/api-docs"
+mount Rswag::Ui::Engine => "/api-docs"
+mount Rswag::Api::Engine => "/api-docs"
 
 namespace :api do
   namespace :public do

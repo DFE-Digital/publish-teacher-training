@@ -56,22 +56,6 @@ GIT
       jwt (~> 2.10)
       omniauth (~> 2.1)
 
-GIT
-  remote: https://github.com/DFE-Digital/open-api-rswag.git
-  revision: b39fb1bdc9fef1c3beca52b0d0c61072c2597bae
-  tag: v0.2.0
-  specs:
-    open_api-rswag-api (0.2.0)
-      railties
-    open_api-rswag-specs (0.2.0)
-      activesupport
-      hashie
-      json-schema (~> 2.2)
-      railties
-    open_api-rswag-ui (0.2.0)
-      actionpack
-      railties
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -675,6 +659,17 @@ GEM
       rspec (>= 3.4)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
+    rswag-api (2.17.0)
+      activesupport (>= 5.2, < 8.2)
+      railties (>= 5.2, < 8.2)
+    rswag-specs (2.17.0)
+      activesupport (>= 5.2, < 8.2)
+      json-schema (>= 2.2, < 7.0)
+      railties (>= 5.2, < 8.2)
+      rspec-core (>= 2.14)
+    rswag-ui (2.17.0)
+      actionpack (>= 5.2, < 8.2)
+      railties (>= 5.2, < 8.2)
     rubocop (1.82.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -882,9 +877,6 @@ DEPENDENCIES
   omniauth-rails_csrf_protection (~> 2.0)
   omniauth_govuk_one_login!
   omniauth_openid_connect (~> 0.8)
-  open_api-rswag-api (= 0.2.0)!
-  open_api-rswag-specs (= 0.2.0)!
-  open_api-rswag-ui (= 0.2.0)!
   pagy (~> 9.4)
   parallel_tests
   pg
@@ -907,6 +899,9 @@ DEPENDENCIES
   rspec-rails (= 8.0.3)
   rspec-wait
   rspec_junit_formatter
+  rswag-api
+  rswag-specs
+  rswag-ui
   rubocop-factory_bot
   rubocop-govuk
   rubocop-rspec_rails
