@@ -1,4 +1,6 @@
 <%= form_with url: undo_find_candidate_saved_courses_path, method: :post do |form| %>
   <%= form.hidden_field :course_id, value: course.id %>
+  <%= form.hidden_field :location, value: local_assigns[:location] if local_assigns[:location].present? %>
+  <%= form.hidden_field :order, value: local_assigns[:order] if local_assigns[:order].present? %>
   <%= form.submit t(".undo"), class: "app-button-link govuk-!-padding-left-0" %>
 <% end %>
