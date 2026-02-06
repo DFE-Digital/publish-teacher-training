@@ -233,7 +233,7 @@ module Courses
       @applied_scopes[:interview_location] = params[:interview_location]
 
       @scope
-        .with_latest_published_enrichment
+        .joins(latest_published_enrichment_join_sql)
         .where("(course_enrichment.json_data->>'InterviewLocation') IN (?)", %w[online both])
     end
 
@@ -338,13 +338,13 @@ module Courses
 
       # This is technically handled in the SearchForm that passes params to
       # this class But it's implemented here too to keep the unit tests passing
-      params[:order] = if @applied_scopes[:location].present?
-                         "distance"
-                       else
-                         "course_name_ascending"
-                       end
+      params[:order] = default_order_name
 
       @scope
+    end
+
+    def default_order_name
+      @applied_scopes[:location].present? ? "distance" : "course_name_ascending"
     end
 
     def distance_ascending_order_scope
@@ -404,6 +404,24 @@ module Courses
         )
     end
 
+    # Returns the lateral join SQL for the latest published enrichment as a string.
+    # This is used instead of Course.with_latest_published_enrichment (a model scope)
+    # so that subclasses starting from a different model (e.g. SavedCourse) can
+    # reuse the fee ordering scopes - .joins(string) works on any relation where
+    # the course table is available, while model scopes are tied to one model.
+    def latest_published_enrichment_join_sql
+      <<~SQL.squish
+        INNER JOIN LATERAL (
+          SELECT *
+          FROM course_enrichment
+          WHERE course_enrichment.course_id = course.id
+            AND course_enrichment.status = 1
+          ORDER BY course_enrichment.last_published_timestamp_utc DESC
+          LIMIT 1
+        ) course_enrichment ON true
+      SQL
+    end
+
     # Salary courses should not have a fee_uk_eu value but many do. In order to
     # prevent our sorting from placing Salary course in amongst the Fee courses
     # during sorting, we initially sort by funding type here
@@ -423,7 +441,7 @@ module Courses
 
       @scope
         .select("course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeUkEu')::integer) as uk_fee")
-        .with_latest_published_enrichment
+        .joins(latest_published_enrichment_join_sql)
         .group("course.id, provider.id, provider.provider_name")
         .order(
           {
@@ -443,7 +461,7 @@ module Courses
 
       @scope
         .select("course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeInternational')::integer) as intl_fee")
-        .with_latest_published_enrichment
+        .joins(latest_published_enrichment_join_sql)
         .group("course.id, provider.id, provider.provider_name")
         .order(
           {
