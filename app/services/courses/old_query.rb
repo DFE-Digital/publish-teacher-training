@@ -133,13 +133,13 @@ module Courses
       excluded_course_codes
         .map { |excluded_course| ExcludedCourseParam.new(provider_code: excluded_course[:provider_code], course_code: excluded_course[:course_code]) }
         .each do |excluded_course_code|
-        next unless excluded_course_code.valid?
+          next unless excluded_course_code.valid?
 
-        new_scope = new_scope.where
-                             .not(
-                               course_code: excluded_course_code.course_code,
-                               provider: { provider_code: excluded_course_code.provider_code },
-                             )
+          new_scope = new_scope.where
+                               .not(
+                                 course_code: excluded_course_code.course_code,
+                                 provider: { provider_code: excluded_course_code.provider_code },
+                               )
       end
 
       new_scope
