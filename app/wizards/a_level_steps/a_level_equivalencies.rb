@@ -4,8 +4,8 @@ module ALevelSteps
   class ALevelEquivalencies
     include DfE::Wizard::Step
 
-    attribute :accept_a_level_equivalency
-    attribute :additional_a_level_equivalencies
+    attribute :accept_a_level_equivalency, :string
+    attribute :additional_a_level_equivalencies, :string
 
     MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS = 250
     validates :accept_a_level_equivalency, presence: true
