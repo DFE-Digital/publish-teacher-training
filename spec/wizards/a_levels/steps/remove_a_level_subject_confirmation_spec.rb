@@ -6,7 +6,7 @@ RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
   subject(:wizard_step) { described_class.new }
 
   let(:uuid) { SecureRandom.uuid }
-  let(:state_store) { instance_double(StateStores::ALevelStore, repository:) }
+  let(:state_store) { instance_double(StateStores::ALevelStore, repository:, subject: "Any subject") }
   let(:repository) { instance_double(Repositories::ALevelRepository, record: course) }
   let(:course) { create(:course, a_level_subject_requirements:) }
   let(:a_level_subject_requirements) do
@@ -50,7 +50,7 @@ RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
         expect(wizard_step).not_to be_valid
         # NOTE: The step currently shows the I18n translation of "other_subject" rather than
         # the actual other_subject value. This is a known limitation.
-        expect(wizard_step.errors[:confirmation]).to include("Select if you want to remove Choose a subject")
+        expect(wizard_step.errors[:confirmation]).to include("Select if you want to remove Any subject")
       end
     end
 
