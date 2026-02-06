@@ -3,21 +3,33 @@
 module Publish
   class ProviderOnboardingController < ApplicationController
     # Public link: skip authentication and authorisation for provider onboarding form
-    skip_before_action :authenticate, only: %i[show update submitted], raise: false
-    skip_after_action :verify_authorized, only: %i[show update submitted]
+    skip_before_action :authenticate, only: %i[show update submitted check_answers confirm], raise: false
+    skip_after_action :verify_authorized, only: %i[show update submitted check_answers confirm]
     before_action :set_onboarding_request
-    before_action :ensure_can_edit, only: %i[update]
+    before_action :ensure_can_edit, only: %i[update confirm]
 
     def show; end
 
     # Handles the submission of the onboarding form by the provider
     def update
-      # Try to submit the form with the provided parameters and current user's admin status
-      # If successful, redirect to the submitted page; otherwise, re-render the form with errors
-      if @onboarding_request.submit(admin_user?, onboarding_request_params)
-        redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
+      # Update the onboarding request with submitted form details and validate provider fields
+      # If successful, redirect to the check your answers page; otherwise, re-render the form with errors
+      if @onboarding_request.update_form_details(onboarding_request_params)
+        redirect_to check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
       else
         render :show
+      end
+    end
+
+    def check_answers; end
+
+    def confirm
+      # Submit the onboarding request and change its status to 'submitted' if valid (and not an admin user)
+      if @onboarding_request.submit(admin_user?)
+        redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
+      else
+        # if submission fails (e.g. validations), re-render the check your answers page with errors
+        render :check_answers
       end
     end
 
@@ -29,7 +41,8 @@ module Publish
   private
 
     def set_onboarding_request
-      @onboarding_request = ProvidersOnboardingFormRequest.find_by!(uuid: params[:uuid])
+      # Find the onboarding request by UUID and decorate it for use in views (ProvidersOnboardingFormRequestDecorator)
+      @onboarding_request = ProvidersOnboardingFormRequest.find_by!(uuid: params[:uuid]).decorate
     end
 
     # Check if the onboarding request is still pending for public users (i.e. not yet submitted)

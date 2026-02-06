@@ -12,6 +12,9 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
   scenario "successfully submitting the provider onboarding form as a public user" do
     when_i_visit_the_onboarding_form
     and_i_fill_in_valid_onboarding_details
+    then_i_click_the_continue_button
+    then_i_am_on_the_check_your_answers_page
+    then_i_see_the_onboarding_form_fields_with_completed_details_and_change_links
     and_i_submit_the_onboarding_form
     then_i_am_taken_to_the_submitted_page
     and_the_onboarding_request_is_marked_as_submitted
@@ -24,7 +27,19 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     when_i_visit_the_onboarding_form_that_has_been_submitted(submitted_request)
     then_i_see_the_read_only_form_fields
     and_i_see_already_submitted_message
-    and_i_do_not_see_the_submit_button
+    and_i_do_not_see_the_continue_button
+  end
+
+  scenario "seeing errors on the check your answers page when submission fails" do
+    when_i_visit_the_onboarding_form
+    and_i_fill_in_valid_onboarding_details
+    then_i_click_the_continue_button
+    then_i_am_on_the_check_your_answers_page
+
+    and_the_onboarding_request_becomes_invalid_before_submit
+    and_i_submit_the_onboarding_form
+
+    then_i_see_the_error_summary_on_check_answers
   end
 
   # Helper methods
@@ -81,6 +96,43 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     fill_in "Email address", with: form_data[:email_address]
     fill_in "First name", with: form_data[:first_name]
     fill_in "Last name", with: form_data[:last_name]
+  end
+
+  def then_i_click_the_continue_button
+    click_button "Continue"
+  end
+
+  def then_i_am_on_the_check_your_answers_page
+    expect(page).to have_current_path(
+      check_answers_publish_provider_onboarding_path(onboarding_request.uuid),
+    )
+    expect(page).to have_content("Check your answers")
+  end
+
+  def then_i_see_the_onboarding_form_fields_with_completed_details_and_change_links
+    expect(page).to have_content(form_data[:provider_name])
+    expect(page).to have_content(form_data[:ukprn])
+    accredited_text = form_data[:accredited_provider] ? "Yes" : "No"
+    expect(page).to have_content(accredited_text)
+    expect(page).to have_content(form_data[:urn])
+
+    expect(page).to have_content(form_data[:contact_email_address])
+    expect(page).to have_content(form_data[:telephone])
+    expect(page).to have_content(form_data[:website])
+
+    expect(page).to have_content(form_data[:address_line_1])
+    expect(page).to have_content(form_data[:address_line_2])
+    expect(page).to have_content(form_data[:address_line_3])
+    expect(page).to have_content(form_data[:town_or_city])
+    expect(page).to have_content(form_data[:county])
+    expect(page).to have_content(form_data[:postcode])
+
+    expect(page).to have_content(form_data[:email_address])
+    expect(page).to have_content(form_data[:first_name])
+    expect(page).to have_content(form_data[:last_name])
+
+    # Check for presence of change links
+    expect(page).to have_link("Change", count: 11)
   end
 
   def and_i_submit_the_onboarding_form
@@ -150,7 +202,8 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
   end
 
   def and_i_see_already_submitted_message
-    expect(page).to have_content("This form has already been submitted and can no longer be edited. Please contact the Publish support team if you need assistance.")
+    support_email = "becomingateacher@digital.education.gov.uk"
+    expect(page).to have_content("This form has already been submitted and can no longer be edited. If you need assistance, please contact the Publish support team at #{support_email}.")
     expect(page).to have_css(".govuk-inset-text.govuk-inset-text--warning")
   end
 
@@ -172,7 +225,33 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     expect(page).to have_field("Last name", disabled: true)
   end
 
-  def and_i_do_not_see_the_submit_button
-    expect(page).not_to have_button("Submit")
+  def and_i_do_not_see_the_continue_button
+    expect(page).not_to have_button("Continue")
+  end
+
+  def and_the_onboarding_request_becomes_invalid_before_submit
+    # Simulate the data becoming invalid between CYA and submit
+    onboarding_request.update!(ukprn: "123")
+    onboarding_request.update!(postcode: "invalid-postcode")
+  end
+
+  def then_i_see_the_error_summary_on_check_answers
+    # Still on the confirm URL because the controller does `render :check_answers`
+    expect(page).to have_current_path(
+      confirm_publish_provider_onboarding_path(onboarding_request.uuid),
+    )
+
+    # The content is the check your answers page
+    expect(page).to have_content("Check your answers")
+
+    # GOV.UK error summary container
+    expect(page).to have_css(".govuk-error-summary")
+
+    # Generic error summary heading (from your view)
+    expect(page).to have_content("There is a problem")
+
+    # Displays real validation message from en.yml
+    expect(page).to have_content("Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1")
+    expect(page).to have_content("Postcode is not valid, (for example, BN1 1AA)")
   end
 end

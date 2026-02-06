@@ -174,6 +174,19 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
     end
   end
 
+  context "when validate_provider_fields is true on a pending record" do
+    let(:record) { build(:providers_onboarding_form_request, :validate_provider_fields) }
+
+    it "runs provider validations even though status is pending" do
+      record.provider_name = nil
+      record.postcode = nil
+
+      expect(record).not_to be_valid
+      expect(record.errors[:provider_name]).to include("Enter your organisation name")
+      expect(record.errors[:postcode]).to be_present
+    end
+  end
+
   describe "#form_link" do
     let(:request) { create(:providers_onboarding_form_request) }
 
