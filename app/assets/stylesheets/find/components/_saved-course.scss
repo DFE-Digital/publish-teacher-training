@@ -1,33 +1,55 @@
-.app-saved-course__cell {
-  position: relative;
+.app-saved-courses-search {
+  padding: 20px;
+  margin-bottom: 20px;
 
-  padding-top: 0;
-  padding-right: govuk-spacing(8);
-  padding-bottom: 0;
-}
+  background-color: #f3f2f1;
 
-.app-saved-course__cell-link {
-  display: block;
-
-  color: inherit;
-
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-
-    background-color: govuk-colour("light-grey");
+  @include govuk-media-query($from: tablet) {
+    padding: 30px;
+    margin-bottom: 30px;
   }
 }
 
-.app-saved-course__cell-content {
-  display: flex;
+.app-saved-courses-search__location-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 20px;
+  align-items: end;
 
-  justify-content: space-between;
+  .govuk-label {
+    grid-column: 1 / -1;
+  }
 
-  padding-top: govuk-spacing(4);
-  padding-bottom: govuk-spacing(4);
-  padding-left: govuk-spacing(2);
+  .govuk-input {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .app-saved-courses-search__button {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+.app-saved-courses-search__button {
+  margin-bottom: govuk-spacing(1);
+  margin-bottom: 0;
+  align-self: end;
+  white-space: nowrap;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.app-saved-course-location {
+  margin-bottom: 0px;
+
+  @media (min-width: 48.0625em) {
+    width: 65%;
+  }
+}
+
+.app-saved-course-location-input {
+  margin-bottom: 0px;
 }
 
 .app-saved-course__status-tag {

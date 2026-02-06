@@ -1,92 +1,57 @@
 # frozen_string_literal: true
 
 module SavedCourses
-  class SummaryCardComponent < ViewComponent::Base
-    include FinancialIncentiveHintHelper
+  class SummaryCardComponent < Courses::SummaryCardComponent
+    attr_reader :saved_course, :order
 
-    attr_reader :saved_course
-
-    def initialize(saved_course:)
+    def initialize(saved_course:, location: nil, short_address: nil, order: nil)
       @saved_course = saved_course
-      super
+      @order = order
+      super(course: saved_course.course, location: location, short_address: short_address)
     end
 
-    def course
-      @course ||= saved_course.course
+    def nearest_placement_school_key
+      t(".nearest_placement_school")
     end
 
     def title
-      provider_span = content_tag(:span, course.provider_name)
-      course_span = content_tag(:span, course.name_and_code)
-      status_tag = course.decorate.saved_status_tag
-      status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
-
-      title_inner = safe_join(
-        [
-          provider_span,
+      course_link = govuk_link_to(
+        find_course_path(
+          provider_code: course.provider_code,
+          course_code: course.course_code,
+          location: @location,
+          distance_from_location: search_by_location? ? saved_course.minimum_distance_to_search_location.ceil : nil,
+        ),
+        class: "govuk-link",
+      ) do
+        safe_join([
+          course.provider_name,
           tag.br,
-          course_span,
-          status_block,
-        ].compact,
-      )
-
-      course_info =
-        if course.is_withdrawn?
-          content_tag(:div, title_inner)
-        else
-          govuk_link_to(
-            find_course_path(provider_code: course.provider_code, course_code: course.course_code),
-            class: "govuk-link",
-          ) { title_inner }
-        end
-
-      content_tag(:div, class: "app-saved-course__card-title") do
-        safe_join(
-          [
-            content_tag(:div, course_info),
-            content_tag(:div, delete_action, class: "app-saved-course__card-title-delete"),
-          ],
-        )
+          course.name_and_code,
+        ])
       end
+
+      safe_join([course_link, " ".html_safe, course.decorate.saved_status_tag])
     end
 
-    def delete_action
-      button_to(
-        t(".delete"),
-        find_candidate_saved_course_path(saved_course),
-        method: :delete,
-        class: "app-button-link",
-      )
+    def nearest_placement_school_value
+      return unless search_by_location?
+
+      t(
+        ".distance_html",
+        distance: content_tag(:strong, pluralize(saved_course.minimum_distance_to_search_location.ceil, "mile")),
+        location: content_tag(:strong, sanitize(@short_address.presence || @location)),
+      ).html_safe
     end
 
-    def fee_or_salary_value
-      if course.salary? || course.apprenticeship?
-        t(".fee_value.#{course.funding}")
-      else
-        safe_join([uk_fees, international_fees].compact_blank, tag.br)
-      end
+    def nearest_placement_school_hint
+      t(".placement_hint") unless search_by_location?
     end
 
-  private
-
-    def uk_fees
-      fee_uk = enrichment.fee_uk_eu
-      return if fee_uk.blank?
-
-      safe_join([content_tag(:b, number_to_currency(fee_uk.to_f)), " ", t(".fee_for_uk_citizens")])
-    end
-
-    def international_fees
-      fee_international = enrichment.fee_international
-      return if fee_international.blank?
-
-      safe_join([content_tag(:b, number_to_currency(fee_international.to_f)), " ", t(".fee_for_non_uk_citizens")])
-    end
-
-    NullEnrichment = Struct.new(:fee_uk_eu, :fee_international, keyword_init: true)
-
-    def enrichment
-      @enrichment ||= course.latest_published_enrichment || NullEnrichment.new
+    def search_by_location?
+      @location.present? &&
+        saved_course.respond_to?(:minimum_distance_to_search_location) &&
+        saved_course.minimum_distance_to_search_location.present?
     end
   end
 end

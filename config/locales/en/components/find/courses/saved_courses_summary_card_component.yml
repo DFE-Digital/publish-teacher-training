@@ -1,0 +1,14 @@
+en:
+  saved_courses:
+    summary_card_component:
+      nearest_placement_school: Nearest placement school
+      distance_html: "%{distance} from %{location}"
+      placement_hint: Add a location to see the nearest potential placement school
+      delete: Delete
+      fee_key: Fee or salary
+      fee_value:
+        salary: Salary
+        apprenticeship: Salary (apprenticeship)
+        fee:
+          uk_fees_html: "%{value} <b>fee</b> for UK citizens"
+          international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"

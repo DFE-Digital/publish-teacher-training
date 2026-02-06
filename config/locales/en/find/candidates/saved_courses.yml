@@ -12,6 +12,8 @@ en:
           applications_link_text: Apply for teacher training website
           applications_url: https://www.gov.uk/apply-for-teacher-training
           applications_utm_content: saved_courses_applications
+          search_heading: View nearest placement schools
+          search_description: Add a location to see the nearest potential placement school for each saved course.
           location_label: City, town or postcode
           add_location: Add location
           sort_by: "Sort by:"
@@ -20,11 +22,6 @@ en:
             distance: Distance
             fee_uk_ascending: Lowest fee for UK citizens
             fee_intl_ascending: Lowest fee for non-UK citizens
-        saved_course_row:
-          delete: Delete
-          nearest_placement_school: Nearest placement school
-          distance_html: "%{distance} from %{location}"
-          placement_hint: Add a location to see the nearest potential placement school
         create:
           success_message_title: Course saved
           view_saved_courses: View saved courses
