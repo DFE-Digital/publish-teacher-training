@@ -19,4 +19,5 @@ activate :open_api
 
 configure :build do
   set :http_prefix, "/docs/"
+  activate :asset_hash
 end
