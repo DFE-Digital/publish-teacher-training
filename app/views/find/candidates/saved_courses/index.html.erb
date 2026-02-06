@@ -18,13 +18,47 @@
     </div>
   <% else %>
     <div class="govuk-grid-column-full">
-      <ul class="govuk-list">
-        <% @saved_courses.each do |saved_course| %>
-          <%= render SavedCourses::SummaryCardComponent.new(saved_course:) %>
-        <% end %>
-      </ul>
+      <%= form_with url: find_candidate_saved_courses_path, method: :get, local: true do |form| %>
+        <div class="govuk-form-group" data-controller="locations-autocomplete" data-locations-autocomplete-path-value="<%= find_geolocation_suggestions_path %>">
+          <%= form.label :location, t(".location_label"), class: "govuk-label" %>
+          <div class="app-saved-courses__location-input">
+            <%= form.text_field :location,
+                value: @location,
+                class: "govuk-input",
+                autocomplete: "off",
+                data: { locations_autocomplete_target: "input" } %>
+            <%= form.submit t(".add_location"), class: "govuk-button govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-left-2" %>
+          </div>
+        </div>
+      <% end %>
 
-      <%= govuk_pagination(pagy: @pagy) %>
+      <p class="govuk-body">
+        <%= t(".sort_by") %>
+        <% sort_options = [["newest_first", t(".sort_options.newest_first")]] %>
+        <% sort_options << ["distance", t(".sort_options.distance")] if @location.present? %>
+        <% sort_options << ["fee_uk_ascending", t(".sort_options.fee_uk_ascending")] %>
+        <% sort_options << ["fee_intl_ascending", t(".sort_options.fee_intl_ascending")] %>
+
+        <% sort_options.each_with_index do |(order_value, label), index| %>
+          <% if @order == order_value %>
+            <strong><%= label %></strong>
+          <% else %>
+            <%= govuk_link_to label, find_candidate_saved_courses_path(location: @location, order: order_value) %>
+          <% end %>
+          <% unless index == sort_options.size - 1 %>
+            |
+          <% end %>
+        <% end %>
+      </p>
+
+      <table class="govuk-table">
+        <tbody class="govuk-table__body">
+          <% @saved_courses.each do |saved_course| %>
+            <%= render partial: "find/candidates/saved_courses/saved_course_row",
+                       locals: { saved_course:, location: @location, short_address: @short_address } %>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   <% end %>
 
