@@ -10,6 +10,7 @@ RSpec.configure do |config|
   config.include FeatureHelpers::CourseSteps, type: :feature
   config.include FeatureHelpers::CourseSteps, type: :system
   config.include FeatureHelpers::PageWithQuery, type: :feature
+  config.include FeatureHelpers::PageWithQuery, type: :system
   config.include DfESignInUserHelper, type: :feature
   config.include DfESignInUserHelper, type: :system
   config.include FeatureHelpers::PageObject::Support, :support_features
