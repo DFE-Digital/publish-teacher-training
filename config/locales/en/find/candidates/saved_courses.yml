@@ -7,6 +7,16 @@ en:
           no_saved_courses: You have no saved courses
           find_saved_courses: Find a course
           empty_state_html: "%{link} and start saving courses you may want to review and apply for later."
+          search_heading: View nearest placement schools
+          search_description: Add a location to see the nearest potential placement school for each saved course.
+          location_label: City, town or postcode
+          add_location: Add location
+          sort_by: "Sort by:"
+          sort_options:
+            newest_first: Most recently saved
+            distance: Distance
+            fee_uk_ascending: Lowest fee for UK citizens
+            fee_intl_ascending: Lowest fee for non-UK citizens
         create:
           success_message_title: Course saved
           view_saved_courses: View saved courses
