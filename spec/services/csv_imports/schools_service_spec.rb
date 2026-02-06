@@ -27,7 +27,7 @@ module CSVImports
 
     shared_examples "attribute imported accross from csv" do |attribute_name, index|
       it "correctly mapped #{attribute_name} to #{index}" do
-        expect(subject.map(&attribute_name)).to eql(csv_content.lines.map { |line| line.split(",")[index].blank? ? nil : line.split(",")[index].gsub("\n", "") })
+        expect(subject.map(&attribute_name)).to eql(csv_content.lines.map { |line| line.split(",")[index].presence&.gsub("\n", "") })
       end
     end
 

@@ -13,12 +13,12 @@ class ProvidersCache
                       .by_name_ascending
                       .select(:id, :provider_name, :provider_code)
                       .map do |provider|
-        ProviderSuggestion.new(
-          id: provider.id,
-          name: provider.name_and_code,
-          code: provider.provider_code,
-          value: provider.provider_code,
-        )
+                        ProviderSuggestion.new(
+                          id: provider.id,
+                          name: provider.name_and_code,
+                          code: provider.provider_code,
+                          value: provider.provider_code,
+                        )
       end
     end
   end
