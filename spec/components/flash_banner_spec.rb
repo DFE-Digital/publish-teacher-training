@@ -194,24 +194,24 @@ describe FlashBanner do
     end
   end
 
-  describe "#success" do
+  describe "#success?" do
     let(:flash) { ActionDispatch::Flash::FlashHash.new }
     let(:flash_banner) { described_class.new(flash:) }
 
     it "returns true when key is 'success'" do
-      expect(flash_banner.success("success")).to be true
+      expect(flash_banner.success?("success")).to be true
     end
 
     it "returns false when key is 'warning'" do
-      expect(flash_banner.success("warning")).to be false
+      expect(flash_banner.success?("warning")).to be false
     end
 
     it "returns false when key is 'info'" do
-      expect(flash_banner.success("info")).to be false
+      expect(flash_banner.success?("info")).to be false
     end
 
     it "returns false when key is 'error'" do
-      expect(flash_banner.success("error")).to be false
+      expect(flash_banner.success?("error")).to be false
     end
   end
 
