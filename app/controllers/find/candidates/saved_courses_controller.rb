@@ -7,11 +7,13 @@ module Find
       skip_before_action :require_authentication, only: %i[sign_in]
 
       def index
-        saved_courses = @candidate.saved_courses
-          .includes(course: :latest_published_enrichment)
-          .order(created_at: :desc)
+        @location = saved_courses_filter_params[:location]
+        @address = Geolocation::Address.query(@location) if @location.present?
 
-        @pagy, @saved_courses = pagy(saved_courses)
+        query_params = saved_courses_query_params
+        @saved_courses = SavedCourses::Query.call(candidate: @candidate, params: query_params)
+        @short_address = @address&.short_address
+        @order = query_params[:order]
       end
 
       def sign_in
@@ -54,9 +56,9 @@ module Find
 
       def undo
         if SaveCourseService.call(candidate: @candidate, course:)
-          redirect_to find_candidate_saved_courses_path
+          redirect_to find_candidate_saved_courses_path(saved_courses_filter_params)
         else
-          redirect_to find_candidate_saved_courses_path(course, error: t(".save_failed"))
+          redirect_to find_candidate_saved_courses_path(saved_courses_filter_params.merge(error: t(".save_failed")))
         end
       end
 
@@ -74,7 +76,7 @@ module Find
               else
                 undo_link = view_context.render(
                   partial: "find/candidates/saved_courses/undo_link",
-                  locals: { label: t(".undo"), undo_path: undo_find_candidate_saved_courses_path, course: @course },
+                  locals: { label: t(".undo"), undo_path: undo_find_candidate_saved_courses_path, course: @course, location: params[:location], order: params[:order] },
                 )
 
                 flash[:success_with_body] = {
@@ -87,7 +89,7 @@ module Find
                   ),
                 }
 
-                redirect_to find_candidate_saved_courses_path
+                redirect_to find_candidate_saved_courses_path(saved_courses_filter_params)
               end
             end
           else
@@ -179,6 +181,20 @@ module Find
         return nil if value.start_with?("//")
 
         value
+      end
+
+      def saved_courses_query_params
+        permitted = saved_courses_filter_params.except(:location).symbolize_keys
+
+        if @address&.latitude.present?
+          permitted.merge(latitude: @address.latitude, longitude: @address.longitude)
+        else
+          permitted
+        end
+      end
+
+      def saved_courses_filter_params
+        params.permit(:location, :order).to_h.compact_blank
       end
 
       def reason_for_request
