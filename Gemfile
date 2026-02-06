@@ -98,7 +98,6 @@ gem "geokit-rails"
 gem "geocoder"
 
 gem "rswag-api"
-gem "rswag-specs"
 gem "rswag-ui"
 
 gem "pg_search"
@@ -168,6 +167,8 @@ group :development, :test do
   gem "rubocop-factory_bot", require: false
   gem "rubocop-govuk", require: false
   gem "rubocop-rspec_rails", require: false
+
+  gem "rswag-specs"
 
   # run specs in parallel
   gem "parallel_tests"
