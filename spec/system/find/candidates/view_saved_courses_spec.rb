@@ -154,8 +154,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
     end
   end
 
-  # --- Shared steps ---
-
   def when_i_log_in_as_a_candidate
     visit "/"
     click_link_or_button "Sign in"
@@ -170,8 +168,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
     candidate = Candidate.first
     @saved_courses = create(:saved_course, course: @course, candidate: candidate)
   end
-
-  # --- Course setup helpers ---
 
   def given_a_published_course_exists
     physics = create(:secondary_subject, :physics, bursary_amount: 20_000, scholarship: 22_000)
@@ -323,8 +319,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
     create(:saved_course, course: @cheap_course, candidate: candidate, created_at: 2.days.ago)
   end
 
-  # --- Location search ---
-
   def and_i_search_for_london
     stub_london_geocode
 
@@ -343,8 +337,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
     )
   end
 
-  # --- Sort link actions ---
-
   def and_i_click_sort_by_most_recently_saved
     click_link_or_button "Most recently saved"
   end
@@ -356,8 +348,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
   def and_i_click_sort_by_lowest_fee_intl
     click_link_or_button "Lowest fee for non-UK citizens"
   end
-
-  # --- Sort ordering assertions ---
 
   def then_i_see_courses_ordered_newest_first
     rows = saved_course_names
@@ -383,8 +373,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
     rows = saved_course_names
     expect(rows).to eq(["Cheap Course", "Expensive Course"])
   end
-
-  # --- Sort link active/inactive assertions ---
 
   def and_most_recently_saved_is_the_active_sort
     within(sort_bar) do
@@ -426,8 +414,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
     end
   end
 
-  # --- Distance info assertions ---
-
   def and_i_see_distance_information
     expect(page).to have_content("Nearest placement school")
     expect(page).to have_content("from London")
@@ -450,8 +436,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
     expect(page).to have_content("fee for UK citizens")
     expect(page).to have_content("fee for Non-UK citizens")
   end
-
-  # --- Existing scenario assertions ---
 
   def then_i_see_no_saved_courses_message
     expect(page).to have_content("You have no saved courses")
@@ -487,8 +471,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
       expect(page).to have_content(text)
     end
   end
-
-  # --- Helpers ---
 
   def within_first_saved_course_row(&block)
     within(all(".govuk-summary-card").first, &block)
