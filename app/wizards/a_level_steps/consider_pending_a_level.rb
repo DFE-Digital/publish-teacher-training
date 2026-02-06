@@ -4,7 +4,7 @@ module ALevelSteps
   class ConsiderPendingALevel
     include DfE::Wizard::Step
 
-    attribute :pending_a_level
+    attribute :pending_a_level, :string
 
     validates :pending_a_level, presence: true
     validates :pending_a_level, inclusion: { in: %w[yes no] }
