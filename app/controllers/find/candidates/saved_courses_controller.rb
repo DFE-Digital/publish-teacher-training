@@ -187,7 +187,13 @@ module Find
         permitted = saved_courses_filter_params.except(:location).symbolize_keys
 
         if @address&.latitude.present?
-          permitted.merge(latitude: @address.latitude, longitude: @address.longitude)
+          radius = ::Courses::DefaultRadius.new(
+            location: @location,
+            formatted_address: @address.formatted_address,
+            address_types: @address.address_types,
+          ).call
+
+          permitted.merge(latitude: @address.latitude, longitude: @address.longitude, radius:)
         else
           permitted
         end

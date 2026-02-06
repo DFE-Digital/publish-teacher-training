@@ -118,6 +118,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
       then_i_see_courses_ordered_by_uk_fee
       and_lowest_fee_uk_is_the_active_sort
+      and_i_see_fee_information
     end
 
     scenario "sorting by lowest fee for non-UK citizens" do
@@ -129,6 +130,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
       then_i_see_courses_ordered_by_intl_fee
       and_lowest_fee_intl_is_the_active_sort
+      and_i_see_fee_information
     end
 
     scenario "placement hint shown when no location searched" do
@@ -138,6 +140,17 @@ RSpec.describe "Viewing my saved courses", service: :find do
       then_i_visit_my_saved_courses
 
       then_i_see_placement_hint
+    end
+
+    scenario "searching by location filters out courses outside the default radius" do
+      when_i_log_in_as_a_candidate
+      and_i_have_courses_in_london_and_cambridge
+
+      then_i_visit_my_saved_courses
+      and_i_search_for_london
+
+      then_i_see_only_london_course
+      and_i_do_not_see_cambridge_course
     end
   end
 
@@ -222,6 +235,35 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def and_i_have_courses_at_different_locations
+    candidate = Candidate.first
+    london = build(:location, :london)
+    lewisham = build(:location, :lewisham)
+
+    @london_course = create(
+      :course,
+      :published,
+      :open,
+      name: "London Course",
+      course_code: "LON1",
+      provider: create(:provider, provider_name: "London University"),
+      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
+    )
+
+    @lewisham_course = create(
+      :course,
+      :published,
+      :open,
+      name: "Lewisham Course",
+      course_code: "LEW1",
+      provider: create(:provider, provider_name: "Lewisham University"),
+      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: lewisham.latitude, longitude: lewisham.longitude))],
+    )
+
+    create(:saved_course, course: @lewisham_course, candidate: candidate, created_at: 1.hour.ago)
+    create(:saved_course, course: @london_course, candidate: candidate, created_at: 2.days.ago)
+  end
+
+  def and_i_have_courses_in_london_and_cambridge
     candidate = Candidate.first
     london = build(:location, :london)
     cambridge = build(:location, :cambridge)
@@ -324,12 +366,12 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
   def then_i_see_courses_ordered_by_distance
     rows = saved_course_names
-    expect(rows).to eq(["London Course", "Cambridge Course"])
+    expect(rows).to eq(["London Course", "Lewisham Course"])
   end
 
   def then_i_see_courses_ordered_newest_first_with_location
     rows = saved_course_names
-    expect(rows).to eq(["Cambridge Course", "London Course"])
+    expect(rows).to eq(["Lewisham Course", "London Course"])
   end
 
   def then_i_see_courses_ordered_by_uk_fee
@@ -395,6 +437,20 @@ RSpec.describe "Viewing my saved courses", service: :find do
     expect(page).to have_content("Add a location to see the nearest potential placement school")
   end
 
+  def then_i_see_only_london_course
+    expect(page).to have_content("London Course")
+  end
+
+  def and_i_do_not_see_cambridge_course
+    expect(page).not_to have_content("Cambridge Course")
+  end
+
+  def and_i_see_fee_information
+    expect(page).to have_content("Fee or salary")
+    expect(page).to have_content("fee for UK citizens")
+    expect(page).to have_content("fee for Non-UK citizens")
+  end
+
   # --- Existing scenario assertions ---
 
   def then_i_see_no_saved_courses_message
@@ -409,6 +465,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
       expect(page).to have_content(@course.name)
       expect(page).to have_content(@course.course_code)
       expect(page).to have_content("Delete")
+      expect(page).to have_content("Fee or salary")
 
       expect(page).to have_link(
         @course.provider.provider_name,
@@ -434,11 +491,13 @@ RSpec.describe "Viewing my saved courses", service: :find do
   # --- Helpers ---
 
   def within_first_saved_course_row(&block)
-    within(all(".govuk-table__row").first, &block)
+    within(all(".govuk-summary-card").first, &block)
   end
 
   def saved_course_names
-    all(".govuk-table__row").map { |row| row.find(".govuk-body-s").text.split("(").first.strip }
+    all(".govuk-summary-card__title a").map do |link|
+      link.native.children.select(&:text?).last.text.split("(").first.strip
+    end
   end
 
   def sort_bar

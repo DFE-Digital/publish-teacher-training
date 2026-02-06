@@ -18,19 +18,28 @@
     </div>
   <% else %>
     <div class="govuk-grid-column-full">
-      <%= form_with url: find_candidate_saved_courses_path, method: :get, local: true do |form| %>
-        <div class="govuk-form-group" data-controller="locations-autocomplete" data-locations-autocomplete-path-value="<%= find_geolocation_suggestions_path %>">
-          <%= form.label :location, t(".location_label"), class: "govuk-label" %>
-          <div class="app-saved-courses__location-input">
-            <%= form.text_field :location,
-                value: @location,
-                class: "govuk-input",
-                autocomplete: "off",
-                data: { locations_autocomplete_target: "input" } %>
-            <%= form.submit t(".add_location"), class: "govuk-button govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-left-2" %>
+      <div class="app-saved-courses-search">
+        <h3 class="govuk-heading-m"><%= t(".search_heading") %></h3>
+        <p class="govuk-body"><%= t(".search_description") %></p>
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full app-saved-course-location">
+            <div class="govuk-form-group app-saved-course-location-input">
+              <%= form_with url: find_candidate_saved_courses_path, method: :get, local: true do |form| %>
+                <div class="app-saved-courses-search__location-row" data-controller="locations-autocomplete" data-locations-autocomplete-path-value="<%= find_geolocation_suggestions_path %>">
+                  <%= form.label :location, t(".location_label"), class: "govuk-label govuk-label--s govuk-!-font-weight-bold" %>
+                  <%= form.text_field :location,
+                      value: @location,
+                      class: "govuk-input",
+                      autocomplete: "off",
+                      data: { locations_autocomplete_target: "input" } %>
+                  <%= form.govuk_submit t(".add_location"), class: "app-saved-courses-search__button" %>
+                </div>
+              <% end %>
+            </div>
           </div>
         </div>
-      <% end %>
+      </div>
 
       <p class="govuk-body">
         <%= t(".sort_by") %>
@@ -51,14 +60,14 @@
         <% end %>
       </p>
 
-      <table class="govuk-table">
-        <tbody class="govuk-table__body">
-          <% @saved_courses.each do |saved_course| %>
-            <%= render partial: "find/candidates/saved_courses/saved_course_row",
-                       locals: { saved_course:, location: @location, short_address: @short_address } %>
-          <% end %>
-        </tbody>
-      </table>
+      <% @saved_courses.each do |saved_course| %>
+        <%= render SavedCourses::SummaryCardComponent.new(
+          saved_course: saved_course,
+          location: @location,
+          short_address: @short_address,
+          order: @order,
+        ) %>
+      <% end %>
     </div>
   <% end %>
 
