@@ -24,6 +24,6 @@ class FlashBanner < ApplicationComponent
   end
 
   def success?(key)
-    key == "success"
+    key.to_s == "success"
   end
 end
