@@ -1,12 +1,13 @@
-# frozen_string_literal: true
-
 module ALevelSteps
-  class ALevelEquivalencies < DfE::Wizard::Step
-    delegate :exit_path, to: :wizard
-    attr_accessor :accept_a_level_equivalency, :additional_a_level_equivalencies
+  class ALevelEquivalencies
+    include DfE::Wizard::Step
+
+    attribute :accept_a_level_equivalency, :string
+    attribute :additional_a_level_equivalencies, :string
 
     MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS = 250
     validates :accept_a_level_equivalency, presence: true
+    validates :accept_a_level_equivalency, inclusion: { in: %w[yes no] }
 
     validates :additional_a_level_equivalencies,
               words_count: {
@@ -18,10 +19,6 @@ module ALevelSteps
 
     def self.permitted_params
       %i[accept_a_level_equivalency additional_a_level_equivalencies]
-    end
-
-    def next_step
-      :exit
     end
 
     def words_count_error_message(error)

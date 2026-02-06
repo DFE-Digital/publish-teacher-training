@@ -3,22 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ALevelSteps::ConsiderPendingALevel do
-  subject(:wizard_step) { described_class.new(wizard:) }
-
-  let(:provider) { create(:provider) }
-  let(:course) { create(:course, :with_teacher_degree_apprenticeship, provider:) }
-  let(:wizard) do
-    ALevelsWizard.new(
-      current_step: :consider_pending_a_level,
-      provider:,
-      course:,
-      step_params: ActionController::Parameters.new(
-        consider_pending_a_level: ActionController::Parameters.new(step_params),
-      ),
-    )
-  end
-  let(:step_params) { { pending_a_level: } }
-  let(:pending_a_level) { "yes" }
+  subject(:wizard_step) { described_class.new }
 
   describe "#valid?" do
     context "when pending_a_level is present" do
@@ -32,9 +17,8 @@ RSpec.describe ALevelSteps::ConsiderPendingALevel do
     end
 
     context "when pending_a_level is not present" do
-      let(:pending_a_level) { nil }
-
       it "is not valid" do
+        wizard_step.pending_a_level = nil
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors.added?(:pending_a_level, :blank)).to be true
       end
@@ -47,9 +31,15 @@ RSpec.describe ALevelSteps::ConsiderPendingALevel do
     end
   end
 
-  describe "#next_step" do
-    it "returns the correct next step" do
-      expect(wizard_step.next_step).to eq(:a_level_equivalencies)
+  describe "#accepting_pending_a_level?" do
+    it "returns true when pending_a_level is 'yes'" do
+      wizard_step.pending_a_level = "yes"
+      expect(wizard_step.accepting_pending_a_level?).to be true
+    end
+
+    it "returns false when pending_a_level is 'no'" do
+      wizard_step.pending_a_level = "no"
+      expect(wizard_step.accepting_pending_a_level?).to be false
     end
   end
 end
