@@ -23,7 +23,7 @@ class FlashBanner < ApplicationComponent
     end.capitalize
   end
 
-  def success(key)
+  def success?(key)
     key == "success"
   end
 end

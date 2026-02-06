@@ -1,6 +1,6 @@
 <% flash.each do |key, value| %>
   <% if FLASH_TYPES.include?(key.to_s) %>
-    <%= govuk_notification_banner(title_text: title(key), success: success(key)) do |nb| %>
+    <%= govuk_notification_banner(title_text: title(key), success: success?(key)) do |nb| %>
       <% nb.with_heading(text: value) %>
     <% end %>
   <% end %>
