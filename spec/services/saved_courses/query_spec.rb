@@ -26,6 +26,8 @@ RSpec.describe SavedCourses::Query do
   end
 
   describe "distance ordering" do
+    let(:lewisham) { build(:location, :lewisham) }
+
     let!(:nearby_course) do
       create(
         :saved_course,
@@ -41,16 +43,16 @@ RSpec.describe SavedCourses::Query do
       )
     end
 
-    let!(:far_course) do
+    let!(:further_course) do
       create(
         :saved_course,
         candidate:,
         course: create(
           :course,
-          name: "Far",
+          name: "Further",
           provider: provider_zeta,
           site_statuses: [
-            create(:site_status, :findable, site: create(:site, latitude: cambridge.latitude, longitude: cambridge.longitude)),
+            create(:site_status, :findable, site: create(:site, latitude: lewisham.latitude, longitude: lewisham.longitude)),
           ],
         ),
       )
@@ -62,7 +64,7 @@ RSpec.describe SavedCourses::Query do
         params: { latitude: london.latitude, longitude: london.longitude },
       )
 
-      expect(results.map(&:id)).to eq([nearby_course.id, far_course.id])
+      expect(results.map(&:id)).to eq([nearby_course.id, further_course.id])
     end
 
     it "annotates saved courses with minimum_distance_to_search_location" do
@@ -85,13 +87,36 @@ RSpec.describe SavedCourses::Query do
       expect(results.map(&:id)).to be_present
     end
 
-    it "shows all saved courses regardless of distance (no radius filter)" do
+    it "filters out courses outside the default radius" do
       results = described_class.call(
         candidate:,
         params: { latitude: london.latitude, longitude: london.longitude },
       )
 
-      expect(results.map(&:id)).to contain_exactly(nearby_course.id, far_course.id)
+      # Both London (~0 miles) and Lewisham (~7 miles) are within the default 10-mile radius
+      expect(results.map(&:id)).to contain_exactly(nearby_course.id, further_course.id)
+
+      # Cambridge is ~55 miles away, outside the default radius
+      far_course = create(
+        :saved_course,
+        candidate:,
+        course: create(
+          :course,
+          name: "Far",
+          provider: create(:provider, provider_name: "Far University"),
+          site_statuses: [
+            create(:site_status, :findable, site: create(:site, latitude: cambridge.latitude, longitude: cambridge.longitude)),
+          ],
+        ),
+      )
+
+      results = described_class.call(
+        candidate:,
+        params: { latitude: london.latitude, longitude: london.longitude },
+      )
+
+      expect(results.map(&:id)).to contain_exactly(nearby_course.id, further_course.id)
+      expect(results.map(&:id)).not_to include(far_course.id)
     end
   end
 

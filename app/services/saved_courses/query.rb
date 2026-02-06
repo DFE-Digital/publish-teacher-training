@@ -27,28 +27,40 @@ module SavedCourses
 
   private
 
-    # LEFT JOIN so all saved courses appear regardless of whether they have
-    # published sites. No radius filter - we show all saved courses with
-    # their distance annotated.
     def location_scope
       return @scope if params[:latitude].blank? || params[:longitude].blank?
 
+      radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
       longitude = Float(params[:longitude])
 
-      @applied_scopes[:location] = { latitude:, longitude: }
+      @applied_scopes[:location] = { latitude:, longitude:, radius: radius_in_miles }
 
       @scope
         .joins(<<~SQL)
-          LEFT JOIN course_site ON (
+          INNER JOIN course_site ON (
             course_site.course_id = course.id
             AND course_site.status = 'R'
             AND course_site.publish = 'Y'
           )
-          LEFT JOIN site ON site.id = course_site.site_id
-            AND site.longitude IS NOT NULL
-            AND site.latitude IS NOT NULL
+          INNER JOIN site ON site.id = course_site.site_id
         SQL
+        .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
+        .where(
+          Course.sanitize_sql_array(
+            [
+              <<~SQL.squish,
+                ST_DistanceSphere(
+                  ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
+                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
+                ) <= ?
+              SQL
+              longitude,
+              latitude,
+              radius_in_meters,
+            ],
+          ),
+        )
         .select(
           Course.sanitize_sql_array(
             [
