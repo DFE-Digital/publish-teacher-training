@@ -177,6 +177,8 @@ jobs:
 
           - name: System - Find
             include-pattern: spec/system/find/.*_spec.rb
+          - name: System - Find
+            include-pattern: spec/system/find/.*_spec.rb
             exclude-pattern: spec/system/find/(homepage*|results*)/.*_spec.rb
           - name: System - Find (homepage & results)
             include-pattern: spec/system/find/(homepage*|results*)/.*_spec.rb
