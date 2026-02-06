@@ -18,9 +18,7 @@ module ALevelSteps
     end
 
     def subject
-      hash = wizard.state_store.repository.record.find_a_level_subject_requirement!(uuid)
-
-      I18n.t("helpers.label.what_a_level_is_required.subject_options.#{hash.fetch('subject', nil)}")
+      wizard.state_store.subject
     end
   end
 end
