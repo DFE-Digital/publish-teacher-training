@@ -17,7 +17,7 @@ module SavedCourses
       provider_span = content_tag(:span, course.provider_name)
       course_span = content_tag(:span, course.name_and_code)
       status_tag = course.decorate.saved_status_tag
-      status_block = (content_tag(:div, status_tag, class: "govuk-!-margin-top-2") if status_tag.present?)
+      status_block = (content_tag(:div, status_tag, class: "govuk-!-margin-top-2 app-saved-course__status-tag") if status_tag.present?)
 
       title_inner = safe_join(
         [
@@ -38,11 +38,11 @@ module SavedCourses
           ) { title_inner }
         end
 
-      content_tag(:div, class: "govuk-grid-row") do
+      content_tag(:div, class: "app-saved-course__card-title") do
         safe_join(
           [
-            content_tag(:div, course_info, class: "govuk-grid-column-two-thirds govuk-!-padding-top-2"),
-            content_tag(:div, delete_action, class: "govuk-grid-column-one-third govuk-!-text-align-right govuk-!-padding-top-2"),
+            content_tag(:div, course_info, class: "app-saved-course__card-title-main"),
+            content_tag(:div, delete_action, class: "app-saved-course__card-title-delete"),
           ],
         )
       end
