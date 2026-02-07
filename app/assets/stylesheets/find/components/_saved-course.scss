@@ -29,3 +29,37 @@
   padding-bottom: govuk-spacing(4);
   padding-left: govuk-spacing(2);
 }
+
+.app-saved-course__status-tag .govuk-tag {
+  max-width: none;
+}
+
+.app-saved-course__card-title {
+  display: flex;
+
+  gap: govuk-spacing(4);
+  justify-content: space-between;
+}
+
+.app-saved-course__card-title-main {
+  padding-top: govuk-spacing(2);
+}
+
+.app-saved-course__card-title-delete {
+  padding-top: govuk-spacing(2);
+
+  text-align: right;
+}
+
+// On small screens, stack so Delete appears below the status tag.
+@include govuk-media-query($until: tablet) {
+  .app-saved-course__card-title {
+    flex-direction: column;
+  }
+
+  .app-saved-course__card-title-delete {
+    padding: 0;
+
+    text-align: left;
+  }
+}

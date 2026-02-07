@@ -5,6 +5,7 @@
   &:not(:hover) {
     text-decoration: underline;
   }
+  padding: 0;
 
   font-size: inherit;
   font-weight: inherit;
@@ -12,6 +13,7 @@
   color: govuk-colour("blue");
 
   text-decoration: underline;
+
 
   cursor: pointer;
 

@@ -14,6 +14,10 @@
     border-color: govuk-colour("orange");
   }
 
+  &.app-callout--blue {
+    border-color: govuk-colour("blue");
+  }
+
   &.app-callout--border {
     border-style: solid;
     border-width: govuk-spacing(1);

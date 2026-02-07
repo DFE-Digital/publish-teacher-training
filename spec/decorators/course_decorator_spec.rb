@@ -110,8 +110,8 @@ describe CourseDecorator do
       end
     end
 
-    it "returns Closed after apply deadline", travel: 1.day.after(apply_deadline) do
-      expect(decorated.saved_status_tag).to include("Closed")
+    it "returns Not accepting applications after apply deadline", travel: 1.day.after(apply_deadline) do
+      expect(decorated.saved_status_tag).to include("Not accepting applications")
     end
 
     it "returns Not yet open between find opening and apply opening", travel: 1.day.after(find_opens) do
@@ -121,16 +121,8 @@ describe CourseDecorator do
     context "when provider closes course early" do
       let(:trait) { :closed }
 
-      it "returns Closed when provider closes course early" do
-        expect(decorated.saved_status_tag).to include("Closed")
-      end
-    end
-
-    context "when the course is open" do
-      let(:trait) { :open }
-
-      it "returns Open by default", travel: 1.day.after(apply_opens) do
-        expect(decorated.saved_status_tag).to include("Open")
+      it "returns Not accepting applications when provider closes course early" do
+        expect(decorated.saved_status_tag).to include("Not accepting applications")
       end
     end
 
