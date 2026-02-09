@@ -37,30 +37,6 @@ RSpec.describe "Support console providers onboarding form requests", service: :s
 
         then_i_see_second_page_of_requests_with_pagination
       end
-
-      # Can be removed when all tickets related to providers onboarding are done / merged
-      context "when in development environment" do
-        before do
-          allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
-          visit support_root_path
-        end
-
-        scenario "Onboarding tab is visible" do
-          expect(page).to have_link("Onboarding")
-        end
-      end
-
-      # Can be removed when all tickets related to providers onboarding are done / merged
-      context "when in production environment" do
-        before do
-          allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
-          visit support_root_path
-        end
-
-        scenario "Onboarding tab is not visible" do
-          expect(page).not_to have_link("Onboarding")
-        end
-      end
     end
   end
 end
