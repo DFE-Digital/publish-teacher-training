@@ -21,6 +21,40 @@ RSpec.describe StateStores::ALevelStore do
     end
   end
 
+  describe "#subject" do
+    let(:repository) { instance_double(Repositories::ALevelSubjectRemovalRepository, record: course, uuid: "abc123") }
+
+    context "when the subject is a predefined option" do
+      let(:a_level_subject_requirements) do
+        [{ "uuid" => "abc123", "subject" => "any_subject", "minimum_grade_required" => "A" }]
+      end
+
+      it "returns the translated subject name" do
+        expect(store.subject).to eq("Any subject")
+      end
+    end
+
+    context "when the subject is other_subject with other_subject text" do
+      let(:a_level_subject_requirements) do
+        [{ "uuid" => "abc123", "subject" => "other_subject", "other_subject" => "Biology", "minimum_grade_required" => "A" }]
+      end
+
+      it "returns the other_subject text" do
+        expect(store.subject).to eq("Biology")
+      end
+    end
+
+    context "when the subject is other_subject with blank other_subject text" do
+      let(:a_level_subject_requirements) do
+        [{ "uuid" => "abc123", "subject" => "other_subject", "other_subject" => "", "minimum_grade_required" => "A" }]
+      end
+
+      it "falls back to the translated subject name" do
+        expect(store.subject).to eq("Choose a subject")
+      end
+    end
+  end
+
   describe "#another_a_level_needed?" do
     subject(:store) { described_class.new(repository:, attribute_names: %w[add_another_a_level]) }
 

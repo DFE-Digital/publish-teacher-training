@@ -17,7 +17,7 @@ module StateStores
     def subject
       subject_hash = repository.record.find_a_level_subject_requirement!(repository.uuid)
 
-      I18n.t("helpers.label.what_a_level_is_required.subject_options.#{subject_hash.fetch('subject', nil)}")
+      subject_hash["other_subject"].presence || I18n.t("helpers.label.what_a_level_is_required.subject_options.#{subject_hash.fetch('subject', nil)}")
     end
   end
 end
