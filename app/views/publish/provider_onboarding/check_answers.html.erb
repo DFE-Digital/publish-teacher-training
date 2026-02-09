@@ -113,6 +113,7 @@
   <% end %>
 <% end %>
 <!-- Submit button -->
+<p class="govuk-body"><%= t(".submit_text_html", support_email: mail_to("becomingateacher@digital.education.gov.uk")) %></p>
 <div class="govuk-button-group govuk-!-margin-top-8">
   <%= form_with url: confirm_publish_provider_onboarding_path(@onboarding_request.uuid),
                 method: :post,

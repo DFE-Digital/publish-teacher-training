@@ -70,3 +70,5 @@ en:
         email_address: Email address
         first_name: First name
         last_name: Last name
+        submit_text_html: <p class="govuk-body"> Please note that once you submit this form, you won't be able to make any changes.</p> <p class="govuk-body">If you need to update any of the information you've entered, please contact the Publish support team at %{support_email}.</p>
+        support_email: becomingateacher@digital.education.gov.uk
