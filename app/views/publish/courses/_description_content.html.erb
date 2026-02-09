@@ -61,7 +61,7 @@
       t("publish.providers.courses.description_content.a_levels_label"),
       render(ALevelRowComponent.new(course:, errors: @errors)),
       %w[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency],
-      action_path: course.a_level_change_path,
+      action_path: course.a_level_subject_requirements.any? && course.a_level_change_path,
       action_visually_hidden_text: "A levels",
       render_errors: false,
     ) %>
