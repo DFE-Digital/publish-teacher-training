@@ -104,3 +104,11 @@ dump.rdb
 # Load testing
 find-load-test-summary.json
 find-load-test-report.html
+
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
