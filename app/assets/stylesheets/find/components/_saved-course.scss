@@ -12,7 +12,9 @@
 
 .app-saved-courses-search__location-row {
   display: grid;
+
   grid-template-columns: 1fr auto;
+
   column-gap: 20px;
   align-items: end;
 
@@ -21,27 +23,29 @@
   }
 
   .govuk-input {
-    grid-column: 1;
     grid-row: 2;
+    grid-column: 1;
   }
 
   .app-saved-courses-search__button {
-    grid-column: 2;
     grid-row: 2;
+    grid-column: 2;
   }
 }
 
 .app-saved-courses-search__button {
+  align-self: end;
+
+  padding-right: 32px;
+  padding-left: 32px;
   margin-bottom: govuk-spacing(1);
   margin-bottom: 0;
-  align-self: end;
+
   white-space: nowrap;
-  padding-left: 32px;
-  padding-right: 32px;
 }
 
 .app-saved-course-location {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 
   @media (min-width: 48.0625em) {
     width: 65%;
@@ -49,7 +53,7 @@
 }
 
 .app-saved-course-location-input {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .app-saved-course__status-tag {
