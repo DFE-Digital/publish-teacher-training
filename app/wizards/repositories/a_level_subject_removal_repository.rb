@@ -12,7 +12,17 @@ module Repositories
       return {} unless step_data[:confirmation] == "yes"
 
       updated_subjects = record.a_level_subject_requirements.reject { |s| s["uuid"] == uuid }
-      { a_level_subject_requirements: updated_subjects }
+
+      if updated_subjects.empty?
+        {
+          a_level_subject_requirements: [],
+          accept_pending_a_level: nil,
+          accept_a_level_equivalency: nil,
+          additional_a_level_equivalencies: nil,
+        }
+      else
+        { a_level_subject_requirements: updated_subjects }
+      end
     end
 
     def transform_for_read(_data)
