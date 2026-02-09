@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix(t("course.#{current_step.model_name.i18n_key}.heading"), current_step.errors && current_step.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix(t("course.#{current_step.model_name.i18n_key}.heading", subject: current_step.subject), current_step.errors && current_step.errors.any?) %>
 
 <% content_for :before_content do %>
   <%# This step doesn't get registered in the flow becuase it is not visited via the wizard navigation. It's visited through a link %>
