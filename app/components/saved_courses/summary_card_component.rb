@@ -41,7 +41,7 @@ module SavedCourses
       content_tag(:div, class: "app-saved-course__card-title") do
         safe_join(
           [
-            content_tag(:div, course_info, class: "app-saved-course__card-title-main"),
+            content_tag(:div, course_info),
             content_tag(:div, delete_action, class: "app-saved-course__card-title-delete"),
           ],
         )
