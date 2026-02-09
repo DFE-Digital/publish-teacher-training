@@ -37,9 +37,24 @@ RSpec.describe Repositories::ALevelSubjectRemovalRepository do
         [{ "uuid" => "uuid-1", "subject" => "any_subject", "minimum_grade_required" => "A" }]
       end
 
-      it "returns an empty array" do
+      it "returns an empty array for a_level_subject_requirements" do
         result = repository.transform_for_write({ confirmation: "yes" })
         expect(result[:a_level_subject_requirements]).to eq([])
+      end
+
+      it "clears accept_pending_a_level" do
+        result = repository.transform_for_write({ confirmation: "yes" })
+        expect(result[:accept_pending_a_level]).to be_nil
+      end
+
+      it "clears accept_a_level_equivalency" do
+        result = repository.transform_for_write({ confirmation: "yes" })
+        expect(result[:accept_a_level_equivalency]).to be_nil
+      end
+
+      it "clears additional_a_level_equivalencies" do
+        result = repository.transform_for_write({ confirmation: "yes" })
+        expect(result[:additional_a_level_equivalencies]).to be_nil
       end
     end
   end
