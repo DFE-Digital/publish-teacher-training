@@ -48,12 +48,12 @@ module FinancialIncentiveHintHelper
 private
 
   def hide_fee_hint?
-    !bursary_and_scholarship_flag_active_or_preview? ||
+    !bursary_and_scholarship_flag_active? ||
       (search_by_visa_sponsorship? && !physics? && !languages?) ||
       financial_incentive.blank?
   end
 
-  def bursary_and_scholarship_flag_active_or_preview?
+  def bursary_and_scholarship_flag_active?
     FeatureFlag.active?(:bursaries_and_scholarships_announced)
   end
 
