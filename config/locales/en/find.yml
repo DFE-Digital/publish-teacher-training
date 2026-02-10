@@ -214,10 +214,6 @@ en:
     subjects:
       fee_value:
         fee:
-          hint:
-            bursaries_and_scholarship_html: "Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available"
-            bursaries_only_html: "Bursaries of %{bursary_amount} are available"
-            scholarship_only_html: "Scholarships of %{scholarship_amount} are available"
     primary_subjects:
       index:
         page_title: Browse primary courses

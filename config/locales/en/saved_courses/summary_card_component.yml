@@ -6,10 +6,5 @@ en:
       fee_value:
         salary: Salary
         apprenticeship: Salary (apprenticeship)
-        fee:
-          hint:
-            bursaries_and_scholarship_html: "Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available"
-            bursaries_only_html: "Bursaries of %{bursary_amount} are available"
-            scholarship_only_html: "Scholarships of %{scholarship_amount} are available"
       fee_for_uk_citizens: fee for UK citizens
       fee_for_non_uk_citizens: fee for Non-UK citizens

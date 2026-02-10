@@ -7,6 +7,7 @@ module Find
         include ApplicationHelper
         include ::ViewHelper
         include PreviewHelper
+        include FinancialIncentiveHintHelper
 
         attr_reader :course, :enrichment
 
@@ -37,28 +38,6 @@ module Find
             t(".fee_value.#{course.funding}")
           else
             safe_join([uk_fees, international_fees].compact_blank, tag.br)
-          end
-        end
-
-        def bursary_value
-          return if course.salary? || course.apprenticeship? || hide_fee_hint?
-
-          if financial_incentive.bursary_amount.present? && financial_incentive.scholarship.present?
-            t(
-              ".fee_value.fee.hint.bursaries_and_scholarship_html",
-              bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-              scholarship_amount: number_to_currency(financial_incentive.scholarship),
-            )
-          elsif financial_incentive.bursary_amount.present?
-            t(
-              ".fee_value.fee.hint.bursaries_only_html",
-              bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-            )
-          elsif financial_incentive.scholarship.present?
-            t(
-              ".fee_value.fee.hint.scholarship_only_html",
-              scholarship_amount: number_to_currency(financial_incentive.scholarship),
-            )
           end
         end
 
@@ -98,16 +77,6 @@ module Find
           t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
         end
 
-        def hide_fee_hint?
-          !bursary_and_scholarship_flag_active_or_preview? ||
-            (search_by_visa_sponsorship? && !physics? && !languages?) ||
-            financial_incentive.blank?
-        end
-
-        def bursary_and_scholarship_flag_active_or_preview?
-          FeatureFlag.active?(:bursaries_and_scholarships_announced)
-        end
-
         def search_by_visa_sponsorship?
           @visa_sponsorship.present?
         end
@@ -143,10 +112,6 @@ module Find
 
         def languages?
           main_subject&.subject_name.in?(LANGUAGE_SUBJECTS)
-        end
-
-        def financial_incentive
-          @financial_incentive ||= main_subject&.financial_incentive
         end
       end
     end
