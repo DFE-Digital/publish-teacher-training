@@ -14,7 +14,7 @@
             publish_provider_onboarding_path(@onboarding_request.uuid),
           ) %>
     <% end %>
-    <% row.with_action(text: "Copy link", href: "#", classes: "copy-btn", html_attributes: { hidden: true, data: { copy_text: publish_provider_onboarding_url(@onboarding_request.uuid) } }) %>
+    <% row.with_action(text: "Copy link", classes: "copy-btn", href: "#", html_attributes: { hidden: true, data: { controller: "copy-link", action: "click->copy-link#copy", copy_link_target: "button", copy_link_text_value: publish_provider_onboarding_url(@onboarding_request.uuid) } }) %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { t(".zendesk_link") } %>
