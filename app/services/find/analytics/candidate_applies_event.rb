@@ -3,7 +3,7 @@
 module Find
   module Analytics
     class CandidateAppliesEvent < ApplicationEvent
-      attr_accessor :candidate_id, :course_id
+      attr_accessor :course_id
 
       def event_name
         :candidate_applies
@@ -16,7 +16,6 @@ module Find
       def event_data
         {
           data: {
-            candidate_id:,
             course_id:,
             was_course_saved: was_course_saved?,
             timestamp: Time.zone.now.utc,
@@ -25,7 +24,7 @@ module Find
       end
 
       def was_course_saved?
-        candidate_id.present? && SavedCourse.exists?(candidate_id:, course_id:)
+        current_user.present? && SavedCourse.exists?(candidate_id: current_user.id, course_id:)
       end
     end
   end

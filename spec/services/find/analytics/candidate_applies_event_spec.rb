@@ -29,7 +29,6 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
     context "when a non signed in candidate applies for a course that they have not saved" do
       let(:attributes) do
         {
-          candidate_id: nil,
           course_id: 2,
         }
       end
@@ -40,7 +39,6 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
 
         expect(subject.event_data).to eq(
           data: {
-            candidate_id: nil,
             course_id: 2,
             was_course_saved: false,
             timestamp: frozen_time,
@@ -56,7 +54,6 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
 
       let(:attributes) do
         {
-          candidate_id: candidate.id,
           course_id: course.id,
         }
       end
@@ -64,12 +61,12 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
       before do
         create(:saved_course, candidate:, course:)
         allow(Time).to receive(:now).and_return(frozen_time)
+        allow(subject).to receive(:current_user).and_return(candidate) # rubocop:disable RSpec/SubjectStub
       end
 
       it "returns a hash with all the event information" do
         expect(subject.event_data).to eq(
           data: {
-            candidate_id: candidate.id,
             course_id: course.id,
             was_course_saved: true,
             timestamp: frozen_time,
@@ -85,7 +82,6 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
 
       let(:attributes) do
         {
-          candidate_id: candidate.id,
           course_id: course.id,
         }
       end
@@ -97,7 +93,6 @@ RSpec.describe Find::Analytics::CandidateAppliesEvent do
       it "returns a hash with all the event information" do
         expect(subject.event_data).to eq(
           data: {
-            candidate_id: candidate.id,
             course_id: course.id,
             was_course_saved: false,
             timestamp: frozen_time,

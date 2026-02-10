@@ -107,7 +107,6 @@ module Find
       def send_saved_course_analytics_event
         Analytics::SavedCourseEvent.new(
           request:,
-          candidate_id: @candidate.id,
           course_id: @course.id,
         ).send_event
       end
@@ -115,7 +114,6 @@ module Find
       def send_remove_saved_course_analytics_event
         Analytics::RemoveSavedCourseEvent.new(
           request:,
-          candidate_id: @candidate.id,
           course_id: @course.id,
         ).send_event
       end

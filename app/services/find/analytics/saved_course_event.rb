@@ -3,7 +3,7 @@
 module Find
   module Analytics
     class SavedCourseEvent < ApplicationEvent
-      attr_accessor :candidate_id, :course_id
+      attr_accessor :course_id
 
       def event_name
         :saved_course
@@ -16,7 +16,6 @@ module Find
       def event_data
         {
           data: {
-            candidate_id:,
             course_id:,
             timestamp: Time.zone.now.utc,
             referer: request.referer,
