@@ -2,5 +2,6 @@
 
 module Find
   class TrackController < ::TrackController
+    include Find::Authentication
   end
 end
