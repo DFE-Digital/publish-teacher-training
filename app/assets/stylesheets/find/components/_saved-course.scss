@@ -46,7 +46,12 @@
 }
 
 // On small screens, stack so Delete appears below the status tag.
+// Also reduce the font size of the status tag.
 @include govuk-media-query($until: tablet) {
+  .app-saved-course__status-tag .govuk-tag {
+    font-size: 16px;
+  }
+
   .app-saved-course__card-title {
     flex-direction: column;
   }

@@ -6,7 +6,7 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
   include Rails.application.routes.url_helpers
 
   subject(:summary_card_content) do
-    rendered.text.gsub(/\r?\n/, " ").squeeze(" ").strip
+    rendered.text.squish
   end
 
   let(:rendered) { render_inline(described_class.new(saved_course:)) }
