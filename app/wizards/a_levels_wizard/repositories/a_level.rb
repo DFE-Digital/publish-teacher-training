@@ -1,6 +1,6 @@
 class ALevelsWizard
   module Repositories
-    class ALevelRepository < DfE::Wizard::Repository::Model
+    class ALevel < DfE::Wizard::Repository::Model
       attr_reader :virtual_attributes
 
       VIRTUAL_ATTRIBUTES = %i[

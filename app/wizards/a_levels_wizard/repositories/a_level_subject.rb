@@ -1,6 +1,6 @@
 class ALevelsWizard
   module Repositories
-    class ALevelSubjectRepository < DfE::Wizard::Repository::Model
+    class ALevelSubject < DfE::Wizard::Repository::Model
       attr_reader :uuid
 
       def initialize(uuid:, **)

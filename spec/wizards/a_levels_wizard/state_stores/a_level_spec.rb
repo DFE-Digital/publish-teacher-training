@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ALevelsWizard::StateStores::ALevelStore do
+RSpec.describe ALevelsWizard::StateStores::ALevel do
   subject(:store) { described_class.new(repository:) }
 
   let(:course) { create(:course, a_level_subject_requirements:) }
@@ -22,7 +22,7 @@ RSpec.describe ALevelsWizard::StateStores::ALevelStore do
   end
 
   describe "#subject" do
-    let(:repository) { instance_double(ALevelsWizard::Repositories::ALevelSubjectRemovalRepository, record: course, uuid: "abc123") }
+    let(:repository) { instance_double(ALevelsWizard::Repositories::ALevelSubjectRemoval, record: course, uuid: "abc123") }
 
     context "when the subject is a predefined option" do
       let(:a_level_subject_requirements) do

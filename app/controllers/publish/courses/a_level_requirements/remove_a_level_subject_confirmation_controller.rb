@@ -23,8 +23,8 @@ module Publish
       private
 
         def state_store
-          ALevelsWizard::StateStores::ALevelStore.new(
-            repository: ALevelsWizard::Repositories::ALevelSubjectRemovalRepository.new(
+          ALevelsWizard::StateStores::ALevel.new(
+            repository: ALevelsWizard::Repositories::ALevelSubjectRemoval.new(
               record: @course,
               uuid: params[:uuid],
             ),
