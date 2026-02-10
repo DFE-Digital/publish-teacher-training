@@ -28,7 +28,6 @@ RSpec.describe Find::Analytics::RemoveSavedCourseEvent do
   describe "#event_data" do
     let(:attributes) do
       {
-        candidate_id: 1360,
         course_id: 2,
       }
     end
@@ -42,7 +41,6 @@ RSpec.describe Find::Analytics::RemoveSavedCourseEvent do
 
         expect(subject.event_data).to eq(
           data: {
-            candidate_id: 1360,
             course_id: 2,
             timestamp: frozen_time,
             referer: "/results",
