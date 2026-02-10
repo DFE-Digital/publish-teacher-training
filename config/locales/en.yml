@@ -607,6 +607,10 @@ en:
         town: "Town or city"
     errors:
       models:
+        saved_course:
+          attributes:
+            note:
+              too_long: Your note must be 100 words or less
         contact:
           attributes:
             email:

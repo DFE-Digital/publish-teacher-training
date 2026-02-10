@@ -18,6 +18,7 @@ shared:
     - course_id
     - created_at
     - updated_at
+    - note
   session:
     - id
     - user_agent
