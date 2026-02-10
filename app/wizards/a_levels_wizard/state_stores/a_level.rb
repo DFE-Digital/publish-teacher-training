@@ -1,6 +1,6 @@
 class ALevelsWizard
   module StateStores
-    class ALevelStore
+    class ALevel
       include DfE::Wizard::StateStore
 
       def subjects
