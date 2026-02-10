@@ -2,6 +2,8 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
+    include FinancialIncentiveHintHelper
+
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
     def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil)
@@ -85,28 +87,6 @@ module Courses
       t(".length_key")
     end
 
-    def bursary_value
-      return if course.salary? || course.apprenticeship? || hide_fee_hint?
-
-      if financial_incentive.bursary_amount.present? && financial_incentive.scholarship.present?
-        t(
-          ".fee_value.fee.hint.bursaries_and_scholarship_html",
-          bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-          scholarship_amount: number_to_currency(financial_incentive.scholarship),
-        )
-      elsif financial_incentive.bursary_amount.present?
-        t(
-          ".fee_value.fee.hint.bursaries_only_html",
-          bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-        )
-      elsif financial_incentive.scholarship.present?
-        t(
-          ".fee_value.fee.hint.scholarship_only_html",
-          scholarship_amount: number_to_currency(financial_incentive.scholarship),
-        )
-      end
-    end
-
     def length_value(course_length = enrichment.course_length)
       translated_course_length = t(".length_value.#{course_length}", default: course_length)
 
@@ -177,12 +157,6 @@ module Courses
       t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
     end
 
-    def hide_fee_hint?
-      !bursary_and_scholarship_flag_active_or_preview? ||
-        (search_by_visa_sponsorship? && !physics? && !languages?) ||
-        financial_incentive.blank?
-    end
-
     def search_by_visa_sponsorship?
       @visa_sponsorship.present?
     end
@@ -216,23 +190,11 @@ module Courses
       main_subject&.subject_name.in?(LANGUAGE_SUBJECTS)
     end
 
-    def financial_incentive
-      @financial_incentive ||= main_subject&.financial_incentive
-    end
-
-    def main_subject
-      @main_subject ||= course.subjects.find { |subject| subject.id == course.master_subject_id }
-    end
-
     NullEnrichment = Struct.new(:course_length, :fee_uk_eu, :fee_international, keyword_init: true)
     # rubocop:enable Lint/UselessConstantScoping
 
     def enrichment
       @enrichment ||= course.latest_published_enrichment || NullEnrichment.new
-    end
-
-    def bursary_and_scholarship_flag_active_or_preview?
-      FeatureFlag.active?(:bursaries_and_scholarships_announced)
     end
   end
 end

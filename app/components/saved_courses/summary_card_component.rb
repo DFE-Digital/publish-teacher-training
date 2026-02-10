@@ -2,6 +2,8 @@
 
 module SavedCourses
   class SummaryCardComponent < ViewComponent::Base
+    include FinancialIncentiveHintHelper
+
     attr_reader :saved_course
 
     def initialize(saved_course:)
@@ -17,7 +19,7 @@ module SavedCourses
       provider_span = content_tag(:span, course.provider_name)
       course_span = content_tag(:span, course.name_and_code)
       status_tag = course.decorate.saved_status_tag
-      status_block = (content_tag(:div, status_tag, class: "govuk-!-margin-top-2 app-saved-course__status-tag") if status_tag.present?)
+      status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
 
       title_inner = safe_join(
         [
@@ -65,28 +67,6 @@ module SavedCourses
       end
     end
 
-    def bursary_value
-      return if course.salary? || course.apprenticeship? || hide_fee_hint?
-
-      if financial_incentive.bursary_amount.present? && financial_incentive.scholarship.present?
-        t(
-          ".fee_value.fee.hint.bursaries_and_scholarship_html",
-          bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-          scholarship_amount: number_to_currency(financial_incentive.scholarship),
-        )
-      elsif financial_incentive.bursary_amount.present?
-        t(
-          ".fee_value.fee.hint.bursaries_only_html",
-          bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-        )
-      elsif financial_incentive.scholarship.present?
-        t(
-          ".fee_value.fee.hint.scholarship_only_html",
-          scholarship_amount: number_to_currency(financial_incentive.scholarship),
-        )
-      end
-    end
-
   private
 
     def uk_fees
@@ -101,20 +81,6 @@ module SavedCourses
       return if fee_international.blank?
 
       safe_join([content_tag(:b, number_to_currency(fee_international.to_f)), " ", t(".fee_for_non_uk_citizens")])
-    end
-
-    def hide_fee_hint?
-      !FeatureFlag.active?(:bursaries_and_scholarships_announced) || financial_incentive.blank?
-    end
-
-    def financial_incentive
-      @financial_incentive ||= main_subject&.financial_incentive
-    end
-
-    def main_subject
-      return if course.master_subject_id.blank?
-
-      course.subjects.find { |subject| subject.id == course.master_subject_id }
     end
 
     NullEnrichment = Struct.new(:fee_uk_eu, :fee_international, keyword_init: true)
