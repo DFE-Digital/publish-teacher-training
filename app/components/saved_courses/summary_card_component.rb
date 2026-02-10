@@ -89,13 +89,15 @@ module SavedCourses
 
   private
 
-    def uk_fees(fee_uk = enrichment.fee_uk_eu)
+    def uk_fees
+      fee_uk = enrichment.fee_uk_eu
       return if fee_uk.blank?
 
       safe_join([content_tag(:b, number_to_currency(fee_uk.to_f)), " ", t(".fee_for_uk_citizens")])
     end
 
-    def international_fees(fee_international = enrichment.fee_international)
+    def international_fees
+      fee_international = enrichment.fee_international
       return if fee_international.blank?
 
       safe_join([content_tag(:b, number_to_currency(fee_international.to_f)), " ", t(".fee_for_non_uk_citizens")])
