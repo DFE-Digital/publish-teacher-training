@@ -515,9 +515,11 @@ describe CourseDecorator do
   describe "#bursary_requirements" do
     subject { decorated_course.bursary_requirements }
 
+    let(:incentive) { build_stubbed(:financial_incentive, bursary_amount: 3000) }
+
     context "Course with mathematics as a subject" do
-      let(:mathematics) { build_stubbed(:secondary_subject, :mathematics, subject_name: "Primary with Mathematics") }
-      let(:english) { build_stubbed(:secondary_subject, :english) }
+      let(:mathematics) { build_stubbed(:secondary_subject, :mathematics, subject_name: "Primary with mathematics", financial_incentive: incentive) }
+      let(:english) { build_stubbed(:secondary_subject, :english, financial_incentive: incentive) }
       let(:subjects) { [mathematics, english] }
 
       expected_requirements = [
@@ -529,7 +531,8 @@ describe CourseDecorator do
     end
 
     context "Course without mathematics as a subject" do
-      let(:english) { build_stubbed(:secondary_subject, :english) }
+      let(:biology) { build_stubbed(:secondary_subject, :biology, financial_incentive: incentive) }
+      let(:english) { build_stubbed(:secondary_subject, :english, financial_incentive: incentive) }
       let(:subjects) { [biology, english] }
 
       expected_requirements = [

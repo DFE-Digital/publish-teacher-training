@@ -31,30 +31,12 @@ module Shared
 
         private
 
-          ELIGIBLE_SUBJECTS = %w[
-            Physics
-            French
-            German
-            Spanish
-          ].freeze
-
-          SUBJECT_WITH_SCHOLARSHIPS = [
-            %w[F1 chemistry],
-            %w[11 computing],
-            %w[G1 mathematics],
-            %w[F3 physics],
-            %w[15 french],
-            %w[17 german],
-            %w[22 spanish],
-          ].freeze
-          private_constant :SUBJECT_WITH_SCHOLARSHIPS, :ELIGIBLE_SUBJECTS
-
           def eligible_subjects
-            ELIGIBLE_SUBJECTS
+            FundingInformation::NON_UK_SCHOLARSHIP_ELIGIBLE_SUBJECTS
           end
 
           def subject_with_scholarship
-            @subject_with_scholarship ||= SUBJECT_WITH_SCHOLARSHIPS.detect { |subject_code, _subject_name|
+            @subject_with_scholarship ||= FundingInformation::SCHOLARSHIP_BODY_SUBJECTS.detect { |subject_code, _subject_name|
               course.subjects.any? do |subject|
                 subject.subject_code == subject_code
               end

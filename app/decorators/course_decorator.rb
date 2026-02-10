@@ -134,17 +134,6 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  def bursary_requirements
-    requirements = ["a degree of 2:2 or above in any subject"]
-
-    if object.course_subjects.any? { |subject| subject.subject.subject_name.downcase == "primary with mathematics" }
-      mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
-      requirements.push(mathematics_requirement)
-    end
-
-    requirements
-  end
-
   def bursary_only?
     object.has_bursary? && !object.has_scholarship?
   end
@@ -614,17 +603,11 @@ private
   end
 
   def has_excluded_course_name?
-    exclusions = [
-      /^Drama/,
-      /^Media Studies/,
-      /^PE/,
-      /^Physical/,
-    ]
     # We only care about course with a name matching the pattern 'Foo with bar'
     # We don't care about courses matching the pattern 'Foo and bar'
     return false unless /with/.match?(object.name)
 
-    exclusions.any? { |e| e.match?(object.name) }
+    FundingInformation::BURSARY_EXCLUDED_COURSE_PATTERNS.any? { |e| e.match?(object.name) }
   end
 
   def bursary_and_scholarship_flag_active_or_preview?
