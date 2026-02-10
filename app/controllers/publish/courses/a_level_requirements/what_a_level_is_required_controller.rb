@@ -13,8 +13,8 @@ module Publish
       private
 
         def state_store
-          StateStores::ALevelStore.new(
-            repository: Repositories::ALevelSubjectRepository.new(
+          ALevelsWizard::StateStores::ALevelStore.new(
+            repository: ALevelsWizard::Repositories::ALevelSubjectRepository.new(
               record: @course,
               uuid: params[:uuid],
             ),
@@ -36,7 +36,7 @@ module Publish
         end
 
         def maximum_a_level_subject_requirements?
-          Array(@course.a_level_subject_requirements).size >= ALevelSteps::AddALevelToAList::MAXIMUM_NUMBER_OF_A_LEVEL_SUBJECTS
+          Array(@course.a_level_subject_requirements).size >= ALevelsWizard::Steps::AddALevelToAList::MAXIMUM_NUMBER_OF_A_LEVEL_SUBJECTS
         end
 
         def no_uuid?

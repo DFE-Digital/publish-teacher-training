@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ALevelSteps::WhatALevelIsRequired, type: :model do
+RSpec.describe ALevelsWizard::Steps::WhatALevelIsRequired, type: :model do
   subject(:wizard_step) { described_class.new }
 
   describe "validations" do

@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe ALevelSteps::AddALevelToAList do
+RSpec.describe ALevelsWizard::Steps::AddALevelToAList do
   subject(:wizard_step) { described_class.new }
 
-  let(:state_store) { instance_double(StateStores::ALevelStore, subjects:) }
+  let(:state_store) { instance_double(ALevelsWizard::StateStores::ALevelStore, subjects:) }
   let(:wizard) { instance_double(ALevelsWizard, state_store:) }
   let(:subjects) { [] }
 

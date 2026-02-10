@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ALevelSteps::ALevelEquivalencies do
+RSpec.describe ALevelsWizard::Steps::ALevelEquivalencies do
   subject(:wizard_step) { described_class.new }
 
   describe "#valid?" do

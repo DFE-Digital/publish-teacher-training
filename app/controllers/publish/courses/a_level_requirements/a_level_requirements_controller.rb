@@ -31,8 +31,8 @@ module Publish
       private
 
         def state_store
-          StateStores::ALevelStore.new(
-            repository: Repositories::ALevelRepository.new(
+          ALevelsWizard::StateStores::ALevelStore.new(
+            repository: ALevelsWizard::Repositories::ALevelRepository.new(
               record: @course,
             ),
           )

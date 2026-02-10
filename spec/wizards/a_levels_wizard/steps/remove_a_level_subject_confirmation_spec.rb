@@ -2,12 +2,12 @@
 
 require "rails_helper"
 
-RSpec.describe ALevelSteps::RemoveALevelSubjectConfirmation do
+RSpec.describe ALevelsWizard::Steps::RemoveALevelSubjectConfirmation do
   subject(:wizard_step) { described_class.new }
 
   let(:uuid) { SecureRandom.uuid }
-  let(:state_store) { instance_double(StateStores::ALevelStore, repository:, subject: "Any subject") }
-  let(:repository) { instance_double(Repositories::ALevelRepository, record: course) }
+  let(:state_store) { instance_double(ALevelsWizard::StateStores::ALevelStore, repository:, subject: "Any subject") }
+  let(:repository) { instance_double(ALevelsWizard::Repositories::ALevelRepository, record: course) }
   let(:course) { create(:course, a_level_subject_requirements:) }
   let(:a_level_subject_requirements) do
     [{ "uuid" => uuid, "subject" => "any_subject", "minimum_grade_required" => "A" }]

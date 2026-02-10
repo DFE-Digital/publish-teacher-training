@@ -150,7 +150,7 @@ private
 
   def and_i_add_too_many_words_into_equivalency_details
     fill_in "Details about equivalency tests you offer or accept",
-            with: "words " * (ALevelSteps::ALevelEquivalencies::MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS + 2)
+            with: "words " * (ALevelsWizard::Steps::ALevelEquivalencies::MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS + 2)
   end
 
   def and_i_click_update_a_levels
