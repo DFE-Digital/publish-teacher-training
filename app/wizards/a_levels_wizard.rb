@@ -17,11 +17,11 @@ class ALevelsWizard
         end
       end
 
-      graph.add_node :what_a_level_is_required, ALevelSteps::WhatALevelIsRequired
-      graph.add_node :add_a_level_to_a_list, ALevelSteps::AddALevelToAList
-      graph.add_node :remove_a_level_subject_confirmation, ALevelSteps::RemoveALevelSubjectConfirmation
-      graph.add_node :consider_pending_a_level, ALevelSteps::ConsiderPendingALevel
-      graph.add_node :a_level_equivalencies, ALevelSteps::ALevelEquivalencies
+      graph.add_node :what_a_level_is_required, Steps::WhatALevelIsRequired
+      graph.add_node :add_a_level_to_a_list, Steps::AddALevelToAList
+      graph.add_node :remove_a_level_subject_confirmation, Steps::RemoveALevelSubjectConfirmation
+      graph.add_node :consider_pending_a_level, Steps::ConsiderPendingALevel
+      graph.add_node :a_level_equivalencies, Steps::ALevelEquivalencies
 
       graph.add_edge from: :what_a_level_is_required, to: :add_a_level_to_a_list
 

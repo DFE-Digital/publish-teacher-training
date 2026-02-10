@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Repositories::ALevelRepository do
+RSpec.describe ALevelsWizard::Repositories::ALevelRepository do
   subject(:repository) { described_class.new(record: course) }
 
   let(:course) do

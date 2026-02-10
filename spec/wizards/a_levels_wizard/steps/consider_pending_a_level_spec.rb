@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ALevelSteps::ConsiderPendingALevel do
+RSpec.describe ALevelsWizard::Steps::ConsiderPendingALevel do
   subject(:wizard_step) { described_class.new }
 
   describe "#valid?" do

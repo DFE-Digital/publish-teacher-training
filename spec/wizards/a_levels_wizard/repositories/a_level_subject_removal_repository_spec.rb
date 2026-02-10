@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Repositories::ALevelSubjectRemovalRepository do
+RSpec.describe ALevelsWizard::Repositories::ALevelSubjectRemovalRepository do
   subject(:repository) { described_class.new(record: course, uuid: uuid) }
 
   let(:course) { create(:course, a_level_subject_requirements: existing_requirements) }
