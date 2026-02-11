@@ -245,9 +245,7 @@
               "english"
             ],
             "enum": [
-              [
-
-              ],
+              [],
               [
                 "maths",
                 "english"
@@ -496,7 +494,7 @@
             "nullable": true,
             "format": "date-time",
             "description": "The application deadline for candidates who require visa sponsorship.",
-            "example": "2019-06-13T10:44:31Z"
+            "example": "2025-06-13T10:44:31Z"
           },
           "degree_grade": {
             "type": "string",
@@ -1967,7 +1965,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2024,
+            "example": 2026,
             "schema": {
               "type": "string"
             }
@@ -2023,6 +2021,7 @@
             "required": false,
             "description": "The associated data for this resource.",
             "schema": {
+              "type": "string",
               "enum": [
                 "accredited_provider",
                 "provider",
@@ -2122,7 +2121,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2024,
+            "example": 2026,
             "schema": {
               "type": "string"
             }
@@ -2153,6 +2152,7 @@
             "required": false,
             "description": "The associated data for this resource.",
             "schema": {
+              "type": "string",
               "enum": [
                 "recruitment_cycle",
                 "provider",
@@ -2196,7 +2196,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2024,
+            "example": 2026,
             "schema": {
               "type": "string"
             }
@@ -2262,6 +2262,7 @@
             "required": false,
             "description": "The associated data for this resource.",
             "schema": {
+              "type": "string",
               "enum": [
                 "accredited_provider",
                 "provider",
@@ -2308,7 +2309,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2024,
+            "example": 2026,
             "schema": {
               "type": "string"
             }
@@ -2339,6 +2340,7 @@
             "required": false,
             "description": "The associated data for this resource.",
             "schema": {
+              "type": "string",
               "enum": [
                 "accredited_provider",
                 "provider",
@@ -2381,7 +2383,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2024,
+            "example": 2026,
             "schema": {
               "type": "string"
             }
@@ -2402,6 +2404,7 @@
             "required": false,
             "description": "The associated data for this resource.",
             "schema": {
+              "type": "string",
               "enum": [
                 "recruitment_cycle",
                 "provider"
@@ -2437,7 +2440,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2024,
+            "example": 2026,
             "schema": {
               "type": "string"
             }
@@ -2489,6 +2492,7 @@
             "required": false,
             "description": "The associated data for this resource.",
             "schema": {
+              "type": "string",
               "enum": [
                 "recruitment_cycle"
               ]
@@ -2533,7 +2537,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2024,
+            "example": 2026,
             "schema": {
               "type": "string"
             }
@@ -2554,6 +2558,7 @@
             "required": false,
             "description": "The associated data for this resource.",
             "schema": {
+              "type": "string",
               "enum": [
                 "recruitment_cycle"
               ]
@@ -2605,6 +2610,7 @@
             "required": false,
             "description": "The associated data for this resource.",
             "schema": {
+              "type": "string",
               "enum": [
                 "subjects"
               ]
