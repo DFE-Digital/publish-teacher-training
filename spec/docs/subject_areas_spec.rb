@@ -10,10 +10,9 @@ describe "API" do
       produces "application/json"
       parameter name: :include,
                 in: :query,
-                type: :string,
                 required: false,
                 description: "The associated data for this resource.",
-                schema: { enum: %w[subjects] },
+                schema: { type: :string, enum: %w[subjects] },
                 example: "subjects"
 
       curl_example description: "Get all subject areas",

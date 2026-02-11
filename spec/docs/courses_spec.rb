@@ -17,7 +17,6 @@ describe "API" do
       parameter name: :filter,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/CourseFilter" },
-                type: :object,
                 style: :deepObject,
                 explode: true,
                 required: false,
@@ -32,7 +31,6 @@ describe "API" do
       parameter name: :sort,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Sort" },
-                type: :object,
                 style: :form,
                 explode: false,
                 required: false,
@@ -41,7 +39,6 @@ describe "API" do
       parameter name: :page,
                 in: :query,
                 schema: { "$ref" => "#/components/schemas/Pagination" },
-                type: :object,
                 style: :deepObject,
                 explode: true,
                 required: false,
@@ -49,10 +46,10 @@ describe "API" do
                 description: "Pagination options to navigate through the collection."
       parameter name: :include,
                 in: :query,
-                type: :string,
                 required: false,
                 description: "The associated data for this resource.",
                 schema: {
+                  type: :string,
                   enum: %w[accredited_provider provider recruitment_cycle],
                 },
                 example: "recruitment_cycle,provider"
