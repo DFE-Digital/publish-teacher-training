@@ -529,6 +529,7 @@ en:
     a_levels_wizard/steps/a_level_equivalencies:
       heading: Will you consider candidates who need to take an equivalency test for their A levels?
       submit: Update A levels
+      success_message: A level requirements updated
       hint: For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay
       or_above: or above
       suffix: or equivalent qualification
