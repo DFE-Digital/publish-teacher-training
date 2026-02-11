@@ -897,6 +897,7 @@ DEPENDENCIES
   rb-readline
   redcarpet
   request_store
+  rexml
   rspec-its
   rspec-rails (= 8.0.3)
   rspec-wait
