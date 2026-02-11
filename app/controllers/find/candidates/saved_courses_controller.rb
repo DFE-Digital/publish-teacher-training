@@ -5,16 +5,10 @@ module Find
       after_action :send_saved_course_analytics_event, only: [:create]
       after_action :send_remove_saved_course_analytics_event, only: [:destroy]
       skip_before_action :require_authentication, only: %i[sign_in]
+      before_action :assign_saved_courses, only: :index
 
       def index
-        @location = saved_courses_filter_params[:location]
-        @address = Geolocation::Address.query(@location) if @location.present?
-
-        query_params = saved_courses_query_params
-        saved_courses = SavedCourses::Query.call(candidate: @candidate, params: query_params)
-        @pagy, @saved_courses = pagy(saved_courses, count: @candidate.saved_courses.count)
-        @short_address = @address&.short_address
-        @order = query_params[:order]
+        not_found if @pagy.overflow?
       end
 
       def sign_in
@@ -105,6 +99,18 @@ module Find
 
       def course
         @course ||= Course.find(params[:course_id])
+      end
+
+      def assign_saved_courses
+        @location = saved_courses_filter_params[:location]
+        @address = Geolocation::Address.query(@location) if @location.present?
+
+        query_params = saved_courses_query_params
+        saved_courses_query = SavedCourses::Query.new(candidate: @candidate, params: query_params)
+        saved_courses = saved_courses_query.call
+        @pagy, @saved_courses = pagy(saved_courses, count: saved_courses_query.count)
+        @short_address = @address&.short_address
+        @order = query_params[:order]
       end
 
       def send_saved_course_analytics_event
