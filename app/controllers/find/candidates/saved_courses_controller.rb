@@ -11,7 +11,8 @@ module Find
         @address = Geolocation::Address.query(@location) if @location.present?
 
         query_params = saved_courses_query_params
-        @saved_courses = SavedCourses::Query.call(candidate: @candidate, params: query_params)
+        saved_courses = SavedCourses::Query.call(candidate: @candidate, params: query_params)
+        @pagy, @saved_courses = pagy(saved_courses)
         @short_address = @address&.short_address
         @order = query_params[:order]
       end
