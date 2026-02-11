@@ -351,27 +351,27 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
   def then_i_see_courses_ordered_newest_first
     rows = saved_course_names
-    expect(rows).to eq(["New Course", "Old Course"])
+    expect(rows).to eq(["New Course (NEW1)", "Old Course (OLD1)"])
   end
 
   def then_i_see_courses_ordered_by_distance
     rows = saved_course_names
-    expect(rows).to eq(["London Course", "Lewisham Course"])
+    expect(rows).to eq(["London Course (LON1)", "Lewisham Course (LEW1)"])
   end
 
   def then_i_see_courses_ordered_newest_first_with_location
     rows = saved_course_names
-    expect(rows).to eq(["Lewisham Course", "London Course"])
+    expect(rows).to eq(["Lewisham Course (LEW1)", "London Course (LON1)"])
   end
 
   def then_i_see_courses_ordered_by_uk_fee
     rows = saved_course_names
-    expect(rows).to eq(["Cheap Course", "Expensive Course"])
+    expect(rows).to eq(["Cheap Course (CHP1)", "Expensive Course (EXP1)"])
   end
 
   def then_i_see_courses_ordered_by_intl_fee
     rows = saved_course_names
-    expect(rows).to eq(["Cheap Course", "Expensive Course"])
+    expect(rows).to eq(["Cheap Course (CHP1)", "Expensive Course (EXP1)"])
   end
 
   def and_most_recently_saved_is_the_active_sort
@@ -478,7 +478,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
   def saved_course_names
     all(".govuk-summary-card__title a").map do |link|
-      link.native.children.select(&:text?).last.text.split("(").first.strip
+      link.native.children.map(&:text).last
     end
   end
 
