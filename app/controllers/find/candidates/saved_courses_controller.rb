@@ -12,7 +12,7 @@ module Find
 
         query_params = saved_courses_query_params
         saved_courses = SavedCourses::Query.call(candidate: @candidate, params: query_params)
-        @pagy, @saved_courses = pagy(saved_courses)
+        @pagy, @saved_courses = pagy(saved_courses, count: @candidate.saved_courses.count)
         @short_address = @address&.short_address
         @order = query_params[:order]
       end
