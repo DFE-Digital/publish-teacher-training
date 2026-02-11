@@ -18,17 +18,16 @@ Use the following command to generate OpenAPI specification:
 bundle exec rake rswag:specs:swaggerize
 ```
 
-3. We build the documentation in a separate container to the main app and copy the contents into the main image.
+3. Build the documentation locally:
 
 ```shell
-bin/build-docs
+cd docs
+bin/build
 ```
 
-This will:
+This builds the static docs site into `public/docs/`. You can then visit `http://publish.localhost:3001/docs/` to see your changes.
 
-1. build a container only of the docs
-2. copy the built docs to `public/docs`
-3. allow you to visit `http://publish.localhost:3001/docs/` and see your changes
+In production, the Dockerfile builds the docs in a separate stage and copies the output into the final image.
 
 #### Confirm the openapi specs
 
