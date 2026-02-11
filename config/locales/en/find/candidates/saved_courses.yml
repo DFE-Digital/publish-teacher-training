@@ -37,3 +37,22 @@ en:
         undo_link:
           undo: Undo
           save_failed: Failed to undo course
+        add_note:
+          caption: "%{provider_name} - %{course_name_and_code}"
+          page_title_add_with_course: "%{provider_name} - %{course_name_and_code} - Add a note"
+          page_title_edit_with_course: "%{provider_name} - %{course_name_and_code} - Edit your note"
+          heading_add: Add note
+          heading_edit: Edit your note
+          note_label: Note
+          save_add: Add note
+          save_edit: Update note
+          cancel: Cancel
+        update_note:
+          note_added_title: Note added
+          note_added_body_html: "Your note has been added to %{provider_name} - %{course_name_and_code}."
+          note_updated_title: Note updated
+          note_updated_body_html: "Your note for %{provider_name} - %{course_name_and_code} has been updated."
+        destroy_note:
+          success_message_title: Note deleted
+          success_message_html: "Your note for %{provider_name} - %{course_name_and_code} has been deleted. %{undo_link}"
+          undo: Undo

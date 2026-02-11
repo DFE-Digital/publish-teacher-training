@@ -3,6 +3,10 @@ en:
     summary_card_component:
       delete: Delete
       fee_key: Fee or salary
+      note_key: Note
+      add_note: Add a note
+      edit_note: Edit
+      delete_note: Delete
       fee_value:
         salary: Salary
         apprenticeship: Salary (apprenticeship)

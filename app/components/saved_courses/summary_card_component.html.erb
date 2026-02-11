@@ -28,6 +28,38 @@
           <div class="govuk-hint govuk-!-font-size-16"><%= bursary_value %></div>
         <% end %>
       <% end %>
+
+      <%= tag.div class: "govuk-summary-list__row#{' govuk-summary-list__row--no-actions' if saved_course.note.blank?}" do %>
+        <%= tag.dt t(".note_key"), class: "govuk-summary-list__key" %>
+
+        <%= tag.dd class: "govuk-summary-list__value" do %>
+          <% if saved_course.note.present? %>
+            <div class="govuk-!-font-size-16"><%= saved_course.note %></div>
+          <% else %>
+            <%= govuk_link_to t(".add_note"), edit_find_candidate_saved_course_note_path(saved_course) %>
+          <% end %>
+        <% end %>
+
+        <% if saved_course.note.present? %>
+          <%= tag.dd class: "govuk-summary-list__actions" do %>
+            <%= tag.ul class: "govuk-summary-list__actions-list" do %>
+              <%= tag.li class: "govuk-summary-list__actions-list-item" do %>
+                <%= govuk_link_to t(".edit_note"), edit_find_candidate_saved_course_note_path(saved_course) %>
+              <% end %>
+
+              <%= tag.li class: "govuk-summary-list__actions-list-item" do %>
+                <%= button_to(
+                  t(".delete_note"),
+                  find_candidate_saved_course_note_path(saved_course),
+                  method: :delete,
+                  class: "app-button-link",
+                  form_class: "govuk-!-display-inline-block",
+                ) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
