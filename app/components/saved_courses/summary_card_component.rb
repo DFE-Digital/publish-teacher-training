@@ -15,23 +15,37 @@ module SavedCourses
     end
 
     def title
-      course_link = govuk_link_to(
-        find_course_path(
-          provider_code: course.provider_code,
-          course_code: course.course_code,
-          location: @location,
-          distance_from_location: search_by_location? ? saved_course.minimum_distance_to_search_location.ceil : nil,
-        ),
-        class: "govuk-link",
-      ) do
-        safe_join([
-          course.provider_name,
-          tag.br,
-          course.name_and_code,
-        ])
-      end
+      provider_span = content_tag(:span, course.provider_name)
+      course_span = content_tag(:span, course.name_and_code)
+      status_tag = course.decorate.saved_status_tag
+      status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
 
-      safe_join([course_link, " ".html_safe, course.decorate.saved_status_tag])
+      title_inner = safe_join(
+        [
+          provider_span,
+          tag.br,
+          course_span,
+          status_block,
+        ].compact,
+      )
+
+      course_info =
+        if course.is_withdrawn?
+          content_tag(:div, title_inner)
+        else
+          govuk_link_to(
+            find_course_path(provider_code: course.provider_code, course_code: course.course_code),
+            class: "govuk-link",
+          ) { title_inner }
+        end
+
+      content_tag(:div, class: "app-saved-course__card-title") do
+        safe_join(
+          [
+            content_tag(:div, course_info),
+          ],
+        )
+      end
     end
 
     def nearest_placement_school_value
