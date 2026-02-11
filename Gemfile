@@ -93,12 +93,12 @@ gem "dry-container"
 
 # For geocoding and geographic logic (e.g: filtering sites by ranges)
 gem "geokit-rails"
+gem "rexml"
 
 # Geocoding
 gem "geocoder"
 
 gem "open_api-rswag-api", "0.2.0", github: "DFE-Digital/open-api-rswag", tag: "v0.2.0"
-gem "open_api-rswag-specs", "0.2.0", github: "DFE-Digital/open-api-rswag", tag: "v0.2.0"
 gem "open_api-rswag-ui", "0.2.0", github: "DFE-Digital/open-api-rswag", tag: "v0.2.0"
 
 gem "pg_search"
@@ -150,6 +150,10 @@ gem "blazer"
 
 gem "dfe-wizard", require: "dfe/wizard", github: "DFE-Digital/dfe-wizard", ref: "c7680087"
 
+# Used to generate seed data in rake tasks
+gem "factory_bot_rails", "~> 6.5"
+gem "faker"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"
@@ -168,6 +172,9 @@ group :development, :test do
   gem "rubocop-factory_bot", require: false
   gem "rubocop-govuk", require: false
   gem "rubocop-rspec_rails", require: false
+
+  # This is only required in the test suite
+  gem "open_api-rswag-specs", "0.2.0", github: "DFE-Digital/open-api-rswag", tag: "v0.2.0"
 
   # run specs in parallel
   gem "parallel_tests"
@@ -198,9 +205,7 @@ group :development, :test do
   # Allow us to freeze time in tests
   gem "timecop"
 
-  gem "factory_bot_rails", "~> 6.5"
   gem "fakefs", require: "fakefs/safe"
-  gem "faker"
 
   gem "dotenv"
 
