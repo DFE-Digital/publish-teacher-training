@@ -1,0 +1,4 @@
+<%= form_with url: undo_find_candidate_saved_course_note_path(saved_course), method: :post do |form| %>
+  <%= form.hidden_field :note, value: deleted_note %>
+  <%= form.submit t("find.candidates.saved_courses.destroy_note.undo"), class: "app-button-link govuk-!-padding-left-0" %>
+<% end %>

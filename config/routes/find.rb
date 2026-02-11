@@ -48,6 +48,10 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
         post :undo, on: :collection
         get :sign_in, on: :collection
         get :after_auth, on: :collection
+
+        resource :note, only: %i[edit update destroy], controller: "notes" do
+          post :undo
+        end
       end
     end
   end

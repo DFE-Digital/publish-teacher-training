@@ -61,4 +61,44 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
     expect(summary_card_content).to include("£17,500 fee for Non-UK citizens")
     expect(summary_card_content).to include("Scholarships of £22,000 or bursaries of £20,000 are available")
   end
+
+  it "renders a note row with an add-note link" do
+    expect(summary_card_content).to include("Note")
+    expect(rendered).to have_link("Add a note", href: edit_find_candidate_saved_course_note_path(saved_course))
+  end
+
+  it "does not render note actions when there is no note" do
+    expect(rendered).not_to have_css(".govuk-summary-list__actions", text: /Edit|Delete/)
+  end
+
+  context "when a note has been added" do
+    let(:saved_course) do
+      create(
+        :saved_course,
+        candidate:,
+        course:,
+        note: "My note text",
+      )
+    end
+
+    it "renders the note and edit/delete actions" do
+      expect(summary_card_content).to include("Note")
+      expect(summary_card_content).to include("My note text")
+      within ".govuk-summary-list__actions" do
+        expect(rendered).to have_link("Edit", href: edit_find_candidate_saved_course_note_path(saved_course))
+        expect(rendered).to have_button("Delete")
+        expect(rendered).to have_css("form[action='#{find_candidate_saved_course_note_path(saved_course)}']")
+      end
+    end
+
+    it "renders the note value with 16px styling" do
+      expect(rendered).to have_css("[class~='govuk-!-font-size-16']", text: "My note text")
+    end
+
+    it "renders delete note as a real DELETE form (not a link)" do
+      form = rendered.css("form[action='#{find_candidate_saved_course_note_path(saved_course)}']").first
+      expect(form).to be_present
+      expect(form.css("input[name='_method'][value='delete']")).to be_present
+    end
+  end
 end
