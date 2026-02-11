@@ -68,6 +68,8 @@
           order: @order,
         ) %>
       <% end %>
+
+      <%= govuk_pagination(pagy: @pagy) %>
     </div>
   <% end %>
 
