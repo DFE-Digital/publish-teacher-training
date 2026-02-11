@@ -39,7 +39,8 @@ ADD .ruby-version $APP_HOME/.ruby-version
 RUN apk add --update --no-cache --virtual build-dependencies \
   build-base && \
   apk add --update --no-cache libpq nodejs yarn && \
-  bundle install --jobs=4 && \
+  bundle config set without test development && \
+  RAILS_ENV=production bundle install --jobs=4 && \
   rm -rf /usr/local/bundle/cache && \
   apk del build-dependencies
 
@@ -55,7 +56,7 @@ COPY --from=middleman /public/ $APP_HOME/public/docs/
 
 RUN ls /app/public/ && \
   yarn build && \
-  bundle exec rake assets:precompile && \
+  RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bundle exec rake assets:precompile && \
   rm -rf node_modules tmp/*
 
 ARG COMMIT_SHA
