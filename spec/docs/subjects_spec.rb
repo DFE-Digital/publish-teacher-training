@@ -10,8 +10,7 @@ describe "API" do
       produces "application/json"
       parameter name: :sort,
                 in: :query,
-                schema: { "type" => "string" },
-                type: :string,
+                schema: { type: :string },
                 style: :form,
                 explode: false,
                 required: false,
