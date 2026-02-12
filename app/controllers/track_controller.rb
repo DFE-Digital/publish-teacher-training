@@ -38,7 +38,6 @@ private
   def send_candidate_applies_analytics_event(course_id)
     Find::Analytics::CandidateAppliesEvent.new(
       request: request,
-      candidate_id: @candidate&.id,
       course_id: course_id,
     ).send_event
   end
