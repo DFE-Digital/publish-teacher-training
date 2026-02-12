@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "financial incentives call out boxes content" do
+RSpec.describe "financial incentives call out boxes content" do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     FeatureFlag.activate(:bursaries_and_scholarships_announced)

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Maintenance mode" do
+RSpec.describe "Maintenance mode" do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
   end
