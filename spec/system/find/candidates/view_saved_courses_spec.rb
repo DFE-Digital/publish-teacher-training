@@ -337,15 +337,15 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def and_i_click_sort_by_most_recently_saved
-    click_link_or_button "Most recently saved"
+    click_link_or_button "Most recently saved", match: :first
   end
 
   def and_i_click_sort_by_lowest_fee_uk
-    click_link_or_button "Lowest fee for UK citizens"
+    click_link_or_button "Lowest fee for UK citizens", match: :first
   end
 
   def and_i_click_sort_by_lowest_fee_intl
-    click_link_or_button "Lowest fee for non-UK citizens"
+    click_link_or_button "Lowest fee for non-UK citizens", match: :first
   end
 
   def then_i_see_courses_ordered_newest_first
@@ -479,6 +479,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def sort_bar
-    page.find("p.govuk-body", text: "Sort by:")
+    page.all("p.govuk-body", text: "Sort by:").first
   end
 end
