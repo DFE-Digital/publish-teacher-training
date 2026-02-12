@@ -30,7 +30,6 @@ module SavedCourses
     def location_scope
       return @scope if params[:latitude].blank? || params[:longitude].blank?
 
-      radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
       longitude = Float(params[:longitude])
 
@@ -46,21 +45,6 @@ module SavedCourses
           INNER JOIN site ON site.id = course_site.site_id
         SQL
         .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
-        .where(
-          Course.sanitize_sql_array(
-            [
-              <<~SQL.squish,
-                ST_DistanceSphere(
-                  ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
-                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-                ) <= ?
-              SQL
-              longitude,
-              latitude,
-              radius_in_meters,
-            ],
-          ),
-        )
         .select(
           Course.sanitize_sql_array(
             [
