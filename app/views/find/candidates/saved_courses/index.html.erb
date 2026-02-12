@@ -19,8 +19,8 @@
   <% else %>
     <div class="govuk-grid-column-full">
       <div class="app-saved-courses-search">
-        <h3 class="govuk-heading-m"><%= t(".search_heading") %></h3>
-        <p class="govuk-body"><%= t(".search_description") %></p>
+        <h2 class="govuk-heading-m"><%= t(".search_heading") %></h2>
+        <p class="govuk-body govuk-!-font-size-16"><%= t(".search_description") %></p>
 
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full app-saved-course-location">
@@ -41,24 +41,41 @@
         </div>
       </div>
 
-      <p class="govuk-body">
-        <%= t(".sort_by") %>
-        <% sort_options = [["newest_first", t(".sort_options.newest_first")]] %>
-        <% sort_options << ["distance", t(".sort_options.distance")] if @location.present? %>
-        <% sort_options << ["fee_uk_ascending", t(".sort_options.fee_uk_ascending")] %>
-        <% sort_options << ["fee_intl_ascending", t(".sort_options.fee_intl_ascending")] %>
+      <% sort_options = [["newest_first", t(".sort_options.newest_first")]] %>
+      <% sort_options << ["distance", t(".sort_options.distance")] if @location.present? %>
+      <% sort_options << ["fee_uk_ascending", t(".sort_options.fee_uk_ascending")] %>
+      <% sort_options << ["fee_intl_ascending", t(".sort_options.fee_intl_ascending")] %>
 
-        <% sort_options.each_with_index do |(order_value, label), index| %>
-          <% if @order == order_value %>
-            <strong><%= label %></strong>
-          <% else %>
-            <%= govuk_link_to label, find_candidate_saved_courses_path(location: @location, order: order_value) %>
+      <div class="app-saved-courses-sort--inline">
+        <p class="govuk-body">
+          <%= t(".sort_by") %>
+          <% sort_options.each_with_index do |(order_value, label), index| %>
+            <% if @order == order_value %>
+              <strong><%= label %></strong>
+            <% else %>
+              <%= govuk_link_to label, find_candidate_saved_courses_path(location: @location, order: order_value) %>
+            <% end %>
+            <% unless index == sort_options.size - 1 %>
+              |
+            <% end %>
           <% end %>
-          <% unless index == sort_options.size - 1 %>
-            |
+        </p>
+      </div>
+
+      <div class="app-saved-courses-sort--list">
+        <p class="govuk-body"><%= t(".sort_by") %></p>
+        <ul class="govuk-list app-list--dash course-contents">
+          <% sort_options.each do |order_value, label| %>
+            <li>
+              <% if @order == order_value %>
+                <strong><%= label %></strong>
+              <% else %>
+                <%= govuk_link_to label, find_candidate_saved_courses_path(location: @location, order: order_value) %>
+              <% end %>
+            </li>
           <% end %>
-        <% end %>
-      </p>
+        </ul>
+      </div>
 
       <% @saved_courses.each do |saved_course| %>
         <%= render SavedCourses::SummaryCardComponent.new(
@@ -75,7 +92,7 @@
 
   <div class="govuk-grid-column-full">
     <%= govuk_inset_text classes: "app-callout app-callout--blue" do %>
-      <h3><%= t(".applications_heading") %></h3>
+      <h2><%= t(".applications_heading") %></h2>
       <%= t(
         ".applications_body_html",
         link: govuk_link_to(t(".applications_link_text"), t(".applications_url")),
