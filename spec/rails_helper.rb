@@ -143,12 +143,6 @@ RSpec.configure do |config|
     host! app_host(service:)
   end
 
-  config.before(:each, type: :feature) do
-    service = self.class.metadata[:service]
-
-    Capybara.app_host = app_url(service:)
-  end
-
   config.before(:each, type: :system) do
     service = self.class.metadata[:service]
 

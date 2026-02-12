@@ -9,27 +9,27 @@ RSpec.configure do |config|
     metadata[:filtering_sorting] = true
   end
 
-  config.define_derived_metadata(file_path: Regexp.new("/spec/(system|features)/find")) do |metadata|
+  config.define_derived_metadata(file_path: Regexp.new("/spec/system/find")) do |metadata|
     metadata[:service] = :find
 
     metadata[:find_features] = true
   end
 
-  config.define_derived_metadata(file_path: Regexp.new("/spec/(system|features)/publish")) do |metadata|
+  config.define_derived_metadata(file_path: Regexp.new("/spec/system/publish")) do |metadata|
     metadata[:service] = :publish
 
     metadata[:publish_features] = true
     metadata[:auth_features] = true
   end
 
-  config.define_derived_metadata(file_path: Regexp.new("/spec/(system|features)/support")) do |metadata|
+  config.define_derived_metadata(file_path: Regexp.new("/spec/system/support")) do |metadata|
     metadata[:service] = :publish
 
     metadata[:support_features] = true
     metadata[:auth_features] = true
   end
 
-  config.define_derived_metadata(file_path: Regexp.new("/spec/(system|features)/auth")) do |metadata|
+  config.define_derived_metadata(file_path: Regexp.new("/spec/system/auth")) do |metadata|
     metadata[:service] = :publish
 
     metadata[:auth_features] = true
