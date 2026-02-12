@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Viewing a findable course" do
+RSpec.describe "Viewing a findable course" do
   include PublishHelper
   include Rails.application.routes.url_helpers
 

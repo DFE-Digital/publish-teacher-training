@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "switcher cycle" do
+RSpec.describe "switcher cycle" do
   before do
     Timecop.freeze(2022, 10, 12)
     allow(ENV).to receive(:[])

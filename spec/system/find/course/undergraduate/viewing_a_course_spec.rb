@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Viewing an undergraduate course" do
+RSpec.describe "Viewing an undergraduate course" do
   include Rails.application.routes.url_helpers
 
   before do

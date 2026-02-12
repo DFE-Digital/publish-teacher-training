@@ -28,4 +28,9 @@ RSpec.describe "View pages" do
     visit "/accessibility"
     expect(page).to have_css("h1", text: "Accessibility statement")
   end
+
+  scenario "Redirect to /cycle-has-ended when cycle open" do
+    visit "/cycle-has-ended"
+    expect(page).to have_current_path(root_path)
+  end
 end

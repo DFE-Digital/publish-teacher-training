@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "viewing courses in various states" do
+RSpec.describe "viewing courses in various states" do
   scenario "viewing a published course" do
     given_there_is_a_published_course
     when_i_visit_the_course_page
