@@ -99,21 +99,10 @@ RSpec.describe SavedCourses::Query do
       )
     end
 
-    context "with default 10 mile radius" do
+    context "with location provided" do
       let(:params) { { latitude: london.latitude, longitude: london.longitude } }
 
-      it "returns only courses within radius ordered by distance" do
-        expect(results).to match_collection(
-          [london_saved_result, lewisham_saved_result],
-          attribute_names: %w[minimum_distance_to_search_location],
-        )
-      end
-    end
-
-    context "with 50 mile radius" do
-      let(:params) { { latitude: london.latitude, longitude: london.longitude, radius: 50 } }
-
-      it "returns courses within 50 miles ordered by distance" do
+      it "returns all saved courses sorted by distance" do
         expect(results).to match_collection(
           [london_saved_result, lewisham_saved_result, cambridge_saved_result],
           attribute_names: %w[minimum_distance_to_search_location],

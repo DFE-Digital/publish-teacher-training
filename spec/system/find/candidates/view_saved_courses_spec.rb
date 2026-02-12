@@ -142,15 +142,14 @@ RSpec.describe "Viewing my saved courses", service: :find do
       then_i_see_placement_hint
     end
 
-    scenario "searching by location filters out courses outside the default radius" do
+    scenario "searching by location sorts all saved courses by distance" do
       when_i_log_in_as_a_candidate
       and_i_have_courses_in_london_and_cambridge
 
       then_i_visit_my_saved_courses
       and_i_search_for_london
 
-      then_i_see_only_london_course
-      and_i_do_not_see_cambridge_course
+      then_i_see_courses_sorted_london_first
     end
   end
 
@@ -423,12 +422,9 @@ RSpec.describe "Viewing my saved courses", service: :find do
     expect(page).to have_content("Add a location to see the nearest potential placement school")
   end
 
-  def then_i_see_only_london_course
-    expect(page).to have_content("London Course")
-  end
-
-  def and_i_do_not_see_cambridge_course
-    expect(page).not_to have_content("Cambridge Course")
+  def then_i_see_courses_sorted_london_first
+    rows = saved_course_names
+    expect(rows).to eq(["London Course (LON1)", "Cambridge Course (CAM1)"])
   end
 
   def and_i_see_fee_information
