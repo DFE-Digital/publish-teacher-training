@@ -34,8 +34,6 @@
   @include govuk-media-query($until: tablet) {
     grid-template-columns: 1fr;
 
-    row-gap: govuk-spacing(2);
-
     .govuk-input {
       grid-column: 1;
     }
@@ -43,6 +41,8 @@
     .app-saved-courses-search__button {
       grid-row: 3;
       grid-column: 1;
+
+      margin-top: govuk-spacing(4);
     }
   }
 }
