@@ -187,7 +187,7 @@ describe Provider do
 
   describe "changed_at" do
     it "is set on create" do
-      provider = create(:provider)
+      provider = create(:provider, changed_at: nil)
 
       expect(provider.changed_at).to be_present
       expect(provider.changed_at).to eq provider.updated_at
