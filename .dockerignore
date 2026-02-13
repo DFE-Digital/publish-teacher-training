@@ -11,3 +11,4 @@ bin/restore-backup
 
 # work is my local project-specific non-committed workspace --Misha
 work
+spec
