@@ -75,7 +75,7 @@ FactoryBot.define do
       # though it's listed in timestamp_attributes_for_update. We must set it
       # explicitly. When no value is provided we offset by the provider id to
       # avoid violating the unique index on changed_at.
-      unique_changed_at = evaluator.changed_at || (Time.current + provider.id.microseconds)
+      unique_changed_at = evaluator.changed_at || (Time.current + Rational(provider.id, 1_000_000))
       provider.update_column(:changed_at, unique_changed_at)
     end
 
