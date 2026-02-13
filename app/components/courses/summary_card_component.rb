@@ -2,8 +2,6 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
-    include FinancialIncentiveHintHelper
-
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
     def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil)
@@ -135,6 +133,10 @@ module Courses
       t(".visa_sponsorship_value.#{course.visa_sponsorship}")
     end
 
+    def financial_incentives
+      CourseFinancialSupport.new(course).hint_text(visa_sponsorship: @visa_sponsorship)
+    end
+
     def search_by_location?
       @location.present? && course.respond_to?(:minimum_distance_to_search_location)
     end
@@ -157,41 +159,7 @@ module Courses
       t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
     end
 
-    def search_by_visa_sponsorship?
-      @visa_sponsorship.present?
-    end
-
-    PHYSICS_SUBJECT = "Physics"
-    private_constant :PHYSICS_SUBJECT
-
-    def physics?
-      main_subject&.subject_name == PHYSICS_SUBJECT
-    end
-
-    LANGUAGE_SUBJECTS = [
-      "Ancient Greek",
-      "Ancient Hebrew",
-      "English",
-      "English as a second or other language",
-      "French",
-      "German",
-      "Italian",
-      "Japanese",
-      "Latin",
-      "Mandarin",
-      "Modern Languages",
-      "Modern languages (other)",
-      "Russian",
-      "Spanish",
-    ].freeze
-    private_constant :LANGUAGE_SUBJECTS
-
-    def languages?
-      main_subject&.subject_name.in?(LANGUAGE_SUBJECTS)
-    end
-
     NullEnrichment = Struct.new(:course_length, :fee_uk_eu, :fee_international, keyword_init: true)
-    # rubocop:enable Lint/UselessConstantScoping
 
     def enrichment
       @enrichment ||= course.latest_published_enrichment || NullEnrichment.new

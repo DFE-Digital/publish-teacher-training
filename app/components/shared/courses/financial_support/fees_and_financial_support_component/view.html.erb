@@ -14,7 +14,7 @@
     <%= render partial: "shared/courses/financial_support/loan" %>
   <% elsif bursary_only? %>
     <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
-  <% elsif has_scholarship_and_bursary? %>
+  <% elsif scholarship_and_bursary? %>
     <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
   <% else %>
     <%= render partial: "shared/courses/financial_support/loan" %>

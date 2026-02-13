@@ -47,6 +47,52 @@ class Subject < ApplicationRecord
     subject_code.in?(LANGUAGE_SUBJECT_CODES)
   end
 
+  def physics?
+    subject_name == "Physics"
+  end
+
+  # Subjects where non-UK citizens are eligible for bursaries only
+  NON_UK_BURSARY_ELIGIBLE_NAMES = [
+    "Italian",
+    "Japanese",
+    "Mandarin",
+    "Russian",
+    "Modern languages (other)",
+    "Ancient Greek",
+    "Ancient Hebrew",
+  ].freeze
+
+  def non_uk_bursary_eligible?
+    subject_name.in?(NON_UK_BURSARY_ELIGIBLE_NAMES)
+  end
+
+  # Subjects where non-UK citizens are eligible for scholarships and bursaries
+  NON_UK_SCHOLARSHIP_AND_BURSARY_ELIGIBLE_NAMES = %w[
+    Physics
+    French
+    German
+    Spanish
+  ].freeze
+
+  def non_uk_scholarship_and_bursary_eligible?
+    subject_name.in?(NON_UK_SCHOLARSHIP_AND_BURSARY_ELIGIBLE_NAMES)
+  end
+
+  # Maps subject codes to I18n keys for scholarship bodies
+  SCHOLARSHIP_BODY_MAP = {
+    "F1" => "chemistry",
+    "11" => "computing",
+    "G1" => "mathematics",
+    "F3" => "physics",
+    "15" => "french",
+    "17" => "german",
+    "22" => "spanish",
+  }.freeze
+
+  def scholarship_body_key
+    SCHOLARSHIP_BODY_MAP[subject_code]
+  end
+
   def match_synonyms_text
     return "" if match_synonyms.blank?
 

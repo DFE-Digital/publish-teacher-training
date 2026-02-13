@@ -244,7 +244,6 @@ module Support
     describe "#stash" do
       context "valid details" do
         it "returns true" do
-          puts subject.params
           expect(subject.stash).to be true
 
           expect(subject.errors.messages).to be_blank

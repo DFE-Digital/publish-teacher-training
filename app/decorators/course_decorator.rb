@@ -6,7 +6,8 @@ class CourseDecorator < ApplicationDecorator
 
   delegate_all
 
-  LANGUAGE_SUBJECT_CODES = %w[Q3 A0 15 16 17 18 19 20 21 22].freeze
+  # Subject codes whose names should stay capitalised in display (e.g. "French with German")
+  CAPITALISED_LANGUAGE_CODES = %w[Q3 A0 15 16 17 18 19 20 21 22].freeze
 
   def sites_ids
     object.site_ids.compact_blank
@@ -112,58 +113,16 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def computed_subject_name_or_names
-    if (number_of_subjects == 1 || modern_languages_other?) && LANGUAGE_SUBJECT_CODES.include?(subjects.first.subject_code)
+    if (number_of_subjects == 1 || modern_languages_other?) && CAPITALISED_LANGUAGE_CODES.include?(subjects.first.subject_code)
       first_subject_name
-    elsif (number_of_subjects == 1 || modern_languages_other?) && LANGUAGE_SUBJECT_CODES.exclude?(subjects.first.subject_code)
+    elsif (number_of_subjects == 1 || modern_languages_other?) && CAPITALISED_LANGUAGE_CODES.exclude?(subjects.first.subject_code)
       first_subject_name.downcase
     elsif number_of_subjects == 2
-      transformed_subjects = course_subjects.map { |cs| LANGUAGE_SUBJECT_CODES.include?(cs.subject.subject_code) ? cs.subject.subject_name : cs.subject.subject_name.downcase }
+      transformed_subjects = course_subjects.map { |cs| CAPITALISED_LANGUAGE_CODES.include?(cs.subject.subject_code) ? cs.subject.subject_name : cs.subject.subject_name.downcase }
       "#{transformed_subjects.first} with #{transformed_subjects.second}"
     else
       object.name.gsub("Modern Languages", "modern languages")
     end
-  end
-
-  def has_scholarship_and_bursary?
-    object.has_bursary? && object.has_scholarship?
-  end
-
-  def bursary_first_line_ending
-    if bursary_requirements.count > 1
-      ":"
-    else
-      "#{bursary_requirements.first}."
-    end
-  end
-
-  def bursary_requirements
-    requirements = ["a degree of 2:2 or above in any subject"]
-
-    if object.course_subjects.any? { |subject| subject.subject.subject_name.downcase == "primary with mathematics" }
-      mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
-      requirements.push(mathematics_requirement)
-    end
-
-    requirements
-  end
-
-  def bursary_only?
-    object.has_bursary? && !object.has_scholarship?
-  end
-
-  def excluded_from_bursary?
-    object.subjects.present? &&
-      # incorrect bursary eligibility only shows up on courses with 2 subjects
-      object.subjects.count == 2 &&
-      has_excluded_course_name?
-  end
-
-  def bursary_amount
-    find_max_funding_for("bursary_amount")
-  end
-
-  def scholarship_amount
-    find_max_funding_for("scholarship")
   end
 
   def salaried?
@@ -240,16 +199,16 @@ class CourseDecorator < ApplicationDecorator
   def funding_option
     return if salaried?
 
-    if excluded_from_bursary?
-      # Duplicate branch body detected
-      "Student loans if you’re eligible"
-    elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Scholarships or bursaries, as well as student loans, are available if you’re eligible"
-    elsif has_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Bursaries and student loans are available if you’re eligible"
+    fs = CourseFinancialSupport.new(object)
+
+    if fs.excluded_from_bursary?
+      "Student loans if you're eligible"
+    elsif fs.scholarship_and_bursary? && fs.announced?
+      "Scholarships or bursaries, as well as student loans, are available if you're eligible"
+    elsif fs.bursary? && fs.announced?
+      "Bursaries and student loans are available if you're eligible"
     else
-      # Duplicate branch body detected
-      "Student loans are available if you’re eligible"
+      "Student loans are available if you're eligible"
     end
   end
 
@@ -481,7 +440,9 @@ class CourseDecorator < ApplicationDecorator
     bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
     scholarship = number_to_currency(financial_incentive&.scholarship)
 
-    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Find::CycleTimetable.current_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
+    fs = CourseFinancialSupport.new(object)
+
+    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Find::CycleTimetable.current_year) || !fs.announced?
     return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
 
     return I18n.t("components.course.financial_incentives.bursary_and_scholarship", scholarship:, bursary_amount:) if bursary_amount.present? && scholarship.present?
@@ -605,32 +566,6 @@ private
     else
       "No"
     end
-  end
-
-  def find_max_funding_for(attribute)
-    subject_funding_amounts = object.subjects.map do |s|
-      s.financial_incentive.public_send(attribute.to_sym).to_i if s.financial_incentive.present? && s.financial_incentive.attributes[attribute].present?
-    end
-
-    subject_funding_amounts.compact.max.to_s
-  end
-
-  def has_excluded_course_name?
-    exclusions = [
-      /^Drama/,
-      /^Media Studies/,
-      /^PE/,
-      /^Physical/,
-    ]
-    # We only care about course with a name matching the pattern 'Foo with bar'
-    # We don't care about courses matching the pattern 'Foo and bar'
-    return false unless /with/.match?(object.name)
-
-    exclusions.any? { |e| e.match?(object.name) }
-  end
-
-  def bursary_and_scholarship_flag_active_or_preview?
-    FeatureFlag.active?(:bursaries_and_scholarships_announced)
   end
 
   def number_of_subjects

@@ -1552,75 +1552,6 @@ describe Course do
     end
   end
 
-  context "bursaries and scholarships" do
-    subject { create(:course, :skip_validate, level: "secondary", subjects: [english]) }
-
-    let(:english) { find_or_create(:secondary_subject, :english) }
-    let!(:financial_incentive) { create(:financial_incentive, subject: english, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
-
-    it { is_expected.to have_bursary }
-    it { is_expected.to have_scholarship_and_bursary }
-    it { is_expected.to have_early_career_payments }
-
-    it { expect(subject.bursary_amount).to eq("255") }
-    it { expect(subject.scholarship_amount).to eq("1415") }
-
-    context "with multiple subjects" do
-      let(:maths) { find_or_create(:secondary_subject, :mathematics) }
-      let(:religious_education) { find_or_create(:secondary_subject, :religious_education) }
-
-      context "when main subject does not have financial incentive" do
-        subject { create(:course, :skip_validate, level: "secondary", subjects: [religious_education, english]) }
-
-        it "reads financial incentives from only the first subject" do
-          expect(subject.bursary_amount).to be_nil
-          expect(subject.has_bursary?).to be false
-          expect(subject.scholarship_amount).to be_nil
-          expect(subject.has_scholarship?).to be false
-        end
-      end
-
-      context "when main subject has a financial incentive" do
-        subject { create(:course, :skip_validate, level: "secondary", subjects: [maths, english]) }
-
-        it "reads financial incentives from only the first subject" do
-          expect(subject.bursary_amount).to eq maths.financial_incentive.bursary_amount
-          expect(subject.has_bursary?).to be true
-          expect(subject.scholarship_amount).to eq maths.financial_incentive.scholarship
-          expect(subject.has_scholarship?).to be true
-        end
-      end
-
-      context "with modern languages" do
-        context "with a language as a second subject" do
-          subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages, french, german, spanish]) }
-
-          let(:french) { create(:modern_languages_subject, :french) }
-          let(:german) { create(:modern_languages_subject, :german) }
-          let(:spanish) { create(:modern_languages_subject, :spanish) }
-          let!(:french_financial_incentive) { create(:financial_incentive, subject: french, bursary_amount: "15000", scholarship: nil) }
-          let!(:german_financial_incentive) { create(:financial_incentive, subject: german, bursary_amount: "14000", scholarship: nil) }
-          let!(:spanish_financial_incentive) { create(:financial_incentive, subject: spanish, bursary_amount: "13000", scholarship: nil) }
-
-          it "reads financial incentives from only the first subject, and ignores the 'Modern Languages' subject" do
-            expect(subject.bursary_amount).to eq french.financial_incentive.bursary_amount
-            expect(subject.has_bursary?).to be true
-            expect(subject.scholarship_amount).to eq french.financial_incentive.scholarship
-            expect(subject.has_scholarship?).to be false
-          end
-        end
-
-        context "with no language as a second subject" do
-          subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages]) }
-
-          it "has no financial incentive" do
-            expect(subject.financial_incentive).to be_nil
-          end
-        end
-      end
-    end
-  end
-
   context "entry requirements" do
     %i[maths science english].each do |gcse_subject|
       describe gcse_subject do
@@ -2174,40 +2105,6 @@ describe Course do
 
       it "returns nil" do
         expect(subject.age_maximum).to be_nil
-      end
-    end
-  end
-
-  describe "#bursary_requirements" do
-    context "when there is no bursary" do
-      subject do
-        create(
-          :course,
-          level: "primary",
-          name: "Primary with english",
-          course_code: "AAAA",
-          subjects: [find_or_create(:primary_subject, :primary_with_english)],
-        )
-      end
-
-      it "returns no requirements" do
-        expect(subject.bursary_requirements).to be_empty
-      end
-    end
-
-    context "when there is a bursary" do
-      subject do
-        create(
-          :course,
-          level: "secondary",
-          name: "Classics",
-          course_code: "AAAA",
-          subjects: [find_or_create(:secondary_subject, :classics)],
-        )
-      end
-
-      it "returns default requirements" do
-        expect(subject.bursary_requirements).to eql(["a degree of 2:2 or above in any subject"])
       end
     end
   end

@@ -7,59 +7,46 @@ module Shared
         class View < ViewComponent::Base
           attr_reader :course
 
-          delegate :scholarship_amount,
-                   :bursary_amount,
-                   :has_early_career_payments?,
-                   to: :course
+          delegate :early_career_payments?,
+                   :non_uk_scholarship_and_bursary_eligible?,
+                   to: :financial_support
 
           def initialize(course)
             super
             @course = course
+            @financial_support = CourseFinancialSupport.new(course)
+          end
+
+          # Template uses these for display — maps to max across all subjects
+          def scholarship_amount
+            financial_support.max_scholarship_amount
+          end
+
+          def bursary_amount
+            financial_support.max_bursary_amount
+          end
+
+          def has_early_career_payments?
+            early_career_payments?
           end
 
           def scholarship_body
-            I18n.t("find.scholarships.#{subject_with_scholarship}.body", default: nil)
+            key = financial_support.scholarship_body_key
+            I18n.t("find.scholarships.#{key}.body", default: nil) if key
           end
 
           def scholarship_url
-            I18n.t("find.scholarships.#{subject_with_scholarship}.url", default: nil)
+            key = financial_support.scholarship_body_key
+            I18n.t("find.scholarships.#{key}.url", default: nil) if key
           end
 
           def bursary_and_scholarship_eligible_subjects
-            course.course_subjects.any? { |subject| eligible_subjects.include?(subject.subject.subject_name) }
+            non_uk_scholarship_and_bursary_eligible?
           end
 
-        private
+          private
 
-          ELIGIBLE_SUBJECTS = %w[
-            Physics
-            French
-            German
-            Spanish
-          ].freeze
-
-          SUBJECT_WITH_SCHOLARSHIPS = [
-            %w[F1 chemistry],
-            %w[11 computing],
-            %w[G1 mathematics],
-            %w[F3 physics],
-            %w[15 french],
-            %w[17 german],
-            %w[22 spanish],
-          ].freeze
-          private_constant :SUBJECT_WITH_SCHOLARSHIPS, :ELIGIBLE_SUBJECTS
-
-          def eligible_subjects
-            ELIGIBLE_SUBJECTS
-          end
-
-          def subject_with_scholarship
-            @subject_with_scholarship ||= SUBJECT_WITH_SCHOLARSHIPS.detect { |subject_code, _subject_name|
-              course.subjects.any? do |subject|
-                subject.subject_code == subject_code
-              end
-            }&.second
-          end
+          attr_reader :financial_support
         end
       end
     end

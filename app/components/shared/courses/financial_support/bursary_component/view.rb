@@ -7,35 +7,28 @@ module Shared
         class View < ViewComponent::Base
           attr_reader :course
 
-          delegate :bursary_amount,
-                   :bursary_requirements,
-                   :bursary_first_line_ending, to: :course
+          delegate :max_bursary_amount, :bursary_requirements,
+                   :bursary_first_line_ending, :non_uk_bursary_eligible?,
+                   to: :financial_support
 
           def initialize(course)
             super
             @course = course
+            @financial_support = CourseFinancialSupport.new(course)
+          end
+
+          # Template uses `bursary_amount` for display — maps to max across all subjects
+          def bursary_amount
+            financial_support.max_bursary_amount
           end
 
           def bursary_eligible_subjects
-            course.course_subjects.any? { |subject| eligible_subjects.include?(subject.subject.subject_name) }
+            non_uk_bursary_eligible?
           end
 
-        private
+          private
 
-          ELIGIBLE_SUBJECTS = [
-            "Italian",
-            "Japanese",
-            "Mandarin",
-            "Russian",
-            "Modern languages (other)",
-            "Ancient Greek",
-            "Ancient Hebrew",
-          ].freeze
-          private_constant :ELIGIBLE_SUBJECTS
-
-          def eligible_subjects
-            ELIGIBLE_SUBJECTS
-          end
+          attr_reader :financial_support
         end
       end
     end
