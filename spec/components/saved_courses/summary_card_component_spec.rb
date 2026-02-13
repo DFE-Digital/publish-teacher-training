@@ -90,8 +90,19 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
       expect(rendered).to have_css("form[action='#{find_candidate_saved_course_note_path(saved_course)}']")
     end
 
-    it "renders the note value with 16px styling" do
-      expect(rendered).to have_css("[class~='govuk-!-font-size-16']", text: "My note text")
+    it "renders the note value with 19px styling" do
+      expect(rendered).to have_css("[class~='govuk-!-font-size-19']", text: "My note text")
+    end
+
+    it "renders note with simple_format, preserving new lines" do
+      saved_course.update!(note: "Line one\nLine two\n\nLine three")
+
+      rendered_component = render_inline(described_class.new(saved_course:))
+      note_value = rendered_component.at_css("[class~='govuk-!-font-size-19']")
+      note_text = note_value&.text
+
+      expect(note_value).to be_present
+      expect(note_text).to eq("Line one\nLine two\n\nLine three")
     end
 
     it "renders delete note as a real DELETE form (not a link)" do
