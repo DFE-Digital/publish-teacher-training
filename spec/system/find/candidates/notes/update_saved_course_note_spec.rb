@@ -15,6 +15,14 @@ RSpec.describe "Updating a saved course note", service: :find do
     then_i_can_update_the_note
   end
 
+  scenario "A candidate sees a validation error when updating a note fails" do
+    given_i_am_signed_in
+    and_i_have_a_saved_course_with_a_note
+
+    when_i_visit_my_saved_courses
+    then_i_cannot_update_the_note_with_more_than_100_words
+  end
+
   def given_i_am_signed_in
     visit "/"
     click_link_or_button "Sign in"
@@ -58,5 +66,21 @@ RSpec.describe "Updating a saved course note", service: :find do
     expect(page).to have_content("Note updated")
     expect(page).to have_content("Your note for Best Practice Network - Physics (S252) has been updated.")
     expect(page).to have_content("This is my updated note")
+  end
+
+  def then_i_cannot_update_the_note_with_more_than_100_words
+    within(all(".govuk-summary-card").first) do
+      within ".govuk-summary-list__actions" do
+        click_link_or_button "Edit"
+      end
+    end
+
+    fill_in "Edit your note", with: ("word " * 101).strip
+    click_button "Update note"
+
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("Your note must be 100 words or less")
+    expect(page).to have_button("Update note")
+    expect(@saved_course.reload.note).to eq("Existing note")
   end
 end

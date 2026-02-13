@@ -15,6 +15,15 @@ RSpec.describe "Deleting a saved course note", service: :find do
     then_i_can_delete_the_note
   end
 
+  scenario "A candidate sees an error when deleting a note fails" do
+    given_i_am_signed_in
+    and_i_have_a_saved_course_with_a_note
+
+    when_i_visit_my_saved_courses
+    and_the_note_is_removed_before_i_submit_delete
+    then_i_see_a_failed_to_delete_note_message
+  end
+
   def given_i_am_signed_in
     visit "/"
     click_link_or_button "Sign in"
@@ -59,5 +68,20 @@ RSpec.describe "Deleting a saved course note", service: :find do
       expect(page).to have_link("Add a note")
       expect(page).not_to have_content("Note to delete")
     end
+  end
+
+  def and_the_note_is_removed_before_i_submit_delete
+    @saved_course.update!(note: nil)
+  end
+
+  def then_i_see_a_failed_to_delete_note_message
+    within(all(".govuk-summary-card").first) do
+      within ".govuk-summary-list__actions" do
+        click_button "Delete"
+      end
+    end
+
+    expect(page).to have_current_path(find_candidate_saved_courses_path)
+    expect(page).to have_content("Failed to delete note")
   end
 end

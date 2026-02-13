@@ -1,4 +1,4 @@
-<%= govuk_summary_card(title:) do |card| %>
+<%= govuk_summary_card(classes: %w[course-summary-card], title:) do |card| %>
   <% card.with_action do %>
     <%= button_to t(".delete"),
                   find_candidate_saved_course_path(saved_course),
@@ -7,59 +7,52 @@
                   class: "app-button-link" %>
   <% end %>
 
-  <% card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
-    <% summary_list.with_row do |row| %>
-      <% row.with_key(text: nearest_placement_school_key) %>
-      <% row.with_value do %>
+  <dl class="govuk-summary-list govuk-summary-list--no-border">
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+      <dt class="govuk-summary-list__key"><%= nearest_placement_school_key %></dt>
+      <dd class="govuk-summary-list__value">
         <% if nearest_placement_school_value %>
           <%= nearest_placement_school_value %>
         <% else %>
           <span class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-0"><%= nearest_placement_school_hint %></span>
         <% end %>
-      <% end %>
-    <% end %>
+      </dd>
+    </div>
 
-    <% summary_list.with_row do |row| %>
-      <% row.with_key(text: fee_key) %>
-      <% row.with_value do %>
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+      <dt class="govuk-summary-list__key"><%= fee_key %></dt>
+      <dd class="govuk-summary-list__value">
         <%= fee_value %>
 
         <% if bursary_value.present? %>
           <div class="govuk-hint govuk-!-font-size-16"><%= bursary_value %></div>
         <% end %>
-      <% end %>
+      </dd>
+    </div>
 
-      <%= tag.div class: "govuk-summary-list__row#{' govuk-summary-list__row--no-actions' if saved_course.note.blank?}" do %>
-        <%= tag.dt t(".note_key"), class: "govuk-summary-list__key" %>
-
-        <%= tag.dd class: "govuk-summary-list__value" do %>
-          <% if saved_course.note.present? %>
-            <div class="govuk-!-font-size-16"><%= saved_course.note %></div>
-          <% else %>
-            <%= govuk_link_to t(".add_note"), edit_find_candidate_saved_course_note_path(saved_course) %>
-          <% end %>
-        <% end %>
-
+    <div class="govuk-summary-list__row <%= "govuk-summary-list__row--no-actions" if saved_course.note.blank? %>">
+      <dt class="govuk-summary-list__key"><%= t(".note_key") %></dt>
+      <dd class="govuk-summary-list__value">
         <% if saved_course.note.present? %>
-          <%= tag.dd class: "govuk-summary-list__actions" do %>
-            <%= tag.ul class: "govuk-summary-list__actions-list" do %>
-              <%= tag.li class: "govuk-summary-list__actions-list-item" do %>
-                <%= govuk_link_to t(".edit_note"), edit_find_candidate_saved_course_note_path(saved_course) %>
-              <% end %>
-
-              <%= tag.li class: "govuk-summary-list__actions-list-item" do %>
-                <%= button_to(
-                  t(".delete_note"),
-                  find_candidate_saved_course_note_path(saved_course),
-                  method: :delete,
-                  class: "app-button-link",
-                  form_class: "govuk-!-display-inline-block",
-                ) %>
-              <% end %>
-            <% end %>
-          <% end %>
+          <div class="govuk-!-font-size-16"><%= saved_course.note %></div>
+        <% else %>
+          <%= govuk_link_to t(".add_note"), edit_find_candidate_saved_course_note_path(saved_course) %>
         <% end %>
+      </dd>
+
+      <% if saved_course.note.present? %>
+        <dd class="govuk-summary-list__actions">
+          <%= govuk_link_to t(".edit_note"), edit_find_candidate_saved_course_note_path(saved_course) %>
+          <span class="govuk-!-margin-left-1 govuk-!-margin-right-1">|</span>
+          <%= button_to(
+            t(".delete_note"),
+            find_candidate_saved_course_note_path(saved_course),
+            method: :delete,
+            class: "app-button-link",
+            form_class: "govuk-!-display-inline-block",
+          ) %>
+        </dd>
       <% end %>
-    <% end %>
-  <% end %>
+    </div>
+  </dl>
 <% end %>
