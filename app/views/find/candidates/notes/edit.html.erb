@@ -1,0 +1,38 @@
+<% content_for :page_title, title_with_error_prefix(
+  t(
+    @editing_note ? "find.candidates.saved_courses.add_note.page_title_edit_with_course" : "find.candidates.saved_courses.add_note.page_title_add_with_course",
+    provider_name: @saved_course.course.provider_name,
+    course_name_and_code: @saved_course.course.name_and_code,
+  ),
+  @saved_course.errors && @saved_course.errors.any?,
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @saved_course, url: find_candidate_saved_course_note_path(@saved_course), method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_area :note,
+            caption: {
+              text: t(
+                "find.candidates.saved_courses.add_note.caption",
+                provider_name: @saved_course.course.provider_name,
+                course_name_and_code: @saved_course.course.name_and_code,
+              ),
+              size: "xl",
+            },
+            label: {
+              text: t(@editing_note ? "find.candidates.saved_courses.add_note.heading_edit" : "find.candidates.saved_courses.add_note.heading_add"),
+              size: "xl",
+            },
+            rows: 15,
+            max_words: 100 %>
+
+      <%= f.govuk_submit t(@editing_note ? "find.candidates.saved_courses.add_note.save_edit" : "find.candidates.saved_courses.add_note.save_add") %>
+
+      <p class="govuk-body govuk-!-margin-top-4">
+        <%= govuk_link_to t("find.candidates.saved_courses.add_note.cancel"), find_candidate_saved_courses_path %>
+      </p>
+    <% end %>
+  </div>
+</div>
