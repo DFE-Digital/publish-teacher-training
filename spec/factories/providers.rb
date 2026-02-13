@@ -71,10 +71,27 @@ FactoryBot.define do
     end
 
     after(:create) do |provider, evaluator|
-      # FactoryBot doesn't recognise changed_at as a timestamp attribute even
-      # though it's listed in timestamp_attributes_for_update. We must set it
-      # explicitly. When no value is provided we offset by the provider id to
-      # avoid violating the unique index on changed_at.
+      # Problem: The `changed_at` column has a UNIQUE index (index_provider_on_changed_at)
+      # and its DB default is `timezone('utc', now())`. PostgreSQL's `now()` returns
+      # the *transaction start time*, so every INSERT within the same transaction (or
+      # rapid sequential inserts that share the same statement timestamp) produces the
+      # same changed_at value — violating the unique constraint.
+      #
+      # FactoryBot doesn't auto-set changed_at (it's not a standard Rails timestamp),
+      # so without this hook the DB default kicks in and collisions happen whenever a
+      # test creates more than one provider.
+      #
+      # Fix: always set changed_at explicitly, using the provider's unique DB id as a
+      # microsecond offset to guarantee uniqueness.
+      #
+      # Why Rational and not Integer#microseconds?
+      #   ActiveSupport (Rails 8) does NOT define `Integer#microseconds`. The method
+      #   simply doesn't exist, so `provider.id.microseconds` raises NoMethodError.
+      #   `Rational(id, 1_000_000)` produces an exact fractional second that Ruby's
+      #   Time correctly adds as a sub-second offset:
+      #
+      #     Time.current + Rational(3, 1_000_000)  →  ...14:05:37.072986  (+3µs)
+      #
       unique_changed_at = evaluator.changed_at || (Time.current + Rational(provider.id, 1_000_000))
       provider.update_column(:changed_at, unique_changed_at)
     end
