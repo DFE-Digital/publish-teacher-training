@@ -190,7 +190,7 @@ group :development, :test do
   # Test framework
   gem "rspec-rails", "8.0.2"
 
-  gem "selenium-webdriver"
+  gem "capybara-playwright-driver"
 
   # Make diffs of Ruby objects much more readable
   gem "super_diff"
