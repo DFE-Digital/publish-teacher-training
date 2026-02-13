@@ -862,7 +862,7 @@ describe Course do
 
   describe "changed_at" do
     it "is set on create" do
-      course = create(:course)
+      course = create(:course, changed_at: nil)
       expect(course.changed_at).to be_present
       expect(course.changed_at).to eq course.updated_at
     end
