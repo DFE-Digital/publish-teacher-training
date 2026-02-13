@@ -81,6 +81,11 @@
   @include govuk-media-query($from: tablet) {
     display: none;
   }
+
+  .app-list--dash {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
 }
 
 .app-saved-course__status-tag {
