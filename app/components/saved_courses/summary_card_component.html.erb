@@ -34,7 +34,7 @@
       <dt class="govuk-summary-list__key"><%= t(".note_key") %></dt>
       <dd class="govuk-summary-list__value">
         <% if saved_course.note.present? %>
-          <div class="govuk-!-font-size-16"><%= saved_course.note %></div>
+          <div class="govuk-!-font-size-19"><%= simple_format(saved_course.note) %></div>
         <% else %>
           <%= govuk_link_to t(".add_note"), edit_find_candidate_saved_course_note_path(saved_course) %>
         <% end %>
