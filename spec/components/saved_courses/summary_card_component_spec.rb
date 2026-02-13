@@ -68,7 +68,8 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
   end
 
   it "does not render note actions when there is no note" do
-    expect(rendered).not_to have_css(".govuk-summary-list__actions", text: /Edit|Delete/)
+    expect(rendered).not_to have_link("Edit")
+    expect(rendered).not_to have_css("form[action='#{find_candidate_saved_course_note_path(saved_course)}']")
   end
 
   context "when a note has been added" do
@@ -84,11 +85,9 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
     it "renders the note and edit/delete actions" do
       expect(summary_card_content).to include("Note")
       expect(summary_card_content).to include("My note text")
-      within ".govuk-summary-list__actions" do
-        expect(rendered).to have_link("Edit", href: edit_find_candidate_saved_course_note_path(saved_course))
-        expect(rendered).to have_button("Delete")
-        expect(rendered).to have_css("form[action='#{find_candidate_saved_course_note_path(saved_course)}']")
-      end
+      expect(rendered).to have_link("Edit", href: edit_find_candidate_saved_course_note_path(saved_course))
+      expect(rendered).to have_button("Delete")
+      expect(rendered).to have_css("form[action='#{find_candidate_saved_course_note_path(saved_course)}']")
     end
 
     it "renders the note value with 16px styling" do

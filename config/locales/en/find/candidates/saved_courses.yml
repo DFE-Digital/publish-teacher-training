@@ -56,3 +56,9 @@ en:
           success_message_title: Note deleted
           success_message_html: "Your note for %{provider_name} - %{course_name_and_code} has been deleted. %{undo_link}"
           undo: Undo
+      notes:
+        errors:
+          add_failed: Failed to add note
+          update_failed: Failed to update note
+          delete_failed: Failed to delete note
+          undo_failed: Failed to undo note

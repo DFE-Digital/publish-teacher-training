@@ -14,29 +14,31 @@ module Find
         @editing_note = @saved_course.note.present?
         note_was_blank = @saved_course.note.blank?
 
-        if @saved_course.update(note_params)
-          flash[:success_with_body] = note_success_flash(course: @saved_course.course, note_was_blank:)
-          redirect_to find_candidate_saved_courses_path
-        else
-          render :edit, status: :unprocessable_entity
-        end
+        return render(:edit, status: :unprocessable_entity) unless saved_course_updated?(note_params)
+
+        flash[:success_with_body] = note_success_flash(course:, note_was_blank:)
+        redirect_to_saved_courses
       end
 
       def destroy
         deleted_note = @saved_course.note
-        @saved_course.update!(note: nil)
 
-        undo_link = note_undo_link(saved_course: @saved_course, deleted_note:)
-        flash[:success_with_body] = note_deleted_flash(course: @saved_course.course, undo_link:)
+        return redirect_with_note_error(:delete_failed) if deleted_note.blank?
+        return redirect_with_note_error(:delete_failed) unless saved_course_updated?(note: nil)
 
-        redirect_to find_candidate_saved_courses_path
+        flash[:success_with_body] = note_deleted_flash(
+          course:,
+          undo_link: note_undo_link(saved_course: @saved_course, deleted_note:),
+        )
+        redirect_to_saved_courses
       end
 
       def undo
         note = params[:note].to_s
-        @saved_course.update(note: note) if note.present?
 
-        redirect_to find_candidate_saved_courses_path
+        return redirect_with_note_error(:undo_failed) unless note.present? && saved_course_updated?(note: note)
+
+        redirect_to_saved_courses
       end
 
     private
@@ -45,8 +47,27 @@ module Find
         @saved_course = @candidate.saved_courses.find(params[:saved_course_id])
       end
 
+      def course
+        @saved_course.course
+      end
+
       def note_params
         params.require(:saved_course).permit(:note)
+      end
+
+      def saved_course_updated?(attributes)
+        @saved_course.update(attributes)
+      end
+
+      def redirect_to_saved_courses
+        redirect_to find_candidate_saved_courses_path
+      end
+
+      def redirect_with_note_error(error_key)
+        redirect_to(
+          find_candidate_saved_courses_path,
+          flash: { error: note_error_flash(error_key) },
+        )
       end
 
       def note_success_flash(course:, note_was_blank:)
@@ -91,6 +112,12 @@ module Find
             course_name_and_code: course.name_and_code,
             undo_link: undo_link,
           ),
+        }
+      end
+
+      def note_error_flash(key)
+        {
+          "message" => t("find.candidates.notes.errors.#{key}"),
         }
       end
     end

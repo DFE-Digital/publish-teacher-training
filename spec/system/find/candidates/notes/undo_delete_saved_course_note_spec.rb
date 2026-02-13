@@ -16,6 +16,16 @@ RSpec.describe "Undo deleting a saved course note", service: :find do
     then_i_can_undo_the_note_deletion
   end
 
+  scenario "A candidate sees an error when undoing a note deletion fails" do
+    given_i_am_signed_in
+    and_i_have_a_saved_course_with_a_note
+    and_the_note_is_invalid_so_undo_fails
+
+    when_i_visit_my_saved_courses
+    when_i_delete_the_note
+    then_i_see_failed_to_undo_note
+  end
+
   def given_i_am_signed_in
     visit "/"
     click_link_or_button "Sign in"
@@ -70,6 +80,24 @@ RSpec.describe "Undo deleting a saved course note", service: :find do
         expect(page).to have_link("Edit")
         expect(page).to have_button("Delete")
       end
+    end
+  end
+
+  def and_the_note_is_invalid_so_undo_fails
+    @saved_course.update_column(:note, ("word " * 101).strip)
+  end
+
+  def then_i_see_failed_to_undo_note
+    within ".govuk-notification-banner" do
+      click_button "Undo"
+    end
+
+    expect(page).to have_current_path(find_candidate_saved_courses_path)
+    expect(page).to have_content("Failed to undo note")
+
+    within(all(".govuk-summary-card").first) do
+      expect(page).to have_link("Add a note")
+      expect(page).not_to have_content("Note to undo-delete")
     end
   end
 end
