@@ -40,6 +40,12 @@ FactoryBot.define do
     synonyms { Faker::Lorem.words(number: 0..3) }
     selectable_school { true }
 
+    # The `changed_at` column has a UNIQUE index and a DB default of `now()`.
+    # PostgreSQL's `now()` is stable within a transaction, so multiple INSERTs
+    # in the same transaction get the same value and the INSERT itself fails.
+    # A sequence ensures each provider gets a unique value in the INSERT.
+    sequence(:changed_at) { |n| Time.zone.at(n).utc }
+
     trait :with_name do
       provider_name { "Test Name" }
     end
@@ -63,19 +69,6 @@ FactoryBot.define do
 
     trait :with_users do
       users { create_list(:user, 4) }
-    end
-
-    transient do
-      changed_at           { nil }
-      skip_associated_data { false }
-    end
-
-    after(:create) do |provider, evaluator|
-      # Strangely, changed_at doesn't get set if we don't do this, even though
-      # updated_at does. Maybe this is because we've added changed_at to
-      # timestamp_attributes_for_update but FactoryBot doesn't actually
-      # recognise it.
-      provider.update changed_at: evaluator.changed_at if evaluator.changed_at.present?
     end
 
     trait :next_recruitment_cycle do

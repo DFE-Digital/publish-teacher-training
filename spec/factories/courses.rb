@@ -31,6 +31,9 @@ FactoryBot.define do
     degree_subject_requirements { "Completed at least one programming module." }
     is_send { false }
 
+    # Same unique-index collision issue as providers — see spec/support/changed_at_collision_fix.rb
+    sequence(:changed_at) { |n| Time.zone.at(n).utc }
+
     trait :with_gcse_equivalency do
       accept_pending_gcse { [true, false].sample }
       accept_gcse_equivalency { [true, false].sample }

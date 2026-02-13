@@ -166,6 +166,8 @@ RSpec.configure do |config|
     else
       example.run
     end
+  ensure
+    Timecop.return
   end
 
 private

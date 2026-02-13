@@ -277,7 +277,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def and_i_choose_the_first_subject_suggestion
-    page.find('input[name="subject_name"]').native.send_keys(:return)
+    page.find('input[name="subject_name"]').send_keys(:return)
   end
 
   def then_i_see_only_courses_within_selected_location_and_primary_subject_within_a_10_mile_radius

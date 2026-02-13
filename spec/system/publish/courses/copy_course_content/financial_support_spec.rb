@@ -75,7 +75,7 @@ RSpec.describe "Copy course content - financial support and fees", service: :pub
   end
 
   def given_there_is_two_draft_courses
-    @provider = create(:accredited_provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: 2026))
+    @provider = create(:accredited_provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Find::CycleTimetable.current_year))
     @source_course = create(
       :course,
       provider: @provider,
