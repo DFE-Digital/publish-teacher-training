@@ -9,7 +9,7 @@ Capybara.register_driver(:playwright) do |app|
   Capybara::Playwright::Driver.new(
     app,
     browser_type: :chromium,
-    headless: true
+    headless: true,
   )
 end
 
@@ -17,7 +17,7 @@ Capybara.register_driver(:playwright_headed) do |app|
   Capybara::Playwright::Driver.new(
     app,
     browser_type: :chromium,
-    headless: false
+    headless: false,
   )
 end
 
