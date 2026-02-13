@@ -40,6 +40,9 @@ RSpec.describe "Support console: providers onboarding form requests - copy link"
   end
 
   def when_i_click_the_copy_button
+    page.driver.with_playwright_page do |pw_page|
+      pw_page.context.grant_permissions(["clipboard-read", "clipboard-write"])
+    end
     @copy_btn = page.find(".copy-btn", match: :first)
     @copy_btn.click
   end
