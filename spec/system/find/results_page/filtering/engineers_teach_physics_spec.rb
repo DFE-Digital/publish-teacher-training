@@ -60,7 +60,7 @@ RSpec.describe "when searching for engineers teach physics", :js, service: :find
   end
 
   def and_i_select_the_first_subject_suggestion
-    page.find('input[name="subject_name"]').native.send_keys(:return)
+    page.find('input[name="subject_name"]').send_keys(:return)
   end
 
   def then_engineers_teach_physics_filter_is_not_visible

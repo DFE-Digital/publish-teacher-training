@@ -71,11 +71,12 @@ FactoryBot.define do
     end
 
     after(:create) do |provider, evaluator|
-      # Strangely, changed_at doesn't get set if we don't do this, even though
-      # updated_at does. Maybe this is because we've added changed_at to
-      # timestamp_attributes_for_update but FactoryBot doesn't actually
-      # recognise it.
-      provider.update changed_at: evaluator.changed_at if evaluator.changed_at.present?
+      # FactoryBot doesn't recognise changed_at as a timestamp attribute even
+      # though it's listed in timestamp_attributes_for_update. We must set it
+      # explicitly. When no value is provided we offset by the provider id to
+      # avoid violating the unique index on changed_at.
+      unique_changed_at = evaluator.changed_at || (Time.current + provider.id.microseconds)
+      provider.update_column(:changed_at, unique_changed_at)
     end
 
     trait :next_recruitment_cycle do
