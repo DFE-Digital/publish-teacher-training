@@ -1,5 +1,5 @@
 module SystemRetryHelper
-  def with_retry(max_attempts: 4, exceptions: [Selenium::WebDriver::Error::StaleElementReferenceError], delay: 1)
+  def with_retry(max_attempts: 4, exceptions: [StandardError], delay: 1)
     attempts = 0
     begin
       yield

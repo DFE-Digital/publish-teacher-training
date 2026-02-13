@@ -133,6 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: postgres://postgres:developmentpassword@localhost:5432
+      PLAYWRIGHT_CLI_EXECUTABLE_PATH: ./node_modules/.bin/playwright
 
     services:
       postgres:
@@ -192,6 +193,13 @@ jobs:
           node-version: '24.x'
           cache: yarn
       - run: yarn install --frozen-lockfile
+
+      - name: Install Playwright
+        run: |
+          export PLAYWRIGHT_CLI_VERSION=$(bundle exec ruby -e \
+            'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip')
+          npm install playwright@${PLAYWRIGHT_CLI_VERSION}
+          npx playwright install --with-deps chromium
 
       - run: bundle exec rails parallel:setup
       - run: bundle exec rails spec:prepare
