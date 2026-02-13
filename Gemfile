@@ -40,8 +40,8 @@ gem "jsonapi-rb"
 gem "jsonb_accessor"
 
 # Sending exceptions to sentry
-gem "sentry-rails"
-gem "sentry-sidekiq"
+gem "sentry-rails", "~> 5.28"
+gem "sentry-sidekiq", "~> 5.28"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]

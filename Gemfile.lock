@@ -724,16 +724,15 @@ GEM
       websocket (~> 1.0)
     semantic_logger (4.17.0)
       concurrent-ruby (~> 1.0)
-    sentry-rails (6.3.1)
-      railties (>= 5.2.0)
-      sentry-ruby (~> 6.3.1)
-    sentry-ruby (6.3.1)
+    sentry-rails (5.28.1)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.28.1)
+    sentry-ruby (5.28.1)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      logger
-    sentry-sidekiq (6.3.1)
-      sentry-ruby (~> 6.3.1)
-      sidekiq (>= 5.0)
+    sentry-sidekiq (5.28.1)
+      sentry-ruby (~> 5.28.1)
+      sidekiq (>= 3.0)
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
     sidekiq (6.5.12)
@@ -907,8 +906,8 @@ DEPENDENCIES
   rubypants
   schema_to_scaffold
   selenium-webdriver
-  sentry-rails
-  sentry-sidekiq
+  sentry-rails (~> 5.28)
+  sentry-sidekiq (~> 5.28)
   shoulda-matchers (~> 7.0)
   sidekiq (~> 6.5)
   sidekiq-cron

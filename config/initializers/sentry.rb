@@ -23,7 +23,7 @@ Sentry.init do |config|
       nil
     else
       filter_record_not_unique_exception_messages!(event, hint)
-      filter.filter(event.to_h)
+      filter.filter(event.to_hash)
     end
   end
 
