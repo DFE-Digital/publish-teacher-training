@@ -109,7 +109,7 @@ RSpec.describe "Search results page title", :js, service: :find do
   end
 
   def and_i_choose_the_first_subject_suggestion
-    page.find('input[name="subject_name"]').native.send_keys(:return)
+    page.find('input[name="subject_name"]').send_keys(:return)
   end
 
   def when_i_search_for_london
