@@ -21,6 +21,7 @@ RSpec.describe Candidate, type: :model do
   describe "associations" do
     it { is_expected.to have_many(:saved_courses).dependent(:destroy) }
     it { is_expected.to have_many(:saved_course_records).through(:saved_courses).source(:course) }
+    it { is_expected.to have_many(:recent_searches).dependent(:destroy) }
 
     it "can have many saved courses through saved_course_records" do
       candidate = create(:candidate)
