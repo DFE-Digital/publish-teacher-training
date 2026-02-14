@@ -37,6 +37,7 @@
             if authenticated?
               nav.with_navigation_item(text: t(".primary_nav.courses_html"), href: find_root_path)
               nav.with_navigation_item(text: t(".primary_nav.saved_courses_html"), href: find_candidate_saved_courses_path)
+              nav.with_navigation_item(text: t(".primary_nav.recent_searches_html"), href: find_candidate_recent_searches_path)
             end
           end %>
     <% else %>
@@ -46,6 +47,7 @@
         <% if authenticated? %>
           <% header.with_navigation_item t(".primary_nav.courses_html"), find_root_path %>
           <% header.with_navigation_item t(".primary_nav.saved_courses_html"), find_candidate_saved_courses_path %>
+          <% header.with_navigation_item t(".primary_nav.recent_searches_html"), find_candidate_recent_searches_path %>
         <% end %>
       <% end %>
     <% end %>
