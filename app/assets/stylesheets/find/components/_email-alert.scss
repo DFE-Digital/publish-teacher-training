@@ -1,0 +1,15 @@
+.app-summary-list--stacked {
+  .govuk-summary-list__row {
+    display: block;
+  }
+
+  .govuk-summary-list__key {
+    width: 100%;
+    padding-bottom: 0;
+  }
+
+  .govuk-summary-list__value {
+    width: 100%;
+    padding-top: 0;
+  }
+}
