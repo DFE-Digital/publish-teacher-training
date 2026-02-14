@@ -53,6 +53,10 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
           post :undo
         end
       end
+      resources :recent_searches, only: [:index], path: "recent-searches" do
+        delete :clear_all, on: :collection
+        post :undo, on: :collection
+      end
     end
   end
 
