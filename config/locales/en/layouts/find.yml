@@ -6,3 +6,4 @@ en:
       primary_nav:
         courses_html: "<strong>Find courses</strong>"
         saved_courses_html: "<strong>Saved courses</strong>"
+        recent_searches_html: "<strong>Recent searches</strong>"
