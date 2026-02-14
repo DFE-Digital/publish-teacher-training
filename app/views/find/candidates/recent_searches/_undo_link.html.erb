@@ -1,0 +1,6 @@
+<%= form_with url: undo_find_candidate_recent_searches_path, method: :post do |form| %>
+  <% ids.each do |id| %>
+    <%= form.hidden_field :ids, multiple: true, value: id, id: nil %>
+  <% end %>
+  <%= form.submit t(".undo"), class: "app-button-link govuk-!-padding-left-0" %>
+<% end %>
