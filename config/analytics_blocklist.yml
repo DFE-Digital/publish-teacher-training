@@ -20,9 +20,32 @@
   - remote_address
   - request_uuid
   - created_at
+  :data_hub_process_summary:
+  - full_summary
+  - updated_total_count
+  - updated_location_name
+  - updated_latlon
+  - updated_address3
+  - error
+  - dry_run
+  - site_updates
+  - duplicate_groups_processed
+  - duplicate_sites_discarded
+  - site_statuses_reassigned
+  - site_statuses_merged
+  - site_statuses_removed
+  - deduplicated_groups
+  - discarded_total_count
+  - discarded_lack_urn
+  - discarded_invalid_gias_urn
+  - discarded_ids_lack_urn
+  - discarded_invalid_urns
   :user:
   - magic_link_token
   - blazer_access
+  :session:
+  - id_token
+  - data
   :provider_ucas_preference:
   - id
   - provider_id
@@ -55,8 +78,6 @@
   - personal_qualities
   - required_qualifications
   - salary_details
-  - describe_school
-  - candidate_training_rationale
   - placement_selection_criteria
   - duration_per_school
   - theoretical_training_location
@@ -68,7 +89,6 @@
   - interview_location
   - fee_schedule
   - additional_fees
-  - fee_support
   :contact:
   - name
   - email
@@ -128,26 +148,3 @@
   - statement
   - data_source
   - created_at
-  :session:
-  - id_token
-  - data
-  :data_hub_process_summary:
-  - full_summary
-  - discarded_total_count
-  - discarded_lack_urn
-  - discarded_invalid_gias_urn
-  - error
-  - discarded_ids_lack_urn
-  - discarded_invalid_urns
-  - updated_total_count
-  - updated_location_name
-  - updated_latlon
-  - updated_address3
-  - dry_run
-  - site_updates
-  - duplicate_groups_processed
-  - duplicate_sites_discarded
-  - site_statuses_reassigned
-  - site_statuses_merged
-  - site_statuses_removed
-  - deduplicated_groups
