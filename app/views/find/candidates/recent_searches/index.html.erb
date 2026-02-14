@@ -1,0 +1,22 @@
+<%= content_for :page_title, t(".page_title") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
+  </div>
+
+  <div class="govuk-grid-column-full">
+    <% if @recent_searches.empty? %>
+      <%= render Find::RecentSearches::EmptyStateComponent.new %>
+    <% else %>
+      <%= button_to t(".clear_all"),
+          clear_all_find_candidate_recent_searches_path,
+          method: :delete,
+          class: "govuk-button govuk-button--warning govuk-!-margin-bottom-4" %>
+
+      <% @recent_searches.each do |recent_search| %>
+        <%= render Find::RecentSearches::SummaryCardComponent.new(recent_search:) %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

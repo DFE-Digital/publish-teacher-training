@@ -49,6 +49,10 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
         get :sign_in, on: :collection
         get :after_auth, on: :collection
       end
+      resources :recent_searches, only: [:index], path: "recent-searches" do
+        delete :clear_all, on: :collection
+        post :undo, on: :collection
+      end
     end
   end
 

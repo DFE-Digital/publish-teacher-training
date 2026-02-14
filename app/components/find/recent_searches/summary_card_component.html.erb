@@ -1,0 +1,10 @@
+<%= govuk_summary_card(title: title) do |card| %>
+  <ul class="app-recent-search-tags">
+    <% filter_tags.each do |tag_text| %>
+      <li><span class="app-recent-search-tag"><%= tag_text %></span></li>
+    <% end %>
+  </ul>
+  <p class="govuk-body govuk-!-margin-top-2">
+    <%= govuk_link_to t(".search_again"), search_again_path %>
+  </p>
+<% end %>

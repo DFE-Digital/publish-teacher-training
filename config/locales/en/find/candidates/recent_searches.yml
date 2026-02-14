@@ -1,0 +1,12 @@
+en:
+  find:
+    candidates:
+      recent_searches:
+        index:
+          page_title: Recent searches
+          clear_all: Clear all recent searches
+        clear_all:
+          success_title: Recent searches cleared
+          success_body_html: "All your recent searches have been deleted. %{undo_link}"
+        undo_link:
+          undo: Undo
