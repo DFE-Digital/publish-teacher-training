@@ -3,6 +3,7 @@ en:
     results:
       index:
         filter_results: Filter results
+        set_up_email_alert: Set up an email alert for this search
       index_old:
         page_title:
           zero: "No courses found"

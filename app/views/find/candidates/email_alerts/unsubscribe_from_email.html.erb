@@ -1,0 +1,22 @@
+<%= content_for :page_title, t(".page_title") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+
+    <ul class="app-recent-search-tags govuk-!-margin-bottom-4">
+      <% @filter_tags.each do |tag_text| %>
+        <li><span class="app-recent-search-tag"><%= tag_text %></span></li>
+      <% end %>
+    </ul>
+
+    <p class="govuk-body"><%= t(".are_you_sure") %></p>
+
+    <%= form_with url: find_unsubscribe_email_alert_from_email_path(token: params[:token]), method: :delete do |form| %>
+      <div class="govuk-button-group">
+        <%= form.submit t(".submit"), class: "govuk-button govuk-button--warning" %>
+        <%= govuk_link_to t(".cancel"), find_root_path, class: "govuk-link" %>
+      </div>
+    <% end %>
+  </div>
+</div>

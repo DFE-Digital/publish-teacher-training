@@ -1,6 +1,9 @@
 <%= govuk_summary_card(
   title:,
-  actions: [govuk_link_to(t(".search_again"), search_again_path)],
+  actions: [
+    govuk_link_to(t(".search_again"), search_again_path),
+    (govuk_link_to(t(".set_up_email_alert"), email_alert_path) if FeatureFlag.active?(:email_alerts)),
+  ].compact,
   classes: "app-recent-search-summary-card",
 ) do |card| %>
   <%= render Find::RecentSearches::FilterTagsComponent.new(active_filters: filter_tags) %>

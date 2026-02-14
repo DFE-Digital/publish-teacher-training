@@ -57,8 +57,24 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
         delete :clear_all, on: :collection
         post :undo, on: :collection
       end
+
+      constraints ->(_req) { FeatureFlag.active?(:email_alerts) } do
+        resources :email_alerts, only: %i[index new create], path: "email-alerts"
+        get "email-alerts/:token/unsubscribe",
+            to: "email_alerts#confirm_unsubscribe",
+            as: :confirm_unsubscribe_email_alert
+        delete "email-alerts/:token/unsubscribe",
+               to: "email_alerts#unsubscribe",
+               as: :unsubscribe_email_alert
+      end
     end
   end
+
+  get "/email-alerts/:token/unsubscribe",
+      to: "candidates/email_alerts#unsubscribe_from_email",
+      as: :unsubscribe_email_alert_from_email
+  delete "/email-alerts/:token/unsubscribe",
+         to: "candidates/email_alerts#confirm_unsubscribe_from_email"
 
   get "/maintenance", to: "pages#maintenance", as: "maintenance"
   get "/cycles", to: "switcher#cycles", as: :cycles
