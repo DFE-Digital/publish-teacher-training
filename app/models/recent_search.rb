@@ -2,7 +2,6 @@
 
 class RecentSearch < ApplicationRecord
   include Discard::Model
-  include SearchTitlePresentable
 
   belongs_to :candidate, foreign_key: :find_candidate_id
 
