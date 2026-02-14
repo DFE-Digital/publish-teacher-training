@@ -1,0 +1,7 @@
+en:
+  find:
+    recent_searches:
+      empty_state_component:
+        heading: No recent searches
+        body_html: "%{link} to start searching for courses."
+        link_text: Find courses
