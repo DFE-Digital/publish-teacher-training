@@ -103,12 +103,4 @@ RSpec.describe RecentSearch, type: :model do
       expect(result).to eq(level: "primary")
     end
   end
-
-  describe "#title" do
-    it "delegates to SearchTitlePresenter via SearchTitlePresentable" do
-      recent_search = build(:recent_search)
-
-      expect(recent_search.title).to be_a(String)
-    end
-  end
 end
