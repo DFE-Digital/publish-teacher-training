@@ -2,7 +2,7 @@
 
 module Find
   class ResultsController < ApplicationController
-    after_action :store_result_fullpath_for_backlinks, :send_analytics_event, only: [:index]
+    after_action :store_result_fullpath_for_backlinks, :send_analytics_event, :record_recent_search, only: [:index]
 
     def index
       @address = Geolocation::Address.query(location_params)
@@ -99,6 +99,21 @@ module Find
 
     def page
       params[:page].to_i.clamp(1..)
+    end
+
+    def record_recent_search
+      return unless authenticated?
+      return unless meaningful_search_params?
+
+      Find::RecordRecentSearchService.call(
+        candidate: @candidate,
+        search_params: @search_params,
+      )
+    end
+
+    def meaningful_search_params?
+      params.keys.intersect?(%w[subjects location can_sponsor_visa funding
+        study_types qualifications send_courses minimum_degree_required])
     end
   end
 end
