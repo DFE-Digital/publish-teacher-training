@@ -56,6 +56,10 @@ bg_jobs:
     cron: "0 3 * * *" # daily at 03:00
     class: "CleanupRecentSearchesJob"
     queue: default
+  send_weekly_email_alerts:
+    cron: "0 8 * * 1" # weekly on Monday at 08:00
+    class: "SendWeeklyEmailAlertsJob"
+    queue: default
 
 skylight:
   enable: true
