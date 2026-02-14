@@ -3,6 +3,7 @@ en:
     results:
       index:
         filter_results: Filter results
+        set_up_email_alert: Set up an email alert for this search
       courses_guidance:
         show:
           heading: "Not sure which course is right for you?"

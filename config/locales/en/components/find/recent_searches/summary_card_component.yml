@@ -3,3 +3,4 @@ en:
     recent_searches:
       summary_card_component:
         search_again: Search again
+        set_up_email_alert: Set up email alert

@@ -1,0 +1,36 @@
+en:
+  find:
+    candidates:
+      email_alerts:
+        index:
+          page_title: Email alerts
+          intro: "We'll email you weekly when new courses are added that meet these criteria. You can unsubscribe any time."
+          search_html: "%{link} to set up an email alert for similar courses."
+          search_link_text: Search for a course
+        new:
+          page_title: "Get email alerts for %{title}"
+          heading_html: "Get email alerts for %{title}"
+          intro: "We'll email you weekly when new courses are added that meet these criteria:"
+          unsubscribe_note: You can unsubscribe at any time.
+          submit: Set up email alert
+          cancel: Cancel
+        create:
+          success_title: Email alert created
+          success_body_html: "You have set up an email alert for %{title}. We'll email you weekly when new courses are added. %{link}"
+          view_email_alerts: View your email alerts
+          create_failed: There was a problem creating your email alert. Please try again.
+        confirm_unsubscribe:
+          page_title: Unsubscribe from this email alert
+          heading: Unsubscribe from this email alert
+          are_you_sure: Are you sure you want to unsubscribe?
+          submit: Unsubscribe
+          cancel: Cancel
+        unsubscribe:
+          success_title: "We've unsubscribed you from this email alert"
+          success_body: You will no longer receive updates for this email alert.
+        unsubscribe_from_email:
+          page_title: Unsubscribe from this email alert
+          heading: Unsubscribe from this email alert
+          are_you_sure: Are you sure you want to unsubscribe?
+          submit: Unsubscribe
+          cancel: Cancel
