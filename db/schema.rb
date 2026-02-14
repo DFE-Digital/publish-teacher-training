@@ -272,6 +272,23 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "email_alert", force: :cascade do |t|
+    t.bigint "candidate_id", null: false
+    t.string "subjects", default: [], array: true
+    t.float "longitude"
+    t.float "latitude"
+    t.integer "radius"
+    t.jsonb "search_attributes", default: {}
+    t.string "location_name"
+    t.datetime "last_sent_at"
+    t.datetime "unsubscribed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candidate_id", "unsubscribed_at"], name: "index_email_alerts_candidate_active"
+    t.index ["candidate_id"], name: "index_email_alert_on_candidate_id"
+    t.index ["unsubscribed_at"], name: "index_email_alert_on_unsubscribed_at"
+  end
+
   create_table "feedback", force: :cascade do |t|
     t.string "ease_of_use"
     t.text "experience"
@@ -610,6 +627,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
   add_foreign_key "course_subject", "course", name: "fk_course_subject__course"
   add_foreign_key "course_subject", "subject", name: "fk_course_subject__subject"
+  add_foreign_key "email_alert", "candidate"
   add_foreign_key "financial_incentive", "subject"
   add_foreign_key "organisation_provider", "organisation", name: "FK_organisation_provider_organisation_organisation_id"
   add_foreign_key "organisation_provider", "provider", name: "FK_organisation_provider_provider_provider_id"
