@@ -111,16 +111,13 @@ module Find
 
       def alert_title_text(alert)
         subject_names = resolve_subject_names(alert.subjects)
-        location = alert.location_name
-
-        render_to_string(
-          Find::Courses::SearchTitleComponent.new(
-            subjects: subject_names,
-            location_name: location,
-            radius: alert.radius,
-            search_attributes: alert.search_attributes,
-          ),
-        ).strip
+        if subject_names.any?
+          subject_names.to_sentence
+        elsif alert.location_name.present?
+          "courses near #{alert.location_name}"
+        else
+          "courses"
+        end
       end
 
       def resolve_subject_names(codes)
