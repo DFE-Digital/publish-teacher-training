@@ -45,6 +45,7 @@ module Find
 
         return redirect_with_note_error(:undo_failed) unless note.present? && saved_course_updated?(note: note)
 
+        send_note_undo_analytics_event(note: note)
         redirect_to_saved_courses
       end
 
@@ -129,30 +130,40 @@ module Find
       end
 
       def send_note_created_analytics_event
-        Find::Analytics::CandidateNoteCreatedEvent.new(
-          request:,
-          course_id: course.id,
-          saved_course_id: @saved_course.id,
+        send_note_analytics_event(
+          Find::Analytics::CandidateNoteCreatedEvent,
           note: @saved_course.note,
-        ).send_event
+        )
       end
 
       def send_note_updated_analytics_event(note_before_edit:)
-        Find::Analytics::CandidateNoteUpdatedEvent.new(
-          request:,
-          course_id: course.id,
-          saved_course_id: @saved_course.id,
+        send_note_analytics_event(
+          Find::Analytics::CandidateNoteUpdatedEvent,
           note_before_edit: note_before_edit,
           note_after_edit: @saved_course.note,
-        ).send_event
+        )
       end
 
       def send_note_deleted_analytics_event(note:)
-        Find::Analytics::CandidateNoteDeletedEvent.new(
+        send_note_analytics_event(
+          Find::Analytics::CandidateNoteDeletedEvent,
+          note: note,
+        )
+      end
+
+      def send_note_undo_analytics_event(note:)
+        send_note_analytics_event(
+          Find::Analytics::CandidateNoteUndoneEvent,
+          note: note,
+        )
+      end
+
+      def send_note_analytics_event(event_class, **extra_attributes)
+        event_class.new(
           request:,
           course_id: course.id,
           saved_course_id: @saved_course.id,
-          note: note,
+          **extra_attributes,
         ).send_event
       end
     end

@@ -7,3 +7,4 @@ shared:
   - candidate_note_created
   - candidate_note_updated
   - candidate_note_deleted
+  - candidate_note_undone

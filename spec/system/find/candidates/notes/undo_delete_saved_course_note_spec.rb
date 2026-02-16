@@ -26,6 +26,21 @@ RSpec.describe "Undo deleting a saved course note", service: :find do
     then_i_see_failed_to_undo_note
   end
 
+  scenario "Undoing a deleted note fires the note undone analytics event" do
+    analytics_event = instance_double(Find::Analytics::CandidateNoteUndoneEvent)
+    allow(analytics_event).to receive(:send_event)
+    allow(Find::Analytics::CandidateNoteUndoneEvent).to receive(:new).and_return(analytics_event)
+
+    given_i_am_signed_in
+    and_i_have_a_saved_course_with_a_note
+
+    when_i_visit_my_saved_courses
+    when_i_delete_the_note
+    then_i_can_undo_the_note_deletion
+
+    expect(analytics_event).to have_received(:send_event).at_least(:once)
+  end
+
   def given_i_am_signed_in
     visit "/"
     click_link_or_button "Sign in"
