@@ -16,6 +16,7 @@ module Find
 
         return render(:edit, status: :unprocessable_entity) unless saved_course_updated?(note_params)
 
+        send_note_created_analytics_event if note_was_blank
         flash[:success_with_body] = note_success_flash(course:, note_was_blank:)
         redirect_to_saved_courses
       end
@@ -119,6 +120,15 @@ module Find
         {
           "message" => t("find.candidates.notes.errors.#{key}"),
         }
+      end
+
+      def send_note_created_analytics_event
+        Find::Analytics::CandidateNoteCreatedEvent.new(
+          request:,
+          course_id: course.id,
+          saved_course_id: @saved_course.id,
+          note: @saved_course.note,
+        ).send_event
       end
     end
   end
