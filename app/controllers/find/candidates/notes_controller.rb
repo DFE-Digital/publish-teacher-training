@@ -15,7 +15,7 @@ module Find
         note_was_blank = @saved_course.note.blank?
         note_before_edit = @saved_course.note
 
-        return render(:edit, status: :unprocessable_entity) unless saved_course_updated?(note_params)
+        return render(:edit, status: :unprocessable_entity) unless saved_course_updated!(note_params)
 
         if note_was_blank
           send_note_created_analytics_event
@@ -30,7 +30,7 @@ module Find
         deleted_note = @saved_course.note
 
         return redirect_with_note_error(:delete_failed) if deleted_note.blank?
-        return redirect_with_note_error(:delete_failed) unless saved_course_updated?(note: nil)
+        return redirect_with_note_error(:delete_failed) unless saved_course_updated!(note: nil)
 
         send_note_deleted_analytics_event(note: deleted_note)
         flash[:success_with_body] = note_deleted_flash(
@@ -43,7 +43,7 @@ module Find
       def undo
         note = params[:note].to_s
 
-        return redirect_with_note_error(:undo_failed) unless note.present? && saved_course_updated?(note: note)
+        return redirect_with_note_error(:undo_failed) unless note.present? && saved_course_updated!(note: note)
 
         send_note_undo_analytics_event(note: note)
         redirect_to_saved_courses
@@ -63,7 +63,7 @@ module Find
         params.require(:saved_course).permit(:note)
       end
 
-      def saved_course_updated?(attributes)
+      def saved_course_updated!(attributes)
         @saved_course.update(attributes)
       end
 
