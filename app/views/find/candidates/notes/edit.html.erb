@@ -4,7 +4,7 @@
     provider_name: @saved_course.course.provider_name,
     course_name_and_code: @saved_course.course.name_and_code,
   ),
-  @saved_course.errors && @saved_course.errors.any?,
+  @saved_course.errors.any?,
 ) %>
 
 <div class="govuk-grid-row">
