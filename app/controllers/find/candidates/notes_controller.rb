@@ -13,10 +13,15 @@ module Find
       def update
         @editing_note = @saved_course.note.present?
         note_was_blank = @saved_course.note.blank?
+        note_before_edit = @saved_course.note
 
         return render(:edit, status: :unprocessable_entity) unless saved_course_updated?(note_params)
 
-        send_note_created_analytics_event if note_was_blank
+        if note_was_blank
+          send_note_created_analytics_event
+        else
+          send_note_updated_analytics_event(note_before_edit: note_before_edit)
+        end
         flash[:success_with_body] = note_success_flash(course:, note_was_blank:)
         redirect_to_saved_courses
       end
@@ -27,6 +32,7 @@ module Find
         return redirect_with_note_error(:delete_failed) if deleted_note.blank?
         return redirect_with_note_error(:delete_failed) unless saved_course_updated?(note: nil)
 
+        send_note_deleted_analytics_event(note: deleted_note)
         flash[:success_with_body] = note_deleted_flash(
           course:,
           undo_link: note_undo_link(saved_course: @saved_course, deleted_note:),
@@ -128,6 +134,25 @@ module Find
           course_id: course.id,
           saved_course_id: @saved_course.id,
           note: @saved_course.note,
+        ).send_event
+      end
+
+      def send_note_updated_analytics_event(note_before_edit:)
+        Find::Analytics::CandidateNoteUpdatedEvent.new(
+          request:,
+          course_id: course.id,
+          saved_course_id: @saved_course.id,
+          note_before_edit: note_before_edit,
+          note_after_edit: @saved_course.note,
+        ).send_event
+      end
+
+      def send_note_deleted_analytics_event(note:)
+        Find::Analytics::CandidateNoteDeletedEvent.new(
+          request:,
+          course_id: course.id,
+          saved_course_id: @saved_course.id,
+          note: note,
         ).send_event
       end
     end
