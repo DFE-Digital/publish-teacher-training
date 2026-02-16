@@ -15,6 +15,20 @@ RSpec.describe "Adding a saved course note", service: :find do
     then_i_can_add_a_note
   end
 
+  scenario "Adding a note fires the note created analytics event" do
+    analytics_event = instance_double(Find::Analytics::CandidateNoteCreatedEvent)
+    allow(analytics_event).to receive(:send_event)
+    allow(Find::Analytics::CandidateNoteCreatedEvent).to receive(:new).and_return(analytics_event)
+
+    given_i_am_signed_in
+    and_i_have_a_saved_course_without_a_note
+
+    when_i_visit_my_saved_courses
+    then_i_can_add_a_note
+
+    expect(analytics_event).to have_received(:send_event).at_least(:once)
+  end
+
   def given_i_am_signed_in
     visit "/"
     click_link_or_button "Sign in"

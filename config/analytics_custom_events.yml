@@ -4,3 +4,4 @@ shared:
   - saved_course
   - removed_saved_course
   - candidate_applies
+  - candidate_note_created
