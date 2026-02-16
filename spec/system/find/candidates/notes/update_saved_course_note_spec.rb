@@ -23,6 +23,20 @@ RSpec.describe "Updating a saved course note", service: :find do
     then_i_cannot_update_the_note_with_more_than_100_words
   end
 
+  scenario "Updating a note fires the note updated analytics event" do
+    analytics_event = instance_double(Find::Analytics::CandidateNoteUpdatedEvent)
+    allow(analytics_event).to receive(:send_event)
+    allow(Find::Analytics::CandidateNoteUpdatedEvent).to receive(:new).and_return(analytics_event)
+
+    given_i_am_signed_in
+    and_i_have_a_saved_course_with_a_note
+
+    when_i_visit_my_saved_courses
+    then_i_can_update_the_note
+
+    expect(analytics_event).to have_received(:send_event).at_least(:once)
+  end
+
   def given_i_am_signed_in
     visit "/"
     click_link_or_button "Sign in"

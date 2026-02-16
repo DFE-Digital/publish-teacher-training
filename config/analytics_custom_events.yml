@@ -5,3 +5,5 @@ shared:
   - removed_saved_course
   - candidate_applies
   - candidate_note_created
+  - candidate_note_updated
+  - candidate_note_deleted
