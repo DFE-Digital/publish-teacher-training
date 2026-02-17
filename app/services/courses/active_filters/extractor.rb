@@ -26,6 +26,7 @@ module Courses
       def initialize(search_params:, search_form:)
         @search_params = search_params
         @search_form = search_form
+        @param_defaults = Find::SearchParamDefaults.new(search_params)
       end
 
       def call
@@ -72,15 +73,19 @@ module Courses
       end
 
       def skip_default?(attribute, value)
-        default = resolve_default(attribute)
+        return true if @param_defaults.default_value?(attribute, value)
 
-        value.to_s == default.to_s
+        radius_default?(attribute, value)
       end
 
-      def resolve_default(attribute)
-        default = defaults[attribute]
+      def radius_default?(attribute, value)
+        return false unless attribute == :radius
 
-        default.is_a?(Proc) ? default.call(@search_params) : default
+        value.to_s == DefaultRadius.new(
+          location: @search_form.location,
+          formatted_address: @search_form.formatted_address,
+          address_types: @search_form.address_types,
+        ).call.to_s
       end
 
       def filter_valid_values(attribute, value)
@@ -123,21 +128,6 @@ module Courses
           value: value,
           remove_params: { location: nil, radius: nil },
         )
-      end
-
-      def defaults
-        {
-          order: proc { |params| params[:short_address].present? ? "distance" : "course_name_ascending" },
-          level: "all",
-          minimum_degree_required: "show_all_courses",
-          radius: proc { |_params|
-            DefaultRadius.new(
-              location: @search_form.location,
-              formatted_address: @search_form.formatted_address,
-              address_types: @search_form.address_types,
-            ).call
-          },
-        }
       end
 
       def conditions
