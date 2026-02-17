@@ -36,32 +36,22 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
     end
 
     context "with invalid filter values" do
-      scenario "invalid subject codes are not displayed" do
+      scenario "individual invalid filter types are not displayed", :aggregate_failures do
         given_the_user_visits_results_with_invalid_subjects
         then_no_active_filters_are_displayed
-      end
 
-      scenario "invalid funding options are not displayed" do
         given_the_user_visits_results_with_invalid_funding
         then_no_active_filters_are_displayed
-      end
 
-      scenario "invalid study types are not displayed" do
         given_the_user_visits_results_with_invalid_study_types
         then_no_active_filters_are_displayed
-      end
 
-      scenario "invalid qualifications are not displayed" do
         given_the_user_visits_results_with_invalid_qualifications
         then_no_active_filters_are_displayed
-      end
 
-      scenario "invalid level is not displayed" do
         given_the_user_visits_results_with_invalid_level
         then_no_active_filters_are_displayed
-      end
 
-      scenario "invalid provider code is not displayed" do
         given_the_user_visits_results_with_invalid_provider_code
         then_no_active_filters_are_displayed
       end
@@ -146,19 +136,9 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
         then_visa_sponsorship_filter_is_displayed
       end
 
-      scenario "can_sponsor_visa filter is hidden when false" do
-        given_the_user_visits_results_without_visa_sponsorship
-        then_no_active_filters_are_displayed
-      end
-
       scenario "send_courses filter is shown when true" do
         given_the_user_enables_send_courses_filter
         then_send_courses_filter_is_displayed
-      end
-
-      scenario "send_courses filter is hidden when false" do
-        given_the_user_visits_results_without_send_courses
-        then_no_active_filters_are_displayed
       end
 
       scenario "engineers_teach_physics filter is shown when true" do
@@ -166,7 +146,13 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
         then_the_active_filters_are_visible("Engineers teach physics")
       end
 
-      scenario "engineers_teach_physics filter is hidden when false" do
+      scenario "boolean filters are hidden when false", :aggregate_failures do
+        given_the_user_visits_results_without_visa_sponsorship
+        then_no_active_filters_are_displayed
+
+        given_the_user_visits_results_without_send_courses
+        then_no_active_filters_are_displayed
+
         given_the_user_visits_results_without_engineers_teach_physics
         then_no_active_filters_are_displayed
       end
@@ -178,19 +164,9 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
         then_further_education_level_filter_is_displayed
       end
 
-      scenario "level filter is hidden when default value selected" do
-        given_the_user_selects_level("all")
-        then_no_active_filters_are_displayed
-      end
-
       scenario "minimum_degree_required filter is shown when non-default value selected" do
         given_the_user_selects_minimum_degree("two_one")
         then_two_one_degree_filter_is_displayed
-      end
-
-      scenario "minimum_degree_required filter is hidden when default value selected" do
-        given_the_user_selects_minimum_degree("show_all_courses")
-        then_no_active_filters_are_displayed
       end
 
       scenario "interview_location filter is shown when set to online" do
@@ -198,14 +174,20 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
         then_online_interview_location_filter_is_displayed
       end
 
-      scenario "interview_location filter is hidden for other values" do
-        given_the_user_selects_interview_location("in_person")
-        then_no_active_filters_are_displayed
-      end
-
       scenario "order filter is shown when non-default value selected" do
         given_the_user_selects_order("provider_name_ascending")
         then_provider_name_ascending_order_filter_is_displayed
+      end
+
+      scenario "dropdown filters are hidden when default values selected", :aggregate_failures do
+        given_the_user_selects_level("all")
+        then_no_active_filters_are_displayed
+
+        given_the_user_selects_minimum_degree("show_all_courses")
+        then_no_active_filters_are_displayed
+
+        given_the_user_selects_interview_location("in_person")
+        then_no_active_filters_are_displayed
       end
     end
 
@@ -423,7 +405,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_no_active_filters_are_displayed
-    expect(active_filters).to eq([])
+    expect(page).to have_no_css(".app-active-filters")
   end
 
   def given_the_user_visits_results_with_invalid_filters
@@ -463,7 +445,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_radius_filter_is_not_displayed
-    expect(active_filters).not_to include("miles")
+    expect(page).to have_no_css(".app-active-filters", text: "miles")
   end
 
   def then_primary_subject_filter_is_displayed
