@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_10_160000) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_14_193915) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -439,6 +439,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_10_160000) do
     t.index ["uuid"], name: "index_providers_onboarding_form_request_on_uuid", unique: true
   end
 
+  create_table "recent_search", force: :cascade do |t|
+    t.bigint "candidate_id", null: false
+    t.string "subjects", default: [], array: true
+    t.float "longitude"
+    t.float "latitude"
+    t.integer "radius"
+    t.jsonb "search_attributes", default: {}
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candidate_id", "discarded_at", "updated_at"], name: "index_recent_search_candidate_active_updated"
+    t.index ["candidate_id", "subjects", "longitude", "latitude", "radius"], name: "index_recent_search_active_dedup", unique: true, where: "(discarded_at IS NULL)"
+    t.index ["candidate_id"], name: "index_recent_search_on_candidate_id"
+    t.index ["discarded_at"], name: "index_recent_search_on_discarded_at"
+  end
+
   create_table "recruitment_cycle", force: :cascade do |t|
     t.string "year"
     t.date "application_start_date", null: false
@@ -603,6 +619,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_10_160000) do
   add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
   add_foreign_key "providers_onboarding_form_request", "user", column: "support_agent_id", name: "FK_onboarding_request_user_support_agent_id"
+  add_foreign_key "recent_search", "candidate"
   add_foreign_key "saved_course", "candidate"
   add_foreign_key "saved_course", "course"
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
