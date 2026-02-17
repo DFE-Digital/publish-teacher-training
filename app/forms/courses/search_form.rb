@@ -105,7 +105,7 @@ module Courses
     end
 
     def provider_name
-      old_provider_name_parameter.presence || super
+      old_provider_name_parameter.presence || super.presence || resolve_provider_name_from_code
     end
 
     def level
@@ -385,6 +385,12 @@ module Courses
 
     def old_provider_name_parameter
       send(:'provider.provider_name')
+    end
+
+    def resolve_provider_name_from_code
+      return if provider_code.blank?
+
+      providers_cache.providers_list.find { |p| p.code == provider_code }&.name
     end
 
     def old_parameters
