@@ -10,3 +10,12 @@ en:
           success_body_html: "All your recent searches have been deleted. %{undo_link}"
         undo_link:
           undo: Undo
+    recent_searches:
+      summary_card:
+        location_with_radius: "Within %{radius} miles of %{location}"
+        visa_sponsorship: Visa sponsorship
+        send_courses: SEND courses
+        funding:
+          salary: Salary
+          apprenticeship: Apprenticeship
+          fee: Fee
