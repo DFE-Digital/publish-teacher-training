@@ -13,6 +13,7 @@ module Find
 
     def call
       return unless @candidate
+      return unless meaningful_search?
 
       dedup_attrs = {
         subjects: extract_subjects,
@@ -38,6 +39,17 @@ module Find
     end
 
   private
+
+    def meaningful_search?
+      extract_subjects.any? ||
+        @search_params[:longitude].present? ||
+        non_default_filters?
+    end
+
+    def non_default_filters?
+      defaults = SearchParamDefaults.new(@search_params)
+      filter_attributes.any? { |k, v| defaults.non_default?(k, v) }
+    end
 
     def extract_subjects
       codes = Array(@search_params[:subjects]).compact_blank
