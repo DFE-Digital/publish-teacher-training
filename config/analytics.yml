@@ -221,6 +221,17 @@ shared:
     - urn
     - created_at
     - updated_at
+  recent_search:
+    - id
+    - candidate_id
+    - subjects
+    - longitude
+    - latitude
+    - radius
+    - search_attributes
+    - discarded_at
+    - created_at
+    - updated_at
   recruitment_cycle:
     - id
     - year
