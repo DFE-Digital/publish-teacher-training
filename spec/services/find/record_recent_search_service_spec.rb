@@ -53,6 +53,25 @@ RSpec.describe Find::RecordRecentSearchService do
         expect(result.subjects).to eq(%w[C1 F1])
       end
 
+      it "extracts subject_code into the subjects column" do
+        result = described_class.call(
+          candidate:,
+          search_params: { subject_code: "24", funding: "salary" },
+        )
+
+        expect(result.subjects).to eq(%w[24])
+        expect(result.search_attributes).not_to have_key("subject_code")
+      end
+
+      it "merges subject_code with subjects without duplicates" do
+        result = described_class.call(
+          candidate:,
+          search_params: { subjects: %w[C1 24], subject_code: "24", funding: "salary" },
+        )
+
+        expect(result.subjects).to eq(%w[24 C1])
+      end
+
       it "only stores permitted keys in search_attributes" do
         result = described_class.call(
           candidate:,
