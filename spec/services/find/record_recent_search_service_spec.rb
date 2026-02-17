@@ -142,8 +142,7 @@ RSpec.describe Find::RecordRecentSearchService do
       end
 
       it "captures the exception and returns nil" do
-        # Force a validation error by stubbing
-        allow_any_instance_of(RecentSearch).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(RecentSearch.new))
+        allow(candidate.recent_searches).to receive(:create!).and_raise(ActiveRecord::RecordInvalid.new(RecentSearch.new))
 
         result = described_class.call(candidate:, search_params: { subjects: %w[C1] })
 

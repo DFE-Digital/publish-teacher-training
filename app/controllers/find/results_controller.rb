@@ -112,8 +112,15 @@ module Find
     end
 
     def meaningful_search_params?
-      params.keys.intersect?(%w[subjects location can_sponsor_visa funding
-        study_types qualifications send_courses minimum_degree_required])
+      params.keys.intersect?(%w[subjects
+                                location
+                                can_sponsor_visa
+                                funding
+                                study_types
+                                qualifications
+                                send_courses
+                                minimum_degree_required
+                                provider_name])
     end
   end
 end
