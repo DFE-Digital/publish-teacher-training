@@ -18,7 +18,6 @@ module Find
     private
 
       def title_text
-        return provider_title if provider_search?
         return visa_title if no_subject_or_location? && visa_sponsorship?
         return apprenticeship_title if no_subject_or_location_or_visa? && apprenticeship_only?
         return salary_title if no_subject_or_location_or_visa? && salary_only?
@@ -54,10 +53,6 @@ module Find
         @subjects.empty? && no_location?
       end
 
-      def provider_search?
-        @attrs["provider_name"].present?
-      end
-
       def visa_sponsorship?
         @attrs["can_sponsor_visa"].present?
       end
@@ -74,10 +69,6 @@ module Find
       def salary_only?
         funding = Array(@attrs["funding"])
         funding.include?("salary") && !funding.include?("fee")
-      end
-
-      def provider_title
-        I18n.t("find.courses.search_title.provider", provider_name: @attrs["provider_name"])
       end
 
       def visa_title

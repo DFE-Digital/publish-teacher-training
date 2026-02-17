@@ -299,6 +299,10 @@ RSpec.describe "Recent searches", service: :find do
         "funding" => %w[salary],
         "send_courses" => "true",
         "level" => "secondary",
+        "study_types" => %w[full_time],
+        "qualifications" => %w[qts_with_pgce_or_pgde],
+        "minimum_degree_required" => "two_one",
+        "start_date" => %w[september],
       },
     )
   end
@@ -357,6 +361,10 @@ RSpec.describe "Recent searches", service: :find do
     expect(page).to have_content("Within 15 miles of Manchester")
     expect(page).to have_content("Visa sponsorship")
     expect(page).to have_content("Salary")
+    expect(page).to have_content("Full time")
+    expect(page).to have_content("QTS with PGCE or PGDE")
+    expect(page).to have_content("Degree: 2:1 or First")
+    expect(page).to have_content("September")
     expect(page).to have_content("SEND courses")
     expect(page).to have_content("Secondary")
   end
@@ -468,7 +476,7 @@ RSpec.describe "Recent searches", service: :find do
   end
 
   def then_i_see_the_provider_search_title
-    expect(page).to have_content("Test Provider (TP1) courses in England")
+    expect(page).to have_content("Courses across England")
   end
 
   def then_i_see_the_provider_filter_tag
