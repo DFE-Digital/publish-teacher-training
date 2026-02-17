@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_10_160000) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -142,7 +142,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_10_160000) do
     t.datetime "start_date", precision: nil
     t.text "study_mode"
     t.integer "provider_id", default: 0, null: false
-    t.text "modular"
     t.integer "english"
     t.integer "maths"
     t.integer "science"
