@@ -15,7 +15,7 @@ end
 Sentry.init do |config|
   filter = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters)
 
-  config.before_send = lambda do |event, _hint|
+  config.before_send = lambda do |event, hint|
     filter_record_not_unique_exception_messages!(event, hint)
 
     # Sanitize extra data
