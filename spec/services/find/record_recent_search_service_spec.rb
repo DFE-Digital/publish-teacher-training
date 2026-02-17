@@ -13,6 +13,58 @@ RSpec.describe Find::RecordRecentSearchService do
       end
     end
 
+    context "when search params contain only default values" do
+      it "does not record a search" do
+        result = described_class.call(
+          candidate:,
+          search_params: { order: "course_name_ascending", minimum_degree_required: "show_all_courses" },
+        )
+
+        expect(result).to be_nil
+        expect(candidate.recent_searches.count).to eq(0)
+      end
+
+      it "does not record a search with empty subjects and location" do
+        result = described_class.call(
+          candidate:,
+          search_params: { order: "course_name_ascending", minimum_degree_required: "show_all_courses", applications_open: "true" },
+        )
+
+        expect(result).to be_nil
+        expect(candidate.recent_searches.count).to eq(0)
+      end
+
+      it "records a search when minimum_degree_required is non-default" do
+        result = described_class.call(
+          candidate:,
+          search_params: { minimum_degree_required: "two_one", order: "course_name_ascending" },
+        )
+
+        expect(result).to be_a(RecentSearch)
+        expect(result).to be_persisted
+      end
+
+      it "records a search when order is non-default" do
+        result = described_class.call(
+          candidate:,
+          search_params: { order: "provider_name_ascending", minimum_degree_required: "show_all_courses" },
+        )
+
+        expect(result).to be_a(RecentSearch)
+        expect(result).to be_persisted
+      end
+
+      it "records a provider-only search" do
+        result = described_class.call(
+          candidate:,
+          search_params: { provider_name: "Test Provider (TP1)", provider_code: "TP1", order: "course_name_ascending" },
+        )
+
+        expect(result).to be_a(RecentSearch)
+        expect(result).to be_persisted
+      end
+    end
+
     context "when creating a new recent search" do
       it "creates a RecentSearch with denormalized and JSONB attributes" do
         params = {
