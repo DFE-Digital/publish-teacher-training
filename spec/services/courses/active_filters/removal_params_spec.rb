@@ -204,6 +204,27 @@ RSpec.describe Courses::ActiveFilters::RemovalParams do
       end
     end
 
+    context "with provider_code attribute" do
+      it "clears both provider_code and provider_name" do
+        search_params = {
+          provider_code: "M40",
+          provider_name: "Manchester Metropolitan University (M40)",
+        }
+
+        removal_params = described_class.new(
+          search_params: search_params,
+          attribute: :provider_code,
+          current_value: "M40",
+          all_values: %w[M40],
+        ).call
+
+        expect(removal_params).to eq({
+          provider_code: nil,
+          provider_name: nil,
+        })
+      end
+    end
+
     context "with other attributes" do
       it "calculates default removal for non-subject attributes" do
         search_params = {
