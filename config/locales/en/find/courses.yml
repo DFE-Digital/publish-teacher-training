@@ -116,6 +116,19 @@ en:
         not_consider_pending_a_level: We will not consider candidates with pending A levels.
         consider_a_level_equivalency: We’ll consider candidates who need to take A level equivalency tests.
         not_consider_a_level_equivalency: We will not consider candidates who need to take A level equivalency tests.
+      search_title:
+        provider: "%{provider_name} courses in England"
+        visa_sponsorship: Courses with visa sponsorship
+        apprenticeship: Apprenticeship courses in England
+        salary: Salaried courses in England
+        one_subject_no_location: "%{subject} courses in England"
+        two_subjects_no_location: "%{subject1} and %{subject2} courses in England"
+        many_subjects_no_location: "%{count} subjects in England"
+        no_subjects_with_location: "Courses within %{radius} miles of %{location}"
+        one_subject_with_location: "%{subject} courses within %{radius} miles of %{location}"
+        two_subjects_with_location: "%{subject1} and %{subject2} courses within %{radius} miles of %{location}"
+        fallback_with_filters: "Courses across England (%{count} filters applied)"
+        fallback: Courses across England
       show:
         back_to_search: Back to search results
         back_to_saved_courses: Back to saved courses

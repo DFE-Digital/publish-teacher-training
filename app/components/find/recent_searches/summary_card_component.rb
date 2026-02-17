@@ -14,7 +14,7 @@ module Find
                  subjects: resolved_subject_names,
                  location_name: location_display_name,
                  radius: @recent_search.radius,
-                 search_attributes: @attrs
+                 search_attributes: @attrs,
                ))
       end
 
@@ -26,7 +26,7 @@ module Find
         helpers.find_results_path(@recent_search.search_params)
       end
 
-      private
+    private
 
       def resolved_subject_names
         return [] if @recent_search.subjects.blank?
@@ -40,6 +40,7 @@ module Find
 
       def build_filter_tags
         tags = []
+        tags << provider_tag if @attrs["provider_name"].present?
         tags.concat(resolved_subject_names)
         tags << location_tag if location_display_name.present?
         tags << visa_tag if @attrs["can_sponsor_visa"].present?
@@ -52,25 +53,29 @@ module Find
       def location_tag
         radius = @recent_search.radius
         name = location_display_name
-        radius.present? ? "Within #{radius} miles of #{name}" : name
+        if radius.present?
+          I18n.t("find.recent_searches.summary_card.location_with_radius", radius: radius, location: name)
+        else
+          name
+        end
       end
 
       def visa_tag
-        "Visa sponsorship"
+        I18n.t("find.recent_searches.summary_card.visa_sponsorship")
       end
 
       def funding_tags
         Array(@attrs["funding"]).filter_map do |f|
-          case f
-          when "salary" then "Salary"
-          when "apprenticeship" then "Apprenticeship"
-          when "fee" then "Fee"
-          end
+          I18n.t("find.recent_searches.summary_card.funding.#{f}", default: nil)
         end
       end
 
       def send_tag
-        "SEND courses"
+        I18n.t("find.recent_searches.summary_card.send_courses")
+      end
+
+      def provider_tag
+        @attrs["provider_name"]
       end
 
       def level_tag

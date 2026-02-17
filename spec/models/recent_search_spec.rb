@@ -81,7 +81,7 @@ RSpec.describe RecentSearch, type: :model do
         longitude: -1.5,
         latitude: 53.0,
         radius: 20,
-        search_attributes: { "funding" => "salary" }
+        search_attributes: { "funding" => "salary" },
       )
 
       result = recent_search.search_params
@@ -91,7 +91,7 @@ RSpec.describe RecentSearch, type: :model do
         subjects: %w[C1 F1],
         longitude: -1.5,
         latitude: 53.0,
-        radius: 20
+        radius: 20,
       )
     end
 

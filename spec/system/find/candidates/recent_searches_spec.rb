@@ -135,6 +135,18 @@ RSpec.describe "Recent searches", service: :find do
     then_no_recent_search_is_recorded
   end
 
+  scenario "Provider search is recorded and displayed with provider title" do
+    given_a_published_course_exists
+    when_i_sign_in
+    when_i_search_by_provider
+    when_i_visit_recent_searches
+
+    then_i_see_the_provider_search_title
+    then_i_see_the_provider_filter_tag
+    when_i_click_search_again
+    then_i_am_on_results_page_with_provider_params
+  end
+
   scenario "Duplicate search updates existing record instead of creating a new one" do
     given_a_published_course_exists
     when_i_sign_in
@@ -449,6 +461,26 @@ RSpec.describe "Recent searches", service: :find do
 
   def then_the_fresh_search_still_exists
     expect(RecentSearch.find_by(id: @fresh_search.id)).to be_present
+  end
+
+  def when_i_search_by_provider
+    visit find_results_path(provider_name: "Test Provider (TP1)", provider_code: "TP1")
+  end
+
+  def then_i_see_the_provider_search_title
+    expect(page).to have_content("Test Provider (TP1) courses in England")
+  end
+
+  def then_i_see_the_provider_filter_tag
+    expect(page).to have_content("Test Provider (TP1)")
+  end
+
+  def then_i_am_on_results_page_with_provider_params
+    expect(page).to have_current_path(/\/results/)
+    uri = URI.parse(current_url)
+    params = Rack::Utils.parse_nested_query(uri.query)
+    expect(params["provider_name"]).to eq("Test Provider (TP1)")
+    expect(params["provider_code"]).to eq("TP1")
   end
 
   def create_subject!(code, name)

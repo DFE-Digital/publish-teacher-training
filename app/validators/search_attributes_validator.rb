@@ -14,6 +14,7 @@ class SearchAttributesValidator < ActiveModel::EachValidator
     location
     minimum_degree_required
     order
+    provider_code
     provider_name
     qualifications
     radius
