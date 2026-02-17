@@ -92,10 +92,11 @@ module Find
         end
       end
 
-      DEFAULT_KEYS = %w[applications_open minimum_degree_required order provider_code provider_name].freeze
+      DISPLAY_EXCLUDED_KEYS = %w[provider_code provider_name].freeze
 
       def active_filter_count
-        @attrs.count { |k, v| v.present? && DEFAULT_KEYS.exclude?(k) }
+        defaults = Find::SearchParamDefaults.new(@attrs)
+        @attrs.count { |k, v| v.present? && DISPLAY_EXCLUDED_KEYS.exclude?(k) && defaults.non_default?(k, v) }
       end
     end
   end

@@ -125,10 +125,16 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     end
   end
 
-  context "with only default filter keys" do
+  context "with only default filter values" do
     let(:search_attributes) { { "applications_open" => "true", "minimum_degree_required" => "show_all_courses", "order" => "course_name_ascending" } }
 
     it { expect(rendered.text).to eq("Courses across England") }
+  end
+
+  context "with non-default minimum_degree_required" do
+    let(:search_attributes) { { "minimum_degree_required" => "two_one", "order" => "course_name_ascending" } }
+
+    it { expect(rendered.text).to eq("Courses across England (1 filter applied)") }
   end
 
   context "with no filters at all" do
