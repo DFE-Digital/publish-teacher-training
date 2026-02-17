@@ -17,12 +17,12 @@ module Find
 
         undo_link = render_to_string(
           partial: "find/candidates/recent_searches/undo_link",
-          locals: { ids: }
+          locals: { ids: },
         )
 
         flash[:success_with_body] = {
           "title" => t(".success_title"),
-          "body" => t(".success_body_html", undo_link:)
+          "body" => t(".success_body_html", undo_link:),
         }
 
         redirect_to find_candidate_recent_searches_path
@@ -30,11 +30,11 @@ module Find
 
       def undo
         ids = Array(params[:ids])
-        @candidate.recent_searches.where(id: ids).each(&:undiscard)
+        @candidate.recent_searches.where(id: ids).find_each(&:undiscard)
         redirect_to find_candidate_recent_searches_path
       end
 
-      private
+    private
 
       def reason_for_request
         :general
