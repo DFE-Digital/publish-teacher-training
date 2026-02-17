@@ -45,6 +45,10 @@ module Find
         tags << location_tag if location_display_name.present?
         tags << visa_tag if @attrs["can_sponsor_visa"].present?
         tags.concat(funding_tags)
+        tags.concat(study_type_tags)
+        tags.concat(qualification_tags)
+        tags << degree_tag if show_degree_tag?
+        tags.concat(start_date_tags)
         tags << send_tag if @attrs["send_courses"].present?
         tags << level_tag if @attrs["level"].present?
         tags.compact
@@ -67,6 +71,32 @@ module Find
       def funding_tags
         Array(@attrs["funding"]).filter_map do |f|
           I18n.t("find.recent_searches.summary_card.funding.#{f}", default: nil)
+        end
+      end
+
+      def study_type_tags
+        Array(@attrs["study_types"]).filter_map do |st|
+          I18n.t("find.recent_searches.summary_card.study_types.#{st}", default: nil)
+        end
+      end
+
+      def qualification_tags
+        Array(@attrs["qualifications"]).filter_map do |q|
+          I18n.t("find.recent_searches.summary_card.qualifications.#{q}", default: nil)
+        end
+      end
+
+      def degree_tag
+        I18n.t("find.recent_searches.summary_card.minimum_degree_required.#{@attrs['minimum_degree_required']}", default: nil)
+      end
+
+      def show_degree_tag?
+        @attrs["minimum_degree_required"].present? && @attrs["minimum_degree_required"] != "show_all_courses"
+      end
+
+      def start_date_tags
+        Array(@attrs["start_date"]).filter_map do |sd|
+          I18n.t("find.recent_searches.summary_card.start_date.#{sd}", default: nil)
         end
       end
 

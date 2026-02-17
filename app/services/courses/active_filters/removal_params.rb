@@ -14,6 +14,8 @@ module Courses
           calculate_subject_code_removal
         when :subjects
           calculate_subjects_removal
+        when :provider_code
+          calculate_provider_code_removal
         else
           calculate_default_removal
         end
@@ -41,6 +43,10 @@ module Courses
         end
 
         removal_params
+      end
+
+      def calculate_provider_code_removal
+        { provider_code: nil, provider_name: nil }
       end
 
       def calculate_default_removal

@@ -61,18 +61,22 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     it { expect(rendered.text).to eq("Courses within 15 miles of Manchester") }
   end
 
-  context "with a provider name" do
+  context "with a provider name only" do
     let(:search_attributes) { { "provider_name" => "Manchester Metropolitan University (M40)" } }
 
-    it { expect(rendered.text).to eq("Manchester Metropolitan University (M40) courses in England") }
+    it { expect(rendered.text).to eq("Courses across England") }
   end
 
-  context "with a provider name and other filters" do
+  context "with a provider name and default keys" do
     let(:search_attributes) { { "provider_name" => "Manchester Metropolitan University (M40)", "applications_open" => "true", "order" => "course_name_ascending" } }
 
-    it "uses the provider title and ignores default keys" do
-      expect(rendered.text).to eq("Manchester Metropolitan University (M40) courses in England")
-    end
+    it { expect(rendered.text).to eq("Courses across England") }
+  end
+
+  context "with a provider name and non-default filter" do
+    let(:search_attributes) { { "provider_name" => "Manchester Metropolitan University (M40)", "send_courses" => "true" } }
+
+    it { expect(rendered.text).to eq("Courses across England (1 filter applied)") }
   end
 
   context "with no subject/location but visa sponsorship" do
@@ -93,7 +97,13 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     it { expect(rendered.text).to eq("Salaried courses in England") }
   end
 
-  context "with filters but no subject/location/visa/apprenticeship/salary" do
+  context "with 1 filter in fallback" do
+    let(:search_attributes) { { "level" => "primary" } }
+
+    it { expect(rendered.text).to eq("Courses across England (1 filter applied)") }
+  end
+
+  context "with 2 filters in fallback" do
     let(:search_attributes) { { "level" => "primary", "send_courses" => "true" } }
 
     it { expect(rendered.text).to eq("Courses across England (2 filters applied)") }
@@ -103,15 +113,15 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:search_attributes) { { "provider_name" => "Test Provider (TP1)", "provider_code" => "TP1", "send_courses" => "true" } }
 
     it "counts only non-default keys as filters" do
-      expect(rendered.text).to eq("Test Provider (TP1) courses in England")
+      expect(rendered.text).to eq("Courses across England (1 filter applied)")
     end
   end
 
   context "with provider_code and provider_name as only non-default keys in fallback" do
     let(:search_attributes) { { "provider_code" => "TP1", "level" => "secondary" } }
 
-    it "excludes provider_code from filter count" do
-      expect(rendered.text).to eq("Courses across England (1 filters applied)")
+    it "excludes provider_code from filter count and uses singular filter" do
+      expect(rendered.text).to eq("Courses across England (1 filter applied)")
     end
   end
 

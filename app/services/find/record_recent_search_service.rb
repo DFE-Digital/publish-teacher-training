@@ -40,12 +40,15 @@ module Find
   private
 
     def extract_subjects
-      Array(@search_params[:subjects]).compact_blank.sort
+      codes = Array(@search_params[:subjects]).compact_blank
+      codes << @search_params[:subject_code] if @search_params[:subject_code].present?
+      codes.uniq.sort
     end
 
     def filter_attributes
       @search_params
         .slice(*SearchAttributesValidator::PERMITTED_KEYS)
+        .except(:subject_code)
         .compact_blank
     end
   end
