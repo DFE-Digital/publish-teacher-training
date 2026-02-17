@@ -181,6 +181,22 @@ RSpec.describe Courses::SearchForm do
           expect(form.search_params).to eq({ provider_code: "ABC" })
         end
       end
+
+      context "when searching by provider code that matches a cached provider" do
+        let(:form) { described_class.new(provider_code: "M40") }
+
+        before do
+          suggestion = ProviderSuggestion.new(id: 1, name: "Manchester Metropolitan University (M40)", code: "M40", value: "M40")
+          allow(form.providers_cache).to receive(:providers_list).and_return([suggestion])
+        end
+
+        it "resolves provider_name from the providers cache" do
+          expect(form.search_params).to include(
+            provider_code: "M40",
+            provider_name: "Manchester Metropolitan University (M40)",
+          )
+        end
+      end
     end
 
     context "when subjects are provided" do
