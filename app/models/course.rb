@@ -17,8 +17,6 @@ class Course < ApplicationRecord
     %w[undergraduate apprenticeship] => "teacher_degree_apprenticeship",
   }.freeze
 
-  after_initialize :set_defaults
-
   before_discard do
     raise "You cannot delete the running course #{self}" unless %i[new not_running].include?(ucas_status)
   end
@@ -1092,10 +1090,6 @@ private
     elsif provider.ukprn.blank?
       errors.add(:base, :provider_ukprn_not_publishable)
     end
-  end
-
-  def set_defaults
-    self.modular ||= ""
   end
 
   def remove_unnecessary_enrichments_validation_message

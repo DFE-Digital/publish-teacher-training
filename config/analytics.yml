@@ -45,7 +45,6 @@ shared:
     - start_date
     - study_mode
     - provider_id
-    - modular
     - english
     - maths
     - science

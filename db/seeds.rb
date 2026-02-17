@@ -73,7 +73,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     maths: 1,
     english: 9,
     science: 9,
-    modular: "M",
     qualification: :pgce_with_qts,
     level: "primary",
     subjects: [
@@ -103,7 +102,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     maths: 3,
     english: 9,
     science: nil,
-    modular: "",
     qualification: :pgce,
     level: "secondary",
     subjects: [
@@ -133,7 +131,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     maths: 3,
     english: 9,
     science: nil,
-    modular: "",
     qualification: :pgce,
     level: "secondary",
     subjects: [
@@ -164,7 +161,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     maths: 3,
     english: 9,
     science: nil,
-    modular: "",
     qualification: :pgce,
     level: "Further education",
     subjects: [
@@ -194,7 +190,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     maths: 3,
     english: 9,
     science: nil,
-    modular: "",
     qualification: :pgce,
     level: "secondary",
     subjects: [
@@ -225,7 +220,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     maths: 3,
     english: 9,
     science: nil,
-    modular: "",
     qualification: :pgce,
     level: "secondary",
     subjects: [
@@ -256,7 +250,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     maths: 3,
     english: 9,
     science: nil,
-    modular: "",
     qualification: :pgce,
     level: "secondary",
     subjects: [
