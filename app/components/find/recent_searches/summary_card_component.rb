@@ -19,7 +19,10 @@ module Find
       end
 
       def filter_tags
-        @filter_tags ||= build_filter_tags
+        @filter_tags ||= ::Courses::ActiveFilters::TagExtractor.new(
+          @attrs.merge("radius" => @recent_search.radius),
+          subject_names: resolved_subject_names,
+        ).call
       end
 
       def search_again_path
@@ -29,87 +32,16 @@ module Find
     private
 
       def resolved_subject_names
-        return [] if @recent_search.subjects.blank?
-
-        Subject.where(subject_code: @recent_search.subjects).pluck(:subject_name)
+        @resolved_subject_names ||=
+          if @recent_search.subjects.present?
+            Subject.where(subject_code: @recent_search.subjects).pluck(:subject_name)
+          else
+            []
+          end
       end
 
       def location_display_name
         @attrs["location"] || @attrs["formatted_address"]
-      end
-
-      def build_filter_tags
-        tags = []
-        tags << provider_tag if @attrs["provider_name"].present?
-        tags.concat(resolved_subject_names)
-        tags << location_tag if location_display_name.present?
-        tags << visa_tag if @attrs["can_sponsor_visa"].present?
-        tags.concat(funding_tags)
-        tags.concat(study_type_tags)
-        tags.concat(qualification_tags)
-        tags << degree_tag if show_degree_tag?
-        tags.concat(start_date_tags)
-        tags << send_tag if @attrs["send_courses"].present?
-        tags << level_tag if @attrs["level"].present?
-        tags.compact
-      end
-
-      def location_tag
-        radius = @recent_search.radius
-        name = location_display_name
-        if radius.present?
-          I18n.t("find.recent_searches.summary_card.location_with_radius", radius: radius, location: name)
-        else
-          name
-        end
-      end
-
-      def visa_tag
-        I18n.t("find.recent_searches.summary_card.visa_sponsorship")
-      end
-
-      def funding_tags
-        Array(@attrs["funding"]).filter_map do |f|
-          I18n.t("find.recent_searches.summary_card.funding.#{f}", default: nil)
-        end
-      end
-
-      def study_type_tags
-        Array(@attrs["study_types"]).filter_map do |st|
-          I18n.t("find.recent_searches.summary_card.study_types.#{st}", default: nil)
-        end
-      end
-
-      def qualification_tags
-        Array(@attrs["qualifications"]).filter_map do |q|
-          I18n.t("find.recent_searches.summary_card.qualifications.#{q}", default: nil)
-        end
-      end
-
-      def degree_tag
-        I18n.t("find.recent_searches.summary_card.minimum_degree_required.#{@attrs['minimum_degree_required']}", default: nil)
-      end
-
-      def show_degree_tag?
-        @attrs["minimum_degree_required"].present? && @attrs["minimum_degree_required"] != "show_all_courses"
-      end
-
-      def start_date_tags
-        Array(@attrs["start_date"]).filter_map do |sd|
-          I18n.t("find.recent_searches.summary_card.start_date.#{sd}", default: nil)
-        end
-      end
-
-      def send_tag
-        I18n.t("find.recent_searches.summary_card.send_courses")
-      end
-
-      def provider_tag
-        @attrs["provider_name"]
-      end
-
-      def level_tag
-        @attrs["level"].humanize
       end
     end
   end
