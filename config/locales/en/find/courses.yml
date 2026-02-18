@@ -120,12 +120,10 @@ en:
         visa_sponsorship: Courses with visa sponsorship
         apprenticeship: Apprenticeship courses in England
         salary: Salaried courses in England
-        one_subject_no_location: "%{subject} courses in England"
-        two_subjects_no_location: "%{subject1} and %{subject2} courses in England"
+        subjects_no_location: "%{subject} courses in England"
         many_subjects_no_location: "%{count} subjects in England"
+        subjects_with_location: "%{subject} courses within %{radius} miles of %{location}"
         no_subjects_with_location: "Courses within %{radius} miles of %{location}"
-        one_subject_with_location: "%{subject} courses within %{radius} miles of %{location}"
-        two_subjects_with_location: "%{subject1} and %{subject2} courses within %{radius} miles of %{location}"
         fallback_with_filters:
           one: "Courses across England (%{count} filter applied)"
           other: "Courses across England (%{count} filters applied)"
