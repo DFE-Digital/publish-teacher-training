@@ -3,7 +3,7 @@
 class CreateRecentSearches < ActiveRecord::Migration[8.0]
   def change
     create_table :recent_search do |t|
-      t.references :candidate, null: false, foreign_key: true
+      t.references :find_candidate, null: false, foreign_key: { to_table: :candidate }
       t.string     :subjects, array: true, default: []
       t.float      :longitude
       t.float      :latitude
@@ -15,13 +15,13 @@ class CreateRecentSearches < ActiveRecord::Migration[8.0]
     end
 
     add_index :recent_search,
-              %i[candidate_id subjects longitude latitude radius],
+              %i[find_candidate_id subjects longitude latitude radius],
               unique: true,
               where: "discarded_at IS NULL",
               name: "index_recent_search_active_dedup"
 
     add_index :recent_search,
-              %i[candidate_id discarded_at updated_at],
+              %i[find_candidate_id discarded_at updated_at],
               name: "index_recent_search_candidate_active_updated"
 
     add_index :recent_search, :discarded_at
