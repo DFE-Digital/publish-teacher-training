@@ -16,8 +16,8 @@ module Find
 
       describe "GET #index" do
         it "renders successfully with active searches" do
-          create(:recent_search, candidate:, subjects: %w[C1])
-          discarded = create(:recent_search, candidate:, subjects: %w[F1])
+          create(:recent_search, find_candidate: candidate, subjects: %w[C1])
+          discarded = create(:recent_search, find_candidate: candidate, subjects: %w[F1])
           discarded.discard
 
           get :index
@@ -26,7 +26,7 @@ module Find
         end
 
         it "discards stale searches" do
-          stale = create(:recent_search, candidate:, updated_at: 31.days.ago)
+          stale = create(:recent_search, find_candidate: candidate, updated_at: 31.days.ago)
 
           get :index
 
@@ -36,8 +36,8 @@ module Find
 
       describe "DELETE #clear_all" do
         it "discards all active searches" do
-          search1 = create(:recent_search, candidate:, subjects: %w[C1])
-          search2 = create(:recent_search, candidate:, subjects: %w[F1])
+          search1 = create(:recent_search, find_candidate: candidate, subjects: %w[C1])
+          search2 = create(:recent_search, find_candidate: candidate, subjects: %w[F1])
 
           delete :clear_all
 
@@ -47,16 +47,16 @@ module Find
 
         it "does not affect another candidate's searches" do
           other_candidate = create(:candidate)
-          other_search = create(:recent_search, candidate: other_candidate)
+          other_search = create(:recent_search, find_candidate: other_candidate)
 
-          create(:recent_search, candidate:)
+          create(:recent_search, find_candidate: candidate)
           delete :clear_all
 
           expect(other_search.reload).not_to be_discarded
         end
 
         it "redirects to the index with a success flash" do
-          create(:recent_search, candidate:)
+          create(:recent_search, find_candidate: candidate)
 
           delete :clear_all
 
@@ -68,8 +68,8 @@ module Find
 
       describe "POST #undo" do
         it "undiscards searches by the given IDs" do
-          search1 = create(:recent_search, candidate:, subjects: %w[C1])
-          search2 = create(:recent_search, candidate:, subjects: %w[F1])
+          search1 = create(:recent_search, find_candidate: candidate, subjects: %w[C1])
+          search2 = create(:recent_search, find_candidate: candidate, subjects: %w[F1])
           search1.discard
           search2.discard
 
@@ -81,7 +81,7 @@ module Find
 
         it "does not undiscard searches belonging to another candidate" do
           other_candidate = create(:candidate)
-          other_search = create(:recent_search, candidate: other_candidate)
+          other_search = create(:recent_search, find_candidate: other_candidate)
           other_search.discard
 
           post :undo, params: { ids: [other_search.id] }
