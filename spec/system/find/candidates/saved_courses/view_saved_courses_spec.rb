@@ -60,7 +60,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
       then_i_should_see_in_first_saved_course_row("Not accepting applications")
     end
 
-    scenario "Withdrawn course shows Withdrawn" do
+    scenario "Withdrawn course is not shown in saved courses" do
       given_a_withdrawn_course_exists
       Timecop.travel(1.day.after(apply_opens))
 
@@ -68,7 +68,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
       and_i_have_saved_courses
       then_i_visit_my_saved_courses
 
-      then_i_should_see_in_first_saved_course_row("Withdrawn")
+      then_i_see_no_saved_courses_message
     end
   end
 

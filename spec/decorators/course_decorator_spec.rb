@@ -125,14 +125,6 @@ describe CourseDecorator do
         expect(decorated.saved_status_tag).to include("Not accepting applications")
       end
     end
-
-    context "when the course is withdrawn" do
-      let(:trait) { :withdrawn }
-
-      it "returns Withdrawn when course is withdrawn" do
-        expect(decorated.saved_status_tag).to include("Withdrawn")
-      end
-    end
   end
 
   # context "status tag" do

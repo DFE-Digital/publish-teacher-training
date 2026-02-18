@@ -29,4 +29,28 @@ RSpec.describe SavedCourse, type: :model do
       expect(saved_course.errors[:note]).to include("Your note must be 100 words or less")
     end
   end
+
+  describe ".not_withdrawn" do
+    it "returns only saved courses for courses that are not withdrawn" do
+      included_saved_course = create(
+        :saved_course,
+        course: create(:course, :published, :with_full_time_sites),
+      )
+      create(
+        :saved_course,
+        course: create(:course, :withdrawn, :with_full_time_sites),
+      )
+
+      expect(described_class.not_withdrawn).to contain_exactly(included_saved_course)
+    end
+
+    it "removes duplicates caused by findable site status joins" do
+      saved_course = create(
+        :saved_course,
+        course: create(:course, :published, :with_2_full_time_sites),
+      )
+
+      expect(described_class.not_withdrawn.where(id: saved_course.id).count).to eq(1)
+    end
+  end
 end

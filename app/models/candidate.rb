@@ -10,6 +10,10 @@ class Candidate < ApplicationRecord
   has_many :saved_courses, dependent: :destroy
   has_many :saved_course_records, through: :saved_courses, source: :course
 
+  def saved_courses_without_withdrawn
+    saved_courses.not_withdrawn
+  end
+
   def self.search(query)
     return all if query.blank?
 
