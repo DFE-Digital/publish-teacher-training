@@ -60,9 +60,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def saved_status_text_and_colour
-    if object.is_withdrawn?
-      %w[Withdrawn red]
-    elsif Find::CycleTimetable.phase_in_time?(:today_is_after_apply_deadline_passed)
+    if Find::CycleTimetable.phase_in_time?(:today_is_after_apply_deadline_passed)
       ["Not accepting applications", "red"]
     elsif Find::CycleTimetable.phase_in_time?(:today_is_between_find_opening_and_apply_opening)
       ["Not yet open", "grey"]

@@ -47,6 +47,16 @@ RSpec.describe Candidate, type: :model do
     end
   end
 
+  describe "#saved_courses_without_withdrawn" do
+    it "returns saved courses excluding withdrawn courses" do
+      candidate = create(:candidate)
+      active_saved_course = create(:saved_course, candidate:, course: create(:course, :published, :with_full_time_sites))
+      create(:saved_course, candidate:, course: create(:course, :withdrawn))
+
+      expect(candidate.saved_courses_without_withdrawn).to contain_exactly(active_saved_course)
+    end
+  end
+
   describe "logged in" do
     it "has a session and authentication" do
       candidate = build(:candidate, :logged_in)

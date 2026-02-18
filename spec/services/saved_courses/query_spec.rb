@@ -219,4 +219,29 @@ RSpec.describe SavedCourses::Query do
       )
     end
   end
+
+  context "when candidate has saved withdrawn courses" do
+    let!(:active_saved_course) do
+      create(
+        :saved_course,
+        candidate:,
+        course: create(:course, :with_full_time_sites, :published, provider: create(:provider, provider_name: "Active University")),
+      )
+    end
+
+    before do
+      create(
+        :saved_course,
+        candidate:,
+        course: create(:course, :with_full_time_sites, :withdrawn, provider: create(:provider, provider_name: "Withdrawn University")),
+      )
+    end
+
+    it "excludes withdrawn saved courses from results" do
+      expect(results).to match_collection(
+        [active_saved_course],
+        attribute_names: %w[id],
+      )
+    end
+  end
 end

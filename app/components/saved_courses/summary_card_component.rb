@@ -30,14 +30,10 @@ module SavedCourses
       )
 
       course_info =
-        if course.is_withdrawn?
-          content_tag(:div, title_inner)
-        else
-          govuk_link_to(
-            find_course_path(provider_code: course.provider_code, course_code: course.course_code),
-            class: "govuk-link",
-          ) { title_inner }
-        end
+        govuk_link_to(
+          find_course_path(provider_code: course.provider_code, course_code: course.course_code),
+          class: "govuk-link",
+        ) { title_inner }
 
       content_tag(:div, class: "app-saved-course__card-title") do
         safe_join(

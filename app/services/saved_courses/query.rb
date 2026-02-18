@@ -10,7 +10,7 @@ module SavedCourses
       @params = params
       @applied_scopes = {}
       @scope = candidate
-        .saved_courses
+        .saved_courses_without_withdrawn
         .joins(course: :provider)
     end
 
