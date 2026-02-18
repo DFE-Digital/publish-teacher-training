@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :recent_search do
-    association :candidate
+    association :find_candidate, factory: :candidate
     subjects { [] }
     search_attributes { {} }
   end

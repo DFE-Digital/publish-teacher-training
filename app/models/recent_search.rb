@@ -3,7 +3,7 @@
 class RecentSearch < ApplicationRecord
   include Discard::Model
 
-  belongs_to :candidate, foreign_key: :find_candidate_id
+  belongs_to :find_candidate, class_name: "Candidate"
 
   validates :search_attributes, search_attributes: true
 
