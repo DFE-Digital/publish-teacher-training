@@ -149,7 +149,7 @@ RSpec.describe Find::RecordRecentSearchService do
       it "updates search_attributes and touches updated_at" do
         existing = create(
           :recent_search,
-          candidate:,
+          find_candidate: candidate,
           subjects: %w[C1 F1],
           longitude: -1.5,
           latitude: 53.0,
@@ -177,7 +177,7 @@ RSpec.describe Find::RecordRecentSearchService do
       it "does not create a duplicate record" do
         create(
           :recent_search,
-          candidate:,
+          find_candidate: candidate,
           subjects: %w[C1],
           longitude: nil,
           latitude: nil,
@@ -194,7 +194,7 @@ RSpec.describe Find::RecordRecentSearchService do
       it "creates a new record (does not reuse discarded)" do
         discarded = create(
           :recent_search,
-          candidate:,
+          find_candidate: candidate,
           subjects: %w[C1],
         )
         discarded.discard
