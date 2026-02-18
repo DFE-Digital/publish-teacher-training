@@ -223,7 +223,7 @@ shared:
     - updated_at
   recent_search:
     - id
-    - candidate_id
+    - find_candidate_id
     - subjects
     - longitude
     - latitude

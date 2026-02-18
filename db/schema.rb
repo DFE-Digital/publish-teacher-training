@@ -439,7 +439,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
   end
 
   create_table "recent_search", force: :cascade do |t|
-    t.bigint "candidate_id", null: false
+    t.bigint "find_candidate_id", null: false
     t.string "subjects", default: [], array: true
     t.float "longitude"
     t.float "latitude"
@@ -448,10 +448,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["candidate_id", "discarded_at", "updated_at"], name: "index_recent_search_candidate_active_updated"
-    t.index ["candidate_id", "subjects", "longitude", "latitude", "radius"], name: "index_recent_search_active_dedup", unique: true, where: "(discarded_at IS NULL)"
-    t.index ["candidate_id"], name: "index_recent_search_on_candidate_id"
     t.index ["discarded_at"], name: "index_recent_search_on_discarded_at"
+    t.index ["find_candidate_id", "discarded_at", "updated_at"], name: "index_recent_search_candidate_active_updated"
+    t.index ["find_candidate_id", "subjects", "longitude", "latitude", "radius"], name: "index_recent_search_active_dedup", unique: true, where: "(discarded_at IS NULL)"
+    t.index ["find_candidate_id"], name: "index_recent_search_on_find_candidate_id"
   end
 
   create_table "recruitment_cycle", force: :cascade do |t|
@@ -618,7 +618,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
   add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
   add_foreign_key "providers_onboarding_form_request", "user", column: "support_agent_id", name: "FK_onboarding_request_user_support_agent_id"
-  add_foreign_key "recent_search", "candidate"
+  add_foreign_key "recent_search", "candidate", column: "find_candidate_id"
   add_foreign_key "saved_course", "candidate"
   add_foreign_key "saved_course", "course"
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
