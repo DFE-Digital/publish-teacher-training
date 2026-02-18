@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe RecentSearch, type: :model do
   describe "associations" do
-    it { is_expected.to belong_to(:candidate) }
+    it { is_expected.to belong_to(:find_candidate).class_name("Candidate") }
   end
 
   describe "discard" do
