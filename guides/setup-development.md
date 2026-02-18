@@ -12,6 +12,12 @@ Run setup:
 ./bin/setup
 ```
 
+## Install Playwright (for system tests)
+
+```bash
+yarn run playwright install --with-deps
+```
+
 ## Start the server
 
 To start all the processes run:
