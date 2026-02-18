@@ -3,10 +3,12 @@ class SavedCourse < ApplicationRecord
   belongs_to :course
 
   scope :not_withdrawn, lambda {
-    joins(course: :latest_enrichment)
-      .merge(Course.findable)
-      .where.not(course_enrichment: { status: CourseEnrichment.statuses[:withdrawn] })
-      .distinct
+    where.not(
+      course_id: Course
+        .joins(:latest_enrichment)
+        .where(course_enrichment: { status: CourseEnrichment.statuses[:withdrawn] })
+        .select(:id),
+    )
   }
 
   validates :candidate_id, uniqueness: { scope: :course_id }
