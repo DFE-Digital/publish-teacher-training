@@ -242,14 +242,14 @@ RSpec.describe "Recent searches", service: :find do
 
     @search1 = create(
       :recent_search,
-      candidate:,
+      find_candidate: candidate,
       subjects: %w[C1],
       search_attributes: { "level" => "secondary" },
       updated_at: 1.hour.ago,
     )
     @search2 = create(
       :recent_search,
-      candidate:,
+      find_candidate: candidate,
       subjects: %w[F1],
       search_attributes: { "can_sponsor_visa" => "true" },
       updated_at: 2.hours.ago,
@@ -262,13 +262,13 @@ RSpec.describe "Recent searches", service: :find do
 
     @old_search = create(
       :recent_search,
-      candidate:,
+      find_candidate: candidate,
       subjects: %w[C1],
       updated_at: 2.days.ago,
     )
     @new_search = create(
       :recent_search,
-      candidate:,
+      find_candidate: candidate,
       subjects: %w[F1],
       updated_at: 1.minute.ago,
     )
@@ -278,7 +278,7 @@ RSpec.describe "Recent searches", service: :find do
     12.times do |i|
       create(
         :recent_search,
-        candidate:,
+        find_candidate: candidate,
         subjects: ["S#{i}"],
         updated_at: i.hours.ago,
       )
@@ -290,7 +290,7 @@ RSpec.describe "Recent searches", service: :find do
 
     create(
       :recent_search,
-      candidate:,
+      find_candidate: candidate,
       subjects: %w[C1],
       radius: 15,
       search_attributes: {
@@ -312,7 +312,7 @@ RSpec.describe "Recent searches", service: :find do
 
     @subject_search = create(
       :recent_search,
-      candidate:,
+      find_candidate: candidate,
       subjects: %w[C1],
       search_attributes: { "level" => "secondary" },
     )
@@ -320,11 +320,11 @@ RSpec.describe "Recent searches", service: :find do
 
   def and_another_candidate_has_searches
     @other_candidate = create(:candidate, email_address: "other@example.com")
-    @other_search = create(:recent_search, candidate: @other_candidate)
+    @other_search = create(:recent_search, find_candidate: @other_candidate)
   end
 
   def and_i_have_a_stale_search
-    @stale_search = create(:recent_search, candidate:, subjects: %w[STALE], updated_at: 31.days.ago)
+    @stale_search = create(:recent_search, find_candidate: candidate, subjects: %w[STALE], updated_at: 31.days.ago)
   end
 
   def and_i_have_a_fresh_search
@@ -332,7 +332,7 @@ RSpec.describe "Recent searches", service: :find do
 
     @fresh_search = create(
       :recent_search,
-      candidate:,
+      find_candidate: candidate,
       subjects: %w[C1],
       search_attributes: { "level" => "secondary" },
       updated_at: 1.day.ago,
@@ -394,7 +394,7 @@ RSpec.describe "Recent searches", service: :find do
   end
 
   def then_the_other_candidate_still_has_searches
-    expect(RecentSearch.kept.where(candidate: @other_candidate).count).to eq(1)
+    expect(RecentSearch.kept.where(find_candidate: @other_candidate).count).to eq(1)
   end
 
   def then_i_see_only_the_fresh_search
@@ -452,15 +452,15 @@ RSpec.describe "Recent searches", service: :find do
   end
 
   def then_the_searches_are_discarded_not_destroyed
-    expect(RecentSearch.with_discarded.where(candidate:).discarded.count).to be >= 1
+    expect(RecentSearch.with_discarded.where(find_candidate: candidate).discarded.count).to be >= 1
   end
 
   def then_the_discarded_searches_are_permanently_deleted
-    expect(RecentSearch.with_discarded.where(candidate:).count).to eq(0)
+    expect(RecentSearch.with_discarded.where(find_candidate: candidate).count).to eq(0)
   end
 
   def then_the_discarded_searches_still_exist_in_database
-    expect(RecentSearch.with_discarded.where(candidate:).discarded.count).to be >= 1
+    expect(RecentSearch.with_discarded.where(find_candidate: candidate).discarded.count).to be >= 1
   end
 
   def then_the_stale_search_is_permanently_deleted
