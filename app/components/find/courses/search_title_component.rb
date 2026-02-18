@@ -21,23 +21,18 @@ module Find
         return visa_title if no_subject_or_location? && visa_sponsorship?
         return apprenticeship_title if no_subject_or_location_or_visa? && apprenticeship_only?
         return salary_title if no_subject_or_location_or_visa? && salary_only?
+        return fallback_title if @subjects.empty? && no_location?
 
-        if @subjects.count == 1 && no_location?
-          I18n.t("find.courses.search_title.one_subject_no_location", subject: @subjects.first)
-        elsif @subjects.count == 2 && no_location?
-          I18n.t("find.courses.search_title.two_subjects_no_location", subject1: @subjects.first, subject2: @subjects.second)
-        elsif @subjects.count >= 3 && no_location?
-          I18n.t("find.courses.search_title.many_subjects_no_location", count: @subjects.count)
-        elsif @subjects.empty? && location?
-          I18n.t("find.courses.search_title.no_subjects_with_location", radius: @radius, location: @location_name)
-        elsif @subjects.count >= 3 && location?
-          I18n.t("find.courses.search_title.no_subjects_with_location", radius: @radius, location: @location_name)
-        elsif @subjects.count == 1 && location?
-          I18n.t("find.courses.search_title.one_subject_with_location", subject: @subjects.first, radius: @radius, location: @location_name)
-        elsif @subjects.count == 2 && location?
-          I18n.t("find.courses.search_title.two_subjects_with_location", subject1: @subjects.first, subject2: @subjects.second, radius: @radius, location: @location_name)
+        named = @subjects.count.between?(1, 2)
+
+        if location?
+          key = named ? "subjects_with_location" : "no_subjects_with_location"
+          I18n.t("find.courses.search_title.#{key}",
+                 subject: @subjects.to_sentence, radius: @radius, location: @location_name)
+        elsif named
+          I18n.t("find.courses.search_title.subjects_no_location", subject: @subjects.to_sentence)
         else
-          fallback_title
+          I18n.t("find.courses.search_title.many_subjects_no_location", count: @subjects.count)
         end
       end
 
