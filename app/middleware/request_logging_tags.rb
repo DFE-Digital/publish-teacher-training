@@ -10,6 +10,9 @@ class RequestLoggingTags
     SemanticLogger.tagged(
       request_id: request.request_id,
       session_id: session_id,
+      user_agent: request.user_agent,
+      remote_ip: request.remote_ip,
+      referrer: request.referrer,
     ) do
       @app.call(env)
     end
