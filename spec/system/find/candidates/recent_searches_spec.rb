@@ -359,14 +359,13 @@ RSpec.describe "Recent searches", service: :find do
   def then_i_see_filter_tags
     expect(page).to have_content("Biology")
     expect(page).to have_content("Within 15 miles of Manchester")
-    expect(page).to have_content("Visa sponsorship")
-    expect(page).to have_content("Salary")
-    expect(page).to have_content("Full time")
-    expect(page).to have_content("QTS with PGCE or PGDE")
-    expect(page).to have_content("Degree: 2:1 or First")
-    expect(page).to have_content("September")
-    expect(page).to have_content("SEND courses")
-    expect(page).to have_content("Secondary")
+    expect(page).to have_content("Courses with visa sponsorship")
+    expect(page).to have_content("Courses with a salary")
+    expect(page).to have_content("Full-time")
+    expect(page).to have_content("Qualification: QTS with PGCE or PGDE")
+    expect(page).to have_content("Degree grade: 2:1 or first")
+    expect(page).to have_content("Start date: September #{Find::CycleTimetable.current_year} only")
+    expect(page).to have_content("Courses with a SEND specialism")
   end
 
   def when_i_click_search_again

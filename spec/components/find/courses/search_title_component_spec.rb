@@ -97,6 +97,12 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     it { expect(rendered.text).to eq("Salaried courses in England") }
   end
 
+  context "with no subject/location/visa but further education level" do
+    let(:search_attributes) { { "level" => "further_education" } }
+
+    it { expect(rendered.text).to eq("Further education courses across England") }
+  end
+
   context "with 1 filter in fallback" do
     let(:search_attributes) { { "level" => "primary" } }
 
