@@ -10,10 +10,18 @@ class CustomLogFormatter < SemanticLogger::Formatters::Json
     format_backtrace
     remove_post_params
 
+    format_payload_with_named_tags
+
     hash.to_json
   end
 
 private
+
+  def format_payload_with_named_tags
+    hash[:payload] ||= {}
+    hash[:payload].merge!(log.named_tags)
+    log.named_tags.clear
+  end
 
   def format_job_data
     hash[:job_id] = RequestStore.store[:job_id] if RequestStore.store[:job_id].present?
