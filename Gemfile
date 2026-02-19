@@ -150,8 +150,7 @@ gem "blazer"
 
 gem "dfe-wizard", require: "dfe/wizard", github: "DFE-Digital/dfe-wizard", ref: "c7680087"
 
-# Used to generate seed data in rake tasks
-gem "factory_bot_rails", "~> 6.5"
+# Used to generate seed data
 gem "faker"
 
 group :development, :test do
@@ -178,6 +177,8 @@ group :development, :test do
 
   # run specs in parallel
   gem "parallel_tests"
+
+  gem "factory_bot_rails", "~> 6.5"
 
   # A little extra console goodness
   gem "pry"
