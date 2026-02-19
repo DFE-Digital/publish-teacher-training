@@ -33,7 +33,7 @@ help: ## Show this help
 	echo
 	printf "\033[33m%s\033[0m\n" "Access the running app in given environment:"
 	echo
-	@grep -E '^(console|shell|logs):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^(console|shell|logs|logs-tail):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	echo
 	printf "\033[33m%s\033[0m\n" "Enable / Disable the maintainence page:"
 	echo
@@ -135,6 +135,10 @@ logs: get-cluster-credentials ## Print logs from aks
 	echo "config: $CONFIG_LONG"
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} logs -l app=publish-${APP_ID} --tail=-1 --timestamps=true
+
+logs-tail: get-cluster-credentials ## Tail logs filtering out pings and healthchecks
+	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
+	kubectl -n ${NAMESPACE} logs -l app=publish-${APP_ID} --tail=20 --timestamps=true -f | grep -v -e '/ping' -e '#ping' -e '/healthcheck'
 
 worker-logs: get-cluster-credentials
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
