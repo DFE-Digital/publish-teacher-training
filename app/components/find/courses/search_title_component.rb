@@ -21,6 +21,7 @@ module Find
         return visa_title if no_subject_or_location? && visa_sponsorship?
         return apprenticeship_title if no_subject_or_location_or_visa? && apprenticeship_only?
         return salary_title if no_subject_or_location_or_visa? && salary_only?
+        return further_education_title if no_subject_or_location_or_visa? && further_education?
         return fallback_title if @subjects.empty? && no_location?
 
         named = @subjects.count.between?(1, 2)
@@ -66,6 +67,10 @@ module Find
         funding.include?("salary") && !funding.include?("fee")
       end
 
+      def further_education?
+        @attrs["level"] == "further_education"
+      end
+
       def visa_title
         I18n.t("find.courses.search_title.visa_sponsorship")
       end
@@ -76,6 +81,10 @@ module Find
 
       def salary_title
         I18n.t("find.courses.search_title.salary")
+      end
+
+      def further_education_title
+        I18n.t("find.courses.search_title.further_education")
       end
 
       def fallback_title

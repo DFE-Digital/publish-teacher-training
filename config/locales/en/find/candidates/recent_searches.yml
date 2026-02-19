@@ -10,28 +10,3 @@ en:
           success_body_html: "All your recent searches have been deleted. %{undo_link}"
         undo_link:
           undo: Undo
-    recent_searches:
-      summary_card:
-        location_with_radius: "Within %{radius} miles of %{location}"
-        visa_sponsorship: Visa sponsorship
-        send_courses: SEND courses
-        funding:
-          salary: Salary
-          apprenticeship: Apprenticeship
-          fee: Fee
-        study_types:
-          full_time: Full time
-          part_time: Part time
-        qualifications:
-          qts: QTS only
-          qts_with_pgce_or_pgde: QTS with PGCE or PGDE
-        minimum_degree_required:
-          two_one: "Degree: 2:1 or First"
-          two_two: "Degree: 2:2"
-          third_class: "Degree: Third"
-          pass: "Degree: Pass"
-          no_degree_required: No degree required
-        start_date:
-          jan_to_aug: January to August
-          september: September
-          oct_to_jul: October to July

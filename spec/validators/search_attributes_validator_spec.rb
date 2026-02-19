@@ -28,6 +28,12 @@ describe SearchAttributesValidator do
     it { is_expected.to be_valid }
   end
 
+  context "with interview_location key" do
+    let(:attrs) { { "interview_location" => "online" } }
+
+    it { is_expected.to be_valid }
+  end
+
   context "with empty hash" do
     let(:attrs) { {} }
 

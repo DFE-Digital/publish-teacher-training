@@ -19,9 +19,10 @@ module Find
       end
 
       def filter_tags
-        @filter_tags ||= ::Courses::ActiveFilters::TagExtractor.new(
+        @filter_tags ||= ::Courses::ActiveFilters::HashExtractor.new(
           @attrs.merge("radius" => @recent_search.radius),
           subject_names: resolved_subject_names,
+          provider_name: @attrs["provider_name"],
         ).call
       end
 
