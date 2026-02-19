@@ -1,9 +1,5 @@
 <%= govuk_summary_card(title: title) do |card| %>
-  <ul class="app-recent-search-tags">
-    <% filter_tags.each do |tag_text| %>
-      <li><span class="app-recent-search-tag"><%= tag_text %></span></li>
-    <% end %>
-  </ul>
+  <%= render Find::RecentSearches::FilterTagsComponent.new(active_filters: filter_tags) %>
   <p class="govuk-body govuk-!-margin-top-2">
     <%= govuk_link_to t(".search_again"), search_again_path %>
   </p>

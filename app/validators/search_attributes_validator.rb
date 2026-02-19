@@ -10,6 +10,7 @@ class SearchAttributesValidator < ActiveModel::EachValidator
     engineers_teach_physics
     formatted_address
     funding
+    interview_location
     level
     location
     minimum_degree_required
