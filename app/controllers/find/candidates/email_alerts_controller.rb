@@ -11,8 +11,16 @@ module Find
 
       def new
         @search_params = search_params_from_request
-        @title = build_title(@search_params)
-        @filter_tags = build_filter_tags(@search_params)
+        subject_names = resolve_subject_names(@search_params[:subjects])
+        @title = render_to_string(
+          Find::Courses::SearchTitleComponent.new(
+            subjects: subject_names,
+            location_name: @search_params[:location] || @search_params[:formatted_address],
+            radius: @search_params[:radius],
+            search_attributes: @search_params.to_h,
+          ),
+        ).strip
+        @filter_tags = extract_filter_tags(@search_params.to_h, subject_names:)
       end
 
       def create
@@ -22,10 +30,18 @@ module Find
         )
 
         if alert
+          subject_names = resolve_subject_names(alert.subjects)
+          title = if subject_names.any?
+                    subject_names.to_sentence
+                  elsif alert.location_name.present?
+                    "courses near #{alert.location_name}"
+                  else
+                    "courses"
+                  end
           flash[:success_with_body] = {
             "title" => t(".success_title"),
             "body" => t(".success_body_html",
-                        title: alert_title_text(alert),
+                        title:,
                         link: helpers.govuk_link_to(t(".view_email_alerts"), find_candidate_email_alerts_path)),
           }
           redirect_to redirect_after_create
@@ -37,7 +53,7 @@ module Find
 
       def confirm_unsubscribe
         @email_alert = find_alert_by_token
-        @filter_tags = build_filter_tags_from_alert(@email_alert)
+        @filter_tags = extract_filter_tags_from_alert(@email_alert)
       end
 
       def unsubscribe
@@ -53,7 +69,7 @@ module Find
 
       def unsubscribe_from_email
         @email_alert = EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
-        @filter_tags = build_filter_tags_from_alert(@email_alert)
+        @filter_tags = extract_filter_tags_from_alert(@email_alert)
       rescue ActiveSupport::MessageVerifier::InvalidSignature
         redirect_to find_root_path
       end
@@ -95,78 +111,26 @@ module Find
         )
       end
 
-      def build_title(search_params)
-        subject_names = resolve_subject_names(search_params[:subjects])
-        location = search_params[:location] || search_params[:formatted_address]
-
-        render_to_string(
-          Find::Courses::SearchTitleComponent.new(
-            subjects: subject_names,
-            location_name: location,
-            radius: search_params[:radius],
-            search_attributes: search_params.to_h,
-          ),
-        ).strip
-      end
-
-      def alert_title_text(alert)
-        subject_names = resolve_subject_names(alert.subjects)
-        if subject_names.any?
-          subject_names.to_sentence
-        elsif alert.location_name.present?
-          "courses near #{alert.location_name}"
-        else
-          "courses"
-        end
-      end
-
       def resolve_subject_names(codes)
         return [] if codes.blank?
 
         Subject.where(subject_code: Array(codes)).pluck(:subject_name)
       end
 
-      def build_filter_tags(search_params)
-        tags = []
-        tags.concat(resolve_subject_names(search_params[:subjects]))
-        tags << location_tag(search_params) if (search_params[:location] || search_params[:formatted_address]).present?
-        tags << "Visa sponsorship" if search_params[:can_sponsor_visa].present?
-        tags.concat(funding_tags(search_params[:funding]))
-        tags << "SEND courses" if search_params[:send_courses].present?
-        tags << search_params[:level].humanize if search_params[:level].present?
-        tags.compact
+      def extract_filter_tags(attrs, subject_names: [])
+        ::Courses::ActiveFilters::HashExtractor.new(
+          attrs,
+          subject_names:,
+          provider_name: attrs["provider_name"],
+        ).call.map(&:formatted_value)
       end
 
-      def build_filter_tags_from_alert(alert)
-        tags = []
-        tags.concat(resolve_subject_names(alert.subjects))
-        tags << location_tag_from_alert(alert) if alert.location_name.present?
-        attrs = alert.search_attributes || {}
-        tags << "Visa sponsorship" if attrs["can_sponsor_visa"].present?
-        tags.concat(funding_tags(attrs["funding"]))
-        tags << "SEND courses" if attrs["send_courses"].present?
-        tags << attrs["level"].humanize if attrs["level"].present?
-        tags.compact
-      end
-
-      def location_tag(search_params)
-        name = search_params[:location] || search_params[:formatted_address]
-        radius = search_params[:radius]
-        radius.present? ? "Within #{radius} miles of #{name}" : name
-      end
-
-      def location_tag_from_alert(alert)
-        alert.radius.present? ? "Within #{alert.radius} miles of #{alert.location_name}" : alert.location_name
-      end
-
-      FUNDING_LABELS = {
-        "salary" => "Salary",
-        "apprenticeship" => "Apprenticeship",
-        "fee" => "Fee",
-      }.freeze
-
-      def funding_tags(funding)
-        Array(funding).filter_map { |f| FUNDING_LABELS[f] }
+      def extract_filter_tags_from_alert(alert)
+        attrs = (alert.search_attributes || {}).merge(
+          "radius" => alert.radius,
+          "location" => alert.location_name,
+        )
+        extract_filter_tags(attrs, subject_names: resolve_subject_names(alert.subjects))
       end
 
       def redirect_after_create
