@@ -99,7 +99,7 @@ gem "rexml"
 gem "geocoder"
 
 gem "open_api-rswag-api", "0.2.0", github: "DFE-Digital/open-api-rswag", tag: "v0.2.0"
-gem "open_api-rswag-ui", "0.2.0", github: "DFE-Digital/open-api-rswag", tag: "v0.2.0"
+gem "open_api-rswag-ui", "0.2.0", github: "DFE-Digital/open-api-rswag", tag: "2.0.5"
 
 gem "pg_search"
 
