@@ -28,6 +28,10 @@ bg_jobs:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
     queue: save_statistic
+  cleanup_recent_searches:
+    cron: "0 3 * * *" # daily at 03:00
+    class: "CleanupRecentSearchesJob"
+    queue: default
 skylight:
   enable: true
 
