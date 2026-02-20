@@ -10,7 +10,6 @@ RSpec.describe "Location category defaults", :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache.lookup_store(:memory_store))
-    FeatureFlag.activate(:find_filtering_and_sorting)
 
     given_courses_exist_in_various_locations
   end
