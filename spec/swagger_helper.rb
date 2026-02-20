@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.configure do |config|
   config.before :suite do
     # Patch to ensure both rspec works and valid OpenAPI spec is generated
-    # see https://github.com/jdanielian/open-api-rswag#global-metadata
+    # see https://github.com/rswag/rswag#global-metadata
     Rswag::Specs.config.openapi_specs["public_v1/api_spec.json"]["basePath"] = "/api/public/v1/"
   end
 
