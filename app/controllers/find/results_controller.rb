@@ -9,11 +9,7 @@ module Find
 
       @search_courses_form = ::Courses::SearchForm.new(search_form_params)
       @search_params = @search_courses_form.search_params
-      @courses_query = if FeatureFlag.active?(:find_filtering_and_sorting)
-                         ::Courses::Query.new(params: @search_params.dup)
-                       else
-                         ::Courses::OldQuery.new(params: @search_params.dup)
-                       end
+      @courses_query = ::Courses::Query.new(params: @search_params.dup)
       @courses = @courses_query.call
       @courses_count = @courses_query.count
       @filter_counts = @search_courses_form.filter_counts
@@ -22,11 +18,7 @@ module Find
       @pagy, @results = pagy(@courses, count: @courses_count, page:)
       respond_to do |format|
         format.html do
-          if FeatureFlag.active?(:find_filtering_and_sorting)
-            render :index
-          else
-            render :index_old
-          end
+          render :index
         end
       end
     end

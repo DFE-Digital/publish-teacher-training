@@ -271,7 +271,7 @@ module Courses
     end
 
     def start_date_options
-      FeatureFlag.active?(:find_filtering_and_sorting) ? START_DATE_OPTIONS : OLD_START_DATE_OPTIONS
+      START_DATE_OPTIONS
     end
 
     def study_type_options
