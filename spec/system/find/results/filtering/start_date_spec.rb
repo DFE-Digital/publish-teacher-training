@@ -6,7 +6,6 @@ require_relative "../filtering_helper"
 RSpec.describe "when filtering by start date", :js, service: :find do
   include FilteringHelper
   before do
-    FeatureFlag.activate(:find_filtering_and_sorting)
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     given_courses_exist_with_varied_start_dates
     when_i_visit_the_find_results_page

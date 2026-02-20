@@ -479,14 +479,22 @@ RSpec.describe Courses::ActiveFilters::Extractor do
 
         active_filters = extractor.call
 
-        expected_filter = Courses::ActiveFilter.new(
-          id: :short_address,
-          raw_value: "London",
-          value: "London",
-          remove_params: { location: nil, radius: nil },
-        )
+        expected_filters = [
+          Courses::ActiveFilter.new(
+            id: :order,
+            raw_value: "course_name_ascending",
+            value: "course_name_ascending",
+            remove_params: { order: nil },
+          ),
+          Courses::ActiveFilter.new(
+            id: :short_address,
+            raw_value: "London",
+            value: "London",
+            remove_params: { location: nil, radius: nil },
+          ),
+        ]
 
-        expect(active_filters).to eq([expected_filter])
+        expect(active_filters).to eq(expected_filters)
       end
 
       it "applies radius condition only when short_address is present" do
@@ -641,10 +649,6 @@ RSpec.describe Courses::ActiveFilters::Extractor do
     end
 
     context "with start_date options" do
-      before do
-        allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
-      end
-
       it "resolves all start_date_options values as valid filters" do
         search_form = Courses::SearchForm.new
         search_form.start_date_options.each do |start_date|
@@ -931,9 +935,7 @@ RSpec.describe Courses::ActiveFilters::Extractor do
     end
 
     context "radius" do
-      it "skips default radius for london for filtering and sorting" do
-        FeatureFlag.activate(:find_filtering_and_sorting)
-
+      it "skips default radius for london" do
         search_form = Courses::SearchForm.new(
           location: "London, UK",
           short_address: "London",
