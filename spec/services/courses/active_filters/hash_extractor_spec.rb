@@ -142,10 +142,18 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
     end
 
     context "with skipped keys" do
-      let(:attrs) { { "order" => "course_name_ascending", "applications_open" => "true", "radius" => "15", "subject_code" => "C1" } }
+      let(:attrs) { { "applications_open" => "true", "radius" => "15", "subject_code" => "C1" } }
 
       it "ignores all skipped keys" do
         expect(filters).to be_empty
+      end
+    end
+
+    context "with order" do
+      let(:attrs) { { "order" => "course_name_ascending" } }
+
+      it "includes order as a filter tag" do
+        expect(formatted_values).to eq(["Sort by: Course (a to z)"])
       end
     end
 
