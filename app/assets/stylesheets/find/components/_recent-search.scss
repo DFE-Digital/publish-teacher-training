@@ -1,12 +1,16 @@
 .govuk-summary-card.app-recent-search-summary-card {
   .govuk-summary-card__title-wrapper {
+    // stylelint-disable-next-line declaration-no-important
     display: block !important;
   }
 
   .govuk-summary-card__actions {
     @include govuk-font($size: 19, $weight: regular);
-    margin: govuk-spacing(1) 0 0;
+
     justify-content: left;
+
+    margin: govuk-spacing(1) 0 0;
+
     text-align: left;
   }
 }
