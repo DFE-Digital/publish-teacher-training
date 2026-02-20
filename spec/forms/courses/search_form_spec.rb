@@ -464,6 +464,32 @@ RSpec.describe Courses::SearchForm do
     end
   end
 
+  describe "#funding" do
+    context "when funding has one value" do
+      let(:form) { described_class.new(funding: "salary") }
+
+      it "returns the funding param in an array" do
+        expect(form.funding).to eq(%w[salary])
+      end
+    end
+
+    context "when funding has no value" do
+      let(:form) { described_class.new }
+
+      it "returns the funding param in an array" do
+        expect(form.funding).to be_nil
+      end
+    end
+
+    context "when funding has two values" do
+      let(:form) { described_class.new(funding: %w[fee salary]) }
+
+      it "returns the funding param in an array" do
+        expect(form.funding).to eq(%w[fee salary])
+      end
+    end
+  end
+
   describe "#location" do
     context "when location is the old parameter" do
       let(:form) { described_class.new(lq: "London NW9, UK") }

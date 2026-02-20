@@ -114,6 +114,12 @@ module Courses
       super
     end
 
+    # A single checkbox arrives as a string instead of an array
+    # return nil if empty
+    def funding
+      Array(super).presence
+    end
+
     def order
       OrderingStrategy.new(
         location:,
