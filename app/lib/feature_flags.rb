@@ -9,7 +9,6 @@ class FeatureFlags
       [:hide_applications_open_date, "Hides the the option to create, edit and view a courses open date"],
       [:candidate_accounts, "Enable candidate accounts feature", "Find and Publish team"],
       [:course_sites_updated_email_notification, "Send email notifications when a course's associated schools are updated", "Find and Publish team"],
-      [:find_filtering_and_sorting, "Enable updated filtering and sorting designs on Find service", "Find and Publish team"],
     ]
   end
 end
