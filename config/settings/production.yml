@@ -52,6 +52,10 @@ bg_jobs:
     cron: "30 2 * * *" # daily at 02:30
     class: "GiasImportJob"
     queue: default
+  cleanup_recent_searches:
+    cron: "0 3 * * *" # daily at 03:00
+    class: "CleanupRecentSearchesJob"
+    queue: default
 
 skylight:
   enable: true
