@@ -94,13 +94,6 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     expect(page).to have_no_content("Location search radius")
   end
 
-  scenario 'when searching "London, UK" using old location parameters' do
-    when_i_search_courses_in_london_using_old_parameters
-    then_i_see_courses_up_to_20_miles_distance
-    and_the_location_search_for_coordinates_is_cached
-    and_london_is_displayed_in_text_field
-  end
-
   scenario "search by subject synonym" do
     given_mathematics_has_synonyms
     when_i_visit_the_results_page
@@ -276,12 +269,6 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
         expect(results).to have_no_content(provider.provider_name)
       end
     end
-  end
-
-  def when_i_search_courses_in_london_using_old_parameters
-    stub_london_location_search
-
-    visit find_results_path(lq: "London, UK")
   end
 
   def and_london_is_displayed_in_text_field

@@ -32,16 +32,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(study_types: %w[full_time part_time]) }
 
       it "returns the correct search params with study_types as an array" do
-        expect(form.search_params).to eq({ study_types: %w[full_time part_time] })
-      end
-    end
-
-    context "when study_types is an old parameter" do
-      let(:form) { described_class.new(study_type: %w[full_time part_time]) }
-
-      it "returns the correct search params with study_types as an array" do
-        expect(form.search_params).to eq({ study_types: %w[full_time part_time] })
-        expect(form.study_types).to eq(%w[full_time part_time])
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", study_types: %w[full_time part_time] })
       end
     end
 
@@ -68,15 +59,7 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(provider_name: "NIoT") }
 
         it "returns the correct search params with provider name" do
-          expect(form.search_params).to eq({ provider_name: "NIoT" })
-        end
-      end
-
-      context "when using the old parameter" do
-        let(:form) { described_class.new('provider.provider_name': "NIoT") }
-
-        it "returns the correct search params with provider name" do
-          expect(form.search_params).to eq({ provider_name: "NIoT" })
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", provider_name: "NIoT" })
         end
       end
 
@@ -224,44 +207,8 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(order: "course_name_ascending") }
 
         it "returns the correct search params with order" do
-          expect(form.search_params).to eq({ order: "course_name_ascending" })
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending" })
         end
-      end
-
-      shared_examples "converts old ordering" do |mapping|
-        let(:form) { described_class.new(mapping[:from]) }
-
-        it "maps #{mapping[:from]} to #{mapping[:to]}" do
-          expect(form.search_params).to eq(mapping[:to])
-        end
-
-        it "returns the expected #{mapping[:to].keys.first} value" do
-          expect(form.order).to eq(mapping[:to].values.first)
-        end
-      end
-
-      context "when using old course name ascending order params" do
-        include_examples "converts old ordering", from: { sortby: "course_asc" }, to: { order: "course_name_ascending" }
-      end
-
-      context "when using old course name descending order params" do
-        include_examples "converts old ordering", from: { sortby: "course_desc" }, to: { order: "course_name_descending" }
-      end
-
-      context "when using old provider name ascending order params" do
-        include_examples "converts old ordering", from: { sortby: "provider_asc" }, to: { order: "provider_name_ascending" }
-      end
-
-      context "when using old provider name descending order params" do
-        include_examples "converts old ordering", from: { sortby: "provider_desc" }, to: { order: "provider_name_descending" }
-      end
-
-      context "when using old order param with a non existent value" do
-        include_examples "converts old ordering", from: { sortby: "something" }, to: {}
-      end
-
-      context "when using old order params with a non existent value and also using the new parameter" do
-        include_examples "converts old ordering", from: { sortby: "something", order: "course_name_ascending" }, to: { order: "course_name_ascending" }
       end
     end
 
@@ -385,14 +332,6 @@ RSpec.describe Courses::SearchForm do
   end
 
   describe "#location" do
-    context "when location is the old parameter" do
-      let(:form) { described_class.new(lq: "London NW9, UK") }
-
-      it "returns the correct search params with location details" do
-        expect(form.location).to eq("London NW9, UK")
-      end
-    end
-
     context "when location is set" do
       let(:form) { described_class.new(location: "London NW9, UK") }
 
