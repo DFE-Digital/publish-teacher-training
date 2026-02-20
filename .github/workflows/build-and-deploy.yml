@@ -166,9 +166,9 @@ jobs:
 
           - name: System - Find (except homepage & results)
             include-pattern: spec/system/find/.*_spec.rb
-            exclude-pattern: spec/system/find/(homepage*|results*)/.*_spec.rb
+            exclude-pattern: spec/system/find/(homepage|results)/.*_spec.rb
           - name: System - Find (homepage & results)
-            include-pattern: spec/system/find/(homepage*|results*)/.*_spec.rb
+            include-pattern: spec/system/find/(homepage|results)/.*_spec.rb
           - name: System - Publish
             include-pattern: spec/system/publish/.*_spec.rb
           - name: System - Support and the rest
