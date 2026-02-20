@@ -8,7 +8,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(can_sponsor_visa: "true") }
 
       it "returns the correct search params with can_sponsor_visa set to true" do
-        expect(form.search_params).to eq({ can_sponsor_visa: true })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", can_sponsor_visa: true })
       end
     end
 
@@ -16,7 +16,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(send_courses: "true") }
 
       it "returns the correct search params with send_courses set to true" do
-        expect(form.search_params).to eq({ send_courses: true })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", send_courses: true })
       end
     end
 
@@ -24,7 +24,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(applications_open: "true") }
 
       it "returns the correct search params with applications_open set to true" do
-        expect(form.search_params).to eq({ applications_open: true })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", applications_open: true })
       end
     end
 
@@ -50,102 +50,8 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(level: "further_education") }
 
         it "returns level search params" do
-          expect(form.search_params).to eq({ level: "further_education" })
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", level: "further_education" })
         end
-      end
-
-      context "when old age group params is used" do
-        let(:form) { described_class.new(age_group: "further_education") }
-
-        it "returns level search params" do
-          expect(form.search_params).to eq({ level: "further_education" })
-        end
-      end
-
-      context "when old qualification params is used as array" do
-        let(:form) { described_class.new(qualification: ["pgce pgde"]) }
-
-        it "returns level search params" do
-          expect(form.search_params).to eq({ level: "further_education" })
-        end
-      end
-
-      context "when all old qualification params is used" do
-        let(:form) { described_class.new(qualification: ["qts", "pgce_with_qts", "pgce pgde"]) }
-
-        it "returns level search params" do
-          expect(form.search_params).to eq({ qualifications: %w[qts qts_with_pgce_or_pgde], level: "further_education" })
-          expect(form.qualifications).to eq(%w[qts qts_with_pgce_or_pgde])
-          expect(form.level).to eq("further_education")
-        end
-      end
-    end
-
-    context "when minimum degree grade is provided" do
-      shared_examples "minimum degree required in search params" do |mapping|
-        let(:form) { described_class.new(mapping[:from]) }
-
-        it "maps #{mapping[:from]} to #{mapping[:to]}" do
-          expect(form.search_params).to eq(mapping[:to])
-        end
-
-        it "returns the expected #{mapping[:to].keys.first} value" do
-          expect(form.minimum_degree_required).to eq(mapping[:to].values.first)
-        end
-      end
-
-      context "when new params" do
-        include_examples "minimum degree required in search params",
-                         from: { minimum_degree_required: "two_one" },
-                         to: { minimum_degree_required: "two_one" }
-      end
-
-      context "when old 2:1 params is used" do
-        include_examples "minimum degree required in search params",
-                         from: { degree_required: "show_all_courses" },
-                         to: { minimum_degree_required: "two_one" }
-      end
-
-      context "when old 2:2 params is used" do
-        include_examples "minimum degree required in search params",
-                         from: { degree_required: "two_two" },
-                         to: { minimum_degree_required: "two_two" }
-      end
-
-      context 'when old "Third class" params is used' do
-        include_examples "minimum degree required in search params",
-                         from: { degree_required: "third_class" },
-                         to: { minimum_degree_required: "third_class" }
-      end
-
-      context 'when old "Pass" params is used' do
-        include_examples "minimum degree required in search params",
-                         from: { degree_required: "not_required" },
-                         to: { minimum_degree_required: "pass" }
-      end
-
-      context "when old undergraduate params is used" do
-        include_examples "minimum degree required in search params",
-                         from: { university_degree_status: false },
-                         to: { minimum_degree_required: "no_degree_required" }
-      end
-
-      context "when old undergraduate params is used always takes precedence over degree required old param" do
-        include_examples "minimum degree required in search params",
-                         from: { degree_required: "show_all_courses", university_degree_status: false },
-                         to: { minimum_degree_required: "no_degree_required" }
-      end
-
-      context "when param value does not exist" do
-        include_examples "minimum degree required in search params",
-                         from: { degree_required: "does_not_exist" },
-                         to: {}
-      end
-
-      context "when show postgraduate params is used" do
-        include_examples "minimum degree required in search params",
-                         from: { university_degree_status: true },
-                         to: {}
       end
     end
 
@@ -153,7 +59,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(funding: %w[fee salary]) }
 
       it "returns the correct search params with funding as an array" do
-        expect(form.search_params).to eq({ funding: %w[fee salary] })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", funding: %w[fee salary] })
       end
     end
 
@@ -178,7 +84,7 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(provider_code: "ABC") }
 
         it "returns the correct search params with provider code" do
-          expect(form.search_params).to eq({ provider_code: "ABC" })
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", provider_code: "ABC" })
         end
       end
     end
@@ -187,7 +93,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(subjects: %w[C1]) }
 
       it "returns the correct search params with subjects" do
-        expect(form.search_params).to eq({ subjects: %w[C1] })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", subjects: %w[C1] })
       end
     end
 
@@ -195,7 +101,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(subject_name: "Biology", subject_code: "C1") }
 
       it "convert into subjects and remove subject code" do
-        expect(form.search_params).to eq({ subject_name: "Biology", subject_code: "C1" })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", subject_name: "Biology", subject_code: "C1" })
       end
     end
 
@@ -204,7 +110,7 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(excluded_courses: [{ provider_code: "ABC", course_code: "C1" }]) }
 
         it "returns the correct search params with excluded courses" do
-          expect(form.search_params).to eq({ excluded_courses: [{ provider_code: "ABC", course_code: "C1" }] })
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", excluded_courses: [{ provider_code: "ABC", course_code: "C1" }] })
         end
       end
 
@@ -212,7 +118,7 @@ RSpec.describe Courses::SearchForm do
         let(:form) { described_class.new(excluded_courses: { 0 => { provider_code: "ABC", course_code: "C1" } }) }
 
         it "returns the correct search params with excluded courses" do
-          expect(form.search_params).to eq({ excluded_courses: [{ provider_code: "ABC", course_code: "C1" }] })
+          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", excluded_courses: [{ provider_code: "ABC", course_code: "C1" }] })
         end
       end
     end
@@ -221,7 +127,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 10) }
 
       it "returns the correct search params with location details" do
-        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 10)
+        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 10, minimum_degree_required: "show_all_courses", order: "distance")
       end
     end
 
@@ -229,7 +135,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435) }
 
       it "returns the correct search params with location details and default radius" do
-        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50)
+        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50, minimum_degree_required: "show_all_courses", order: "distance")
       end
     end
 
@@ -237,7 +143,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: "") }
 
       it "returns the correct search params with location details and default radius" do
-        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50)
+        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50, minimum_degree_required: "show_all_courses", order: "distance")
       end
     end
 
@@ -245,7 +151,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(radius: "10") }
 
       it "returns empty params" do
-        expect(form.search_params).to eq({})
+        expect(form.search_params).to eq(minimum_degree_required: "show_all_courses", order: "course_name_ascending")
       end
     end
 
@@ -253,15 +159,15 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(address_types: [], subject_code: "", subject_name: "") }
 
       it "returns empty search params" do
-        expect(form.search_params).to eq({})
+        expect(form.search_params).to eq(minimum_degree_required: "show_all_courses", order: "course_name_ascending")
       end
     end
 
-    context "when location is provided with radius" do
+    context "when location is provided with radius but radius is no valid" do
       let(:form) { described_class.new(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 200) }
 
       it "returns the correct search params with location details and default radius" do
-        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 200)
+        expect(form.search_params).to eq(location: "London NW9, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50, minimum_degree_required: "show_all_courses", order: "distance")
       end
     end
 
@@ -269,61 +175,49 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(location: "Cornwall, UK", latitude: 51.53328, longitude: -0.1734435, address_types: %w[administrative_area_level_2]) }
 
       it "returns the large area radius" do
-        expect(form.search_params).to eq(location: "Cornwall, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50, address_types: %w[administrative_area_level_2])
+        expect(form.search_params).to eq(location: "Cornwall, UK", latitude: 51.53328, longitude: -0.1734435, radius: 50, address_types: %w[administrative_area_level_2], minimum_degree_required: "show_all_courses", order: "distance")
       end
     end
 
-    ###
-    ### FILTERING AND SORTING FEATURE FLAG
-    ###
-    describe "Filtering and sorting enabled" do
-      before do
-        allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
-      end
+    context "when location is blank and order is distance" do
+      let(:form) { described_class.new(location: "", order: "distance") }
 
-      context "when location is blank and order is distance" do
-        let(:form) { described_class.new(location: "", order: "distance") }
-
-        it "forces the ordering to be by course_name_ascending" do
-          expect(form.search_params).to eq({ order: "course_name_ascending", minimum_degree_required: "show_all_courses" })
-        end
-      end
-
-      context "when location is present and order is blank" do
-        let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK") }
-
-        it "defaults the ordering to distance" do
-          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
-        end
-      end
-
-      context "when location is present and order is explicitly set" do
-        let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending") }
-
-        it "respects the user's ordering choice" do
-          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending", radius: 20 })
-        end
-      end
-
-      context "when location is blank and order is blank" do
-        let(:form) { described_class.new(location: "", order: "") }
-
-        it "forces the ordering to be by course_name_ascending" do
-          expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending" })
-        end
-      end
-
-      context "when location is present, ordered by fee, but fee funding is removed" do
-        let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "fee_uk_ascending", funding: %w[salary]) }
-
-        it "resets the ordering to distance" do
-          expect(form.search_params[:order]).to eq("distance")
-        end
+      it "forces the ordering to be by course_name_ascending" do
+        expect(form.search_params).to eq({ order: "course_name_ascending", minimum_degree_required: "show_all_courses" })
       end
     end
-    ###
-    ### END FILTERING AND SORTING FEATURE FLAG
-    ###
+
+    context "when location is present and order is blank" do
+      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK") }
+
+      it "defaults the ordering to distance" do
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
+      end
+    end
+
+    context "when location is present and order is explicitly set" do
+      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending") }
+
+      it "respects the user's ordering choice" do
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending", radius: 20 })
+      end
+    end
+
+    context "when location is blank and order is blank" do
+      let(:form) { described_class.new(location: "", order: "") }
+
+      it "forces the ordering to be by course_name_ascending" do
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending" })
+      end
+    end
+
+    context "when location is present, ordered by fee, but fee funding is removed" do
+      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "fee_uk_ascending", funding: %w[salary]) }
+
+      it "resets the ordering to distance" do
+        expect(form.search_params[:order]).to eq("distance")
+      end
+    end
 
     context "when ordering is provided" do
       context "when new params" do
@@ -375,7 +269,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new }
 
       it "returns empty search params" do
-        expect(form.search_params).to eq({})
+        expect(form.search_params).to eq(minimum_degree_required: "show_all_courses", order: "course_name_ascending")
       end
     end
 
@@ -383,7 +277,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(can_sponsor_visa: "true", send_courses: "true", study_types: %w[full_time]) }
 
       it "returns the correct search params with all attributes" do
-        expect(form.search_params).to eq({ can_sponsor_visa: true, send_courses: true, study_types: %w[full_time] })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending", can_sponsor_visa: true, send_courses: true, study_types: %w[full_time] })
       end
     end
 
@@ -391,7 +285,7 @@ RSpec.describe Courses::SearchForm do
       let(:form) { described_class.new(can_sponsor_visa: nil) }
 
       it "returns search params without nil values" do
-        expect(form.search_params).to eq({})
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", order: "course_name_ascending" })
       end
     end
   end
@@ -602,28 +496,12 @@ RSpec.describe Courses::SearchForm do
   end
 
   describe "#start_date_options" do
-    context "when find_filtering_and_sorting feature flag is active" do
-      before { FeatureFlag.activate(:find_filtering_and_sorting) }
+    it "returns the new start date options" do
+      search_form = described_class.new
 
-      it "returns the new start date options" do
-        search_form = described_class.new
+      options = search_form.start_date_options
 
-        options = search_form.start_date_options
-
-        expect(options).to eq(%w[jan_to_aug september oct_to_jul])
-      end
-    end
-
-    context "when find_filtering_and_sorting feature flag is inactive" do
-      before { FeatureFlag.deactivate(:find_filtering_and_sorting) }
-
-      it "returns the old start date options" do
-        search_form = described_class.new
-
-        options = search_form.start_date_options
-
-        expect(options).to eq(%w[september all_other_dates])
-      end
+      expect(options).to eq(%w[jan_to_aug september oct_to_jul])
     end
   end
 
@@ -638,10 +516,6 @@ RSpec.describe Courses::SearchForm do
   end
 
   describe "#filter_counts" do
-    before do
-      allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
-    end
-
     context "with no filters selected" do
       let(:form) { described_class.new }
 
@@ -899,15 +773,7 @@ RSpec.describe Courses::SearchForm do
   describe "#radius" do
     context "when valid radius" do
       it "returns radius" do
-        FeatureFlag.activate(:find_filtering_and_sorting)
-
         [10, 20, 50, 100].each do |valid_radius|
-          search_form = described_class.new(radius: valid_radius)
-          expect(search_form.radius).to eq(valid_radius)
-        end
-
-        FeatureFlag.deactivate(:find_filtering_and_sorting)
-        [1, 5, 10, 15, 20, 25, 50, 100, 200].each do |valid_radius|
           search_form = described_class.new(radius: valid_radius)
           expect(search_form.radius).to eq(valid_radius)
         end
@@ -916,16 +782,7 @@ RSpec.describe Courses::SearchForm do
 
     context "when invalid radius" do
       it "returns radius" do
-        FeatureFlag.activate(:find_filtering_and_sorting)
-
         [1, 5, 15, "not-allowed", 999, "other-value", -9].each do |invalid_radius|
-          search_form = described_class.new(radius: invalid_radius)
-          expect(search_form.radius).to eq(50)
-        end
-
-        FeatureFlag.deactivate(:find_filtering_and_sorting)
-
-        ["not-allowed", 999, "other-value", -9].each do |invalid_radius|
           search_form = described_class.new(radius: invalid_radius)
           expect(search_form.radius).to eq(50)
         end
@@ -934,10 +791,6 @@ RSpec.describe Courses::SearchForm do
   end
 
   describe "#location_category_changed?" do
-    before do
-      allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
-    end
-
     context "when both previous and current location categories are nil" do
       let(:form) { described_class.new(previous_location_category: nil, location: nil) }
 
@@ -1006,10 +859,6 @@ RSpec.describe Courses::SearchForm do
   end
 
   describe "resetting defaults when location category changes" do
-    before do
-      allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
-    end
-
     describe "#order" do
       context "when location category changed from nil to regional" do
         let(:form) do

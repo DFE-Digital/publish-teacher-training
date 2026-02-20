@@ -661,57 +661,34 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
   describe "when displaying start date" do
     let(:course) { create(:course, start_date: Time.zone.local(2025, 9, 1)) }
 
-    context "when find_filtering_and_sorting feature flag is active" do
-      before { FeatureFlag.activate(:find_filtering_and_sorting) }
-
-      context "when show_start_date is true" do
-        let(:summary_card) do
-          render_inline(
-            described_class.new(
-              course:,
-              show_start_date: true,
-            ),
-          )
-        end
-
-        it "displays the start date row with month and year" do
-          expect(summary_card_content).to include("Start date")
-          expect(summary_card_content).to include("September 2025")
-        end
+    context "when show_start_date is true" do
+      let(:summary_card) do
+        render_inline(
+          described_class.new(
+            course:,
+            show_start_date: true,
+          ),
+        )
       end
 
-      context "when show_start_date is false" do
-        let(:summary_card) do
-          render_inline(
-            described_class.new(
-              course:,
-              show_start_date: false,
-            ),
-          )
-        end
-
-        it "does not display the start date row" do
-          expect(summary_card_content).not_to include("Start date")
-        end
+      it "displays the start date row with month and year" do
+        expect(summary_card_content).to include("Start date")
+        expect(summary_card_content).to include("September 2025")
       end
     end
 
-    context "when find_filtering_and_sorting feature flag is inactive" do
-      before { FeatureFlag.deactivate(:find_filtering_and_sorting) }
+    context "when show_start_date is false" do
+      let(:summary_card) do
+        render_inline(
+          described_class.new(
+            course:,
+            show_start_date: false,
+          ),
+        )
+      end
 
-      context "when show_start_date is true" do
-        let(:summary_card) do
-          render_inline(
-            described_class.new(
-              course:,
-              show_start_date: true,
-            ),
-          )
-        end
-
-        it "does not display the start date row" do
-          expect(summary_card_content).not_to include("Start date")
-        end
+      it "does not display the start date row" do
+        expect(summary_card_content).not_to include("Start date")
       end
     end
   end

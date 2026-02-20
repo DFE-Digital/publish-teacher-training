@@ -140,7 +140,7 @@ module Courses
     end
 
     def show_start_date?
-      FeatureFlag.active?(:find_filtering_and_sorting) && @show_start_date
+      @show_start_date.presence
     end
 
   private
