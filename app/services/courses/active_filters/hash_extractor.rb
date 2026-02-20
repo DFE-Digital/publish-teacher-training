@@ -4,7 +4,6 @@ module Courses
   module ActiveFilters
     class HashExtractor
       SKIP_KEYS = %w[
-        order
         applications_open
         radius
         location
@@ -33,6 +32,7 @@ module Courses
         can_sponsor_visa
         interview_location
         start_date
+        order
       ].freeze
 
       def initialize(attrs, subject_names: [], provider_name: nil)
