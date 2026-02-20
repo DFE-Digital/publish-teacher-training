@@ -24,7 +24,7 @@ module Find
       end
     end
 
-    private
+  private
 
     def find_matching_courses(alert, recently_published_ids)
       ::Courses::Query.call(params: alert.search_params.dup).where(id: recently_published_ids)
