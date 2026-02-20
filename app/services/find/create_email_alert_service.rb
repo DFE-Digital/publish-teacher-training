@@ -25,7 +25,7 @@ module Find
       nil
     end
 
-    private
+  private
 
     def extract_subjects
       Array(@search_params[:subjects]).compact_blank.sort
