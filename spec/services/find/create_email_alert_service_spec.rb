@@ -116,7 +116,9 @@ RSpec.describe Find::CreateEmailAlertService do
       end
 
       it "captures the exception and returns nil" do
-        allow_any_instance_of(EmailAlert).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(EmailAlert.new))
+        email_alerts = candidate.email_alerts
+        allow(email_alerts).to receive(:create!).and_raise(ActiveRecord::RecordInvalid.new(EmailAlert.new))
+        allow(candidate).to receive(:email_alerts).and_return(email_alerts)
 
         result = described_class.call(candidate:, search_params: { subjects: %w[C1] })
 
