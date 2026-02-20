@@ -256,7 +256,7 @@ RSpec.describe "Email alerts", service: :find do
 
     create(
       :recent_search,
-      candidate:,
+      find_candidate: candidate,
       subjects: %w[C1],
       search_attributes: { "level" => "secondary" },
     )
