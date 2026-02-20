@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
-  config.define_derived_metadata(file_path: Regexp.new("/spec/system/find/(results|homepage)/")) do |metadata|
-    metadata[:filtering_sorting] = true
-  end
-
-  config.define_derived_metadata(file_path: Regexp.new("/spec/requests/find/radius_quick_link_suggestions_spec")) do |metadata|
-    metadata[:filtering_sorting] = true
-  end
-
   config.define_derived_metadata(file_path: Regexp.new("/spec/system/find")) do |metadata|
     metadata[:service] = :find
 
