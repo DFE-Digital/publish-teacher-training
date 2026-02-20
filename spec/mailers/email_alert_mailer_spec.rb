@@ -8,10 +8,7 @@ describe EmailAlertMailer do
     create(:email_alert, candidate:, subjects: %w[C1], location_name: "Manchester", radius: 10)
   end
   let(:courses) do
-    [
-      create(:course, :published, :with_accrediting_provider),
-      create(:course, :published, :with_accrediting_provider),
-    ]
+    create_list(:course, 2, :published, :with_accrediting_provider)
   end
   let(:mail) { described_class.weekly_digest(email_alert, courses) }
 

@@ -53,8 +53,8 @@ module Find
         course = create(:course, :published_postgraduate)
         course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
 
-        alert1 = create(:email_alert, candidate:)
-        alert2 = create(:email_alert, candidate: create(:candidate))
+        create(:email_alert, candidate:)
+        create(:email_alert, candidate: create(:candidate))
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).exactly(2).times

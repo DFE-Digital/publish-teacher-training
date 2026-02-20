@@ -32,7 +32,7 @@ module Find
         infer_subjects?: false,
         site_statuses: [
           build(:site_status, :findable, vac_status: :full_time_vacancies,
-                site: build(:site, **site_attrs)),
+                                         site: build(:site, **site_attrs)),
         ],
         **traits,
       )
@@ -88,7 +88,7 @@ module Find
       end
 
       it "matches a subject-only alert to all recently published courses with that subject" do
-        alert = create(:email_alert, candidate:, subjects: %w[C1])
+        create(:email_alert, candidate:, subjects: %w[C1])
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).once
@@ -100,13 +100,13 @@ module Find
       end
 
       it "matches a location-based alert only to courses within radius" do
-        alert = create(:email_alert, candidate:,
-                        subjects: %w[C1],
-                        latitude: london.latitude,
-                        longitude: london.longitude,
-                        radius: 50,
-                        location_name: "London",
-                        search_attributes: { "location" => "London", "radius" => "50" })
+        create(:email_alert, candidate:,
+                             subjects: %w[C1],
+                             latitude: london.latitude,
+                             longitude: london.longitude,
+                             radius: 50,
+                             location_name: "London",
+                             search_attributes: { "location" => "London", "radius" => "50" })
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).once
@@ -119,8 +119,8 @@ module Find
       end
 
       it "matches a visa-sponsorship alert only to courses offering visa sponsorship" do
-        alert = create(:email_alert, candidate:,
-                        search_attributes: { "can_sponsor_visa" => "true" })
+        create(:email_alert, candidate:,
+                             search_attributes: { "can_sponsor_visa" => "true" })
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).once
@@ -132,15 +132,15 @@ module Find
       end
 
       it "does not match courses published before the since date" do
-        alert = create(:email_alert, candidate:, subjects: %w[G1])
+        create(:email_alert, candidate:, subjects: %w[G1])
 
         expect { described_class.call(since: 1.week.ago) }
           .not_to have_enqueued_job(EmailAlertMailerJob)
       end
 
       it "one course can match multiple alerts from different candidates" do
-        alert_a = create(:email_alert, candidate:, subjects: %w[C1])
-        alert_b = create(:email_alert, candidate: create(:candidate), subjects: %w[C1])
+        create(:email_alert, candidate:, subjects: %w[C1])
+        create(:email_alert, candidate: create(:candidate), subjects: %w[C1])
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).exactly(2).times
@@ -189,7 +189,7 @@ module Find
         # Simulate re-publish: update the enrichment timestamp
         course.enrichments.first.update!(last_published_timestamp_utc: 1.day.ago)
 
-        alert = create(:email_alert, candidate:, subjects: %w[C1])
+        create(:email_alert, candidate:, subjects: %w[C1])
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).once
@@ -208,15 +208,15 @@ module Find
           can_sponsor_skilled_worker_visa: true,
         )
 
-        biology_no_visa = create_findable_course(
+        create_findable_course(
           name: "Biology no visa",
           subjects: [biology],
           can_sponsor_skilled_worker_visa: false,
         )
 
-        alert = create(:email_alert, candidate:,
-                        subjects: %w[C1],
-                        search_attributes: { "can_sponsor_visa" => "true" })
+        create(:email_alert, candidate:,
+                             subjects: %w[C1],
+                             search_attributes: { "can_sponsor_visa" => "true" })
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).once
@@ -229,9 +229,9 @@ module Find
 
     describe "edge cases" do
       it "handles an alert with no subjects and no location (broad match)" do
-        course = create_findable_course(name: "Any course", subjects: [biology])
+        create_findable_course(name: "Any course", subjects: [biology])
 
-        alert = create(:email_alert, candidate:)
+        create(:email_alert, candidate:)
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).once

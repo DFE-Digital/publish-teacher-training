@@ -27,7 +27,7 @@ module Find
         helpers.find_candidate_confirm_unsubscribe_email_alert_path(token:)
       end
 
-      private
+    private
 
       def resolved_subject_names
         return [] if @email_alert.subjects.blank?
@@ -55,13 +55,15 @@ module Find
         end
       end
 
+      FUNDING_LABELS = {
+        "salary" => "Salary",
+        "apprenticeship" => "Apprenticeship",
+        "fee" => "Fee",
+      }.freeze
+
       def funding_rows
         Array(@attrs["funding"]).filter_map do |f|
-          case f
-          when "salary" then { key: "Funding", value: "Salary" }
-          when "apprenticeship" then { key: "Funding", value: "Apprenticeship" }
-          when "fee" then { key: "Funding", value: "Fee" }
-          end
+          FUNDING_LABELS[f] && { key: "Funding", value: FUNDING_LABELS[f] }
         end
       end
     end

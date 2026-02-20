@@ -71,7 +71,7 @@ module Find
         redirect_to find_root_path
       end
 
-      private
+    private
 
       def reason_for_request
         :general
@@ -91,7 +91,7 @@ module Find
           :can_sponsor_visa, :funding, :level, :location, :longitude,
           :latitude, :radius, :send_courses, :minimum_degree_required,
           :formatted_address, :provider_name, :return_to,
-          subjects: [], study_types: [], qualifications: [], start_date: [],
+          subjects: [], study_types: [], qualifications: [], start_date: []
         )
       end
 
@@ -159,14 +159,14 @@ module Find
         alert.radius.present? ? "Within #{alert.radius} miles of #{alert.location_name}" : alert.location_name
       end
 
+      FUNDING_LABELS = {
+        "salary" => "Salary",
+        "apprenticeship" => "Apprenticeship",
+        "fee" => "Fee",
+      }.freeze
+
       def funding_tags(funding)
-        Array(funding).filter_map do |f|
-          case f
-          when "salary" then "Salary"
-          when "apprenticeship" then "Apprenticeship"
-          when "fee" then "Fee"
-          end
-        end
+        Array(funding).filter_map { |f| FUNDING_LABELS[f] }
       end
 
       def redirect_after_create
