@@ -14,7 +14,7 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
     mail(to: email_alert.candidate.email_address)
   end
 
-  private
+private
 
   def email_alert_title(email_alert)
     subject_names = Subject.where(subject_code: email_alert.subjects).pluck(:subject_name)
@@ -37,9 +37,9 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
   end
 
   def format_course_list(courses)
-    courses.first(20).map do |course|
+    courses.first(20).map { |course|
       "#{course.name} - #{course.provider.provider_name} (#{course.course_code})"
-    end.join("\n")
+    }.join("\n")
   end
 
   def unsubscribe_url(email_alert)
