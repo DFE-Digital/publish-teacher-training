@@ -149,11 +149,27 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
       end
     end
 
-    context "with order" do
+    context "with order set to default for non-location search" do
       let(:attrs) { { "order" => "course_name_ascending" } }
 
+      it "skips the default order" do
+        expect(filters).to be_empty
+      end
+    end
+
+    context "with order set to default for location search" do
+      let(:attrs) { { "order" => "distance", "location" => "Manchester", "radius" => "15" } }
+
+      it "skips the default order but keeps the location filter" do
+        expect(formatted_values).to eq(["Within 15 miles of Manchester"])
+      end
+    end
+
+    context "with non-default order" do
+      let(:attrs) { { "order" => "provider_name_ascending" } }
+
       it "includes order as a filter tag" do
-        expect(formatted_values).to eq(["Sort by: Course (a to z)"])
+        expect(formatted_values).to eq(["Sort by: Provider (a to z)"])
       end
     end
 
