@@ -18,9 +18,9 @@ module Find
 
         def qualification_required
           if course.teacher_degree_apprenticeship?
-            t(".a_levels")
+            t("find.courses.entry_requirements_component.view.a_levels")
           else
-            t(".degree")
+            t("find.courses.entry_requirements_component.view.degree")
           end
         end
 
