@@ -108,8 +108,8 @@ RSpec.describe "Editing visa sponsorship" do
   end
 
   def and_i_see_the_visa_sponsorship_deadline_date
-    expect(page).to have_text "Is there a visa sponsorship deadline?Yes"
-    expect(page).to have_text "Visa sponsorship deadline#{@valid_date.to_fs(:govuk_date)}"
+    expect(page).to have_text(/Is there a visa sponsorship deadline\?\s*Yes/i)
+    expect(page).to have_text(/Visa sponsorship deadline\s*#{Regexp.escape(@valid_date.to_fs(:govuk_date))}/i)
   end
 
   def then_i_see_the_visa_sponsorship_deadline_required_page

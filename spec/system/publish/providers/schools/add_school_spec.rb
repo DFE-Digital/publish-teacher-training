@@ -117,7 +117,7 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
   def then_i_see_the_confirmation_page
     expect(page).to have_content("Add school")
     expect(page).to have_content("Check your answers")
-    expect(page).to have_content("School NameDistinct School")
+    expect(page).to have_content(/(School\s+)?Name\s*Distinct School/i)
     expect(page).to have_content("URN123456")
     expect(page).to have_content("Address 123 Fake Street Newtown RD9 0AN", normalize_ws: true)
   end

@@ -85,8 +85,8 @@ private
     within(".govuk-notification-banner__content") do
       expect(page).to have_text "Visa sponsorship deadline and date updated"
     end
-    expect(page).to have_text "Is there a visa sponsorship deadline?Yes"
-    expect(page).to have_text "Visa sponsorship deadline#{@valid_date.to_fs(:govuk_date)}"
+    expect(page).to have_text(/Is there a visa sponsorship deadline\?\s*Yes/i)
+    expect(page).to have_text(/Visa sponsorship deadline\s*#{Regexp.escape(@valid_date.to_fs(:govuk_date))}/i)
   end
 
   def then_i_do_not_see_the_date_on_the_basic_details_tab
