@@ -14,7 +14,7 @@ module Courses
       @short_address = short_address
       @show_start_date = show_start_date
 
-      super
+      super()
     end
 
     def title

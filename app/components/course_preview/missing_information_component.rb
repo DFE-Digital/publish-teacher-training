@@ -7,7 +7,7 @@ module CoursePreview
     delegate :course_code, :recruitment_cycle_year, :provider_code, :accrediting_provider, to: :course
 
     def initialize(course:, information_type:, is_preview:)
-      super
+      super()
       @information_type = information_type
       @course = course
       @is_preview = is_preview

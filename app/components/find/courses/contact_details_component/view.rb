@@ -10,7 +10,7 @@ module Find
         delegate :contact_form?, :contact_form, :show_address?, to: :course_information_config
 
         def initialize(course)
-          super
+          super()
           @course = course
         end
 

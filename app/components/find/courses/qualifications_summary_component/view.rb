@@ -13,7 +13,7 @@ module Find
         alias_method :summary_text, :find_outcome
 
         def initialize(course:)
-          super
+          super()
           @course = course
         end
       end

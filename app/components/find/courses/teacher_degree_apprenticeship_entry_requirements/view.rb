@@ -10,7 +10,7 @@ module Find
           @course = course
           @preview = preview
 
-          super
+          super()
         end
 
         def render?

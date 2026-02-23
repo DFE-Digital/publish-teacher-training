@@ -7,7 +7,7 @@ module Filters
     def initialize(filters:, filter_model:)
       @filters = filters
       @filter_model = filter_model
-      super
+      super()
     end
 
   private

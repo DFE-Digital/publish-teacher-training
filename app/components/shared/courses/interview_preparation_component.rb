@@ -6,7 +6,7 @@ module Shared
       attr_reader :course, :is_preview
 
       def initialize(course:, is_preview:)
-        super
+        super()
         @course = course
         @is_preview = is_preview
       end

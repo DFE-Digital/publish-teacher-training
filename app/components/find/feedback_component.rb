@@ -7,7 +7,7 @@ module Find
     attr_reader :path, :controller
 
     def initialize(path:, controller:)
-      super
+      super()
       @path = path
       @controller = controller
     end

@@ -2,7 +2,7 @@
 
 class PhaseBanner < ViewComponent::Base
   def initialize(no_border: false)
-    super
+    super()
     @no_border = no_border
   end
 

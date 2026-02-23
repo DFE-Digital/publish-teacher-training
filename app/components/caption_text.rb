@@ -5,6 +5,6 @@ class CaptionText < ViewComponent::Base
 
   def initialize(text:)
     @text = text
-    super
+    super()
   end
 end

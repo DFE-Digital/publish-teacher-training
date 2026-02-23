@@ -5,7 +5,7 @@ module Find
         attr_reader :active_filters, :html_class, :utm_medium
 
         def initialize(active_filters:, position:, html_class: "app-c-filter-summary__clear-filters")
-          super
+          super()
 
           @active_filters = active_filters
           @html_class = html_class

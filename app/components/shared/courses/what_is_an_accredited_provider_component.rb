@@ -6,7 +6,7 @@ module Shared
       attr_reader :course
 
       def initialize(course:)
-        super
+        super()
         @course = course
       end
 

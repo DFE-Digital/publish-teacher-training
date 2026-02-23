@@ -4,7 +4,7 @@ class PaginatedFilter < ViewComponent::Base
   attr_reader :filter_params, :collection, :pagy
 
   def initialize(filter_params:, collection:, pagy:)
-    super
+    super()
     @filter_params = filter_params
     @collection = collection
     @pagy = pagy

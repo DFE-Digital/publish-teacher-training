@@ -12,7 +12,7 @@ class DegreeRowContent < ViewComponent::Base
   }.freeze
 
   def initialize(course:, errors: nil)
-    super
+    super()
     @course = course
     @errors = errors
   end
