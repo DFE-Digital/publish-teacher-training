@@ -224,22 +224,6 @@ class CourseDecorator < ApplicationDecorator
     !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
   end
 
-  def funding_option
-    return if salaried?
-
-    if excluded_from_bursary?
-      # Duplicate branch body detected
-      "Student loans if you’re eligible"
-    elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Scholarships or bursaries, as well as student loans, are available if you’re eligible"
-    elsif has_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Bursaries and student loans are available if you’re eligible"
-    else
-      # Duplicate branch body detected
-      "Student loans are available if you’re eligible"
-    end
-  end
-
   def current_cycle?
     course.recruitment_cycle.year.to_i == Find::CycleTimetable.current_year
   end

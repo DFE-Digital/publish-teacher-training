@@ -13,7 +13,6 @@ module Find
 
         delegate :accrediting_provider,
                  :provider,
-                 :funding_option,
                  :age_range_in_years,
                  :length,
                  :applications_open_from,

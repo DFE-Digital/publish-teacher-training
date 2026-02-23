@@ -383,73 +383,29 @@ describe CourseDecorator do
     end
   end
 
-  # context "financial incentives" do
-  #   describe "#salaried?" do
-  #     let(:subject) { decorated_course }
+  context "financial incentives" do
+    describe "#salaried?" do
+      subject { decorated_course }
 
-  #     context "course is salaried" do
-  #       let(:course) { build_stubbed :course, funding_type: "salary" }
+      context "course is salaried" do
+        let(:course) { build_stubbed :course, funding: "salary" }
 
-  #       it { is_expected.to be_salaried }
-  #     end
+        it { is_expected.to be_salaried }
+      end
 
-  #     context "course is an apprenticeship with salary" do
-  #       let(:course) { build_stubbed :course, funding_type: "apprenticeship" }
+      context "course is an apprenticeship with salary" do
+        let(:course) { build_stubbed :course, funding: "apprenticeship" }
 
-  #       it { is_expected.to be_salaried }
-  #     end
+        it { is_expected.to be_salaried }
+      end
 
-  #     context "course is not salaried" do
-  #       let(:course) { build_stubbed :course, :with_fees }
+      context "course is not salaried" do
+        let(:course) { build_stubbed :course, :fee_type_based }
 
-  #       it { is_expected.to_not be_salaried }
-  #     end
-  #   end
-
-  #   describe "#funding_option" do
-  #     let(:subject) { decorated_course.funding_option }
-
-  #     context "Salary" do
-  #       let(:course) { build_stubbed :course, funding_type: "salary" }
-
-  #       it { is_expected.to eq("Salary") }
-  #     end
-
-  #     context "Apprenticeship" do
-  #       let(:course) { build_stubbed :course, funding_type: "apprenticeship" }
-
-  #       it { is_expected.to eq("Salary") }
-  #     end
-
-  #     context "Bursary and Scholarship" do
-  #       let(:mathematics) { build_stubbed(:subject, :mathematics, scholarship: "2000", bursary_amount: "3000") }
-  #       let(:course) { build_stubbed :course, subjects: [mathematics] }
-
-  #       it { is_expected.to eq("Scholarships or bursaries, as well as student finance, are available if youre eligible") }
-  #     end
-
-  #     context "Bursary" do
-  #       let(:mathematics) { build_stubbed(:subject, :mathematics, bursary_amount: "3000") }
-  #       let(:course) { build_stubbed :course, subjects: [mathematics] }
-
-  #       it { is_expected.to eq("Bursaries and student finance are available if youre eligible") }
-  #     end
-
-  #     context "Student finance" do
-  #       let(:course) { build_stubbed :course }
-
-  #       it { is_expected.to eq("Student finance if youre eligible") }
-  #     end
-
-  #     context "Courses excluded from bursaries" do
-  #       let(:pe) { build_stubbed(:subject) }
-  #       let(:english) { build_stubbed(:subject, :english, bursary_amount: "3000") }
-
-  #       let(:course) { build_stubbed :course, name: "Drama with English", subjects: [pe, english] }
-
-  #       it { is_expected.to eq("Student finance if youre eligible") }
-  #     end
-  #   end
+        it { is_expected.not_to be_salaried }
+      end
+    end
+  end
 
   describe "#subject_name" do
     context "course has more than one subject" do
