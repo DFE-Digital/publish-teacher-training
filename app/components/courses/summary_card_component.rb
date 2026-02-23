@@ -58,7 +58,7 @@ module Courses
       return unless search_by_location?
 
       t(
-        ".location_value.distance",
+        "courses.summary_card_component.location_value.distance",
         school_term:,
         distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
         location: content_tag(:span, sanitize(@short_address.presence || @location), class: "govuk-!-font-weight-bold"),

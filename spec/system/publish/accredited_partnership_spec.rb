@@ -122,7 +122,7 @@ private
 
   def and_i_see_the_information_to_be_confirmed
     expect(page).to have_content("Check your answers")
-    expect(page).to have_content("Accredited providerUCLChange accredited provider name")
+    expect(page).to have_content(/Accredited provider\s*UCL\s*Change accredited provider name/i)
   end
 
   def then_i_am_taken_to_the_confirm_page

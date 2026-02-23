@@ -135,9 +135,9 @@
                 <% end %>
               </ul>
             <% elsif @provider.study_sites.any? %>
-              <%= "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to(t('.select_study_site'), new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)))}</div>".html_safe %>
+              <%= "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to(t('publish.courses.confirmation.select_study_site'), new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)))}</div>".html_safe %>
             <% else %>
-              <%= "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to(t('.add_a_study_site'), publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe %>
+              <%= "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to(t('publish.courses.confirmation.add_a_study_site'), publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe %>
             <% end %>
           <% end %>
           <% if course.study_sites.any? %>
