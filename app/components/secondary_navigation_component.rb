@@ -4,7 +4,7 @@ class SecondaryNavigationComponent < ViewComponent::Base
   renders_many :navigation_items, "NavigationItemComponent"
 
   class NavigationItemComponent < ViewComponent::Base
-    def initialize(name, url, current: nil, classes: [], html_attributes: {})
+    def initialize(name, url, current: nil)
       @name = name
       @url = url
       @current = current
