@@ -16,6 +16,7 @@ module Courses
       DEFAULT_SKIP = {
         "minimum_degree_required" => "show_all_courses",
         "level" => "all",
+        "order" => "course_name_ascending",
       }.freeze
 
       FILTER_ORDER = %i[
