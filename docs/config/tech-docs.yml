@@ -4,7 +4,8 @@ host: api.publish-teacher-training-courses.service.gov.uk
 # Header-related options
 show_govuk_logo: true
 service_name: Teacher Training Courses
-service_link: https://api.publish-teacher-training-courses.service.gov.uk/
+service_link: /docs/
+use_service_link_for_favicon: true
 phase: Beta
 
 # Links to show on right-hand-side of header
