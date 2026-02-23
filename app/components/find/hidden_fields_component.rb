@@ -5,7 +5,7 @@ module Find
     attr_reader :query_params, :form_name, :form, :exclude_keys
 
     def initialize(query_params:, form_name:, form:, exclude_keys: [])
-      super
+      super()
       @query_params = query_params
       @form_name = form_name
       @form = form

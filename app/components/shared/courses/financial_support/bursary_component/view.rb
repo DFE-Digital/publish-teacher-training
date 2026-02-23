@@ -12,7 +12,7 @@ module Shared
                    :bursary_first_line_ending, to: :course
 
           def initialize(course)
-            super
+            super()
             @course = course
           end
 

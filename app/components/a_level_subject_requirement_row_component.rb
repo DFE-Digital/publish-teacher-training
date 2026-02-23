@@ -8,7 +8,7 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
   IN_WORDS = %w[zero one two three four].freeze # Avoiding the need to add a gem number.in_words for a simple conversion
 
   def initialize(a_level_subject_requirement)
-    super
+    super()
 
     @a_level_subject_requirement = a_level_subject_requirement.with_indifferent_access
   end

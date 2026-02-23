@@ -5,7 +5,7 @@ module Publish
         @recruitment_cycle = recruitment_cycle
         @provider = provider
 
-        super
+        super()
       end
 
       def render?

@@ -13,7 +13,7 @@ module Shared
                    to: :course
 
           def initialize(course)
-            super
+            super()
             @course = course
           end
 

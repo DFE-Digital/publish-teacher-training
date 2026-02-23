@@ -11,7 +11,7 @@ module Courses
       @debug = debug
       @environment_name = ActiveSupport::StringInquirer.new(environment_name)
 
-      super
+      super()
     end
 
     def render?

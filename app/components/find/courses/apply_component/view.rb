@@ -9,7 +9,7 @@ module Find
         delegate :application_status_open?, :provider, to: :course
 
         def initialize(course, preview: false, utm_content: nil)
-          super
+          super()
           @course = course
           @preview = preview
           @utm_content = utm_content

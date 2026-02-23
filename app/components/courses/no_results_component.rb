@@ -7,7 +7,7 @@ module Courses
     def initialize(search_params:)
       @search_params = search_params
 
-      super
+      super()
     end
 
     def country

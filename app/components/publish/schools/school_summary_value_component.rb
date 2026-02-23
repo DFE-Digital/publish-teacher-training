@@ -9,7 +9,7 @@ module Publish
       def initialize(course:)
         @course = course
 
-        super
+        super()
       end
 
       def inset_class

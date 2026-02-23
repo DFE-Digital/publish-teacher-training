@@ -12,7 +12,7 @@ module Courses
       @latitude = latitude
       @longitude = longitude
 
-      super
+      super()
     end
 
     def render?

@@ -1,7 +1,7 @@
 module Publish
   class SchoolsChangedBannerComponent < ViewComponent::Base
     def initialize(provider:)
-      super
+      super()
 
       @provider = provider
       @recruitment_cycle = provider.recruitment_cycle

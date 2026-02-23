@@ -10,7 +10,7 @@ module Find
         attr_reader :course, :address, :distance_from_location, :preview
 
         def initialize(course:, address:, distance_from_location:, preview: false)
-          super
+          super()
           @course = course
           @address = address
           @distance_from_location = distance_from_location

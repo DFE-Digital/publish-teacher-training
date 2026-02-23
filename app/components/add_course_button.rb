@@ -7,7 +7,7 @@ class AddCourseButton < ViewComponent::Base
   Section = Struct.new(:text, :path, keyword_init: true)
 
   def initialize(provider:)
-    super
+    super()
     @provider = provider
   end
 

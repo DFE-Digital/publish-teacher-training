@@ -17,7 +17,7 @@ module Shared
                    :financial_support, to: :course
 
           def initialize(course, enrichment)
-            super
+            super()
             @course = course
             @enrichment = enrichment
           end

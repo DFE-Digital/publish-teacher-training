@@ -6,7 +6,7 @@ module Find
       include ::ViewHelper
 
       def initialize(rows:)
-        super
+        super()
         rows = transform_hash(rows) if rows.is_a?(Hash)
         @rows = rows
       end

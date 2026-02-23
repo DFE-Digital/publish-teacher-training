@@ -4,7 +4,7 @@ class SupportTitleBar < ViewComponent::Base
   attr_reader :current_user
 
   def initialize(current_user:)
-    super
+    super()
 
     @current_user = current_user
   end

@@ -10,7 +10,7 @@ class SearchResultTitleComponent < ViewComponent::Base
     @return_path = return_path
     @search_resource = search_resource
     @caption_text = caption_text || "Add #{search_resource.humanize(capitalize: false)}"
-    super
+    super()
   end
 
   def title

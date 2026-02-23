@@ -6,7 +6,7 @@ class TitleBar < ViewComponent::Base
   delegate :multiple_providers_or_admin?, to: :current_user
 
   def initialize(title:, current_user:, provider:)
-    super
+    super()
     @title = title
     @current_user = current_user
     @provider = provider

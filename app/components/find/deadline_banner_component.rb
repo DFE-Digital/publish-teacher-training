@@ -5,7 +5,7 @@ module Find
     attr_accessor :flash_empty
 
     def initialize(flash_empty:, cycle_timetable: Find::CycleTimetable)
-      super
+      super()
       @flash_empty = flash_empty
       @cycle_timetable = cycle_timetable
     end

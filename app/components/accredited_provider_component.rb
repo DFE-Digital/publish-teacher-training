@@ -6,7 +6,7 @@ class AccreditedProviderComponent < ViewComponent::Base
   attr_reader :provider, :remove_path
 
   def initialize(provider:, remove_path:)
-    super
+    super()
     @provider = provider
     @remove_path = remove_path
   end

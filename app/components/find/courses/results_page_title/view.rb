@@ -5,7 +5,7 @@ module Find
         attr_reader :subjects, :radius
 
         def initialize(courses_count:, address:, subjects:, radius:)
-          super
+          super()
 
           @courses_count = courses_count
           @address = address

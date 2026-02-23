@@ -9,7 +9,7 @@ class SecondaryNavigationComponent < ViewComponent::Base
       @url = url
       @current = current
 
-      super(classes:, html_attributes:)
+      super()
     end
 
     def call

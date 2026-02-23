@@ -10,7 +10,7 @@ module Find
           @course = course
           @a_level_row_component = ALevelRowComponent.new(course:)
 
-          super
+          super()
         end
 
         def a_level_subject_requirements

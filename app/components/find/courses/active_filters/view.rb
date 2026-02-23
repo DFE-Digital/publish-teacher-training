@@ -5,7 +5,7 @@ module Find
         attr_reader :active_filters, :search_params
 
         def initialize(active_filters:, search_params: {})
-          super
+          super()
 
           @active_filters = active_filters
           @search_params = search_params
