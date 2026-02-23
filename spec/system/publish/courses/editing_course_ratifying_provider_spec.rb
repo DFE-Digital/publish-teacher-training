@@ -106,7 +106,7 @@ private
   end
 
   def and_i_see_the_ratifying_provider_is_updated
-    expect(page).to have_content("Accredited provider#{@new_ratifying_provider.provider_name}")
+    expect(page).to have_content(/(Accredited|ratifying) provider\s*#{Regexp.escape(@new_ratifying_provider.provider_name)}/i)
   end
 
   def and_there_is_a_published_course_i_want_to_edit
