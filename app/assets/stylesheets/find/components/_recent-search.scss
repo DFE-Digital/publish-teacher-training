@@ -26,6 +26,10 @@
   margin: 0;
 
   list-style: none;
+
+  @include govuk-media-query($until: tablet) {
+    padding-bottom: govuk-spacing(4);
+  }
 }
 
 .app-recent-search-tag {
