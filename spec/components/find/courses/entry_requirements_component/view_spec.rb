@@ -470,11 +470,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
   describe "#qualification_required" do
     let(:course) { build(:course) }
 
-    it "returns Degree" do
-      component = described_class.new(course: course.decorate)
-      render_inline(component)
-
-      expect(component.qualification_required).to eq("Degree required")
+    it "renders Degree required" do
+      expect(result.text).to include("Degree required")
     end
 
     context "when teacher_degree_apprenticeship" do
@@ -485,11 +482,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         )
       end
 
-      it "returns A levels" do
-        component = described_class.new(course: course.decorate)
-        render_inline(component)
-
-        expect(component.qualification_required).to eq("A levels")
+      it "renders A levels" do
+        expect(result.text).to include("A levels")
       end
     end
   end
