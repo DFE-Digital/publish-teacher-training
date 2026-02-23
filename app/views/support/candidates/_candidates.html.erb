@@ -1,7 +1,7 @@
 <%= govuk_table do |table| %>
   <% table.with_head do |head| %>
     <% head.with_row do |row| %>
-      <% row.with_cell text: t(".email_address") %>
+      <% row.with_cell text: t("support.candidates.candidates.email_address") %>
       <% row.with_cell do %>
         <% current_sort = params[:sort] %>
         <% next_sort = current_sort == "created_at_desc" ? "created_at_asc" : "created_at_desc" %>
@@ -10,7 +10,7 @@
                    else
                      (current_sort == "created_at_asc" ? " ↑" : "")
                    end %>
-        <%= link_to "#{t('.created_at')}#{arrow}", url_for(request.query_parameters.merge(sort: next_sort, page: nil)), class: "govuk-link" %>
+        <%= link_to "#{t('support.candidates.candidates.created_at')}#{arrow}", url_for(request.query_parameters.merge(sort: next_sort, page: nil)), class: "govuk-link" %>
       <% end %>
     <% end %>
   <% end %>
