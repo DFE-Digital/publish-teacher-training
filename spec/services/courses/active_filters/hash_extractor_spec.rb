@@ -173,6 +173,14 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
       end
     end
 
+    context "with course_name order on a location search" do
+      let(:attrs) { { "order" => "course_name_ascending", "location" => "Manchester", "radius" => "15" } }
+
+      it "shows order because course_name is not the default for location searches" do
+        expect(formatted_values).to include("Sort by: Course (a to z)")
+      end
+    end
+
     context "with many filters" do
       let(:provider_name) { "University of Bristol" }
       let(:subject_names) { %w[Biology] }
