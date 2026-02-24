@@ -221,7 +221,7 @@ shared:
     - urn
     - created_at
     - updated_at
-  email_alert:
+  candidate_email_alerts:
     - id
     - candidate_id
     - subjects

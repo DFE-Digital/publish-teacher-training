@@ -20,7 +20,7 @@ RSpec.describe Find::CreateEmailAlertService do
 
         result = described_class.call(candidate:, search_params: params)
 
-        expect(result).to be_a(EmailAlert)
+        expect(result).to be_a(Candidate::EmailAlert)
         expect(result).to be_persisted
         expect(result.subjects).to eq(%w[C1 F1]) # sorted
         expect(result.longitude).to eq(-1.5)
@@ -117,7 +117,7 @@ RSpec.describe Find::CreateEmailAlertService do
 
       it "captures the exception and returns nil" do
         email_alerts = candidate.email_alerts
-        allow(email_alerts).to receive(:create!).and_raise(ActiveRecord::RecordInvalid.new(EmailAlert.new))
+        allow(email_alerts).to receive(:create!).and_raise(ActiveRecord::RecordInvalid.new(Candidate::EmailAlert.new))
         allow(candidate).to receive(:email_alerts).and_return(email_alerts)
 
         result = described_class.call(candidate:, search_params: { subjects: %w[C1] })
