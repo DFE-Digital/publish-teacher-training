@@ -16,7 +16,6 @@ module Courses
       DEFAULT_SKIP = {
         "minimum_degree_required" => "show_all_courses",
         "level" => "all",
-        "order" => "course_name_ascending",
       }.freeze
 
       FILTER_ORDER = %i[
@@ -93,6 +92,7 @@ module Courses
           next [] if SKIP_KEYS.include?(key)
           next [] if value.blank?
           next [] if DEFAULT_SKIP[key] == value
+          next [] if key == "order" && value == default_order
 
           Array(value).map do |v|
             Courses::ActiveFilter.new(
@@ -103,6 +103,14 @@ module Courses
             )
           end
         end
+      end
+
+      def default_order
+        location_based? ? "distance" : "course_name_ascending"
+      end
+
+      def location_based?
+        @attrs["location"].present? || @attrs["formatted_address"].present?
       end
 
       def sort_filters(filters)
