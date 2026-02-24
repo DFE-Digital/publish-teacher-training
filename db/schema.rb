@@ -303,6 +303,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_27_102121) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "subject_knowledge_enhancement_course_available", default: false, null: false
+    t.boolean "non_uk_bursary_eligible", default: false, null: false
+    t.boolean "non_uk_scholarship_eligible", default: false, null: false
     t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
   end
 
