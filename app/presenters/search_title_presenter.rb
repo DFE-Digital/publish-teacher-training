@@ -32,7 +32,7 @@ class SearchTitlePresenter
     end
   end
 
-  private
+private
 
   def no_location? = @location_name.blank?
   def location? = @location_name.present?
@@ -59,7 +59,7 @@ class SearchTitlePresenter
 
   def fallback_title
     filter_count = active_filter_count
-    if filter_count > 0
+    if filter_count.positive?
       "Courses across England (#{filter_count} filters applied)"
     else
       "Courses across England"

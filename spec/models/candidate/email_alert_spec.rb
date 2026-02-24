@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe EmailAlert, type: :model do
+RSpec.describe Candidate::EmailAlert, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:candidate) }
   end

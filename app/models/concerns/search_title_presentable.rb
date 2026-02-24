@@ -8,11 +8,11 @@ module SearchTitlePresentable
       subjects: resolved_subject_names,
       location_name: location_display_name,
       radius: radius,
-      search_attributes: search_attributes
+      search_attributes: search_attributes,
     ).to_s
   end
 
-  private
+private
 
   def resolved_subject_names
     return [] if subjects.blank?
