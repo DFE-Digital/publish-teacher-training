@@ -12,7 +12,7 @@ RSpec.describe SearchTitlePresentable do
         :recent_search,
         subjects: %w[ZY ZZ],
         search_attributes: { "location" => "Leeds" },
-        radius: 10
+        radius: 10,
       )
 
       expect(recent_search.title).to eq("Astrology and Zoology courses within 10 miles of Leeds")
@@ -25,7 +25,7 @@ RSpec.describe SearchTitlePresentable do
 
       recent_search = build(:recent_search, subjects: %w[ZZ])
 
-      expect(recent_search.send(:resolved_subject_names)).to eq(["Zoology"])
+      expect(recent_search.send(:resolved_subject_names)).to eq(%w[Zoology])
     end
 
     it "returns an empty array when subjects are blank" do
@@ -55,7 +55,7 @@ RSpec.describe SearchTitlePresentable do
     end
   end
 
-  private
+private
 
   def create_subject!(code, name)
     subject_area = SubjectArea.find_or_create_by!(typename: "SecondarySubject", name: "Secondary")

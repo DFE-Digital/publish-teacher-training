@@ -11,7 +11,7 @@ RSpec.describe SearchTitlePresenter do
   let(:search_attributes) { {} }
 
   context "with 1 subject and no location" do
-    let(:subjects) { ["Mathematics"] }
+    let(:subjects) { %w[Mathematics] }
 
     it { is_expected.to eq("Mathematics courses in England") }
   end
@@ -36,7 +36,7 @@ RSpec.describe SearchTitlePresenter do
   end
 
   context "with 1 subject and a location" do
-    let(:subjects) { ["Mathematics"] }
+    let(:subjects) { %w[Mathematics] }
     let(:location_name) { "Manchester" }
     let(:radius) { 15 }
 
@@ -66,13 +66,13 @@ RSpec.describe SearchTitlePresenter do
   end
 
   context "with no subject/location/visa but apprenticeship funding" do
-    let(:search_attributes) { { "funding" => ["apprenticeship"] } }
+    let(:search_attributes) { { "funding" => %w[apprenticeship] } }
 
     it { is_expected.to eq("Apprenticeship courses in England") }
   end
 
   context "with no subject/location/visa but salary funding" do
-    let(:search_attributes) { { "funding" => ["salary"] } }
+    let(:search_attributes) { { "funding" => %w[salary] } }
 
     it { is_expected.to eq("Salaried courses in England") }
   end
