@@ -53,6 +53,6 @@ resource "azurerm_storage_container" "sanitised_uploads" {
   count                 = var.enable_sanitised_storage ? 1 : 0
 
   name                  = "database-backup"
-  storage_account_name  = azurerm_storage_account.sanitised_uploads[0].name
+  storage_account_id  = azurerm_storage_account.sanitised_uploads[0].id
   container_access_type = "private"
 }
