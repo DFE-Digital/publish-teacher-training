@@ -1,5 +1,5 @@
 <div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-entry"><%= t("find.courses.entry_requirements_component.view.heading") %> </h2>
+  <h2 class="govuk-heading-l" id="section-entry"><%= t(".heading") %> </h2>
   <div data-qa="course__required_qualifications">
 
     <%= govuk_summary_list(actions: false) do |summary_list| %>
@@ -17,7 +17,7 @@
             <% end %>
 
             <% if course.degree_subject_requirements.present? || subject_knowledge_enhancement_content? %>
-              <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t("find.courses.entry_requirements_component.view.degree_subject_requirements")) do %>
+              <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".degree_subject_requirements")) do %>
                 <% if course.degree_subject_requirements %>
                   <%= helpers.markdown(course.degree_subject_requirements) %>
                 <% end %>
@@ -43,7 +43,7 @@
       <% end %>
 
       <% summary_list.with_row do |row| %>
-        <% row.with_key(text: t("find.courses.entry_requirements_component.view.gcses")) %>
+        <% row.with_key(text: t(".gcses")) %>
         <% row.with_value do %>
           <% if (course.accept_pending_gcse.nil? || course.accept_gcse_equivalency.nil?) %>
             <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :gcse, is_preview: preview?(params)) %>
@@ -52,7 +52,7 @@
             <%= required_gcse_content(course) %>
             <br>
             <span class="govuk-hint govuk-!-font-size-16">
-              <%= t("find.courses.entry_requirements_component.view.above_or_equivalent_qualification") %>
+              <%= t(".above_or_equivalent_qualification") %>
             </span>
             </p>
 
@@ -60,7 +60,7 @@
               <%= pending_gcse_content(course) %>
             </span>
 
-            <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t("find.courses.entry_requirements_component.view.equivalency_tests")) do %>
+            <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".equivalency_tests")) do %>
               <p class="govuk-body">
               <%= gcse_equivalency_content(course) %>
               </p>
@@ -76,7 +76,7 @@
       <% end %>
 
       <% summary_list.with_row do |row| %>
-        <% row.with_key(text: t("find.courses.entry_requirements_component.view.visa_sponsorship")) %>
+        <% row.with_key(text: t(".visa_sponsorship")) %>
         <% row.with_value do %>
           <%= render Find::Courses::InternationalStudentsComponent::View.new(course:) %>
         <% end %>

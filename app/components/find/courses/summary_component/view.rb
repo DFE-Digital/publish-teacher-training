@@ -35,7 +35,7 @@ module Find
 
         def fee_value
           if course.salary? || course.apprenticeship?
-            t("find.courses.summary_component.view.fee_value.#{course.funding}")
+            t(".fee_value.#{course.funding}")
           else
             safe_join([uk_fees, international_fees].compact_blank, tag.br)
           end
@@ -70,11 +70,11 @@ module Find
       private
 
         def uk_fees(fee_uk = enrichment&.fee_uk_eu)
-          t("find.courses.summary_component.view.fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
+          t(".fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
         end
 
         def international_fees(fee_international = enrichment&.fee_international)
-          t("find.courses.summary_component.view.fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
+          t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
         end
 
         def search_by_visa_sponsorship?

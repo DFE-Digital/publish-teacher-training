@@ -13,9 +13,9 @@
         <% row.with_cell(text: feedback.id) %>
         <% row.with_cell(text: feedback.ease_of_use.humanize) %>
         <% row.with_cell do %>
-          <%= truncate(feedback.experience, length: t("support.feedbacks.list.truncate_experience_chars_max")) %>
-          <% if feedback.experience.length > t("support.feedbacks.list.truncate_experience_chars_max") %>
-            <%= govuk_link_to t("support.feedbacks.list.view_full_experience_text"), support_feedback_path(feedback) %>
+          <%= truncate(feedback.experience, length: t(".truncate_experience_chars_max")) %>
+          <% if feedback.experience.length > t(".truncate_experience_chars_max") %>
+            <%= govuk_link_to t(".view_full_experience_text"), support_feedback_path(feedback) %>
           <% end %>
         <% end %>
         <% row.with_cell(text: l(feedback.created_at, format: :last_event)) %>
