@@ -1,4 +1,71 @@
 en:
+  govuk_component:
+    table_component:
+      email_address: Email address
+      created_at: Created at
+      truncate_experience_chars_max: 100
+      view_full_experience_text: View full
+      head_component:
+        created_at: Created at
+      body_component:
+        truncate_experience_chars_max: 100
+        view_full_experience_text: View full
+    summary_list_component:
+      form_link: Form link
+      view_provider_form: View provider form
+      zendesk_link: Zendesk link
+      view_zendesk_ticket: View Zendesk ticket
+      not_available: Not available
+      subject_level: Subject level
+      send: Special educational needs and disability (SEND)
+      subjects:
+        one: Subject
+        other: Subjects
+      engineers: Engineers Teach Physics
+      none: None
+      schools: Schools
+      study_site:
+        one: Study site
+        other: Study sites
+      study_sites: Study sites
+      select_study_site: Select a study site
+      add_a_study_site: Add a study site
+      accredited_provider: Accredited provider
+      ratifying_provider: ratifying provider
+      student_visas: Student visas
+      can_sponsor: Yes - can sponsor
+      cannot_sponsor: No - cannot sponsor
+      skilled_worker_visas: Skilled Worker visas
+      skilled_worker_visa_sponsorship: skilled worker visa sponsorship
+      is_there_a_visa_sponsorship_deadline: Is there a visa sponsorship deadline?
+      visa_sponsorship_application_deadline_date: Visa sponsorship deadline
+      visa_sponsorship_deadline_required_visually_hidden: visa sponsorship deadline required
+      date_for_applications_requiring_visa_sponsorship_visually_hidden: date for applications requiring visa sponsorship
+      course_start_date: Course start date
+      outcome: Outcome
+      funding_type: Funding type
+      if_funding: if funding type
+      study_pattern: Study pattern
+      if_full_part_time: if full or part time
+      visa_sponsorship: Visa sponsorship
+      gcses: GCSEs
+      equivalency_tests: Equivalency tests
+      degree_subject_requirements: Degree subject requirements
+      above_or_equivalent_qualification: or above, or equivalent qualification
+      fee_key: Fee or salary
+      fee_value:
+        salary: Salary
+        apprenticeship: Salary (apprenticeship)
+        fee:
+          uk_fees_html: "%{value} <b>fee</b> for UK citizens"
+          international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"
+      course_length: Course length
+      age_range: Age group
+      qualification: Qualification awarded
+      provider: Provider
+      accredited_by: Accredited by
+      date_can_apply: Date you can apply from
+      start_date: Start date
   shared:
     decorators:
       course:
@@ -252,6 +319,7 @@ en:
             or equivalent qualification
             </span>
       visa_sponsorship_key: Visa sponsorship
+      start_date: Start date
       visa_sponsorship_value:
         no_sponsorship: Visas cannot be sponsored
         can_sponsor_student_visa: Student visas can be sponsored
