@@ -18,7 +18,7 @@ module Find
         .where("last_published_timestamp_utc > ?", @since)
         .select(:course_id)
 
-      BatchDelivery.new(relation: EmailAlert.active, stagger_over: 1.hour, batch_size: 100).each do |deliver_at, alerts|
+      BatchDelivery.new(relation: Candidate::EmailAlert.active, stagger_over: 1.hour, batch_size: 100).each do |deliver_at, alerts|
         alerts.each do |alert|
           matching = find_matching_courses(alert, recently_published_ids)
           next if matching.empty?
