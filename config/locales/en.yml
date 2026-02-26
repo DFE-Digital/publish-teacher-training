@@ -11,6 +11,7 @@ en:
         truncate_experience_chars_max: 100
         view_full_experience_text: View full
     summary_list_component:
+      age_range_label: Age range
       form_link: Form link
       view_provider_form: View provider form
       zendesk_link: Zendesk link
@@ -105,6 +106,7 @@ en:
       course_length: Course length
       age_range: Age group
       qualification: Qualification awarded
+      qualification_label: Qualification
       provider: Provider
       accredited_by: Accredited by
       date_can_apply: Date you can apply from
