@@ -1,0 +1,13 @@
+<%= govuk_summary_card(title: title) do |card| %>
+  <% card.with_action do %>
+    <%= govuk_link_to t(".unsubscribe"), unsubscribe_path %>
+  <% end %>
+  <dl class="govuk-summary-list govuk-summary-list--no-border app-summary-list--stacked">
+    <% filter_rows.each do |row| %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key"><%= row[:key] %></dt>
+        <dd class="govuk-summary-list__value"><%= row[:value] %></dd>
+      </div>
+    <% end %>
+  </dl>
+<% end %>

@@ -76,6 +76,12 @@
     </div>
 
     <div class="govuk-grid-column-two-thirds">
+      <% if authenticated? && FeatureFlag.active?(:email_alerts) %>
+        <p class="govuk-body govuk-!-margin-bottom-4">
+          <%= govuk_link_to t(".set_up_email_alert"), new_find_candidate_email_alert_path(@search_params.except(:order, :page)) %>
+        </p>
+      <% end %>
+
       <% if @results.present? %>
         <ul class="app-search-results">
           <% @results.each do |course| %>

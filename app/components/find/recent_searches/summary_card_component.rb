@@ -30,6 +30,10 @@ module Find
         helpers.find_results_path(@recent_search.search_params)
       end
 
+      def email_alert_path
+        helpers.new_find_candidate_email_alert_path(@recent_search.search_params.merge(return_to: "recent_searches"))
+      end
+
     private
 
       def resolved_subject_names
