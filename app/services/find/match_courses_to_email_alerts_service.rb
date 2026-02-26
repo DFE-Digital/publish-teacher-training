@@ -12,15 +12,19 @@ module Find
 
     def call
       recently_published_ids = CourseEnrichment
+        .joins(course: :provider)
+        .merge(Provider.in_current_cycle)
         .where(status: :published)
         .where("last_published_timestamp_utc > ?", @since)
         .select(:course_id)
 
-      EmailAlert.active.find_each do |alert|
-        matching = find_matching_courses(alert, recently_published_ids)
-        next if matching.empty?
+      BatchDelivery.new(relation: EmailAlert.active, stagger_over: 1.hour, batch_size: 100).each do |deliver_at, alerts|
+        alerts.each do |alert|
+          matching = find_matching_courses(alert, recently_published_ids)
+          next if matching.empty?
 
-        EmailAlertMailerJob.perform_later(alert.id, matching.reorder(nil).pluck(:id))
+          EmailAlertMailerJob.set(wait_until: deliver_at).perform_later(alert.id, matching.reorder(nil).pluck(:id))
+        end
       end
     end
 
