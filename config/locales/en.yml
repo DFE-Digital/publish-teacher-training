@@ -52,6 +52,49 @@ en:
       equivalency_tests: Equivalency tests
       degree_subject_requirements: Degree subject requirements
       above_or_equivalent_qualification: or above, or equivalent qualification
+      degree_requirements_key: Degree required
+      degree_requirements_value:
+        postgraduate:
+          two_one: "2:1 bachelor’s degree"
+          two_two: "2:2 bachelor’s degree"
+          third_class: "Bachelor’s degree"
+          not_required: "Bachelor’s degree"
+        undergraduate:
+          not_required: No degree required
+      degree_requirements_hint:
+        two_one:
+          html: "<br><span class='govuk-hint govuk-!-font-size-16'>or above or equivalent qualification</span>"
+        two_two:
+          html: "<br><span class='govuk-hint govuk-!-font-size-16'>or above or equivalent qualification</span>"
+        third_class:
+          html: <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+            or equivalent qualification
+            </span>
+            <br>
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+            This should be an honours degree (Third or above), or equivalent
+            </span>
+        not_required:
+          html: <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+            or equivalent qualification
+            </span>
+      location_key:
+        fee: Nearest placement school
+        salary: Nearest employing school
+        apprenticeship: Nearest employing schools
+      location_value:
+        not_listed: Not listed yet
+        school_term:
+          fee: "placement"
+          default: "employing"
+        potential_schools:
+          one: "1 potential %{school_term} school"
+          other: "%{count} potential %{school_term} schools"
+        distance: "%{distance} from %{location}"
+        placement_hint_html: Search by city, town or postcode to find the nearest potential %{school_term} school
       fee_key: Fee or salary
       fee_value:
         salary: Salary

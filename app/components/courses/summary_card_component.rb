@@ -58,7 +58,7 @@ module Courses
       return unless search_by_location?
 
       t(
-        "courses.summary_card_component.location_value.distance",
+        ".location_value.distance",
         school_term:,
         distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
         location: content_tag(:span, sanitize(@short_address.presence || @location), class: "govuk-!-font-weight-bold"),
@@ -68,27 +68,27 @@ module Courses
     def location_hint
       return if search_by_location?
 
-      t("courses.summary_card_component.location_value.placement_hint_html", school_term:)
+      t(".location_value.placement_hint_html", school_term:)
     end
 
     def fee_key
-      t("courses.summary_card_component.fee_key")
+      t(".fee_key")
     end
 
     def fee_value
       if course.salary? || course.apprenticeship?
-        t("courses.summary_card_component.fee_value.#{course.funding}")
+        t(".fee_value.#{course.funding}")
       else
         safe_join([uk_fees, international_fees].compact_blank, tag.br)
       end
     end
 
     def length_key
-      t("courses.summary_card_component.length_key")
+      t(".length_key")
     end
 
     def length_value(course_length = enrichment.course_length)
-      translated_course_length = t("courses.summary_card_component.length_value.#{course_length}", default: course_length)
+      translated_course_length = t(".length_value.#{course_length}", default: course_length)
 
       [translated_course_length, course.study_mode.humanize.downcase].join(" - ")
     end
@@ -98,7 +98,7 @@ module Courses
     end
 
     def age_group_key
-      t("courses.summary_card_component.age_group_key")
+      t(".age_group_key")
     end
 
     def age_group_value
@@ -106,33 +106,33 @@ module Courses
     end
 
     def qualification_key
-      t("courses.summary_card_component.qualification_key")
+      t(".qualification_key")
     end
 
     def qualification_value
-      t("courses.summary_card_component.qualification_value.#{course.qualification}_html")
+      t(".qualification_value.#{course.qualification}_html")
     end
 
     def degree_requirements_key
-      t("courses.summary_card_component.degree_requirements_key")
+      t(".degree_requirements_key")
     end
 
     def degree_requirements_value
-      t("courses.summary_card_component.degree_requirements_value.#{course.degree_type}.#{course.degree_grade}")
+      t(".degree_requirements_value.#{course.degree_type}.#{course.degree_grade}")
     end
 
     def degree_requirements_hint
       return if course.undergraduate_degree_type?
 
-      t("courses.summary_card_component.degree_requirements_hint.#{course.degree_grade}.html")
+      t(".degree_requirements_hint.#{course.degree_grade}.html")
     end
 
     def visa_sponsorship_key
-      t("courses.summary_card_component.visa_sponsorship_key")
+      t(".visa_sponsorship_key")
     end
 
     def visa_sponsorship_value
-      t("courses.summary_card_component.visa_sponsorship_value.#{course.visa_sponsorship}")
+      t(".visa_sponsorship_value.#{course.visa_sponsorship}")
     end
 
     def search_by_location?
@@ -146,15 +146,15 @@ module Courses
   private
 
     def school_term
-      t("courses.summary_card_component.location_value.school_term.#{course.funding}", default: t("courses.summary_card_component.location_value.school_term.default"))
+      t(".location_value.school_term.#{course.funding}", default: t(".location_value.school_term.default"))
     end
 
     def uk_fees(fee_uk = enrichment.fee_uk_eu)
-      t("courses.summary_card_component.fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
+      t(".fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
     end
 
     def international_fees(fee_international = enrichment.fee_international)
-      t("courses.summary_card_component.fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
+      t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
     end
 
     def search_by_visa_sponsorship?
