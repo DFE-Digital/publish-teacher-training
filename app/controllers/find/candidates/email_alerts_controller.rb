@@ -68,14 +68,14 @@ module Find
       end
 
       def unsubscribe_from_email
-        @email_alert = EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
+        @email_alert = Candidate::EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
         @filter_tags = extract_filter_tags_from_alert(@email_alert)
       rescue ActiveSupport::MessageVerifier::InvalidSignature
         redirect_to find_root_path
       end
 
       def confirm_unsubscribe_from_email
-        alert = EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
+        alert = Candidate::EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
         alert.unsubscribe!
 
         flash[:success_with_body] = {
@@ -94,7 +94,7 @@ module Find
       end
 
       def find_alert_by_token
-        alert = EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
+        alert = Candidate::EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
         raise ActiveRecord::RecordNotFound unless alert.candidate_id == @candidate.id
 
         alert
