@@ -2,7 +2,7 @@ ruby            3.4.8
 kubectl         1.32.2
 yarn            1.22.22
 nodejs          24.13.0
-terraform       1.4.5
+terraform       1.14.5
 azure-cli       2.70.0
 azure-kubelogin latest
 jq              1.7.1
