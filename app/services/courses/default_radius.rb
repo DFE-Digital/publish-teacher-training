@@ -43,7 +43,7 @@ module Courses
     end
 
     def london_radius
-      FeatureFlag.active?(:find_filtering_and_sorting) ? 20 : 15
+      20
     end
   end
 end

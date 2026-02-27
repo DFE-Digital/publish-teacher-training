@@ -1,16 +1,13 @@
-// stylelint-disable max-nesting-depth
-.filtering-sorting {
-  .app-filter {
-    @include govuk-clearfix;
+.app-filter {
+  @include govuk-clearfix;
 
-    @include govuk-media-query($until: tablet) {
-      padding: 0 govuk-spacing(3);
-      margin-bottom: govuk-spacing(4);
-    }
+  @include govuk-media-query($until: tablet) {
+    padding: 0 govuk-spacing(3);
+    margin-bottom: govuk-spacing(4);
+  }
 
-    &__heading {
-      font-size: 24px;
-      font-weight: $govuk-font-weight-bold;
-    }
+  &__heading {
+    font-size: 24px;
+    font-weight: $govuk-font-weight-bold;
   }
 }

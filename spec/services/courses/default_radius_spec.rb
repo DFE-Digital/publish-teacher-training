@@ -13,8 +13,6 @@ RSpec.describe Courses::DefaultRadius do
     end
 
     it "returns london radius when formatted_address is london UK" do
-      allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
-
       radius = described_class.new(
         location: "London, UK",
         formatted_address: "London, UK",
@@ -25,8 +23,6 @@ RSpec.describe Courses::DefaultRadius do
     end
 
     it "returns london radius when formatted_address is london" do
-      allow(FeatureFlag).to receive(:active?).with(:find_filtering_and_sorting).and_return(true)
-
       radius = described_class.new(
         location: "London, UK",
         formatted_address: "London",
