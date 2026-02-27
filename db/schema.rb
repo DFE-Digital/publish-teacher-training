@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_27_102121) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -118,6 +118,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
     t.string "email_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "candidate_recent_search", force: :cascade do |t|
+    t.bigint "find_candidate_id", null: false
+    t.string "subjects", default: [], array: true
+    t.float "longitude"
+    t.float "latitude"
+    t.integer "radius"
+    t.jsonb "search_attributes", default: {}
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_candidate_recent_search_on_discarded_at"
+    t.index ["find_candidate_id", "discarded_at", "updated_at"], name: "index_candidate_recent_search_candidate_active_updated"
+    t.index ["find_candidate_id", "subjects", "longitude", "latitude", "radius"], name: "index_candidate_recent_search_active_dedup", unique: true, where: "(discarded_at IS NULL)"
+    t.index ["find_candidate_id"], name: "index_candidate_recent_search_on_find_candidate_id"
   end
 
   create_table "contact", force: :cascade do |t|
@@ -438,22 +454,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
     t.index ["uuid"], name: "index_providers_onboarding_form_request_on_uuid", unique: true
   end
 
-  create_table "recent_search", force: :cascade do |t|
-    t.bigint "find_candidate_id", null: false
-    t.string "subjects", default: [], array: true
-    t.float "longitude"
-    t.float "latitude"
-    t.integer "radius"
-    t.jsonb "search_attributes", default: {}
-    t.datetime "discarded_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["discarded_at"], name: "index_recent_search_on_discarded_at"
-    t.index ["find_candidate_id", "discarded_at", "updated_at"], name: "index_recent_search_candidate_active_updated"
-    t.index ["find_candidate_id", "subjects", "longitude", "latitude", "radius"], name: "index_recent_search_active_dedup", unique: true, where: "(discarded_at IS NULL)"
-    t.index ["find_candidate_id"], name: "index_recent_search_on_find_candidate_id"
-  end
-
   create_table "recruitment_cycle", force: :cascade do |t|
     t.string "year"
     t.date "application_start_date", null: false
@@ -601,6 +601,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
     t.index ["user_id"], name: "index_user_permission_on_user_id"
   end
 
+  add_foreign_key "candidate_recent_search", "candidate", column: "find_candidate_id"
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "course"
@@ -618,7 +619,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
   add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
   add_foreign_key "providers_onboarding_form_request", "user", column: "support_agent_id", name: "FK_onboarding_request_user_support_agent_id"
-  add_foreign_key "recent_search", "candidate", column: "find_candidate_id"
   add_foreign_key "saved_course", "candidate"
   add_foreign_key "saved_course", "course"
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade

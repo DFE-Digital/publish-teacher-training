@@ -221,7 +221,7 @@ shared:
     - urn
     - created_at
     - updated_at
-  recent_search:
+  candidate_recent_search:
     - id
     - find_candidate_id
     - subjects
