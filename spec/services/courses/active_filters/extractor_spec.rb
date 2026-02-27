@@ -900,7 +900,7 @@ RSpec.describe Courses::ActiveFilters::Extractor do
           id: :provider_code,
           raw_value: "DFE01",
           value: "Example University (DFE01)",
-          remove_params: { provider_code: nil },
+          remove_params: { provider_code: nil, provider_name: nil },
         )
 
         expect(active_filters).to eq([expected_filter])

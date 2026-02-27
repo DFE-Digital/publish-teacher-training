@@ -9,6 +9,7 @@ class Candidate < ApplicationRecord
 
   has_many :saved_courses, dependent: :destroy
   has_many :saved_course_records, through: :saved_courses, source: :course
+  has_many :recent_searches, foreign_key: :find_candidate_id, inverse_of: :find_candidate, dependent: :destroy
 
   def saved_courses_without_withdrawn
     saved_courses.not_withdrawn

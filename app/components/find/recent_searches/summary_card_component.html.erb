@@ -1,0 +1,7 @@
+<%= govuk_summary_card(
+  title:,
+  actions: [govuk_link_to(t(".search_again"), search_again_path)],
+  classes: "app-recent-search-summary-card",
+) do |card| %>
+  <%= render Find::RecentSearches::FilterTagsComponent.new(active_filters: filter_tags) %>
+<% end %>

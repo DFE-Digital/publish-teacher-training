@@ -40,5 +40,5 @@ en:
         jan_to_aug: "Start date: January to August %{current_recruitment_cycle_year}"
         oct_to_jul: "Start date: October %{current_recruitment_cycle_year} to July %{next_recruitment_cycle_year}"
       study_types:
-        full_time: Full-time
-        part_time: Part-time
+        full_time: Full time
+        part_time: Part time
