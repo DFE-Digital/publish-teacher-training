@@ -51,7 +51,7 @@ RSpec.describe Courses::ActiveFilter do
 
       formatted_value = active_filter.formatted_value
 
-      expect(formatted_value).to eq("Full-time")
+      expect(formatted_value).to eq("Full time")
     end
 
     it "returns translated text for qualification filters" do

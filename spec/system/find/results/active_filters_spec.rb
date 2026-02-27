@@ -478,11 +478,11 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_full_time_filter_is_displayed
-    expect(active_filters).to include("Full-time")
+    expect(active_filters).to include("Full time")
   end
 
   def and_part_time_filter_is_displayed
-    expect(active_filters).to include("Part-time")
+    expect(active_filters).to include("Part time")
   end
 
   def then_qts_filter_is_displayed
@@ -524,7 +524,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_all_expected_filters_are_displayed
-    expect(active_filters).to contain_exactly("Primary", "Primary with English", "Art and design", "Further education", "Fee-paying courses", "Courses with a salary", "Full-time", "Part-time", "Qualification: QTS only", "Qualification: QTS with PGCE or PGDE", "Degree grade: 2:1 or first", "Courses with visa sponsorship", "Courses with online interviews", "London", "Courses with a SEND specialism", "Biology")
+    expect(active_filters).to contain_exactly("Primary", "Primary with English", "Art and design", "Further education", "Fee-paying courses", "Courses with a salary", "Full time", "Part time", "Qualification: QTS only", "Qualification: QTS with PGCE or PGDE", "Degree grade: 2:1 or first", "Courses with visa sponsorship", "Courses with online interviews", "London", "Courses with a SEND specialism", "Biology")
   end
 
   def when_user_search_main_subject(subject)
