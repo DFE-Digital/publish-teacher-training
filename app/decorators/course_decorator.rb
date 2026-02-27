@@ -134,17 +134,6 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  def bursary_requirements
-    requirements = ["a degree of 2:2 or above in any subject"]
-
-    if object.course_subjects.any? { |subject| subject.subject.subject_name.downcase == "primary with mathematics" }
-      mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
-      requirements.push(mathematics_requirement)
-    end
-
-    requirements
-  end
-
   def bursary_only?
     object.has_bursary? && !object.has_scholarship?
   end
@@ -233,22 +222,6 @@ class CourseDecorator < ApplicationDecorator
 
   def has_site?(site)
     !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
-  end
-
-  def funding_option
-    return if salaried?
-
-    if excluded_from_bursary?
-      # Duplicate branch body detected
-      "Student loans if you’re eligible"
-    elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Scholarships or bursaries, as well as student loans, are available if you’re eligible"
-    elsif has_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Bursaries and student loans are available if you’re eligible"
-    else
-      # Duplicate branch body detected
-      "Student loans are available if you’re eligible"
-    end
   end
 
   def current_cycle?
@@ -614,17 +587,11 @@ private
   end
 
   def has_excluded_course_name?
-    exclusions = [
-      /^Drama/,
-      /^Media Studies/,
-      /^PE/,
-      /^Physical/,
-    ]
     # We only care about course with a name matching the pattern 'Foo with bar'
     # We don't care about courses matching the pattern 'Foo and bar'
     return false unless /with/.match?(object.name)
 
-    exclusions.any? { |e| e.match?(object.name) }
+    FundingInformation::BURSARY_EXCLUDED_COURSE_PATTERNS.any? { |e| e.match?(object.name) }
   end
 
   def bursary_and_scholarship_flag_active_or_preview?

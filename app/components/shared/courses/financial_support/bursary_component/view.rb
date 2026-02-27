@@ -22,19 +22,8 @@ module Shared
 
         private
 
-          ELIGIBLE_SUBJECTS = [
-            "Italian",
-            "Japanese",
-            "Mandarin",
-            "Russian",
-            "Modern languages (other)",
-            "Ancient Greek",
-            "Ancient Hebrew",
-          ].freeze
-          private_constant :ELIGIBLE_SUBJECTS
-
           def eligible_subjects
-            ELIGIBLE_SUBJECTS
+            FundingInformation::NON_UK_BURSARY_ELIGIBLE_SUBJECTS
           end
         end
       end
