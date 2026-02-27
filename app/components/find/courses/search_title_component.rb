@@ -6,6 +6,7 @@ module Find
       def initialize(subjects:, location_name:, radius:, search_attributes:)
         super
         @subjects = Array(subjects).compact
+        @subjects << "Further education" if @subjects.any? && further_education?(search_attributes) && @subjects.exclude?("Further education")
         @location_name = location_name
         @radius = radius
         @attrs = search_attributes || {}
@@ -67,8 +68,8 @@ module Find
         funding.include?("salary") && !funding.include?("fee")
       end
 
-      def further_education?
-        @attrs["level"] == "further_education"
+      def further_education?(attrs = @attrs)
+        (attrs || {})["level"] == "further_education"
       end
 
       def visa_title
