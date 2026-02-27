@@ -19,9 +19,19 @@
 
 ### PR Title
 
-- The PR title should describe the change in a single line.
-
-- The PR title should be less than or equal to 72 characters long, if possible. This is a guideline, not a strict rule.
+- Use the following format so Trello tickets can be synced automatically: `<prefix>(<topic>)[<Trello ticket ID>]: <short description>`.
+- Supported prefixes describe the type of change and should match the list below:
+  - `feat`: new feature for users (not tooling-only changes).
+  - `fix`: bug fixes visible to users (not build script tweaks).
+  - `docs`: documentation-only changes.
+  - `style`: formatting / linting adjustments without production behaviour changes.
+  - `refactor`: production refactors such as renaming variables or restructuring code.
+  - `test`: adding or refactoring tests only.
+  - `chore`: maintenance tasks such as build or tooling updates.
+  - `deps`: dependency updates (gems, npm packages, GitHub Actions etc). Dependabot PRs continue to use their default titles; the workflow skips enforcement for them.
+- Keep the short description concise (<= 72 characters when possible) and ensure the topic reflects the area touched, e.g. `feat(Topic)[TRELLO-123]: allow providers to filter results`.
+- The value inside `[...]` must match a Trello reference that appears in the card title (e.g. `[TRELLO-123]` or the card shortlink). A GitHub Action uses this reference to automatically attach the PR URL to the card for human-authored PRs (it deduplicates attachments if the same PR is rerun), and posts/updates a PR comment linking back to the card. Dependabot PRs and PRs labelled `prototype` are excluded from this automation. If the reference cannot be resolved, the workflow fails and you will need to fix the title or the Trello card name before merging.
+- For the Trello automation to work, repo/environment secrets `TRELLO_KEY`, `TRELLO_TOKEN`, and `TRELLO_BOARD_IDS` must be configured. `TRELLO_BOARD_IDS` accepts a comma-separated list of board IDs that contain the relevant cards.
 
 ### PR Description
 
