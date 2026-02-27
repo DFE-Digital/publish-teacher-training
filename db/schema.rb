@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_24_155222) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -118,6 +118,23 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
     t.string "email_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "candidate_email_alerts", force: :cascade do |t|
+    t.bigint "candidate_id", null: false
+    t.string "subjects", default: [], array: true
+    t.float "longitude"
+    t.float "latitude"
+    t.integer "radius"
+    t.jsonb "search_attributes", default: {}
+    t.string "location_name"
+    t.datetime "last_sent_at"
+    t.datetime "unsubscribed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candidate_id", "unsubscribed_at"], name: "index_email_alerts_candidate_active"
+    t.index ["candidate_id"], name: "index_candidate_email_alerts_on_candidate_id"
+    t.index ["unsubscribed_at"], name: "index_candidate_email_alerts_on_unsubscribed_at"
   end
 
   create_table "contact", force: :cascade do |t|
@@ -601,6 +618,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_17_110546) do
     t.index ["user_id"], name: "index_user_permission_on_user_id"
   end
 
+  add_foreign_key "candidate_email_alerts", "candidate"
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "course"

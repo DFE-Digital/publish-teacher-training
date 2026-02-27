@@ -221,6 +221,19 @@ shared:
     - urn
     - created_at
     - updated_at
+  candidate_email_alerts:
+    - id
+    - candidate_id
+    - subjects
+    - longitude
+    - latitude
+    - radius
+    - search_attributes
+    - location_name
+    - last_sent_at
+    - unsubscribed_at
+    - created_at
+    - updated_at
   recent_search:
     - id
     - find_candidate_id

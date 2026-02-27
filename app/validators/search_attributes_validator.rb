@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Single source of truth for allowed search filter keys.
-# Shared by RecentSearch and EmailAlert model validation.
+# Shared by RecentSearch and Candidate::EmailAlert model validation.
 # Derived from Courses::SearchForm and ResultsController#search_courses_params.
 class SearchAttributesValidator < ActiveModel::EachValidator
   PERMITTED_KEYS = %w[
