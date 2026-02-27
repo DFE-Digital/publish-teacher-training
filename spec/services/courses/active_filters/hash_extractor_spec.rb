@@ -72,7 +72,7 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
       let(:attrs) { { "study_types" => %w[full_time part_time] } }
 
       it "translates via active_filters.yml" do
-        expect(formatted_values).to eq(%w[Full-time Part-time])
+        expect(formatted_values).to eq(["Full time", "Part time"])
       end
     end
 
@@ -207,7 +207,7 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
           "Within 15 miles of Manchester",
           "Courses with a SEND specialism",
           "Courses with a salary",
-          "Full-time",
+          "Full time",
           "Qualification: QTS with PGCE or PGDE",
           "Degree grade: 2:1 or first",
           "Courses with visa sponsorship",

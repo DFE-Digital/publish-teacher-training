@@ -361,7 +361,7 @@ RSpec.describe "Recent searches", service: :find do
     expect(page).to have_content("Within 15 miles of Manchester")
     expect(page).to have_content("Courses with visa sponsorship")
     expect(page).to have_content("Courses with a salary")
-    expect(page).to have_content("Full-time")
+    expect(page).to have_content("Full time")
     expect(page).to have_content("Qualification: QTS with PGCE or PGDE")
     expect(page).to have_content("Degree grade: 2:1 or first")
     expect(page).to have_content("Start date: September #{Find::CycleTimetable.current_year} only")
