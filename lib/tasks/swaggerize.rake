@@ -11,7 +11,7 @@ if defined?(RSpec)
       RSpec::Core::RakeTask.new("swaggerize") do |t|
         t.pattern = "spec/docs/**/*_spec.rb"
 
-        t.rspec_opts = ["--format OpenApi::Rswag::Specs::SwaggerFormatter", "--dry-run", "--order defined"]
+        t.rspec_opts = ["--format Rswag::Specs::SwaggerFormatter", "--dry-run", "--order defined"]
       end
     end
   end
