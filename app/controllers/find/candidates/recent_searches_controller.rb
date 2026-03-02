@@ -6,7 +6,7 @@ module Find
       before_action :require_authentication
 
       def index
-        @candidate.recent_searches.stale.discard_all
+        @candidate.recent_searches.stale.update_all(discarded_at: Time.current)
         @recent_searches = @candidate.recent_searches.for_display
 
         all_codes = @recent_searches.flat_map(&:subjects).compact.uniq
@@ -16,7 +16,7 @@ module Find
       def clear_all
         searches = @candidate.recent_searches.active
         ids = searches.pluck(:id)
-        searches.discard_all
+        searches.update_all(discarded_at: Time.current)
 
         undo_link = render_to_string(
           partial: "find/candidates/recent_searches/undo_link",
