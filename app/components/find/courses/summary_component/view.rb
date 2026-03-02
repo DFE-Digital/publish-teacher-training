@@ -13,7 +13,6 @@ module Find
 
         delegate :accrediting_provider,
                  :provider,
-                 :funding_option,
                  :age_range_in_years,
                  :length,
                  :applications_open_from,
@@ -79,39 +78,6 @@ module Find
 
         def search_by_visa_sponsorship?
           @visa_sponsorship.present?
-        end
-
-        def main_subject
-          @main_subject ||= Subject.find_by(id: course.master_subject_id)
-        end
-
-        PHYSICS_SUBJECT = "Physics"
-        private_constant :PHYSICS_SUBJECT
-
-        def physics?
-          main_subject&.subject_name == PHYSICS_SUBJECT
-        end
-
-        LANGUAGE_SUBJECTS = [
-          "Ancient Greek",
-          "Ancient Hebrew",
-          "English",
-          "English as a second or other language",
-          "French",
-          "German",
-          "Italian",
-          "Japanese",
-          "Latin",
-          "Mandarin",
-          "Modern Languages",
-          "Modern languages (other)",
-          "Russian",
-          "Spanish",
-        ].freeze
-        private_constant :LANGUAGE_SUBJECTS
-
-        def languages?
-          main_subject&.subject_name.in?(LANGUAGE_SUBJECTS)
         end
       end
     end

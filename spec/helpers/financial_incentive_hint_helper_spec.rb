@@ -3,30 +3,6 @@
 require "rails_helper"
 
 RSpec.describe FinancialIncentiveHintHelper do
-  describe ".hint_text" do
-    it "returns the combined scholarship/bursary hint" do
-      expect(
-        described_class.hint_text(bursary_amount: 20_000, scholarship_amount: 22_000),
-      ).to eq("Scholarships of £22,000 or bursaries of £20,000 are available")
-    end
-
-    it "returns the bursary-only hint" do
-      expect(
-        described_class.hint_text(bursary_amount: 20_000, scholarship_amount: nil),
-      ).to eq("Bursaries of £20,000 are available")
-    end
-
-    it "returns the scholarship-only hint" do
-      expect(
-        described_class.hint_text(bursary_amount: nil, scholarship_amount: 22_000),
-      ).to eq("Scholarships of £22,000 are available")
-    end
-
-    it "returns nil when there is no bursary and no scholarship" do
-      expect(described_class.hint_text(bursary_amount: nil, scholarship_amount: nil)).to be_nil
-    end
-  end
-
   describe "#bursary_value" do
     let(:helper_instance_class) do
       Struct.new(:course, :visa_sponsorship, keyword_init: true) do
@@ -78,6 +54,45 @@ RSpec.describe FinancialIncentiveHintHelper do
 
       it "hides the hint" do
         expect(instance.bursary_value).to be_nil
+      end
+    end
+
+    context "when the course is salaried" do
+      let(:course) do
+        create(
+          :course,
+          :secondary,
+          :open,
+          :published,
+          :salary,
+          provider: build(:provider),
+          subjects: [subject_with_incentives],
+          master_subject_id: subject_with_incentives.id,
+        )
+      end
+
+      it "returns nil" do
+        expect(instance.bursary_value).to be_nil
+      end
+    end
+
+    context "when visa sponsorship is active but subject has non-UK funding" do
+      let(:visa_sponsorship) { "true" }
+      let(:eligible_subject) { create(:secondary_subject, subject_name: "Physics", bursary_amount: 20_000, scholarship: 22_000, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true) }
+      let(:course) do
+        create(
+          :course,
+          :secondary,
+          :open,
+          :published,
+          provider: build(:provider),
+          subjects: [eligible_subject],
+          master_subject_id: eligible_subject.id,
+        )
+      end
+
+      it "still shows the hint" do
+        expect(instance.bursary_value).to be_present
       end
     end
   end
