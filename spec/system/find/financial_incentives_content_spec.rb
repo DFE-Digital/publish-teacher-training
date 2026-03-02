@@ -71,7 +71,7 @@ RSpec.describe "financial incentives call out boxes content" do
   context "Non-UK citizens" do
     context "given the course has bursary and scholarship available" do
       scenario "renders the bursary and scholarship content" do
-        given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000, subject: :physics)
+        given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000, subject: :physics, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
         when_i_visit_the_find_results_page
         select_course
 
@@ -83,7 +83,7 @@ RSpec.describe "financial incentives call out boxes content" do
 
     context "given the course has bursaries available" do
       scenario "renders the bursaries content" do
-        given_there_is_a_findable_course(bursary_amount: 4000, subject: :ancient_hebrew)
+        given_there_is_a_findable_course(bursary_amount: 4000, subject: :ancient_hebrew, non_uk_bursary_eligible: true)
         when_i_visit_the_find_results_page
         select_course
 
@@ -123,7 +123,7 @@ RSpec.describe "financial incentives call out boxes content" do
     find_results_page.load
   end
 
-  def given_there_is_a_findable_course(bursary_amount: nil, scholarship_amount: nil, funding: "fee", qualification: "pgce_with_qts", subject: :chemistry)
+  def given_there_is_a_findable_course(bursary_amount: nil, scholarship_amount: nil, funding: "fee", qualification: "pgce_with_qts", subject: :chemistry, non_uk_bursary_eligible: false, non_uk_scholarship_eligible: false)
     @course = create(
       :course,
       :secondary,
@@ -140,6 +140,8 @@ RSpec.describe "financial incentives call out boxes content" do
           subject,
           scholarship: scholarship_amount,
           bursary_amount: bursary_amount,
+          non_uk_bursary_eligible: non_uk_bursary_eligible,
+          non_uk_scholarship_eligible: non_uk_scholarship_eligible,
         ),
       ],
     )
