@@ -34,15 +34,12 @@ module API
 
         attributes :age_maximum,
                    :age_minimum,
-                   :bursary_amount,
-                   :bursary_requirements,
                    :created_at,
                    :gcse_subjects_required,
                    :level,
                    :name,
                    :program_type,
                    :qualifications,
-                   :scholarship_amount,
                    :study_mode,
                    :uuid,
                    :degree_grade,
@@ -59,6 +56,18 @@ module API
                    :application_status,
                    :training_route,
                    :degree_type
+
+        attribute :bursary_amount do
+          CourseFunding.new(@object).bursary_amount
+        end
+
+        attribute :bursary_requirements do
+          CourseFunding::View.new(CourseFunding.new(@object)).bursary_requirements
+        end
+
+        attribute :scholarship_amount do
+          CourseFunding.new(@object).scholarship_amount
+        end
 
         attribute :about_accredited_body do
           @object.ratifying_provider_description
@@ -89,11 +98,11 @@ module API
         end
 
         attribute :has_early_career_payments do
-          @object.has_early_career_payments?
+          CourseFunding.new(@object).has_early_career_payments?
         end
 
         attribute :has_scholarship do
-          @object.has_scholarship?
+          CourseFunding.new(@object).has_scholarship?
         end
 
         attribute :has_vacancies do
