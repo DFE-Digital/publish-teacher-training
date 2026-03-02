@@ -13,9 +13,9 @@
   <% elsif excluded_from_bursary? %>
     <%= render partial: "shared/courses/financial_support/loan" %>
   <% elsif bursary_only? %>
-    <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
+    <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(funding_view) %>
   <% elsif has_scholarship_and_bursary? %>
-    <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
+    <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(funding_view) %>
   <% else %>
     <%= render partial: "shared/courses/financial_support/loan" %>
   <% end %>
