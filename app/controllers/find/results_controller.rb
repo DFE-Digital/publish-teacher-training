@@ -103,15 +103,15 @@ module Find
 
     def record_recent_search
       return unless authenticated?
-      return unless meaningful_search_params?
+      return unless meaningful_for_recent_search?
 
-      Find::RecordRecentSearchService.call(
+      Find::RecentSearchRecorder.call(
         candidate: @candidate,
         search_params: @search_params,
       )
     end
 
-    def meaningful_search_params?
+    def meaningful_for_recent_search?
       params.keys.intersect?(%w[subjects
                                 location
                                 can_sponsor_visa

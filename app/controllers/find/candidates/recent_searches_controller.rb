@@ -8,6 +8,9 @@ module Find
       def index
         @candidate.recent_searches.stale.discard_all
         @recent_searches = @candidate.recent_searches.for_display
+
+        all_codes = @recent_searches.flat_map(&:subjects).compact.uniq
+        @subject_names_by_code = all_codes.any? ? Subject.where(subject_code: all_codes).pluck(:subject_code, :subject_name).to_h : {}
       end
 
       def clear_all

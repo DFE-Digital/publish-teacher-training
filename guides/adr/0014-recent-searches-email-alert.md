@@ -143,7 +143,7 @@ We need to introduce **Recent Searches** (saving and replaying search filter set
 
 | Phase | Scope | Flag |
 |---|---|---|
-| **Phase 1** | `recent_searches` migration, model, validator, `RecordRecentSearchService`, `ResultsController` integration | `:candidate_accounts` |
+| **Phase 1** | `recent_searches` migration, model, validator, `RecentSearchRecorder`, `ResultsController` integration | `:candidate_accounts` |
 | **Phase 2** | `RecentSearchesController`, ViewComponents, navigation, clear/undo flow | `:candidate_accounts` |
 | **Phase 3** | `CleanupRecentSearchesJob`, sidekiq-cron schedule | `:candidate_accounts` |
 | **Phase 4** | `email_alerts` migration, model, `CreateEmailAlertService` | `:email_alerts` |

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module Find
-  class RecordRecentSearchService
+  class RecentSearchRecorder
     def self.call(candidate:, search_params:)
       new(candidate, search_params).call
     end
 
     def initialize(candidate, search_params)
       @candidate = candidate
-      @search_params = search_params.to_h.with_indifferent_access
+      @search_params = search_params.to_h.symbolize_keys
     end
 
     def call
@@ -59,9 +59,10 @@ module Find
 
     def filter_attributes
       @search_params
-        .slice(*SearchAttributesValidator::PERMITTED_KEYS)
+        .slice(*SearchAttributesValidator::PERMITTED_KEYS.map(&:to_sym))
         .except(:subject_code)
         .compact_blank
+        .stringify_keys
     end
   end
 end
