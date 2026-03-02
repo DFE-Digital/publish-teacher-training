@@ -4,7 +4,7 @@ module Find
   module Courses
     class SearchTitleComponent < ViewComponent::Base
       def initialize(subjects:, location_name:, radius:, search_attributes:)
-        super
+        super()
         @subjects = Array(subjects).compact
         @subjects << "Further education" if @subjects.any? && further_education?(search_attributes) && @subjects.exclude?("Further education")
         @location_name = location_name

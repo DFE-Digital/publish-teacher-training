@@ -6,7 +6,7 @@ module Find
       attr_reader :active_filters
 
       def initialize(active_filters:)
-        super
+        super()
         @active_filters = active_filters
       end
 
