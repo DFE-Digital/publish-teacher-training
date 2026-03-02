@@ -381,7 +381,7 @@ module ResultsHelper
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
           "Connection" => "keep-alive",
           "Keep-Alive" => "30",
-          "User-Agent" => "Faraday v2.14.0",
+          "User-Agent" => "Faraday v#{Faraday::VERSION}",
         },
       ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/london.json"), headers: { "Content-Type" => "application/json" })
   end
@@ -408,7 +408,7 @@ module ResultsHelper
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
           "Connection" => "keep-alive",
           "Keep-Alive" => "30",
-          "User-Agent" => "Faraday v2.14.0",
+          "User-Agent" => "Faraday v#{Faraday::VERSION}",
         },
       ).to_return(status: 200, body: file_fixture("google_old_places_api_client/autocomplete/#{value.humanize.parameterize.underscore}.json"), headers: { "Content-Type" => "application/json" })
   end
