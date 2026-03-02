@@ -4,7 +4,7 @@ module Find
   module RecentSearches
     class SummaryCardComponent < ViewComponent::Base
       def initialize(recent_search:)
-        super
+        super()
         @recent_search = recent_search
         @attrs = recent_search.search_attributes || {}
       end
