@@ -3,10 +3,11 @@
 module Find
   module RecentSearches
     class SummaryCardComponent < ViewComponent::Base
-      def initialize(recent_search:)
+      def initialize(recent_search:, subject_names_by_code: {})
         super()
         @recent_search = recent_search
         @attrs = recent_search.search_attributes || {}
+        @subject_names_by_code = subject_names_by_code
       end
 
       def title
@@ -35,7 +36,7 @@ module Find
       def resolved_subject_names
         @resolved_subject_names ||=
           if @recent_search.subjects.present?
-            Subject.where(subject_code: @recent_search.subjects).pluck(:subject_name)
+            @recent_search.subjects.filter_map { |code| @subject_names_by_code[code] }
           else
             []
           end

@@ -97,6 +97,8 @@ module Find
         end
       end
 
+      # These keys represent a specific provider search, not user-selected filters,
+      # so they are excluded from the active filter count displayed in the title.
       DISPLAY_EXCLUDED_KEYS = %w[provider_code provider_name].freeze
 
       def active_filter_count

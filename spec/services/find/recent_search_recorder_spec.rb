@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Find::RecordRecentSearchService do
+RSpec.describe Find::RecentSearchRecorder do
   describe ".call" do
     let(:candidate) { create(:candidate) }
 
