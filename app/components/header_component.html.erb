@@ -1,7 +1,15 @@
 <%= govuk_header homepage_url: "https://www.gov.uk", classes: ["app-header--wide-logo", "govuk-header--full-width-border"] do |header| %>
   <% if current_user %>
-    <% header.with_navigation_item(text: current_user.full_name, href: Settings.dfe_signin.profile) %>
-    <% header.with_navigation_item text: "Sign out", href: sign_out_path %>
+    <nav aria-label="Menu" class="govuk-header__navigation govuk-header__navigation--end app-header-account-options">
+      <ul class="govuk-header__navigation-list">
+        <li class="govuk-header__navigation-item">
+          <%= link_to current_user.full_name, Settings.dfe_signin.profile, class: "govuk-header__link" %>
+        </li>
+        <li class="govuk-header__navigation-item">
+          <%= link_to "Sign out", sign_out_path, class: "govuk-header__link" %>
+        </li>
+      </ul>
+    </nav>
   <% end %>
 <% end %>
 

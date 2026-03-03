@@ -15,7 +15,7 @@ class PhaseBanner < ViewComponent::Base
       "development" => "grey",
       "qa" => "orange",
       "review" => "purple",
-      "rollover" => "turquoise",
+      "rollover" => "teal",
       "sandbox" => "purple",
       "staging" => "red",
       "unknown-environment" => "yellow",

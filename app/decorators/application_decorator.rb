@@ -36,11 +36,11 @@ private
 
   def status_tags_for_vacancies
     {
-      published: { text: "Open", colour: "turquoise" },
+      published: { text: "Open", colour: "teal" },
       withdrawn: { text: "Withdrawn", colour: "red" },
       empty: { text: "Draft", colour: "grey" },
       draft: { text: "Draft", colour: "grey" },
-      published_with_unpublished_changes: { text: "Open&nbsp;*", colour: "turquoise" },
+      published_with_unpublished_changes: { text: "Open&nbsp;*", colour: "teal" },
       rolled_over: { text: "Rolled over", colour: "yellow" },
     }
   end
