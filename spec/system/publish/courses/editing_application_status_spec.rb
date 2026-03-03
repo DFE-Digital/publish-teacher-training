@@ -48,7 +48,7 @@ RSpec.describe "Editing course application status" do
   def and_the_course_is_open
     course.reload
     expect(course).to be_application_status_open
-    expect(page).to have_css(".govuk-tag--turquoise")
+    expect(page).to have_css(".govuk-tag--teal")
   end
 
   def and_the_course_is_closed
