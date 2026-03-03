@@ -1,21 +1,22 @@
 <%= govuk_header(
   homepage_url: publish_root_path,
-  classes: "govuk-!-display-none-print govuk-header--full-width-border app-header--wide-logo",
-  navigation_classes: "govuk-header__navigation--end",
+  classes: %w[govuk-header--full-width-border app-header--wide-logo with-extra-content],
 ) do |header| %>
 
   <% header.with_product_name(name: service_name) %>
 
   <% if current_user.present? %>
-    <% if current_user.admin? %>
-      <% header.with_navigation_item(text: "Support console", href: support_root_path, active: false) %>
-      <% header.with_navigation_item(text: "Sign out", href: sign_out_path) %>
-    <% else %>
-      <% if current_user.associated_with_accredited_provider? %>
-        <% header.with_navigation_item(text: "Notifications", href: publish_notifications_path, active: false) %>
+    <div class="govuk-header__content account-options">
+      <% if current_user.admin? %>
+        <%= govuk_link_to(support_root_path, inverse: true, no_underline: true) { "Support console" } %>
+        <%= govuk_link_to(sign_out_path, inverse: true, no_underline: true) { "Sign out" } %>
+      <% else %>
+        <% if current_user.associated_with_accredited_provider? %>
+          <%= govuk_link_to(publish_notifications_path, inverse: true, no_underline: true) { "Notifications" } %>
+        <% end %>
+        <%= govuk_link_to(sign_out_path, inverse: true, no_underline: true) { "Sign out" } %>
+        <%= govuk_link_to(Settings.dfe_signin.profile, inverse: true, no_underline: true) { "(#{current_user.first_name} #{current_user.last_name})" } %>
       <% end %>
-      <% header.with_navigation_item(text: "Sign out", href: sign_out_path) %>
-      <% header.with_navigation_item(text: "(#{current_user.first_name} #{current_user.last_name})", href: Settings.dfe_signin.profile) %>
-    <% end %>
+    </div>
   <% end %>
 <% end %>
