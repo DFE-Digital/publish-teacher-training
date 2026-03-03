@@ -162,10 +162,18 @@ describe CourseFunding::View do
   end
 
   describe "#hint_text" do
-    context "when course has both bursary and scholarship" do
+    context "when course has both bursary and scholarship but no non-UK funding" do
       let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000", scholarship: "2000")]) }
 
-      it "returns the hint text using course funding amounts" do
+      it "appends 'for UK citizens'" do
+        expect(view.hint_text).to eq("Scholarships of £2,000 or bursaries of £3,000 are available for UK citizens")
+      end
+    end
+
+    context "when course has non-UK funding available" do
+      let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000", scholarship: "2000", non_uk_bursary_eligible: true)]) }
+
+      it "does not append 'for UK citizens'" do
         expect(view.hint_text).to eq("Scholarships of £2,000 or bursaries of £3,000 are available")
       end
     end

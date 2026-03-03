@@ -35,8 +35,8 @@ RSpec.describe FinancialIncentiveHintHelper do
       FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
     end
 
-    it "returns the hint text when the flag is active and the course has incentives" do
-      expect(instance.bursary_value).to eq("Scholarships of £22,000 or bursaries of £20,000 are available")
+    it "appends 'for UK citizens' when subject is not non-UK eligible" do
+      expect(instance.bursary_value).to eq("Scholarships of £22,000 or bursaries of £20,000 are available for UK citizens")
     end
 
     context "when visa sponsorship filtering is in effect (and the subject is not physics or languages)" do
@@ -91,8 +91,8 @@ RSpec.describe FinancialIncentiveHintHelper do
         )
       end
 
-      it "still shows the hint" do
-        expect(instance.bursary_value).to be_present
+      it "shows the hint without 'for UK citizens'" do
+        expect(instance.bursary_value).to eq("Scholarships of £22,000 or bursaries of £20,000 are available")
       end
     end
   end
