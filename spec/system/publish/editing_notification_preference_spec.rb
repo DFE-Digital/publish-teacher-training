@@ -37,7 +37,7 @@ RSpec.describe "Opting into notifications" do
   end
 
   def and_i_click_on_notifications_link
-    publish_header_page.notifications_preference_link.click
+    click_link "Notifications"
   end
 
   def then_the_publish_notification_page_is_displayed
@@ -45,7 +45,8 @@ RSpec.describe "Opting into notifications" do
   end
 
   def and_the_notifications_link_has_an_active_state
-    expect(publish_header_page).to have_active_notifications_preference_link
+    expect(page).to have_current_path(publish_notifications_path, ignore_query: true)
+    expect(page).to have_link("Notifications", href: publish_notifications_path)
   end
 
   def then_neither_radio_button_is_selected

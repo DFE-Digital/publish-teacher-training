@@ -8,7 +8,7 @@ RSpec.describe PhaseBanner, type: :component do
     "qa" => "orange",
     "review" => "purple",
     "sandbox" => "purple",
-    "rollover" => "turquoise",
+    "rollover" => "teal",
     "staging" => "red",
     "unknown-environment" => "yellow",
   }.each do |environment, colour|

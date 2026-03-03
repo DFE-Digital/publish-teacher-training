@@ -21,7 +21,7 @@ private
 
   def then_i_should_see_the_open_status
     within("td.govuk-table__cell.status") do
-      expect(page).to have_css("strong.govuk-tag.govuk-tag--turquoise", text: "Open")
+      expect(page).to have_css("strong.govuk-tag.govuk-tag--teal", text: "Open")
     end
   end
 
