@@ -25,6 +25,7 @@ en:
         age_range: Age range
         age_range_label: Age range
         qualification: Qualification
+        qualification_label: Qualification
         outcome: Outcome
         funding_type: Funding type
         if_funding: if funding type
