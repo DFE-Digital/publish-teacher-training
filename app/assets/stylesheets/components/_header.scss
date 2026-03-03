@@ -16,6 +16,7 @@
   @include govuk-media-query($from: desktop) {
     .govuk-header__container {
       display: flex;
+
       flex-wrap: wrap;
     }
 
@@ -26,11 +27,14 @@
 
   .account-options {
     display: flex;
+
     gap: govuk-spacing(4);
-    justify-content: flex-end;
     align-items: center;
-    margin-left: auto;
+    justify-content: flex-end;
+
     width: auto;
+
+    margin-left: auto;
   }
 }
 
