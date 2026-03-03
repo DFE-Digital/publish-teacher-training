@@ -45,7 +45,7 @@ module Find
         scholarship_amount: financial_incentive.scholarship,
       )
 
-      content_tag(:p, content, class: "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0 govuk-!-margin-bottom-0") if content
+      helpers.content_tag(:p, content, class: "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0 govuk-!-margin-bottom-0") if content
     end
 
     def subject_params
