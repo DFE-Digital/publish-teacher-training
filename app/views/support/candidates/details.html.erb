@@ -25,3 +25,5 @@
     <% row.with_value text: @candidate.sessions.last&.created_at&.to_fs(:govuk_date_and_time) || t(".never_logged_in") %>
   <% end %>
 <% end %>
+
+<%= govuk_button_link_to(t(".delete_button"), delete_support_candidate_path(@candidate), class: "govuk-button--warning") %>

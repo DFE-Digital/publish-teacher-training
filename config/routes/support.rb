@@ -112,6 +112,8 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
     member do
       get :details
       get :saved_courses
+      get :delete
+      delete :delete, to: "candidates#destroy"
     end
   end
 end

@@ -1,6 +1,6 @@
 module Support
   class CandidatesController < ApplicationController
-    before_action :set_candidate, only: %i[details saved_courses]
+    before_action :set_candidate, only: %i[details saved_courses delete destroy]
 
     def index
       @pagy, @candidates = pagy(filtered_candidates)
@@ -10,6 +10,16 @@ module Support
 
     def saved_courses
       @saved_courses = @candidate.saved_courses.order(created_at: :desc)
+    end
+
+    def delete; end
+
+    def destroy
+      if @candidate.destroy!
+        redirect_to support_candidates_path, flash: { success: t(".deleted_successfully") }
+      else
+        redirect_to support_candidates_path, flash: { warning: t(".delete_failed") }
+      end
     end
 
   private
