@@ -1,6 +1,15 @@
 en:
   support:
     candidates:
+      delete:
+        title: Are you sure you want to remove this candidate?
+        button: Delete this candidate
+        cancel: Cancel
+        cancel_link: Cancel
+        remove_candidate: Remove candidate
+      destroy:
+        deleted_successfully: Candidate successfully deleted
+        delete_failed: This candidate could not be deleted
       details:
         email_address: Email address
         created_at: Created at
@@ -8,6 +17,7 @@ en:
         never_logged_in: Never logged in
         details: Details
         saved_courses: Saved courses
+        delete_button: Delete this candidate
       saved_courses:
         details: Details
         saved_courses: Saved courses

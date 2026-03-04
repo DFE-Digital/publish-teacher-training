@@ -1,0 +1,22 @@
+<%= render PageTitle.new(title: t(".title")) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_support_candidate_path(@candidate)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= t(".title") %>
+    </h1>
+
+    <%= govuk_button_to t(".remove_candidate"),
+        delete_support_candidate_path(@candidate),
+        method: :delete,
+        class: "govuk-button--warning" %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t(".cancel_link"), details_support_candidate_path(@candidate)) %>
+    </p>
+  </div>
+</div>
