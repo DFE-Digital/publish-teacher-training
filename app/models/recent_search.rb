@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class RecentSearch < ApplicationRecord
+  self.table_name = "candidate_recent_search"
+
   include Discard::Model
 
   belongs_to :find_candidate, class_name: "Candidate"
