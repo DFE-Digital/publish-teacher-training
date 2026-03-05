@@ -4,7 +4,7 @@ module Find
   module EmailAlerts
     class SummaryCardComponent < ViewComponent::Base
       def initialize(email_alert:)
-        super
+        super()
         @email_alert = email_alert
         @attrs = email_alert.search_attributes || {}
       end
