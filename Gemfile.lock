@@ -163,7 +163,7 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    addressable (2.8.8)
+    addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
     aes_key_wrap (1.1.0)
     amazing_print (2.0.0)
@@ -554,7 +554,7 @@ GEM
     psych (5.3.1)
       date
       stringio
-    public_suffix (7.0.2)
+    public_suffix (7.0.5)
     puma (7.2.0)
       nio4r (~> 2.0)
     pundit (2.5.2)
@@ -764,11 +764,11 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    site_prism (5.1.1)
+    site_prism (5.2)
       addressable (~> 2.8, >= 2.8.4)
       capybara (~> 3.34)
       site_prism-all_there (> 3, < 5)
-    site_prism-all_there (3.0.7)
+    site_prism-all_there (3.0.8)
     skylight (7.0.0)
       activesupport (>= 7.1.0)
     smart_properties (1.17.0)
@@ -921,7 +921,7 @@ DEPENDENCIES
   sidekiq (~> 6.5)
   sidekiq-cron
   simplecov (< 0.23)
-  site_prism (~> 5.1)
+  site_prism (~> 5.2)
   skylight
   super_diff
   timecop
