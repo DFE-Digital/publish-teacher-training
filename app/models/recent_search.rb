@@ -4,7 +4,6 @@ class RecentSearch < ApplicationRecord
   self.table_name = "candidate_recent_search"
 
   include Discard::Model
-  include SearchTitlePresentable
 
   belongs_to :find_candidate, class_name: "Candidate"
 
