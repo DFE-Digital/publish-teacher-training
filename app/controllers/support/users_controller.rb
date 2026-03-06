@@ -37,7 +37,7 @@ module Support
     end
 
     def destroy
-      if user.discard
+      if user.destroy!
         redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: "User successfully deleted" }
       else
         redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: "This user has already been deleted" }
@@ -63,7 +63,7 @@ module Support
     end
 
     def filter_params
-      @filter_params ||= params.except(:commit, :recruitment_cycle_year).permit(:text_search, :page, :commit, :status, user_type: [])
+      @filter_params ||= params.except(:commit, :recruitment_cycle_year).permit(:text_search, :page, :commit, user_type: [])
     end
   end
 end
