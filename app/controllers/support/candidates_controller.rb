@@ -1,15 +1,9 @@
 module Support
   class CandidatesController < ApplicationController
-    before_action :set_candidate, only: %i[details saved_courses delete destroy]
+    before_action :set_candidate, only: %i[delete destroy]
 
     def index
       @pagy, @candidates = pagy(filtered_candidates)
-    end
-
-    def details; end
-
-    def saved_courses
-      @saved_courses = @candidate.saved_courses.order(created_at: :desc)
     end
 
     def delete; end
@@ -30,7 +24,7 @@ module Support
     }.freeze
 
     def filtered_candidates
-      scope = Support::Filter.call(model_data_scope: Candidate.all, filter_params:)
+      scope = Support::Filter.call(model_data_scope: ::Candidate.all, filter_params:)
       apply_sort(scope)
     end
 
@@ -43,7 +37,7 @@ module Support
     end
 
     def set_candidate
-      @candidate = Candidate.find(params[:id])
+      @candidate = ::Candidate.find(params[:id])
     end
   end
 end
