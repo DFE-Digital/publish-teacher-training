@@ -60,6 +60,18 @@ module Find
           .to have_enqueued_job(EmailAlertMailerJob).exactly(2).times
       end
 
+      it "does not produce duplicate course IDs when a course has multiple published enrichments" do
+        course = create(:course, :published_postgraduate)
+        course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
+        create(:course_enrichment, :published, course:, last_published_timestamp_utc: 1.day.ago)
+
+        alert = create(:email_alert, candidate:)
+
+        expect { described_class.call(since: 1.week.ago) }
+          .to have_enqueued_job(EmailAlertMailerJob)
+          .with(alert.id, [course.id])
+      end
+
       it "scopes recently published courses to the current recruitment cycle" do
         next_provider = create(:provider, :next_recruitment_cycle)
         next_course = create(:course, :published_postgraduate, provider: next_provider)
