@@ -17,6 +17,7 @@ module Find
         .where(status: :published)
         .where("last_published_timestamp_utc > ?", @since)
         .select(:course_id)
+        .distinct
 
       BatchDelivery.new(relation: Candidate::EmailAlert.active, stagger_over: 1.hour, batch_size: 100).each do |deliver_at, alerts|
         alerts.each do |alert|
