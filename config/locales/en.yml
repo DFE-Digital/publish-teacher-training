@@ -511,6 +511,7 @@ en:
           index: Candidates
           details: View a candidate
           saved_courses: Saved Courses
+          notes: Notes
         users:
           index: "Users"
           show: "User overview"

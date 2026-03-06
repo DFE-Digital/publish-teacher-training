@@ -17,14 +17,25 @@ en:
         never_logged_in: Never logged in
         details: Details
         saved_courses: Saved courses
+        notes: Notes
         delete_button: Delete this candidate
       saved_courses:
         details: Details
         saved_courses: Saved courses
+        notes: Notes
         saved_at: Saved at
         no_saved_courses: This candidate hasn’t saved any courses yet.
         course: Course
         provider: Provider
+      notes:
+        details: Details
+        saved_courses: Saved courses
+        notes: Notes
+        course: Course
+        provider: Provider
+        note: Note
+        updated_at: Last updated
+        no_notes: This candidate hasn’t added any notes yet.
       candidates:
         email_address: Email address
         created_at: Created at

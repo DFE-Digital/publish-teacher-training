@@ -37,4 +37,24 @@ RSpec.describe "Support::Candidates authorization" do
       expect(Candidate.exists?(target_candidate.id)).to be(false)
     end
   end
+
+  %w[details saved_courses notes].each do |endpoint|
+    describe "GET /support/candidates/:id/#{endpoint}" do
+      it "does not allow a non-admin to access #{endpoint}" do
+        login_user(non_admin_user)
+
+        get "/support/candidates/#{target_candidate.id}/#{endpoint}"
+
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "allows an admin to access #{endpoint}" do
+        login_user(admin_user)
+
+        get "/support/candidates/#{target_candidate.id}/#{endpoint}"
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
 end
