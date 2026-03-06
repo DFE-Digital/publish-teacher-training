@@ -27,10 +27,10 @@ describe "API" do
                 example: "X130"
       parameter name: :include,
                 in: :query,
-                type: :string,
                 required: false,
                 description: "The associated data for this resource.",
                 schema: {
+                  type: :string,
                   enum: %w[recruitment_cycle provider course location_status],
                 },
                 example: "recruitment_cycle,provider,course,location_status"
