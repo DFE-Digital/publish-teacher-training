@@ -10,6 +10,45 @@ describe User do
     it { is_expected.to have_many(:organisations).through(:organisation_users) }
     it { is_expected.to have_many(:providers).through(:user_permissions) }
     it { is_expected.to have_many(:user_notifications) }
+    it { is_expected.to have_many(:organisation_users).dependent(:destroy) }
+    it { is_expected.to have_many(:user_permissions).dependent(:destroy) }
+    it { is_expected.to have_many(:user_notifications).dependent(:destroy) }
+    it { is_expected.to have_many(:created_course_enrichments).dependent(:nullify) }
+    it { is_expected.to have_many(:updated_course_enrichments).dependent(:nullify) }
+    it { is_expected.to have_many(:providers_onboarding_form_requests).dependent(:nullify) }
+  end
+
+  describe "#destroy!" do
+    it "destroys organisation_users, user_permissions, user_notifications and the user" do
+      user = create(:user)
+
+      organisation_user = OrganisationUser.create!(user:, organisation: create(:organisation))
+      user_permission = UserPermission.create!(user:, provider: create(:provider))
+      user_notification = create(:user_notification, user:)
+
+      user.destroy!
+
+      expect(OrganisationUser.find_by(id: organisation_user.id)).to be_nil
+      expect(UserPermission.find_by(id: user_permission.id)).to be_nil
+      expect(UserNotification.find_by(id: user_notification.id)).to be_nil
+      expect(described_class.find_by(id: user.id)).to be_nil
+    end
+
+    it "nullifies user references in course_enrichments and onboarding requests" do
+      user = create(:user, :admin)
+      course_enrichment = create(
+        :course_enrichment,
+        created_by_user_id: user.id,
+        updated_by_user_id: user.id,
+      )
+      onboarding_request = create(:providers_onboarding_form_request, support_agent: user)
+
+      user.destroy!
+
+      expect(course_enrichment.reload.created_by_user_id).to be_nil
+      expect(course_enrichment.reload.updated_by_user_id).to be_nil
+      expect(onboarding_request.reload.support_agent_id).to be_nil
+    end
   end
 
   describe "validations" do
@@ -176,38 +215,6 @@ describe User do
 
       it "removes the right provider" do
         expect(subject.reload.providers).to eq([other_provider])
-      end
-    end
-  end
-
-  describe "#discard" do
-    subject { create(:user) }
-
-    context "before discarding" do
-      its(:discarded?) { is_expected.to be false }
-
-      it "is in kept" do
-        expect(described_class.kept).to eq([subject])
-      end
-
-      it "is not in discarded" do
-        expect(described_class.discarded).to be_empty
-      end
-    end
-
-    context "after discarding" do
-      before do
-        subject.discard
-      end
-
-      its(:discarded?) { is_expected.to be true }
-
-      it "is not in kept" do
-        expect(described_class.kept).to be_empty
-      end
-
-      it "is in discarded" do
-        expect(described_class.discarded).to eq([subject])
       end
     end
   end
