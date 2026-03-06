@@ -3,6 +3,8 @@
 module Find
   module Courses
     class AccreditingProvidersController < ApplicationController
+      before_action -> { render_not_found if provider.nil? }
+
       def show
         @course = provider.courses.includes(
           :enrichments,
