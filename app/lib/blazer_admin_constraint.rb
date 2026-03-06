@@ -5,6 +5,6 @@ class BlazerAdminConstraint
     signin_user = Publish::Authentication::UserSession.load_from_session(request.session)
     return false if signin_user.blank?
 
-    User.with_blazer_access.kept.exists?(email: signin_user.email)
+    User.with_blazer_access.where(discarded_at: nil).exists?(email: signin_user.email)
   end
 end

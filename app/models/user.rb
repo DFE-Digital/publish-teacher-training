@@ -1,22 +1,39 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  include Discard::Model
   include PgSearch::Model
 
   before_save :downcase_email, :strip_email_whitespace
 
-  has_many :organisation_users
+  has_many :organisation_users, dependent: :destroy
 
   # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
   has_many :organisations, through: :organisation_users, dependent: :destroy
 
-  has_many :user_notifications, class_name: "UserNotification"
+  has_many :user_notifications, class_name: "UserNotification", dependent: :destroy
 
   has_many :providers_via_organisations, through: :organisations, source: :providers
 
-  has_many :user_permissions
+  has_many :user_permissions, dependent: :destroy
   has_many :providers, through: :user_permissions
+
+  has_many :created_course_enrichments,
+           class_name: "CourseEnrichment",
+           foreign_key: :created_by_user_id,
+           dependent: :nullify,
+           inverse_of: false
+
+  has_many :updated_course_enrichments,
+           class_name: "CourseEnrichment",
+           foreign_key: :updated_by_user_id,
+           dependent: :nullify,
+           inverse_of: false
+
+  has_many :providers_onboarding_form_requests,
+           class_name: "ProvidersOnboardingFormRequest",
+           foreign_key: :support_agent_id,
+           dependent: :nullify,
+           inverse_of: :support_agent
 
   scope :admins, -> { where(admin: true) }
   scope :non_admins, -> { where.not(admin: true) }
