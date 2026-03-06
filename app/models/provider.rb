@@ -28,10 +28,10 @@ class Provider < ApplicationRecord
 
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
 
-  has_many :users_via_organisation, -> { kept }, through: :organisations, source: :users
+  has_many :users_via_organisation, -> { where(discarded_at: nil) }, through: :organisations, source: :users
 
   has_many :user_permissions
-  has_many :users, -> { kept }, through: :user_permissions
+  has_many :users, -> { where(discarded_at: nil) }, through: :user_permissions
 
   has_many :sites, -> { where(site_type: :school).kept }, inverse_of: :provider
   has_many :study_sites, -> { where(site_type: :study_site).kept }, inverse_of: :provider, class_name: "Site"

@@ -39,7 +39,6 @@ private
   end
 
   def and_the_user_is_deleted
-    @user_to_delete.reload
     expect(User.exists?(id: @user_to_delete.id)).to be false
   end
 end
