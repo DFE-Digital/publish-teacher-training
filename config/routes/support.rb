@@ -110,8 +110,9 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
   end
   resources :candidates, only: %i[index] do
     member do
-      get :details
-      get :saved_courses
+      get :details, to: "candidate/details#show"
+      get :saved_courses, to: "candidate/saved_courses#index"
+      get :notes, to: "candidate/notes#index"
       get :delete
       delete :delete, to: "candidates#destroy"
     end

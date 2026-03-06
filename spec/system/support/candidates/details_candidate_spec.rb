@@ -11,6 +11,22 @@ RSpec.describe "Support console Candidates details" do
     then_i_see_the_details_of_the_candidate
   end
 
+  scenario "user sees tabs to saved courses and notes" do
+    when_a_candidates_exist
+    and_i_visit_the_candidate_details
+
+    expect(page).to have_link("Saved courses", href: saved_courses_support_candidate_path(@candidate))
+    expect(page).to have_link("Notes", href: notes_support_candidate_path(@candidate))
+  end
+
+  scenario "user sees the last login date when a session exists" do
+    @candidate = create(:candidate, :logged_in)
+
+    and_i_visit_the_candidate_details
+
+    expect(page).to have_content(@candidate.sessions.last.created_at.to_fs(:govuk_date_and_time))
+  end
+
   def when_a_candidates_exist
     @candidate = create(:candidate)
   end

@@ -11,6 +11,28 @@ RSpec.describe "Support console Candidates saved courses" do
     then_i_see_the_saved_courses_of_the_candidate
   end
 
+  scenario "user sees an empty state when candidate has no saved courses" do
+    @candidate = create(:candidate)
+
+    and_i_visit_the_candidate_details
+
+    expect(page).to have_text(/This candidate hasn.?t saved any courses yet\./)
+  end
+
+  scenario "saved courses are ordered by most recently saved first" do
+    @candidate = create(:candidate)
+    older = create(:saved_course, candidate: @candidate, created_at: 2.days.ago)
+    newer = create(:saved_course, candidate: @candidate, created_at: 1.day.ago)
+
+    and_i_visit_the_candidate_details
+
+    within("table tbody") do
+      rows = all("tr")
+      expect(rows.first).to have_text(newer.course.name)
+      expect(rows.last).to have_text(older.course.name)
+    end
+  end
+
   def when_a_candidates_exist
     @candidate = create(:candidate)
 
