@@ -1,4 +1,4 @@
-FROM ruby:3.4.8-alpine3.23 AS middleman
+FROM ruby:3.4.8-alpine3.22 AS middleman
 RUN apk add --no-cache libxml2
 RUN apk add --update --no-cache npm git build-base
 
@@ -16,7 +16,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:3.4.8-alpine3.23
+FROM ruby:3.4.8-alpine3.22
 
 RUN apk add --no-cache libxml2 yaml-dev
 
