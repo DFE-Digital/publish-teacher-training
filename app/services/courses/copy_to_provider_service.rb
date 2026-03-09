@@ -26,7 +26,9 @@ module Courses
         year_differential                                   = new_course.recruitment_cycle.year.to_i - course.recruitment_cycle.year.to_i
         new_course.applications_open_from                   = adjusted_applications_open_from_date(course, year_differential)
         new_course.start_date                               = course.start_date + year_differential.year
-        new_course.subjects                                 = course.subjects
+        course.course_subjects.each do |cs|
+          new_course.course_subjects.build(subject_id: cs.subject_id, position: cs.position)
+        end
         new_course.can_sponsor_skilled_worker_visa          = course.can_sponsor_skilled_worker_visa
         new_course.can_sponsor_student_visa                 = course.can_sponsor_student_visa
         new_course.visa_sponsorship_application_deadline_at = nil # We can't currently predict how to carry this value over. Provider must set it again

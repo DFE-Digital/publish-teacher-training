@@ -47,9 +47,6 @@ module Publish
 
           elsif course.errors.none? && course_subjects_form.save!
             course_updated_message(section_key)
-            # TODO: move this to the form?
-            course.update(master_subject_id: params[:course][:master_subject_id])
-            course.update(name: course.generate_name)
             course.update(campaign_name: nil) unless course.master_subject_id == SecondarySubject.physics.id
 
             redirect_to(
