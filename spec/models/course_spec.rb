@@ -113,99 +113,17 @@ describe Course do
     it { is_expected.to have_many(:saved_by_candidates).through(:saved_courses).source(:candidate) }
 
     describe "course_subjects" do
-      context "Adding subjects to a new course" do
-        let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
-        let(:further_education) { find_or_create(:further_education_subject) }
-        let(:english) { find_or_create(:secondary_subject, :english) }
-        let(:maths) { find_or_create(:secondary_subject, :mathematics) }
-
-        context "Primary course" do
-          let(:course) { build(:course, level: "primary", subjects: []) }
-
-          it "Does not assign a position" do
-            course.course_subjects.build(subject: primary_with_mathematics)
-
-            expect(course.course_subjects.first.position).to be_nil
-          end
-        end
-
-        context "Further Education" do
-          let(:course) { build(:course, level: "further_education", subjects: []) }
-
-          it "Does not assign a position" do
-            course.course_subjects.build(subject: further_education)
-
-            expect(course.course_subjects.first.position).to be_nil
-          end
-        end
-
-        context "Secondary course" do
-          let(:course) { build(:course, level: "secondary", course_subjects: []) }
-
-          # The Course factory adds subjects to the course
-          # and I can't see how else to prevent the course having courses
-          before { course.subjects.destroy_all }
-
-          it "Assigns position 0 to a single secondary subject" do
-            course.course_subjects.build(subject: english)
-            expect(course.course_subjects.first.position).to eq(0)
-          end
-
-          it "Assigns position 0,1 to two secondary subjects in the order they are given" do
-            course.course_subjects.build(subject: maths)
-            course.course_subjects.build(subject: english)
-            course_subjects = course.course_subjects
-
-            expect(course_subjects[0].position).to eq(0)
-            expect(course_subjects[1].position).to eq(1)
-          end
-
-          it "Doesnt assign a position to languages" do
-            course.course_subjects.build(subject: modern_languages)
-            course.course_subjects.build(subject: french)
-
-            expect(course.course_subjects[0].position).to eq(0)
-            expect(course.course_subjects[1].position).to be_nil
-          end
-        end
-      end
-
-      context "Adding subjects to an existing course" do
-        let(:english) { find_or_create(:secondary_subject, :english) }
-        let(:maths) { find_or_create(:secondary_subject, :mathematics) }
-
-        context "When the existing course has no priorities" do
-          it "Does not assign a priority to the new subject" do
-            course = build(:course, level: "secondary", subjects: [maths])
-            course.course_subjects.first.position = nil
-
-            course.subjects << english
-            expect(course.course_subjects.map(&:position)).to eq([nil, nil])
-          end
-        end
-
-        context "When the existing course has a modern language subject with languages" do
-          it "Assigns the priority to the new secondary subject" do
-            course = build(:course, level: "secondary", subjects: [modern_languages, french])
-            course.subjects << english
-
-            expect(course.course_subjects.last.position).to eq(1)
-          end
-        end
-      end
-
-      it "Orders course subjects by their position" do
+      it "orders course subjects by their position" do
         english = find_or_create(:secondary_subject, :english)
         maths = find_or_create(:secondary_subject, :mathematics)
 
-        course = build(:course, level: "secondary", subjects: [maths, english])
+        course = build(:course, level: "secondary", subjects: [])
+        Courses::AssignSubjectsService.call(course:, subject_ids: [maths.id, english.id])
         course.save!
         course.reload
 
-        subjects = course.subjects
-
-        expect(subjects.first).to eq(maths)
-        expect(subjects.second).to eq(english)
+        expect(course.subjects.first).to eq(maths)
+        expect(course.subjects.second).to eq(english)
       end
     end
 
@@ -2103,8 +2021,9 @@ describe Course do
 
     context "when course has two subjects" do
       it "set the subordinate subject id to the second subjects_id" do
+        master_subject = course.subjects.first
         subordinate_subject = find_or_create(:secondary_subject, :physics)
-        course.subjects << subordinate_subject
+        Courses::AssignSubjectsService.call(course:, subject_ids: [master_subject.id, subordinate_subject.id])
         expect(course.reload).to have_attributes({ subordinate_subject_id: subordinate_subject.id })
       end
     end
