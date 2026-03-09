@@ -76,7 +76,7 @@ module Publish
     private
 
       def updated_subject_list
-        @updated_subject_list ||= selected_non_language_subjects_ids.concat(selected_language_subjects_ids)
+        @updated_subject_list ||= selected_non_language_subjects_ids + selected_language_subjects_ids
       end
 
       def course_subjects_form
@@ -113,9 +113,9 @@ module Publish
 
       def build_course_params
         build_new_course # to get languages edit_options
-        params[:course][:subjects_ids] = selected_non_language_subject_ids
-        params[:course][:subjects_ids] += params[:course][:language_ids] if params[:course][:language_ids]
-        params[:course].delete(:language_ids)
+        language_ids = params[:course].delete(:language_ids) || []
+        non_language_ids = selected_non_language_subject_ids
+        params[:course][:subjects_ids] = non_language_ids + language_ids
       end
 
       def non_language_subject_ids
@@ -123,7 +123,7 @@ module Publish
       end
 
       def selected_non_language_subject_ids
-        non_language_subject_ids & params[:course][:subjects_ids]
+        params[:course][:subjects_ids] & non_language_subject_ids
       end
 
       def design_technology_subject_id
