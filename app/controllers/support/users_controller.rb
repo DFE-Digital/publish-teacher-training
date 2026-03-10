@@ -37,11 +37,8 @@ module Support
     end
 
     def destroy
-      if user.destroy!
-        redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: "User successfully deleted" }
-      else
-        redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: "This user has already been deleted" }
-      end
+      user.destroy!
+      redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: "User successfully deleted" }
     end
 
   private
