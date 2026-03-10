@@ -13,8 +13,7 @@ module Shared
                    :has_fees?,
                    :financial_support, to: :course
 
-          delegate :excluded_from_bursary?,
-                   :bursary_only?,
+          delegate :bursary_only?,
                    :has_scholarship_and_bursary?, to: :funding_view
 
           def initialize(course, enrichment)

@@ -4,7 +4,7 @@ class CourseFunding::View
   include ActiveSupport::NumberHelper
 
   delegate :has_bursary?, :has_scholarship?, :has_scholarship_and_bursary?,
-           :bursary_only?, :excluded_from_bursary?, :has_early_career_payments?,
+           :bursary_only?, :has_early_career_payments?,
            :max_bursary_amount, :max_scholarship_amount, :bursary_amount,
            :scholarship_amount, :bursary_eligible_subjects?,
            :scholarship_eligible_subjects?, :non_uk_funding_available?,
@@ -35,7 +35,7 @@ class CourseFunding::View
   end
 
   def financial_incentive_details
-    financial_incentive = course.financial_incentives.first
+    financial_incentive = course_funding.financial_incentive
     formatted_bursary = number_to_currency(financial_incentive&.bursary_amount)
     formatted_scholarship = number_to_currency(financial_incentive&.scholarship)
 

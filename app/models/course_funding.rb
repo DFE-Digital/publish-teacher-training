@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
 class CourseFunding
-  # Course name patterns excluded from bursary despite subject eligibility.
-  # Only applies to courses with 2 subjects and "with" in the name.
-  BURSARY_EXCLUDED_COURSE_PATTERNS = [
-    /^Drama/,
-    /^Media Studies/,
-    /^PE/,
-    /^Physical/,
-  ].freeze
-
   attr_reader :course
 
   def initialize(course)
@@ -17,9 +8,7 @@ class CourseFunding
   end
 
   def financial_incentive
-    # Ignore "modern languages" as financial incentives
-    # differ based on the language selected
-    course.subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first&.financial_incentive
+    funding_relevant_subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first&.financial_incentive
   end
 
   def bursary_amount
@@ -58,18 +47,12 @@ class CourseFunding
     has_bursary? && !has_scholarship?
   end
 
-  def excluded_from_bursary?
-    course.subjects.present? &&
-      course.subjects.count == 2 &&
-      has_excluded_course_name?
-  end
-
   def bursary_eligible_subjects?
-    course.subjects.any? { |s| s.financial_incentive&.non_uk_bursary_eligible? }
+    funding_relevant_subjects.any? { |s| s.financial_incentive&.non_uk_bursary_eligible? }
   end
 
   def scholarship_eligible_subjects?
-    course.subjects.any? { |s| s.financial_incentive&.non_uk_scholarship_eligible? }
+    funding_relevant_subjects.any? { |s| s.financial_incentive&.non_uk_scholarship_eligible? }
   end
 
   def non_uk_funding_available?
@@ -78,7 +61,7 @@ class CourseFunding
 
   # return the downcased subject name if the courses subject has a scholarship
   def subject_with_scholarship
-    @subject_with_scholarship ||= course.subjects
+    @subject_with_scholarship ||= funding_relevant_subjects
       .find { |s| s.financial_incentive&.scholarship.present? }
       &.subject_name&.downcase
   end
@@ -86,14 +69,26 @@ class CourseFunding
 private
 
   def find_max_funding_for(attribute)
-    course.subjects
+    subjects = funding_relevant_subjects
+    subjects
       .filter_map { |s| s.financial_incentive&.public_send(attribute)&.to_i }
       .max.to_s
   end
 
-  def has_excluded_course_name?
-    return false unless /with/.match?(course.name)
+  def funding_relevant_subjects
+    return course.subjects if course.subordinate_subject_id.blank?
 
-    BURSARY_EXCLUDED_COURSE_PATTERNS.any? { |e| e.match?(course.name) }
+    subjects = course.subjects.reject { |s| s.id == course.subordinate_subject_id }
+
+    if modern_languages_master?
+      language_subjects = subjects.select { |s| s.is_a?(ModernLanguagesSubject) }
+      return language_subjects if language_subjects.present?
+    end
+
+    subjects
+  end
+
+  def modern_languages_master?
+    course.master_subject_id == SecondarySubject.modern_languages&.id
   end
 end
