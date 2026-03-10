@@ -10,8 +10,6 @@
   <% end %>
   <% if salaried? %>
     <%= render partial: "shared/courses/financial_support/salaried", locals: { course: @course } %>
-  <% elsif excluded_from_bursary? %>
-    <%= render partial: "shared/courses/financial_support/loan" %>
   <% elsif bursary_only? %>
     <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(funding_view) %>
   <% elsif has_scholarship_and_bursary? %>

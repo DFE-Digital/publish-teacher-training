@@ -16,7 +16,6 @@ describe CourseFunding::View do
          has_scholarship?
          has_scholarship_and_bursary?
          bursary_only?
-         excluded_from_bursary?
          has_early_career_payments?
          max_bursary_amount
          max_scholarship_amount
@@ -96,11 +95,7 @@ describe CourseFunding::View do
       end
 
       context "course has both bursary and scholarship" do
-        let(:financial_incentive) { build_stubbed(:financial_incentive, scholarship: "2000", bursary_amount: "3000") }
-
-        before do
-          allow(course).to receive(:financial_incentives).and_return([financial_incentive])
-        end
+        let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000", scholarship: "2000")]) }
 
         it "returns scholarship and bursary details" do
           expect(view.financial_incentive_details).to eq("Scholarships of £2,000 and bursaries of £3,000 are available")
@@ -108,11 +103,7 @@ describe CourseFunding::View do
       end
 
       context "course only has bursary" do
-        let(:financial_incentive) { build_stubbed(:financial_incentive, bursary_amount: "3000") }
-
-        before do
-          allow(course).to receive(:financial_incentives).and_return([financial_incentive])
-        end
+        let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000")]) }
 
         it "returns bursary details" do
           expect(view.financial_incentive_details).to eq("Bursaries of £3,000 available")

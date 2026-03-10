@@ -3,29 +3,47 @@
 require "rails_helper"
 
 describe CourseFunding do
-  describe "constants" do
-    describe "BURSARY_EXCLUDED_COURSE_PATTERNS" do
-      it "contains the expected patterns" do
-        expect(described_class::BURSARY_EXCLUDED_COURSE_PATTERNS).to eq(
-          [/^Drama/, /^Media Studies/, /^PE/, /^Physical/],
+  shared_context "modern languages with subordinate subject" do
+    let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
+    let(:mandarin) do
+      build(:modern_languages_subject, :mandarin).tap do |s|
+        s.financial_incentive = FinancialIncentive.new(
+          bursary_amount: "20000",
+          scholarship: "22000",
+          non_uk_bursary_eligible: true,
+          non_uk_scholarship_eligible: true,
         )
       end
-
-      it "matches expected course names" do
-        expect(described_class::BURSARY_EXCLUDED_COURSE_PATTERNS.first).to match("Drama with English")
-        expect(described_class::BURSARY_EXCLUDED_COURSE_PATTERNS[1]).to match("Media Studies with English")
-        expect(described_class::BURSARY_EXCLUDED_COURSE_PATTERNS[2]).to match("PE with Mathematics")
-        expect(described_class::BURSARY_EXCLUDED_COURSE_PATTERNS[3]).to match("Physical Education with Mathematics")
-      end
-
-      it "does not match non-excluded course names" do
-        expect(described_class::BURSARY_EXCLUDED_COURSE_PATTERNS.first).not_to match("Mathematics with Physics")
-      end
-
-      it "is frozen" do
-        expect(described_class::BURSARY_EXCLUDED_COURSE_PATTERNS).to be_frozen
-      end
     end
+    let(:mathematics) do
+      build(:secondary_subject, bursary_amount: "29000", scholarship: "31000",
+                                non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
+    end
+    let(:course) do
+      build(:course, :secondary, name: "Modern Languages (Mandarin) with Mathematics",
+                                 subjects: [modern_languages, mandarin, mathematics],
+                                 master_subject_id: modern_languages.id,
+                                 subordinate_subject_id: mathematics.id)
+    end
+    let(:funding) { described_class.new(course) }
+  end
+
+  shared_context "course with subordinate subject" do
+    let(:master) do
+      build(:secondary_subject, subject_name: "Drama")
+    end
+    let(:subordinate) do
+      build(:secondary_subject, bursary_amount: "30000", scholarship: "26000",
+                                non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
+    end
+    let(:course_name) { "Drama with English" }
+    let(:course) do
+      build(:course, :secondary, name: course_name,
+                                 subjects: [master, subordinate],
+                                 master_subject_id: master.id,
+                                 subordinate_subject_id: subordinate.id)
+    end
+    let(:funding) { described_class.new(course) }
   end
 
   describe "#financial_incentive" do
@@ -56,6 +74,14 @@ describe CourseFunding do
 
       expect(funding.financial_incentive.bursary_amount).to be_nil
     end
+
+    context "when Modern Languages is the master subject" do
+      include_context "modern languages with subordinate subject"
+
+      it "ignores the subordinate subject's financial incentive" do
+        expect(funding.financial_incentive).to eq(mandarin.financial_incentive)
+      end
+    end
   end
 
   describe "#bursary_amount" do
@@ -72,6 +98,14 @@ describe CourseFunding do
 
       expect(described_class.new(course).bursary_amount).to be_nil
     end
+
+    context "when Modern Languages is the master subject" do
+      include_context "modern languages with subordinate subject"
+
+      it "returns the language subject's bursary, not the subordinate's" do
+        expect(funding.bursary_amount).to eq("20000")
+      end
+    end
   end
 
   describe "#scholarship_amount" do
@@ -80,6 +114,14 @@ describe CourseFunding do
       course = build(:course, subjects: [subject])
 
       expect(described_class.new(course).scholarship_amount).to eq("2000")
+    end
+
+    context "when Modern Languages is the master subject" do
+      include_context "modern languages with subordinate subject"
+
+      it "returns the language subject's scholarship, not the subordinate's" do
+        expect(funding.scholarship_amount).to eq("22000")
+      end
     end
   end
 
@@ -156,6 +198,22 @@ describe CourseFunding do
 
       expect(described_class.new(course).max_bursary_amount).to eq("4000")
     end
+
+    context "when Modern Languages is the master subject" do
+      include_context "modern languages with subordinate subject"
+
+      it "uses language subject bursaries, ignoring the subordinate subject" do
+        expect(funding.max_bursary_amount).to eq("20000")
+      end
+
+      it "uses the max across multiple language subjects" do
+        russian = build(:modern_languages_subject, :russian)
+        russian.financial_incentive = FinancialIncentive.new(bursary_amount: "25000")
+        course.subjects << russian
+
+        expect(funding.max_bursary_amount).to eq("25000")
+      end
+    end
   end
 
   describe "#max_scholarship_amount" do
@@ -165,6 +223,14 @@ describe CourseFunding do
       course = build(:course, :secondary, subjects: [mathematics, english])
 
       expect(described_class.new(course).max_scholarship_amount).to eq("4000")
+    end
+
+    context "when Modern Languages is the master subject" do
+      include_context "modern languages with subordinate subject"
+
+      it "uses language subject scholarships, ignoring the subordinate subject" do
+        expect(funding.max_scholarship_amount).to eq("22000")
+      end
     end
   end
 
@@ -184,48 +250,6 @@ describe CourseFunding do
     end
   end
 
-  describe "#excluded_from_bursary?" do
-    it "returns false for single-subject courses" do
-      course = build_stubbed(:course, name: "Mathematics")
-      allow(course).to receive(:subjects).and_return([build_stubbed(:secondary_subject)])
-
-      expect(described_class.new(course)).not_to be_excluded_from_bursary
-    end
-
-    context "course name contains 'with'" do
-      let(:english) { build_stubbed(:secondary_subject, bursary_amount: "30000") }
-      let(:drama) { build_stubbed(:secondary_subject, subject_name: "Drama") }
-      let(:subjects) { [english, drama] }
-
-      it "excludes 'Drama with English'" do
-        course = build_stubbed(:course, name: "Drama with English")
-        allow(course).to receive(:subjects).and_return(subjects)
-
-        expect(described_class.new(course)).to be_excluded_from_bursary
-      end
-
-      it "does not exclude 'English with Drama'" do
-        course = build_stubbed(:course, name: "English with Drama")
-        allow(course).to receive(:subjects).and_return(subjects)
-
-        expect(described_class.new(course)).not_to be_excluded_from_bursary
-      end
-    end
-
-    context "course name contains 'and'" do
-      let(:english) { build_stubbed(:secondary_subject, bursary_amount: "30000") }
-      let(:drama) { build_stubbed(:secondary_subject, subject_name: "Drama") }
-      let(:subjects) { [english, drama] }
-
-      it "does not exclude 'Drama and English'" do
-        course = build_stubbed(:course, name: "Drama and English")
-        allow(course).to receive(:subjects).and_return(subjects)
-
-        expect(described_class.new(course)).not_to be_excluded_from_bursary
-      end
-    end
-  end
-
   describe "#bursary_eligible_subjects?" do
     it "returns true when course has a subject with non_uk_bursary_eligible flag" do
       italian = build(:secondary_subject, subject_name: "Italian", non_uk_bursary_eligible: true)
@@ -239,6 +263,16 @@ describe CourseFunding do
       course = build(:course, subjects: [maths])
 
       expect(described_class.new(course)).not_to be_bursary_eligible_subjects
+    end
+
+    context "when Modern Languages is the master subject" do
+      include_context "modern languages with subordinate subject"
+
+      it "ignores the subordinate subject's eligibility" do
+        mandarin.financial_incentive.non_uk_bursary_eligible = false
+
+        expect(funding).not_to be_bursary_eligible_subjects
+      end
     end
   end
 
@@ -255,6 +289,16 @@ describe CourseFunding do
       course = build(:course, subjects: [maths])
 
       expect(described_class.new(course)).not_to be_scholarship_eligible_subjects
+    end
+
+    context "when Modern Languages is the master subject" do
+      include_context "modern languages with subordinate subject"
+
+      it "ignores the subordinate subject's eligibility" do
+        mandarin.financial_incentive.non_uk_scholarship_eligible = false
+
+        expect(funding).not_to be_scholarship_eligible_subjects
+      end
     end
   end
 
@@ -281,6 +325,28 @@ describe CourseFunding do
     end
   end
 
+  describe "subordinate subject exclusion" do
+    context "when course has a subordinate subject" do
+      include_context "course with subordinate subject"
+
+      it "ignores the subordinate subject's bursary" do
+        expect(funding.max_bursary_amount).to eq("")
+      end
+
+      it "ignores the subordinate subject's scholarship" do
+        expect(funding.max_scholarship_amount).to eq("")
+      end
+
+      it "ignores the subordinate subject's non-UK bursary eligibility" do
+        expect(funding).not_to be_bursary_eligible_subjects
+      end
+
+      it "ignores the subordinate subject's non-UK scholarship eligibility" do
+        expect(funding).not_to be_scholarship_eligible_subjects
+      end
+    end
+  end
+
   describe "#subject_with_scholarship" do
     it "returns the downcased subject name for a subject with a scholarship" do
       physics = build(:secondary_subject, :physics, scholarship: "31000")
@@ -294,6 +360,14 @@ describe CourseFunding do
       course = build(:course, subjects: [history])
 
       expect(described_class.new(course).subject_with_scholarship).to be_nil
+    end
+
+    context "when Modern Languages is the master subject" do
+      include_context "modern languages with subordinate subject"
+
+      it "returns the language subject, not the subordinate" do
+        expect(funding.subject_with_scholarship).to eq("mandarin")
+      end
     end
   end
 end
