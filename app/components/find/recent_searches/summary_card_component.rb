@@ -28,7 +28,7 @@ module Find
       end
 
       def search_again_path
-        helpers.find_results_path(@recent_search.search_params)
+        helpers.find_results_path(@recent_search.search_params.merge(utm_source: "recent_searches"))
       end
 
     private

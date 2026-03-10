@@ -377,6 +377,7 @@ RSpec.describe "Recent searches", service: :find do
     uri = URI.parse(current_url)
     params = Rack::Utils.parse_nested_query(uri.query)
     expect(params["subjects"]).to include("C1")
+    expect(params["utm_source"]).to eq("recent_searches")
   end
 
   def when_i_click_clear_all
@@ -488,6 +489,7 @@ RSpec.describe "Recent searches", service: :find do
     params = Rack::Utils.parse_nested_query(uri.query)
     expect(params["provider_name"]).to eq("Test Provider (TP1)")
     expect(params["provider_code"]).to eq("TP1")
+    expect(params["utm_source"]).to eq("recent_searches")
   end
 
   def create_subject!(code, name)
