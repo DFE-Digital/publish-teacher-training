@@ -9,6 +9,7 @@ module Courses
         location
         formatted_address
         subject_code
+        subjects
         provider_code
         provider_name
       ].freeze

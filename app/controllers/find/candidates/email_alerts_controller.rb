@@ -3,6 +3,8 @@
 module Find
   module Candidates
     class EmailAlertsController < ApplicationController
+      include ::Courses::ActiveFilters::SummaryRowBuilder
+
       before_action :require_authentication, except: %i[unsubscribe_from_email confirm_unsubscribe_from_email]
 
       def index
@@ -12,15 +14,14 @@ module Find
       def new
         @search_params = search_params_from_request
         subject_names = resolve_subject_names(@search_params[:subjects])
-        @title = render_to_string(
-          Find::Courses::SearchTitleComponent.new(
-            subjects: subject_names,
-            location_name: @search_params[:location] || @search_params[:formatted_address],
-            radius: @search_params[:radius],
-            search_attributes: @search_params.to_h,
-          ),
-        ).strip
-        @filter_tags = extract_filter_tags(@search_params.to_h, subject_names:)
+        @title = Find::Courses::SearchTitleComponent.new(
+          subjects: subject_names,
+          location_name: @search_params[:location] || @search_params[:formatted_address],
+          radius: @search_params[:radius],
+          search_attributes: @search_params.to_h,
+        ).title_text
+        @summary_rows = build_summary_rows(@search_params.to_h, subject_names:)
+        @cancel_path = redirect_after_create
       end
 
       def create
@@ -31,18 +32,15 @@ module Find
 
         if alert
           subject_names = resolve_subject_names(alert.subjects)
-          title = if subject_names.any?
-                    subject_names.to_sentence
-                  elsif alert.location_name.present?
-                    "courses near #{alert.location_name}"
-                  else
-                    "courses"
-                  end
+          title = Find::Courses::SearchTitleComponent.new(
+            subjects: subject_names,
+            location_name: alert.location_name,
+            radius: alert.radius,
+            search_attributes: alert.search_attributes || {},
+          ).title_text
           flash[:success_with_body] = {
             "title" => t(".success_title"),
-            "body" => t(".success_body_html",
-                        title:,
-                        link: helpers.govuk_link_to(t(".view_email_alerts"), find_candidate_email_alerts_path)),
+            "body" => t(".success_body_html", title:),
           }
           redirect_to redirect_after_create
         else

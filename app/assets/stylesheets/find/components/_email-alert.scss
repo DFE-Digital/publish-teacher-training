@@ -1,17 +1,18 @@
-.app-summary-list--stacked {
-  .govuk-summary-list__row {
+.app-filter-alert__icon {
+  height: 1em;
+  fill: currentColor;
+}
+
+.app-email-alert-summary {
+  .app-summary-list__key {
     display: block;
+    padding: 0 !important;
+    width: 100%;
   }
 
-  .govuk-summary-list__key {
-    width: 100%;
-
-    padding-bottom: 0;
-  }
-
-  .govuk-summary-list__value {
-    width: 100%;
-
-    padding-top: 0;
+  .app-summary-list__value {
+    display: block;
+    padding: 0 !important;
+    margin-bottom: 15px;
   }
 }

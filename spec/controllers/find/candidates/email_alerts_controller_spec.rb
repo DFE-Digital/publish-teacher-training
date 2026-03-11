@@ -33,6 +33,43 @@ module Find
 
           expect(response).to have_http_status(:ok)
         end
+
+        context "with rendered views" do
+          render_views
+
+          it "shows summary rows with human-readable values without label prefixes" do
+            subject_area = SubjectArea.find_by!(typename: "SecondarySubject")
+            Subject.find_or_create_by!(subject_code: "C1") do |s|
+              s.subject_name = "Biology"
+              s.type = "SecondarySubject"
+              s.subject_area = subject_area
+            end
+
+            get :new, params: {
+              subjects: %w[C1],
+              qualifications: %w[qts qts_with_pgce_or_pgde],
+              start_date: %w[jan_to_aug september],
+            }
+
+            expect(response.body).to include("Biology")
+            expect(response.body).to include("QTS only")
+            expect(response.body).to include("QTS with PGCE or PGDE")
+            expect(response.body).not_to include("Qualification:")
+            expect(response.body).not_to include("Start date:")
+          end
+        end
+
+        it "sets cancel path to results page by default" do
+          get :new, params: { subjects: %w[C1], level: "secondary" }
+
+          expect(assigns(:cancel_path)).to eq(find_results_path(subjects: %w[C1], level: "secondary"))
+        end
+
+        it "sets cancel path to recent searches when return_to is recent_searches" do
+          get :new, params: { subjects: %w[C1], return_to: "recent_searches" }
+
+          expect(assigns(:cancel_path)).to eq(find_candidate_recent_searches_path)
+        end
       end
 
       describe "POST #create" do
