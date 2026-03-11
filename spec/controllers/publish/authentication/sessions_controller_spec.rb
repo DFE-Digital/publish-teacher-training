@@ -8,42 +8,41 @@ module Publish
       include DfESignInUserHelper
       let(:user) { create(:user) }
 
+      before do
+        request.host = URI(Settings.publish_url).host
+      end
+
       describe "#destroy" do
-        let(:request_destroy) do
-          session["user"] = {
-            "last_active_at" => Time.zone.now,
-            "email" => user.email,
-            "id_token" => "id_token",
-          }
-
-          post :destroy
-        end
-
         context "existing database user" do
-          it "redirects to the root page" do
-            request_destroy
+          before do
+            session_key = SecureRandom.hex(32)
+            user.sessions.create!(session_key:, id_token: "id_token")
+            cookies.signed[Settings.cookies.user_session.name] = session_key
+          end
+
+          it "redirects to the DfE Sign-In logout URL" do
+            post :destroy
             expect(response.location).to start_with("#{Settings.dfe_signin.issuer}/session/end")
+            expect(response.location).to include("id_token_hint=id_token")
             expect(response).to be_redirect
+          end
+
+          it "destroys the user's session record" do
+            expect { post :destroy }.to change { user.sessions.count }.from(1).to(0)
           end
         end
 
         context "non existing database user" do
-          let(:user) { build(:user) }
-
           it "redirects to the root page" do
-            request_destroy
+            post :destroy
             expect(response).to redirect_to(publish_root_path)
           end
         end
       end
 
       describe "#sign_out" do
-        let(:request_sign_out) do
-          post :sign_out
-        end
-
         it "redirects to the auth/dfe/signout" do
-          request_sign_out
+          post :sign_out
           expect(response).to redirect_to("/auth/dfe/signout")
         end
       end
@@ -55,13 +54,18 @@ module Publish
         end
 
         context "existing database user" do
-          it "creates a session for the signed in user" do
+          it "does not store user data in the cookie session" do
             request_callback
-            expect(session["user"]["sign_in_user_id"]).to eq(user.sign_in_user_id)
-            expect(session["user"]["email"]).to eq(user.email)
+            expect(session["user"]).to be_nil
+          end
 
-            expect(session["user"]["first_name"]).to eq(user.first_name)
-            expect(session["user"]["last_name"]).to eq(user.last_name)
+          it "creates a database session record" do
+            expect { request_callback }.to change { user.sessions.count }.by(1)
+          end
+
+          it "stores id_token in the database session" do
+            request_callback
+            expect(user.sessions.last.id_token).to eq("id_token")
           end
 
           it "redirects to the Publish root page" do
@@ -73,9 +77,8 @@ module Publish
         context "non existing database user" do
           let(:user) { build(:user) }
 
-          it "do not creates a session for the user" do
-            request_callback
-            expect(session["user"]).to be_nil
+          it "does not create a database session" do
+            expect { request_callback }.not_to change(Session, :count)
           end
 
           it "redirects to the sign in user not found page" do

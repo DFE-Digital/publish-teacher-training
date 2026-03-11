@@ -7,17 +7,21 @@ module Publish
     module UserSessions
       describe Update do
         describe ".call" do
-          let(:service) { described_class.call(user:, user_session:) }
+          let(:service) { described_class.call(user:, omniauth_payload:) }
 
           context "when user are valid" do
             let(:user) { create(:user) }
 
-            let(:user_session) do
+            let(:omniauth_payload) do
               template = build(:user)
-              UserSession.new(email: template.email,
-                              sign_in_user_id: template.sign_in_user_id,
-                              first_name: template.first_name,
-                              last_name: template.last_name)
+              {
+                "uid" => template.sign_in_user_id,
+                "info" => {
+                  "email" => template.email,
+                  "first_name" => template.first_name,
+                  "last_name" => template.last_name,
+                },
+              }
             end
 
             before do
@@ -26,10 +30,10 @@ module Publish
             end
 
             it "updates the user's details" do
-              expect(user.email).to eq(user_session.email)
-              expect(user.sign_in_user_id).to eq(user_session.sign_in_user_id)
-              expect(user.first_name).to eq(user_session.first_name)
-              expect(user.last_name).to eq(user_session.last_name)
+              expect(user.email).to eq(omniauth_payload["info"]["email"].downcase)
+              expect(user.sign_in_user_id).to eq(omniauth_payload["uid"])
+              expect(user.first_name).to eq(omniauth_payload["info"]["first_name"])
+              expect(user.last_name).to eq(omniauth_payload["info"]["last_name"])
             end
 
             it "is successful" do
@@ -40,11 +44,15 @@ module Publish
           context "when the user's details are invalid" do
             let(:user) { create(:user) }
 
-            let(:user_session) do
-              UserSession.new(email: nil,
-                              sign_in_user_id: nil,
-                              first_name: nil,
-                              last_name: nil)
+            let(:omniauth_payload) do
+              {
+                "uid" => nil,
+                "info" => {
+                  "email" => nil,
+                  "first_name" => nil,
+                  "last_name" => nil,
+                },
+              }
             end
 
             before do
@@ -53,10 +61,10 @@ module Publish
             end
 
             it "does not update the user's details" do
-              expect(user.email).not_to eq(user_session.email)
-              expect(user.sign_in_user_id).not_to eq(user_session.sign_in_user_id)
-              expect(user.first_name).not_to eq(user_session.first_name)
-              expect(user.last_name).not_to eq(user_session.last_name)
+              expect(user.email).not_to eq(omniauth_payload["info"]["email"])
+              expect(user.sign_in_user_id).not_to eq(omniauth_payload["uid"])
+              expect(user.first_name).not_to eq(omniauth_payload["info"]["first_name"])
+              expect(user.last_name).not_to eq(omniauth_payload["info"]["last_name"])
             end
 
             it "is unsuccessful" do

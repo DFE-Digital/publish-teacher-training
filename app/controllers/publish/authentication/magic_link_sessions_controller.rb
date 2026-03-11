@@ -12,7 +12,7 @@ module Publish
 
       def create
         update_user
-        set_user_session
+        start_user_session(user)
         record_first_login
         send_welcome_email
 
@@ -63,15 +63,6 @@ module Publish
           magic_link_token: nil,
           magic_link_token_sent_at: nil,
         )
-      end
-
-      def set_user_session
-        session["user"] = {
-          "email" => user.email,
-          "first_name" => user.first_name,
-          "last_name" => user.last_name,
-          "last_active_at" => Time.zone.now,
-        }
       end
 
       def record_first_login
