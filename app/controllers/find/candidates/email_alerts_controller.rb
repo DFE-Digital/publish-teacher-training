@@ -100,8 +100,10 @@ module Find
 
       def existing_alert_for?(search_params)
         attrs = search_params.to_h.stringify_keys.except("return_to")
-        subjects = Array(attrs.delete("subjects"))
-        @candidate.email_alerts.active.any? { |a| a.matches_search?(subjects:, search_attributes: attrs) }
+        subjects = Array(attrs.delete("subjects")).sort
+        @candidate.email_alerts.active
+                  .where(subjects: subjects, search_attributes: attrs)
+                  .exists?
       end
 
       def find_alert_by_token
