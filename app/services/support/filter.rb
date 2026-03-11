@@ -60,6 +60,12 @@ module Support
       records.accredited
     end
 
+    def has_email_alerts(records, has_email_alerts_param)
+      return records unless has_email_alerts_param == "on"
+
+      records.joins(:email_alerts).where(candidate_email_alerts: { unsubscribed_at: nil }).distinct
+    end
+
     def status_filter(records, status)
       return records unless status
 
@@ -85,6 +91,7 @@ module Support
       filtered_records = course_search(filtered_records, filter_params[:course_search]) if filtered_records.respond_to?(:course_search)
       filtered_records = user_type(filtered_records, filter_params[:user_type]) if filtered_records.respond_to?(:admins)
       filtered_records = status_filter(filtered_records, filter_params[:status]) if filtered_records.respond_to?(:with_discarded) || filtered_records.respond_to?(:kept)
+      filtered_records = has_email_alerts(filtered_records, filter_params[:has_email_alerts]) if filtered_records.klass.reflect_on_association(:email_alerts)
 
       filtered_records
     end

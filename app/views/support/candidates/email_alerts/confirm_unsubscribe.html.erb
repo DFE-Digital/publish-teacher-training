@@ -1,0 +1,35 @@
+<%= render PageTitle.new(title: t(".page_title")) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_candidate_email_alerts_path(@candidate)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= t(".heading") %>
+    </h1>
+
+    <% subject_names = Subject.where(subject_code: @email_alert.subjects).pluck(:subject_name) %>
+    <% rows = build_summary_rows(@email_alert.search_attributes, subject_names:) %>
+    <% if rows.present? %>
+      <%= govuk_summary_list do |list| %>
+        <% rows.each do |summary_row| %>
+          <% list.with_row do |row| %>
+            <% row.with_key text: summary_row[:label] %>
+            <% row.with_value text: summary_row[:value] %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= govuk_button_to t(".submit"),
+        confirm_unsubscribe_support_candidate_email_alert_path(@candidate, @email_alert),
+        method: :delete,
+        class: "govuk-button--warning" %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t(".cancel"), support_candidate_email_alerts_path(@candidate)) %>
+    </p>
+  </div>
+</div>
