@@ -153,7 +153,9 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Get email alerts for")
     expect(page).to have_content("We'll email you weekly")
     expect(page).to have_button("Set up email alert")
-    expect(page).to have_link("Cancel")
+    cancel_link = page.find_link("Cancel")
+    expect(cancel_link[:href]).not_to be_blank
+    expect(cancel_link[:href]).not_to eq("javascript:history.back()")
   end
 
   def when_i_click_set_up_email_alert
@@ -263,7 +265,7 @@ RSpec.describe "Email alerts", service: :find do
   end
 
   def when_i_click_set_up_email_alert_on_recent_search
-    click_link_or_button "Set up email alert"
+    click_link_or_button "Email me courses like this"
   end
 
   def and_i_have_an_alert_with_many_filters
@@ -289,7 +291,7 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Within 15 miles of Manchester")
     expect(page).to have_content("Visa sponsorship")
     expect(page).to have_content("Salary")
-    expect(page).to have_content("SEND courses")
+    expect(page).to have_content("SEND specialism")
   end
 
   def create_subject!(code, name)
