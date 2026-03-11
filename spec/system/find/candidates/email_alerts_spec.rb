@@ -118,6 +118,24 @@ RSpec.describe "Email alerts", service: :find do
     then_i_do_not_see_email_alert_link
   end
 
+  scenario "Hides email alert link on recent searches with many filters" do
+    when_i_sign_in
+    and_i_have_a_recent_search_with_many_filters
+    and_i_have_an_alert_matching_many_filters
+    when_i_visit_recent_searches
+
+    then_i_do_not_see_email_alert_link
+  end
+
+  scenario "Shows email alert link when alert has been unsubscribed" do
+    when_i_sign_in
+    and_i_have_a_recent_search
+    and_i_have_an_unsubscribed_alert_matching_recent_search
+    when_i_visit_recent_searches
+
+    then_i_see_email_alert_link
+  end
+
   scenario "Redirects from new page when an active alert already exists for the search params" do
     when_i_sign_in
     and_i_have_an_existing_alert_for_biology
@@ -125,6 +143,33 @@ RSpec.describe "Email alerts", service: :find do
 
     then_i_am_redirected_away_from_new_page
     then_i_see_already_subscribed_notice
+  end
+
+  scenario "Creating an alert via new page then revisiting redirects" do
+    when_i_sign_in
+    when_i_visit_new_email_alert_with_params
+    when_i_click_set_up_email_alert
+
+    then_i_see_success_banner
+    when_i_visit_new_email_alert_with_params
+
+    then_i_am_redirected_away_from_new_page
+    then_i_see_already_subscribed_notice
+  end
+
+  scenario "Creating an alert from recent searches then link is hidden" do
+    when_i_sign_in
+    and_i_have_a_recent_search_with_many_filters
+    when_i_visit_recent_searches
+    when_i_click_set_up_email_alert_on_recent_search
+
+    then_i_see_the_confirmation_page
+    when_i_click_set_up_email_alert
+
+    then_the_email_alert_is_created
+    when_i_visit_recent_searches
+
+    then_i_do_not_see_email_alert_link
   end
 
   def when_i_sign_in
@@ -310,6 +355,54 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Visa sponsorship")
     expect(page).to have_content("Salary")
     expect(page).to have_content("SEND specialism")
+  end
+
+  def many_filters_search_attributes
+    {
+      "level" => "further_education",
+      "send_courses" => "true",
+      "qualifications" => %w[qts qts_with_pgce_or_pgde],
+      "minimum_degree_required" => "two_one",
+      "can_sponsor_visa" => "true",
+      "interview_location" => "online",
+      "start_date" => %w[jan_to_aug september oct_to_jul],
+    }
+  end
+
+  def and_i_have_a_recent_search_with_many_filters
+    %w[C1 F1 W1 L1 13 W3].zip(%w[Chemistry Design\ and\ technology Art\ and\ design Citizenship Drama Further\ education]).each do |code, name|
+      create_subject!(code, name)
+    end
+
+    create(
+      :recent_search,
+      find_candidate: candidate,
+      subjects: %w[13 C1 F1 L1 W1 W3],
+      search_attributes: many_filters_search_attributes,
+    )
+  end
+
+  def and_i_have_an_alert_matching_many_filters
+    create(
+      :email_alert,
+      candidate:,
+      subjects: %w[13 C1 F1 L1 W1 W3],
+      search_attributes: many_filters_search_attributes,
+    )
+  end
+
+  def and_i_have_an_unsubscribed_alert_matching_recent_search
+    alert = create(
+      :email_alert,
+      candidate:,
+      subjects: %w[C1],
+      search_attributes: { "level" => "secondary" },
+    )
+    alert.unsubscribe!
+  end
+
+  def then_i_see_email_alert_link
+    expect(page).to have_link("Email me courses like this")
   end
 
   def and_i_have_an_alert_matching_recent_search
