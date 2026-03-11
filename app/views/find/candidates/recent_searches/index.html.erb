@@ -10,7 +10,7 @@
       <%= render Find::RecentSearches::EmptyStateComponent.new %>
     <% else %>
       <% @recent_searches.each do |recent_search| %>
-        <%= render Find::RecentSearches::SummaryCardComponent.new(recent_search:, subject_names_by_code: @subject_names_by_code) %>
+        <%= render Find::RecentSearches::SummaryCardComponent.new(recent_search:, subject_names_by_code: @subject_names_by_code, active_email_alerts: @active_email_alerts) %>
       <% end %>
 
       <%= button_to t(".clear_all"),

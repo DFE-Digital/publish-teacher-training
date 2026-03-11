@@ -11,6 +11,11 @@ class Candidate
     scope :active, -> { where(unsubscribed_at: nil) }
     scope :subscribed, -> { active }
 
+    def matches_search?(subjects:, search_attributes:)
+      self.subjects.sort == Array(subjects).sort &&
+        self.search_attributes == search_attributes.to_h.stringify_keys.except("return_to")
+    end
+
     def search_params
       params = search_attributes.symbolize_keys
       params[:subjects] = subjects if subjects.present?

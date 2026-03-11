@@ -8,6 +8,7 @@ en:
           search_html: "%{link} to set up an email alert for similar courses."
           search_link_text: Search for a course
         new:
+          already_subscribed: You already have an email alert for this search
           page_title: "Get email alerts for %{title}"
           heading_html: "Get email alerts for %{title}"
           intro: "We'll email you weekly when new courses are added that meet these criteria:"

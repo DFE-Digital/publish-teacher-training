@@ -3,11 +3,12 @@
 module Find
   module RecentSearches
     class SummaryCardComponent < ViewComponent::Base
-      def initialize(recent_search:, subject_names_by_code: {})
+      def initialize(recent_search:, subject_names_by_code: {}, active_email_alerts: [])
         super()
         @recent_search = recent_search
         @attrs = recent_search.search_attributes || {}
         @subject_names_by_code = subject_names_by_code
+        @active_email_alerts = active_email_alerts
       end
 
       def title
@@ -33,6 +34,11 @@ module Find
 
       def email_alert_path
         helpers.new_find_candidate_email_alert_path(@recent_search.search_params.merge(return_to: "recent_searches"))
+      end
+
+      def show_email_alert_link?
+        FeatureFlag.active?(:email_alerts) &&
+          !@active_email_alerts.any? { |a| a.matches_search?(subjects: @recent_search.subjects, search_attributes: @attrs) }
       end
 
     private
