@@ -44,7 +44,7 @@
           <% row.with_cell do %>
             <% subject_names = Subject.where(subject_code: alert.subjects).pluck(:subject_name) %>
             <% rows = build_summary_rows(alert.search_attributes, subject_names:) %>
-            <% rows.reject { |r| r[:label] == "Subject" || r[:label] == "Location" }.each do |summary_row| %>
+            <% rows.reject { |r| %w[Subject Location].include?(r[:label]) }.each do |summary_row| %>
               <strong><%= summary_row[:label] %>:</strong> <%= summary_row[:value] %><br>
             <% end %>
           <% end %>
