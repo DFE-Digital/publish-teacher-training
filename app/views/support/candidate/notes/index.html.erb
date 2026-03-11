@@ -24,7 +24,7 @@
         <% body.with_row do |row| %>
           <% row.with_cell text: govuk_link_to(course.name_and_code, publish_provider_recruitment_cycle_course_url(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code)) %>
           <% row.with_cell text: govuk_link_to(course.provider.provider_name, support_recruitment_cycle_provider_path(course.provider.recruitment_cycle_year, course.provider)) %>
-          <% row.with_cell text: saved.note %>
+          <% row.with_cell text: simple_format(saved.note) %>
           <% row.with_cell text: saved.updated_at.to_fs(:govuk_date_and_time) %>
         <% end %>
       <% end %>
