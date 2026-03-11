@@ -16,8 +16,6 @@ module Find
         content_tag(:span, title_text)
       end
 
-    private
-
       def title_text
         return visa_title if no_subject_or_location? && visa_sponsorship?
         return apprenticeship_title if no_subject_or_location_or_visa? && apprenticeship_only?

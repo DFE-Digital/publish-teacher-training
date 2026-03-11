@@ -14,10 +14,21 @@ en:
           unsubscribe_note: You can unsubscribe at any time.
           submit: Set up email alert
           cancel: Cancel
+          summary_labels:
+            subjects: Subject
+            short_address: Location
+            level: Level
+            send_courses: SEND specialism
+            funding: Fee or salary
+            study_types: Full time or part time
+            qualifications: Qualification
+            minimum_degree_required: Degree required
+            can_sponsor_visa: Visa sponsorship
+            start_date: Start date
+            provider_code: Provider
         create:
           success_title: Email alert created
-          success_body_html: "You have set up an email alert for %{title}. We'll email you weekly when new courses are added. %{link}"
-          view_email_alerts: View your email alerts
+          success_body_html: "You have set up an email alert for %{title}. We'll email you weekly when new courses are added. You can unsubscribe at any time."
           create_failed: There was a problem creating your email alert. Please try again.
         confirm_unsubscribe:
           page_title: Unsubscribe from this email alert
