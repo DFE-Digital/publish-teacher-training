@@ -11,9 +11,13 @@ module Support
 
       def index
         @email_alerts = @candidate.email_alerts.order(created_at: :desc)
+        all_subject_codes = @email_alerts.flat_map(&:subjects).uniq
+        @subject_names_by_code = Subject.where(subject_code: all_subject_codes).pluck(:subject_code, :subject_name).to_h
       end
 
-      def confirm_unsubscribe; end
+      def confirm_unsubscribe
+        @subject_names = Subject.where(subject_code: @email_alert.subjects).pluck(:subject_name)
+      end
 
       def unsubscribe
         @email_alert.unsubscribe!
