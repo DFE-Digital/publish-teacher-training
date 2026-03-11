@@ -38,7 +38,9 @@ module Find
 
       def show_email_alert_link?
         FeatureFlag.active?(:email_alerts) &&
-          !@alerted_search_keys.include?([Array(@recent_search.subjects).sort, @attrs.stringify_keys])
+          !@alerted_search_keys.include?(
+            [Array(@recent_search.subjects).sort, @attrs.stringify_keys.slice(*Candidate::EmailAlert::FILTER_KEYS)],
+          )
       end
 
     private
