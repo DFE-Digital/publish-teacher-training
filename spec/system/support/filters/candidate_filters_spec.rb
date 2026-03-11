@@ -19,6 +19,12 @@ RSpec.describe "Filter candidates" do
     then_i_should_see_all_candidates
   end
 
+  scenario "filtering by email alerts" do
+    when_i_check_has_email_alerts
+    and_when_i_click_apply_filters
+    then_i_only_see_candidate_with_email_alerts
+  end
+
   def when_i_applied_filters
     then_i_can_search_by_email
     and_when_i_click_apply_filters
@@ -39,6 +45,7 @@ RSpec.describe "Filter candidates" do
   def and_there_are_candidates
     @candidate_one = create(:candidate, email_address: "barry@gmail.com")
     @candidate_two = create(:candidate, email_address: "george@gmail.com")
+    create(:email_alert, candidate: @candidate_one)
   end
 
   def when_i_visit_the_support_users_index_page
@@ -56,6 +63,15 @@ RSpec.describe "Filter candidates" do
   end
 
   def then_i_only_see_one_candidate
+    expect(page).to have_content(@candidate_one.email_address)
+    expect(page).to have_no_content(@candidate_two.email_address)
+  end
+
+  def when_i_check_has_email_alerts
+    check "Has active email alerts"
+  end
+
+  def then_i_only_see_candidate_with_email_alerts
     expect(page).to have_content(@candidate_one.email_address)
     expect(page).to have_no_content(@candidate_two.email_address)
   end
