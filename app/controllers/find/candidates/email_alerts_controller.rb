@@ -13,6 +13,13 @@ module Find
 
       def new
         @search_params = search_params_from_request
+
+        if existing_alert_for?(@search_params)
+          flash[:info] = t(".already_subscribed")
+          redirect_to redirect_after_create
+          return
+        end
+
         subject_names = resolve_subject_names(@search_params[:subjects])
         @title = Find::Courses::SearchTitleComponent.new(
           subjects: subject_names,
@@ -89,6 +96,12 @@ module Find
 
       def reason_for_request
         :general
+      end
+
+      def existing_alert_for?(search_params)
+        attrs = search_params.to_h.stringify_keys.except("return_to")
+        subjects = Array(attrs.delete("subjects"))
+        @candidate.email_alerts.active.any? { |a| a.matches_search?(subjects:, search_attributes: attrs) }
       end
 
       def find_alert_by_token
