@@ -128,5 +128,7 @@ cookies:
     name: _teacher_training_courses_session
   candidate_session:
     name: candidate_session
+  user_session:
+    name: user_session
 
 STATE_CHANGE_SLACK_URL: replace_me

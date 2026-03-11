@@ -14,15 +14,14 @@ module Publish
       end
 
       def callback
-        UserSession.begin_session!(session, request.env["omniauth.auth"])
+        omniauth_payload = request.env["omniauth.auth"]
+        user = find_or_update_user(omniauth_payload)
 
-        if current_user
-          UserSessions::Update.call(user: current_user, user_session:)
+        if user
+          start_user_session(user, id_token: omniauth_payload["credentials"]["id_token"])
 
           redirect_to after_sign_in_path
         else
-          UserSession.end_session!(session)
-
           redirect_to user_not_found_path
         end
       end
@@ -30,14 +29,42 @@ module Publish
       def destroy
         session.delete(:cycle_year)
         if current_user.present?
-          UserSession.end_session!(session)
-          redirect_to(user_session.logout_url, allow_other_host: true)
+          id_token = Current.session&.id_token
+          terminate_user_session
+          redirect_to(logout_url(id_token), allow_other_host: true)
         else
           redirect_to publish_root_path
         end
       end
 
     private
+
+      def find_or_update_user(omniauth_payload)
+        user = User.find_by(sign_in_user_id: omniauth_payload["uid"]) ||
+          User.find_by(email: omniauth_payload["info"]["email"]&.downcase)
+        return unless user
+
+        UserSessions::Update.call(user:, omniauth_payload:)
+
+        user
+      end
+
+      def logout_url(id_token)
+        if AuthenticationService.magic_link? || AuthenticationService.persona?
+          "/sign-in"
+        else
+          dfe_logout_url(id_token)
+        end
+      end
+
+      def dfe_logout_url(id_token)
+        uri = URI("#{Settings.dfe_signin.issuer}/session/end")
+        uri.query = {
+          id_token_hint: id_token,
+          post_logout_redirect_uri: "#{Settings.base_url}/auth/dfe/signout",
+        }.to_query
+        uri.to_s
+      end
 
       def after_sign_in_path
         saved_path = session.delete("post_dfe_sign_in_path")

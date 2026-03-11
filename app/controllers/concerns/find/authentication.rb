@@ -29,7 +29,7 @@ module Find
     end
 
     def find_session_by_cookie
-      Session.find_by(session_key: candidate_session) if candidate_session
+      Session.find_by(session_key: candidate_session, sessionable_type: "Candidate") if candidate_session
     end
 
     def omniauth

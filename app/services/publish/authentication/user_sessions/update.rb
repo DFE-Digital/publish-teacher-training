@@ -10,17 +10,17 @@ module Publish
 
         alias_method :successful?, :successful
 
-        def initialize(user:, user_session:)
+        def initialize(user:, omniauth_payload:)
           @user = user
 
           attributes = {
             last_login_date_utc: Time.zone.now,
-            email: user_session.email,
-            sign_in_user_id: user_session.sign_in_user_id,
+            email: omniauth_payload["info"]["email"]&.downcase,
+            sign_in_user_id: omniauth_payload["uid"],
           }
 
-          attributes[:first_name] = user_session.first_name if user_session.first_name.present?
-          attributes[:last_name] = user_session.last_name if user_session.last_name.present?
+          attributes[:first_name] = omniauth_payload["info"]["first_name"] if omniauth_payload["info"]["first_name"].present?
+          attributes[:last_name] = omniauth_payload["info"]["last_name"] if omniauth_payload["info"]["last_name"].present?
 
           @user.assign_attributes(attributes)
         end
