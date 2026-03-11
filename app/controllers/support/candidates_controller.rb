@@ -39,7 +39,7 @@ module Support
     end
 
     def filter_params
-      @filter_params ||= params.except(:commit).permit(:text_search, :page, :commit, :sort)
+      @filter_params ||= params.except(:commit).permit(:text_search, :page, :commit, :sort, :has_email_alerts)
     end
 
     def set_candidate

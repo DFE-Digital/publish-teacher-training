@@ -23,6 +23,7 @@ RSpec.describe "Support console Candidates details" do
     expect(page).to have_content(@candidate.email_address)
     expect(page).to have_content(@candidate.created_at.to_fs(:govuk_date_and_time))
     expect(page).to have_content("Never logged in")
+    expect(page).to have_link("Email alerts", href: support_candidate_email_alerts_path(@candidate))
   end
 
   def given_i_am_authenticated
