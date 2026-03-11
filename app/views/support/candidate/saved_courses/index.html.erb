@@ -6,11 +6,7 @@
 
 <h1 class="govuk-heading-l"><%= @candidate.email_address %></h1>
 
-<%= render TabNavigation.new(items: [
-  { name: t("support.candidates.saved_courses.details"), url: details_support_candidate_path(@candidate) },
-  { name: t("support.candidates.saved_courses.saved_courses"), url: saved_courses_support_candidate_path(@candidate), current: true },
-  { name: t("support.candidates.saved_courses.notes"), url: notes_support_candidate_path(@candidate) },
-]) %>
+<%= render "support/candidate/tabs", candidate: @candidate, current_tab: :saved_courses %>
 
 <% if @saved_courses.present? %>
   <%= govuk_table do |table| %>
@@ -23,7 +19,7 @@
     <% end %>
     <% table.with_body do |body| %>
       <% @saved_courses.each do |saved| %>
-        <% course = saved.try(:course) || saved %>
+        <% course = saved.course %>
         <% body.with_row do |row| %>
           <% row.with_cell text: govuk_link_to(course.name_and_code, publish_provider_recruitment_cycle_course_url(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code)) %>
           <% row.with_cell text: govuk_link_to(course.provider.provider_name, support_recruitment_cycle_provider_path(course.provider.recruitment_cycle_year, course.provider)) %>
