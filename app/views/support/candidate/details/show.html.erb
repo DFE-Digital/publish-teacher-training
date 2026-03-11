@@ -6,11 +6,7 @@
 
 <h1 class="govuk-heading-l"><%= @candidate.email_address %></h1>
 
-<%= render TabNavigation.new(items: [
-  { name: t("support.candidates.details.details"), url: details_support_candidate_path(@candidate), current: true },
-  { name: t("support.candidates.details.saved_courses"), url: saved_courses_support_candidate_path(@candidate) },
-  { name: t("support.candidates.details.notes"), url: notes_support_candidate_path(@candidate) },
-]) %>
+<%= render "support/candidate/tabs", candidate: @candidate, current_tab: :details %>
 
 <%= govuk_summary_list do |list| %>
   <% list.with_row do |row| %>
