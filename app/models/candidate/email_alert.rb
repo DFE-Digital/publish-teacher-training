@@ -31,11 +31,11 @@ class Candidate
     def matches_search?(subjects:, search_attributes:)
       other_attrs = search_attributes.to_h.stringify_keys
       self.subjects.sort == Array(subjects).sort &&
-        self.search_attributes.slice(*FILTER_KEYS) == other_attrs.slice(*FILTER_KEYS)
+        normalize_filter_attrs(self.search_attributes) == normalize_filter_attrs(other_attrs)
     end
 
     def filter_key
-      [subjects.sort, search_attributes.slice(*FILTER_KEYS)]
+      [subjects.sort, normalize_filter_attrs(search_attributes)]
     end
 
     def search_params
@@ -49,6 +49,12 @@ class Candidate
 
     def unsubscribe!
       update!(unsubscribed_at: Time.current)
+    end
+
+  private
+
+    def normalize_filter_attrs(attrs)
+      attrs.slice(*FILTER_KEYS).transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
     end
   end
 end
