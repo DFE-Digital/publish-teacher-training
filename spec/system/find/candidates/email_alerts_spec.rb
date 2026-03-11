@@ -370,7 +370,7 @@ RSpec.describe "Email alerts", service: :find do
   end
 
   def and_i_have_a_recent_search_with_many_filters
-    %w[C1 F1 W1 L1 13 W3].zip(%w[Chemistry Design\ and\ technology Art\ and\ design Citizenship Drama Further\ education]).each do |code, name|
+    %w[C1 F1 W1 L1 13 W3].zip(["Chemistry", "Design and technology", "Art and design", "Citizenship", "Drama", "Further education"]).each do |code, name|
       create_subject!(code, name)
     end
 

@@ -57,18 +57,20 @@ module Find
             expect(response.body).not_to include("Qualification:")
             expect(response.body).not_to include("Start date:")
           end
-        end
 
-        it "sets cancel path to results page by default" do
-          get :new, params: { subjects: %w[C1], level: "secondary" }
+          it "links cancel to results page by default" do
+            get :new, params: { subjects: %w[C1], level: "secondary" }
 
-          expect(assigns(:cancel_path)).to eq(find_results_path(subjects: %w[C1], level: "secondary"))
-        end
+            expect(response.body).to include("/results?")
+            expect(response.body).to include("level=secondary")
+            expect(response.body).to include("subjects%5B%5D=C1")
+          end
 
-        it "sets cancel path to recent searches when return_to is recent_searches" do
-          get :new, params: { subjects: %w[C1], return_to: "recent_searches" }
+          it "links cancel to recent searches when return_to is recent_searches" do
+            get :new, params: { subjects: %w[C1], return_to: "recent_searches" }
 
-          expect(assigns(:cancel_path)).to eq(find_candidate_recent_searches_path)
+            expect(response.body).to include(find_candidate_recent_searches_path)
+          end
         end
       end
 

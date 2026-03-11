@@ -138,6 +138,53 @@ RSpec.describe Candidate::EmailAlert, type: :model do
 
       expect(alert.matches_search?(subjects: %w[C1], search_attributes: search_attributes.merge("return_to" => "recent_searches"))).to be true
     end
+
+    it "matches when alert has string 'true' and recent search has boolean true" do
+      # Email alerts store "true" (string via strong params)
+      # Recent searches store true (boolean via JSONB)
+      alert_attrs = { "can_sponsor_visa" => "true", "send_courses" => "true", "level" => "further_education" }
+      recent_attrs = { "can_sponsor_visa" => true, "send_courses" => true, "level" => "further_education" }
+
+      alert = create(:email_alert, subjects: %w[C1], search_attributes: alert_attrs).reload
+
+      # Verify the type mismatch exists
+      expect(alert.search_attributes["can_sponsor_visa"]).to be_a(String)
+      expect(recent_attrs["can_sponsor_visa"]).to be(true)
+
+      expect(alert.matches_search?(subjects: %w[C1], search_attributes: recent_attrs)).to be true
+    end
+
+    it "matches via filter_key when types differ between alert and recent search" do
+      alert_attrs = { "can_sponsor_visa" => "true", "send_courses" => "true", "level" => "further_education" }
+      recent_attrs = { "can_sponsor_visa" => true, "send_courses" => true, "level" => "further_education" }
+
+      alert = create(:email_alert, subjects: %w[C1], search_attributes: alert_attrs).reload
+
+      alert_key = alert.filter_key
+      filter_keys = Candidate::EmailAlert::FILTER_KEYS
+      normalized_recent_attrs = recent_attrs.stringify_keys.slice(*filter_keys)
+        .transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
+      recent_key = [%w[C1], normalized_recent_attrs]
+
+      expect(Set[alert_key].include?(recent_key)).to be true
+    end
+
+    it "matches when alert is missing a display-only key present in the recent search" do
+      alert = build(:email_alert, subjects: %w[C1], search_attributes: {
+        "level" => "further_education",
+        "can_sponsor_visa" => "true",
+      })
+
+      recent_attrs = {
+        "level" => "further_education",
+        "can_sponsor_visa" => "true",
+        "location" => "Manchester",
+        "radius" => "50",
+        "order" => "distance",
+      }
+
+      expect(alert.matches_search?(subjects: %w[C1], search_attributes: recent_attrs)).to be true
+    end
   end
 
   describe "#unsubscribe!" do

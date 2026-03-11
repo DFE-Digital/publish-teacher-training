@@ -5,7 +5,7 @@ class EmailAlertMailerJob < ApplicationJob
     alert = Candidate::EmailAlert.find(email_alert_id)
     return if alert.unsubscribed_at.present?
 
-    courses = Course.where(id: course_ids)
+    courses = Course.includes(:provider).where(id: course_ids)
     return if courses.empty?
 
     EmailAlertMailer.weekly_digest(alert, courses).deliver_now
