@@ -37,10 +37,11 @@ module Find
       end
 
       def show_email_alert_link?
+        filter_keys = Candidate::EmailAlert::FILTER_KEYS
+        normalized_attrs = @attrs.stringify_keys.slice(*filter_keys)
+          .transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
         FeatureFlag.active?(:email_alerts) &&
-          !@alerted_search_keys.include?(
-            [Array(@recent_search.subjects).sort, @attrs.stringify_keys.slice(*Candidate::EmailAlert::FILTER_KEYS)],
-          )
+          !@alerted_search_keys.include?([Array(@recent_search.subjects).sort, normalized_attrs])
       end
 
     private

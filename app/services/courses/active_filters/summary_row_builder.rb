@@ -31,7 +31,7 @@ module Courses
         end
       end
 
-      private
+    private
 
       def resolve_filter_value(id, filter)
         option_key = FILTER_OPTION_KEYS[id]
