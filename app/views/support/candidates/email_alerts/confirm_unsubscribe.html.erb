@@ -10,8 +10,7 @@
       <%= t(".heading") %>
     </h1>
 
-    <% subject_names = Subject.where(subject_code: @email_alert.subjects).pluck(:subject_name) %>
-    <% rows = build_summary_rows(@email_alert.search_attributes, subject_names:) %>
+    <% rows = build_summary_rows(@email_alert.search_attributes, subject_names: @subject_names) %>
     <% if rows.present? %>
       <%= govuk_summary_list do |list| %>
         <% rows.each do |summary_row| %>
