@@ -109,6 +109,24 @@ RSpec.describe "Email alerts", service: :find do
     then_i_see_filter_details_in_summary_card
   end
 
+  scenario "Hides email alert link on recent searches when an active alert already exists" do
+    when_i_sign_in
+    and_i_have_a_recent_search
+    and_i_have_an_alert_matching_recent_search
+    when_i_visit_recent_searches
+
+    then_i_do_not_see_email_alert_link
+  end
+
+  scenario "Redirects from new page when an active alert already exists for the search params" do
+    when_i_sign_in
+    and_i_have_an_existing_alert_for_biology
+    when_i_visit_new_email_alert_with_params
+
+    then_i_am_redirected_away_from_new_page
+    then_i_see_already_subscribed_notice
+  end
+
   def when_i_sign_in
     visit "/"
     click_link_or_button "Sign in"
@@ -292,6 +310,38 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Visa sponsorship")
     expect(page).to have_content("Salary")
     expect(page).to have_content("SEND specialism")
+  end
+
+  def and_i_have_an_alert_matching_recent_search
+    create(
+      :email_alert,
+      candidate:,
+      subjects: %w[C1],
+      search_attributes: { "level" => "secondary" },
+    )
+  end
+
+  def and_i_have_an_existing_alert_for_biology
+    create_subject!("C1", "Biology")
+
+    create(
+      :email_alert,
+      candidate:,
+      subjects: %w[C1],
+      search_attributes: { "level" => "secondary" },
+    )
+  end
+
+  def then_i_do_not_see_email_alert_link
+    expect(page).not_to have_link("Email me courses like this")
+  end
+
+  def then_i_am_redirected_away_from_new_page
+    expect(page).not_to have_current_path(new_find_candidate_email_alert_path)
+  end
+
+  def then_i_see_already_subscribed_notice
+    expect(page).to have_content("You already have an email alert for this search")
   end
 
   def create_subject!(code, name)
