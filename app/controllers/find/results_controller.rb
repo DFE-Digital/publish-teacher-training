@@ -42,7 +42,6 @@ module Find
 
     def search_courses_params
       permitted = [
-        :'provider.provider_name',
         :age_group,
         :can_sponsor_visa,
         :degree_required,
