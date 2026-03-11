@@ -1,18 +1,22 @@
 .app-filter-alert__icon {
   height: 1em;
+
   fill: currentColor;
 }
 
 .app-email-alert-summary {
   .app-summary-list__key {
     display: block;
-    padding: 0 !important;
+
     width: 100%;
+
+    padding: 0;
   }
 
   .app-summary-list__value {
     display: block;
-    padding: 0 !important;
+
+    padding: 0;
     margin-bottom: 15px;
   }
 }
