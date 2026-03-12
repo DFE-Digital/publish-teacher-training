@@ -408,6 +408,70 @@ describe CourseFunding do
     end
   end
 
+  context "when Science is master with a specialist subordinate" do
+    shared_context "science with specialist subordinate" do |specialist_name|
+      let(:science) { build(:secondary_subject, subject_name: "Science") }
+      let(:specialist) do
+        build(:secondary_subject, subject_name: specialist_name,
+                                  bursary_amount: "29000", scholarship: "31000",
+                                  non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
+      end
+      let(:course) do
+        build(:course, :secondary, name: "Science with #{specialist_name}",
+                                   subjects: [science, specialist],
+                                   master_subject_id: science.id,
+                                   subordinate_subject_id: specialist.id)
+      end
+      let(:funding) { described_class.new(course) }
+    end
+
+    %w[Physics Chemistry Biology].each do |specialist_name|
+      context "when subordinate is #{specialist_name}" do
+        include_context "science with specialist subordinate", specialist_name
+
+        it "uses the subordinate's financial incentive" do
+          expect(funding.financial_incentive).to eq(specialist.financial_incentive)
+        end
+
+        it "uses the subordinate's bursary" do
+          expect(funding.bursary_amount).to eq("29000")
+        end
+
+        it "uses the subordinate's scholarship" do
+          expect(funding.scholarship_amount).to eq("31000")
+        end
+
+        it "uses the subordinate's non-UK bursary eligibility" do
+          expect(funding).to be_bursary_eligible_subjects
+        end
+
+        it "uses the subordinate's non-UK scholarship eligibility" do
+          expect(funding).to be_scholarship_eligible_subjects
+        end
+      end
+    end
+
+    context "when subordinate is not a science specialist" do
+      let(:science) { build(:secondary_subject, subject_name: "Science", bursary_amount: "10000") }
+      let(:mathematics) { build(:secondary_subject, subject_name: "Mathematics", bursary_amount: "25000") }
+      let(:course) do
+        build(:course, :secondary, name: "Science with Mathematics",
+                                   subjects: [science, mathematics],
+                                   master_subject_id: science.id,
+                                   subordinate_subject_id: mathematics.id)
+      end
+      let(:funding) { described_class.new(course) }
+
+      it "uses the master's financial incentive, not the subordinate's" do
+        expect(funding.financial_incentive).to eq(science.financial_incentive)
+      end
+
+      it "uses the master's bursary" do
+        expect(funding.bursary_amount).to eq("10000")
+      end
+    end
+  end
+
   describe "#subject_with_scholarship" do
     it "returns the downcased subject name for a subject with a scholarship" do
       physics = build(:secondary_subject, :physics, scholarship: "31000")
