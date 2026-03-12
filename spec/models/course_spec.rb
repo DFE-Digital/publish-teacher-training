@@ -1993,6 +1993,80 @@ describe Course do
         expect(course.reload).to have_attributes({ subordinate_subject_id: subordinate_subject.id })
       end
     end
+
+    context "when master is Modern Languages with children and a subordinate" do
+      let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
+      let(:french) { find_or_create(:modern_languages_subject, :french) }
+      let(:physics) { find_or_create(:secondary_subject, :physics) }
+
+      let(:course) do
+        create(:course, :secondary, subjects: [modern_languages, french], master_subject_id: modern_languages.id).tap do |c|
+          c.course_subjects.delete_all
+          c.course_subjects.create!(subject: modern_languages, position: 0)
+          c.course_subjects.create!(subject: french, position: 1)
+          c.course_subjects.create!(subject: physics, position: 2)
+        end
+      end
+
+      it "derives subordinate as Physics, skipping language children" do
+        expect(course.subordinate_subject_id).to eq(physics.id)
+      end
+    end
+
+    context "when master is Design and technology with children and a subordinate" do
+      let(:design_and_technology) { find_or_create(:secondary_subject, :design_and_technology) }
+      let(:engineering) { find_or_create(:design_technology_subject, :engineering) }
+      let(:physics) { find_or_create(:secondary_subject, :physics) }
+
+      let(:course) do
+        create(:course, :secondary, subjects: [design_and_technology, engineering], master_subject_id: design_and_technology.id).tap do |c|
+          c.course_subjects.delete_all
+          c.course_subjects.create!(subject: design_and_technology, position: 0)
+          c.course_subjects.create!(subject: engineering, position: 1)
+          c.course_subjects.create!(subject: physics, position: 2)
+        end
+      end
+
+      it "derives subordinate as Physics, skipping D&T children" do
+        expect(course.subordinate_subject_id).to eq(physics.id)
+      end
+    end
+
+    context "when both master and subordinate are parent subjects" do
+      let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
+      let(:french) { find_or_create(:modern_languages_subject, :french) }
+      let(:design_and_technology) { find_or_create(:secondary_subject, :design_and_technology) }
+      let(:engineering) { find_or_create(:design_technology_subject, :engineering) }
+
+      let(:course) do
+        create(:course, :secondary, subjects: [modern_languages, french], master_subject_id: modern_languages.id).tap do |c|
+          c.course_subjects.delete_all
+          c.course_subjects.create!(subject: modern_languages, position: 0)
+          c.course_subjects.create!(subject: french, position: 1)
+          c.course_subjects.create!(subject: design_and_technology, position: 2)
+          c.course_subjects.create!(subject: engineering, position: 3)
+        end
+      end
+
+      it "derives subordinate as Design and technology" do
+        expect(course.subordinate_subject_id).to eq(design_and_technology.id)
+      end
+    end
+
+    context "when course has only a master subject with no subordinate" do
+      let(:english) { find_or_create(:secondary_subject, :english) }
+
+      let(:course) do
+        create(:course, :secondary, subjects: [english], master_subject_id: english.id).tap do |c|
+          c.course_subjects.delete_all
+          c.course_subjects.create!(subject: english, position: 0)
+        end
+      end
+
+      it "derives subordinate as nil" do
+        expect(course.subordinate_subject_id).to be_nil
+      end
+    end
   end
 
   describe "#age_minimum" do
