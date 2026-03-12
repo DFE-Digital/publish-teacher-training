@@ -1,0 +1,35 @@
+<%= @title %>
+
+---
+
+<% @courses.each do |course| -%>
+[<%= course.name %> - <%= course.provider.provider_name %> (<%= course.course_code %>)](<%= find_course_url(course.provider.provider_code, course.course_code) %>)
+
+<% end -%>
+<% if @remaining_count > 0 -%>
+and <%= @remaining_count %> more
+
+<% end -%>
+---
+
+# Your email alert criteria
+
+<% @summary_rows.each do |row| -%>
+<%= row[:label] %>: <%= row[:value] %>
+<% end -%>
+
+[View all your email alerts](<%= find_candidate_email_alerts_url %>).
+
+[Search for a course](<%= @search_url %>) to set up a new email alert for similar courses.
+
+---
+
+# Not sure which course is right for you?
+
+[Find out how to choose a course](<%= I18n.t("find.get_into_teaching.url_choose_course") %>).
+
+[Get a free teacher training adviser](<%= I18n.t("find.get_into_teaching.url_training_adviser") %>).
+
+---
+
+Don't want to receive these email alerts? [Unsubscribe here](<%= @unsubscribe_url %>).
