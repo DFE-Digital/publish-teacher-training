@@ -78,6 +78,10 @@ private
   def funding_relevant_subjects
     return course.subjects if course.subordinate_subject_id.blank?
 
+    if science_with_specialist_subordinate?
+      return course.subjects.select { |s| s.id == course.subordinate_subject_id }
+    end
+
     subjects = course.subjects.reject { |s| s.id == course.subordinate_subject_id }
 
     if modern_languages_master?
@@ -88,7 +92,18 @@ private
     subjects
   end
 
+  SCIENCE_SPECIALIST_SUBJECT_NAMES = %w[Physics Chemistry Biology].freeze
+
+  def science_with_specialist_subordinate?
+    master = course.subjects.find { |s| s.id == course.master_subject_id }
+    return false unless master&.subject_name == "Science"
+
+    subordinate = course.subjects.find { |s| s.id == course.subordinate_subject_id }
+    subordinate&.subject_name&.in?(SCIENCE_SPECIALIST_SUBJECT_NAMES)
+  end
+
   def modern_languages_master?
-    course.master_subject_id == SecondarySubject.modern_languages&.id
+    master = course.subjects.find { |s| s.id == course.master_subject_id }
+    master&.subject_name == "Modern Languages"
   end
 end
