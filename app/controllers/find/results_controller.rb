@@ -42,15 +42,12 @@ module Find
 
     def search_courses_params
       permitted = [
-        :age_group,
         :can_sponsor_visa,
-        :degree_required,
         :funding,
         :latitude,
         :level,
         :location,
         :longitude,
-        :lq,
         :minimum_degree_required,
         :order,
         :previous_location_category,
@@ -60,17 +57,13 @@ module Find
         :engineers_teach_physics,
         :send_courses,
         :interview_location,
-        :sortby,
         :subject_code,
         :subject_name,
-        :university_degree_status,
         :applications_open,
         { subjects: [],
           start_date: [],
-          study_type: [],
           study_types: [],
           qualifications: [],
-          qualification: [],
           funding: [],
           excluded_courses: %i[provider_code course_code] },
       ]
@@ -81,7 +74,7 @@ module Find
     end
 
     def location_params
-      params[:location] || params[:lq]
+      params[:location]
     end
 
     def store_result_fullpath_for_backlinks
