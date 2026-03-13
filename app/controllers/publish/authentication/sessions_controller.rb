@@ -40,6 +40,22 @@ module Publish
     private
 
       def find_or_update_user(omniauth_payload)
+        if AuthenticationService.persona?
+          find_persona_user(omniauth_payload)
+        else
+          find_or_create_authenticated_user(omniauth_payload)
+        end
+      end
+
+      def find_persona_user(omniauth_payload)
+        user = User.find_by(email: omniauth_payload["info"]["email"]&.downcase)
+        return unless user
+
+        UserSessions::Update.call(user:, omniauth_payload:)
+        user
+      end
+
+      def find_or_create_authenticated_user(omniauth_payload)
         uid = omniauth_payload["uid"]
         provider = ::Authentication.provider_map(omniauth_payload["provider"])
 
