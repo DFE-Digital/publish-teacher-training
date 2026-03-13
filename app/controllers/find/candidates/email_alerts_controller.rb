@@ -9,42 +9,32 @@ module Find
 
       def index
         @email_alerts = @candidate.email_alerts.active.order(created_at: :desc)
+        all_codes = @email_alerts.flat_map(&:subjects).compact.uniq
+        @subject_names_by_code = all_codes.any? ? Subject.where(subject_code: all_codes).pluck(:subject_code, :subject_name).to_h : {}
       end
 
       def new
-        @search_params = search_params_from_request
+        return redirect_existing_alert if existing_alert?
 
-        if existing_alert_for?(@search_params)
-          flash[:info] = t(".already_subscribed")
-          redirect_to redirect_after_create
-          return
-        end
-
-        subject_names = resolve_subject_names(@search_params[:subjects])
-        @title = Find::Courses::SearchTitleComponent.new(
-          subjects: subject_names,
-          location_name: @search_params[:location] || @search_params[:formatted_address],
-          radius: @search_params[:radius],
-          search_attributes: @search_params.to_h,
-        ).title_text
-        @summary_rows = build_summary_rows(@search_params.to_h, subject_names:)
+        @title = build_title(subject_names:, search_attributes: search_params.to_h, location_name:, radius: search_params[:radius])
+        @summary_rows = build_summary_rows(search_params.to_h, subject_names:)
+        @search_params = search_params
         @cancel_path = redirect_after_create
       end
 
       def create
         alert = Find::CreateEmailAlertService.call(
           candidate: @candidate,
-          search_params: search_params_from_request,
+          search_params:,
         )
 
         if alert
-          subject_names = resolve_subject_names(alert.subjects)
-          title = Find::Courses::SearchTitleComponent.new(
-            subjects: subject_names,
+          title = build_title(
+            subject_names: resolve_subject_names(alert.subjects),
+            search_attributes: alert.search_attributes || {},
             location_name: alert.location_name,
             radius: alert.radius,
-            search_attributes: alert.search_attributes || {},
-          ).title_text
+          )
           flash[:success_with_body] = {
             "title" => t(".success_title"),
             "body" => t(".success_body_html", title:),
@@ -98,10 +88,36 @@ module Find
         :general
       end
 
-      def existing_alert_for?(search_params)
+      def search_params
+        @search_params ||= search_params_from_request
+      end
+
+      def subject_names
+        @subject_names ||= resolve_subject_names(search_params[:subjects])
+      end
+
+      def location_name
+        search_params[:location] || search_params[:formatted_address]
+      end
+
+      def existing_alert?
         attrs = search_params.to_h.stringify_keys
         subjects = Array(attrs["subjects"])
         @candidate.email_alerts.active.any? { |a| a.matches_search?(subjects:, search_attributes: attrs) }
+      end
+
+      def redirect_existing_alert
+        flash[:info] = t("find.candidates.email_alerts.new.already_subscribed")
+        redirect_to redirect_after_create
+      end
+
+      def build_title(subject_names:, search_attributes:, location_name:, radius:)
+        Find::Courses::SearchTitleComponent.new(
+          subjects: subject_names,
+          location_name:,
+          radius:,
+          search_attributes:,
+        ).title_text
       end
 
       def find_alert_by_token
@@ -150,7 +166,7 @@ module Find
         if params[:return_to] == "recent_searches"
           find_candidate_recent_searches_path
         else
-          find_results_path(search_params_from_request.except(:return_to))
+          find_results_path(search_params.except(:return_to))
         end
       end
     end
