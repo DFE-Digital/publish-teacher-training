@@ -31,7 +31,6 @@ module Publish
 
             it "updates the user's details" do
               expect(user.email).to eq(omniauth_payload["info"]["email"].downcase)
-              expect(user.sign_in_user_id).to eq(omniauth_payload["uid"])
               expect(user.first_name).to eq(omniauth_payload["info"]["first_name"])
               expect(user.last_name).to eq(omniauth_payload["info"]["last_name"])
             end
@@ -62,7 +61,6 @@ module Publish
 
             it "does not update the user's details" do
               expect(user.email).not_to eq(omniauth_payload["info"]["email"])
-              expect(user.sign_in_user_id).not_to eq(omniauth_payload["uid"])
               expect(user.first_name).not_to eq(omniauth_payload["info"]["first_name"])
               expect(user.last_name).not_to eq(omniauth_payload["info"]["last_name"])
             end

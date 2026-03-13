@@ -74,6 +74,32 @@ module Publish
           end
         end
 
+        context "first time DfE sign-in (user exists by email but no authentication record)" do
+          let(:user) { create(:user, sign_in_user_id: nil) }
+          let(:dfe_uid) { SecureRandom.uuid }
+
+          let(:request_callback) do
+            request.env["omniauth.auth"] = OmniAuth::AuthHash.new(
+              fake_dfe_sign_in_auth_hash(
+                email: user.email,
+                sign_in_user_id: dfe_uid,
+                first_name: user.first_name,
+                last_name: user.last_name,
+              ),
+            )
+            get :callback
+          end
+
+          it "creates an authentication record" do
+            expect { request_callback }.to change { user.authentications.dfe_signin.count }.by(1)
+            expect(user.authentications.dfe_signin.first.subject_key).to eq(dfe_uid)
+          end
+
+          it "creates a database session record" do
+            expect { request_callback }.to change { user.sessions.count }.by(1)
+          end
+        end
+
         context "non existing database user" do
           let(:user) { build(:user) }
 
