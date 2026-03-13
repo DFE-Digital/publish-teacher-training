@@ -16,7 +16,6 @@ module Publish
           attributes = {
             last_login_date_utc: Time.zone.now,
             email: omniauth_payload["info"]["email"]&.downcase,
-            sign_in_user_id: omniauth_payload["uid"],
           }
 
           attributes[:first_name] = omniauth_payload["info"]["first_name"] if omniauth_payload["info"]["first_name"].present?

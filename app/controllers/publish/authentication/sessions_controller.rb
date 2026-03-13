@@ -40,9 +40,19 @@ module Publish
     private
 
       def find_or_update_user(omniauth_payload)
-        user = User.find_by(sign_in_user_id: omniauth_payload["uid"]) ||
-          User.find_by(email: omniauth_payload["info"]["email"]&.downcase)
-        return unless user
+        uid = omniauth_payload["uid"]
+        provider = ::Authentication.provider_map(omniauth_payload["provider"])
+
+        authentication = ::Authentication.find_by(subject_key: uid, provider:)
+
+        if authentication
+          user = authentication.authenticable
+        else
+          user = User.find_by(email: omniauth_payload["info"]["email"]&.downcase)
+          return unless user
+
+          user.authentications.create!(provider:, subject_key: uid)
+        end
 
         UserSessions::Update.call(user:, omniauth_payload:)
 
