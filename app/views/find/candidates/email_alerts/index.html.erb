@@ -14,7 +14,10 @@
       <%= render Find::EmailAlerts::EmptyStateComponent.new %>
     <% else %>
       <% @email_alerts.each do |email_alert| %>
-        <%= render Find::EmailAlerts::SummaryCardComponent.new(email_alert:) %>
+        <%= render Find::EmailAlerts::SummaryCardComponent.new(
+          email_alert:,
+          subject_names: email_alert.subjects.filter_map { |code| @subject_names_by_code[code] },
+        ) %>
       <% end %>
     <% end %>
   </div>
