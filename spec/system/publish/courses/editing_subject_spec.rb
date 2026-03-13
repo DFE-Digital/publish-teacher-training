@@ -50,8 +50,9 @@ RSpec.describe "updating a subject" do
     and_there_is_a_secondary_course_i_want_to_edit
     and_the_course_has_two_languages
     when_i_visit_the_edit_course_subject_page
-    then_i_should_see_populated_selects("Drama", "Modern Languages")
+    then_i_should_see_populated_selects("Modern Languages", "Drama")
     when_i_select_a_master_subject(:business_studies)
+    when_i_select_a_subordinate_subject(:modern_languages)
     and_i_click_continue
     then_i_am_met_with_the_modern_languages_page(:business_studies)
   end
@@ -88,13 +89,17 @@ private
   end
 
   def and_the_course_has_two_subjects
-    @course.subjects << find_or_create(:secondary_subject, :latin)
+    latin = find_or_create(:secondary_subject, :latin)
+    existing_subject = @course.subjects.first
+    Courses::AssignSubjectsService.call(course: @course, subject_ids: [existing_subject.id, latin.id])
   end
 
   def and_the_course_has_two_languages
-    @course.subjects << find_or_create(:secondary_subject, :modern_languages)
-    @course.subjects << find_or_create(:modern_languages_subject, :french)
-    @course.subjects << find_or_create(:modern_languages_subject, :german)
+    modern_languages = find_or_create(:secondary_subject, :modern_languages)
+    french = find_or_create(:modern_languages_subject, :french)
+    german = find_or_create(:modern_languages_subject, :german)
+    existing_subject = @course.subjects.first
+    Courses::AssignSubjectsService.call(course: @course, subject_ids: [modern_languages.id, french.id, german.id, existing_subject.id])
   end
 
   def then_i_should_see_populated_selects(master_name, subordinate_name = nil)

@@ -161,37 +161,7 @@ module Courses
       @visa_sponsorship.present?
     end
 
-    PHYSICS_SUBJECT = "Physics"
-    private_constant :PHYSICS_SUBJECT
-
-    def physics?
-      main_subject&.subject_name == PHYSICS_SUBJECT
-    end
-
-    LANGUAGE_SUBJECTS = [
-      "Ancient Greek",
-      "Ancient Hebrew",
-      "English",
-      "English as a second or other language",
-      "French",
-      "German",
-      "Italian",
-      "Japanese",
-      "Latin",
-      "Mandarin",
-      "Modern Languages",
-      "Modern languages (other)",
-      "Russian",
-      "Spanish",
-    ].freeze
-    private_constant :LANGUAGE_SUBJECTS
-
-    def languages?
-      main_subject&.subject_name.in?(LANGUAGE_SUBJECTS)
-    end
-
     NullEnrichment = Struct.new(:course_length, :fee_uk_eu, :fee_international, keyword_init: true)
-    # rubocop:enable Lint/UselessConstantScoping
 
     def enrichment
       @enrichment ||= course.latest_published_enrichment || NullEnrichment.new

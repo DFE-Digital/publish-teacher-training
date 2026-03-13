@@ -118,7 +118,6 @@ class Course < ApplicationRecord
   has_many :course_subjects,
            -> { order :position },
            inverse_of: :course,
-           before_add: :set_subject_position,
            dependent: :destroy
 
   delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
@@ -126,20 +125,6 @@ class Course < ApplicationRecord
 
   def applicable_for_engineers_teach_physics?
     master_subject_id == SecondarySubject.physics.id
-  end
-
-  def set_subject_position(course_subject)
-    return unless course_subject.subject.secondary_subject?
-
-    secondary_course_subjects = course_subjects.select { |cs| cs.subject.secondary_subject? }
-
-    return unless secondary_course_subjects.all? { |cs| cs.position.present? }
-
-    course_subject.position = if secondary_course_subjects.any?
-                                secondary_course_subjects.last.position + 1
-                              else
-                                0
-                              end
   end
 
   has_many :subjects, through: :course_subjects
@@ -657,37 +642,6 @@ class Course < ApplicationRecord
     end
   end
 
-  def has_bursary?
-    bursary_amount.present?
-  end
-
-  def has_scholarship_and_bursary?
-    has_scholarship? && has_bursary?
-  end
-
-  def has_scholarship?
-    scholarship_amount.present?
-  end
-
-  def has_early_career_payments?
-    financial_incentive&.early_career_payments.present?
-  end
-
-  def bursary_amount
-    financial_incentive&.bursary_amount
-  end
-
-  def scholarship_amount
-    financial_incentive&.scholarship
-  end
-
-  def financial_incentive
-    # Ignore "modern languages" as financial incentives
-    # differ based on the language selected
-
-    subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first&.financial_incentive
-  end
-
   def is_further_education?
     further_education_course?
   end
@@ -808,10 +762,10 @@ class Course < ApplicationRecord
     if is_primary?
       assign_positioned_master_subject!(subjects_list: course_subjects) if master_subject_id.blank?
     else
-      positioned_subjects = course_subjects.select(&:position)
+      positioned_secondary_subjects = course_subjects.select(&:position).select { |cs| cs.subject.secondary_subject? }
 
-      self.master_subject_id ||= assign_positioned_master_subject!(subjects_list: positioned_subjects)
-      self.subordinate_subject_id ||= assign_positioned_secondary_subject!(subjects_list: positioned_subjects)
+      self.master_subject_id ||= assign_positioned_master_subject!(subjects_list: positioned_secondary_subjects)
+      self.subordinate_subject_id ||= assign_positioned_secondary_subject!(subjects_list: positioned_secondary_subjects)
     end
   end
 
@@ -824,7 +778,11 @@ class Course < ApplicationRecord
   end
 
   def subordinate_subject_id
-    super || (is_primary? ? nil : assign_positioned_secondary_subject!(subjects_list: course_subjects.select(&:position)))
+    super || (is_primary? ? nil : assign_positioned_secondary_subject!(subjects_list: positioned_secondary_course_subjects))
+  end
+
+  def positioned_secondary_course_subjects
+    course_subjects.select(&:position).select { |cs| cs.subject.secondary_subject? }
   end
 
   def assignable_master_subjects
@@ -849,17 +807,6 @@ class Course < ApplicationRecord
     return if age_range_in_years.blank?
 
     age_range_in_years.split("_").last.to_i
-  end
-
-  def bursary_requirements
-    return [] unless has_bursary?
-
-    requirements = [I18n.t("course.values.bursary_requirements.second_degree")]
-    mathematics_requirement = I18n.t("course.values.bursary_requirements.maths")
-
-    requirements.push(mathematics_requirement) if subjects.any? { |subject| subject.subject_name == "Primary with mathematics" }
-
-    requirements
   end
 
   def validate_degree_requirements_publishable

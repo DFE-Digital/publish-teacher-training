@@ -155,7 +155,7 @@ private
   end
 
   def then_subjects_list_correctly_on_confirmation_page
-    expect(publish_course_confirmation_page.details.subjects.value).to have_content("MathematicsModern LanguagesGermanItalian")
+    expect(publish_course_confirmation_page.details.subjects.value).to have_content("Modern LanguagesGermanItalianMathematics")
   end
 
   def given_i_am_authenticated_as_a_provider_user(provider_trait = nil)

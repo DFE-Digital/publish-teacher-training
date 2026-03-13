@@ -43,13 +43,22 @@ FactoryBot.define do
       sample_subject { subjects.to_a.sample }
       bursary_amount { nil }
       scholarship { nil }
+      non_uk_bursary_eligible { false }
+      non_uk_scholarship_eligible { false }
     end
 
     subject_name { sample_subject.first }
     subject_code { sample_subject.second }
 
     after(:build) do |subject, evaluator|
-      financial_incentive = find_or_create(:financial_incentive, subject:, bursary_amount: evaluator.bursary_amount, scholarship: evaluator.scholarship)
+      financial_incentive = find_or_create(
+        :financial_incentive,
+        subject:,
+        bursary_amount: evaluator.bursary_amount,
+        scholarship: evaluator.scholarship,
+        non_uk_bursary_eligible: evaluator.non_uk_bursary_eligible,
+        non_uk_scholarship_eligible: evaluator.non_uk_scholarship_eligible,
+      )
       subject.update(financial_incentive:)
     end
 

@@ -14,13 +14,21 @@ module Subjects
           %w[Mathematics] => {
             bursary_amount: "29000",
           },
-          %w[Chemistry Computing Physics] => {
+          %w[Chemistry Computing] => {
             bursary_amount: "29000",
             scholarship: "31000",
+          },
+          %w[Physics] => {
+            bursary_amount: "29000",
+            scholarship: "31000",
+            non_uk_bursary_eligible: true,
+            non_uk_scholarship_eligible: true,
           },
           %w[French German Spanish] => {
             bursary_amount: "20000",
             scholarship: "22000",
+            non_uk_bursary_eligible: true,
+            non_uk_scholarship_eligible: true,
           },
           [
             "Ancient Greek",
@@ -34,6 +42,7 @@ module Subjects
             "Russian",
           ] => {
             bursary_amount: "20000",
+            non_uk_bursary_eligible: true,
           },
           ["Design and technology"] => {
             bursary_amount: "20000",
@@ -204,6 +213,16 @@ module Subjects
     end
 
     def execute
+      # Reset all records' attributes in case subjects
+      # from previous year are not being updated
+      @financial_incentive.update_all(
+        bursary_amount: nil,
+        scholarship: nil,
+        early_career_payments: nil,
+        non_uk_bursary_eligible: false,
+        non_uk_scholarship_eligible: false,
+      )
+
       subject_and_financial_incentives.each do |subject_name, financial_incentive_attributes|
         @subject.where(subject_name:).each do |subject|
           financial_incentive_record = @financial_incentive.find_or_initialize_by(subject:)
