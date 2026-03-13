@@ -17,10 +17,12 @@ en:
         never_logged_in: Never logged in
         details: Details
         saved_courses: Saved courses
+        email_alerts: Email alerts
         delete_button: Delete this candidate
       saved_courses:
         details: Details
         saved_courses: Saved courses
+        email_alerts: Email alerts
         saved_at: Saved at
         no_saved_courses: This candidate hasn’t saved any courses yet.
         course: Course

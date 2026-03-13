@@ -115,5 +115,11 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       get :delete
       delete :delete, to: "candidates#destroy"
     end
+    resources :email_alerts, only: %i[index], controller: "candidates/email_alerts" do
+      member do
+        get :confirm_unsubscribe
+        delete :confirm_unsubscribe, to: "candidates/email_alerts#unsubscribe"
+      end
+    end
   end
 end

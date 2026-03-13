@@ -9,6 +9,7 @@
 <%= render TabNavigation.new(items: [
   { name: t(".details"), url: details_support_candidate_path(@candidate) },
   { name: t(".saved_courses"), url: saved_courses_support_candidate_path(@candidate), current: true },
+  { name: t(".email_alerts"), url: support_candidate_email_alerts_path(@candidate) },
 ]) %>
 
 <% if @saved_courses.present? %>

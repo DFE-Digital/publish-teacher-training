@@ -1,0 +1,64 @@
+<%= render PageTitle.new(title: "support.candidates.email_alerts.index") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_candidates_path(page: params[:page])) %>
+<% end %>
+
+<h1 class="govuk-heading-l"><%= @candidate.email_address %></h1>
+
+<%= render TabNavigation.new(items: [
+  { name: t(".details"), url: details_support_candidate_path(@candidate) },
+  { name: t(".saved_courses"), url: saved_courses_support_candidate_path(@candidate) },
+  { name: t(".email_alerts"), url: support_candidate_email_alerts_path(@candidate), current: true },
+]) %>
+
+<% if @email_alerts.present? %>
+  <%= govuk_table do |table| %>
+    <% table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell text: t(".status") %>
+        <% row.with_cell text: t(".subjects") %>
+        <% row.with_cell text: t(".location") %>
+        <% row.with_cell text: t(".filters") %>
+        <% row.with_cell text: t(".created") %>
+        <% row.with_cell text: t(".last_sent") %>
+        <% row.with_cell text: t(".action") %>
+      <% end %>
+    <% end %>
+    <% table.with_body do |body| %>
+      <% @email_alerts.each do |alert| %>
+        <% alert_subject_names = alert.subjects.filter_map { |code| @subject_names_by_code[code] } %>
+        <% body.with_row do |row| %>
+          <% row.with_cell do %>
+            <% if alert.unsubscribed_at.nil? %>
+              <strong class="govuk-tag govuk-tag--green"><%= t(".active") %></strong>
+            <% else %>
+              <strong class="govuk-tag govuk-tag--grey"><%= t(".unsubscribed") %></strong>
+            <% end %>
+          <% end %>
+          <% row.with_cell do %>
+            <% if alert_subject_names.present? %>
+              <%= alert_subject_names.join(", ") %>
+            <% end %>
+          <% end %>
+          <% row.with_cell text: alert.location_name %>
+          <% row.with_cell do %>
+            <% rows = build_summary_rows(alert.search_attributes, subject_names: alert_subject_names) %>
+            <% rows.reject { |r| %w[Subject Location].include?(r[:label]) }.each do |summary_row| %>
+              <strong><%= summary_row[:label] %>:</strong> <%= summary_row[:value] %><br>
+            <% end %>
+          <% end %>
+          <% row.with_cell text: alert.created_at.to_fs(:govuk_date_and_time) %>
+          <% row.with_cell text: alert.last_sent_at&.to_fs(:govuk_date_and_time) || "Never" %>
+          <% row.with_cell do %>
+            <% if alert.unsubscribed_at.nil? %>
+              <%= govuk_link_to t(".unsubscribe"), confirm_unsubscribe_support_candidate_email_alert_path(@candidate, alert) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <p class="govuk-body"><%= t(".no_email_alerts") %></p>
+<% end %>
