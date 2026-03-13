@@ -57,13 +57,15 @@ module Publish
       def handle_qualification_update
         if undergraduate_to_other_qualification?
           @course.enrichments.find_or_initialize_draft.update(course_length: nil, salary_details: nil)
-          @course.update(
+          @course.assign_attributes(
             degree_type: "postgraduate",
             a_level_subject_requirements: [],
             accept_pending_a_level: nil,
             accept_a_level_equivalency: nil,
             additional_a_level_equivalencies: nil,
           )
+          ::Courses::AssignProgramTypeService.new.execute(@course.funding, @course)
+          return handle_update_failure unless @course.save
 
           redirect_to funding_type_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
