@@ -1,6 +1,13 @@
 <%= govuk_summary_card(
   title:,
-  actions: [govuk_link_to(t(".search_again"), search_again_path)],
+  actions: [
+    govuk_link_to(t(".search_again"), search_again_path),
+    (if show_email_alert_link?
+       govuk_link_to(email_alert_path, class: "govuk-link--no-visited-state") do
+         safe_join([render("shared/bell_icon"), t(".set_up_email_alert")])
+       end
+     end),
+  ].compact,
   classes: "app-recent-search-summary-card",
 ) do |card| %>
   <%= render Find::RecentSearches::FilterTagsComponent.new(active_filters: filter_tags) %>

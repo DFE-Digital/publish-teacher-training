@@ -1,0 +1,33 @@
+<%= content_for :page_title, t(".page_title", title: @title) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t(".heading_html", title: @title) %></h1>
+
+    <p class="govuk-body"><%= t(".intro") %></p>
+
+    <dl class="govuk-summary-list app-email-alert-summary">
+      <% @summary_rows.each do |row| %>
+        <div class="govuk-summary-list__row app-summary-list__row app-body">
+          <dt class="govuk-summary-list__key app-summary-list__key"><%= row[:label] %></dt>
+          <dd class="govuk-summary-list__value app-summary-list__value"><%= row[:value] %></dd>
+        </div>
+      <% end %>
+    </dl>
+
+    <p class="govuk-body"><%= t(".unsubscribe_note") %></p>
+
+    <%= form_with url: find_candidate_email_alerts_path, method: :post do |form| %>
+      <% @search_params.each do |key, value| %>
+        <% Array(value).each do |v| %>
+          <%= form.hidden_field key, value: v, multiple: value.is_a?(Array), id: nil %>
+        <% end %>
+      <% end %>
+
+      <div class="govuk-button-group">
+        <%= form.submit t(".submit"), class: "govuk-button" %>
+        <%= govuk_link_to t(".cancel"), @cancel_path, class: "govuk-link" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+en:
+  find:
+    email_alerts:
+      empty_state_component:
+        heading: You have no email alerts
+        body_html: "%{link} to receive an email alert whenever a course matching this search is listed."
+        link_text: Find a course

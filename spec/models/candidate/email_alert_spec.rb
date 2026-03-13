@@ -81,6 +81,112 @@ RSpec.describe Candidate::EmailAlert, type: :model do
     end
   end
 
+  describe "#matches_search?" do
+    let(:search_attributes) do
+      {
+        "level" => "further_education",
+        "send_courses" => "true",
+        "qualifications" => %w[qts qts_with_pgce_or_pgde],
+        "minimum_degree_required" => "two_one",
+        "can_sponsor_visa" => "true",
+        "interview_location" => "online",
+        "start_date" => %w[jan_to_aug september oct_to_jul],
+      }
+    end
+
+    it "matches when subjects and search_attributes are identical" do
+      alert = build(:email_alert, subjects: %w[C1 F1 W1 L1 13 W3], search_attributes:)
+
+      expect(alert.matches_search?(subjects: %w[C1 F1 W1 L1 13 W3], search_attributes:)).to be true
+    end
+
+    it "matches regardless of subject order" do
+      alert = build(:email_alert, subjects: %w[13 C1 F1 L1 W1 W3], search_attributes:)
+
+      expect(alert.matches_search?(subjects: %w[W3 C1 13 F1 L1 W1], search_attributes:)).to be true
+    end
+
+    it "does not match when subjects differ" do
+      alert = build(:email_alert, subjects: %w[C1 F1], search_attributes:)
+
+      expect(alert.matches_search?(subjects: %w[C1], search_attributes:)).to be false
+    end
+
+    it "does not match when search_attributes differ" do
+      alert = build(:email_alert, subjects: %w[C1], search_attributes:)
+
+      different_attrs = search_attributes.merge("level" => "secondary")
+      expect(alert.matches_search?(subjects: %w[C1], search_attributes: different_attrs)).to be false
+    end
+
+    it "does not match an unsubscribed alert via active scope" do
+      candidate = create(:candidate)
+      alert = create(:email_alert, candidate:, subjects: %w[C1], search_attributes:)
+      alert.unsubscribe!
+
+      expect(
+        candidate.email_alerts.active
+          .pluck(:subjects, :search_attributes)
+          .map { |s, a| [s.sort, a] }
+          .to_set
+          .include?([%w[C1], search_attributes]),
+      ).to be false
+    end
+
+    it "ignores return_to key in search_attributes" do
+      alert = build(:email_alert, subjects: %w[C1], search_attributes:)
+
+      expect(alert.matches_search?(subjects: %w[C1], search_attributes: search_attributes.merge("return_to" => "recent_searches"))).to be true
+    end
+
+    it "matches when alert has string 'true' and recent search has boolean true" do
+      # Email alerts store "true" (string via strong params)
+      # Recent searches store true (boolean via JSONB)
+      alert_attrs = { "can_sponsor_visa" => "true", "send_courses" => "true", "level" => "further_education" }
+      recent_attrs = { "can_sponsor_visa" => true, "send_courses" => true, "level" => "further_education" }
+
+      alert = create(:email_alert, subjects: %w[C1], search_attributes: alert_attrs).reload
+
+      # Verify the type mismatch exists
+      expect(alert.search_attributes["can_sponsor_visa"]).to be_a(String)
+      expect(recent_attrs["can_sponsor_visa"]).to be(true)
+
+      expect(alert.matches_search?(subjects: %w[C1], search_attributes: recent_attrs)).to be true
+    end
+
+    it "matches via filter_key when types differ between alert and recent search" do
+      alert_attrs = { "can_sponsor_visa" => "true", "send_courses" => "true", "level" => "further_education" }
+      recent_attrs = { "can_sponsor_visa" => true, "send_courses" => true, "level" => "further_education" }
+
+      alert = create(:email_alert, subjects: %w[C1], search_attributes: alert_attrs).reload
+
+      alert_key = alert.filter_key
+      filter_keys = Candidate::EmailAlert::FILTER_KEYS
+      normalized_recent_attrs = recent_attrs.stringify_keys.slice(*filter_keys)
+        .transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
+      recent_key = [%w[C1], normalized_recent_attrs]
+
+      expect(Set[alert_key].include?(recent_key)).to be true
+    end
+
+    it "matches when alert is missing a display-only key present in the recent search" do
+      alert = build(:email_alert, subjects: %w[C1], search_attributes: {
+        "level" => "further_education",
+        "can_sponsor_visa" => "true",
+      })
+
+      recent_attrs = {
+        "level" => "further_education",
+        "can_sponsor_visa" => "true",
+        "location" => "Manchester",
+        "radius" => "50",
+        "order" => "distance",
+      }
+
+      expect(alert.matches_search?(subjects: %w[C1], search_attributes: recent_attrs)).to be true
+    end
+  end
+
   describe "#unsubscribe!" do
     it "sets unsubscribed_at to the current time" do
       email_alert = create(:email_alert)
