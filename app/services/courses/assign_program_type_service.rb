@@ -16,16 +16,18 @@ module Courses
       when "salary"
         calculate_salary_program(provider_type)
       when "apprenticeship"
-        if course.teacher_degree_apprenticeship?
-          course.program_type
-        else
-          :pg_teaching_apprenticeship
-        end
+        calculate_apprenticeship_program(course)
       when "fee"
         calculate_fee_program(provider_type)
       else
         course.program_type # Default to current program_type if funding_type is not recognised
       end
+    end
+
+    def calculate_apprenticeship_program(course)
+      return :teacher_degree_apprenticeship if course.undergraduate_degree_with_qts?
+
+      :pg_teaching_apprenticeship
     end
 
     def calculate_salary_program(provider_type)

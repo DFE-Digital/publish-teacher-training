@@ -120,6 +120,7 @@ RSpec.describe Publish::Courses::OutcomeController do
         expect(course.accept_a_level_equivalency).to be_nil
         expect(course.accept_pending_a_level).to be_nil
         expect(course.additional_a_level_equivalencies).to be_nil
+        expect(course.program_type).to eq("pg_teaching_apprenticeship")
       end
     end
   end
