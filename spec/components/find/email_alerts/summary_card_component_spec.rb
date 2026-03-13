@@ -18,14 +18,14 @@ RSpec.describe Find::EmailAlerts::SummaryCardComponent, type: :component do
       end
 
       it "escapes HTML in filter row values" do
-        rendered = render_inline(described_class.new(email_alert:))
+        rendered = render_inline(described_class.new(email_alert:, subject_names: []))
 
         expect(rendered.to_html).not_to include("<script>")
         expect(rendered.text).to include('alert("xss")')
       end
 
       it "escapes HTML in the card title" do
-        rendered = render_inline(described_class.new(email_alert:))
+        rendered = render_inline(described_class.new(email_alert:, subject_names: []))
 
         expect(rendered.to_html).not_to include("<script>")
       end
@@ -44,7 +44,7 @@ RSpec.describe Find::EmailAlerts::SummaryCardComponent, type: :component do
       end
 
       it "escapes HTML in filter row values" do
-        rendered = render_inline(described_class.new(email_alert:))
+        rendered = render_inline(described_class.new(email_alert:, subject_names: []))
 
         expect(rendered.to_html).not_to include("<img src=x")
         expect(rendered.text).to include('onerror="alert(1)"')
@@ -63,7 +63,7 @@ RSpec.describe Find::EmailAlerts::SummaryCardComponent, type: :component do
       end
 
       it "renders without error" do
-        expect { render_inline(described_class.new(email_alert:)) }.not_to raise_error
+        expect { render_inline(described_class.new(email_alert:, subject_names: [])) }.not_to raise_error
       end
     end
   end
