@@ -2,9 +2,21 @@
 
 class BlazerAdminConstraint
   def matches?(request)
-    signin_user = Publish::Authentication::UserSession.load_from_session(request.session)
-    return false if signin_user.blank?
+    user = user_from_session(request)
+    return false if user.blank?
 
-    User.with_blazer_access.where(discarded_at: nil).exists?(email: signin_user.email)
+    user.blazer_access? && user.admin?
+  end
+
+private
+
+  def user_from_session(request)
+    session_key = request.cookie_jar.signed[Settings.cookies.user_session.name]
+    return unless session_key
+
+    db_session = Session.find_by(session_key:, sessionable_type: "User")
+    return unless db_session
+
+    db_session.sessionable
   end
 end

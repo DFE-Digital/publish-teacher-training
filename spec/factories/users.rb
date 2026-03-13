@@ -11,6 +11,12 @@ FactoryBot.define do
     sign_in_user_id { SecureRandom.uuid }
     state { "rolled_over" }
 
+    after(:create) do |user|
+      if user.sign_in_user_id.present? && user.authentications.dfe_signin.empty?
+        create(:authentication, :dfe_signin, authenticable: user, subject_key: user.sign_in_user_id)
+      end
+    end
+
     trait :admin do
       admin { true }
       email { "factory.admin.#{Faker::Name.first_name.downcase}@education.gov.uk" }

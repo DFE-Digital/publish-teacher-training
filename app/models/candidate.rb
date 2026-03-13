@@ -4,7 +4,7 @@ class Candidate < ApplicationRecord
 
   normalizes :email_address, with: ->(value) { value&.strip&.downcase }, apply_to_nil: false
 
-  has_many :sessions, inverse_of: :sessionable
+  has_many :sessions, as: :sessionable, inverse_of: :sessionable, dependent: :destroy
   has_many :authentications, inverse_of: :authenticable
 
   has_many :saved_courses, dependent: :destroy

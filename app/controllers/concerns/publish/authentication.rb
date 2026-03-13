@@ -4,20 +4,20 @@ module Publish
   module Authentication
     extend ActiveSupport::Concern
 
+    SESSION_TIMEOUT = 2.hours
+
     included do
       helper_method :current_user
+      before_action :load_user_session
       before_action :authenticate
     end
 
-    def user_session
-      @user_session ||= UserSession.load_from_session(session)
-    end
-
     def current_user
-      @current_user ||= User.find_by(email: user_session&.email)
+      @current_user ||= Current.session&.sessionable
     end
 
     def authenticated?
+      resume_session
       current_user.present?
     end
 
@@ -30,6 +30,78 @@ module Publish
       else
         redirect_to sign_in_path
       end
+    end
+
+  private
+
+    def load_user_session
+      session.delete("user") if session["user"].present?
+      resume_session
+    end
+
+    def resume_session
+      Current.session ||= find_user_session
+    end
+
+    def find_user_session
+      return unless user_session_key
+
+      db_session = Session.find_by(session_key: user_session_key)
+      return unless db_session
+      return unless db_session.sessionable_type == "User"
+
+      if db_session.updated_at < SESSION_TIMEOUT.ago
+        db_session.destroy!
+        reset_user_session_cookie
+        return
+      end
+
+      db_session.touch
+      db_session
+    end
+
+    def start_user_session(user, id_token: nil)
+      user.sessions.destroy_all
+      reset_user_session_cookie
+
+      user.sessions.create!(
+        session_key: user_session_key,
+        id_token: id_token,
+        user_agent: request.user_agent,
+        ip_address: request.remote_ip,
+      ).tap do |db_session|
+        Current.session = db_session
+      end
+    end
+
+    def terminate_user_session
+      Current.session&.destroy!
+      Current.session = nil
+      reset_user_session_cookie
+    end
+
+    # Cookie management
+
+    def user_session_key
+      cookies.signed[user_session_cookie_name] ||= new_user_session_cookie
+      cookies.signed[user_session_cookie_name]
+    end
+
+    def reset_user_session_cookie
+      cookies.signed[user_session_cookie_name] = new_user_session_cookie
+    end
+
+    def new_user_session_cookie
+      {
+        value: SecureRandom.hex(32),
+        httponly: true,
+        same_site: :lax,
+        secure: !Rails.env.in?(%(development test)),
+      }
+    end
+
+    def user_session_cookie_name
+      Settings.cookies.user_session.name
     end
   end
 end

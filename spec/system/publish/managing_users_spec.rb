@@ -126,7 +126,7 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
   end
 
   def given_that_the_user_does_not_have_a_dfe_signin_account
-    @user.update(sign_in_user_id: nil)
+    @user.authentications.dfe_signin.destroy_all
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -229,7 +229,7 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
   end
 
   def given_the_user_has_an_associated_dfe_signin_account
-    @user.update(sign_in_user_id: "SOME-SORT-OF-IDENTIFICATION-CODE")
+    @user.authentications.dfe_signin.first_or_create!(subject_key: "SOME-SORT-OF-IDENTIFICATION-CODE")
   end
 
   def then_i_should_not_see_any_change_links
