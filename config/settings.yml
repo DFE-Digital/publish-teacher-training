@@ -85,7 +85,6 @@ govuk_notify:
 
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
-system_authentication_token: <%= SecureRandom.base64 %>
 
 log_level: info
 magic_link:

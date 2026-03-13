@@ -27,5 +27,4 @@ one_login:
 mcbg:
   redis_password:
 
-system_authentication_token: "Ge32"
 log_level: debug
