@@ -52,11 +52,30 @@ RSpec.describe "AssignProgramType" do
           expect(course.program_type).to eq("pg_teaching_apprenticeship")
         end
 
-        it "keeps the teacher_degree_apprenticeship program type" do
+        it "sets the program type to teacher_degree_apprenticeship for undergraduate qualification" do
           provider = create(:provider)
-          course = create(:course, :with_teacher_degree_apprenticeship, provider:)
+          course = create(
+            :course,
+            :with_teacher_degree_apprenticeship,
+            :resulting_in_undergraduate_degree_with_qts,
+            provider:,
+          )
           service.execute(course.funding, course)
           expect(course.program_type).to eq("teacher_degree_apprenticeship")
+        end
+
+        it "sets the program type to pg_teaching_apprenticeship for non-undergraduate qualification" do
+          provider = create(:provider)
+          course = create(
+            :course,
+            :with_teacher_degree_apprenticeship,
+            :resulting_in_qts,
+            provider:,
+          )
+
+          service.execute(course.funding, course)
+
+          expect(course.program_type).to eq("pg_teaching_apprenticeship")
         end
       end
 
