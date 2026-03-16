@@ -116,7 +116,7 @@ class User < ApplicationRecord
   end
 
   def has_sign_in_account?
-    sign_in_user_id.present?
+    authentications.dfe_signin.exists?
   end
 
 private
