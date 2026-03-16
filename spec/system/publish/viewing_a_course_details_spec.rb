@@ -101,7 +101,7 @@ private
   def and_the_new_cycle_has_started
     Timecop.travel(1.day.after(find_opens(2026)))
     # Changing the time will log the user out
-    # /lib/publish/authentication/user_session.rb:34
+    # Database-backed session expires after 2 hours of inactivity
     visit_auth_sign_in_page
   end
 
