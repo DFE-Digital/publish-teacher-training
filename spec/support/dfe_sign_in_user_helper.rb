@@ -11,7 +11,7 @@ module DfESignInUserHelper
     OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
       fake_dfe_sign_in_auth_hash(
         email: user.email,
-        sign_in_user_id: user.sign_in_user_id,
+        subject_key: user.authentications.dfe_signin.first&.subject_key,
         first_name: user.first_name,
         last_name: user.last_name,
       ),
@@ -25,10 +25,10 @@ module DfESignInUserHelper
 
 private
 
-  def fake_dfe_sign_in_auth_hash(email:, sign_in_user_id:, first_name:, last_name:)
+  def fake_dfe_sign_in_auth_hash(email:, subject_key:, first_name:, last_name:)
     {
       "provider" => "dfe",
-      "uid" => sign_in_user_id,
+      "uid" => subject_key,
       "info" => {
         "name" => "#{first_name} #{last_name}",
         "email" => email,
@@ -50,7 +50,7 @@ private
       "extra" => {
         "raw_info" => {
           "email" => email,
-          "sub" => sign_in_user_id,
+          "sub" => subject_key,
         },
       },
     }

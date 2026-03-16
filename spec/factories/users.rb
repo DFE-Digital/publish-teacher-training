@@ -8,8 +8,13 @@ FactoryBot.define do
     first_login_date_utc { Faker::Time.backward(days: 1) }
     welcome_email_date_utc { Faker::Time.backward(days: 1) }
     accept_terms_date_utc { Faker::Time.backward(days: 1) }
-    sign_in_user_id { SecureRandom.uuid }
     state { "rolled_over" }
+
+    after(:create) do |user|
+      if user.authentications.dfe_signin.empty?
+        create(:authentication, :dfe_signin, authenticable: user, subject_key: SecureRandom.uuid)
+      end
+    end
 
     trait :admin do
       admin { true }
@@ -42,6 +47,12 @@ FactoryBot.define do
 
     trait :with_scitt_provider do
       providers { [create(:provider, :scitt)] }
+    end
+
+    trait :without_dfe_signin do
+      after(:create) do |user|
+        user.authentications.dfe_signin.destroy_all
+      end
     end
 
     trait :inactive do
