@@ -6,7 +6,19 @@ class SystemAdminConstraint
   end
 
   def system_admin?(request)
-    signin_user = Publish::Authentication::UserSession.load_from_session(request.session)
-    signin_user.present? && User.admins.where(discarded_at: nil).exists?(email: signin_user.email)
+    user = user_from_session(request)
+    user.present? && user.admin?
+  end
+
+private
+
+  def user_from_session(request)
+    session_key = request.cookie_jar.signed[Settings.cookies.user_session.name]
+    return unless session_key
+
+    db_session = Session.find_by(session_key:, sessionable_type: "User")
+    return unless db_session
+
+    db_session.sessionable
   end
 end
