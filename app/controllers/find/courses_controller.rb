@@ -13,7 +13,7 @@ module Find
     before_action :set_course, only: %i[show confirm_apply]
 
     def show
-      distance_from_location if params[:location].present?
+      distance_from_location if location_params.present?
 
       @saved_course = @candidate&.saved_courses&.find_by(course_id: @course.id)
 
@@ -26,8 +26,13 @@ module Find
 
     def confirm_apply; end
 
+    def location_params
+      location = params[:location]
+      location.is_a?(String) ? location : nil
+    end
+
     def distance_from_location
-      @address = Geolocation::Address.query(params[:location])
+      @address = Geolocation::Address.query(location_params)
       @distance_from_location ||= ::Courses::NearestSchoolQuery.new(
         courses: [@course],
         latitude: @address.latitude,

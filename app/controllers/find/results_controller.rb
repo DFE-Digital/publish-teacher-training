@@ -74,7 +74,8 @@ module Find
     end
 
     def location_params
-      params[:location]
+      location = params[:location]
+      location.is_a?(String) ? location : nil
     end
 
     def store_result_fullpath_for_backlinks
@@ -82,7 +83,10 @@ module Find
     end
 
     def page
-      params[:page].to_i.clamp(1..)
+      value = params[:page]
+      return 1 unless value.is_a?(String) || value.is_a?(Numeric)
+
+      value.to_i.clamp(1..)
     end
 
     def record_recent_search
