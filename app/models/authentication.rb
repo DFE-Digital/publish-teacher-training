@@ -1,7 +1,7 @@
 class Authentication < ApplicationRecord
   belongs_to :authenticable, polymorphic: true
 
-  enum :provider, { developer: 0, govuk_one_login: 1 }
+  enum :provider, { developer: 0, govuk_one_login: 1, dfe_signin: 2 }
 
   validates :authenticable, :provider, :subject_key, presence: true
   validate :unique_authenticable_with_provider
@@ -10,6 +10,7 @@ class Authentication < ApplicationRecord
     {
       "find-developer" => "developer",
       "one-login" => "govuk_one_login",
+      "dfe" => "dfe_signin",
     }[provider.to_s]
   end
 
