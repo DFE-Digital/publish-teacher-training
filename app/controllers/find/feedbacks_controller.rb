@@ -12,6 +12,9 @@ module Find
       else
         render :new
       end
+    rescue ArgumentError
+      @feedback = Feedback.new
+      render :new
     end
 
   private

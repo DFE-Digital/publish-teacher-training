@@ -102,7 +102,8 @@ module Find
       end
 
       def assign_saved_courses
-        @location = saved_courses_filter_params[:location]
+        location = saved_courses_filter_params[:location]
+        @location = location.is_a?(String) ? location : nil
         @address = Geolocation::Address.query(@location) if @location.present?
 
         query_params = saved_courses_query_params
