@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
   before_save :downcase_email, :strip_email_whitespace
 
+  has_many :sessions, as: :sessionable, dependent: :destroy
+  has_many :authentications, as: :authenticable, inverse_of: :authenticable, dependent: :destroy
   has_many :organisation_users, dependent: :destroy
 
   # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
