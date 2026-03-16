@@ -34,6 +34,12 @@ module Find
           get :index, params: { qualification: %w[qts] }
         }.not_to raise_error
       end
+
+      it "does not raise when location is passed as a hash instead of a string" do
+        expect {
+          get :index, params: { location: { foo: "bar" } }
+        }.not_to raise_error
+      end
     end
   end
 end
