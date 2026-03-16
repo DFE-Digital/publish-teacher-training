@@ -18,7 +18,6 @@ base_url: http://publish.localhost
 
 govuk_notify:
   api_key: cafe-cafecafe-cafe-cafe-cafe-cafecafecafe-cafecafe-cafe-cafe-cafe-cafecafecafe
-system_authentication_token: "Ge32"
 
 bg_jobs:
   save_statistic:

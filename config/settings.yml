@@ -44,13 +44,6 @@ dfe_signin:
   user_search_url: https://test-support.signin.education.gov.uk/users
 
 authentication:
-  algorithm: HS256
-  # Set this in the env! The below ensures that we are un-authenticatable if we
-  # forget to do this in production.
-  secret: <%= SecureRandom.base64 %>
-  issuer: "publish-teacher-training"
-  audience: "teacher-training-api"
-  subject: "access"
   # mode: magic_link  # when dfe_signin is down
   # mode: persona     # none critical systems, ie localhost
 
@@ -86,7 +79,6 @@ govuk_notify:
 
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
-system_authentication_token: <%= SecureRandom.base64 %>
 
 log_level: info
 magic_link:
