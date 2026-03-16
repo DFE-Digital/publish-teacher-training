@@ -44,6 +44,7 @@ dfe_signin:
   user_search_url: https://test-support.signin.education.gov.uk/users
 
 authentication:
+  mode: dfe_signin  # default authentication mode
   # mode: magic_link  # when dfe_signin is down
   # mode: persona     # none critical systems, ie localhost
 
