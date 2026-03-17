@@ -21,13 +21,12 @@ module Publish
         )
 
         if @course.enrichments.blank?
-          course_enrichment = @course.enrichments.find_or_initialize_draft
-          course_enrichment.course_length = "4 years"
+          @course.enrichments.find_or_initialize_draft
         else
           @course
             .enrichments
             .max_by(&:created_at)
-            .update(course_length: "4 years", fee_details: nil, fee_international: nil, fee_uk_eu: nil)
+            .update(fee_details: nil, fee_international: nil, fee_uk_eu: nil)
         end
       end
     end
