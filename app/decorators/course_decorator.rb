@@ -198,6 +198,10 @@ class CourseDecorator < ApplicationDecorator
       "1 year"
     when "TwoYears"
       "Up to 2 years"
+    when "ThreeYears"
+      "3 years"
+    when "FourYears"
+      "4 years"
     else
       course_length.to_s
     end
@@ -211,7 +215,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def other_course_length?
-    %w[OneYear TwoYears].exclude?(course_length) && !course_length.nil?
+    %w[OneYear TwoYears ThreeYears FourYears].exclude?(course_length) && !course_length.nil?
   end
 
   def other_age_range?
@@ -520,7 +524,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def cannot_change_course_length?
-    teacher_degree_apprenticeship? || is_withdrawn?
+    is_withdrawn?
   end
 
   def cannot_change_skilled_worker_visa?

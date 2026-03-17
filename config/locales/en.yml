@@ -325,6 +325,8 @@ en:
       length_value:
         OneYear: 1 year
         TwoYears: Up to 2 years
+        ThreeYears: 3 years
+        FourYears: 4 years
       age_group_key: Age group
       qualification_key: Qualification awarded
       qualification_value:

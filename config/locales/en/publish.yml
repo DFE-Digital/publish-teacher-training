@@ -74,6 +74,12 @@ en:
           two_years:
             label: Up to 2 years
             value: TwoYears
+          three_years:
+            label: 3 years
+            value: ThreeYears
+          four_years:
+            label: 4 years
+            value: FourYears
           other:
             label: Other
             value: Other
