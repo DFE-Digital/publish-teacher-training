@@ -4,12 +4,13 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
   include ::Courses::ActiveFilters::SummaryRowBuilder
 
   MAX_USER_INPUT_LENGTH = 200
+  COURSE_LIMIT = 20
 
   def weekly_digest(email_alert, courses)
     set_template(Settings.govuk_notify.email_alert_weekly_digest_template_id)
 
     @email_alert = email_alert
-    @courses = courses.first(20)
+    @courses = courses.first(COURSE_LIMIT)
     @remaining_count = courses.size - @courses.size
     @subject_names = Subject.where(subject_code: email_alert.subjects).pluck(:subject_name)
     @title = email_subject

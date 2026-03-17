@@ -148,7 +148,7 @@ We need to introduce **Recent Searches** (saving and replaying search filter set
 | **Phase 3** | `CleanupRecentSearchesJob`, sidekiq-cron schedule | `:candidate_accounts` |
 | **Phase 4** | `email_alerts` migration, model, `CreateEmailAlertService` | `:email_alerts` |
 | **Phase 5** | `EmailAlertsController`, create/unsubscribe flows, ViewComponents | `:email_alerts` |
-| **Phase 6** | `MatchCoursesToEmailAlertsService`, `EmailAlertMailer`, weekly job | `:email_alerts` |
+| **Phase 6** | `ProcessWeeklyEmailAlertsService`, `EmailAlertMailer`, weekly job | `:email_alerts` |
 | **Phase 7** | Analytics events, monitoring, alerting | Both |
 
 Each phase is independently deployable and testable. Feature flags ensure no user-facing changes until the team is ready.

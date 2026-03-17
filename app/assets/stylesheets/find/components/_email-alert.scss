@@ -1,5 +1,5 @@
 .app-filter-alert__icon {
-  height: 1em;
+  height: 1rem;
 
   fill: currentColor;
 }
@@ -17,6 +17,6 @@
     display: block;
 
     padding: 0;
-    margin-bottom: 15px;
+    margin-bottom: govuk-spacing(3);
   }
 }

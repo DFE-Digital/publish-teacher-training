@@ -38,6 +38,10 @@ class Candidate
       [subjects.sort, normalize_filter_attrs(search_attributes)]
     end
 
+    def filter_key_hash
+      Digest::SHA256.hexdigest(filter_key.to_json)
+    end
+
     def search_params
       params = search_attributes.symbolize_keys
       params[:subjects] = subjects if subjects.present?

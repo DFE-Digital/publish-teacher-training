@@ -11,7 +11,7 @@ module Find
 
         all_codes = @recent_searches.flat_map(&:subjects).compact.uniq
         @subject_names_by_code = all_codes.any? ? Subject.where(subject_code: all_codes).pluck(:subject_code, :subject_name).to_h : {}
-        @alerted_search_keys = @candidate.email_alerts.active.map(&:filter_key).to_set
+        @alerted_search_keys = @candidate.email_alerts.active.map(&:filter_key_hash).to_set
       end
 
       def clear_all
