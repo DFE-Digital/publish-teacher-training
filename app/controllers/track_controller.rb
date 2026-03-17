@@ -43,7 +43,7 @@ private
   end
 
   def host_allowed?(host)
-    ALLOWED_REDIRECT_HOSTS.include?(host)
+    ALLOWED_REDIRECT_HOSTS.include?(host.delete_prefix("www."))
   end
 
   def safe_redirect_url(url)
