@@ -194,6 +194,7 @@ FactoryBot.define do
 
     trait :with_teacher_degree_apprenticeship do
       program_type { :teacher_degree_apprenticeship }
+      qualification { :undergraduate_degree_with_qts }
       funding { :apprenticeship }
     end
 
