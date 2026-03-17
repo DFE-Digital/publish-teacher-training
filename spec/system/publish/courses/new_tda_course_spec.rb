@@ -38,9 +38,9 @@ RSpec.describe "Adding a teacher degree apprenticeship course" do
 
     when_i_click_on_the_course_description_tab
     then_i_do_not_see_the_degree_requirements_row
-    and_i_do_not_see_the_change_link_for_course_length
 
     given_i_fill_in_all_other_fields_for_the_course
+    and_i_set_the_course_length
     and_i_add_a_level_requirements
     when_i_publish_the_course
     then_the_course_is_published
@@ -76,9 +76,9 @@ RSpec.describe "Adding a teacher degree apprenticeship course" do
 
     when_i_click_on_the_course_description_tab
     then_i_do_not_see_the_degree_requirements_row
-    and_i_do_not_see_the_change_link_for_course_length
 
     given_i_fill_in_all_other_fields_for_the_course
+    and_i_set_the_course_length
     and_i_add_a_level_requirements
     when_i_publish_the_course
     then_the_course_is_published
@@ -113,9 +113,9 @@ RSpec.describe "Adding a teacher degree apprenticeship course" do
 
     when_i_click_on_the_course_description_tab
     then_i_do_not_see_the_degree_requirements_row
-    and_i_do_not_see_the_change_link_for_course_length
 
     given_i_fill_in_all_other_fields_for_the_course
+    and_i_set_the_course_length
     and_i_add_a_level_requirements
     when_i_publish_the_course
     then_the_course_is_published
@@ -398,7 +398,6 @@ RSpec.describe "Adding a teacher degree apprenticeship course" do
     expect(course.degree_subject_requirements).to be_nil
     expect(course.degree_grade).to eq("not_required")
     expect(course.enrichments.last).to be_present
-    expect(course.enrichments.last.course_length).to eq("4 years")
   end
 
   def and_i_select_no_send
@@ -433,10 +432,10 @@ RSpec.describe "Adding a teacher degree apprenticeship course" do
     end
   end
 
-  def and_i_do_not_see_the_change_link_for_course_length
-    within('[data-qa="enrichment__course_length"]') do
-      expect(page).to have_no_link("Change")
-    end
+  def and_i_set_the_course_length
+    click_on "Change course length"
+    choose "4 years"
+    click_on "Update course length"
   end
 
   def when_i_click_on_the_course_i_created
