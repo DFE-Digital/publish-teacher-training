@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Find
-  RSpec.describe MatchCoursesToEmailAlertsService, "integration" do
+  RSpec.describe ProcessWeeklyEmailAlertsService, "integration" do
     include ActiveJob::TestHelper
 
     let(:candidate) { create(:candidate) }

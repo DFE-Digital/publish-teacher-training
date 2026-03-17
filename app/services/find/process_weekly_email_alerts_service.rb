@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Find
-  class MatchCoursesToEmailAlertsService
+  class ProcessWeeklyEmailAlertsService
     def self.call(since: 1.week.ago)
       new(since).call
     end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Find
-  RSpec.describe MatchCoursesToEmailAlertsService do
+  RSpec.describe ProcessWeeklyEmailAlertsService do
     describe ".call" do
       let(:candidate) { create(:candidate) }
 

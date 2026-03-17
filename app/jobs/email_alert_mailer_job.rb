@@ -9,6 +9,6 @@ class EmailAlertMailerJob < ApplicationJob
     return if courses.empty?
 
     EmailAlertMailer.weekly_digest(alert, courses).deliver_now
-    alert.update!(last_sent_at: Time.current)
+    alert.touch(:last_sent_at)
   end
 end
