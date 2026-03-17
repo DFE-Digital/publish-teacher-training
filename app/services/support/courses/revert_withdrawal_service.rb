@@ -19,6 +19,7 @@ module Support
 
       def update_enrichments
         @course.enrichments.max_by(&:created_at).update(status: "published", last_published_timestamp_utc: Time.zone.now)
+        @course.set_first_published_date
       end
 
       def update_site_status

@@ -64,6 +64,14 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.visa_sponsorship_application_deadline_at).to be_nil
   end
 
+  it "resets first_published_date on the rolled-over course" do
+    course.update_column(:first_published_date, Date.current)
+
+    service.execute(course:, new_provider:)
+
+    expect(new_course.first_published_date).to be_nil
+  end
+
   it "adds the copied course to @courses_copied" do
     service.execute(course:, new_provider:)
 
