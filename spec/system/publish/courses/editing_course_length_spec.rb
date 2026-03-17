@@ -67,7 +67,7 @@ private
   end
 
   def and_there_is_an_uneditable_course
-    given_a_course_exists(program_type: "TDA", funding: :apprenticeship)
+    given_a_course_exists(:with_teacher_degree_apprenticeship)
   end
 
   def and_there_is_a_course_i_want_to_edit(course_length)
