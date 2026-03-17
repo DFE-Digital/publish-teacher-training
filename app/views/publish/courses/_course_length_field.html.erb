@@ -11,14 +11,20 @@
       <%= t("publish.providers.course_length.edit.course_length") %>
     </h1>
   </legend>
-    <%= f.govuk_radio_button(:course_length, t("publish.providers.course_length.edit.one_year.value"),
-      data: { qa: "course_course_length_oneyear" },
+  <%= f.govuk_radio_button(:course_length, t("publish.providers.course_length.edit.one_year.value"),
       label: { text: t("publish.providers.course_length.edit.one_year.label") },
       link_errors: true) %>
 
-    <%= f.govuk_radio_button(:course_length, t("publish.providers.course_length.edit.two_years.value"),
-      label: { text: t("publish.providers.course_length.edit.two_years.label") },
-      data: { qa: "course_course_length_twoyears" }) %>
+  <%= f.govuk_radio_button(:course_length, t("publish.providers.course_length.edit.two_years.value"),
+      label: { text: t("publish.providers.course_length.edit.two_years.label") }) %>
 
-    <%= render partial: "publish/courses/other_course_length_field", locals: { f:, course_object: @course } %>
+  <%= f.govuk_radio_button(:course_length, t("publish.providers.course_length.edit.other.value"),
+      checked: @course.other_course_length?,
+      label: { text: t("publish.providers.course_length.edit.other.label") }) do %>
+
+    <%= f.govuk_text_field(:course_length_other_length,
+        value: @course.other_course_length? ? @course.course_length : "",
+        label: { text: t("publish.providers.course_length.edit.custom_length.label"), size: "s" },
+        width: 20) %>
+  <% end %>
 <% end %>
