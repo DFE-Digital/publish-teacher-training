@@ -44,6 +44,36 @@ RSpec.describe "TrackController", service: :find, type: :request do
     end
   end
 
+  describe "redirect safety" do
+    before do
+      allow(Find::Analytics::ClickEvent).to receive(:new).and_return(instance_double(Find::Analytics::ClickEvent, send_event: nil))
+    end
+
+    it "redirects to an allowed host" do
+      get "/track_click", params: { url: "https://getintoteaching.education.gov.uk/page", utm_content: "test" }
+
+      expect(response).to redirect_to("https://getintoteaching.education.gov.uk/page")
+    end
+
+    it "redirects to an allowed host with www. prefix" do
+      get "/track_click", params: { url: "https://www.gov.uk/page", utm_content: "test" }
+
+      expect(response).to redirect_to("https://www.gov.uk/page")
+    end
+
+    it "redirects to the find root path for a disallowed host" do
+      get "/track_click", params: { url: "https://evil.com/page", utm_content: "test" }
+
+      expect(response).to redirect_to(find_root_path)
+    end
+
+    it "redirects to the find root path for a disallowed host with www. prefix" do
+      get "/track_click", params: { url: "https://www.evil.com/page", utm_content: "test" }
+
+      expect(response).to redirect_to(find_root_path)
+    end
+  end
+
   describe "GET /track_apply_to_course_click" do
     let(:course) { create(:course) }
 
