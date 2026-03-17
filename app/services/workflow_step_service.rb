@@ -184,10 +184,4 @@ private
   def school_direct_workflow_steps_with_accredited_provider_check
     school_direct_workflow_steps.reject { |step| workflow_removed_steps.include?(step) }
   end
-
-  def remove_applications_open(steps)
-    return steps unless FeatureFlag.active?(:hide_applications_open_date)
-
-    steps - [:applications_open]
-  end
 end
