@@ -4,29 +4,14 @@ class Candidate
   class EmailAlert < ApplicationRecord
     self.table_name = "candidate_email_alerts"
 
+    include FilterKeyDigestable
+
     belongs_to :candidate
 
     validates :search_attributes, search_attributes: true
 
     scope :active, -> { where(unsubscribed_at: nil) }
     scope :subscribed, -> { active }
-
-    # Keys that determine what courses match — excludes display-only keys
-    # (location, formatted_address, radius, order, provider_name, provider_code, subject_code)
-    # which are either stored as separate columns or don't affect results.
-    FILTER_KEYS = %w[
-      applications_open
-      can_sponsor_visa
-      engineers_teach_physics
-      funding
-      interview_location
-      level
-      minimum_degree_required
-      qualifications
-      send_courses
-      start_date
-      study_types
-    ].freeze
 
     def matches_search?(subjects:, search_attributes:)
       other_attrs = search_attributes.to_h.stringify_keys
@@ -36,10 +21,6 @@ class Candidate
 
     def filter_key
       [subjects.sort, normalize_filter_attrs(search_attributes)]
-    end
-
-    def filter_key_hash
-      Digest::SHA256.hexdigest(filter_key.to_json)
     end
 
     def search_params
@@ -53,12 +34,6 @@ class Candidate
 
     def unsubscribe!
       update!(unsubscribed_at: Time.current)
-    end
-
-  private
-
-    def normalize_filter_attrs(attrs)
-      attrs.slice(*FILTER_KEYS).transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
     end
   end
 end
