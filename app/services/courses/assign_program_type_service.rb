@@ -25,6 +25,8 @@ module Courses
     end
 
     def calculate_apprenticeship_program(course)
+      # Intentionally use qualification rather than current program_type.
+      # During TDA -> non-TDA updates, program_type can be stale until reassigned.
       return :teacher_degree_apprenticeship if course.undergraduate_degree_with_qts?
 
       :pg_teaching_apprenticeship
