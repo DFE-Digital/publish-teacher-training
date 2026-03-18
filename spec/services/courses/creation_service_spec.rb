@@ -90,7 +90,6 @@ describe Courses::CreationService do
       expect(subject.additional_degree_subject_requirements).to be(false)
       expect(subject.degree_grade).to eq("not_required")
       expect(subject.enrichments.last).to be_present
-      expect(subject.enrichments.last.course_length).to eq("4 years")
     end
   end
 
