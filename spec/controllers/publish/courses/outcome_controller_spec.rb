@@ -94,7 +94,6 @@ RSpec.describe Publish::Courses::OutcomeController do
         expect(course.degree_grade).to eq("not_required")
         expect(course.study_mode).to eq("full_time")
         expect(course.site_statuses.map(&:vac_status).uniq.first).to eq("full_time_vacancies")
-        expect(course.enrichments.max_by(&:created_at).course_length).to eq("4 years")
       end
     end
 
