@@ -101,9 +101,16 @@ module Find
       end
 
       def existing_alert?
+        digest = compute_digest_from_params
+        @candidate.email_alerts.active.exists?(filter_key_digest: digest)
+      end
+
+      def compute_digest_from_params
         attrs = search_params.to_h.stringify_keys
-        subjects = Array(attrs["subjects"])
-        @candidate.email_alerts.active.any? { |a| a.matches_search?(subjects:, search_attributes: attrs) }
+        subjects = Array(attrs["subjects"]).sort
+        normalized = attrs.slice(*FilterKeyDigestable::FILTER_KEYS)
+          .transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
+        Digest::SHA256.hexdigest([subjects, normalized].to_json)
       end
 
       def redirect_existing_alert

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_16_181000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_18_120001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -123,6 +123,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_181000) do
   create_table "candidate_email_alerts", force: :cascade do |t|
     t.bigint "candidate_id", null: false
     t.datetime "created_at", null: false
+    t.string "filter_key_digest"
     t.datetime "last_sent_at"
     t.float "latitude"
     t.string "location_name"
@@ -134,12 +135,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_181000) do
     t.datetime "updated_at", null: false
     t.index ["candidate_id", "unsubscribed_at"], name: "index_email_alerts_candidate_active"
     t.index ["candidate_id"], name: "index_candidate_email_alerts_on_candidate_id"
+    t.index ["filter_key_digest"], name: "index_candidate_email_alerts_on_filter_key_digest"
     t.index ["unsubscribed_at"], name: "index_candidate_email_alerts_on_unsubscribed_at"
   end
 
   create_table "candidate_recent_search", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "discarded_at"
+    t.string "filter_key_digest"
     t.bigint "find_candidate_id", null: false
     t.float "latitude"
     t.float "longitude"
@@ -148,6 +151,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_181000) do
     t.string "subjects", default: [], array: true
     t.datetime "updated_at", null: false
     t.index ["discarded_at"], name: "index_candidate_recent_search_on_discarded_at"
+    t.index ["filter_key_digest"], name: "index_candidate_recent_search_on_filter_key_digest"
     t.index ["find_candidate_id", "discarded_at", "updated_at"], name: "index_candidate_recent_search_candidate_active_updated"
     t.index ["find_candidate_id", "subjects", "longitude", "latitude", "radius"], name: "index_candidate_recent_search_active_dedup", unique: true, where: "(discarded_at IS NULL)"
     t.index ["find_candidate_id"], name: "index_candidate_recent_search_on_find_candidate_id"
