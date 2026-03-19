@@ -59,6 +59,7 @@ module Courses
       @scope = excluded_courses_scope
 
       # Ordering
+      @scope = master_subject_ordering_scope
       @scope = default_ordering_scope
       @scope = distance_ascending_order_scope
       @scope = course_name_ascending_order_scope
@@ -114,7 +115,10 @@ module Courses
 
       subject_codes = [params[:subjects], params[:subject_code]].flatten.compact
 
+      return @scope if subject_codes.empty?
+
       @applied_scopes[:subjects] = subject_codes
+      @searched_subject_ids = Subject.where(subject_code: subject_codes).select(:id)
 
       @scope.joins(:subjects).where(subjects: { subject_code: subject_codes })
     end
@@ -481,6 +485,14 @@ module Courses
     end
 
   private
+
+    def master_subject_ordering_scope
+      return @scope if @searched_subject_ids.blank?
+
+      order_sql = "CASE WHEN course.master_subject_id IN (#{@searched_subject_ids.to_sql}) THEN 0 ELSE 1 END ASC"
+
+      @scope.order(Arel.sql(order_sql))
+    end
 
     def log_query_info
       Courses::QueryLogger.new(self).call
