@@ -40,6 +40,10 @@
   - discarded_invalid_gias_urn
   - discarded_ids_lack_urn
   - discarded_invalid_urns
+  :candidate_recent_search:
+  - filter_key_digest
+  :candidate_email_alerts:
+  - filter_key_digest
   :user:
   - magic_link_token
   - blazer_access

@@ -512,6 +512,8 @@ en:
           details: View a candidate
           saved_courses: Saved Courses
           notes: Notes
+          email_alerts:
+            index: Email alerts
         users:
           index: "Users"
           show: "User overview"
@@ -524,6 +526,7 @@ en:
         text_search: 'Subject name'
       candidates:
         text_search: "Email address"
+        has_email_alerts: "Has active email alerts"
       providers:
         provider_search: "Provider name, code or UKPRN"
         course_search: "Course code"
