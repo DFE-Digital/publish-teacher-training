@@ -56,14 +56,22 @@ module Publish
 
       def handle_qualification_update
         if undergraduate_to_other_qualification?
-          @course.enrichments.find_or_initialize_draft.update(course_length: nil, salary_details: nil)
-          @course.update(
-            degree_type: "postgraduate",
-            a_level_subject_requirements: [],
-            accept_pending_a_level: nil,
-            accept_a_level_equivalency: nil,
-            additional_a_level_equivalencies: nil,
-          )
+          begin
+            ActiveRecord::Base.transaction do
+              @course.enrichments.find_or_initialize_draft.update!(course_length: nil, salary_details: nil)
+              @course.assign_attributes(
+                degree_type: "postgraduate",
+                a_level_subject_requirements: [],
+                accept_pending_a_level: nil,
+                accept_a_level_equivalency: nil,
+                additional_a_level_equivalencies: nil,
+              )
+              ::Courses::AssignProgramTypeService.new.execute(@course.funding, @course)
+              @course.save!
+            end
+          rescue ActiveRecord::RecordInvalid => e
+            return handle_update_failure(e.record)
+          end
 
           redirect_to funding_type_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
@@ -90,8 +98,8 @@ module Publish
         end
       end
 
-      def handle_update_failure
-        @errors = @course.errors.messages
+      def handle_update_failure(record = @course)
+        @errors = record.errors.messages
         render :edit
       end
 
