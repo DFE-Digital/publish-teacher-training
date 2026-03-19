@@ -62,7 +62,12 @@ module Courses
     def assign_master_and_subordinate_subject_ids
       return if subject_ids.empty?
 
-      course.master_subject_id, course.subordinate_subject_id = subject_ids
+      parent_ids = subject_ids.select { |id| assignable_parent_ids.include?(id) }
+      course.master_subject_id, course.subordinate_subject_id = parent_ids
+    end
+
+    def assignable_parent_ids
+      @assignable_parent_ids ||= course.assignable_master_subjects&.pluck(:id) || []
     end
 
     def request_has_duplicate_subject_ids?
