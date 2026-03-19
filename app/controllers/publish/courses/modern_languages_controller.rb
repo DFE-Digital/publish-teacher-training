@@ -112,18 +112,13 @@ module Publish
       end
 
       def build_course_params
-        build_new_course # to get languages edit_options
-        language_ids = params[:course].delete(:language_ids) || []
-        non_language_ids = selected_non_language_subject_ids
-        params[:course][:subjects_ids] = non_language_ids + language_ids
-      end
+        build_new_course
 
-      def non_language_subject_ids
-        @course.edit_course_options[:subjects].map(&:id).map(&:to_s)
-      end
-
-      def selected_non_language_subject_ids
-        params[:course][:subjects_ids] & non_language_subject_ids
+        params[:course][:subjects_ids] = MergeSubjectIdsService.call(
+          course: @course,
+          subjects_ids: params[:course][:subjects_ids],
+          language_ids: params[:course].delete(:language_ids),
+        )
       end
 
       def design_technology_subject_id
