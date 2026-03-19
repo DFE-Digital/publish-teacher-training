@@ -36,10 +36,6 @@ module Courses
 
   private
 
-    def subjects
-      @subjects ||= Subject.find(@subject_ids)
-    end
-
     def update_subjects
       if course.further_education_course?
         update_further_education_fields
@@ -51,42 +47,22 @@ module Courses
       elsif course.persisted?
         Course.transaction do
           course.course_subjects.clear
-          ordered_subject_ids.each_with_index do |subject_id, index|
+          subject_ids.each_with_index do |subject_id, index|
             course.course_subjects.create(subject_id:, position: index)
           end
           course.save
         end
       else
-        ordered_subject_ids.each_with_index do |subject_id, index|
+        subject_ids.each_with_index do |subject_id, index|
           course.course_subjects.build(subject_id:, position: index)
         end
       end
     end
 
-    def ordered_subject_ids
-      subjects_by_id = subjects.index_by(&:id)
-
-      language_ids = subject_ids.select { |id| subjects_by_id[id].is_a?(ModernLanguagesSubject) }
-      return subject_ids if language_ids.empty?
-
-      non_language_ids = subject_ids - language_ids
-
-      ml_parent_index = non_language_ids.index do |id|
-        s = subjects_by_id[id]
-        s.is_a?(SecondarySubject) && s.subject_name == "Modern Languages"
-      end
-
-      return subject_ids unless ml_parent_index
-
-      non_language_ids.insert(ml_parent_index + 1, *language_ids)
-    end
-
     def assign_master_and_subordinate_subject_ids
       return if subject_ids.empty?
 
-      language_ids = subjects.select { |s| s.is_a?(ModernLanguagesSubject) }.map(&:id)
-      non_language_ids = subject_ids.reject { |id| language_ids.include?(id) }
-      course.master_subject_id, course.subordinate_subject_id = non_language_ids
+      course.master_subject_id, course.subordinate_subject_id = subject_ids
     end
 
     def request_has_duplicate_subject_ids?

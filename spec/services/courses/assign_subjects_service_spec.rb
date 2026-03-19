@@ -237,13 +237,11 @@ describe Courses::AssignSubjectsService do
       let(:french) { find_or_create(:modern_languages_subject, :french) }
       let(:subject_ids) { [secondary_subject.id, french.id, modern_languages.id] }
 
-      it "reorders languages to come after ML parent" do
-        expect(subject.course_subjects.map { it.subject.id }).to eq(
-          [secondary_subject.id, modern_languages.id, french.id],
-        )
+      it "preserves caller order" do
+        expect(subject.course_subjects.map { it.subject.id }).to eq(subject_ids)
       end
 
-      it "sets master_subject_id to the first non-language subject" do
+      it "sets master_subject_id to the first parent subject" do
         expect(subject.master_subject_id).to eq(secondary_subject.id)
       end
 
