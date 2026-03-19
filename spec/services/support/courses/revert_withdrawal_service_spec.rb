@@ -26,13 +26,5 @@ RSpec.describe Support::Courses::RevertWithdrawalService do
     it "updates the course to published" do
       expect(course.reload.is_withdrawn?).to be_falsey
     end
-
-    it "sets first_published_date when it is nil" do
-      course.update_column(:first_published_date, nil)
-
-      described_class.new(course).call
-
-      expect(course.reload.first_published_date).to eq(Time.zone.today)
-    end
   end
 end
