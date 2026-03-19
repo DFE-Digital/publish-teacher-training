@@ -119,21 +119,13 @@ module Publish
 
         params[:course][:subjects_ids] = selected_subject_ids
 
-        build_new_course # to get languages edit_options
+        build_new_course
 
-        previous_language_selections = selected_subject_ids.include?(modern_languages_subject_id.to_s) ? strip_non_language_subject_ids(previous_subject_selections) : []
-
-        params[:course][:subjects_ids] = selected_subject_ids.concat(previous_language_selections)
-      end
-
-      def strip_non_language_subject_ids(subject_ids)
-        return [] unless subject_ids
-
-        subject_ids.filter { |id| available_languages_ids.include?(id) }
-      end
-
-      def available_languages_ids
-        @course.edit_course_options[:modern_languages].map(&:id).map(&:to_s)
+        params[:course][:subjects_ids] = MergeSubjectIdsService.call(
+          course: @course,
+          subjects_ids: selected_subject_ids,
+          all_subjects_ids: previous_subject_selections,
+        )
       end
 
       def section_key

@@ -118,34 +118,11 @@ module Publish
       def build_course_params
         build_new_course
 
-        previous_subject_selections = params[:course][:subjects_ids]
-
-        params[:course][:subjects_ids] = selected_non_design_technology_subject_ids
-
-        # Preserve previously selected Modern language specialisms
-        params[:course][:subjects_ids] += strip_non_language_subject_ids(previous_subject_selections)
-
-        # Append selected D&T specialisms
-        params[:course][:subjects_ids] += params[:course][:design_technology_ids] if params[:course][:design_technology_ids]
-        params[:course].delete(:design_technology_ids)
-      end
-
-      def non_design_technology_subject_ids
-        @course.edit_course_options[:subjects].map(&:id).map(&:to_s)
-      end
-
-      def selected_non_design_technology_subject_ids
-        non_design_technology_subject_ids & params[:course][:subjects_ids]
-      end
-
-      def available_languages_ids
-        @course.edit_course_options[:modern_languages].map(&:id).map(&:to_s)
-      end
-
-      def strip_non_language_subject_ids(subject_ids)
-        return [] unless subject_ids
-
-        subject_ids & available_languages_ids
+        params[:course][:subjects_ids] = MergeSubjectIdsService.call(
+          course: @course,
+          subjects_ids: params[:course][:subjects_ids],
+          design_technology_ids: params[:course].delete(:design_technology_ids),
+        )
       end
     end
   end
