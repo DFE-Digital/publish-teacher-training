@@ -20,7 +20,19 @@ module Publish
     end
 
     def call
-      parent_ids + resolved_language_ids + resolved_dt_ids
+      result = []
+
+      parent_ids.each do |id|
+        result << id
+
+        if id == ml_parent_id
+          result.concat(resolved_language_ids)
+        elsif id == dt_parent_id
+          result.concat(resolved_dt_ids)
+        end
+      end
+
+      result
     end
 
   private
@@ -37,6 +49,14 @@ module Publish
     def resolved_dt_ids
       source = @design_technology_ids || @all_subjects_ids
       source.select { |id| available_dt_ids.include?(id) }
+    end
+
+    def ml_parent_id
+      @ml_parent_id ||= @course.edit_course_options[:modern_languages_subject]&.id&.to_s
+    end
+
+    def dt_parent_id
+      @dt_parent_id ||= @course.edit_course_options[:design_technology_subjects]&.id&.to_s
     end
 
     def available_parent_ids
