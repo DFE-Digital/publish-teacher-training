@@ -28,7 +28,7 @@ module Support
     private
 
       def set_candidate
-        @candidate = Candidate.find(params[:candidate_id])
+        @candidate = ::Candidate.find(params[:candidate_id])
       end
 
       def set_email_alert

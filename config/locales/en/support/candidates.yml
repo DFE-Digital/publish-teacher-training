@@ -18,11 +18,13 @@ en:
         details: Details
         saved_courses: Saved courses
         notes: Notes
+        email_alerts: Email alerts
         delete_button: Delete this candidate
       saved_courses:
         details: Details
         saved_courses: Saved courses
         notes: Notes
+        email_alerts: Email alerts
         saved_at: Saved at
         no_saved_courses: This candidate hasn’t saved any courses yet.
         course: Course
@@ -31,6 +33,7 @@ en:
         details: Details
         saved_courses: Saved courses
         notes: Notes
+        email_alerts: Email alerts
         course: Course
         provider: Provider
         note: Note
