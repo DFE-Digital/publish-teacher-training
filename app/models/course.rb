@@ -637,6 +637,12 @@ class Course < ApplicationRecord
     end
   end
 
+  def set_first_published_date
+    return if first_published_date.present?
+
+    update_column(:first_published_date, publication_date_for_first_publish)
+  end
+
   def is_modern_language_course?
     course_subjects.any? { |cs| cs.subject == SecondarySubject.modern_languages }
   end
@@ -965,6 +971,14 @@ class Course < ApplicationRecord
   end
 
 private
+
+  def publication_date_for_first_publish
+    if next_recruitment_cycle? && Time.zone.now < Find::CycleTimetable.find_opens(recruitment_cycle.year)
+      Find::CycleTimetable.find_opens(recruitment_cycle.year).to_date
+    else
+      Time.zone.today
+    end
+  end
 
   def update_vac_status(study_mode, site_status)
     case study_mode
