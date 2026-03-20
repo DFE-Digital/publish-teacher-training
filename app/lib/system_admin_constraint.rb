@@ -6,7 +6,7 @@ class SystemAdminConstraint
   end
 
   def system_admin?(request)
-    signin_user = Publish::Authentication::UserSession.load_from_session(request.session)
-    signin_user.present? && User.admins.where(discarded_at: nil).exists?(email: signin_user.email)
+    user = UserFromCookie.authenticated_user(request)
+    user.present? && user.admin?
   end
 end
