@@ -4,8 +4,6 @@ module Publish
   module Authentication
     extend ActiveSupport::Concern
 
-    SESSION_TIMEOUT = 2.hours
-
     included do
       helper_method :current_user
       before_action :load_user_session
@@ -50,7 +48,7 @@ module Publish
       return unless db_session
       return unless db_session.sessionable_type == "User"
 
-      if db_session.updated_at < SESSION_TIMEOUT.ago
+      unless db_session.active?
         db_session.destroy!
         reset_user_session_cookie
         return
