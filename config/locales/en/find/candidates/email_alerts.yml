@@ -9,6 +9,9 @@ en:
           search_link_text: Search for a course
         new:
           already_subscribed: You already have an email alert for this search
+          subscription_limit_heading: You cannot set up a new email alert
+          subscription_limit_body_html: "You have already set up the maximum number of email alerts. You must %{link} in order to set up a new one."
+          subscription_limit_link_text: unsubscribe from one of your email alerts
           page_title: "Get email alerts for %{title}"
           heading_html: "Get email alerts for %{title}"
           intro: "We'll email you weekly when new courses are added that meet these criteria:"

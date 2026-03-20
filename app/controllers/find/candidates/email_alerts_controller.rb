@@ -6,6 +6,7 @@ module Find
       include ::Courses::ActiveFilters::SummaryRowBuilder
 
       before_action :require_authentication, except: %i[unsubscribe_from_email confirm_unsubscribe_from_email]
+      before_action :redirect_if_subscription_limit_reached, only: %i[new create]
 
       def index
         @email_alerts = @candidate.email_alerts.active.order(created_at: :desc)
@@ -160,6 +161,21 @@ module Find
           "location" => alert.location_name,
         )
         extract_filter_tags(attrs, subject_names: resolve_subject_names(alert.subjects))
+      end
+
+      def redirect_if_subscription_limit_reached
+        return unless @candidate.email_alert_subscription_limit_reached?
+
+        link = helpers.govuk_link_to(
+          t("find.candidates.email_alerts.new.subscription_limit_link_text"),
+          find_candidate_email_alerts_path,
+          target: "_blank",
+        )
+        flash[:info] = {
+          "title" => t("find.candidates.email_alerts.new.subscription_limit_heading"),
+          "body" => t("find.candidates.email_alerts.new.subscription_limit_body_html", link:),
+        }
+        redirect_to redirect_after_create
       end
 
       def redirect_after_create
