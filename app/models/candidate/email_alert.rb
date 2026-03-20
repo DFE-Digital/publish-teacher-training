@@ -4,6 +4,8 @@ class Candidate
   class EmailAlert < ApplicationRecord
     self.table_name = "candidate_email_alerts"
 
+    MAXIMUM_SUBSCRIPTIONS = 10
+
     belongs_to :candidate
 
     validates :search_attributes, search_attributes: true
