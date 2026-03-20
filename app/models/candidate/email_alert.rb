@@ -5,6 +5,7 @@ class Candidate
     self.table_name = "candidate_email_alerts"
 
     include FilterKeyDigestable
+    MAXIMUM_SUBSCRIPTIONS = 10
 
     belongs_to :candidate
 

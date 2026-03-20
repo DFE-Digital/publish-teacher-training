@@ -157,6 +157,34 @@ RSpec.describe "Email alerts", service: :find do
     then_i_see_already_subscribed_notice
   end
 
+  scenario "Cannot create email alert from search results when subscription limit reached" do
+    when_i_sign_in
+    and_i_have_reached_the_subscription_limit
+    when_i_visit_new_email_alert_with_params
+
+    then_i_am_redirected_away_from_new_page
+    then_i_see_subscription_limit_warning
+  end
+
+  scenario "Cannot create email alert from recent searches when subscription limit reached" do
+    when_i_sign_in
+    and_i_have_reached_the_subscription_limit
+    and_i_have_a_recent_search
+    when_i_visit_recent_searches
+    when_i_click_set_up_email_alert_on_recent_search
+
+    then_i_see_subscription_limit_warning
+  end
+
+  scenario "Can create email alert when some subscriptions are unsubscribed and active count is below limit" do
+    when_i_sign_in
+    and_i_have_reached_the_subscription_limit
+    and_one_subscription_is_unsubscribed
+    when_i_visit_new_email_alert_with_params
+
+    then_i_see_the_confirmation_page
+  end
+
   scenario "Creating an alert from recent searches then link is hidden" do
     when_i_sign_in
     and_i_have_a_recent_search_with_many_filters
@@ -435,6 +463,24 @@ RSpec.describe "Email alerts", service: :find do
 
   def then_i_see_already_subscribed_notice
     expect(page).to have_content("You already have an email alert for this search")
+  end
+
+  def and_i_have_reached_the_subscription_limit
+    create_subject!("C1", "Biology")
+    Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS.times do |i|
+      create(:email_alert, candidate:, subjects: %w[C1], search_attributes: { "level" => "secondary", "send_courses" => i.to_s })
+    end
+  end
+
+  def and_one_subscription_is_unsubscribed
+    candidate.email_alerts.active.first.unsubscribe!
+  end
+
+  def then_i_see_subscription_limit_warning
+    expect(page).to have_content("Important")
+    expect(page).to have_content("You cannot set up a new email alert")
+    expect(page).to have_content("You have already set up the maximum number of email alerts")
+    expect(page).to have_link("unsubscribe from one of your email alerts")
   end
 
   def create_subject!(code, name)
