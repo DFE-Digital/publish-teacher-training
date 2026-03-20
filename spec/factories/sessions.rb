@@ -6,5 +6,21 @@ FactoryBot.define do
     session_key { "46f991ab353648507017f0aca1de9563019c583c6d0c558d191454e13e886096" }
     sessionable { build(:candidate) }
     data { {} }
+
+    trait :timed_out do
+      updated_at do
+        case sessionable_type
+        when "User" then 1.minute.until(Session::USER_TIMEOUT.ago)
+        end
+      end
+    end
+
+    trait :active do
+      updated_at do
+        case sessionable_type
+        when "User" then 1.minute.since(Session::USER_TIMEOUT.ago)
+        end
+      end
+    end
   end
 end
