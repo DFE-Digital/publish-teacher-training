@@ -10,16 +10,20 @@ module Shared
           attr_reader :course, :enrichment
 
           delegate :salaried?,
-                   :excluded_from_bursary?,
-                   :bursary_only?,
-                   :has_scholarship_and_bursary?,
                    :has_fees?,
                    :financial_support, to: :course
+
+          delegate :bursary_only?,
+                   :has_scholarship_and_bursary?, to: :funding_view
 
           def initialize(course, enrichment)
             super()
             @course = course
             @enrichment = enrichment
+          end
+
+          def funding_view
+            @funding_view ||= CourseFunding::View.new(CourseFunding.new(course))
           end
         end
       end

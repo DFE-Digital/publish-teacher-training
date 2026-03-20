@@ -41,7 +41,7 @@
         <% unless course.is_further_education? %>
           <% summary_list.with_row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
             <% row.with_key { t(".subjects", count: [course.master_subject_id, course.subordinate_subject_id].compact.size) } %>
-            <% row.with_value { course.chosen_subjects } %>
+            <% row.with_value { course.sorted_subjects } %>
             <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_subjects_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: t(".subjects"),

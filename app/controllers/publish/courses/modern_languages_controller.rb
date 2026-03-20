@@ -18,7 +18,7 @@ module Publish
       def edit
         authorize(provider)
 
-        return if selected_non_language_subjects_ids.include? modern_languages_subject_id
+        return if param_subject_ids.include?(modern_languages_subject_id)
 
         redirect_to(
           details_publish_provider_recruitment_cycle_course_path(
@@ -32,14 +32,13 @@ module Publish
       def update
         authorize(provider)
 
-        next_subjects = updated_subject_list
-        if next_subjects.include?(design_technology_subject_id)
+        if merged_subject_ids.include?(design_technology_subject_id.to_s)
           redirect_to(
             design_technology_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
-              course: { subjects_ids: next_subjects },
+              course: { subjects_ids: merged_subject_ids },
             ),
           )
           return
@@ -75,12 +74,16 @@ module Publish
 
     private
 
-      def updated_subject_list
-        @updated_subject_list ||= selected_non_language_subjects_ids.concat(selected_language_subjects_ids)
+      def merged_subject_ids
+        @merged_subject_ids ||= MergeSubjectIdsService.call(
+          course: @course,
+          subjects_ids: params[:course][:subjects_ids],
+          language_ids: params[:course][:language_ids],
+        )
       end
 
       def course_subjects_form
-        @course_subjects_form ||= CourseSubjectsForm.new(@course, params: updated_subject_list)
+        @course_subjects_form ||= CourseSubjectsForm.new(@course, params: merged_subject_ids)
       end
 
       def error_keys
@@ -91,39 +94,22 @@ module Publish
         @modern_languages_subject_id ||= @course.edit_course_options[:modern_languages_subject].id
       end
 
-      def selected_subjects(param_key)
-        edit_course_options_key = param_key == :language_ids ? :modern_languages : :subjects
-
-        ids = params.dig(:course, param_key)&.map(&:to_i) || []
-
-        ids.intersection(@course.edit_course_options[edit_course_options_key].map(&:id))
-      end
-
-      def selected_language_subjects_ids
-        selected_subjects(:language_ids)
-      end
-
-      def selected_non_language_subjects_ids
-        selected_subjects(:subjects_ids)
-      end
-
       def has_modern_languages_subject?
         @course.course_subjects.any? { |subject| subject.subject.id == modern_languages_subject_id }
       end
 
+      def param_subject_ids
+        params.dig(:course, :subjects_ids)&.map(&:to_i) || []
+      end
+
       def build_course_params
-        build_new_course # to get languages edit_options
-        params[:course][:subjects_ids] = selected_non_language_subject_ids
-        params[:course][:subjects_ids] += params[:course][:language_ids] if params[:course][:language_ids]
-        params[:course].delete(:language_ids)
-      end
+        build_new_course
 
-      def non_language_subject_ids
-        @course.edit_course_options[:subjects].map(&:id).map(&:to_s)
-      end
-
-      def selected_non_language_subject_ids
-        non_language_subject_ids & params[:course][:subjects_ids]
+        params[:course][:subjects_ids] = MergeSubjectIdsService.call(
+          course: @course,
+          subjects_ids: params[:course][:subjects_ids],
+          language_ids: params[:course].delete(:language_ids),
+        )
       end
 
       def design_technology_subject_id
