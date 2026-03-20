@@ -22,10 +22,10 @@ describe "API" do
                 example: "T92"
       parameter name: :include,
                 in: :query,
-                type: :string,
                 required: false,
                 description: "The associated data for this resource.",
                 schema: {
+                  type: :string,
                   enum: %w[recruitment_cycle provider],
                 },
                 example: "recruitment_cycle,provider"
