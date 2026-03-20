@@ -1,0 +1,27 @@
+en:
+  support:
+    candidates:
+      email_alerts:
+        index:
+          page_title: Email alerts
+          details: Details
+          saved_courses: Saved courses
+          email_alerts: Email alerts
+          status: Status
+          subjects: Subjects
+          location: Location
+          filters: Filters
+          created: Created
+          last_sent: Last sent
+          action: Action
+          active: Active
+          unsubscribed: Unsubscribed
+          unsubscribe: Unsubscribe
+          no_email_alerts: This candidate has no email alerts.
+        confirm_unsubscribe:
+          page_title: Unsubscribe email alert
+          heading: Are you sure you want to unsubscribe this email alert?
+          submit: Unsubscribe
+          cancel: Cancel
+        unsubscribe:
+          success: Email alert successfully unsubscribed

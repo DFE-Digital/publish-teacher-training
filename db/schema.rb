@@ -153,6 +153,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_181000) do
     t.index ["find_candidate_id"], name: "index_candidate_recent_search_on_find_candidate_id"
   end
 
+
   create_table "contact", force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.text "email"
