@@ -72,6 +72,18 @@ module Publish
         authenticator.call
         expect(user.authentications.dfe_signin.first.subject_key).to eq(uid)
       end
+
+      context "when updating user details fails" do
+        before do
+          allow(User).to receive(:find_by).with(email:).and_return(user)
+          allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+        end
+
+        it "does not create an authentication record" do
+          expect { authenticator.call }.to raise_error(ActiveRecord::RecordInvalid)
+            .and(not_change { user.authentications.count })
+        end
+      end
     end
 
     context "when no user exists" do
