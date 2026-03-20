@@ -32,6 +32,23 @@ module Publish
           end
         end
 
+        context "when session has no id_token (e.g. magic link sign-in)" do
+          before do
+            session_key = SecureRandom.hex(32)
+            user.sessions.create!(session_key:, id_token: nil)
+            cookies.signed[Settings.cookies.user_session.name] = session_key
+          end
+
+          it "redirects to the sign-in page" do
+            post :destroy
+            expect(response).to redirect_to("/sign-in")
+          end
+
+          it "destroys the user's session record" do
+            expect { post :destroy }.to change { user.sessions.count }.from(1).to(0)
+          end
+        end
+
         context "non existing database user" do
           it "redirects to the root page" do
             post :destroy
