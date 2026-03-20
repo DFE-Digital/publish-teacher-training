@@ -32,8 +32,10 @@ module Publish
       user = User.find_by(email: email_address)
       return unless user
 
-      user.authentications.create!(provider:, subject_key: oauth.uid)
-      update_user_details(user)
+      ::Authentication.transaction do
+        user.authentications.create!(provider:, subject_key: oauth.uid)
+        update_user_details(user)
+      end
       user
     end
 
@@ -43,7 +45,7 @@ module Publish
       attributes[:first_name] = oauth.info.first_name if oauth.info.first_name.present?
       attributes[:last_name] = oauth.info.last_name if oauth.info.last_name.present?
 
-      user.update(attributes)
+      user.update!(attributes)
     end
 
     def authentication
