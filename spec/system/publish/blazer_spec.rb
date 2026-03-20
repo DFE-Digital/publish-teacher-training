@@ -6,19 +6,19 @@ RSpec.describe "Blazer SQL tool" do
   scenario "i cannot access blazer as an admin who does not have blazer access" do
     given_i_am_authenticated_as_an_admin
     when_i_visit_the_blazer_page
-    then_i_see_page_not_found
+    then_i_am_redirected_to_sign_in
   end
 
   scenario "i cannot access blazer as a non admin who does not have blazer access" do
     given_i_am_authenticated_as_a_non_admin
     when_i_visit_the_blazer_page
-    then_i_see_page_not_found
+    then_i_am_redirected_to_sign_in
   end
 
   scenario "I cannot access blazer as a non admin with blazer access" do
     given_i_am_authenticated_as_a_non_admin_who_is_authorised_to_access_blazer
     when_i_visit_the_blazer_page
-    then_i_see_page_not_found
+    then_i_am_redirected_to_sign_in
   end
 
   scenario "i can access blazer as an admin who has blazer access" do
@@ -60,7 +60,7 @@ RSpec.describe "Blazer SQL tool" do
     expect(publish_provider_courses_index_page).to be_displayed
   end
 
-  def then_i_see_page_not_found
-    expect(page.status_code).to eq(404)
+  def then_i_am_redirected_to_sign_in
+    expect(page).to have_current_path(sign_in_path)
   end
 end
