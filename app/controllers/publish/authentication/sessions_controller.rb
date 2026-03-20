@@ -48,10 +48,10 @@ module Publish
       end
 
       def logout_url(id_token)
-        if AuthenticationService.magic_link? || AuthenticationService.persona?
-          "/sign-in"
-        else
+        if id_token.present?
           dfe_logout_url(id_token)
+        else
+          "/sign-in"
         end
       end
 
