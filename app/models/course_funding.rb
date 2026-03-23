@@ -12,11 +12,11 @@ class CourseFunding
   end
 
   def bursary_amount
-    financial_incentive&.bursary_amount
+    find_max_funding_for("bursary_amount")
   end
 
   def scholarship_amount
-    financial_incentive&.scholarship
+    find_max_funding_for("scholarship")
   end
 
   def has_bursary?
@@ -35,13 +35,6 @@ class CourseFunding
     financial_incentive&.early_career_payments.present?
   end
 
-  def max_bursary_amount
-    find_max_funding_for("bursary_amount")
-  end
-
-  def max_scholarship_amount
-    find_max_funding_for("scholarship")
-  end
 
   def bursary_only?
     has_bursary? && !has_scholarship?
@@ -69,10 +62,9 @@ class CourseFunding
 private
 
   def find_max_funding_for(attribute)
-    subjects = funding_relevant_subjects
-    subjects
+    funding_relevant_subjects
       .filter_map { |s| s.financial_incentive&.public_send(attribute)&.to_i }
-      .max.to_s
+      .max&.to_s
   end
 
   def funding_relevant_subjects
@@ -86,7 +78,7 @@ private
 
     if modern_languages_master?
       language_subjects = subjects.select(&:language_subject?)
-      return language_subjects if language_subjects.present?
+      return language_subjects if language_subjects.length.between?(1, 2)
     end
 
     subjects

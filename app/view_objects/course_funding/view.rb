@@ -5,8 +5,8 @@ class CourseFunding::View
 
   delegate :has_bursary?, :has_scholarship?, :has_scholarship_and_bursary?,
            :bursary_only?, :has_early_career_payments?,
-           :max_bursary_amount, :max_scholarship_amount, :bursary_amount,
-           :scholarship_amount, :bursary_eligible_subjects?,
+           :bursary_amount, :scholarship_amount,
+           :bursary_eligible_subjects?,
            :scholarship_eligible_subjects?, :non_uk_funding_available?,
            :subject_with_scholarship,
            to: :course_funding

@@ -190,20 +190,20 @@ describe CourseFunding do
     end
   end
 
-  describe "#max_bursary_amount" do
+  describe "#bursary_amount" do
     it "returns the maximum bursary amount across all subjects" do
       mathematics = build(:secondary_subject, bursary_amount: "2000")
       english = build(:secondary_subject, bursary_amount: "4000")
       course = build(:course, :secondary, subjects: [mathematics, english])
 
-      expect(described_class.new(course).max_bursary_amount).to eq("4000")
+      expect(described_class.new(course).bursary_amount).to eq("4000")
     end
 
     context "when Modern Languages is the master subject" do
       include_context "modern languages with subordinate subject"
 
       it "uses language subject bursaries, ignoring the subordinate subject" do
-        expect(funding.max_bursary_amount).to eq("20000")
+        expect(funding.bursary_amount).to eq("20000")
       end
 
       it "uses the max across multiple language subjects" do
@@ -211,25 +211,25 @@ describe CourseFunding do
         russian.financial_incentive = FinancialIncentive.new(bursary_amount: "25000")
         course.subjects << russian
 
-        expect(funding.max_bursary_amount).to eq("25000")
+        expect(funding.bursary_amount).to eq("25000")
       end
     end
   end
 
-  describe "#max_scholarship_amount" do
+  describe "#scholarship_amount" do
     it "returns the maximum scholarship amount across all subjects" do
       mathematics = build(:secondary_subject, scholarship: "2000")
       english = build(:secondary_subject, scholarship: "4000")
       course = build(:course, :secondary, subjects: [mathematics, english])
 
-      expect(described_class.new(course).max_scholarship_amount).to eq("4000")
+      expect(described_class.new(course).scholarship_amount).to eq("4000")
     end
 
     context "when Modern Languages is the master subject" do
       include_context "modern languages with subordinate subject"
 
       it "uses language subject scholarships, ignoring the subordinate subject" do
-        expect(funding.max_scholarship_amount).to eq("22000")
+        expect(funding.scholarship_amount).to eq("22000")
       end
     end
   end
@@ -332,7 +332,7 @@ describe CourseFunding do
         mathematics = build(:secondary_subject, bursary_amount: "25000")
         course = build(:course, :secondary, subjects: [physics, mathematics])
 
-        expect(described_class.new(course).max_bursary_amount).to eq("29000")
+        expect(described_class.new(course).bursary_amount).to eq("29000")
       end
     end
 
@@ -340,11 +340,11 @@ describe CourseFunding do
       include_context "course with subordinate subject"
 
       it "ignores the subordinate subject's bursary" do
-        expect(funding.max_bursary_amount).to eq("")
+        expect(funding.bursary_amount).to be_nil
       end
 
       it "ignores the subordinate subject's scholarship" do
-        expect(funding.max_scholarship_amount).to eq("")
+        expect(funding.scholarship_amount).to be_nil
       end
 
       it "ignores the subordinate subject's non-UK bursary eligibility" do
@@ -368,7 +368,7 @@ describe CourseFunding do
       let(:funding) { described_class.new(course) }
 
       it "uses the master subject's bursary, not the subordinate's" do
-        expect(funding.max_bursary_amount).to eq("25000")
+        expect(funding.bursary_amount).to eq("25000")
       end
 
       it "does not use the subordinate's scholarship" do
@@ -380,8 +380,8 @@ describe CourseFunding do
       include_context "modern languages with subordinate subject"
 
       it "uses language subjects, ignoring both ML parent and subordinate" do
-        expect(funding.max_bursary_amount).to eq("20000")
-        expect(funding.max_scholarship_amount).to eq("22000")
+        expect(funding.bursary_amount).to eq("20000")
+        expect(funding.scholarship_amount).to eq("22000")
       end
 
       it "ignores the subordinate's non-UK eligibility" do
@@ -403,7 +403,7 @@ describe CourseFunding do
       end
 
       it "uses language subjects" do
-        expect(described_class.new(course).max_bursary_amount).to eq("20000")
+        expect(described_class.new(course).bursary_amount).to eq("20000")
       end
     end
   end
