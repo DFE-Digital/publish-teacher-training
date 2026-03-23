@@ -43,7 +43,7 @@ shared:
     - program_type
     - qualification
     - start_date
-    - first_published_datetime
+    - first_published_at
     - study_mode
     - provider_id
     - english
