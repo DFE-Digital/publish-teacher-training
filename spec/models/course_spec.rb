@@ -1838,12 +1838,12 @@ describe Course do
     end
   end
 
-  describe "#set_first_published_at" do
+  describe "#set_first_published_at!" do
     context "when first_published_at is nil" do
       it "sets first_published_at to now for current-cycle courses" do
         course.update_column(:first_published_at, nil)
 
-        expect { course.set_first_published_at }
+        expect { course.set_first_published_at! }
           .to change { course.reload.first_published_at }
           .from(nil)
 
@@ -1856,7 +1856,7 @@ describe Course do
         original_date = 4.days.ago
         course.update_column(:first_published_at, original_date)
 
-        expect { course.set_first_published_at }.not_to(change { course.reload.first_published_at })
+        expect { course.set_first_published_at! }.not_to(change { course.reload.first_published_at })
       end
     end
 
@@ -1868,7 +1868,7 @@ describe Course do
       it "sets first_published_at to Find open date for that cycle" do
         travel_to(1.day.before(Find::CycleTimetable.find_opens(next_recruitment_cycle.year))) do
           course.update_column(:first_published_at, nil)
-          course.set_first_published_at
+          course.set_first_published_at!
         end
 
         expect(course.reload.first_published_at).to eq(Find::CycleTimetable.find_opens(next_recruitment_cycle.year))

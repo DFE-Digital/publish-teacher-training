@@ -637,10 +637,10 @@ class Course < ApplicationRecord
     end
   end
 
-  def set_first_published_at
+  def set_first_published_at!
     return if first_published_at.present?
 
-    update_column(:first_published_at, publication_datetime_for_first_publish)
+    touch(:first_published_at, time: publication_datetime_for_first_publish)
   end
 
   def is_modern_language_course?
