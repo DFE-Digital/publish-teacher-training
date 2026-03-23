@@ -36,15 +36,17 @@ module Publish
   private
 
     def parent_ids
-      @subjects_ids & available_parent_ids
+      @subjects_ids.select { |id| available_parent_ids.include?(id) }
     end
 
     def resolved_language_ids
-      (@language_ids || @all_subjects_ids) & available_language_ids
+      source = @language_ids || @all_subjects_ids
+      source.select { |id| available_language_ids.include?(id) }
     end
 
     def resolved_dt_ids
-      (@design_technology_ids || @all_subjects_ids) & available_dt_ids
+      source = @design_technology_ids || @all_subjects_ids
+      source.select { |id| available_dt_ids.include?(id) }
     end
 
     def options
