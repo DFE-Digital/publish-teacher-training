@@ -12,11 +12,11 @@ class CourseFunding
   end
 
   def bursary_amount
-    find_max_funding_for("bursary_amount")
+    find_max_funding_for(:bursary_amount)
   end
 
   def scholarship_amount
-    find_max_funding_for("scholarship")
+    find_max_funding_for(:scholarship)
   end
 
   def has_bursary?
@@ -35,7 +35,6 @@ class CourseFunding
     financial_incentive&.early_career_payments.present?
   end
 
-
   def bursary_only?
     has_bursary? && !has_scholarship?
   end
@@ -52,7 +51,6 @@ class CourseFunding
     bursary_eligible_subjects? || scholarship_eligible_subjects?
   end
 
-  # return the downcased subject name if the courses subject has a scholarship
   def subject_with_scholarship
     @subject_with_scholarship ||= funding_relevant_subjects
       .find { |s| s.financial_incentive&.scholarship.present? }
@@ -68,20 +66,30 @@ private
   end
 
   def funding_relevant_subjects
-    return course.subjects if course.subordinate_subject_id.blank?
+    @funding_relevant_subjects ||= determine_funding_relevant_subjects
+  end
 
-    if science_with_specialist_subordinate?
-      return [subordinate_subject].compact
-    end
+  def determine_funding_relevant_subjects
+    return [subordinate_subject].compact if science_with_specialist_subordinate?
 
-    subjects = course.subjects.reject { |s| s.id == course.subordinate_subject_id }
+    subjects = without_subordinate
 
     if modern_languages_master?
       language_subjects = subjects.select(&:language_subject?)
       return language_subjects if language_subjects.length.between?(1, 2)
+      return [] if language_subjects.length > 2
     end
 
     subjects
+  end
+
+  # Returns all subject up to the position of the subordiante subject
+  # This prevents us returnin subjects that appear after the subordinat
+  def without_subordinate
+    return course.subjects if course.subordinate_subject_id.blank?
+
+    subordinate_index = course.subjects.index(subordinate_subject)
+    subordinate_index ? course.subjects.first(subordinate_index) : course.subjects
   end
 
   def master_subject

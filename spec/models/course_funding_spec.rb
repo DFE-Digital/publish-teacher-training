@@ -105,6 +105,18 @@ describe CourseFunding do
       it "returns the language subject's bursary, not the subordinate's" do
         expect(funding.bursary_amount).to eq("20000")
       end
+
+      it "uses the max across multiple language subjects" do
+        russian = build(:modern_languages_subject, :russian).tap do |s|
+          s.financial_incentive = FinancialIncentive.new(bursary_amount: "25000")
+        end
+        ml_course = build(:course, :secondary, name: "Modern Languages (Mandarin and Russian) with Mathematics",
+                                               subjects: [modern_languages, mandarin, russian, mathematics],
+                                               master_subject_id: modern_languages.id,
+                                               subordinate_subject_id: mathematics.id)
+
+        expect(described_class.new(ml_course).bursary_amount).to eq("25000")
+      end
     end
   end
 
@@ -187,50 +199,6 @@ describe CourseFunding do
       course = build(:course, subjects: [subject])
 
       expect(described_class.new(course)).not_to be_has_early_career_payments
-    end
-  end
-
-  describe "#bursary_amount" do
-    it "returns the maximum bursary amount across all subjects" do
-      mathematics = build(:secondary_subject, bursary_amount: "2000")
-      english = build(:secondary_subject, bursary_amount: "4000")
-      course = build(:course, :secondary, subjects: [mathematics, english])
-
-      expect(described_class.new(course).bursary_amount).to eq("4000")
-    end
-
-    context "when Modern Languages is the master subject" do
-      include_context "modern languages with subordinate subject"
-
-      it "uses language subject bursaries, ignoring the subordinate subject" do
-        expect(funding.bursary_amount).to eq("20000")
-      end
-
-      it "uses the max across multiple language subjects" do
-        russian = build(:modern_languages_subject, :russian)
-        russian.financial_incentive = FinancialIncentive.new(bursary_amount: "25000")
-        course.subjects << russian
-
-        expect(funding.bursary_amount).to eq("25000")
-      end
-    end
-  end
-
-  describe "#scholarship_amount" do
-    it "returns the maximum scholarship amount across all subjects" do
-      mathematics = build(:secondary_subject, scholarship: "2000")
-      english = build(:secondary_subject, scholarship: "4000")
-      course = build(:course, :secondary, subjects: [mathematics, english])
-
-      expect(described_class.new(course).scholarship_amount).to eq("4000")
-    end
-
-    context "when Modern Languages is the master subject" do
-      include_context "modern languages with subordinate subject"
-
-      it "uses language subject scholarships, ignoring the subordinate subject" do
-        expect(funding.scholarship_amount).to eq("22000")
-      end
     end
   end
 
@@ -404,6 +372,34 @@ describe CourseFunding do
 
       it "uses language subjects" do
         expect(described_class.new(course).bursary_amount).to eq("20000")
+      end
+    end
+
+    context "when Modern Languages has more than 2 language subjects" do
+      let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
+      let(:french) do
+        build(:modern_languages_subject, :french).tap do |s|
+          s.financial_incentive = FinancialIncentive.new(bursary_amount: "20000")
+        end
+      end
+      let(:german) do
+        build(:modern_languages_subject, :german).tap do |s|
+          s.financial_incentive = FinancialIncentive.new(bursary_amount: "18000")
+        end
+      end
+      let(:spanish) do
+        build(:modern_languages_subject, :spanish).tap do |s|
+          s.financial_incentive = FinancialIncentive.new(bursary_amount: "15000")
+        end
+      end
+      let(:course) do
+        build(:course, :secondary, subjects: [modern_languages, french, german, spanish],
+                                   master_subject_id: modern_languages.id)
+      end
+      let(:funding) { described_class.new(course) }
+
+      it "does not use language subject funding" do
+        expect(funding.bursary_amount).to be_nil
       end
     end
   end
