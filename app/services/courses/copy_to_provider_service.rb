@@ -30,6 +30,7 @@ module Courses
         new_course.can_sponsor_skilled_worker_visa          = course.can_sponsor_skilled_worker_visa
         new_course.can_sponsor_student_visa                 = course.can_sponsor_student_visa
         new_course.visa_sponsorship_application_deadline_at = nil # We can't currently predict how to carry this value over. Provider must set it again
+        new_course.first_published_at                       = nil
         new_course.save!(validate: false)
 
         copy_latest_enrichment_to_course(course, new_course)

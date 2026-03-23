@@ -28,6 +28,18 @@ RSpec.describe Courses::PublishService do
       return_value = subject.call
       expect(course.reload).to eq(return_value)
     end
+
+    it "sets first_published_at on first publish" do
+      expect { subject.call }.to change { course.reload.first_published_at }.from(nil)
+      expect(course.reload.first_published_at).to be_within(1.second).of(Time.zone.now)
+    end
+
+    it "does not change first_published_at once set" do
+      original_first_published_at = 5.days.ago
+      course.update_column(:first_published_at, original_first_published_at)
+
+      expect { subject.call }.not_to(change { course.reload.first_published_at })
+    end
   end
 
   describe "publishing during rollover" do
