@@ -764,31 +764,17 @@ class Course < ApplicationRecord
     end
   end
 
-  def assign_positioned_subjects!
-    if is_primary?
-      assign_positioned_master_subject!(subjects_list: course_subjects) if master_subject_id.blank?
-    else
-      positioned_secondary_subjects = course_subjects.select(&:position).select { |cs| cs.subject.secondary_subject? }
-
-      self.master_subject_id ||= assign_positioned_master_subject!(subjects_list: positioned_secondary_subjects)
-      self.subordinate_subject_id ||= assign_positioned_secondary_subject!(subjects_list: positioned_secondary_subjects)
-    end
-  end
-
-  def assign_positioned_master_subject!(subjects_list:)
-    subjects_list.first&.subject_id
-  end
-
-  def assign_positioned_secondary_subject!(subjects_list:)
-    subjects_list.second&.subject&.id
-  end
-
   def subordinate_subject_id
-    super || (is_primary? ? nil : assign_positioned_secondary_subject!(subjects_list: positioned_secondary_course_subjects))
+    super || fetch_subordinate_subject_id
   end
 
-  def positioned_secondary_course_subjects
-    course_subjects.select(&:position).select { |cs| cs.subject.secondary_subject? }
+  # Find the second SecondarySubject in the course_subjects
+  def fetch_subordinate_subject_id
+    return if is_primary? || further_education_course?
+
+    subject_ids = course_subjects.map(&:subject_id)
+    parent_ids = subject_ids.select { |id| assignable_master_subjects&.pluck(:id)&.include?(id) }
+    parent_ids.second
   end
 
   def assignable_master_subjects

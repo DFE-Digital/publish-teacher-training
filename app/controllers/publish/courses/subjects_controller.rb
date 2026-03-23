@@ -134,8 +134,6 @@ module Publish
 
       def build_course
         @course = provider.courses.find_by!(course_code: params[:code])
-
-        @course.assign_positioned_subjects!
       end
     end
   end
