@@ -121,7 +121,7 @@ module Publish
 
         build_new_course
 
-        params[:course][:subjects_ids] = MergeSubjectIdsService.call(
+        params[:course][:subjects_ids] = SortSubjectParamsService.call(
           course: @course,
           subjects_ids: selected_subject_ids,
           all_subjects_ids: previous_subject_selections,

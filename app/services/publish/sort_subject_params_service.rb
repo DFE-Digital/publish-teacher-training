@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class MergeSubjectIdsService
+  class SortSubjectParamsService
     include ServicePattern
 
     # Merges subject IDs from various form inputs into a single ordered array.

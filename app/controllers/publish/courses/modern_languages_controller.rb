@@ -75,7 +75,7 @@ module Publish
     private
 
       def merged_subject_ids
-        @merged_subject_ids ||= MergeSubjectIdsService.call(
+        @merged_subject_ids ||= SortSubjectParamsService.call(
           course: @course,
           subjects_ids: params[:course][:subjects_ids],
           language_ids: params[:course][:language_ids],
@@ -105,7 +105,7 @@ module Publish
       def build_course_params
         build_new_course
 
-        params[:course][:subjects_ids] = MergeSubjectIdsService.call(
+        params[:course][:subjects_ids] = SortSubjectParamsService.call(
           course: @course,
           subjects_ids: params[:course][:subjects_ids],
           language_ids: params[:course].delete(:language_ids),
