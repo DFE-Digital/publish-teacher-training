@@ -1838,6 +1838,44 @@ describe Course do
     end
   end
 
+  describe "#set_first_published_datetime" do
+    context "when first_published_datetime is nil" do
+      it "sets first_published_datetime to now for current-cycle courses" do
+        course.update_column(:first_published_datetime, nil)
+
+        expect { course.set_first_published_datetime }
+          .to change { course.reload.first_published_datetime }
+          .from(nil)
+
+        expect(course.reload.first_published_datetime).to be_within(1.second).of(Time.zone.now)
+      end
+    end
+
+    context "when first_published_datetime is already set" do
+      it "does not change the value" do
+        original_date = 4.days.ago
+        course.update_column(:first_published_datetime, original_date)
+
+        expect { course.set_first_published_datetime }.not_to(change { course.reload.first_published_datetime })
+      end
+    end
+
+    context "for next-cycle courses published before Find opens" do
+      let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
+      let(:next_cycle_provider) { create(:provider, :accredited_provider, recruitment_cycle: next_recruitment_cycle) }
+      let(:course) { create(:course, provider: next_cycle_provider) }
+
+      it "sets first_published_datetime to Find open date for that cycle" do
+        travel_to(1.day.before(Find::CycleTimetable.find_opens(next_recruitment_cycle.year))) do
+          course.update_column(:first_published_datetime, nil)
+          course.set_first_published_datetime
+        end
+
+        expect(course.reload.first_published_datetime).to eq(Find::CycleTimetable.find_opens(next_recruitment_cycle.year))
+      end
+    end
+  end
+
   describe "#discard" do
     context "new course" do
       subject { course }

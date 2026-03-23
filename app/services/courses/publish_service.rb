@@ -29,6 +29,7 @@ module Courses
         course.undiscard
         publish_sites
         course.publish_enrichment(user)
+        course.set_first_published_datetime
         course.application_status_open!
       end
     end
