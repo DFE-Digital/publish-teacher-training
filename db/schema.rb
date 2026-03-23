@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_16_181000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_17_101500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -193,7 +193,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_181000) do
     t.string "degree_type", default: "postgraduate", null: false
     t.datetime "discarded_at", precision: nil
     t.integer "english"
-    t.date "first_published_date"
+    t.datetime "first_published_datetime"
     t.string "funding", null: false
     t.boolean "is_send"
     t.string "level"
@@ -219,7 +219,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_181000) do
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["degree_grade"], name: "index_course_on_degree_grade"
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
-    t.index ["first_published_date"], name: "index_course_on_first_published_date"
+    t.index ["first_published_datetime"], name: "index_course_on_first_published_datetime"
     t.index ["funding"], name: "index_course_on_funding"
     t.index ["is_send"], name: "index_course_on_is_send"
     t.index ["master_subject_id"], name: "index_course_on_master_subject_id"
