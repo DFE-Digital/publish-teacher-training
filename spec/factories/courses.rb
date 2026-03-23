@@ -30,6 +30,7 @@ FactoryBot.define do
     additional_degree_subject_requirements { true }
     degree_subject_requirements { "Completed at least one programming module." }
     is_send { false }
+    first_published_at { nil }
 
     # Same unique-index collision issue as providers — see spec/support/changed_at_collision_fix.rb
     sequence(:changed_at) { |n| Time.zone.at(n).utc }
@@ -296,6 +297,7 @@ FactoryBot.define do
     end
 
     trait :published do
+      first_published_at { Time.zone.now }
       enrichments { [build(:course_enrichment, :published)] }
     end
 

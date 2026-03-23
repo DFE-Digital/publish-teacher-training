@@ -35,8 +35,7 @@ RSpec.describe Courses::PublishService do
     end
 
     it "does not change first_published_at once set" do
-      original_first_published_at = 5.days.ago
-      course.update_column(:first_published_at, original_first_published_at)
+      course = create(:course, :published)
 
       expect { subject.call }.not_to(change { course.reload.first_published_at })
     end
