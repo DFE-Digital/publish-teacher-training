@@ -7,10 +7,6 @@ class CourseFunding
     @course = course
   end
 
-  def financial_incentive
-    funding_relevant_subjects.reject(&:modern_languages?).first&.financial_incentive
-  end
-
   def bursary_amount
     find_max_funding_for(:bursary_amount)
   end
@@ -32,7 +28,7 @@ class CourseFunding
   end
 
   def has_early_career_payments?
-    financial_incentive&.early_career_payments.present?
+    funding_relevant_subjects.any? { |s| s.financial_incentive&.early_career_payments.present? }
   end
 
   def bursary_only?

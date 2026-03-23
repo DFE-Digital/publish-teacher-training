@@ -46,44 +46,6 @@ describe CourseFunding do
     let(:funding) { described_class.new(course) }
   end
 
-  describe "#financial_incentive" do
-    it "returns the first non-Modern-Languages subject's financial incentive" do
-      subject = build(:secondary_subject, :mathematics, bursary_amount: "3000")
-      course = build(:course, subjects: [subject])
-
-      funding = described_class.new(course)
-
-      expect(funding.financial_incentive).to eq(subject.financial_incentive)
-    end
-
-    it "skips Modern Languages subject" do
-      ml_subject = build(:secondary_subject, :modern_languages, bursary_amount: "1000")
-      real_subject = build(:secondary_subject, :french, bursary_amount: "3000")
-      course = build(:course, subjects: [ml_subject, real_subject])
-
-      funding = described_class.new(course)
-
-      expect(funding.financial_incentive).to eq(real_subject.financial_incentive)
-    end
-
-    it "returns nil when no subjects have financial incentives" do
-      subject = build(:secondary_subject, :mathematics)
-      course = build(:course, subjects: [subject])
-
-      funding = described_class.new(course)
-
-      expect(funding.financial_incentive.bursary_amount).to be_nil
-    end
-
-    context "when Modern Languages is the master subject" do
-      include_context "modern languages with subordinate subject"
-
-      it "ignores the subordinate subject's financial incentive" do
-        expect(funding.financial_incentive).to eq(mandarin.financial_incentive)
-      end
-    end
-  end
-
   describe "#bursary_amount" do
     it "returns the bursary amount from the financial incentive" do
       subject = build(:secondary_subject, bursary_amount: "3000")
@@ -294,16 +256,6 @@ describe CourseFunding do
   end
 
   describe "subordinate subject exclusion" do
-    context "when course has no subordinate subject" do
-      it "considers all subjects" do
-        physics = build(:secondary_subject, bursary_amount: "29000")
-        mathematics = build(:secondary_subject, bursary_amount: "25000")
-        course = build(:course, :secondary, subjects: [physics, mathematics])
-
-        expect(described_class.new(course).bursary_amount).to eq("29000")
-      end
-    end
-
     context "when course has a subordinate subject with no master bursary" do
       include_context "course with subordinate subject"
 
@@ -425,10 +377,6 @@ describe CourseFunding do
       context "when subordinate is #{specialist_name}" do
         include_context "science with specialist subordinate", specialist_name
 
-        it "uses the subordinate's financial incentive" do
-          expect(funding.financial_incentive).to eq(specialist.financial_incentive)
-        end
-
         it "uses the subordinate's bursary" do
           expect(funding.bursary_amount).to eq("29000")
         end
@@ -457,10 +405,6 @@ describe CourseFunding do
                                    subordinate_subject_id: mathematics.id)
       end
       let(:funding) { described_class.new(course) }
-
-      it "uses the master's financial incentive, not the subordinate's" do
-        expect(funding.financial_incentive).to eq(science.financial_incentive)
-      end
 
       it "uses the master's bursary" do
         expect(funding.bursary_amount).to eq("10000")

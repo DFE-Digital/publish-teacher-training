@@ -35,12 +35,12 @@ class CourseFunding::View
   end
 
   def financial_incentive_details
-    financial_incentive = course_funding.financial_incentive
-    formatted_bursary = number_to_currency(financial_incentive&.bursary_amount)
-    formatted_scholarship = number_to_currency(financial_incentive&.scholarship)
-
     return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Find::CycleTimetable.current_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
-    return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
+
+    formatted_bursary = number_to_currency(bursary_amount)
+    formatted_scholarship = number_to_currency(scholarship_amount)
+
+    return I18n.t("components.course.financial_incentives.none") if formatted_bursary.blank? && formatted_scholarship.blank?
 
     return I18n.t("components.course.financial_incentives.bursary_and_scholarship", scholarship: formatted_scholarship, bursary_amount: formatted_bursary) if formatted_bursary.present? && formatted_scholarship.present?
 
