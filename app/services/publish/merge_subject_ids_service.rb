@@ -20,55 +20,59 @@ module Publish
     end
 
     def call
-      result = []
+      parent_ids.flat_map do |id|
+        specialisms = if id == ml_parent_id
+                        resolved_language_ids
+                      elsif id == dt_parent_id
+                        resolved_dt_ids
+                      else
+                        []
+                      end
 
-      parent_ids.each do |id|
-        result << id
-
-        if id == ml_parent_id
-          result.concat(resolved_language_ids)
-        elsif id == dt_parent_id
-          result.concat(resolved_dt_ids)
-        end
+        [id, *specialisms]
       end
-
-      result
     end
 
   private
 
     def parent_ids
-      @subjects_ids.select { |id| available_parent_ids.include?(id) }
+      @subjects_ids & available_parent_ids
     end
 
     def resolved_language_ids
-      source = @language_ids || @all_subjects_ids
-      source.select { |id| available_language_ids.include?(id) }
+      (@language_ids || @all_subjects_ids) & available_language_ids
     end
 
     def resolved_dt_ids
-      source = @design_technology_ids || @all_subjects_ids
-      source.select { |id| available_dt_ids.include?(id) }
+      (@design_technology_ids || @all_subjects_ids) & available_dt_ids
+    end
+
+    def options
+      @options ||= @course.edit_course_options
     end
 
     def ml_parent_id
-      @ml_parent_id ||= @course.edit_course_options[:modern_languages_subject]&.id&.to_s
+      @ml_parent_id ||= options[:modern_languages_subject]&.id&.to_s
     end
 
     def dt_parent_id
-      @dt_parent_id ||= @course.edit_course_options[:design_technology_subjects]&.id&.to_s
+      @dt_parent_id ||= options[:design_technology_subjects]&.id&.to_s
     end
 
     def available_parent_ids
-      @available_parent_ids ||= @course.edit_course_options[:subjects].map(&:id).map(&:to_s)
+      @available_parent_ids ||= stringify_ids(options[:subjects])
     end
 
     def available_language_ids
-      @available_language_ids ||= @course.edit_course_options[:modern_languages].map(&:id).map(&:to_s)
+      @available_language_ids ||= stringify_ids(options[:modern_languages])
     end
 
     def available_dt_ids
-      @available_dt_ids ||= @course.edit_course_options[:design_technologies].map(&:id).map(&:to_s)
+      @available_dt_ids ||= stringify_ids(options[:design_technologies])
+    end
+
+    def stringify_ids(collection)
+      collection.map { |s| s.id.to_s }
     end
   end
 end
