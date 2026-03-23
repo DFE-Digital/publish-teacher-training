@@ -42,9 +42,19 @@ class Subject < ApplicationRecord
     type == "SecondarySubject"
   end
 
+  def modern_languages?
+    subject_name == "Modern Languages"
+  end
+
   LANGUAGE_SUBJECT_CODES = %w[Q3 A1 A2 15 18 19 A0 20 21 22 17].freeze
+  SCIENCE_SUBJECT_NAMES = %w[Physics Chemistry Biology].freeze
+
   def language_subject?
     subject_code.in?(LANGUAGE_SUBJECT_CODES)
+  end
+
+  def science_subject?
+    subject_name.in?(SCIENCE_SUBJECT_NAMES)
   end
 
   def match_synonyms_text

@@ -8,7 +8,7 @@ class CourseFunding
   end
 
   def financial_incentive
-    funding_relevant_subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first&.financial_incentive
+    funding_relevant_subjects.reject(&:modern_languages?).first&.financial_incentive
   end
 
   def bursary_amount
@@ -79,31 +79,33 @@ private
     return course.subjects if course.subordinate_subject_id.blank?
 
     if science_with_specialist_subordinate?
-      return course.subjects.select { |s| s.id == course.subordinate_subject_id }
+      return [subordinate_subject].compact
     end
 
     subjects = course.subjects.reject { |s| s.id == course.subordinate_subject_id }
 
     if modern_languages_master?
-      language_subjects = subjects.select { |s| s.is_a?(ModernLanguagesSubject) }
+      language_subjects = subjects.select(&:language_subject?)
       return language_subjects if language_subjects.present?
     end
 
     subjects
   end
 
-  SCIENCE_SPECIALIST_SUBJECT_NAMES = %w[Physics Chemistry Biology].freeze
+  def master_subject
+    @master_subject ||= course.subjects.find { |s| s.id == course.master_subject_id }
+  end
+
+  def subordinate_subject
+    @subordinate_subject ||= course.subjects.find { |s| s.id == course.subordinate_subject_id }
+  end
 
   def science_with_specialist_subordinate?
-    master = course.subjects.find { |s| s.id == course.master_subject_id }
-    return false unless master&.subject_name == "Science"
-
-    subordinate = course.subjects.find { |s| s.id == course.subordinate_subject_id }
-    subordinate&.subject_name&.in?(SCIENCE_SPECIALIST_SUBJECT_NAMES)
+    master_subject&.subject_name == "Science" &&
+      subordinate_subject&.science_subject?
   end
 
   def modern_languages_master?
-    master = course.subjects.find { |s| s.id == course.master_subject_id }
-    master&.subject_name == "Modern Languages"
+    master_subject&.modern_languages?
   end
 end
