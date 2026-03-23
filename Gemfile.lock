@@ -370,7 +370,7 @@ GEM
       logger
     html-attributes-utils (1.0.2)
       activesupport (>= 6.1.4.4)
-    http (6.0.1)
+    http (6.0.2)
       http-cookie (~> 1.0)
       llhttp (~> 0.6.1)
     http-cookie (1.1.0)
