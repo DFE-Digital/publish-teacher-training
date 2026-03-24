@@ -46,9 +46,5 @@ class Candidate
 
       errors.add(:base, :subscription_limit_reached)
     end
-
-    def normalize_filter_attrs(attrs)
-      attrs.slice(*FILTER_KEYS).transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
-    end
   end
 end
