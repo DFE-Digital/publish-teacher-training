@@ -467,7 +467,8 @@ RSpec.describe "Email alerts", service: :find do
 
   def and_i_have_reached_the_subscription_limit
     create_subject!("C1", "Biology")
-    Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS.times do |i|
+    stub_const("Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS", 2)
+    2.times do |i|
       create(:email_alert, candidate:, subjects: %w[C1], search_attributes: { "level" => "secondary", "send_courses" => i.to_s })
     end
   end

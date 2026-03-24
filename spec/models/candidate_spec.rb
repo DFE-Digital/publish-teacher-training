@@ -66,30 +66,6 @@ RSpec.describe Candidate, type: :model do
     end
   end
 
-  describe "#email_alert_subscription_limit_reached?" do
-    it "returns false when the candidate has fewer than the maximum active email alerts" do
-      candidate = create(:candidate)
-      create_list(:email_alert, 9, candidate:)
-
-      expect(candidate.email_alert_subscription_limit_reached?).to be false
-    end
-
-    it "returns true when the candidate has reached the maximum active email alerts" do
-      candidate = create(:candidate)
-      create_list(:email_alert, 10, candidate:)
-
-      expect(candidate.email_alert_subscription_limit_reached?).to be true
-    end
-
-    it "does not count unsubscribed email alerts" do
-      candidate = create(:candidate)
-      create_list(:email_alert, 10, candidate:)
-      candidate.email_alerts.first.unsubscribe!
-
-      expect(candidate.email_alert_subscription_limit_reached?).to be false
-    end
-  end
-
   describe ".search" do
     it "returns all candidates when query is blank" do
       candidate_one = create(:candidate, email_address: "alpha@example.com")

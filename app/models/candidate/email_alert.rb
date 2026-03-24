@@ -10,6 +10,7 @@ class Candidate
     belongs_to :candidate
 
     validates :search_attributes, search_attributes: true
+    validate :subscription_limit_not_reached
 
     scope :active, -> { where(unsubscribed_at: nil) }
     scope :subscribed, -> { active }
@@ -35,6 +36,19 @@ class Candidate
 
     def unsubscribe!
       update!(unsubscribed_at: Time.current)
+    end
+
+  private
+
+    def subscription_limit_not_reached
+      return unless new_record?
+      return unless candidate&.email_alerts&.active&.count.to_i >= MAXIMUM_SUBSCRIPTIONS
+
+      errors.add(:base, :subscription_limit_reached)
+    end
+
+    def normalize_filter_attrs(attrs)
+      attrs.slice(*FILTER_KEYS).transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
     end
   end
 end
