@@ -18,20 +18,31 @@ module FilterKeyDigestable
     study_types
   ].freeze
 
+  def self.compute_digest(subjects:, search_attributes:)
+    normalized = normalize_attrs(search_attributes)
+    key = [Array(subjects).sort, normalized]
+    Digest::SHA256.hexdigest(key.to_json)
+  end
+
+  def self.normalize_attrs(attrs)
+    (attrs || {}).stringify_keys
+      .slice(*FILTER_KEYS)
+      .transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
+  end
+
   included do
     before_save :set_filter_key_digest, if: :should_recompute_digest?
   end
 
   def compute_filter_key_digest
-    key = [Array(subjects).sort, normalize_filter_attrs(search_attributes || {})]
-    Digest::SHA256.hexdigest(key.to_json)
+    FilterKeyDigestable.compute_digest(subjects: subjects, search_attributes: search_attributes)
+  end
+
+  def normalize_filter_attrs(attrs)
+    FilterKeyDigestable.normalize_attrs(attrs)
   end
 
 private
-
-  def normalize_filter_attrs(attrs)
-    attrs.stringify_keys.slice(*FILTER_KEYS).transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
-  end
 
   def set_filter_key_digest
     self.filter_key_digest = compute_filter_key_digest
