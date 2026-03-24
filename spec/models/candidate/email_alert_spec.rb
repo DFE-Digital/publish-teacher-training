@@ -73,7 +73,7 @@ RSpec.describe Candidate::EmailAlert, type: :model do
     end
 
     it "omits blank denormalized columns" do
-      email_alert = build(:email_alert, search_attributes: { "level" => "primary" })
+      email_alert = build(:email_alert, subjects: [], search_attributes: { "level" => "primary" })
 
       result = email_alert.search_params
 
