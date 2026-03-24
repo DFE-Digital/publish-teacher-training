@@ -106,7 +106,7 @@ module Find
       end
 
       def compute_digest_from_params
-        FilterKeyDigestable.compute_digest(
+        Find::FilterKeyDigest.digest(
           subjects: search_params[:subjects],
           search_attributes: search_params.to_h,
         )

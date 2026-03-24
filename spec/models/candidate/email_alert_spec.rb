@@ -161,9 +161,7 @@ RSpec.describe Candidate::EmailAlert, type: :model do
       alert = create(:email_alert, subjects: %w[C1], search_attributes: alert_attrs).reload
 
       alert_key = alert.filter_key
-      filter_keys = Candidate::EmailAlert::FILTER_KEYS
-      normalized_recent_attrs = recent_attrs.stringify_keys.slice(*filter_keys)
-        .transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
+      normalized_recent_attrs = Find::FilterKeyDigest.normalize(recent_attrs)
       recent_key = [%w[C1], normalized_recent_attrs]
 
       expect(Set[alert_key].include?(recent_key)).to be true
