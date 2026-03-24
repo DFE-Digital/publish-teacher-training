@@ -48,7 +48,7 @@ jobs:
           environment: review
           pr-number: ${{ inputs.pr-number }}
           sha: ${{ inputs.sha }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook: ${{ secrets.TEAMS_WEBHOOK_URL }}
           azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
 
       - name: Post comment to Pull Request ${{ github.event.number }}
