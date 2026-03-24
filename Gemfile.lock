@@ -410,7 +410,7 @@ GEM
       rspec-expectations
     jsonapi-serializable (0.3.1)
       jsonapi-renderer (~> 0.2.0)
-    jsonb_accessor (1.4.1)
+    jsonb_accessor (1.4.2)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
       pg (>= 0.18.1)
