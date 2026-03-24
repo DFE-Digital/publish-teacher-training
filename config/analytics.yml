@@ -130,6 +130,8 @@ shared:
     - subject_id
     - bursary_amount
     - early_career_payments
+    - non_uk_bursary_eligible
+    - non_uk_scholarship_eligible
     - scholarship
     - created_at
     - updated_at

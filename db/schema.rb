@@ -322,6 +322,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_24_120000) do
     t.string "bursary_amount"
     t.datetime "created_at", null: false
     t.string "early_career_payments"
+    t.boolean "non_uk_bursary_eligible", default: false, null: false
+    t.boolean "non_uk_scholarship_eligible", default: false, null: false
     t.string "scholarship"
     t.bigint "subject_id", null: false
     t.boolean "subject_knowledge_enhancement_course_available", default: false, null: false
