@@ -42,7 +42,7 @@ module Courses
 
         course
           .course_subjects
-          .build(subject_id: FurtherEducationSubject.instance.id)
+          .build(subject_id: FurtherEducationSubject.instance.id, position: 0)
 
       elsif course.persisted?
         Course.transaction do
