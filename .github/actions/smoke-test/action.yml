@@ -8,7 +8,7 @@ inputs:
   pr-number:
     description: PR number if testing a review app
     required: false
-  slack-webhook:
+  teams-webhook:
     required: true
 
 runs:
@@ -25,13 +25,12 @@ runs:
       env:
         APP_NAME_SUFFIX: review-${{ inputs.pr-number }}
 
-    - name: "Notify Slack channel on failure"
+    - name: Notify teams channel on job failure
       if: ${{ failure() && inputs.environment != 'review' }}
-      uses: rtCamp/action-slack-notify@master
-      env:
-        SLACK_COLOR: "#ef5343"
-        SLACK_ICON_EMOJI: ":github-logo:"
-        SLACK_USERNAME: Publish Teacher Training
-        SLACK_TITLE: Smoke tests failure
-        SLACK_MESSAGE: ":alert: <!channel> Smoke tests failure on ${{ inputs.environment }} :sadparrot:"
-        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
+      uses: DFE-Digital/github-actions/send-to-teams-channel@master
+      with:
+        teams-webhook-url: ${{ inputs.teams-webhook }}
+        title: Smoke tests failure
+        service: Publish teacher training
+        message: |
+          Smoke tests failure on ${{ inputs.environment }}

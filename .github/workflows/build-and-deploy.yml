@@ -54,16 +54,15 @@ jobs:
         env:
           COMMAND: ${{ matrix.tests.command }}
 
-      - name: Notify Slack channel on job failure
+      - name: Notify teams channel on job failure
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_USERNAME: Publish Teacher Training CI
-          SLACK_TITLE: Lint failure
-          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training ${{ matrix.tests.name }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }} :sadparrot:"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_COLOR: failure
-          SLACK_FOOTER: Sent from lint job in build workflow
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Lint failure
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Publish Teacher Training ${{ matrix.tests.name }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }}
 
   javascript-tests:
     name: JavaScript Tests
@@ -83,16 +82,15 @@ jobs:
       - name: yarn test
         run: yarn run test --run
 
-      - name: Notify Slack channel on job failure
+      - name: Notify teams channel on job failure
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_USERNAME: Publish Teacher Training CI
-          SLACK_TITLE: Lint failure
-          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training ${{ matrix.name }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }} :sadparrot:"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_COLOR: failure
-          SLACK_FOOTER: Sent from lint job in build workflow
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Lint failure
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Publish Teacher Training ${{ matrix.name }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }}
 
   analytics-checks:
     name: Analytics checks
@@ -226,16 +224,15 @@ jobs:
       #     name: Coverage_report
       #     path: ${{ github.workspace }}/out/*
 
-      - name: Alert Test Failures
+      - name: Notify teams channel on job failure
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: "#ef5343"
-          SLACK_ICON_EMOJI: ":github-logo:"
-          SLACK_USERNAME: Publish Teacher Training CI
-          SLACK_TITLE: Test failure
-          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training Test failure :sadparrot:"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: Test failure
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Publish Teacher Training Test failure
 
   build:
     name: Build
@@ -263,7 +260,8 @@ jobs:
           max-cache: false
           target: middleman
           docker-repository: ${{ env.MIDDLEMAN_IMAGE }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
 #          snyk-token: ${{ secrets.SNYK_TOKEN }}
 
       - name: Build Docker Image
@@ -277,7 +275,8 @@ jobs:
           docker-repository: ${{ env.DOCKER_IMAGE }}
           extra-cache-repo: ${{ env.MIDDLEMAN_IMAGE }}
           snyk-token: ${{ secrets.SNYK_TOKEN }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
 
   deploy-review-app:
     name: Deployment To Review
@@ -303,7 +302,7 @@ jobs:
           environment: review
           pr-number: ${{ github.event.pull_request.number }}
           sha: ${{ needs.build.outputs.image_tag }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook: ${{ secrets.TEAMS_WEBHOOK_URL }}
           azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
 
       - name: Post comment to Pull Request ${{ github.event.number }}
@@ -345,7 +344,7 @@ jobs:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: ${{ matrix.environment }}
           sha: ${{ github.sha }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook: ${{ secrets.TEAMS_WEBHOOK_URL }}
 
   deploy-aks-production:
     name: Production deployment
@@ -368,7 +367,7 @@ jobs:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: production
           sha: ${{ github.sha }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook: ${{ secrets.TEAMS_WEBHOOK_URL }}
 
   deploy-aks-sandbox:
     name: Sandbox deployment
@@ -391,7 +390,7 @@ jobs:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: sandbox
           sha: ${{ github.sha }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook: ${{ secrets.TEAMS_WEBHOOK_URL }}
 
   # deploy_domains_infra:
   #   name: Deploy Domains Infrastructure
@@ -411,7 +410,8 @@ jobs:
   #         azure-client-id: ${{ secrets.AZURE_CLIENT_ID  }}
   #         azure-tenant-id: ${{ secrets.AZURE_TENANT_ID   }}
   #         azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
-  #         slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+  #         teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+  #.        service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
   #         terraform-base: terraform/custom_domains/infrastructure
 
   # deploy_domains_env:
@@ -438,5 +438,6 @@ jobs:
   #         azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID   }}
   #         environment: ${{ matrix.domain_environment }}
   #         healthcheck: healthcheck
-  #         slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+  #         teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+  #.        service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
   #         terraform-base: terraform/custom_domains/environment_domains

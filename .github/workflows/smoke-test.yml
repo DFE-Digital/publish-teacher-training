@@ -30,4 +30,4 @@ jobs:
         with:
           environment: ${{ github.event.inputs.environment }}
           pr-number: ${{ github.event.inputs.pr }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook: ${{ secrets.TEAMS_WEBHOOK_URL }}

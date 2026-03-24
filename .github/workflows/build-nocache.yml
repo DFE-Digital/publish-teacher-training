@@ -32,7 +32,8 @@ jobs:
           max-cache: false
           target: middleman
           docker-repository: ${{ env.MIDDLEMAN_IMAGE }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
 #          snyk-token: ${{ secrets.SNYK_TOKEN }}
 
       - name: Build Docker Image
@@ -46,4 +47,5 @@ jobs:
           docker-repository: ${{ env.DOCKER_IMAGE }}
           extra-cache-repo: ${{ env.MIDDLEMAN_IMAGE }}
           snyk-token: ${{ secrets.SNYK_TOKEN }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}

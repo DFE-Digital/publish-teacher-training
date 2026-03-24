@@ -11,7 +11,7 @@ inputs:
   sha:
     description: Commit sha to be deployed
     required: true
-  slack-webhook:
+  teams-webhook:
     required: true
   azure-storage-connection-string:
     description: Connection string
@@ -152,16 +152,14 @@ runs:
       with:
         environment: ${{ inputs.environment }}
         pr-number: ${{ inputs.pr-number }}
-        slack-webhook: ${{ inputs.slack-webhook }}
+        teams-webhook: ${{ inputs.teams-webhook }}
 
-    - name: Alert on Failure
+    - name: Notify teams channel on job failure
       if: ${{ failure() && github.ref == 'refs/heads/main' }}
-      uses: rtCamp/action-slack-notify@master
-      env:
-        SLACK_CHANNEL: twd_findpub_tech
-        SLACK_COLOR: '#ef5343'
-        SLACK_ICON_EMOJI: ':github-logo:'
-        SLACK_USERNAME: Publish Teacher Training
-        SLACK_TITLE: Deploy to ${{ inputs.environment }} Failed
-        SLACK_MESSAGE: ':alert: <!channel> Deployment failure on ${{ inputs.environment }} :sadparrot:'
-        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
+      uses: DFE-Digital/github-actions/send-to-teams-channel@master
+      with:
+        teams-webhook-url: ${{ inputs.teams-webhook }}
+        title: Deploy to ${{ inputs.environment }} Failed
+        service: Publish teacher training
+        message: |
+          Deployment failure on ${{ inputs.environment }}
