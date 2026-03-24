@@ -13,6 +13,18 @@ RSpec.describe "Support console Candidate email alerts" do
     then_i_see_the_email_alerts
   end
 
+  scenario "admin sees subject names in the email alerts table" do
+    when_a_candidate_with_email_alerts_with_subjects_exists
+    and_i_visit_the_candidate_email_alerts
+    then_i_see_the_subject_names
+  end
+
+  scenario "admin sees subject name when alert was created via homepage autocomplete with subject_code" do
+    when_a_candidate_with_subject_code_alert_exists
+    and_i_visit_the_candidate_email_alerts
+    then_i_see_the_subject_from_subject_code
+  end
+
   scenario "admin unsubscribes an active alert" do
     when_a_candidate_with_email_alerts_exists
     and_i_visit_the_candidate_email_alerts
@@ -83,6 +95,41 @@ RSpec.describe "Support console Candidate email alerts" do
 
   def then_i_see_the_empty_state
     expect(page).to have_content("This candidate has no email alerts.")
+  end
+
+  def when_a_candidate_with_subject_code_alert_exists
+    create_subject!("C1", "Biology")
+    @candidate = create(:candidate)
+    @alert_with_subject_code = create(
+      :email_alert,
+      candidate: @candidate,
+      subjects: [],
+      search_attributes: { "subject_code" => "C1" },
+      location_name: "Birmingham",
+    )
+  end
+
+  def then_i_see_the_subject_from_subject_code
+    expect(page).to have_content("Biology")
+  end
+
+  def when_a_candidate_with_email_alerts_with_subjects_exists
+    @biology = create_subject!("C1", "Biology")
+    @chemistry = create_subject!("F1", "Chemistry")
+    @candidate = create(:candidate)
+    @alert_with_subjects = create(:email_alert, candidate: @candidate, subjects: %w[C1 F1], location_name: "London")
+  end
+
+  def then_i_see_the_subject_names
+    expect(page).to have_content("Biology")
+    expect(page).to have_content("Chemistry")
+  end
+
+  def create_subject!(code, name)
+    return Subject.find_by(subject_code: code) if Subject.exists?(subject_code: code)
+
+    subject_area = SubjectArea.find_or_create_by!(typename: "SecondarySubject", name: "Secondary")
+    Subject.create!(subject_code: code, subject_name: name, type: "SecondarySubject", subject_area:)
   end
 
   def given_i_am_authenticated
