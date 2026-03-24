@@ -170,7 +170,9 @@ module Find
       end
 
       def redirect_if_subscription_limit_reached
-        return unless @candidate.email_alert_subscription_limit_reached?
+        email_alert = @candidate.email_alerts.build
+        email_alert.valid?
+        return unless email_alert.errors.of_kind?(:base, :subscription_limit_reached)
 
         link = helpers.govuk_link_to(
           t("find.candidates.email_alerts.new.subscription_limit_link_text"),

@@ -185,6 +185,50 @@ RSpec.describe Candidate::EmailAlert, type: :model do
     end
   end
 
+  describe "subscription limit validation" do
+    it "is valid when below the subscription limit" do
+      candidate = create(:candidate)
+      stub_const("Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS", 2)
+      create(:email_alert, candidate:)
+
+      email_alert = build(:email_alert, candidate:)
+
+      expect(email_alert).to be_valid
+    end
+
+    it "is invalid when the subscription limit is reached" do
+      candidate = create(:candidate)
+      stub_const("Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS", 2)
+      create_list(:email_alert, 2, candidate:)
+
+      email_alert = build(:email_alert, candidate:)
+
+      expect(email_alert).not_to be_valid
+      expect(email_alert.errors).to be_of_kind(:base, :subscription_limit_reached)
+    end
+
+    it "does not prevent updating an existing alert when at the limit" do
+      candidate = create(:candidate)
+      stub_const("Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS", 2)
+      alerts = create_list(:email_alert, 2, candidate:)
+
+      alerts.first.unsubscribe!
+
+      expect(alerts.first).to be_valid
+    end
+
+    it "does not count unsubscribed email alerts" do
+      candidate = create(:candidate)
+      stub_const("Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS", 2)
+      alerts = create_list(:email_alert, 2, candidate:)
+      alerts.first.unsubscribe!
+
+      email_alert = build(:email_alert, candidate:)
+
+      expect(email_alert).to be_valid
+    end
+  end
+
   describe "#unsubscribe!" do
     it "sets unsubscribed_at to the current time" do
       email_alert = create(:email_alert)

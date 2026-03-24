@@ -23,10 +23,6 @@ class Candidate < ApplicationRecord
     where("email_address ILIKE ?", pattern)
   end
 
-  def email_alert_subscription_limit_reached?
-    email_alerts.active.count >= Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS
-  end
-
   def full_name
     email_address
   end
