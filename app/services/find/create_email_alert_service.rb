@@ -20,7 +20,7 @@ module Find
         location_name: @search_params[:location] || @search_params[:formatted_address],
         search_attributes: filter_attributes,
       )
-    rescue ActiveRecord::RecordInvalid => e
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
       Sentry.capture_exception(e)
       nil
     end

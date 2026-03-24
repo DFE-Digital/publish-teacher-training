@@ -98,15 +98,16 @@ RSpec.describe Find::CreateEmailAlertService do
       end
     end
 
-    context "when candidate creates multiple alerts" do
-      it "allows duplicate filter combinations (no dedup)" do
+    context "when candidate creates a duplicate active alert" do
+      it "returns nil and does not create a duplicate" do
         params = { subjects: %w[C1], funding: "salary" }
 
         first = described_class.call(candidate:, search_params: params)
         second = described_class.call(candidate:, search_params: params)
 
-        expect(first.id).not_to eq(second.id)
-        expect(candidate.email_alerts.count).to eq(2)
+        expect(first).to be_persisted
+        expect(second).to be_nil
+        expect(candidate.email_alerts.count).to eq(1)
       end
     end
 
