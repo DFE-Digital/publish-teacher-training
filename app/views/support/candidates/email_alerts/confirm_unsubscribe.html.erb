@@ -10,7 +10,7 @@
       <%= t(".heading") %>
     </h1>
 
-    <% rows = build_summary_rows(@email_alert.search_attributes, subject_names: @subject_names) %>
+    <% rows = build_summary_rows(@email_alert.search_attributes || {}, subject_names: @subject_names) %>
     <% if rows.present? %>
       <%= govuk_summary_list do |list| %>
         <% rows.each do |summary_row| %>

@@ -27,7 +27,8 @@
     <% end %>
     <% table.with_body do |body| %>
       <% @email_alerts.each do |alert| %>
-        <% alert_subject_names = alert.subjects.filter_map { |code| @subject_names_by_code[code] } %>
+        <% alert_subject_codes = alert.subjects.presence || [alert.search_attributes&.dig("subject_code")].compact %>
+        <% alert_subject_names = alert_subject_codes.filter_map { |code| @subject_names_by_code[code] } %>
         <% body.with_row do |row| %>
           <% row.with_cell do %>
             <% if alert.unsubscribed_at.nil? %>
@@ -43,7 +44,7 @@
           <% end %>
           <% row.with_cell text: alert.location_name %>
           <% row.with_cell do %>
-            <% rows = build_summary_rows(alert.search_attributes, subject_names: alert_subject_names) %>
+            <% rows = build_summary_rows(alert.search_attributes || {}, subject_names: alert_subject_names) %>
             <% rows.reject { |r| %w[Subject Location].include?(r[:label]) }.each do |summary_row| %>
               <strong><%= summary_row[:label] %>:</strong> <%= summary_row[:value] %><br>
             <% end %>
