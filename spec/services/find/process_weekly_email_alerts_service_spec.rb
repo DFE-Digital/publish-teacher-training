@@ -11,7 +11,7 @@ module Find
         course = create(:course, :published_postgraduate)
         course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
 
-        alert = create(:email_alert, candidate:)
+        alert = create(:email_alert, candidate:, subjects: [])
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob)
@@ -53,8 +53,8 @@ module Find
         course = create(:course, :published_postgraduate)
         course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
 
-        create(:email_alert, candidate:)
-        create(:email_alert, candidate: create(:candidate))
+        create(:email_alert, candidate:, subjects: [])
+        create(:email_alert, candidate: create(:candidate), subjects: [])
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).exactly(2).times
@@ -65,7 +65,7 @@ module Find
         course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
         create(:course_enrichment, :published, course:, last_published_timestamp_utc: 1.day.ago)
 
-        alert = create(:email_alert, candidate:)
+        alert = create(:email_alert, candidate:, subjects: [])
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob)
@@ -92,7 +92,7 @@ module Find
         course = create(:course, :published_postgraduate)
         course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
 
-        create(:email_alert, candidate:)
+        create(:email_alert, candidate:, subjects: [])
 
         freeze_time do
           described_class.call(since: 1.week.ago)
