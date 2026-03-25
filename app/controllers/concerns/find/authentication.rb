@@ -61,8 +61,7 @@ module Find
         format.json do
           redirect_path = find_root_path
           if reason_for_request_from_json == :save_course && params[:course_id].present?
-            return_to = safe_results_return_to_from_referer
-            redirect_path = sign_in_find_candidate_saved_courses_path(course_id: params[:course_id], return_to: return_to.presence)
+            redirect_path = sign_in_find_candidate_saved_courses_path(course_id: params[:course_id])
           end
 
           render json: { redirect: redirect_path }, status: :unauthorized
@@ -76,30 +75,6 @@ module Find
       else
         :general
       end
-    end
-
-    def safe_results_return_to_from_referer
-      # When the results-page "Save" button is clicked while unauthenticated, the request comes in
-      # as JSON (fetch). We respond with a redirect URL that the browser follows.
-      #
-      # This helper derives a safe `return_to` from the HTTP Referer so users can be sent back to
-      # the same results page after signing in.
-      #
-      # Security notes:
-      # - We only allow same-host URLs to avoid open redirect issues.
-      # - We only allow paths under `/results` to avoid redirecting to arbitrary internal pages.
-      # - Invalid/absent referers simply result in no `return_to` being used.
-      return nil if request.referer.blank?
-
-      uri = URI.parse(request.referer)
-      return nil unless uri.host == request.host
-
-      path = uri.request_uri
-      return nil unless path.is_a?(String) && path.start_with?("/results")
-
-      path
-    rescue URI::InvalidURIError
-      nil
     end
 
     # Destroy session

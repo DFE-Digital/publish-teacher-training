@@ -129,7 +129,7 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
 
   def then_i_am_redirected_to_sign_in_page_from_results
     expect(page).to have_current_path(
-      sign_in_find_candidate_saved_courses_path(course_id: @course.id, return_to: find_results_path),
+      sign_in_find_candidate_saved_courses_path(course_id: @course.id),
     )
     expect(page).to have_content("Sign in to save this course")
   end
