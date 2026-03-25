@@ -118,6 +118,7 @@ module Courses
       return @scope if subject_codes.empty?
 
       @applied_scopes[:subjects] = subject_codes
+      # Used by master_subject_ordering_scope to prioritise courses whose master subject matches the search
       @searched_subject_ids = Subject.where(subject_code: subject_codes).select(:id)
 
       @scope.joins(:subjects).where(subjects: { subject_code: subject_codes })
