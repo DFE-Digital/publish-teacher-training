@@ -79,7 +79,7 @@ module Find
     end
 
     def store_result_fullpath_for_backlinks
-      session[:results_path] = request.fullpath
+      cookies[:results_path] = { value: request.fullpath, httponly: true }
     end
 
     def page
