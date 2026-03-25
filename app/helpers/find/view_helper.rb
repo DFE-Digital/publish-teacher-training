@@ -13,8 +13,8 @@ module Find
         find_candidate_saved_courses_path
       elsif referer.request_uri =~ %r{^/results}
         request.referer
-      elsif referer && session[:results_path] =~ %r{^/results}
-        session[:results_path]
+      elsif referer && cookies[:results_path]&.match?(%r{^/results})
+        cookies[:results_path]
       end
     end
 
