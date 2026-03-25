@@ -58,6 +58,48 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
 
+    context "when searching by multiple subjects" do
+      let(:chemistry_subject) { find_or_create(:secondary_subject, :chemistry) }
+
+      let!(:chemistry_course) do
+        create(
+          :course,
+          :with_full_time_sites,
+          :secondary,
+          name: "Chemistry",
+          provider:,
+          subjects: [chemistry_subject],
+          master_subject_id: chemistry_subject.id,
+        )
+      end
+
+      let!(:science_with_chemistry_course) do
+        create(
+          :course,
+          :with_full_time_sites,
+          :secondary,
+          name: "Science with Chemistry",
+          provider: another_provider,
+          subjects: [science_subject, chemistry_subject],
+          master_subject_id: science_subject.id,
+        )
+      end
+
+      let(:params) do
+        {
+          subjects: [physics_subject.subject_code, chemistry_subject.subject_code],
+          order: "course_name_ascending",
+        }
+      end
+
+      it "prioritises courses whose master subject matches any of the searched subjects" do
+        expect(results).to match_collection(
+          [chemistry_course, physics_course, science_with_chemistry_course, science_with_physics_course],
+          attribute_names: %w[id name],
+        )
+      end
+    end
+
     context "when no subject filter is applied" do
       let(:params) { { order: "course_name_ascending" } }
 
