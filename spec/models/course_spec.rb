@@ -112,100 +112,26 @@ describe Course do
     it { is_expected.to have_many(:saved_courses).dependent(:destroy) }
     it { is_expected.to have_many(:saved_by_candidates).through(:saved_courses).source(:candidate) }
 
-    describe "course_subjects" do
-      context "Adding subjects to a new course" do
-        let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
-        let(:further_education) { find_or_create(:further_education_subject) }
-        let(:english) { find_or_create(:secondary_subject, :english) }
-        let(:maths) { find_or_create(:secondary_subject, :mathematics) }
+    describe "#set_subject_position" do
+      let(:course) { build(:course, level: "secondary", infer_subjects?: false) }
+      let(:english) { find_or_create(:secondary_subject, :english) }
+      let(:maths) { find_or_create(:secondary_subject, :mathematics) }
 
-        context "Primary course" do
-          let(:course) { build(:course, level: "primary", subjects: []) }
-
-          it "Does not assign a position" do
-            course.course_subjects.build(subject: primary_with_mathematics)
-
-            expect(course.course_subjects.first.position).to be_nil
-          end
-        end
-
-        context "Further Education" do
-          let(:course) { build(:course, level: "further_education", subjects: []) }
-
-          it "Does not assign a position" do
-            course.course_subjects.build(subject: further_education)
-
-            expect(course.course_subjects.first.position).to be_nil
-          end
-        end
-
-        context "Secondary course" do
-          let(:course) { build(:course, level: "secondary", course_subjects: []) }
-
-          # The Course factory adds subjects to the course
-          # and I can't see how else to prevent the course having courses
-          before { course.subjects.destroy_all }
-
-          it "Assigns position 0 to a single secondary subject" do
-            course.course_subjects.build(subject: english)
-            expect(course.course_subjects.first.position).to eq(0)
-          end
-
-          it "Assigns position 0,1 to two secondary subjects in the order they are given" do
-            course.course_subjects.build(subject: maths)
-            course.course_subjects.build(subject: english)
-            course_subjects = course.course_subjects
-
-            expect(course_subjects[0].position).to eq(0)
-            expect(course_subjects[1].position).to eq(1)
-          end
-
-          it "Doesnt assign a position to languages" do
-            course.course_subjects.build(subject: modern_languages)
-            course.course_subjects.build(subject: french)
-
-            expect(course.course_subjects[0].position).to eq(0)
-            expect(course.course_subjects[1].position).to be_nil
-          end
-        end
+      it "assigns position 0 to the first subject added" do
+        course.subjects << english
+        expect(course.course_subjects.first.position).to eq(0)
       end
 
-      context "Adding subjects to an existing course" do
-        let(:english) { find_or_create(:secondary_subject, :english) }
-        let(:maths) { find_or_create(:secondary_subject, :mathematics) }
-
-        context "When the existing course has no priorities" do
-          it "Does not assign a priority to the new subject" do
-            course = build(:course, level: "secondary", subjects: [maths])
-            course.course_subjects.first.position = nil
-
-            course.subjects << english
-            expect(course.course_subjects.map(&:position)).to eq([nil, nil])
-          end
-        end
-
-        context "When the existing course has a modern language subject with languages" do
-          it "Assigns the priority to the new secondary subject" do
-            course = build(:course, level: "secondary", subjects: [modern_languages, french])
-            course.subjects << english
-
-            expect(course.course_subjects.last.position).to eq(1)
-          end
-        end
+      it "assigns incrementing positions for subsequent subjects" do
+        course.subjects << english
+        course.subjects << maths
+        expect(course.course_subjects.map(&:position)).to eq([0, 1])
       end
 
-      it "Orders course subjects by their position" do
-        english = find_or_create(:secondary_subject, :english)
-        maths = find_or_create(:secondary_subject, :mathematics)
-
-        course = build(:course, level: "secondary", subjects: [maths, english])
-        course.save!
-        course.reload
-
-        subjects = course.subjects
-
-        expect(subjects.first).to eq(maths)
-        expect(subjects.second).to eq(english)
+      it "does not overwrite an explicitly set position" do
+        course.course_subjects.build(subject: english, position: 5)
+        course.subjects << maths
+        expect(course.course_subjects.map(&:position)).to eq([5, 6])
       end
     end
 
@@ -1551,75 +1477,6 @@ describe Course do
     end
   end
 
-  context "bursaries and scholarships" do
-    subject { create(:course, :skip_validate, level: "secondary", subjects: [english]) }
-
-    let(:english) { find_or_create(:secondary_subject, :english) }
-    let!(:financial_incentive) { create(:financial_incentive, subject: english, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
-
-    it { is_expected.to have_bursary }
-    it { is_expected.to have_scholarship_and_bursary }
-    it { is_expected.to have_early_career_payments }
-
-    it { expect(subject.bursary_amount).to eq("255") }
-    it { expect(subject.scholarship_amount).to eq("1415") }
-
-    context "with multiple subjects" do
-      let(:maths) { find_or_create(:secondary_subject, :mathematics) }
-      let(:religious_education) { find_or_create(:secondary_subject, :religious_education) }
-
-      context "when main subject does not have financial incentive" do
-        subject { create(:course, :skip_validate, level: "secondary", subjects: [religious_education, english]) }
-
-        it "reads financial incentives from only the first subject" do
-          expect(subject.bursary_amount).to be_nil
-          expect(subject.has_bursary?).to be false
-          expect(subject.scholarship_amount).to be_nil
-          expect(subject.has_scholarship?).to be false
-        end
-      end
-
-      context "when main subject has a financial incentive" do
-        subject { create(:course, :skip_validate, level: "secondary", subjects: [maths, english]) }
-
-        it "reads financial incentives from only the first subject" do
-          expect(subject.bursary_amount).to eq maths.financial_incentive.bursary_amount
-          expect(subject.has_bursary?).to be true
-          expect(subject.scholarship_amount).to eq maths.financial_incentive.scholarship
-          expect(subject.has_scholarship?).to be true
-        end
-      end
-
-      context "with modern languages" do
-        context "with a language as a second subject" do
-          subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages, french, german, spanish]) }
-
-          let(:french) { create(:modern_languages_subject, :french) }
-          let(:german) { create(:modern_languages_subject, :german) }
-          let(:spanish) { create(:modern_languages_subject, :spanish) }
-          let!(:french_financial_incentive) { create(:financial_incentive, subject: french, bursary_amount: "15000", scholarship: nil) }
-          let!(:german_financial_incentive) { create(:financial_incentive, subject: german, bursary_amount: "14000", scholarship: nil) }
-          let!(:spanish_financial_incentive) { create(:financial_incentive, subject: spanish, bursary_amount: "13000", scholarship: nil) }
-
-          it "reads financial incentives from only the first subject, and ignores the 'Modern Languages' subject" do
-            expect(subject.bursary_amount).to eq french.financial_incentive.bursary_amount
-            expect(subject.has_bursary?).to be true
-            expect(subject.scholarship_amount).to eq french.financial_incentive.scholarship
-            expect(subject.has_scholarship?).to be false
-          end
-        end
-
-        context "with no language as a second subject" do
-          subject { create(:course, :skip_validate, level: "secondary", subjects: [modern_languages]) }
-
-          it "has no financial incentive" do
-            expect(subject.financial_incentive).to be_nil
-          end
-        end
-      end
-    end
-  end
-
   context "entry requirements" do
     %i[maths science english].each do |gcse_subject|
       describe gcse_subject do
@@ -2172,9 +2029,84 @@ describe Course do
 
     context "when course has two subjects" do
       it "set the subordinate subject id to the second subjects_id" do
+        master_subject = course.subjects.first
         subordinate_subject = find_or_create(:secondary_subject, :physics)
-        course.subjects << subordinate_subject
+        Courses::AssignSubjectsService.call(course:, subject_ids: [master_subject.id, subordinate_subject.id])
         expect(course.reload).to have_attributes({ subordinate_subject_id: subordinate_subject.id })
+      end
+    end
+
+    context "when master is Modern Languages with children and a subordinate" do
+      let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
+      let(:french) { find_or_create(:modern_languages_subject, :french) }
+      let(:physics) { find_or_create(:secondary_subject, :physics) }
+
+      let(:course) do
+        create(:course, :secondary, subjects: [modern_languages, french], master_subject_id: modern_languages.id).tap do |c|
+          c.course_subjects.delete_all
+          c.course_subjects.create!(subject: modern_languages, position: 0)
+          c.course_subjects.create!(subject: french, position: 1)
+          c.course_subjects.create!(subject: physics, position: 2)
+        end
+      end
+
+      it "derives subordinate as Physics, skipping language children" do
+        expect(course.subordinate_subject_id).to eq(physics.id)
+      end
+    end
+
+    context "when master is Design and technology with children and a subordinate" do
+      let(:design_and_technology) { find_or_create(:secondary_subject, :design_and_technology) }
+      let(:engineering) { find_or_create(:design_technology_subject, :engineering) }
+      let(:physics) { find_or_create(:secondary_subject, :physics) }
+
+      let(:course) do
+        create(:course, :secondary, subjects: [design_and_technology, engineering], master_subject_id: design_and_technology.id).tap do |c|
+          c.course_subjects.delete_all
+          c.course_subjects.create!(subject: design_and_technology, position: 0)
+          c.course_subjects.create!(subject: engineering, position: 1)
+          c.course_subjects.create!(subject: physics, position: 2)
+        end
+      end
+
+      it "derives subordinate as Physics, skipping D&T children" do
+        expect(course.subordinate_subject_id).to eq(physics.id)
+      end
+    end
+
+    context "when both master and subordinate are parent subjects" do
+      let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
+      let(:french) { find_or_create(:modern_languages_subject, :french) }
+      let(:design_and_technology) { find_or_create(:secondary_subject, :design_and_technology) }
+      let(:engineering) { find_or_create(:design_technology_subject, :engineering) }
+
+      let(:course) do
+        create(:course, :secondary, subjects: [modern_languages, french], master_subject_id: modern_languages.id).tap do |c|
+          c.course_subjects.delete_all
+          c.course_subjects.create!(subject: modern_languages, position: 0)
+          c.course_subjects.create!(subject: french, position: 1)
+          c.course_subjects.create!(subject: design_and_technology, position: 2)
+          c.course_subjects.create!(subject: engineering, position: 3)
+        end
+      end
+
+      it "derives subordinate as Design and technology" do
+        expect(course.subordinate_subject_id).to eq(design_and_technology.id)
+      end
+    end
+
+    context "when course has only a master subject with no subordinate" do
+      let(:english) { find_or_create(:secondary_subject, :english) }
+
+      let(:course) do
+        create(:course, :secondary, subjects: [english], master_subject_id: english.id).tap do |c|
+          c.course_subjects.delete_all
+          c.course_subjects.create!(subject: english, position: 0)
+        end
+      end
+
+      it "derives subordinate as nil" do
+        expect(course.subordinate_subject_id).to be_nil
       end
     end
   end

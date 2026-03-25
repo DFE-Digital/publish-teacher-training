@@ -53,6 +53,15 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.can_sponsor_student_visa).to eq course.can_sponsor_student_visa
   end
 
+  it "preserves course_subject positions" do
+    service.execute(course:, new_provider:)
+
+    original_positions = course.course_subjects.order(:position).map { |cs| [cs.subject_id, cs.position] }
+    copied_positions = new_course.course_subjects.order(:position).map { |cs| [cs.subject_id, cs.position] }
+
+    expect(copied_positions).to eq(original_positions)
+  end
+
   it "sets the visa_sponsorship_application_deadline_at to nil" do
     course.can_sponsor_student_visa = true
     course.visa_sponsorship_application_deadline_at = 1.week.before(course.recruitment_cycle.application_end_date)
@@ -147,6 +156,8 @@ RSpec.describe Courses::CopyToProviderService do
 
   it "saves without doing validations" do
     course_dup = instance_spy(Course, recruitment_cycle:)
+    course_subjects_double = instance_spy(ActiveRecord::Associations::CollectionProxy)
+    allow(course_dup).to receive(:course_subjects).and_return(course_subjects_double)
     allow(course).to receive(:dup).and_return(course_dup)
 
     service.execute(course:, new_provider:)
