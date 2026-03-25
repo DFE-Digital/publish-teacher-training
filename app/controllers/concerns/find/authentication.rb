@@ -49,7 +49,7 @@ module Find
     end
 
     def request_authentication
-      session["return_to_after_authenticating"] = request.url
+      session["return_to_after_authenticating"] = request.fullpath
 
       respond_to do |format|
         format.html do
