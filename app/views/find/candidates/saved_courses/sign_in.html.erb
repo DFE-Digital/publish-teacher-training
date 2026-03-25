@@ -12,9 +12,6 @@
 
     <%= form_tag(@login_path, method: :post) do %>
       <%= hidden_field_tag :course_id, @course.id %>
-      <% if @return_to.present? %>
-        <%= hidden_field_tag :return_to, @return_to %>
-      <% end %>
       <%= button_tag t(".continue"), type: "submit", class: "govuk-button" %>
     <% end %>
   </div>

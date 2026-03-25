@@ -14,13 +14,13 @@ module Find
       def sign_in
         @course = Course.find(params[:course_id])
         @login_path = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
-        @return_to = safe_results_return_to(params[:return_to])
+        @return_to = referer_is_results_page? ? safe_results_return_to(cookies[:results_path]) : nil
+        session["save_course_from_results"] = true if @return_to
       end
 
       def after_auth
         intent = extract_save_course_intent
         return redirect_to(find_root_path) if intent[:course_id].blank?
-        return redirect_to(find_root_path, flash: { error: save_failed_flash }) if intent[:invalid_return_to]
 
         @course = Course.find_by(id: intent[:course_id])
         return redirect_to(find_root_path, flash: { error: save_failed_flash }) unless @course
@@ -161,12 +161,11 @@ module Find
 
       def extract_save_course_intent
         course_id = session.delete("save_course_id_after_authenticating")
-        invalid_return_to = session.delete("save_course_return_to_invalid_after_authenticating").present?
-        return_to = safe_results_return_to(session.delete("save_course_return_to_after_authenticating"))
+        from_results = session.delete("save_course_from_results")
+        return_to = from_results ? safe_results_return_to(cookies[:results_path]) : nil
 
         {
           course_id: course_id,
-          invalid_return_to: invalid_return_to,
           return_to: return_to,
         }
       end
@@ -181,6 +180,14 @@ module Find
         else
           redirect_to_course(course)
         end
+      end
+
+      def referer_is_results_page?
+        return false if request.referer.blank?
+
+        URI.parse(request.referer).path&.start_with?("/results")
+      rescue URI::InvalidURIError
+        false
       end
 
       def safe_results_return_to(value)
