@@ -59,8 +59,6 @@ module Find
         end
 
         format.json do
-          session["flash_sign_in_reason"] = reason_for_request_from_json
-
           redirect_path = find_root_path
           if reason_for_request_from_json == :save_course && params[:course_id].present?
             return_to = safe_results_return_to_from_referer
@@ -102,10 +100,6 @@ module Find
       path
     rescue URI::InvalidURIError
       nil
-    end
-
-    def after_authentication_url
-      Current.session.data.delete("return_to_after_authenticating") || find_root_url
     end
 
     # Destroy session
