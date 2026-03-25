@@ -124,22 +124,15 @@ class Course < ApplicationRecord
   delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, :year, :rollover_period_2026?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
-  def applicable_for_engineers_teach_physics?
-    master_subject_id == SecondarySubject.physics.id
+  def set_subject_position(course_subject)
+    return if course_subject.position.present?
+
+    max_position = course_subjects.filter_map(&:position).max
+    course_subject.position = max_position ? max_position + 1 : 0
   end
 
-  def set_subject_position(course_subject)
-    return unless course_subject.subject.secondary_subject?
-
-    secondary_course_subjects = course_subjects.select { |cs| cs.subject.secondary_subject? }
-
-    return unless secondary_course_subjects.all? { |cs| cs.position.present? }
-
-    course_subject.position = if secondary_course_subjects.any?
-                                secondary_course_subjects.last.position + 1
-                              else
-                                0
-                              end
+  def applicable_for_engineers_teach_physics?
+    master_subject_id == SecondarySubject.physics.id
   end
 
   has_many :subjects, through: :course_subjects
@@ -810,27 +803,17 @@ class Course < ApplicationRecord
     end
   end
 
-  def assign_positioned_subjects!
-    if is_primary?
-      assign_positioned_master_subject!(subjects_list: course_subjects) if master_subject_id.blank?
-    else
-      positioned_subjects = course_subjects.select(&:position)
-
-      self.master_subject_id ||= assign_positioned_master_subject!(subjects_list: positioned_subjects)
-      self.subordinate_subject_id ||= assign_positioned_secondary_subject!(subjects_list: positioned_subjects)
-    end
-  end
-
-  def assign_positioned_master_subject!(subjects_list:)
-    subjects_list.first&.subject_id
-  end
-
-  def assign_positioned_secondary_subject!(subjects_list:)
-    subjects_list.second&.subject&.id
-  end
-
   def subordinate_subject_id
-    super || (is_primary? ? nil : assign_positioned_secondary_subject!(subjects_list: course_subjects.select(&:position)))
+    super || fetch_subordinate_subject_id
+  end
+
+  # Find the second SecondarySubject in the course_subjects
+  def fetch_subordinate_subject_id
+    return if is_primary? || further_education_course?
+
+    subject_ids = course_subjects.map(&:subject_id)
+    parent_ids = subject_ids.select { |id| assignable_master_subjects&.pluck(:id)&.include?(id) }
+    parent_ids.second
   end
 
   def assignable_master_subjects
