@@ -120,6 +120,7 @@ module Find
 
       it "matches a visa-sponsorship alert only to courses offering visa sponsorship" do
         create(:email_alert, candidate:,
+                             subjects: [],
                              search_attributes: { "can_sponsor_visa" => "true" })
 
         expect { described_class.call(since: 1.week.ago) }
@@ -231,7 +232,7 @@ module Find
       it "handles an alert with no subjects and no location (broad match)" do
         create_findable_course(name: "Any course", subjects: [biology])
 
-        create(:email_alert, candidate:)
+        create(:email_alert, candidate:, subjects: [])
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob).once
