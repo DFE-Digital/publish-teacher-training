@@ -3,13 +3,13 @@
 module Publish
   # In each relevant controller, sort the subject ids in a predetermined order
   #
-  # If there's on subject: [English]
+  # If there's one subject: [English]
   # If there's two subjects: [English, Mathematics]
   # If the master subject is Modern languages: [Modern Languages, *language_ids]
-  # If the master is Modern languages and subordiante is D&T: [Modern Languages, *language_ids, D&T, *specialisms]
-  # If the master is D&T and subordiante is Modern languages: [D&T, *specialisms, Modern Languages, *language_ids]
+  # If the master is Modern languages and subordinate is D&T: [Modern Languages, *language_ids, D&T, *specialisms]
+  # If the master is D&T and subordinate is Modern languages: [D&T, *specialisms, Modern Languages, *language_ids]
   #
-  # This keep the subject params predictable and consistent
+  # This keeps the subject params predictable and consistent
   class SortSubjectParamsService
     include ServicePattern
 
