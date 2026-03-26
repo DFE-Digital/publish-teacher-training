@@ -811,9 +811,8 @@ class Course < ApplicationRecord
   def fetch_subordinate_subject_id
     return if is_primary? || further_education_course?
 
-    subject_ids = course_subjects.map(&:subject_id)
-    parent_ids = subject_ids.select { |id| assignable_master_subjects&.pluck(:id)&.include?(id) }
-    parent_ids.second
+    assignable_ids = assignable_master_subjects&.pluck(:id) || []
+    course_subjects.map(&:subject_id).select { |id| assignable_ids.include?(id) }.second
   end
 
   def assignable_master_subjects
