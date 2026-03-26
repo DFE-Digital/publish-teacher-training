@@ -84,6 +84,9 @@ RSpec.describe Courses::CopyToProviderService do
 
   context "applications open from date" do
     it "updates the applications_open_from and start date attributes" do
+      # Set an explicit date, becuase the factory sets a random one resulting in flaky test
+      course.applications_open_from = provider.recruitment_cycle.application_start_date + 1.month
+
       service.execute(course:, new_provider:)
       expect(new_course.start_date).to eq course.start_date + 1.year
       expect(new_course.applications_open_from).to eq course.applications_open_from + 1.year
