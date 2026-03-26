@@ -64,6 +64,7 @@ module Courses
       @scope = distance_ascending_order_scope
       @scope = course_name_ascending_order_scope
       @scope = provider_name_ascending_order_scope
+      @scope = newest_course_order_scope
       @scope = start_date_ascending_order_scope
       @scope = fee_uk_ascending_order_scope
       @scope = fee_intl_ascending_order_scope
@@ -389,6 +390,20 @@ module Courses
             courses_table[:name] => :asc,
             courses_table[:course_code] => :asc,
           },
+        )
+    end
+
+    def newest_course_order_scope
+      return @scope unless params[:order] == "newest_course"
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select("course.*, provider.provider_name")
+        .joins(latest_published_enrichment_join_sql)
+        .group("course.id, provider.id, provider.provider_name, course_enrichment.last_published_timestamp_utc")
+        .order(
+          "course_enrichment.last_published_timestamp_utc DESC, LOWER(provider.provider_name) ASC, LOWER(course.name) ASC, course.course_code ASC",
         )
     end
 

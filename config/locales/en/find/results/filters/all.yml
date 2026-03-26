@@ -31,6 +31,7 @@ en:
             distance: Distance
             course_name_ascending: Course name (a to z)
             provider_name_ascending: Training provider (a to z)
+            newest_course: Newest course
             start_date: Soonest start date
             fee_uk_ascending: Lowest fee for UK citizens
             fee_intl_ascending: Lowest fee for non-UK citizens
