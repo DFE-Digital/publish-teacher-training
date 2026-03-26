@@ -136,6 +136,58 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
 
+    context "when ordering by newest course" do
+      let(:params) { { order: "newest_course" } }
+
+      let(:alpha_provider) { create(:provider, provider_name: "Alpha University") }
+      let(:beta_provider) { create(:provider, provider_name: "Beta University") }
+
+      let!(:course_old) do
+        create(:course, :with_full_time_sites, name: "Geology", provider: alpha_provider,
+                                               enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 3.days.ago)])
+      end
+      let!(:course_new) do
+        create(:course, :with_full_time_sites, name: "Astronomy", provider: beta_provider,
+                                               enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 1.day.ago)])
+      end
+      let!(:course_mid) do
+        create(:course, :with_full_time_sites, name: "Ecology", provider: alpha_provider,
+                                               enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 2.days.ago)])
+      end
+
+      it "returns courses ordered by newest first" do
+        newest_courses = results.select { |c| c.name.in?(%w[Geology Astronomy Ecology]) }
+
+        expect(newest_courses).to match_collection(
+          [course_new, course_mid, course_old],
+          attribute_names: %w[name],
+        )
+      end
+
+      context "when courses have the same published timestamp" do
+        let(:zeta_provider) { create(:provider, provider_name: "Zeta University") }
+        let(:same_published_at) { Time.zone.parse("2026-03-20 12:00:00") }
+
+        let!(:course_same_time_zeta) do
+          create(:course, :with_full_time_sites, name: "Robotics", provider: zeta_provider,
+                                                 enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: same_published_at)])
+        end
+
+        before do
+          course_new.enrichments.first.update!(last_published_timestamp_utc: same_published_at)
+        end
+
+        it "orders by provider name ascending as secondary sort" do
+          same_time_courses = results.select { |c| c.name.in?(%w[Astronomy Robotics]) }
+
+          expect(same_time_courses).to match_collection(
+            [course_new, course_same_time_zeta],
+            attribute_names: %w[name provider_id],
+          )
+        end
+      end
+    end
+
     context "when ordering by start date ascending" do
       let(:params) { { order: "start_date_ascending" } }
 
