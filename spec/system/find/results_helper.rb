@@ -248,7 +248,7 @@ module ResultsHelper
     expect(Rails.cache.read("geolocation:suggestions:corn")).to eq(
       [
         {
-          name: "Cornwall, UK",
+          name: "Cornwall",
           place_id: "ChIJyQ4nv_C3akgRcUVL2YU8Qm4",
           types: %w[political geocode administrative_area_level_2],
         },
@@ -260,7 +260,7 @@ module ResultsHelper
     expect(Rails.cache.read("geolocation:suggestions:lon")).to eq(
       [
         {
-          name: "London, UK",
+          name: "London",
           place_id: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
           types: %w[locality political],
         },
@@ -269,7 +269,7 @@ module ResultsHelper
   end
 
   def and_the_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:address_resolver:london-uk")).to eq(
+    expect(Rails.cache.read("geolocation:address_resolver:london")).to eq(
       {
         formatted_address: "London, UK",
         latitude: 51.5072178,
@@ -288,7 +288,7 @@ module ResultsHelper
   end
 
   def and_the_cornwall_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:address_resolver:cornwall-uk")).to eq(
+    expect(Rails.cache.read("geolocation:address_resolver:cornwall")).to eq(
       {
         formatted_address: "Cornwall, UK",
         latitude: 50.5036299,
@@ -307,7 +307,7 @@ module ResultsHelper
   end
 
   def and_the_postcode_location_search_for_coordinates_is_cached
-    expect(Rails.cache.read("geolocation:address_resolver:beacon-road-marazion-tr17-0hf-uk")).to eq(
+    expect(Rails.cache.read("geolocation:address_resolver:beacon-road-marazion-tr17-0hf")).to eq(
       {
         formatted_address: "Beacon Rd, Marazion TR17 0HF, UK",
         latitude: 50.1239982,
@@ -522,7 +522,7 @@ module ResultsHelper
   def and_i_am_on_the_results_page_with_cornwall_location_as_parameter
     and_i_am_on_the_results_page
 
-    expect(search_params).to eq(applications_open: "true", subject_name: "", subject_code: "", location: "Cornwall, UK", provider_name: "", provider_code: "")
+    expect(search_params).to eq(applications_open: "true", subject_name: "", subject_code: "", location: "Cornwall", provider_name: "", provider_code: "")
   end
 
   def and_i_am_on_the_results_page_with_mathematics_subject_and_cornwall_location_and_sponsor_visa_as_parameter
@@ -532,7 +532,7 @@ module ResultsHelper
       applications_open: "true",
       subject_name: "Mathematics",
       subject_code: "G1",
-      location: "Cornwall, UK",
+      location: "Cornwall",
       can_sponsor_visa: "true",
       provider_name: "",
       provider_code: "",

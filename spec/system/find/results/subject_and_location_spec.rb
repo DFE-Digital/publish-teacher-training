@@ -22,7 +22,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
 
   scenario "when I filter by location" do
     when_i_start_typing_london_location
-    then_i_see_location_suggestions("London, UK")
+    then_i_see_location_suggestions("London")
     and_the_location_suggestions_for_london_is_cached
 
     when_i_select_the_first_suggestion
@@ -47,7 +47,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
 
   scenario "when I filter by location and subject" do
     when_i_start_typing_london_location
-    then_i_see_location_suggestions("London, UK")
+    then_i_see_location_suggestions("London")
 
     when_i_select_the_first_suggestion
     and_i_click_to_search_courses_in_london
@@ -79,7 +79,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     then_i_do_not_see_the_location_filter
 
     when_i_start_typing_london_location
-    then_i_see_location_suggestions("London, UK")
+    then_i_see_location_suggestions("London")
     when_i_select_the_first_suggestion
     and_i_click_to_search_courses_in_london
 
