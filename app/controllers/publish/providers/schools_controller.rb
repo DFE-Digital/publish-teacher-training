@@ -6,8 +6,10 @@ module Publish
       before_action :site, only: %i[show delete]
       before_action :reset_urn_form, only: %i[index]
 
+      PER_PAGE = 20
+
       def index
-        @pagy, @schools = pagy(provider.sites.order(:location_name))
+        @pagy, @schools = pagy(provider.sites.order(:location_name), limit: PER_PAGE)
       end
 
       def show; end
