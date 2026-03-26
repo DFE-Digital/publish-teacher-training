@@ -27,7 +27,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     then_i_see_no_autocomplete_suggestions
 
     when_i_start_typing_postcode_location
-    then_i_see_location_suggestions("Beacon Road, Marazion TR17 0HF, UK")
+    then_i_see_location_suggestions("Beacon Road, Marazion TR17 0HF")
     and_the_location_suggestions_for_postcode_is_cached
 
     when_i_select_the_first_suggestion
@@ -44,7 +44,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_i_choose_the_first_subject_suggestion
 
     when_i_start_typing_postcode_location
-    then_i_see_location_suggestions("Beacon Road, Marazion TR17 0HF, UK")
+    then_i_see_location_suggestions("Beacon Road, Marazion TR17 0HF")
 
     when_i_select_the_first_suggestion
     and_i_check_visa_sponsorship_filter_in_the_homepage
@@ -75,7 +75,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     expect(Rails.cache.read("geolocation:suggestions:tr17")).to eq(
       [
         {
-          name: "Beacon Road, Marazion TR17 0HF, UK",
+          name: "Beacon Road, Marazion TR17 0HF",
           place_id: "ChIJu0TvYk7bakgR8HSit5vKcd8",
           types: %w[geocode postal_code],
         },
@@ -86,7 +86,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   def stub_postcode_location_search
     stub_request(
       :get,
-      "https://maps.googleapis.com/maps/api/geocode/json?address=Beacon%20Road,%20Marazion%20TR17%200HF,%20UK&components=country:UK&key=replace_me&language=en",
+      "https://maps.googleapis.com/maps/api/geocode/json?address=Beacon%20Road,%20Marazion%20TR17%200HF&components=country:UK&key=replace_me&language=en",
     )
       .with(
         headers: {
@@ -128,7 +128,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   def and_i_am_on_the_results_page_with_postcode_location_as_parameter
     and_i_am_on_the_results_page
 
-    expect(search_params).to eq(applications_open: "true", subject_name: "", subject_code: "", location: "Beacon Road, Marazion TR17 0HF, UK", provider_name: "", provider_code: "")
+    expect(search_params).to eq(applications_open: "true", subject_name: "", subject_code: "", location: "Beacon Road, Marazion TR17 0HF", provider_name: "", provider_code: "")
   end
 
   def and_i_am_on_the_results_page_with_mathematics_subject_and_postcode_location_and_sponsor_visa_as_parameter
@@ -138,7 +138,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
       applications_open: "true",
       subject_name: "Mathematics",
       subject_code: "G1",
-      location: "Beacon Road, Marazion TR17 0HF, UK",
+      location: "Beacon Road, Marazion TR17 0HF",
       can_sponsor_visa: "true",
       provider_name: "",
       provider_code: "",

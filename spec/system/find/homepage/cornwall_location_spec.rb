@@ -20,7 +20,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     then_i_see_no_autocomplete_suggestions
 
     when_i_start_typing_cornwall_location
-    then_i_see_location_suggestions("Cornwall, UK")
+    then_i_see_location_suggestions("Cornwall")
     and_the_location_suggestions_for_cornwall_is_cached
 
     when_i_select_the_first_suggestion
@@ -37,7 +37,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
     and_i_choose_the_first_subject_suggestion
 
     when_i_start_typing_cornwall_location
-    then_i_see_location_suggestions("Cornwall, UK")
+    then_i_see_location_suggestions("Cornwall")
 
     when_i_select_the_first_suggestion
     and_i_check_visa_sponsorship_filter_in_the_homepage

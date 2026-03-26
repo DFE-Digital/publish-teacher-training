@@ -27,7 +27,7 @@ RSpec.describe "Location category defaults", :js, service: :find do
 
       # Second search: add a location - sort resets to distance
       when_i_start_typing_cornwall_location
-      then_i_see_location_suggestions("Cornwall, UK")
+      then_i_see_location_suggestions("Cornwall")
       when_i_select_the_first_suggestion
       and_i_click_to_search_courses_in_cornwall
 
@@ -41,7 +41,7 @@ RSpec.describe "Location category defaults", :js, service: :find do
 
       # First search: London - default radius is 20 miles
       when_i_start_typing_london_location
-      then_i_see_location_suggestions("London, UK")
+      then_i_see_location_suggestions("London")
       when_i_select_the_first_suggestion
       and_i_click_to_search_courses_in_london
 
@@ -49,7 +49,7 @@ RSpec.describe "Location category defaults", :js, service: :find do
 
       # Second search: Cornwall - radius resets to 50 miles (regional default)
       when_i_clear_and_type_cornwall_location
-      then_i_see_location_suggestions("Cornwall, UK")
+      then_i_see_location_suggestions("Cornwall")
       when_i_select_the_first_suggestion
       and_i_click_to_search_courses_in_cornwall
 
@@ -61,7 +61,7 @@ RSpec.describe "Location category defaults", :js, service: :find do
 
       # First search: Cornwall - default radius is 50 miles
       when_i_start_typing_cornwall_location
-      then_i_see_location_suggestions("Cornwall, UK")
+      then_i_see_location_suggestions("Cornwall")
       when_i_select_the_first_suggestion
       and_i_click_to_search_courses_in_cornwall
 
@@ -69,7 +69,7 @@ RSpec.describe "Location category defaults", :js, service: :find do
 
       # Second search: London - radius resets to 20 miles
       when_i_clear_and_type_london_location
-      then_i_see_location_suggestions("London, UK")
+      then_i_see_location_suggestions("London")
       when_i_select_the_first_suggestion
       and_i_click_to_search_courses_in_london
 
@@ -81,7 +81,7 @@ RSpec.describe "Location category defaults", :js, service: :find do
 
       # First search: Cornwall with custom radius
       when_i_start_typing_cornwall_location
-      then_i_see_location_suggestions("Cornwall, UK")
+      then_i_see_location_suggestions("Cornwall")
       when_i_select_the_first_suggestion
       and_i_click_to_search_courses_in_cornwall
 
