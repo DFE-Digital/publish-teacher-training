@@ -28,7 +28,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
         expect(result).to eq(
           [
             {
-              name: "London, UK",
+              name: "London",
               place_id: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
               types: %w[locality political],
             },
