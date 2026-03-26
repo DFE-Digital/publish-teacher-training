@@ -32,7 +32,7 @@ module GoogleOldPlacesAPI
 
       Array(response["predictions"]).map do |prediction|
         {
-          name: prediction["description"],
+          name: prediction["description"].delete_suffix(", UK"),
           place_id: prediction["place_id"],
           types: prediction["types"],
         }
