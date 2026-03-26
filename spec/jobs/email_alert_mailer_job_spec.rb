@@ -47,5 +47,23 @@ RSpec.describe EmailAlertMailerJob do
 
       expect(alert.reload.last_sent_at).to be_nil
     end
+
+    it "passes courses to the mailer ordered by newest first" do
+      old_course = create(:course, :published,
+                          enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 3.days.ago)])
+      new_course = create(:course, :published,
+                          enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 1.day.ago)])
+      mid_course = create(:course, :published,
+                          enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 2.days.ago)])
+
+      mail = double(deliver_now: true)
+      allow(EmailAlertMailer).to receive(:weekly_digest).and_return(mail)
+
+      described_class.new.perform(alert.id, [old_course.id, new_course.id, mid_course.id])
+
+      expect(EmailAlertMailer).to have_received(:weekly_digest) do |_alert, courses|
+        expect(courses.map(&:id)).to eq([new_course.id, mid_course.id, old_course.id])
+      end
+    end
   end
 end

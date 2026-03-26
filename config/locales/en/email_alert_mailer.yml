@@ -2,10 +2,8 @@ en:
   email_alert_mailer:
     weekly_digest:
       subject:
-        one_course_subject: "%{provider} has added a new %{subject} course"
-        one_course_no_subject: "%{provider} is looking for trainee teachers"
-        one_course_subject_location: "A new %{subject} course has been added near %{location}"
-        one_course_location: "A new teacher training course in %{location} meets your criteria"
-        many_courses_subject: "A new %{subject} course has been added to Find teacher training courses"
+        one_course: "A new teacher training course meets your criteria"
         many_courses: "%{count} new teacher training courses meet your criteria"
-        fallback: "A new teacher training course meets your criteria"
+      body_intro:
+        one_course: "A new teacher training course has recently been published that meets your criteria."
+        many_courses: "%{count} teacher training courses have recently been published that meet your criteria."

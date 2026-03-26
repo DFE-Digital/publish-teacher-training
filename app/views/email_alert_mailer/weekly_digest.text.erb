@@ -1,13 +1,16 @@
 <%= @title %>
 
+<%= @body_intro %>
+
 ---
 
 <% @courses.each do |course| -%>
-[<%= course.name %> - <%= course.provider.provider_name %> (<%= course.course_code %>)](<%= find_course_url(course.provider.provider_code, course.course_code) %>)
+<%= course.provider.provider_name %>
+[<%= course.name %> (<%= course.course_code %>)](<%= find_course_url(course.provider.provider_code, course.course_code) %>)
 
 <% end -%>
 <% if @remaining_count > 0 -%>
-and <%= @remaining_count %> more
+[View more courses that meet your criteria on Find teacher training courses.](<%= @search_url %>)
 
 <% end -%>
 ---
