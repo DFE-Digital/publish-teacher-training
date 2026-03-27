@@ -180,18 +180,6 @@ class CourseDecorator < ApplicationDecorator
     object.course_subjects.map { |cs| cs.subject.subject_name }.join("<br>").html_safe
   end
 
-  def chosen_subjects
-    return sorted_subjects if master_subject_nil?
-
-    if main_subject_is_modern_languages?
-      format_name(modern_language_subjects.to_a.push(additional_subjects.sort_by { |x| [x.type, x.subject_name] }).flatten.uniq.unshift(main_subject))
-    elsif !main_subject_is_modern_languages? && modern_languages_subjects.present?
-      format_name(additional_subjects.push(modern_language_subjects.to_a).flatten.uniq.unshift(main_subject))
-    else
-      format_name(additional_subjects.unshift(main_subject))
-    end
-  end
-
   def length
     case course_length.to_s
     when "OneYear"
