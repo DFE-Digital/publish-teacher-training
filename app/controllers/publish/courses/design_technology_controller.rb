@@ -20,7 +20,7 @@ module Publish
       def edit
         authorize(provider)
 
-        unless selected_non_design_technology_subjects_ids.include?(design_technology_subject_id)
+        unless param_subject_ids.include?(design_technology_subject_id)
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
@@ -33,7 +33,6 @@ module Publish
 
       def update
         authorize(provider)
-        updated_subject_list
 
         if course_subjects_form.save!
           course_updated_message("Design and technology")
@@ -68,14 +67,16 @@ module Publish
 
     private
 
-      def updated_subject_list
-        @updated_subject_list ||= selected_non_design_technology_subjects_ids
-                                   .concat(selected_language_subjects_ids)
-                                   .concat(selected_design_technology_subjects_ids)
+      def merged_subject_ids
+        @merged_subject_ids ||= SortSubjectParamsService.call(
+          course: @course,
+          subjects_ids: params[:course][:subjects_ids],
+          design_technology_ids: params[:course][:design_technology_ids],
+        )
       end
 
       def course_subjects_form
-        @course_subjects_form ||= CourseSubjectsForm.new(@course, params: updated_subject_list)
+        @course_subjects_form ||= CourseSubjectsForm.new(@course, params: merged_subject_ids)
       end
 
       def error_keys
@@ -86,66 +87,22 @@ module Publish
         @design_technology_subject_id ||= @course.edit_course_options[:design_technology_subjects].id
       end
 
-      def selected_subjects(param_key)
-        edit_course_options_key = param_key == :design_technology_ids ? :design_technologies : :subjects
-
-        ids = params.dig(:course, param_key)&.map(&:to_i) || []
-
-        ids.intersection(@course.edit_course_options[edit_course_options_key].map(&:id))
-      end
-
-      def selected_design_technology_subjects_ids
-        selected_subjects(:design_technology_ids)
-      end
-
-      def selected_non_design_technology_subjects_ids
-        selected_subjects(:subjects_ids)
-      end
-
-      def selected_language_subjects_ids
-        ids = params.dig(:course, :subjects_ids)&.map(&:to_i) || []
-        ids.intersection(@course.edit_course_options[:modern_languages].map(&:id))
-      end
-
-      def modern_languages_subject_id
-        @modern_languages_subject_id ||= @course.edit_course_options[:modern_languages_subject].id
-      end
-
       def has_design_technology_subject?
         @course.course_subjects.any? { |subject| subject.subject.id == design_technology_subject_id }
+      end
+
+      def param_subject_ids
+        params.dig(:course, :subjects_ids)&.map(&:to_i) || []
       end
 
       def build_course_params
         build_new_course
 
-        previous_subject_selections = params[:course][:subjects_ids]
-
-        params[:course][:subjects_ids] = selected_non_design_technology_subject_ids
-
-        # Preserve previously selected Modern language specialisms
-        params[:course][:subjects_ids] += strip_non_language_subject_ids(previous_subject_selections)
-
-        # Append selected D&T specialisms
-        params[:course][:subjects_ids] += params[:course][:design_technology_ids] if params[:course][:design_technology_ids]
-        params[:course].delete(:design_technology_ids)
-      end
-
-      def non_design_technology_subject_ids
-        @course.edit_course_options[:subjects].map(&:id).map(&:to_s)
-      end
-
-      def selected_non_design_technology_subject_ids
-        non_design_technology_subject_ids & params[:course][:subjects_ids]
-      end
-
-      def available_languages_ids
-        @course.edit_course_options[:modern_languages].map(&:id).map(&:to_s)
-      end
-
-      def strip_non_language_subject_ids(subject_ids)
-        return [] unless subject_ids
-
-        subject_ids & available_languages_ids
+        params[:course][:subjects_ids] = SortSubjectParamsService.call(
+          course: @course,
+          subjects_ids: params[:course][:subjects_ids],
+          design_technology_ids: params[:course].delete(:design_technology_ids),
+        )
       end
     end
   end

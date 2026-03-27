@@ -11,8 +11,9 @@ describe Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View
                   financial_incentive: FinancialIncentive.new(scholarship: 2000,
                                                               bursary_amount: 3000,
                                                               early_career_payments: 2000)),
-          ]).decorate
+          ])
   end
+  let(:funding_view) { CourseFunding::View.new(CourseFunding.new(course)) }
 
   context "bursaries_and_scholarships_announced feature flag is on" do
     before do
@@ -20,7 +21,7 @@ describe Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View
     end
 
     it "renders scholarship and bursary details" do
-      result = render_inline(described_class.new(course))
+      result = render_inline(described_class.new(funding_view))
 
       expect(result.text).to include("Bursaries of £3,000 and scholarships of £2,000 are available to eligible trainees.")
     end
@@ -33,22 +34,22 @@ describe Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View
                       financial_incentive: FinancialIncentive.new(scholarship: 2000,
                                                                   bursary_amount: 3000,
                                                                   early_career_payments: 2000)),
-              ]).decorate
+              ])
       end
 
       it "does not try to render link to scholarship body" do
-        result = render_inline(described_class.new(course))
+        result = render_inline(described_class.new(funding_view))
 
-        expect(result.text).not_to include("For a scholarship, you’ll need to apply through")
+        expect(result.text).not_to include("For a scholarship, you'll need to apply through")
       end
     end
   end
 
   context "bursaries_and_scholarships_announced feature flag is off" do
     it "does not render scholarship and bursary details" do
-      result = render_inline(described_class.new(course))
+      result = render_inline(described_class.new(funding_view))
 
-      expect(result.text).not_to include("With a scholarship or bursary, you’ll also get early career payments")
+      expect(result.text).not_to include("With a scholarship or bursary, you'll also get early career payments")
     end
   end
 end

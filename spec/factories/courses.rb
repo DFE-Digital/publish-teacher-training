@@ -119,6 +119,10 @@ FactoryBot.define do
 
       course.master_subject_id = course.subjects.first.id if course.subjects.any? && course.master_subject_id.nil?
 
+      course.course_subjects.each_with_index do |cs, index|
+        cs.update_column(:position, index) if cs.position.nil?
+      end
+
       # We've just created a course with this provider's code, so ensure it's
       # up-to-date and has this course loaded.
       course.provider.reload
