@@ -53,7 +53,7 @@ module ManageCoursesBackend
     config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
     config.action_mailer.deliver_later_queue_name = "mailers"
 
-    config.session_store :cookie_store, key: Settings.cookies.session.name, httponly: true
+    config.session_store :cookie_store, key: Settings.cookies.session.name, httponly: true, secure: !Rails.env.test? && !Rails.env.development?
 
     config.skylight.environments += Settings.skylight.enable ? [Rails.env] : []
     config.skylight.logger = SemanticLogger[Skylight]
