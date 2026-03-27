@@ -65,6 +65,10 @@ module ManageCoursesBackend
     config.view_component.preview_route = "/support/view_components"
     config.view_component.preview_controller = "Support::ViewComponentsController"
 
+    show_previews = !Rails.env.production? || Settings.environment.name.in?(%w[qa review])
+    config.action_mailer.preview_paths = [Rails.root.join("spec/mailers/previews")]
+    config.action_mailer.show_previews = show_previews
+
     config.analytics = config_for(:analytics)
 
     config.exceptions_app = routes

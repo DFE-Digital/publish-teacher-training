@@ -34,12 +34,11 @@ describe EmailAlertMailer do
     expect(mail.govuk_notify_personalisation[:subject]).to be_present
   end
 
-  it "includes the body in the personalisation" do
+  it "includes provider name and course name with code in the body" do
     body = mail.govuk_notify_personalisation[:body]
     courses.each do |course|
-      expect(body).to include(course.name)
       expect(body).to include(course.provider.provider_name)
-      expect(body).to include(course.course_code)
+      expect(body).to include("#{course.name} (#{course.course_code})")
     end
   end
 
@@ -62,15 +61,49 @@ describe EmailAlertMailer do
     expect(body).to include("Get a free teacher training adviser")
   end
 
-  it "limits the course list to 20 courses" do
-    many_courses = create_list(:course, 25, :published, :with_accrediting_provider)
+  it "limits the course list to 10 courses" do
+    many_courses = create_list(:course, 15, :published, :with_accrediting_provider)
     mail = described_class.weekly_digest(email_alert, many_courses)
 
     body = mail.govuk_notify_personalisation[:body]
-    many_courses.first(20).each do |course|
+    many_courses.first(10).each do |course|
       expect(body).to include(course.course_code)
     end
-    expect(body).to include("and 5 more")
+    many_courses.last(5).each do |course|
+      expect(body).not_to include(course.course_code)
+    end
+  end
+
+  it "shows view more link when courses are truncated" do
+    many_courses = create_list(:course, 15, :published, :with_accrediting_provider)
+    mail = described_class.weekly_digest(email_alert, many_courses)
+
+    body = mail.govuk_notify_personalisation[:body]
+    expect(body).to include("View more courses that meet your criteria on Find teacher training courses.")
+  end
+
+  it "does not show view more link when courses fit within the limit" do
+    few_courses = create_list(:course, 5, :published, :with_accrediting_provider)
+    mail = described_class.weekly_digest(email_alert, few_courses)
+
+    body = mail.govuk_notify_personalisation[:body]
+    expect(body).not_to include("View more courses")
+  end
+
+  it "includes order=newest_course in search URL when courses are truncated" do
+    many_courses = create_list(:course, 15, :published, :with_accrediting_provider)
+    mail = described_class.weekly_digest(email_alert, many_courses)
+
+    body = mail.govuk_notify_personalisation[:body]
+    expect(body).to include("order=newest_course")
+  end
+
+  it "does not include order=newest_course in search URL when courses fit within the limit" do
+    few_courses = create_list(:course, 5, :published, :with_accrediting_provider)
+    mail = described_class.weekly_digest(email_alert, few_courses)
+
+    body = mail.govuk_notify_personalisation[:body]
+    expect(body).not_to include("order=newest_course")
   end
 
   describe "sanitisation of user-controlled input" do
@@ -79,14 +112,6 @@ describe EmailAlertMailer do
         create(:email_alert, candidate:, subjects: [], location_name: "London](https://evil.com) [Click here", radius: 10)
       end
       let(:courses) { [create(:course, :published, :with_accrediting_provider)] }
-
-      it "strips markdown link characters from the subject line" do
-        mail = described_class.weekly_digest(email_alert, courses)
-        subject_line = mail.govuk_notify_personalisation[:subject]
-        expect(subject_line).not_to include("](")
-        expect(subject_line).not_to include("[Click")
-        expect(subject_line).to include("Londonhttps://evil.com Click here")
-      end
 
       it "strips markdown link characters from the body criteria" do
         mail = described_class.weekly_digest(email_alert, courses)
@@ -116,14 +141,6 @@ describe EmailAlertMailer do
         create(:email_alert, candidate:, subjects: [], location_name: "A" * 1000, radius: 10)
       end
       let(:courses) { [create(:course, :published, :with_accrediting_provider)] }
-
-      it "truncates the location in the subject line" do
-        mail = described_class.weekly_digest(email_alert, courses)
-        subject_line = mail.govuk_notify_personalisation[:subject]
-        expect(subject_line.length).to be <= 300
-        expect(subject_line).to include("A" * 100)
-        expect(subject_line).to include("...")
-      end
 
       it "truncates the location in the body criteria" do
         mail = described_class.weekly_digest(email_alert, courses)
@@ -157,84 +174,20 @@ describe EmailAlertMailer do
     end
   end
 
-  describe "subject line variants" do
-    context "with 1 course, 1 subject, no location" do
-      let(:email_alert) do
-        create(:email_alert, candidate:, subjects: %w[C1], location_name: nil, radius: nil)
-      end
+  describe "subject line" do
+    context "with 1 course" do
       let(:courses) { [create(:course, :published, :with_accrediting_provider)] }
 
-      it "uses the provider and subject name" do
+      it "uses the singular subject line" do
         mail = described_class.weekly_digest(email_alert, courses)
-        provider_name = courses.first.provider.provider_name
         expect(mail.govuk_notify_personalisation[:subject]).to eq(
-          "#{provider_name} has added a new Biology course",
+          "A new teacher training course meets your criteria",
         )
       end
     end
 
-    context "with 1 course, no subject, no location" do
-      let(:email_alert) do
-        create(:email_alert, candidate:, subjects: [], location_name: nil, radius: nil)
-      end
-      let(:courses) { [create(:course, :published, :with_accrediting_provider)] }
-
-      it "uses the provider name with generic text" do
-        mail = described_class.weekly_digest(email_alert, courses)
-        provider_name = courses.first.provider.provider_name
-        expect(mail.govuk_notify_personalisation[:subject]).to eq(
-          "#{provider_name} is looking for trainee teachers",
-        )
-      end
-    end
-
-    context "with 1 course, 1 subject, with location" do
-      let(:email_alert) do
-        create(:email_alert, candidate:, subjects: %w[C1], location_name: "Manchester", radius: 10)
-      end
-      let(:courses) { [create(:course, :published, :with_accrediting_provider)] }
-
-      it "uses the subject and location" do
-        mail = described_class.weekly_digest(email_alert, courses)
-        expect(mail.govuk_notify_personalisation[:subject]).to eq(
-          "A new Biology course has been added near Manchester",
-        )
-      end
-    end
-
-    context "with 1 course, no subject, with location" do
-      let(:email_alert) do
-        create(:email_alert, candidate:, subjects: [], location_name: "Manchester", radius: 10)
-      end
-      let(:courses) { [create(:course, :published, :with_accrediting_provider)] }
-
-      it "uses the location with generic text" do
-        mail = described_class.weekly_digest(email_alert, courses)
-        expect(mail.govuk_notify_personalisation[:subject]).to eq(
-          "A new teacher training course in Manchester meets your criteria",
-        )
-      end
-    end
-
-    context "with multiple courses, 1 subject" do
-      let(:email_alert) do
-        create(:email_alert, candidate:, subjects: %w[C1], location_name: nil, radius: nil)
-      end
-
-      it "uses the subject name" do
-        mail = described_class.weekly_digest(email_alert, courses)
-        expect(mail.govuk_notify_personalisation[:subject]).to eq(
-          "A new Biology course has been added to Find teacher training courses",
-        )
-      end
-    end
-
-    context "with multiple courses, no subject" do
-      let(:email_alert) do
-        create(:email_alert, candidate:, subjects: [], location_name: nil, radius: nil)
-      end
-
-      it "uses the count" do
+    context "with multiple courses" do
+      it "uses the count in the subject line" do
         mail = described_class.weekly_digest(email_alert, courses)
         expect(mail.govuk_notify_personalisation[:subject]).to eq(
           "2 new teacher training courses meet your criteria",
@@ -242,27 +195,34 @@ describe EmailAlertMailer do
       end
     end
 
-    context "with 1 course, multiple subjects, no location" do
-      let(:email_alert) do
-        create(:email_alert, candidate:, subjects: %w[C1 F1], location_name: nil, radius: nil)
+    context "with more courses than the limit" do
+      let(:many_courses) { create_list(:course, 15, :published, :with_accrediting_provider) }
+
+      it "uses the total count including truncated courses" do
+        mail = described_class.weekly_digest(email_alert, many_courses)
+        expect(mail.govuk_notify_personalisation[:subject]).to eq(
+          "15 new teacher training courses meet your criteria",
+        )
       end
+    end
+  end
+
+  describe "body intro" do
+    context "with 1 course" do
       let(:courses) { [create(:course, :published, :with_accrediting_provider)] }
 
-      before do
-        subject_area = find_or_create(:subject_area, :secondary)
-        Subject.find_or_create_by!(subject_code: "F1") do |s|
-          s.subject_name = "Chemistry"
-          s.type = "SecondarySubject"
-          s.subject_area = subject_area
-        end
-      end
-
-      it "uses the provider name with generic text" do
+      it "uses the singular intro" do
         mail = described_class.weekly_digest(email_alert, courses)
-        provider_name = courses.first.provider.provider_name
-        expect(mail.govuk_notify_personalisation[:subject]).to eq(
-          "#{provider_name} is looking for trainee teachers",
-        )
+        body = mail.govuk_notify_personalisation[:body]
+        expect(body).to include("A new teacher training course has recently been published that meets your criteria.")
+      end
+    end
+
+    context "with multiple courses" do
+      it "uses the count in the intro" do
+        mail = described_class.weekly_digest(email_alert, courses)
+        body = mail.govuk_notify_personalisation[:body]
+        expect(body).to include("2 teacher training courses have recently been published that meet your criteria.")
       end
     end
   end

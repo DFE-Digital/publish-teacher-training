@@ -4,7 +4,7 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
   include ::Courses::ActiveFilters::SummaryRowBuilder
 
   MAX_USER_INPUT_LENGTH = 200
-  COURSE_LIMIT = 20
+  COURSE_LIMIT = 10
 
   def weekly_digest(email_alert, courses)
     set_template(Settings.govuk_notify.email_alert_weekly_digest_template_id)
@@ -12,10 +12,15 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
     @email_alert = email_alert
     @courses = courses.first(COURSE_LIMIT)
     @remaining_count = courses.size - @courses.size
+    @total_count = courses.size
     @subject_names = Subject.where(subject_code: email_alert.subjects).pluck(:subject_name)
     @title = email_subject
+    @body_intro = body_intro
     @unsubscribe_url = unsubscribe_url(email_alert)
-    @search_url = find_results_url(email_alert.search_params)
+
+    search_params = email_alert.search_params
+    search_params[:order] = "newest_course" if @remaining_count.positive?
+    @search_url = find_results_url(search_params)
     @summary_rows = build_summary_rows(
       email_alert.search_attributes.merge(
         "radius" => email_alert.radius,
@@ -35,36 +40,18 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
 private
 
   def email_subject
-    subject = @subject_names.first if @subject_names.size == 1
-    location = sanitize_for_notify(@email_alert.location_name)
-
-    if @courses.size == 1
-      provider = @courses.first.provider.provider_name
-      one_course_subject(provider:, subject:, location:)
-    elsif @courses.size > 1
-      many_courses_subject(subject:)
+    if @total_count == 1
+      t("email_alert_mailer.weekly_digest.subject.one_course")
     else
-      t("email_alert_mailer.weekly_digest.subject.fallback")
+      t("email_alert_mailer.weekly_digest.subject.many_courses", count: @total_count)
     end
   end
 
-  def one_course_subject(provider:, subject:, location:)
-    if subject && location.blank?
-      t("email_alert_mailer.weekly_digest.subject.one_course_subject", provider:, subject:)
-    elsif subject.nil? && location.blank?
-      t("email_alert_mailer.weekly_digest.subject.one_course_no_subject", provider:)
-    elsif subject && location.present?
-      t("email_alert_mailer.weekly_digest.subject.one_course_subject_location", subject:, location:)
+  def body_intro
+    if @total_count == 1
+      t("email_alert_mailer.weekly_digest.body_intro.one_course")
     else
-      t("email_alert_mailer.weekly_digest.subject.one_course_location", location:)
-    end
-  end
-
-  def many_courses_subject(subject:)
-    if subject
-      t("email_alert_mailer.weekly_digest.subject.many_courses_subject", subject:)
-    else
-      t("email_alert_mailer.weekly_digest.subject.many_courses", count: @courses.size + @remaining_count)
+      t("email_alert_mailer.weekly_digest.body_intro.many_courses", count: @total_count)
     end
   end
 
