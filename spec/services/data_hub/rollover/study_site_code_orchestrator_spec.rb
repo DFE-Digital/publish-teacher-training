@@ -28,13 +28,16 @@ RSpec.describe DataHub::Rollover::StudySiteCodeOrchestrator, type: :service do
         create(:site, :study_site, provider: new_provider, code: "A1")
       end
 
-      it "returns the original codes unchanged" do
+      it "reassigns conflicting codes to keep target provider codes unique" do
         assignments = described_class.new(
           target_provider: new_provider,
           sites_to_copy: sites_to_copy,
         ).call
 
-        expect(assignments.map { |a| a[:code] }).to contain_exactly("A1", "B2")
+        codes = assignments.map { |a| a[:code] }
+        expect(codes).to include("B2")
+        expect(codes).not_to include("A1")
+        expect(codes.uniq.size).to eq(2)
       end
     end
 
