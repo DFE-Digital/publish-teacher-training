@@ -1,4 +1,12 @@
+/* eslint-disable import/first */
 // Entry point for the build script in your package.json
+//
+document.body.className +=
+  ' js-enabled' +
+  ('noModule' in HTMLScriptElement.prototype
+    ? ' govuk-frontend-supported'
+    : '')
+
 import { initAll } from 'govuk-frontend'
 import { initCrossServiceHeader } from 'govuk-one-login/service-header'
 
@@ -12,12 +20,6 @@ import RemoteAutocompleteController from './controllers/remote_autocomplete_cont
 import LocationsAutocompleteController from './controllers/locations_autocomplete_controller'
 import VisibilityController from './controllers/visibility_controller'
 import DetailsComponentController from './controllers/details_component_controller'
-
-document.body.className +=
-  ' js-enabled' +
-  ('noModule' in HTMLScriptElement.prototype
-    ? ' govuk-frontend-supported'
-    : '')
 
 window.Stimulus = Application.start()
 

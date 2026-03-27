@@ -1,3 +1,27 @@
+// Default: show JS version, hide no-JS version
+.js-enabled {
+  [data-controller="save-course"] {
+    display: block;
+  }
+
+  .save-course-html {
+    display: none;
+  }
+}
+
+// When JS is explicitly disabled
+body:not(.js-enabled) {
+  .save-course-html {
+    display: block;
+
+    text-align: end;
+  }
+
+  [data-controller="save-course"] {
+    display: none;
+  }
+}
+
 .unstyled-button {
   padding: 0;
 
@@ -29,7 +53,7 @@
 }
 
 .save-course-button {
-  display: flex;
+  text-align: end;
 
   &__button {
     display: inline-flex;
