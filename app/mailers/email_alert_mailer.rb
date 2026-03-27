@@ -66,8 +66,4 @@ private
       token: email_alert.signed_id(purpose: :unsubscribe, expires_in: 30.days),
     )
   end
-
-  def _default_body
-    govuk_notify_personalisation&.dig(:body) || super
-  end
 end
