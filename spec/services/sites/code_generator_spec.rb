@@ -41,4 +41,15 @@ describe Sites::CodeGenerator do
       expect(subject).to eq("AD")
     end
   end
+
+  context "when only a study site holds the final available UCAS code" do
+    before do
+      (Site::POSSIBLE_CODES - ["A"]).each { |code| create(:site, code:, provider:) }
+      create(:site, :study_site, code: "A", provider:)
+    end
+
+    it "does not reuse the study site code" do
+      expect(subject).to eq("AA")
+    end
+  end
 end

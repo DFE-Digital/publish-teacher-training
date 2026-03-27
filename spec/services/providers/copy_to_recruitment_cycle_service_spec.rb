@@ -132,6 +132,29 @@ describe Providers::CopyToRecruitmentCycleService do
             new_recruitment_cycle: new_recruitment_cycle,
           )
       end
+
+      context "when a site code already exists on the target provider" do
+        before do
+          create(:site, :school, provider: new_provider, code: site.code)
+          create(:site, :study_site, provider: new_provider, code: study_site.code)
+        end
+
+        it "skips school code collisions and reassigns study site collisions" do
+          result = service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+          expect(mocked_copy_site_service).not_to have_received(:execute).with(site: site, new_provider: new_provider)
+          expect(mocked_copy_site_service).to have_received(:execute).with(
+            site: study_site,
+            new_provider: new_provider,
+            assigned_code: satisfy { |code| code != study_site.code },
+          )
+
+          expect(result[:sites_skipped]).to include(
+            { site_code: site.code, reason: "Site code already exists on provider" },
+          )
+          expect(result[:study_sites_skipped]).to be_empty
+        end
+      end
     end
 
     it "assigns the new provider to organisation" do
