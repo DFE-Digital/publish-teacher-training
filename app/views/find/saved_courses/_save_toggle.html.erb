@@ -44,10 +44,17 @@
       </div>
     </button>
   </div>
+  <div class="save-course-html">
+    <% if saved_course %>
+      <%= render partial: "find/courses/unsave_button", locals: { saved_course: } %>
+    <% else %>
+      <%= render partial: "find/courses/save_button", locals: { course: } %>
+    <% end %>
+  </div>
 <% else %>
   <% if saved_course %>
-    <%= render partial: "find/courses/unsave_button", locals: { saved_course: saved_course } %>
+    <%= render partial: "find/courses/unsave_button", locals: { saved_course: } %>
   <% else %>
-    <%= render partial: "find/courses/save_button", locals: { course: course } %>
+    <%= render partial: "find/courses/save_button", locals: { course: } %>
   <% end %>
 <% end %>
