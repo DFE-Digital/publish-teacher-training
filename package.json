@@ -42,8 +42,12 @@
     "mustache": "^4.2.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "esbuild": "^0.25.8",
+    "eslint": "^10.1.0",
+    "globals": "^17.4.0",
     "jsdom": "^26.1.0",
+    "playwright": "^1.52.0",
     "sass": "^1.90.0",
     "standard": "^17.1.2",
     "stylelint": "^16.23.1",
@@ -52,7 +56,6 @@
     "stylelint-config-standard": "^39.0.0",
     "stylelint-config-standard-scss": "^15.0.1",
     "stylelint-selector-bem-pattern": "^4.0.1",
-    "playwright": "^1.52.0",
     "vitest": "^3.2.4"
   }
 }
