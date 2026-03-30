@@ -14,10 +14,10 @@ describe EmailAlertMailer do
 
   before do
     subject_area = find_or_create(:subject_area, :secondary)
-    Subject.find_or_create_by!(subject_code: "C1") do |s|
-      s.subject_name = "Biology"
-      s.type = "SecondarySubject"
-      s.subject_area = subject_area
+    Subject.find_or_create_by!(subject_code: "C1") do |subject|
+      subject.subject_name = "Biology"
+      subject.type = "SecondarySubject"
+      subject.subject_area = subject_area
     end
     mail
   end
@@ -61,49 +61,53 @@ describe EmailAlertMailer do
     expect(body).to include("Get a free teacher training adviser")
   end
 
-  it "limits the course list to 10 courses" do
-    many_courses = create_list(:course, 15, :published, :with_accrediting_provider)
-    mail = described_class.weekly_digest(email_alert, many_courses)
+  context "with course limit stubbed" do
+    before { stub_const("EmailAlertMailer::COURSE_LIMIT", 2) }
 
-    body = mail.govuk_notify_personalisation[:body]
-    many_courses.first(10).each do |course|
-      expect(body).to include(course.course_code)
+    it "limits the course list to the COURSE_LIMIT" do
+      many_courses = create_list(:course, 4, :published, :with_accrediting_provider)
+      mail = described_class.weekly_digest(email_alert, many_courses)
+
+      body = mail.govuk_notify_personalisation[:body]
+      many_courses.first(2).each do |course|
+        expect(body).to include(course.course_code)
+      end
+      many_courses.last(2).each do |course|
+        expect(body).not_to include(course.course_code)
+      end
     end
-    many_courses.last(5).each do |course|
-      expect(body).not_to include(course.course_code)
+
+    it "shows view more link when courses are truncated" do
+      many_courses = create_list(:course, 4, :published, :with_accrediting_provider)
+      mail = described_class.weekly_digest(email_alert, many_courses)
+
+      body = mail.govuk_notify_personalisation[:body]
+      expect(body).to include("View more courses that meet your criteria on Find teacher training courses.")
     end
-  end
 
-  it "shows view more link when courses are truncated" do
-    many_courses = create_list(:course, 15, :published, :with_accrediting_provider)
-    mail = described_class.weekly_digest(email_alert, many_courses)
+    it "does not show view more link when courses fit within the limit" do
+      few_courses = create_list(:course, 2, :published, :with_accrediting_provider)
+      mail = described_class.weekly_digest(email_alert, few_courses)
 
-    body = mail.govuk_notify_personalisation[:body]
-    expect(body).to include("View more courses that meet your criteria on Find teacher training courses.")
-  end
+      body = mail.govuk_notify_personalisation[:body]
+      expect(body).not_to include("View more courses")
+    end
 
-  it "does not show view more link when courses fit within the limit" do
-    few_courses = create_list(:course, 5, :published, :with_accrediting_provider)
-    mail = described_class.weekly_digest(email_alert, few_courses)
+    it "includes order=newest_course in search URL when courses are truncated" do
+      many_courses = create_list(:course, 4, :published, :with_accrediting_provider)
+      mail = described_class.weekly_digest(email_alert, many_courses)
 
-    body = mail.govuk_notify_personalisation[:body]
-    expect(body).not_to include("View more courses")
-  end
+      body = mail.govuk_notify_personalisation[:body]
+      expect(body).to include("order=newest_course")
+    end
 
-  it "includes order=newest_course in search URL when courses are truncated" do
-    many_courses = create_list(:course, 15, :published, :with_accrediting_provider)
-    mail = described_class.weekly_digest(email_alert, many_courses)
+    it "does not include order=newest_course in search URL when courses fit within the limit" do
+      few_courses = create_list(:course, 2, :published, :with_accrediting_provider)
+      mail = described_class.weekly_digest(email_alert, few_courses)
 
-    body = mail.govuk_notify_personalisation[:body]
-    expect(body).to include("order=newest_course")
-  end
-
-  it "does not include order=newest_course in search URL when courses fit within the limit" do
-    few_courses = create_list(:course, 5, :published, :with_accrediting_provider)
-    mail = described_class.weekly_digest(email_alert, few_courses)
-
-    body = mail.govuk_notify_personalisation[:body]
-    expect(body).not_to include("order=newest_course")
+      body = mail.govuk_notify_personalisation[:body]
+      expect(body).not_to include("order=newest_course")
+    end
   end
 
   describe "sanitisation of user-controlled input" do
@@ -196,12 +200,14 @@ describe EmailAlertMailer do
     end
 
     context "with more courses than the limit" do
-      let(:many_courses) { create_list(:course, 15, :published, :with_accrediting_provider) }
+      before { stub_const("EmailAlertMailer::COURSE_LIMIT", 2) }
+
+      let(:many_courses) { create_list(:course, 4, :published, :with_accrediting_provider) }
 
       it "uses the total count including truncated courses" do
         mail = described_class.weekly_digest(email_alert, many_courses)
         expect(mail.govuk_notify_personalisation[:subject]).to eq(
-          "15 new teacher training courses meet your criteria",
+          "4 new teacher training courses meet your criteria",
         )
       end
     end
