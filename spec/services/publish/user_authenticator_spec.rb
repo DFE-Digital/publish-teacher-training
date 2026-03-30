@@ -9,30 +9,22 @@ module Publish
     let(:oauth) do
       OmniAuth::AuthHash.new(
         "provider" => "dfe",
-        "uid" => uid,
+        "uid" => SecureRandom.uuid,
         "info" => {
           "email" => email,
-          "first_name" => first_name,
-          "last_name" => last_name,
+          "first_name" => "Jane",
+          "last_name" => "Smith",
         },
       )
     end
 
-    let(:uid) { SecureRandom.uuid }
     let(:email) { "user@example.com" }
-    let(:first_name) { "Jane" }
-    let(:last_name) { "Smith" }
 
-    context "when user has an existing authentication record" do
-      let(:user) { create(:user) }
-      let(:uid) { user.authentications.dfe_signin.first.subject_key }
+    context "when user exists with matching email" do
+      let!(:user) { create(:user, email:) }
 
       it "returns the user" do
         expect(authenticator.call).to eq(user)
-      end
-
-      it "does not create a new authentication record" do
-        expect { authenticator.call }.not_to(change { user.authentications.count })
       end
 
       it "updates last_login_date_utc" do
@@ -42,57 +34,30 @@ module Publish
         end
       end
 
-      context "when email has changed in DfE Sign-In" do
-        let(:email) { "new-email@example.com" }
-
-        it "updates the email" do
-          authenticator.call
-          expect(user.reload.email).to eq("new-email@example.com")
-        end
-      end
-
-      it "finds the user even if their email has changed" do
-        user.update!(email: "old-email@example.com")
-        expect(authenticator.call).to eq(user)
-      end
-    end
-
-    context "when user exists by email but has no authentication record" do
-      let!(:user) { create(:user, :without_dfe_signin, email:) }
-
-      it "returns the user" do
-        expect(authenticator.call).to eq(user)
-      end
-
-      it "creates an authentication record" do
-        expect { authenticator.call }.to change { user.authentications.dfe_signin.count }.by(1)
-      end
-
-      it "stores the correct subject_key" do
+      it "updates first_name from oauth" do
         authenticator.call
-        expect(user.authentications.dfe_signin.first.subject_key).to eq(uid)
+        expect(user.reload.first_name).to eq("Jane")
       end
 
-      context "when updating user details fails" do
-        before do
-          allow(User).to receive(:find_by).with(email:).and_return(user)
-          allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-        end
+      it "updates last_name from oauth" do
+        authenticator.call
+        expect(user.reload.last_name).to eq("Smith")
+      end
 
-        it "does not create an authentication record" do
-          expect { authenticator.call }.to raise_error(ActiveRecord::RecordInvalid)
-            .and(not_change { user.authentications.count })
-        end
+      it "does not update first_name when oauth value is blank" do
+        oauth.info.first_name = ""
+        expect { authenticator.call }.not_to(change { user.reload.first_name })
+      end
+
+      it "does not update last_name when oauth value is blank" do
+        oauth.info.last_name = ""
+        expect { authenticator.call }.not_to(change { user.reload.last_name })
       end
     end
 
-    context "when no user exists" do
+    context "when no user exists with that email" do
       it "returns nil" do
         expect(authenticator.call).to be_nil
-      end
-
-      it "does not create an authentication record" do
-        expect { authenticator.call }.not_to change(::Authentication, :count)
       end
     end
   end

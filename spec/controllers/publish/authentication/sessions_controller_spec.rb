@@ -91,66 +91,6 @@ module Publish
           end
         end
 
-        context "returning user with existing authentication record" do
-          let(:dfe_uid) { SecureRandom.uuid }
-          let(:request_callback) do
-            request.env["omniauth.auth"] = OmniAuth::AuthHash.new(
-              fake_dfe_sign_in_auth_hash(
-                email: user.email,
-                subject_key: dfe_uid,
-                first_name: user.first_name,
-                last_name: user.last_name,
-              ),
-            )
-            get :callback
-          end
-          let(:user) { create(:user, :without_dfe_signin) }
-
-          before do
-            user.authentications.create!(provider: :dfe_signin, subject_key: dfe_uid)
-          end
-
-          it "finds the user via authentication record" do
-            expect { request_callback }.not_to(change { user.authentications.count })
-          end
-
-          it "creates a database session record" do
-            expect { request_callback }.to change { user.sessions.count }.by(1)
-          end
-
-          it "finds the user even if their email has changed" do
-            user.update!(email: "different-email@example.com")
-            request_callback
-            expect(user.sessions.count).to eq(1)
-          end
-        end
-
-        context "first time DfE sign-in (user exists by email but no authentication record)" do
-          let(:user) { create(:user, :without_dfe_signin) }
-          let(:dfe_uid) { SecureRandom.uuid }
-
-          let(:request_callback) do
-            request.env["omniauth.auth"] = OmniAuth::AuthHash.new(
-              fake_dfe_sign_in_auth_hash(
-                email: user.email,
-                subject_key: dfe_uid,
-                first_name: user.first_name,
-                last_name: user.last_name,
-              ),
-            )
-            get :callback
-          end
-
-          it "creates an authentication record" do
-            expect { request_callback }.to change { user.authentications.dfe_signin.count }.by(1)
-            expect(user.authentications.dfe_signin.first.subject_key).to eq(dfe_uid)
-          end
-
-          it "creates a database session record" do
-            expect { request_callback }.to change { user.sessions.count }.by(1)
-          end
-        end
-
         context "non existing database user" do
           let(:user) { build(:user) }
 
