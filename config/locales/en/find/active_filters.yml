@@ -21,6 +21,7 @@ en:
         no_degree_required: "Degree grade: No degree"
       order:
         course_name_ascending: "Sort by: Course (a to z)"
+        newest_course: "Sort by: Newest course"
         provider_name_ascending: "Sort by: Provider (a to z)"
         start_date_ascending: "Sort by: Soonest start date"
         fee_uk_ascending: "Sort by: Lowest fee for UK citizens"
