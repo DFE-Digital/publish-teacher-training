@@ -25,5 +25,22 @@ module Support
     def show
       @feedback = Feedback.find(params[:id])
     end
+
+    def delete_multiple
+      @feedbacks = Feedback.where(id: params[:feedback_ids])
+
+      if @feedbacks.empty?
+        redirect_to support_feedback_index_path, flash: { warning: "No feedback selected" }
+      end
+    end
+
+    def destroy_multiple
+      feedbacks = Feedback.where(id: params[:feedback_ids])
+      count = feedbacks.count
+
+      feedbacks.destroy_all
+
+      redirect_to support_feedback_index_path, flash: { success: "#{count} #{'entry'.pluralize(count)} destroyed" }
+    end
   end
 end
