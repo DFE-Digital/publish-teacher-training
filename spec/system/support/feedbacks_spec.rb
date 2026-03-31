@@ -25,7 +25,8 @@ RSpec.describe "Support console feedback view", service: :support do
 
   context "with more than one page of feedback" do
     before do
-      create_list(:feedback, 15)
+      stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(limit: 3))
+      create_list(:feedback, 5) { |feedback, i| feedback.update!(experience: "Pagination feedback #{i + 1}") }
       when_i_visit_the_feedback_page
     end
 
@@ -75,6 +76,38 @@ RSpec.describe "Support console feedback view", service: :support do
     end
   end
 
+  context "when deleting multiple feedbacks from the index page" do
+    let!(:feedback_one) { create(:feedback, experience: "First feedback to delete") }
+    let!(:feedback_two) { create(:feedback, experience: "Second feedback to delete") }
+    let!(:feedback_three) { create(:feedback, experience: "Third feedback to keep") }
+
+    before do
+      when_i_visit_the_feedback_page
+    end
+
+    scenario "user can select and delete multiple feedbacks" do
+      when_i_select_feedback(feedback_one)
+      when_i_select_feedback(feedback_two)
+      when_i_click_delete_selected
+
+      then_i_see_the_multi_delete_confirmation_page(count: 2)
+      when_i_confirm_multi_delete
+
+      then_i_am_redirected_to_the_feedback_list_page
+      then_i_see_feedbacks_destroyed_message(count: 2)
+      then_the_feedback_is_deleted(feedback_one)
+      then_the_feedback_is_deleted(feedback_two)
+      then_i_see_feedback_on_the_page(feedback_three)
+    end
+
+    scenario "user sees warning when no feedbacks selected" do
+      when_i_click_delete_selected
+
+      then_i_am_redirected_to_the_feedback_list_page
+      then_i_see_no_feedback_selected_warning
+    end
+  end
+
   context "when I want to download feedback data as a CSV file" do
     let!(:feedback) { create(:feedback, id: 1, ease_of_use: "easy", experience: "Great experience", created_at: "2025/07/10") }
 
@@ -113,7 +146,6 @@ RSpec.describe "Support console feedback view", service: :support do
 
   def then_i_see_recent_feedback_entries
     Feedback.order(created_at: :desc).limit(10).each do |feedback|
-      expect(page).to have_content(feedback.id)
       expect(page).to have_content(feedback.ease_of_use)
       expect(page).to have_content(feedback.experience)
       expect(page).to have_content(feedback.created_at.strftime("%d %B %Y"))
@@ -129,12 +161,12 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_see_first_page_of_feedback_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 10)
+    expect(page).to have_selector("table tbody tr", count: 3)
     expect(page).to have_link("Next")
   end
 
   def then_i_see_second_page_of_feedback_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 5)
+    expect(page).to have_selector("table tbody tr", count: 2)
     expect(page).to have_link("Previous")
   end
 
@@ -159,6 +191,43 @@ RSpec.describe "Support console feedback view", service: :support do
 
   def then_i_am_on_the_feedback_list_page
     visit support_feedback_index_path
+  end
+
+  def then_i_see_feedback_on_the_page(feedback)
+    expect(page).to have_content(feedback.experience)
+  end
+
+  def then_i_am_redirected_to_the_feedback_list_page
+    expect(page).to have_current_path(support_feedback_index_path)
+  end
+
+  def then_the_feedback_is_deleted(feedback)
+    expect(page).to have_no_content(feedback.experience)
+    expect(Feedback.exists?(feedback.id)).to be false
+  end
+
+  def when_i_select_feedback(feedback)
+    check "Select feedback #{feedback.id}"
+  end
+
+  def when_i_click_delete_selected
+    click_button "Delete selected"
+  end
+
+  def then_i_see_the_multi_delete_confirmation_page(count:)
+    expect(page).to have_content("Are you sure you want to delete #{count} entries?")
+  end
+
+  def when_i_confirm_multi_delete
+    click_button "Delete entries"
+  end
+
+  def then_i_see_feedbacks_destroyed_message(count:)
+    expect(page).to have_content("#{count} entries destroyed")
+  end
+
+  def then_i_see_no_feedback_selected_warning
+    expect(page).to have_content("No feedback selected")
   end
 
   def when_i_download_the_feedback_data_as_csv

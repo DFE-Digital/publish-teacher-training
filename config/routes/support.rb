@@ -3,7 +3,12 @@
 namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { host: URI.parse(Settings.publish_url).host } do
   root to: "recruitment_cycle#index"
 
-  resources :feedbacks, only: %i[index show], path: "feedback", as: :feedback
+  resources :feedbacks, only: %i[index show], path: "feedback", as: :feedback do
+    collection do
+      get :delete_multiple
+      delete :delete_multiple, to: "feedbacks#destroy_multiple"
+    end
+  end
   resources :providers_onboarding_form_requests, only: %i[index new create show update], path: "providers-onboarding-form-requests", as: :providers_onboarding_form_requests
 
   resources :subjects, except: %i[create destroy]

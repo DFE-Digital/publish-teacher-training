@@ -2,10 +2,65 @@
 <% content_for :before_content do %>
   <%= govuk_back_link_to(support_root_path) %>
 <% end %>
+
 <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+
 <%= link_to "Download feedback (CSV)", support_feedback_index_path(format: :csv), class: "govuk-button govuk-button--secondary" %>
-<% if flash[:alert] %>
-  <div class="alert"><%= flash[:alert] %></div>
+
+<%= form_with url: delete_multiple_support_feedback_index_path, method: :get, data: { turbo: false, controller: "select-all-checkboxes" } do |f| %>
+  <%= govuk_table do |table| %>
+    <% table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell(header: true) do %>
+          <div class="govuk-checkboxes govuk-checkboxes--small app-js-only">
+            <div class="govuk-checkboxes__item">
+              <%= check_box_tag "select_all", "1", false,
+                  class: "govuk-checkboxes__input",
+                  id: "select-all",
+                  data: { select_all_checkboxes_target: "selectAll", action: "select-all-checkboxes#toggleAll" } %>
+              <%= label_tag "select-all", class: "govuk-checkboxes__label" do %>
+                <span class="govuk-visually-hidden">Select all</span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:id), width: "one-quarter") %>
+        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:ease_of_use), width: "one-quarter") %>
+        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:experience), width: "one-quarter") %>
+        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:created_at), width: "one-quarter") %>
+      <% end %>
+    <% end %>
+    <% table.with_body do |body| %>
+      <% @feedbacks.each do |feedback| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell do %>
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <%= check_box_tag "feedback_ids[]", feedback.id, false,
+                    class: "govuk-checkboxes__input",
+                    id: "feedback-#{feedback.id}",
+                    data: { select_all_checkboxes_target: "checkbox", action: "select-all-checkboxes#updateSelectAll" } %>
+                <%= label_tag "feedback-#{feedback.id}", class: "govuk-checkboxes__label" do %>
+                  <span class="govuk-visually-hidden">Select feedback <%= feedback.id %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+          <% row.with_cell(text: feedback.id) %>
+          <% row.with_cell(text: feedback.ease_of_use.humanize) %>
+          <% row.with_cell do %>
+            <%= truncate(feedback.experience, length: t(".truncate_experience_chars_max")) %>
+            <% if feedback.experience.length > t(".truncate_experience_chars_max") %>
+              <%= govuk_link_to t(".view_full_experience_text"), support_feedback_path(feedback) %>
+            <% end %>
+          <% end %>
+          <% row.with_cell(text: l(feedback.created_at, format: :last_event)) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= f.govuk_submit "Delete selected", class: "govuk-button--warning" %>
 <% end %>
-<%= render "list", feedbacks: @feedbacks %>
+
 <%= govuk_pagination(pagy: @pagy) %>
