@@ -179,6 +179,11 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
         then_provider_name_ascending_order_filter_is_displayed
       end
 
+      scenario "newest course order filter is shown when selected" do
+        given_the_user_selects_order("newest_course")
+        then_newest_course_order_filter_is_displayed
+      end
+
       scenario "dropdown filters are hidden when default values selected", :aggregate_failures do
         given_the_user_selects_level("all")
         then_no_active_filters_are_displayed
@@ -515,6 +520,10 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
 
   def then_provider_name_ascending_order_filter_is_displayed
     expect(active_filters).to include("Sort by: Provider (a to z)")
+  end
+
+  def then_newest_course_order_filter_is_displayed
+    expect(active_filters).to include("Sort by: Newest course")
   end
 
   def active_filters
