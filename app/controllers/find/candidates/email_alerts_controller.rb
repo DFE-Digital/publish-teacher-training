@@ -139,11 +139,11 @@ module Find
       def search_params_from_request
         params.permit(
           :applications_open, :can_sponsor_visa, :engineers_teach_physics,
-          :formatted_address, :funding, :interview_location, :level,
+          :formatted_address, :interview_location, :level,
           :location, :longitude, :latitude, :minimum_degree_required,
           :order, :provider_code, :provider_name, :radius, :return_to,
           :send_courses, :subject_code,
-          subjects: [], study_types: [], qualifications: [], start_date: []
+          subjects: [], study_types: [], qualifications: [], start_date: [], funding: []
         )
       end
 

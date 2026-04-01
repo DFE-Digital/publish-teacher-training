@@ -50,6 +50,16 @@ RSpec.describe "Email alerts", service: :find do
     then_the_email_alert_is_created
   end
 
+  scenario "Creating an email alert with funding filters" do
+    when_i_sign_in
+    when_i_visit_new_email_alert_with_funding_params
+    then_i_see_funding_filters_on_confirmation_page
+    when_i_click_set_up_email_alert
+
+    then_i_see_success_banner
+    then_the_email_alert_has_funding_filters
+  end
+
   scenario "Unsubscribing from an email alert (authenticated)" do
     when_i_sign_in
     and_i_have_email_alerts
@@ -482,6 +492,21 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("You cannot set up a new email alert")
     expect(page).to have_content("You have already set up the maximum number of email alerts")
     expect(page).to have_link("unsubscribe from one of your email alerts")
+  end
+
+  def when_i_visit_new_email_alert_with_funding_params
+    visit new_find_candidate_email_alert_path(funding: %w[fee salary apprenticeship])
+  end
+
+  def then_i_see_funding_filters_on_confirmation_page
+    expect(page).to have_content("Fee - no salary")
+    expect(page).to have_content("Salary")
+    expect(page).to have_content("Teaching apprenticeship - with salary")
+  end
+
+  def then_the_email_alert_has_funding_filters
+    alert = candidate.email_alerts.active.last
+    expect(alert.search_attributes["funding"]).to match_array(%w[fee salary apprenticeship])
   end
 
   def create_subject!(code, name)
