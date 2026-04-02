@@ -51,7 +51,7 @@ module Filters
     end
 
     def reload_path
-      if filter_model.to_s.downcase.pluralize == "candidates"
+      if filter_model.to_s.downcase.pluralize.in?(%w[candidates subjects])
         send(:"support_#{filter_model.to_s.downcase.pluralize}_path")
       else
         send(:"support_recruitment_cycle_#{filter_model.to_s.downcase.pluralize}_path")

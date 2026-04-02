@@ -2,3 +2,11 @@
   <%= label_tag "text_search", t("components.filter.subjects.text_search"), class: "govuk-label govuk-label--s" %>
   <%= text_field_tag "text_search", (filters[:text_search] if filters), spellcheck: false, class: "govuk-input", autocomplete: false %>
 </div>
+  <div class="govuk-form-group">
+    <div class="govuk-checkboxes govuk-checkboxes--small">
+      <div class="govuk-checkboxes__item">
+        <%= check_box_tag "incentives", nil, class: "govuk-checkboxes__input", checked: filters&.dig(:incentives) == "on" %>
+        <%= label_tag "incentives", t("components.filter.subjects.incentives"), class: "govuk-label govuk-checkboxes__label" %>
+      </div>
+    </div>
+  </div>

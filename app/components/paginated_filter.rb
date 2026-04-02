@@ -18,6 +18,7 @@ private
 
   def allowed_search_params_keys
     {
+      Subject: %i[text_search incentives],
       User: %i[text_search user_type status],
       Provider: %i[provider_search course_search accredited provider_type],
       Candidate: %i[text_search has_email_alerts],

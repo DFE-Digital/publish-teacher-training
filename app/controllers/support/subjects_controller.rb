@@ -34,12 +34,15 @@ module Support
         search_term = "%#{filter_params[:text_search]}%"
         scope = scope.where("subject_name ILIKE ?", search_term)
       end
+      if filter_params[:incentives].present?
+        scope = scope.joins(:financial_incentive).merge(FinancialIncentive.with_incentive)
+      end
 
       scope
     end
 
     def filter_params
-      @filter_params ||= params.permit(:text_search, :page)
+      @filter_params ||= params.permit(:text_search, :page, :incentives)
     end
 
     def match_synonyms_text
