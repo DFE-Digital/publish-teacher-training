@@ -117,7 +117,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
   end
 
   describe "Text output for all SKE subjects" do
-    %i[mathematics chemistry physics computing french german spanish].each do |subject_name|
+    %i[mathematics physics computing french german spanish].each do |subject_name|
       include_examples "ske subjects degree requirements", subject_name:
     end
   end
@@ -125,6 +125,18 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
   describe "Text output for non SKE subjects" do
     %i[drama classics geography].each do |subject_name|
       include_examples "non-ske subjects degree requirements", subject_name:
+    end
+  end
+
+  context "when subject is chemistry" do
+    let(:subjects) { [build(:secondary_subject, :chemistry)] }
+
+    it "does not render the SKE text" do
+      expect(result.text).not_to include(ske_text)
+    end
+
+    it "does not render the SKE link" do
+      expect(result).to have_no_link(ske_url_name, href: ske_url)
     end
   end
 

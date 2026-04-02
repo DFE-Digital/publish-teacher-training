@@ -8,8 +8,8 @@ module Find
 
         attr_accessor :course
 
-        # ["Chemistry", "Computing", "Mathematics", "Physics", "French", "German", "Spanish", "Modern languages (other)"]
-        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[F1 11 G1 F3 15 17 22 24].freeze
+        # ["Computing", "Mathematics", "Physics", "French", "German", "Spanish", "Modern languages (other)"]
+        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[11 G1 F3 15 17 22 24].freeze
 
         def initialize(course:)
           super()
