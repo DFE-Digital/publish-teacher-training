@@ -1,7 +1,5 @@
 en:
   publish:
-    course_information:
-      text_body_html: The way you add information about courses has changed. <br> <a class="govuk-link" href="%{how_to_add_course_info_url}">Find out more about how to add course information.</a>
     rollover_notification:
       text: "Action needed before 30 September: check and schedule your rolled over courses"
       text_body_html: "On 30 September courses for the 2025 to 2026 recruitment cycle will be published on <a class='govuk-link' href='%{find_path}'> Find teacher training courses.</a> Before this, you need to check and schedule your rolled over courses. If you do not schedule your courses to be published, they will not be shown to candidates. <br><br> If you need help, you can read our <a class='govuk-link' href='%{guidance_path}'> guidance on rolling over courses to a new recruitment cycle</a>."
@@ -131,6 +129,9 @@ en:
       schools: # file
         index:
           add_school_to_account: If needed, you can add new schools to your account.
+          update_all_schools_html: >-
+            We automatically upload all schools you are working with. These are schools that are on <a class="govuk-link" href="%{register_url}">Register trainee teachers</a>.
+          register_url: https://www.register-trainee-teachers.service.gov.uk/
       study_site_search:
         new:
           caption: Add study site

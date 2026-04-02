@@ -10,7 +10,6 @@
     ),
   )) %>
 <% end %>
-<%= render(NotificationBanner.new(text_body: t("publish.course_information.text_body_html", how_to_add_course_info_url: add_course_information_path))) %>
 
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>
