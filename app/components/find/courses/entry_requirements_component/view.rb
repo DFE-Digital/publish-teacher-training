@@ -8,6 +8,8 @@ module Find
 
         attr_accessor :course
 
+        NON_SKE_SUBJECT_CODES = %w[F1].freeze
+
         # ["Computing", "Mathematics", "Physics", "French", "German", "Spanish", "Modern languages (other)"]
         SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[11 G1 F3 15 17 22 24].freeze
 
@@ -27,7 +29,7 @@ module Find
       private
 
         def degree_requirements_title
-          if course.subjects.first&.subject_code == "F1"
+          if course.subjects.map(&:subject_code).intersect?(NON_SKE_SUBJECT_CODES)
             t(".degree_requirements")
           else
             t(".degree_subject_requirements")
