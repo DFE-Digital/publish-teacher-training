@@ -1,0 +1,36 @@
+<%= content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: t(".back_link_text"),
+    href: support_subjects_path,
+  ) %>
+<% end %>
+
+<h1 class="govuk-heading-l"><%= @subject.subject_name %></h1>
+
+<%= render TabNavigation.new(items: [
+  { name: "Details", url: support_subject_path(@subject) },
+  { name: "Financial Incentives", url: financial_incentives_support_subject_path(@subject) },
+]) %>
+
+<%= render GovukComponent::SummaryListComponent.new do |component|
+      component.with_row do |row|
+        row.with_key { FinancialIncentive.human_attribute_name(:bursary_amount) }
+        row.with_value(text: number_to_currency(@subject.financial_incentive.bursary_amount))
+      end
+
+      component.with_row do |row|
+        row.with_key { FinancialIncentive.human_attribute_name(:scholarship) }
+        row.with_value(text: number_to_currency(@subject.financial_incentive.scholarship))
+      end
+
+      component.with_row do |row|
+        row.with_key { FinancialIncentive.human_attribute_name(:non_uk_bursary_eligible) }
+        row.with_value(text: @subject.financial_incentive.non_uk_bursary_eligible)
+      end
+
+      component.with_row do |row|
+        row.with_key { FinancialIncentive.human_attribute_name(:non_uk_scholarship_eligible) }
+        row.with_value(text: @subject.financial_incentive.non_uk_scholarship_eligible)
+      end
+    end %>
+

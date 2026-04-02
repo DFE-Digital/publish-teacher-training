@@ -2,7 +2,7 @@
 
 module Support
   class SubjectsController < ApplicationController
-    before_action :assign_subject, only: %i[show edit update]
+    before_action :assign_subject, only: %i[show edit update financial_incentives]
 
     def index
       @pagy, @subjects = pagy(filtered_subjects)
@@ -18,6 +18,8 @@ module Support
       redirect_to support_subject_path(@subject),
                   flash: { success: t("support.flash.updated", resource: Subject.name) }
     end
+
+    def financial_incentives; end
 
   private
 

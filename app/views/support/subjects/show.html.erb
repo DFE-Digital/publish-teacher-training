@@ -9,6 +9,7 @@
 
 <%= render TabNavigation.new(items: [
   { name: "Details", url: support_subject_path(@subject) },
+  { name: "Financial Incentives", url: financial_incentives_support_subject_path(@subject) },
 ]) %>
 
 <%= render GovukComponent::SummaryListComponent.new do |component|
@@ -33,3 +34,4 @@
         row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: Subject.human_attribute_name(:match_synonyms))
       end
     end %>
+

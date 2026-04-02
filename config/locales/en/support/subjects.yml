@@ -3,6 +3,9 @@ en:
     subjects:
       index:
         page_title: 'Subjects'
+      financial_incentives:
+        page_title: 'Subject'
+        back_link_text: 'All subjects records'
       show:
         page_title: 'Subject'
         back_link_text: 'All subjects records'
