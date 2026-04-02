@@ -26,6 +26,14 @@ module Find
 
       private
 
+        def degree_requirements_title
+          if course.subjects.first&.subject_code == "F1"
+            t(".degree_requirements")
+          else
+            t(".degree_subject_requirements")
+          end
+        end
+
         def subject_knowledge_enhancement_content?
           if course.subjects.first.subject_code.nil?
             course.subjects.any? { |subject| SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(subject.subject_code) }

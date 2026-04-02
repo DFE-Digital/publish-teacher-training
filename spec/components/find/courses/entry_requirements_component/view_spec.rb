@@ -138,6 +138,15 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     it "does not render the SKE link" do
       expect(result).to have_no_link(ske_url_name, href: ske_url)
     end
+
+    context "when provider has degree subject requirements text" do
+      let(:course) { build(:course, subjects:, additional_degree_subject_requirements: true, degree_subject_requirements: "A degree in a relevant subject.") }
+
+      it "renders the dropdown title as 'Degree requirements'" do
+        expect(result.text).to include("Degree requirements")
+        expect(result.text).not_to include("Degree subject requirements")
+      end
+    end
   end
 
   context "with multiple subject_knowledge_enhancement_subjects" do
