@@ -61,10 +61,17 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
   end
 
   def given_i_see_the_schools_guidance_text
-    expect(page).to have_text("Add the schools you can offer placements in. A placement school is where candidates will go to get classroom experience.", normalize_ws: true)
-    expect(page).to have_text("Your courses will not appear in candidate’s location searches if you do not add placement schools to them.", normalize_ws: true)
+    expect(page).to have_text("We automatically upload all schools you are working with. These are schools that are on Register trainee teachers.", normalize_ws: true)
+    expect(page).to have_link("Register trainee teachers", href: "https://www.register-trainee-teachers.service.gov.uk/")
+    expect(page).to have_text("If needed, you can add new schools to your account.", normalize_ws: true)
+    expect(page).to have_text("You can only add schools that are on Get Information About Schools (GIAS).", normalize_ws: true)
+    expect(page).to have_link("Get Information About Schools (GIAS)", href: "https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments")
+    expect(page).to have_text("You can attach placement schools to any of your courses from the ‘Basic details’ tab on each of your courses.", normalize_ws: true)
+    expect(page).to have_link("your courses", href: publish_provider_recruitment_cycle_courses_path(provider.provider_code, Find::CycleTimetable.current_year))
+    expect(page).to have_text("Your courses will not appear in candidates’ location searches if you do not attach placement schools to them.", normalize_ws: true)
     expect(page).to have_link("Find out more about why you should add school placement locations", href: "https://www.publish-teacher-training-courses.service.gov.uk/how-to-use-this-service/add-schools-and-study-sites")
-    expect(page).to have_text("Add placement schools here, then attach them to any of your courses from the ‘Basic details’ tab on each course page.", normalize_ws: true)
+    expect(page).to have_text("You can choose whether to show or hide the placements from candidates in Organisation details.", normalize_ws: true)
+    expect(page).to have_link("Organisation details", href: details_publish_provider_recruitment_cycle_path(provider_code: provider.provider_code, year: Find::CycleTimetable.current_year))
   end
 
   def when_i_click_add_a_school
