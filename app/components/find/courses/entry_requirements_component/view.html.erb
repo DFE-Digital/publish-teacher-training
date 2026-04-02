@@ -17,7 +17,7 @@
             <% end %>
 
             <% if course.degree_subject_requirements.present? || subject_knowledge_enhancement_content? %>
-              <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".degree_subject_requirements")) do %>
+              <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: degree_requirements_title) do %>
                 <% if course.degree_subject_requirements %>
                   <%= helpers.markdown(course.degree_subject_requirements) %>
                 <% end %>
