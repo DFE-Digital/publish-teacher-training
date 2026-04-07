@@ -41,36 +41,7 @@ module Find
     end
 
     def search_courses_params
-      permitted = [
-        :can_sponsor_visa,
-        :funding,
-        :latitude,
-        :level,
-        :location,
-        :longitude,
-        :minimum_degree_required,
-        :order,
-        :previous_location_category,
-        :provider_code,
-        :provider_name,
-        :radius,
-        :engineers_teach_physics,
-        :send_courses,
-        :interview_location,
-        :subject_code,
-        :subject_name,
-        :applications_open,
-        { subjects: [],
-          start_date: [],
-          study_types: [],
-          qualifications: [],
-          funding: [],
-          excluded_courses: %i[provider_code course_code] },
-      ]
-
-      permitted.delete(:applications_open) if FeatureFlag.active?(:hide_applications_open_date)
-
-      params.permit(*permitted)
+      Find::SearchParams.permit(params)
     end
 
     def location_params
