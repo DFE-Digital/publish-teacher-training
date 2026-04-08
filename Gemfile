@@ -231,7 +231,7 @@ end
 group :test do
   gem "database_cleaner"
   gem "jsonapi-rspec"
-  gem "mock_redis"
+  gem "mock_redis", "0.46.0"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 7.0"
   gem "simplecov", "< 0.23", require: false

@@ -433,7 +433,7 @@ GEM
     minitest (6.0.3)
       drb (~> 2.0)
       prism (~> 1.5)
-    mock_redis (0.48.1)
+    mock_redis (0.46.0)
     msgpack (1.8.0)
     multi_json (1.19.1)
     multi_xml (0.6.0)
@@ -869,7 +869,7 @@ DEPENDENCIES
   jwt
   launchy
   listen (>= 3.0.5, < 3.11)
-  mock_redis
+  mock_redis (= 0.46.0)
   oj
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 2.0)
