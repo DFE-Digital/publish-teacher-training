@@ -122,48 +122,6 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  def has_scholarship_and_bursary?
-    object.has_bursary? && object.has_scholarship?
-  end
-
-  def bursary_first_line_ending
-    if bursary_requirements.count > 1
-      ":"
-    else
-      "#{bursary_requirements.first}."
-    end
-  end
-
-  def bursary_requirements
-    requirements = ["a degree of 2:2 or above in any subject"]
-
-    if object.course_subjects.any? { |subject| subject.subject.subject_name.downcase == "primary with mathematics" }
-      mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
-      requirements.push(mathematics_requirement)
-    end
-
-    requirements
-  end
-
-  def bursary_only?
-    object.has_bursary? && !object.has_scholarship?
-  end
-
-  def excluded_from_bursary?
-    object.subjects.present? &&
-      # incorrect bursary eligibility only shows up on courses with 2 subjects
-      object.subjects.count == 2 &&
-      has_excluded_course_name?
-  end
-
-  def bursary_amount
-    find_max_funding_for("bursary_amount")
-  end
-
-  def scholarship_amount
-    find_max_funding_for("scholarship")
-  end
-
   def salaried?
     object.funding.in?(%w[salary apprenticeship])
   end
@@ -225,22 +183,6 @@ class CourseDecorator < ApplicationDecorator
 
   def has_site?(site)
     !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
-  end
-
-  def funding_option
-    return if salaried?
-
-    if excluded_from_bursary?
-      # Duplicate branch body detected
-      "Student loans if you’re eligible"
-    elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Scholarships or bursaries, as well as student loans, are available if you’re eligible"
-    elsif has_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Bursaries and student loans are available if you’re eligible"
-    else
-      # Duplicate branch body detected
-      "Student loans are available if you’re eligible"
-    end
   end
 
   def current_cycle?
@@ -466,19 +408,6 @@ class CourseDecorator < ApplicationDecorator
     current_published_enrichment[:financial_support]
   end
 
-  def financial_incentive_details
-    financial_incentive = object.financial_incentives.first
-    bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
-    scholarship = number_to_currency(financial_incentive&.scholarship)
-
-    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Find::CycleTimetable.current_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
-    return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
-
-    return I18n.t("components.course.financial_incentives.bursary_and_scholarship", scholarship:, bursary_amount:) if bursary_amount.present? && scholarship.present?
-
-    I18n.t("components.course.financial_incentives.bursary", amount: bursary_amount)
-  end
-
   def personal_qualities
     object.enrichment_attribute(:personal_qualities)
   end
@@ -595,32 +524,6 @@ private
     else
       "No"
     end
-  end
-
-  def find_max_funding_for(attribute)
-    subject_funding_amounts = object.subjects.map do |s|
-      s.financial_incentive.public_send(attribute.to_sym).to_i if s.financial_incentive.present? && s.financial_incentive.attributes[attribute].present?
-    end
-
-    subject_funding_amounts.compact.max.to_s
-  end
-
-  def has_excluded_course_name?
-    exclusions = [
-      /^Drama/,
-      /^Media Studies/,
-      /^PE/,
-      /^Physical/,
-    ]
-    # We only care about course with a name matching the pattern 'Foo with bar'
-    # We don't care about courses matching the pattern 'Foo and bar'
-    return false unless /with/.match?(object.name)
-
-    exclusions.any? { |e| e.match?(object.name) }
-  end
-
-  def bursary_and_scholarship_flag_active_or_preview?
-    FeatureFlag.active?(:bursaries_and_scholarships_announced)
   end
 
   def number_of_subjects
