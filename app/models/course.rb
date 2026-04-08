@@ -656,37 +656,6 @@ class Course < ApplicationRecord
     end
   end
 
-  def has_bursary?
-    bursary_amount.present?
-  end
-
-  def has_scholarship_and_bursary?
-    has_scholarship? && has_bursary?
-  end
-
-  def has_scholarship?
-    scholarship_amount.present?
-  end
-
-  def has_early_career_payments?
-    financial_incentive&.early_career_payments.present?
-  end
-
-  def bursary_amount
-    financial_incentive&.bursary_amount
-  end
-
-  def scholarship_amount
-    financial_incentive&.scholarship
-  end
-
-  def financial_incentive
-    # Ignore "modern languages" as financial incentives
-    # differ based on the language selected
-
-    subjects.reject { |subject| subject.subject_name == "Modern Languages" }.first&.financial_incentive
-  end
-
   def is_further_education?
     further_education_course?
   end
@@ -811,8 +780,9 @@ class Course < ApplicationRecord
   def fetch_subordinate_subject_id
     return if is_primary? || further_education_course?
 
-    assignable_ids = assignable_master_subjects&.pluck(:id) || []
-    course_subjects.map(&:subject_id).select { |id| assignable_ids.include?(id) }.second
+    subject_ids = course_subjects.map(&:subject_id)
+    parent_ids = subject_ids.select { |id| assignable_master_subjects&.pluck(:id)&.include?(id) }
+    parent_ids.second
   end
 
   def assignable_master_subjects
@@ -837,17 +807,6 @@ class Course < ApplicationRecord
     return if age_range_in_years.blank?
 
     age_range_in_years.split("_").last.to_i
-  end
-
-  def bursary_requirements
-    return [] unless has_bursary?
-
-    requirements = [I18n.t("course.values.bursary_requirements.second_degree")]
-    mathematics_requirement = I18n.t("course.values.bursary_requirements.maths")
-
-    requirements.push(mathematics_requirement) if subjects.any? { |subject| subject.subject_name == "Primary with mathematics" }
-
-    requirements
   end
 
   def validate_degree_requirements_publishable
