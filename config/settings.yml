@@ -3,7 +3,6 @@ environment:
   name: production
 
 support_email: becomingateacher@digital.education.gov.uk
-campaign_email: itt.engagement@education.gov.uk
 
 # The canonical URL of the Find service
 find_url: https://find.localhost

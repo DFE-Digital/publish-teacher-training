@@ -12,9 +12,6 @@
   <p class="govuk-body">
     Engineers Teach Physics is a new campaign to help engineers become physics teachers.
   </p>
-  <p class="govuk-body">
-    For more information, email <%= govuk_mail_to(Settings.campaign_email, subject: "Engineers Teach Physics", class: "govuk-link") %>
-  </p>
 
   <%= render "publish/shared/error_wrapper", error_keys: [:campaign_name], data_qa: "course__engineers_teach_physics" do %>
 
