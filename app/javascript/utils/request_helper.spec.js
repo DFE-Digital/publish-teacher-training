@@ -18,14 +18,16 @@ describe('Request helpers', () => {
     const abortMock = vi.fn()
 
     beforeEach(() => {
-      global.XMLHttpRequest = vi.fn(() => ({
-        abort: abortMock,
-        addEventListener: (_, cb) => cb(),
-        open: vi.fn(),
-        send: vi.fn(),
-        responseText: '[]',
-        readyState: 2
-      }))
+      global.XMLHttpRequest = vi.fn(function MockXMLHttpRequest () {
+        return {
+          abort: abortMock,
+          addEventListener: (_, cb) => cb(),
+          open: vi.fn(),
+          send: vi.fn(),
+          responseText: '[]',
+          readyState: 2
+        }
+      })
       requestFn = request('/endpoint')
     })
 
