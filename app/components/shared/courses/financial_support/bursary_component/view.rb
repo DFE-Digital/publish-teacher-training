@@ -5,36 +5,17 @@ module Shared
     module FinancialSupport
       module BursaryComponent
         class View < ViewComponent::Base
-          attr_reader :course
+          attr_reader :funding_view
 
           delegate :bursary_amount,
+                   :bursary_first_line_ending,
                    :bursary_requirements,
-                   :bursary_first_line_ending, to: :course
+                   :bursary_eligible_subjects?, to: :funding_view
+          alias_method :bursary_eligible_subjects, :bursary_eligible_subjects?
 
-          def initialize(course)
+          def initialize(funding_view)
             super()
-            @course = course
-          end
-
-          def bursary_eligible_subjects
-            course.course_subjects.any? { |subject| eligible_subjects.include?(subject.subject.subject_name) }
-          end
-
-        private
-
-          ELIGIBLE_SUBJECTS = [
-            "Italian",
-            "Japanese",
-            "Mandarin",
-            "Russian",
-            "Modern languages (other)",
-            "Ancient Greek",
-            "Ancient Hebrew",
-          ].freeze
-          private_constant :ELIGIBLE_SUBJECTS
-
-          def eligible_subjects
-            ELIGIBLE_SUBJECTS
+            @funding_view = funding_view
           end
         end
       end
