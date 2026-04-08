@@ -2,8 +2,6 @@
 
 module Find
   class PrimarySubjectsController < ApplicationController
-    include FinancialIncentiveHelper
-
     before_action :initialize_form
 
     def index
