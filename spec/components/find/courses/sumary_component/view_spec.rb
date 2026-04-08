@@ -118,6 +118,68 @@ module Find
           end
         end
 
+        describe "#bursary_value" do
+          before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
+          after { FeatureFlag.deactivate(:bursaries_and_scholarships_announced) }
+
+          context "when the subject has a bursary" do
+            it "shows the bursary hint" do
+              subject = build(:secondary_subject, :dance, bursary_amount: 9000)
+              enrichment = create(:course_enrichment, :published)
+              course = create(:course, :secondary, :fee_type_based, subjects: [subject], enrichments: [enrichment]).decorate
+
+              result = render_inline(described_class.new(course, enrichment))
+              expect(result.text).to include("Bursaries of £9,000 are available")
+            end
+          end
+
+          context "when the subject has a bursary and scholarship" do
+            it "shows both" do
+              subject = build(:secondary_subject, :chemistry, bursary_amount: 20_000, scholarship: 22_000)
+              enrichment = create(:course_enrichment, :published)
+              course = create(:course, :secondary, :fee_type_based, subjects: [subject], enrichments: [enrichment]).decorate
+
+              result = render_inline(described_class.new(course, enrichment))
+              expect(result.text).to include("Scholarships of £22,000 or bursaries of £20,000 are available")
+            end
+          end
+
+          context "when the course is salaried" do
+            it "does not show bursaries" do
+              subject = build(:secondary_subject, :dance, bursary_amount: 9000)
+              enrichment = create(:course_enrichment, :published)
+              course = create(:course, :secondary, :salary, subjects: [subject], enrichments: [enrichment]).decorate
+
+              result = render_inline(described_class.new(course, enrichment))
+              expect(result.text).not_to include("Bursaries")
+            end
+          end
+
+          context "when the feature flag is inactive" do
+            before { FeatureFlag.deactivate(:bursaries_and_scholarships_announced) }
+
+            it "does not show bursaries" do
+              subject = build(:secondary_subject, :dance, bursary_amount: 9000)
+              enrichment = create(:course_enrichment, :published)
+              course = create(:course, :secondary, :fee_type_based, subjects: [subject], enrichments: [enrichment]).decorate
+
+              result = render_inline(described_class.new(course, enrichment))
+              expect(result.text).not_to include("Bursaries")
+            end
+          end
+
+          context "when the subject is not non-UK eligible" do
+            it "appends 'for UK citizens'" do
+              subject = build(:secondary_subject, :chemistry, bursary_amount: 20_000)
+              enrichment = create(:course_enrichment, :published)
+              course = create(:course, :secondary, :fee_type_based, subjects: [subject], enrichments: [enrichment]).decorate
+
+              result = render_inline(described_class.new(course, enrichment))
+              expect(result.text).to include("for UK citizens")
+            end
+          end
+        end
+
         context "when there are UK fees" do
           it "renders the uk fees" do
             enrichment = create(:course_enrichment, fee_uk_eu: 9250)
