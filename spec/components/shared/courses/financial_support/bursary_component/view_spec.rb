@@ -4,12 +4,12 @@ require "rails_helper"
 
 describe Shared::Courses::FinancialSupport::BursaryComponent::View, type: :component do
   let(:course) { create(:course, subjects: [create(:primary_subject, subject_name: "primary with mathematics", financial_incentive: FinancialIncentive.new(bursary_amount: 3000))]) }
-  let(:funding_view) { CourseIncentive::View.new(CourseIncentive.new(course)) }
+  let(:incentive_view) { CourseIncentive::View.new(CourseIncentive.new(course)) }
 
   context "bursaries_and_scholarships_announced feature flag is on" do
     before do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
-      render_inline(described_class.new(funding_view))
+      render_inline(described_class.new(incentive_view))
     end
 
     it "renders bursary details" do
@@ -20,7 +20,7 @@ describe Shared::Courses::FinancialSupport::BursaryComponent::View, type: :compo
 
   context "bursaries_and_scholarships_announced feature flag is off" do
     it "does not render bursary details" do
-      render_inline(described_class.new(funding_view))
+      render_inline(described_class.new(incentive_view))
 
       expect(page.has_text?("You could be eligible for a bursary of £3,000")).to be false
     end
