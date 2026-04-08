@@ -2143,40 +2143,6 @@ describe Course do
     end
   end
 
-  describe "#bursary_requirements" do
-    context "when there is no bursary" do
-      subject do
-        create(
-          :course,
-          level: "primary",
-          name: "Primary with english",
-          course_code: "AAAA",
-          subjects: [find_or_create(:primary_subject, :primary_with_english)],
-        )
-      end
-
-      it "returns no requirements" do
-        expect(subject.bursary_requirements).to be_empty
-      end
-    end
-
-    context "when there is a bursary" do
-      subject do
-        create(
-          :course,
-          level: "secondary",
-          name: "Classics",
-          course_code: "AAAA",
-          subjects: [find_or_create(:secondary_subject, :classics)],
-        )
-      end
-
-      it "returns default requirements" do
-        expect(subject.bursary_requirements).to eql(["a degree of 2:2 or above in any subject"])
-      end
-    end
-  end
-
   describe "rollable?" do
     subject do
       create(
