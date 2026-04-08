@@ -14,7 +14,7 @@ module Shared
                    :financial_support, to: :course
 
           delegate :bursary_only?,
-                   :has_scholarship_and_bursary?, to: :funding_view
+                   :has_scholarship_and_bursary?, to: :incentive_view
 
           def initialize(course, enrichment)
             super()
@@ -22,8 +22,8 @@ module Shared
             @enrichment = enrichment
           end
 
-          def funding_view
-            @funding_view ||= CourseIncentive::View.new(CourseIncentive.new(course))
+          def incentive_view
+            @incentive_view ||= CourseIncentive::View.new(CourseIncentive.new(course))
           end
         end
       end

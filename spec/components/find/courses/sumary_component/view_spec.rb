@@ -118,7 +118,7 @@ module Find
           end
         end
 
-        describe "#bursary_value" do
+        describe "#incentive_hint" do
           before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
           after { FeatureFlag.deactivate(:bursaries_and_scholarships_announced) }
 

@@ -155,16 +155,12 @@ module Courses
       t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
     end
 
-    def bursary_value
-      return if course.salary? || course.apprenticeship?
-      return unless funding_view.bursary_and_scholarship_flag_active_or_preview?
-      return if @visa_sponsorship.present? && !funding_view.non_uk_funding_available?
-
-      funding_view.hint_text
+    def incentive_hint
+      incentive_view.hint_text
     end
 
-    def funding_view
-      @funding_view ||= CourseIncentive::View.new(CourseIncentive.new(course))
+    def incentive_view
+      @incentive_view ||= CourseIncentive::View.new(CourseIncentive.new(course))
     end
 
     NullEnrichment = Struct.new(:course_length, :fee_uk_eu, :fee_international, keyword_init: true)

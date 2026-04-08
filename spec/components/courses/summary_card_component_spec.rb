@@ -302,9 +302,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           )
         end
 
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
+        it "shows bursaries and scholarship with UK citizens qualifier" do
+          expect(summary_card_content).to include("for UK citizens")
         end
       end
 
@@ -348,9 +347,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         end
         let(:search_params) { { can_sponsor_visa: true } }
 
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
+        it "shows bursaries and scholarship with UK citizens qualifier" do
+          expect(summary_card_content).to include("for UK citizens")
         end
       end
 
@@ -369,9 +367,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         end
         let(:search_params) { { can_sponsor_visa: true } }
 
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
+        it "shows bursaries and scholarship with UK citizens qualifier" do
+          expect(summary_card_content).to include("for UK citizens")
         end
       end
     end
