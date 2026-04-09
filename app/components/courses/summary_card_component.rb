@@ -156,7 +156,6 @@ module Courses
     end
 
     def bursary_value
-      return if course.salary? || course.apprenticeship?
       return unless funding_view.bursary_and_scholarship_flag_active_or_preview?
       return if @visa_sponsorship.present? && !funding_view.non_uk_funding_available?
 

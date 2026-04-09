@@ -66,6 +66,7 @@ private
   end
 
   def determine_funding_relevant_subjects
+    return [] if course.salary? || course.apprenticeship?
     return [subordinate_subject].compact if science_with_specialist_subordinate?
 
     subjects = without_subordinate
