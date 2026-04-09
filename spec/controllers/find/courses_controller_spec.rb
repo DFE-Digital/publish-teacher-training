@@ -71,6 +71,33 @@ module Find
 
         expect(response).to be_not_found
       end
+
+      context "when a location param is given but geocoding returns no coordinates" do
+        let(:published_course) do
+          create(
+            :course,
+            enrichments: [build(:course_enrichment, :published)],
+            sites: [create(:site, latitude: 51.5, longitude: -0.1)],
+            provider:,
+          )
+        end
+
+        before do
+          allow(Geolocation::Address).to receive(:query).and_return(
+            Geolocation::Address.new(latitude: nil, longitude: nil, formatted_address: nil),
+          )
+        end
+
+        it "does not raise a TypeError from Float(nil)" do
+          expect {
+            get :show, params: {
+              provider_code: provider.provider_code,
+              course_code: published_course.course_code,
+              location: "somewhere unresolvable",
+            }
+          }.not_to raise_error
+        end
+      end
     end
   end
 end
