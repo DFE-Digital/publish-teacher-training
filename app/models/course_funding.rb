@@ -12,7 +12,7 @@ class CourseFunding
   end
 
   def scholarship_amount
-    find_max_funding_for(:scholarship)
+    find_max_funding_for(:scholarship, scholarship_relevant_subjects)
   end
 
   def has_bursary?
@@ -40,7 +40,7 @@ class CourseFunding
   end
 
   def scholarship_eligible_subjects?
-    funding_relevant_subjects.any? { |s| s.financial_incentive&.non_uk_scholarship_eligible? }
+    scholarship_relevant_subjects.any? { |s| s.financial_incentive&.non_uk_scholarship_eligible? }
   end
 
   def non_uk_funding_available?
@@ -48,15 +48,15 @@ class CourseFunding
   end
 
   def subject_with_scholarship
-    @subject_with_scholarship ||= funding_relevant_subjects
+    @subject_with_scholarship ||= scholarship_relevant_subjects
       .find { |s| s.financial_incentive&.scholarship.present? }
       &.subject_name&.downcase
   end
 
 private
 
-  def find_max_funding_for(attribute)
-    funding_relevant_subjects
+  def find_max_funding_for(attribute, subjects = funding_relevant_subjects)
+    subjects
       .filter_map { |s| s.financial_incentive&.public_send(attribute)&.to_i }
       .max&.to_s
   end
@@ -72,8 +72,7 @@ private
 
     if modern_languages_master?
       language_subjects = subjects.select(&:language_subject?)
-      return language_subjects if language_subjects.length.between?(1, 2)
-      return [] if language_subjects.length > 2
+      return language_subjects if language_subjects.any?
     end
 
     subjects
@@ -103,5 +102,17 @@ private
 
   def modern_languages_master?
     master_subject&.modern_languages?
+  end
+
+  def scholarship_relevant_subjects
+    @scholarship_relevant_subjects ||= if modern_languages_master? && !all_language_subjects_have_scholarship?
+                                         []
+                                       else
+                                         funding_relevant_subjects
+                                       end
+  end
+
+  def all_language_subjects_have_scholarship?
+    funding_relevant_subjects.all? { |s| s.financial_incentive&.scholarship.present? }
   end
 end
