@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CourseFunding::View
+class CourseIncentive::View
   include ActiveSupport::NumberHelper
 
   delegate :has_bursary?, :has_scholarship?, :has_scholarship_and_bursary?,
@@ -9,10 +9,10 @@ class CourseFunding::View
            :bursary_eligible_subjects?,
            :scholarship_eligible_subjects?, :non_uk_funding_available?,
            :subject_with_scholarship,
-           to: :course_funding
+           to: :course_incentive
 
-  def initialize(course_funding)
-    @course_funding = course_funding
+  def initialize(course_incentive)
+    @course_incentive = course_incentive
   end
 
   def bursary_requirements
@@ -93,9 +93,9 @@ class CourseFunding::View
 
 private
 
-  attr_reader :course_funding
+  attr_reader :course_incentive
 
   def course
-    course_funding.course
+    course_incentive.course
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CourseFunding
+class CourseIncentive
   attr_reader :course
 
   def initialize(course)

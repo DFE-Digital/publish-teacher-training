@@ -2,18 +2,18 @@
 
 require "rails_helper"
 
-describe CourseFunding::View do
-  subject(:view) { described_class.new(course_funding) }
+describe CourseIncentive::View do
+  subject(:view) { described_class.new(course_incentive) }
 
   before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
 
   let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
   let(:provider) { build(:provider, recruitment_cycle: current_recruitment_cycle) }
   let(:course) { build(:course, provider:) }
-  let(:course_funding) { CourseFunding.new(course) }
+  let(:course_incentive) { CourseIncentive.new(course) }
 
   describe "delegation" do
-    it "delegates logic methods to CourseFunding" do
+    it "delegates logic methods to CourseIncentive" do
       %i[has_bursary?
          has_scholarship?
          has_scholarship_and_bursary?

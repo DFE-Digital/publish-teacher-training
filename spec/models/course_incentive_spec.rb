@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe CourseFunding do
+describe CourseIncentive do
   before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
 
   shared_context "modern languages with subordinate subject" do

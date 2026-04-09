@@ -40,7 +40,7 @@ module Find
     def financial_information(financial_incentive)
       return unless FeatureFlag.active?(:bursaries_and_scholarships_announced) && financial_incentive.present?
 
-      content = CourseFunding::View.hint_text(
+      content = CourseIncentive::View.hint_text(
         bursary_amount: financial_incentive.bursary_amount,
         scholarship_amount: financial_incentive.scholarship,
         non_uk_funding_available: financial_incentive.non_uk_bursary_eligible? || financial_incentive.non_uk_scholarship_eligible?,

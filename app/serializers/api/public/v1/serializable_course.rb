@@ -58,15 +58,15 @@ module API
                    :degree_type
 
         attribute :bursary_amount do
-          course_funding.bursary_amount
+          course_incentive.bursary_amount
         end
 
         attribute :bursary_requirements do
-          CourseFunding::View.new(course_funding).bursary_requirements
+          CourseIncentive::View.new(course_incentive).bursary_requirements
         end
 
         attribute :scholarship_amount do
-          course_funding.scholarship_amount
+          course_incentive.scholarship_amount
         end
 
         attribute :about_accredited_body do
@@ -98,11 +98,11 @@ module API
         end
 
         attribute :has_early_career_payments do
-          course_funding.has_early_career_payments?
+          course_incentive.has_early_career_payments?
         end
 
         attribute :has_scholarship do
-          course_funding.has_scholarship?
+          course_incentive.has_scholarship?
         end
 
         attribute :has_vacancies do
@@ -166,8 +166,8 @@ module API
         end
 
         # Not memoized because JSONAPI::Serializable::Resource freezes instances after initialize
-        def course_funding
-          CourseFunding.new(@object)
+        def course_incentive
+          CourseIncentive.new(@object)
         end
 
         enrichment_attribute :about_course
