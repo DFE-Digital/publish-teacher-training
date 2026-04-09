@@ -5,6 +5,8 @@ require "rails_helper"
 describe CourseFunding::View do
   subject(:view) { described_class.new(course_funding) }
 
+  before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
+
   let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
   let(:provider) { build(:provider, recruitment_cycle: current_recruitment_cycle) }
   let(:course) { build(:course, provider:) }
@@ -82,10 +84,6 @@ describe CourseFunding::View do
 
   describe "#financial_incentive_details" do
     context "bursaries and scholarships is announced" do
-      before do
-        FeatureFlag.activate(:bursaries_and_scholarships_announced)
-      end
-
       context "course has no financial incentive" do
         it "returns 'None available'" do
           expect(view.financial_incentive_details).to eq("None available")
@@ -120,6 +118,8 @@ describe CourseFunding::View do
     end
 
     context "bursaries and scholarships is not announced" do
+      before { FeatureFlag.deactivate(:bursaries_and_scholarships_announced) }
+
       it "returns 'Information not yet available'" do
         expect(view.financial_incentive_details).to eq("Information not yet available")
       end
@@ -171,18 +171,6 @@ describe CourseFunding::View do
       it "returns nil" do
         expect(view.hint_text).to be_nil
       end
-    end
-  end
-
-  describe "#bursary_and_scholarship_flag_active_or_preview?" do
-    it "returns true when feature flag is active" do
-      FeatureFlag.activate(:bursaries_and_scholarships_announced)
-
-      expect(view.bursary_and_scholarship_flag_active_or_preview?).to be true
-    end
-
-    it "returns false when feature flag is inactive" do
-      expect(view.bursary_and_scholarship_flag_active_or_preview?).to be false
     end
   end
 

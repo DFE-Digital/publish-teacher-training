@@ -75,8 +75,6 @@ module Find
         end
 
         def bursary_value
-          return unless funding_view.bursary_and_scholarship_flag_active_or_preview?
-
           funding_view.hint_text
         end
 

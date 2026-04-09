@@ -3,6 +3,8 @@
 require "rails_helper"
 
 describe CourseFunding do
+  before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
+
   shared_context "modern languages with subordinate subject" do
     let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
     let(:mandarin) do
@@ -72,6 +74,30 @@ describe CourseFunding do
                                  subordinate_subject_id: subordinate.id)
     end
     let(:funding) { described_class.new(course) }
+  end
+
+  describe "salaried and apprenticeship courses" do
+    it "returns no funding for salaried courses" do
+      subject = build(:secondary_subject, bursary_amount: "3000", scholarship: "2000")
+      course = build(:course, :salary, subjects: [subject])
+      funding = described_class.new(course)
+
+      expect(funding.bursary_amount).to be_nil
+      expect(funding.scholarship_amount).to be_nil
+      expect(funding).not_to be_has_bursary
+      expect(funding).not_to be_has_scholarship
+    end
+
+    it "returns no funding for apprenticeship courses" do
+      subject = build(:secondary_subject, bursary_amount: "3000", scholarship: "2000")
+      course = build(:course, :apprenticeship, subjects: [subject])
+      funding = described_class.new(course)
+
+      expect(funding.bursary_amount).to be_nil
+      expect(funding.scholarship_amount).to be_nil
+      expect(funding).not_to be_has_bursary
+      expect(funding).not_to be_has_scholarship
+    end
   end
 
   describe "#bursary_amount" do

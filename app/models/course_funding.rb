@@ -67,6 +67,7 @@ private
 
   def determine_funding_relevant_subjects
     return [] if course.salary? || course.apprenticeship?
+    return [] unless FeatureFlag.active?(:bursaries_and_scholarships_announced)
     return [subordinate_subject].compact if science_with_specialist_subordinate?
 
     subjects = without_subordinate

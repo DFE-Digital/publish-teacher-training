@@ -83,10 +83,6 @@ class CourseFunding::View
     )
   end
 
-  def bursary_and_scholarship_flag_active_or_preview?
-    FeatureFlag.active?(:bursaries_and_scholarships_announced)
-  end
-
   def scholarship_body
     I18n.t("find.scholarships.#{subject_with_scholarship}.body", default: nil)
   end
