@@ -8,7 +8,6 @@ module Shared
           attr_reader :incentive_view
 
           delegate :bursary_amount,
-                   :bursary_first_line_ending,
                    :bursary_requirements,
                    :bursary_eligible_subjects?, to: :incentive_view
           alias_method :bursary_eligible_subjects, :bursary_eligible_subjects?

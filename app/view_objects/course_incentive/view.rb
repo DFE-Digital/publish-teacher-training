@@ -26,14 +26,6 @@ class CourseIncentive::View
     requirements
   end
 
-  def bursary_first_line_ending
-    if bursary_requirements.count > 1
-      ":"
-    else
-      "#{bursary_requirements.first}."
-    end
-  end
-
   def financial_incentive_details
     return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Find::CycleTimetable.current_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
 
@@ -47,6 +39,10 @@ class CourseIncentive::View
     I18n.t("components.course.financial_incentives.bursary", amount: formatted_bursary)
   end
 
+  # This method is not coupled with a course like the others
+  # We can pass arbitrary values in for burasry and scholarship
+  # This is specifically used for rendering content about financial incentives
+  # directly with secondary subjects rather than course
   def self.hint_text(bursary_amount:, scholarship_amount:, non_uk_funding_available: true)
     bursary = bursary_amount.presence
     scholarship = scholarship_amount.presence

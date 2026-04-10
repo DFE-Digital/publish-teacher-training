@@ -59,29 +59,6 @@ describe CourseIncentive::View do
     end
   end
 
-  describe "#bursary_first_line_ending" do
-    context "when there is one bursary requirement" do
-      let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000")]) }
-
-      it "returns the requirement with a period" do
-        expect(view.bursary_first_line_ending).to end_with(".")
-      end
-    end
-
-    context "when there are multiple bursary requirements" do
-      let(:course) do
-        build(:course, provider:, subjects: [
-          build(:primary_subject, subject_name: "Primary with mathematics",
-                                  financial_incentive: FinancialIncentive.new(bursary_amount: 3000)),
-        ])
-      end
-
-      it "returns a colon" do
-        expect(view.bursary_first_line_ending).to eq(":")
-      end
-    end
-  end
-
   describe "#financial_incentive_details" do
     context "bursaries and scholarships is announced" do
       context "course has no financial incentive" do
