@@ -33,17 +33,23 @@ RSpec.describe Session, type: :model do
 
       it "returns false at exactly the timeout boundary" do
         session = create(:session, sessionable: create(:user))
-        session.update_columns(updated_at: Session::USER_TIMEOUT.ago)
+        session.update_columns(updated_at: Session::INACTIVITY_TIMEOUT.ago)
 
         expect(session).not_to be_active
       end
     end
 
     context "when the session belongs to a Candidate" do
-      it "returns true regardless of updated_at" do
-        session = create(:session, :timed_out, sessionable: create(:candidate))
+      it "returns true when updated within the timeout period" do
+        session = create(:session, :active, sessionable: create(:candidate))
 
         expect(session).to be_active
+      end
+
+      it "returns false when updated beyond the timeout period" do
+        session = create(:session, :timed_out, sessionable: create(:candidate))
+
+        expect(session).not_to be_active
       end
     end
   end

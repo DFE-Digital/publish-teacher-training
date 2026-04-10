@@ -29,7 +29,19 @@ module Find
     end
 
     def find_session_by_cookie
-      Session.find_by(session_key: candidate_session, sessionable_type: "Candidate") if candidate_session
+      return unless candidate_session
+
+      db_session = Session.find_by(session_key: candidate_session, sessionable_type: "Candidate")
+      return unless db_session
+
+      unless db_session.active?
+        db_session.destroy!
+        reset_candidate_session
+        return
+      end
+
+      db_session.touch
+      db_session
     end
 
     def omniauth

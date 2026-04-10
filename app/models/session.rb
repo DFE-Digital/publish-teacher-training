@@ -1,16 +1,11 @@
 class Session < ApplicationRecord
-  USER_TIMEOUT = 2.hours
+  INACTIVITY_TIMEOUT = 30.minutes
 
   belongs_to :sessionable, polymorphic: true
 
   validates :session_key, presence: true
 
   def active?
-    case sessionable_type
-    when "User"
-      updated_at > USER_TIMEOUT.ago
-    else
-      true # Candidate session don't time out yet
-    end
+    updated_at > INACTIVITY_TIMEOUT.ago
   end
 end

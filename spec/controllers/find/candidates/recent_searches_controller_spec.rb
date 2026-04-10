@@ -116,6 +116,32 @@ module Find
           expect(response).to redirect_to(find_root_path)
         end
       end
+
+      context "when the candidate session has timed out" do
+        before do
+          session_record.update_columns(updated_at: Session::INACTIVITY_TIMEOUT.ago)
+        end
+
+        it "destroys the expired session" do
+          get :index
+
+          expect(Session.find_by(id: session_record.id)).to be_nil
+        end
+
+        it "redirects to the find root path" do
+          get :index
+
+          expect(response).to redirect_to(find_root_path)
+        end
+      end
+
+      context "when the candidate session is active" do
+        it "touches the session to reset the inactivity timer" do
+          session_record.update_columns(updated_at: 10.minutes.ago)
+
+          expect { get :index }.to(change { session_record.reload.updated_at })
+        end
+      end
     end
   end
 end
