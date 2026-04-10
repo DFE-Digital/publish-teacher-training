@@ -4,6 +4,10 @@
   font-family: $govuk-font-family;
 }
 
+.autocomplete__status {
+  @include govuk-visually-hidden;
+}
+
 .govuk-form-group--error {
   .autocomplete__input {
     border-color: $govuk-error-colour;
