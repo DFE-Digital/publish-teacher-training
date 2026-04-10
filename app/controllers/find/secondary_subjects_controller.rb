@@ -2,8 +2,6 @@
 
 module Find
   class SecondarySubjectsController < ApplicationController
-    include FinancialIncentiveHelper
-
     before_action :initialize_form
 
     def index
@@ -37,6 +35,18 @@ module Find
           subject_group: subject.subject_group.name,
         )
       end
+    end
+
+    def financial_information(financial_incentive)
+      return unless FeatureFlag.active?(:bursaries_and_scholarships_announced) && financial_incentive.present?
+
+      content = CourseIncentive::View.hint_text(
+        bursary_amount: financial_incentive.bursary_amount,
+        scholarship_amount: financial_incentive.scholarship,
+        non_uk_funding_available: financial_incentive.non_uk_bursary_eligible? || financial_incentive.non_uk_scholarship_eligible?,
+      )
+
+      helpers.content_tag(:p, content, class: "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0 govuk-!-margin-bottom-0") if content
     end
 
     def subject_params

@@ -25,6 +25,8 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:bursary_amount).with_value(nil) }
 
   context "when financial_incentives are present" do
+    before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
+
     let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], level: "secondary", subjects: [find_or_create(:secondary_subject, :physics)]) }
 
     it { is_expected.to have_attribute(:scholarship_amount).with_value("26000") }
@@ -48,7 +50,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
     it { is_expected.to have_attribute(:visa_sponsorship_application_deadline_at).with_value(deadline.iso8601) }
   end
 
-  it { is_expected.to have_attribute(:bursary_requirements).with_value(course.bursary_requirements) }
+  it { is_expected.to have_attribute(:bursary_requirements).with_value(CourseIncentive::View.new(CourseIncentive.new(course)).bursary_requirements) }
   it { is_expected.to have_attribute(:changed_at).with_value(course.changed_at.iso8601) }
   it { is_expected.to have_attribute(:code).with_value(course.course_code) }
   it { is_expected.to have_attribute(:course_length).with_value(course.latest_published_enrichment.course_length) }
@@ -61,7 +63,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:gcse_subjects_required).with_value(%w[maths english science]) }
   it { is_expected.to have_attribute(:has_early_career_payments).with_value(false) }
   it { is_expected.to have_attribute(:financial_support).with_value(course.latest_published_enrichment.financial_support) }
-  it { is_expected.to have_attribute(:has_scholarship).with_value(course.has_scholarship?) }
+  it { is_expected.to have_attribute(:has_scholarship).with_value(CourseIncentive.new(course).has_scholarship?) }
   it { is_expected.to have_attribute(:has_vacancies).with_value(course.has_vacancies?) }
   it { is_expected.to have_attribute(:how_school_placements_work).with_value(course.latest_published_enrichment.how_school_placements_work) }
   it { is_expected.to have_attribute(:interview_process).with_value(course.latest_published_enrichment.interview_process) }
@@ -90,6 +92,8 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:visa_sponsorship_application_deadline_at).with_value(nil) }
 
   context "when bursary amount is present" do
+    before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
+
     let(:course) { create(:course, :with_accrediting_provider, :secondary, enrichments: [enrichment], subjects: [find_or_create(:secondary_subject, :classics)]) }
 
     it { is_expected.to have_attribute(:bursary_amount).with_value("10000") }

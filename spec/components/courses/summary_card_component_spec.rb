@@ -202,14 +202,14 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
 
     context "when course funding is fee and user searches for visa sponsorship" do
-      context "when physics is main subject and has bursaries" do
+      context "when subject has non-UK bursary eligibility" do
         let(:course) do
           create(
             :course,
             :secondary,
             name: "Physics with Drama",
             subjects: [
-              build(:secondary_subject, :physics, bursary_amount: 10_000),
+              build(:secondary_subject, :physics, bursary_amount: 10_000, non_uk_bursary_eligible: true),
               build(:secondary_subject, :drama),
             ],
             funding:,
@@ -222,14 +222,14 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "Bursaries of £10,000 are available"
       end
 
-      context "when physics is main subject and has scholarship" do
+      context "when subject has non-UK scholarship eligibility" do
         let(:course) do
           create(
             :course,
             :secondary,
             name: "Physics with Drama",
             subjects: [
-              build(:secondary_subject, :physics, scholarship: 10_000),
+              build(:secondary_subject, :physics, scholarship: 10_000, non_uk_scholarship_eligible: true),
               build(:secondary_subject, :drama),
             ],
             funding:,
@@ -242,14 +242,14 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "Scholarships of £10,000 are available"
       end
 
-      context "when physics is main subject and has bursaries and scholarship" do
+      context "when subject has both non-UK bursary and scholarship eligibility" do
         let(:course) do
           create(
             :course,
             :secondary,
             name: "Physics with Drama",
             subjects: [
-              build(:secondary_subject, :physics, bursary_amount: 9000, scholarship: 10_000),
+              build(:secondary_subject, :physics, bursary_amount: 9000, scholarship: 10_000, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true),
               build(:secondary_subject, :drama),
             ],
             funding:,
@@ -262,7 +262,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "Scholarships of £10,000 or bursaries of £9,000 are available"
       end
 
-      context "when main subject does not have bursaries and physics is second subject with bursaries" do
+      context "when no subjects have non-UK eligibility flags" do
         let(:course) do
           create(
             :course,
@@ -286,23 +286,25 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         end
       end
 
-      context "when languages is the main subject and offer bursaries and scholarship" do
+      context "when subject has bursary but is not non-UK eligible" do
+        let(:search_params) { { can_sponsor_visa: true } }
         let(:course) do
           create(
             :course,
             :secondary,
+            :fee_type_based,
             name: "English with Drama",
             subjects: [
               build(:secondary_subject, :english, bursary_amount: 6000, scholarship: 5000),
               build(:secondary_subject, :drama),
             ],
-            funding:,
             enrichments: [create(:course_enrichment, :published, fee_uk_eu: 10_000, fee_international: nil)],
           )
         end
 
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£10,000 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "Scholarships of £5,000 or bursaries of £6,000 are available"
+        it "shows bursaries and scholarship with UK citizens qualifier" do
+          expect(summary_card_content).to include("for UK citizens")
+        end
       end
 
       context "when languages is the second subject" do
@@ -345,9 +347,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         end
         let(:search_params) { { can_sponsor_visa: true } }
 
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
+        it "shows bursaries and scholarship with UK citizens qualifier" do
+          expect(summary_card_content).to include("for UK citizens")
         end
       end
 
@@ -366,9 +367,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         end
         let(:search_params) { { can_sponsor_visa: true } }
 
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
+        it "shows bursaries and scholarship with UK citizens qualifier" do
+          expect(summary_card_content).to include("for UK citizens")
         end
       end
     end
