@@ -26,19 +26,6 @@ class CourseIncentive::View
     requirements
   end
 
-  def financial_incentive_details
-    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Find::CycleTimetable.current_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
-
-    formatted_bursary = number_to_currency(bursary_amount)
-    formatted_scholarship = number_to_currency(scholarship_amount)
-
-    return I18n.t("components.course.financial_incentives.none") if formatted_bursary.blank? && formatted_scholarship.blank?
-
-    return I18n.t("components.course.financial_incentives.bursary_and_scholarship", scholarship: formatted_scholarship, bursary_amount: formatted_bursary) if formatted_bursary.present? && formatted_scholarship.present?
-
-    I18n.t("components.course.financial_incentives.bursary", amount: formatted_bursary)
-  end
-
   # This method is not coupled with a course like the others
   # We can pass arbitrary values in for burasry and scholarship
   # This is specifically used for rendering content about financial incentives

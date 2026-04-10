@@ -59,50 +59,6 @@ describe CourseIncentive::View do
     end
   end
 
-  describe "#financial_incentive_details" do
-    context "bursaries and scholarships is announced" do
-      context "course has no financial incentive" do
-        it "returns 'None available'" do
-          expect(view.financial_incentive_details).to eq("None available")
-        end
-      end
-
-      context "course has both bursary and scholarship" do
-        let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000", scholarship: "2000")]) }
-
-        it "returns scholarship and bursary details" do
-          expect(view.financial_incentive_details).to eq("Scholarships of £2,000 and bursaries of £3,000 are available")
-        end
-      end
-
-      context "course only has bursary" do
-        let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000")]) }
-
-        it "returns bursary details" do
-          expect(view.financial_incentive_details).to eq("Bursaries of £3,000 available")
-        end
-      end
-
-      context "course is in the next cycle" do
-        before do
-          allow(course).to receive(:recruitment_cycle_year).and_return(current_recruitment_cycle.year.to_i + 1)
-        end
-
-        it "returns 'Information not yet available'" do
-          expect(view.financial_incentive_details).to eq("Information not yet available")
-        end
-      end
-    end
-
-    context "bursaries and scholarships is not announced" do
-      before { FeatureFlag.deactivate(:bursaries_and_scholarships_announced) }
-
-      it "returns 'Information not yet available'" do
-        expect(view.financial_incentive_details).to eq("Information not yet available")
-      end
-    end
-  end
-
   describe ".hint_text" do
     it "returns combined scholarship and bursary hint" do
       expect(
