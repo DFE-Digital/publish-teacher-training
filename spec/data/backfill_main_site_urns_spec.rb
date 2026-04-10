@@ -4,7 +4,9 @@ require "rails_helper"
 require Rails.root.join("db/data/20260410105723_backfill_main_site_urns")
 
 describe BackfillMainSiteUrns do
-  subject(:run_migration) { described_class.new.up }
+  def run_migration
+    described_class.new.up
+  end
 
   let(:current_cycle) { find_or_create(:recruitment_cycle) }
   let(:previous_cycle) { find_or_create(:recruitment_cycle, :previous) }
