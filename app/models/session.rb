@@ -6,11 +6,6 @@ class Session < ApplicationRecord
   validates :session_key, presence: true
 
   def active?
-    case sessionable_type
-    when "User"
-      updated_at > INACTIVITY_TIMEOUT.ago
-    else
-      true # Candidate session don't time out yet
-    end
+    updated_at > INACTIVITY_TIMEOUT.ago
   end
 end

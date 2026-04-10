@@ -40,10 +40,16 @@ RSpec.describe Session, type: :model do
     end
 
     context "when the session belongs to a Candidate" do
-      it "returns true regardless of updated_at" do
-        session = create(:session, :timed_out, sessionable: create(:candidate))
+      it "returns true when updated within the timeout period" do
+        session = create(:session, :active, sessionable: create(:candidate))
 
         expect(session).to be_active
+      end
+
+      it "returns false when updated beyond the timeout period" do
+        session = create(:session, :timed_out, sessionable: create(:candidate))
+
+        expect(session).not_to be_active
       end
     end
   end
