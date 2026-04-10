@@ -10,7 +10,7 @@ FactoryBot.define do
     trait :timed_out do
       updated_at do
         case sessionable_type
-        when "User" then 1.minute.until(Session::USER_TIMEOUT.ago)
+        when "User" then 1.minute.until(Session::INACTIVITY_TIMEOUT.ago)
         end
       end
     end
@@ -18,7 +18,7 @@ FactoryBot.define do
     trait :active do
       updated_at do
         case sessionable_type
-        when "User" then 1.minute.since(Session::USER_TIMEOUT.ago)
+        when "User" then 1.minute.since(Session::INACTIVITY_TIMEOUT.ago)
         end
       end
     end

@@ -33,7 +33,7 @@ RSpec.describe Session, type: :model do
 
       it "returns false at exactly the timeout boundary" do
         session = create(:session, sessionable: create(:user))
-        session.update_columns(updated_at: Session::USER_TIMEOUT.ago)
+        session.update_columns(updated_at: Session::INACTIVITY_TIMEOUT.ago)
 
         expect(session).not_to be_active
       end

@@ -45,7 +45,7 @@ describe "Sidekiq authorization" do
 
       before do
         login_user(user)
-        user.sessions.last.update_columns(updated_at: 1.minute.until(Session::USER_TIMEOUT.ago))
+        user.sessions.last.update_columns(updated_at: 1.minute.until(Session::INACTIVITY_TIMEOUT.ago))
       end
 
       it "redirects to sign in" do
