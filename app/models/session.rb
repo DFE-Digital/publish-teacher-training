@@ -1,5 +1,5 @@
 class Session < ApplicationRecord
-  INACTIVITY_TIMEOUT = 2.hours
+  INACTIVITY_TIMEOUT = 30.minutes
 
   belongs_to :sessionable, polymorphic: true
 
