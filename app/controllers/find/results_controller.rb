@@ -4,6 +4,8 @@ module Find
   class ResultsController < ApplicationController
     after_action :store_result_fullpath_for_backlinks, :send_analytics_event, :record_recent_search, only: [:index]
 
+    helper_method :show_email_alert_link?
+
     def index
       @address = Geolocation::Address.query(location_params)
 
@@ -51,6 +53,16 @@ module Find
 
     def store_result_fullpath_for_backlinks
       cookies[:results_path] = { value: request.fullpath, httponly: true }
+    end
+
+    def show_email_alert_link?
+      return unless FeatureFlag.active?(:email_alerts)
+
+      filters_applied?
+    end
+
+    def filters_applied?
+      @search_courses_form.active_filters.present?
     end
 
     def page
