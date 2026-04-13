@@ -26,6 +26,7 @@ en:
           filter_title_interviews: Online interviews
           filter_title_start_date: Start date
           filter_title_provider: Training provider
+          set_up_email_alert: Email me courses like this
           apply_filter: Apply filters
           sort_by_labels:
             distance: Distance

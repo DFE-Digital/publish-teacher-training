@@ -16,6 +16,15 @@
     </div>
   </div>
 
+  <% if show_email_alert_link? %>
+    <p class="govuk-body govuk-!-margin-bottom-4">
+      <%= govuk_link_to new_find_candidate_email_alert_path(@search_params.except(:order, :page)), class: "govuk-link--no-visited-state" do %>
+        <%= render "shared/bell_icon" %>
+        <%= t(".set_up_email_alert") %>
+      <% end %>
+    </p>
+  <% end %>
+
   <section aria-labelledby="filter-and-sort" data-details-component-target="content" id="details-component-content">
     <%# Sort by %>
     <details class="app-c-filter-section">
