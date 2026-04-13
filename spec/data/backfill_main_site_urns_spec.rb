@@ -110,6 +110,30 @@ describe BackfillMainSiteUrns do
     end
   end
 
+  context "when the site has an empty-string urn" do
+    before { create(:gias_school, :open, urn: "123456", postcode: "SW1A 1AA") }
+
+    let!(:site) do
+      create(:site, :main_site, provider: current_provider, postcode: "SW1A 1AA", urn: "")
+    end
+
+    it "backfills the urn" do
+      expect { run_migration }.to change { site.reload.urn }.from("").to("123456")
+    end
+  end
+
+  context "when the site has a whitespace-only urn" do
+    before { create(:gias_school, :open, urn: "123456", postcode: "SW1A 1AA") }
+
+    let!(:site) do
+      create(:site, :main_site, provider: current_provider, postcode: "SW1A 1AA", urn: " ")
+    end
+
+    it "backfills the urn" do
+      expect { run_migration }.to change { site.reload.urn }.from(" ").to("123456")
+    end
+  end
+
   context "when the site is soft-deleted" do
     before { create(:gias_school, :open, urn: "123456", postcode: "SW1A 1AA") }
 
