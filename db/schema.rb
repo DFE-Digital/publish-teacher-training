@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_24_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_161201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -157,7 +157,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_24_120000) do
     t.index ["find_candidate_id"], name: "index_candidate_recent_search_on_find_candidate_id"
   end
 
-
   create_table "contact", force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.text "email"
@@ -252,6 +251,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_24_120000) do
     t.index ["course_id"], name: "index_course_enrichment_on_course_id"
     t.index ["created_by_user_id"], name: "IX_course_enrichment_created_by_user_id"
     t.index ["updated_by_user_id"], name: "IX_course_enrichment_updated_by_user_id"
+  end
+
+  create_table "course_school", force: :cascade do |t|
+    t.integer "course_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "gias_school_id", null: false
+    t.text "site_code", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id", "gias_school_id", "site_code"], name: "index_course_school_unique", unique: true
+    t.index ["gias_school_id"], name: "index_course_school_on_gias_school_id"
   end
 
   create_table "course_site", id: :serial, force: :cascade do |t|
@@ -438,6 +447,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_24_120000) do
     t.index ["accredited_provider_id", "training_provider_id"], name: "idx_on_accredited_provider_id_training_provider_id_7705512e33", unique: true
     t.index ["accredited_provider_id"], name: "index_provider_partnership_on_accredited_provider_id"
     t.index ["training_provider_id"], name: "index_provider_partnership_on_training_provider_id"
+  end
+
+  create_table "provider_school", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "gias_school_id", null: false
+    t.bigint "provider_id", null: false
+    t.text "site_code", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gias_school_id"], name: "index_provider_school_on_gias_school_id"
+    t.index ["provider_id", "gias_school_id", "site_code"], name: "index_provider_school_unique", unique: true
+    t.index ["provider_id"], name: "index_provider_school_one_main_per_provider", unique: true, where: "(site_code = '-'::text)"
   end
 
   create_table "provider_ucas_preference", force: :cascade do |t|
@@ -634,6 +654,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_24_120000) do
   add_foreign_key "course_enrichment", "course"
   add_foreign_key "course_enrichment", "user", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
   add_foreign_key "course_enrichment", "user", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"
+  add_foreign_key "course_school", "course"
+  add_foreign_key "course_school", "gias_school"
   add_foreign_key "course_site", "course", name: "FK_course_site_course_course_id", on_delete: :cascade
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
   add_foreign_key "course_subject", "course", name: "fk_course_subject__course"
@@ -644,6 +666,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_24_120000) do
   add_foreign_key "organisation_user", "organisation", name: "FK_organisation_user_organisation_organisation_id"
   add_foreign_key "organisation_user", "user", name: "FK_organisation_user_user_user_id"
   add_foreign_key "provider", "recruitment_cycle"
+  add_foreign_key "provider_school", "gias_school"
+  add_foreign_key "provider_school", "provider"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
   add_foreign_key "providers_onboarding_form_request", "user", column: "support_agent_id", name: "FK_onboarding_request_user_support_agent_id"
   add_foreign_key "saved_course", "candidate"
