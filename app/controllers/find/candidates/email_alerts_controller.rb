@@ -36,9 +36,10 @@ module Find
             location_name: alert.location_name,
             radius: alert.radius,
           )
+
           flash[:success_with_body] = {
             "title" => t(".success_title"),
-            "body" => t(".success_body_html", title:),
+            "body" => t(".success_body_html", title:, unsubscribe_link: unsubscribe_link(alert)),
           }
           redirect_to redirect_after_create
         else
@@ -50,6 +51,10 @@ module Find
       def confirm_unsubscribe
         @email_alert = find_alert_by_token
         @filter_tags = extract_filter_tags_from_alert(@email_alert)
+      end
+
+      def unsubscribe_link(alert)
+        helpers.govuk_link_to("unsubscribe", find_candidate_unsubscribe_email_alert_path(token: alert.signed_id(purpose: :unsubscribe, expires_in: 30.days)))
       end
 
       def unsubscribe
