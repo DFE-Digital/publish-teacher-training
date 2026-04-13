@@ -10,7 +10,8 @@ class BackfillMainSiteUrns < ActiveRecord::Migration[8.1]
 
     RecruitmentCycle.current.sites
       .kept
-      .where(site_type: :school, urn: nil)
+      .where(site_type: :school)
+      .where("site.urn IS NULL OR TRIM(site.urn) = ''")
       .find_each do |site|
         normalized = site.postcode.to_s.gsub(/\s+/, "").upcase
         if normalized.blank?
