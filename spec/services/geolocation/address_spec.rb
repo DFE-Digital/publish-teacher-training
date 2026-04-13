@@ -3,6 +3,28 @@
 require "rails_helper"
 
 RSpec.describe Geolocation::Address do
+  describe "#coordinates?" do
+    it "returns true when both latitude and longitude are present" do
+      address = described_class.new(latitude: 51.5, longitude: -0.1)
+      expect(address.coordinates?).to be(true)
+    end
+
+    it "returns false when latitude is nil" do
+      address = described_class.new(latitude: nil, longitude: -0.1)
+      expect(address.coordinates?).to be(false)
+    end
+
+    it "returns false when longitude is nil" do
+      address = described_class.new(latitude: 51.5, longitude: nil)
+      expect(address.coordinates?).to be(false)
+    end
+
+    it "returns false when both are nil" do
+      address = described_class.new
+      expect(address.coordinates?).to be(false)
+    end
+  end
+
   describe "#short_address" do
     context "when full postcode" do
       let(:address) do

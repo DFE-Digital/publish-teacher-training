@@ -162,6 +162,10 @@ module Geolocation
       landmark? || (postcode_area? && route.present?)
     end
 
+    def coordinates?
+      latitude.present? && longitude.present?
+    end
+
   private
 
     def full_postcode?

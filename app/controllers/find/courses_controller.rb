@@ -32,7 +32,7 @@ module Find
 
     def distance_from_location
       @address = Geolocation::Address.query(location_params)
-      return if @address.latitude.nil? || @address.longitude.nil?
+      return unless @address.coordinates?
 
       @distance_from_location ||= ::Courses::NearestSchoolQuery.new(
         courses: [@course],
