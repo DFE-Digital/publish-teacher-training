@@ -75,7 +75,7 @@
     </div>
 
     <div class="govuk-grid-column-two-thirds">
-      <% if authenticated? && FeatureFlag.active?(:email_alerts) %>
+      <% if show_email_alert_link? %>
         <p class="govuk-body govuk-!-margin-bottom-4">
           <%= govuk_link_to new_find_candidate_email_alert_path(@search_params.except(:order, :page)), class: "govuk-link--no-visited-state" do %>
             <%= render "shared/bell_icon" %>
