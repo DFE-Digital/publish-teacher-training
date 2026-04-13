@@ -121,6 +121,12 @@ class Course < ApplicationRecord
            before_add: :set_subject_position,
            dependent: :destroy
 
+  has_many :course_schools,
+           class_name: "Course::School",
+           inverse_of: :course,
+           dependent: :destroy
+  has_many :gias_schools, through: :course_schools
+
   delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, :year, :rollover_period_2026?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
