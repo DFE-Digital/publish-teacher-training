@@ -52,14 +52,13 @@ describe BackfillMainSiteUrns do
 
   context "when ambiguous postcode is disambiguated by provider ukprn" do
     let(:current_provider) { create(:provider, recruitment_cycle: current_cycle, ukprn: "10000001") }
+    let!(:site) do
+      create(:site, :main_site, provider: current_provider, postcode: "SW1A 1AA")
+    end
 
     before do
       create(:gias_school, :open, urn: "111111", postcode: "SW1A 1AA", ukprn: "10000001")
       create(:gias_school, :open, urn: "222222", postcode: "SW1A 1AA", ukprn: "10000002")
-    end
-
-    let!(:site) do
-      create(:site, :main_site, provider: current_provider, postcode: "SW1A 1AA")
     end
 
     it "picks the school sharing the provider's ukprn" do
