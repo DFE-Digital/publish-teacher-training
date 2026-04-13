@@ -19,18 +19,26 @@ class BackfillMainSiteUrns < ActiveRecord::Migration[8.1]
           next
         end
 
-        matches = GiasSchool.available
+        postcode_matches = GiasSchool.available
           .where("REPLACE(UPPER(postcode), ' ', '') = ?", normalized)
-          .pluck(:urn)
 
-        case matches.size
-        when 0
+        resolved_urn =
+          case postcode_matches.size
+          when 0
+            nil
+          when 1
+            postcode_matches.first.urn
+          else
+            disambiguate(site, postcode_matches)
+          end
+
+        if resolved_urn
+          site.update_column(:urn, resolved_urn)
+          updated << [site, resolved_urn]
+        elsif postcode_matches.empty?
           no_match << site
-        when 1
-          site.update_column(:urn, matches.first)
-          updated << [site, matches.first]
         else
-          ambiguous << [site, matches]
+          ambiguous << [site, postcode_matches.pluck(:urn)]
         end
       end
 
@@ -53,5 +61,23 @@ class BackfillMainSiteUrns < ActiveRecord::Migration[8.1]
 
   def down
     raise ActiveRecord::IrreversibleMigration
+  end
+
+  private
+
+  def disambiguate(site, postcode_matches)
+    provider_ukprn = site.provider&.ukprn
+    if provider_ukprn.present?
+      by_ukprn = postcode_matches.where(ukprn: provider_ukprn).pluck(:urn)
+      return by_ukprn.first if by_ukprn.size == 1
+    end
+
+    location_name = site.location_name.to_s.strip
+    if location_name.present?
+      by_name = postcode_matches.where("LOWER(name) = ?", location_name.downcase).pluck(:urn)
+      return by_name.first if by_name.size == 1
+    end
+
+    nil
   end
 end

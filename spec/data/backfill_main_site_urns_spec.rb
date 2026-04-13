@@ -50,6 +50,53 @@ describe BackfillMainSiteUrns do
     end
   end
 
+  context "when ambiguous postcode is disambiguated by provider ukprn" do
+    let(:current_provider) { create(:provider, recruitment_cycle: current_cycle, ukprn: "10000001") }
+
+    before do
+      create(:gias_school, :open, urn: "111111", postcode: "SW1A 1AA", ukprn: "10000001")
+      create(:gias_school, :open, urn: "222222", postcode: "SW1A 1AA", ukprn: "10000002")
+    end
+
+    let!(:site) do
+      create(:site, :main_site, provider: current_provider, postcode: "SW1A 1AA")
+    end
+
+    it "picks the school sharing the provider's ukprn" do
+      expect { run_migration }.to change { site.reload.urn }.from(nil).to("111111")
+    end
+  end
+
+  context "when ambiguous postcode is disambiguated by location_name" do
+    before do
+      create(:gias_school, :open, urn: "111111", name: "Hilltop Infant School", postcode: "SS11 8LT", ukprn: "10000003")
+      create(:gias_school, :open, urn: "222222", name: "Hilltop Junior School", postcode: "SS11 8LT", ukprn: "10000004")
+    end
+
+    let!(:site) do
+      create(:site, :main_site, provider: current_provider, postcode: "SS11 8LT", location_name: "Hilltop Infant School")
+    end
+
+    it "picks the school whose name matches location_name" do
+      expect { run_migration }.to change { site.reload.urn }.from(nil).to("111111")
+    end
+  end
+
+  context "when ambiguous postcode cannot be disambiguated" do
+    before do
+      create(:gias_school, :open, urn: "111111", name: "Alpha School", postcode: "SW1A 1AA", ukprn: "10000005")
+      create(:gias_school, :open, urn: "222222", name: "Beta School", postcode: "SW1A 1AA", ukprn: "10000006")
+    end
+
+    let!(:site) do
+      create(:site, :main_site, provider: current_provider, postcode: "SW1A 1AA", location_name: "Main Site")
+    end
+
+    it "leaves the urn untouched" do
+      expect { run_migration }.not_to(change { site.reload.urn })
+    end
+  end
+
   context "when no GiasSchool matches by postcode" do
     let!(:site) do
       create(:site, :main_site, provider: current_provider, postcode: "ZZ9 9ZZ")
