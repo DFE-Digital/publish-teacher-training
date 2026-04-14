@@ -59,15 +59,18 @@ module Publish
     end
 
     def start_user_session(user, id_token: nil)
-      reset_user_session_cookie
+      ::Authentication.transaction do
+        terminate_user_session
+        user.sessions.destroy_all
 
-      user.sessions.create!(
-        session_key: user_session_key,
-        id_token: id_token,
-        user_agent: request.user_agent,
-        ip_address: request.remote_ip,
-      ).tap do |db_session|
-        Current.session = db_session
+        user.sessions.create!(
+          session_key: user_session_key,
+          id_token: id_token,
+          user_agent: request.user_agent,
+          ip_address: request.remote_ip,
+        ).tap do |db_session|
+          Current.session = db_session
+        end
       end
     end
 

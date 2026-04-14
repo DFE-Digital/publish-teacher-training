@@ -53,6 +53,7 @@ module Find
     def start_new_session_for(user, oauth)
       ::Authentication.transaction do
         terminate_session
+        user.sessions.destroy_all
 
         user.sessions.create!(session_key: candidate_session, id_token: oauth.credentials.id_token, user_agent: request.user_agent, ip_address: request.remote_ip).tap do |session|
           Current.session = session
