@@ -28,7 +28,9 @@ module Find
   private
 
     def extract_subjects
-      Array(@search_params[:subjects]).compact_blank.sort
+      codes = Array(@search_params[:subjects]).compact_blank
+      codes << @search_params[:subject_code] if @search_params[:subject_code].present?
+      codes.compact_blank.uniq.sort
     end
 
     def filter_attributes
