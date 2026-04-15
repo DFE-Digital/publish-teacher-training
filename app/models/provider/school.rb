@@ -5,7 +5,7 @@ class Provider::School < ApplicationRecord
 
   MAIN_SITE_CODE = "-"
 
-  belongs_to :provider, class_name: "::Provider", inverse_of: :provider_schools
+  belongs_to :provider, class_name: "::Provider", inverse_of: :schools
   belongs_to :gias_school
 
   validates :site_code, presence: true

@@ -3,7 +3,7 @@
 class Course::School < ApplicationRecord
   self.table_name = "course_school"
 
-  belongs_to :course, class_name: "::Course", inverse_of: :course_schools
+  belongs_to :course, class_name: "::Course", inverse_of: :schools
   belongs_to :gias_school
 
   validates :site_code, presence: true

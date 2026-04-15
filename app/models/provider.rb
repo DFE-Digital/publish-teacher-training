@@ -36,11 +36,11 @@ class Provider < ApplicationRecord
   has_many :sites, -> { where(site_type: :school).kept }, inverse_of: :provider
   has_many :study_sites, -> { where(site_type: :study_site).kept }, inverse_of: :provider, class_name: "Site"
 
-  has_many :provider_schools,
+  has_many :schools,
            class_name: "Provider::School",
            inverse_of: :provider,
            dependent: :destroy
-  has_many :gias_schools, through: :provider_schools
+  has_many :gias_schools, through: :schools
 
   has_many :user_notifications,
            foreign_key: :provider_code,
