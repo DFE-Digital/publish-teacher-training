@@ -12,7 +12,6 @@ describe Provider::School do
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:site_code) }
-    it { is_expected.to validate_presence_of(:gias_school_id) }
 
     it "creates a valid record" do
       expect(provider_school).to be_valid

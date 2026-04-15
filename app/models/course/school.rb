@@ -7,6 +7,5 @@ class Course::School < ApplicationRecord
   belongs_to :gias_school
 
   validates :site_code, presence: true
-  validates :gias_school_id, presence: true
   validates :gias_school_id, uniqueness: { scope: %i[course_id site_code] }
 end

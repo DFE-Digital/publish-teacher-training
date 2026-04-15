@@ -12,7 +12,6 @@ describe Course::School do
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:site_code) }
-    it { is_expected.to validate_presence_of(:gias_school_id) }
 
     it "creates a valid record" do
       expect(course_school).to be_valid

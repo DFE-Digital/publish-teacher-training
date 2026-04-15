@@ -20,6 +20,13 @@
   - remote_address
   - request_uuid
   - created_at
+  :provider_school:
+  - id
+  - provider_id
+  - gias_school_id
+  - site_code
+  - created_at
+  - updated_at
   :data_hub_process_summary:
   - full_summary
   - updated_total_count
@@ -40,6 +47,13 @@
   - discarded_invalid_gias_urn
   - discarded_ids_lack_urn
   - discarded_invalid_urns
+  :course_school:
+  - id
+  - course_id
+  - gias_school_id
+  - site_code
+  - created_at
+  - updated_at
   :candidate_recent_search:
   - filter_key_digest
   :candidate_email_alerts:
