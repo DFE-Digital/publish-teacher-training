@@ -58,7 +58,14 @@ module Find
     def show_email_alert_link?
       return unless FeatureFlag.active?(:email_alerts)
 
-      filters_applied?
+      filters_applied? && alert_does_not_exist?
+    end
+
+    def alert_does_not_exist?
+      return if current_user.blank?
+
+      filter_key_digest = Find::FilterKeyDigest.digest(subjects: @search_params[:subjects], search_attributes: @search_params)
+      !current_user.email_alerts.exists?(filter_key_digest:)
     end
 
     def filters_applied?
