@@ -34,8 +34,6 @@ module Find
     def self.permit(params)
       permitted = PERMITTED.dup
 
-      permitted.delete(:applications_open) if FeatureFlag.active?(:hide_applications_open_date)
-
       params.permit(*permitted)
     end
   end
