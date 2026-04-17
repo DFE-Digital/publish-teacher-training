@@ -4,9 +4,11 @@ require "rails_helper"
 require "rake"
 
 describe "schools_backfill:run" do
-  subject(:invoke_task) { Rake::Task["schools_backfill:run"].reenable && Rake::Task["schools_backfill:run"].invoke }
+  Rails.application.load_tasks if Rake::Task.tasks.empty?
 
-  before { Rails.application.load_tasks if Rake::Task.tasks.empty? }
+  subject(:run_task) { Rake::Task["schools_backfill:run"].invoke }
+
+  before { Rake::Task["schools_backfill:run"].reenable }
 
   it "invokes DataHub::SchoolsBackfill::Executor and prints both summaries" do
     executor = instance_double(DataHub::SchoolsBackfill::Executor)
@@ -19,7 +21,7 @@ describe "schools_backfill:run" do
     allow(DataHub::SchoolsBackfill::Executor).to receive(:new).and_return(executor)
     allow(executor).to receive(:execute).and_return(fake_summary)
 
-    expect { invoke_task }.to output.to_stdout
+    expect { run_task }.to output.to_stdout
     expect(executor).to have_received(:execute)
   end
 end
