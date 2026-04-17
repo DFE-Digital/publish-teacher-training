@@ -1,6 +1,10 @@
 <div class="app-active-filters">
-  <h3 class="govuk-heading-s app-active-filters__heading">Active filters</h3>
-
+  <div class="app-active-filters__header">
+    <h3 class="govuk-heading-s app-active-filters__heading">Active filters</h3>
+    <p class="govuk-body">
+      <%= render Find::Courses::ClearAllFilters::View.new(active_filters:, position: :top) %>
+    </p>
+  </div>
   <ul class="app-active-filters__remove-filters">
     <% active_filters.each do |filter| %>
       <li>
@@ -15,8 +19,4 @@
       </li>
     <% end %>
   </ul>
-
-  <p class="govuk-body">
-    <%= render Find::Courses::ClearAllFilters::View.new(active_filters:, position: :top) %>
-  </p>
 </div>
