@@ -99,7 +99,7 @@ module Find
       end
 
       def subject_names
-        @subject_names ||= resolve_subject_names(search_params[:subjects])
+        @subject_names ||= resolve_subject_names(subject_codes)
       end
 
       def location_name
@@ -143,6 +143,12 @@ module Find
 
       def search_params_from_request
         Find::SearchParams.permit(params)
+      end
+
+      def subject_codes
+        codes = Array(@search_params[:subjects]).compact_blank
+        codes << @search_params[:subject_code] if @search_params[:subject_code].present?
+        codes.compact_blank.uniq.sort
       end
 
       def resolve_subject_names(codes)
