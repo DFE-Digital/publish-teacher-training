@@ -13,6 +13,15 @@
     }
   }
 
+  // We have two idnetical links on the page because we need one above the
+  // details component on mobile and one below the component on desktop and we
+  // need to hide the one that is not appropriate for the breakpoint
+  @include govuk-media-query($until: tablet) {
+    & > .email-alert-link-desktop {
+      display: none;
+    }
+  }
+
   @include govuk-media-query($from: tablet) {
     .app-c-filter-section.app-c-filter-section__summary {
       display: none;
@@ -20,6 +29,10 @@
       + section {
         display: block;
       }
+    }
+
+    & > .email-alert-link-mobile {
+      display: none;
     }
   }
 }
