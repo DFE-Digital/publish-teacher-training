@@ -186,8 +186,6 @@ private
   end
 
   def remove_applications_open(steps)
-    return steps unless FeatureFlag.active?(:hide_applications_open_date)
-
     steps - [:applications_open]
   end
 end
