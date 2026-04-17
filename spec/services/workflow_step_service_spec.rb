@@ -32,7 +32,6 @@ describe WorkflowStepService do
           study_site
           accredited_provider
           can_sponsor_skilled_worker_visa
-          applications_open
           start_date
           confirmation
         ]
@@ -69,7 +68,6 @@ describe WorkflowStepService do
           can_sponsor_skilled_worker_visa
           visa_sponsorship_application_deadline_required
           visa_sponsorship_application_deadline_at
-          applications_open
           start_date
           confirmation
         ]
@@ -106,7 +104,6 @@ describe WorkflowStepService do
           accredited_provider
           can_sponsor_skilled_worker_visa
           visa_sponsorship_application_deadline_required
-          applications_open
           start_date
           confirmation
         ]
@@ -136,7 +133,6 @@ describe WorkflowStepService do
           school
           study_site
           can_sponsor_skilled_worker_visa
-          applications_open
           start_date
           confirmation
         ]
@@ -172,7 +168,6 @@ describe WorkflowStepService do
           school
           study_site
           accredited_provider
-          applications_open
           start_date
           confirmation
         ]
@@ -199,7 +194,6 @@ describe WorkflowStepService do
           outcome
           school
           study_site
-          applications_open
           start_date
           confirmation
         ]
@@ -225,7 +219,6 @@ describe WorkflowStepService do
         outcome
         school
         study_site
-        applications_open
         start_date
         confirmation
       ]
@@ -247,7 +240,6 @@ describe WorkflowStepService do
         full_or_part_time
         school
         study_site
-        applications_open
         start_date
         confirmation
       ]
@@ -275,7 +267,6 @@ describe WorkflowStepService do
         school
         study_site
         can_sponsor_skilled_worker_visa
-        applications_open
         start_date
         confirmation
       ]

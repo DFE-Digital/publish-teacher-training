@@ -96,29 +96,5 @@ RSpec.describe Find::SearchParams do
       expect(permitted[:evil]).to be_nil
       expect(permitted[:location]).to eq("London")
     end
-
-    context "when applications_open feature flag is active" do
-      before { allow(FeatureFlag).to receive(:active?).with(:hide_applications_open_date).and_return(false) }
-
-      it "permits applications_open" do
-        params = ActionController::Parameters.new(applications_open: "true")
-
-        permitted = described_class.permit(params)
-
-        expect(permitted[:applications_open]).to eq("true")
-      end
-    end
-
-    context "when hide_applications_open_date feature flag is active" do
-      before { allow(FeatureFlag).to receive(:active?).with(:hide_applications_open_date).and_return(true) }
-
-      it "does not permit applications_open" do
-        params = ActionController::Parameters.new(applications_open: "true")
-
-        permitted = described_class.permit(params)
-
-        expect(permitted[:applications_open]).to be_nil
-      end
-    end
   end
 end
