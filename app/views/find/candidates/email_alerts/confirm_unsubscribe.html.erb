@@ -16,7 +16,8 @@
       <%= button_to t(".submit"),
           find_candidate_unsubscribe_email_alert_path(token: @email_alert.signed_id(purpose: :unsubscribe, expires_in: 30.days)),
           method: :delete,
-          class: "govuk-button govuk-button--warning" %>
+          class: "govuk-button govuk-button--warning",
+          form_class: "app-email-alert__unsubscribe-button" %>
       <%= govuk_link_to t(".cancel"), find_candidate_email_alerts_path, class: "govuk-link" %>
     </div>
   </div>
