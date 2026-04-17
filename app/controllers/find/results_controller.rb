@@ -64,8 +64,10 @@ module Find
     def alert_does_not_exist?
       return if current_user.blank?
 
-      filter_key_digest = Find::FilterKeyDigest.digest(subjects: @search_params[:subjects], search_attributes: @search_params)
-      !current_user.email_alerts.exists?(filter_key_digest:)
+      subjects = [@search_params[:subjects], [@search_params[:subject_code]]].flatten.compact_blank
+      filter_key_digest = Find::FilterKeyDigest.digest(subjects:, search_attributes: @search_params)
+
+      !current_user.email_alerts.active.exists?(filter_key_digest:)
     end
 
     def filters_applied?
