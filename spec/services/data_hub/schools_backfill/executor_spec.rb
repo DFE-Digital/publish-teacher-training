@@ -199,9 +199,10 @@ describe DataHub::SchoolsBackfill::Executor do
       end
 
       it "marks the summary as failed and re-raises on error" do
-        allow(executor).to receive(:insert_course_schools).and_raise(StandardError, "boom")
+        failing_executor = described_class.new(tmp_dir: tmp_dir)
+        allow(failing_executor).to receive(:insert_course_schools).and_raise(StandardError, "boom")
 
-        expect { executor.execute }.to raise_error(StandardError, "boom")
+        expect { failing_executor.execute }.to raise_error(StandardError, "boom")
 
         summary = DataHub::SchoolsBackfillProcessSummary.order(:started_at).last
         expect(summary.status).to eq("failed")
@@ -213,9 +214,10 @@ describe DataHub::SchoolsBackfill::Executor do
         gias_school = create(:gias_school, urn: "700007")
         create(:site, provider: provider, urn: gias_school.urn, code: "H")
 
-        allow(executor).to receive(:insert_course_schools).and_raise(StandardError, "boom")
+        failing_executor = described_class.new(tmp_dir: tmp_dir)
+        allow(failing_executor).to receive(:insert_course_schools).and_raise(StandardError, "boom")
 
-        expect { executor.execute }.to raise_error(StandardError, "boom")
+        expect { failing_executor.execute }.to raise_error(StandardError, "boom")
         expect(Provider::School.where(provider_id: provider.id)).to be_empty
       end
     end
