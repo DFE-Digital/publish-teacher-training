@@ -19,7 +19,25 @@ class AddCourseButton < ViewComponent::Base
     @incomplete_sections ||= [school, accredited_provider].compact
   end
 
+  def add_course_path
+    if wizard_add_course_flow?
+      new_publish_provider_recruitment_cycle_course_wizard_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      )
+    else
+      new_publish_provider_recruitment_cycle_course_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      )
+    end
+  end
+
 private
+
+  def wizard_add_course_flow?
+    FeatureFlag.active?(:wizard_add_course_flow)
+  end
 
   def accredited_provider
     return if accredited_partner_present?

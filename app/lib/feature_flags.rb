@@ -10,6 +10,7 @@ class FeatureFlags
       [:candidate_accounts, "Enable candidate accounts feature", "Find and Publish team"],
       [:email_alerts, "Enable email alerts for candidates", "Find and Publish team"],
       [:course_sites_updated_email_notification, "Send email notifications when a course's associated schools are updated", "Find and Publish team"],
+      [:wizard_add_course_flow, "Enables the wizard add course flow that uses the DfE wizard", "Find and Publish team"],
     ]
   end
 end

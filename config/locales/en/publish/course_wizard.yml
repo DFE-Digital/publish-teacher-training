@@ -1,0 +1,20 @@
+en:
+  course_wizard:
+    steps:
+      level:
+        heading: What type of course?
+        level_label: Subject level
+        send_label: Does this course have a special educational needs and disability (SEND) specialism?
+        submit: Continue
+        cancel: Cancel
+        options:
+          primary: Primary
+          secondary: Secondary
+          further_education: Further education
+          yes_send: "Yes"
+          no_send: "No"
+        errors:
+          level:
+            blank: Select a subject level
+          is_send:
+            blank: Select if this course has a special educational needs and disability (SEND) specialism
