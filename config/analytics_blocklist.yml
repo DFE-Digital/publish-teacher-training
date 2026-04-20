@@ -46,8 +46,8 @@
   - course_schools_inserted
   - sites_skipped
   - course_sites_skipped
-  - skipped_sites_csv_path
-  - skipped_course_sites_csv_path
+  - skipped_sites
+  - skipped_course_sites
   - discarded_total_count
   - discarded_lack_urn
   - discarded_invalid_gias_urn
