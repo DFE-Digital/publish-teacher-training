@@ -12,6 +12,41 @@ describe AddCourseButton do
     render_inline(described_class.new(provider:))
   end
 
+  context "when the wizard add course flow is active" do
+    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], sites: [build(:site)], recruitment_cycle:) }
+
+    it "renders a course wizard link" do
+      component = described_class.new(provider:)
+      allow(component).to receive(:wizard_add_course_flow?).and_return(true)
+
+      render_inline(component)
+
+      expect(rendered_content).to have_link(
+        "Add course",
+        href: new_publish_provider_recruitment_cycle_course_wizard_path(
+          provider.provider_code,
+          provider.recruitment_cycle.year,
+        ),
+      )
+    end
+  end
+
+  context "when the wizard add course flow is not active" do
+    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], sites: [build(:site)], recruitment_cycle:) }
+
+    it "renders a course link" do
+      component = described_class.new(provider:)
+      allow(component).to receive(:wizard_add_course_flow?).and_return(false)
+
+      render_inline(component)
+
+      expect(rendered_content).to have_link(
+        "Add course",
+        href: new_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle.year),
+      )
+    end
+  end
+
   context "when the provider has not filled out any required sections" do
     it "renders an accredited provider link" do
       expect(rendered_content).to have_link(

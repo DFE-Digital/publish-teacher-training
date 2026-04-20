@@ -1,0 +1,32 @@
+# frozen_string_literal: true
+
+class CourseWizard
+  include DfE::Wizard
+
+  attr_accessor :recruitment_cycle_year, :provider_code
+
+  def steps_processor
+    DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
+      graph.root :level
+
+      graph.add_node :level, Steps::Level
+      graph.add_edge from: :level, to: :courses_index
+    end
+  end
+
+  def route_strategy
+    DfE::Wizard::RouteStrategy::ConfigurableRoutes.new(
+      wizard: self,
+      namespace: "publish-provider-recruitment-cycle-course-wizard",
+    ) do |config|
+      config.default_path_arguments = {
+        recruitment_cycle_year: config.wizard.recruitment_cycle_year,
+        provider_code: config.wizard.provider_code,
+      }
+
+      config.map_step :courses_index, to: lambda { |_wizard, options, helpers|
+        helpers.publish_provider_recruitment_cycle_courses_path(**options)
+      }
+    end
+  end
+end
