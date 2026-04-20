@@ -12,7 +12,6 @@ module Find
         delegate :accrediting_provider,
                  :provider,
                  :age_range_in_years,
-                 :length,
                  :applications_open_from,
                  :find_outcome,
                  :start_date,
@@ -24,10 +23,20 @@ module Find
                  :can_sponsor_skilled_worker_visa,
                  :no_fee?, to: :course
 
+        delegate :course_length, to: :enrichment
+
         def initialize(course, enrichment)
           super()
           @course = course
           @enrichment = enrichment
+        end
+
+        def course_length_formatted
+          if enrichment.standard_course_length?
+            t("courses.summary_card_component.length_value.#{course_length}")
+          else
+            course_length.to_s
+          end
         end
 
         def fee_value
@@ -47,7 +56,7 @@ module Find
         end
 
         def course_length_with_study_mode_row
-          "#{length} - #{study_mode.humanize.downcase}"
+          "#{course_length_formatted} - #{study_mode.humanize.downcase}"
         end
 
         def visa_sponsorship_row

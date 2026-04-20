@@ -11,7 +11,7 @@ RSpec.describe "Editing course length" do
     then_i_an_error_message
   end
 
-  scenario "I update the course length to a standard length (eg Up to two years)" do
+  scenario "I update the course length to a standard length (eg Up to two years)", :js do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_1_year_course_i_want_to_edit
     when_i_visit_the_course_length_edit_page
@@ -24,6 +24,8 @@ RSpec.describe "Editing course length" do
 
     when_i_visit_the_course_length_edit_page
     then_i_see_two_years_selected
+
+    when_i_view_the_published_course_it_is_not_updated_yet
   end
 
   scenario "I update the course length with a custom length" do
@@ -99,21 +101,31 @@ private
   end
 
   def then_i_see_two_years_selected
-    expect(find_field("Up to 2 years")).to be_checked
+    expect(find_field("Up to 2 years", visible: false)).to be_checked
   end
 
   def then_i_see_one_year_selected
-    expect(find_field("1 year")).to be_checked
+    expect(find_field("1 year", visible: false)).to be_checked
   end
 
   def then_i_see_the_custom_length_of_5_years
-    expect(find_field("Other")).to be_checked
-    expect(find_field("Course length").value).to eq "5 years"
+    expect(find_field("Other", visible: false)).to be_checked
+    expect(find_field("Course length", visible: false).value).to eq "5 years"
   end
 
   def then_i_see_the_custom_length
-    expect(find_field("Other")).to be_checked
-    expect(find_field("Course length").value).to eq "Three years"
+    expect(find_field("Other", visible: false)).to be_checked
+    expect(find_field("Course length", visible: false).value).to eq "Three years"
+  end
+
+  def when_i_view_the_published_course_it_is_not_updated_yet
+    open_new_window
+
+    window = Capybara::Window.new(page, page.driver.window_handles.last)
+    within_window(window) do
+      visit find_course_url(provider_code: provider.provider_code, course_code: course.course_code)
+      expect(page).to have_content("1 year - full time")
+    end
   end
 
   def and_i_submit_the_form

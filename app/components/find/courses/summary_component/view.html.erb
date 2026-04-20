@@ -11,11 +11,9 @@
     <% end %>
   <% end %>
 
-  <% if length.present? %>
-    <% summary_list.with_row do |row| %>
-      <% row.with_key(text: t(".course_length")) %>
-      <% row.with_value(text: course_length_with_study_mode_row) %>
-    <% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: t(".course_length")) %>
+    <% row.with_value(text: course_length_with_study_mode_row) %>
   <% end %>
 
   <% if age_range_in_years.present? %>
