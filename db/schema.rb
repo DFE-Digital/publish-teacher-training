@@ -654,8 +654,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_161201) do
   add_foreign_key "course_enrichment", "course"
   add_foreign_key "course_enrichment", "user", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
   add_foreign_key "course_enrichment", "user", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"
-  add_foreign_key "course_school", "course"
-  add_foreign_key "course_school", "gias_school"
+  add_foreign_key "course_school", "course", on_delete: :cascade
+  add_foreign_key "course_school", "gias_school", on_delete: :cascade
   add_foreign_key "course_site", "course", name: "FK_course_site_course_course_id", on_delete: :cascade
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
   add_foreign_key "course_subject", "course", name: "fk_course_subject__course"
@@ -666,8 +666,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_161201) do
   add_foreign_key "organisation_user", "organisation", name: "FK_organisation_user_organisation_organisation_id"
   add_foreign_key "organisation_user", "user", name: "FK_organisation_user_user_user_id"
   add_foreign_key "provider", "recruitment_cycle"
-  add_foreign_key "provider_school", "gias_school"
-  add_foreign_key "provider_school", "provider"
+  add_foreign_key "provider_school", "gias_school", on_delete: :cascade
+  add_foreign_key "provider_school", "provider", on_delete: :cascade
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
   add_foreign_key "providers_onboarding_form_request", "user", column: "support_agent_id", name: "FK_onboarding_request_user_support_agent_id"
   add_foreign_key "saved_course", "candidate"

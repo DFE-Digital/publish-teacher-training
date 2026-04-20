@@ -9,8 +9,8 @@ class CreateCourseSchool < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_foreign_key :course_school, :course
-    add_foreign_key :course_school, :gias_school
+    add_foreign_key :course_school, :course, on_delete: :cascade
+    add_foreign_key :course_school, :gias_school, on_delete: :cascade
 
     add_index :course_school, :gias_school_id
     add_index :course_school, %i[course_id gias_school_id site_code],
