@@ -41,7 +41,7 @@ describe "Filter" do
 
         it "returns all results" do
           expect(subject.length).to eq 2
-          expect(subject).to eq([provider, provider2])
+          expect(subject.map(&:id)).to eq([provider.id, provider2.id])
         end
       end
 
