@@ -164,4 +164,8 @@ class CourseEnrichment < ApplicationRecord
   def required_qualifications_needed?
     course&.provider&.recruitment_cycle&.year.to_i < Course::STRUCTURED_REQUIREMENTS_REQUIRED_FROM
   end
+
+  def standard_course_length?
+    course_length.in?(%w[OneYear TwoYears ThreeYears FourYears])
+  end
 end
