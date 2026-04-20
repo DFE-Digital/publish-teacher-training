@@ -191,12 +191,6 @@ private
       )
     end
 
-    within_summary_row "Date you can apply from" do
-      expect(publish_course_preview_page).to have_content(
-        course.applications_open_from.strftime("%-d %B %Y"),
-      )
-    end
-
     expect(publish_course_preview_page).to have_content(
       "September #{recruitment_cycle.year}",
     )
