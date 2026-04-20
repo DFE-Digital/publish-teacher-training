@@ -3,15 +3,7 @@
 require "rails_helper"
 
 describe DataHub::SchoolsBackfill::Executor do
-  subject(:executor) { described_class.new(tmp_dir: tmp_dir) }
-
-  let(:tmp_dir) { Pathname.new(Dir.mktmpdir("schools_backfill_spec")) }
-
-  after { FileUtils.remove_entry(tmp_dir) if tmp_dir.exist? }
-
-  def csv_rows(path)
-    CSV.read(path, headers: true).map(&:to_h)
-  end
+  subject(:executor) { described_class.new }
 
   describe "#execute" do
     context "with a provider whose school-type site has a matching GIAS school" do
@@ -83,11 +75,9 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(Provider::School.where(provider_id: provider.id)).to be_empty
       end
 
-      it "lists the site in the skipped-sites CSV with reason 'no_urn'" do
+      it "records the site in skipped_sites with reason 'no_urn'" do
         summary = executor.execute
-        path = summary.full_summary["skipped_sites_csv_path"]
-        rows = csv_rows(path)
-        skipped = rows.find { |row| row["site_id"] == site.id.to_s }
+        skipped = summary.full_summary["skipped_sites"].find { |row| row["site_id"] == site.id }
         expect(skipped).to include("reason" => "no_urn")
       end
     end
@@ -103,10 +93,9 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(Provider::School.where(provider_id: provider.id)).to be_empty
       end
 
-      it "lists the site in the skipped-sites CSV with reason 'urn_not_in_gias_school'" do
+      it "records the site in skipped_sites with reason 'urn_not_in_gias_school'" do
         summary = executor.execute
-        path = summary.full_summary["skipped_sites_csv_path"]
-        skipped = csv_rows(path).find { |row| row["site_id"] == site.id.to_s }
+        skipped = summary.full_summary["skipped_sites"].find { |row| row["site_id"] == site.id }
         expect(skipped).to include("reason" => "urn_not_in_gias_school")
       end
     end
@@ -129,11 +118,10 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(Provider::School.where(provider_id: provider.id)).to be_empty
       end
 
-      it "does not list the site in the skipped-sites CSV" do
+      it "does not record the site in skipped_sites" do
         summary = executor.execute
-        path = summary.full_summary["skipped_sites_csv_path"]
-        ids = csv_rows(path).map { |row| row["site_id"] }
-        expect(ids).not_to include(site.id.to_s)
+        ids = summary.full_summary["skipped_sites"].map { |row| row["site_id"] }
+        expect(ids).not_to include(site.id)
       end
     end
 
@@ -149,11 +137,10 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(Provider::School.where(provider_id: provider.id)).to be_empty
       end
 
-      it "does not list the site in the skipped-sites CSV" do
+      it "does not record the site in skipped_sites" do
         summary = executor.execute
-        path = summary.full_summary["skipped_sites_csv_path"]
-        ids = csv_rows(path).map { |row| row["site_id"] }
-        expect(ids).not_to include(site.id.to_s)
+        ids = summary.full_summary["skipped_sites"].map { |row| row["site_id"] }
+        expect(ids).not_to include(site.id)
       end
     end
 
@@ -172,7 +159,7 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(first.short_summary["provider_schools_inserted"]).to eq(1)
         expect(first.short_summary["course_schools_inserted"]).to eq(1)
 
-        expect { described_class.new(tmp_dir: tmp_dir).execute }
+        expect { described_class.new.execute }
           .to not_change { Provider::School.count }
           .and(not_change { Course::School.count })
 
@@ -183,7 +170,7 @@ describe DataHub::SchoolsBackfill::Executor do
     end
 
     context "process summary lifecycle" do
-      it "returns a finished DataHub::SchoolsBackfillProcessSummary with counts and csv paths" do
+      it "returns a finished summary with counts and skipped-row details" do
         provider = create(:provider)
         gias_school = create(:gias_school, urn: "600006")
         create(:site, provider: provider, urn: gias_school.urn, code: "G")
@@ -194,12 +181,12 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(summary.status).to eq("finished")
         expect(summary.finished_at).to be_present
         expect(summary.short_summary["provider_schools_inserted"]).to eq(1)
-        expect(summary.full_summary["skipped_sites_csv_path"]).to include("schools_backfill_skipped_sites_")
-        expect(summary.full_summary["skipped_course_sites_csv_path"]).to include("schools_backfill_skipped_course_sites_")
+        expect(summary.full_summary["skipped_sites"]).to eq([])
+        expect(summary.full_summary["skipped_course_sites"]).to eq([])
       end
 
       it "marks the summary as failed and re-raises on error" do
-        failing_executor = described_class.new(tmp_dir: tmp_dir)
+        failing_executor = described_class.new
         allow(failing_executor).to receive(:insert_course_schools).and_raise(StandardError, "boom")
 
         expect { failing_executor.execute }.to raise_error(StandardError, "boom")
@@ -214,7 +201,7 @@ describe DataHub::SchoolsBackfill::Executor do
         gias_school = create(:gias_school, urn: "700007")
         create(:site, provider: provider, urn: gias_school.urn, code: "H")
 
-        failing_executor = described_class.new(tmp_dir: tmp_dir)
+        failing_executor = described_class.new
         allow(failing_executor).to receive(:insert_course_schools).and_raise(StandardError, "boom")
 
         expect { failing_executor.execute }.to raise_error(StandardError, "boom")

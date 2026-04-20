@@ -9,7 +9,7 @@ module DataHub
                    course_sites_skipped: [:integer, { default: 0 }]
 
     jsonb_accessor :full_summary,
-                   skipped_sites_csv_path: :string,
-                   skipped_course_sites_csv_path: :string
+                   skipped_sites: [:jsonb, { array: true, default: [] }],
+                   skipped_course_sites: [:jsonb, { array: true, default: [] }]
   end
 end
