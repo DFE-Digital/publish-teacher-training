@@ -9,8 +9,8 @@ class CreateProviderSchool < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_foreign_key :provider_school, :provider
-    add_foreign_key :provider_school, :gias_school
+    add_foreign_key :provider_school, :provider, on_delete: :cascade
+    add_foreign_key :provider_school, :gias_school, on_delete: :cascade
 
     add_index :provider_school, :gias_school_id
     add_index :provider_school, %i[provider_id gias_school_id site_code],

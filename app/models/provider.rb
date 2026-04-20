@@ -39,7 +39,7 @@ class Provider < ApplicationRecord
   has_many :schools,
            class_name: "Provider::School",
            inverse_of: :provider,
-           dependent: :destroy
+           dependent: :delete_all
   has_many :gias_schools, through: :schools
 
   has_many :user_notifications,

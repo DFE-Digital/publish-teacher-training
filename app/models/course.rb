@@ -124,7 +124,7 @@ class Course < ApplicationRecord
   has_many :schools,
            class_name: "Course::School",
            inverse_of: :course,
-           dependent: :destroy
+           dependent: :delete_all
   has_many :gias_schools, through: :schools
 
   delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
