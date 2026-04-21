@@ -10,11 +10,18 @@ module Publish
         def show; end
 
         def update
-          if @site.save
-            redirect_to publish_provider_recruitment_cycle_schools_path, flash: { success_with_body: { title: t(".added"), body: @site.location_name } }
-          else
-            render :show
+          ActiveRecord::Base.transaction do
+            ::ProviderSchools::LegacySiteCreator.call(site: @site)
+            ::ProviderSchools::Creator.call(
+              provider: @site.provider,
+              gias_school_id: school_id,
+              site_code: @site.code,
+            )
           end
+
+          redirect_to publish_provider_recruitment_cycle_schools_path, flash: { success_with_body: { title: t(".added"), body: @site.location_name } }
+        rescue ActiveRecord::RecordInvalid
+          render :show
         end
 
       private
