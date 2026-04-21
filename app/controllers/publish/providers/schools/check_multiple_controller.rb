@@ -10,7 +10,16 @@ module Publish
         def show; end
 
         def update
-          schools.each(&:save!)
+          schools.each do |site|
+            ActiveRecord::Base.transaction do
+              ::ProviderSchools::LegacySiteCreator.call(site:)
+              ::ProviderSchools::Creator.call(
+                provider:,
+                gias_school_id: gias_schools_by_urn.fetch(site.urn).id,
+                site_code: site.code,
+              )
+            end
+          end
 
           schools_added_message(schools)
 
@@ -66,6 +75,10 @@ module Publish
           end
         end
         alias_method :load_schools, :schools
+
+        def gias_schools_by_urn
+          @gias_schools_by_urn ||= GiasSchool.where(urn: schools.map(&:urn)).index_by(&:urn)
+        end
 
         def unfound_urns
           @unfound_urns = urn_service[:unfound_urns]
