@@ -51,11 +51,9 @@ describe ProviderSchools::Creator do
   it "returns the existing row when a RecordNotUnique race fires" do
     existing = create(:provider_school, provider:, gias_school:, site_code: "B")
 
-    # Simulate a race: between find_or_create_by!'s SELECT and INSERT, another
-    # process inserted the row.
-    allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-      .to receive(:find_or_create_by!)
-      .and_raise(ActiveRecord::RecordNotUnique)
+    schools_proxy = provider.schools
+    allow(provider).to receive(:schools).and_return(schools_proxy)
+    allow(schools_proxy).to receive(:find_or_create_by!).and_raise(ActiveRecord::RecordNotUnique)
 
     result = described_class.call(provider:, gias_school_id: gias_school.id)
 
