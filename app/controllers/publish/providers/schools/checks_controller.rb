@@ -11,12 +11,10 @@ module Publish
 
         def update
           ActiveRecord::Base.transaction do
+            provider_school = ::ProviderSchools::Creator.call(provider: @provider, gias_school_id: school_id)
+
+            @site.code = provider_school.site_code
             ::ProviderSchools::LegacySiteCreator.call(site: @site)
-            ::ProviderSchools::Creator.call(
-              provider: @site.provider,
-              gias_school_id: school_id,
-              site_code: @site.code,
-            )
           end
 
           redirect_to publish_provider_recruitment_cycle_schools_path, flash: { success_with_body: { title: t(".added"), body: @site.location_name } }
