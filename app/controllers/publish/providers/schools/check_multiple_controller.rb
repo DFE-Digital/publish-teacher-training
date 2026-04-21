@@ -10,18 +10,19 @@ module Publish
         def show; end
 
         def update
-          schools.each do |site|
+          saved_sites = []
+
+          gias_schools.each do |gias_school|
             ActiveRecord::Base.transaction do
+              provider_school = ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
+
+              site = provider.sites.build(gias_school.school_attributes.merge(code: provider_school.site_code))
               ::ProviderSchools::LegacySiteCreator.call(site:)
-              ::ProviderSchools::Creator.call(
-                provider:,
-                gias_school_id: gias_schools_by_urn.fetch(site.urn).id,
-                site_code: site.code,
-              )
+              saved_sites << site
             end
           end
 
-          schools_added_message(schools)
+          schools_added_message(saved_sites)
 
           redirect_to publish_provider_recruitment_cycle_schools_path
         end
@@ -66,19 +67,14 @@ module Publish
           @urn_service ||= ProviderURNIdentificationService.new(provider, urn_form.values || []).call
         end
 
+        def gias_schools
+          @gias_schools ||= GiasSchool.where(urn: urn_service[:new_urns])
+        end
+
         def schools
-          @schools = begin
-            gias_schools = GiasSchool.where(urn: urn_service[:new_urns])
-            gias_schools.map do |gias_school|
-              provider.sites.build(gias_school.school_attributes)
-            end
-          end
+          @schools ||= gias_schools.map { |gias_school| provider.sites.build(gias_school.school_attributes) }
         end
         alias_method :load_schools, :schools
-
-        def gias_schools_by_urn
-          @gias_schools_by_urn ||= GiasSchool.where(urn: schools.map(&:urn)).index_by(&:urn)
-        end
 
         def unfound_urns
           @unfound_urns = urn_service[:unfound_urns]
