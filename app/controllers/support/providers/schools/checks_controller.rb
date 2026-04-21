@@ -12,15 +12,13 @@ module Support
           saved = false
 
           ActiveRecord::Base.transaction do
-            saved = @school_form.save!
+            provider_school = ::ProviderSchools::Creator.call(
+              provider: provider,
+              gias_school_id: params[:school_id],
+            )
 
-            if saved
-              ::ProviderSchools::Creator.call(
-                provider: @site.provider,
-                gias_school_id: params[:school_id],
-                site_code: @site.code,
-              )
-            end
+            @school_form.fields[:code] = provider_school.site_code
+            saved = @school_form.save!
           end
 
           if saved
