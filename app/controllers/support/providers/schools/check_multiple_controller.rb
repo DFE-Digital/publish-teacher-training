@@ -39,7 +39,16 @@ module Support
         end
 
         def save
-          schools.each(&:save!)
+          schools.each do |site|
+            ActiveRecord::Base.transaction do
+              ::ProviderSchools::LegacySiteCreator.call(site:)
+              ::ProviderSchools::Creator.call(
+                provider:,
+                gias_school_id: gias_schools_by_urn.fetch(site.urn).id,
+                site_code: site.code,
+              )
+            end
+          end
 
           schools_added_message(schools)
         end
@@ -59,6 +68,10 @@ module Support
               provider.sites.build(gias_school.school_attributes)
             end
           end
+        end
+
+        def gias_schools_by_urn
+          @gias_schools_by_urn ||= GiasSchool.where(urn: schools.map(&:urn)).index_by(&:urn)
         end
 
         def unfound_urns
