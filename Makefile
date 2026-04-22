@@ -327,6 +327,11 @@ set-pgserver:
 list-pglogs: composed-variables set-pgserver set-azure-account
 	az postgres flexible-server server-logs list --resource-group ${RESOURCE_GROUP_NAME} --server-name ${SERVERNAME}
 
+download-pglogs: composed-variables set-pgserver set-azure-account
+	$(if $(LOG_NAME), , $(error Please specify a LOG_NAME for download))
+	az postgres flexible-server server-logs download --name ${LOG_NAME} --resource-group ${RESOURCE_GROUP_NAME} --server-name ${SERVERNAME}
+	ls -l $(LOG_NAME)*
+
 enable-pglogs: composed-variables set-pgserver set-azure-account
 	echo "Enabling server logs for PostgreSQL server ${SERVERNAME}"
 	echo "Current Value"
