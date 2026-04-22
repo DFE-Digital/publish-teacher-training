@@ -24,6 +24,7 @@ class AddCourseButton < ViewComponent::Base
       new_publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
+        state_key: wizard_state_key,
       )
     else
       new_publish_provider_recruitment_cycle_course_path(
@@ -37,6 +38,10 @@ private
 
   def wizard_add_course_flow?
     FeatureFlag.active?(:wizard_add_course_flow)
+  end
+
+  def wizard_state_key
+    @wizard_state_key ||= SecureRandom.uuid
   end
 
   def accredited_provider

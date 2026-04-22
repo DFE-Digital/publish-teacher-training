@@ -171,8 +171,8 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
       end
 
       resource :course_wizard, only: %i[new], controller: "course_wizards"
-      get "course_wizard/:step", to: "course_wizards#show", as: :course_wizard
-      patch "course_wizard/:step", to: "course_wizards#update"
+      get "course_wizard/:state_key/:step", to: "course_wizards#show", as: :course_wizard
+      patch "course_wizard/:state_key/:step", to: "course_wizards#update"
 
       resources :courses, param: :code, only: %i[index new create show] do
         get "/apply", on: :member, to: "courses#apply", as: :apply

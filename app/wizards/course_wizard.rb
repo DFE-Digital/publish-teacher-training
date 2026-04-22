@@ -3,7 +3,7 @@
 class CourseWizard
   include DfE::Wizard
 
-  attr_accessor :recruitment_cycle_year, :provider_code
+  attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
@@ -22,9 +22,11 @@ class CourseWizard
       config.default_path_arguments = {
         recruitment_cycle_year: config.wizard.recruitment_cycle_year,
         provider_code: config.wizard.provider_code,
+        state_key: config.wizard.state_key,
       }
 
       config.map_step :courses_index, to: lambda { |_wizard, options, helpers|
+        options = options.except(:state_key)
         helpers.publish_provider_recruitment_cycle_courses_path(**options)
       }
     end

@@ -9,6 +9,7 @@ RSpec.shared_context "add_course_wizard" do
     ).tap do |course_wizard|
       course_wizard.provider_code = provider_code
       course_wizard.recruitment_cycle_year = recruitment_cycle_year
+      course_wizard.state_key = state_key
     end
   end
 
@@ -18,4 +19,5 @@ RSpec.shared_context "add_course_wizard" do
   let(:current_step_params) { {} }
   let(:provider_code) { "ABC" }
   let(:recruitment_cycle_year) { 2026 }
+  let(:state_key) { SecureRandom.uuid }
 end

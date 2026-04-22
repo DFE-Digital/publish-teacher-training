@@ -17,15 +17,16 @@ describe AddCourseButton do
 
     it "renders a course wizard link" do
       component = described_class.new(provider:)
-      allow(component).to receive(:wizard_add_course_flow?).and_return(true)
+      allow(component).to receive_messages(wizard_add_course_flow?: true, wizard_state_key: "test-state-key")
 
       render_inline(component)
 
       expect(rendered_content).to have_link(
         "Add course",
         href: new_publish_provider_recruitment_cycle_course_wizard_path(
-          provider.provider_code,
-          provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          state_key: "test-state-key",
         ),
       )
     end
