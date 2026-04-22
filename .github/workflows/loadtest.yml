@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Set up k6
-        uses: grafana/setup-k6@v0
+        uses: grafana/setup-k6@7af9007cf6ab08d712b18ed2ad067ae5c8ff441d # Pinned at v0.0.1
 
       - name: Setup environment
         working-directory: load_testing
