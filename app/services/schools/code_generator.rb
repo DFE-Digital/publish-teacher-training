@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-# Generates a site_code for a provider's next school relationship.
-# Deterministic (first-available) to keep behaviour predictable for
-# users and tests. Excludes "-" because it is reserved for the provider
-# main site under the partial unique index on provider_school
-# (site_code = '-'). Reads used codes from both the legacy site table
-# and the new provider_school table so codes don't collide on either
-# side during the dual-write period. Race safety is the caller's
-# responsibility (see ProviderSchools::Creator).
 module Schools
+  # Generates a site_code for a provider's next school relationship.
+  # Deterministic (first-available) to keep behaviour predictable for
+  # users and tests. Excludes "-" because it is reserved for the provider
+  # main site under the partial unique index on provider_school
+  # (site_code = '-'). Reads used codes from both the legacy site table
+  # and the new provider_school table so codes don't collide on either
+  # side during the dual-write period. Race safety is the caller's
+  # responsibility (see ProviderSchools::Creator).
   class CodeGenerator
     include ServicePattern
 
@@ -39,7 +39,7 @@ module Schools
       @used_codes ||= (
         @provider.sites.pluck(:code) +
         @provider.schools.pluck(:site_code)
-      ).compact.reject(&:empty?).uniq
+      ).compact_blank.uniq
     end
   end
 end

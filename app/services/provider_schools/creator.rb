@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-# Writes a Provider::School row and owns site_code generation so the
-# new model never depends on legacy Site data. Locks the provider row
-# for the duration of the code-pick + insert so two concurrent adds
-# to the same provider can't hand out the same code. Idempotent under
-# RecordNotUnique (race with the backfill or another request).
 module ProviderSchools
+  # Writes a Provider::School row and owns site_code generation so the
+  # new model never depends on legacy Site data. Locks the provider row
+  # for the duration of the code-pick + insert so two concurrent adds
+  # to the same provider can't hand out the same code. Idempotent under
+  # RecordNotUnique (race with the backfill or another request).
   class Creator
     include ServicePattern
 
