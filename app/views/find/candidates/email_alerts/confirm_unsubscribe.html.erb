@@ -4,14 +4,16 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
 
-    <ul class="app-recent-search-tags govuk-!-margin-bottom-4">
-      <% @filter_tags.each do |tag_text| %>
-        <li><span class="app-recent-search-tag"><%= tag_text %></span></li>
+    <dl class="govuk-summary-list">
+      <% @summary_rows.each do |row| %>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key"><%= row[:label] %></dt>
+          <dd class="govuk-summary-list__value"><%= row[:value] %></dd>
+        </div>
       <% end %>
-    </ul>
+    </dl>
 
     <p class="govuk-body"><%= t(".are_you_sure") %></p>
-
     <div class="govuk-button-group">
       <%= button_to t(".submit"),
           find_candidate_unsubscribe_email_alert_path(token: @email_alert.signed_id(purpose: :unsubscribe, expires_in: 30.days)),
