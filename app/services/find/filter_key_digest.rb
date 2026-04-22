@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Find
+  # Functions to hash Find search params
+  # Used to compare live search with RecentSearch and EmailAlert search attributes
   class FilterKeyDigest
     # Keys that determine what courses match — excludes display-only keys
     FILTER_KEYS = %w[
@@ -9,9 +11,15 @@ module Find
       engineers_teach_physics
       funding
       interview_location
+      latitude
       level
+      location
+      longitude
       minimum_degree_required
+      provider_code
+      provider_name
       qualifications
+      radius
       send_courses
       start_date
       study_types
