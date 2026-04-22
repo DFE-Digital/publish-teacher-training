@@ -4,9 +4,14 @@ require "rails_helper"
 
 describe Schools::CodeGenerator do
   let(:provider) { create(:provider) }
+  let(:all_single_chars) { ("A".."Z").to_a + ("0".."9").to_a }
 
   def seed_site(code)
     create(:site, provider:, code:)
+  end
+
+  def seed_sites(codes)
+    Site.insert_all(codes.map { |code| { provider_id: provider.id, code: } })
   end
 
   def seed_provider_school(site_code)
@@ -46,20 +51,20 @@ describe Schools::CodeGenerator do
     end
 
     it "moves into the numeric range after A-Z are used" do
-      ("A".."Z").each { |c| seed_site(c) }
+      seed_sites(("A".."Z").to_a)
 
       expect(described_class.call(provider:)).to eq("0")
     end
 
     it "returns 'AA' once all single-char codes are exhausted" do
-      (("A".."Z").to_a + ("0".."9").to_a).each { |c| seed_site(c) }
+      seed_sites(all_single_chars)
 
       expect(described_class.call(provider:)).to eq("AA")
     end
 
     it "never returns '-' even when it is the only single-char code missing from used set" do
       # seed everything BUT "-"; the legacy generator could pick "-" here, we must not
-      (("A".."Z").to_a + ("0".."9").to_a).each { |c| seed_site(c) }
+      seed_sites(all_single_chars)
 
       expect(described_class.call(provider:)).not_to eq("-")
     end
@@ -71,16 +76,13 @@ describe Schools::CodeGenerator do
     end
 
     it "returns the next sequential code after the highest multi-char in use" do
-      (("A".."Z").to_a + ("0".."9").to_a).each { |c| seed_site(c) }
-      seed_site("AA")
-      seed_site("AB")
+      seed_sites(all_single_chars + %w[AA AB])
 
       expect(described_class.call(provider:)).to eq("AC")
     end
 
     it "wraps from 'AZ' to 'BA'" do
-      (("A".."Z").to_a + ("0".."9").to_a).each { |c| seed_site(c) }
-      seed_site("AZ")
+      seed_sites(all_single_chars + %w[AZ])
 
       expect(described_class.call(provider:)).to eq("BA")
     end
