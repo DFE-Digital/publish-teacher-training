@@ -5,6 +5,7 @@ require "rails_helper"
 RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   before do
     given_i_am_authenticated_as_a_provider_user
+    and_provider_schools_mirror_the_sites
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_publish_course_school_edit_page
   end
@@ -15,6 +16,16 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     and_i_submit
     then_i_should_see_a_success_message
     and_the_course_schools_are_updated
+    and_the_new_model_course_school_row_exists
+  end
+
+  scenario "i can detach a school from the course" do
+    given_the_course_already_has_both_sites
+    when_i_untick_site_one
+    and_i_submit
+    then_i_should_see_a_success_message
+    and_only_site_two_is_attached
+    and_no_course_school_row_exists_for_site_one
   end
 
   scenario "updating with invalid data" do
@@ -77,6 +88,46 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     expect(publish_course_school_edit_page).to have_content(
       I18n.t("activemodel.errors.models.publish/course_school_form.attributes.site_ids.no_schools"),
     )
+  end
+
+  def and_provider_schools_mirror_the_sites
+    provider.sites.each do |site|
+      gias_school = create(:gias_school, urn: site.urn)
+      create(:provider_school, provider:, gias_school:, site_code: site.code)
+    end
+  end
+
+  def and_the_new_model_course_school_row_exists
+    site = provider.sites.find_by(location_name: "Site 1")
+    gias_school = GiasSchool.find_by!(urn: site.urn)
+    course_school = course.reload.schools.find_by(gias_school:)
+    expect(course_school).to be_present
+    expect(course_school.site_code).to eq(site.code)
+  end
+
+  def given_the_course_already_has_both_sites
+    provider.sites.each do |site|
+      gias_school = GiasSchool.find_by!(urn: site.urn)
+      course.site_statuses.create!(site:, status: :new_status, publish: :unpublished)
+      create(:course_school, course:, gias_school:, site_code: site.code)
+    end
+    visit current_path
+  end
+
+  def when_i_untick_site_one
+    publish_course_school_edit_page.vacancies.find { |el|
+      el.find(".govuk-label").text == "Site 1"
+    }.uncheck
+  end
+
+  def and_only_site_two_is_attached
+    expect(course.reload.sites.map(&:location_name)).to contain_exactly("Site 2")
+  end
+
+  def and_no_course_school_row_exists_for_site_one
+    site_one = provider.sites.find_by(location_name: "Site 1")
+    gias_school_one = GiasSchool.find_by!(urn: site_one.urn)
+    expect(course.reload.schools.where(gias_school: gias_school_one)).to be_empty
   end
 
   def provider
