@@ -39,6 +39,7 @@ private
     visit new_publish_provider_recruitment_cycle_course_wizard_path(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
+      state_key: wizard_state_key,
     )
   end
 
@@ -65,7 +66,10 @@ private
   end
 
   def then_i_go_back_to_the_school_courses_page
-    expect(page).to have_current_path(publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year))
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year),
+      ignore_query: true,
+    )
   end
 
   def then_i_have_errors_on_the_level_step
@@ -76,5 +80,9 @@ private
 
   def provider
     @provider ||= @user.providers.first
+  end
+
+  def wizard_state_key
+    @wizard_state_key ||= SecureRandom.uuid
   end
 end

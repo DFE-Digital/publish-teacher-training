@@ -13,6 +13,7 @@
             provider_code: params[:provider_code],
             recruitment_cycle_year: params[:recruitment_cycle_year],
             step: current_step_name,
+            state_key: params[:state_key],
           ),
           method: :patch,
         ) do |form| %>

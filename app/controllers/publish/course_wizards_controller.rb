@@ -22,6 +22,7 @@ module Publish
         provider_code: params[:provider_code],
         recruitment_cycle_year: params[:recruitment_cycle_year],
         step: :level,
+        state_key:,
       )
     end
 
@@ -58,7 +59,7 @@ module Publish
       state_store = CourseWizard::StateStores::CourseWizardStore.new(
         repository: DfE::Wizard::Repository::Cache.new(
           cache: Rails.cache,
-          key: "course_wizard_#{params[:provider_code]}_#{params[:recruitment_cycle_year]}",
+          key: "course_wizard_#{params[:provider_code]}_#{params[:recruitment_cycle_year]}_#{state_key}",
           expires_in: CACHE_EXPIRY,
         ),
       )
@@ -70,7 +71,12 @@ module Publish
       ).tap do |wizard|
         wizard.recruitment_cycle_year = params[:recruitment_cycle_year]
         wizard.provider_code = params[:provider_code]
+        wizard.state_key = state_key
       end
+    end
+
+    def state_key
+      @state_key ||= params[:state_key]
     end
 
     def step_params
