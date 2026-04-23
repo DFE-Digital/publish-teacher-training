@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sandbox.api.publish-teacher-training-courses.service.gov.uk
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: sandbox.api.publish-teacher-training-courses.service.gov.uk
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        backend:
+          service:
+            name: publish-sandbox
+            port:
+              number: 80
