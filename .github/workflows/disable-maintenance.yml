@@ -9,6 +9,8 @@ on:
         options:
         - qa
         - production
+        - sandbox
+        - staging
 
 permissions:
   id-token: write
