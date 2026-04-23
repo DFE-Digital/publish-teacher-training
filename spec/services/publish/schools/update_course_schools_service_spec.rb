@@ -96,6 +96,67 @@ module Publish
             service_call
           end
         end
+
+        context "dual-write to Course::School" do
+          let(:gias_school_one) { create(:gias_school, urn: site_one.urn) }
+          let(:gias_school_two) { create(:gias_school, urn: site_two.urn) }
+
+          before do
+            # Persist sites so they have IDs / URNs present in the DB
+            provider.save!
+            create(:provider_school, provider:, gias_school: gias_school_one, site_code: "X")
+            create(:provider_school, provider:, gias_school: gias_school_two, site_code: "Y")
+          end
+
+          context "when a site is newly attached" do
+            let(:params) { { site_ids: [site_one.id, site_two.id] } }
+
+            it "creates a Course::School row for the newly attached site" do
+              expect {
+                described_class.new(course:, params:).call
+              }.to change { course.schools.count }.by(1)
+
+              added = course.schools.find_by(gias_school: gias_school_two)
+              expect(added).to be_present
+              expect(added.site_code).to eq("Y")
+            end
+          end
+
+          context "when a site is detached" do
+            let(:params) { { site_ids: [] } }
+
+            before do
+              create(:course_school, course:, gias_school: gias_school_one, site_code: "X")
+            end
+
+            it "destroys the Course::School row for the detached site" do
+              expect {
+                described_class.new(course:, params:).call
+              }.to change { course.schools.count }.by(-1)
+
+              expect(course.schools.where(gias_school: gias_school_one)).to be_empty
+            end
+          end
+
+          context "when the new-model write fails" do
+            let(:params) { { site_ids: [site_one.id, site_two.id] } }
+
+            before do
+              # Destroy the prerequisite provider_school so Creator raises
+              Provider::School.where(provider:, gias_school: gias_school_two).destroy_all
+            end
+
+            it "rolls back the legacy SiteStatus write" do
+              previous_site_status_count = course.site_statuses.count
+
+              expect {
+                described_class.new(course:, params:).call
+              }.to raise_error(ActiveRecord::RecordNotFound)
+
+              expect(course.reload.site_statuses.count).to eq(previous_site_status_count)
+            end
+          end
+        end
       end
     end
   end
