@@ -57,7 +57,7 @@ module Publish
     end
 
     def set_wizard
-      state_store = CourseWizard::StateStores::CourseWizardStore.new(
+      state_store = CourseWizard::StateStores::CourseWizard.new(
         repository: wizard_repository,
       )
 
