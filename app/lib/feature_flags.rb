@@ -10,6 +10,7 @@ class FeatureFlags
       [:candidate_accounts, "Enable candidate accounts feature", "Find and Publish team"],
       [:email_alerts, "Enable email alerts for candidates", "Find and Publish team"],
       [:course_sites_updated_email_notification, "Send email notifications when a course's associated schools are updated", "Find and Publish team"],
+      [:course_publishing_uses_new_school_model, "Read publish-side school checks from Course::School instead of Site", "Find and Publish team"],
     ]
   end
 end

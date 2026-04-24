@@ -365,9 +365,11 @@ class Course < ApplicationRecord
     gcse_science_required? && !recruitment_cycle_after_2021?
   }
 
-  validates :sites, presence: true, on: %i[publish new]
+  validates_with CoursePublishableSchoolsPresenceValidator, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
-  validate :validate_schools, on: :publish, if: -> { recruitment_cycle_rollover_period_2026? }
+  validates_with CoursePublishableSchoolsRolloverValidator,
+                 on: :publish,
+                 if: -> { recruitment_cycle_rollover_period_2026? }
 
   validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? || further_education_course? }
   validate :validate_enrichment_publishable, on: :publish
@@ -463,15 +465,6 @@ class Course < ApplicationRecord
     return if accredited_provider_code.blank?
 
     errors.add(:accrediting_provider, :partnership_missing) unless provider.accredited_partners.include?(accrediting_provider)
-  end
-
-  def validate_schools
-    return if schools_validated?
-
-    if latest_enrichment&.rolled_over?
-      errors.add(:sites, :check_schools) if sites.school.present?
-      errors.add(:sites, :enter_schools) if sites.school.blank?
-    end
   end
 
   def update_valid?
