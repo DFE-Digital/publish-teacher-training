@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if ENV.key?("VCAP_SERVICES") || ENV.key?("REDIS_WORKER_URL")
+if ENV.key?("REDIS_WORKER_URL")
   Sidekiq.configure_server do |config|
     config.redis = {
       url: ENV.fetch("REDIS_WORKER_URL"),
