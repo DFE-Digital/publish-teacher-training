@@ -84,6 +84,55 @@ describe "#publishable?" do
     end
   end
 
+  context "when the new-school-model flag is on" do
+    let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
+    let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
+
+    before do
+      allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
+    end
+
+    context "with no Course::School rows" do
+      let(:course) do
+        create(
+          :course,
+          :with_gcse_equivalency,
+          :with_accrediting_provider,
+          subjects: [primary_with_mathematics],
+          enrichments: [enrichment],
+          site_statuses: [site_status], # legacy sites present but flag ignores them
+          study_sites: [study_site],
+        )
+      end
+
+      it "is not publishable and reports the sites :blank error" do
+        expect(course).not_to be_publishable
+        expect(course.errors.details[:sites]).to include(error: :blank)
+      end
+    end
+
+    context "with Course::School rows" do
+      let(:gias_school) { create(:gias_school) }
+      let(:course) do
+        create(
+          :course,
+          :with_gcse_equivalency,
+          :with_accrediting_provider,
+          subjects: [primary_with_mathematics],
+          enrichments: [enrichment],
+          site_statuses: [], # legacy empty but flag reads the new model
+          study_sites: [study_site],
+        )
+      end
+
+      before do
+        create(:course_school, course:, gias_school:, site_code: "A")
+      end
+
+      its(:publishable?) { is_expected.to be_truthy }
+    end
+  end
+
   context "when publishing a NON teacher degree apprenticeship course without A levels" do
     it "does not require A level to be answered" do
       course = create(
