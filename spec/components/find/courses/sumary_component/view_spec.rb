@@ -18,7 +18,6 @@ module Find
             "Age group",
             "Qualification awarded",
             "Provider",
-            "Date you can apply from",
             "Start date",
           )
         end
@@ -32,39 +31,6 @@ module Find
             expect(result.text).not_to include("£9,250")
             expect(result.text).to include("Fee or salary")
             expect(result.text).to include("Salary (apprenticeship)")
-          end
-        end
-
-        context "applications open date has not passed" do
-          it "renders the 'Date you can apply from'" do
-            enrichment = create(:course_enrichment)
-            course = create(:course, enrichments: [enrichment], applications_open_from: Time.zone.tomorrow, provider: build(:provider)).decorate
-
-            result = render_inline(described_class.new(course, enrichment))
-
-            expect(result.text).to include("Date you can apply from")
-          end
-        end
-
-        context "applications open date has passed" do
-          it "does not render the 'Date you can apply from'" do
-            enrichment = create(:course_enrichment)
-            course = create(:course, enrichments: [enrichment], applications_open_from: Time.zone.yesterday, provider: build(:provider)).decorate
-
-            result = render_inline(described_class.new(course, enrichment))
-
-            expect(result.text).not_to include("Date you can apply from")
-          end
-        end
-
-        context "applications open date is today" do
-          it "does not render the 'Date you can apply from'" do
-            enrichment = create(:course_enrichment)
-            course = create(:course, enrichments: [enrichment], applications_open_from: Time.zone.today, provider: build(:provider)).decorate
-
-            result = render_inline(described_class.new(course, enrichment))
-
-            expect(result.text).not_to include("Date you can apply from")
           end
         end
 
