@@ -10,25 +10,34 @@ class CourseWizard
       graph.root :level
 
       graph.add_node :level, Steps::Level
-      graph.add_edge from: :level, to: :courses_index
+      graph.add_node :subjects, Steps::Subjects
+
+      graph.add_edge from: :level, to: :subjects
+      graph.add_edge from: :subjects, to: :courses_index
     end
   end
 
   def route_strategy
-    DfE::Wizard::RouteStrategy::ConfigurableRoutes.new(
-      wizard: self,
-      namespace: "publish-provider-recruitment-cycle-course-wizard",
-    ) do |config|
-      config.default_path_arguments = {
-        recruitment_cycle_year: config.wizard.recruitment_cycle_year,
-        provider_code: config.wizard.provider_code,
-        state_key: config.wizard.state_key,
-      }
-
-      config.map_step :courses_index, to: lambda { |_wizard, options, helpers|
-        options = options.except(:state_key)
-        helpers.publish_provider_recruitment_cycle_courses_path(**options)
-      }
-    end
+    DfE::Wizard::RouteStrategy::DynamicRoutes.new(
+      state_store:,
+      path_builder: lambda { |step_id, _state_store, helpers, options|
+        case step_id
+        when :courses_index
+          helpers.publish_provider_recruitment_cycle_courses_path(
+            provider_code:,
+            recruitment_cycle_year:,
+            **options.except(:state_key),
+          )
+        else
+          helpers.publish_provider_recruitment_cycle_course_wizard_path(
+            provider_code:,
+            recruitment_cycle_year:,
+            state_key:,
+            step: step_id,
+            **options,
+          )
+        end
+      },
+    )
   end
 end

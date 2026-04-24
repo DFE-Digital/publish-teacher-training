@@ -1,0 +1,8 @@
+<% content_for :page_title, title_with_error_prefix("Subjects", current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course.add_course")) %>
+  Subjects
+</h1>
+
+<%= form.govuk_submit t("course_wizard.steps.level.submit") %>

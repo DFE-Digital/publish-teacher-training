@@ -1,0 +1,19 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.level.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course.add_course")) %>
+  <%= t("course_wizard.steps.level.heading") %>
+</h1>
+
+<%= form.govuk_radio_buttons_fieldset :level, legend: { text: t("course_wizard.steps.level.level_label"), size: "m" } do %>
+  <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.primary").downcase, label: { text: t("course_wizard.steps.level.options.primary") } %>
+  <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.secondary").downcase, label: { text: t("course_wizard.steps.level.options.secondary") } %>
+  <%= form.govuk_radio_button :level, "further_education", label: { text: t("course_wizard.steps.level.options.further_education") } %>
+<% end %>
+
+<%= form.govuk_radio_buttons_fieldset :is_send, legend: { text: t("course_wizard.steps.level.send_label"), size: "m" } do %>
+  <%= form.govuk_radio_button :is_send, "true", label: { text: t("course_wizard.steps.level.options.yes_send") } %>
+  <%= form.govuk_radio_button :is_send, "false", label: { text: t("course_wizard.steps.level.options.no_send") } %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.level.submit") %>

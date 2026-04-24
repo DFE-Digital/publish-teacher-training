@@ -13,7 +13,7 @@ RSpec.describe "Add course wizard level step", type: :system do
     and_i_choose_primary_level
     and_i_choose_no_for_send_specialism
     and_i_click_continue
-    then_i_go_back_to_the_school_courses_page
+    then_i_am_taken_to_the_subjects_page
   end
 
   scenario "submitting without selecting a level or SEND shows validation errors" do
@@ -55,20 +55,14 @@ private
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_course_wizard_subjects_step
+  def then_i_am_taken_to_the_subjects_page
     expect(page).to have_current_path(
-      new_publish_provider_recruitment_cycle_courses_subjects_path(
-        provider.provider_code,
-        provider.recruitment_cycle_year,
+      publish_provider_recruitment_cycle_course_wizard_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :subjects,
+        state_key: wizard_state_key,
       ),
-    )
-    expect(page).to have_content("Subject")
-  end
-
-  def then_i_go_back_to_the_school_courses_page
-    expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year),
-      ignore_query: true,
     )
   end
 
