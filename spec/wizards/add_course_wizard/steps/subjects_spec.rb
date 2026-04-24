@@ -5,9 +5,9 @@ require "rails_helper"
 RSpec.describe CourseWizard::Steps::Subjects do
   subject(:wizard_step) { described_class.new(wizard:, step_id: :subjects) }
 
-  let(:state_store) { instance_double(CourseWizard::StateStores::CourseWizardStore, read: stored_state) }
+  let(:state_store) { double("state_store", level: stored_level) }
   let(:wizard) { instance_double(CourseWizard, state_store:) }
-  let(:stored_state) { {} }
+  let(:stored_level) { nil }
 
   describe "#valid?" do
     context "when master_subject_id is present" do
@@ -25,14 +25,8 @@ RSpec.describe CourseWizard::Steps::Subjects do
     end
   end
 
-  describe ".permitted_params" do
-    it "returns the correct permitted params" do
-      expect(described_class.permitted_params).to eq(%i[master_subject_id subordinate_subject_id])
-    end
-  end
-
   describe "#primary_level?" do
-    let(:stored_state) { { "level" => "primary" } }
+    let(:stored_level) { "primary" }
 
     it "returns true when the saved level is primary" do
       expect(wizard_step.primary_level?).to be true
@@ -40,10 +34,16 @@ RSpec.describe CourseWizard::Steps::Subjects do
   end
 
   describe "#secondary_level?" do
-    let(:stored_state) { { "level" => "secondary" } }
+    let(:stored_level) { "secondary" }
 
     it "returns true when the saved level is secondary" do
       expect(wizard_step.secondary_level?).to be true
+    end
+  end
+
+  describe ".permitted_params" do
+    it "returns the correct permitted params" do
+      expect(described_class.permitted_params).to eq(%i[master_subject_id subordinate_subject_id])
     end
   end
 end
