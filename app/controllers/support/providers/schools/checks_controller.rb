@@ -9,7 +9,19 @@ module Support
         def show; end
 
         def update
-          if @school_form.save!
+          saved = false
+
+          ActiveRecord::Base.transaction do
+            provider_school = ::ProviderSchools::Creator.call(
+              provider: provider,
+              gias_school_id: params[:school_id],
+            )
+
+            @school_form.fields[:code] = provider_school.site_code
+            saved = @school_form.save!
+          end
+
+          if saved
             redirect_to support_recruitment_cycle_provider_schools_path
             flash[:success] = t(".added")
           else

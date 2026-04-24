@@ -34,6 +34,7 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
     when_i_click_add_school
     then_i_see_a_confirmation_message
     and_the_school_is_in_the_database
+    and_the_provider_school_row_is_created
   end
 
   scenario "attempting to add a school with duplicate URN" do
@@ -48,6 +49,7 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
     when_i_click_add_school
     then_i_see_a_duplicate_urn_error
     and_the_school_is_not_added_to_the_database
+    and_no_provider_school_row_is_created
   end
 
   def and_there_are_gias_schools
@@ -172,5 +174,16 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
     added_school = provider.sites.find_by(urn: @gias_school.urn)
     expect(added_school).to be_present
     expect(added_school.location_name).to eq(@gias_school.name)
+  end
+
+  def and_the_provider_school_row_is_created
+    added_site = provider.sites.find_by(urn: @gias_school.urn)
+    provider_school = provider.schools.find_by(gias_school_id: @gias_school.id)
+    expect(provider_school).to be_present
+    expect(provider_school.site_code).to eq(added_site.code)
+  end
+
+  def and_no_provider_school_row_is_created
+    expect(provider.schools.where(gias_school_id: @gias_school.id)).to be_empty
   end
 end

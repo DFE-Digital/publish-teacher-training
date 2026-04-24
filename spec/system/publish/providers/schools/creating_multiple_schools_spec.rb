@@ -28,6 +28,7 @@ RSpec.describe "Multiple schools" do
     when_i_click_add_schools
     then_i_am_redirected_to_the_school_index
     and_i_see_that_all_schools_are_created
+    and_provider_school_rows_are_created_for_each
     and_i_see_the_success_message
   end
 
@@ -125,6 +126,15 @@ RSpec.describe "Multiple schools" do
   def and_i_see_that_all_schools_are_created
     @gias_schools.each do |school|
       expect(page).to have_css(".school-row", text: /#{school.name}.*#{school.urn}/)
+    end
+  end
+
+  def and_provider_school_rows_are_created_for_each
+    @gias_schools.each do |gias_school|
+      site = provider.sites.find_by(urn: gias_school.urn)
+      provider_school = provider.schools.find_by(gias_school_id: gias_school.id)
+      expect(provider_school).to be_present
+      expect(provider_school.site_code).to eq(site.code)
     end
   end
 
