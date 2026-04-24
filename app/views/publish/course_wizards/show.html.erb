@@ -1,45 +1,35 @@
-<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.level.heading"), current_step.errors.any?) %>
-
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_courses_path(params[:provider_code], params[:recruitment_cycle_year])) %>
+  <%= govuk_back_link_to(
+        @wizard.previous_step_path(
+          fallback: publish_provider_recruitment_cycle_courses_path(
+            provider_code: params[:provider_code],
+            recruitment_cycle_year: params[:recruitment_cycle_year],
+          ),
+        ),
+      ) %>
 <% end %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <%= form_with(
-          model: current_step,
-          scope: current_step_name,
-          url: publish_provider_recruitment_cycle_course_wizard_path(
-            provider_code: params[:provider_code],
-            recruitment_cycle_year: params[:recruitment_cycle_year],
-            step: current_step_name,
-            state_key: params[:state_key],
-          ),
-          method: :patch,
-        ) do |form| %>
+  <%= form_with(
+        model: current_step,
+        scope: current_step_name,
+        url: publish_provider_recruitment_cycle_course_wizard_path(
+          provider_code: params[:provider_code],
+          recruitment_cycle_year: params[:recruitment_cycle_year],
+          step: current_step_name,
+          state_key: params[:state_key],
+        ),
+        method: :patch,
+      ) do |form| %>
+    <div class="govuk-grid-column-full">
       <%= form.govuk_error_summary %>
+    </div>
 
-      <h1 class="govuk-heading-l">
-        <%= render CaptionText.new(text: t("course.add_course")) %>
-        <%= t("course_wizard.steps.level.heading") %>
-      </h1>
-
-      <%= form.govuk_radio_buttons_fieldset :level, legend: { text: t("course_wizard.steps.level.level_label"), size: "m" } do %>
-        <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.primary").downcase, label: { text: t("course_wizard.steps.level.options.primary") } %>
-        <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.secondary").downcase, label: { text: t("course_wizard.steps.level.options.secondary") } %>
-        <%= form.govuk_radio_button :level, "further_education", label: { text: t("course_wizard.steps.level.options.further_education") } %>
-      <% end %>
-
-      <%= form.govuk_radio_buttons_fieldset :is_send, legend: { text: t("course_wizard.steps.level.send_label"), size: "m" } do %>
-        <%= form.govuk_radio_button :is_send, "true", label: { text: t("course_wizard.steps.level.options.yes_send") } %>
-        <%= form.govuk_radio_button :is_send, "false", label: { text: t("course_wizard.steps.level.options.no_send") } %>
-      <% end %>
-
-      <%= form.govuk_submit t("course_wizard.steps.level.submit") %>
-    <% end %>
-
-    <p class="govuk-body">
-      <%= govuk_link_to(t("course_wizard.steps.level.cancel"), publish_provider_recruitment_cycle_courses_path(params[:provider_code], params[:recruitment_cycle_year])) %>
-    </p>
-  </div>
+    <div class="govuk-grid-column-two-thirds">
+      <%= render "publish/course_wizards/steps/#{current_step_name}", form: %>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("course_wizard.steps.level.cancel"), publish_provider_recruitment_cycle_courses_path(params[:provider_code], params[:recruitment_cycle_year])) %>
+      </p>
+    </div>
+  <% end %>
 </div>

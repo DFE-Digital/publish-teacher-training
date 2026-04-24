@@ -2,7 +2,8 @@
 
 module Publish
   class CourseWizardsController < ApplicationController
-    CACHE_EXPIRY = 1.hour
+    CACHE_EXPIRY = 24.hours
+    LOCAL_CACHE_STORE = ActiveSupport::Cache::MemoryStore.new
 
     before_action :authorize_course_creation
     before_action :set_wizard, except: [:new]
@@ -56,12 +57,8 @@ module Publish
     end
 
     def set_wizard
-      state_store = CourseWizard::StateStores::CourseWizardStore.new(
-        repository: DfE::Wizard::Repository::Cache.new(
-          cache: Rails.cache,
-          key: "course_wizard_#{params[:provider_code]}_#{params[:recruitment_cycle_year]}_#{state_key}",
-          expires_in: CACHE_EXPIRY,
-        ),
+      state_store = CourseWizard::StateStores::CourseWizard.new(
+        repository: wizard_repository,
       )
 
       @wizard = CourseWizard.new(
@@ -81,6 +78,18 @@ module Publish
 
     def step_params
       params
+    end
+
+    def wizard_repository
+      DfE::Wizard::Repository::Cache.new(
+        cache: wizard_cache_store,
+        key: "course_wizard_#{params[:provider_code]}_#{params[:recruitment_cycle_year]}_#{state_key}",
+        expires_in: CACHE_EXPIRY,
+      )
+    end
+
+    def wizard_cache_store
+      Rails.env.development? ? LOCAL_CACHE_STORE : Rails.cache
     end
   end
 end
