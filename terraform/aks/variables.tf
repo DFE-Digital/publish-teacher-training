@@ -145,3 +145,9 @@ variable "run_as_non_root" {
   default     = true
   description = "Whether to enforce that containers must run as non-root user"
 }
+
+variable "server_docker_image" {
+  type        = string
+  default     = null
+  description = "Docker Hub image for the kubernetes deployment, eg. postgis/postgis:16-3.5. Default is postgres:<server_version>-alpine"
+}
