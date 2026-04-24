@@ -12,4 +12,12 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(nil)
     end
   end
+
+  context "from subjects" do
+    let(:current_step) { :subjects }
+
+    it "returns to level" do
+      expect(wizard).to have_previous_step(:level)
+    end
+  end
 end
