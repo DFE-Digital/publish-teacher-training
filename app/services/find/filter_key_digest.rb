@@ -9,9 +9,15 @@ module Find
       engineers_teach_physics
       funding
       interview_location
+      latitude
       level
+      location_name
+      longitude
       minimum_degree_required
+      provider_code
+      provider_name
       qualifications
+      radius
       send_courses
       start_date
       study_types

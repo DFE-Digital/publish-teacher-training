@@ -173,7 +173,7 @@ describe EmailAlertMailer do
         body = mail.govuk_notify_personalisation[:body]
         expect(body).not_to include("](https://evil.com)")
         expect(body).not_to include("[pwned")
-        expect(body).to include("Provider: Evil Corphttps://evil.com pwned")
+        expect(body).to have_content("Provider: Evil Corphttps://evil.com pwned", normalize_ws: true)
       end
     end
   end
