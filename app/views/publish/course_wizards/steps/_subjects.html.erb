@@ -1,8 +1,14 @@
-<% content_for :page_title, title_with_error_prefix("Subjects", current_step.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Subject", current_step.errors.any?) %>
 
 <h1 class="govuk-heading-l">
   <%= render CaptionText.new(text: t("course.add_course")) %>
-  Subjects
+  Subject
 </h1>
+
+<% if current_step.primary_level? %>
+  <%= render "publish/course_wizards/steps/primary_subjects", form: %>
+<% elsif current_step.secondary_level? %>
+  <%= render "publish/course_wizards/steps/secondary_subjects", form: %>
+<% end %>
 
 <%= form.govuk_submit t("course_wizard.steps.level.submit") %>

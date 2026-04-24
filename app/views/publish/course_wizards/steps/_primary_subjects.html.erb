@@ -1,0 +1,5 @@
+<%= form.govuk_radio_buttons_fieldset :master_subject_id, legend: { hidden: true, text: "Subject" } do %>
+  <% current_step.selectable_subjects.each do |name, id| %>
+    <%= form.govuk_radio_button :master_subject_id, id, label: { text: name }, link_errors: true %>
+  <% end %>
+<% end %>
