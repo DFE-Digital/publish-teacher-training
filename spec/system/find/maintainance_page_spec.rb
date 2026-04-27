@@ -15,7 +15,7 @@ RSpec.describe "Maintenance mode" do
       visit find_root_path
 
       expect(page).to have_current_path find_maintenance_path
-      expect(page).to have_no_content "Important"
+      expect(page).to have_content "Important"
     end
   end
 
