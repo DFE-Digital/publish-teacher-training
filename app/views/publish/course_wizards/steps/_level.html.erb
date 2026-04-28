@@ -8,7 +8,7 @@
 <%= form.govuk_radio_buttons_fieldset :level, legend: { text: t("course_wizard.steps.level.level_label"), size: "m" } do %>
   <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.primary").downcase, label: { text: t("course_wizard.steps.level.options.primary") } %>
   <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.secondary").downcase, label: { text: t("course_wizard.steps.level.options.secondary") } %>
-  <%= form.govuk_radio_button :level, "further_education", label: { text: t("course_wizard.steps.level.options.further_education") } %>
+  <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.further_education_value"), label: { text: t("course_wizard.steps.level.options.further_education") } %>
 <% end %>
 
 <%= form.govuk_radio_buttons_fieldset :is_send, legend: { text: t("course_wizard.steps.level.send_label"), size: "m" } do %>

@@ -1,13 +1,13 @@
-<p class="govuk-body">Candidates may be able to get a bursary or scholarship for some subjects.If the course content is made up of at least 50% of a subject that is eligible for a bursary, add this as the first subject. This means we can show the correct financial information to candidates.</p>
+<p class="govuk-body"><%= t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_text") %></p>
 <p class="govuk-body">
-    <%= govuk_link_to "Learn more about the bursaries and scholarships", "https://www.gov.uk/government/publications/funding-initial-teacher-training-itt/funding-initial-teacher-training-itt-academic-year-2023-to-2024#postgraduate-bursaries-and-scholarships" %>
+    <%= govuk_link_to t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_text"), t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_url") %>
 </p>
 <%= form.govuk_select :master_subject_id,
       options_for_select(current_step.selectable_subjects, current_step.master_subject_id),
       options: { include_blank: true },
-      label: { text: "First subject", size: "s" } %>
+      label: { text: t("course_wizard.steps.secondary_subjects.first_subject_label"), size: "s" } %>
 
 <%= form.govuk_select :subordinate_subject_id,
       options_for_select(current_step.selectable_subjects, current_step.subordinate_subject_id),
       options: { include_blank: true },
-      label: { text: "Second subject (optional)", size: "s" } %>
+      label: { text: t("course_wizard.steps.secondary_subjects.second_subject_label"), size: "s" } %>
