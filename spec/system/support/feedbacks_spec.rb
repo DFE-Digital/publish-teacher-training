@@ -145,7 +145,7 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_see_recent_feedback_entries
-    Feedback.order(created_at: :desc).limit(10).each do |feedback|
+    Feedback.order(created_at: :desc).limit(50).each do |feedback|
       expect(page).to have_content(feedback.ease_of_use)
       expect(page).to have_content(feedback.experience)
       expect(page).to have_content(feedback.created_at.strftime("%d %B %Y"))

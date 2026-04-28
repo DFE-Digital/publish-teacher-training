@@ -1,7 +1,7 @@
 module Support
   class FeedbacksController < ApplicationController
     def index
-      @pagy, @feedbacks = pagy(Feedback.order(created_at: :desc))
+      @pagy, @feedbacks = pagy(Feedback.order(created_at: :desc), limit: 50)
 
       respond_to do |format|
         format.html
