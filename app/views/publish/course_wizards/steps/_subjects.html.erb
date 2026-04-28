@@ -1,8 +1,8 @@
-<% content_for :page_title, title_with_error_prefix("Subject", current_step.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.subjects.heading"), current_step.errors.any?) %>
 
 <h1 class="govuk-heading-l">
   <%= render CaptionText.new(text: t("course.add_course")) %>
-  Subject
+  <%= t("course_wizard.steps.subjects.heading") %>
 </h1>
 
 <% if current_step.primary_level? %>
