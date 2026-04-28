@@ -75,7 +75,7 @@ variable "resource_group_name" {
   type = string
 }
 
-variable "postgres_version" { default = 14 }
+variable "postgres_version" { default = 17 }
 
 variable "postgres_enable_high_availability" { default = false }
 
