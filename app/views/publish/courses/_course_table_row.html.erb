@@ -9,17 +9,77 @@
         <%= course.name_and_code %><br>
       </span>
     <% end %>
-    <span class="govuk-body-s"><%= course.summary %></span>
+    <% if course.name.include?("Primary") %>
+      <span class="govuk-hint govuk-!-font-size-16 govuk-!-margin-0">Ages 5 – 11</span>
+    <% end %>
+    <!-- <span class="govuk-body-s"><%= course.summary %></span> -->
   </td>
+  <td class="govuk-table__cell">
+    <%# Test course information %>
+    <!-- <span class="govuk-body-s"><%= course.summary %></span> -->
+    <span class="govuk-body-s">
+      <% if course.level == "primary" %>
+        Fee-paying<br>
+        QTS with PGCE<br>
+        Full time
+      <% elsif course.level == "secondary" && ["Chemistry", "Physics", "Biology"].include?(course.name) %>
+        Salary<br>
+        QTS<br>
+        Full time
+      <% elsif course.level == "secondary" && ["Design and technology"].include?(course.name) %>
+        Teaching apprenticeship<br>
+        QTS with PGCE<br>
+        Full time
+      <% elsif course.level == "secondary" && course.salary? %>
+        Salary<br>
+        QTS with PGCE<br>
+        Full time
+      <% elsif course.level == "secondary" && course.salary? == false %>
+        Fee (no salary)<br>
+        QTS with PGCE<br>
+        Full time
+      <% else %>
+        <%= course.summary %>
+      <% end %>
+    </span>
+  </td>
+  <!-- <td class="govuk-table__cell">
+    <%# Test course information %>
+    <% if course.level == "primary" %>
+      <ul class="govuk-list govuk-list--bullet govuk-body-s">
+        <li>Fee-paying</li>
+        <li>QTS with PGCE</li>
+        <li>Full time</li>
+      </ul>
+    <% elsif course.level == "secondary" && ["Chemistry", "Physics", "Biology"].include?(course.name) %>
+      <ul class="govuk-list govuk-list--bullet govuk-body-s">
+        <li>Salary</li>
+        <li>QTS</li>
+        <li>Full time</li>
+      </ul>
+    <% elsif course.level == "secondary" && ["Design and technology"].include?(course.name) %>
+      <ul class="govuk-list govuk-list--bullet govuk-body-s">
+        <li>Teaching apprenticeship</li>
+        <li>QTS with PGCE</li>
+        <li>Full time</li>
+      </ul>
+    <% elsif course.level == "secondary" && course.salary? %>
+      <ul class="govuk-list govuk-list--bullet govuk-body-s">
+        <li>Salary</li>
+        <li>QTS with PGCE</li>
+        <li>Full time</li>
+      </ul>
+    <% elsif course.level == "secondary" && !course.salary? %>
+      <ul class="govuk-list govuk-list--bullet govuk-body-s">
+        <li>Fee-paying</li>
+        <li>QTS with PGCE</li>
+        <li>Full time</li>
+      </ul>
+    <% else %>
+      <span class="govuk-body-s"><%= course.summary %></span>
+    <% end %>
+  </td> -->
   <td class="govuk-table__cell" data-qa="courses-table__status">
     <%= course.status_tag %>
-  </td>
-  <td class="govuk-table__cell" data-qa="courses-table__findable">
-    <%= course.on_find(course.provider) %>
-  </td>
-  <td class="govuk-table__cell" data-qa="courses-table__applications">
-    <% if course.is_running? || course.is_withdrawn? %>
-      <%= course.open_or_closed_for_applications %>
-    <% end %>
   </td>
 </tr>
