@@ -9,7 +9,9 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     let(:current_step) { :level }
 
     context "when primary is selected" do
-      let(:current_step_params) { { level: "primary", is_send: "false" } }
+      before do
+        state_store.write(level: "primary")
+      end
 
       it "proceeds to primary subjects" do
         expect(wizard).to have_next_step(:primary_subjects)
@@ -17,7 +19,9 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     end
 
     context "when secondary is selected" do
-      let(:current_step_params) { { level: "secondary", is_send: "false" } }
+      before do
+        state_store.write(level: "secondary")
+      end
 
       it "proceeds to secondary subjects" do
         expect(wizard).to have_next_step(:secondary_subjects)
@@ -25,7 +29,9 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     end
 
     context "when further education is selected" do
-      let(:current_step_params) { { level: "further_education", is_send: "false" } }
+      before do
+        state_store.write(level: "further_education")
+      end
 
       it "proceeds to courses page" do
         expect(wizard).to have_next_step(:courses_index)
