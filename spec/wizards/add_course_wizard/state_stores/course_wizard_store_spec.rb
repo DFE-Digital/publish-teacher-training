@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe CourseWizard::StateStores::CourseWizard do
+RSpec.describe CourseWizard::StateStores::CourseWizardStore do
   subject(:store) { described_class.new(repository:, attribute_names: %w[level]) }
 
   let(:repository) { instance_double(DfE::Wizard::Repository::InMemory) }

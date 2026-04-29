@@ -8,12 +8,20 @@ RSpec.describe "Add course wizard level step", type: :system do
     given_i_am_authenticated_as_a_provider_user_with_a_school
   end
 
-  scenario "choosing a primary level and no SEND and continues to subjects" do
+  scenario "choosing a primary level and no SEND and continues to primary subjects" do
     when_i_visit_the_wizard_level_page
     and_i_choose_primary_level
     and_i_choose_no_for_send_specialism
     and_i_click_continue
-    then_i_am_taken_to_the_subjects_page
+    then_i_am_taken_to_the_primary_subjects_page
+  end
+
+  scenario "choosing a secondary level and no SEND and continues to secondary subjects" do
+    when_i_visit_the_wizard_level_page
+    and_i_choose_secondary_level
+    and_i_choose_no_for_send_specialism
+    and_i_click_continue
+    then_i_am_taken_to_the_secondary_subjects_page
   end
 
   scenario "submitting without selecting a level or SEND shows validation errors" do
@@ -47,6 +55,10 @@ private
     choose "Primary"
   end
 
+  def and_i_choose_secondary_level
+    choose "Secondary"
+  end
+
   def and_i_choose_no_for_send_specialism
     choose "No"
   end
@@ -55,15 +67,28 @@ private
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_subjects_page
+  def then_i_am_taken_to_the_primary_subjects_page
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
-        step: :subjects,
+        step: :primary_subjects,
         state_key: wizard_state_key,
       ),
     )
+    expect(page).to have_content("Subject")
+  end
+
+  def then_i_am_taken_to_the_secondary_subjects_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :secondary_subjects,
+        state_key: wizard_state_key,
+      ),
+    )
+    expect(page).to have_content("Subject")
   end
 
   def then_i_have_errors_on_the_level_step

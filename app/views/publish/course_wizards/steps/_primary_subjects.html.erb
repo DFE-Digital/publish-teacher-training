@@ -1,5 +1,14 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.primary_subjects.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.primary_subjects.caption")) %>
+  <%= t("course_wizard.steps.primary_subjects.heading") %>
+</h1>
+
 <%= form.govuk_radio_buttons_fieldset :master_subject_id, legend: { hidden: true, text: t("course_wizard.steps.primary_subjects.heading") } do %>
   <% current_step.selectable_subjects.each do |name, id| %>
     <%= form.govuk_radio_button :master_subject_id, id, label: { text: name }, link_errors: true %>
   <% end %>
 <% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.primary_subjects.submit") %>

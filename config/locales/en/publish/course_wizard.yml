@@ -1,5 +1,7 @@
 en:
   course_wizard:
+    show:
+      cancel: Cancel
     steps:
       level:
         heading: What type of course?
@@ -19,13 +21,22 @@ en:
             blank: Select a subject level
           is_send:
             blank: Select if this course has a special educational needs and disability (SEND) specialism
-      subjects:
-        heading: Subject
       primary_subjects:
+        caption: Add course
         heading: Subject
+        submit: Continue
+        errors:
+          master_subject_id:
+            blank: Select a subject
       secondary_subjects:
+        caption: Add course
+        heading: Subject
         bursary_and_scholarship_text: Candidates may be able to get a bursary or scholarship for some subjects.If the course content is made up of at least 50% of a subject that is eligible for a bursary, add this as the first subject. This means we can show the correct financial information to candidates.
         bursary_and_scholarship_link_text: Learn more about the bursaries and scholarships
         bursary_and_scholarship_link_url: https://www.gov.uk/government/publications/funding-initial-teacher-training-itt/funding-initial-teacher-training-itt-academic-year-2023-to-2024#postgraduate-bursaries-and-scholarships
         first_subject_label: First subject
         second_subject_label: Second subject (optional)
+        submit: Continue
+        errors:
+          master_subject_id:
+            blank: Select a subject

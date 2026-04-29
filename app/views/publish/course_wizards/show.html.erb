@@ -28,7 +28,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= render "publish/course_wizards/steps/#{current_step_name}", form: %>
       <p class="govuk-body">
-        <%= govuk_link_to(t("course_wizard.steps.level.cancel"), publish_provider_recruitment_cycle_courses_path(params[:provider_code], params[:recruitment_cycle_year])) %>
+        <%= govuk_link_to(t("course_wizard.show.cancel"), publish_provider_recruitment_cycle_courses_path(params[:provider_code], params[:recruitment_cycle_year])) %>
       </p>
     </div>
   <% end %>
