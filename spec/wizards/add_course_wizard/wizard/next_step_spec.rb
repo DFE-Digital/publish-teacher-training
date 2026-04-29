@@ -8,15 +8,43 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
   context "from level" do
     let(:current_step) { :level }
 
-    it "proceeds to subjects" do
-      expect(wizard).to have_next_step(:subjects)
+    context "when primary is selected" do
+      let(:current_step_params) { { level: "primary", is_send: "false" } }
+
+      it "proceeds to primary subjects" do
+        expect(wizard).to have_next_step(:primary_subjects)
+      end
+    end
+
+    context "when secondary is selected" do
+      let(:current_step_params) { { level: "secondary", is_send: "false" } }
+
+      it "proceeds to secondary subjects" do
+        expect(wizard).to have_next_step(:secondary_subjects)
+      end
+    end
+
+    context "when further education is selected" do
+      let(:current_step_params) { { level: "further_education", is_send: "false" } }
+
+      it "proceeds to courses page" do
+        expect(wizard).to have_next_step(:courses_index)
+      end
     end
   end
 
-  context "from subjects" do
-    let(:current_step) { :subjects }
+  context "from primary subjects" do
+    let(:current_step) { :primary_subjects }
 
-    it "proceeds to courses page (for now)" do
+    it "proceeds to courses page" do
+      expect(wizard).to have_next_step(:courses_index)
+    end
+  end
+
+  context "from secondary subjects" do
+    let(:current_step) { :secondary_subjects }
+
+    it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)
     end
   end

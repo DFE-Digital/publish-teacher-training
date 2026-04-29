@@ -1,3 +1,10 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.secondary_subjects.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.secondary_subjects.caption")) %>
+  <%= t("course_wizard.steps.secondary_subjects.heading") %>
+</h1>
+
 <p class="govuk-body"><%= t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_text") %></p>
 <p class="govuk-body">
     <%= govuk_link_to t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_text"), t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_url") %>
@@ -11,3 +18,5 @@
       options_for_select(current_step.selectable_subjects, current_step.subordinate_subject_id),
       options: { include_blank: true },
       label: { text: t("course_wizard.steps.secondary_subjects.second_subject_label"), size: "s" } %>
+
+<%= form.govuk_submit t("course_wizard.steps.secondary_subjects.submit") %>

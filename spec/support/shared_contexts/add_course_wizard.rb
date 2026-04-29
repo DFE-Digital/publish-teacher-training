@@ -14,7 +14,7 @@ RSpec.shared_context "add_course_wizard" do
   end
 
   let(:repository) { DfE::Wizard::Repository::InMemory.new }
-  let(:state_store) { CourseWizard::StateStores::CourseWizard.new(repository:) }
+  let(:state_store) { CourseWizard::StateStores::CourseWizardStore.new(repository:) }
   let(:current_step) { :level }
   let(:current_step_params) { {} }
   let(:provider_code) { "ABC" }
