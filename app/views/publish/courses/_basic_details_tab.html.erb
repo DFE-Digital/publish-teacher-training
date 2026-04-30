@@ -102,24 +102,36 @@
 
      summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row|
        row.with_key { school_label_with_plural(course, count: course.sites.length) }
-       row.with_value do
-         if course.recruitment_cycle_rollover_period_2026?
-           raw(render(::Publish::Schools::SchoolSummaryValueComponent.new(course:)))
-         elsif course.sites.blank?
-           raw("<span class=\"app-!-colour-muted\">None</span>")
-         elsif course.sites.size == 1
-           course.sites.first.location_name
-         else
-          raw(<<~HTML)
-            <p class="govuk-body govuk-!-margin-bottom-2 app-!-colour-muted">
-              #{course.sites.size} schools
-            </p>
-            <ul class="govuk-list">
-              #{course.alphabetically_sorted_sites.map { |s| "<li>#{s.location_name}</li>" }.join}
-            </ul>
-          HTML
-        end
-      end
+row.with_value do
+  sites = course.alphabetically_sorted_sites
+  count = sites.size
+
+  if sites.blank?
+    raw('<span class="app-!-colour-muted">None</span>')
+  elsif count <= 4
+    raw("<ul class='govuk-list'>#{sites.map { |s| "<li>#{s.location_name}</li>" }.join}</ul>")
+  else
+    first_four = sites.first(4)
+    remaining  = sites.drop(4)
+
+    raw(<<~HTML)
+      <details class="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            #{count} schools
+          </span>
+        </summary>
+
+        <div class="govuk-details__text">
+          <ul class="govuk-list">
+            #{first_four.map { |s| "<li>#{s.location_name}</li>" }.join}
+            #{remaining.map { |s| "<li>#{s.location_name}</li>" }.join}
+          </ul>
+        </div>
+      </details>
+    HTML
+  end
+end
 
 
        if course.is_withdrawn?
