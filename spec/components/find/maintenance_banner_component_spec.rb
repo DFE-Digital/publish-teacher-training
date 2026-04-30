@@ -9,7 +9,7 @@ module Find
         FeatureFlag.activate(:maintenance_banner)
         result = render_inline(described_class.new)
 
-        expect(result.text).to have_content "Important"
+        expect(result.text).to have_content "Login issues"
       end
     end
 
