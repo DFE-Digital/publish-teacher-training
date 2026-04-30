@@ -26,7 +26,7 @@ RSpec.describe "Support console feedback view", service: :support do
   context "with more than one page of feedback" do
     before do
       stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(limit: 3))
-      create_list(:feedback, 5) { |feedback, i| feedback.update!(experience: "Pagination feedback #{i + 1}") }
+      create_list(:feedback, 55) { |feedback, i| feedback.update!(experience: "Pagination feedback #{i + 1}") }
       when_i_visit_the_feedback_page
     end
 
@@ -161,12 +161,12 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_see_first_page_of_feedback_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 3)
+    expect(page).to have_selector("table tbody tr", count: 50)
     expect(page).to have_link("Next")
   end
 
   def then_i_see_second_page_of_feedback_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 2)
+    expect(page).to have_selector("table tbody tr", count: 5)
     expect(page).to have_link("Previous")
   end
 
