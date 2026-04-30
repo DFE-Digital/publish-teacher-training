@@ -138,22 +138,33 @@ module Publish
             end
           end
 
-          context "when the new-model write fails" do
+          context "when the prerequisite provider_school is missing" do
             let(:params) { { site_ids: [site_one.id, site_two.id] } }
 
             before do
-              # Destroy the prerequisite provider_school so Creator raises
+              # Simulate an env where the schools backfill has not yet run
+              # for this provider's existing sites.
               Provider::School.where(provider:, gias_school: gias_school_two).destroy_all
             end
 
-            it "rolls back the legacy SiteStatus write" do
-              previous_site_status_count = course.site_statuses.count
-
+            it "still attaches the legacy SiteStatus and does not raise" do
               expect {
                 described_class.new(course:, params:).call
-              }.to raise_error(ActiveRecord::RecordNotFound)
+              }.not_to raise_error
 
-              expect(course.reload.site_statuses.count).to eq(previous_site_status_count)
+              expect(course.reload.sites.map(&:id)).to include(site_two.id)
+            end
+
+            it "skips the Course::School write for the missing provider_school" do
+              described_class.new(course:, params:).call
+
+              expect(course.reload.schools.where(gias_school: gias_school_two)).to be_empty
+            end
+
+            it "logs the skip so operators can spot environments needing a backfill" do
+              expect(Rails.logger).to receive(:warn).with(/no provider_school for course=/)
+
+              described_class.new(course:, params:).call
             end
           end
         end

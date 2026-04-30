@@ -64,6 +64,15 @@ module Publish
         return unless gias_school
 
         ::CourseSchools::Creator.call(course:, gias_school_id: gias_school.id)
+      rescue ActiveRecord::RecordNotFound
+        # No matching Provider::School yet — environment hasn't been fully
+        # backfilled or the provider's site predates the dual-write. Skip
+        # the new-model write rather than 404'ing the request; the schools
+        # backfill (or the next provider-side dual-write) reconciles later.
+        Rails.logger.warn(
+          "[CourseSchools] skipped course_school write — no provider_school for " \
+          "course=#{course.id} provider=#{course.provider_id} gias_school=#{gias_school.id}",
+        )
       end
 
       def detach_school(site, gias_schools_by_urn)
