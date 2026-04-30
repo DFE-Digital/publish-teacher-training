@@ -1,12 +1,16 @@
-<table class="govuk-table app-table--vertical-align-middle app-table--courses">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th class="govuk-table__header"><%= t(".course") %></th>
-      <th class="govuk-table__header"><%= t(".status") %></th>
-      <th class="govuk-table__header"><%= t(".view_course") %></th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    <%= render partial: "publish/courses/course_table_row", collection: courses, as: :course %>
-  </tbody>
-</table>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <table class="govuk-table app-table--vertical-align-middle app-table--courses">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header"><%= t(".course") %></th>
+          <th class="govuk-table__header">Course information</th>
+          <th class="govuk-table__header">Status</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <%= render partial: "publish/courses/course_table_row", collection: courses, as: :course %>
+      </tbody>
+    </table>
+  </div>
+</div>
