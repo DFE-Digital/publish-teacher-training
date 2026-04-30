@@ -110,12 +110,17 @@
          elsif course.sites.size == 1
            course.sites.first.location_name
          else
-           school_names = course.alphabetically_sorted_sites.map do |site|
-             "<li>#{site.location_name}</li>"
-           end
-           raw("<ul class=\"govuk-list\">#{school_names.join}</ul>")
-         end
-       end
+          raw(<<~HTML)
+            <p class="govuk-body govuk-!-margin-bottom-2 app-!-colour-muted">
+              #{course.sites.size} schools
+            </p>
+            <ul class="govuk-list">
+              #{course.alphabetically_sorted_sites.map { |s| "<li>#{s.location_name}</li>" }.join}
+            </ul>
+          HTML
+        end
+      end
+
 
        if course.is_withdrawn?
          row.with_action
