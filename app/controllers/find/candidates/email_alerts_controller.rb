@@ -36,9 +36,10 @@ module Find
             location_name: alert.location_name,
             radius: alert.radius,
           )
+
           flash[:success_with_body] = {
             "title" => t(".success_title"),
-            "body" => t(".success_body_html", title:),
+            "body" => t(".success_body_html", title:, unsubscribe_link: unsubscribe_link(alert)),
           }
           redirect_to redirect_after_create
         else
@@ -50,6 +51,11 @@ module Find
       def confirm_unsubscribe
         @email_alert = find_alert_by_token
         @filter_tags = extract_filter_tags_from_alert(@email_alert)
+        @summary_rows = build_summary_rows(@email_alert.search_params.to_h, subject_names: Subject.where(subject_code: @email_alert.subjects).pluck(:subject_name))
+      end
+
+      def unsubscribe_link(alert)
+        helpers.govuk_link_to("unsubscribe", find_candidate_unsubscribe_email_alert_path(token: alert.signed_id(purpose: :unsubscribe, expires_in: 30.days)))
       end
 
       def unsubscribe
@@ -65,6 +71,7 @@ module Find
 
       def unsubscribe_from_email
         @email_alert = Candidate::EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
+        @summary_rows = build_summary_rows(@email_alert.search_params.to_h, subject_names: @email_alert.subjects)
         @filter_tags = extract_filter_tags_from_alert(@email_alert)
       rescue ActiveSupport::MessageVerifier::InvalidSignature
         redirect_to find_root_path
@@ -94,7 +101,7 @@ module Find
       end
 
       def subject_names
-        @subject_names ||= resolve_subject_names(search_params[:subjects])
+        @subject_names ||= resolve_subject_names(subject_codes)
       end
 
       def location_name
@@ -138,6 +145,12 @@ module Find
 
       def search_params_from_request
         Find::SearchParams.permit(params)
+      end
+
+      def subject_codes
+        codes = Array(@search_params[:subjects]).compact_blank
+        codes << @search_params[:subject_code] if @search_params[:subject_code].present?
+        codes.compact_blank.uniq.sort
       end
 
       def resolve_subject_names(codes)

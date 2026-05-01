@@ -32,7 +32,9 @@ en:
             provider_code: Provider
         create:
           success_title: Email alert created
-          success_body_html: "You have set up an email alert for %{title}. We'll email you weekly when new courses are added. You can unsubscribe at any time."
+          success_body_html: >
+            <p class="govuk-body">You have set up an email alert for %{title}.</p>
+            <p class="govuk-body">We'll email you weekly when new courses are added. You can %{unsubscribe_link} at any time.</p>
           create_failed: There was a problem creating your email alert. Please try again.
         confirm_unsubscribe:
           page_title: Unsubscribe from this email alert
