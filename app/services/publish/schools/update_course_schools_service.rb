@@ -22,7 +22,8 @@ module Publish
       def call
         ActiveRecord::Base.transaction do
           assign_attributes_to_course
-          update_site_statuses
+          sync_schools
+          apply_publish_status_to_site_statuses
           course.save!
         end
 
@@ -37,9 +38,69 @@ module Publish
         course.assign_attributes(params.except(:site_ids))
       end
 
-      def update_site_statuses
-        course.site_ids = params[:site_ids]
+      def sync_schools
+        return if sites_to_attach_ids.empty? && sites_to_remove_ids.empty?
 
+        sites_to_attach_ids.each { |id| attach_school(sites_by_id[id]) }
+        sites_to_remove_ids.each { |id| detach_school(sites_by_id[id]) }
+
+        course.sites.reload
+      end
+
+      def submitted_site_ids
+        @submitted_site_ids ||= Array(params[:site_ids]).compact_blank.map(&:to_i)
+      end
+
+      def current_site_ids
+        @current_site_ids ||= course.site_ids
+      end
+
+      def sites_to_attach_ids
+        @sites_to_attach_ids ||= submitted_site_ids - current_site_ids
+      end
+
+      def sites_to_remove_ids
+        @sites_to_remove_ids ||= current_site_ids - submitted_site_ids
+      end
+
+      def sites_by_id
+        @sites_by_id ||= Site.where(id: sites_to_attach_ids + sites_to_remove_ids).index_by(&:id)
+      end
+
+      def gias_schools_by_urn
+        @gias_schools_by_urn ||= GiasSchool
+          .where(urn: sites_by_id.values.map(&:urn).compact_blank)
+          .index_by(&:urn)
+      end
+
+      def attach_school(site)
+        ::CourseSchools::LegacySiteStatusCreator.call(course:, site:)
+
+        gias_school = gias_schools_by_urn[site.urn]
+        return unless gias_school
+
+        ::CourseSchools::Creator.call(course:, gias_school_id: gias_school.id)
+      rescue ActiveRecord::RecordNotFound
+        # No matching Provider::School yet — environment hasn't been fully
+        # backfilled or the provider's site predates the dual-write. Skip
+        # the new-model write rather than 404'ing the request; the schools
+        # backfill (or the next provider-side dual-write) reconciles later.
+        Rails.logger.warn(
+          "[CourseSchools] skipped course_school write — no provider_school for " \
+          "course=#{course.id} provider=#{course.provider_id} gias_school=#{gias_school.id}",
+        )
+      end
+
+      def detach_school(site)
+        ::CourseSchools::LegacySiteStatusRemover.call(course:, site:)
+
+        gias_school = gias_schools_by_urn[site.urn]
+        return unless gias_school
+
+        ::CourseSchools::Remover.call(course:, gias_school_id: gias_school.id)
+      end
+
+      def apply_publish_status_to_site_statuses
         course.site_statuses.each do |site_status|
           site_status.assign_attributes(site_status_attributes)
         end

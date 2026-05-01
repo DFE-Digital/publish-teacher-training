@@ -96,6 +96,78 @@ module Publish
             service_call
           end
         end
+
+        context "dual-write to Course::School" do
+          let(:gias_school_one) { create(:gias_school, urn: site_one.urn) }
+          let(:gias_school_two) { create(:gias_school, urn: site_two.urn) }
+
+          before do
+            # Persist sites so they have IDs / URNs present in the DB
+            provider.save!
+            create(:provider_school, provider:, gias_school: gias_school_one, site_code: "X")
+            create(:provider_school, provider:, gias_school: gias_school_two, site_code: "Y")
+          end
+
+          context "when a site is newly attached" do
+            let(:params) { { site_ids: [site_one.id, site_two.id] } }
+
+            it "creates a Course::School row for the newly attached site" do
+              expect {
+                described_class.new(course:, params:).call
+              }.to change { course.schools.count }.by(1)
+
+              added = course.schools.find_by(gias_school: gias_school_two)
+              expect(added).to be_present
+              expect(added.site_code).to eq("Y")
+            end
+          end
+
+          context "when a site is detached" do
+            let(:params) { { site_ids: [] } }
+
+            before do
+              create(:course_school, course:, gias_school: gias_school_one, site_code: "X")
+            end
+
+            it "destroys the Course::School row for the detached site" do
+              expect {
+                described_class.new(course:, params:).call
+              }.to change { course.schools.count }.by(-1)
+
+              expect(course.schools.where(gias_school: gias_school_one)).to be_empty
+            end
+          end
+
+          context "when the prerequisite provider_school is missing" do
+            let(:params) { { site_ids: [site_one.id, site_two.id] } }
+
+            before do
+              # Simulate an env where the schools backfill has not yet run
+              # for this provider's existing sites.
+              Provider::School.where(provider:, gias_school: gias_school_two).destroy_all
+            end
+
+            it "still attaches the legacy SiteStatus and does not raise" do
+              expect {
+                described_class.new(course:, params:).call
+              }.not_to raise_error
+
+              expect(course.reload.sites.map(&:id)).to include(site_two.id)
+            end
+
+            it "skips the Course::School write for the missing provider_school" do
+              described_class.new(course:, params:).call
+
+              expect(course.reload.schools.where(gias_school: gias_school_two)).to be_empty
+            end
+
+            it "logs the skip so operators can spot environments needing a backfill" do
+              expect(Rails.logger).to receive(:warn).with(/no provider_school for course=/)
+
+              described_class.new(course:, params:).call
+            end
+          end
+        end
       end
     end
   end
