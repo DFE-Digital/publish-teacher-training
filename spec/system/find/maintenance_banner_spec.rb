@@ -9,7 +9,7 @@ RSpec.describe "Maintenance banner" do
 
       visit find_root_path
 
-      expect(page).to have_content "The service will be unavailable from 5pm to 7pm on Tuesday 28 April 2026."
+      expect(page).to have_content "Some users with non-UK mobile numbers may not be able to sign in at the moment."
     end
   end
 
@@ -20,7 +20,7 @@ RSpec.describe "Maintenance banner" do
       visit find_root_path
 
       expect(page).to have_content "Find teacher training courses"
-      expect(page).to have_no_content "The service will be unavailable from 5pm to 7pm on Tuesday 28 April 2026."
+      expect(page).to have_no_content "Some users with non-UK mobile numbers may not be able to sign in at the moment."
     end
   end
 end
