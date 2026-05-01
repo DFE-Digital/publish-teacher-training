@@ -39,25 +39,41 @@ module Publish
       end
 
       def sync_schools
-        desired_site_ids = Array(params[:site_ids]).compact_blank.map(&:to_i)
-        current_site_ids = course.site_ids
+        return if sites_to_attach_ids.empty? && sites_to_remove_ids.empty?
 
-        to_attach_ids = desired_site_ids - current_site_ids
-        to_detach_ids = current_site_ids - desired_site_ids
-        return if to_attach_ids.empty? && to_detach_ids.empty?
-
-        sites_by_id = Site.where(id: to_attach_ids + to_detach_ids).index_by(&:id)
-        gias_schools_by_urn = GiasSchool
-          .where(urn: sites_by_id.values.map(&:urn).compact_blank)
-          .index_by(&:urn)
-
-        to_attach_ids.each { |id| attach_school(sites_by_id[id], gias_schools_by_urn) }
-        to_detach_ids.each { |id| detach_school(sites_by_id[id], gias_schools_by_urn) }
+        sites_to_attach_ids.each { |id| attach_school(sites_by_id[id]) }
+        sites_to_remove_ids.each { |id| detach_school(sites_by_id[id]) }
 
         course.sites.reload
       end
 
-      def attach_school(site, gias_schools_by_urn)
+      def submitted_site_ids
+        @submitted_site_ids ||= Array(params[:site_ids]).compact_blank.map(&:to_i)
+      end
+
+      def current_site_ids
+        @current_site_ids ||= course.site_ids
+      end
+
+      def sites_to_attach_ids
+        @sites_to_attach_ids ||= submitted_site_ids - current_site_ids
+      end
+
+      def sites_to_remove_ids
+        @sites_to_remove_ids ||= current_site_ids - submitted_site_ids
+      end
+
+      def sites_by_id
+        @sites_by_id ||= Site.where(id: sites_to_attach_ids + sites_to_remove_ids).index_by(&:id)
+      end
+
+      def gias_schools_by_urn
+        @gias_schools_by_urn ||= GiasSchool
+          .where(urn: sites_by_id.values.map(&:urn).compact_blank)
+          .index_by(&:urn)
+      end
+
+      def attach_school(site)
         ::CourseSchools::LegacySiteStatusCreator.call(course:, site:)
 
         gias_school = gias_schools_by_urn[site.urn]
@@ -75,7 +91,7 @@ module Publish
         )
       end
 
-      def detach_school(site, gias_schools_by_urn)
+      def detach_school(site)
         ::CourseSchools::LegacySiteStatusRemover.call(course:, site:)
 
         gias_school = gias_schools_by_urn[site.urn]
