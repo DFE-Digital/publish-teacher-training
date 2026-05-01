@@ -249,7 +249,11 @@ describe Course do
         .on(%i[create update])
     end
 
-    describe "#validate_schools" do
+    describe "rollover-period schools check on :publish" do
+      # Unit-level rules live in
+      # spec/validators/course_publishable_schools_rollover_validator_spec.rb.
+      # These two cases cover the Course-level wiring: the `if:` guard and
+      # the `schools_validated?` bypass on a real Course instance.
       let(:provider) { create(:provider) }
       let(:recruitment_cycle) { create(:recruitment_cycle, year: 2026, application_start_date: 3.days.ago) }
 
@@ -257,62 +261,20 @@ describe Course do
         provider.update!(recruitment_cycle: recruitment_cycle)
       end
 
-      context "during 2026 rollover period" do
+      context "during 2026 rollover period with schools_validated? true" do
+        let!(:site) { create(:site, provider: provider) }
+        let(:course) { create(:course, schools_validated: true, provider: provider) }
+
         before do
-          # Make sure we're before rollover_end (which is application_start_date + 1.month)
           travel_to(recruitment_cycle.application_start_date + 1.day)
+          course.sites << site
         end
 
         after { travel_back }
 
-        # context "when schools_validated? is false" do
-        #   context "when sites.school is present" do
-        #     let!(:site) { create(:site, provider:) }
-        #     let(:course) { create(:course, provider:, enrichments: [build(:course_enrichment, :rolled_over)]) }
-        #
-        #     before { course.sites << site }
-        #
-        #     it "adds :check_schools error to sites on :publish" do
-        #       expect(course.schools_validated?).to be_falsey
-        #       allow(course.sites).to receive(:school).and_return([site]) unless course.sites.respond_to?(:school)
-        #       course.valid?(:publish)
-        #       expect(course.errors.of_kind?(:sites, :check_schools)).to be true
-        #     end
-        #   end
-        #
-        #   context "when sites.school is blank" do
-        #     let(:course) { create(:course, provider:, enrichments: [build(:course_enrichment, :rolled_over)]) }
-        #
-        #     it "adds :enter_schools error to sites on :publish" do
-        #       allow(course.sites).to receive(:school).and_return([]) unless course.sites.respond_to?(:school)
-        #       course.valid?(:publish)
-        #       expect(course.errors.of_kind?(:sites, :enter_schools)).to be true
-        #     end
-        #   end
-        #
-        #   context "when course is not rolled over" do
-        #     let(:course) { create(:course, provider:, enrichments: [build(:course_enrichment, :draft)]) }
-        #
-        #     it "adds :enter_schools error to sites on :publish" do
-        #       allow(course.sites).to receive(:school).and_return([]) unless course.sites.respond_to?(:school)
-        #       course.valid?(:publish)
-        #       expect(course.errors.of_kind?(:sites, :enter_schools)).to be false
-        #     end
-        #   end
-        # end
-
-        context "when schools_validated? is true" do
-          let!(:site) { create(:site, provider: provider) }
-          let(:course) { create(:course, schools_validated: true, provider: provider) }
-
-          before do
-            course.sites << site
-          end
-
-          it "does not add errors for sites on :publish" do
-            course.valid?(:publish)
-            expect(course.errors[:sites]).to be_empty
-          end
+        it "does not add errors for sites on :publish" do
+          course.valid?(:publish)
+          expect(course.errors[:sites]).to be_empty
         end
       end
 
