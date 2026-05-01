@@ -14,8 +14,6 @@ RSpec.describe "Entering a deadline for candidates who need visa sponsorship" do
     then_i_am_on_the_course_start_date_page
 
     when_i_go_back
-    # see add course study sites page
-    then_i_see_the_course_study_sites_page_and_continue
     then_i_see_the_visa_sponsorship_question
     when_i_select_yes_visa_sponsorship_and_continue
     then_i_am_asked_if_there_is_a_different_deadline_for_candidates_with_visa_sponsorship

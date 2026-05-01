@@ -12,15 +12,11 @@ class WorkflowStepService
     return teacher_degree_apprenticeship_workflow_steps if course.undergraduate_degree_with_qts?
 
     if course.is_further_education?
-      remove_applications_open(further_education_workflow_steps)
+      further_education_workflow_steps
     elsif course.is_school_direct?
-      remove_applications_open(
-        school_direct_workflow_steps_with_accredited_provider_check - visas_to_remove(course) - sponsorship_application_steps_to_remove,
-      )
+      school_direct_workflow_steps_with_accredited_provider_check - visas_to_remove(course) - sponsorship_application_steps_to_remove
     elsif course.is_uni_or_scitt?
-      remove_applications_open(
-        uni_or_scitt_workflow_steps - visas_to_remove(course) - sponsorship_application_steps_to_remove,
-      )
+      uni_or_scitt_workflow_steps - visas_to_remove(course) - sponsorship_application_steps_to_remove
     end
   end
 
@@ -39,7 +35,6 @@ private
       school
       study_site
       accredited_provider
-      applications_open
       start_date
       confirmation
     ]
@@ -55,7 +50,6 @@ private
       outcome
       school
       study_site
-      applications_open
       start_date
       confirmation
     ]
@@ -71,7 +65,7 @@ private
         []
       end
 
-    remove_applications_open(steps.reject { |step| workflow_removed_steps.include?(step) })
+    steps.reject { |step| workflow_removed_steps.include?(step) }
   end
 
   def further_education_workflow_steps
@@ -83,7 +77,6 @@ private
       full_or_part_time
       school
       study_site
-      applications_open
       start_date
       confirmation
     ]
@@ -106,7 +99,6 @@ private
       can_sponsor_skilled_worker_visa
       visa_sponsorship_application_deadline_required
       visa_sponsorship_application_deadline_at
-      applications_open
       start_date
       confirmation
     ]
@@ -128,7 +120,6 @@ private
       can_sponsor_skilled_worker_visa
       visa_sponsorship_application_deadline_required
       visa_sponsorship_application_deadline_at
-      applications_open
       start_date
       confirmation
     ]
@@ -183,11 +174,5 @@ private
 
   def school_direct_workflow_steps_with_accredited_provider_check
     school_direct_workflow_steps.reject { |step| workflow_removed_steps.include?(step) }
-  end
-
-  def remove_applications_open(steps)
-    return steps unless FeatureFlag.active?(:hide_applications_open_date)
-
-    steps - [:applications_open]
   end
 end

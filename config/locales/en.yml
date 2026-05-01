@@ -109,7 +109,6 @@ en:
       qualification_label: Qualification
       provider: Provider
       accredited_by: Accredited by
-      date_can_apply: Date you can apply from
       start_date: Start date
   shared:
     decorators:
