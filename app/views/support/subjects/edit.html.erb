@@ -13,6 +13,36 @@
           rows: 8,
           value: @subject.match_synonyms_text %>
 
+      <h2 class="govuk-heading-m">Financial incentives</h2>
+
+      <% if @subject.financial_incentive.blank? %>
+        <p class="govuk-body">No financial incentive exists for this subject yet. Enter details below to create one.</p>
+      <% end %>
+
+      <%= f.fields_for :financial_incentive, @financial_incentive do |financial_incentive_fields| %>
+        <%= financial_incentive_fields.govuk_text_field :bursary_amount,
+            label: { text: "Bursary amount", size: "s" },
+            hint: { text: "Enter numbers only, for example 26000." },
+            width: 10 %>
+
+        <%= financial_incentive_fields.govuk_text_field :scholarship,
+            label: { text: "Scholarship amount", size: "s" },
+            hint: { text: "Enter numbers only, for example 28000." },
+            width: 10 %>
+
+        <%= financial_incentive_fields.govuk_check_boxes_fieldset :subject_knowledge_enhancement_course_available, legend: { text: "Subject knowledge enhancement course" }, multiple: false do %>
+          <% financial_incentive_fields.govuk_check_box :subject_knowledge_enhancement_course_available, true, false, label: { text: "Subject knowledge enhancement course available" }, multiple: false %>
+        <% end %>
+
+        <%= financial_incentive_fields.govuk_check_boxes_fieldset :non_uk_bursary_eligible, legend: { text: "Non-UK bursary eligibility" }, multiple: false do %>
+          <% financial_incentive_fields.govuk_check_box :non_uk_bursary_eligible, true, false, label: { text: "Eligible for non-UK bursary" }, multiple: false %>
+        <% end %>
+
+        <%= financial_incentive_fields.govuk_check_boxes_fieldset :non_uk_scholarship_eligible, legend: { text: "Non-UK scholarship eligibility" }, multiple: false do %>
+          <% financial_incentive_fields.govuk_check_box :non_uk_scholarship_eligible, true, false, label: { text: "Eligible for non-UK scholarship" }, multiple: false %>
+        <% end %>
+      <% end %>
+
       <%= f.govuk_submit t("support.update_resource", resource: "subject") %>
     <% end %>
 

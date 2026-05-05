@@ -32,4 +32,39 @@
         row.with_value(text: @subject.match_synonyms)
         row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: Subject.human_attribute_name(:match_synonyms))
       end
+
+      component.with_row do |row|
+        row.with_key { "Bursary amount" }
+        row.with_value(text: @financial_incentive&.bursary_amount.presence || t("govuk_component.summary_list_component.not_available"))
+        row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: "bursary amount")
+      end
+
+      component.with_row do |row|
+        row.with_key { "Scholarship amount" }
+        row.with_value(text: @financial_incentive&.scholarship.presence || t("govuk_component.summary_list_component.not_available"))
+        row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: "scholarship amount")
+      end
+
+      component.with_row do |row|
+        row.with_key { "Early career payments" }
+        row.with_value(text: @financial_incentive&.early_career_payments.presence || t("govuk_component.summary_list_component.not_available"))
+      end
+
+      component.with_row do |row|
+        row.with_key { "Subject knowledge enhancement course available" }
+        row.with_value(text: @financial_incentive&.subject_knowledge_enhancement_course_available ? "Yes" : "No")
+        row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: "subject knowledge enhancement course availability")
+      end
+
+      component.with_row do |row|
+        row.with_key { "Non-UK bursary eligible" }
+        row.with_value(text: @financial_incentive&.non_uk_bursary_eligible ? "Yes" : "No")
+        row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: "non-UK bursary eligibility")
+      end
+
+      component.with_row do |row|
+        row.with_key { "Non-UK scholarship eligible" }
+        row.with_value(text: @financial_incentive&.non_uk_scholarship_eligible ? "Yes" : "No")
+        row.with_action(text: "Change", href: edit_support_subject_path(@subject), visually_hidden_text: "non-UK scholarship eligibility")
+      end
     end %>

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Add match synonyms to subjects" do
+RSpec.describe "Support subjects match synonyms" do
   include DfESignInUserHelper
 
   before do
@@ -55,10 +55,6 @@ RSpec.describe "Add match synonyms to subjects" do
 
   def given_a_support_user_exists
     @user = create(:user, :admin)
-  end
-
-  def given_mathematics_has_synonyms
-    mathematics.update!(match_synonyms: %w[Maths Math Numeracy])
   end
 
   def given_i_visit_the_support_subjects_page
