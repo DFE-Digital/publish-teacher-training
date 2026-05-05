@@ -9,6 +9,7 @@ import { Application } from '@hotwired/stimulus'
 import InputPreviewController from './courses/input_preview_controller'
 import SelectAllCheckboxesController from './controllers/select_all_checkboxes_controller'
 import CopyLinkController from './controllers/copy_link_controller'
+import SchoolSearchController from './controllers/school_search_controller'
 
 window.jQuery = jQuery
 window.$ = jQuery
@@ -22,3 +23,4 @@ window.Stimulus = Application.start()
 Stimulus.register('input-preview', InputPreviewController)
 Stimulus.register('select-all-checkboxes', SelectAllCheckboxesController)
 Stimulus.register('copy-link', CopyLinkController)
+Stimulus.register('school-search', SchoolSearchController)

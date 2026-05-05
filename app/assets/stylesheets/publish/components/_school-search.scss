@@ -1,0 +1,40 @@
+.app-school-search-form-container {
+  display: block;
+}
+
+@include govuk-media-query($from: tablet) {
+  .app-school-search-form-container {
+    display: flex;
+    column-gap: govuk-spacing(4); // 20px equivalent
+    align-items: flex-start;
+  }
+}
+
+.school-search-container {
+  margin-bottom: govuk-spacing(4);
+
+  background-color: govuk-colour("light-grey");
+
+  @include govuk-media-query($from: tablet) {
+    margin-bottom: govuk-spacing(6);
+  }
+
+  .school-search-content {
+    padding: govuk-spacing(4);
+
+    @include govuk-media-query($from: tablet) {
+      padding: govuk-spacing(6);
+      padding-bottom: 0;
+    }
+  }
+
+  .school-search-form-container {
+    display: block;
+
+    @include govuk-media-query($from: tablet) {
+      display: flex;
+
+      column-gap: govuk-spacing(4);
+    }
+  }
+}
