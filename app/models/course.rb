@@ -547,6 +547,15 @@ class Course < ApplicationRecord
     qualifications_summary + study_mode_string + program_type_description
   end
 
+  def summary_parts
+    return [qualifications_summary] if teacher_degree_apprenticeship?
+
+    [
+      qualifications_summary,
+      study_mode_description.capitalize,
+    ].compact
+  end
+
   def study_mode_string
     (full_time_or_part_time? ? ", " : " ") +
       study_mode_description
@@ -908,6 +917,20 @@ class Course < ApplicationRecord
 
   def offers_sponsorship?
     !no_visa_sponsorship?
+  end
+
+  def funding_description
+    {
+      "fee" => "Fee-paying",
+      "salary" => "Salaried",
+      "apprenticeship" => "Teaching apprenticeship",
+    }[funding]
+  end
+
+  def start_date_description
+    return if start_date.blank?
+
+    start_date.strftime('%B %Y').to_s
   end
 
 private
