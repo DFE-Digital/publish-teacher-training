@@ -2,6 +2,7 @@
 
 module Support
   class SubjectsController < ApplicationController
+    BOOLEAN_TYPE = ActiveModel::Type::Boolean.new
     FINANCIAL_INCENTIVE_TEXT_FIELDS = %i[bursary_amount scholarship].freeze
     FINANCIAL_INCENTIVE_BOOLEAN_FIELDS = %i[
       subject_knowledge_enhancement_course_available
@@ -86,21 +87,32 @@ module Support
     end
 
     def financial_incentive_attributes
-      @financial_incentive_attributes ||= begin
-        attributes = permitted_financial_incentive_params.to_h.symbolize_keys
+      @financial_incentive_attributes ||= normalize_financial_incentive_attributes(
+        permitted_financial_incentive_params.to_h.symbolize_keys,
+      )
+    end
 
-        FINANCIAL_INCENTIVE_TEXT_FIELDS.each do |field|
-          attributes[field] = attributes[field].presence
-        end
+    def normalize_financial_incentive_attributes(attributes)
+      normalize_text_fields!(attributes)
+      normalize_boolean_fields!(attributes)
+      attributes
+    end
 
-        FINANCIAL_INCENTIVE_BOOLEAN_FIELDS.each do |field|
-          value = attributes[field]
-          value = value.last if value.is_a?(Array)
-          attributes[field] = ActiveModel::Type::Boolean.new.cast(value) || false
-        end
-
-        attributes
+    def normalize_text_fields!(attributes)
+      FINANCIAL_INCENTIVE_TEXT_FIELDS.each do |field|
+        attributes[field] = attributes[field].presence
       end
+    end
+
+    def normalize_boolean_fields!(attributes)
+      FINANCIAL_INCENTIVE_BOOLEAN_FIELDS.each do |field|
+        attributes[field] = cast_to_boolean(attributes[field])
+      end
+    end
+
+    def cast_to_boolean(value)
+      raw_value = value.is_a?(Array) ? value.last : value
+      BOOLEAN_TYPE.cast(raw_value) || false
     end
 
     def financial_incentive_params_present?
