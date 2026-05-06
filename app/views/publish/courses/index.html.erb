@@ -10,23 +10,26 @@
     ),
   )) %>
 <% end %>
-
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>
-
-<% if @self_accredited_courses %>
-  <section data-qa="courses__table-section">
-    <%= render partial: "course_table", locals: { courses: @self_accredited_courses } %>
-  </section>
-<% end %>
-
-<% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
-  <section data-qa="courses__table-section">
-    <h2 class="govuk-heading-m">
-      <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
-      <%= accrediting_provider %>
-    </h2>
-
-    <%= render partial: "course_table", locals: { courses: } %>
-  </section>
-<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third">
+    <%= render "filters" %>
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+    <% if @self_accredited_courses %>
+      <section data-qa="courses__table-section">
+        <%= render partial: "course_table", locals: { courses: @self_accredited_courses } %>
+      </section>
+    <% end %>
+    <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
+      <section data-qa="courses__table-section">
+        <h2 class="govuk-heading-m">
+          <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
+          <%= accrediting_provider %>
+        </h2>
+        <%= render partial: "course_table", locals: { courses: } %>
+      </section>
+    <% end %>
+  </div>
+</div>

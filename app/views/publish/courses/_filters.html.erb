@@ -1,0 +1,74 @@
+<%= form_with url: request.path, method: :get, local: true do |form| %>
+  <!-- STATUS filter -->
+  <p class="govuk-heading-m">Filter courses</p>
+  <fieldset class="govuk-fieldset">
+    <%= form.govuk_check_boxes_fieldset :status, 
+    legend: { text: "Status", size: "s" },
+    multiple: true do %>
+      <% %w[open closed draft rolled_over scheduled withdrawn].each do |status| %>
+        <%= form.govuk_check_box :status, status,
+          checked: Array(params[:status]).include?(status),
+          label: { text: status.humanize } %>
+      <% end %>
+    <% end %>
+  </fieldset>
+  <!-- EDUCATION PHASE filter -->
+  <fieldset class="govuk-fieldset govuk-!-margin-top-4">
+    <%= form.govuk_check_boxes_fieldset :education_phase,
+    legend: { text: "Education phase", size: "s" },
+    multiple: true do %>
+      <% %w[primary secondary further_education].each do |phase| %>
+        <%= form.govuk_check_box :education_phase, phase,
+          checked: Array(params[:education_phase]).include?(phase),
+          label: { text: phase.humanize } %>
+      <% end %>
+    <% end %>
+  </fieldset>
+  <!-- FEE OR SALARY PHASE filter -->
+  <%= form.govuk_check_boxes_fieldset :funding,
+  legend: { text: "Fee or salary", size: "s" },
+  multiple: true do %>
+    <% %w[fee salary apprenticeship].each do |option| %>
+      <%= form.govuk_check_box :funding, option,
+      checked: Array(params[:funding]).include?(option),
+      label: { text: option.humanize } %>
+    <% end %>
+  <% end %>
+  <!-- QUALIFICATION filter -->
+  <%= form.govuk_check_boxes_fieldset :qualification,
+  legend: { text: "Qualification", size: "s" },
+  multiple: true do %>
+    <%= form.govuk_check_box :qualification, "qts",
+    checked: Array(params[:qualification]).include?("qts"),
+    label: { text: "QTS only" } %>
+    <%= form.govuk_check_box :qualification, "pgce_with_qts",
+    checked: Array(params[:qualification]).include?("pgce_with_qts"),
+    label: { text: "QTS with PGCE" } %>
+  <% end %>
+  <!-- FULL TIME OR PART TIME filter -->
+  <%= form.govuk_check_boxes_fieldset :study_mode,
+  legend: { text: "Full time or part time", size: "s" },
+  multiple: true do %>
+    <% %w[full_time part_time].each do |option| %>
+      <%= form.govuk_check_box :study_mode, option,
+      checked: Array(params[:study_mode]).include?(option),
+      label: { text: option.humanize } %>
+    <% end %>
+  <% end %>
+  <!-- START DATE filter -->
+  <!-- START DATE filter -->
+  <%= form.govuk_check_boxes_fieldset :start_date,
+  legend: { text: "Start date", size: "s" },
+  multiple: true do %>
+    <%= form.govuk_check_box :start_date, "2026-09",
+    checked: Array(params[:start_date]).include?("2026-09"),
+    label: { text: "September 2026" } %>
+    <%= form.govuk_check_box :start_date, "2027-01",
+    checked: Array(params[:start_date]).include?("2027-01"),
+    label: { text: "January 2027" } %>
+  <% end %>
+  <%= govuk_button_to "Apply filters", class: "govuk-!-margin-top-4" %>
+  <%= link_to "Clear all filters",
+            request.path,
+            class: "govuk-link govuk-!-margin-bottom-2" %>
+<% end %>

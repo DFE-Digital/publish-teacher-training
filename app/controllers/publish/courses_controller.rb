@@ -152,7 +152,9 @@ module Publish
     end
 
     def courses_by_accrediting_provider
-      @courses_by_accrediting_provider ||= ::Courses::Fetch.by_accrediting_provider(provider)
+      @courses_by_accrediting_provider ||= filtered_courses.group_by do |course|
+        course.accrediting_provider&.provider_name || provider.provider_name
+      end
     end
 
     def self_accredited_courses
@@ -163,6 +165,59 @@ module Publish
       @course.errors.messages.transform_values do |error_messages|
         error_messages.map { |message| message.gsub(/^\^/, "") }
       end
+    end
+
+    STATUS_MATCHERS = {
+      "open" => lambda { |c|
+        c.open_for_applications?
+      },
+
+      "closed" => lambda { |c|
+        c.only_published? &&
+          !c.open_for_applications? &&
+          !c.is_withdrawn?
+      },
+
+      "draft" => lambda { |c|
+        c.content_status == :draft
+      },
+
+      "rolled_over" => lambda { |c|
+        c.content_status == :rolled_over
+      },
+
+      "scheduled" => lambda { |c|
+        c.scheduled?
+      },
+
+      "withdrawn" => lambda { |c|
+        c.is_withdrawn?
+      },
+    }.freeze
+
+    def filtered_courses
+      courses = provider.courses
+
+      courses = courses.where(level: params[:education_phase]) if params[:education_phase].present?
+      courses = courses.where(funding: params[:funding]) if params[:funding].present?
+      courses = courses.where(qualification: params[:qualification]) if params[:qualification].present?
+      courses = courses.where(study_mode: params[:study_mode]) if params[:study_mode].present?
+      courses = courses.where(start_date: params[:start_date]) if params[:start_date].present?
+
+      courses = courses.map(&:decorate)
+
+      if params[:status].present?
+        selected = Array(params[:status])
+
+        courses = courses.select do |course|
+          selected.any? do |status|
+            matcher = STATUS_MATCHERS[status]
+            matcher && matcher.call(course)
+          end
+        end
+      end
+
+      courses
     end
   end
 end
