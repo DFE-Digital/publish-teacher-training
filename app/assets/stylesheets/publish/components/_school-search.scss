@@ -21,10 +21,11 @@
 
   .school-search-content {
     padding: govuk-spacing(4);
+    padding-bottom: 10px;
 
     @include govuk-media-query($from: tablet) {
       padding: govuk-spacing(6);
-      padding-bottom: 0;
+      padding-bottom: govuk-spacing(2);
     }
   }
 
