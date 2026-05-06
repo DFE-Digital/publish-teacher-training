@@ -125,7 +125,10 @@
               </div>
             <% end %>
           <% end %>
-          <%= f.govuk_submit "Update #{page_title.downcase}" %>
+          <div class="govuk-button-group">
+            <%= f.govuk_submit "Update #{page_title.downcase}" %>
+            <%= f.govuk_submit "Update and add another placement school", class: "govuk-button--secondary" %>
+          </div>
           <p class="govuk-body">
             <%= govuk_link_to(
           t("cancel"),
