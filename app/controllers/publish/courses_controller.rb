@@ -167,6 +167,7 @@ module Publish
       end
     end
 
+    # The status matchers are used to filter courses by their status in the index action. They are defined as lambdas that take a course and return true if the course matches the status.
     STATUS_MATCHERS = {
       "open" => lambda { |c|
         c.open_for_applications?
@@ -195,6 +196,7 @@ module Publish
       },
     }.freeze
 
+    # The filtered_courses method is used to filter courses by the selected filters in the index action. It applies the filters to the courses and returns the filtered courses.
     def filtered_courses
       courses = provider.courses
 
@@ -216,8 +218,7 @@ module Publish
           end
         end
       end
-
-      courses
+      courses.sort_by { |course| course.name.downcase }
     end
   end
 end
