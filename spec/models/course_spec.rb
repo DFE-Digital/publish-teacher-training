@@ -839,8 +839,8 @@ describe Course do
         expect(second_site_status.reload.status).to eq("running")
       end
 
-      it "sets old site_status to suspended" do
-        expect(first_site_status.reload.status).to eq("suspended")
+      it "destroys the old site_status when its site is removed" do
+        expect(SiteStatus.find_by(id: first_site_status.id)).to be_nil
       end
     end
   end
@@ -1466,15 +1466,19 @@ describe Course do
     context "for running courses" do
       let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
 
-      it "suspends the site when an existing site is removed" do
+      it "destroys the site_status when an existing site is removed" do
         expect { subject.sites = [] }
-          .to change { existing_site_status.reload.status }.from("running").to("suspended")
+          .to change { subject.reload.site_statuses.size }.from(1).to(0)
+        expect(SiteStatus.find_by(id: existing_site_status.id)).to be_nil
       end
 
-      it "adds a new site status and sets it to running when a new site is added" do
-        expect { subject.sites = [new_site] }.to change { subject.reload.site_statuses.size }.from(1).to(2)
+      it "destroys the old site status and creates a running one when sites change" do
+        old_id = existing_site_status.id
+        subject.sites = [new_site]
+        subject.reload
 
-        expect(existing_site_status.reload.status).to eq("suspended")
+        expect(SiteStatus.find_by(id: old_id)).to be_nil
+        expect(subject.site_statuses.size).to eq(1)
         expect(new_site_status.reload.status).to eq("running")
       end
     end
@@ -1499,7 +1503,10 @@ describe Course do
       end
     end
 
-    context "for suspended courses" do
+    context "for courses with a previously-suspended site_status" do
+      # This state is reachable via Course#withdraw (course-level), not via
+      # remove_site! anymore, but the AASM start! event still permits the
+      # suspended → running transition.
       let(:existing_site_status) { create(:site_status, :suspended, site: existing_site) }
 
       it "sets the site to running when a new site is added" do

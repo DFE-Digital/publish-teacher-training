@@ -941,8 +941,12 @@ private
   end
 
   def remove_site!(site:)
-    site_status = site_statuses.find_by!(site:)
-    ucas_status == :new ? site_status.destroy! : site_status.suspend!
+    # Destroy every site_status for this (course, site) pair. The legacy
+    # suspend-then-reuse approach broke when stale duplicate rows existed
+    # (find_by! could return an already-suspended row, AASM raised
+    # InvalidTransition). Audit history is still preserved by the audited
+    # gem on the destroy event.
+    site_statuses.where(site:).destroy_all
   end
 
   def withdraw_latest_enrichment
