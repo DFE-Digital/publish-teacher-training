@@ -5,8 +5,8 @@
     details_publish_provider_recruitment_cycle_course_path(
       @provider.provider_code,
       course.recruitment_cycle_year,
-      course.course_code
-    )
+      course.course_code,
+    ),
   ) %>
 <% end %>
 <%= form_with(
@@ -14,7 +14,7 @@
   url: schools_publish_provider_recruitment_cycle_course_path(
     @provider.provider_code,
     course.recruitment_cycle_year,
-    course.course_code
+    course.course_code,
   ),
   method: :put,
   local: true,
@@ -37,8 +37,8 @@
         },
         form_group: {
           data: {
-            controller: "select-all-checkboxes school-search"
-          }
+            controller: "select-all-checkboxes school-search",
+          },
         } do %>
         <!-- Number of schools currently attached to the course -->
         <p class="govuk-body">
@@ -66,14 +66,13 @@
               id="school-search"
               type="search"
               placeholder="Enter school name, postcode or URN"
+              autoComplete="off"
               data-school-search-target="input"
-              data-action="keydown.enter->school-search#search"
-                  >
+              data-action="keydown.enter->school-search#search">
                   <button
               class="govuk-button govuk-button--primary"
               type="button"
-              data-action="school-search#search"
-            >
+              data-action="school-search#search">
                     Search
                   </button>
                 </div>
@@ -84,12 +83,10 @@
                   type="checkbox"
                   class="govuk-checkboxes__input"
                   id="show-attached-only"
-                  data-action="attached-schools#toggle"
-                >
+                  data-action="attached-schools#toggle">
                   <label
                   class="govuk-label govuk-checkboxes__label"
-                  for="show-attached-only"
-                >
+                  for="show-attached-only">
                     Only show schools attached to this course
                   </label>
                 </div>
@@ -120,16 +117,15 @@
             data-search-text="<%= [
               site.location_name,
               site.postcode,
-              site.urn
-            ].compact.join(' ').downcase %>"
-          >
+              site.urn,
+            ].compact.join(" ").downcase %>">
                   <%= f.govuk_check_box :site_ids,
               site.id,
               label: {
                 text: [
                   site.location_name,
-                  render(Publish::Schools::NewlyAddedTagComponent.new(school: site))
-                ].compact_blank.join(" ").html_safe
+                  render(Publish::Schools::NewlyAddedTagComponent.new(school: site)),
+                ].compact_blank.join(" ").html_safe,
               },
               hint: { text: site.full_address },
               link_errors: index.zero?,
@@ -150,8 +146,8 @@
           details_publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
             @provider.recruitment_cycle.year,
-            @course.course_code
-          )
+            @course.course_code,
+          ),
         ) %>
             </p>
           </div>

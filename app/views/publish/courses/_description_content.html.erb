@@ -39,7 +39,7 @@
   <%= t("publish.providers.courses.description_content.course_requirements_heading") %>
 </h2>
 <!-- TEST for school experience section for salaried courses -->
-<%if course.salary? %>
+<% if course.salary? %>
   <%= "School experience" %>
 <% end %>
 <%= govuk_summary_list do |summary_list| %>
