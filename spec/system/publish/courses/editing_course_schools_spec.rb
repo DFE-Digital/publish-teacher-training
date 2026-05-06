@@ -35,8 +35,29 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     and_i_submit
     then_i_should_see_a_success_message
     and_only_site_two_is_attached
-    and_site_one_site_status_is_suspended
+    and_site_one_site_status_is_destroyed
     and_the_basic_details_page_no_longer_lists_site_one
+  end
+
+  scenario "untick all then re-tick one school on a published course with three schools" do
+    given_the_provider_has_three_sites
+    given_the_course_is_published_with_all_three_sites_running
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_untick_all_then_tick_only_site_two
+    and_i_submit
+    then_i_should_see_a_success_message
+    and_only_site_two_is_attached_among_the_three
+    and_site_one_and_three_site_statuses_are_destroyed
+  end
+
+  scenario "duplicate stale site_status rows do not break the untick (AASM regression)" do
+    given_the_course_is_published_with_both_sites_running
+    given_site_one_has_an_extra_stale_suspended_site_status
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_untick_site_one
+    and_i_submit
+    then_i_should_see_a_success_message
+    and_only_site_two_is_attached
   end
 
   scenario "updating with invalid data" do
@@ -150,10 +171,18 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     course.update!(first_published_at: 1.day.ago) if course.respond_to?(:first_published_at)
   end
 
-  def and_site_one_site_status_is_suspended
+  def and_site_one_site_status_is_destroyed
     site_one = provider.sites.find_by(location_name: "Site 1")
-    site_status = course.reload.site_statuses.find_by!(site: site_one)
-    expect(site_status).to be_status_suspended
+    expect(course.reload.site_statuses.where(site: site_one)).to be_empty
+  end
+
+  def given_site_one_has_an_extra_stale_suspended_site_status
+    # Mirrors the production data state that triggered AASM::InvalidTransition
+    # for the QA-reported untick: a duplicate suspended row from an earlier
+    # remove sat alongside the running one. find_by!(site:) used to grab the
+    # suspended one and suspend! blew up.
+    site_one = provider.sites.find_by(location_name: "Site 1")
+    SiteStatus.create!(course:, site: site_one, status: :suspended, publish: :unpublished)
   end
 
   def and_the_basic_details_page_no_longer_lists_site_one
@@ -164,6 +193,42 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     )
     expect(page).to have_no_content("Site 1")
     expect(page).to have_content("Site 2")
+  end
+
+  def given_the_provider_has_three_sites
+    provider.sites << build(:site, location_name: "Site 3")
+    provider.save!
+    site = provider.sites.find_by(location_name: "Site 3")
+    gias_school = create(:gias_school, urn: site.urn)
+    create(:provider_school, provider:, gias_school:, site_code: site.code)
+  end
+
+  def given_the_course_is_published_with_all_three_sites_running
+    provider.sites.each do |site|
+      gias_school = GiasSchool.find_by!(urn: site.urn)
+      course.site_statuses.create!(site:, status: :running, publish: :published)
+      create(:course_school, course:, gias_school:, site_code: site.code)
+    end
+    course.update!(first_published_at: 1.day.ago) if course.respond_to?(:first_published_at)
+  end
+
+  def when_i_untick_all_then_tick_only_site_two
+    ["Site 1", "Site 2", "Site 3"].each do |label|
+      box = publish_course_school_edit_page.vacancies.find { |el| el.find(".govuk-label").text == label }
+      box.uncheck if box.checked?
+    end
+    publish_course_school_edit_page.vacancies.find { |el| el.find(".govuk-label").text == "Site 2" }.check
+  end
+
+  def and_only_site_two_is_attached_among_the_three
+    expect(course.reload.sites.map(&:location_name)).to contain_exactly("Site 2")
+  end
+
+  def and_site_one_and_three_site_statuses_are_destroyed
+    ["Site 1", "Site 3"].each do |name|
+      site = provider.sites.find_by(location_name: name)
+      expect(course.reload.site_statuses.where(site: site)).to be_empty
+    end
   end
 
   def provider

@@ -123,18 +123,10 @@ module Publish
             end
             let(:params) { { site_ids: [site_two.id] } }
 
-            it "leaves the unticked site_status as :suspended" do
+            it "destroys the unticked site_status" do
               described_class.new(course:, params:).call
 
-              site_status = course.reload.site_statuses.find_by!(site: site_one)
-              expect(site_status).to be_status_suspended
-            end
-
-            it "leaves the unticked site_status as :unpublished" do
-              described_class.new(course:, params:).call
-
-              site_status = course.reload.site_statuses.find_by!(site: site_one)
-              expect(site_status).to be_unpublished_on_ucas
+              expect(course.reload.site_statuses.where(site: site_one)).to be_empty
             end
 
             it "removes the unticked school from course.sites" do
