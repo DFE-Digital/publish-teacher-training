@@ -101,7 +101,12 @@ module Publish
       end
 
       def apply_publish_status_to_site_statuses
-        course.site_statuses.each do |site_status|
+        # Reload + scope to new_or_running so we never touch site_statuses
+        # that sync_schools just suspended or destroyed. Iterating the
+        # cached collection used to flip a freshly-suspended row back to
+        # running, leaving the unticked school still attached on the
+        # rendered page.
+        course.site_statuses.reload.new_or_running.each do |site_status|
           site_status.assign_attributes(site_status_attributes)
         end
       end

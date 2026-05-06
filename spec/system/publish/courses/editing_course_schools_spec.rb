@@ -28,6 +28,17 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     and_no_course_school_row_exists_for_site_one
   end
 
+  scenario "i can detach a school from a published course (regression for QA bug)" do
+    given_the_course_is_published_with_both_sites_running
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_untick_site_one
+    and_i_submit
+    then_i_should_see_a_success_message
+    and_only_site_two_is_attached
+    and_site_one_site_status_is_suspended
+    and_the_basic_details_page_no_longer_lists_site_one
+  end
+
   scenario "updating with invalid data" do
     and_i_submit
     then_i_should_see_an_error_message
@@ -128,6 +139,31 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     site_one = provider.sites.find_by(location_name: "Site 1")
     gias_school_one = GiasSchool.find_by!(urn: site_one.urn)
     expect(course.reload.schools.where(gias_school: gias_school_one)).to be_empty
+  end
+
+  def given_the_course_is_published_with_both_sites_running
+    provider.sites.each do |site|
+      gias_school = GiasSchool.find_by!(urn: site.urn)
+      course.site_statuses.create!(site:, status: :running, publish: :published)
+      create(:course_school, course:, gias_school:, site_code: site.code)
+    end
+    course.update!(first_published_at: 1.day.ago) if course.respond_to?(:first_published_at)
+  end
+
+  def and_site_one_site_status_is_suspended
+    site_one = provider.sites.find_by(location_name: "Site 1")
+    site_status = course.reload.site_statuses.find_by!(site: site_one)
+    expect(site_status).to be_status_suspended
+  end
+
+  def and_the_basic_details_page_no_longer_lists_site_one
+    visit details_publish_provider_recruitment_cycle_course_path(
+      provider.provider_code,
+      provider.recruitment_cycle_year,
+      course.course_code,
+    )
+    expect(page).to have_no_content("Site 1")
+    expect(page).to have_content("Site 2")
   end
 
   def provider
