@@ -5,6 +5,7 @@
 @include govuk-media-query($from: tablet) {
   .app-school-search-form-container {
     display: flex;
+    
     column-gap: govuk-spacing(4); // 20px equivalent
     align-items: flex-start;
   }

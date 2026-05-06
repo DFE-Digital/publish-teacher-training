@@ -930,7 +930,7 @@ class Course < ApplicationRecord
   def start_date_description
     return if start_date.blank?
 
-    start_date.strftime('%B %Y').to_s
+    start_date.strftime("%B %Y").to_s
   end
 
 private
