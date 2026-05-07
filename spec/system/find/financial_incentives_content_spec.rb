@@ -49,11 +49,8 @@ RSpec.describe "financial incentives call out boxes content" do
       scenario "renders the bursary and scholarship content" do
         given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000)
         when_i_visit_the_find_results_page
-        select_course
-
-        within('[data-qa="course__scholarship_and_bursary_details"]') do
-          expect(page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
-        end
+        when_i_select_the_course
+        then_i_see_bursary_and_scholarship_content_for_uk_citizens
       end
     end
 
@@ -61,11 +58,8 @@ RSpec.describe "financial incentives call out boxes content" do
       scenario "renders the bursaries content" do
         given_there_is_a_findable_course(bursary_amount: 4000)
         when_i_visit_the_find_results_page
-        select_course
-
-        within('[data-qa="course__bursary_details"]') do
-          expect(page).to have_content("Bursaries of £4,000 are available to eligible trainees.")
-        end
+        when_i_select_the_course
+        then_i_see_bursary_content_for_uk_citizens
       end
     end
 
@@ -73,11 +67,8 @@ RSpec.describe "financial incentives call out boxes content" do
       scenario "renders the non bursary and scholarship content" do
         given_there_is_a_findable_course
         when_i_visit_the_find_results_page
-        select_course
-
-        within('[data-qa="course__loan_details"]') do
-          expect(page).to have_content("You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.")
-        end
+        when_i_select_the_course
+        then_i_see_student_loans_content_for_uk_citizens
       end
     end
 
@@ -85,21 +76,15 @@ RSpec.describe "financial incentives call out boxes content" do
       scenario "renders the salaried content for QTS with PGCE" do
         given_there_is_a_findable_course(funding: "salary")
         when_i_visit_the_find_results_page
-        select_course
-
-        within(".course-salary-details") do
-          expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You may also have to pay for your PGCE. You can discuss salary details with the provider at interview.")
-        end
+        when_i_select_the_course
+        then_i_see_salaried_content_for_uk_citizens_with_pgce
       end
 
       scenario "renders the salaried content for QTS only" do
         given_there_is_a_findable_course(funding: "salary", qualification: "qts")
         when_i_visit_the_find_results_page
-        select_course
-
-        within(".course-salary-details") do
-          expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You can discuss salary details with the provider at interview.")
-        end
+        when_i_select_the_course
+        then_i_see_salaried_content_for_uk_citizens
       end
     end
   end
@@ -109,11 +94,8 @@ RSpec.describe "financial incentives call out boxes content" do
       scenario "renders the bursary and scholarship content" do
         given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000, subject: :physics, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
         when_i_visit_the_find_results_page
-        select_course
-
-        within('[data-qa="course__scholarship_and_bursary_details_non_uk"]') do
-          expect(page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
-        end
+        when_i_select_the_course
+        then_i_see_bursary_and_scholarship_content_for_non_uk_citizens
       end
     end
 
@@ -121,11 +103,8 @@ RSpec.describe "financial incentives call out boxes content" do
       scenario "renders the bursaries content" do
         given_there_is_a_findable_course(bursary_amount: 4000, subject: :ancient_hebrew, non_uk_bursary_eligible: true)
         when_i_visit_the_find_results_page
-        select_course
-
-        within('[data-qa="course__bursary_details_non_uk"]') do
-          expect(page).to have_content("Bursaries of £4,000 are available to eligible trainees.")
-        end
+        when_i_select_the_course
+        then_i_see_bursary_content_for_non_uk_citizens
       end
     end
 
@@ -133,11 +112,8 @@ RSpec.describe "financial incentives call out boxes content" do
       scenario "renders the non bursary and scholarship content" do
         given_there_is_a_findable_course
         when_i_visit_the_find_results_page
-        select_course
-
-        within('[data-qa="course__loan_details_non_uk"]') do
-          expect(page).to have_content("If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan\nFind out what financial support is available to non-UK citizens.")
-        end
+        when_i_select_the_course
+        then_i_see_no_bursary_or_scholarship_content_for_non_uk_citizens
       end
     end
 
@@ -145,18 +121,86 @@ RSpec.describe "financial incentives call out boxes content" do
       scenario "renders the salaried content" do
         given_there_is_a_findable_course(funding: "salary")
         when_i_visit_the_find_results_page
-        select_course
-
-        within(".course-salary-details-non-uk") do
-          expect(page).to have_content("You can apply for a salaried teacher training course. However, these courses are limited in number and very competitive.")
-          expect(page).to have_content("Before you apply, contact the teacher training provider to check you meet the entry requirements.")
-        end
+        when_i_select_the_course
+        then_i_see_salaried_content_for_non_uk_citizens
       end
     end
   end
 
   def when_i_visit_the_find_results_page
     find_results_page.load
+  end
+
+  def within_financial_support_for_uk_citizens(&block)
+    within(".govuk-accordion", text: "Financial support for UK citizens", &block)
+  end
+
+  def within_financial_support_for_non_uk_citizens(&block)
+    within(".govuk-accordion", text: "Financial support for non-UK citizens", &block)
+  end
+
+  def within_salaried_content_for_uk_citizens(&block)
+    within(".govuk-accordion", text: "How salaried courses work", &block)
+  end
+
+  def within_salaried_content_for_non_uk_citizens(&block)
+    within(".govuk-accordion", text: "Non-UK citizens: applying for salaried courses", &block)
+  end
+
+  def then_i_see_bursary_and_scholarship_content_for_uk_citizens
+    within_financial_support_for_uk_citizens do
+      expect(page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
+    end
+  end
+
+  def then_i_see_bursary_content_for_uk_citizens
+    within_financial_support_for_uk_citizens do
+      expect(page).to have_content("Bursaries of £4,000 are available to eligible trainees.")
+    end
+  end
+
+  def then_i_see_student_loans_content_for_uk_citizens
+    within_financial_support_for_uk_citizens do
+      expect(page).to have_content("You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.")
+    end
+  end
+
+  def then_i_see_salaried_content_for_uk_citizens_with_pgce
+    within_salaried_content_for_uk_citizens do
+      expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You may also have to pay for your PGCE. You can discuss salary details with the provider at interview.")
+    end
+  end
+
+  def then_i_see_salaried_content_for_uk_citizens
+    within_salaried_content_for_uk_citizens do
+      expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You can discuss salary details with the provider at interview.")
+    end
+  end
+
+  def then_i_see_bursary_and_scholarship_content_for_non_uk_citizens
+    within_financial_support_for_non_uk_citizens do
+      expect(page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
+    end
+  end
+
+  def then_i_see_bursary_content_for_non_uk_citizens
+    within_financial_support_for_non_uk_citizens do
+      expect(page).to have_content("Bursaries of £4,000 are available to eligible trainees.")
+    end
+  end
+
+  def then_i_see_no_bursary_or_scholarship_content_for_non_uk_citizens
+    within_financial_support_for_non_uk_citizens do
+      expect(page).to have_content("If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan")
+      expect(page).to have_content("Find out what financial support is available to non-UK citizens.")
+    end
+  end
+
+  def then_i_see_salaried_content_for_non_uk_citizens
+    within_salaried_content_for_non_uk_citizens do
+      expect(page).to have_content("You can apply for a salaried teacher training course. However, these courses are limited in number and very competitive.")
+      expect(page).to have_content("Before you apply, contact the teacher training provider to check you meet the entry requirements.")
+    end
   end
 
   def then_i_see_the_displayed_financial_incentive_is_for_uk_citizens
