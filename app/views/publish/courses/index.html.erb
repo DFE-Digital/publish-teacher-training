@@ -27,12 +27,10 @@
     <% end %>
     <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
       <section data-qa="courses__table-section">
-        <div class="govuk-grid-row">
-          <h2 class="govuk-heading-m">
-          <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
-          <%= accrediting_provider %>
-          </h2>
-        </div>
+        <h2 class="govuk-heading-m">
+        <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
+        <%= accrediting_provider %>
+        </h2>
         <%= render partial: "course_table", locals: { courses: } %>
       </section>
     <% end %>
