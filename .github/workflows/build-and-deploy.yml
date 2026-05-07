@@ -212,14 +212,14 @@ jobs:
 
       - name: Upload screenshots
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Test-screenshots
           path: ${{ github.workspace }}/tmp/capybara/*
 
       # - name: Upload coverage results
       #   if: always()
-      #   uses: actions/upload-artifact@v4
+      #   uses: actions/upload-artifact@v7
       #   with:
       #     name: Coverage_report
       #     path: ${{ github.workspace }}/out/*
