@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up k6
         uses: grafana/setup-k6@7af9007cf6ab08d712b18ed2ad067ae5c8ff441d # Pinned at v0.0.1

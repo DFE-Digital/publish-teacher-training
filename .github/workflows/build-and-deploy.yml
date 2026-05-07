@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -113,7 +113,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -180,7 +180,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -248,7 +248,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Build middleman Docker Image
         id: build-image-middleman
@@ -290,7 +290,7 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Deploy App to Review
         id: deploy_review
@@ -333,7 +333,7 @@ jobs:
         environment: [qa, staging]
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Deploy App to ${{ matrix.environment }}
         id: deploy_app_before_production
@@ -356,7 +356,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Deploy App to production
         id: deploy_app
@@ -379,7 +379,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Deploy App to sandbox
         id: deploy_sandbox
