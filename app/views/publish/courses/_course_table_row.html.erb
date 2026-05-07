@@ -14,11 +14,6 @@
         Ages <%= course.age_minimum %> to <%= course.age_maximum %>
       </div>
     <% end %>
-    <% if course.start_date_description.present? %>
-      <span class="govuk-hint govuk-!-font-size-16 govuk-!-margin-0">
-        <%= course.start_date_description %>
-      </span><br>
-    <% end %>
   </td>
   <td class="govuk-table__cell">
     <!-- <span class="govuk-body-s"><%= course.summary %></span> -->
@@ -28,6 +23,9 @@
     <span class="govuk-body-s">
       <% course.summary_parts.each do |part| %>
         <div><%= part %></div>
+      <% end %>
+      <% if course.start_date_description.present? %>
+        <div><%= course.start_date_description %></div>
       <% end %>
     </span>
     <!-- TEST course information with line breaks -->
