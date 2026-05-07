@@ -530,7 +530,7 @@ class Course < ApplicationRecord
 
   def program_type_description
     if salary? then " with salary"
-    elsif apprenticeship? then " teaching apprenticeship"
+    elsif apprenticeship? then " apprenticeship"
     else
       ""
     end
@@ -924,7 +924,7 @@ class Course < ApplicationRecord
     {
       "fee" => "Fee-paying",
       "salary" => "Salaried",
-      "apprenticeship" => "Teaching apprenticeship",
+      "apprenticeship" => "Apprenticeship",
     }[funding]
   end
 
