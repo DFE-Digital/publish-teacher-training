@@ -9,6 +9,42 @@ RSpec.describe "financial incentives call out boxes content" do
   end
 
   context "UK citizens" do
+    context "given a future financial incentive exists but is hidden" do
+      scenario "search results render the displayed financial incentive for UK citizens" do
+        given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000)
+        and_there_is_a_hidden_future_financial_incentive(non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
+        when_i_visit_the_find_results_page
+        then_i_see_the_displayed_financial_incentive_is_for_uk_citizens
+        and_i_do_not_see_the_hidden_future_financial_incentive
+      end
+
+      scenario "the course page renders the displayed financial incentive for UK citizens" do
+        given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000)
+        and_there_is_a_hidden_future_financial_incentive(non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
+        when_i_visit_the_find_results_page
+        when_i_select_the_course
+        then_i_see_the_displayed_financial_incentive_is_for_uk_citizens
+        and_i_do_not_see_the_hidden_future_financial_incentive
+      end
+
+      scenario "search results render the displayed financial incentive when it is available to non-UK citizens" do
+        given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000, subject: :physics, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
+        and_there_is_a_hidden_future_financial_incentive
+        when_i_visit_the_find_results_page
+        then_i_see_the_displayed_financial_incentive_is_available_to_non_uk_citizens
+        and_i_do_not_see_the_hidden_future_financial_incentive
+      end
+
+      scenario "the course page renders the displayed financial incentive when it is available to non-UK citizens" do
+        given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000, subject: :physics, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
+        and_there_is_a_hidden_future_financial_incentive
+        when_i_visit_the_find_results_page
+        when_i_select_the_course
+        then_i_see_the_displayed_financial_incentive_is_available_to_non_uk_citizens
+        and_i_do_not_see_the_hidden_future_financial_incentive
+      end
+    end
+
     context "given the course has bursary and scholarship available" do
       scenario "renders the bursary and scholarship content" do
         given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000)
@@ -123,6 +159,33 @@ RSpec.describe "financial incentives call out boxes content" do
     find_results_page.load
   end
 
+  def then_i_see_the_displayed_financial_incentive_is_for_uk_citizens
+    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+  end
+
+  def then_i_see_the_displayed_financial_incentive_is_available_to_non_uk_citizens
+    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available")
+    expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+  end
+
+  def and_i_do_not_see_the_hidden_future_financial_incentive
+    expect(page).to have_no_content("£99,999")
+    expect(page).to have_no_content("£88,888")
+  end
+
+  def and_there_is_a_hidden_future_financial_incentive(non_uk_bursary_eligible: false, non_uk_scholarship_eligible: false)
+    create(
+      :financial_incentive,
+      :hidden,
+      subject: @course.subjects.first,
+      year: FinancialIncentive.current_year + 1,
+      bursary_amount: 99_999,
+      scholarship: 88_888,
+      non_uk_bursary_eligible:,
+      non_uk_scholarship_eligible:,
+    )
+  end
+
   def given_there_is_a_findable_course(bursary_amount: nil, scholarship_amount: nil, funding: "fee", qualification: "pgce_with_qts", subject: :chemistry, non_uk_bursary_eligible: false, non_uk_scholarship_eligible: false)
     @course = create(
       :course,
@@ -167,4 +230,6 @@ RSpec.describe "financial incentives call out boxes content" do
   def select_course
     click_on(@course.name)
   end
+
+  alias_method :when_i_select_the_course, :select_course
 end

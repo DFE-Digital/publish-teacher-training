@@ -142,7 +142,8 @@ class Course < ApplicationRecord
   end
 
   has_many :subjects, through: :course_subjects
-  has_many :financial_incentives, through: :subjects
+  has_many :financial_incentives, through: :subjects, source: :financial_incentive
+  has_many :financial_incentive_records, through: :subjects
   has_many :site_statuses
   has_many :study_site_placements, dependent: :destroy
 

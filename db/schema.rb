@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_161201) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_07_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -331,6 +331,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_161201) do
   create_table "financial_incentive", force: :cascade do |t|
     t.string "bursary_amount"
     t.datetime "created_at", null: false
+    t.boolean "displayed", default: false, null: false
     t.string "early_career_payments"
     t.boolean "non_uk_bursary_eligible", default: false, null: false
     t.boolean "non_uk_scholarship_eligible", default: false, null: false
@@ -338,6 +339,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_161201) do
     t.bigint "subject_id", null: false
     t.boolean "subject_knowledge_enhancement_course_available", default: false, null: false
     t.datetime "updated_at", null: false
+    t.integer "year", default: 2026, null: false
+    t.index ["subject_id", "year"], name: "index_financial_incentive_on_subject_id_and_year", unique: true
+    t.index ["subject_id"], name: "index_financial_incentive_on_displayed_subject_id", unique: true, where: "displayed"
     t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
   end
 

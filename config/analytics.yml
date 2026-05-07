@@ -129,6 +129,7 @@ shared:
     - id
     - subject_id
     - bursary_amount
+    - displayed
     - early_career_payments
     - non_uk_bursary_eligible
     - non_uk_scholarship_eligible
@@ -136,6 +137,7 @@ shared:
     - created_at
     - updated_at
     - subject_knowledge_enhancement_course_available
+    - year
   gias_school:
     - id
     - urn

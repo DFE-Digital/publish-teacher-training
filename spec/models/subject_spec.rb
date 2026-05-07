@@ -6,12 +6,17 @@ describe Subject do
   subject { find_or_create(:modern_languages_subject, subject_name: "Modern languages (other)", subject_code: "101") }
 
   it { is_expected.to have_many(:courses).through(:course_subjects) }
+  it { is_expected.to have_many(:financial_incentive_records).class_name("FinancialIncentive") }
+  it { is_expected.to have_one(:financial_incentive).class_name("FinancialIncentive") }
   its(:to_sym) { is_expected.to eq(:modern_languages_other) }
   its(:to_s) { is_expected.to eq("Modern languages (other)") }
 
-  it "can get a financial incentive" do
-    financial_incentive = create(:financial_incentive, subject:)
-    expect(subject.financial_incentive).to eq(financial_incentive)
+  it "gets the displayed financial incentive" do
+    FinancialIncentive.where(subject:).delete_all
+    financial_incentive = create(:financial_incentive, subject:, year: 2026, displayed: true)
+    create(:financial_incentive, :hidden, subject:, year: 2027)
+
+    expect(subject.reload.financial_incentive).to eq(financial_incentive)
   end
 
   it "returns all active subjects" do
@@ -36,7 +41,8 @@ describe Subject do
       find_or_create(:primary_subject, :primary_with_english, subject_code: "00")
       find_or_create(:primary_subject, :primary, subject_code: "01")
 
-      find_or_create(:modern_languages_subject, subject_name: "Modern languages (other)", subject_code: "101")
+      modern_languages_other = find_or_create(:modern_languages_subject, subject_name: "Modern languages (other)", subject_code: "101")
+      create(:financial_incentive, subject: modern_languages_other)
       find_or_create(:secondary_subject, :ancient_greek, subject_code: "102")
     end
 

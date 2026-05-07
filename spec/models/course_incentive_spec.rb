@@ -108,6 +108,16 @@ describe CourseIncentive do
       expect(described_class.new(course).bursary_amount).to eq("3000")
     end
 
+    it "ignores hidden financial incentives" do
+      subject = find_or_create(:primary_subject, :primary)
+      FinancialIncentive.where(subject:).delete_all
+      create(:financial_incentive, subject:, year: 2026, bursary_amount: "3000", displayed: true)
+      create(:financial_incentive, :hidden, subject:, year: 2027, bursary_amount: "99999")
+      course = build(:course, subjects: [subject.reload])
+
+      expect(described_class.new(course).bursary_amount).to eq("3000")
+    end
+
     it "returns nil when there is no bursary" do
       subject = build(:secondary_subject)
       course = build(:course, subjects: [subject])

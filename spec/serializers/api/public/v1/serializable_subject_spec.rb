@@ -23,4 +23,16 @@ RSpec.describe API::Public::V1::SerializableSubject do
     it { is_expected.to have_attribute(:scholarship).with_value(nil) }
     it { is_expected.to have_attribute(:subject_knowledge_enhancement_course_available).with_value(nil) }
   end
+
+  context "when a hidden future financial incentive exists" do
+    let(:bursary_subject) { find_or_create(:secondary_subject, :physics) }
+    let(:resource) { described_class.new(object: bursary_subject) }
+
+    before do
+      create(:financial_incentive, :hidden, subject: bursary_subject, year: 2027, bursary_amount: "99999")
+    end
+
+    it { is_expected.to have_attribute(:bursary_amount).with_value("24000") }
+    it { is_expected.to have_attribute(:scholarship).with_value("26000") }
+  end
 end

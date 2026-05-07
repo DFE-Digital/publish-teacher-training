@@ -45,21 +45,25 @@ FactoryBot.define do
       scholarship { nil }
       non_uk_bursary_eligible { false }
       non_uk_scholarship_eligible { false }
+      financial_incentive_year { FinancialIncentive.current_year }
+      financial_incentive_displayed { true }
     end
 
     subject_name { sample_subject.first }
     subject_code { sample_subject.second }
 
     after(:build) do |subject, evaluator|
-      financial_incentive = find_or_create(
-        :financial_incentive,
-        subject:,
+      subject.save! unless subject.persisted?
+
+      financial_incentive = FinancialIncentive.find_or_initialize_by(subject:, year: evaluator.financial_incentive_year)
+      financial_incentive.update!(
         bursary_amount: evaluator.bursary_amount,
         scholarship: evaluator.scholarship,
         non_uk_bursary_eligible: evaluator.non_uk_bursary_eligible,
         non_uk_scholarship_eligible: evaluator.non_uk_scholarship_eligible,
+        displayed: evaluator.financial_incentive_displayed,
       )
-      subject.update(financial_incentive:)
+      subject.association(:financial_incentive).target = financial_incentive if financial_incentive.displayed?
     end
 
     trait :ancient_greek do

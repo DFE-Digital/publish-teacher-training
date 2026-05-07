@@ -5,7 +5,8 @@ class Subject < ApplicationRecord
   has_many :courses, through: :course_subjects
   belongs_to :subject_group, optional: true
   belongs_to :subject_area, foreign_key: :type, inverse_of: :subjects
-  has_one :financial_incentive
+  has_many :financial_incentive_records, class_name: "FinancialIncentive", inverse_of: :subject
+  has_one :financial_incentive, -> { displayed }, class_name: "FinancialIncentive", inverse_of: :subject
 
   scope :with_subject_codes, lambda { |subject_codes|
     where(subject_code: subject_codes)
@@ -28,7 +29,7 @@ class Subject < ApplicationRecord
   end
 
   def self.secondary_subject_codes_with_incentives
-    secondary.includes(:financial_incentive).pluck(:subject_code)
+    secondary.joins(:financial_incentive).pluck(:subject_code)
   end
 
   def self.secondary_subjects_with_subject_groups
