@@ -33,6 +33,19 @@ RSpec.describe API::Public::V1::SerializableCourse do
     it { is_expected.to have_attribute(:bursary_amount).with_value("24000") }
   end
 
+  context "when hidden future financial_incentives are present" do
+    before do
+      FeatureFlag.activate(:bursaries_and_scholarships_announced)
+      create(:financial_incentive, :hidden, subject: physics, year: 2027, bursary_amount: "99999", scholarship: "88888")
+    end
+
+    let(:physics) { find_or_create(:secondary_subject, :physics) }
+    let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], level: "secondary", subjects: [physics]) }
+
+    it { is_expected.to have_attribute(:scholarship_amount).with_value("26000") }
+    it { is_expected.to have_attribute(:bursary_amount).with_value("24000") }
+  end
+
   context "when course sponsors visas and has a visa sponsorship application deadline" do
     let(:provider) { create(:provider) }
     let(:deadline) { (provider.recruitment_cycle.application_end_date - 1.day).end_of_day }

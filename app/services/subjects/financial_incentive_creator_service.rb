@@ -2,10 +2,11 @@
 
 module Subjects
   class FinancialIncentiveCreatorService
-    def initialize(year:, subject: Subject, financial_incentive: FinancialIncentive)
+    def initialize(year:, displayed: false, subject: Subject, financial_incentive: FinancialIncentive)
       @subject = subject
       @financial_incentive = financial_incentive
-      @year = year
+      @year = year.to_i
+      @displayed = displayed
     end
 
     def subject_and_financial_incentives
@@ -21,14 +22,14 @@ module Subjects
           %w[Physics] => {
             bursary_amount: "29000",
             scholarship: "31000",
-            non_uk_bursary_eligible: true,
-            non_uk_scholarship_eligible: true,
+            non_uk_bursary_eligible: false,
+            non_uk_scholarship_eligible: false,
           },
           %w[French German Spanish] => {
             bursary_amount: "20000",
             scholarship: "22000",
-            non_uk_bursary_eligible: true,
-            non_uk_scholarship_eligible: true,
+            non_uk_bursary_eligible: false,
+            non_uk_scholarship_eligible: false,
           },
           [
             "Ancient Greek",
@@ -42,7 +43,7 @@ module Subjects
             "Russian",
           ] => {
             bursary_amount: "20000",
-            non_uk_bursary_eligible: true,
+            non_uk_bursary_eligible: false,
           },
           ["Design and technology"] => {
             bursary_amount: "20000",
@@ -213,20 +214,21 @@ module Subjects
     end
 
     def execute
-      # Reset all records' attributes in case subjects
-      # from previous year are not being updated
-      @financial_incentive.update_all(
+      # Reset the target year's records in case subjects
+      # from an earlier import are no longer being updated.
+      @financial_incentive.for_year(@year).update_all(
         bursary_amount: nil,
         scholarship: nil,
         early_career_payments: nil,
         non_uk_bursary_eligible: false,
         non_uk_scholarship_eligible: false,
+        displayed: @displayed,
       )
 
       subject_and_financial_incentives.each do |subject_name, financial_incentive_attributes|
         @subject.where(subject_name:).each do |subject|
-          financial_incentive_record = @financial_incentive.find_or_initialize_by(subject:)
-          financial_incentive_record.update(financial_incentive_attributes)
+          financial_incentive_record = @financial_incentive.find_or_initialize_by(subject:, year: @year)
+          financial_incentive_record.update!(financial_incentive_attributes.merge(displayed: @displayed))
         end
       end
     end

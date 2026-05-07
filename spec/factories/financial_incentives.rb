@@ -8,5 +8,11 @@ FactoryBot.define do
     scholarship { nil }
     non_uk_bursary_eligible { false }
     non_uk_scholarship_eligible { false }
+    year { FinancialIncentive.current_year }
+    displayed { true }
+
+    trait :hidden do
+      displayed { false }
+    end
   end
 end
