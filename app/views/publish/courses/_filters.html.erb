@@ -75,7 +75,7 @@
       <div class="govuk-checkboxes govuk-checkboxes--small">
         <%= form.govuk_check_box :funding, "fee",
           checked: Array(params[:funding]).include?("fee"),
-          label: { text: "Fee – no salary" } %>
+          label: { text: "Fee-paying" } %>
 
         <%= form.govuk_check_box :funding, "salary",
           checked: Array(params[:funding]).include?("salary"),
@@ -83,7 +83,7 @@
 
         <%= form.govuk_check_box :funding, "apprenticeship",
           checked: Array(params[:funding]).include?("apprenticeship"),
-          label: { text: "Teaching apprenticeship – with salary" } %>
+          label: { text: "Apprenticeship" } %>
       </div>
 
     <% end %>
