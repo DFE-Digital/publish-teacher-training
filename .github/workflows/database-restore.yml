@@ -67,7 +67,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set KV environment variables
         run: |
@@ -191,7 +191,7 @@ jobs:
     steps:
       - name: Checkout
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true') && env.SKIP_RESTORE == 'false'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore database
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true') && env.SKIP_RESTORE == 'false'
