@@ -1,4 +1,9 @@
 en:
+  publish:
+    courses:
+      school_experience:
+        edit:
+          page_title: School experience
   govuk_component:
     table_component:
       email_address: Email address

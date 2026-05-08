@@ -40,22 +40,24 @@
 </h2>
 <!-- TEST for school experience section for salaried courses -->
 <%= govuk_summary_list do |summary_list| %>
-  <%= "Salary? #{course.salary?}" %>
-  <% if course.salary? %>
-    <% summary_list.rows << {
-      key: { text: "School experience" },
-      value: {
-        html: link_to(
-          "Enter school experience",
-          school_experience_publish_provider_recruitment_cycle_course_path(
-            @provider.provider_code,
-            @provider.recruitment_cycle_year,
-            course.course_code
-          )
-        )
-      }
-    } %>
-  <% end %>
+<% unless course.fee_based? %>
+  <% enrichment_summary(
+    summary_list,
+    :course,
+    "School experience",
+    link_to(
+      "Enter school experience",
+      school_experience_publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        course.course_code
+      ),
+      class: "govuk-link"
+    ),
+    [],
+    action_path: nil
+  ) %>
+<% end %>
   <% if course.show_degree_requirements_row? %>
     <% enrichment_summary(
       summary_list,
