@@ -65,6 +65,67 @@ module Publish
 
       courses_by_accrediting_provider
       self_accredited_courses
+
+      @active_filters = []
+
+      if params[:funding].present?
+        Array(params[:funding]).each do |value|
+          @active_filters << {
+            key: :funding,
+            value: value,
+            label: value.humanize,
+          }
+        end
+      end
+
+      if params[:status].present?
+        Array(params[:status]).each do |value|
+          @active_filters << {
+            key: :status,
+            value: value,
+            label: value.humanize,
+          }
+        end
+      end
+
+      if params[:education_phase].present?
+        Array(params[:education_phase]).each do |value|
+          @active_filters << {
+            key: :education_phase,
+            value: value,
+            label: value.humanize,
+          }
+        end
+      end
+
+      if params[:qualification].present?
+        Array(params[:qualification]).each do |value|
+          @active_filters << {
+            key: :qualification,
+            value: value == "qts" ? "QTS only" : "QTS with PGCE or PGDE",
+          }
+        end
+      end
+
+      if params[:study_mode].present?
+        Array(params[:study_mode]).each do |value|
+          @active_filters << {
+            key: :study_mode,
+            value: value,
+            label: value.humanize,
+          }
+        end
+      end
+
+      if params[:start_date].present?
+        Array(params[:start_date]).each do |value|
+          @active_filters << {
+            key: :start_date,
+            value: value,
+            label: Date.parse(value).strftime("%B %Y"),
+          }
+        end
+      end
     end
 
     def show

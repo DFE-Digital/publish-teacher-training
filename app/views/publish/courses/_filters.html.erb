@@ -1,11 +1,32 @@
 <%= form_with url: request.path, method: :get, local: true, data: { controller: "course-filters" } do |form| %>
   <!-- STATUS filter -->
   <p class="govuk-heading-m">Filter courses</p>
-  <!-- CLEAR FILTERS link -->
-  <div class="govuk-body govuk-!-margin-bottom-5">
-    <%= link_to "Clear all filters",
-                request.path %>
-  </div>
+  <% if @active_filters.any? %>
+    <div class="app-active-filters govuk-!-margin-bottom-4">
+      <h3 class="govuk-heading-s app-active-filters__heading">
+        Active filters
+      </h3>
+      <ul class="app-active-filters__list">
+        <% @active_filters.each do |filter| %>
+          <li class="app-active-filters__item govuk-body">
+            <%= link_to(
+            request.query_parameters.deep_merge(
+              filter[:key] => Array(params[filter[:key]]) - [filter[:value]]
+            ),
+            class: "app-active-filters__remove-filter"
+          ) do %>
+              <span class="govuk-visually-hidden">Remove filter</span>
+              <%= filter[:label] %> ×
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+      <!-- CLEAR FILTERS link -->
+      <p class="govuk-body">
+        <%= link_to "Clear all filters", request.path %>
+      </p>
+    </div>
+  <% end %>
   <details class="app-c-filter-section" <%= "open" if params[:status].present? %>>
     <summary class="app-c-filter-section__summary">
       <h3 class="app-c-filter-section__summary-heading">
