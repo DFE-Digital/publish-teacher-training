@@ -296,6 +296,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
         get "/start-date", on: :member, to: "courses/start_date#edit"
         put "/start-date", on: :member, to: "courses/start_date#update"
+
+        get "/school-experience", on: :member, to: "courses/school_experience#edit"
+        patch "/school-experience", on: :member, to: "courses/school_experience#update"
       end
 
       scope module: :providers do
