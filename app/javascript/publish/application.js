@@ -1,26 +1,28 @@
 // Entry point for the build script in your package.json
-import jQuery from 'jquery'
-import { initAll } from 'govuk-frontend'
+import jQuery from "jquery";
+import { initAll } from "govuk-frontend";
 
-import autocompleteSetup from './autocomplete'
-import FilterToggle from './filters'
+import autocompleteSetup from "./autocomplete";
+import FilterToggle from "./filters";
 
-import { Application } from '@hotwired/stimulus'
-import InputPreviewController from './courses/input_preview_controller'
-import SelectAllCheckboxesController from './controllers/select_all_checkboxes_controller'
-import CopyLinkController from './controllers/copy_link_controller'
-import SchoolSearchController from './controllers/school_search_controller'
+import { Application } from "@hotwired/stimulus";
+import InputPreviewController from "./courses/input_preview_controller";
+import SelectAllCheckboxesController from "./controllers/select_all_checkboxes_controller";
+import CopyLinkController from "./controllers/copy_link_controller";
+import SchoolSearchController from "./controllers/school_search_controller";
+import CourseFiltersController from "./controllers/course_filters_controller";
 
-window.jQuery = jQuery
-window.$ = jQuery
+window.jQuery = jQuery;
+window.$ = jQuery;
 
-initAll()
-FilterToggle.init()
+initAll();
+FilterToggle.init();
 
-autocompleteSetup()
+autocompleteSetup();
 
-window.Stimulus = Application.start()
-Stimulus.register('input-preview', InputPreviewController)
-Stimulus.register('select-all-checkboxes', SelectAllCheckboxesController)
-Stimulus.register('copy-link', CopyLinkController)
-Stimulus.register('school-search', SchoolSearchController)
+window.Stimulus = Application.start();
+Stimulus.register("input-preview", InputPreviewController);
+Stimulus.register("select-all-checkboxes", SelectAllCheckboxesController);
+Stimulus.register("copy-link", CopyLinkController);
+Stimulus.register("school-search", SchoolSearchController);
+Stimulus.register("course-filters", CourseFiltersController);
