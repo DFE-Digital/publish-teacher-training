@@ -97,7 +97,7 @@ module Find
       end
 
       def search_params
-        @search_params ||= search_params_from_request
+        @search_params ||= Find::SearchParams.permit(params)
       end
 
       def subject_names
@@ -115,7 +115,7 @@ module Find
 
       def compute_digest_from_params
         Find::FilterKeyDigest.digest(
-          subjects: search_params[:subjects],
+          subjects: subject_codes,
           search_attributes: search_params.to_h,
         )
       end
@@ -143,13 +143,9 @@ module Find
         raise ActiveRecord::RecordNotFound
       end
 
-      def search_params_from_request
-        Find::SearchParams.permit(params)
-      end
-
       def subject_codes
-        codes = Array(@search_params[:subjects]).compact_blank
-        codes << @search_params[:subject_code] if @search_params[:subject_code].present?
+        codes = Array(search_params[:subjects])
+        codes << search_params[:subject_code] if search_params[:subject_code].present?
         codes.compact_blank.uniq.sort
       end
 
