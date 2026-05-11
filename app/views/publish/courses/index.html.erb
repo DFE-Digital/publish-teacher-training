@@ -23,19 +23,28 @@
     <%= render "filters" %>
   </div>
   <div class="govuk-grid-column-two-thirds">
-    <% if @self_accredited_courses %>
-      <section data-qa="courses__table-section">
-        <%= render partial: "course_table", locals: { courses: @self_accredited_courses } %>
-      </section>
-    <% end %>
-    <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
-      <section data-qa="courses__table-section">
-        <h2 class="govuk-heading-m">
-          <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
-          <%= accrediting_provider %>
-        </h2>
-        <%= render partial: "course_table", locals: { courses: } %>
-      </section>
+    <% total_courses =
+       (@self_accredited_courses&.size || 0) +
+       (@courses_by_accrediting_provider&.values || []).sum(&:size) %>
+    <% if total_courses.zero? %>
+      <p class="govuk-body">
+        No courses found
+      </p>
+    <% else %>
+      <% if @self_accredited_courses.present? %>
+        <section data-qa="courses__table-section">
+          <%= render partial: "course_table",
+                   locals: { courses: @self_accredited_courses } %>
+        </section>
+      <% end %>
+      <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
+        <section data-qa="courses__table-section">
+          <h2 class="govuk-heading-m">
+            <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
+            <%= accrediting_provider %>
+          </h2>
+          <%= render partial: "course_table", locals: { courses: } %>
+        </section>
+      <% end %>
     <% end %>
   </div>
-</div>
