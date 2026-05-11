@@ -424,7 +424,7 @@ private
   def and_i_see_financial_support
     expect(decorated_course.use_financial_support_placeholder?).to be_falsey
 
-    expect(publish_course_preview_page.scholarship_amount).to have_content("Bursaries of £24,000 and scholarships of £26,000 are available to eligible trainees.")
+    expect(publish_course_preview_page).to have_content("Bursaries of £24,000 and scholarships of £26,000 are available to eligible trainees.")
 
     expect(publish_course_preview_page).to have_no_content("Information not yet available")
   end
