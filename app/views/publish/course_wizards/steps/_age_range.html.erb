@@ -1,0 +1,33 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.age_range.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.age_range.caption")) %>
+  <%= t("course_wizard.steps.age_range.heading") %>
+</h1>
+
+<% preset_options = wizard_repository.read[:level] == "primary" ? current_step.primary_age_range_options : current_step.secondary_age_range_options %>
+
+<%= form.govuk_radio_buttons_fieldset :age_range_in_years, legend: { hidden: true, text: t("course_wizard.steps.age_range.heading") } do %>
+  <% preset_options.each_with_index do |value, index| %>
+    <%= form.govuk_radio_button :age_range_in_years, value,
+          label: { text: value.humanize },
+          link_errors: index.zero? %>
+  <% end %>
+
+  <%= form.govuk_radio_divider %>
+
+  <%= form.govuk_radio_button :age_range_in_years, "other",
+        label: { text: t("edit_options.age_range_in_years.other.label") } do %>
+    <p class="govuk-body"><%= t("course_wizard.steps.age_range.other_hint") %></p>
+
+    <%= form.govuk_text_field :course_age_range_in_years_other_from,
+          label: { text: t("course_wizard.steps.age_range.other_from_label") },
+          class: "govuk-input govuk-input--width-2" %>
+
+    <%= form.govuk_text_field :course_age_range_in_years_other_to,
+          label: { text: t("course_wizard.steps.age_range.other_to_label") },
+          class: "govuk-input govuk-input--width-2" %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.age_range.submit") %>

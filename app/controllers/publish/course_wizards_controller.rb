@@ -15,6 +15,8 @@ module Publish
       params[:step]&.to_sym || :level
     end
 
+    helper_method :wizard_repository
+
     def new
       return render_schools_messages unless provider.sites.any?
 
@@ -80,9 +82,10 @@ module Publish
     end
 
     def wizard_repository
-      DfE::Wizard::Repository::Cache.new(
-        cache: Rails.cache,
-        key: "course_wizard_#{params[:provider_code]}_#{params[:recruitment_cycle_year]}_#{state_key}",
+      @wizard_repository ||= CourseWizard::Repositories::Course.new(
+        provider_code: params[:provider_code],
+        recruitment_cycle_year: params[:recruitment_cycle_year],
+        state_key:,
         expires_in: CACHE_EXPIRY,
       )
     end

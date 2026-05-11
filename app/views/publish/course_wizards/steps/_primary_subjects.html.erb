@@ -5,9 +5,9 @@
   <%= t("course_wizard.steps.primary_subjects.heading") %>
 </h1>
 
-<%= form.govuk_radio_buttons_fieldset :master_subject_id, legend: { hidden: true, text: t("course_wizard.steps.primary_subjects.heading") } do %>
+<%= form.govuk_radio_buttons_fieldset :primary_master_subject_id, legend: { hidden: true, text: t("course_wizard.steps.primary_subjects.heading") } do %>
   <% current_step.selectable_subjects.each do |name, id| %>
-    <%= form.govuk_radio_button :master_subject_id, id, label: { text: name }, link_errors: true %>
+    <%= form.govuk_radio_button :primary_master_subject_id, id, label: { text: name }, link_errors: true %>
   <% end %>
 <% end %>
 

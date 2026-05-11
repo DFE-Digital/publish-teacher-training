@@ -42,13 +42,21 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
   context "from primary subjects" do
     let(:current_step) { :primary_subjects }
 
-    it "proceeds to courses page" do
-      expect(wizard).to have_next_step(:courses_index)
+    it "proceeds to age range page" do
+      expect(wizard).to have_next_step(:age_range)
     end
   end
 
   context "from secondary subjects" do
     let(:current_step) { :secondary_subjects }
+
+    it "proceeds to age range page" do
+      expect(wizard).to have_next_step(:age_range)
+    end
+  end
+
+  context "from age range" do
+    let(:current_step) { :age_range }
 
     it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)

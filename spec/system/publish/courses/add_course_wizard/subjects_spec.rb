@@ -14,7 +14,7 @@ RSpec.describe "Add course wizard subjects step", type: :system do
     when_i_visit_the_wizard_subjects_page_for_primary
     and_i_choose_primary_subject
     and_i_click_continue
-    then_i_am_taken_to_the_courses_page
+    then_i_am_taken_to_the_age_range_page
   end
 
   scenario "submitting primary without selecting a subject shows validation errors" do
@@ -27,13 +27,20 @@ RSpec.describe "Add course wizard subjects step", type: :system do
     when_i_visit_the_wizard_subjects_page_for_secondary
     and_i_choose_secondary_subject
     and_i_click_continue
-    then_i_am_taken_to_the_courses_page
+    then_i_am_taken_to_the_age_range_page
   end
 
   scenario "submitting secondary without selecting a subject shows validation errors" do
     when_i_visit_the_wizard_subjects_page_for_secondary
     and_i_click_continue
     then_i_have_errors_on_the_subjects_step
+  end
+
+  scenario "submitting secondary with a duplicate master and subordinate subject shows validation errors" do
+    when_i_visit_the_wizard_subjects_page_for_secondary
+    and_i_choose_duplicate_master_and_subordinate_subject
+    and_i_click_continue
+    then_i_should_see_a_duplicate_master_and_subordinate_subject_error
   end
 
 private
@@ -55,6 +62,11 @@ private
 
   def and_secondary_subjects_exist
     secondary_subject
+  end
+
+  def and_i_choose_duplicate_master_and_subordinate_subject
+    select secondary_subject.subject_name, from: "First subject"
+    select secondary_subject.subject_name, from: "Second subject"
   end
 
   def when_i_visit_the_wizard_subjects_page_for_primary
@@ -93,11 +105,13 @@ private
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_courses_page
+  def then_i_am_taken_to_the_age_range_page
     expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_courses_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
+        step: :age_range,
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
+        state_key: wizard_state_key,
       ),
       ignore_query: true,
     )
@@ -106,6 +120,11 @@ private
   def then_i_have_errors_on_the_subjects_step
     expect(page).to have_content("There is a problem")
     expect(page).to have_content("Select a subject")
+  end
+
+  def then_i_should_see_a_duplicate_master_and_subordinate_subject_error
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("The second subject must be different to the first subject")
   end
 
   def primary_subject

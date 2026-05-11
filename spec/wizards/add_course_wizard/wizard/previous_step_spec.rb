@@ -32,4 +32,29 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:level)
     end
   end
+
+  context "from age range with primary level" do
+    let(:current_step) { :age_range }
+
+    before do
+      state_store.write(primary_master_subject_id: "123")
+      state_store.write(level: "primary")
+    end
+
+    it "goes back to primary subjects" do
+      expect(wizard).to have_previous_step(:primary_subjects)
+    end
+  end
+
+  context "from age range with secondary level" do
+    let(:current_step) { :age_range }
+
+    before do
+      state_store.write(master_subject_id: "123", subordinate_subject_id: "456")
+    end
+
+    it "goes back to secondary subjects" do
+      expect(wizard).to have_previous_step(:secondary_subjects)
+    end
+  end
 end
