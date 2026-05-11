@@ -12,3 +12,6 @@
 * [10. Merge Publish service into TTAPI](0010-merge-publish-service-into-ttapi.md)
 * [11. TDA courses](0011-tda-courses.md)
 * [12. Formalise Accredited Provider relationships](0012-formalize-accredited-provider-relationships.md)
+* [13. Database backed sessions with polymorphism](0013-database-backed-sessions.md)
+* [14. Recent Searches and Email Alerts for Find Teacher Training](0014-recent-searches-email-alert.md)
+* [15. Store financial incentives by year with display control](0015-store-financial-incentives-by-year-with-display-control.md)
