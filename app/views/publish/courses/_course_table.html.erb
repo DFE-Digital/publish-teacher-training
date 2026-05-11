@@ -10,6 +10,11 @@
     </tr>
   </thead>
   <tbody class="govuk-table__body">
+    <!-- Number of courses currently being displayed -->
+    <p class="govuk-body-s number-of-courses govuk-!-margin-bottom-1">
+      <%= "#{courses.count} courses" %>
+    </p>
+    <hr>
     <%= render partial: "publish/courses/course_table_row", collection: courses, as: :course %>
   </tbody>
 </table>

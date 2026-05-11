@@ -31,3 +31,14 @@
 .app-active-filters__remove-filter:focus {
   @include govuk-focused-text;
 }
+
+.filter-summary {
+  display: flex;
+  flex-direction: column;
+  color: #505a5f;
+  margin-bottom: 0;
+}
+
+// .number-of-courses {
+//   color: #505a5f;
+// }
