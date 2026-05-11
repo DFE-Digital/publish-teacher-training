@@ -28,7 +28,7 @@
         <p class="govuk-hint">Candidates have said they would like to know:</p>
 
         <ul class="govuk-list govuk-list--bullet govuk-hint">
-          <li>How much time should they spend in school?</li>
+          <li>How much time should they have spent in school?</li>
           <li>What types of activities should they have experience in? For example, observing lessons, teaching classes, behaviour management</li>
           <li>Must it have been paid work or could it be voluntary?</li>
           <li>Do they need to have had experience in the particular subject they're applying for?</li>
@@ -41,8 +41,8 @@
     </div>
   </div>
 
-  <%= link_to "Update school experience",
-            school_experience_details_publish_provider_recruitment_cycle_course_path(
+<%= link_to "Update school experience",
+            publish_provider_recruitment_cycle_course_path(
               @provider.provider_code,
               params[:recruitment_cycle_year],
               @course.course_code

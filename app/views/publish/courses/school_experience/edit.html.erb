@@ -1,59 +1,58 @@
+<%= form_with(
+      model: @course,
+      url: school_experience_publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ),
+      method: :patch,
+      local: true
+    ) do |f| %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
 
-    <p class="govuk-body-s"><a href="./" class="govuk-link">< Back</a></p>
+  <span class="govuk-caption-l">
+    <%= @course.name_and_code %>
+  </span>
 
-    <span class="govuk-caption-l">
-      <%= @course.name_and_code %>
-    </span>
+  <h1 class="govuk-heading-l">
+    School experience (optional)
+  </h1>
 
-    <h1 class="govuk-heading-l">
-      School experience
-    </h1>
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        Is school experience required or strongly recommended for this course?
+      </legend>
 
-  </div>
-</div>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-
-    <div class="govuk-form-group">
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h1 class="govuk-fieldset__heading">
-            Is school experience required or strongly recommended for this course? (optional)
-          </h1>
-        </legend>
-        <div class="govuk-radios" data-module="govuk-radios">
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
-            <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
-              Yes, school experience is required or strongly recommended
-            </label>
-          </div>
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
-            <label class="govuk-label govuk-radios__label" for="whereDoYouLive-2">
-              No, school experience is not required or strongly recommended
-            </label>
-          </div>
+      <div class="govuk-radios">
+        <div class="govuk-radios__item">
+          <%= f.radio_button :school_experience_required, true, class: "govuk-radios__input", id: "school_experience_yes" %>
+          <%= f.label :school_experience_required, "Yes, school experience is required or strongly recommended",
+                      value: true,
+                      class: "govuk-label govuk-radios__label",
+                      for: "school_experience_yes" %>
         </div>
-      </fieldset>
-    </div>
 
-<%= link_to "Continue",
-            school_experience_details_publish_provider_recruitment_cycle_course_path(
-              @provider.provider_code,
-              params[:recruitment_cycle_year],
-              @course.course_code
-            ),
-            class: "govuk-button" %>
-
-
-    </div>
+        <div class="govuk-radios__item">
+          <%= f.radio_button :school_experience_required, false, class: "govuk-radios__input", id: "school_experience_no" %>
+          <%= f.label :school_experience_required, "No, school experience is not required or strongly recommended",
+                      value: false,
+                      class: "govuk-label govuk-radios__label",
+                      for: "school_experience_no" %>
+        </div>
+      </div>
+    </fieldset>
   </div>
 
-  <p class="govuk-body">
-  <a href="./" class="govuk-link">Cancel</a>
+  <%= f.submit "Continue", class: "govuk-button" %>
+
+<% end %>
+
+<p class="govuk-body">
+  <%= link_to "Cancel", details_publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ), class: "govuk-link" %>
 </p>
+``
