@@ -351,6 +351,28 @@ class Course < ApplicationRecord
     end
   }
 
+  scope :with_start_dates, lambda { |start_date_filters|
+    return all if start_date_filters.blank?
+
+    ranges = Array(start_date_filters).map { |filter|
+      case filter
+      when "jan_aug_2026"
+        Date.new(2026, 1, 1)..Date.new(2026, 8, 31)
+      when "sep_2026"
+        Date.new(2026, 9, 1)..Date.new(2026, 9, 30)
+      when "oct_2026_jul_2027"
+        Date.new(2026, 10, 1)..Date.new(2027, 7, 31)
+      end
+    }.compact
+
+    return all if ranges.empty?
+
+    where(
+      ranges.map { "(course.start_date BETWEEN ? AND ?)" }.join(" OR "),
+      *ranges.flat_map { |r| [r.begin, r.end] },
+    )
+  }
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
