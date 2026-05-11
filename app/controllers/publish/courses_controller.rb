@@ -10,38 +10,71 @@ module Publish
       authorize :provider, :index?
 
       # Courses to actually display in the table
-      courses = filtered_courses
+      filtered_courses
 
-      # Courses used to decide whether information varies
-      # (only use all courses when no filters are applied)
-      comparison_courses =
-        if filters_applied?
-          courses
-        else
-          provider.courses.map(&:decorate)
-        end
+      # OLD CODE FOR WHICH COURSE INFORMATION TO SHOW (shows all information when filtered and only varying information when unfiltered)
+      # Courses to use for comparison purposes (i.e. deciding which information to show and which filters to show). This is either the filtered or unfiltered courses, depending on whether filters are applied or not, as we want to compare based on the courses being shown to users.
+      # comparison_courses =
+      #   if filters_applied?
+      #     courses
+      #   else
+      #     provider.courses.map(&:decorate)
+      #   end
 
-      if filters_applied?
-        # When filtering, always show all course information
-        @show_summary_parts = {
-          qualification: true,
-          study_mode: true,
-        }
-        @show_funding = true
-        @show_start_date = true
-      else
-        # When unfiltered, only show information if it varies
-        @show_summary_parts = {
-          qualification: comparison_courses.map { |c| c.summary_parts[0] }.uniq.size > 1,
-          study_mode: comparison_courses.map { |c| c.summary_parts[1] }.compact.uniq.size > 1,
-        }
+      # Decide which course information to show based on whether it varies across the courses being compared (works the for unfultered and filtered courses)
+      # @show_summary_parts = {
+      #   qualification:
+      #     comparison_courses.map { |c| c.summary_parts[0] }.compact.uniq.size > 1,
 
-        @show_funding =
-          comparison_courses.map(&:funding).uniq.size > 1
+      #   study_mode:
+      #     comparison_courses.map { |c| c.summary_parts[1] }.compact.uniq.size > 1,
+      # }
 
-        @show_start_date =
-          comparison_courses.map(&:start_date).uniq.size > 1
-      end
+      # @show_funding =
+      #   comparison_courses.map(&:funding).uniq.size > 1
+
+      # @show_start_date =
+      #   comparison_courses.map(&:start_date).uniq.size > 1
+
+      # LOGIC FOR WHICH COURSE INFORMATION TO SHOW (shows varie dinformation if unfiltered and all info when filtered)
+      # if filters_applied?
+      #   # When filtering, always show all course information
+      #   @show_summary_parts = {
+      #     qualification: true,
+      #     study_mode: true,
+      #   }
+      #   @show_funding = true
+      #   @show_start_date = true
+      # else
+      #   # When unfiltered, only show information if it varies
+      #   @show_summary_parts = {
+      #     qualification: comparison_courses.map { |c| c.summary_parts[0] }.uniq.size > 1,
+      #     study_mode: comparison_courses.map { |c| c.summary_parts[1] }.compact.uniq.size > 1,
+      #   }
+
+      #   @show_funding =
+      #     comparison_courses.map(&:funding).uniq.size > 1
+
+      #   @show_start_date =
+      #     comparison_courses.map(&:start_date).uniq.size > 1
+      # end
+
+      # NEW LOGIC FOR WHICH COURSE INFORMATION TO SHOW (always shows varying information and shows all rows in course information from unfiltered list when filtered)
+      all_courses = provider.courses.map(&:decorate)
+
+      @show_summary_parts = {
+        qualification:
+          all_courses.map { |c| c.summary_parts[0] }.compact.uniq.size > 1,
+
+        study_mode:
+    all_courses.map { |c| c.summary_parts[1] }.compact.uniq.size > 1,
+      }
+
+      @show_funding =
+        all_courses.map(&:funding).uniq.size > 1
+
+      @show_start_date =
+        all_courses.map(&:start_date).uniq.size > 1
 
       # Decide whether to show the "Course information" column at all
       @show_course_info_column =
@@ -51,10 +84,10 @@ module Publish
 
       # Which filters should beshown to users
       @show_filters = {
-        funding: comparison_courses.map(&:funding).uniq.size > 1,
-        qualification: comparison_courses.map(&:qualification).uniq.size > 1,
-        study_mode: comparison_courses.map(&:study_mode).uniq.size > 1,
-        start_date: comparison_courses.map(&:start_date).uniq.size > 1,
+        funding: all_courses.map(&:funding).uniq.size > 1,
+        qualification: all_courses.map(&:qualification).uniq.size > 1,
+        study_mode: all_courses.map(&:study_mode).uniq.size > 1,
+        start_date: all_courses.map(&:start_date).uniq.size > 1,
       }
 
       # Always show filters that are currently applied
