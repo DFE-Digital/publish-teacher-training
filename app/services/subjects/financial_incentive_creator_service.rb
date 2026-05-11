@@ -2,6 +2,14 @@
 
 module Subjects
   class FinancialIncentiveCreatorService
+    DEFAULT_ATTRIBUTES = {
+      bursary_amount: nil,
+      scholarship: nil,
+      early_career_payments: nil,
+      non_uk_bursary_eligible: false,
+      non_uk_scholarship_eligible: false,
+    }.freeze
+
     def initialize(year:, displayed: false, subject: Subject, financial_incentive: FinancialIncentive)
       @subject = subject
       @financial_incentive = financial_incentive
@@ -214,22 +222,29 @@ module Subjects
     end
 
     def execute
-      # Reset the target year's records in case subjects
-      # from an earlier import are no longer being updated.
-      @financial_incentive.for_year(@year).update_all(
-        bursary_amount: nil,
-        scholarship: nil,
-        early_career_payments: nil,
-        non_uk_bursary_eligible: false,
-        non_uk_scholarship_eligible: false,
-        displayed: @displayed,
-      )
+      @financial_incentive.transaction do
+        reset_target_year_financial_incentives
 
-      subject_and_financial_incentives.each do |subject_name, financial_incentive_attributes|
-        @subject.where(subject_name:).each do |subject|
-          financial_incentive_record = @financial_incentive.find_or_initialize_by(subject:, year: @year)
-          financial_incentive_record.update!(financial_incentive_attributes.merge(displayed: @displayed))
+        subject_and_financial_incentives.each do |subject_names, financial_incentive_attributes|
+          @subject.where(subject_name: subject_names).find_each do |subject|
+            financial_incentive_record = @financial_incentive.find_or_initialize_by(subject:, year: @year)
+            financial_incentive_record.assign_attributes(DEFAULT_ATTRIBUTES.merge(financial_incentive_attributes))
+
+            if @displayed
+              financial_incentive_record.display!
+            else
+              financial_incentive_record.save!
+            end
+          end
         end
+      end
+    end
+
+  private
+
+    def reset_target_year_financial_incentives
+      @financial_incentive.for_year(@year).find_each do |financial_incentive|
+        financial_incentive.update!(DEFAULT_ATTRIBUTES)
       end
     end
   end

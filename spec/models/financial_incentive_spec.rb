@@ -39,4 +39,33 @@ describe FinancialIncentive do
       expect(financial_incentive).not_to be_displayed
     end
   end
+
+  describe "#display!" do
+    let(:subject_record) { find_or_create(:primary_subject, :primary) }
+
+    before do
+      described_class.where(subject: subject_record).delete_all
+    end
+
+    it "displays the financial incentive and hides the previously displayed incentive for the subject" do
+      previous_financial_incentive = create(:financial_incentive, subject: subject_record, year: 2026, displayed: true)
+      financial_incentive = create(:financial_incentive, :hidden, subject: subject_record, year: 2027)
+
+      financial_incentive.display!
+
+      expect(financial_incentive.reload).to be_displayed
+      expect(previous_financial_incentive.reload).not_to be_displayed
+    end
+
+    it "can display a new financial incentive" do
+      previous_financial_incentive = create(:financial_incentive, subject: subject_record, year: 2026, displayed: true)
+      financial_incentive = build(:financial_incentive, :hidden, subject: subject_record, year: 2027)
+
+      financial_incentive.display!
+
+      expect(financial_incentive).to be_persisted
+      expect(financial_incentive).to be_displayed
+      expect(previous_financial_incentive.reload).not_to be_displayed
+    end
+  end
 end
