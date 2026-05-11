@@ -56,18 +56,23 @@ module Find
     end
 
     def show_email_alert_link?
-      return unless FeatureFlag.active?(:email_alerts)
+      return unless current_user.present? && FeatureFlag.active?(:email_alerts)
 
-      filters_applied? && alert_does_not_exist?
+      filters_applied? && alert_does_not_exist? && meaningful_for_recent_search?
     end
 
     def alert_does_not_exist?
-      return if current_user.blank?
+      !current_user.email_alerts.active.exists?(filter_key_digest: search_digest)
+    end
 
-      subjects = [@search_params[:subjects], [@search_params[:subject_code]]].flatten.compact_blank
-      filter_key_digest = Find::FilterKeyDigest.digest(subjects:, search_attributes: @search_params)
+    def search_digest
+      @search_digest ||= Find::FilterKeyDigest.digest(subjects: subject_codes, search_attributes: @search_params)
+    end
 
-      !current_user.email_alerts.active.exists?(filter_key_digest:)
+    def subject_codes
+      codes = Array(params[:subjects])
+      codes << params[:subject_code] if params[:subject_code].present?
+      codes.compact_blank.uniq.sort
     end
 
     def filters_applied?
