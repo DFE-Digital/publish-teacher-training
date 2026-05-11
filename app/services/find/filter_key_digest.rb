@@ -34,6 +34,7 @@ module Find
       (attrs || {}).stringify_keys
         .slice(*FILTER_KEYS)
         .transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
+        .compact_blank
     end
   end
 end
