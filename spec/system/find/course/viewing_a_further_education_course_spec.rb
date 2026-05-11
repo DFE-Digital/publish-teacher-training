@@ -206,7 +206,8 @@ private
 
     expect(find_course_show_page).not_to have_salary_details
 
-    expect(find_course_show_page).to have_no_scholarship_amount
+    expect(find_course_show_page).to have_no_content("Bursaries of")
+    expect(find_course_show_page).to have_no_content("Scholarships of")
 
     expect(find_course_show_page.required_qualifications).to have_no_content(
       @course.latest_published_enrichment.required_qualifications,
@@ -270,7 +271,8 @@ private
   end
 
   def and_i_should_see_no_funding_options
-    expect(find_course_show_page).to have_no_scholarship_amount
+    expect(find_course_show_page).to have_no_content("Bursaries of")
+    expect(find_course_show_page).to have_no_content("Scholarships of")
   end
 
   def then_i_should_not_see_the_apply_button

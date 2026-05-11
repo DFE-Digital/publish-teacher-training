@@ -227,7 +227,7 @@ private
 
     expect(find_course_show_page).not_to have_salary_details
 
-    expect(find_course_show_page.scholarship_amount).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees")
+    expect(find_course_show_page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees")
 
     expect(find_course_show_page.required_qualifications).to have_no_content(
       @course.latest_published_enrichment.required_qualifications,
