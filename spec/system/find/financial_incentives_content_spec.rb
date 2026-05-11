@@ -14,7 +14,7 @@ RSpec.describe "financial incentives call out boxes content" do
         given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000)
         and_there_is_a_hidden_future_financial_incentive(non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
         when_i_visit_the_find_results_page
-        then_i_see_the_displayed_financial_incentive_is_for_uk_citizens
+        then_i_see_the_displayed_search_result_financial_incentive_is_for_uk_citizens
         and_i_do_not_see_the_hidden_future_financial_incentive
       end
 
@@ -23,7 +23,7 @@ RSpec.describe "financial incentives call out boxes content" do
         and_there_is_a_hidden_future_financial_incentive(non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
         when_i_visit_the_find_results_page
         when_i_select_the_course
-        then_i_see_the_displayed_financial_incentive_is_for_uk_citizens
+        then_i_see_the_displayed_course_page_financial_incentive_is_for_uk_citizens
         and_i_do_not_see_the_hidden_future_financial_incentive
       end
 
@@ -31,7 +31,7 @@ RSpec.describe "financial incentives call out boxes content" do
         given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000, subject: :physics, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
         and_there_is_a_hidden_future_financial_incentive
         when_i_visit_the_find_results_page
-        then_i_see_the_displayed_financial_incentive_is_available_to_non_uk_citizens
+        then_i_see_the_displayed_search_result_financial_incentive_is_available_to_non_uk_citizens
         and_i_do_not_see_the_hidden_future_financial_incentive
       end
 
@@ -40,7 +40,7 @@ RSpec.describe "financial incentives call out boxes content" do
         and_there_is_a_hidden_future_financial_incentive
         when_i_visit_the_find_results_page
         when_i_select_the_course
-        then_i_see_the_displayed_financial_incentive_is_available_to_non_uk_citizens
+        then_i_see_the_displayed_course_page_financial_incentive_is_available_to_non_uk_citizens
         and_i_do_not_see_the_hidden_future_financial_incentive
       end
     end
@@ -203,13 +203,24 @@ RSpec.describe "financial incentives call out boxes content" do
     end
   end
 
-  def then_i_see_the_displayed_financial_incentive_is_for_uk_citizens
+  def then_i_see_the_displayed_search_result_financial_incentive_is_for_uk_citizens
     expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
   end
 
-  def then_i_see_the_displayed_financial_incentive_is_available_to_non_uk_citizens
+  def then_i_see_the_displayed_search_result_financial_incentive_is_available_to_non_uk_citizens
     expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available")
     expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+  end
+
+  def then_i_see_the_displayed_course_page_financial_incentive_is_for_uk_citizens
+    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+    expect(page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
+  end
+
+  def then_i_see_the_displayed_course_page_financial_incentive_is_available_to_non_uk_citizens
+    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available")
+    expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+    expect(page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
   end
 
   def and_i_do_not_see_the_hidden_future_financial_incentive
@@ -273,6 +284,10 @@ RSpec.describe "financial incentives call out boxes content" do
 
   def select_course
     click_on(@course.name)
+    expect(page).to have_current_path(
+      find_course_path(provider_code: @course.provider_code, course_code: @course.course_code),
+      ignore_query: true,
+    )
   end
 
   alias_method :when_i_select_the_course, :select_course
