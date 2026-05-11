@@ -99,6 +99,7 @@ module Publish
       courses_by_accrediting_provider
       self_accredited_courses
 
+      # Set active filters for display in the view
       @active_filters = []
 
       if params[:funding].present?
@@ -135,7 +136,8 @@ module Publish
         Array(params[:qualification]).each do |value|
           @active_filters << {
             key: :qualification,
-            value: value == "qts" ? "QTS only" : "QTS with PGCE or PGDE",
+            value: value,
+            label: value == "qts" ? "QTS only" : "QTS with PGCE or PGDE",
           }
         end
       end
