@@ -154,10 +154,22 @@ module Publish
 
       if params[:start_date].present?
         Array(params[:start_date]).each do |value|
+          label =
+            case value
+            when "jan_aug_2026"
+              "January to August 2026"
+            when "sep_2026"
+              "September 2026 only"
+            when "oct_2026_jul_2027"
+              "October 2026 to July 2027"
+            else
+              value
+            end
+
           @active_filters << {
             key: :start_date,
             value: value,
-            label: Date.parse(value).strftime("%B %Y"),
+            label: label,
           }
         end
       end
@@ -354,7 +366,7 @@ module Publish
       courses = courses.where(funding: params[:funding]) if params[:funding].present?
       courses = courses.where(qualification: params[:qualification]) if params[:qualification].present?
       courses = courses.where(study_mode: params[:study_mode]) if params[:study_mode].present?
-      courses = courses.where(start_date: params[:start_date]) if params[:start_date].present?
+      courses = courses.with_start_dates(params[:start_date]) if params[:start_date].present?
 
       courses = courses.map(&:decorate)
 
