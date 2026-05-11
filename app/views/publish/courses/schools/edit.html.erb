@@ -78,7 +78,7 @@
                 </div>
               </div>
               <!-- Placeholder: Checkbox for filtering to show only attached schools - DOESN"T WORK -->
-              <div class="govuk-checkboxes__item govuk-!-margin-bottom-3 govuk-checkboxes--small">
+              <%# <div class="govuk-checkboxes__item govuk-!-margin-bottom-3 govuk-checkboxes--small">
                 <input
                   type="checkbox"
                   class="govuk-checkboxes__input"
@@ -89,37 +89,37 @@
                   for="show-attached-only">
                     Only show schools attached to this course
                   </label>
-                </div>
-              </div>
+                </div> %>
             </div>
-            <!-- Select all -->
-            <div class="govuk-checkboxes__item">
-              <input
+          </div>
+          <!-- Select all -->
+          <div class="govuk-checkboxes__item">
+            <input
             type="checkbox"
             class="govuk-checkboxes__input"
             id="select-all-schools"
             data-select-all-checkboxes-target="selectAll"
             data-action="select-all-checkboxes#toggleAll">
-                <label
+              <label
             class="govuk-label govuk-checkboxes__label"
             for="select-all-schools">
-                  <%= t("publish.courses.schools.select_all") %>
-                </label>
-              </div>
-              <div class="govuk-body govuk-!-margin-left-2">or</div>
-              <div class="govuk-hint">
-                <%= t("publish.courses.schools.new.selection") %>
-              </div>
-              <!-- ✅ Schools list (single loop, searchable) -->
-              <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
-                <div
+                <%= t("publish.courses.schools.select_all") %>
+              </label>
+            </div>
+            <div class="govuk-body govuk-!-margin-left-2">or</div>
+            <div class="govuk-hint">
+              <%= t("publish.courses.schools.new.selection") %>
+            </div>
+            <!-- Schools list (single loop, searchable) -->
+            <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+              <div
             data-school-search-target="school"
             data-search-text="<%= [
               site.location_name,
               site.postcode,
               site.urn,
             ].compact.join(" ").downcase %>">
-                  <%= f.govuk_check_box :site_ids,
+                <%= f.govuk_check_box :site_ids,
               site.id,
               label: {
                 text: [
@@ -133,15 +133,15 @@
                 select_all_checkboxes_target: "checkbox",
                 action: "select-all-checkboxes#updateSelectAll",
               } %>
-                </div>
-              <% end %>
+              </div>
             <% end %>
-            <div class="govuk-button-group">
-              <%= f.govuk_submit "Update #{page_title.downcase}" %>
-              <%= f.govuk_submit "Update and add another placement school", class: "govuk-button--secondary" %>
-            </div>
-            <p class="govuk-body">
-              <%= govuk_link_to(
+          <% end %>
+          <div class="govuk-button-group">
+            <%= f.govuk_submit "Update #{page_title.downcase}" %>
+            <%= f.govuk_submit "Update and add another placement school", class: "govuk-button--secondary" %>
+          </div>
+          <p class="govuk-body">
+            <%= govuk_link_to(
           t("cancel"),
           details_publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
@@ -149,7 +149,7 @@
             @course.course_code,
           ),
         ) %>
-            </p>
-          </div>
+          </p>
         </div>
-      <% end %>
+      </div>
+    <% end %>
