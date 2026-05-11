@@ -297,6 +297,8 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/start-date", on: :member, to: "courses/start_date#edit"
         put "/start-date", on: :member, to: "courses/start_date#update"
 
+        get "/school-experience/details", on: :member, to: "courses/school_experience#details", as: :school_experience_details
+
         get "/school-experience", on: :member, to: "courses/school_experience#edit"
         patch "/school-experience", on: :member, to: "courses/school_experience#update"
       end
