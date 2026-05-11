@@ -18,4 +18,15 @@ class FinancialIncentive < ApplicationRecord
   def self.current_year
     (RecruitmentCycle.current&.year || Find::CycleTimetable.current_year).to_i
   end
+
+  def display!
+    subject.with_lock do
+      self.class.where(subject_id:, displayed: true).where.not(id:).find_each do |financial_incentive|
+        financial_incentive.update!(displayed: false)
+      end
+
+      self.displayed = true
+      save!
+    end
+  end
 end
