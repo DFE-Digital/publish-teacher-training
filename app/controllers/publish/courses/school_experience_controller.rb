@@ -9,6 +9,10 @@ module Publish
         @course = find_course
       end
 
+      def details
+        @course = find_course
+      end
+
       private
 
       def find_course

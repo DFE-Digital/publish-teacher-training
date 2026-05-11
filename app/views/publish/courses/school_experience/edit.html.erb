@@ -1,14 +1,59 @@
 
-<p class="govuk-body-s"><a href="./" class="govuk-link">< Back</a></p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
 
-<span class="govuk-caption-l">
-  <%= @course.name_and_code %>
-</span>
+    <p class="govuk-body-s"><a href="./" class="govuk-link">< Back</a></p>
 
-<h1 class="govuk-heading-l">
-  School experience
-</h1>
+    <span class="govuk-caption-l">
+      <%= @course.name_and_code %>
+    </span>
 
-<p class="govuk-body">
-  This page is working.
+    <h1 class="govuk-heading-l">
+      School experience
+    </h1>
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h1 class="govuk-fieldset__heading">
+            Is school experience required or strongly recommended for this course? (optional)
+          </h1>
+        </legend>
+        <div class="govuk-radios" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
+            <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
+              Yes, school experience is required or strongly recommended
+            </label>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
+            <label class="govuk-label govuk-radios__label" for="whereDoYouLive-2">
+              No, school experience is not required or strongly recommended
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+<%= link_to "Continue",
+            school_experience_details_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              params[:recruitment_cycle_year],
+              @course.course_code
+            ),
+            class: "govuk-button" %>
+
+
+    </div>
+  </div>
+
+  <p class="govuk-body">
+  <a href="./" class="govuk-link">Cancel</a>
 </p>
