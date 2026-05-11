@@ -13,16 +13,16 @@ module Courses
       ages = parse_age_range(age_range_in_years)
 
       if ages.nil?
-        course.errors.add(:age_range_in_years, "^Enter an age range")
+        course.errors.add(:age_range_in_years, "Enter an age range")
         return
       end
 
       from_age, to_age = ages.values_at("from", "to")
 
       if invalid_from_age?(from_age) || invalid_to_age?(to_age)
-        course.errors.add(:age_range_in_years, "^Age range must cover #{MIN_AGE_SPAN} or more school years")
+        course.errors.add(:age_range_in_years, "Age range must cover #{MIN_AGE_SPAN} or more school years")
       elsif (to_age - from_age) < MIN_AGE_SPAN
-        course.errors.add(:age_range_in_years, "^Age range must cover at least #{MIN_AGE_SPAN} years")
+        course.errors.add(:age_range_in_years, "Age range must cover at least #{MIN_AGE_SPAN} years")
       end
     end
 

@@ -19,6 +19,14 @@ RSpec.describe CourseWizard::Steps::SecondarySubjects do
         expect(wizard_step).not_to be_valid
       end
     end
+
+    context "when master_subject_id is the same as the subordinate_subject_id" do
+      it "is not valid" do
+        wizard_step.master_subject_id = "1"
+        wizard_step.subordinate_subject_id = "1"
+        expect(wizard_step).not_to be_valid
+      end
+    end
   end
 
   describe ".permitted_params" do

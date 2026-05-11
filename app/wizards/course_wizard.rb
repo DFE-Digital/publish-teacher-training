@@ -14,6 +14,8 @@ class CourseWizard
       graph.add_node :level, Steps::Level
       graph.add_node :primary_subjects, Steps::PrimarySubjects
       graph.add_node :secondary_subjects, Steps::SecondarySubjects
+      graph.add_node :age_range, Steps::AgeRange
+
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
 
       graph.add_multiple_conditional_edges(
@@ -25,8 +27,10 @@ class CourseWizard
         default: :secondary_subjects,
       )
 
-      graph.add_edge from: :primary_subjects, to: :courses_index
-      graph.add_edge from: :secondary_subjects, to: :courses_index
+      graph.add_edge from: :primary_subjects, to: :age_range
+      graph.add_edge from: :secondary_subjects, to: :age_range
+
+      graph.add_edge from: :age_range, to: :courses_index
     end
   end
 

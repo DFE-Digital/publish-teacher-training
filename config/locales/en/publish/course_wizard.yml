@@ -26,7 +26,7 @@ en:
         heading: Subject
         submit: Continue
         errors:
-          master_subject_id:
+          primary_master_subject_id:
             blank: Select a subject
       secondary_subjects:
         caption: Add course
@@ -40,3 +40,33 @@ en:
         errors:
           master_subject_id:
             blank: Select a subject
+            same_as_subordinate_subject_id: The second subject must be different to the first subject
+      age_range:
+        caption: Add course
+        heading: Age range
+        other_hint: "Enter an age range in years, for example: 5 to 11. The course must cover 4 or more school years."
+        other_from_label: From
+        other_to_label: To
+        submit: Continue
+        errors:
+          age_range_in_years:
+            blank: Select an age range
+  activemodel:
+    errors:
+      models:
+        course_wizard/steps/age_range:
+          attributes:
+            course_age_range_in_years_other_from:
+              blank: Enter an age in From
+              not_a_number: Enter a valid age in From
+              not_an_integer: Enter a valid age in From
+              greater_than_or_equal_to: From age must be between 0 and 46
+              less_than_or_equal_to: From age must be between 0 and 46
+              invalid: Enter a valid age in From
+            course_age_range_in_years_other_to:
+              blank: Enter an age in To
+              not_a_number: Enter a valid age in To
+              not_an_integer: Enter a valid age in To
+              greater_than_or_equal_to: To age must be between 4 and 50
+              less_than_or_equal_to: To age must be between 4 and 50
+              invalid: Enter a valid age in To
