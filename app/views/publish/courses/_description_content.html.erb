@@ -47,7 +47,10 @@
         if school_experience_required == "false"
           "No, school experience is not required or strongly recommended"
         elsif school_experience_text.present?
-          simple_format(h(school_experience_text))
+  safe_join([
+    content_tag(:p, "Yes, school experience is required or strongly recommended"),
+    simple_format(h(school_experience_text))
+  ])
         else
           link_to(
             "Enter school experience",
