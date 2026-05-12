@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Subjects
+  # This service creates or updates financial incentives for a given year based on the subject and financial incentive attributes defined in the `subject_and_financial_incentives` method.
+  # As this is intended to be used for setting up financial incentives for a new year, it resets all financial incentives for the target year to the default attributes before applying the new attributes. This means that any financial incentives for the target year that are not included in the `subject_and_financial_incentives` method will be reset to the default attributes.
   class FinancialIncentiveCreatorService
     DEFAULT_ATTRIBUTES = {
       bursary_amount: nil,
@@ -10,6 +12,11 @@ module Subjects
       non_uk_scholarship_eligible: false,
     }.freeze
 
+    # Instantiates a new FinancialIncentiveCreatorService
+    # @param year [Integer] the year for which to create or update financial incentives
+    # @param displayed [Boolean] whether the financial incentives should be displayed or not
+    # @param subject [Subject] the Subject model to use for finding subjects
+    # @param financial_incentive [FinancialIncentive] the FinancialIncentive model to use for creating or updating financial incentives
     def initialize(year:, displayed: false, subject: Subject, financial_incentive: FinancialIncentive)
       @subject = subject
       @financial_incentive = financial_incentive
@@ -242,6 +249,7 @@ module Subjects
 
   private
 
+    # Resets all financial incentives for the target year to the default attributes. This means that any financial incentives for the target year that are not included in the `subject_and_financial_incentives` method will be reset to the default attributes.
     def reset_target_year_financial_incentives
       @financial_incentive.for_year(@year).find_each do |financial_incentive|
         financial_incentive.update!(DEFAULT_ATTRIBUTES)
