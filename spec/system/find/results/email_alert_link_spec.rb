@@ -25,7 +25,8 @@ RSpec.describe "Email alert link on results page", service: :find do
   end
 
   scenario "Email alert link is hidden when feature flag is off" do
-    FeatureFlag.deactivate(:email_alerts)
+    allow(FeatureFlag).to receive(:active?).and_call_original
+    allow(FeatureFlag).to receive(:active?).with(:email_alerts).and_return(false)
     when_i_sign_in
     when_i_visit_results_with_subject_filter
     then_i_do_not_see_the_email_alert_link
