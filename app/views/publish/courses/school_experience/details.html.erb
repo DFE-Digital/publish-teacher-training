@@ -19,36 +19,46 @@
   <div class="govuk-grid-column-two-thirds">
 
     <div class="govuk-form-group">
-      <h1 class="govuk-label-wrapper">
-        <label class="govuk-label govuk-label--m" for="more-detail">
-          What school experience are you looking for?
-        </label>
-      </h1>
+      <p class="govuk-hint">Candidates have said they would like to know:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-hint">
+        <li>How much time should they have spent in school?</li>
+        <li>What types of activities should they have experience in? For example, observing lessons, teaching classes, behaviour management</li>
+        <li>Must it have been paid work or could it be voluntary?</li>
+        <li>Do they need to have had experience in the particular subject they're applying for?</li>
+        <li>Must their experience have been in a UK school?</li>
+      </ul>
 
-        <p class="govuk-hint">Candidates have said they would like to know:</p>
+      <%= form_with url: school_experience_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            params[:recruitment_cycle_year],
+            @course.course_code
+          ),
+          method: :patch,
+          local: true do %>
 
-        <ul class="govuk-list govuk-list--bullet govuk-hint">
-          <li>How much time should they have spent in school?</li>
-          <li>What types of activities should they have experience in? For example, observing lessons, teaching classes, behaviour management</li>
-          <li>Must it have been paid work or could it be voluntary?</li>
-          <li>Do they need to have had experience in the particular subject they're applying for?</li>
-          <li>Must their experience have been in a UK school?</li>
-        </ul>
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="school_experience">
+            What school experience are you looking for?
+          </label>
 
-      <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="10" aria-describedby="more-detail-hint"></textarea>
+      <textarea
+        class="govuk-textarea"
+        name="school_experience"
+        id="school_experience"
+        rows="5"><%= h(params[:school_experience]) %></textarea>
+        </div>
+
+        <button class="govuk-button" type="submit">
+          Update school experience
+        </button>
+
+      <% end %>
     </div>
 
+    <p class="govuk-body">
+      <a href="../" class="govuk-link">Cancel</a>
+    </p>
+
+<!-- End column 2 thirds -->
     </div>
   </div>
-
-<%= link_to "Update school experience",
-            publish_provider_recruitment_cycle_course_path(
-              @provider.provider_code,
-              params[:recruitment_cycle_year],
-              @course.course_code
-            ),
-            class: "govuk-button" %>
-
-  <p class="govuk-body">
-  <a href="../" class="govuk-link">Cancel</a>
-</p>
