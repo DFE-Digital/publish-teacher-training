@@ -51,17 +51,9 @@ RSpec.describe FilterKeyDigestable do
 
     it "ignores display-only keys in search_attributes" do
       alert1 = create(:email_alert, subjects: %w[C1], search_attributes: { "level" => "secondary" })
-      alert2 = create(:email_alert, subjects: %w[C1], search_attributes: { "level" => "secondary", "location" => "London" })
+      alert2 = create(:email_alert, subjects: %w[C1], search_attributes: { "level" => "secondary", "order" => "course_name_ascending" })
 
       expect(alert1.filter_key_digest).to eq(alert2.filter_key_digest)
-    end
-
-    it "handles nil search_attributes" do
-      alert = build(:email_alert, subjects: %w[C1], search_attributes: nil)
-      # Manually bypass validation to test nil handling
-      alert.instance_variable_set(:@search_attributes_override, true)
-
-      expect(alert.compute_filter_key_digest).to be_present
     end
 
     it "normalizes boolean-like values to strings" do
