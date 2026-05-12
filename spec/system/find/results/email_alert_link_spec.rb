@@ -11,6 +11,7 @@ RSpec.describe "Email alert link on results page", service: :find do
     FeatureFlag.activate(:email_alerts)
     CandidateAuthHelper.mock_auth
     given_there_are_courses_with_secondary_subjects
+    stub_address_country("England")
   end
 
   scenario "Signed in user with filters applied sees the email alert link" do
@@ -48,6 +49,20 @@ RSpec.describe "Email alert link on results page", service: :find do
   scenario "Email alert link is shown when alert for the search has been unsubscribed" do
     when_i_sign_in
     and_i_have_an_unsubscribed_alert_for_the_search
+    when_i_visit_results_with_subject_filter
+    then_i_see_the_email_alert_link
+  end
+
+  scenario "Email alert link is hidden when the location is outside England" do
+    stub_address_country("Scotland")
+    when_i_sign_in
+    when_i_visit_results_with_subject_filter
+    then_i_do_not_see_the_email_alert_link
+  end
+
+  scenario "Email alert link is shown when no location is resolved" do
+    stub_address_country(nil)
+    when_i_sign_in
     when_i_visit_results_with_subject_filter
     then_i_see_the_email_alert_link
   end
@@ -99,5 +114,11 @@ RSpec.describe "Email alert link on results page", service: :find do
 
   def search_attributes_for_subject_filter
     { "minimum_degree_required" => "show_all_courses" }
+  end
+
+  def stub_address_country(country)
+    allow(Geolocation::Address).to receive(:query).and_return(
+      Geolocation::Address.new(country:),
+    )
   end
 end
