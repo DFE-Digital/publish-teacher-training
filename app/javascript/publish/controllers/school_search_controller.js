@@ -1,22 +1,37 @@
-import { Controller } from '@hotwired/stimulus'
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ['input', 'school']
+  static targets = ["input", "school"];
 
-  search (event) {
-    // Stop Enter from submitting the whole form
-    if (event) event.preventDefault()
+  search(event) {
+    if (event) event.preventDefault();
 
-    const query = this.inputTarget.value.trim().toLowerCase()
+    const query = this.inputTarget.value.trim().toLowerCase();
 
     this.schoolTargets.forEach((element) => {
-      const text = element.dataset.searchText || ''
+      const text = element.dataset.searchText || "";
+      element.hidden = !(query === "" || text.includes(query));
+    });
+  }
 
-      if (query === '' || text.includes(query)) {
-        element.classList.remove('govuk-!-display-none')
-      } else {
-        element.classList.add('govuk-!-display-none')
-      }
-    })
+  clear(event) {
+    if (event) event.preventDefault();
+
+    // ✅ Clear the input
+    this.inputTarget.value = "";
+
+    // ✅ Show all schools
+    this.schoolTargets.forEach((element) => {
+      element.hidden = false;
+    });
+
+    // ✅ Reset pagination back to first 20
+    const showMoreContainer = this.element.closest(
+      '[data-controller~="show-more"]',
+    );
+
+    if (showMoreContainer) {
+      showMoreContainer.dispatchEvent(new CustomEvent("show-more:reset"));
+    }
   }
 }

@@ -45,11 +45,11 @@
           <%= "You currently have #{@course.sites.count} schools attached to this course" %>
         </p>
         <!-- placeholder button for downloading list of attached schools as CSV -->
-        <div class="govuk-button-group">
+        <%# <div class="govuk-button-group">
           <button type="button" class="govuk-button govuk-button--secondary">
             Download list of attached schools (CSV)
           </button>
-        </div>
+        </div> %>
         <!-- ✅ Search box -->
         <div class="school-search-container">
           <div class="school-search-content">
@@ -70,11 +70,20 @@
               data-school-search-target="input"
               data-action="keydown.enter->school-search#search">
                   <button
-              class="govuk-button govuk-button--primary"
+              class="govuk-button govuk-button--primary govuk-!-margin-bottom-3"
               type="button"
               data-action="school-search#search">
                     Search
                   </button>
+                </div>
+                <div class="govuk-!-margin-top-0 govuk-body">
+                  <a
+  href="#"
+  class="app-button-link"
+  data-action="school-search#clear"
+  data-show-more-target="button">
+                    Clear search
+                  </a>
                 </div>
               </div>
               <!-- Placeholder: Checkbox for filtering to show only attached schools - DOESN"T WORK -->
@@ -111,34 +120,71 @@
               <%= t("publish.courses.schools.new.selection") %>
             </div>
             <!-- Schools list (single loop, searchable) -->
-            <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
-              <div
-            data-school-search-target="school"
-            data-search-text="<%= [
-              site.location_name,
-              site.postcode,
-              site.urn,
-            ].compact.join(" ").downcase %>">
-                <%= f.govuk_check_box :site_ids,
-              site.id,
-              label: {
-                text: [
-                  site.location_name,
-                  render(Publish::Schools::NewlyAddedTagComponent.new(school: site)),
-                ].compact_blank.join(" ").html_safe,
-              },
-              hint: { text: site.full_address },
-              link_errors: index.zero?,
-              data: {
-                select_all_checkboxes_target: "checkbox",
-                action: "select-all-checkboxes#updateSelectAll",
-              } %>
+            <!-- Schools list (single loop, searchable) -->
+            <div data-controller="show-more" data-show-more-page-size-value="20">
+              <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+                <div
+      data-show-more-target="item"
+      data-school-search-target="school"
+      data-search-text="<%= [
+        site.location_name,
+        site.postcode,
+        site.urn,
+      ].compact.join(" ").downcase %>">
+                  <%= f.govuk_check_box :site_ids,
+        site.id,
+        label: {
+          text: [
+            site.location_name,
+            render(Publish::Schools::NewlyAddedTagComponent.new(school: site)),
+          ].compact_blank.join(" ").html_safe,
+        },
+        hint: { text: site.full_address },
+        link_errors: index.zero?,
+        data: {
+          select_all_checkboxes_target: "checkbox",
+          action: "select-all-checkboxes#updateSelectAll",
+        } %>
+                </div>
+              <% end %>
+              <div class="govuk-!-margin-top-4 govuk-body">
+                <a
+  href="#"
+  class="app-button-link"
+  data-show-more-target="button"
+  data-action="show-more#showMore">
+                  Show 20 more schools
+                </a>
               </div>
-            <% end %>
+            </div>
           <% end %>
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                  Have you finished updating placement schools?
+                </h1>
+              </legend>
+              <div class="govuk-radios" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
+                  <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
+                    Yes, I have finsihed updating placement schools
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label" for="whereDoYouLive-2">
+                    No, I want to add more placement schools
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
           <div class="govuk-button-group">
-            <%= f.govuk_submit "Update #{page_title.downcase}" %>
-            <%= f.govuk_submit "Update and add another placement school", class: "govuk-button--secondary" %>
+            <%= f.govuk_submit "Continue" %>
+            <!-- <%= f.govuk_submit "Update #{page_title.downcase}" %> -->
+            <!-- <%= f.govuk_submit "Update and add another placement school", class: "govuk-button--secondary" %> -->
           </div>
           <p class="govuk-body">
             <%= govuk_link_to(
