@@ -1,0 +1,59 @@
+<% content_for :page_title, t(".page_title") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(edit_support_financial_incentive_path(@financial_incentive, year: @year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <span class="govuk-caption-l"><%= @financial_incentive.subject.subject_name %></span>
+    <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+
+    <%= govuk_warning_text(text: t(".warning")) %>
+
+    <%= govuk_summary_list do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { t("support.financial_incentives.shared.bursary_amount") } %>
+        <% row.with_value(text: financial_incentive_amount(@financial_incentive.bursary_amount)) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { t("support.financial_incentives.shared.scholarship_amount") } %>
+        <% row.with_value(text: financial_incentive_amount(@financial_incentive.scholarship)) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { t("support.financial_incentives.shared.early_career_payments") } %>
+        <% row.with_value(text: financial_incentive_amount(@financial_incentive.early_career_payments)) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { t("support.financial_incentives.shared.non_uk_bursary") } %>
+        <% row.with_value(text: financial_incentive_yes_no(@financial_incentive.non_uk_bursary_eligible?)) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { t("support.financial_incentives.shared.non_uk_scholarship") } %>
+        <% row.with_value(text: financial_incentive_yes_no(@financial_incentive.non_uk_scholarship_eligible?)) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { t("support.financial_incentives.shared.ske") } %>
+        <% row.with_value(text: financial_incentive_yes_no(@financial_incentive.subject_knowledge_enhancement_course_available?)) %>
+      <% end %>
+    <% end %>
+
+    <%= form_with model: @financial_incentive, url: support_financial_incentive_path(@financial_incentive, year: @year), scope: :financial_incentive, method: :patch, local: true do |form| %>
+      <% FinancialIncentive::INCENTIVE_ATTRIBUTES.each do |attribute| %>
+        <%= form.hidden_field attribute %>
+      <% end %>
+      <%= hidden_field_tag :confirmed, "true" %>
+
+      <%= form.govuk_submit t("support.financial_incentives.shared.confirm_changes") %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to t("support.financial_incentives.shared.cancel"), support_financial_incentives_path(year: @year) %>
+    </p>
+  </div>
+</div>
