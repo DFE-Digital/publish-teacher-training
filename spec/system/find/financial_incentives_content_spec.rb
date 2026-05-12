@@ -45,6 +45,18 @@ RSpec.describe "financial incentives call out boxes content" do
       end
     end
 
+    context "given every financial incentive for the course is hidden" do
+      scenario "search results and the course page do not render financial incentive amounts" do
+        given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000)
+        and_all_financial_incentives_for_the_course_are_hidden
+        when_i_visit_the_find_results_page
+        then_i_do_not_see_the_financial_incentive_amounts
+        when_i_select_the_course
+        then_i_see_student_loans_content_for_uk_citizens
+        and_i_do_not_see_the_financial_incentive_amounts
+      end
+    end
+
     context "given the course has bursary and scholarship available" do
       scenario "renders the bursary and scholarship content" do
         given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000)
@@ -228,6 +240,13 @@ RSpec.describe "financial incentives call out boxes content" do
     expect(page).to have_no_content("£88,888")
   end
 
+  def then_i_do_not_see_the_financial_incentive_amounts
+    expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available")
+    expect(page).to have_no_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
+  end
+  alias_method :and_i_do_not_see_the_financial_incentive_amounts,
+               :then_i_do_not_see_the_financial_incentive_amounts
+
   def and_there_is_a_hidden_future_financial_incentive(non_uk_bursary_eligible: false, non_uk_scholarship_eligible: false)
     create(
       :financial_incentive,
@@ -239,6 +258,17 @@ RSpec.describe "financial incentives call out boxes content" do
       non_uk_bursary_eligible:,
       non_uk_scholarship_eligible:,
     )
+  end
+
+  def and_all_financial_incentives_for_the_course_are_hidden
+    @course.subjects.each do |subject|
+      subject.financial_incentive_records.find_each do |financial_incentive|
+        financial_incentive.update!(displayed: false)
+      end
+
+      subject.association(:financial_incentive).reset
+      subject.association(:financial_incentive_records).reset
+    end
   end
 
   def given_there_is_a_findable_course(bursary_amount: nil, scholarship_amount: nil, funding: "fee", qualification: "pgce_with_qts", subject: :chemistry, non_uk_bursary_eligible: false, non_uk_scholarship_eligible: false)
