@@ -79,7 +79,7 @@
                 <div class="govuk-!-margin-top-0 govuk-body">
                   <a
   href="#"
-  class="app-button-link"
+  class="app-button-link govuk-link"
   data-action="school-search#clear"
   data-show-more-target="button">
                     Clear search
@@ -150,7 +150,7 @@
               <div class="govuk-!-margin-top-4 govuk-body">
                 <a
   href="#"
-  class="app-button-link"
+  class="app-button-link govuk-link"
   data-show-more-target="button"
   data-action="show-more#showMore">
                   Show 20 more schools
@@ -158,7 +158,7 @@
               </div>
             </div>
           <% end %>
-          <div class="govuk-form-group">
+          <%# <div class="govuk-form-group">
             <fieldset class="govuk-fieldset">
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">
@@ -169,7 +169,7 @@
                 <div class="govuk-radios__item">
                   <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
                   <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
-                    Yes, I have finsihed updating placement schools
+                    Yes, I have finished updating placement schools
                   </label>
                 </div>
                 <div class="govuk-radios__item">
@@ -180,7 +180,14 @@
                 </div>
               </div>
             </fieldset>
-          </div>
+          </div> %>
+          <%= f.govuk_radio_buttons_fieldset :finished_updating_schools,
+  legend: { text: "Have you finished updating placement schools?", size: "m" } do %>
+            <%= f.govuk_radio_button :finished_updating_schools, "yes",
+    label: { text: "Yes, I have finished updating placement schools" } %>
+            <%= f.govuk_radio_button :finished_updating_schools, "no",
+    label: { text: "No, I want to add more placement schools" } %>
+          <% end %>
           <div class="govuk-button-group">
             <%= f.govuk_submit "Continue" %>
             <!-- <%= f.govuk_submit "Update #{page_title.downcase}" %> -->
