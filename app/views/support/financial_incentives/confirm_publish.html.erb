@@ -1,0 +1,37 @@
+<% content_for :page_title, t(".page_title", year: @year) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_financial_incentives_path(year: @year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l"><%= t(".heading", year: @year) %></h1>
+
+    <%= govuk_warning_text(text: t(".warning", year: @year)) %>
+
+    <p class="govuk-body">
+      <%= t(".feature_flag_context") %>
+    </p>
+
+    <%= govuk_summary_list do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { RecruitmentCycle.human_attribute_name(:year) } %>
+        <% row.with_value(text: @year) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { t("support.financial_incentives.shared.subjects") } %>
+        <% row.with_value(text: Subject.active.count) %>
+      <% end %>
+    <% end %>
+
+    <%= form_with url: publish_support_financial_incentives_path(year: @year), method: :post, local: true do |form| %>
+      <%= form.govuk_submit t(".submit"), class: "govuk-button--warning" %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to t("support.financial_incentives.shared.cancel"), support_financial_incentives_path(year: @year) %>
+    </p>
+  </div>
+</div>

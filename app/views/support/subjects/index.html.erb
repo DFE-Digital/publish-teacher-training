@@ -2,6 +2,10 @@
   <%= t(".page_title") %>
 </h1>
 
+<div class="govuk-button-group">
+  <%= link_to t(".financial_incentives"), support_financial_incentives_path, class: "govuk-button govuk-button--primary" %>
+</div>
+
 <%= render PaginatedFilter.new(filter_params: @filter_params, collection: @subjects, pagy: @pagy) do %>
   <%= govuk_table do |table| %>
     <% table.with_head do |head| %>

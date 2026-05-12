@@ -1,6 +1,24 @@
 # frozen_string_literal: true
 
 class FinancialIncentive < ApplicationRecord
+  INCENTIVE_ATTRIBUTES = %i[
+    bursary_amount
+    scholarship
+    early_career_payments
+    non_uk_bursary_eligible
+    non_uk_scholarship_eligible
+    subject_knowledge_enhancement_course_available
+  ].freeze
+
+  DEFAULT_ATTRIBUTES = {
+    bursary_amount: nil,
+    scholarship: nil,
+    early_career_payments: nil,
+    non_uk_bursary_eligible: false,
+    non_uk_scholarship_eligible: false,
+    subject_knowledge_enhancement_course_available: false,
+  }.freeze
+
   attribute :displayed, default: false
   attribute :year, default: -> { FinancialIncentive.current_year }
 

@@ -1,0 +1,79 @@
+<% content_for :page_title, t(".page_title") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_subjects_path) %>
+<% end %>
+
+<h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
+
+<%= form_with url: support_financial_incentives_path, method: :get, local: true do %>
+  <div class="govuk-form-group">
+    <%= label_tag :year, t(".financial_incentive_year"), class: "govuk-label" %>
+    <%= select_tag :year, options_for_select(@year_options, @year), class: "govuk-select" %>
+  </div>
+
+  <%= submit_tag t(".apply"), class: "govuk-button govuk-button--secondary" %>
+<% end %>
+
+<% if @financial_incentives.none? %>
+  <div class="govuk-!-text-align-centre govuk-!-padding-6">
+    <h2 class="govuk-heading-m"><%= t(".no_incentives.heading", year: @year) %></h2>
+    <p class="govuk-body"><%= t(".no_incentives.body") %></p>
+    <%= govuk_button_to t(".no_incentives.create", year: @year), create_year_support_financial_incentives_path(year: @year), method: :post %>
+  </div>
+<% else %>
+  <% if @missing_subjects.any? %>
+    <%= govuk_notification_banner(title_text: t("support.financial_incentives.shared.important")) do |notification_banner| %>
+      <% notification_banner.with_heading(text: t(".missing.heading", count: @missing_subjects.size, year: @year)) %>
+      <p class="govuk-body"><%= t(".missing.body") %></p>
+      <%= govuk_button_to t(".missing.create"), create_missing_support_financial_incentives_path(year: @year), method: :post, class: "govuk-button--secondary" %>
+    <% end %>
+  <% end %>
+
+  <div class="govuk-button-group">
+    <% if @missing_subjects.none? && @financial_incentives.any? && !@financial_incentives.all?(&:displayed?) %>
+      <%= govuk_button_link_to t(".make_visible", year: @year), confirm_publish_support_financial_incentives_path(year: @year) %>
+    <% elsif @missing_subjects.none? && @financial_incentives.all?(&:displayed?) %>
+      <%= govuk_tag(text: t(".visible_tag", year: @year), colour: "green") %>
+    <% end %>
+  </div>
+
+  <%= govuk_table do |table| %>
+    <% table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.subject")) %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.bursary")) %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.scholarship")) %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.early_career_payments")) %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.non_uk_bursary")) %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.non_uk_scholarship")) %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.ske")) %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.status")) %>
+        <% row.with_cell(text: t("support.financial_incentives.shared.action")) %>
+      <% end %>
+    <% end %>
+
+    <% table.with_body do |body| %>
+      <% @subjects.each do |subject| %>
+        <% financial_incentive = @financial_incentives_by_subject_id[subject.id] %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: subject.subject_name) %>
+          <% row.with_cell(text: financial_incentive_amount(financial_incentive&.bursary_amount)) %>
+          <% row.with_cell(text: financial_incentive_amount(financial_incentive&.scholarship)) %>
+          <% row.with_cell(text: financial_incentive_amount(financial_incentive&.early_career_payments)) %>
+          <% row.with_cell(text: financial_incentive_yes_no(financial_incentive&.non_uk_bursary_eligible?)) %>
+          <% row.with_cell(text: financial_incentive_yes_no(financial_incentive&.non_uk_scholarship_eligible?)) %>
+          <% row.with_cell(text: financial_incentive_yes_no(financial_incentive&.subject_knowledge_enhancement_course_available?)) %>
+          <% row.with_cell { financial_incentive_status_tag(financial_incentive) } %>
+          <% row.with_cell do %>
+            <% if financial_incentive.present? %>
+              <%= govuk_link_to t("support.financial_incentives.shared.change"), edit_support_financial_incentive_path(financial_incentive, year: @year) %>
+            <% else %>
+              <%= govuk_button_to t(".create_blank"), create_blank_support_financial_incentives_path(year: @year, subject_id: subject.id), method: :post, class: "govuk-button--secondary govuk-!-margin-bottom-0" %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

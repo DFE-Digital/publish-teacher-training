@@ -1,0 +1,85 @@
+en:
+  support:
+    financial_incentives:
+      shared:
+        action: Action
+        bursary: Bursary
+        bursary_amount: Bursary amount
+        cancel: Cancel
+        change: Change
+        confirm_changes: Confirm changes
+        early_career_payments: Early career payments
+        hidden: Hidden
+        important: Important
+        missing: Missing
+        "no": "No"
+        non_uk_bursary: Non-UK bursary
+        non_uk_scholarship: Non-UK scholarship
+        none: None
+        scholarship: Scholarship
+        scholarship_amount: Scholarship amount
+        ske: SKE
+        status: Status
+        subject: Subject
+        subjects: Subjects
+        visible: Visible
+        "yes": "Yes"
+      index:
+        page_title: Financial incentives
+        financial_incentive_year: Financial incentive year
+        apply: Apply
+        no_incentives:
+          heading: There are no financial incentives for %{year}
+          body: Create hidden financial incentives for every active subject by copying the currently visible incentive for each subject.
+          create: Create financial incentives for %{year}
+        missing:
+          heading:
+            one: "%{count} subject missing financial incentives for %{year}"
+            other: "%{count} subjects missing financial incentives for %{year}"
+          body: Create blank hidden financial incentives for missing subjects before making this year visible.
+          create: Create blank incentives for missing subjects
+        make_visible: Make %{year} incentives visible
+        visible_tag: "%{year} incentives are visible"
+        create_blank: Create blank incentive
+      edit:
+        page_title: Edit financial incentive
+        heading: Edit %{year} financial incentive
+        warning: Changes to this incentive will be visible to candidates when the feature flag is active.
+        fields:
+          non_uk_bursary_eligible:
+            legend: Non-UK bursary eligibility
+            label: Eligible for non-UK bursary
+          non_uk_scholarship_eligible:
+            legend: Non-UK scholarship eligibility
+            label: Eligible for non-UK scholarship
+          subject_knowledge_enhancement_course_available:
+            legend: Subject knowledge enhancement
+            label: SKE course available
+      confirm_publish:
+        page_title: Make %{year} financial incentives visible
+        heading: Make %{year} financial incentives visible?
+        warning: This will hide the currently visible incentives and make all %{year} incentives visible for active subjects.
+        feature_flag_context: Find and the public API will only show these incentives while the bursaries and scholarships feature flag is active.
+        submit: Make financial incentives visible
+      confirm_update:
+        page_title: Confirm financial incentive changes
+        heading: Confirm changes to this visible financial incentive
+        warning: These changes will be visible to candidates when the feature flag is active.
+      create_year:
+        success: "%{count} financial incentives for %{year} created"
+        already_exists: Financial incentives for %{year} already exist
+      create_missing:
+        success: "%{count} blank financial incentives for %{year} created"
+        none_missing: There are no missing financial incentives for %{year}
+      create_blank:
+        success: Blank financial incentive for %{subject_name} created
+        already_exists: "%{subject_name} already has a financial incentive for %{year}"
+      confirm_publish_redirect:
+        missing: Create missing financial incentives before making %{year} visible
+      publish:
+        success: Financial incentives for %{year} are now visible
+        missing:
+          one: Financial incentives for %{year} are missing for %{count} subject
+          other: Financial incentives for %{year} are missing for %{count} subjects
+      update:
+        success: Financial incentive for %{subject_name} updated

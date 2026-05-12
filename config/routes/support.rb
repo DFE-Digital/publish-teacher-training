@@ -12,6 +12,15 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
   resources :providers_onboarding_form_requests, only: %i[index new create show update], path: "providers-onboarding-form-requests", as: :providers_onboarding_form_requests
 
   resources :subjects, except: %i[create destroy]
+  resources :financial_incentives, path: "financial-incentives", only: %i[index edit update] do
+    collection do
+      post :create_year, path: "create-year"
+      post :create_missing, path: "create-missing"
+      post :create_blank, path: "create-blank"
+      get :confirm_publish, path: "confirm-publish"
+      post :publish
+    end
+  end
 
   resources :recruitment_cycle, only: %i[index], param: :year, constraints: CycleYearConstraint.new, path: "" do
     namespace :providers do
