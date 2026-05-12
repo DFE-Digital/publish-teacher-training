@@ -40,7 +40,8 @@ module Publish
           redirect_to publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
             params[:recruitment_cycle_year],
-            @course.course_code
+            @course.course_code,
+            school_experience_required: false
           )
         end
       end
