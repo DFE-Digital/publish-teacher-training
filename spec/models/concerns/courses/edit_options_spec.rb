@@ -192,23 +192,4 @@ describe "Course with edit options" do
       end
     end
   end
-
-  describe "applications_open" do
-    let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
-
-    context "when unpublished" do
-      it "indicates that the option is a checkbox" do
-        expect(course.show_applications_open?).to be(true)
-      end
-    end
-
-    context "when published" do
-      let(:enrichment) { create(:course_enrichment, :published) }
-      let(:course) { create(:course, enrichments: [enrichment]) }
-
-      it "indicates that the option is hidden" do
-        expect(course.show_applications_open?).to be(false)
-      end
-    end
-  end
 end

@@ -9,7 +9,6 @@ module Courses
     include StartDateConcern
     include StudyModeConcern
     include IsSendConcern
-    include ApplicationsOpenConcern
     include SubjectsConcern
     include CanSponsorStudentVisaConcern
     include CanSponsorSkilledWorkerVisaConcern
@@ -28,7 +27,6 @@ module Courses
           can_sponsor_skilled_worker_visas: can_sponsor_skilled_worker_visa_options,
           show_is_send: show_is_send?,
           show_start_date: show_start_date?,
-          show_applications_open: show_applications_open?,
           subjects: potential_subjects,
           modern_languages:,
           modern_languages_subject:,
