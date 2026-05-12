@@ -15,7 +15,7 @@ class Candidate
     scope :active, -> { where(unsubscribed_at: nil) }
 
     def search_params
-      params = search_attributes.symbolize_keys
+      params = (search_attributes || {}).symbolize_keys
       params[:subjects] = subjects if subjects.present?
       params[:longitude] = longitude if longitude.present?
       params[:latitude] = latitude if latitude.present?

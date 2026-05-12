@@ -15,7 +15,7 @@ class RecentSearch < ApplicationRecord
   scope :for_display, -> { active.limit(10) }
 
   def search_params
-    params = search_attributes.symbolize_keys
+    params = (search_attributes || {}).symbolize_keys
     params[:subjects] = subjects if subjects.present?
     params[:longitude] = longitude if longitude.present?
     params[:latitude] = latitude if latitude.present?
