@@ -89,14 +89,32 @@ The application keeps `Subject#financial_incentive` as the displayed incentive a
 
 The financial incentive import service creates or updates incentives for a specific year and defaults new imported incentives to hidden. A later operational step can flip the displayed flag when the new incentives should be released.
 
+### Support management workflow
+
+Support users can manage financial incentives by year through the support UI. This is the operational workflow for preparing, checking, repairing, editing, and publishing year-specific incentives.
+
+The support workflow follows these rules:
+
+- Financial incentive years are selected by the plain integer year stored on `FinancialIncentive`.
+- Creating a new year creates hidden financial incentives for every active subject. Discontinued subjects are excluded.
+- New year records copy values from each subject's currently displayed incentive. If a subject has no displayed incentive, the new record is created with blank/default incentive values.
+- The index view shows all active subjects for the selected year, including subjects with missing records.
+- Missing records can be repaired by creating blank hidden incentives, either one subject at a time or for all missing active subjects.
+- Making a year visible requires a confirmation step.
+- A year can only be made visible when every active subject has a financial incentive for that year.
+- Publishing a year happens in a transaction: currently displayed active-subject incentives are hidden, then the selected year's active-subject incentives are marked as displayed.
+- Editing an incentive that is already displayed requires confirmation because the change affects candidate-facing data when the feature flag is active.
+
+The `displayed` flag and the `bursaries_and_scholarships_announced` feature flag remain separate controls. `displayed` chooses which year-specific records are candidate-facing; the feature flag controls whether bursary and scholarship content is shown at all.
+
 ## Consequences
 
 Future financial incentives can be imported, validated, and tested before they are visible to candidates. This reduces the risk of timed annual updates and keeps the published values stable until the team chooses to release the new records.
 
-The release process now needs to update display state correctly: each subject should have the previous displayed incentive hidden and the new incentive shown. The database partial unique index prevents two displayed incentives for the same subject, but it does not decide which incentive should be displayed.
+The release process needs to update display state correctly: each active subject should have the previous displayed incentive hidden and the new incentive shown. The database partial unique index prevents two displayed incentives for the same subject, but it does not decide which incentive should be displayed. The support workflow provides a transaction-backed publishing action for this.
 
 Code that previously assumed one incentive per subject must now choose between the displayed association and the full incentive history. This is intentional: public candidate-facing paths should use the displayed incentive, while import and maintenance code can work with year-specific records.
 
 Using an integer year means the database does not enforce a direct relationship between a financial incentive and a recruitment cycle record. Any requirement for incentive years to align with active recruitment cycles should be enforced in the import or management workflow rather than by coupling the data model to recruitment cycle rollover.
 
-Automating the release process, adding admin controls, or recording scheduled release dates can be considered later if the manual flip becomes difficult to operate.
+Automating the release process or recording scheduled release dates can be considered later if the manual support workflow becomes difficult to operate.
