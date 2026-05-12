@@ -11,6 +11,7 @@ import SelectAllCheckboxesController from "./controllers/select_all_checkboxes_c
 import CopyLinkController from "./controllers/copy_link_controller";
 import SchoolSearchController from "./controllers/school_search_controller";
 import CourseFiltersController from "./controllers/course_filters_controller";
+import ShowMoreController from "./controllers/show_more_controller";
 
 window.jQuery = jQuery;
 window.$ = jQuery;
@@ -26,3 +27,4 @@ Stimulus.register("select-all-checkboxes", SelectAllCheckboxesController);
 Stimulus.register("copy-link", CopyLinkController);
 Stimulus.register("school-search", SchoolSearchController);
 Stimulus.register("course-filters", CourseFiltersController);
+Stimulus.register("show-more", ShowMoreController);
