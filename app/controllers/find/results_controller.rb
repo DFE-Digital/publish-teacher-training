@@ -58,7 +58,11 @@ module Find
     def show_email_alert_link?
       return unless current_user.present? && FeatureFlag.active?(:email_alerts)
 
-      filters_applied? && alert_does_not_exist? && meaningful_for_recent_search?
+      filters_applied? && alert_does_not_exist? && meaningful_for_recent_search? && !location_outside_england?
+    end
+
+    def location_outside_england?
+      @address.country.present? && @address.country != "England"
     end
 
     def alert_does_not_exist?
