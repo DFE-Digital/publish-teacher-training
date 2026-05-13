@@ -38,7 +38,7 @@ en:
         second_subject_label: Second subject (optional)
         submit: Continue
         errors:
-          master_subject_id:
+          secondary_master_subject_id:
             blank: Select a subject
             same_as_subordinate_subject_id: The second subject must be different to the first subject
       age_range:
@@ -60,13 +60,13 @@ en:
               blank: Enter an age in From
               not_a_number: Enter a valid age in From
               not_an_integer: Enter a valid age in From
-              greater_than_or_equal_to: From age must be between 0 and 46
-              less_than_or_equal_to: From age must be between 0 and 46
+              greater_than_or_equal_to: From age must be between 3 and 15
+              less_than_or_equal_to: From age must be between 3 and 15
               invalid: Enter a valid age in From
             course_age_range_in_years_other_to:
               blank: Enter an age in To
               not_a_number: Enter a valid age in To
               not_an_integer: Enter a valid age in To
-              greater_than_or_equal_to: To age must be between 4 and 50
-              less_than_or_equal_to: To age must be between 4 and 50
+              greater_than_or_equal_to: To age must be between 7 and 19
+              less_than_or_equal_to: To age must be between 7 and 19
               invalid: Enter a valid age in To

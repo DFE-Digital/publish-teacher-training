@@ -3,9 +3,7 @@
 class CourseWizard
   module Repositories
     class Course < DfE::Wizard::Repository::Cache
-      CACHE_EXPIRY = 24.hours
-
-      def initialize(provider_code:, recruitment_cycle_year:, state_key:, cache: Rails.cache, expires_in: CACHE_EXPIRY)
+      def initialize(provider_code:, recruitment_cycle_year:, state_key:, expires_in:, cache: Rails.cache)
         super(
           cache:,
           key: self.class.cache_key(provider_code:, recruitment_cycle_year:, state_key:),
