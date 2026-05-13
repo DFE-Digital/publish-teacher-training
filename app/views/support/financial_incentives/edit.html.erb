@@ -16,9 +16,9 @@
         <%= govuk_warning_text(text: t(".warning")) %>
       <% end %>
 
-      <%= f.govuk_text_field :bursary_amount, label: { text: t("support.financial_incentives.shared.bursary_amount"), size: "s" }, width: 10, prefix_text: "£" %>
-      <%= f.govuk_text_field :scholarship, label: { text: t("support.financial_incentives.shared.scholarship_amount"), size: "s" }, width: 10, prefix_text: "£" %>
-      <%= f.govuk_text_field :early_career_payments, label: { text: t("support.financial_incentives.shared.early_career_payments"), size: "s" }, width: 10, prefix_text: "£" %>
+      <%= f.govuk_text_field :bursary_amount, label: { text: FinancialIncentive.human_attribute_name(:bursary_amount), size: "s" }, width: 10, prefix_text: "£" %>
+      <%= f.govuk_text_field :scholarship, label: { text: FinancialIncentive.human_attribute_name(:scholarship), size: "s" }, width: 10, prefix_text: "£" %>
+      <%= f.govuk_text_field :early_career_payments, label: { text: FinancialIncentive.human_attribute_name(:early_career_payments), size: "s" }, width: 10, prefix_text: "£" %>
 
       <%= f.govuk_check_boxes_fieldset :non_uk_bursary_eligible, legend: { text: t(".fields.non_uk_bursary_eligible.legend"), size: "s" }, multiple: false do %>
         <% f.govuk_check_box :non_uk_bursary_eligible, true, false, label: { text: t(".fields.non_uk_bursary_eligible.label") }, multiple: false %>
@@ -36,7 +36,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to t("support.financial_incentives.shared.cancel"), support_financial_incentives_path(year: @year) %>
+      <%= govuk_link_to t("cancel"), support_financial_incentives_path(year: @year) %>
     </p>
   </div>
 </div>

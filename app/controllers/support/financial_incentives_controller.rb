@@ -14,9 +14,9 @@ module Support
     end
 
     def create_year
-      redirect_to_index(success: t("support.financial_incentives.create_year.success", count: created_year_count, year:))
+      redirect_to_index(success: t(".success", count: created_year_count, year:))
     rescue ::FinancialIncentives::CreateYearService::YearAlreadyExistsError
-      redirect_to_index(warning: t("support.financial_incentives.create_year.already_exists", year:))
+      redirect_to_index(warning: t(".already_exists", year:))
     end
 
     def create_missing
@@ -32,15 +32,15 @@ module Support
 
       return if @missing_subjects.none?
 
-      redirect_to_index(warning: t("support.financial_incentives.confirm_publish_redirect.missing", year:))
+      redirect_to_index(warning: t(".missing", year:))
     end
 
     def publish
       ::FinancialIncentives::PublishYearService.call(year:)
 
-      redirect_to_index(success: t("support.financial_incentives.publish.success", year:))
+      redirect_to_index(success: t(".success", year:))
     rescue ::FinancialIncentives::PublishYearService::IncompleteYearError => e
-      redirect_to_index(warning: t("support.financial_incentives.publish.missing", count: e.missing_subjects.size, year:))
+      redirect_to_index(warning: t(".missing", count: e.missing_subjects.size, year:))
     end
 
     def edit
@@ -57,7 +57,7 @@ module Support
         render :confirm_update
       else
         financial_incentive.save!
-        redirect_to_index(success: t("support.financial_incentives.update.success", subject_name: financial_incentive.subject.subject_name))
+        redirect_to_index(success: t(".success", subject_name: financial_incentive.subject.subject_name))
       end
     end
 
@@ -86,22 +86,36 @@ module Support
     end
 
     def set_year
-      @year = requested_year || FinancialIncentive.current_year
+      @year = selected_year
     end
 
     def set_financial_incentive
       @financial_incentive = FinancialIncentive.includes(:subject).find(params[:id])
     end
 
-    def requested_year
-      params[:year].presence&.to_i
+    def selected_year
+      requested_year = parsed_requested_year
+      return requested_year if allowed_years.include?(requested_year)
+
+      FinancialIncentive.current_year
+    end
+
+    def parsed_requested_year
+      return if params[:year].blank?
+      return unless params[:year].to_s.match?(/\A\d+\z/)
+
+      params[:year].to_i
+    end
+
+    def allowed_years
+      @allowed_years ||= (
+        FinancialIncentive.distinct.pluck(:year) +
+        [FinancialIncentive.current_year, Find::CycleTimetable.next_year]
+      ).compact.uniq
     end
 
     def year_options
-      @year_options ||= (
-        FinancialIncentive.distinct.pluck(:year) +
-        [FinancialIncentive.current_year, Find::CycleTimetable.next_year, year]
-      ).compact.uniq.sort.reverse
+      @year_options ||= allowed_years.sort.reverse
     end
 
     def created_year_count
@@ -122,20 +136,20 @@ module Support
 
     def create_missing_flash
       if created_missing_count.positive?
-        return { success: t("support.financial_incentives.create_missing.success", count: created_missing_count, year:) }
+        return { success: t(".success", count: created_missing_count, year:) }
       end
 
-      { warning: t("support.financial_incentives.create_missing.none_missing", year:) }
+      { warning: t(".none_missing", year:) }
     end
 
     def create_blank_flash
       if created_blank_count.positive?
-        return { success: t("support.financial_incentives.create_blank.success", subject_name: blank_subject.subject_name) }
+        return { success: t(".success", subject_name: blank_subject.subject_name) }
       end
 
       {
         warning: t(
-          "support.financial_incentives.create_blank.already_exists",
+          ".already_exists",
           subject_name: blank_subject.subject_name,
           year:,
         ),

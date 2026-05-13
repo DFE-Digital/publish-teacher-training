@@ -1,33 +1,19 @@
 en:
   support:
     financial_incentives:
-      shared:
-        action: Action
-        bursary: Bursary
-        bursary_amount: Bursary amount
-        cancel: Cancel
-        change: Change
-        confirm_changes: Confirm changes
-        early_career_payments: Early career payments
-        hidden: Hidden
-        important: Important
-        missing: Missing
-        "no": "No"
-        non_uk_bursary: Non-UK bursary
-        non_uk_scholarship: Non-UK scholarship
-        none: None
-        scholarship: Scholarship
-        scholarship_amount: Scholarship amount
-        ske: SKE
-        status: Status
-        subject: Subject
-        subjects: Subjects
-        visible: Visible
-        "yes": "Yes"
       index:
         page_title: Financial incentives
         financial_incentive_year: Financial incentive year
         apply: Apply
+        important: Important
+        statuses:
+          hidden: Hidden
+          missing: Missing
+          visible: Visible
+        values:
+          "no": "No"
+          none: None
+          "yes": "Yes"
         no_incentives:
           heading: There are no financial incentives for %{year}
           body: Create hidden financial incentives for every active subject by copying the currently visible incentive for each subject.
@@ -41,6 +27,16 @@ en:
         make_visible: Make %{year} incentives visible
         visible_tag: "%{year} incentives are visible"
         create_blank: Create blank incentive
+        table:
+          action: Action
+          bursary: Bursary
+          early_career_payments: Early career payments
+          non_uk_bursary: Non-UK bursary
+          non_uk_scholarship: Non-UK scholarship
+          scholarship: Scholarship
+          ske: SKE
+          status: Status
+          subject: Subject
       edit:
         page_title: Edit financial incentive
         heading: Edit %{year} financial incentive
@@ -61,10 +57,17 @@ en:
         warning: This will hide the currently visible incentives and make all %{year} incentives visible for active subjects.
         feature_flag_context: Find and the public API will only show these incentives while the bursaries and scholarships feature flag is active.
         submit: Make financial incentives visible
+        subjects: Subjects
+        missing: Create missing financial incentives before making %{year} visible
       confirm_update:
         page_title: Confirm financial incentive changes
         heading: Confirm changes to this visible financial incentive
         warning: These changes will be visible to candidates when the feature flag is active.
+        confirm_changes: Confirm changes
+        values:
+          "no": "No"
+          none: None
+          "yes": "Yes"
       create_year:
         success: "%{count} financial incentives for %{year} created"
         already_exists: Financial incentives for %{year} already exist
@@ -74,8 +77,6 @@ en:
       create_blank:
         success: Blank financial incentive for %{subject_name} created
         already_exists: "%{subject_name} already has a financial incentive for %{year}"
-      confirm_publish_redirect:
-        missing: Create missing financial incentives before making %{year} visible
       publish:
         success: Financial incentives for %{year} are now visible
         missing:
