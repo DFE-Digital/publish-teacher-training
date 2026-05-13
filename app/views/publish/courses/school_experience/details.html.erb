@@ -18,13 +18,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-      <%= form_with url: school_experience_publish_provider_recruitment_cycle_course_path(
-            @provider.provider_code,
-            params[:recruitment_cycle_year],
-            @course.course_code
-          ),
-          method: :patch,
-          local: true do %>
+<%= form_with url: bulk_update_school_experience_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          params[:recruitment_cycle_year],
+          @course.course_code
+        ),
+        method: :get,
+        local: true do %>
 
         <div class="govuk-form-group">
           <label class="govuk-label govuk-label--m" for="school_experience">

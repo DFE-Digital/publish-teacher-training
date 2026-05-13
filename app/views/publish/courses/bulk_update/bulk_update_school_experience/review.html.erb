@@ -1,3 +1,18 @@
+<%
+  bulk_update_scope_labels = {
+    "all_apprenticeship" => "All apprenticeship courses",
+    "qts_only" => "All QTS only apprenticeship courses",
+    "full_time" => "All full time apprenticeship courses",
+    "primary" => "All primary apprenticeship courses",
+    "single_course" => "Only this course (#{@course.name_and_code})"
+  }
+%>
+
+<%
+  school_experience_required =
+    ActiveModel::Type::Boolean.new.cast(params[:school_experience_required])
+%>
+
  <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
 
@@ -6,10 +21,88 @@
   </span>
 
   <h1 class="govuk-heading-l">
-    Bulk update school experience
+    Updating school experience
   </h1>
 
-  <p class="govuk-body">This review page works</p>
+<p class="govuk-body">You are updating this information:</p>
+
+  <% if params[:school_experience].present? || params[:school_experience_required].present? %>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          School experience (optional)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% if params[:school_experience_required] == "false" %>
+            No, school experience is not required or strongly recommended.
+        <% else %>
+            Yes, school experience is required or strongly recommended.
+        <% end %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> name</span></a>
+        </dd>
+      </div>
+      <% if params[:school_experience_required] == "true" && params[:school_experience].present? %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          School experience details
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= h(params[:school_experience]).gsub(/\n/, "<br>").html_safe %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> name</span></a>
+        </dd>
+      </div>
+    <% end %>
+    </dl>
+  <% end %>
+<br>
+
+<p class="govuk-body">You are updating these courses:</p>
+
+  <% if params[:bulk_update_scope].present? %>
+    <ul class="govuk-list govuk-list--bullet">
+      <li><%= bulk_update_scope_labels[params[:bulk_update_scope]] %></li>
+    </ul>
+  <% end %>
+
+
+<dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Course name (X789)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Test
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Course name (B234)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Test
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+    </dl>
+
+    <%= link_to "Update school experience on 2 courses",
+  publish_provider_recruitment_cycle_course_path(
+    @provider.provider_code,
+    @provider.recruitment_cycle_year,
+    @course.course_code,
+    school_experience: params[:school_experience],
+    school_experience_required: params[:school_experience_required]
+  ),
+  class: "govuk-button"
+%>
+
 
   </div>
 </div>
