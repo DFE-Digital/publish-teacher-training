@@ -1,5 +1,14 @@
  <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
+
+<%= govuk_back_link_to(
+  publish_provider_recruitment_cycle_course_path(
+    @provider.provider_code,
+    params[:recruitment_cycle_year],
+    @course.course_code
+  )
+) %>
+
 <%= form_with(
       model: @course,
       url: school_experience_publish_provider_recruitment_cycle_course_path(
@@ -68,7 +77,7 @@
   <% end %>
 
     <p class="govuk-body">
-<%= link_to "Cancel",
+      <%= link_to "Cancel",
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         params[:recruitment_cycle_year],
