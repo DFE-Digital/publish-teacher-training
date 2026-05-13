@@ -102,25 +102,34 @@
             </div>
           </div>
           <!-- Select all -->
-          <div class="govuk-checkboxes__item">
-            <input
-            type="checkbox"
-            class="govuk-checkboxes__input"
-            id="select-all-schools"
-            data-select-all-checkboxes-target="selectAll"
-            data-action="select-all-checkboxes#toggleAll">
-              <label
-            class="govuk-label govuk-checkboxes__label"
-            for="select-all-schools">
-                <%= t("publish.courses.schools.select_all") %>
-              </label>
+          <div data-school-search-target="selectAllSection">
+            <div class="govuk-checkboxes__item">
+              <input
+      type="checkbox"
+      class="govuk-checkboxes__input"
+      id="select-all-schools"
+      data-select-all-checkboxes-target="selectAll"
+      data-action="select-all-checkboxes#toggleAll">
+                <label
+      class="govuk-label govuk-checkboxes__label"
+      for="select-all-schools">
+                  <%= t("publish.courses.schools.select_all") %>
+                </label>
+              </div>
+              <div class="govuk-body govuk-!-margin-left-2">or</div>
+              <div class="govuk-hint">
+                <%= t("publish.courses.schools.new.selection") %>
+              </div>
             </div>
-            <div class="govuk-body govuk-!-margin-left-2">or</div>
-            <div class="govuk-hint">
-              <%= t("publish.courses.schools.new.selection") %>
+            <div
+          class="govuk-body govuk-!-margin-top-3"
+          hidden
+          data-school-search-target="noResults"
+        >
+              <p class="govuk-body">
+                No results found. Please clear the search and try again.
+              </p>
             </div>
-            <!-- Schools list (single loop, searchable) -->
-            <!-- Schools list (single loop, searchable) -->
             <div data-controller="show-more" data-show-more-page-size-value="20">
               <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
                 <div
@@ -152,6 +161,7 @@
   href="#"
   class="app-button-link govuk-link"
   data-show-more-target="button"
+  data-school-search-target="showMoreButton"
   data-action="show-more#showMore">
                   Show 20 more schools
                 </a>

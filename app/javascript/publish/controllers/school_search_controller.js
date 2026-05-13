@@ -1,31 +1,45 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["input", "school"];
+  static targets = [
+    "input",
+    "school",
+    "noResults",
+    "selectAllSection",
+    "showMoreButton",
+  ];
 
   search(event) {
     if (event) event.preventDefault();
 
     const query = this.inputTarget.value.trim().toLowerCase();
+    let visibleCount = 0;
 
     this.schoolTargets.forEach((element) => {
       const text = element.dataset.searchText || "";
-      element.hidden = !(query === "" || text.includes(query));
-    });
-  }
+      const matches = query === "" || text.includes(query);
 
-  clear(event) {
-    if (event) event.preventDefault();
+      element.hidden = !matches;
 
-    // ✅ Clear the input
-    this.inputTarget.value = "";
-
-    // ✅ Show all schools
-    this.schoolTargets.forEach((element) => {
-      element.hidden = false;
+      if (matches) {
+        visibleCount += 1;
+      }
     });
 
-    // ✅ Reset pagination back to first 20
+    const hasResults = visibleCount > 0;
+
+    // No results message
+    this.noResultsTarget.hidden = hasResults;
+
+    // Select all section
+    this.selectAllSectionTarget.hidden = !hasResults;
+
+    const hasSearchTerm = query.length > 0;
+
+    // Hide "Show 20 more schools" whenever a search is active
+    this.showMoreButtonTarget.hidden = hasSearchTerm;
+
+    // Reset pagination
     const showMoreContainer = this.element.closest(
       '[data-controller~="show-more"]',
     );
@@ -33,5 +47,15 @@ export default class extends Controller {
     if (showMoreContainer) {
       showMoreContainer.dispatchEvent(new CustomEvent("show-more:reset"));
     }
+  }
+
+  clear(event) {
+    if (event) event.preventDefault();
+
+    // Clear the search input
+    this.inputTarget.value = "";
+
+    // Re-run the search logic with an empty query
+    this.search();
   }
 }
