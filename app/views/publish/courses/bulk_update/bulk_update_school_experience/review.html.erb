@@ -16,6 +16,16 @@
  <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
 
+      <%= govuk_back_link_to(
+        bulk_update_school_experience_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @provider.recruitment_cycle_year,
+          @course.course_code,
+          school_experience: params[:school_experience],
+          school_experience_required: params[:school_experience_required]
+        )
+      ) %>
+
   <span class="govuk-caption-l">
     <%= @course.name_and_code %>
   </span>
@@ -103,6 +113,15 @@
   class: "govuk-button"
 %>
 
+<p class="govuk-body">
+      <%= link_to "Cancel",
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ),
+      class: "govuk-link" %>
+    </p>
 
   </div>
 </div>

@@ -1,6 +1,22 @@
  <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
 
+      <%= govuk_back_link_to(
+        params[:school_experience_required] == "false" ?
+          school_experience_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+            @course.course_code,
+            school_experience_required: "false"
+          ) :
+          school_experience_details_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+            @course.course_code,
+            school_experience: params[:school_experience],
+            school_experience_required: params[:school_experience_required]
+          )
+      ) %>
 
 <%= form_with url: bulk_update_school_experience_review_publish_provider_recruitment_cycle_course_path(
       @provider.provider_code,
@@ -38,16 +54,34 @@
         <% end %>
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> name</span></a>
+          <%= link_to "Change",
+            school_experience_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              @course.course_code,
+              school_experience: params[:school_experience],
+              school_experience_required: params[:school_experience_required]
+            ),
+            class: "govuk-link" %>
         </dd>
       </div>
-      <% if params[:school_experience_required] == "true" && params[:school_experience].present? %>
-        <div class="govuk-summary-list__row">
+        <% if params[:school_experience_required] != "false" && params[:school_experience].present? %>        <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             School experience details
           </dt>
           <dd class="govuk-summary-list__value">
             <%= h(params[:school_experience]).gsub(/\n/, "<br>").html_safe %>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <%= link_to "Change",
+              school_experience_details_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                @course.course_code,
+                school_experience: params[:school_experience],
+                school_experience_required: params[:school_experience_required]
+              ),
+              class: "govuk-link" %>
           </dd>
         </div>
       <% end %>
@@ -139,6 +173,15 @@
 
   <% end %>
 
+  <p class="govuk-body">
+      <%= link_to "Cancel",
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ),
+      class: "govuk-link" %>
+    </p>
 
   </div>
 </div>
