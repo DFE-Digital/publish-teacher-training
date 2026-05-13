@@ -5,6 +5,8 @@ class CourseWizard
     class AgeRange
       include DfE::Wizard::Step
 
+      CUSTOM_AGE_RANGE_VALIDATOR = Courses::ValidateCustomAgeRangeService
+
       attribute :age_range_in_years, :string
       attribute :course_age_range_in_years_other_from, :string
       attribute :course_age_range_in_years_other_to, :string
@@ -15,14 +17,14 @@ class CourseWizard
         validates :course_age_range_in_years_other_from, numericality: {
           only_integer: true,
           allow_blank: true,
-          greater_than_or_equal_to: 0,
-          less_than_or_equal_to: 46,
+          greater_than_or_equal_to: CUSTOM_AGE_RANGE_VALIDATOR::MIN_FROM_AGE,
+          less_than_or_equal_to: CUSTOM_AGE_RANGE_VALIDATOR::MAX_FROM_AGE,
         }
         validates :course_age_range_in_years_other_to, numericality: {
           only_integer: true,
           allow_blank: true,
-          greater_than_or_equal_to: 4,
-          less_than_or_equal_to: 50,
+          greater_than_or_equal_to: CUSTOM_AGE_RANGE_VALIDATOR::MIN_TO_AGE,
+          less_than_or_equal_to: CUSTOM_AGE_RANGE_VALIDATOR::MAX_TO_AGE,
         }
         validate :age_range_from_and_to_missing
         validate :validate_custom_age_range
@@ -34,6 +36,10 @@ class CourseWizard
 
       def secondary_age_range_options
         %w[11_to_16 11_to_18 14_to_19]
+      end
+
+      def preset_options
+        wizard.state_store.primary_level? ? primary_age_range_options : secondary_age_range_options
       end
 
       def self.permitted_params
@@ -57,7 +63,7 @@ class CourseWizard
       def validate_custom_age_range
         return if errors[:course_age_range_in_years_other_from].present? || errors[:course_age_range_in_years_other_to].present?
 
-        Courses::ValidateCustomAgeRangeService.new.execute(combined_age_range, self)
+        CUSTOM_AGE_RANGE_VALIDATOR.new.execute(combined_age_range, self)
       end
 
       def combined_age_range

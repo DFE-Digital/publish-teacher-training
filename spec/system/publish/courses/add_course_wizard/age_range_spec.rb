@@ -68,7 +68,7 @@ RSpec.describe "Add course wizard age range step", type: :system do
     and_i_choose_other_age_range
     and_i_fill_in_other_age_range(from: "2", to: "11")
     and_i_click_continue
-    then_i_should_see_age_span_school_years_error
+    then_i_should_see_other_from_age_bounds_error
   end
 
   scenario "choosing other with a range shorter than four years shows validation errors" do
@@ -114,6 +114,11 @@ private
   def then_i_should_see_age_span_school_years_error
     expect(page).to have_content("There is a problem")
     expect(page).to have_content("Age range must cover 4 or more school years")
+  end
+
+  def then_i_should_see_other_from_age_bounds_error
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("From age must be between 3 and 15")
   end
 
   def then_i_should_see_age_span_minimum_years_error

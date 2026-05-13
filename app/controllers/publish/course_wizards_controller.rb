@@ -15,8 +15,6 @@ module Publish
       params[:step]&.to_sym || :level
     end
 
-    helper_method :wizard_repository
-
     def new
       return render_schools_messages unless provider.sites.any?
 

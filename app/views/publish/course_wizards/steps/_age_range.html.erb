@@ -5,10 +5,8 @@
   <%= t("course_wizard.steps.age_range.heading") %>
 </h1>
 
-<% preset_options = wizard_repository.read[:level] == "primary" ? current_step.primary_age_range_options : current_step.secondary_age_range_options %>
-
 <%= form.govuk_radio_buttons_fieldset :age_range_in_years, legend: { hidden: true, text: t("course_wizard.steps.age_range.heading") } do %>
-  <% preset_options.each_with_index do |value, index| %>
+  <% current_step.preset_options.each_with_index do |value, index| %>
     <%= form.govuk_radio_button :age_range_in_years, value,
           label: { text: value.humanize },
           link_errors: index.zero? %>

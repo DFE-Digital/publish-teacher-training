@@ -9,8 +9,8 @@
 <p class="govuk-body">
     <%= govuk_link_to t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_text"), t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_url") %>
 </p>
-<%= form.govuk_select :master_subject_id,
-      options_for_select(current_step.selectable_subjects, current_step.master_subject_id),
+<%= form.govuk_select :secondary_master_subject_id,
+      options_for_select(current_step.selectable_subjects, current_step.secondary_master_subject_id),
       options: { include_blank: true },
       label: { text: t("course_wizard.steps.secondary_subjects.first_subject_label"), size: "s" } %>
 
