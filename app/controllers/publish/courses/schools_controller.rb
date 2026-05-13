@@ -67,17 +67,26 @@ module Publish
               recruitment_cycle.year,
               course.course_code,
             )
-          else
-            # Restore EXISTING behaviour for Basic details (no schools count included in banner (just schools updated message) - couldn't work out how to do this easily!)
-            flash[:success] =
-              if Array(@course_school_form.site_ids).size >
-                  Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
-                I18n.t("success.enqueued_schools")
-              else
-                I18n.t("success.saved", value: section_key)
-              end
+          # else
+          #   # Restore EXISTING behaviour for Basic details (no schools count included in banner (just schools updated message) - couldn't work out how to do this easily!)
+          #   flash[:success] =
+          #     if Array(@course_school_form.site_ids).size >
+          #         Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
+          #       I18n.t("success.enqueued_schools")
+          #     else
+          #       I18n.t("success.saved", value: section_key)
+          #     end
 
-            redirect_to details_publish_provider_recruitment_cycle_course_path(
+          #   redirect_to details_publish_provider_recruitment_cycle_course_path(
+          #     provider.provider_code,
+          #     recruitment_cycle.year,
+          #     course.course_code,
+          #   )
+          # end
+
+          else
+            # redirect to bulk update schools page if user is not finished updating schools (i.e. they want to make further updates to other courses)
+            redirect_to edit_bulk_schools_publish_provider_recruitment_cycle_course_path(
               provider.provider_code,
               recruitment_cycle.year,
               course.course_code,

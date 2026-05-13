@@ -233,6 +233,14 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
         get "/schools", on: :member, to: "courses/schools#edit"
         put "/schools", on: :member, to: "courses/schools#update"
+        # Bulk update routes for schools
+
+        scope module: "courses/bulk_update" do
+          get  "/schools/bulk",         on: :member, to: "schools#edit", as: :edit_bulk_schools
+          post "/schools/bulk",         on: :member, to: "schools#update"
+          get  "/schools/bulk/check",   on: :member, to: "schools#check",   as: :check_bulk_schools
+          post "/schools/bulk/confirm", on: :member, to: "schools#confirm", as: :confirm_bulk_schools
+        end
 
         get "/preview", on: :member, to: "courses#preview"
 

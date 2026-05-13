@@ -1,0 +1,66 @@
+<% page_title = "Check bulk update schools" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :before_content do %>
+  <!-- Fix Back link to udpate placement schools page -->
+  <%= govuk_back_link_to(
+    edit_bulk_schools_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code),
+  ) %>
+<% end %>
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-caption-l">
+        <%= course.name_and_code %>
+      </div>
+      <p class="govuk-heading-l">
+        Udating placement schools
+      </p>
+      <div class="govuk-body">
+        You are updating this information:
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Placement schools</li>
+        </ul>
+      </div>
+      <p class="govuk-body">
+        You are updating these courses:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <% if @bulk_apply_scope_label.include?("All courses") %>
+          <li>All courses</li>
+        <% elsif @bulk_apply_scope_label.include?("Only this course") %>
+          <li>Only this course - <%= course.name_and_code %></li>
+        <% else %>
+          <li><%= @bulk_apply_scope_label %></li>
+        <% end %>
+      </ul>
+      <% if @show_courses_table %>
+        <table class="govuk-table">
+          <tbody class="govuk-table__body">
+            <% ["Course name (A123)", "Course name (B456)", "Course name (C789)", "Course name (D012)", "Course name (E345)"].each do |name| %>
+              <tr class="govuk-table__row">
+                <!-- Column 1: Course -->
+                <td class="govuk-table__cell">
+                  <strong><%= name %></strong>
+                </td>
+                <!-- Column 2: Course information -->
+                <td class="govuk-table__cell">
+                  <span class="govuk-hint"><%= @bulk_apply_short_label %></span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+      <%= form_with(
+  url: confirm_bulk_schools_publish_provider_recruitment_cycle_course_path(
+    course.provider_code,
+    course.recruitment_cycle_year,
+    course.course_code,
+  ),
+  method: :post
+) do |f| %>
+        <%= f.govuk_submit "Continue" %>
+      <% end %>
+    </div>
+  </div>
+</div>
