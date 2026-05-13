@@ -1,0 +1,36 @@
+<% page_title = "Bulk update schools" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :before_content do %>
+  <!-- Fix Back link to udpate placement schools page -->
+  <%= govuk_back_link_to(
+    schools_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code),
+  ) %>
+<% end %>
+<div class="govuk-caption-l">
+  <%= course.name_and_code %>
+</div>
+<div class="govuk-heading-l">
+  Updating placement schools
+</div>
+<div class="govuk-body">
+  You are updating this information:
+  <ul class="govuk-list govuk-list--bullet">
+    <li>Placement schools</li>
+  </ul>
+</div>
+<%= form_with(
+  url: edit_bulk_schools_publish_provider_recruitment_cycle_course_path,
+  method: :post
+) do |f| %>
+  <%= f.govuk_collection_radio_buttons(
+    :bulk_apply,
+    @bulk_options,
+    :id,
+    :name,
+    legend: {
+      text: "What courses do you want to apply this change to?",
+      size: "m",
+    },
+  ) %>
+  <%= f.govuk_submit "Continue" %>
+<% end %>
