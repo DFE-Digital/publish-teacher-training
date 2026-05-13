@@ -301,6 +301,39 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
         get "/school-experience", on: :member, to: "courses/school_experience#edit"
         patch "/school-experience", on: :member, to: "courses/school_experience#update"
+
+        # Bulk update – fees
+        get "bulk-update/fees",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_fees#edit",
+            as: :bulk_update_fees
+
+        get "bulk-update/fees/review",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_fees#review",
+            as: :bulk_update_fees_review
+
+        # Bulk update – school placements
+        get "bulk-update/school-placements",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_school_placements#edit",
+            as: :bulk_update_school_placements
+
+        get "bulk-update/school-placements/review",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_school_placements#review",
+            as: :bulk_update_school_placements_review
+
+        # Bulk update – school experience
+        get "bulk-update/school-experience",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_school_experience#edit",
+            as: :bulk_update_school_experience
+
+        get "bulk-update/school-experience/review",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_school_experience#review",
+            as: :bulk_update_school_experience_review
       end
 
       scope module: :providers do
