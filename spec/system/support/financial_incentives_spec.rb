@@ -47,6 +47,16 @@ RSpec.describe "Financial incentives support" do
     then_the_physics_financial_incentive_is_updated
   end
 
+  scenario "visiting the page with an invalid or unsupported year" do
+    when_i_visit_the_financial_incentives_page_with_year("not-a-year")
+    then_i_see_the_current_financial_incentive_year
+    and_i_do_not_see_year_option("0")
+
+    when_i_visit_the_financial_incentives_page_with_year("9999")
+    then_i_see_the_current_financial_incentive_year
+    and_i_do_not_see_year_option("9999")
+  end
+
 private
 
   attr_reader :support_user, :mathematics, :physics_incentive
@@ -64,7 +74,7 @@ private
   end
 
   def when_i_click_financial_incentives
-    click_link_or_button "Financial Incentives"
+    click_link_or_button "Financial incentives"
   end
 
   def then_i_see_the_financial_incentives_page
@@ -82,6 +92,7 @@ private
 
   def then_financial_incentives_are_created_for_all_active_subjects
     expect(page).to have_content("financial incentives for #{current_year} created")
+    expect(page).to have_no_content("translation missing")
     expect(FinancialIncentive.for_year(current_year).where(subject: Subject.active).count).to eq(Subject.active.count)
   end
 
@@ -96,6 +107,20 @@ private
 
   def when_i_visit_the_financial_incentives_page
     visit support_financial_incentives_path(year: current_year)
+  end
+
+  def when_i_visit_the_financial_incentives_page_with_year(year)
+    visit support_financial_incentives_path(year:)
+  end
+
+  def then_i_see_the_current_financial_incentive_year
+    expect(page).to have_select("Financial incentive year", selected: current_year.to_s)
+    expect(page).to have_content("There are no financial incentives for #{current_year}")
+    expect(page).to have_no_content("There are no financial incentives for 0")
+  end
+
+  def and_i_do_not_see_year_option(year)
+    expect(page).to have_no_css("select#year option[value='#{year}']")
   end
 
   def then_i_see_mathematics_is_missing_a_financial_incentive
@@ -129,6 +154,7 @@ private
   def then_i_see_the_publish_confirmation_page
     expect(page).to have_content("Make #{current_year} financial incentives visible?")
     expect(page).to have_content("This will hide the currently visible incentives")
+    expect(page).to have_no_content("translation missing")
   end
 
   def when_i_confirm_the_year_should_be_visible
@@ -158,6 +184,7 @@ private
   def then_i_see_the_visible_incentive_confirmation_page
     expect(page).to have_content("Confirm changes to this visible financial incentive")
     expect(page).to have_content("£12,345")
+    expect(page).to have_no_content("translation missing")
   end
 
   def when_i_confirm_the_financial_incentive_changes

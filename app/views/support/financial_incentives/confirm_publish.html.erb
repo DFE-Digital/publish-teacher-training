@@ -21,7 +21,7 @@
       <% end %>
 
       <% summary_list.with_row do |row| %>
-        <% row.with_key { t("support.financial_incentives.shared.subjects") } %>
+        <% row.with_key { t(".subjects") } %>
         <% row.with_value(text: Subject.active.count) %>
       <% end %>
     <% end %>
@@ -31,7 +31,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to t("support.financial_incentives.shared.cancel"), support_financial_incentives_path(year: @year) %>
+      <%= govuk_link_to t("cancel"), support_financial_incentives_path(year: @year) %>
     </p>
   </div>
 </div>

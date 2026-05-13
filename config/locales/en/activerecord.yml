@@ -14,6 +14,13 @@ en:
         ease_of_use: Ease of use
         experience: User experience
         created_at: Created at
+      financial_incentive:
+        bursary_amount: Bursary amount
+        early_career_payments: Early career payments
+        non_uk_bursary_eligible: Non-UK bursary
+        non_uk_scholarship_eligible: Non-UK scholarship
+        scholarship: Scholarship amount
+        subject_knowledge_enhancement_course_available: SKE
     errors:
       models:
         site:

@@ -23,7 +23,7 @@
   </div>
 <% else %>
   <% if @missing_subjects.any? %>
-    <%= govuk_notification_banner(title_text: t("support.financial_incentives.shared.important")) do |notification_banner| %>
+    <%= govuk_notification_banner(title_text: t(".important")) do |notification_banner| %>
       <% notification_banner.with_heading(text: t(".missing.heading", count: @missing_subjects.size, year: @year)) %>
       <p class="govuk-body"><%= t(".missing.body") %></p>
       <%= govuk_button_to t(".missing.create"), create_missing_support_financial_incentives_path(year: @year), method: :post, class: "govuk-button--secondary" %>
@@ -41,15 +41,15 @@
   <%= govuk_table do |table| %>
     <% table.with_head do |head| %>
       <% head.with_row do |row| %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.subject")) %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.bursary")) %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.scholarship")) %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.early_career_payments")) %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.non_uk_bursary")) %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.non_uk_scholarship")) %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.ske")) %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.status")) %>
-        <% row.with_cell(text: t("support.financial_incentives.shared.action")) %>
+        <% row.with_cell(text: t(".table.subject")) %>
+        <% row.with_cell(text: t(".table.bursary")) %>
+        <% row.with_cell(text: t(".table.scholarship")) %>
+        <% row.with_cell(text: t(".table.early_career_payments")) %>
+        <% row.with_cell(text: t(".table.non_uk_bursary")) %>
+        <% row.with_cell(text: t(".table.non_uk_scholarship")) %>
+        <% row.with_cell(text: t(".table.ske")) %>
+        <% row.with_cell(text: t(".table.status")) %>
+        <% row.with_cell(text: t(".table.action")) %>
       <% end %>
     <% end %>
 
@@ -67,7 +67,7 @@
           <% row.with_cell { financial_incentive_status_tag(financial_incentive) } %>
           <% row.with_cell do %>
             <% if financial_incentive.present? %>
-              <%= govuk_link_to t("support.financial_incentives.shared.change"), edit_support_financial_incentive_path(financial_incentive, year: @year) %>
+              <%= govuk_link_to t("change"), edit_support_financial_incentive_path(financial_incentive, year: @year) %>
             <% else %>
               <%= govuk_button_to t(".create_blank"), create_blank_support_financial_incentives_path(year: @year, subject_id: subject.id), method: :post, class: "govuk-button--secondary govuk-!-margin-bottom-0" %>
             <% end %>

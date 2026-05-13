@@ -2,22 +2,34 @@
 
 module Support
   module FinancialIncentivesHelper
+    STATUS_COLOURS = {
+      hidden: "grey",
+      missing: "red",
+      visible: "green",
+    }.freeze
+
     def financial_incentive_amount(amount)
-      amount.present? ? number_to_currency(amount.to_i, precision: 0) : t("support.financial_incentives.shared.none")
+      amount.present? ? number_to_currency(amount.to_i, precision: 0) : t(".values.none")
     end
 
     def financial_incentive_yes_no(value)
-      value ? t("support.financial_incentives.shared.yes") : t("support.financial_incentives.shared.no")
+      key = value ? :yes : :no
+
+      t(".values.#{key}")
     end
 
     def financial_incentive_status_tag(financial_incentive)
-      return govuk_tag(text: t("support.financial_incentives.shared.missing"), colour: "red") if financial_incentive.blank?
+      status = financial_incentive_status(financial_incentive)
 
-      if financial_incentive.displayed?
-        govuk_tag(text: t("support.financial_incentives.shared.visible"), colour: "green")
-      else
-        govuk_tag(text: t("support.financial_incentives.shared.hidden"), colour: "grey")
-      end
+      govuk_tag(text: t(".statuses.#{status}"), colour: STATUS_COLOURS.fetch(status))
+    end
+
+  private
+
+    def financial_incentive_status(financial_incentive)
+      return :missing if financial_incentive.blank?
+
+      financial_incentive.displayed? ? :visible : :hidden
     end
   end
 end
