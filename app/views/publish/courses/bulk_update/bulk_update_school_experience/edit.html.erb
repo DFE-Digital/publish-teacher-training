@@ -1,19 +1,144 @@
  <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
 
+
+<%= form_with url: bulk_update_school_experience_review_publish_provider_recruitment_cycle_course_path(
+      @provider.provider_code,
+      @provider.recruitment_cycle_year,
+      @course.course_code
+    ),
+    method: :get,
+    local: true do %>
+
+  <%= hidden_field_tag :school_experience, params[:school_experience] %>
+  <%= hidden_field_tag :school_experience_required, params[:school_experience_required] %>
+
+
   <span class="govuk-caption-l">
     <%= @course.name_and_code %>
   </span>
 
   <h1 class="govuk-heading-l">
-    Bulk update school experience
+    Updating school experience
   </h1>
 
-  <p class="govuk-body">This page works</p>
+  <p class="govuk-body">You are updating this information:</p>
 
-  <a href="#" class="govuk-button">
-    Continue
-  </a>
+  <% if params[:school_experience].present? || params[:school_experience_required].present? %>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          School experience (optional)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% if params[:school_experience_required] == "false" %>
+            No, school experience is not required or strongly recommended.
+        <% else %>
+            Yes, school experience is required or strongly recommended.
+        <% end %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> name</span></a>
+        </dd>
+      </div>
+      <% if params[:school_experience_required] == "true" && params[:school_experience].present? %>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            School experience details
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= h(params[:school_experience]).gsub(/\n/, "<br>").html_safe %>
+          </dd>
+        </div>
+      <% end %>
+    </dl>
+  <% end %>
+<br>
+
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">
+        What courses do you want to apply this change to?
+      </h1>
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input"
+              id="bulk_update_scope_all_apprenticeship"
+              name="bulk_update_scope"
+              type="radio"
+              value="all_apprenticeship">
+        <label class="govuk-label govuk-radios__label"
+              for="bulk_update_scope_all_apprenticeship">
+          All apprenticeship courses
+        </label>
+      </div>
+
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input"
+              id="bulk_update_scope_qts_only"
+              name="bulk_update_scope"
+              type="radio"
+              value="qts_only">
+        <label class="govuk-label govuk-radios__label"
+              for="bulk_update_scope_qts_only">
+          All QTS only apprenticeship courses
+        </label>
+      </div>
+
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input"
+              id="bulk_update_scope_full_time"
+              name="bulk_update_scope"
+              type="radio"
+              value="full_time">
+        <label class="govuk-label govuk-radios__label"
+              for="bulk_update_scope_full_time">
+          All full time apprenticeship courses
+        </label>
+      </div>
+
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input"
+              id="bulk_update_scope_primary"
+              name="bulk_update_scope"
+              type="radio"
+              value="primary">
+        <label class="govuk-label govuk-radios__label"
+              for="bulk_update_scope_primary">
+          All primary apprenticeship courses
+        </label>
+      </div>
+
+      <div class="govuk-radios__divider">or</div>
+
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input"
+              id="bulk_update_scope_single"
+              name="bulk_update_scope"
+              type="radio"
+              value="single_course">
+        <label class="govuk-label govuk-radios__label"
+              for="bulk_update_scope_single">
+          Only this course - <%= @course.name_and_code %>
+        </label>
+      </div>
+    </div>
+    </div>
+  </fieldset>
+</div>
+
+
+<button class="govuk-button" type="submit">
+  Continue to view the course that will be changed
+</button>
+
+
+
+  <% end %>
+
 
   </div>
 </div>

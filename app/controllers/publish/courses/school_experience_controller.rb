@@ -34,14 +34,15 @@ module Publish
             @provider.provider_code,
             params[:recruitment_cycle_year],
             @course.course_code,
-            school_experience: school_experience
+            school_experience: school_experience,
+            school_experience_required: "true"
           )
         else
-          redirect_to publish_provider_recruitment_cycle_course_path(
+          redirect_to bulk_update_school_experience_publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
             params[:recruitment_cycle_year],
             @course.course_code,
-            school_experience_required: false
+            school_experience_required: "false"
           )
         end
       end
