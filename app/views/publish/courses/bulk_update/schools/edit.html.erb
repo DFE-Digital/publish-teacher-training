@@ -32,5 +32,8 @@
       size: "m",
     },
   ) %>
-  <%= f.govuk_submit "Continue" %>
+  <%= f.govuk_submit "Continue to check your changes" %>
 <% end %>
+<div class="govuk-body">
+  <%= govuk_link_to "Cancel", details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code) %>
+</div>

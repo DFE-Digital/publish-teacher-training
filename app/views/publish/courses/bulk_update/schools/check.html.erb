@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <!-- Fix Back link to udpate placement schools page -->
   <%= govuk_back_link_to(
-    edit_bulk_schools_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code),
+    edit_bulk_schools_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code, bulk_apply: params[:bulk_apply]),
   ) %>
 <% end %>
 <div class="govuk-width-container">
@@ -59,8 +59,11 @@
   ),
   method: :post
 ) do |f| %>
-        <%= f.govuk_submit "Continue" %>
+        <%= f.govuk_submit "Update placement schools" %>
       <% end %>
     </div>
   </div>
+</div>
+<div class="govuk-body">
+  <%= govuk_link_to "Cancel", details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code) %>
 </div>
