@@ -143,7 +143,7 @@ module Publish
           end
 
           # Always allow just this course
-          @bulk_options << OpenStruct.new(
+          @this_course_option = OpenStruct.new(
             id: "this_course",
             name: "Only this course – #{course.name_and_code}",
           )

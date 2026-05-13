@@ -22,18 +22,26 @@
   url: edit_bulk_schools_publish_provider_recruitment_cycle_course_path,
   method: :post
 ) do |f| %>
-  <%= f.govuk_collection_radio_buttons(
-    :bulk_apply,
-    @bulk_options,
-    :id,
-    :name,
+  <%= f.govuk_radio_buttons_fieldset :bulk_apply,
     legend: {
       text: "What courses do you want to apply this change to?",
       size: "m",
-    },
-  ) %>
+    } do %>
+    <% @bulk_options.each do |option| %>
+      <%= f.govuk_radio_button(
+        :bulk_apply,
+        option.id,
+        label: { text: option.name }
+      ) %>
+    <% end %>
+    <div class="govuk-radios__divider">
+      or
+    </div>
+    <%= f.govuk_radio_button(
+      :bulk_apply,
+      @this_course_option.id,
+      label: { text: @this_course_option.name }
+    ) %>
+  <% end %>
   <%= f.govuk_submit "Continue to check your changes" %>
 <% end %>
-<div class="govuk-body">
-  <%= govuk_link_to "Cancel", details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code) %>
-</div>
