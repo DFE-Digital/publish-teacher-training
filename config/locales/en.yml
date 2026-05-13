@@ -1,6 +1,23 @@
 en:
   publish:
     courses:
+      bulk_update:
+        bulk_update_fees:
+          edit:
+            page_title: "Bulk update fees"
+          review:
+            page_title: "Review bulk update fees"
+
+        bulk_update_school_placements:
+          edit:
+            page_title: "Bulk update school placements"
+          review:
+            page_title: "Review bulk update school placements"
+        bulk_update_school_experience:
+          edit:
+            page_title: "Bulk update school experience"
+          review:
+            page_title: "Review bulk update school experience"
       school_experience:
         edit:
           page_title: School experience
