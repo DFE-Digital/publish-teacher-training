@@ -11,11 +11,10 @@
 
 <%
   bulk_update_scope_labels = {
-    "all_apprenticeship" => "All apprenticeship courses",
-    "qts_only" => "All QTS only apprenticeship courses",
-    "full_time" => "All full time apprenticeship courses",
-    "primary" => "All primary apprenticeship courses",
-    "single_course" => "Only this course (#{@course.name_and_code})"
+    "all_apprenticeship" => "All fee-paying courses",
+    "qts_only" => "All QTS with PGCE fee-paying courses",
+    "full_time" => "All full time fee-paying courses",
+    "single_course" => "Only this course - #{@course.name_and_code}"
   }
 %>
 

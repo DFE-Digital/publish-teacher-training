@@ -60,7 +60,7 @@ module Publish
         #     OpenStruct.new(id: "pgce", name: "All QTS with PGCE courses"),
         #     OpenStruct.new(
         #       id: "this_course",
-        #       name: "Only this course – #{course.name_and_code}",
+        #       name: "Only this course - #{course.name_and_code}",
         #     ),
         #   ]
         # end
@@ -145,7 +145,7 @@ module Publish
           # Always allow just this course
           @this_course_option = OpenStruct.new(
             id: "this_course",
-            name: "Only this course – #{course.name_and_code}",
+            name: "Only this course - #{course.name_and_code}",
           )
         end
 
