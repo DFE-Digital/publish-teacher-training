@@ -161,9 +161,9 @@ module Publish
         def confirm
           flash[:success] = "Schools updated on #{selected_courses_count(params[:bulk_apply])} courses"
 
-          redirect_to publish_provider_recruitment_cycle_course_path(
+          redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
-            course.recruitment_cycle_year,
+            recruitment_cycle.year,
             course.course_code,
           )
         end
