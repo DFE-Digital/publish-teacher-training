@@ -39,13 +39,17 @@ export default class extends Controller {
     // Hide "Show 20 more schools" whenever a search is active
     this.showMoreButtonTarget.hidden = hasSearchTerm;
 
-    // Reset pagination
-    const showMoreContainer = this.element.closest(
-      '[data-controller~="show-more"]',
-    );
+    // Reset pagination only when search is cleared
+    if (!hasSearchTerm) {
+      const showMoreContainer = this.element.querySelector(
+        '[data-controller~="show-more"]',
+      );
 
-    if (showMoreContainer) {
-      showMoreContainer.dispatchEvent(new CustomEvent("show-more:reset"));
+      if (showMoreContainer) {
+        showMoreContainer.dispatchEvent(
+          new CustomEvent("show-more:reset", { bubbles: true }),
+        );
+      }
     }
   }
 
