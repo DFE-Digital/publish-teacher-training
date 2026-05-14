@@ -36,11 +36,11 @@
       <% if @show_courses_table %>
         <table class="govuk-table">
           <tbody class="govuk-table__body">
-            <% ["Course name (A123)", "Course name (B456)", "Course name (C789)", "Course name (D012)", "Course name (E345)"].each do |name| %>
+            <% (1..20).each do |index| %>
               <tr class="govuk-table__row">
                 <!-- Column 1: Course -->
                 <td class="govuk-table__cell">
-                  <strong><%= name %></strong>
+                  <strong><%= "Course name (X#{index.to_s.rjust(3, "0")})" %></strong>
                 </td>
                 <!-- Column 2: Course information -->
                 <td class="govuk-table__cell">
