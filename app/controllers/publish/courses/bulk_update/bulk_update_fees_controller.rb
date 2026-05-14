@@ -3,20 +3,20 @@ module Publish
     module BulkUpdate
       class BulkUpdateFeesController < ApplicationController
         def edit
-          @course = Course.find_by!(course_code: params[:code])
+          @course = course
           assign_bulk_update_options
         end
 
         def review
-          @course = Course.find_by!(course_code: params[:code])
+          @course = course
           assign_bulk_update_options
         end
 
         def confirm
-          @course = Course.find_by!(course_code: params[:code])
+          @course = course
           flash[:success] = "Fees and financial support updated on #{selected_courses_count(params[:bulk_update_scope])} courses"
 
-          redirect_to publish_provider_recruitment_cycle_course_path(
+          redirect_to details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
@@ -26,14 +26,16 @@ module Publish
       private
 
         def assign_bulk_update_options
+          qualification_summary = @course.qualifications_summary.to_s.upcase
+
           @bulk_options = []
           @bulk_options << OpenStruct.new(id: "all_apprenticeship", name: "All fee-paying courses")
 
-          if @course.qualifications_summary == "QTS"
+          if qualification_summary == "QTS"
             @bulk_options << OpenStruct.new(id: "qts_only", name: "All QTS fee-paying courses")
           end
 
-          if @course.qualifications_summary&.include?("PGCE")
+          if qualification_summary.include?("PGCE")
             @bulk_options << OpenStruct.new(id: "qts_with_pgce", name: "All QTS with PGCE fee-paying courses")
           end
 
@@ -53,6 +55,10 @@ module Publish
 
         def selected_courses_count(scope)
           scope == "single_course" ? 1 : 20
+        end
+
+        def course
+          @course ||= provider.courses.find_by!(course_code: params[:code])
         end
       end
     end
