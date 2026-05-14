@@ -13,39 +13,30 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(
-          model: @fees_and_financial_support_form,
-          url: fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
-            @provider.provider_code,
-            @course.recruitment_cycle_year,
-            @course.course_code,
-          ),
-          data: { qa: "enrichment-form", module: "form-check-leave" },
-          method: :patch,
-          local: true,
-        ) do |f| %>
+    <%= form_with url: bulk_update_fees_publish_provider_recruitment_cycle_course_path(
+      @provider.provider_code,
+      @course.recruitment_cycle_year,
+      @course.course_code
+    ),
+    method: :get,
+    local: true do |f| %>
+
       <%= f.hidden_field :goto_preview, value: params[:goto_preview] %>
 
       <% content_for :before_content do %>
-        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @course.recruitment_cycle_year, course_code: @course.course_code)) %>
+        <%= govuk_back_link_to(
+          publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code
+          )
+        ) %>
       <% end %>
-
-      <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
         <%= t(".heading") %>
       </h1>
-
-      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-        texts: [
-          [t(".fee_uk"), number_to_currency(@course.fee_uk_eu).to_s],
-          [@course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), number_to_currency(@course.fee_international).to_s],
-          [t(".fee_schedule"), @course.fee_schedule],
-          [t(".additional_fees"), @course.additional_fees],
-          [t(".financial_support"), @course.financial_support],
-        ],
-      } %>
 
       <%= render partial: "publish/courses/markdown_formatting" %>
 
@@ -102,7 +93,9 @@
         <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
 
       </div>
-      <%= f.govuk_submit t(".submit_button") %>
+
+    <%= f.govuk_submit "Continue" %>
+
     <% end %>
 
     <p class="govuk-body">
