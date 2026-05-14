@@ -12,12 +12,12 @@
 <div class="govuk-heading-l">
   Updating placement schools
 </div>
-<div class="govuk-body">
+<p class="govuk-body">
   You are updating this information:
-  <ul class="govuk-list govuk-list--bullet">
+</p>
+ <ul class="govuk-list govuk-list--bullet">
     <li>Placement schools</li>
   </ul>
-</div>
 <%= form_with(
   url: edit_bulk_schools_publish_provider_recruitment_cycle_course_path,
   method: :post
@@ -43,5 +43,5 @@
       label: { text: @this_course_option.name }
     ) %>
   <% end %>
-  <%= f.govuk_submit "Continue to check your changes" %>
+  <%= f.govuk_submit "Continue to view the courses that will be updated" %>
 <% end %>
