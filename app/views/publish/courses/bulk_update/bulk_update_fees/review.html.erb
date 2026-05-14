@@ -6,10 +6,190 @@
   </span>
 
   <h1 class="govuk-heading-l">
-    Bulk update fees
+    Updating fees and financial support
   </h1>
 
-  <p class="govuk-body">This review page works</p>
+<%
+  bulk_update_scope_labels = {
+    "all_apprenticeship" => "All apprenticeship courses",
+    "qts_only" => "All QTS only apprenticeship courses",
+    "full_time" => "All full time apprenticeship courses",
+    "primary" => "All primary apprenticeship courses",
+    "single_course" => "Only this course (#{@course.name_and_code})"
+  }
+%>
+
+<p class="govuk-body">You are updating this information:</p>
+
+  <% if params.present? %>
+  <dl class="govuk-summary-list">
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Fee for UK citizens</dt>
+      <dd class="govuk-summary-list__value">
+        <%= params[:fee_uk_eu] %>
+      </dd>
+      <dd class="govuk-summary-list__actions">
+          <%= link_to "Change",
+            fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              @course.course_code,
+              fee_uk_eu: params[:fee_uk_eu],
+              fee_international: params[:fee_international],
+              fee_schedule: params[:fee_schedule],
+              additional_fees: params[:additional_fees],
+              financial_support: params[:financial_support]
+            ),
+            class: "govuk-link" %>
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Fee for non-UK citizens</dt>
+      <dd class="govuk-summary-list__value">
+        <%= params[:fee_international] %>
+      </dd>
+      <dd class="govuk-summary-list__actions">
+          <%= link_to "Change",
+            fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              @course.course_code,
+              fee_uk_eu: params[:fee_uk_eu],
+              fee_international: params[:fee_international],
+              fee_schedule: params[:fee_schedule],
+              additional_fees: params[:additional_fees],
+              financial_support: params[:financial_support]
+            ),
+            class: "govuk-link" %>
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">When are the fees due? Is there a payment schedule?</dt>
+      <dd class="govuk-summary-list__value">
+        <%= h(params[:fee_schedule]).gsub(/\n/, "<br>").html_safe %>
+      </dd>
+      <dd class="govuk-summary-list__actions">
+          <%= link_to "Change",
+            fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              @course.course_code,
+              fee_uk_eu: params[:fee_uk_eu],
+              fee_international: params[:fee_international],
+              fee_schedule: params[:fee_schedule],
+              additional_fees: params[:additional_fees],
+              financial_support: params[:financial_support]
+            ),
+            class: "govuk-link" %>
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Are there any additional fees or costs?</dt>
+      <dd class="govuk-summary-list__value">
+        <%= h(params[:additional_fees]).gsub(/\n/, "<br>").html_safe %>
+      </dd>
+      <dd class="govuk-summary-list__actions">
+          <%= link_to "Change",
+            fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              @course.course_code,
+              fee_uk_eu: params[:fee_uk_eu],
+              fee_international: params[:fee_international],
+              fee_schedule: params[:fee_schedule],
+              additional_fees: params[:additional_fees],
+              financial_support: params[:financial_support]
+            ),
+            class: "govuk-link" %>
+        </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Does your organisation offer any financial support?</dt>
+      <dd class="govuk-summary-list__value">
+        <%= h(params[:financial_support]).gsub(/\n/, "<br>").html_safe %>
+      </dd>
+      <dd class="govuk-summary-list__actions">
+          <%= link_to "Change",
+            fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              @course.course_code,
+              fee_uk_eu: params[:fee_uk_eu],
+              fee_international: params[:fee_international],
+              fee_schedule: params[:fee_schedule],
+              additional_fees: params[:additional_fees],
+              financial_support: params[:financial_support]
+            ),
+            class: "govuk-link" %>
+        </dd>
+    </div>
+
+  </dl>
+<% end %>
+<br>
+
+<p class="govuk-body">You are updating these courses:</p>
+
+<% if params[:bulk_update_scope].present? %>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>
+      <%= bulk_update_scope_labels[params[:bulk_update_scope]] %>
+    </li>
+  </ul>
+<% end %>
+
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Course name (X789)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Test
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Course name (B234)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Test
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+    </dl>
+
+
+<%= link_to "Update fees and financial support on courses",
+  publish_provider_recruitment_cycle_course_path(
+    @provider.provider_code,
+    @provider.recruitment_cycle_year,
+    @course.course_code,
+    fee_uk_eu: params[:fee_uk_eu],
+    fee_international: params[:fee_international],
+    fee_schedule: params[:fee_schedule],
+    additional_fees: params[:additional_fees],
+    financial_support: params[:financial_support]
+  ),
+  class: "govuk-button"
+%>
+
+    <p class="govuk-body">
+      <%= link_to "Cancel",
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ),
+      class: "govuk-link" %>
+    </p>
 
   </div>
 </div>
