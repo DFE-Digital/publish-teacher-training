@@ -1,10 +1,18 @@
 <%
-  bulk_update_scope_labels = {
-    "all_apprenticeship" => "All apprenticeship courses",
-    "qts_only" => "All QTS only apprenticeship courses",
-    "full_time" => "All full time apprenticeship courses",
-    "primary" => "All primary apprenticeship courses",
-    "single_course" => "Only this course - #{@course.name_and_code}"
+  bulk_update_scope_labels = @bulk_options.index_by(&:id).transform_values(&:name).merge(
+    @this_course_option.id => @this_course_option.name,
+  )
+%>
+
+<%
+  bulk_update_course_type_labels = {
+    "all_apprenticeship" => @target_course_type_label,
+    "qts_only" => "#{@target_course_type_label} QTS only",
+    "qts_with_pgce" => "#{@target_course_type_label} QTS with PGCE",
+    "full_time" => "#{@target_course_type_label} Full time",
+    "part_time" => "#{@target_course_type_label} Part time",
+    "primary" => "#{@target_course_type_label} Primary",
+    "secondary" => "#{@target_course_type_label} Secondary",
   }
 %>
 
@@ -79,30 +87,32 @@
   <% end %>
 
 
-<dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Course name (X789)
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Test
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Course name (B234)
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Test
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-    </dl>
+<%
+  displayed_course_names = (1..20).map do |index|
+    "Course name (X#{index.to_s.rjust(3, "0")})"
+  end
 
-    <%= link_to "Update school experience on 2 courses",
+  courses_count_label = params[:bulk_update_scope] == "single_course" ? "1 course" : "20 courses"
+%>
+
+<% unless params[:bulk_update_scope] == "single_course" %>
+  <dl class="govuk-summary-list">
+    <% displayed_course_names.each do |course_name| %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          <%= course_name %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= bulk_update_course_type_labels[params[:bulk_update_scope]] %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+    <% end %>
+  </dl>
+<% end %>
+
+    <%= link_to "Update school experience on #{courses_count_label}",
   publish_provider_recruitment_cycle_course_path(
     @provider.provider_code,
     @provider.recruitment_cycle_year,
