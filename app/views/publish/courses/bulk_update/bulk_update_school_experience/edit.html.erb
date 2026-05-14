@@ -27,7 +27,9 @@
     local: true do %>
 
   <%= hidden_field_tag :school_experience, params[:school_experience] %>
-  <%= hidden_field_tag :school_experience_required, params[:school_experience_required] %>
+  <%= hidden_field_tag :school_experience_required,
+     params[:school_experience_required].presence || "true" %>
+
 
 
   <span class="govuk-caption-l">
@@ -44,13 +46,13 @@
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          School experience (optional)
+          Is school experience required or strongly recommended?
         </dt>
         <dd class="govuk-summary-list__value">
           <% if params[:school_experience_required] == "false" %>
-            No, school experience is not required or strongly recommended.
+            School experience is not required or strongly recommended.
         <% else %>
-            Yes, school experience is required or strongly recommended.
+            School experience is required or strongly recommended.
         <% end %>
         </dd>
         <dd class="govuk-summary-list__actions">
@@ -166,7 +168,7 @@
 
 
 <button class="govuk-button" type="submit">
-  Continue to view the course that will be changed
+  Continue to view the courses that will be changed
 </button>
 
 
