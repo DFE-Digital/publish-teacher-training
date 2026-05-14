@@ -7,13 +7,14 @@ module CoursePreview
        fee_uk_eu
        gcse
        train_with_disability
-       train_with_us].each do |information_type|
-      define_method information_type do
-        provider = Provider.new(provider_code: "BAT", recruitment_cycle: RecruitmentCycle.current)
-        accrediting_provider = Provider.new(provider_code: "CAT", recruitment_cycle: RecruitmentCycle.current)
-        course = Course.new(provider:, course_code: "2KT", accrediting_provider:)
-        render CoursePreview::MissingInformationComponent.new(course:, information_type:, is_preview: true)
-      end
-    end
+       train_with_us]
+         .each do |information_type|
+           define_method information_type do
+             provider = Provider.new(provider_code: "BAT", recruitment_cycle: RecruitmentCycle.current)
+             accrediting_provider = Provider.new(provider_code: "CAT", recruitment_cycle: RecruitmentCycle.current)
+             course = Course.new(provider:, course_code: "2KT", accrediting_provider:)
+             render CoursePreview::MissingInformationComponent.new(course:, information_type:, is_preview: true)
+           end
+         end
   end
 end

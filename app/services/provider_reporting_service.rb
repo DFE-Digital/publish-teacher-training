@@ -46,15 +46,15 @@ private
 
     {
       open: Provider.send(column_name).map { |key, _value|
-              x = {}
-              x[key.to_sym] = open[key] || 0
-              x
-            }.reduce({}, :merge),
+        x = {}
+        x[key.to_sym] = open[key] || 0
+        x
+      }.reduce({}, :merge),
       closed: Provider.send(column_name).map { |key, _value|
-                x = {}
-                x[key.to_sym] = closed[key] || 0
-                x
-              }.reduce({}, :merge),
+        x = {}
+        x[key.to_sym] = closed[key] || 0
+        x
+      }.reduce({}, :merge),
     }
   end
 end

@@ -19,7 +19,7 @@ class ProvidersCache
                           code: provider.provider_code,
                           value: provider.provider_code,
                         )
-      end
+                      end
     end
   end
 end

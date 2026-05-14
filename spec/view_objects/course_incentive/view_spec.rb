@@ -24,9 +24,10 @@ describe CourseIncentive::View do
          bursary_eligible_subjects?
          scholarship_eligible_subjects?
          non_uk_funding_available?
-         subject_with_scholarship].each do |method|
-        expect(view).to respond_to(method)
-      end
+         subject_with_scholarship]
+           .each do |method|
+             expect(view).to respond_to(method)
+           end
     end
   end
 

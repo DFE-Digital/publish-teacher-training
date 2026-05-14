@@ -90,15 +90,15 @@ describe CourseReportingService do
       },
       subject: {
         open: Subject.active.each_with_index.map { |sub, i|
-                x = {}
-                x[sub.subject_name] = (i + 1) * 3
-                x
-              }.reduce({}, :merge),
+          x = {}
+          x[sub.subject_name] = (i + 1) * 3
+          x
+        }.reduce({}, :merge),
         closed: Subject.active.each_with_index.map { |sub, _i|
-                  x = {}
-                  x[sub.subject_name] = 0
-                  x
-                }.reduce({}, :merge),
+          x = {}
+          x[sub.subject_name] = 0
+          x
+        }.reduce({}, :merge),
       },
     }
   end
