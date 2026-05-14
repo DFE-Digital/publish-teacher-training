@@ -159,7 +159,7 @@ module Publish
         end
 
         def confirm
-          flash[:success] = I18n.t("success.saved", value: "Schools")
+          flash[:success] = "Schools updated on #{selected_courses_count(params[:bulk_apply])} courses"
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
@@ -183,6 +183,10 @@ module Publish
 
           # show courses table for all multi-course scopes, including "all courses"
           @show_courses_table = @bulk_apply != "this_course"
+        end
+
+        def selected_courses_count(scope)
+          scope == "this_course" ? 1 : 20
         end
       end
     end

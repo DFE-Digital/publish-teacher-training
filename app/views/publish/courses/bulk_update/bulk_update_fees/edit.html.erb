@@ -161,41 +161,19 @@
     </legend>
     <div class="govuk-radios" data-module="govuk-radios">
 
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input"
-              id="bulk_update_scope_all_apprenticeship"
-              name="bulk_update_scope"
-              type="radio"
-              value="all_apprenticeship">
-        <label class="govuk-label govuk-radios__label"
-              for="bulk_update_scope_all_apprenticeship">
-          All fee-paying courses
-        </label>
-      </div>
-
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input"
-              id="bulk_update_scope_qts_only"
-              name="bulk_update_scope"
-              type="radio"
-              value="qts_only">
-        <label class="govuk-label govuk-radios__label"
-              for="bulk_update_scope_qts_only">
-          All QTS with PGCE fee-paying courses
-        </label>
-      </div>
-
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input"
-              id="bulk_update_scope_full_time"
-              name="bulk_update_scope"
-              type="radio"
-              value="full_time">
-        <label class="govuk-label govuk-radios__label"
-              for="bulk_update_scope_full_time">
-          All full time fee-paying courses
-        </label>
-      </div>
+      <% @bulk_options.each do |option| %>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input"
+                id="bulk_update_scope_<%= option.id %>"
+                name="bulk_update_scope"
+                type="radio"
+                value="<%= option.id %>">
+          <label class="govuk-label govuk-radios__label"
+                for="bulk_update_scope_<%= option.id %>">
+            <%= option.name %>
+          </label>
+        </div>
+      <% end %>
 
       <div class="govuk-radios__divider">or</div>
 
@@ -204,10 +182,10 @@
               id="bulk_update_scope_single"
               name="bulk_update_scope"
               type="radio"
-              value="single_course">
+              value="<%= @this_course_option.id %>">
         <label class="govuk-label govuk-radios__label"
               for="bulk_update_scope_single">
-          Only this course - <%= @course.name_and_code %>
+          <%= @this_course_option.name %>
         </label>
       </div>
     </div>

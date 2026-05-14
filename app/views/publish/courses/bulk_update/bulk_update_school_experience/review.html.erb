@@ -112,16 +112,18 @@
   </dl>
 <% end %>
 
-    <%= link_to "Update school experience on #{courses_count_label}",
-  publish_provider_recruitment_cycle_course_path(
+<%= form_with(
+  url: confirm_bulk_update_school_experience_publish_provider_recruitment_cycle_course_path(
     @provider.provider_code,
     @provider.recruitment_cycle_year,
     @course.course_code,
-    school_experience: params[:school_experience],
-    school_experience_required: params[:school_experience_required]
   ),
-  class: "govuk-button"
-%>
+  method: :post,
+  local: true,
+) do |f| %>
+  <%= hidden_field_tag :bulk_update_scope, params[:bulk_update_scope] %>
+  <%= f.govuk_submit "Update school experience on #{courses_count_label}" %>
+<% end %>
 
 <p class="govuk-body">
       <%= link_to "Cancel",

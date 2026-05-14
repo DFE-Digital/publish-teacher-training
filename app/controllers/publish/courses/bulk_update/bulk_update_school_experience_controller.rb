@@ -12,6 +12,17 @@ module Publish
           assign_bulk_update_options
         end
 
+        def confirm
+          @course = Course.find_by!(course_code: params[:code])
+          flash[:success] = "School experience updated on #{selected_courses_count(params[:bulk_update_scope])} courses"
+
+          redirect_to publish_provider_recruitment_cycle_course_path(
+            @course.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+          )
+        end
+
       private
 
         def assign_bulk_update_options
@@ -49,6 +60,10 @@ module Publish
             id: "single_course",
             name: "Only this course - #{@course.name_and_code}",
           )
+        end
+
+        def selected_courses_count(scope)
+          scope == "single_course" ? 1 : 20
         end
       end
     end
