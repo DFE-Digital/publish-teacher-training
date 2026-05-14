@@ -144,7 +144,7 @@ module Courses
                                  course_code: excluded_course_code.course_code,
                                  provider: { provider_code: excluded_course_code.provider_code },
                                )
-      end
+        end
 
       new_scope
     end

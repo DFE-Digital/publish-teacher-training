@@ -51,23 +51,23 @@ class TestDataCache
           FactoryBot.create(:course, :primary, :unpublished)
         end,
         %i[resulting_in_qts] => lambda do
-                                  FactoryBot.create(:course, :resulting_in_qts)
-                                end,
+          FactoryBot.create(:course, :resulting_in_qts)
+        end,
         %i[resulting_in_pgce_with_qts] => lambda do
-                                            FactoryBot.create(:course, :resulting_in_pgce_with_qts)
-                                          end,
+          FactoryBot.create(:course, :resulting_in_pgce_with_qts)
+        end,
         %i[resulting_in_pgde_with_qts] => lambda do
-                                            FactoryBot.create(:course, :resulting_in_pgde_with_qts)
-                                          end,
+          FactoryBot.create(:course, :resulting_in_pgde_with_qts)
+        end,
         %i[resulting_in_pgce] => lambda do
-                                   FactoryBot.create(:course, :resulting_in_pgce)
-                                 end,
+          FactoryBot.create(:course, :resulting_in_pgce)
+        end,
         %i[undergraduate_degree_with_qts] => lambda do
-                                               FactoryBot.create(:course, :undergraduate_degree_with_qts)
-                                             end,
+          FactoryBot.create(:course, :undergraduate_degree_with_qts)
+        end,
         %i[resulting_in_pgde] => lambda do
-                                   FactoryBot.create(:course, :resulting_in_pgde)
-                                 end,
+          FactoryBot.create(:course, :resulting_in_pgde)
+        end,
       }
     end
 

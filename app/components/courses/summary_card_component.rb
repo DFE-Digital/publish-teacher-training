@@ -16,12 +16,14 @@ module Courses
     end
 
     def title
-      course_link = govuk_link_to(find_course_path(
-                                    provider_code: course.provider_code,
-                                    course_code: course.course_code,
-                                    location: @location,
-                                    distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
-                                  ), class: "govuk-link govuk-!-font-size-24") do
+      url = find_course_path(
+        provider_code: course.provider_code,
+        course_code: course.course_code,
+        location: @location,
+        distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
+      )
+
+      course_link = govuk_link_to(url, class: "govuk-link govuk-!-font-size-24") do
         safe_join([
           content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
           content_tag(:span, course.name_and_code, class: "app-search-result__course-name"),
