@@ -321,6 +321,11 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
             to: "courses/bulk_update/bulk_update_fees#review",
             as: :bulk_update_fees_review
 
+        post "bulk-update/fees/confirm",
+             on: :member,
+             to: "courses/bulk_update/bulk_update_fees#confirm",
+             as: :confirm_bulk_update_fees
+
         # Bulk update – school placements
         get "bulk-update/school-placements",
             on: :member,
@@ -342,6 +347,11 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
             on: :member,
             to: "courses/bulk_update/bulk_update_school_experience#review",
             as: :bulk_update_school_experience_review
+
+        post "bulk-update/school-experience/confirm",
+             on: :member,
+             to: "courses/bulk_update/bulk_update_school_experience#confirm",
+             as: :confirm_bulk_update_school_experience
       end
 
       scope module: :providers do

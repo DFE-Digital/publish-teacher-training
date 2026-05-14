@@ -59,6 +59,7 @@
   ),
   method: :post
 ) do |f| %>
+        <%= hidden_field_tag :bulk_apply, @bulk_apply %>
         <%= f.govuk_submit "Update placement schools" %>
       <% end %>
     </div>
