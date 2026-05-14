@@ -14,6 +14,7 @@ module Courses
 
     def execute(course:, new_provider:)
       @courses_not_copied << course and return unless course.rollable? || force
+
       @courses_not_copied << course and return if course_code_already_exists_on_provider?(course:, new_provider:)
 
       new_course = nil
