@@ -181,8 +181,8 @@ module Publish
               labels[:short]
             end
 
-          # only show courses table if user has selected a bulk option that applies to multiple courses (i.e. not "this course only" or "all courses")
-          @show_courses_table = !%w[all this_course].include?(@bulk_apply)
+          # show courses table for all multi-course scopes, including "all courses"
+          @show_courses_table = @bulk_apply != "this_course"
         end
       end
     end
