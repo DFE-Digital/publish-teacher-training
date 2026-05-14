@@ -11,7 +11,6 @@ module Courses
       end
 
       def by_accrediting_provider(provider)
-        # rubocop:disable Style/HashTransformValues
         provider
           .courses
           .group_by { |course|
@@ -26,7 +25,6 @@ module Courses
             [provider_name, courses.sort_by { |course| [course.name, course.course_code] }.map(&:decorate)]
           end
         # rubocop:enable Style/MultilineBlockChain
-        # rubocop:enable Style/HashTransformValues
       end
     end
   end
