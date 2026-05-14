@@ -3,20 +3,20 @@ module Publish
     module BulkUpdate
       class BulkUpdateSchoolExperienceController < ApplicationController
         def edit
-          @course = Course.find_by!(course_code: params[:code])
+          @course = course
           assign_bulk_update_options
         end
 
         def review
-          @course = Course.find_by!(course_code: params[:code])
+          @course = course
           assign_bulk_update_options
         end
 
         def confirm
-          @course = Course.find_by!(course_code: params[:code])
+          @course = course
           flash[:success] = "School experience updated on #{selected_courses_count(params[:bulk_update_scope])} courses"
 
-          redirect_to publish_provider_recruitment_cycle_course_path(
+          redirect_to details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
@@ -64,6 +64,10 @@ module Publish
 
         def selected_courses_count(scope)
           scope == "single_course" ? 1 : 20
+        end
+
+        def course
+          @course ||= provider.courses.find_by!(course_code: params[:code])
         end
       end
     end
