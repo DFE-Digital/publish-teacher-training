@@ -4,11 +4,13 @@ require "rails_helper"
 
 describe WithQualifications do
   specs = [
-    qts: { values: [:qts], description: "QTS" },
-    pgce: { values: [:pgce], description: "PGCE" },
-    pgde: { values: [:pgde], description: "PGDE" },
-    pgce_with_qts: { values: %i[qts pgce], description: "PGCE with QTS" },
-    pgde_with_qts: { values: %i[qts pgde], description: "PGDE with QTS" },
+    {
+      qts: { values: [:qts], description: "QTS" },
+      pgce: { values: [:pgce], description: "PGCE" },
+      pgde: { values: [:pgde], description: "PGDE" },
+      pgce_with_qts: { values: %i[qts pgce], description: "PGCE with QTS" },
+      pgde_with_qts: { values: %i[qts pgde], description: "PGDE with QTS" },
+    },
   ].freeze
 
   describe "#qualifications" do

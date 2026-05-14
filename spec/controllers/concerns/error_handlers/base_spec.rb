@@ -32,9 +32,11 @@ describe "Base" do
       expect(response.content_type).to include "application/json"
       expect(response.parsed_body).to match(
         "errors" => [
-          "status" => 500,
-          "title" => a_string_including("ERROR"),
-          "detail" => a_string_including("gone wrong"),
+          {
+            "status" => 500,
+            "title" => a_string_including("ERROR"),
+            "detail" => a_string_including("gone wrong"),
+          },
         ],
       )
     end
