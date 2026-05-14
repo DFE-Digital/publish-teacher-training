@@ -9,24 +9,48 @@ export default class extends Controller {
     "showMoreButton",
   ];
 
+  connect() {
+    this.searchResultLimit = 20;
+    this.lastQuery = "";
+  }
+
   search(event) {
     if (event) event.preventDefault();
 
     const query = this.inputTarget.value.trim().toLowerCase();
-    let visibleCount = 0;
+    const hasSearchTerm = query.length > 0;
+    let matchCount = 0;
+    const matchedSchools = [];
+
+    if (hasSearchTerm && query !== this.lastQuery) {
+      this.searchResultLimit = 20;
+    }
+
+    this.lastQuery = query;
 
     this.schoolTargets.forEach((element) => {
       const text = element.dataset.searchText || "";
       const matches = query === "" || text.includes(query);
 
-      element.hidden = !matches;
-
       if (matches) {
-        visibleCount += 1;
+        matchedSchools.push(element);
+        matchCount += 1;
       }
+
+      element.hidden = true;
     });
 
-    const hasResults = visibleCount > 0;
+    if (hasSearchTerm) {
+      matchedSchools.slice(0, this.searchResultLimit).forEach((element) => {
+        element.hidden = false;
+      });
+    } else {
+      matchedSchools.forEach((element) => {
+        element.hidden = false;
+      });
+    }
+
+    const hasResults = matchCount > 0;
 
     // No results message
     this.noResultsTarget.hidden = hasResults;
@@ -34,10 +58,10 @@ export default class extends Controller {
     // Select all section
     this.selectAllSectionTarget.hidden = !hasResults;
 
-    const hasSearchTerm = query.length > 0;
-
-    // Hide "Show 20 more schools" whenever a search is active
-    this.showMoreButtonTarget.hidden = hasSearchTerm;
+    // During search, keep link visible only when there are more matches to reveal
+    if (hasSearchTerm) {
+      this.showMoreButtonTarget.hidden = matchCount <= this.searchResultLimit;
+    }
 
     // Reset pagination only when search is cleared
     if (!hasSearchTerm) {
@@ -51,6 +75,18 @@ export default class extends Controller {
         );
       }
     }
+  }
+
+  showMore(event) {
+    if (!event) return;
+
+    const query = this.inputTarget.value.trim();
+    if (query.length === 0) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    this.searchResultLimit += 20;
+    this.search();
   }
 
   clear(event) {
