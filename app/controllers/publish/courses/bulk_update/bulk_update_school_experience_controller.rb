@@ -16,7 +16,7 @@ module Publish
           @course = course
           flash[:success] = "School experience updated on #{selected_courses_count(params[:bulk_update_scope])} courses"
 
-          redirect_to details_publish_provider_recruitment_cycle_course_path(
+          redirect_to publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,

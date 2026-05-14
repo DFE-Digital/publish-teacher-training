@@ -51,6 +51,7 @@
           </tbody>
         </table>
       <% end %>
+      <% button_text = @bulk_apply == "this_course" ? "Update placement schools on 1 course" : "Update placement schools on 20 courses" %>
       <%= form_with(
   url: confirm_bulk_schools_publish_provider_recruitment_cycle_course_path(
     course.provider_code,
@@ -60,7 +61,7 @@
   method: :post
 ) do |f| %>
         <%= hidden_field_tag :bulk_apply, @bulk_apply %>
-        <%= f.govuk_submit "Update placement schools" %>
+        <%= f.govuk_submit button_text %>
       <% end %>
     </div>
   </div>
