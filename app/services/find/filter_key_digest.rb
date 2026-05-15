@@ -6,7 +6,6 @@ module Find
   class FilterKeyDigest
     # Keys that determine what courses match — excludes display-only keys
     FILTER_KEYS = %w[
-      applications_open
       can_sponsor_visa
       engineers_teach_physics
       funding
