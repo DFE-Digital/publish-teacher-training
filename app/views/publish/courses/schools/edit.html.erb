@@ -185,7 +185,7 @@
                 <div class="govuk-radios__item">
                   <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
                   <label class="govuk-label govuk-radios__label" for="whereDoYouLive-2">
-                    No, I want to add more placement schools
+                    No, I want to add or remove more placement schools
                   </label>
                 </div>
               </div>
@@ -196,7 +196,7 @@
             <%= f.govuk_radio_button :finished_updating_schools, "yes",
     label: { text: "Yes, I have finished updating placement schools" } %>
             <%= f.govuk_radio_button :finished_updating_schools, "no",
-    label: { text: "No, I want to add more placement schools" } %>
+    label: { text: "No, I want to add or remove more placement schools" } %>
           <% end %>
           <div class="govuk-button-group">
             <%= f.govuk_submit "Continue" %>
