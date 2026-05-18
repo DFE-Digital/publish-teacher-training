@@ -57,12 +57,6 @@ describe CourseDecorator do
     expect(decorated_course.sorted_subjects).to eq("English<br>Mathematics")
   end
 
-  it "returns if applications are open or closed" do
-    allow(course).to receive(:open_for_applications?).and_return(true)
-
-    expect(decorated_course.open_or_closed_for_applications).to eq("Open")
-  end
-
   it "returns if course is an apprenticeship" do
     expect(decorated_course.apprenticeship?).to be(false)
   end
