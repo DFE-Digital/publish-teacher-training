@@ -15,13 +15,13 @@
 <%= render AddCourseButton.new(provider: @provider) %>
 
 <% if @self_accredited_courses %>
-  <section data-qa="courses__table-section">
+  <section>
     <%= render partial: "course_table", locals: { courses: @self_accredited_courses } %>
   </section>
 <% end %>
 
 <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
-  <section data-qa="courses__table-section">
+  <section>
     <h2 class="govuk-heading-m">
       <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
       <%= accrediting_provider %>

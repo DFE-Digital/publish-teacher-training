@@ -41,23 +41,22 @@ RSpec.describe "Viewing courses as an accredited provider" do
   end
 
   def then_i_should_see_a_list_of_training_partners
-    expect(publish_training_partner_index_page.training_provider_rows.size).to eq(1)
-
-    expect(publish_training_partner_index_page.training_provider_rows.first.name).to have_text(training_provider.provider_name)
+    expect(page).to have_link(training_provider.provider_name)
   end
 
   def and_i_should_see_a_count_of_the_courses_i_accredit
-    expect(publish_training_partner_index_page.training_provider_rows.first.course_count).to have_text("1")
+    expect(page).to have_text("1 course")
   end
 
   def and_i_click_on_a_training_provider
-    publish_training_partner_index_page.training_provider_rows.first.name.click
+    click_link(training_provider.provider_name)
   end
 
   def then_i_see_the_courses_i_accredit_for
-    expect(publish_training_partners_course_index_page).to be_displayed
-    expect(publish_training_partners_course_index_page.courses.size).to eq(1)
-    expect(publish_training_partners_course_index_page.courses.first.name).to have_text(course.name)
+    expect(page).to have_current_path(
+      "/publish/organisations/#{accrediting_provider.provider_code}/#{accrediting_provider.recruitment_cycle_year}/training-partners/#{training_provider.provider_code}/courses",
+    )
+    expect(page).to have_text(course.name_and_code)
   end
 
   def accrediting_provider
