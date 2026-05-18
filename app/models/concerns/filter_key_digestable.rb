@@ -8,7 +8,7 @@ module FilterKeyDigestable
   end
 
   def compute_filter_key_digest
-    Find::FilterKeyDigest.digest(subjects: subjects, search_attributes: search_attributes)
+    Find::FilterKeyDigest.digest(subjects: subjects, search_attributes: search_params)
   end
 
   def normalize_filter_attrs(attrs)

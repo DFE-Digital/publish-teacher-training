@@ -1,4 +1,16 @@
+.app-active-filters__header {
+  display: flex;
+
+  justify-content: space-between;
+}
+
+.app-c-filter-summary__clear-filters {
+  display: inline-block;
+}
+
 .app-active-filters__heading {
+  display: inline-block;
+
   padding: 0;
   margin: 0 0 govuk-spacing(3);
 
