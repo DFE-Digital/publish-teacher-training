@@ -42,16 +42,6 @@ class CourseDecorator < ApplicationDecorator
     I18n.l(date, format: :govuk_short, ordinal: ActiveSupport::Inflector.ordinal(date.day))
   end
 
-  def open_or_closed_for_applications
-    if object.open_for_applications?
-      "Open"
-    elsif Find::CycleTimetable.apply_opens(object.recruitment_cycle.year).future?
-      "Applications will open on #{Find::CycleTimetable.apply_opens(object.recruitment_cycle.year).to_fs(:day_and_month)}"
-    else
-      "Closed"
-    end
-  end
-
   def saved_status_tag
     text, colour = saved_status_text_and_colour
     return if text.blank?
