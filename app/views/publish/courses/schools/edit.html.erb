@@ -168,29 +168,6 @@
               </div>
             </div>
           <% end %>
-          <%# <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                  Have you finished updating placement schools?
-                </h1>
-              </legend>
-              <div class="govuk-radios" data-module="govuk-radios">
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
-                  <label class="govuk-label govuk-radios__label" for="whereDoYouLive">
-                    Yes, I have finished updating placement schools
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
-                  <label class="govuk-label govuk-radios__label" for="whereDoYouLive-2">
-                    No, I want to add or remove more placement schools
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-          </div> %>
           <%= f.govuk_radio_buttons_fieldset :finished_updating_schools,
   legend: { text: "Have you finished updating placement schools?", size: "m" } do %>
             <%= f.govuk_radio_button :finished_updating_schools, "yes",
