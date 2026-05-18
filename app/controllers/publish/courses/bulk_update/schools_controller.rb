@@ -181,8 +181,8 @@ module Publish
               labels[:short]
             end
 
-          # show courses table for all multi-course scopes, including "all courses"
-          @show_courses_table = @bulk_apply != "this_course"
+          # show courses table for all multi-course scopes, including "all courses" and "only this course"
+          @show_courses_table = @bulk_apply != "this_course" && @bulk_apply != "all"
         end
 
         def selected_courses_count(scope)
