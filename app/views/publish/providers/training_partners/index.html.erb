@@ -8,9 +8,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <ul class="govuk-list" data-qa="provider__training_partners_list">
+    <ul class="govuk-list">
       <% @training_partners.each do |training_partner| %>
-        <li data-qa="training_partner">
+        <li>
           <h3 class="govuk-heading-s">
             <%= govuk_link_to(
               training_partner.provider_name,
@@ -22,7 +22,7 @@
               class: "govuk-!-font-weight-bold",
               data: { qa: "training_partner_name" },
             ) %>
-            <span class="govuk-hint govuk-!-display-inline" data-qa="course_count">
+            <span class="govuk-hint govuk-!-display-inline">
               <%= pluralize(@course_counts[training_partner.provider_code], "course") %>
             </span>
           </h3>
@@ -33,7 +33,7 @@
 
   <% unless @training_partners.empty? %>
     <aside class="govuk-grid-column-one-third">
-      <div class="app-status-box" data-qa="download-section">
+      <div class="app-status-box">
         <h2 class="govuk-heading-m"><%= t(".download") %></h2>
         <p class="govuk-body"><%= t(".export") %></p>
         <p class="govuk-body">

@@ -28,28 +28,8 @@ class CourseDecorator < ApplicationDecorator
     object.description.to_s.sub("PGCE with QTS", "QTS with PGCE")
   end
 
-  def on_find(provider = object.provider)
-    return not_on_find unless object.findable?
-
-    if current_open_cycle?
-      h.govuk_link_to("View live course", h.find_course_url(provider.provider_code, object.course_code))
-    else
-      "Course will go live on #{Find::CycleTimetable.find_opens(object.recruitment_cycle.year).to_fs(:day_and_month)}"
-    end
-  end
-
   def govuk_short_ordinal(date)
     I18n.l(date, format: :govuk_short, ordinal: ActiveSupport::Inflector.ordinal(date.day))
-  end
-
-  def open_or_closed_for_applications
-    if object.open_for_applications?
-      "Open"
-    elsif Find::CycleTimetable.apply_opens(object.recruitment_cycle.year).future?
-      "Applications will open on #{Find::CycleTimetable.apply_opens(object.recruitment_cycle.year).to_fs(:day_and_month)}"
-    else
-      "Closed"
-    end
   end
 
   def saved_status_tag
@@ -187,10 +167,6 @@ class CourseDecorator < ApplicationDecorator
 
   def current_cycle?
     course.recruitment_cycle.year.to_i == Find::CycleTimetable.current_year
-  end
-
-  def current_open_cycle?
-    current_cycle? && Find::CycleTimetable.find_open?
   end
 
   def next_cycle?
@@ -506,16 +482,6 @@ class CourseDecorator < ApplicationDecorator
   end
 
 private
-
-  def not_on_find
-    if object.new_and_not_running?
-      "Still in draft"
-    elsif object.is_withdrawn?
-      "No - withdrawn"
-    else
-      "No"
-    end
-  end
 
   def number_of_subjects
     subjects.size

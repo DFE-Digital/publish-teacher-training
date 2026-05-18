@@ -40,13 +40,11 @@ RSpec.describe "Managing a provider's courses" do
   end
 
   def then_i_should_see_a_list_of_courses
-    expect(publish_provider_courses_index_page.courses.size).to eq(1)
-
-    expect(publish_provider_courses_index_page.courses.first.name).to have_text(course.name)
+    expect(page).to have_link(course.name_and_code)
   end
 
   def and_i_click_on_a_course
-    publish_provider_courses_index_page.courses.first.link.click
+    click_link(course.name_and_code)
   end
 
   def then_i_see_the_course
