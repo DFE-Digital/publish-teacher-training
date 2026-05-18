@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe ErrorReporting::RateLimiter do
-  include ActiveSupport::Testing::TimeHelpers
-
   it "stays silent below the threshold and fires from the threshold onward" do
     results = 15.times.map { described_class.report?(key: "x", threshold: 10) }
 
@@ -17,12 +15,13 @@ RSpec.describe ErrorReporting::RateLimiter do
   end
 
   it "uses a sliding window so old events age out" do
-    freeze_time do
+    Timecop.freeze do
       10.times { described_class.report?(key: "x", threshold: 10, window: 1.hour) }
       expect(described_class.report?(key: "x", threshold: 10, window: 1.hour)).to be true
 
-      travel 1.hour + 1.second
-      expect(described_class.report?(key: "x", threshold: 10, window: 1.hour)).to be false
+      Timecop.travel(1.hour + 1.second) do
+        expect(described_class.report?(key: "x", threshold: 10, window: 1.hour)).to be false
+      end
     end
   end
 
