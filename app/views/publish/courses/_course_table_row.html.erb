@@ -9,17 +9,58 @@
         <%= course.name_and_code %><br>
       </span>
     <% end %>
-    <span class="govuk-body-s"><%= course.summary %></span>
+    <% if course.primary_course? && course.age_minimum && course.age_maximum %>
+      <div class="govuk-hint govuk-!-margin-0">
+        Ages <%= course.age_minimum %> to <%= course.age_maximum %>
+      </div>
+    <% end %>
   </td>
+  <% if @show_course_info_column %>
+    <td class="govuk-table__cell">
+      <!-- <span class="govuk-body-s"><%= course.summary %></span> -->
+      <% if @show_funding && course.funding_description.present? %>
+        <span class="govuk-body-s"><%= course.funding_description %></span><br>
+      <% end %>
+      <span class="govuk-body-s">
+        <% if @show_summary_parts[:qualification] && course.summary_parts[0].present? %>
+          <div><%= course.summary_parts[0] %></div>
+        <% end %>
+        <% if @show_summary_parts[:study_mode] && course.summary_parts[1].present? %>
+          <div><%= course.summary_parts[1] %></div>
+        <% end %>
+        <% if @show_start_date && course.start_date_description.present? %>
+          <div><%= course.start_date_description %></div>
+        <% end %>
+      </span>
+      <!-- TEST course information with line breaks -->
+      <!--<span class="govuk-body-s">
+      <% if course.level == "primary" %>
+        - Fee-paying<br>
+        - QTS with PGCE<br>
+        - Full time
+      <% elsif course.level == "secondary" && ["Chemistry", "Physics", "Biology"].include?(course.name) %>
+        Salary<br>
+        QTS<br>
+        Full time
+      <% elsif course.level == "secondary" && ["Design and technology"].include?(course.name) %>
+        Apprenticeship<br>
+        QTS with PGCE<br>
+        Full time
+      <% elsif course.level == "secondary" && course.salary? %>
+        Salary<br>
+        QTS with PGCE<br>
+        Full time
+      <% elsif course.level == "secondary" && course.salary? == false %>
+        Fee-paying<br>
+        QTS with PGCE<br>
+        Full time
+      <% else %>
+        <%= course.summary %>
+      <% end %>
+    </span> -->
+    </td>
+  <% end %>
   <td class="govuk-table__cell" data-qa="courses-table__status">
     <%= course.status_tag %>
-  </td>
-  <td class="govuk-table__cell" data-qa="courses-table__findable">
-    <%= course.on_find(course.provider) %>
-  </td>
-  <td class="govuk-table__cell" data-qa="courses-table__applications">
-    <% if course.is_running? || course.is_withdrawn? %>
-      <%= course.open_or_closed_for_applications %>
-    <% end %>
   </td>
 </tr>

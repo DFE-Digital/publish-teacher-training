@@ -1,0 +1,89 @@
+ <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+<%= govuk_back_link_to(
+  publish_provider_recruitment_cycle_course_path(
+    @provider.provider_code,
+    params[:recruitment_cycle_year],
+    @course.course_code
+  )
+) %>
+
+<%= form_with(
+      model: @course,
+      url: school_experience_publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ),
+      method: :patch,
+      local: true
+    ) do |f| %>
+
+  <span class="govuk-caption-l">
+    <%= @course.name_and_code %>
+  </span>
+
+  <h1 class="govuk-heading-l">
+    School experience (optional)
+  </h1>
+
+  <%= hidden_field_tag :school_experience, params[:school_experience] %>
+
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          Is school experience required or strongly recommended for this course? (optional)
+        </legend>
+
+        <div class="govuk-radios">
+          <div class="govuk-radios__item">
+          <%= f.radio_button :school_experience_required,
+                   true,
+                   class: "govuk-radios__input",
+                   id: "school_experience_yes",
+                   checked: params[:school_experience].present? %>
+
+          <%= f.label :school_experience_required,
+                      "Yes, school experience is required or strongly recommended",
+                      value: true,
+                      class: "govuk-label govuk-radios__label",
+                      for: "school_experience_yes" %>
+        </div>
+
+        <div class="govuk-radios__item">
+          <%= f.radio_button :school_experience_required,
+                   false,
+                   class: "govuk-radios__input",
+                   id: "school_experience_no",
+                   checked: params[:school_experience_required] == "false" %>
+
+          <%= f.label :school_experience_required,
+                      "No, school experience is not required or strongly recommended",
+                      value: false,
+                      class: "govuk-label govuk-radios__label",
+                      for: "school_experience_no" %>
+        </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <%= f.submit "Continue", class: "govuk-button" %>
+
+  <% end %>
+
+    <p class="govuk-body">
+      <%= link_to "Cancel",
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ),
+      class: "govuk-link" %>
+    </p>
+  </div>
+</div>

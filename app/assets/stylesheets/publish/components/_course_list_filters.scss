@@ -1,0 +1,44 @@
+.app-active-filters {
+  margin-bottom: govuk-spacing(4);
+}
+
+.app-active-filters__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: govuk-spacing(2);
+  padding: 0;
+  margin: 0 0 govuk-spacing(3);
+  list-style: none;
+}
+
+.app-active-filters__remove-filter {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px solid govuk-colour("mid-grey");
+  border-radius: 4px;
+  background-color: govuk-colour("light-grey");
+  color: govuk-colour("black");
+  text-decoration: none;
+  font-size: 1.18rem;
+  line-height: 1.4;
+}
+
+.app-active-filters__remove-filter:hover {
+  border-color: govuk-colour("black");
+  text-decoration: underline;
+}
+
+.app-active-filters__remove-filter:focus {
+  @include govuk-focused-text;
+}
+
+.filter-summary {
+  display: flex;
+  flex-direction: column;
+  color: #505a5f;
+  margin-bottom: 0;
+}
+
+// .number-of-courses {
+//   color: #505a5f;
+// }

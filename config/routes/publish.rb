@@ -233,6 +233,14 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
         get "/schools", on: :member, to: "courses/schools#edit"
         put "/schools", on: :member, to: "courses/schools#update"
+        # Bulk update routes for schools
+
+        scope module: "courses/bulk_update" do
+          get  "/schools/bulk",         on: :member, to: "schools#edit", as: :edit_bulk_schools
+          post "/schools/bulk",         on: :member, to: "schools#update"
+          get  "/schools/bulk/check",   on: :member, to: "schools#check",   as: :check_bulk_schools
+          post "/schools/bulk/confirm", on: :member, to: "schools#confirm", as: :confirm_bulk_schools
+        end
 
         get "/preview", on: :member, to: "courses#preview"
 
@@ -296,6 +304,54 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
         get "/start-date", on: :member, to: "courses/start_date#edit"
         put "/start-date", on: :member, to: "courses/start_date#update"
+
+        get "/school-experience/details", on: :member, to: "courses/school_experience#details", as: :school_experience_details
+
+        get "/school-experience", on: :member, to: "courses/school_experience#edit"
+        patch "/school-experience", on: :member, to: "courses/school_experience#update"
+
+        # Bulk update – fees
+        get "bulk-update/fees",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_fees#edit",
+            as: :bulk_update_fees
+
+        get "bulk-update/fees/review",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_fees#review",
+            as: :bulk_update_fees_review
+
+        post "bulk-update/fees/confirm",
+             on: :member,
+             to: "courses/bulk_update/bulk_update_fees#confirm",
+             as: :confirm_bulk_update_fees
+
+        # Bulk update – school placements
+        get "bulk-update/school-placements",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_school_placements#edit",
+            as: :bulk_update_school_placements
+
+        get "bulk-update/school-placements/review",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_school_placements#review",
+            as: :bulk_update_school_placements_review
+
+        # Bulk update – school experience
+        get "bulk-update/school-experience",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_school_experience#edit",
+            as: :bulk_update_school_experience
+
+        get "bulk-update/school-experience/review",
+            on: :member,
+            to: "courses/bulk_update/bulk_update_school_experience#review",
+            as: :bulk_update_school_experience_review
+
+        post "bulk-update/school-experience/confirm",
+             on: :member,
+             to: "courses/bulk_update/bulk_update_school_experience#confirm",
+             as: :confirm_bulk_update_school_experience
       end
 
       scope module: :providers do
