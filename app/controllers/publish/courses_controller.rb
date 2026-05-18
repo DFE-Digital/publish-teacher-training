@@ -8,73 +8,21 @@ module Publish
 
     def index
       authorize :provider, :index?
-
-      # Courses to actually display in the table
-      filtered_courses
-
-      # OLD CODE FOR WHICH COURSE INFORMATION TO SHOW (shows all information when filtered and only varying information when unfiltered)
-      # Courses to use for comparison purposes (i.e. deciding which information to show and which filters to show). This is either the filtered or unfiltered courses, depending on whether filters are applied or not, as we want to compare based on the courses being shown to users.
-      # comparison_courses =
-      #   if filters_applied?
-      #     courses
-      #   else
-      #     provider.courses.map(&:decorate)
-      #   end
-
-      # Decide which course information to show based on whether it varies across the courses being compared (works the for unfultered and filtered courses)
-      # @show_summary_parts = {
-      #   qualification:
-      #     comparison_courses.map { |c| c.summary_parts[0] }.compact.uniq.size > 1,
-
-      #   study_mode:
-      #     comparison_courses.map { |c| c.summary_parts[1] }.compact.uniq.size > 1,
-      # }
-
-      # @show_funding =
-      #   comparison_courses.map(&:funding).uniq.size > 1
-
-      # @show_start_date =
-      #   comparison_courses.map(&:start_date).uniq.size > 1
-
-      # LOGIC FOR WHICH COURSE INFORMATION TO SHOW (shows varie dinformation if unfiltered and all info when filtered)
-      # if filters_applied?
-      #   # When filtering, always show all course information
-      #   @show_summary_parts = {
-      #     qualification: true,
-      #     study_mode: true,
-      #   }
-      #   @show_funding = true
-      #   @show_start_date = true
-      # else
-      #   # When unfiltered, only show information if it varies
-      #   @show_summary_parts = {
-      #     qualification: comparison_courses.map { |c| c.summary_parts[0] }.uniq.size > 1,
-      #     study_mode: comparison_courses.map { |c| c.summary_parts[1] }.compact.uniq.size > 1,
-      #   }
-
-      #   @show_funding =
-      #     comparison_courses.map(&:funding).uniq.size > 1
-
-      #   @show_start_date =
-      #     comparison_courses.map(&:start_date).uniq.size > 1
-      # end
-
-      # NEW LOGIC FOR WHICH COURSE INFORMATION TO SHOW (always shows varying information and shows all rows in course information from unfiltered list when filtered)
-      all_courses = provider.courses.map(&:decorate)
+      all_courses = provider.courses
 
       @show_summary_parts = {
         qualification:
-          all_courses.map { |c| c.summary_parts[0] }.compact.uniq.size > 1,
+          varying_column?(all_courses, :qualification),
 
         study_mode:
-    all_courses.map { |c| c.summary_parts[1] }.compact.uniq.size > 1,
+          varying_column?(all_courses.where.not(study_mode: nil), :study_mode),
       }
 
       @show_funding =
-        all_courses.map(&:funding).uniq.size > 1
+        varying_column?(all_courses, :funding)
 
       @show_start_date =
-        all_courses.map(&:start_date).uniq.size > 1
+        varying_column?(all_courses, :start_date)
 
       # Decide whether to show the "Course information" column at all
       @show_course_info_column =
@@ -84,10 +32,10 @@ module Publish
 
       # Which filters should beshown to users
       @show_filters = {
-        funding: all_courses.map(&:funding).uniq.size > 1,
-        qualification: all_courses.map(&:qualification).uniq.size > 1,
-        study_mode: all_courses.map(&:study_mode).uniq.size > 1,
-        start_date: all_courses.map(&:start_date).uniq.size > 1,
+        funding: varying_column?(all_courses, :funding),
+        qualification: varying_column?(all_courses, :qualification),
+        study_mode: varying_column?(all_courses, :study_mode),
+        start_date: varying_column?(all_courses, :start_date),
       }
 
       # Always show filters that are currently applied
@@ -309,7 +257,6 @@ module Publish
 
     def provider
       @provider ||= recruitment_cycle.providers
-                                     .includes(courses: %i[site_statuses enrichments provider])
                                      .find_by!(provider_code: params[:provider_code])
     end
 
@@ -360,6 +307,28 @@ module Publish
 
     # The filtered_courses method is used to filter courses by the selected filters in the index action. It applies the filters to the courses and returns the filtered courses.
     def filtered_courses
+      @filtered_courses ||= begin
+        courses = filtered_courses_scope.includes(:accrediting_provider)
+
+        if params[:status].present?
+          selected = Array(params[:status])
+          courses = courses.includes(:latest_enrichment, :enrichments, :site_statuses).to_a.select do |course|
+            selected.any? do |status|
+              matcher = STATUS_MATCHERS[status]
+              matcher && matcher.call(course)
+            end
+          end
+        else
+          courses = courses.to_a
+        end
+
+        courses
+          .map(&:decorate)
+          .sort_by { |course| course.name.downcase }
+      end
+    end
+
+    def filtered_courses_scope
       courses = provider.courses
 
       courses = courses.where(level: params[:education_phase]) if params[:education_phase].present?
@@ -367,20 +336,11 @@ module Publish
       courses = courses.where(qualification: params[:qualification]) if params[:qualification].present?
       courses = courses.where(study_mode: params[:study_mode]) if params[:study_mode].present?
       courses = courses.with_start_dates(params[:start_date]) if params[:start_date].present?
+      courses
+    end
 
-      courses = courses.map(&:decorate)
-
-      if params[:status].present?
-        selected = Array(params[:status])
-
-        courses = courses.select do |course|
-          selected.any? do |status|
-            matcher = STATUS_MATCHERS[status]
-            matcher && matcher.call(course)
-          end
-        end
-      end
-      courses.sort_by { |course| course.name.downcase }
+    def varying_column?(scope, column_name)
+      scope.reselect(column_name).distinct.limit(2).pluck(column_name).size > 1
     end
 
     def filters_applied?
