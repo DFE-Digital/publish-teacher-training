@@ -26,15 +26,17 @@
           <div class="govuk-grid-column-full app-saved-course-location">
             <div class="govuk-form-group app-saved-course-location-input">
               <%= form_with url: find_candidate_saved_courses_path, method: :get, local: true do |form| %>
-                <div class="app-saved-courses-search__location-row" data-controller="locations-autocomplete" data-locations-autocomplete-path-value="<%= find_geolocation_suggestions_path %>">
+                <%= tag.div(
+                  class: "app-saved-courses-search__location-row suggestions",
+                  data: remote_autocomplete_data(path: find_geolocation_suggestions_path),
+                ) do %>
                   <%= form.label :location, t(".location_label"), class: "govuk-label govuk-label--s govuk-!-font-weight-bold" %>
                   <%= form.text_field :location,
                       value: @location,
                       class: "govuk-input",
-                      autocomplete: "off",
-                      data: { locations_autocomplete_target: "input" } %>
+                      autocomplete: "off" %>
                   <%= form.govuk_submit t(".add_location"), class: "app-saved-courses-search__button" %>
-                </div>
+                <% end %>
               <% end %>
             </div>
           </div>
