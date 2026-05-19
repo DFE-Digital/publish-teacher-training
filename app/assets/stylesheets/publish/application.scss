@@ -2,7 +2,7 @@
 @import "../govuk_style_setup";
 @import "@ministryofjustice/frontend/moj/all";
 $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
-@import "accessible-autocomplete/dist/accessible-autocomplete.min";
+@import "dfe-autocomplete/src/dfe-autocomplete";
 @import "../one-login";
 
 @import "../components/accordion";
