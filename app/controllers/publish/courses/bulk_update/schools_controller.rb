@@ -5,6 +5,7 @@ module Publish
         include CourseBasicDetailConcern
 
         before_action :build_course
+        before_action :load_school_changes, only: %i[edit check]
 
         BULK_APPLY_LABELS = {
           "all" => {
@@ -52,18 +53,6 @@ module Publish
             short: "This course only",
           },
         }.freeze
-
-        # def edit
-        #   @bulk_options = [
-        #     OpenStruct.new(id: "all", name: "All courses"),
-        #     OpenStruct.new(id: "full_time", name: "All full time courses"),
-        #     OpenStruct.new(id: "pgce", name: "All QTS with PGCE courses"),
-        #     OpenStruct.new(
-        #       id: "this_course",
-        #       name: "Only this course - #{course.name_and_code}",
-        #     ),
-        #   ]
-        # end
 
         def edit
           @bulk_options = []
@@ -155,6 +144,10 @@ module Publish
             recruitment_cycle.year,
             course.course_code,
             bulk_apply: params[:bulk_apply], # pass through the bulk option selected on the edit page so it can be applied on the check page
+            added_count: params[:added_count], # pass through the counts so they can be displayed on the check page without having to recalculate them
+            removed_count: params[:removed_count],
+            added_site_ids: params[:added_site_ids],
+            removed_site_ids: params[:removed_site_ids],
           )
         end
 
@@ -187,6 +180,28 @@ module Publish
 
         def selected_courses_count(scope)
           scope == "this_course" ? 1 : 20
+        end
+
+      private
+
+        def load_school_changes
+          @added_count   = params[:added_count].to_i
+          @removed_count = params[:removed_count].to_i
+
+          @added_site_ids   = Array(params[:added_site_ids]).map(&:to_i)
+          @removed_site_ids = Array(params[:removed_site_ids]).map(&:to_i)
+
+          # Turn IDs to school names for display in the view
+          site_ids = @added_site_ids + @removed_site_ids
+
+          sites_by_id =
+            Site.where(id: site_ids).index_by(&:id)
+
+          @added_schools =
+            @added_site_ids.map { |id| sites_by_id[id] }.compact
+
+          @removed_schools =
+            @removed_site_ids.map { |id| sites_by_id[id] }.compact
         end
       end
     end

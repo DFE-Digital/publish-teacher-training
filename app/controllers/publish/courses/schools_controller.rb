@@ -35,9 +35,11 @@ module Publish
             .map(&:to_i)
             .sort
 
-          # Calculate counts for banner message
-          added_count   = (new_site_ids - previous_site_ids).size
-          removed_count = (previous_site_ids - new_site_ids).size
+          added_site_ids   = new_site_ids - previous_site_ids
+          removed_site_ids = previous_site_ids - new_site_ids
+
+          added_count   = added_site_ids.size
+          removed_count = removed_site_ids.size
 
           # Update course schools (async if above threshold)
           Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(
@@ -90,6 +92,10 @@ module Publish
               provider.provider_code,
               recruitment_cycle.year,
               course.course_code,
+              added_count: added_count,
+              removed_count: removed_count,
+              added_site_ids: added_site_ids,
+              removed_site_ids: removed_site_ids,
             )
           end
         else
