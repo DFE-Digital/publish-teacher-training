@@ -55,7 +55,7 @@
           <div class="school-search-content">
             <div class="govuk-form-group govuk-!-margin-bottom-0">
               <p class="govuk-heading-m">
-                Search for a school
+                Search for a school in the list
               </p>
               <label class="govuk-label" for="school-search">
                 Enter the name of a school, university or college. You can also enter a postcode or URN.
@@ -168,7 +168,8 @@
               </div>
             </div>
           <% end %>
-          <%= f.govuk_radio_buttons_fieldset :finished_updating_schools,
+          <!-- REMOVED: Radio buttons for "Have you finished updating schools?" -->
+          <!-- <%= f.govuk_radio_buttons_fieldset :finished_updating_schools,
   legend: { text: "Have you finished updating placement schools?", size: "m" } do %>
             <%= f.govuk_radio_button :finished_updating_schools, "yes",
     label: { text: "Yes, I have finished updating placement schools" } %>
@@ -176,9 +177,14 @@
     label: { text: "No, I want to add or remove more placement schools" } %>
           <% end %>
           <div class="govuk-button-group">
-            <%= f.govuk_submit "Continue" %>
-            <!-- <%= f.govuk_submit "Update #{page_title.downcase}" %> -->
-            <!-- <%= f.govuk_submit "Update and add another placement school", class: "govuk-button--secondary" %> -->
+            <%= f.govuk_submit "Continue" %> -->
+          <!-- <%= f.govuk_submit "Update #{page_title.downcase}" %> -->
+          <!-- <%= f.govuk_submit "Update and add another placement school", class: "govuk-button--secondary" %> -->
+          <%# </div> %>
+          <!-- BUTTON: Radio button replaced with one button to behave like selecting "yes" on the old radion button (minimal refactor so I didn't have to update the controller) -->
+          <%= f.hidden_field :finished_updating_schools, value: "yes" %>
+          <div class="govuk-button-group">
+            <%= f.govuk_submit "Continue to choose which courses to apply this change to" %>
           </div>
           <p class="govuk-body">
             <%= govuk_link_to(
