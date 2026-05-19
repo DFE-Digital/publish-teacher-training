@@ -34,7 +34,7 @@ RSpec.describe "Authentication error", service: :find, type: :request do
 
       expect(Sentry).to have_received(:capture_message).with(
         "One Login failure",
-        hash_including(tags: hash_including(error_type: "callback_state_mismatch", sample_rate: 1)),
+        hash_including(tags: hash_including(error_type: "callback_state_mismatch", threshold: 1)),
       )
     end
 
@@ -47,7 +47,7 @@ RSpec.describe "Authentication error", service: :find, type: :request do
 
       expect(Sentry).to have_received(:capture_message).with(
         "One Login failure",
-        hash_including(tags: hash_including(error_type: "invalid_authenticity_token", sample_rate: 10)),
+        hash_including(tags: hash_including(error_type: "invalid_authenticity_token", threshold: 10)),
       )
     end
 
@@ -57,19 +57,6 @@ RSpec.describe "Authentication error", service: :find, type: :request do
       get "/auth/failure", params: { message: "ActionController::InvalidAuthenticityToken" }
 
       expect(Sentry).not_to have_received(:capture_message)
-    end
-
-    it "buckets unknown error types as 'other' to bound cardinality, and applies the threshold" do
-      allow(ErrorReporting::RateLimiter).to receive(:report?)
-        .with(key: "one_login:other", threshold: 10)
-        .and_return(true)
-
-      get "/auth/failure", params: { message: "<attacker-controlled>" }
-
-      expect(Sentry).to have_received(:capture_message).with(
-        "One Login failure",
-        hash_including(tags: hash_including(error_type: "other", sample_rate: 10)),
-      )
     end
 
     it "treats a blank message as 'other'" do

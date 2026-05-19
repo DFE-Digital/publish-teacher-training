@@ -32,7 +32,7 @@ module Find
         invalid_authenticity_token
       ].freeze
 
-      THRESHOLDED_ONE_LOGIN_ERROR_TYPES = %w[invalid_authenticity_token other].freeze
+      THRESHOLDED_ONE_LOGIN_ERROR_TYPES = %w[invalid_authenticity_token].freeze
 
       def callback
         candidate = Find::CandidateAuthenticator.new(oauth: omniauth).call
