@@ -3,6 +3,7 @@ module Find
     class SessionsController < ApplicationController
       skip_before_action :verify_authenticity_token, only: %i[backchannel_logout]
 
+      ERROR_REPORTING_THRESHOLD = 10
       KNOWN_ONE_LOGIN_ERROR_TYPES = %w[
         openid_discovery
         callback_state_mismatch
@@ -65,10 +66,10 @@ module Find
         error_type = normalized_one_login_error_type
         thresholded = THRESHOLDED_ONE_LOGIN_ERROR_TYPES.include?(error_type)
 
-        if !thresholded || ErrorReporting::RateLimiter.report?(key: "one_login:#{error_type}", threshold: 10)
+        if !thresholded || ErrorReporting::RateLimiter.report?(key: "one_login:#{error_type}", threshold: ERROR_REPORTING_THRESHOLD)
           Sentry.capture_message("One Login failure", tags: {
             error_type:,
-            threshold: thresholded ? 10 : 1,
+            threshold: thresholded ? ERROR_REPORTING_THRESHOLD : 1,
           }, extra: {
             session_id: request.session&.id&.public_id,
           })
