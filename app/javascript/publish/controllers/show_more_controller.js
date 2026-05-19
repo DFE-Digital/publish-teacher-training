@@ -18,7 +18,8 @@ export default class extends Controller {
   showMore(event) {
     if (event) event.preventDefault();
 
-    this.visibleCount += this.pageSizeValue;
+    // Show everything in one go
+    this.visibleCount = this.itemTargets.length;
     this.update();
   }
 
