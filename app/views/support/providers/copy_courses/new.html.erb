@@ -13,15 +13,22 @@
           <h2 class="govuk-heading-m">Copy courses from:</h2>
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-              <div class="govuk-form-group">
-                <%= form.govuk_text_field :provider,
-                  id: "provider",
-                  value: params[:query],
-                  class: "govuk-input",
-                  data: { qa: "provider-search" },
-                  label: -> { tag.div("Search for an organisation to copy courses from:") + tag.div("Enter the name or provider code", class: %w[govuk-hint govuk-!-display-inline]) } %>
-                <div id="provider-autocomplete"></div>
-              </div>
+              <%= form.govuk_text_field :provider,
+                id: "provider",
+                value: params[:query],
+                class: "govuk-input",
+                data: { qa: "provider-search" },
+                form_group: {
+                  class: "suggestions",
+                  data: remote_autocomplete_data(
+                    path: publish_providers_suggest_path,
+                    format: "provider",
+                    id_field: "code",
+                    hidden_name: "course[autocompleted_provider_code]",
+                  ),
+                },
+                label: -> { tag.div("Search for an organisation to copy courses from:") + tag.div("Enter the name or provider code", class: %w[govuk-hint govuk-!-display-inline]) } %>
+              <%= hidden_field_tag "course[autocompleted_provider_code]" %>
             </div>
           </div>
 
