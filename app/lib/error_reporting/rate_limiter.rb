@@ -22,7 +22,8 @@ module ErrorReporting
       }.last
 
       count >= threshold
-    rescue StandardError
+    rescue Redis::BaseError => e
+      Rails.logger.tagged("ErrorReporting::RateLimiter") { |l| l.error(e.message) }
       true
     end
   end
