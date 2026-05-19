@@ -26,7 +26,7 @@ RSpec.describe ErrorReporting::RateLimiter do
   end
 
   it "fails open if Redis raises" do
-    allow(RedisClient.cache).to receive(:multi).and_raise(StandardError)
+    allow(RedisClient.cache).to receive(:multi).and_raise(Redis::TimeoutError)
 
     expect(described_class.report?(key: "x", threshold: 10)).to be true
   end
