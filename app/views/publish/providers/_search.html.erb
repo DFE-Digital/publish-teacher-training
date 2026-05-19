@@ -8,7 +8,10 @@
 
       <%= form_with url: publish_providers_search_path, method: :get do |form| %>
         <% error = flash[:error] && flash[:error]["message"] == "Name or provider code" %>
-        <div class="govuk-form-group<% if error %> govuk-form-group--error<% end %>">
+        <%= tag.div(
+          class: class_names("govuk-form-group", "suggestions", "govuk-form-group--error" => error),
+          data: remote_autocomplete_data(path: publish_providers_suggest_path, format: "provider"),
+        ) do %>
           <%= form.label :query, { class: "govuk-label", for: "provider" } do %>
             Search for an organisation
             <span class="govuk-hint govuk-!-display-inline">Enter the name or provider code</span>
@@ -23,8 +26,7 @@
                               value: params[:query],
                               class: "govuk-input",
                               data: { qa: "provider-search" } %>
-          <div id="provider-autocomplete"></div>
-        </div>
+        <% end %>
         <%= form.submit "Search", name: nil, class: "govuk-button govuk-!-margin-bottom-0", data: { qa: "find-providers" } %>
       <% end %>
     </div>

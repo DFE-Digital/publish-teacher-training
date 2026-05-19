@@ -10,7 +10,6 @@
     model: @school_search_form,
     url: search_support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, @provider.id),
     method: :post,
-    html: { data: { module: "app-schools-autocomplete" } },
   ) do |f| %>
 
     <div class="govuk-grid-column-full">
@@ -18,7 +17,16 @@
     </div>
 
     <div class="govuk-grid-column-two-thirds">
-      <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
+      <%= tag.div(
+        id: "school-autocomplete",
+        class: class_names("govuk-form-group", "suggestions", "govuk-form-group--error" => f.object.errors.present?),
+        data: remote_autocomplete_data(
+          path: api_school_suggestions_path,
+          format: "school",
+          id_field: "id",
+          hidden_name: "school_id",
+        ),
+      ) do %>
         <span class="govuk-caption-l"><%= t(".caption") %> - <%= @provider.name_and_code %></span>
         <%= f.label :query, { class: "govuk-label govuk-label--l", for: "support-providers-schools-search-form-query-field" } do %>
           <%= t(".title") %>
@@ -34,8 +42,8 @@
         value: params[:query],
         class: "govuk-input",
         data: { qa: "schools-search" } %>
-        <div id="school-autocomplete"></div>
-      </div>
+      <% end %>
+      <%= hidden_field_tag :school_id %>
 
       <p class="govuk-body govuk-!-margin-bottom-7">
 
