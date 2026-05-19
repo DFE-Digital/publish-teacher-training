@@ -34,7 +34,7 @@
         <%= form.hidden_field :previous_location_category, value: @search_courses_form.location_category %>
 
         <div class="app-find-search">
-          <div class="govuk-form-group" data-controller="subjects-autocomplete">
+          <div class="govuk-form-group" data-controller="dfe-autocomplete" data-dfe-autocomplete-name-value="subject_name" data-dfe-autocomplete-min-length-value="2">
             <%= render DfE::Autocomplete::View.new(
               form,
               attribute_name: :subject_code,
@@ -53,11 +53,10 @@
           <%= form.govuk_text_field :location,
             label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
             form_group: {
-              "data-controller" => "locations-autocomplete",
-              "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path,
+              class: "suggestions",
+              data: remote_autocomplete_data(path: find_geolocation_suggestions_path),
             },
-            autocomplete: "off",
-            data: { locations_autocomplete_target: "input" }, value: @address.short_address %>
+            autocomplete: "off", value: @address.short_address %>
 
             <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), name: "utm_medium", value: "search" %>
           </div>
