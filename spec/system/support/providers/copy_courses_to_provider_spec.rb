@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Support", service: :publish, skip: "can not get chromedriver working on Alpine" do
+RSpec.describe "Support copies courses between providers", service: :publish do
   include DfESignInUserHelper
 
   let(:courses) do
@@ -20,19 +20,20 @@ RSpec.describe "Support", service: :publish, skip: "can not get chromedriver wor
     sign_in_system_test(user:)
   end
 
-  it "copy courses from one provider to another", :js do
+  it "copies courses from one provider to another using the autocomplete", :js do
     visit "/support"
     click_on "Target Provider"
     click_on "Courses"
     click_on "Copy Courses"
-    autocomplete = page.find("input#provider")
-    autocomplete.set(source_provider.provider_code)
-    sleep 3
-    li = page.find("ul#provider__listbox li", visible: false)
-    li.click
-    page.find_by_id("schools-true-field", visible: false).click
+
+    fill_in "provider", with: source_provider.provider_code
+    expect(page).to have_css("#provider__listbox")
+    page.find("#provider__listbox li", text: source_provider.provider_name).click
+
+    check "Copy placement schools?"
     click_on "Copy courses"
     click_on "Courses"
+
     courses.map(&:name).each do |course_name|
       expect(page).to have_content(course_name)
     end

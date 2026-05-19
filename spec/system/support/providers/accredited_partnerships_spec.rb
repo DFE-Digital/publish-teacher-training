@@ -43,6 +43,17 @@ RSpec.describe "Accredited partnership flow" do
     and_i_see_the_accredited_partnership
   end
 
+  scenario "i can select an accredited provider using the autocomplete", :js do
+    when_i_click_add_accredited_provider
+    and_i_type_a_provider_name_into_the_autocomplete
+    then_i_see_the_provider_in_the_autocomplete_suggestions
+    when_i_choose_the_provider_from_the_autocomplete_suggestions
+    click_link_or_button "Continue"
+    when_i_confirm_the_changes
+    then_i_return_to_the_index_page
+    and_the_accredited_provider_is_saved_to_the_database
+  end
+
   scenario "i cannot delete accredited partnerships attached to a course" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
@@ -89,6 +100,22 @@ private
 
   def form_title
     "Enter a provider name, UKPRN or postcode"
+  end
+
+  def and_i_type_a_provider_name_into_the_autocomplete
+    fill_in form_title, with: @accredited_provider.provider_name
+  end
+
+  def then_i_see_the_provider_in_the_autocomplete_suggestions
+    expect(page).to have_css(autocomplete_listbox_selector, text: @accredited_provider.provider_name)
+  end
+
+  def when_i_choose_the_provider_from_the_autocomplete_suggestions
+    page.find(autocomplete_listbox_selector, text: @accredited_provider.provider_name).click
+  end
+
+  def autocomplete_listbox_selector
+    "#accredited-provider-search-form-query-field__listbox li"
   end
 
   def and_i_search_with_an_invalid_query

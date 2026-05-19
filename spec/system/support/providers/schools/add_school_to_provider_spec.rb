@@ -34,6 +34,19 @@ RSpec.describe "Adding school to provider as an admin" do
       and_the_provider_school_row_is_created
     end
 
+    scenario "i can select a school using the autocomplete", :js do
+      given_i_visit_the_support_provider_schools_index_page
+      and_i_click_add_school
+      then_i_am_on_the_school_search_page
+
+      and_i_type_a_school_name_into_the_autocomplete
+      then_i_see_the_school_in_the_autocomplete_suggestions
+      when_i_choose_the_school_from_the_autocomplete_suggestions
+      click_continue
+
+      then_i_am_on_the_confirmation_page_for_the_chosen_school
+    end
+
     scenario "attempting to add a school with duplicate URN" do
       given_the_provider_already_has_a_school_with_the_same_urn
       given_i_visit_the_support_provider_schools_index_page
@@ -54,6 +67,27 @@ RSpec.describe "Adding school to provider as an admin" do
 
   def given_i_am_authenticated_as_an_admin_user
     given_i_am_authenticated(user: create(:user, :admin))
+  end
+
+  def and_i_type_a_school_name_into_the_autocomplete
+    fill_in "support-providers-schools-search-form-query-field", with: "Dist"
+  end
+
+  def then_i_see_the_school_in_the_autocomplete_suggestions
+    expect(page).to have_css(autocomplete_listbox_selector, text: @gias_school.name)
+  end
+
+  def when_i_choose_the_school_from_the_autocomplete_suggestions
+    page.find(autocomplete_listbox_selector, text: @gias_school.name).click
+  end
+
+  def autocomplete_listbox_selector
+    "#support-providers-schools-search-form-query-field__listbox li"
+  end
+
+  def then_i_am_on_the_confirmation_page_for_the_chosen_school
+    expect(page).to have_content("Check your answers")
+    expect(page).to have_content(@gias_school.urn)
   end
 
   def and_there_is_a_provider

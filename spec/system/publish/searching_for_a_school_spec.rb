@@ -28,7 +28,40 @@ RSpec.describe "Searching for a school from the GIAS list" do
     then_i_should_be_taken_to_the_add_school_page
   end
 
+  scenario "i can select a school using the autocomplete", :js do
+    when_i_visit_the_school_search_page
+    and_i_type_a_school_name_into_the_autocomplete
+    then_i_see_the_school_in_the_autocomplete_suggestions
+    when_i_choose_the_school_from_the_autocomplete_suggestions
+    and_i_continue
+    then_i_am_taken_to_the_check_page_for(@school)
+  end
+
 private
+
+  def and_i_type_a_school_name_into_the_autocomplete
+    fill_in "Enter URN or school", with: "Enda"
+  end
+
+  def then_i_see_the_school_in_the_autocomplete_suggestions
+    expect(page).to have_css(autocomplete_listbox_selector, text: @school.name)
+  end
+
+  def when_i_choose_the_school_from_the_autocomplete_suggestions
+    page.find(autocomplete_listbox_selector, text: @school.name).click
+  end
+
+  def and_i_continue
+    click_continue
+  end
+
+  def then_i_am_taken_to_the_check_page_for(school)
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/schools/check?school_id=#{school.id}")
+  end
+
+  def autocomplete_listbox_selector
+    "#publish-providers-schools-search-form-query-field__listbox li"
+  end
 
   def and_i_go_back
     click_link_or_button "Back"
