@@ -44,7 +44,42 @@ RSpec.describe "Searching for an accredited provider" do
     when_i_am_on_the_confirm_page
   end
 
+  scenario "i can select an accredited provider using the autocomplete", :js do
+    when_i_visit_the_accredited_provider_search_page
+    and_i_type_a_provider_name_into_the_autocomplete
+    then_i_see_the_accredited_provider_in_the_autocomplete_suggestions
+    when_i_choose_the_accredited_provider_from_the_autocomplete_suggestions
+    click_continue
+    then_i_am_taken_to_the_confirm_page
+  end
+
 private
+
+  def and_i_type_a_provider_name_into_the_autocomplete
+    fill_in form_title, with: @accredited_provider.provider_name
+  end
+
+  def then_i_see_the_accredited_provider_in_the_autocomplete_suggestions
+    expect(page).to have_css(autocomplete_listbox_selector, text: @accredited_provider.provider_name)
+  end
+
+  def when_i_choose_the_accredited_provider_from_the_autocomplete_suggestions
+    page.find(autocomplete_listbox_selector, text: @accredited_provider.provider_name).click
+  end
+
+  def autocomplete_listbox_selector
+    "#accredited-provider-search-form-query-field__listbox li"
+  end
+
+  def then_i_am_taken_to_the_confirm_page
+    expect(page).to have_current_path(
+      check_publish_provider_recruitment_cycle_accredited_partnerships_path(
+        recruitment_cycle_year: Find::CycleTimetable.current_year,
+        provider_code: provider.provider_code,
+        accredited_provider_id: @accredited_provider.id,
+      ),
+    )
+  end
 
   def given_i_am_a_lead_school_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
