@@ -12,6 +12,7 @@ import CopyLinkController from "./controllers/copy_link_controller";
 import SchoolSearchController from "./controllers/school_search_controller";
 import CourseFiltersController from "./controllers/course_filters_controller";
 import ShowMoreController from "./controllers/show_more_controller";
+import SchoolDiffController from "./controllers/school_diff_controller";
 
 window.jQuery = jQuery;
 window.$ = jQuery;
@@ -28,3 +29,4 @@ Stimulus.register("copy-link", CopyLinkController);
 Stimulus.register("school-search", SchoolSearchController);
 Stimulus.register("course-filters", CourseFiltersController);
 Stimulus.register("show-more", ShowMoreController);
+Stimulus.register("school-diff", SchoolDiffController);
