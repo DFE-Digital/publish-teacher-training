@@ -63,7 +63,10 @@
     }
   }
 
-  .govuk-checkboxes__label::before, input {
+  // The `.suggestions .autocomplete__input` selector below matches the specificity
+  // of dfe-autocomplete's `background: transparent` rule, so the enhanced
+  // combobox keeps the homepage's white background on the grey container.
+  .govuk-checkboxes__label::before, input, .suggestions .autocomplete__input {
     background: govuk-colour("white");
   }
 }
