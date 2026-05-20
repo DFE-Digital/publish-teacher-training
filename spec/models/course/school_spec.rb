@@ -41,6 +41,44 @@ describe Course::School do
     end
   end
 
+  describe "touching the course" do
+    let(:course) { create(:course, changed_at: 1.hour.ago) }
+
+    it "bumps course.changed_at on create" do
+      Timecop.freeze do
+        create(:course_school, course:)
+        expect(course.reload.changed_at).to be_within(1.second).of(Time.zone.now)
+      end
+    end
+
+    it "bumps course.changed_at on update" do
+      course_school = create(:course_school, course:)
+      course.update_columns(changed_at: 1.hour.ago)
+
+      Timecop.freeze do
+        course_school.update!(site_code: "Z")
+        expect(course.reload.changed_at).to be_within(1.second).of(Time.zone.now)
+      end
+    end
+
+    it "does not bump course.changed_at on destroy" do
+      course_school = create(:course_school, course:)
+      course.update_columns(changed_at: 1.hour.ago)
+      before_changed_at = course.reload.changed_at
+
+      course_school.destroy!
+      expect(course.reload.changed_at).to be_within(1.second).of(before_changed_at)
+    end
+
+    it "leaves course.updated_at unchanged" do
+      course.update_columns(updated_at: 1.hour.ago)
+      original_updated_at = course.reload.updated_at
+
+      create(:course_school, course:)
+      expect(course.reload.updated_at).to be_within(1.second).of(original_updated_at)
+    end
+  end
+
   describe "database constraints" do
     let(:course) { create(:course) }
     let(:gias_school) { create(:gias_school) }
