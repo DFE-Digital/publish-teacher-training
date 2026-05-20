@@ -1,0 +1,17 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.qualifications.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.qualifications.caption")) %>
+  <%= t("course_wizard.steps.qualifications.heading") %>
+</h1>
+
+<%= form.govuk_radio_buttons_fieldset :qualification, legend: { hidden: true, text: t("course_wizard.steps.qualifications.heading") } do %>
+  <% current_step.qualification_options.each_with_index do |value, index| %>
+    <%= form.govuk_radio_button :qualification, value,
+          label: { text: t("course_wizard.steps.qualifications.options.#{value}.label") },
+          hint: { text: t("course_wizard.steps.qualifications.options.#{value}.help") },
+          link_errors: index.zero? %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.qualifications.submit") %>

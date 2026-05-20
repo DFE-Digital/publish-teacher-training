@@ -51,6 +51,32 @@ en:
         errors:
           age_range_in_years:
             blank: Select an age range
+      qualifications:
+        caption: Add course
+        heading: Qualification
+        submit: Continue
+        options:
+          qts:
+            label: QTS
+            help: Qualified teacher status
+          pgce:
+            label: PGCE only (without QTS)
+            help: Postgraduate certificate in education
+          pgce_with_qts:
+            label: QTS with PGCE
+            help: Qualified teacher status with a postgraduate certificate in education
+          pgde:
+            label: PGDE only (without QTS)
+            help: Postgraduate diploma in education
+          pgde_with_qts:
+            label: QTS with PGDE
+            help: Qualified teacher status with a postgraduate diploma in education
+          undergraduate_degree_with_qts:
+            label: Teacher degree apprenticeship (TDA) with QTS
+            help: Teacher degree apprenticeship with qualified teacher status
+        errors:
+          qualification:
+            blank: Select a qualification
   activemodel:
     errors:
       models:

@@ -72,4 +72,40 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:secondary_subjects)
     end
   end
+
+  context "from qualifications with primary level" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "primary")
+    end
+
+    it "goes back to age range" do
+      expect(wizard).to have_previous_step(:age_range)
+    end
+  end
+
+  context "from qualifications with secondary level" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "secondary")
+    end
+
+    it "goes back to age range" do
+      expect(wizard).to have_previous_step(:age_range)
+    end
+  end
+
+  context "from qualifications with further education level" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "further_education")
+    end
+
+    it "goes back to level" do
+      expect(wizard).to have_previous_step(:level)
+    end
+  end
 end
