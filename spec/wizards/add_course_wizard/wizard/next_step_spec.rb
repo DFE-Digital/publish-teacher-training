@@ -34,7 +34,7 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
       end
 
       it "proceeds to courses page" do
-        expect(wizard).to have_next_step(:courses_index)
+        expect(wizard).to have_next_step(:qualifications)
       end
     end
   end
@@ -55,8 +55,32 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     end
   end
 
-  context "from age range" do
+  context "from age range with primary level" do
     let(:current_step) { :age_range }
+
+    before do
+      state_store.write(level: "primary")
+    end
+
+    it "proceeds to qualifications page" do
+      expect(wizard).to have_next_step(:qualifications)
+    end
+  end
+
+  context "from age range with secondary level" do
+    let(:current_step) { :age_range }
+
+    before do
+      state_store.write(level: "secondary")
+    end
+
+    it "proceeds to qualifications page" do
+      expect(wizard).to have_next_step(:qualifications)
+    end
+  end
+
+  context "from qualifications" do
+    let(:current_step) { :qualifications }
 
     it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)
