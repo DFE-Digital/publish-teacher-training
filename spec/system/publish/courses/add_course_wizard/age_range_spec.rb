@@ -10,24 +10,24 @@ RSpec.describe "Add course wizard age range step", type: :system do
     and_secondary_subjects_exist
   end
 
-  scenario "choosing a primary age range and continues to courses index" do
+  scenario "choosing a primary age range and continues to qualifications step" do
     when_i_visit_the_wizard_subjects_page_for_primary
     and_i_choose_primary_subject
     and_i_click_continue
     then_i_am_taken_to_the_age_range_page
     and_i_choose_primary_age_range
     and_i_click_continue
-    then_i_am_taken_to_the_courses_page
+    then_i_am_taken_to_the_qualifications_page
   end
 
-  scenario "choosing a secondary age range and continues to courses index" do
+  scenario "choosing a secondary age range and continues to qualifications step" do
     when_i_visit_the_wizard_subjects_page_for_secondary
     and_i_choose_secondary_subject
     and_i_click_continue
     then_i_am_taken_to_the_age_range_page
     and_i_choose_secondary_age_range
     and_i_click_continue
-    then_i_am_taken_to_the_courses_page
+    then_i_am_taken_to_the_qualifications_page
   end
 
   scenario "choosing no age_range_in_years options renders an error" do
@@ -139,11 +139,13 @@ private
     expect(page).to have_content("Age range")
   end
 
-  def then_i_am_taken_to_the_courses_page
+  def then_i_am_taken_to_the_qualifications_page
     expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_courses_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
+        step: :qualifications,
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
+        state_key: wizard_state_key,
       ),
       ignore_query: true,
     )
