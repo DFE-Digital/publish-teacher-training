@@ -77,6 +77,44 @@ describe Provider::School do
     end
   end
 
+  describe "touching the provider" do
+    let(:provider) { create(:provider, changed_at: 1.hour.ago) }
+
+    it "bumps provider.changed_at on create" do
+      Timecop.freeze do
+        create(:provider_school, provider:)
+        expect(provider.reload.changed_at).to be_within(1.second).of(Time.zone.now)
+      end
+    end
+
+    it "bumps provider.changed_at on update" do
+      provider_school = create(:provider_school, provider:)
+      provider.update_columns(changed_at: 1.hour.ago)
+
+      Timecop.freeze do
+        provider_school.update!(site_code: "Z")
+        expect(provider.reload.changed_at).to be_within(1.second).of(Time.zone.now)
+      end
+    end
+
+    it "does not bump provider.changed_at on destroy" do
+      provider_school = create(:provider_school, provider:)
+      provider.update_columns(changed_at: 1.hour.ago)
+      before_changed_at = provider.reload.changed_at
+
+      provider_school.destroy!
+      expect(provider.reload.changed_at).to be_within(1.second).of(before_changed_at)
+    end
+
+    it "leaves provider.updated_at unchanged" do
+      provider.update_columns(updated_at: 1.hour.ago)
+      original_updated_at = provider.reload.updated_at
+
+      create(:provider_school, provider:)
+      expect(provider.reload.updated_at).to be_within(1.second).of(original_updated_at)
+    end
+  end
+
   describe "database constraints" do
     let(:provider) { create(:provider) }
     let(:gias_school) { create(:gias_school) }
