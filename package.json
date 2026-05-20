@@ -33,7 +33,8 @@
     "minimatch": "^3.1.4",
     "picomatch": "^4.0.4",
     "flatted": "^3.4.2",
-    "lodash": "^4.18.1"
+    "lodash": "^4.18.1",
+    "fast-uri": "^3.1.1"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
