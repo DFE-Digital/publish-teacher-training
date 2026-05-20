@@ -20,7 +20,7 @@
         Updating placement schools
       </p>
       <p class="govuk-heading-m">
-        <strong>You are updating this information:</strong>
+        You are updating these schools
       </p>
       <% if @added_schools.empty? && @removed_schools.empty? %>
         <p class="govuk-body">
@@ -28,8 +28,8 @@
         </p>
       <% else %>
         <% if @added_schools.any? %>
-          <p class="govuk-body">
-            You are adding <%= pluralize(@added_schools.size, "school") %>
+          <p class="govuk-body govuk-!-margin-bottom-1">
+            <strong>You are adding <%= pluralize(@added_schools.size, "school") %>:</strong>
           </p>
           <ul class="govuk-list govuk-list--bullet">
             <% @added_schools.each do |school| %>
@@ -38,8 +38,8 @@
           </ul>
         <% end %>
         <% if @removed_schools.any? %>
-          <p class="govuk-body">
-            You are removing <%= pluralize(@removed_schools.size, "school") %>
+          <p class="govuk-body govuk-!-margin-bottom-1">
+            <strong>You are removing <%= pluralize(@removed_schools.size, "school") %>:</strong>
           </p>
           <ul class="govuk-list govuk-list--bullet">
             <% @removed_schools.each do |school| %>
@@ -48,6 +48,7 @@
           </ul>
         <% end %>
       <% end %>
+      <br>
       <p class="govuk-heading-m">
         <strong>You are updating these courses:</strong>
       </p>

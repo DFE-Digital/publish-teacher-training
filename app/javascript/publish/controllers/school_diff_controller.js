@@ -60,7 +60,7 @@ export default class extends Controller {
     if (added.length > 0) {
       this.addedSectionTarget.innerHTML = `
         <p class="govuk-body govuk-!-margin-bottom-1">
-          <strong>You are adding ${added.length} school${added.length === 1 ? "" : "s"}</strong>
+          <strong>You are adding ${added.length} school${added.length === 1 ? "" : "s"}:</strong>
         </p>
         <ul class="govuk-list govuk-list--bullet">
           ${added.map((cb) => `<li>${cb.dataset.schoolName}</li>`).join("")}
@@ -71,7 +71,7 @@ export default class extends Controller {
     if (removed.length > 0) {
       this.removedSectionTarget.innerHTML = `
         <p class="govuk-body govuk-!-margin-bottom-1">
-          <strong>You are removing ${removed.length} school${removed.length === 1 ? "" : "s"}</strong>
+          <strong>You are removing ${removed.length} school${removed.length === 1 ? "" : "s"}:</strong>
         </p>
         <ul class="govuk-list govuk-list--bullet">
           ${removed.map((cb) => `<li>${cb.dataset.schoolName}</li>`).join("")}

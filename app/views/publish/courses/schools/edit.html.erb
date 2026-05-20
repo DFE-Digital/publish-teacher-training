@@ -30,7 +30,7 @@
         provider: @provider,
       ) %>
       <div
-  data-controller="school-diff" 
+  data-controller="school-diff"
   data-school-diff-initial-site-ids-value="<%= @course.site_ids.join(',') %>"
 >
         <%= f.govuk_check_boxes_fieldset :site_ids,
@@ -192,9 +192,9 @@
   data-school-diff-target="summary"
   hidden
 >
-              <p class="govuk-body govuk-!-margin-bottom-2">
-                <strong>You are updating these schools:</strong>
-              </p>
+              <h2 class="govuk-heading-m">
+                <strong>You are updating these schools</strong>
+              </h2>
               <div data-school-diff-target="addedSection"></div>
               <div data-school-diff-target="removedSection"></div>
             </div>
