@@ -100,23 +100,7 @@
     </legend>
     <div class="govuk-radios" data-module="govuk-radios">
 
-      <% @bulk_options.each do |option| %>
-        <div class="govuk-radios__item">
-          <input class="govuk-radios__input"
-                id="bulk_update_scope_<%= option.id %>"
-                name="bulk_update_scope"
-                type="radio"
-                value="<%= option.id %>">
-          <label class="govuk-label govuk-radios__label"
-                for="bulk_update_scope_<%= option.id %>">
-            <%= option.name %>
-          </label>
-        </div>
-      <% end %>
-
-      <div class="govuk-radios__divider">or</div>
-
-      <div class="govuk-radios__item">
+      <div class="govuk-radios__item govuk-!-margin-bottom-0">
         <input class="govuk-radios__input"
               id="bulk_update_scope_single"
               name="bulk_update_scope"
@@ -124,9 +108,29 @@
               value="<%= @this_course_option.id %>">
         <label class="govuk-label govuk-radios__label"
               for="bulk_update_scope_single">
-          <%= @this_course_option.name %>
+              <%= @this_course_option.name %><br>
+              <span class="govuk-hint govuk-!-font-size-16">
+                <%= @course.funding_description %>
+              </span>
         </label>
       </div>
+
+      <div class="govuk-radios__divider">or</div>
+
+    <% @bulk_options.first(1).each do |option| %>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input"
+              id="bulk_update_scope_<%= option.id %>"
+              name="bulk_update_scope"
+              type="radio"
+              value="<%= option.id %>">
+        <label class="govuk-label govuk-radios__label"
+              for="bulk_update_scope_<%= option.id %>">
+          <%= option.name %>
+        </label>
+      </div>
+    <% end %>
+
     </div>
     </div>
   </fieldset>
