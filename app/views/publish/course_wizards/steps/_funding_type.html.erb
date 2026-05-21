@@ -1,0 +1,16 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.funding_type.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.funding_type.caption")) %>
+  <%= t("course_wizard.steps.funding_type.heading") %>
+</h1>
+
+<%= form.govuk_radio_buttons_fieldset :funding_type, legend: { hidden: true, text: t("course_wizard.steps.funding_type.heading") } do %>
+  <% current_step.funding_type_options.each_with_index do |value, index| %>
+    <%= form.govuk_radio_button :funding_type, value,
+          label: { text: t("course_wizard.steps.funding_type.options.#{value}.label") },
+          link_errors: index.zero? %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.funding_type.submit") %>

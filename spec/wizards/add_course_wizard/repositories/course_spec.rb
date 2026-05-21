@@ -23,6 +23,7 @@ RSpec.describe CourseWizard::Repositories::Course do
       repository.write({ "age_range_in_years" => "11_to_16" })
       repository.write({ "course_age_range_in_years_other_from" => "1", "course_age_range_in_years_other_to" => "16" })
       repository.write({ "qualification" => "qts" })
+      repository.write({ "funding_type" => "fee" })
 
       data = repository.read
       expect(data[:level]).to eq("secondary")
@@ -34,6 +35,7 @@ RSpec.describe CourseWizard::Repositories::Course do
       expect(data[:course_age_range_in_years_other_from]).to eq("1")
       expect(data[:course_age_range_in_years_other_to]).to eq("16")
       expect(data[:qualification]).to eq("qts")
+      expect(data[:funding_type]).to eq("fee")
 
       expect(data.keys.map(&:class).uniq).to eq([Symbol])
     end
