@@ -77,6 +77,21 @@ en:
         errors:
           qualification:
             blank: Select a qualification
+
+      funding_type:
+        caption: Add course
+        heading: Funding type
+        submit: Continue
+        options:
+          fee:
+            label: Fee - no salary
+          salary:
+            label: Salary
+          apprenticeship:
+            label: Teaching apprenticeship - with salary
+        errors:
+          funding_type:
+            blank: Select a funding type
   activemodel:
     errors:
       models:

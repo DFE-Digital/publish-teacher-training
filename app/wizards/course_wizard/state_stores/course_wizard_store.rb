@@ -12,6 +12,10 @@ class CourseWizard
       def primary_level?
         level == "primary"
       end
+
+      def undergraduate_degree_with_qts?
+        qualification == "undergraduate_degree_with_qts"
+      end
     end
   end
 end

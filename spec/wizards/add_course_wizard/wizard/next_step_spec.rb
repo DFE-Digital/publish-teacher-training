@@ -79,8 +79,56 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     end
   end
 
-  context "from qualifications" do
+  context "from qualifications with primary level" do
     let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "primary")
+    end
+
+    it "proceeds to primary subjects page" do
+      expect(wizard).to have_next_step(:funding_type)
+    end
+  end
+
+  context "from qualifications with secondary level" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "secondary")
+    end
+
+    it "proceeds to primary subjects page" do
+      expect(wizard).to have_next_step(:funding_type)
+    end
+  end
+
+  context "from qualifications with further education level" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "further_education")
+    end
+
+    it "proceeds to funding type page" do
+      expect(wizard).to have_next_step(:funding_type)
+    end
+  end
+
+  context "from qualifications with undergraduate degree with QTS" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(qualification: "undergraduate_degree_with_qts")
+    end
+
+    it "proceeds to courses page" do
+      expect(wizard).to have_next_step(:courses_index)
+    end
+  end
+
+  context "from funding type" do
+    let(:current_step) { :funding_type }
 
     it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)
