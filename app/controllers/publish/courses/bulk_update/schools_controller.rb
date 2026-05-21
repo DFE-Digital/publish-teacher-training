@@ -57,10 +57,10 @@ module Publish
         def edit
           @bulk_options = []
 
-          # Always allow all courses
-          @bulk_options << OpenStruct.new(
-            id: "all",
-            name: "All courses",
+          # Always allow just this course
+          @this_course_option = OpenStruct.new(
+            id: "this_course",
+            name: "Only this course - #{course.name_and_code}",
           )
 
           # Fee or salary
@@ -87,55 +87,73 @@ module Publish
 
           # Qualification options
           # PGCE‑style
-          if course.qualifications_summary&.include?("PGCE")
-            @bulk_options << OpenStruct.new(
-              id: "pgce",
-              name: "All QTS with PGCE courses",
-            )
-          end
+          # if course.qualifications_summary&.include?("PGCE")
+          #   @bulk_options << OpenStruct.new(
+          #     id: "pgce",
+          #     name: "All QTS with PGCE courses",
+          #   )
+          # end
 
-          if course.qualifications_summary == "QTS"
-            @bulk_options << OpenStruct.new(
-              id: "qts",
-              name: "All QTS only courses",
-            )
-          end
+          # if course.qualifications_summary == "QTS"
+          #   @bulk_options << OpenStruct.new(
+          #     id: "qts",
+          #     name: "All QTS only courses",
+          #   )
+          # end
 
           # Study mode–based options
-          if course.full_time?
-            @bulk_options << OpenStruct.new(
-              id: "full_time",
-              name: "All full time courses",
-            )
-          end
+          # if course.full_time?
+          #   @bulk_options << OpenStruct.new(
+          #     id: "full_time",
+          #     name: "All full time courses",
+          #   )
+          # end
 
-          if course.part_time?
-            @bulk_options << OpenStruct.new(
-              id: "part_time",
-              name: "All part time courses",
-            )
-          end
+          # if course.part_time?
+          #   @bulk_options << OpenStruct.new(
+          #     id: "part_time",
+          #     name: "All part time courses",
+          #   )
+          # end
 
           # Primary/secondary options
-          if course.primary_course?
+          # if course.primary_course?
+          #   @bulk_options << OpenStruct.new(
+          #     id: "primary",
+          #     name: "All primary courses",
+          #   )
+          # end
+
+          # if course.secondary_course?
+          #   @bulk_options << OpenStruct.new(
+          #     id: "secondary",
+          #     name: "All secondary courses",
+          #   )
+          # end
+
+          if course.subjects.any?
+            subject = course.subjects.first
+
             @bulk_options << OpenStruct.new(
-              id: "primary",
-              name: "All primary courses",
+              id: "subject_#{subject.id}",
+              name: "All #{subject.name.downcase} courses",
             )
           end
 
-          if course.secondary_course?
-            @bulk_options << OpenStruct.new(
-              id: "secondary",
-              name: "All secondary courses",
-            )
-          end
-
-          # Always allow just this course
-          @this_course_option = OpenStruct.new(
-            id: "this_course",
-            name: "Only this course - #{course.name_and_code}",
+          # Always allow all courses
+          @bulk_options << OpenStruct.new(
+            id: "all",
+            name: "All courses",
           )
+
+          @this_course_hint = [
+            ("Fee-paying" if course.fee?),
+            ("Salaried" if course.salary?),
+            ("QTS" if course.qualifications_summary == "QTS"),
+            ("QTS with PGCE" if course.qualifications_summary&.include?("PGCE")),
+            ("full time" if course.full_time?),
+            ("part time" if course.part_time?),
+          ].compact.join(", ")
         end
 
         def update
@@ -164,17 +182,24 @@ module Publish
         def check
           @bulk_apply = params[:bulk_apply]
 
-          labels = BULK_APPLY_LABELS[@bulk_apply]
+          if @bulk_apply.start_with?("subject_")
+            subject_id = @bulk_apply.delete_prefix("subject_")
+            subject = Subject.find(subject_id)
 
-          @bulk_apply_scope_label = labels[:scope]
-          @bulk_apply_short_label =
-            if @bulk_apply == "this_course"
-              course.name_and_code
-            else
-              labels[:short]
-            end
+            @bulk_apply_scope_label = "All #{subject.name} courses"
+            @bulk_apply_short_label = subject.name
+          else
+            labels = BULK_APPLY_LABELS[@bulk_apply]
 
-          # show courses table for all multi-course scopes, including "all courses" and "only this course"
+            @bulk_apply_scope_label = labels[:scope]
+            @bulk_apply_short_label =
+              if @bulk_apply == "this_course"
+                course.name_and_code
+              else
+                labels[:short]
+              end
+          end
+
           @show_courses_table = @bulk_apply != "this_course" && @bulk_apply != "all"
         end
 

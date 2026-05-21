@@ -71,26 +71,29 @@
   <% @removed_site_ids.each do |id| %>
     <%= hidden_field_tag "removed_site_ids[]", id %>
   <% end %>
-  <%= f.govuk_radio_buttons_fieldset :bulk_apply,
+  <div class="govuk-form-group govuk-!-margin-bottom-6">
+    <%= f.govuk_radio_buttons_fieldset :bulk_apply,
     legend: {
       text: "What courses do you want to apply this change to?",
       size: "m",
     } do %>
-    <% @bulk_options.each do |option| %>
       <%= f.govuk_radio_button(
+  :bulk_apply,
+  @this_course_option.id,
+  label: { text: @this_course_option.name },
+  hint: { text: @this_course_hint }
+) %>
+      <div class="govuk-radios__divider">
+        or
+      </div>
+      <% @bulk_options.each do |option| %>
+        <%= f.govuk_radio_button(
         :bulk_apply,
         option.id,
         label: { text: option.name }
       ) %>
+      <% end %>
     <% end %>
-    <div class="govuk-radios__divider">
-      or
-    </div>
-    <%= f.govuk_radio_button(
-      :bulk_apply,
-      @this_course_option.id,
-      label: { text: @this_course_option.name }
-    ) %>
-  <% end %>
+  </div>
   <%= f.govuk_submit "Continue to view the courses that will be updated" %>
 <% end %>

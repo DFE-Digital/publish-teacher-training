@@ -33,6 +33,7 @@ $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 @import "./components/school-search";
 @import "./components/course_list_filters";
 @import "./components/course_list";
+@import "./components/bulk_update";
 
 .app-list--dash {
   padding-left: govuk-spacing(3);
