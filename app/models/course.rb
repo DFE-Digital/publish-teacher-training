@@ -950,6 +950,21 @@ class Course < ApplicationRecord
     }[funding]
   end
 
+  def funding_type_label
+    if apprenticeship?
+      if qualifications_summary&.include?("Teacher degree apprenticeship")
+        "Teacher degree apprenticeship"
+      else
+        "Postgraduate teaching apprenticeship"
+      end
+    elsif salary?
+      "Salaried"
+    else
+      funding_description
+    end
+  end
+
+
   def start_date_description
     return if start_date.blank?
 
