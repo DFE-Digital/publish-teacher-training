@@ -74,7 +74,7 @@ module Publish
           if course.salary?
             @bulk_options << OpenStruct.new(
               id: "salary",
-              name: "All school direct salaried course (not apprenticeship courses)",
+              name: "All school direct salaried courses",
             )
           end
 
@@ -148,7 +148,7 @@ module Publish
 
           @this_course_hint = [
             ("Fee-paying" if course.fee?),
-            ("Salaried" if course.salary?),
+            ("School direct salaried" if course.salary?),
             ("QTS" if course.qualifications_summary == "QTS"),
             ("QTS with PGCE" if course.qualifications_summary&.include?("PGCE")),
             ("full time" if course.full_time?),

@@ -958,7 +958,7 @@ class Course < ApplicationRecord
         "Postgraduate teaching apprenticeship"
       end
     elsif salary?
-      "Salaried"
+      "School direct salaried"
     else
       funding_description
     end
