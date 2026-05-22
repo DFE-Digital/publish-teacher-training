@@ -1151,9 +1151,9 @@ detect-libc@^2.0.3:
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.1.2.tgz#689c5dcdc1900ef5583a4cb9f6d7b473742074ad"
   integrity sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==
 
-dfe-autocomplete@DFE-Digital/dfe-autocomplete#version-1/refactor:
-  version "0.2.1"
-  resolved "https://codeload.github.com/DFE-Digital/dfe-autocomplete/tar.gz/a7701e7f7f6284497d29ec38955adfc219246319"
+dfe-autocomplete@DFE-Digital/dfe-autocomplete#v1.0.0:
+  version "1.0.0"
+  resolved "https://codeload.github.com/DFE-Digital/dfe-autocomplete/tar.gz/0fff185bf6acda09dbb544dd7a6fb8233bef6c80"
   dependencies:
     accessible-autocomplete "^3.0.1"
 
