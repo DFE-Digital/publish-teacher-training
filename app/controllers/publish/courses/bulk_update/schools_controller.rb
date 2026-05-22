@@ -129,19 +129,19 @@ module Publish
           # end
 
           # Primary/secondary options
-          # if course.primary_course?
-          #   @bulk_options << OpenStruct.new(
-          #     id: "primary",
-          #     name: "All primary courses",
-          #   )
-          # end
+          if course.primary_course?
+            @bulk_options << OpenStruct.new(
+              id: "primary",
+              name: "All primary courses",
+            )
+          end
 
-          # if course.secondary_course?
-          #   @bulk_options << OpenStruct.new(
-          #     id: "secondary",
-          #     name: "All secondary courses",
-          #   )
-          # end
+          if course.secondary_course?
+            @bulk_options << OpenStruct.new(
+              id: "secondary",
+              name: "All secondary courses",
+            )
+          end
 
           # if course.subjects.any?
           #   subject = course.subjects.first
