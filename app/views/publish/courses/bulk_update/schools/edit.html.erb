@@ -78,22 +78,28 @@
       size: "m",
     } do %>
       <%= f.govuk_radio_button(
-  :bulk_apply,
-  @this_course_option.id,
-  label: { text: @this_course_option.name },
-  hint: { text: @this_course_hint }
-) %>
+      :bulk_apply,
+      @this_course_option.id,
+      label: { text: @this_course_option.name },
+      hint: { text: @this_course_hint }
+    ) %>
       <div class="govuk-radios__divider">
         or
       </div>
       <% @bulk_options.each do |option| %>
+        <% radio_options = {
+        label: { text: option.name }
+      } %>
+        <% if option.respond_to?(:hint) && option.hint.present? %>
+          <% radio_options[:hint] = { text: option.hint } %>
+        <% end %>
         <%= f.govuk_radio_button(
         :bulk_apply,
         option.id,
-        label: { text: option.name }
+        **radio_options
       ) %>
       <% end %>
     <% end %>
   </div>
   <%= f.govuk_submit "Continue to view the courses that will be updated" %>
-<% end %>
+  <% end %>

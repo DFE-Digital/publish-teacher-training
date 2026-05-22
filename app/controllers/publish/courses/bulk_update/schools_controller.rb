@@ -52,7 +52,19 @@ module Publish
             scope: "Only this course",
             short: "This course only",
           },
+
+          "subject_science" => {
+            scope: "All science courses",
+            short: "Science courses",
+          },
         }.freeze
+
+        SCIENCE_SUBJECT_NAMES = %w[
+          Biology
+          Chemistry
+          Physics
+          Science
+        ].freeze
 
         def edit
           @bulk_options = []
@@ -131,7 +143,31 @@ module Publish
           #   )
           # end
 
-          if course.subjects.any?
+          # if course.subjects.any?
+          #   subject = course.subjects.first
+
+          #   @bulk_options << OpenStruct.new(
+          #     id: "subject_#{subject.id}",
+          #     name: "All #{subject.name.downcase} courses",
+          #   )
+          # end
+
+          # # if science course then offer to update all science courses (biology / chemistry / physics)
+          # if course.subjects.any? { |s| SCIENCE_SUBJECT_NAMES.include?(s.name) }
+          #   @bulk_options << OpenStruct.new(
+          #     id: "subject_science",
+          #     name: "All science courses",
+          #   )
+          # end
+
+          # Subject-based options vs single subject options
+          if science_course?
+            @bulk_options << OpenStruct.new(
+              id: "subject_science",
+              name: "All science courses",
+              hint: "Biology, chemistry, physics, science",
+            )
+          elsif course.subjects.any?
             subject = course.subjects.first
 
             @bulk_options << OpenStruct.new(
@@ -146,14 +182,7 @@ module Publish
             name: "All courses",
           )
 
-          @this_course_hint = [
-            ("Fee-paying" if course.fee?),
-            ("School direct salaried" if course.salary?),
-            ("QTS" if course.qualifications_summary == "QTS"),
-            ("QTS with PGCE" if course.qualifications_summary&.include?("PGCE")),
-            ("full time" if course.full_time?),
-            ("part time" if course.part_time?),
-          ].compact.join(", ")
+          @this_course_hint = course_hint_text
         end
 
         def update
@@ -182,12 +211,18 @@ module Publish
         def check
           @bulk_apply = params[:bulk_apply]
 
-          if @bulk_apply.start_with?("subject_")
+          case @bulk_apply
+          when "subject_science"
+            @bulk_apply_scope_label = "All science courses"
+            @bulk_apply_short_label = course_hint_text
+
+          when /^subject_/
             subject_id = @bulk_apply.delete_prefix("subject_")
             subject = Subject.find(subject_id)
 
-            @bulk_apply_scope_label = "All #{subject.name} courses"
+            @bulk_apply_scope_label = "All #{subject.name.downcase} courses"
             @bulk_apply_short_label = subject.name
+
           else
             labels = BULK_APPLY_LABELS[@bulk_apply]
 
@@ -208,6 +243,21 @@ module Publish
         end
 
       private
+
+        def science_course?
+          course.subjects.any? { |s| SCIENCE_SUBJECT_NAMES.include?(s.name) }
+        end
+
+        def course_hint_text
+          [
+            ("Fee-paying" if course.fee?),
+            ("School direct salaried" if course.salary?),
+            ("QTS" if course.qualifications_summary == "QTS"),
+            ("QTS with PGCE" if course.qualifications_summary&.include?("PGCE")),
+            ("full time" if course.full_time?),
+            ("part time" if course.part_time?),
+          ].compact.join(", ")
+        end
 
         def load_school_changes
           @added_count   = params[:added_count].to_i
