@@ -17,7 +17,7 @@
       <%= tag.div(
         class: class_names("govuk-form-group", "suggestions", "govuk-form-group--error" => f.object.errors.present?),
         data: remote_autocomplete_data(
-          path: "/api/#{@recruitment_cycle.year}/accredited_provider_suggestions",
+          path: api_accredited_provider_suggestions_path(@recruitment_cycle.year),
           format: "accredited",
           min_length: 2,
           id_field: "id",

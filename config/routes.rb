@@ -10,13 +10,18 @@ Rails.application.routes.draw do
     draw(:external_api)
   end
 
-  constraints host: Settings.find_hosts do
+  # The internal API is shared by the Find and Publish services. Draw it once
+  # (rather than once per host) so its routes have unique names and can be
+  # referenced via route helpers.
+  constraints host: Settings.find_hosts + Settings.publish_hosts do
     draw(:internal_api)
+  end
+
+  constraints host: Settings.find_hosts do
     draw(:find)
   end
 
   constraints host: Settings.publish_hosts do
-    draw(:internal_api)
     draw(:publish)
     draw(:support)
   end
