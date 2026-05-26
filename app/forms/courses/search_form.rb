@@ -103,7 +103,7 @@ module Courses
 
     def order
       OrderingStrategy.new(
-        location:,
+        location: geocoded_location,
         funding: funding,
         current_order: location_category_changed? ? nil : super,
       ).call
@@ -247,6 +247,12 @@ module Courses
     end
 
   private
+
+    def geocoded_location
+      return nil unless latitude.present? && longitude.present?
+
+      location
+    end
 
     def boolean_filter_count(value)
       value.presence ? 1 : nil

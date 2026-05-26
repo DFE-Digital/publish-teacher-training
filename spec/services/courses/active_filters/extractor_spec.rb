@@ -993,6 +993,8 @@ RSpec.describe Courses::ActiveFilters::Extractor do
           short_address: "Locality",
           formatted_address: "Locality",
           postal_code: "SW1A 1AA",
+          latitude: 51.5010,
+          longitude: -0.1419,
           address_types: %w[postal_code],
           radius: 10,
         )
@@ -1050,6 +1052,8 @@ RSpec.describe Courses::ActiveFilters::Extractor do
           location: "Bristol",
           short_address: "Bristol",
           formatted_address: "Bristol, UK",
+          latitude: 51.4545,
+          longitude: -2.5879,
           radius: 50,
         )
         search_params = search_form.search_params
