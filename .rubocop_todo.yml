@@ -132,6 +132,7 @@ RSpec/StubbedMock:
     - 'spec/controllers/api/public/v1/providers/courses_controller_spec.rb'
     - 'spec/services/course_reporting_service_spec.rb'
     - 'spec/services/course_search_service_spec.rb'
+    - 'spec/services/course_search_service_schools_spec.rb'
     - 'spec/services/notification_service/course_published_spec.rb'
     - 'spec/services/notification_service/course_sites_updated_spec.rb'
     - 'spec/services/notification_service/course_subjects_updated_spec.rb'
