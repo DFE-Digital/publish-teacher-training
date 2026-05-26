@@ -202,6 +202,28 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context "when location text is present but geocoding produced no coordinates" do
+      # Any free-text location that Geolocation::Address fails to resolve to
+      # latitude/longitude reproduces the bug — the country in the string is
+      # irrelevant. previous_location_category is blank (form re-submitted with
+      # the new location text), so location_category_changed? returns true and
+      # OrderingStrategy defaults to "distance" even though no coordinates
+      # exist for Courses::Query to order by.
+      let(:form) do
+        described_class.new(
+          location: "Unrecognised place ",
+          previous_location_category: "",
+          order: "course_name_ascending",
+          subject_code: "06",
+          can_sponsor_visa: "true",
+        )
+      end
+
+      it "produces a search_params payload that Courses::Query can execute" do
+        expect { ::Courses::Query.call(params: form.search_params.dup).to_a }.not_to raise_error
+      end
+    end
+
     context "when location is blank and order is blank" do
       let(:form) { described_class.new(location: "", order: "") }
 
