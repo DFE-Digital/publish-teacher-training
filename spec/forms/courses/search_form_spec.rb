@@ -187,10 +187,10 @@ RSpec.describe Courses::SearchForm do
     end
 
     context "when location is present and order is blank" do
-      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK") }
+      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", latitude: 51.5074, longitude: -0.1278) }
 
       it "defaults the ordering to distance" do
-        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", latitude: 51.5074, longitude: -0.1278, order: "distance", radius: 20 })
       end
     end
 
@@ -233,7 +233,7 @@ RSpec.describe Courses::SearchForm do
     end
 
     context "when location is present, ordered by fee, but fee funding is removed" do
-      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "fee_uk_ascending", funding: %w[salary]) }
+      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", latitude: 51.5074, longitude: -0.1278, order: "fee_uk_ascending", funding: %w[salary]) }
 
       it "resets the ordering to distance" do
         expect(form.search_params[:order]).to eq("distance")
@@ -586,7 +586,7 @@ RSpec.describe Courses::SearchForm do
       end
 
       context "when location is present and order is distance (default)" do
-        let(:form) { described_class.new(location: "London, UK", order: "distance") }
+        let(:form) { described_class.new(location: "London, UK", latitude: 51.5074, longitude: -0.1278, order: "distance") }
 
         it "returns nil for ordering" do
           expect(form.filter_counts[:ordering]).to be_nil
@@ -843,6 +843,8 @@ RSpec.describe Courses::SearchForm do
             previous_location_category: "",
             location: "Cornwall, UK",
             formatted_address: "Cornwall, UK",
+            latitude: 50.2660,
+            longitude: -5.0527,
             address_types: %w[administrative_area_level_2 political],
             order: "course_name_ascending",
           )
