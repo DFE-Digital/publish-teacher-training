@@ -116,4 +116,12 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:qualifications)
     end
   end
+
+  context "from study pattern" do
+    let(:current_step) { :study_pattern }
+
+    it "goes back to funding type" do
+      expect(wizard).to have_previous_step(:funding_type)
+    end
+  end
 end
