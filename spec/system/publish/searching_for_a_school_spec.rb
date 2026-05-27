@@ -40,7 +40,7 @@ RSpec.describe "Searching for a school from the GIAS list" do
 private
 
   def and_i_type_a_school_name_into_the_autocomplete
-    fill_in "Enter URN or school", with: "Enda"
+    fill_in "Enter URN or school", with: "Northgate"
   end
 
   def then_i_see_the_school_in_the_autocomplete_suggestions
@@ -74,7 +74,7 @@ private
   end
 
   def and_there_are_schools_in_the_database
-    @school = create(:gias_school, name: "Enda's", urn: "466415", postcode: "NW1 5WS", town: "Damonmouth")
+    @school = create(:gias_school, name: "Northgate Academy", urn: "466415", postcode: "NW1 5WS", town: "Damonmouth")
     @school_two = create(:gias_school, name: "School Two")
     @school_three = create(:gias_school, name: "School Three")
   end
