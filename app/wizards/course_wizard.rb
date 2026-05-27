@@ -17,6 +17,7 @@ class CourseWizard
       graph.add_node :age_range, Steps::AgeRange
       graph.add_node :qualifications, Steps::Qualifications
       graph.add_node :funding_type, Steps::FundingType
+      graph.add_node :study_pattern, Steps::StudyPattern
 
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
 
@@ -42,7 +43,9 @@ class CourseWizard
 
       graph.add_edge from: :age_range, to: :qualifications
 
-      graph.add_edge from: :funding_type, to: :courses_index
+      graph.add_edge from: :funding_type, to: :study_pattern
+
+      graph.add_edge from: :study_pattern, to: :courses_index
     end
   end
 

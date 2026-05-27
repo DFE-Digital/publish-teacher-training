@@ -131,6 +131,14 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     let(:current_step) { :funding_type }
 
     it "proceeds to courses page" do
+      expect(wizard).to have_next_step(:study_pattern)
+    end
+  end
+
+  context "from study pattern" do
+    let(:current_step) { :study_pattern }
+
+    it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)
     end
   end

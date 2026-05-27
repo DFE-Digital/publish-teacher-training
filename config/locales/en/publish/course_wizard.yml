@@ -77,7 +77,6 @@ en:
         errors:
           qualification:
             blank: Select a qualification
-
       funding_type:
         caption: Add course
         heading: Funding type
@@ -92,6 +91,19 @@ en:
         errors:
           funding_type:
             blank: Select a funding type
+      study_pattern:
+        caption: Add course
+        heading: Study pattern
+        hint: Select all that apply
+        submit: Continue
+        options:
+          full_time:
+            label: Full time
+          part_time:
+            label: Part time
+        errors:
+          study_pattern:
+            blank: Select a study pattern
   activemodel:
     errors:
       models:

@@ -1,0 +1,17 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.study_pattern.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.study_pattern.caption")) %>
+  <%= t("course_wizard.steps.study_pattern.heading") %>
+</h1>
+
+<%= form.govuk_check_boxes_fieldset :study_pattern, legend: { hidden: true, text: t("course_wizard.steps.study_pattern.heading") }, hint: { text: t("course_wizard.steps.study_pattern.hint") } do %>
+  <% current_step.study_pattern_options.each_with_index do |value, index| %>
+    <%= form.govuk_check_box :study_pattern, value,
+          label: { text: t("course_wizard.steps.study_pattern.options.#{value}.label") },
+          include_hidden: false,
+          link_errors: index.zero? %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.study_pattern.submit") %>
