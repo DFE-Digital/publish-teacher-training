@@ -192,12 +192,20 @@ jobs:
           cache: yarn
       - run: yarn install --frozen-lockfile
 
-      - name: Install Playwright
+      - name: Pin Playwright JS package
+        timeout-minutes: 5
         run: |
-          export PLAYWRIGHT_CLI_VERSION=$(bundle exec ruby -e \
+          PLAYWRIGHT_CLI_VERSION=$(bundle exec ruby -e \
             'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip')
           yarn add --dev playwright@${PLAYWRIGHT_CLI_VERSION}
-          yarn exec playwright install --with-deps chromium
+
+      - name: Install Playwright system deps (apt)
+        timeout-minutes: 10
+        run: yarn exec playwright install-deps chromium
+
+      - name: Install Playwright browser binaries (CDN)
+        timeout-minutes: 10
+        run: yarn exec playwright install chromium
 
       - run: bundle exec rails parallel:setup
       - run: bundle exec rails spec:prepare
