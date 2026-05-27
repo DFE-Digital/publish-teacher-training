@@ -39,7 +39,7 @@ RSpec.describe "Searching for a study site from the GIAS list" do
   end
 
   def and_i_type_a_school_name_into_the_autocomplete
-    fill_in "publish-providers-schools-search-form-query-field", with: "Enda"
+    fill_in "publish-providers-schools-search-form-query-field", with: "Northgate"
   end
 
   def then_i_see_the_school_in_the_autocomplete_suggestions
@@ -140,7 +140,7 @@ RSpec.describe "Searching for a study site from the GIAS list" do
   end
 
   def and_there_are_schools_in_the_database
-    @school = create(:gias_school, name: "Enda's")
+    @school = create(:gias_school, name: "Northgate Academy")
     @school_two = create(:gias_school, name: "School Two")
     @school_three = create(:gias_school, name: "School Three")
   end
