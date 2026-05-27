@@ -197,7 +197,7 @@ jobs:
           export PLAYWRIGHT_CLI_VERSION=$(bundle exec ruby -e \
             'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip')
           yarn add --dev playwright@${PLAYWRIGHT_CLI_VERSION}
-          yarn exec playwright install --verbose --with-deps chromium
+          yarn exec playwright install chromium --verbose --with-deps
 
       - run: bundle exec rails parallel:setup
       - run: bundle exec rails spec:prepare
