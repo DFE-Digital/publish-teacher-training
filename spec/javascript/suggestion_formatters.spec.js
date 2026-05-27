@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { FORMATTERS } from './suggestion_formatters'
+import { FORMATTERS } from '../../app/javascript/shared/suggestion_formatters'
 
 describe('remote autocomplete suggestion FORMATTERS', () => {
   it('provider: appends the code to the name', () => {
