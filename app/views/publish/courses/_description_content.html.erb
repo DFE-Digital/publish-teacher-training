@@ -45,10 +45,10 @@
 
     <% school_experience_value =
         if school_experience_required == "false"
-          "No, school experience is not required or strongly recommended"
+          "No, school experience is not required"
         elsif school_experience_text.present?
   safe_join([
-    content_tag(:p, "Yes, school experience is required or strongly recommended"),
+    content_tag(:p, "Yes, school experience is required"),
     simple_format(h(school_experience_text))
   ])
         else
