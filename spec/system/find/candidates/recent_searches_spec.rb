@@ -476,7 +476,7 @@ RSpec.describe "Recent searches", service: :find do
   end
 
   def then_i_see_the_provider_search_title
-    expect(page).to have_content("Courses across England")
+    expect(page).to have_content("courses across England")
   end
 
   def then_i_see_the_provider_filter_tag
