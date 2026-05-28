@@ -428,7 +428,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.0407)
+    mime-types-data (3.2026.0414)
     mini_mime (1.1.5)
     minitest (6.0.6)
       drb (~> 2.0)
@@ -507,7 +507,7 @@ GEM
     pg_search (2.3.7)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
-    playwright-ruby-client (1.59.0)
+    playwright-ruby-client (1.60.0)
       base64
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
