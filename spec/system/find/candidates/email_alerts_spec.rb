@@ -338,6 +338,8 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Unsubscribe from this email alert")
     expect(page).to have_content("Are you sure you want to unsubscribe?")
     expect(page).to have_button("Unsubscribe")
+    expect(page).to have_content("Biology")
+    expect(page).not_to have_content(/\bC1\b/)
   end
 
   def then_i_see_homepage
