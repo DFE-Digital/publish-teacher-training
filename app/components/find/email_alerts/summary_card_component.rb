@@ -10,6 +10,7 @@ module Find
         @email_alert = email_alert
         @attrs = email_alert.search_attributes || {}
         @subject_names = subject_names
+        @subject_names << "Further education" if further_education? && @subject_names.exclude?("Further education")
       end
 
       def title
@@ -23,7 +24,7 @@ module Find
 
       def filter_rows
         @filter_rows ||= build_summary_rows(
-          @attrs.merge("radius" => @email_alert.radius, "location" => @email_alert.location_name),
+          @attrs.except("level").merge("radius" => @email_alert.radius, "location" => @email_alert.location_name),
           subject_names: @subject_names,
         )
       end
@@ -31,6 +32,12 @@ module Find
       def unsubscribe_path
         token = @email_alert.signed_id(purpose: :unsubscribe, expires_in: 30.days)
         helpers.find_candidate_confirm_unsubscribe_email_alert_path(token:)
+      end
+
+    private
+
+      def further_education?
+        @attrs["level"] == "further_education"
       end
     end
   end

@@ -82,6 +82,27 @@ module Find
 
             expect(cancel_link_href(response.body)).to eq(find_candidate_recent_searches_path)
           end
+
+          it "treats level=further_education as a subject and omits the level summary row" do
+            get :new, params: { level: "further_education" }
+
+            expect(response.body).to include("Further education")
+            expect(response.body).not_to match(/<dt[^>]*>\s*Level\s*<\/dt>/)
+          end
+
+          it "lists 'Further education' alongside explicit subjects when level=further_education" do
+            subject_area = SubjectArea.find_by!(typename: "SecondarySubject")
+            Subject.find_or_create_by!(subject_code: "C1") do |s|
+              s.subject_name = "Biology"
+              s.type = "SecondarySubject"
+              s.subject_area = subject_area
+            end
+
+            get :new, params: { subjects: %w[C1], level: "further_education" }
+
+            expect(response.body).to include("Biology")
+            expect(response.body).to include("Further education")
+          end
         end
       end
 
