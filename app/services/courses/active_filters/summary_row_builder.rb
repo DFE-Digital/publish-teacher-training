@@ -6,6 +6,7 @@ module Courses
       VALUE_FORMATTERS = Hash.new(->(values) { values.join(", ") }).merge!(
         funding: ->(values) { values.join(", ").humanize },
         study_types: ->(values) { values.join(", ").humanize },
+        subjects: ->(values) { values.sort.map { |name| SubjectHelper.subject_name_in_sentence(name) }.to_sentence(last_word_connector: ", ").upcase_first },
       ).freeze
 
       FILTER_OPTION_KEYS = {
