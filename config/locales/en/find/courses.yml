@@ -124,11 +124,11 @@ en:
         subjects_no_location: "%{subject} courses in England"
         many_subjects_no_location: "%{count} subjects in England"
         subjects_with_location: "%{subject} courses within %{radius} miles of %{location}"
-        no_subjects_with_location: "Courses within %{radius} miles of %{location}"
+        no_subjects_with_location: "courses within %{radius} miles of %{location}"
         fallback_with_filters:
-          one: "Courses across England (%{count} filter applied)"
-          other: "Courses across England (%{count} filters applied)"
-        fallback: Courses across England
+          one: "courses across England (%{count} filter applied)"
+          other: "courses across England (%{count} filters applied)"
+        fallback: courses across England
       show:
         back_to_search: Back to search results
         back_to_saved_courses: Back to saved courses
