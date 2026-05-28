@@ -20,7 +20,7 @@ module Find
         @title = build_title(subject_names:, search_attributes: search_params.to_h, location_name:, radius: search_params[:radius])
         @summary_rows = build_summary_rows(search_params.to_h, subject_names:)
         @search_params = search_params
-        @cancel_path = redirect_after_create
+        @cancel_path = redirect_back
       end
 
       def create
@@ -41,10 +41,10 @@ module Find
             "title" => t(".success_title"),
             "body" => t(".success_body_html", title:, unsubscribe_link: unsubscribe_link(alert)),
           }
-          redirect_to redirect_after_create
+          redirect_to find_candidate_email_alerts_path
         else
           flash[:warning] = t(".create_failed")
-          redirect_to find_candidate_email_alerts_path
+          redirect_to redirect_back
         end
       end
 
@@ -122,7 +122,7 @@ module Find
 
       def redirect_existing_alert
         flash[:info] = t("find.candidates.email_alerts.new.already_subscribed")
-        redirect_to redirect_after_create
+        redirect_to redirect_back
       end
 
       def build_title(subject_names:, search_attributes:, location_name:, radius:)
@@ -185,14 +185,17 @@ module Find
           "title" => t("find.candidates.email_alerts.new.subscription_limit_heading"),
           "body" => t("find.candidates.email_alerts.new.subscription_limit_body_html", link:),
         }
-        redirect_to redirect_after_create
+        redirect_to redirect_back
       end
 
-      def redirect_after_create
-        if params[:return_to] == "recent_searches"
+      def redirect_back
+        case params[:return_to]
+        when "recent_searches"
           find_candidate_recent_searches_path
-        else
+        when "results"
           find_results_path(search_params.except(:return_to))
+        else
+          find_candidate_email_alerts_path
         end
       end
     end
