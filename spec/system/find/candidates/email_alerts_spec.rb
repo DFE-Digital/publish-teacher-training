@@ -385,6 +385,7 @@ RSpec.describe "Email alerts", service: :find do
         "can_sponsor_visa" => "true",
         "funding" => %w[salary],
         "send_courses" => "true",
+        "interview_location" => "online",
       },
     )
   end
@@ -395,6 +396,7 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Visa sponsorship")
     expect(page).to have_content("salary")
     expect(page).to have_content("SEND specialism")
+    expect(page).to have_content("Online interview")
   end
 
   def many_filters_search_attributes
