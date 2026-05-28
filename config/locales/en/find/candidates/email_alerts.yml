@@ -28,6 +28,7 @@ en:
             qualifications: Qualification
             minimum_degree_required: Degree required
             can_sponsor_visa: Visa sponsorship
+            interview_location: Online interview
             start_date: Start date
             provider_code: Provider
         create:
