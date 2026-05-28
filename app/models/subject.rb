@@ -48,6 +48,7 @@ class Subject < ApplicationRecord
   end
 
   LANGUAGE_SUBJECT_CODES = %w[Q3 A1 A2 15 18 19 A0 20 21 22 17].freeze
+  LANGUAGE_PROPER_NOUNS = %w[English French German Greek Hebrew Italian Japanese Latin Mandarin Russian Spanish].freeze
   SCIENCE_SUBJECT_NAMES = %w[Physics Chemistry Biology].freeze
 
   def language_subject?
