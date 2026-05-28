@@ -1,5 +1,5 @@
 <tr class="govuk-table__row">
-  <td class="govuk-table__cell app-table--courses__course-name" data-qa="courses-table__course-name">
+  <td class="govuk-table__cell app-table--courses__course-name app-course-list-padding" data-qa="courses-table__course-name">
     <% if current_page?(publish_provider_recruitment_cycle_courses_path(@provider.provider_code, course.recruitment_cycle.year)) %>
       <%= govuk_link_to course.name_and_code,
         publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
@@ -16,7 +16,7 @@
     <% end %>
   </td>
   <% if @show_course_info_column %>
-    <td class="govuk-table__cell">
+    <td class="govuk-table__cell app-course-list-padding">
       <!-- <span class="govuk-body-s"><%= course.summary %></span> -->
       <% if @show_funding && course.funding_description.present? %>
         <span class="govuk-body-s"><%= course.funding_description %></span><br>
@@ -60,7 +60,7 @@
     </span> -->
     </td>
   <% end %>
-  <td class="govuk-table__cell" data-qa="courses-table__status">
+  <td class="govuk-table__cell app-course-list-padding" data-qa="courses-table__status">
     <%= course.status_tag %>
   </td>
 </tr>
