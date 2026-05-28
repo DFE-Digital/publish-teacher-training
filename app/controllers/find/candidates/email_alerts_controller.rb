@@ -18,7 +18,7 @@ module Find
         return redirect_existing_alert if existing_alert?
 
         @title = build_title(subject_names:, search_attributes: search_params.to_h, location_name:, radius: search_params[:radius])
-        @summary_rows = build_summary_rows(search_params.to_h, subject_names:)
+        @summary_rows = build_summary_rows(search_params.to_h.except("level"), subject_names:)
         @search_params = search_params
         @cancel_path = redirect_back
       end
@@ -31,7 +31,7 @@ module Find
 
         if alert
           title = build_title(
-            subject_names: resolve_subject_names(alert.subjects),
+            subject_names:,
             search_attributes: alert.search_attributes || {},
             location_name: alert.location_name,
             radius: alert.radius,
@@ -101,7 +101,11 @@ module Find
       end
 
       def subject_names
-        @subject_names ||= resolve_subject_names(subject_codes)
+        @subject_names ||= begin
+          names = resolve_subject_names(subject_codes)
+          names << "Further education" if params["level"] == "further_education"
+          names
+        end
       end
 
       def location_name
