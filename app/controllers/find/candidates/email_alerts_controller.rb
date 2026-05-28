@@ -71,7 +71,7 @@ module Find
 
       def unsubscribe_from_email
         @email_alert = Candidate::EmailAlert.find_signed!(params[:token], purpose: :unsubscribe)
-        @summary_rows = build_summary_rows(@email_alert.search_params.to_h, subject_names: @email_alert.subjects)
+        @summary_rows = build_summary_rows(@email_alert.search_params.to_h, subject_names: resolve_subject_names(@email_alert.subjects))
         @filter_tags = extract_filter_tags_from_alert(@email_alert)
       rescue ActiveSupport::MessageVerifier::InvalidSignature
         redirect_to find_root_path
