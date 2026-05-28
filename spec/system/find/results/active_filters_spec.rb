@@ -511,7 +511,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_two_one_degree_filter_is_displayed
-    expect(active_filters).to include("Degree grade: 2:1 or first")
+    expect(active_filters).to include("Degree grade: 2:1 or First")
   end
 
   def then_online_interview_location_filter_is_displayed
@@ -533,7 +533,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_all_expected_filters_are_displayed
-    expect(active_filters).to contain_exactly("Primary", "Primary with English", "Art and design", "Further education", "Fee-paying courses", "Courses with a salary", "Full time", "Part time", "Qualification: QTS only", "Qualification: QTS with PGCE or PGDE", "Degree grade: 2:1 or first", "Courses with visa sponsorship", "Courses with online interviews", "London", "Courses with a SEND specialism", "Biology")
+    expect(active_filters).to contain_exactly("Primary", "Primary with English", "Art and design", "Further education", "Fee-paying courses", "Courses with a salary", "Full time", "Part time", "Qualification: QTS only", "Qualification: QTS with PGCE or PGDE", "Degree grade: 2:1 or First", "Courses with visa sponsorship", "Courses with online interviews", "London", "Courses with a SEND specialism", "Biology")
   end
 
   def when_user_search_main_subject(subject)

@@ -77,7 +77,7 @@ RSpec.describe Courses::ActiveFilter do
 
       formatted_value = active_filter.formatted_value
 
-      expect(formatted_value).to eq("Degree grade: 2:1 or first")
+      expect(formatted_value).to eq("Degree grade: 2:1 or First")
     end
 
     it "returns nil when translation is missing for non-special ids" do

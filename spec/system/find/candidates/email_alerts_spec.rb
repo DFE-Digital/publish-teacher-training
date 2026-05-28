@@ -393,7 +393,7 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Biology")
     expect(page).to have_content("Within 15 miles of Manchester")
     expect(page).to have_content("Visa sponsorship")
-    expect(page).to have_content("Salary")
+    expect(page).to have_content("salary")
     expect(page).to have_content("SEND specialism")
   end
 
@@ -501,9 +501,9 @@ RSpec.describe "Email alerts", service: :find do
   end
 
   def then_i_see_funding_filters_on_confirmation_page
-    expect(page).to have_content("Fee - no salary")
-    expect(page).to have_content("Salary")
-    expect(page).to have_content("Teaching apprenticeship - with salary")
+    expect(page).to have_content("Fee-paying courses")
+    expect(page).to have_content("courses with a salary")
+    expect(page).to have_content("apprenticeship courses")
   end
 
   def then_the_email_alert_has_funding_filters
