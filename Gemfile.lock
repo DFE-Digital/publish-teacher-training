@@ -433,7 +433,8 @@ GEM
     minitest (6.0.6)
       drb (~> 2.0)
       prism (~> 1.5)
-    mock_redis (0.46.0)
+    mock_redis (0.54.0)
+      redis (~> 5)
     msgpack (1.8.0)
     multi_json (1.21.1)
     multi_xml (0.6.0)
@@ -608,7 +609,10 @@ GEM
       psych (>= 4.0.0)
       tsort
     redcarpet (3.6.1)
-    redis (4.8.1)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.29.0)
+      connection_pool
     regexp_parser (2.12.0)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -732,10 +736,10 @@ GEM
       sidekiq (>= 5.0)
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
-    sidekiq (6.5.12)
-      connection_pool (>= 2.2.5, < 3)
+    sidekiq (6.5.5)
+      connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+      redis (>= 4.5.0)
     sidekiq-cron (2.4.0)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
@@ -871,7 +875,7 @@ DEPENDENCIES
   jwt
   launchy
   listen (>= 3.0.5, < 3.11)
-  mock_redis (= 0.46.0)
+  mock_redis (= 0.54.0)
   oj
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 2.0)
