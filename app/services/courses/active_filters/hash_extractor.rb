@@ -107,7 +107,7 @@ module Courses
       end
 
       def default_order
-        search_location.located? ? "distance" : "course_name_ascending"
+        Courses::OrderingStrategy.default_for(search_location)
       end
 
       def search_location
