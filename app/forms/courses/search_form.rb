@@ -103,7 +103,7 @@ module Courses
 
     def order
       OrderingStrategy.new(
-        location: geocoded_location,
+        search_location: search_location,
         funding: funding,
         current_order: location_category_changed? ? nil : super,
       ).call
@@ -248,10 +248,14 @@ module Courses
 
   private
 
-    def geocoded_location
-      return nil unless latitude.present? && longitude.present?
-
-      location
+    def search_location
+      @search_location ||= SearchLocation.new(
+        text: location,
+        latitude: latitude,
+        longitude: longitude,
+        formatted_address: formatted_address,
+        short_address: short_address,
+      )
     end
 
     def boolean_filter_count(value)
@@ -273,7 +277,7 @@ module Courses
     end
 
     def ordering_filter_count
-      default_order = location.present? ? "distance" : "course_name_ascending"
+      default_order = search_location.sortable_by_distance? ? "distance" : "course_name_ascending"
       order == default_order ? nil : 1
     end
 

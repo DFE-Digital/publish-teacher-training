@@ -578,7 +578,7 @@ RSpec.describe Courses::SearchForm do
 
     context "with ordering" do
       context "when location is present and order is not distance" do
-        let(:form) { described_class.new(location: "London, UK", order: "course_name_ascending") }
+        let(:form) { described_class.new(location: "London, UK", latitude: 51.5074, longitude: -0.1278, order: "course_name_ascending") }
 
         it "returns 1 for ordering" do
           expect(form.filter_counts[:ordering]).to eq(1)

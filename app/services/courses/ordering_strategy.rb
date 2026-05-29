@@ -2,8 +2,8 @@ module Courses
   class OrderingStrategy
     DEFAULT_ORDER = "course_name_ascending".freeze
 
-    def initialize(location:, funding:, current_order:)
-      @location = location
+    def initialize(search_location:, funding:, current_order:)
+      @search_location = search_location
       @funding = funding
       @current_order = current_order
     end
@@ -18,7 +18,7 @@ module Courses
   private
 
     def default_order
-      @location.present? ? "distance" : DEFAULT_ORDER
+      @search_location.sortable_by_distance? ? "distance" : DEFAULT_ORDER
     end
 
     def should_reset_to_default?
@@ -26,7 +26,7 @@ module Courses
     end
 
     def distance_without_location?
-      @current_order == "distance" && @location.blank?
+      @current_order == "distance" && !@search_location.sortable_by_distance?
     end
 
     def fee_order_without_fee_funding?
