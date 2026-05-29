@@ -26,7 +26,14 @@ module Courses
       def initialize(search_params:, search_form:)
         @search_params = search_params
         @search_form = search_form
-        @param_defaults = Find::SearchParamDefaults.new(search_params)
+        # Defaults are computed from the form's full search_params (which
+        # carry coordinates and the location label) — not from the
+        # constructor-supplied @search_params, which intentionally has
+        # those location keys stripped so they don't show up as chips.
+        # Without this, a geocoded search would not be recognised as a
+        # location-based one when deciding whether "distance" is the
+        # default order.
+        @param_defaults = Find::SearchParamDefaults.new(search_form.search_params)
       end
 
       def call
