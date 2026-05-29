@@ -21,6 +21,10 @@
   </strong>
 </div>
 
+<p class="govuk-hint">
+  <%= t("course_wizard.steps.schools.hint") %>
+</p>
+
 <%= form.govuk_check_boxes_fieldset :site_ids, legend: { hidden: true, text: heading } do %>
   <% current_step.sites.each_with_index do |site, index| %>
     <%= form.govuk_check_box :site_ids,
