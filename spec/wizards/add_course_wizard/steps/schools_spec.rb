@@ -30,6 +30,17 @@ RSpec.describe CourseWizard::Steps::Schools do
       expect(wizard_step).not_to be_valid
       expect(wizard_step.errors.messages_for(:site_ids)).to contain_exactly("Select at least one school")
     end
+
+    context "when provider has only one site" do
+      let!(:site_b) { nil }
+
+      it "auto-selects the only site and is valid when no site is submitted" do
+        wizard_step.site_ids = nil
+
+        expect(wizard_step).to be_valid
+        expect(wizard_step.site_ids).to eq([site_a.id.to_s])
+      end
+    end
   end
 
   describe "#sites" do
@@ -42,6 +53,15 @@ RSpec.describe CourseWizard::Steps::Schools do
           site_a,
         ],
       )
+    end
+
+    it "uses provider/recruitment cycle from the wizard when available" do
+      wizard.provider = provider
+      wizard.recruitment_cycle = provider.recruitment_cycle
+
+      expect(RecruitmentCycle).not_to receive(:find_by!)
+
+      wizard_step.sites
     end
   end
 
@@ -81,6 +101,16 @@ RSpec.describe CourseWizard::Steps::Schools do
 
       it "returns false" do
         expect(wizard_step.salaried?).to be(false)
+      end
+    end
+
+    context "when qualification is undergraduate degree with qts and funding type is nil" do
+      before do
+        state_store.write(qualification: "undergraduate_degree_with_qts")
+      end
+
+      it "returns true" do
+        expect(wizard_step.salaried?).to be(true)
       end
     end
   end

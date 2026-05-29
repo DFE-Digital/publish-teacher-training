@@ -106,11 +106,9 @@ en:
             blank: Select a study pattern
       schools:
         caption: Add course
-        heading: Schools
         submit: Continue
         description: The more schools you select, the more searches your course will appear in. You should only add schools that are relevant to this course.
         percentage: 60% of searches are by location.
-        warning_text: If you do not add all relevant placement schools, you may miss out on potential candidates.
         errors:
           site_ids:
             blank: Select at least one school

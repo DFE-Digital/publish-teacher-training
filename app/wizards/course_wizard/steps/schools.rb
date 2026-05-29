@@ -4,6 +4,7 @@ class CourseWizard
       include DfE::Wizard::Step
 
       FUNDING_TYPES_WITH_SALARY = %w[salary apprenticeship].freeze
+      QUALIFICATIONS_WITH_SALARY = %w[undergraduate_degree_with_qts].freeze
 
       attribute :site_ids
 
@@ -14,7 +15,7 @@ class CourseWizard
       end
 
       def salaried?
-        funding_type.in?(FUNDING_TYPES_WITH_SALARY)
+        funding_type.in?(FUNDING_TYPES_WITH_SALARY) || qualification.in?(QUALIFICATIONS_WITH_SALARY)
       end
 
       def self.permitted_params
@@ -42,15 +43,19 @@ class CourseWizard
       end
 
       def provider
-        @provider ||= recruitment_cycle.providers.find_by!(provider_code: wizard.provider_code)
+        wizard.provider || @provider ||= recruitment_cycle.providers.find_by!(provider_code: wizard.provider_code)
       end
 
       def recruitment_cycle
-        @recruitment_cycle ||= RecruitmentCycle.find_by!(year: wizard.recruitment_cycle_year)
+        wizard.recruitment_cycle || @recruitment_cycle ||= RecruitmentCycle.find_by!(year: wizard.recruitment_cycle_year)
       end
 
       def funding_type
         wizard.state_store.funding_type
+      end
+
+      def qualification
+        wizard.state_store.qualification
       end
     end
   end

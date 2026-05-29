@@ -68,6 +68,8 @@ module Publish
         wizard.recruitment_cycle_year = params[:recruitment_cycle_year]
         wizard.provider_code = params[:provider_code]
         wizard.state_key = state_key
+        wizard.provider = provider
+        wizard.recruitment_cycle = recruitment_cycle
       end
     end
 
