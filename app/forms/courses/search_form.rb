@@ -277,7 +277,7 @@ module Courses
     end
 
     def ordering_filter_count
-      default_order = search_location.sortable_by_distance? ? "distance" : "course_name_ascending"
+      default_order = search_location.located? ? "distance" : "course_name_ascending"
       order == default_order ? nil : 1
     end
 

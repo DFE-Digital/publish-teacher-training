@@ -18,7 +18,7 @@ module Courses
   private
 
     def default_order
-      @search_location.sortable_by_distance? ? "distance" : DEFAULT_ORDER
+      @search_location.located? ? "distance" : DEFAULT_ORDER
     end
 
     def should_reset_to_default?
@@ -26,7 +26,7 @@ module Courses
     end
 
     def distance_without_location?
-      @current_order == "distance" && !@search_location.sortable_by_distance?
+      @current_order == "distance" && !@search_location.located?
     end
 
     def fee_order_without_fee_funding?

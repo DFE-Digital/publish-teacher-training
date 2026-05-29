@@ -26,13 +26,12 @@ module Courses
       @short_address = short_address
     end
 
-    def sortable_by_distance?
+    def located?
       @latitude.present? && @longitude.present?
     end
 
     def blank?
-      [@text, @formatted_address, @short_address].all?(&:blank?) &&
-        !sortable_by_distance?
+      [@text, @formatted_address, @short_address].all?(&:blank?) && !located?
     end
 
     def label
