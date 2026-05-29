@@ -28,13 +28,11 @@ module Find
       {
         "applications_open" => "true",
         "minimum_degree_required" => "show_all_courses",
-        "order" => proc { |params| location_based?(params) ? "distance" : "course_name_ascending" },
+        "order" => proc { |params|
+          ::Courses::SearchLocation.from_params(params).sortable_by_distance? ? "distance" : "course_name_ascending"
+        },
         "level" => "all",
       }
-    end
-
-    def location_based?(params)
-      params["short_address"].present? || params["longitude"].present?
     end
   end
 end
