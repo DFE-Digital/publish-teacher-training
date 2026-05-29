@@ -107,11 +107,11 @@ module Courses
       end
 
       def default_order
-        location_based? ? "distance" : "course_name_ascending"
+        search_location.sortable_by_distance? ? "distance" : "course_name_ascending"
       end
 
-      def location_based?
-        @attrs["location"].present? || @attrs["formatted_address"].present?
+      def search_location
+        @search_location ||= Courses::SearchLocation.from_params(@attrs)
       end
 
       def sort_filters(filters)
