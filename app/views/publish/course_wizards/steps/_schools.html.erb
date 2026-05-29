@@ -1,0 +1,35 @@
+<% heading = school_label_for(current_step) %>
+<% content_for :page_title, title_with_error_prefix(heading, current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.schools.caption")) %>
+  <%= heading %>
+</h1>
+
+<p class="govuk-body">
+  <%= t("publish.courses.schools.new.schools_selection") %>
+</p>
+
+<p class="govuk-body">
+  <%= t("publish.courses.schools.new.searches_by_location") %>
+</p>
+
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    <%= school_warning_text(current_step) %>
+  </strong>
+</div>
+
+<%= form.govuk_check_boxes_fieldset :site_ids, legend: { hidden: true, text: heading } do %>
+  <% current_step.sites.each_with_index do |site, index| %>
+    <%= form.govuk_check_box :site_ids,
+          site.id.to_s,
+          label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
+          hint: { text: site.full_address },
+          include_hidden: false,
+          link_errors: index.zero? %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.schools.submit") %>
