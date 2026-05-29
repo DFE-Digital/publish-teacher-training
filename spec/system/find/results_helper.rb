@@ -634,6 +634,17 @@ module ResultsHelper
       )
   end
 
+  def stub_atlantis_geocode_zero_results
+    stub_request(
+      :get,
+      %r{https://maps.googleapis.com/maps/api/geocode/json.*address=Atlantis},
+    ).to_return(
+      status: 200,
+      body: file_fixture("google_old_places_api_client/geocode/atlantis.json").read,
+      headers: { "Content-Type" => "application/json" },
+    )
+  end
+
   def stub_london_location_search
     stub_request(
       :get,
