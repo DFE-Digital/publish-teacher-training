@@ -1,6 +1,14 @@
 module Courses
   class OrderingStrategy
     DEFAULT_ORDER = "course_name_ascending".freeze
+    LOCATED_ORDER = "distance".freeze
+
+    # The default order for a given location — used by callers (SearchForm,
+    # SearchParamDefaults, HashExtractor) that need to know "what would the
+    # default be?" without going through the full strategy.
+    def self.default_for(search_location)
+      search_location.located? ? LOCATED_ORDER : DEFAULT_ORDER
+    end
 
     def initialize(search_location:, funding:, current_order:)
       @search_location = search_location
@@ -18,7 +26,7 @@ module Courses
   private
 
     def default_order
-      @search_location.located? ? "distance" : DEFAULT_ORDER
+      self.class.default_for(@search_location)
     end
 
     def should_reset_to_default?
@@ -26,7 +34,7 @@ module Courses
     end
 
     def distance_without_location?
-      @current_order == "distance" && !@search_location.located?
+      @current_order == LOCATED_ORDER && !@search_location.located?
     end
 
     def fee_order_without_fee_funding?
