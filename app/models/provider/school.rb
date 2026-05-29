@@ -10,6 +10,8 @@ class Provider::School < ApplicationRecord
   belongs_to :provider, class_name: "::Provider", inverse_of: :schools
   belongs_to :gias_school
 
+  delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
+
   validates :site_code, presence: true
   validates :gias_school_id, uniqueness: { scope: %i[provider_id site_code] }
   validates :site_code,
