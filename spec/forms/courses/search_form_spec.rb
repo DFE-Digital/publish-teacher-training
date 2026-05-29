@@ -406,8 +406,11 @@ RSpec.describe Courses::SearchForm do
     end
 
     it "excludes non-filter address fields from active filters" do
+      # No explicit order: a geocoded search defaults to "distance", which is
+      # the natural default for this state — so no order chip surfaces and
+      # the test focuses on what it cares about (address-related fields do
+      # not become chips).
       search_form = described_class.new(
-        order: "course_name_ascending",
         level: "all",
         minimum_degree_required: "show_all_courses",
         applications_open: true,
