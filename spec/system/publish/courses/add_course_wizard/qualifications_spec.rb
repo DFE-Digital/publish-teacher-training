@@ -32,12 +32,12 @@ RSpec.describe "Add course wizard qualifications step", type: :system do
     then_i_am_taken_to_the_funding_type_page
   end
 
-  scenario "choosing a qualification with undergraduate degree with QTS and continues to courses index" do
+  scenario "choosing a qualification with undergraduate degree with QTS and continues to schools page" do
     and_i_have_wizard_state_for_qualifications(level: "primary", qualification: "undergraduate_degree_with_qts")
     when_i_visit_the_wizard_qualifications_page
     and_i_choose_qualification(qualification: "Teacher degree apprenticeship (TDA) with QTS")
     and_i_click_continue
-    then_i_am_taken_to_the_courses_index_page
+    then_i_am_taken_to_the_schools_page
   end
 
   scenario "submitting qualifications without selecting a qualification shows validation errors" do
@@ -60,11 +60,13 @@ private
     given_i_am_authenticated(user: @user)
   end
 
-  def then_i_am_taken_to_the_courses_index_page
+  def then_i_am_taken_to_the_schools_page
     expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_courses_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :schools,
+        state_key: wizard_state_key,
       ),
       ignore_query: true,
     )

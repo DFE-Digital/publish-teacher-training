@@ -104,6 +104,14 @@ en:
         errors:
           study_pattern:
             blank: Select a study pattern
+      schools:
+        caption: Add course
+        submit: Continue
+        description: The more schools you select, the more searches your course will appear in. You should only add schools that are relevant to this course.
+        percentage: 60% of searches are by location.
+        errors:
+          site_ids:
+            blank: Select at least one school
   activemodel:
     errors:
       models:
