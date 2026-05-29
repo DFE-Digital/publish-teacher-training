@@ -29,7 +29,7 @@ module Find
         "applications_open" => "true",
         "minimum_degree_required" => "show_all_courses",
         "order" => proc { |params|
-          ::Courses::SearchLocation.from_params(params).sortable_by_distance? ? "distance" : "course_name_ascending"
+          ::Courses::SearchLocation.from_params(params).located? ? "distance" : "course_name_ascending"
         },
         "level" => "all",
       }

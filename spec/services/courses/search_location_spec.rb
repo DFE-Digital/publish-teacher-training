@@ -3,30 +3,30 @@
 require "rails_helper"
 
 RSpec.describe Courses::SearchLocation do
-  describe "#sortable_by_distance?" do
+  describe "#located?" do
     it "is true when both coordinates are present" do
       location = described_class.new(latitude: "51.5074", longitude: "-0.1278")
-      expect(location.sortable_by_distance?).to be true
+      expect(location.located?).to be true
     end
 
     it "is false when latitude is missing" do
       location = described_class.new(longitude: "-0.1278")
-      expect(location.sortable_by_distance?).to be false
+      expect(location.located?).to be false
     end
 
     it "is false when longitude is missing" do
       location = described_class.new(latitude: "51.5074")
-      expect(location.sortable_by_distance?).to be false
+      expect(location.located?).to be false
     end
 
     it "is false when both coordinates are missing" do
       location = described_class.new(text: "London")
-      expect(location.sortable_by_distance?).to be false
+      expect(location.located?).to be false
     end
 
     it "is false when coordinates are empty strings" do
       location = described_class.new(latitude: "", longitude: "")
-      expect(location.sortable_by_distance?).to be false
+      expect(location.located?).to be false
     end
 
     it "treats display fields (text, short_address, formatted_address) as irrelevant" do
@@ -35,7 +35,7 @@ RSpec.describe Courses::SearchLocation do
         short_address: "Atlantis",
         formatted_address: "Atlantis, Ocean",
       )
-      expect(location.sortable_by_distance?).to be false
+      expect(location.located?).to be false
     end
   end
 
@@ -105,7 +105,7 @@ RSpec.describe Courses::SearchLocation do
         "short_address" => "London",
       )
 
-      expect(location.sortable_by_distance?).to be true
+      expect(location.located?).to be true
       expect(location.label).to eq("London")
     end
 
@@ -118,7 +118,7 @@ RSpec.describe Courses::SearchLocation do
         short_address: "London",
       )
 
-      expect(location.sortable_by_distance?).to be true
+      expect(location.located?).to be true
       expect(location.label).to eq("London")
     end
 

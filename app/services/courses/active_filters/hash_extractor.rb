@@ -107,7 +107,7 @@ module Courses
       end
 
       def default_order
-        search_location.sortable_by_distance? ? "distance" : "course_name_ascending"
+        search_location.located? ? "distance" : "course_name_ascending"
       end
 
       def search_location
