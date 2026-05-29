@@ -54,15 +54,6 @@ RSpec.describe CourseWizard::Steps::Schools do
         ],
       )
     end
-
-    it "uses provider/recruitment cycle from the wizard when available" do
-      wizard.provider = provider
-      wizard.recruitment_cycle = provider.recruitment_cycle
-
-      expect(RecruitmentCycle).not_to receive(:find_by!)
-
-      wizard_step.sites
-    end
   end
 
   describe ".permitted_params" do

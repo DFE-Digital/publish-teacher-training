@@ -3,7 +3,7 @@
 class CourseWizard
   include DfE::Wizard
 
-  attr_accessor :recruitment_cycle_year, :provider_code, :state_key, :provider, :recruitment_cycle
+  attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
   delegate :further_education_level?, :primary_level?, :undergraduate_degree_with_qts?, to: :state_store
 

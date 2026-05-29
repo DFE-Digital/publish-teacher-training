@@ -43,11 +43,11 @@ class CourseWizard
       end
 
       def provider
-        wizard.provider || @provider ||= recruitment_cycle.providers.find_by!(provider_code: wizard.provider_code)
+        @provider ||= recruitment_cycle.providers.find_by!(provider_code: wizard.provider_code)
       end
 
       def recruitment_cycle
-        wizard.recruitment_cycle || @recruitment_cycle ||= RecruitmentCycle.find_by!(year: wizard.recruitment_cycle_year)
+        @recruitment_cycle ||= RecruitmentCycle.find_by!(year: wizard.recruitment_cycle_year)
       end
 
       def funding_type
