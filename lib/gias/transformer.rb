@@ -21,6 +21,7 @@ module Gias
         "Postcode" => "postcode",
         "SchoolWebsite" => "website",
         "TelephoneNum" => "telephone",
+        "GOR (code)" => "region_code",
         "Latitude" => "latitude",
         "Longitude" => "longitude",
       }.freeze

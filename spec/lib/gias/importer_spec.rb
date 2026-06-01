@@ -40,15 +40,16 @@ RSpec.describe Gias::Importer do
         telephone: "02072831147",
         searchable: "'100000':1 '5de':9 'aldgate':3,6 'ec3a':8 'ec3a5de':10 'london':11 'school':4,7 'the':2,5",
         latitude: 51.513968813644965,
-        longitude: -0.077530631715809 },
+        longitude: -0.077530631715809,
+        region_code: "london" },
     )
   end
 
   context "when school hasn't changed" do
     let!(:test_csv) do
       StringIO.new(<<~CSV_DATA)
-        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
-        100000,The Aldgate School,02,4,1,2,3,11,10079319,St James's Passage,Duke's Place,"","","",EC3A 5DE,www.thealdgateschool.org,02072831147,51.513968813644965,-0.077530631715809
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
+        100000,The Aldgate School,02,4,1,2,3,11,10079319,St James's Passage,Duke's Place,"","","",EC3A 5DE,www.thealdgateschool.org,02072831147,H,51.513968813644965,-0.077530631715809
       CSV_DATA
     end
 
@@ -80,7 +81,8 @@ RSpec.describe Gias::Importer do
             telephone: "02072831147",
             searchable: "'100000':1 '5de':9 'aldgate':3,6 'ec3a':8 'ec3a5de':10 'school':4,7 'the':2,5",
             latitude: 51.513968813644965,
-            longitude: -0.077530631715809 },
+            longitude: -0.077530631715809,
+            region_code: "london" },
         )
 
         expect(GiasSchool.last.updated_at).to be_within(1.second).of(now)
@@ -106,8 +108,8 @@ RSpec.describe Gias::Importer do
 
     let!(:test_csv) do
       StringIO.new(<<~CSV_DATA)
-        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
-        200000,Updated School Name,02,4,1,2,3,11,10079319,456 New St,,,London,,SW1A 1AA,www.example.com,02012345678,,
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
+        200000,Updated School Name,02,4,1,2,3,11,10079319,456 New St,,,London,,SW1A 1AA,www.example.com,02012345678,H,,
       CSV_DATA
     end
 
@@ -137,8 +139,8 @@ RSpec.describe Gias::Importer do
 
     let!(:test_csv) do
       StringIO.new(<<~CSV_DATA)
-        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
-        300000,Updated School,02,4,1,2,3,11,10079319,789 Test Ave,,,Manchester,,M1 1AA,www.example.com,02012345678,,
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
+        300000,Updated School,02,4,1,2,3,11,10079319,789 Test Ave,,,Manchester,,M1 1AA,www.example.com,02012345678,H,,
       CSV_DATA
     end
 
@@ -167,8 +169,8 @@ RSpec.describe Gias::Importer do
 
     let!(:test_csv) do
       StringIO.new(<<~CSV_DATA)
-        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
-        400000,School to be geocoded,02,4,1,2,3,11,10079319,999 New Rd,,,Birmingham,,B1 1AA,www.example.com,02012345678,52.4862,-1.8904
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
+        400000,School to be geocoded,02,4,1,2,3,11,10079319,999 New Rd,,,Birmingham,,B1 1AA,www.example.com,02012345678,H,52.4862,-1.8904
       CSV_DATA
     end
 
@@ -196,8 +198,8 @@ RSpec.describe Gias::Importer do
 
     let!(:test_csv) do
       StringIO.new(<<~CSV_DATA)
-        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
-        500000,School with Both Coordinates,02,4,1,2,3,11,10079319,111 Test St,,,Leeds,,LS1 1AA,www.example.com,02012345678,,-1.9000
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
+        500000,School with Both Coordinates,02,4,1,2,3,11,10079319,111 Test St,,,Leeds,,LS1 1AA,www.example.com,02012345678,H,,-1.9000
       CSV_DATA
     end
 
@@ -255,8 +257,8 @@ RSpec.describe Gias::Importer do
 
     let!(:test_csv) do
       StringIO.new(<<~CSV_DATA)
-        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
-        600000,Another School with Coordinates,02,4,2,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,51.9000,
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
+        600000,Another School with Coordinates,02,4,2,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,H,51.9000,
       CSV_DATA
     end
 
@@ -280,8 +282,8 @@ RSpec.describe Gias::Importer do
 
     let!(:test_csv) do
       StringIO.new(<<~CSV_DATA)
-        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
-        600000,Another School with Coordinates,02,4,1,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,51.9000,
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
+        600000,Another School with Coordinates,02,4,1,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,H,51.9000,
       CSV_DATA
     end
 
@@ -306,8 +308,8 @@ RSpec.describe Gias::Importer do
   context "when csv school is 'proposed_to_open' and record is doesn't exist" do
     let!(:test_csv) do
       StringIO.new(<<~CSV_DATA)
-        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude
-        600000,Another School with Coordinates,02,4,4,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,51.9000,
+        urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
+        600000,Another School with Coordinates,02,4,4,2,3,11,10079319,222 Sample Rd,,,Bristol,,BS1 1AA,www.example.com,02012345678,H,51.9000,
       CSV_DATA
     end
 
