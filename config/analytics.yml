@@ -154,6 +154,7 @@ shared:
     - address3
     - town
     - county
+    - region_code
     - postcode
     - website
     - telephone
