@@ -97,6 +97,19 @@ class GiasSchool < ApplicationRecord
     all_through: "7",
   }
 
+  enum :region_code, {
+    north_east: "A",
+    north_west: "B",
+    yorkshire_and_the_humber: "D",
+    east_midlands: "E",
+    west_midlands: "F",
+    east_of_england: "G",
+    london: "H",
+    south_east: "J",
+    south_west: "K",
+    not_applicable: "Z",
+  }, prefix: true
+
   def school_attributes
     {
       location_name: name,
