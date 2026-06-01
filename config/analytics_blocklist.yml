@@ -48,6 +48,14 @@
   - course_sites_skipped
   - skipped_sites
   - skipped_course_sites
+  - removed_count
+  - skipped_with_courses_count
+  - kept_present_count
+  - kept_missing_count
+  - removed
+  - skipped_with_courses
+  - kept_present
+  - kept_missing
   - discarded_total_count
   - discarded_lack_urn
   - discarded_invalid_gias_urn
