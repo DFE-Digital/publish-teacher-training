@@ -187,20 +187,11 @@
         </h3>
       </summary>
       <div class="app-c-filter-section__content">
-        <%= form.govuk_check_boxes_fieldset :start_date,
-      legend: nil,
-      multiple: true do %>
-          <div class="govuk-checkboxes govuk-checkboxes--small">
-            <%= form.govuk_check_box :start_date, "jan_aug_2026",
-          checked: Array(params[:start_date]).include?("jan_aug_2026"),
-          label: { text: "January to August 2026" } %>
-            <%= form.govuk_check_box :start_date, "sep_2026",
-          checked: Array(params[:start_date]).include?("sep_2026"),
-          label: { text: "September 2026 only" } %>
-            <%= form.govuk_check_box :start_date, "oct_2026_jul_2027",
-          checked: Array(params[:start_date]).include?("oct_2026_jul_2027"),
-          label: { text: "October 2026 to July 2027" } %>
-          </div>
+        <% @start_month_options.each do |month| %>
+          <%= form.govuk_check_box :start_date,
+    month.strftime("%Y-%m"),
+    checked: Array(params[:start_date]).include?(month.strftime("%Y-%m")),
+    label: { text: month.strftime("%B %Y") } %>
         <% end %>
       </div>
     </details>

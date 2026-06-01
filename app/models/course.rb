@@ -374,6 +374,20 @@ class Course < ApplicationRecord
     )
   }
 
+  # Filter by start month (YYYY-MM)
+  scope :with_start_months, lambda { |start_months|
+    return all if start_months.blank?
+
+    months = Array(start_months).map do |value|
+      Date.strptime(value, "%Y-%m")
+    end
+
+    where(
+      months.map { "(course.start_date BETWEEN ? AND ?)" }.join(" OR "),
+      *months.flat_map { |m| [m.beginning_of_month, m.end_of_month] },
+    )
+  }
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
@@ -963,7 +977,6 @@ class Course < ApplicationRecord
       funding_description
     end
   end
-
 
   def start_date_description
     return if start_date.blank?
