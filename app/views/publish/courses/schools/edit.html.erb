@@ -152,7 +152,7 @@
             render(Publish::Schools::NewlyAddedTagComponent.new(school: site)),
           ].compact_blank.join(" ").html_safe,
         },
-        hint: { text: site.full_address },
+        hint: { text: site.address_without_name },
         link_errors: index.zero?,
         data: {
           select_all_checkboxes_target: "checkbox",
