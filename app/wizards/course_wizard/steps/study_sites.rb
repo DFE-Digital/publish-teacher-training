@@ -7,8 +7,6 @@ class CourseWizard
 
       attribute :study_sites_ids
 
-      validate :study_sites_ids_selected
-
       def study_sites
         provider.study_sites.sort_by(&:location_name)
       end
@@ -18,16 +16,6 @@ class CourseWizard
       end
 
     private
-
-      def study_sites_ids_selected
-        return if selected_study_sites_ids.any?
-
-        errors.add(:study_sites_ids, I18n.t("course_wizard.steps.study_sites.errors.study_sites_ids.blank"))
-      end
-
-      def selected_study_sites_ids
-        Array(study_sites_ids).compact_blank
-      end
 
       def provider
         @provider ||= recruitment_cycle.providers.find_by!(provider_code: wizard.provider_code)

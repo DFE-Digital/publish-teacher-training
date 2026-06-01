@@ -22,12 +22,6 @@ RSpec.describe CourseWizard::Steps::StudySites do
       wizard_step.study_sites_ids = %w[1 2]
       expect(wizard_step).to be_valid
     end
-
-    it "is not valid when no study sites are selected" do
-      wizard_step.study_sites_ids = nil
-      expect(wizard_step).not_to be_valid
-      expect(wizard_step.errors.messages_for(:study_sites_ids)).to contain_exactly("Select at least one study site")
-    end
   end
 
   describe "#study_sites" do

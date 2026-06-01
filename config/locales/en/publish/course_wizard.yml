@@ -118,9 +118,6 @@ en:
         heading: Study sites
         submit: Continue
         hint: Select all that apply
-        errors:
-          study_sites_ids:
-            blank: Select at least one study site
   activemodel:
     errors:
       models:

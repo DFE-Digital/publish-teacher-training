@@ -15,12 +15,6 @@ RSpec.describe "Add course wizard study sites step", type: :system do
     then_i_am_taken_to_the_courses_index_page
   end
 
-  scenario "submitting study sites without selecting a study site shows validation errors" do
-    when_i_visit_the_wizard_study_sites_page
-    and_i_click_continue
-    then_i_have_errors_on_the_study_sites_step
-  end
-
 private
 
   def when_i_visit_the_wizard_study_sites_page
@@ -48,11 +42,6 @@ private
       ),
       ignore_query: true,
     )
-  end
-
-  def then_i_have_errors_on_the_study_sites_step
-    expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Select at least one study site")
   end
 
   def given_i_am_authenticated_as_a_provider_user_with_multiple_schools
