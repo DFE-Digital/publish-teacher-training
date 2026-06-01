@@ -1151,9 +1151,9 @@ detect-libc@^2.0.3:
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.1.2.tgz#689c5dcdc1900ef5583a4cb9f6d7b473742074ad"
   integrity sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==
 
-dfe-autocomplete@DFE-Digital/dfe-autocomplete#v0.2.1:
-  version "0.2.1"
-  resolved "https://codeload.github.com/DFE-Digital/dfe-autocomplete/tar.gz/966efa70f058585fdbc91e7217d678092db62303"
+dfe-autocomplete@DFE-Digital/dfe-autocomplete#v1.0.0:
+  version "1.0.0"
+  resolved "https://codeload.github.com/DFE-Digital/dfe-autocomplete/tar.gz/0fff185bf6acda09dbb544dd7a6fb8233bef6c80"
   dependencies:
     accessible-autocomplete "^3.0.1"
 
@@ -2744,11 +2744,6 @@ locate-path@^6.0.0:
   integrity sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==
   dependencies:
     p-locate "^5.0.0"
-
-lodash.debounce@^4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
-  integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
 
 lodash.merge@^4.6.2:
   version "4.6.2"

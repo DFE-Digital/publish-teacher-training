@@ -6,9 +6,6 @@
     <%= form_with(
         model: @accredited_provider_search_form,
         url: search_support_recruitment_cycle_provider_accredited_providers_path,
-        html: {
-          data: { recruitment_cycle_year: @recruitment_cycle.year },
-        },
       ) do |f| %>
 
       <%= content_for(:breadcrumbs) do %>
@@ -20,7 +17,16 @@
 
       <%= f.govuk_error_summary %>
 
-      <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
+      <%= tag.div(
+        class: class_names("govuk-form-group", "suggestions", "govuk-form-group--error" => f.object.errors.present?),
+        data: remote_autocomplete_data(
+          path: api_accredited_provider_suggestions_path(@recruitment_cycle.year),
+          format: "accredited",
+          min_length: 2,
+          id_field: "id",
+          hidden_name: "accredited_provider_id",
+        ),
+      ) do %>
         <%= f.label :query, { class: "govuk-label govuk-label--l", for: "accredited-provider-search-form-query-field" } do %>
           <span class="govuk-caption-l"><%= t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code) %></span>
           <%= t(".title") %>
@@ -34,8 +40,8 @@
                               id: "accredited-provider-search-form-query-field",
                               value: params[:query],
                               class: "govuk-input" %>
-        <div id="accredited-provider-autocomplete" class="govuk-!-margin-bottom-7"></div>
-      </div>
+      <% end %>
+      <%= hidden_field_tag :accredited_provider_id %>
 
       <%= f.govuk_submit t("continue") %>
     <% end %>

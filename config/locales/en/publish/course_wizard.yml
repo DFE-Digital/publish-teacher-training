@@ -51,6 +51,73 @@ en:
         errors:
           age_range_in_years:
             blank: Select an age range
+      qualifications:
+        caption: Add course
+        heading: Qualification
+        submit: Continue
+        options:
+          qts:
+            label: QTS
+            help: Qualified teacher status
+          pgce:
+            label: PGCE only (without QTS)
+            help: Postgraduate certificate in education
+          pgce_with_qts:
+            label: QTS with PGCE
+            help: Qualified teacher status with a postgraduate certificate in education
+          pgde:
+            label: PGDE only (without QTS)
+            help: Postgraduate diploma in education
+          pgde_with_qts:
+            label: QTS with PGDE
+            help: Qualified teacher status with a postgraduate diploma in education
+          undergraduate_degree_with_qts:
+            label: Teacher degree apprenticeship (TDA) with QTS
+            help: Teacher degree apprenticeship with qualified teacher status
+        errors:
+          qualification:
+            blank: Select a qualification
+      funding_type:
+        caption: Add course
+        heading: Funding type
+        submit: Continue
+        options:
+          fee:
+            label: Fee - no salary
+          salary:
+            label: Salary
+          apprenticeship:
+            label: Teaching apprenticeship - with salary
+        errors:
+          funding_type:
+            blank: Select a funding type
+      study_pattern:
+        caption: Add course
+        heading: Study pattern
+        hint: Select all that apply
+        submit: Continue
+        options:
+          full_time:
+            label: Full time
+          part_time:
+            label: Part time
+        errors:
+          study_pattern:
+            blank: Select a study pattern
+      schools:
+        caption: Add course
+        hint: Select all that apply
+        submit: Continue
+        description: The more schools you select, the more searches your course will appear in. You should only add schools that are relevant to this course.
+        percentage: 60% of searches are by location.
+        errors:
+          site_ids:
+            blank: Select at least one school
+      study_sites:
+        caption: Add course
+        heading: Study sites
+        submit: Continue
+        hint: Select all that apply
   activemodel:
     errors:
       models:

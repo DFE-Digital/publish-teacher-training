@@ -187,10 +187,10 @@ RSpec.describe Courses::SearchForm do
     end
 
     context "when location is present and order is blank" do
-      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK") }
+      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", latitude: 51.5074, longitude: -0.1278) }
 
       it "defaults the ordering to distance" do
-        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "distance", radius: 20 })
+        expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", latitude: 51.5074, longitude: -0.1278, order: "distance", radius: 20 })
       end
     end
 
@@ -199,6 +199,28 @@ RSpec.describe Courses::SearchForm do
 
       it "respects the user's ordering choice" do
         expect(form.search_params).to eq({ minimum_degree_required: "show_all_courses", formatted_address: "London, UK", location: "London, UK", order: "course_name_ascending", radius: 20 })
+      end
+    end
+
+    context "when location text is present but geocoding produced no coordinates" do
+      # Any free-text location that Geolocation::Address fails to resolve to
+      # latitude/longitude reproduces the bug — the country in the string is
+      # irrelevant. previous_location_category is blank (form re-submitted with
+      # the new location text), so location_category_changed? returns true and
+      # OrderingStrategy defaults to "distance" even though no coordinates
+      # exist for Courses::Query to order by.
+      let(:form) do
+        described_class.new(
+          location: "Unrecognised place ",
+          previous_location_category: "",
+          order: "course_name_ascending",
+          subject_code: "06",
+          can_sponsor_visa: "true",
+        )
+      end
+
+      it "produces a search_params payload that Courses::Query can execute" do
+        expect { ::Courses::Query.call(params: form.search_params.dup).to_a }.not_to raise_error
       end
     end
 
@@ -211,7 +233,7 @@ RSpec.describe Courses::SearchForm do
     end
 
     context "when location is present, ordered by fee, but fee funding is removed" do
-      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", order: "fee_uk_ascending", funding: %w[salary]) }
+      let(:form) { described_class.new(formatted_address: "London, UK", location: "London, UK", latitude: 51.5074, longitude: -0.1278, order: "fee_uk_ascending", funding: %w[salary]) }
 
       it "resets the ordering to distance" do
         expect(form.search_params[:order]).to eq("distance")
@@ -564,7 +586,7 @@ RSpec.describe Courses::SearchForm do
       end
 
       context "when location is present and order is distance (default)" do
-        let(:form) { described_class.new(location: "London, UK", order: "distance") }
+        let(:form) { described_class.new(location: "London, UK", latitude: 51.5074, longitude: -0.1278, order: "distance") }
 
         it "returns nil for ordering" do
           expect(form.filter_counts[:ordering]).to be_nil
@@ -821,6 +843,8 @@ RSpec.describe Courses::SearchForm do
             previous_location_category: "",
             location: "Cornwall, UK",
             formatted_address: "Cornwall, UK",
+            latitude: 50.2660,
+            longitude: -5.0527,
             address_types: %w[administrative_area_level_2 political],
             order: "course_name_ascending",
           )

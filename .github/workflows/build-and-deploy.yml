@@ -193,11 +193,12 @@ jobs:
       - run: yarn install --frozen-lockfile
 
       - name: Install Playwright
+        if: ${{ startsWith(matrix.tests.name, 'System') }}
         run: |
           export PLAYWRIGHT_CLI_VERSION=$(bundle exec ruby -e \
             'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip')
           yarn add --dev playwright@${PLAYWRIGHT_CLI_VERSION}
-          yarn exec playwright install --with-deps chromium
+          yarn exec playwright install chromium --with-deps
 
       - run: bundle exec rails parallel:setup
       - run: bundle exec rails spec:prepare

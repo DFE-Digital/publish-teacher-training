@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Provider::School < ApplicationRecord
+  include TouchProvider
+
   self.table_name = "provider_school"
 
   MAIN_SITE_CODE = "-"

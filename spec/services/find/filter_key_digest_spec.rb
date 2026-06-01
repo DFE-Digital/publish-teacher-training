@@ -39,7 +39,7 @@ RSpec.describe Find::FilterKeyDigest do
 
     it "ignores display-only keys" do
       expect(described_class.digest(subjects: %w[C1], search_attributes: { "level" => "secondary" }))
-        .to eq(described_class.digest(subjects: %w[C1], search_attributes: { "level" => "secondary", "location" => "London" }))
+        .to eq(described_class.digest(subjects: %w[C1], search_attributes: { "level" => "secondary", "order" => "course_name_ascending" }))
     end
 
     it "handles nil search_attributes" do
@@ -54,7 +54,7 @@ RSpec.describe Find::FilterKeyDigest do
 
   describe ".normalize" do
     it "only keeps FILTER_KEYS" do
-      result = described_class.normalize("level" => "secondary", "location" => "London", "funding" => "salary")
+      result = described_class.normalize("level" => "secondary", "order" => "course_name_ascending", "funding" => "salary")
 
       expect(result.keys).to contain_exactly("level", "funding")
     end

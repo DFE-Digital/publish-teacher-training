@@ -72,4 +72,84 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:secondary_subjects)
     end
   end
+
+  context "from qualifications with primary level" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "primary")
+    end
+
+    it "goes back to age range" do
+      expect(wizard).to have_previous_step(:age_range)
+    end
+  end
+
+  context "from qualifications with secondary level" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "secondary")
+    end
+
+    it "goes back to age range" do
+      expect(wizard).to have_previous_step(:age_range)
+    end
+  end
+
+  context "from qualifications with further education level" do
+    let(:current_step) { :qualifications }
+
+    before do
+      state_store.write(level: "further_education")
+    end
+
+    it "goes back to level" do
+      expect(wizard).to have_previous_step(:level)
+    end
+  end
+
+  context "from funding type" do
+    let(:current_step) { :funding_type }
+
+    it "goes back to qualifications" do
+      expect(wizard).to have_previous_step(:qualifications)
+    end
+  end
+
+  context "from study pattern" do
+    let(:current_step) { :study_pattern }
+
+    it "goes back to funding type" do
+      expect(wizard).to have_previous_step(:funding_type)
+    end
+  end
+
+  context "from schools" do
+    let(:current_step) { :schools }
+
+    it "goes back to study pattern" do
+      expect(wizard).to have_previous_step(:study_pattern)
+    end
+  end
+
+  context "from schools with undergraduate degree with QTS qualification" do
+    let(:current_step) { :schools }
+
+    before do
+      state_store.write(qualification: "undergraduate_degree_with_qts")
+    end
+
+    it "goes back to qualifications" do
+      expect(wizard).to have_previous_step(:qualifications)
+    end
+  end
+
+  context "from study sites" do
+    let(:current_step) { :study_sites }
+
+    it "goes back to schools" do
+      expect(wizard).to have_previous_step(:schools)
+    end
+  end
 end

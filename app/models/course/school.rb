@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Course::School < ApplicationRecord
+  include TouchCourse
+
   self.table_name = "course_school"
 
   belongs_to :course, class_name: "::Course", inverse_of: :schools

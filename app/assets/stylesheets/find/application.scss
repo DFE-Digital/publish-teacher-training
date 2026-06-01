@@ -1,6 +1,6 @@
 // Entry point for your Sass build
 @import "../govuk_style_setup";
-@import "accessible-autocomplete/dist/accessible-autocomplete.min";
+@import "dfe-autocomplete/src/dfe-autocomplete";
 @import "../one-login";
 // Treat this as a library. It may become distributed by Gov.uk
 @import "./components/filter-panel";

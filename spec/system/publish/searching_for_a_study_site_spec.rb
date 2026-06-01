@@ -29,6 +29,38 @@ RSpec.describe "Searching for a study site from the GIAS list" do
     and_the_study_site_form_should_be_prefilled(@school_two)
   end
 
+  scenario "i can select a study site using the autocomplete", :js do
+    when_i_visit_the_school_search_page
+    and_i_type_a_school_name_into_the_autocomplete
+    then_i_see_the_school_in_the_autocomplete_suggestions
+    when_i_choose_the_school_from_the_autocomplete_suggestions
+    click_continue
+    then_i_am_taken_to_the_add_study_site_page_for(@school)
+  end
+
+  def and_i_type_a_school_name_into_the_autocomplete
+    fill_in "publish-providers-schools-search-form-query-field", with: "Northgate"
+  end
+
+  def then_i_see_the_school_in_the_autocomplete_suggestions
+    expect(page).to have_css(autocomplete_listbox_selector, text: @school.name)
+  end
+
+  def when_i_choose_the_school_from_the_autocomplete_suggestions
+    page.find(autocomplete_listbox_selector, text: @school.name).click
+  end
+
+  def autocomplete_listbox_selector
+    "#publish-providers-schools-search-form-query-field__listbox li"
+  end
+
+  def then_i_am_taken_to_the_add_study_site_page_for(site)
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/study-sites/new")
+      expect(uri.query).to eq("study_site_id=#{site.id}")
+    end
+  end
+
   def and_the_study_site_form_should_be_prefilled(site)
     expect(page).to have_field("Study site name", with: site.name)
     expect(page).to have_field("URN", with: site.urn)
@@ -108,7 +140,7 @@ RSpec.describe "Searching for a study site from the GIAS list" do
   end
 
   def and_there_are_schools_in_the_database
-    @school = create(:gias_school, name: "Enda's")
+    @school = create(:gias_school, name: "Northgate Academy")
     @school_two = create(:gias_school, name: "School Two")
     @school_three = create(:gias_school, name: "School Three")
   end

@@ -1,17 +1,24 @@
 # frozen_string_literal: true
 
 module Find
+  # Functions to hash Find search params
+  # Used to compare live search with RecentSearch and EmailAlert search attributes
   class FilterKeyDigest
     # Keys that determine what courses match — excludes display-only keys
     FILTER_KEYS = %w[
-      applications_open
       can_sponsor_visa
       engineers_teach_physics
       funding
       interview_location
+      latitude
       level
+      location
+      longitude
       minimum_degree_required
+      provider_code
+      provider_name
       qualifications
+      radius
       send_courses
       start_date
       study_types
@@ -26,6 +33,7 @@ module Find
       (attrs || {}).stringify_keys
         .slice(*FILTER_KEYS)
         .transform_values { |v| v.is_a?(Array) ? v.map(&:to_s) : v.to_s }
+        .compact_blank
     end
   end
 end
