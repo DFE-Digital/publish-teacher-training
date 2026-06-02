@@ -10,11 +10,12 @@ class CourseWizard
       validates :start_date, presence: { message: I18n.t("course_wizard.steps.start_date.errors.start_date.blank") }
 
       def start_date_options
-        cycle_year = wizard.provider.recruitment_cycle.year.to_i
+        cycle_year = wizard.recruitment_cycle_year.to_i
+
         options = (1..12).map { |m| "#{Date::MONTHNAMES[m]} #{cycle_year}" } +
           (1..7).map { |m| "#{Date::MONTHNAMES[m]} #{cycle_year + 1}" }
 
-        return options if persisted?
+        return options if start_date.present?
 
         index = options.index(sliced_label_for_today(cycle_year))
 
