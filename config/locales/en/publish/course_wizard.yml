@@ -125,6 +125,29 @@ en:
         errors:
           start_date:
             blank: Select a course start date
+      visa_sponsorship:
+        caption: Add course
+        heading: Student visas
+        submit: Continue
+        questions:
+          organisation: Can your organisation sponsor Student visas for this course?
+          availability: Is Student visa sponsorship available for this course?
+        recruiting_from_overseas:
+          prefix: Learn more about
+          link_text: recruiting trainee teachers from overseas
+          link_url: https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers
+        inset:
+          can_sponsor: "%{provider_name} can sponsor Student visas for some of their courses."
+          cannot_sponsor: "%{provider_name} have said they cannot sponsor Student visas so we have defaulted your answer to 'No'."
+          contact_provider: "If your organisation would like to sponsor Student visas, contact %{provider_name}."
+        options:
+          can_sponsor_student_visa:
+            label: "Yes"
+          cannot_sponsor_student_visa:
+            label: "No"
+        errors:
+          can_sponsor_student_visa:
+            blank: Select if student visas can be sponsored for this course
   activemodel:
     errors:
       models:
