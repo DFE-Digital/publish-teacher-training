@@ -122,21 +122,37 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
       state_store.write(qualification: "undergraduate_degree_with_qts")
     end
 
-    it "proceeds to courses page" do
-      expect(wizard).to have_next_step(:courses_index)
+    it "proceeds to schools page" do
+      expect(wizard).to have_next_step(:schools)
     end
   end
 
   context "from funding type" do
     let(:current_step) { :funding_type }
 
-    it "proceeds to courses page" do
+    it "proceeds to study pattern page" do
       expect(wizard).to have_next_step(:study_pattern)
     end
   end
 
   context "from study pattern" do
     let(:current_step) { :study_pattern }
+
+    it "proceeds to schools page" do
+      expect(wizard).to have_next_step(:schools)
+    end
+  end
+
+  context "from schools" do
+    let(:current_step) { :schools }
+
+    it "proceeds to study sites page" do
+      expect(wizard).to have_next_step(:study_sites)
+    end
+  end
+
+  context "from study sites" do
+    let(:current_step) { :study_sites }
 
     it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)

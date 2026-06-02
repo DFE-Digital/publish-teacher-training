@@ -1,0 +1,23 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.study_sites.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.study_sites.caption")) %>
+  <%= t("course_wizard.steps.study_sites.heading") %>
+</h1>
+
+<p class="govuk-hint">
+  <%= t("course_wizard.steps.study_sites.hint") %>
+</p>
+
+<%= form.govuk_check_boxes_fieldset :study_sites_ids, legend: { hidden: true, text: t("course_wizard.steps.study_sites.heading") } do %>
+  <% current_step.study_sites.each_with_index do |study_site, index| %>
+    <%= form.govuk_check_box :study_sites_ids,
+      study_site.id.to_s,
+      label: { text: [study_site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: study_site))].compact_blank.join(" ").html_safe },
+      hint: { text: study_site.full_address },
+      include_hidden: false,
+      link_errors: index.zero? %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.study_sites.submit") %>
