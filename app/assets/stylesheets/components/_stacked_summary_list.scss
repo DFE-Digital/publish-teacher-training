@@ -1,0 +1,24 @@
+// make the summary list look on desktop the way it looks on mobile
+// The list key is stacked on top of the list value instead of side by side
+.govuk-summary-list.govuk-summary-list--stacked {
+  @media (min-width: 40.0625em) {
+    display: block;
+
+    .govuk-summary-list__row {
+      display: block;
+
+      margin-bottom: 15px;
+    }
+
+    .govuk-summary-list__key,
+    .govuk-summary-list__value,
+    .govuk-summary-list__actions {
+      display: block;
+
+      width: 100%;
+
+      padding: 0;
+      margin: 0 0 5px;
+    }
+  }
+}

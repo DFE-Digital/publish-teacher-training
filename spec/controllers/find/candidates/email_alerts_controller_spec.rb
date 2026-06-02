@@ -15,6 +15,10 @@ module Find
         cookies.signed[Settings.cookies.candidate_session.name] = session_record.session_key
       end
 
+      def cancel_link_href(body)
+        Nokogiri::HTML(body).at_xpath("//a[normalize-space(text())='Cancel']")&.[]("href")
+      end
+
       describe "GET #index" do
         it "renders successfully with active alerts" do
           create(:email_alert, candidate:, subjects: %w[C1])
@@ -58,35 +62,63 @@ module Find
             expect(response.body).not_to include("Start date:")
           end
 
-          it "links cancel to results page by default" do
+          it "links cancel to results page when return_to param is 'results'" do
+            get :new, params: { subjects: %w[C1], level: "secondary", return_to: "results" }
+
+            cancel_href = cancel_link_href(response.body)
+            expect(cancel_href).to start_with("/results?")
+            expect(cancel_href).to include("level=secondary")
+            expect(cancel_href).to include("subjects%5B%5D=C1")
+          end
+
+          it "links cancel to the email alerts index by default" do
             get :new, params: { subjects: %w[C1], level: "secondary" }
 
-            expect(response.body).to include("/results?")
-            expect(response.body).to include("level=secondary")
-            expect(response.body).to include("subjects%5B%5D=C1")
+            expect(cancel_link_href(response.body)).to eq(find_candidate_email_alerts_path)
           end
 
           it "links cancel to recent searches when return_to is recent_searches" do
             get :new, params: { subjects: %w[C1], return_to: "recent_searches" }
 
-            expect(response.body).to include(find_candidate_recent_searches_path)
+            expect(cancel_link_href(response.body)).to eq(find_candidate_recent_searches_path)
+          end
+
+          it "treats level=further_education as a subject and omits the level summary row" do
+            get :new, params: { level: "further_education" }
+
+            expect(response.body).to include("Further education")
+            expect(response.body).not_to match(/<dt[^>]*>\s*Level\s*<\/dt>/)
+          end
+
+          it "lists 'Further education' alongside explicit subjects when level=further_education" do
+            subject_area = SubjectArea.find_by!(typename: "SecondarySubject")
+            Subject.find_or_create_by!(subject_code: "C1") do |s|
+              s.subject_name = "Biology"
+              s.type = "SecondarySubject"
+              s.subject_area = subject_area
+            end
+
+            get :new, params: { subjects: %w[C1], level: "further_education" }
+
+            expect(response.body).to include("Biology")
+            expect(response.body).to include("Further education")
           end
         end
       end
 
       describe "POST #create" do
-        it "creates an email alert and redirects with success flash" do
+        it "creates an email alert and redirects to the alerts index with success flash" do
           post :create, params: { subjects: %w[C1], level: "secondary" }
 
           expect(candidate.email_alerts.count).to eq(1)
-          expect(response).to redirect_to(find_results_path(subjects: %w[C1], level: "secondary"))
+          expect(response).to redirect_to(find_candidate_email_alerts_path)
           expect(flash[:success_with_body]["title"]).to eq("Email alert created")
         end
 
-        it "redirects to recent searches when return_to is set" do
+        it "always redirects to the alerts index on success even when return_to is set" do
           post :create, params: { subjects: %w[C1], return_to: "recent_searches" }
 
-          expect(response).to redirect_to(find_candidate_recent_searches_path)
+          expect(response).to redirect_to(find_candidate_email_alerts_path)
         end
       end
 

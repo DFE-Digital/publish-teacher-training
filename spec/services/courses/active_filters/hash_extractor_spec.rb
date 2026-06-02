@@ -88,7 +88,7 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
       let(:attrs) { { "minimum_degree_required" => "two_one" } }
 
       it "translates via active_filters.yml" do
-        expect(formatted_values).to eq(["Degree grade: 2:1 or first"])
+        expect(formatted_values).to eq(["Degree grade: 2:1 or First"])
       end
     end
 
@@ -209,7 +209,7 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
           "Courses with a salary",
           "Full time",
           "Qualification: QTS with PGCE or PGDE",
-          "Degree grade: 2:1 or first",
+          "Degree grade: 2:1 or First",
           "Courses with visa sponsorship",
           "Start date: September #{year} only",
         ])
