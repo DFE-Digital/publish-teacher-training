@@ -36,24 +36,24 @@ RSpec.describe CourseWizard::Steps::StartDate do
 
   describe "#start_date_options" do
     it "starts from the current month when in the recruitment cycle year" do
-      travel_to Date.new(2026, 6, 15) do
-        options = wizard_step.start_date_options
+      allow(Time.zone).to receive(:today).and_return(Date.new(2026, 6, 15))
 
-        expect(options.first).to eq("June 2026")
-        expect(options).to include("July 2027")
-        expect(options).not_to include("May 2026")
-      end
+      options = wizard_step.start_date_options
+
+      expect(options.first).to eq("June 2026")
+      expect(options).to include("July 2027")
+      expect(options).not_to include("May 2026")
     end
 
     context "when today is after the recruitment cycle year" do
       it "falls back to January of the cycle year" do
-        travel_to Date.new(2027, 2, 1) do
-          options = wizard_step.start_date_options
+        allow(Time.zone).to receive(:today).and_return(Date.new(2027, 2, 1))
 
-          expect(options.first).to eq("January 2026")
-          expect(options).to include("July 2027")
-          expect(options).to include("February 2026")
-        end
+        options = wizard_step.start_date_options
+
+        expect(options.first).to eq("January 2026")
+        expect(options).to include("July 2027")
+        expect(options).to include("February 2026")
       end
     end
 
@@ -61,13 +61,13 @@ RSpec.describe CourseWizard::Steps::StartDate do
       let(:cycle_year) { 2027 }
 
       it "starts from January of the cycle year" do
-        travel_to Date.new(2026, 6, 15) do
-          options = wizard_step.start_date_options
+        allow(Time.zone).to receive(:today).and_return(Date.new(2026, 6, 15))
 
-          expect(options.first).to eq("January 2027")
-          expect(options).to include("July 2028")
-          expect(options).not_to include("December 2026")
-        end
+        options = wizard_step.start_date_options
+
+        expect(options.first).to eq("January 2027")
+        expect(options).to include("July 2028")
+        expect(options).not_to include("December 2026")
       end
     end
   end
