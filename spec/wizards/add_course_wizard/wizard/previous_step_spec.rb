@@ -152,4 +152,12 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:schools)
     end
   end
+
+  context "from start date" do
+    let(:current_step) { :start_date }
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
+  end
 end

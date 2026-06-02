@@ -1,0 +1,14 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.start_date.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.start_date.caption")) %>
+  <%= t("course_wizard.steps.start_date.heading") %>
+</h1>
+
+<%= form.govuk_radio_buttons_fieldset :start_date, legend: { hidden: true, text: t("course_wizard.steps.start_date.heading") } do %>
+  <% current_step.start_date_options.each do |option| %>
+    <%= form.govuk_radio_button :start_date, option, label: { text: option } %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.start_date.submit") %>
