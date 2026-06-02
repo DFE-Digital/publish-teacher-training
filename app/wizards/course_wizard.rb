@@ -21,6 +21,7 @@ class CourseWizard
       graph.add_node :schools, Steps::Schools
       graph.add_node :study_sites, Steps::StudySites
       graph.add_node :start_date, Steps::StartDate
+      graph.add_node :visa_sponsorship, Steps::VisaSponsorship
 
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
 
@@ -61,8 +62,7 @@ class CourseWizard
           # TDA also goes straight to start date.
           { when: :undergraduate_degree_with_qts?, then: :start_date },
         ],
-        # TODO: Visa sponsorship steps for other routes will go here.
-        default: :courses_index,
+        default: :visa_sponsorship,
       )
 
       graph.add_edge from: :start_date, to: :courses_index
@@ -99,5 +99,11 @@ class CourseWizard
 
   def recruitment_cycle
     @recruitment_cycle ||= RecruitmentCycle.find_by!(year: recruitment_cycle_year)
+  end
+
+  def accrediting_provider
+    return unless provider.accredited_partners.one?
+
+    @accrediting_provider ||= provider.accredited_partners.first
   end
 end
