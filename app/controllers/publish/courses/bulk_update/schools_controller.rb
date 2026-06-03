@@ -66,6 +66,12 @@ module Publish
           Science
         ].freeze
 
+        COURSE_STATUSES = [
+          { label: "Open", colour: "blue" },
+          { label: "Rolled over", colour: "yellow" },
+          { label: "Closed", colour: "red" },
+        ].freeze
+
         def edit
           @bulk_options = []
 
@@ -221,7 +227,7 @@ module Publish
             subject = Subject.find(subject_id)
 
             @bulk_apply_scope_label = "All #{subject.name.downcase} courses"
-            @bulk_apply_short_label = subject.name
+            @bulk_apply_short_label = course_hint_text
 
           else
             labels = BULK_APPLY_LABELS[@bulk_apply]
@@ -231,10 +237,20 @@ module Publish
               if @bulk_apply == "this_course"
                 course.name_and_code
               else
-                labels[:short]
+                course_hint_text
+              end
+
+            @courses_for_check =
+              Array.new(selected_courses_count(@bulk_apply)) do |index|
+                {
+                  name: "Course name (X#{(index + 1).to_s.rjust(3, '0')})",
+                  status: COURSE_STATUSES.sample,
+                  info: @bulk_apply_short_label,
+                }
               end
           end
 
+          # Show the courses table if we're applying to a subset of courses (e.g. all science courses)
           @show_courses_table = @bulk_apply != "this_course" && @bulk_apply != "all"
         end
 
@@ -254,9 +270,9 @@ module Publish
             ("School direct salaried" if course.salary?),
             ("QTS" if course.qualifications_summary == "QTS"),
             ("QTS with PGCE" if course.qualifications_summary&.include?("PGCE")),
-            ("full time" if course.full_time?),
-            ("part time" if course.part_time?),
-          ].compact.join(", ")
+            ("Full time" if course.full_time?),
+            ("Part time" if course.part_time?),
+          ].compact
         end
 
         def load_school_changes

@@ -63,16 +63,33 @@
       </ul>
       <% if @show_courses_table %>
         <table class="govuk-table">
-          <tbody class="govuk-table__body">
-            <% (1..20).each do |index| %>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Course</th>
+              <th scope="col" class="govuk-table__header">Course information</th>
+              <th scope="col" class="govuk-table__header">Status</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body govuk-margin-bottom-0">
+            <% @courses_for_check.each do |course| %>
               <tr class="govuk-table__row">
                 <!-- Column 1: Course -->
-                <td class="govuk-table__cell">
-                  <strong><%= "Course name (X#{index.to_s.rjust(3, "0")})" %></strong>
+                <td class="govuk-table__cell govuk-!-padding-top-4 govuk-!-padding-bottom-4">
+                  <strong><%= course[:name] %></strong>
                 </td>
                 <!-- Column 2: Course information -->
-                <td class="govuk-table__cell">
-                  <span class="govuk-hint"><%= @bulk_apply_short_label %></span>
+                <td class="govuk-table__cell govuk-!-padding-top-4 govuk-!-padding-bottom-4">
+                  <ul class="govuk-list govuk-hint govuk-!-margin-bottom-0">
+                    <% @bulk_apply_short_label.each do |line| %>
+                      <li class="govuk-body-s govuk-!-margin-bottom-0"><%= line %></li>
+                    <% end %>
+                  </ul>
+                </td>
+                <!-- Column 3: Status -->
+                <td class="govuk-table__cell govuk-!-padding-top-4 govuk-!-padding-bottom-4">
+                  <strong class="govuk-tag govuk-tag--<%= course[:status][:colour] %>">
+                    <%= course[:status][:label] %>
+                  </strong>
                 </td>
               </tr>
             <% end %>
