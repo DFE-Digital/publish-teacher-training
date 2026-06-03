@@ -4,14 +4,13 @@ class CourseWizard
   module Steps
     class VisaSponsorship
       include DfE::Wizard::Step
-      VISA_SPONSORSHIP_OPTIONS = %w[yes no].freeze
 
-      attribute :can_sponsor_student_visa
+      attribute :can_sponsor_student_visa, :boolean
 
-      validates :can_sponsor_student_visa, inclusion: { in: VISA_SPONSORSHIP_OPTIONS, message: I18n.t("course_wizard.steps.visa_sponsorship.errors.can_sponsor_student_visa.blank") }
+      validates :can_sponsor_student_visa, inclusion: { in: [true, false], message: I18n.t("course_wizard.steps.visa_sponsorship.errors.can_sponsor_student_visa.blank") }
 
       def question
-        if wizard.provider.university? || wizard.provider.scitt?
+        if wizard.provider.accredited?
           I18n.t("course_wizard.steps.visa_sponsorship.questions.organisation")
         else
           I18n.t("course_wizard.steps.visa_sponsorship.questions.availability")
@@ -19,11 +18,11 @@ class CourseWizard
       end
 
       def show_recruiting_from_overseas_guidance?
-        (wizard.provider.university? || wizard.provider.scitt?) && !wizard.provider.can_sponsor_student_visa
+        wizard.provider.accredited? && !wizard.provider.can_sponsor_student_visa
       end
 
       def show_accrediting_provider_inset_text?
-        !wizard.provider.university? && !wizard.provider.scitt? && accrediting_provider.present?
+        !wizard.provider.accredited? && accrediting_provider.present?
       end
 
       def accrediting_provider_name

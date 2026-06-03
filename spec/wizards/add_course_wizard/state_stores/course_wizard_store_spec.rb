@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe CourseWizard::StateStores::CourseWizardStore do
-  subject(:store) { described_class.new(repository:, attribute_names: %w[level qualification]) }
+  subject(:store) { described_class.new(repository:, attribute_names: %w[level qualification can_sponsor_student_visa]) }
 
   let(:repository) { instance_double(DfE::Wizard::Repository::InMemory) }
 
@@ -69,6 +69,28 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
 
       it "returns false" do
         expect(store.undergraduate_degree_with_qts?).to be false
+      end
+    end
+  end
+
+  describe "#visa_sponsorship_required?" do
+    before do
+      allow(repository).to receive(:read).and_return({ can_sponsor_student_visa: })
+    end
+
+    context "when can_sponsor_student_visa is true" do
+      let(:can_sponsor_student_visa) { true }
+
+      it "returns true" do
+        expect(store.visa_sponsorship_required?).to be true
+      end
+    end
+
+    context "when can_sponsor_student_visa is false" do
+      let(:can_sponsor_student_visa) { false }
+
+      it "returns false" do
+        expect(store.visa_sponsorship_required?).to be false
       end
     end
   end

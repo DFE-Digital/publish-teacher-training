@@ -154,8 +154,8 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
   context "from study sites" do
     let(:current_step) { :study_sites }
 
-    it "proceeds to courses page by default" do
-      expect(wizard).to have_next_step(:courses_index)
+    it "proceeds to visa sponsorship page by default" do
+      expect(wizard).to have_next_step(:visa_sponsorship)
     end
 
     context "when qualification is undergraduate degree with qts" do
@@ -184,6 +184,30 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
 
     it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)
+    end
+  end
+
+  context "from visa sponsorship when visa sponsorship is required" do
+    let(:current_step) { :visa_sponsorship }
+
+    before do
+      state_store.write(can_sponsor_student_visa: true)
+    end
+
+    it "proceeds to courses page" do
+      expect(wizard).to have_next_step(:courses_index)
+    end
+  end
+
+  context "from visa sponsorship when visa sponsorship is not required" do
+    let(:current_step) { :visa_sponsorship }
+
+    before do
+      state_store.write(can_sponsor_student_visa: false)
+    end
+
+    it "proceeds to start date page" do
+      expect(wizard).to have_next_step(:start_date)
     end
   end
 end

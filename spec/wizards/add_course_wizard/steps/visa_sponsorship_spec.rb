@@ -19,6 +19,27 @@ RSpec.describe CourseWizard::Steps::VisaSponsorship do
   let(:can_sponsor_student_visa) { false }
   let(:wizard_step) { wizard.current_step }
 
+  describe "#valid?" do
+    it "is valid when can_sponsor_student_visa is true" do
+      wizard_step.can_sponsor_student_visa = true
+
+      expect(wizard_step).to be_valid
+    end
+
+    it "is valid when can_sponsor_student_visa is false" do
+      wizard_step.can_sponsor_student_visa = false
+
+      expect(wizard_step).to be_valid
+    end
+
+    it "is not valid when can_sponsor_student_visa is nil" do
+      wizard_step.can_sponsor_student_visa = nil
+
+      expect(wizard_step).not_to be_valid
+      expect(wizard_step.errors.messages_for(:can_sponsor_student_visa)).to contain_exactly("Select if student visas can be sponsored for this course")
+    end
+  end
+
   describe "#question" do
     it "returns the organisation question for university or scitt providers" do
       expect(wizard_step.question).to eq("Can your organisation sponsor Student visas for this course?")
