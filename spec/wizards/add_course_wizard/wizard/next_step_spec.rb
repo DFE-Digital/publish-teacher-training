@@ -149,6 +149,19 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     it "proceeds to study sites page" do
       expect(wizard).to have_next_step(:study_sites)
     end
+
+    context "when provider has no study sites and multiple accredited partners" do
+      let!(:provider) do
+        school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        school_provider
+      end
+
+      it "skips study sites and proceeds to accredited provider page" do
+        expect(wizard).to have_next_step(:accredited_provider)
+      end
+    end
   end
 
   context "from study sites" do
@@ -176,6 +189,28 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
       it "proceeds to start date page" do
         expect(wizard).to have_next_step(:start_date)
       end
+    end
+
+    context "when provider has multiple accredited partners" do
+      let!(:provider) do
+        school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+        create(:site, :study_site, provider: school_provider)
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        school_provider
+      end
+
+      it "proceeds to accredited provider page" do
+        expect(wizard).to have_next_step(:accredited_provider)
+      end
+    end
+  end
+
+  context "from accredited provider" do
+    let(:current_step) { :accredited_provider }
+
+    it "proceeds to visa sponsorship page" do
+      expect(wizard).to have_next_step(:visa_sponsorship)
     end
   end
 

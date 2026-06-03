@@ -19,7 +19,8 @@ class CourseWizard
       graph.add_node :funding_type, Steps::FundingType
       graph.add_node :study_pattern, Steps::StudyPattern
       graph.add_node :schools, Steps::Schools
-      graph.add_node :study_sites, Steps::StudySites
+      graph.add_node :study_sites, Steps::StudySites, skip_when: :skip_study_sites?
+      graph.add_node :accredited_provider, Steps::AccreditedProvider
       graph.add_node :start_date, Steps::StartDate
       graph.add_node :visa_sponsorship, Steps::VisaSponsorship
 
@@ -61,9 +62,14 @@ class CourseWizard
           { when: :further_education_level?, then: :start_date },
           # TDA also goes straight to start date.
           { when: :undergraduate_degree_with_qts?, then: :start_date },
+          # School-based providers with multiple accredited partners need
+          # to choose who is accrediting the course.
+          { when: :accredited_provider_selection_required?, then: :accredited_provider },
         ],
         default: :visa_sponsorship,
       )
+
+      graph.add_edge from: :accredited_provider, to: :visa_sponsorship
 
       graph.add_multiple_conditional_edges(
         from: :visa_sponsorship,
@@ -110,9 +116,21 @@ class CourseWizard
     @recruitment_cycle ||= RecruitmentCycle.find_by!(year: recruitment_cycle_year)
   end
 
-  def accrediting_provider
-    return unless provider.accredited_partners.one?
+  def skip_study_sites?
+    provider.study_sites.none?
+  end
 
-    @accrediting_provider ||= provider.accredited_partners.first
+  def accredited_provider_selection_required?
+    !provider.accredited? && provider.accredited_partners.many?
+  end
+
+  def accrediting_provider
+    return if provider.accredited?
+
+    partners = provider.accredited_partners
+    return partners.first if partners.one?
+
+    selected_provider_code = state_store.accredited_provider_code
+    partners.find_by(provider_code: selected_provider_code) if selected_provider_code.present?
   end
 end

@@ -20,4 +20,9 @@ RSpec.shared_context "add_course_wizard" do
   let(:provider_code) { "ABC" }
   let(:recruitment_cycle_year) { 2026 }
   let(:state_key) { SecureRandom.uuid }
+  let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: recruitment_cycle_year) }
+
+  let!(:provider) do
+    create(:provider, :accredited_provider, provider_code:, recruitment_cycle:)
+  end
 end
