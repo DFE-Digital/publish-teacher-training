@@ -127,7 +127,11 @@ private
     @user = create(
       :user,
       providers: [
-        create(:provider, :accredited_provider, sites: [build(:site), build(:site)]),
+        create(
+          :provider,
+          :accredited_provider,
+          sites: [build(:site), build(:site), build(:site, :study_site)],
+        ),
       ],
     )
 
@@ -138,7 +142,7 @@ private
     @user = create(
       :user,
       providers: [
-        create(:provider, :accredited_provider, sites: [build(:site)]),
+        create(:provider, :accredited_provider, sites: [build(:site), build(:site, :study_site)]),
       ],
     )
 

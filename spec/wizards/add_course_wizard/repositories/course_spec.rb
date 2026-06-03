@@ -29,6 +29,7 @@ RSpec.describe CourseWizard::Repositories::Course do
       repository.write({ "study_sites_ids" => %w[3 4] })
       repository.write({ "start_date" => "January 2026" })
       repository.write({ "can_sponsor_student_visa" => "yes" })
+      repository.write({ "accredited_provider_code" => "123" })
 
       data = repository.read
       expect(data[:level]).to eq("secondary")
@@ -46,6 +47,7 @@ RSpec.describe CourseWizard::Repositories::Course do
       expect(data[:study_sites_ids]).to eq(%w[3 4])
       expect(data[:start_date]).to eq("January 2026")
       expect(data[:can_sponsor_student_visa]).to eq("yes")
+      expect(data[:accredited_provider_code]).to eq("123")
 
       expect(data.keys.map(&:class).uniq).to eq([Symbol])
     end
