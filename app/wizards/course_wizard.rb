@@ -65,6 +65,9 @@ class CourseWizard
           # School-based providers with multiple accredited partners need
           # to choose who is accrediting the course.
           { when: :accredited_provider_selection_required?, then: :accredited_provider },
+
+          # TODO: mirror visa split here:
+          # non-fee courses -> Skilled Worker visa path, fee courses -> Student visa path.
         ],
         default: :visa_sponsorship,
       )
