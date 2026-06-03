@@ -137,6 +137,7 @@
               <div data-controller="show-more" data-show-more-page-size-value="20">
                 <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
                   <div
+                  class="govuk-!-padding-top-4"
       data-show-more-target="item"
       data-school-search-target="school"
       data-search-text="<%= [
