@@ -1,0 +1,16 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.accredited_provider.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.accredited_provider.caption")) %>
+  <%= t("course_wizard.steps.accredited_provider.heading") %>
+</h1>
+
+<%= form.govuk_radio_buttons_fieldset :accredited_provider_code, legend: { hidden: true, text: t("course_wizard.steps.accredited_provider.heading") } do %>
+  <% current_step.accredited_partners.each do |accredited_partner| %>
+    <%= form.govuk_radio_button :accredited_provider_code,
+      accredited_partner.provider_code,
+      label: { text: accredited_partner.provider_name } %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.accredited_provider.submit") %>

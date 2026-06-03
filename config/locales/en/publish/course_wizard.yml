@@ -118,6 +118,13 @@ en:
         heading: Study sites
         submit: Continue
         hint: Select all that apply
+      accredited_provider:
+        caption: Add course
+        heading: Accredited provider
+        submit: Continue
+        errors:
+          accredited_provider_code:
+            blank: Select an accredited provider
       start_date:
         caption: Add course
         heading: Course start date

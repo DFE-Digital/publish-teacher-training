@@ -183,5 +183,27 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
     it "goes back to study sites" do
       expect(wizard).to have_previous_step(:study_sites)
     end
+
+    context "when provider has multiple accredited partners" do
+      let!(:provider) do
+        school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+        create(:site, :study_site, provider: school_provider)
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        school_provider
+      end
+
+      it "goes back to accredited provider" do
+        expect(wizard).to have_previous_step(:accredited_provider)
+      end
+    end
+  end
+
+  context "from accredited provider" do
+    let(:current_step) { :accredited_provider }
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
   end
 end
