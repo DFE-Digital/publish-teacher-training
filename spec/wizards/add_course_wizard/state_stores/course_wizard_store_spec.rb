@@ -93,5 +93,21 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
         expect(store.visa_sponsorship_required?).to be false
       end
     end
+
+    context "when can_sponsor_student_visa is 'true'" do
+      let(:can_sponsor_student_visa) { "true" }
+
+      it "returns true" do
+        expect(store.visa_sponsorship_required?).to be true
+      end
+    end
+
+    context "when can_sponsor_student_visa is 'false'" do
+      let(:can_sponsor_student_visa) { "false" }
+
+      it "returns false" do
+        expect(store.visa_sponsorship_required?).to be false
+      end
+    end
   end
 end

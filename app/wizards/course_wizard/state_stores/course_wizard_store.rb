@@ -18,7 +18,7 @@ class CourseWizard
       end
 
       def visa_sponsorship_required?
-        can_sponsor_student_visa == true
+        ActiveModel::Type::Boolean.new.cast(can_sponsor_student_visa) == true
       end
     end
   end

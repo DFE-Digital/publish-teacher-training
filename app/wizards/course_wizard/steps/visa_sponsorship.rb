@@ -9,6 +9,12 @@ class CourseWizard
 
       validates :can_sponsor_student_visa, inclusion: { in: [true, false], message: I18n.t("course_wizard.steps.visa_sponsorship.errors.can_sponsor_student_visa.blank") }
 
+      def can_sponsor_student_visa
+        return super unless super.nil? && default_to_no_from_accrediting_provider?
+
+        false
+      end
+
       def question
         if wizard.provider.accredited?
           I18n.t("course_wizard.steps.visa_sponsorship.questions.organisation")
@@ -38,6 +44,10 @@ class CourseWizard
       end
 
     private
+
+      def default_to_no_from_accrediting_provider?
+        show_accrediting_provider_inset_text? && !accrediting_provider_can_sponsor_student_visa?
+      end
 
       def accrediting_provider
         wizard.accrediting_provider

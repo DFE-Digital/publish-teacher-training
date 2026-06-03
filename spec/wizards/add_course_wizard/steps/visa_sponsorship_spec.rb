@@ -40,6 +40,20 @@ RSpec.describe CourseWizard::Steps::VisaSponsorship do
     end
   end
 
+  describe "boolean casting" do
+    it "casts 'true' to true in serializable data" do
+      wizard_step.can_sponsor_student_visa = "true"
+
+      expect(wizard_step.serializable_data["can_sponsor_student_visa"]).to be(true)
+    end
+
+    it "casts 'false' to false in serializable data" do
+      wizard_step.can_sponsor_student_visa = "false"
+
+      expect(wizard_step.serializable_data["can_sponsor_student_visa"]).to be(false)
+    end
+  end
+
   describe "#question" do
     it "returns the organisation question for university or scitt providers" do
       expect(wizard_step.question).to eq("Can your organisation sponsor Student visas for this course?")
@@ -166,6 +180,18 @@ RSpec.describe CourseWizard::Steps::VisaSponsorship do
 
       it "returns nil for accrediting provider sponsorship capability" do
         expect(wizard_step.accrediting_provider_can_sponsor_student_visa?).to be_nil
+      end
+    end
+
+    context "when there is a single accredited partner that cannot sponsor student visas" do
+      let(:accredited_partner_can_sponsor_student_visa) { false }
+
+      it "defaults can_sponsor_student_visa to false" do
+        expect(wizard_step.can_sponsor_student_visa).to be(false)
+      end
+
+      it "is valid without explicitly setting can_sponsor_student_visa" do
+        expect(wizard_step).to be_valid
       end
     end
   end
