@@ -36,25 +36,59 @@
     No placement schools added or removed.
   </p>
 <% else %>
+  <%# Added schools %>
   <% if @added_schools.any? %>
-    <p class="govuk-body govuk-!-margin-bottom-1">
-      <strong>You are adding <%= pluralize(@added_schools.size, "school") %>:</strong>
-    </p>
-    <ul class="govuk-list govuk-list--bullet">
-      <% @added_schools.each do |school| %>
-        <li><%= school.location_name %></li>
-      <% end %>
-    </ul>
+    <% if @added_schools.size >= 10 %>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            You are adding <%= pluralize(@added_schools.size, "school") %>
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+        <% else %>
+          <p class="govuk-body govuk-!-margin-bottom-1">
+            <strong>
+              You are adding <%= pluralize(@added_schools.size, "school") %>:
+            </strong>
+          </p>
+        <% end %>
+        <ul class="govuk-list govuk-list--bullet">
+          <% @added_schools.each do |school| %>
+            <li><%= school.location_name %></li>
+          <% end %>
+        </ul>
+        <% if @added_schools.size >= 10 %>
+        </div>
+      </details>
+    <% end %>
   <% end %>
+  <%# Removed schools %>
   <% if @removed_schools.any? %>
-    <p class="govuk-body govuk-!-margin-bottom-1">
-      <strong>You are removing <%= pluralize(@removed_schools.size, "school") %>:</strong>
-    </p>
-    <ul class="govuk-list govuk-list--bullet">
-      <% @removed_schools.each do |school| %>
-        <li><%= school.location_name %></li>
-      <% end %>
-    </ul>
+    <% if @removed_schools.size >= 10 %>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            You are removing <%= pluralize(@removed_schools.size, "school") %>
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+        <% else %>
+          <p class="govuk-body govuk-!-margin-bottom-1">
+            <strong>
+              You are removing <%= pluralize(@removed_schools.size, "school") %>:
+            </strong>
+          </p>
+        <% end %>
+        <ul class="govuk-list govuk-list--bullet">
+          <% @removed_schools.each do |school| %>
+            <li><%= school.location_name %></li>
+          <% end %>
+        </ul>
+        <% if @removed_schools.size >= 10 %>
+        </div>
+      </details>
+    <% end %>
   <% end %>
 <% end %>
 <br>
@@ -102,4 +136,4 @@
     <% end %>
   </div>
   <%= f.govuk_submit "Continue to view the courses that will be updated" %>
-  <% end %>
+<% end %>

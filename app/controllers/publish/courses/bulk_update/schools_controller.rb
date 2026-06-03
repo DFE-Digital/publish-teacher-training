@@ -188,7 +188,7 @@ module Publish
             name: "All courses",
           )
 
-          @this_course_hint = course_hint_text
+          @this_course_hint = course_hint_text.join(", ")
         end
 
         def update
@@ -235,22 +235,21 @@ module Publish
             @bulk_apply_scope_label = labels[:scope]
             @bulk_apply_short_label =
               if @bulk_apply == "this_course"
-                course.name_and_code
+                [course.name_and_code]
               else
                 course_hint_text
               end
-
-            @courses_for_check =
-              Array.new(selected_courses_count(@bulk_apply)) do |index|
-                {
-                  name: "Course name (X#{(index + 1).to_s.rjust(3, '0')})",
-                  status: COURSE_STATUSES.sample,
-                  info: @bulk_apply_short_label,
-                }
-              end
           end
 
-          # Show the courses table if we're applying to a subset of courses (e.g. all science courses)
+          @courses_for_check =
+            Array.new(selected_courses_count(@bulk_apply)) do |index|
+              {
+                name: "Course name (X#{(index + 1).to_s.rjust(3, '0')})",
+                status: COURSE_STATUSES.sample,
+                info: @bulk_apply_short_label,
+              }
+            end
+
           @show_courses_table = @bulk_apply != "this_course" && @bulk_apply != "all"
         end
 
@@ -270,8 +269,8 @@ module Publish
             ("School direct salaried" if course.salary?),
             ("QTS" if course.qualifications_summary == "QTS"),
             ("QTS with PGCE" if course.qualifications_summary&.include?("PGCE")),
-            ("Full time" if course.full_time?),
-            ("Part time" if course.part_time?),
+            ("full time" if course.full_time?),
+            ("part time" if course.part_time?),
           ].compact
         end
 
