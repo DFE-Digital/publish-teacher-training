@@ -97,7 +97,7 @@ module Gias
       end
 
       def valid?
-        northing_and_easting_present? && in_england?
+        northing_and_easting_present? && in_england? && valid_region_code?
       end
 
       def transformed_row
@@ -110,6 +110,10 @@ module Gias
 
       def in_england?
         NON_ENGLISH_ESTABLISHMENTS.exclude?(row.fetch("TypeOfEstablishment (code)"))
+      end
+
+      def valid_region_code?
+        GiasSchool.region_codes.value?(row.fetch("GOR (code)"))
       end
 
       def northing_and_easting_present?
