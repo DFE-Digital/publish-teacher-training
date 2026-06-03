@@ -146,6 +146,42 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
   context "from schools" do
     let(:current_step) { :schools }
 
+    it "proceeds to study sites page" do
+      expect(wizard).to have_next_step(:study_sites)
+    end
+  end
+
+  context "from study sites" do
+    let(:current_step) { :study_sites }
+
+    it "proceeds to courses page by default" do
+      expect(wizard).to have_next_step(:courses_index)
+    end
+
+    context "when qualification is undergraduate degree with qts" do
+      before do
+        state_store.write(qualification: "undergraduate_degree_with_qts")
+      end
+
+      it "proceeds to start date page" do
+        expect(wizard).to have_next_step(:start_date)
+      end
+    end
+
+    context "when level is further education" do
+      before do
+        state_store.write(level: "further_education")
+      end
+
+      it "proceeds to start date page" do
+        expect(wizard).to have_next_step(:start_date)
+      end
+    end
+  end
+
+  context "from start date" do
+    let(:current_step) { :start_date }
+
     it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)
     end

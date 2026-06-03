@@ -144,4 +144,36 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:qualifications)
     end
   end
+
+  context "from study sites" do
+    let(:current_step) { :study_sites }
+
+    it "goes back to schools" do
+      expect(wizard).to have_previous_step(:schools)
+    end
+  end
+
+  context "from start date with undergraduate degree with QTS qualification" do
+    let(:current_step) { :start_date }
+
+    before do
+      state_store.write(qualification: "undergraduate_degree_with_qts")
+    end
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
+  end
+
+  context "from start date with further education level" do
+    let(:current_step) { :start_date }
+
+    before do
+      state_store.write(level: "further_education")
+    end
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
+  end
 end

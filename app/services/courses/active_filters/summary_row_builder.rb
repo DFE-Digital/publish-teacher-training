@@ -3,6 +3,12 @@
 module Courses
   module ActiveFilters
     module SummaryRowBuilder
+      VALUE_FORMATTERS = Hash.new(->(values) { values.join(", ") }).merge!(
+        funding: ->(values) { values.join(", ").humanize },
+        study_types: ->(values) { values.join(", ").humanize },
+        subjects: ->(values) { values.sort.map { |name| SubjectHelper.subject_name_in_sentence(name) }.to_sentence(last_word_connector: ", ").upcase_first },
+      ).freeze
+
       FILTER_OPTION_KEYS = {
         qualifications: "qualification_options",
         minimum_degree_required: "minimum_degree_required_options",
@@ -27,7 +33,9 @@ module Courses
           values = group.map { |f| resolve_filter_value(id, f) }.compact
           next if values.empty?
 
-          { label:, value: values.join(", ") }
+          value = VALUE_FORMATTERS[id].call(values)
+
+          { label:, value: }
         end
       end
 
@@ -39,8 +47,8 @@ module Courses
           this_year = Find::CycleTimetable.current_year
           next_year = Find::CycleTimetable.next_year
           I18n.t(
-            "find.results.filters.all.#{option_key}.#{filter.raw_value}",
-            recruitment_cycle_year: this_year,
+            "courses.active_filters.#{option_key}.#{filter.raw_value}",
+            current_recruitment_cycle_year: this_year,
             next_recruitment_cycle_year: next_year,
             default: filter.formatted_value,
           )

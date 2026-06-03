@@ -34,7 +34,7 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:location_name) { "Manchester" }
     let(:radius) { 10 }
 
-    it { expect(rendered.text).to eq("Courses within 10 miles of Manchester") }
+    it { expect(rendered.text).to eq("courses within 10 miles of Manchester") }
   end
 
   context "with 1 subject and a location" do
@@ -58,25 +58,25 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:location_name) { "Manchester" }
     let(:radius) { 15 }
 
-    it { expect(rendered.text).to eq("Courses within 15 miles of Manchester") }
+    it { expect(rendered.text).to eq("courses within 15 miles of Manchester") }
   end
 
   context "with a provider name only" do
     let(:search_attributes) { { "provider_name" => "Manchester Metropolitan University (M40)" } }
 
-    it { expect(rendered.text).to eq("Courses across England") }
+    it { expect(rendered.text).to eq("courses across England") }
   end
 
   context "with a provider name and default keys" do
     let(:search_attributes) { { "provider_name" => "Manchester Metropolitan University (M40)", "applications_open" => "true", "order" => "course_name_ascending" } }
 
-    it { expect(rendered.text).to eq("Courses across England") }
+    it { expect(rendered.text).to eq("courses across England") }
   end
 
   context "with a provider name and non-default filter" do
     let(:search_attributes) { { "provider_name" => "Manchester Metropolitan University (M40)", "send_courses" => "true" } }
 
-    it { expect(rendered.text).to eq("Courses across England (1 filter applied)") }
+    it { expect(rendered.text).to eq("courses across England (1 filter applied)") }
   end
 
   context "with no subject/location but visa sponsorship" do
@@ -113,20 +113,20 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
   context "with 1 filter in fallback" do
     let(:search_attributes) { { "level" => "primary" } }
 
-    it { expect(rendered.text).to eq("Courses across England (1 filter applied)") }
+    it { expect(rendered.text).to eq("courses across England (1 filter applied)") }
   end
 
   context "with 2 filters in fallback" do
     let(:search_attributes) { { "level" => "primary", "send_courses" => "true" } }
 
-    it { expect(rendered.text).to eq("Courses across England (2 filters applied)") }
+    it { expect(rendered.text).to eq("courses across England (2 filters applied)") }
   end
 
   context "with provider params excluded from filter count" do
     let(:search_attributes) { { "provider_name" => "Test Provider (TP1)", "provider_code" => "TP1", "send_courses" => "true" } }
 
     it "counts only non-default keys as filters" do
-      expect(rendered.text).to eq("Courses across England (1 filter applied)")
+      expect(rendered.text).to eq("courses across England (1 filter applied)")
     end
   end
 
@@ -134,23 +134,23 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:search_attributes) { { "provider_code" => "TP1", "level" => "secondary" } }
 
     it "excludes provider_code from filter count and uses singular filter" do
-      expect(rendered.text).to eq("Courses across England (1 filter applied)")
+      expect(rendered.text).to eq("courses across England (1 filter applied)")
     end
   end
 
   context "with only default filter values" do
     let(:search_attributes) { { "applications_open" => "true", "minimum_degree_required" => "show_all_courses", "order" => "course_name_ascending" } }
 
-    it { expect(rendered.text).to eq("Courses across England") }
+    it { expect(rendered.text).to eq("courses across England") }
   end
 
   context "with non-default minimum_degree_required" do
     let(:search_attributes) { { "minimum_degree_required" => "two_one", "order" => "course_name_ascending" } }
 
-    it { expect(rendered.text).to eq("Courses across England (1 filter applied)") }
+    it { expect(rendered.text).to eq("courses across England (1 filter applied)") }
   end
 
   context "with no filters at all" do
-    it { expect(rendered.text).to eq("Courses across England") }
+    it { expect(rendered.text).to eq("courses across England") }
   end
 end

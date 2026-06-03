@@ -338,6 +338,8 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Unsubscribe from this email alert")
     expect(page).to have_content("Are you sure you want to unsubscribe?")
     expect(page).to have_button("Unsubscribe")
+    expect(page).to have_content("Biology")
+    expect(page).not_to have_content(/\bC1\b/)
   end
 
   def then_i_see_homepage
@@ -383,6 +385,7 @@ RSpec.describe "Email alerts", service: :find do
         "can_sponsor_visa" => "true",
         "funding" => %w[salary],
         "send_courses" => "true",
+        "interview_location" => "online",
       },
     )
   end
@@ -391,8 +394,9 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Biology")
     expect(page).to have_content("Within 15 miles of Manchester")
     expect(page).to have_content("Visa sponsorship")
-    expect(page).to have_content("Salary")
+    expect(page).to have_content("salary")
     expect(page).to have_content("SEND specialism")
+    expect(page).to have_content("Online interview")
   end
 
   def many_filters_search_attributes
@@ -499,9 +503,9 @@ RSpec.describe "Email alerts", service: :find do
   end
 
   def then_i_see_funding_filters_on_confirmation_page
-    expect(page).to have_content("Fee - no salary")
-    expect(page).to have_content("Salary")
-    expect(page).to have_content("Teaching apprenticeship - with salary")
+    expect(page).to have_content("Fee-paying courses")
+    expect(page).to have_content("courses with a salary")
+    expect(page).to have_content("apprenticeship courses")
   end
 
   def then_the_email_alert_has_funding_filters

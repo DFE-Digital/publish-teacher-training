@@ -363,7 +363,7 @@ RSpec.describe "Recent searches", service: :find do
     expect(page).to have_content("Courses with a salary")
     expect(page).to have_content("Full time")
     expect(page).to have_content("Qualification: QTS with PGCE or PGDE")
-    expect(page).to have_content("Degree grade: 2:1 or first")
+    expect(page).to have_content("Degree grade: 2:1 or First")
     expect(page).to have_content("Start date: September #{Find::CycleTimetable.current_year} only")
     expect(page).to have_content("Courses with a SEND specialism")
   end
@@ -476,7 +476,7 @@ RSpec.describe "Recent searches", service: :find do
   end
 
   def then_i_see_the_provider_search_title
-    expect(page).to have_content("Courses across England")
+    expect(page).to have_content("courses across England")
   end
 
   def then_i_see_the_provider_filter_tag

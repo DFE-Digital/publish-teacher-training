@@ -8,7 +8,6 @@ RSpec.describe CourseWizard::Steps::Schools do
   let(:current_step) { :schools }
   let(:provider_code) { provider.provider_code }
   let(:recruitment_cycle_year) { provider.recruitment_cycle_year }
-  let(:current_step_params) { { site_ids: } }
   let(:site_ids) { nil }
 
   let(:provider) { create(:provider, :accredited_provider, recruitment_cycle: find_or_create(:recruitment_cycle)) }

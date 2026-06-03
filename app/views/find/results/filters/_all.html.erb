@@ -3,7 +3,7 @@
 <div data-controller="details-component" class="app-c-filter-panel__top">
   <% if show_email_alert_link? %>
     <p class="email-alert-link govuk-body govuk-!-margin-bottom-4">
-      <%= govuk_link_to new_find_candidate_email_alert_path(@search_params.except(:order, :page)), class: "govuk-link--no-visited-state" do %>
+      <%= govuk_link_to new_find_candidate_email_alert_path(@search_params.except(:order, :page).merge(return_to: :results)), class: "govuk-link--no-visited-state" do %>
         <%= render "shared/bell_icon" %>
         <%= t(".set_up_email_alert") %>
       <% end %>

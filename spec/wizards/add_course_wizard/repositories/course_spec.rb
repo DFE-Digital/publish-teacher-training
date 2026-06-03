@@ -26,6 +26,8 @@ RSpec.describe CourseWizard::Repositories::Course do
       repository.write({ "funding_type" => "fee" })
       repository.write({ "study_pattern" => %w[full_time part_time] })
       repository.write({ "site_ids" => %w[1 2] })
+      repository.write({ "study_sites_ids" => %w[3 4] })
+      repository.write({ "start_date" => "January 2026" })
 
       data = repository.read
       expect(data[:level]).to eq("secondary")
@@ -40,6 +42,8 @@ RSpec.describe CourseWizard::Repositories::Course do
       expect(data[:funding_type]).to eq("fee")
       expect(data[:study_pattern]).to eq(%w[full_time part_time])
       expect(data[:site_ids]).to eq(%w[1 2])
+      expect(data[:study_sites_ids]).to eq(%w[3 4])
+      expect(data[:start_date]).to eq("January 2026")
 
       expect(data.keys.map(&:class).uniq).to eq([Symbol])
     end
