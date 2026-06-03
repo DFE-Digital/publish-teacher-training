@@ -64,6 +64,14 @@ RSpec.describe "Add course wizard visa sponsorship step", type: :system do
     then_i_see_the_common_visa_sponsorship_page_content
     and_i_see_the_availability_question
     and_i_see_accrediting_partner_cannot_sponsor_inset_text
+    and_i_see_no_selected_by_default
+  end
+
+  scenario "school-based provider with accrediting partner that cannot sponsor and continues without choosing" do
+    given_i_am_authenticated_as_a_school_based_provider_user_with_accredited_partner(can_sponsor_student_visa: false)
+    when_i_visit_the_wizard_visa_sponsorship_page
+    and_i_click_continue
+    then_i_am_taken_to_the_start_date_page
   end
 
   scenario "school-based provider with accrediting partner that can sponsor shows inset text" do
@@ -268,6 +276,11 @@ private
 
   def and_i_do_not_see_accrediting_provider_inset_text
     expect(page).not_to have_css(".govuk-inset-text")
+  end
+
+  def and_i_see_no_selected_by_default
+    expect(page).to have_checked_field("No")
+    expect(page).to have_unchecked_field("Yes")
   end
 
   def wizard_sites

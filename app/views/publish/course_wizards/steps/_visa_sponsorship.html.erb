@@ -19,7 +19,7 @@
 <% if current_step.show_accrediting_provider_inset_text? %>
   <div class="govuk-inset-text">
     <% if current_step.accrediting_provider_can_sponsor_student_visa? %>
-      <%= t("course_wizard.steps.visa_sponsorship.inset.can_sponsor", provider_name: current_step.accrediting_provider_name) %>
+      <p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship.inset.can_sponsor", provider_name: current_step.accrediting_provider_name) %></p>
     <% else %>
       <p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship.inset.cannot_sponsor", provider_name: current_step.accrediting_provider_name) %></p>
       <p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship.inset.contact_provider", provider_name: current_step.accrediting_provider_name) %></p>

@@ -121,16 +121,21 @@ class CourseWizard
   end
 
   def accredited_provider_selection_required?
-    !provider.accredited? && provider.accredited_partners.many?
+    !provider.accredited? && accredited_partners.many?
   end
 
   def accrediting_provider
     return if provider.accredited?
 
-    partners = provider.accredited_partners
-    return partners.first if partners.one?
+    @accrediting_provider ||= begin
+      return accredited_partners.first if accredited_partners.one?
 
-    selected_provider_code = state_store.accredited_provider_code
-    partners.find_by(provider_code: selected_provider_code) if selected_provider_code.present?
+      selected_provider_code = state_store.accredited_provider_code
+      accredited_partners.find { |partner| partner.provider_code == selected_provider_code } if selected_provider_code.present?
+    end
+  end
+
+  def accredited_partners
+    @accredited_partners ||= provider.accredited_partners.to_a
   end
 end
