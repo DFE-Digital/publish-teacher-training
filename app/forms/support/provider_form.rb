@@ -63,8 +63,6 @@ module Support
 
   private
 
-    delegate :providers, to: :recruitment_cycle
-
     def scitt?
       provider_type&.to_sym == :scitt
     end
@@ -74,7 +72,9 @@ module Support
     end
 
     def provider_code_taken
-      errors.add(:provider_code, :taken) if providers.exists?(provider_code:)
+      return if provider_code.blank?
+
+      errors.add(:provider_code, :taken) if Provider.exists?(recruitment_cycle:, provider_code: provider_code.upcase)
     end
 
     def provider_type_school_is_an_invalid_accredited_provider
