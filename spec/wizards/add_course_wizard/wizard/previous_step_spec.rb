@@ -201,6 +201,13 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
 
   context "from accredited provider" do
     let(:current_step) { :accredited_provider }
+    let!(:provider) do
+      school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+      create(:site, :study_site, provider: school_provider)
+      create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+      create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+      school_provider
+    end
 
     it "goes back to study sites" do
       expect(wizard).to have_previous_step(:study_sites)

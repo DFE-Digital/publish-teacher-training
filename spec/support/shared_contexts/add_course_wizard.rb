@@ -23,6 +23,12 @@ RSpec.shared_context "add_course_wizard" do
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: recruitment_cycle_year) }
 
   let!(:provider) do
-    create(:provider, :accredited_provider, provider_code:, recruitment_cycle:)
+    create(
+      :provider,
+      :accredited_provider,
+      provider_code:,
+      recruitment_cycle:,
+      sites: [build(:site), build(:site, :study_site)],
+    )
   end
 end
