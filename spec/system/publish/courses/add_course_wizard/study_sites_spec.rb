@@ -8,11 +8,11 @@ RSpec.describe "Add course wizard study sites step", type: :system do
     given_i_am_authenticated_as_a_provider_user_with_multiple_schools
   end
 
-  scenario "choosing a study site and continues to courses index page when qualification is not TDA or further education" do
+  scenario "choosing a study site and continues to visa sponsorship page when qualification is not TDA or further education" do
     when_i_visit_the_wizard_study_sites_page
     and_i_choose_a_study_site_from_the_list
     and_i_click_continue
-    then_i_am_taken_to_the_courses_index_page
+    then_i_am_taken_to_the_visa_sponsorship_page
   end
 
   scenario "choosing a study site and continues to start date page when qualification is TDA" do
@@ -50,11 +50,13 @@ private
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_courses_index_page
+  def then_i_am_taken_to_the_visa_sponsorship_page
     expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_courses_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :visa_sponsorship,
+        state_key: wizard_state_key,
       ),
       ignore_query: true,
     )

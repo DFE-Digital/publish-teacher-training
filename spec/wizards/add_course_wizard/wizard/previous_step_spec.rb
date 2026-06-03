@@ -176,4 +176,12 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:study_sites)
     end
   end
+
+  context "from visa sponsorship" do
+    let(:current_step) { :visa_sponsorship }
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
+  end
 end

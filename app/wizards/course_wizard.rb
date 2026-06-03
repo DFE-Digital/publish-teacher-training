@@ -5,7 +5,7 @@ class CourseWizard
 
   attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
-  delegate :further_education_level?, :primary_level?, :undergraduate_degree_with_qts?, to: :state_store
+  delegate :further_education_level?, :primary_level?, :undergraduate_degree_with_qts?, :visa_sponsorship_required?, to: :state_store
 
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
@@ -63,6 +63,15 @@ class CourseWizard
           { when: :undergraduate_degree_with_qts?, then: :start_date },
         ],
         default: :visa_sponsorship,
+      )
+
+      graph.add_multiple_conditional_edges(
+        from: :visa_sponsorship,
+        branches: [
+          # TODO: when true go to visa sponsorship application deadline page
+          { when: :visa_sponsorship_required?, then: :courses_index },
+        ],
+        default: :start_date,
       )
 
       graph.add_edge from: :start_date, to: :courses_index

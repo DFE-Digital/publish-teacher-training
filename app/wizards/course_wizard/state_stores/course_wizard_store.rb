@@ -16,6 +16,10 @@ class CourseWizard
       def undergraduate_degree_with_qts?
         qualification == "undergraduate_degree_with_qts"
       end
+
+      def visa_sponsorship_required?
+        can_sponsor_student_visa == true
+      end
     end
   end
 end
