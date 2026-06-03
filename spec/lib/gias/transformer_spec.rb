@@ -20,7 +20,7 @@ RSpec.describe Gias::Transformer do
       1,33,,
     CSV
 
-    expected_csv = "urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude,region_code"
+    expected_csv = "urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude"
     actual_csv = described_class.call(inline_csv.open).read.chomp
 
     expect(Gias::Log).to have_received(:log).with("Gias::Transformer", "Starting transformation of GIAS schools download...")
@@ -32,9 +32,27 @@ RSpec.describe Gias::Transformer do
     FileUtils.rm_f(file_name)
   end
 
+  it "when the region code is not a valid English region does not create a row" do
+    header = "EstablishmentStatus (code),TypeOfEstablishment (code),GOR (code),Northing,Easting"
+
+    inline_csv = Tempfile.new
+    inline_csv.write(<<~CSV)
+      #{header}
+      1,33,W,181851,532506
+    CSV
+
+    expected_csv = "urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude"
+    actual_csv = described_class.call(inline_csv.open).read.chomp
+
+    expect(expected_csv).to eq(actual_csv)
+  ensure
+    inline_csv&.delete
+    FileUtils.rm_f(file_name)
+  end
+
   it "filters out the columns we do not use" do
     expected_csv = <<~EXPECTEDCSV
-      urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,latitude,longitude,region_code
+      urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
       100000,The Aldgate School,02,4,1,2,3,11,10079319,St James's Passage,Duke's Place,"",London,"",EC3A 5DE,www.thealdgateschool.org,02072831147,H,51.513968813644965,-0.077530631715809
     EXPECTEDCSV
 
