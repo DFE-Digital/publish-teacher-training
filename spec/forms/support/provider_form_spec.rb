@@ -178,7 +178,23 @@ module Support
         end
 
         let(:provider_code) do
-          create(:provider).provider_code
+          create(:provider, recruitment_cycle:).provider_code
+        end
+
+        it "validates the provider code" do
+          expect(subject).not_to be_valid
+
+          expect(subject.errors[:provider_code]).to match_array("Provider code already taken")
+        end
+      end
+
+      context "using a discarded provider_code" do
+        let(:test_params) do
+          { provider_code: }
+        end
+
+        let(:provider_code) do
+          create(:provider, :discarded, recruitment_cycle:).provider_code
         end
 
         it "validates the provider code" do
