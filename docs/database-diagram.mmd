@@ -1,0 +1,501 @@
+erDiagram
+	direction TB
+	"Audited::Audit" {
+		string action
+		integer associated_id FK
+		string associated_type
+		integer auditable_id FK
+		string auditable_type
+		jsonb audited_changes
+		string comment
+		integer id PK
+		string remote_address
+		string request_uuid
+		integer user_id FK
+		string user_type
+		string username
+		integer version
+	}
+	Authentication {
+		integer authenticable_id FK
+		string authenticable_type
+		integer id PK
+		integer provider
+		string subject_key
+	}
+	"Blazer::Audit" {
+		string data_source
+		integer id PK
+		integer query_id FK
+		text statement
+		integer user_id FK
+	}
+	"Blazer::Check" {
+		string check_type
+		integer creator_id FK
+		text emails
+		integer id PK
+		datetime last_run_at
+		text message
+		integer query_id FK
+		string schedule
+		text slack_channels
+		string state
+	}
+	"Blazer::Dashboard" {
+		integer creator_id FK
+		integer id PK
+		string name
+	}
+	"Blazer::DashboardQuery" {
+		integer dashboard_id FK
+		integer id PK
+		integer position
+		integer query_id FK
+	}
+	"Blazer::Query" {
+		integer creator_id FK
+		string data_source
+		text description
+		integer id PK
+		string name
+		text statement
+		string status
+	}
+	Candidate {
+		string email_address
+		integer id PK
+	}
+	"Candidate::EmailAlert" {
+		integer candidate_id FK
+		string filter_key_digest
+		integer id PK
+		datetime last_sent_at
+		float latitude
+		string location_name
+		float longitude
+		integer radius
+		jsonb search_attributes
+		string subjects
+		datetime unsubscribed_at
+	}
+	"Candidate::RecentSearch" {
+		datetime discarded_at
+		string filter_key_digest
+		integer find_candidate_id
+		integer id PK
+		float latitude
+		float longitude
+		integer radius
+		jsonb search_attributes
+		string subjects
+	}
+	Contact {
+		text email
+		integer id PK
+		text name
+		boolean permission_given
+		integer provider_id FK
+		text telephone
+		text type
+	}
+	Course {
+		jsonb a_level_subject_requirements
+		boolean accept_a_level_equivalency
+		boolean accept_english_gcse_equivalency
+		boolean accept_gcse_equivalency
+		boolean accept_maths_gcse_equivalency
+		boolean accept_pending_a_level
+		boolean accept_pending_gcse
+		boolean accept_science_gcse_equivalency
+		text accredited_provider_code FK
+		text additional_a_level_equivalencies
+		boolean additional_degree_subject_requirements
+		string additional_gcse_equivalencies
+		string age_range_in_years
+		integer application_status
+		date applications_open_from
+		integer campaign_name
+		boolean can_sponsor_skilled_worker_visa
+		boolean can_sponsor_student_visa
+		datetime changed_at
+		text course_code
+		integer degree_grade
+		string degree_subject_requirements
+		string degree_type
+		datetime discarded_at
+		integer english
+		datetime first_published_at
+		string funding
+		integer id PK
+		boolean is_send
+		string level
+		integer master_subject_id
+		integer maths
+		text name
+		text profpost_flag
+		text program_type
+		integer provider_id FK
+		integer qualification
+		boolean school_experience_required
+		text school_experience_required_content
+		boolean schools_validated
+		integer science
+		datetime start_date
+		text study_mode
+		uuid uuid
+		datetime visa_sponsorship_application_deadline_at
+	}
+	"Course::School" {
+		integer course_id FK
+		integer gias_school_id FK
+		integer id PK
+		text site_code
+	}
+	CourseEnrichment {
+		integer course_id FK
+		integer created_by_user_id FK
+		integer id PK
+		jsonb json_data
+		datetime last_published_timestamp_utc
+		integer status
+		integer updated_by_user_id FK
+		integer version
+	}
+	CourseSubject {
+		integer course_id FK
+		integer id PK
+		integer position
+		integer subject_id FK
+	}
+	"DataHub::ProcessSummary" {
+		datetime finished_at
+		jsonb full_summary
+		integer id PK
+		jsonb short_summary
+		datetime started_at
+		string status
+		string type
+	}
+	Feedback {
+		string ease_of_use
+		text experience
+		integer id PK
+	}
+	FinancialIncentive {
+		string bursary_amount
+		boolean displayed
+		string early_career_payments
+		integer id PK
+		boolean non_uk_bursary_eligible
+		boolean non_uk_scholarship_eligible
+		string scholarship
+		integer subject_id FK
+		boolean subject_knowledge_enhancement_course_available
+		integer year
+	}
+	GiasSchool {
+		text address1
+		text address2
+		text address3
+		text county
+		text group_code
+		integer id PK
+		float latitude
+		float longitude
+		text maximum_age
+		text minimum_age
+		text name
+		text phase_code
+		text postcode
+		string region_code
+		tsvector searchable
+		text status_code
+		text telephone
+		text town
+		text type_code
+		text ukprn
+		text urn
+		text website
+	}
+	Organisation {
+		integer id PK
+		text name
+		text org_id
+	}
+	OrganisationUser {
+		integer id PK
+		integer organisation_id FK
+		integer user_id FK
+	}
+	Provider {
+		text about_us
+		boolean accredited
+		integer accredited_provider_number
+		text address1
+		text address2
+		text address3
+		text address4
+		boolean can_sponsor_skilled_worker_visa
+		boolean can_sponsor_student_visa
+		datetime changed_at
+		text contact_name
+		datetime discarded_at
+		text email
+		integer id PK
+		float latitude
+		float longitude
+		text postcode
+		text provider_code FK
+		text provider_name
+		text provider_type
+		integer recruitment_cycle_id FK
+		integer region_code
+		tsvector searchable
+		boolean selectable_school
+		string synonyms
+		text telephone
+		text town
+		text train_with_disability
+		text train_with_us
+		string ukprn
+		string urn
+		text value_proposition
+		text website
+		text year_code
+	}
+	"Provider::School" {
+		integer gias_school_id FK
+		integer id PK
+		integer provider_id FK
+		text site_code
+	}
+	ProviderPartnership {
+		integer accredited_provider_id FK
+		integer id PK
+		integer training_provider_id FK
+	}
+	ProviderUCASPreference {
+		text application_alert_email
+		text gt12_response_destination
+		integer id PK
+		integer provider_id FK
+		text send_application_alerts
+		text type_of_gt12
+	}
+	ProvidersOnboardingFormRequest {
+		boolean accredited_provider
+		text address_line_1
+		text address_line_2
+		text address_line_3
+		string contact_email_address
+		string county
+		string email_address
+		string first_name
+		string form_name
+		integer id PK
+		string last_name
+		string postcode
+		jsonb provider_metadata
+		string provider_name
+		string status
+		integer support_agent_id FK
+		string telephone
+		string town_or_city
+		string ukprn
+		string urn
+		uuid uuid
+		string website
+		string zendesk_link
+	}
+	RecentSearch {
+		datetime discarded_at
+		string filter_key_digest
+		integer find_candidate_id FK
+		integer id PK
+		float latitude
+		float longitude
+		integer radius
+		jsonb search_attributes
+		string subjects
+	}
+	RecruitmentCycle {
+		date application_end_date
+		date application_start_date
+		date available_for_support_users_from
+		date available_in_publish_from
+		integer id PK
+		string year
+	}
+	SavedCourse {
+		integer candidate_id FK
+		integer course_id FK
+		integer id PK
+		text note
+	}
+	Session {
+		jsonb data
+		integer id PK
+		string id_token
+		string ip_address
+		string session_key
+		integer sessionable_id FK
+		string sessionable_type
+		string user_agent
+	}
+	Site {
+		string added_via
+		text address1
+		text address2
+		text address3
+		text address4
+		text code
+		datetime discarded_at
+		boolean discarded_via_script
+		integer id PK
+		float latitude
+		text location_name
+		float longitude
+		text postcode
+		integer provider_id FK
+		integer region_code
+		integer site_type
+		text town
+		string urn
+		uuid uuid
+	}
+	SiteStatus {
+		integer course_id FK
+		integer id PK
+		text publish
+		integer site_id FK
+		text status
+		text vac_status
+	}
+	Statistic {
+		integer id PK
+		jsonb json_data
+	}
+	StudySitePlacement {
+		integer course_id FK
+		integer id PK
+		integer site_id FK
+	}
+	Subject {
+		integer id PK
+		string match_synonyms
+		text subject_code
+		integer subject_group_id FK
+		text subject_name
+		text type FK
+	}
+	SubjectArea {
+		text name
+		text typename PK
+	}
+	SubjectGroup {
+		integer id PK
+		string name
+	}
+	User {
+		datetime accept_terms_date_utc
+		boolean admin
+		boolean blazer_access
+		datetime discarded_at
+		text email
+		datetime first_login_date_utc
+		text first_name
+		integer id PK
+		datetime invite_date_utc
+		datetime last_login_date_utc
+		text last_name
+		string magic_link_token
+		datetime magic_link_token_sent_at
+		text sign_in_user_id
+		string state
+		datetime welcome_email_date_utc
+	}
+	UserNotification {
+		boolean course_publish
+		boolean course_update
+		integer id PK
+		string provider_code FK
+		integer user_id FK
+	}
+	UserPermission {
+		integer id PK
+		integer provider_id FK
+		integer user_id FK
+	}
+	Auditable o|--}o "Audited::Audit" : ""
+	Candidate o|--}o "Audited::Audit" : ""
+	Contact o|--}o "Audited::Audit" : ""
+	Course o|--}o "Audited::Audit" : ""
+	CourseSubject o|--}o "Audited::Audit" : ""
+	Organisation o|--}o "Audited::Audit" : ""
+	OrganisationUser o|--}o "Audited::Audit" : ""
+	Provider o|--}o "Audited::Audit" : ""
+	Site o|--}o "Audited::Audit" : ""
+	SiteStatus o|--}o "Audited::Audit" : ""
+	User o|--}o "Audited::Audit" : ""
+	Associated o|--}o "Audited::Audit" : ""
+	Provider ||--}o "Provider::School" : ""
+	GiasSchool ||--}o "Provider::School" : ""
+	Course ||--}o "Course::School" : ""
+	GiasSchool ||--}o "Course::School" : ""
+	Candidate ||--}o "Candidate::EmailAlert" : ""
+	User ||--}o UserPermission : ""
+	Provider ||--}o UserPermission : ""
+	User ||--}o UserNotification : ""
+	Provider ||--}o UserNotification : ""
+	Sessionable ||--}o Session : ""
+	Candidate ||--}o Session : ""
+	User ||--}o Session : ""
+	Authenticable ||--}o Authentication : ""
+	User ||--}o Authentication : ""
+	User ||--}o OrganisationUser : ""
+	User o|..}o Organisation : ""
+	User o|..}o Provider : ""
+	User o|--}o CourseEnrichment : ""
+	User o|--}o ProvidersOnboardingFormRequest : ""
+	SubjectGroup o|--}o Subject : ""
+	SubjectArea ||--}o Subject : ""
+	Subject ||--}o CourseSubject : ""
+	Subject o|..}| Course : ""
+	Subject ||--}o FinancialIncentive : ""
+	Course ||--}o StudySitePlacement : ""
+	Site ||--}o StudySitePlacement : ""
+	Site ||--}o SiteStatus : ""
+	Course ||--}o SiteStatus : ""
+	Candidate ||--}o SavedCourse : ""
+	Course ||--}o SavedCourse : ""
+	RecruitmentCycle ||--}o Provider : ""
+	RecruitmentCycle o|..}o Course : ""
+	RecruitmentCycle o|..}o Site : ""
+	Candidate ||--}o RecentSearch : ""
+	Provider ||--|o ProviderUCASPreference : ""
+	Provider ||--}o ProviderPartnership : ""
+	Organisation ||--}o OrganisationUser : ""
+	Organisation o{--}o Provider : ""
+	Course ||--}o CourseSubject : ""
+	Course ||--}o CourseEnrichment : ""
+	CourseEnrichment o|..|o Provider : ""
+	Provider ||--}o Contact : ""
+	Candidate o|--}o Authentication : ""
+	Candidate o|..}o Course : ""
+	Provider ||--}o Site : ""
+	Provider o|..}o GiasSchool : ""
+	Provider ||--}o Course : ""
+	Provider o|..}o Provider : ""
+	Course o|..}o GiasSchool : ""
+	Course o|..}o FinancialIncentive : ""
+	Course o|..}o Site : ""
+	User o|--}o "Blazer::Query" : ""
+	"Blazer::Query" ||--}o "Blazer::Check" : ""
+	"Blazer::Query" ||--}o "Blazer::DashboardQuery" : ""
+	"Blazer::Query" o|..}o "Blazer::Dashboard" : ""
+	"Blazer::Query" o|--}o "Blazer::Audit" : ""
+	"Blazer::Dashboard" ||--}o "Blazer::DashboardQuery" : ""
+	User o|--}o "Blazer::Dashboard" : ""
+	User o|--}o "Blazer::Check" : ""
+	User o|--}o "Blazer::Audit" : ""
