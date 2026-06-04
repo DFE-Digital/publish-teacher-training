@@ -50,7 +50,7 @@ class CourseWizard
       end
 
       def accrediting_provider
-        wizard.accrediting_provider
+        wizard.accreditation.accrediting_provider
       end
     end
   end

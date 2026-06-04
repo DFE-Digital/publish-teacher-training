@@ -5,6 +5,8 @@ class CourseWizard
 
   attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
+  delegate :accrediting_provider, to: :accreditation
+
   delegate :further_education_level?, :primary_level?, :undergraduate_degree_with_qts?, :visa_sponsorship_required?, to: :state_store
 
   def steps_processor
@@ -124,21 +126,13 @@ class CourseWizard
   end
 
   def accredited_provider_selection_required?
-    !provider.accredited? && accredited_partners.many?
+    accreditation.selection_required?
   end
 
-  def accrediting_provider
-    return if provider.accredited?
-
-    @accrediting_provider ||= begin
-      return accredited_partners.first if accredited_partners.one?
-
-      selected_provider_code = state_store.accredited_provider_code
-      accredited_partners.find { |partner| partner.provider_code == selected_provider_code } if selected_provider_code.present?
-    end
-  end
-
-  def accredited_partners
-    @accredited_partners ||= provider.accredited_partners.to_a
+  def accreditation
+    @accreditation ||= Accreditation.new(
+      provider:,
+      selected_provider_code: state_store.accredited_provider_code,
+    )
   end
 end
