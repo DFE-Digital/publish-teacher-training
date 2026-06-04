@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_01_101307) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_04_142930) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -208,6 +208,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_01_101307) do
     t.text "program_type"
     t.integer "provider_id", default: 0, null: false
     t.integer "qualification", null: false
+    t.boolean "school_experience_required"
+    t.text "school_experience_required_content"
     t.boolean "schools_validated"
     t.integer "science"
     t.datetime "start_date", precision: nil
