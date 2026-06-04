@@ -173,7 +173,7 @@ deploy-init: vendor-modules
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
 
 deploy-plan: deploy-init
-	terraform -chdir=terraform/aks plan -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS}
+	terraform -chdir=terraform/aks plan ${DETAILED_EXITCODE} -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS}
 
 deploy: deploy-init
 	terraform -chdir=terraform/aks apply -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS} $(AUTO_APPROVE)
@@ -239,7 +239,7 @@ find-domains-infra-init: find set-production-subscription set-azure-account vend
 		-backend-config=workspace_variables/${DOMAINS_ID}_backend.tfvars
 
 find-domains-infra-plan: find-domains-infra-init
-	terraform -chdir=terraform/custom_domains/infrastructure plan -var-file workspace_variables/${DOMAINS_ID}.tfvars.json
+	terraform -chdir=terraform/custom_domains/infrastructure plan ${DETAILED_EXITCODE} -var-file workspace_variables/${DOMAINS_ID}.tfvars.json
 
 find-domains-infra-apply: find-domains-infra-init
 	terraform -chdir=terraform/custom_domains/infrastructure apply -var-file workspace_variables/${DOMAINS_ID}.tfvars.json ${AUTO_APPROVE}
@@ -249,7 +249,7 @@ publish-domains-infra-init: publish set-production-subscription set-azure-accoun
 		-backend-config=workspace_variables/${DOMAINS_ID}_backend.tfvars
 
 publish-domains-infra-plan: publish-domains-infra-init
-	terraform -chdir=terraform/custom_domains/infrastructure plan -var-file workspace_variables/${DOMAINS_ID}.tfvars.json
+	terraform -chdir=terraform/custom_domains/infrastructure plan ${DETAILED_EXITCODE} -var-file workspace_variables/${DOMAINS_ID}.tfvars.json
 
 publish-domains-infra-apply: publish-domains-infra-init
 	terraform -chdir=terraform/custom_domains/infrastructure apply -var-file workspace_variables/${DOMAINS_ID}.tfvars.json ${AUTO_APPROVE}
@@ -267,7 +267,7 @@ find-domains-init: find set-production-subscription set-azure-account vendor-dom
 	terraform -chdir=terraform/custom_domains/environment_domains init -upgrade -reconfigure -backend-config=workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}_backend.tfvars
 
 find-domains-plan: find-domains-init
-	terraform -chdir=terraform/custom_domains/environment_domains plan -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
+	terraform -chdir=terraform/custom_domains/environment_domains plan ${DETAILED_EXITCODE} -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
 
 find-domains-apply: find-domains-init
 	terraform -chdir=terraform/custom_domains/environment_domains apply -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json ${AUTO_APPROVE}
@@ -282,7 +282,7 @@ publish-domains-init: publish set-production-subscription set-azure-account vend
 	terraform -chdir=terraform/custom_domains/environment_domains init -upgrade -reconfigure -backend-config=workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}_backend.tfvars
 
 publish-domains-plan: publish-domains-init
-	terraform -chdir=terraform/custom_domains/environment_domains plan -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
+	terraform -chdir=terraform/custom_domains/environment_domains plan ${DETAILED_EXITCODE} -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
 
 publish-domains-apply: publish-domains-init
 	terraform -chdir=terraform/custom_domains/environment_domains apply -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json ${AUTO_APPROVE}
