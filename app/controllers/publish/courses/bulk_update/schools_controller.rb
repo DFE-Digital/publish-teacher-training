@@ -134,13 +134,13 @@ module Publish
           #   )
           # end
 
-          # Primary/secondary options
-          if course.primary_course?
-            @bulk_options << OpenStruct.new(
-              id: "primary",
-              name: "All primary courses",
-            )
-          end
+          # Primary/secondary options (we can hide primary opton as this is covered with the subject of primary which is in effect the same thing)
+          # if course.primary_course?
+          #   @bulk_options << OpenStruct.new(
+          #     id: "primary",
+          #     name: "All primary courses",
+          #   )
+          # end
 
           if course.secondary_course?
             @bulk_options << OpenStruct.new(
@@ -149,31 +149,7 @@ module Publish
             )
           end
 
-          # if course.subjects.any?
-          #   subject = course.subjects.first
-
-          #   @bulk_options << OpenStruct.new(
-          #     id: "subject_#{subject.id}",
-          #     name: "All #{subject.name.downcase} courses",
-          #   )
-          # end
-
-          # # if science course then offer to update all science courses (biology / chemistry / physics)
-          # if course.subjects.any? { |s| SCIENCE_SUBJECT_NAMES.include?(s.name) }
-          #   @bulk_options << OpenStruct.new(
-          #     id: "subject_science",
-          #     name: "All science courses",
-          #   )
-          # end
-
-          # Subject-based options vs single subject options
-          if science_course?
-            @bulk_options << OpenStruct.new(
-              id: "subject_science",
-              name: "All science courses",
-              hint: "Biology, chemistry, physics, science",
-            )
-          elsif course.subjects.any?
+          if course.subjects.any?
             subject = course.subjects.first
 
             @bulk_options << OpenStruct.new(
@@ -181,6 +157,22 @@ module Publish
               name: "All #{subject.name.downcase} courses",
             )
           end
+
+          # Subject-based options vs single subject options
+          # if science_course?
+          #   @bulk_options << OpenStruct.new(
+          #     id: "subject_science",
+          #     name: "All science courses",
+          #     hint: "Biology, chemistry, physics, science",
+          #   )
+          # elsif course.subjects.any?
+          #   subject = course.subjects.first
+
+          #   @bulk_options << OpenStruct.new(
+          #     id: "subject_#{subject.id}",
+          #     name: "All #{subject.name.downcase} courses",
+          #   )
+          # end
 
           # Always allow all courses
           @bulk_options << OpenStruct.new(
@@ -267,11 +259,21 @@ module Publish
           [
             ("Fee-paying" if course.fee?),
             ("School direct salaried" if course.salary?),
+            ("Apprenticeship" if course.apprenticeship?),
             ("QTS" if course.qualifications_summary == "QTS"),
             ("QTS with PGCE" if course.qualifications_summary&.include?("PGCE")),
-            ("full time" if course.full_time?),
-            ("part time" if course.part_time?),
+            study_mode_hint,
           ].compact
+        end
+
+        def study_mode_hint
+          if course.full_time_or_part_time?
+            "full time or part time"
+          elsif course.full_time?
+            "full time"
+          elsif course.part_time?
+            "part time"
+          end
         end
 
         def load_school_changes
