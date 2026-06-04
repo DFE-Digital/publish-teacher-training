@@ -79,6 +79,8 @@ shared:
     - funding
     - visa_sponsorship_application_deadline_at
     - schools_validated
+    - school_experience_required
+    - school_experience_required_content
   course_site:
     - id
     - course_id
