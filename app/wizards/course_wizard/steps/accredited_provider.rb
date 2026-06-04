@@ -10,7 +10,7 @@ class CourseWizard
       validates :accredited_provider_code, presence: { message: I18n.t("course_wizard.steps.accredited_provider.errors.accredited_provider_code.blank") }
 
       def accredited_partners
-        wizard.provider.accredited_partners.sort_by(&:provider_name)
+        wizard.accreditation.partners
       end
 
       def self.permitted_params
