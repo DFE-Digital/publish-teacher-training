@@ -36,9 +36,11 @@
     No placement schools added or removed.
   </p>
 <% else %>
+  <!-- move all schools into details component if more than 10 schools are being added OR removed -->
+  <% use_details = @added_schools.size >= 10 || @removed_schools.size >= 10 %>
   <%# Added schools %>
   <% if @added_schools.any? %>
-    <% if @added_schools.size >= 10 %>
+    <% if use_details %>
       <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
           <span class="govuk-details__summary-text">
@@ -58,14 +60,14 @@
             <li><%= school.location_name %></li>
           <% end %>
         </ul>
-        <% if @added_schools.size >= 10 %>
+        <% if use_details %>
         </div>
       </details>
     <% end %>
   <% end %>
   <%# Removed schools %>
   <% if @removed_schools.any? %>
-    <% if @removed_schools.size >= 10 %>
+    <% if use_details %>
       <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
           <span class="govuk-details__summary-text">
@@ -85,7 +87,7 @@
             <li><%= school.location_name %></li>
           <% end %>
         </ul>
-        <% if @removed_schools.size >= 10 %>
+        <% if use_details %>
         </div>
       </details>
     <% end %>
