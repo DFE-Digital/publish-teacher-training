@@ -7,7 +7,13 @@ class CourseWizard
 
   delegate :accrediting_provider, to: :accreditation
 
-  delegate :further_education_level?, :primary_level?, :undergraduate_degree_with_qts?, :visa_sponsorship_required?, to: :state_store
+  delegate :further_education_level?,
+           :primary_level?,
+           :undergraduate_degree_with_qts?,
+           :visa_sponsorship_required?,
+           :skilled_worker_visa_required?,
+           :skilled_worker_visa_sponsorship_required?,
+           to: :state_store
 
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
@@ -25,6 +31,7 @@ class CourseWizard
       graph.add_node :accredited_provider, Steps::AccreditedProvider
       graph.add_node :start_date, Steps::StartDate
       graph.add_node :visa_sponsorship, Steps::VisaSponsorship
+      graph.add_node :skilled_worker_visa, Steps::SkilledWorkerVisa
 
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
 
@@ -67,9 +74,7 @@ class CourseWizard
           # School-based providers with multiple accredited partners need
           # to choose who is accrediting the course.
           { when: :accredited_provider_selection_required?, then: :accredited_provider },
-
-          # TODO: mirror visa split here:
-          # non-fee courses -> Skilled Worker visa path, fee courses -> Student visa path.
+          { when: :skilled_worker_visa_required?, then: :skilled_worker_visa },
         ],
         default: :visa_sponsorship,
       )
@@ -86,6 +91,14 @@ class CourseWizard
       )
 
       graph.add_edge from: :start_date, to: :courses_index
+
+      graph.add_multiple_conditional_edges(
+        from: :skilled_worker_visa,
+        branches: [
+          { when: :skilled_worker_visa_sponsorship_required?, then: :courses_index },
+        ],
+        default: :start_date,
+      )
     end
   end
 

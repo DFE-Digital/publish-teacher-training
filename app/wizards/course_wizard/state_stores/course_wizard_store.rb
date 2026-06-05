@@ -20,6 +20,14 @@ class CourseWizard
       def visa_sponsorship_required?
         ActiveModel::Type::Boolean.new.cast(can_sponsor_student_visa)
       end
+
+      def skilled_worker_visa_required?
+        funding_type.in?(%w[salary apprenticeship])
+      end
+
+      def skilled_worker_visa_sponsorship_required?
+        ActiveModel::Type::Boolean.new.cast(can_sponsor_skilled_worker_visa)
+      end
     end
   end
 end

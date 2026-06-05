@@ -213,4 +213,16 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:study_sites)
     end
   end
+
+  context "from skilled worker visa" do
+    let(:current_step) { :skilled_worker_visa }
+
+    before do
+      state_store.write(funding_type: "salary")
+    end
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
+  end
 end
