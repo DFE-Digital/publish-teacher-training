@@ -29,4 +29,10 @@ RSpec.describe CourseWizard::Steps::SkilledWorkerVisa do
       expect(wizard_step).to be_valid
     end
   end
+
+  describe ".permitted_params" do
+    it "returns [:can_sponsor_skilled_worker_visa]" do
+      expect(described_class.permitted_params).to eq(%i[can_sponsor_skilled_worker_visa])
+    end
+  end
 end

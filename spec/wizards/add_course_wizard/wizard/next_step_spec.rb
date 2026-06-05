@@ -276,11 +276,12 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     end
   end
 
-  context "from skilled worker visa when funding type is salary" do
+  context "from skilled worker visa when funding type is salary and can sponsor skilled worker visa is true" do
     let(:current_step) { :skilled_worker_visa }
 
     before do
       state_store.write(funding_type: "salary")
+      state_store.write(can_sponsor_skilled_worker_visa: true)
     end
 
     it "proceeds to courses page" do
@@ -288,15 +289,16 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     end
   end
 
-  context "from skilled worker visa when funding type is apprenticeship" do
+  context "from skilled worker visa when funding type is apprenticeship and can sponsor skilled worker visa is false" do
     let(:current_step) { :skilled_worker_visa }
 
     before do
       state_store.write(funding_type: "apprenticeship")
+      state_store.write(can_sponsor_skilled_worker_visa: false)
     end
 
     it "proceeds to start date page" do
-      expect(wizard).to have_next_step(:courses_index)
+      expect(wizard).to have_next_step(:start_date)
     end
   end
 end
