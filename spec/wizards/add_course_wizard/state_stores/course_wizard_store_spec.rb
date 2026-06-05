@@ -51,6 +51,20 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
     end
   end
 
+  describe "#fee_based?" do
+    before do
+      allow(repository).to receive(:read).and_return({ funding_type: })
+    end
+
+    context "when funding type is not 'fee'" do
+      let(:funding_type) { "apprenticeship" }
+
+      it "returns false" do
+        expect(store.fee_based?).to be false
+      end
+    end
+  end
+
   describe "#undergraduate_degree_with_qts?" do
     before do
       allow(repository).to receive(:read).and_return({ qualification: })
@@ -111,7 +125,7 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
     end
   end
 
-  describe "#skilled_worker_visa_required?" do
+  describe "#salary_based?" do
     before do
       allow(repository).to receive(:read).and_return({ funding_type: })
     end
@@ -120,7 +134,7 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
       let(:funding_type) { "salary" }
 
       it "returns true" do
-        expect(store.skilled_worker_visa_required?).to be true
+        expect(store.salary_based?).to be true
       end
     end
 
@@ -128,7 +142,7 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
       let(:funding_type) { "apprenticeship" }
 
       it "returns true" do
-        expect(store.skilled_worker_visa_required?).to be true
+        expect(store.salary_based?).to be true
       end
     end
 
@@ -136,7 +150,7 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
       let(:funding_type) { "fee" }
 
       it "returns false" do
-        expect(store.skilled_worker_visa_required?).to be false
+        expect(store.salary_based?).to be false
       end
     end
   end

@@ -13,16 +13,20 @@ class CourseWizard
         level == "primary"
       end
 
+      def fee_based?
+        funding_type == "fee"
+      end
+
+      def salary_based?
+        funding_type.in?(%w[salary apprenticeship])
+      end
+
       def undergraduate_degree_with_qts?
         qualification == "undergraduate_degree_with_qts"
       end
 
       def visa_sponsorship_required?
         ActiveModel::Type::Boolean.new.cast(can_sponsor_student_visa)
-      end
-
-      def skilled_worker_visa_required?
-        funding_type.in?(%w[salary apprenticeship])
       end
 
       def skilled_worker_visa_sponsorship_required?
