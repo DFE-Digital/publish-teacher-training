@@ -181,6 +181,24 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
       end
     end
 
+    context "when qualification is undergraduate degree with qts and provider has multiple accredited partners" do
+      let!(:provider) do
+        school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+        create(:site, :study_site, provider: school_provider)
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        school_provider
+      end
+
+      before do
+        state_store.write(qualification: "undergraduate_degree_with_qts")
+      end
+
+      it "proceeds to accredited provider page" do
+        expect(wizard).to have_next_step(:accredited_provider)
+      end
+    end
+
     context "when level is further education" do
       before do
         state_store.write(level: "further_education")

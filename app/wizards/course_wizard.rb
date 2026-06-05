@@ -70,11 +70,12 @@ class CourseWizard
           # Further education does not require visa sponsorship in the
           # existing flow, so it goes straight to start date.
           { when: :further_education_level?, then: :start_date },
-          # TDA also goes straight to start date.
-          { when: :undergraduate_degree_with_qts?, then: :start_date },
           # School-based providers with multiple accredited partners need
           # to choose who is accrediting the course.
           { when: :accredited_provider_selection_required?, then: :accredited_provider },
+          # TDA goes straight to start date when no accredited provider
+          # selection is required.
+          { when: :undergraduate_degree_with_qts?, then: :start_date },
           { when: :salary_based?, then: :skilled_worker_visa },
         ],
         default: :visa_sponsorship,
@@ -103,6 +104,7 @@ class CourseWizard
       graph.add_multiple_conditional_edges(
         from: :skilled_worker_visa,
         branches: [
+          # TODO: when true go to visa sponsorship application deadline page
           { when: :skilled_worker_visa_sponsorship_required?, then: :courses_index },
         ],
         default: :start_date,
