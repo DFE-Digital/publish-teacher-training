@@ -204,6 +204,36 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
         expect(wizard).to have_next_step(:accredited_provider)
       end
     end
+
+    context "when funding type is salary" do
+      before do
+        state_store.write(funding_type: "salary")
+      end
+
+      it "proceeds to skilled worker visa page" do
+        expect(wizard).to have_next_step(:skilled_worker_visa)
+      end
+    end
+
+    context "when funding type is apprenticeship" do
+      before do
+        state_store.write(funding_type: "apprenticeship")
+      end
+
+      it "proceeds to skilled worker visa page" do
+        expect(wizard).to have_next_step(:skilled_worker_visa)
+      end
+    end
+
+    context "when funding type is fee" do
+      before do
+        state_store.write(funding_type: "fee")
+      end
+
+      it "proceeds to visa sponsorship page" do
+        expect(wizard).to have_next_step(:visa_sponsorship)
+      end
+    end
   end
 
   context "from accredited provider" do
@@ -243,6 +273,30 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
 
     it "proceeds to start date page" do
       expect(wizard).to have_next_step(:start_date)
+    end
+  end
+
+  context "from skilled worker visa when funding type is salary" do
+    let(:current_step) { :skilled_worker_visa }
+
+    before do
+      state_store.write(funding_type: "salary")
+    end
+
+    it "proceeds to courses page" do
+      expect(wizard).to have_next_step(:courses_index)
+    end
+  end
+
+  context "from skilled worker visa when funding type is apprenticeship" do
+    let(:current_step) { :skilled_worker_visa }
+
+    before do
+      state_store.write(funding_type: "apprenticeship")
+    end
+
+    it "proceeds to start date page" do
+      expect(wizard).to have_next_step(:courses_index)
     end
   end
 end
