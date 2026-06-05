@@ -13,7 +13,7 @@ RSpec.describe "Add course wizard accredited provider step", type: :system do
     when_i_visit_the_wizard_accredited_provider_page
     and_i_choose_an_accredited_provider
     and_i_click_continue
-    then_i_am_taken_to_the_visa_sponsorship_page
+    then_i_am_taken_to_the_start_date_page
   end
 
   scenario "submitting without selecting an accredited provider shows validation errors" do
@@ -89,12 +89,12 @@ private
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_visa_sponsorship_page
+  def then_i_am_taken_to_the_start_date_page
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
-        step: :visa_sponsorship,
+        step: :start_date,
         state_key: wizard_state_key,
       ),
       ignore_query: true,
