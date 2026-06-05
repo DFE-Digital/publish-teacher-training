@@ -19,6 +19,7 @@
       <p class="govuk-heading-l">
         Updating placement schools
       </p>
+      <!-- List of schools being added or removed -->
       <p class="govuk-heading-m">
         You are updating these schools
       </p>
@@ -27,25 +28,61 @@
           No placement schools added or removed.
         </p>
       <% else %>
+        <!-- move all schools into details component if more than 10 schools are being added OR removed -->
+        <% use_details = @added_schools.size >= 10 || @removed_schools.size >= 10 %>
+        <%# Added schools %>
         <% if @added_schools.any? %>
-          <p class="govuk-body govuk-!-margin-bottom-1">
-            <strong>You are adding <%= pluralize(@added_schools.size, "school") %>:</strong>
-          </p>
-          <ul class="govuk-list govuk-list--bullet">
-            <% @added_schools.each do |school| %>
-              <li><%= school.location_name %></li>
-            <% end %>
-          </ul>
+          <% if use_details %>
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  You are adding <%= pluralize(@added_schools.size, "school") %>
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+              <% else %>
+                <p class="govuk-body govuk-!-margin-bottom-1">
+                  <strong>
+                    You are adding <%= pluralize(@added_schools.size, "school") %>:
+                  </strong>
+                </p>
+              <% end %>
+              <ul class="govuk-list govuk-list--bullet">
+                <% @added_schools.each do |school| %>
+                  <li><%= school.location_name %></li>
+                <% end %>
+              </ul>
+              <% if use_details %>
+              </div>
+            </details>
+          <% end %>
         <% end %>
+        <%# Removed schools %>
         <% if @removed_schools.any? %>
-          <p class="govuk-body govuk-!-margin-bottom-1">
-            <strong>You are removing <%= pluralize(@removed_schools.size, "school") %>:</strong>
-          </p>
-          <ul class="govuk-list govuk-list--bullet">
-            <% @removed_schools.each do |school| %>
-              <li><%= school.location_name %></li>
-            <% end %>
-          </ul>
+          <% if use_details %>
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  You are removing <%= pluralize(@removed_schools.size, "school") %>
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+              <% else %>
+                <p class="govuk-body govuk-!-margin-bottom-1">
+                  <strong>
+                    You are removing <%= pluralize(@removed_schools.size, "school") %>:
+                  </strong>
+                </p>
+              <% end %>
+              <ul class="govuk-list govuk-list--bullet">
+                <% @removed_schools.each do |school| %>
+                  <li><%= school.location_name %></li>
+                <% end %>
+              </ul>
+              <% if use_details %>
+              </div>
+            </details>
+          <% end %>
         <% end %>
       <% end %>
       <br>
