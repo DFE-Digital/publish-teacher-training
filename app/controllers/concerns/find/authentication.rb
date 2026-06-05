@@ -82,6 +82,10 @@ module Find
       end
     end
 
+    def reason_for_request
+      :general
+    end
+
     def reason_for_request_from_json
       if request.path.start_with?("/candidate/saved-courses")
         :save_course

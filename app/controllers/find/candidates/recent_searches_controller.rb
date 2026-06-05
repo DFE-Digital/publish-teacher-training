@@ -37,12 +37,6 @@ module Find
         @candidate.recent_searches.where(id: ids).find_each(&:undiscard)
         redirect_to find_candidate_recent_searches_path
       end
-
-    private
-
-      def reason_for_request
-        :general
-      end
     end
   end
 end

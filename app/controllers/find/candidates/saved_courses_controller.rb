@@ -211,10 +211,6 @@ module Find
       def saved_courses_filter_params
         params.permit(:location, :order).to_h.compact_blank
       end
-
-      def reason_for_request
-        :general
-      end
     end
   end
 end

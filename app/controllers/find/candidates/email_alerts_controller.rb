@@ -92,10 +92,6 @@ module Find
 
     private
 
-      def reason_for_request
-        :general
-      end
-
       def search_params
         @search_params ||= Find::SearchParams.permit(params)
       end
