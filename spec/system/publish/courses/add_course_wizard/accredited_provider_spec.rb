@@ -6,14 +6,22 @@ RSpec.describe "Add course wizard accredited provider step", type: :system do
   before do
     FeatureFlag.activate(:wizard_add_course_flow)
     given_i_am_authenticated_as_a_school_based_provider_user_with_multiple_accredited_partners
-    and_i_have_wizard_state_for_accredited_provider
   end
 
-  scenario "choosing an accredited provider and continues to visa sponsorship page" do
+  scenario "choosing an accredited provider and continues to visa sponsorship page when fee based course" do
+    and_i_have_wizard_state_for_accredited_provider(funding_type: "fee")
     when_i_visit_the_wizard_accredited_provider_page
     and_i_choose_an_accredited_provider
     and_i_click_continue
-    then_i_am_taken_to_the_start_date_page
+    then_i_am_taken_to_the_visa_sponsorship_page
+  end
+
+  scenario "choosing an accredited provider and continues to skilled worker visa page when salary based course" do
+    and_i_have_wizard_state_for_accredited_provider(funding_type: "salary")
+    when_i_visit_the_wizard_accredited_provider_page
+    and_i_choose_an_accredited_provider
+    and_i_click_continue
+    then_i_am_taken_to_the_skilled_worker_visa_page
   end
 
   scenario "submitting without selecting an accredited provider shows validation errors" do
@@ -60,7 +68,7 @@ private
     given_i_am_authenticated(user: @user)
   end
 
-  def and_i_have_wizard_state_for_accredited_provider
+  def and_i_have_wizard_state_for_accredited_provider(funding_type: nil)
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
@@ -69,7 +77,7 @@ private
     )
 
     state_store = CourseWizard::StateStores::CourseWizardStore.new(repository:)
-    state_store.write(level: "secondary")
+    state_store.write(level: "secondary", funding_type:)
   end
 
   def when_i_visit_the_wizard_accredited_provider_page
@@ -89,12 +97,24 @@ private
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_start_date_page
+  def then_i_am_taken_to_the_visa_sponsorship_page
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
-        step: :start_date,
+        step: :visa_sponsorship,
+        state_key: wizard_state_key,
+      ),
+      ignore_query: true,
+    )
+  end
+
+  def then_i_am_taken_to_the_skilled_worker_visa_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :skilled_worker_visa,
         state_key: wizard_state_key,
       ),
       ignore_query: true,
