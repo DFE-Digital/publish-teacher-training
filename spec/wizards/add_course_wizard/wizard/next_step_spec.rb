@@ -239,8 +239,19 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
   context "from accredited provider" do
     let(:current_step) { :accredited_provider }
 
-    it "proceeds to visa sponsorship page" do
+    it "proceeds to visa sponsorship page when fee based course" do
+      state_store.write(funding_type: "fee")
       expect(wizard).to have_next_step(:visa_sponsorship)
+    end
+
+    it "proceeds to skilled worker visa page when salary based course" do
+      state_store.write(funding_type: "salary")
+      expect(wizard).to have_next_step(:skilled_worker_visa)
+    end
+
+    it "proceeds to skilled worker visa page when apprenticeship based course" do
+      state_store.write(funding_type: "apprenticeship")
+      expect(wizard).to have_next_step(:skilled_worker_visa)
     end
   end
 

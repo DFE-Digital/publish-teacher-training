@@ -11,7 +11,8 @@ class CourseWizard
            :primary_level?,
            :undergraduate_degree_with_qts?,
            :visa_sponsorship_required?,
-           :skilled_worker_visa_required?,
+           :salary_based?,
+           :fee_based?,
            :skilled_worker_visa_sponsorship_required?,
            to: :state_store
 
@@ -74,12 +75,19 @@ class CourseWizard
           # School-based providers with multiple accredited partners need
           # to choose who is accrediting the course.
           { when: :accredited_provider_selection_required?, then: :accredited_provider },
-          { when: :skilled_worker_visa_required?, then: :skilled_worker_visa },
+          { when: :salary_based?, then: :skilled_worker_visa },
         ],
         default: :visa_sponsorship,
       )
 
-      graph.add_edge from: :accredited_provider, to: :visa_sponsorship
+      graph.add_multiple_conditional_edges(
+        from: :accredited_provider,
+        branches: [
+          { when: :salary_based?, then: :skilled_worker_visa },
+          { when: :fee_based?, then: :visa_sponsorship },
+        ],
+        default: :start_date,
+      )
 
       graph.add_multiple_conditional_edges(
         from: :visa_sponsorship,
