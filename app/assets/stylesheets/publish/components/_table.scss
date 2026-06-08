@@ -6,6 +6,13 @@
   }
 }
 
+.app-table--vertical-align-top {
+  .govuk-table__header,
+  .govuk-table__cell {
+    vertical-align: top;
+  }
+}
+
 .app-table--no-collapse {
   border-collapse: separate;
 }
