@@ -15,6 +15,6 @@
     <%= render Publish::Courses::InformationComponent.new(course:) %>
   </td>
   <td class="govuk-table__cell" data-qa="courses-table__status">
-    <%= status_tag %>
+    <%= render Publish::Courses::StatusTagComponent.new(course:, recruitment_cycle_year:) %>
   </td>
 </tr>

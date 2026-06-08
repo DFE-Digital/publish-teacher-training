@@ -3,12 +3,15 @@
 require "rails_helper"
 
 RSpec.describe Publish::Courses::RowComponent, type: :component do
-  subject(:render_component) { render_inline(described_class.new(course: course.decorate, provider:)) }
+  subject(:render_component) { render_inline(described_class.new(course: row, provider:)) }
 
   let(:provider) { create(:provider) }
+  # Rows carry the read-model columns (content_status, has_unpublished_changes), so
+  # source them through the query exactly as the page does.
+  let(:row) { Publish::Courses::Query.call(provider: provider.reload).find { |course| course.id == created_course.id }.decorate }
 
   context "with a published, open course" do
-    let(:course) { create(:course, :published_postgraduate, provider:, name: "Biology", course_code: "B123") }
+    let!(:created_course) { create(:course, :published_postgraduate, provider:, name: "Biology", course_code: "B123") }
 
     it "renders the course name and code" do
       render_component
@@ -36,7 +39,7 @@ RSpec.describe Publish::Courses::RowComponent, type: :component do
   end
 
   context "with a draft course" do
-    let(:course) { create(:course, :draft_enrichment, provider:) }
+    let!(:created_course) { create(:course, :draft_enrichment, provider:) }
 
     it "renders the Draft status tag" do
       render_component
