@@ -22,6 +22,12 @@ RSpec.describe "Add course wizard skilled worker visa step", type: :system do
     then_i_am_taken_to_the_start_date_page
   end
 
+  scenario "choosing nil to skilled worker visa and shows validation errors" do
+    when_i_visit_the_wizard_skilled_worker_visa_page
+    and_i_click_continue
+    then_i_have_errors_on_the_skilled_worker_visa_step
+  end
+
 private
 
   def given_i_am_authenticated_as_a_provider_user_with_a_school
@@ -42,6 +48,10 @@ private
     )
 
     expect(page).to have_content("Can your organisation sponsor Skilled Worker visas for this course?")
+  end
+
+  def then_i_have_errors_on_the_skilled_worker_visa_step
+    expect(page).to have_content("Select if candidates can get a sponsored Skilled Worker visa")
   end
 
   def and_i_choose_yes_to_the_skilled_worker_visa_question

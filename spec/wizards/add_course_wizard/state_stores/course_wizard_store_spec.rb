@@ -56,8 +56,24 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
       allow(repository).to receive(:read).and_return({ funding_type: })
     end
 
-    context "when funding type is not 'fee'" do
+    context "when funding type is 'fee'" do
+      let(:funding_type) { "fee" }
+
+      it "returns true" do
+        expect(store.fee_based?).to be true
+      end
+    end
+
+    context "when funding type is 'apprenticeship'" do
       let(:funding_type) { "apprenticeship" }
+
+      it "returns false" do
+        expect(store.fee_based?).to be false
+      end
+    end
+
+    context "when funding type is 'salary'" do
+      let(:funding_type) { "salary" }
 
       it "returns false" do
         expect(store.fee_based?).to be false

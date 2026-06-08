@@ -17,6 +17,7 @@ class CourseWizard
         funding_type == "fee"
       end
 
+      # Employment-based funding types are salary and apprenticeship.
       def salary_based?
         funding_type.in?(%w[salary apprenticeship])
       end
