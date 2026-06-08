@@ -9,8 +9,7 @@ module Publish
     def index
       authorize :provider, :index?
 
-      courses_by_accrediting_provider
-      self_accredited_courses
+      @course_list = ::Publish::CourseList.new(provider:)
     end
 
     def show
@@ -149,14 +148,6 @@ module Publish
       @provider ||= recruitment_cycle.providers
                                      .includes(courses: %i[site_statuses enrichments provider])
                                      .find_by!(provider_code: params[:provider_code])
-    end
-
-    def courses_by_accrediting_provider
-      @courses_by_accrediting_provider ||= ::Courses::Fetch.by_accrediting_provider(provider)
-    end
-
-    def self_accredited_courses
-      @self_accredited_courses ||= courses_by_accrediting_provider.delete(provider.provider_name)
     end
 
     def format_publish_error_messages
