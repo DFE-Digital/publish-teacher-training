@@ -145,9 +145,7 @@ module Publish
     end
 
     def provider
-      @provider ||= recruitment_cycle.providers
-                                     .includes(courses: %i[site_statuses enrichments provider])
-                                     .find_by!(provider_code: params[:provider_code])
+      @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code])
     end
 
     def format_publish_error_messages
