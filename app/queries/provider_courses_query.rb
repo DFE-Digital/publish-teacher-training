@@ -60,7 +60,7 @@ private
 
   def courses
     @courses ||= provider.courses
-                         .includes(%i[site_statuses enrichments provider])
+                         .includes(%i[site_statuses enrichments latest_enrichment provider])
                          .joins(sanitize(ACCREDITED_PROVIDER_JOIN, cycle_id: provider.recruitment_cycle_id))
                          .select("course.*", sanitize(GROUP_NAME_SELECT, own_code: provider.provider_code))
                          .order(Arel.sql(sanitize(ORDER_CLAUSE, own_code: provider.provider_code)))

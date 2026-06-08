@@ -727,7 +727,10 @@ class Course < ApplicationRecord
   end
 
   def draft_enrichment
-    enrichments.draft.most_recent.first
+    return enrichments.draft.most_recent.first unless enrichments.loaded?
+
+    enrichments.select { |enrichment| enrichment.draft? || enrichment.rolled_over? }
+               .max_by { |enrichment| [enrichment.created_at, enrichment.id] }
   end
 
   def is_running?
@@ -865,7 +868,9 @@ class Course < ApplicationRecord
   end
 
   def current_published_enrichment
-    enrichments.where(status: "published").order(last_published_timestamp_utc: :desc).first
+    return enrichments.where(status: "published").order(last_published_timestamp_utc: :desc).first unless enrichments.loaded?
+
+    enrichments.select(&:published?).max_by(&:last_published_timestamp_utc)
   end
 
   def find_a_level_subject_requirement!(uuid)
@@ -955,7 +960,9 @@ private
   end
 
   def enrichment_not_withdrawn?
-    !enrichments.most_recent.first.withdrawn?
+    # latest_enrichment is the has_one equivalent of enrichments.most_recent.first
+    # and is preloaded on the course list, avoiding a per-course query.
+    !latest_enrichment.withdrawn?
   end
 
   def all_enrichments_are_published?
