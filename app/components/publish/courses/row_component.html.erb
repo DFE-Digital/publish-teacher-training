@@ -11,7 +11,7 @@
       <div class="govuk-hint govuk-!-margin-0"><%= age_range %></div>
     <% end %>
   </td>
-  <td class="govuk-table__cell" data-qa="courses-table__course-information">
+  <td class="govuk-table__cell app-table--courses__course-information" data-qa="courses-table__course-information">
     <%= render Publish::Courses::InformationComponent.new(course:) %>
   </td>
   <td class="govuk-table__cell" data-qa="courses-table__status">

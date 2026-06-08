@@ -6,17 +6,27 @@
   }
 }
 
-.app-table--vertical-align-top {
-  .govuk-table__header,
-  .govuk-table__cell {
-    vertical-align: top;
-  }
-}
-
 .app-table--no-collapse {
   border-collapse: separate;
 }
 
 .app-table--courses {
   width: 66%;
+
+  .govuk-table__header,
+  .govuk-table__cell {
+    vertical-align: top;
+  }
+
+  // The course information cell stacks its lines tightly, with a single gap
+  // beneath the last line.
+  &__course-information {
+    .govuk-body-s {
+      margin-bottom: 0;
+    }
+
+    .govuk-body-s:last-child {
+      margin-bottom: govuk-spacing(4);
+    }
+  }
 }
