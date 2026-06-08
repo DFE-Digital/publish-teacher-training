@@ -54,9 +54,7 @@ private
   end
 
   def current_recruitment_cycle_year?
-    # Compare the (preloaded) cycle year against the timetable instead of
-    # Course#in_current_cycle?, which issues a RecruitmentCycle lookup per course.
-    course.recruitment_cycle.year.to_i == Find::CycleTimetable.current_year
+    course.in_current_cycle?
   end
 
   def previous_recruitment_cycle?
