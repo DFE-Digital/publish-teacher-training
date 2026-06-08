@@ -17,12 +17,10 @@ module Publish
         end
 
         def fetch_courses
-          training_partner
-            .courses
-            .includes(:enrichments, :site_statuses, provider: [:recruitment_cycle])
-            .where(accredited_provider_code: provider.provider_code)
-            .order(:name)
-            .map(&:decorate)
+          Publish::Courses::Query.call(
+            provider: training_partner,
+            params: { accredited_provider: provider.provider_code },
+          ).map(&:decorate)
         end
       end
     end
