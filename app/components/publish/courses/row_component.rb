@@ -37,7 +37,9 @@ module Publish
         "Ages #{course.age_range}"
       end
 
-      delegate :status_tag, to: :course
+      def recruitment_cycle_year
+        course.recruitment_cycle.year
+      end
     end
   end
 end

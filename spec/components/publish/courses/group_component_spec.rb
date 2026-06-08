@@ -6,12 +6,11 @@ RSpec.describe Publish::Courses::GroupComponent, type: :component do
   subject(:render_component) { render_inline(described_class.new(group:, provider:)) }
 
   let(:provider) { create(:provider) }
-  let(:course) { create(:course, :published_postgraduate, provider:) }
+  let!(:course) { create(:course, :published_postgraduate, provider:) }
+  let(:courses) { Publish::Courses::Query.call(provider: provider.reload).map(&:decorate) }
 
   context "with a headed (ratified) group" do
-    let(:group) do
-      ProviderCoursesQuery::Group.new(accredited_provider_name: "Heading University", courses: [course.decorate])
-    end
+    let(:group) { Publish::CourseList::Group.new(accredited_provider_name: "Heading University", courses:) }
 
     it "renders the accredited provider heading and caption" do
       render_component
@@ -29,9 +28,7 @@ RSpec.describe Publish::Courses::GroupComponent, type: :component do
   end
 
   context "with a self-accredited group" do
-    let(:group) do
-      ProviderCoursesQuery::Group.new(accredited_provider_name: nil, courses: [course.decorate])
-    end
+    let(:group) { Publish::CourseList::Group.new(accredited_provider_name: nil, courses:) }
 
     it "does not render a heading" do
       render_component
