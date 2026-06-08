@@ -3,4 +3,5 @@ en:
     courses:
       course_table:
         course: Course
+        course_information: Course information
         status: Status
