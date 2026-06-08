@@ -7,5 +7,5 @@
 </h1>
 
 <section>
-  <%= render partial: "publish/courses/course_table", locals: { courses: @courses } %>
+  <%= render Publish::Courses::TableComponent.new(courses: @courses, provider: @provider) %>
 </section>

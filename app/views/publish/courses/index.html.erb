@@ -14,19 +14,4 @@
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>
 
-<% if @self_accredited_courses %>
-  <section>
-    <%= render partial: "course_table", locals: { courses: @self_accredited_courses } %>
-  </section>
-<% end %>
-
-<% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
-  <section>
-    <h2 class="govuk-heading-m">
-      <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
-      <%= accrediting_provider %>
-    </h2>
-
-    <%= render partial: "course_table", locals: { courses: } %>
-  </section>
-<% end %>
+<%= render Publish::Courses::ListComponent.new(course_list: @course_list, provider: @provider) %>
