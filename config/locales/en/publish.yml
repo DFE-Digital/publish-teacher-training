@@ -9,6 +9,11 @@ en:
     courses:
       index:
         ratifying_provider: Accredited provider
+      information_component:
+        funding:
+          fee: Fee-paying
+          salary: Salaried
+          apprenticeship: Apprenticeship
       training_with_disabilities:
         show:
           heading: Training with disabilities and other needs at %{provider_name}
