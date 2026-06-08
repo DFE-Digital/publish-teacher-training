@@ -136,5 +136,21 @@ RSpec.describe ProviderCoursesQuery, type: :model do
 
       expect(large).to eq(small)
     end
+
+    def render_status_tags_for(course_count)
+      provider = create(:provider)
+      accredited = create(:accredited_provider)
+      create_list(:course, course_count, :published_postgraduate, provider:, accrediting_provider: accredited)
+      count_queries do
+        described_class.new(provider: provider.reload).groups.each { |group| group.courses.each(&:status_tag) }
+      end
+    end
+
+    it "renders status tags without an N+1 (constant queries as course count grows)" do
+      small = render_status_tags_for(3)
+      large = render_status_tags_for(12)
+
+      expect(large).to eq(small)
+    end
   end
 end
