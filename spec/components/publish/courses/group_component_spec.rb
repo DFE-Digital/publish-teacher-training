@@ -11,7 +11,7 @@ RSpec.describe Publish::Courses::GroupComponent, type: :component do
   context "with a headed (ratified) group" do
     let(:accredited_provider) { create(:accredited_provider, provider_name: "Heading University") }
     let(:group) do
-      Publish::CourseGroup.new(training_provider: provider, accredited_provider:, courses: [course])
+      ProviderCoursesQuery::Group.new(accredited_provider:, courses: [course.decorate])
     end
 
     it "renders the accredited provider heading and caption" do
@@ -31,7 +31,7 @@ RSpec.describe Publish::Courses::GroupComponent, type: :component do
 
   context "with a self-accredited group" do
     let(:group) do
-      Publish::CourseGroup.new(training_provider: provider, accredited_provider: nil, courses: [course])
+      ProviderCoursesQuery::Group.new(accredited_provider: nil, courses: [course.decorate])
     end
 
     it "does not render a heading" do
