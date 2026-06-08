@@ -84,6 +84,7 @@ class CourseWizard
       graph.add_multiple_conditional_edges(
         from: :accredited_provider,
         branches: [
+          { when: :undergraduate_degree_with_qts?, then: :start_date },
           { when: :salary_based?, then: :skilled_worker_visa },
           { when: :fee_based?, then: :visa_sponsorship },
         ],

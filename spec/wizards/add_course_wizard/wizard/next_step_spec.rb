@@ -257,6 +257,17 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
   context "from accredited provider" do
     let(:current_step) { :accredited_provider }
 
+    it "proceeds to start date page for undergraduate degree with qts when funding type is not set" do
+      state_store.write(qualification: "undergraduate_degree_with_qts")
+      expect(wizard).to have_next_step(:start_date)
+    end
+
+    it "proceeds to start date page for undergraduate degree with qts even when funding type is set" do
+      state_store.write(qualification: "undergraduate_degree_with_qts")
+      state_store.write(funding_type: "salary")
+      expect(wizard).to have_next_step(:start_date)
+    end
+
     it "proceeds to visa sponsorship page when fee based course" do
       state_store.write(funding_type: "fee")
       expect(wizard).to have_next_step(:visa_sponsorship)

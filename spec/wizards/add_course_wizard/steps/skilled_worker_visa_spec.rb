@@ -22,11 +22,11 @@ RSpec.describe CourseWizard::Steps::SkilledWorkerVisa do
       expect(wizard_step).to be_valid
     end
 
-    it "defaults to false when can_sponsor_skilled_worker_visa is nil" do
+    it "is invalid when can_sponsor_skilled_worker_visa is nil" do
       wizard_step.can_sponsor_skilled_worker_visa = nil
 
-      expect(wizard_step.can_sponsor_skilled_worker_visa).to be(false)
-      expect(wizard_step).to be_valid
+      expect(wizard_step).not_to be_valid
+      expect(wizard_step.errors.messages_for(:can_sponsor_skilled_worker_visa)).to contain_exactly("Select if candidates can get a sponsored Skilled Worker visa")
     end
   end
 
