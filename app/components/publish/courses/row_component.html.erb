@@ -1,0 +1,15 @@
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell app-table--courses__course-name" data-qa="courses-table__course-name">
+    <% if on_courses_index_page? %>
+      <%= govuk_link_to name_and_code, course_path, class: "govuk-heading-s govuk-!-margin-bottom-0" %>
+    <% else %>
+      <span class="govuk-heading-s govuk-!-margin-0">
+        <%= name_and_code %><br>
+      </span>
+    <% end %>
+    <span class="govuk-body-s"><%= course.summary %></span>
+  </td>
+  <td class="govuk-table__cell" data-qa="courses-table__status">
+    <%= status_tag %>
+  </td>
+</tr>

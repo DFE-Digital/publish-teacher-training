@@ -1,0 +1,3 @@
+<% course_list.groups.each do |group| %>
+  <%= render Publish::Courses::GroupComponent.new(group:, provider:) %>
+<% end %>
