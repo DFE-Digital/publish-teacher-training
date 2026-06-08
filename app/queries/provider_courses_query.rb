@@ -1,71 +1,73 @@
 # frozen_string_literal: true
 
 # Builds the ordered, grouped list of courses shown on the publish course list
-# page. Owns the database access: it loads a provider's courses eagerly, resolves
-# their accredited (ratifying) providers in a single batched query, and arranges
-# them into groups for display.
+# page. Owns the database access: a single query joins each course to its
+# accredited (ratifying) provider and lets the database do the ordering —
+# self-accredited courses first, then case-insensitively by accredited provider
+# name, then by course name and code. The pre-ordered rows are chunked into
+# groups in Ruby.
 #
-# Courses with no accredited provider (or whose accredited provider is the
-# provider itself) form a single self-accredited group, ordered first and
-# rendered without a heading. The remaining groups follow, ordered
-# case-insensitively by accredited provider name.
+# A course is self-accredited when it has no accredited provider, or its
+# accredited provider is the training provider itself; such courses form a
+# single group rendered without a heading.
 class ProviderCoursesQuery
-  Group = Data.define(:accredited_provider, :courses) do
+  Group = Data.define(:accredited_provider_name, :courses) do
     def self_accredited?
-      accredited_provider.nil?
+      accredited_provider_name.nil?
     end
 
     def heading
-      accredited_provider&.provider_name
+      accredited_provider_name
     end
   end
+
+  ACCREDITED_PROVIDER_JOIN = <<~SQL.squish
+    LEFT OUTER JOIN provider AS accredited_provider
+      ON accredited_provider.provider_code = course.accredited_provider_code
+      AND accredited_provider.recruitment_cycle_id = :cycle_id
+  SQL
+
+  # A course is self-accredited when it has no accredited provider, or the
+  # accredited provider is the training provider itself.
+  SELF_ACCREDITED = "course.accredited_provider_code IS NULL OR course.accredited_provider_code = :own_code"
+
+  # NULL group name == self-accredited group (rendered without a heading).
+  GROUP_NAME = "CASE WHEN (#{SELF_ACCREDITED}) THEN NULL ELSE accredited_provider.provider_name END".freeze
+
+  GROUP_NAME_SELECT = "#{GROUP_NAME} AS group_name".freeze
+
+  # Self-accredited first, then case-insensitive by accredited provider name.
+  ORDER_CLAUSE = <<~SQL.squish.freeze
+    CASE WHEN (#{SELF_ACCREDITED}) THEN 0 ELSE 1 END,
+    LOWER(#{GROUP_NAME}),
+    course.name,
+    course.course_code
+  SQL
 
   def initialize(provider:)
     @provider = provider
   end
 
   def groups
-    @groups ||= build_groups
+    @groups ||= courses
+      .chunk_while { |a, b| a[:group_name] == b[:group_name] }
+      .map { |chunk| Group.new(accredited_provider_name: chunk.first[:group_name], courses: chunk.map(&:decorate)) }
   end
 
 private
 
   attr_reader :provider
 
-  def build_groups
-    courses
-      .group_by { |course| accredited_provider_for(course) }
-      .sort_by { |accredited_provider, _courses| group_order(accredited_provider) }
-      .map { |accredited_provider, grouped| Group.new(accredited_provider:, courses: grouped.map(&:decorate)) }
-  end
-
-  def group_order(accredited_provider)
-    return [0, ""] if accredited_provider.nil? # self-accredited group first
-
-    [1, accredited_provider.provider_name.downcase]
-  end
-
   def courses
     @courses ||= provider.courses
                          .includes(%i[site_statuses enrichments provider])
-                         .order(:name, :course_code)
+                         .joins(sanitize(ACCREDITED_PROVIDER_JOIN, cycle_id: provider.recruitment_cycle_id))
+                         .select("course.*", sanitize(GROUP_NAME_SELECT, own_code: provider.provider_code))
+                         .order(Arel.sql(sanitize(ORDER_CLAUSE, own_code: provider.provider_code)))
                          .to_a
   end
 
-  def accredited_provider_for(course)
-    code = course.accredited_provider_code
-    return nil if code.blank? || code == provider.provider_code
-
-    accredited_providers_by_code[code]
-  end
-
-  def accredited_providers_by_code
-    @accredited_providers_by_code ||=
-      Provider.where(recruitment_cycle_id: provider.recruitment_cycle_id, provider_code: accredited_provider_codes)
-              .index_by(&:provider_code)
-  end
-
-  def accredited_provider_codes
-    courses.filter_map(&:accredited_provider_code).uniq
+  def sanitize(sql, **)
+    Course.sanitize_sql_array([sql, **])
   end
 end
