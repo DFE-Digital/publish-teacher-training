@@ -39,6 +39,7 @@ jobs:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           environment: production
           terraform-base: ${{ matrix.terraform_base }}
+          terraform-version-file: ${{ matrix.terraform_version_file }}
           validation-plan: ${{ matrix.validation_plan }}
           service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL_INFRA }}
