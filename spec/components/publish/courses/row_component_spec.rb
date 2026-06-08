@@ -16,10 +16,16 @@ RSpec.describe Publish::Courses::RowComponent, type: :component do
       expect(page).to have_text("Biology (B123)")
     end
 
-    it "renders the course summary information" do
+    it "renders the course information cell" do
       render_component
 
-      expect(page).to have_css('[data-qa="courses-table__course-name"]', text: course.summary)
+      expect(page).to have_css('[data-qa="courses-table__course-information"]', text: "QTS with PGCE")
+    end
+
+    it "renders the age range hint under the course name" do
+      render_component
+
+      expect(page).to have_css('[data-qa="courses-table__course-name"] .govuk-hint', text: "Ages 3 to 7")
     end
 
     it "renders the status tag" do

@@ -12,7 +12,7 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
     render_component
 
     headers = page.all(".govuk-table__header").map(&:text)
-    expect(headers).to eq(%w[Course Status])
+    expect(headers).to eq(["Course", "Course information", "Status"])
   end
 
   it "renders a row for each course" do

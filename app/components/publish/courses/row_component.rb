@@ -31,6 +31,12 @@ module Publish
         )
       end
 
+      def age_range
+        return if course.age_range_in_years.blank?
+
+        "Ages #{course.age_range}"
+      end
+
       delegate :status_tag, to: :course
     end
   end
