@@ -299,8 +299,8 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
       state_store.write(can_sponsor_student_visa: true)
     end
 
-    it "proceeds to courses page" do
-      expect(wizard).to have_next_step(:courses_index)
+    it "proceeds to visa sponsorship application deadline required page" do
+      expect(wizard).to have_next_step(:visa_sponsorship_application_deadline_required)
     end
   end
 
@@ -324,8 +324,8 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
       state_store.write(can_sponsor_skilled_worker_visa: true)
     end
 
-    it "proceeds to courses page" do
-      expect(wizard).to have_next_step(:courses_index)
+    it "proceeds to visa sponsorship application deadline required page" do
+      expect(wizard).to have_next_step(:visa_sponsorship_application_deadline_required)
     end
   end
 
@@ -338,6 +338,20 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
     end
 
     it "proceeds to start date page" do
+      expect(wizard).to have_next_step(:start_date)
+    end
+  end
+
+  context "from visa sponsorship application deadline required" do
+    let(:current_step) { :visa_sponsorship_application_deadline_required }
+
+    it "proceeds to courses page when deadline for application visa sponsorship is required" do
+      state_store.write(visa_sponsorship_application_deadline_required: true)
+      expect(wizard).to have_next_step(:courses_index)
+    end
+
+    it "proceeds to start date page when deadline for application visa sponsorship is not required" do
+      state_store.write(visa_sponsorship_application_deadline_required: false)
       expect(wizard).to have_next_step(:start_date)
     end
   end

@@ -12,7 +12,7 @@ RSpec.describe "Add course wizard skilled worker visa step", type: :system do
     when_i_visit_the_wizard_skilled_worker_visa_page
     and_i_choose_yes_to_the_skilled_worker_visa_question
     and_i_click_continue
-    then_i_am_taken_to_the_courses_index_page
+    then_i_am_taken_to_the_visa_sponsorship_application_deadline_required_page
   end
 
   scenario "choosing no to skilled worker visa and continues to start date page" do
@@ -70,8 +70,16 @@ private
     expect(page).to have_current_path(publish_provider_recruitment_cycle_course_wizard_path(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, step: :start_date, state_key: wizard_state_key))
   end
 
-  def then_i_am_taken_to_the_courses_index_page
-    expect(page).to have_current_path(publish_provider_recruitment_cycle_courses_path(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year))
+  def then_i_am_taken_to_the_visa_sponsorship_application_deadline_required_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :visa_sponsorship_application_deadline_required,
+        state_key: wizard_state_key,
+      ),
+      ignore_query: true,
+    )
   end
 
   def provider

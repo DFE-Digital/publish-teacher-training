@@ -1,0 +1,15 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.visa_sponsorship_application_deadline_required.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.visa_sponsorship_application_deadline_required.caption")) %>
+  <%= t("course_wizard.steps.visa_sponsorship_application_deadline_required.heading") %>
+</h1>
+
+<p class="govuk-inset-text"><%= t("course_wizard.steps.visa_sponsorship_application_deadline_required.hint") %></p>
+
+<%= form.govuk_radio_buttons_fieldset :visa_sponsorship_application_deadline_required, legend: { hidden: true } do %>
+  <%= form.govuk_radio_button :visa_sponsorship_application_deadline_required, true, label: { text: t("course_wizard.steps.visa_sponsorship_application_deadline_required.options.visa_sponsorship_application_deadline_required.label") } %>
+  <%= form.govuk_radio_button :visa_sponsorship_application_deadline_required, false, label: { text: t("course_wizard.steps.visa_sponsorship_application_deadline_required.options.visa_sponsorship_application_deadline_not_required.label") } %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.visa_sponsorship_application_deadline_required.submit") %>

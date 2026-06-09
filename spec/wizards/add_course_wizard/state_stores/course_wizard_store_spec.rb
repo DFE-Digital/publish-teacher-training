@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe CourseWizard::StateStores::CourseWizardStore do
-  subject(:store) { described_class.new(repository:, attribute_names: %w[level qualification can_sponsor_student_visa can_sponsor_skilled_worker_visa funding_type]) }
+  subject(:store) { described_class.new(repository:, attribute_names: %w[level qualification can_sponsor_student_visa can_sponsor_skilled_worker_visa funding_type visa_sponsorship_application_deadline_required]) }
 
   let(:repository) { instance_double(DfE::Wizard::Repository::InMemory) }
 
@@ -81,6 +81,36 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
     end
   end
 
+  describe "#salary_based?" do
+    before do
+      allow(repository).to receive(:read).and_return({ funding_type: })
+    end
+
+    context "when funding type is salary" do
+      let(:funding_type) { "salary" }
+
+      it "returns true" do
+        expect(store.salary_based?).to be true
+      end
+    end
+
+    context "when funding type is apprenticeship" do
+      let(:funding_type) { "apprenticeship" }
+
+      it "returns true" do
+        expect(store.salary_based?).to be true
+      end
+    end
+
+    context "when funding type is fee" do
+      let(:funding_type) { "fee" }
+
+      it "returns false" do
+        expect(store.salary_based?).to be false
+      end
+    end
+  end
+
   describe "#undergraduate_degree_with_qts?" do
     before do
       allow(repository).to receive(:read).and_return({ qualification: })
@@ -141,36 +171,6 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
     end
   end
 
-  describe "#salary_based?" do
-    before do
-      allow(repository).to receive(:read).and_return({ funding_type: })
-    end
-
-    context "when funding type is salary" do
-      let(:funding_type) { "salary" }
-
-      it "returns true" do
-        expect(store.salary_based?).to be true
-      end
-    end
-
-    context "when funding type is apprenticeship" do
-      let(:funding_type) { "apprenticeship" }
-
-      it "returns true" do
-        expect(store.salary_based?).to be true
-      end
-    end
-
-    context "when funding type is fee" do
-      let(:funding_type) { "fee" }
-
-      it "returns false" do
-        expect(store.salary_based?).to be false
-      end
-    end
-  end
-
   describe "#skilled_worker_visa_sponsorship_required?" do
     before do
       allow(repository).to receive(:read).and_return({ can_sponsor_skilled_worker_visa: })
@@ -205,6 +205,44 @@ RSpec.describe CourseWizard::StateStores::CourseWizardStore do
 
       it "returns false" do
         expect(store.skilled_worker_visa_sponsorship_required?).to be false
+      end
+    end
+  end
+
+  describe "#deadline_for_application_visa_sponsorship_required?" do
+    before do
+      allow(repository).to receive(:read).and_return({ visa_sponsorship_application_deadline_required: })
+    end
+
+    context "when visa_sponsorship_application_deadline_required is true" do
+      let(:visa_sponsorship_application_deadline_required) { true }
+
+      it "returns true" do
+        expect(store.deadline_for_application_visa_sponsorship_required?).to be true
+      end
+    end
+
+    context "when visa_sponsorship_application_deadline_required is false" do
+      let(:visa_sponsorship_application_deadline_required) { false }
+
+      it "returns false" do
+        expect(store.deadline_for_application_visa_sponsorship_required?).to be false
+      end
+    end
+
+    context "when visa_sponsorship_application_deadline_required is 'true'" do
+      let(:visa_sponsorship_application_deadline_required) { "true" }
+
+      it "returns true" do
+        expect(store.deadline_for_application_visa_sponsorship_required?).to be true
+      end
+    end
+
+    context "when visa_sponsorship_application_deadline_required is 'false'" do
+      let(:visa_sponsorship_application_deadline_required) { "false" }
+
+      it "returns false" do
+        expect(store.deadline_for_application_visa_sponsorship_required?).to be false
       end
     end
   end
