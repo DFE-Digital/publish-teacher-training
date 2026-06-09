@@ -168,6 +168,20 @@ en:
         errors:
           can_sponsor_skilled_worker_visa:
             blank: Select if candidates can get a sponsored Skilled Worker visa
+      visa_sponsorship_application_deadline_required:
+        caption: Add course
+        heading: Is there a deadline for applications that require visa sponsorship?
+        question: Is there a deadline for applications that require visa sponsorship?
+        hint: You have told us that you can sponsor visas for this course.
+        submit: Continue
+        options:
+          visa_sponsorship_application_deadline_required:
+            label: "Yes"
+          visa_sponsorship_application_deadline_not_required:
+            label: "No"
+        errors:
+          visa_sponsorship_application_deadline_required:
+            blank: Select if there is a deadline for applications that require visa sponsorship
   activemodel:
     errors:
       models:

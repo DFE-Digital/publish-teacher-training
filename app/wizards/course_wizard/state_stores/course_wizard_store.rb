@@ -33,6 +33,10 @@ class CourseWizard
       def skilled_worker_visa_sponsorship_required?
         ActiveModel::Type::Boolean.new.cast(can_sponsor_skilled_worker_visa)
       end
+
+      def deadline_for_application_visa_sponsorship_required?
+        ActiveModel::Type::Boolean.new.cast(visa_sponsorship_application_deadline_required)
+      end
     end
   end
 end
