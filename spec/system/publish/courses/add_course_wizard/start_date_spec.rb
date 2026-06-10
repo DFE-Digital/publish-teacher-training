@@ -8,12 +8,12 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
     given_i_am_authenticated_as_a_provider_user(cycle_year: Date.current.year)
   end
 
-  scenario "choosing a start date and continues to courses index page" do
+  scenario "choosing a start date and continues to check answers page" do
     and_i_have_wizard_state_for_start_date
     when_i_visit_the_wizard_start_date_page
     and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Date.current.year))
     and_i_click_continue
-    then_i_am_taken_to_the_courses_index_page
+    then_i_am_taken_to_the_check_answers_page
   end
 
   scenario "submitting start date without selecting an option shows validation errors" do
@@ -63,11 +63,13 @@ private
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_courses_index_page
+  def then_i_am_taken_to_the_check_answers_page
     expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_courses_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :check_answers,
+        state_key: wizard_state_key,
       ),
       ignore_query: true,
     )

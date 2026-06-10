@@ -36,6 +36,7 @@ class CourseWizard
       graph.add_node :skilled_worker_visa, Steps::SkilledWorkerVisa
       graph.add_node :visa_sponsorship_application_deadline_required, Steps::VisaSponsorshipApplicationDeadlineRequired
       graph.add_node :visa_sponsorship_application_deadline_at, Steps::VisaSponsorshipApplicationDeadlineAt
+      graph.add_node :check_answers, Steps::CheckAnswers
 
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
 
@@ -102,8 +103,6 @@ class CourseWizard
         default: :start_date,
       )
 
-      graph.add_edge from: :start_date, to: :courses_index
-
       graph.add_multiple_conditional_edges(
         from: :skilled_worker_visa,
         branches: [
@@ -121,6 +120,12 @@ class CourseWizard
       )
 
       graph.add_edge from: :visa_sponsorship_application_deadline_at, to: :start_date
+
+      graph.add_edge from: :start_date, to: :check_answers
+      graph.add_edge from: :check_answers, to: :courses_index
+
+      graph.before_next_step(:handle_return_to_review)
+      graph.before_previous_step(:handle_back_to_review)
     end
   end
 
@@ -169,5 +174,23 @@ class CourseWizard
       provider:,
       selected_provider_code: state_store.accredited_provider_code,
     )
+  end
+
+  def handle_return_to_review
+    return if return_to_review_param.blank?
+
+    :check_answers
+  end
+
+  def handle_back_to_review
+    return unless return_to_review_param.to_s == current_step_name.to_s
+
+    :check_answers
+  end
+
+  def return_to_review_param
+    # dfe-wizard's current pinned version of current_step_params only returns permitted step attributes,
+    # so we need raw request params for return_to_review callback routing.
+    @current_step_params&.[](:return_to_review) || @current_step_params&.[]("return_to_review")
   end
 end

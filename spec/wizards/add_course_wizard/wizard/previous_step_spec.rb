@@ -280,4 +280,21 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:visa_sponsorship_application_deadline_required)
     end
   end
+
+  context "from check answers" do
+    let(:current_step) { :check_answers }
+
+    it "goes back to start date" do
+      expect(wizard).to have_previous_step(:start_date)
+    end
+  end
+
+  context "from start date with return_to_review param" do
+    let(:current_step) { :start_date }
+    let(:current_step_params) { ActionController::Parameters.new(return_to_review: "start_date") }
+
+    it "goes back to check answers" do
+      expect(wizard).to have_previous_step(:check_answers)
+    end
+  end
 end

@@ -287,8 +287,40 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
   context "from start date" do
     let(:current_step) { :start_date }
 
+    it "proceeds to check answers page" do
+      expect(wizard).to have_next_step(:check_answers)
+    end
+  end
+
+  context "from check answers" do
+    let(:current_step) { :check_answers }
+
     it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)
+    end
+  end
+
+  context "from funding type with return_to_review param" do
+    let(:current_step) { :funding_type }
+    let(:current_step_params) { ActionController::Parameters.new(return_to_review: "funding_type") }
+
+    before do
+      state_store.write(
+        level: "primary",
+        is_send: "false",
+        primary_master_subject_id: "1",
+        age_range_in_years: "3_to_7",
+        qualification: "qts",
+        funding_type: "fee",
+        study_pattern: %w[full_time],
+        site_ids: %w[1],
+        can_sponsor_student_visa: false,
+        start_date: "January #{recruitment_cycle_year}",
+      )
+    end
+
+    it "returns to check answers" do
+      expect(wizard).to have_next_step(:check_answers)
     end
   end
 

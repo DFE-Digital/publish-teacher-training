@@ -132,6 +132,32 @@ en:
         errors:
           start_date:
             blank: Select a course start date
+      check_answers:
+        caption: Add course
+        heading: Check your answers
+        submit: Create course
+        change: Change
+        answers:
+          "yes": "Yes"
+          "no": "No"
+        labels:
+          level: Subject level
+          send: Special educational needs and disability (SEND)
+          primary_subject: Subject
+          first_subject: First subject
+          second_subject: Second subject
+          age_range: Age range
+          qualification: Qualification
+          funding_type: Funding type
+          study_pattern: Study pattern
+          schools: Schools
+          study_sites: Study sites
+          accredited_provider: Accredited provider
+          student_visa_sponsorship: Student visa sponsorship
+          skilled_worker_visa_sponsorship: Skilled Worker visa sponsorship
+          visa_sponsorship_application_deadline_required: Deadline for applications that require visa sponsorship
+          visa_sponsorship_application_deadline_at: Deadline date for applications that require visa sponsorship
+          start_date: Course start date
       visa_sponsorship:
         caption: Add course
         heading: Student visas

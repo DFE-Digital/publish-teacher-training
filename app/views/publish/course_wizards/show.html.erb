@@ -18,6 +18,7 @@
           recruitment_cycle_year: params[:recruitment_cycle_year],
           step: current_step_name,
           state_key: params[:state_key],
+          return_to_review: params[:return_to_review],
         ),
         method: :patch,
       ) do |form| %>
