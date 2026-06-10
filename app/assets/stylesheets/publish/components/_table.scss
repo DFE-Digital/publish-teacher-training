@@ -11,22 +11,26 @@
 }
 
 .app-table--courses {
-  width: 66%;
+  width: 100%;
+  // Fixed layout keeps the three columns at an equal third each, so long course
+  // names wrap inside their column instead of pushing the others out.
+  table-layout: fixed;
 
-  .govuk-table__header,
+  // Bottom-align the headers so a wrapped "Course information" header lines up
+  // with the single-line "Course"/"Status" headers; keep multi-line body cells
+  // top-aligned.
+  .govuk-table__header {
+    vertical-align: bottom;
+  }
+
   .govuk-table__cell {
     vertical-align: top;
   }
 
-  // The course information cell stacks its lines tightly, with a single gap
-  // beneath the last line.
+  // The course information cell stacks its lines tightly.
   &__course-information {
     .govuk-body-s {
       margin-bottom: 0;
-    }
-
-    .govuk-body-s:last-child {
-      margin-bottom: govuk-spacing(4);
     }
   }
 }
