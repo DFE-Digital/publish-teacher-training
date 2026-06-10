@@ -4,6 +4,7 @@ require "rails_helper"
 
 RSpec.describe CourseWizard::Repositories::Course do
   let(:cache) { ActiveSupport::Cache::MemoryStore.new }
+  let(:visa_deadline_payload) { { year: "2026", month: "9", day: "1" } }
   let(:repository) do
     described_class.new(
       provider_code: "PROV",
@@ -32,6 +33,7 @@ RSpec.describe CourseWizard::Repositories::Course do
       repository.write({ "can_sponsor_student_visa" => true })
       repository.write({ "can_sponsor_skilled_worker_visa" => true })
       repository.write({ "visa_sponsorship_application_deadline_required" => true })
+      repository.write({ "visa_sponsorship_application_deadline_at" => visa_deadline_payload })
 
       data = repository.read
       expect(data[:level]).to eq("secondary")
@@ -52,6 +54,7 @@ RSpec.describe CourseWizard::Repositories::Course do
       expect(data[:can_sponsor_student_visa]).to be(true)
       expect(data[:can_sponsor_skilled_worker_visa]).to be(true)
       expect(data[:visa_sponsorship_application_deadline_required]).to be(true)
+      expect(data[:visa_sponsorship_application_deadline_at]).to eq(visa_deadline_payload)
 
       expect(data.keys.map(&:class).uniq).to eq([Symbol])
     end

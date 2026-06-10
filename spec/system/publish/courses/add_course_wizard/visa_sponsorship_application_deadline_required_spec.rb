@@ -8,12 +8,12 @@ RSpec.describe "Add course wizard visa sponsorship application deadline required
     given_i_am_authenticated_as_a_provider_user_with_a_school
   end
 
-  scenario "choosing yes to visa sponsorship application deadline required and continues to courses index" do
+  scenario "choosing yes to visa sponsorship application deadline required and continues to visa sponsorship application deadline at page" do
     and_i_have_wizard_state_for_visa_sponsorship_application_deadline_required
     when_i_visit_the_wizard_visa_sponsorship_application_deadline_required_page
     and_i_choose_yes_to_the_visa_sponsorship_application_deadline_required_question
     and_i_click_continue
-    then_i_am_taken_to_the_courses_index_page
+    then_i_am_taken_to_the_visa_sponsorship_application_deadline_at_page
   end
 
   scenario "choosing no to visa sponsorship application deadline required and continues to start date page" do
@@ -71,11 +71,13 @@ private
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_courses_index_page
+  def then_i_am_taken_to_the_visa_sponsorship_application_deadline_at_page
     expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_courses_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :visa_sponsorship_application_deadline_at,
+        state_key: wizard_state_key,
       ),
       ignore_query: true,
     )

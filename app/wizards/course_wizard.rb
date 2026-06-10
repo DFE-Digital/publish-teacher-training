@@ -35,6 +35,7 @@ class CourseWizard
       graph.add_node :visa_sponsorship, Steps::VisaSponsorship
       graph.add_node :skilled_worker_visa, Steps::SkilledWorkerVisa
       graph.add_node :visa_sponsorship_application_deadline_required, Steps::VisaSponsorshipApplicationDeadlineRequired
+      graph.add_node :visa_sponsorship_application_deadline_at, Steps::VisaSponsorshipApplicationDeadlineAt
 
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
 
@@ -114,10 +115,12 @@ class CourseWizard
       graph.add_multiple_conditional_edges(
         from: :visa_sponsorship_application_deadline_required,
         branches: [
-          { when: :deadline_for_application_visa_sponsorship_required?, then: :courses_index },
+          { when: :deadline_for_application_visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_at },
         ],
         default: :start_date,
       )
+
+      graph.add_edge from: :visa_sponsorship_application_deadline_at, to: :start_date
     end
   end
 

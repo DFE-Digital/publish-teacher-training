@@ -1,0 +1,24 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.visa_sponsorship_application_deadline_at.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.visa_sponsorship_application_deadline_at.caption")) %>
+  <%= t("course_wizard.steps.visa_sponsorship_application_deadline_at.heading") %>
+</h1>
+
+<p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship_application_deadline_at.deadline_advice.it_takes_around_90_days") %></p>
+<p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship_application_deadline_at.deadline_advice.choose_a_deadline_date") %></p>
+<p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship_application_deadline_at.deadline_advice.if_you_need_more_time") %></p>
+
+<%= form.govuk_date_field(
+      :visa_sponsorship_application_deadline_at,
+      maxlength_enabled: true,
+      legend: { text: t("course_wizard.steps.visa_sponsorship_application_deadline_at.legend") },
+      hint: lambda {
+        safe_join([
+          tag.p(t("course_wizard.steps.visa_sponsorship_application_deadline_at.hint.hint_date"), class: "govuk-hint"),
+          tag.p(t("course_wizard.steps.visa_sponsorship_application_deadline_at.hint.hint_time"), class: "govuk-hint"),
+        ])
+      },
+    ) %>
+
+<%= form.govuk_submit t("course_wizard.steps.visa_sponsorship_application_deadline_at.submit") %>
