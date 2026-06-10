@@ -182,6 +182,18 @@ en:
         errors:
           visa_sponsorship_application_deadline_required:
             blank: Select if there is a deadline for applications that require visa sponsorship
+      visa_sponsorship_application_deadline_at:
+        caption: Add course
+        heading: Date that applications close for visa sponsored candidates
+        legend: What date will applications that require visa sponsorship close?
+        deadline_advice:
+          it_takes_around_90_days: It takes around 90 days between a candidate that needs visa sponsorship accepting an offer and being recruited.
+          choose_a_deadline_date: Choose a deadline date that gives you at least 3 months to process applications that require a visa so that candidates can start the course on time
+          if_you_need_more_time: If you need more time to process these applications, set an earlier date.
+        hint:
+          hint_date: For example 31 3 2024
+          hint_time: Applications will close at 11:59pm on the date you enter
+        submit: Continue
   activemodel:
     errors:
       models:
@@ -201,3 +213,13 @@ en:
               greater_than_or_equal_to: To age must be between 7 and 19
               less_than_or_equal_to: To age must be between 7 and 19
               invalid: Enter a valid age in To
+        course_wizard/steps/visa_sponsorship_application_deadline_at:
+          attributes:
+            visa_sponsorship_application_deadline_at:
+              all_blank: Select a date that applications close for visa sponsored candidates
+              some_blank: The date that applications which require visa sponsorship will close must contain a day, a month and a year
+              not_integers: The date that applications which require visa sponsorship will close can only contain numbers 0 to 9
+              invalid_date: Enter a real date that applications close for visa sponsored candidates
+              not_in_range: >
+                The date that applications which require visa sponsorship will close must be between %{earliest_date} and
+                the end of the recruitment cycle, %{apply_deadline}

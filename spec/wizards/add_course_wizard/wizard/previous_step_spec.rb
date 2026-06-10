@@ -262,4 +262,22 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:visa_sponsorship)
     end
   end
+
+  context "from visa sponsorship application deadline at" do
+    let(:current_step) { :visa_sponsorship_application_deadline_at }
+
+    it "goes back to visa sponsorship application deadline required when funding type is fee and can sponsor student visa is true" do
+      state_store.write(funding_type: "fee")
+      state_store.write(can_sponsor_student_visa: true)
+      state_store.write(visa_sponsorship_application_deadline_required: true)
+      expect(wizard).to have_previous_step(:visa_sponsorship_application_deadline_required)
+    end
+
+    it "goes back to visa sponsorship application deadline required when funding type is salary and can sponsor skilled worker visa is true" do
+      state_store.write(funding_type: "salary")
+      state_store.write(can_sponsor_skilled_worker_visa: true)
+      state_store.write(visa_sponsorship_application_deadline_required: true)
+      expect(wizard).to have_previous_step(:visa_sponsorship_application_deadline_required)
+    end
+  end
 end
