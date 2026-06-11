@@ -9,7 +9,7 @@
   <tbody class="govuk-table__body">
     <% courses.each do |course| %>
       <tr class="govuk-table__row">
-        <td class="govuk-table__cell app-table--courses__course-name" data-qa="courses-table__course-name">
+        <td class="govuk-table__cell app-table--courses__course-name">
           <% if on_courses_index_page?(course) %>
             <%= govuk_link_to course.name_and_code, course_path(course), class: "govuk-heading-s govuk-!-margin-bottom-0" %>
           <% else %>
@@ -21,7 +21,7 @@
             <div class="govuk-hint govuk-!-margin-0"><%= age_range(course) %></div>
           <% end %>
         </td>
-        <td class="govuk-table__cell app-table--courses__course-information" data-qa="courses-table__course-information">
+        <td class="govuk-table__cell app-table--courses__course-information">
           <span class="govuk-body-s govuk-!-display-block"><%= funding_label(course) %></span>
           <span class="govuk-body-s govuk-!-display-block"><%= course.qualifications_summary %></span>
           <span class="govuk-body-s govuk-!-display-block"><%= study_type_label(course) %></span>
@@ -29,7 +29,7 @@
             <span class="govuk-body-s govuk-!-display-block govuk-!-font-size-16"><%= start_date(course) %></span>
           <% end %>
         </td>
-        <td class="govuk-table__cell" data-qa="courses-table__status">
+        <td class="govuk-table__cell app-table--courses__status">
           <%= render Publish::Courses::StatusTagComponent.new(course:, recruitment_cycle_year: recruitment_cycle_year(course)) %>
         </td>
       </tr>

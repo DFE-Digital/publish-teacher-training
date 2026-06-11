@@ -7,16 +7,12 @@ module PageObjects
     class ProviderCoursesIndex < PageObjects::Base
       set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses"
 
-      sections :courses, '[data-qa="courses__table-section"]' do
+      sections :courses, ".app-course-list__group" do
         element :subheading, "h2"
-        element :name, '[data-qa="courses-table__course-name"]'
-        element :link, '[data-qa="courses-table__course-name"] a'
-        element :course_information, '[data-qa="courses-table__course-information"]'
-        element :status, '[data-qa="courses-table__status"]'
-        element :on_find, '[data-qa="courses-table__findable"]'
-        element :find_link, '[data-qa="courses-table__findable"] a'
-        element :applications, '[data-qa="courses-table__applications"]'
-        element :vacancies, '[data-qa="courses-table__vacancies"]'
+        element :name, ".app-table--courses__course-name"
+        element :link, ".app-table--courses__course-name a"
+        element :course_information, ".app-table--courses__course-information"
+        element :status, ".app-table--courses__status"
       end
 
       element :success_summary, ".govuk-notification-banner--success"
