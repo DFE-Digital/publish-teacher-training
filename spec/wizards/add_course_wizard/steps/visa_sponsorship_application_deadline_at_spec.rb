@@ -41,6 +41,14 @@ RSpec.describe CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt do
         .to include("The date that applications which require visa sponsorship will close can only contain numbers 0 to 9")
     end
 
+    it "is invalid when date fields contain mixed numeric and non-numeric values" do
+      set_date_parts("2026", "1a", "2")
+
+      expect(wizard_step).not_to be_valid
+      expect(wizard_step.errors.messages_for(:visa_sponsorship_application_deadline_at))
+        .to include("The date that applications which require visa sponsorship will close can only contain numbers 0 to 9")
+    end
+
     it "is invalid when date is not real" do
       set_date_parts("2026", "2", "31")
 

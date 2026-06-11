@@ -45,7 +45,7 @@ class CourseWizard
                        :all_blank
                      elsif [year, month, day].any?(&:blank?)
                        :some_blank
-                     elsif [year, month, day].any? { |entry| entry.match?(/\A[a-zA-Z'-]*\z/) }
+                     elsif [year, month, day].any? { |entry| entry.present? && !entry.match?(/\A\d+\z/) }
                        :not_integers
                      end
 
@@ -106,7 +106,7 @@ class CourseWizard
       end
 
       def start_of_cycle
-        @start_of_cycle ||= wizard.recruitment_cycle.application_start_date.end_of_day.change(hour: 9)
+        @start_of_cycle ||= wizard.recruitment_cycle.application_start_date.change(hour: 9)
       end
 
       def compose_deadline_parts

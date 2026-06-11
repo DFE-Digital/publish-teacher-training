@@ -48,6 +48,15 @@ RSpec.describe "Add course wizard visa sponsorship application deadline at step"
     )
   end
 
+  scenario "submitting with mixed letters and numbers shows validation errors" do
+    when_i_visit_the_wizard_visa_sponsorship_application_deadline_at_page
+    and_i_choose_a_visa_sponsorship_application_deadline_at_with_mixed_values
+    and_i_click_continue
+    then_i_have_errors_on_the_visa_sponsorship_application_deadline_at_step(
+      "The date that applications which require visa sponsorship will close can only contain numbers 0 to 9",
+    )
+  end
+
   scenario "submitting with a date that is not within the recruitment cycle range shows validation errors" do
     when_i_visit_the_wizard_visa_sponsorship_application_deadline_at_page
     and_i_choose_a_visa_sponsorship_application_deadline_at_that_is_not_within_the_recruitment_cycle_range
@@ -113,6 +122,12 @@ private
     fill_in "Year", with: "efgh"
   end
 
+  def and_i_choose_a_visa_sponsorship_application_deadline_at_with_mixed_values
+    fill_in "Day", with: "1a"
+    fill_in "Month", with: "2"
+    fill_in "Year", with: provider.recruitment_cycle_year
+  end
+
   def and_i_choose_a_visa_sponsorship_application_deadline_at_that_is_not_within_the_recruitment_cycle_range
     fill_in "Day", with: 1
     fill_in "Month", with: 1
@@ -142,7 +157,7 @@ private
 
   def not_in_range_error_message
     apply_deadline = Find::CycleTimetable.date(:apply_deadline, provider.recruitment_cycle_year).to_fs(:govuk_date_and_time)
-    start_of_cycle = provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9)
+    start_of_cycle = provider.recruitment_cycle.application_start_date.change(hour: 9)
     earliest_date = Time.zone.now.after?(start_of_cycle) ? "today" : start_of_cycle.to_fs(:govuk_date_and_time)
 
     "The date that applications which require visa sponsorship will close must be between #{earliest_date} and the end of the recruitment cycle, #{apply_deadline}"

@@ -171,7 +171,6 @@ en:
       visa_sponsorship_application_deadline_required:
         caption: Add course
         heading: Is there a deadline for applications that require visa sponsorship?
-        question: Is there a deadline for applications that require visa sponsorship?
         hint: You have told us that you can sponsor visas for this course.
         submit: Continue
         options:
