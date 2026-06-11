@@ -7,7 +7,7 @@ module PageObjects
     class ProviderCoursesIndex < PageObjects::Base
       set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses"
 
-      sections :courses, ".app-course-list__group" do
+      sections :courses, ".app-table--courses__section" do
         element :subheading, "h2"
         element :name, ".app-table--courses__course-name"
         element :link, ".app-table--courses__course-name a"
