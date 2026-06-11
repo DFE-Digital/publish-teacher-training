@@ -102,6 +102,7 @@ ci:	## Run in automation environment
 	$(eval export AUTO_APPROVE=-auto-approve)
 	$(eval SKIP_CONFIRM=true)
 	$(eval SKIP_AZURE_LOGIN=true)
+	$(eval export NO_IMAGE_TAG_DEFAULT=true)
 
 read-keyvault-config:
 	$(eval export key_vault_name=$(shell jq -r '.key_vault_name' terraform/aks/workspace_variables/$(DEPLOY_ENV).tfvars.json))
@@ -166,7 +167,7 @@ vendor-modules:
 ### Infra Targets From Here
 
 deploy-init: vendor-modules
-	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=main))
+	$(if $(IMAGE_TAG),,$(if $(NO_IMAGE_TAG_DEFAULT),$(eval export IMAGE_TAG=main),$(error Missing environment variable "IMAGE_TAG")))
 	$(eval export TF_VAR_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
 	terraform -chdir=terraform/aks init -reconfigure -upgrade -backend-config=./workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key)
