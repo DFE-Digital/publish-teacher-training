@@ -1,5 +1,5 @@
 <% course_list.groups.each do |group| %>
-  <section data-qa="courses__table-section">
+  <section class="app-course-list__group">
     <% unless group.self_accredited? %>
       <h2 class="govuk-heading-m">
         <span class="govuk-caption-m"><%= t("publish.courses.index.ratifying_provider") %></span>

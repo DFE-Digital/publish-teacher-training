@@ -47,17 +47,17 @@ RSpec.describe "Viewing the grouped course list" do
   end
 
   def then_i_see_a_section_per_group
-    expect(page).to have_css('[data-qa="courses__table-section"]', count: 3)
+    expect(page).to have_css('.app-course-list__group', count: 3)
   end
 
   def and_the_self_accredited_section_has_no_heading
     # The self-accredited group is rendered first and has no <h2> heading.
-    first_section = page.all('[data-qa="courses__table-section"]').first
+    first_section = page.all('.app-course-list__group').first
     expect(first_section).to have_no_css("h2")
   end
 
   def and_the_ratified_sections_are_in_alphabetical_order
-    headings = page.all('[data-qa="courses__table-section"] h2').map { |h2| h2.text.squish }
+    headings = page.all('.app-course-list__group h2').map { |h2| h2.text.squish }
     expect(headings).to eq(
       ["Accredited provider Alpha University", "Accredited provider Zeta University"],
     )
@@ -71,6 +71,6 @@ RSpec.describe "Viewing the grouped course list" do
 
   def then_i_see_no_course_sections
     expect(page).to have_css("h1", text: "Courses")
-    expect(page).to have_no_css('[data-qa="courses__table-section"]')
+    expect(page).to have_no_css('.app-course-list__group')
   end
 end

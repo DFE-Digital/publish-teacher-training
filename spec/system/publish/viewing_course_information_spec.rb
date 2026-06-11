@@ -46,7 +46,7 @@ RSpec.describe "Viewing course information in the course list" do
   end
 
   def then_i_see_the_course_information_on_separate_lines
-    within '[data-qa="courses-table__course-information"]' do
+    within '.app-table--courses__course-information' do
       expect(page).to have_text("Fee-paying")
       expect(page).to have_text("QTS with PGCE")
       expect(page).to have_text("Full time")
@@ -55,11 +55,11 @@ RSpec.describe "Viewing course information in the course list" do
   end
 
   def and_i_see_the_start_date_in_the_smaller_font
-    expect(page).to have_css('[data-qa="courses-table__course-information"] .govuk-\!-font-size-16', text: "September 2026")
+    expect(page).to have_css('.app-table--courses__course-information .govuk-\!-font-size-16', text: "September 2026")
   end
 
   def then_i_see_both_start_dates
-    information = page.all('[data-qa="courses-table__course-information"]').map(&:text).join(" ")
+    information = page.all('.app-table--courses__course-information').map(&:text).join(" ")
     expect(information).to include("September 2026")
     expect(information).to include("January 2027")
   end
