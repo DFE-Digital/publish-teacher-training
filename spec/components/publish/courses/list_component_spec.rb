@@ -24,6 +24,14 @@ RSpec.describe Publish::Courses::ListComponent, type: :component do
         ["Accredited provider Aardvark University", "Accredited provider Zoo College"],
       )
     end
+
+    it "renders the self-accredited group first, without a heading, but with its table" do
+      render_component
+
+      first_section = page.all('section[data-qa="courses__table-section"]').first
+      expect(first_section).to have_no_css("h2")
+      expect(first_section).to have_css("table.app-table--courses")
+    end
   end
 
   context "when the provider has no courses" do
