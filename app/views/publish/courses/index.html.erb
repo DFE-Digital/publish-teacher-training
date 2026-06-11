@@ -13,9 +13,14 @@
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>
 <!-- TEST button for downloading course list as CSV -->
-<button type="submit" class="govuk-button govuk-button--secondary govuk-margin-left-2" data-module="govuk-button">
-  Download all course information (CSV)
-</button>
+<%= link_to "Download all course information (CSV)",
+    publish_provider_recruitment_cycle_courses_path(
+      @provider.provider_code,
+      @provider.recruitment_cycle.year,
+      request.query_parameters.merge(format: :csv)
+    ),
+    class: "govuk-button govuk-button--secondary govuk-margin-left-2"
+%>
 <br>
 <br>
 <div class="govuk-grid-row">
