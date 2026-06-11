@@ -16,18 +16,18 @@ module Publish
         withdrawn: { text: "Withdrawn", colour: "red" },
         empty: { text: "Draft", colour: "grey" },
         draft: { text: "Draft", colour: "grey" },
-        published_with_unpublished_changes: { text: "Open&nbsp;*", colour: "teal" },
+        published_with_unpublished_changes: { text: "Open *", colour: "teal" },
         rolled_over: { text: "Rolled over", colour: "yellow" },
       }.freeze
 
       NO_VACANCIES = VACANCIES.merge(
         published: { text: "Closed", colour: "purple" },
-        published_with_unpublished_changes: { text: "Closed&nbsp;*", colour: "purple" },
+        published_with_unpublished_changes: { text: "Closed *", colour: "purple" },
       ).freeze
 
       SCHEDULED = VACANCIES.merge(
         published: { text: "Scheduled", colour: "blue" },
-        published_with_unpublished_changes: { text: "Scheduled&nbsp;*", colour: "blue" },
+        published_with_unpublished_changes: { text: "Scheduled *", colour: "blue" },
       ).freeze
 
       def initialize(course:, recruitment_cycle_year:, classes: [], html_attributes: {})
@@ -37,7 +37,7 @@ module Publish
       end
 
       def call
-        rendered = helpers.govuk_tag(text: status[:text].html_safe, colour: status[:colour])
+        rendered = helpers.govuk_tag(text: status[:text], colour: status[:colour])
         rendered += unpublished_hint if has_unpublished_changes?
         rendered
       end
@@ -72,7 +72,7 @@ module Publish
 
       def unpublished_hint
         helpers.tag.span(
-          "*&nbsp;Unpublished&nbsp;changes".html_safe,
+          "* Unpublished changes",
           class: "govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0 govuk-!-margin-top-1",
         )
       end
