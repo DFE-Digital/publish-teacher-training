@@ -1,3 +1,12 @@
 <% course_list.groups.each do |group| %>
-  <%= render Publish::Courses::GroupComponent.new(group:, provider:) %>
+  <section data-qa="courses__table-section">
+    <% unless group.self_accredited? %>
+      <h2 class="govuk-heading-m">
+        <span class="govuk-caption-m"><%= t("publish.courses.index.ratifying_provider") %></span>
+        <%= group.heading %>
+      </h2>
+    <% end %>
+
+    <%= render Publish::Courses::TableComponent.new(courses: group.courses, provider:) %>
+  </section>
 <% end %>
