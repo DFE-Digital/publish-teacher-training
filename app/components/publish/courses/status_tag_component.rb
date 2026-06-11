@@ -11,7 +11,7 @@ module Publish
     # cross-check spec asserts this component renders identically to
     # ApplicationDecorator#status_tag.
     class StatusTagComponent < ApplicationComponent
-      VACANCIES = {
+      OPEN_APPLICATION_STATUS_TAGS = {
         published: { text: "Open", colour: "teal" },
         withdrawn: { text: "Withdrawn", colour: "red" },
         empty: { text: "Draft", colour: "grey" },
@@ -20,12 +20,12 @@ module Publish
         rolled_over: { text: "Rolled over", colour: "yellow" },
       }.freeze
 
-      NO_VACANCIES = VACANCIES.merge(
+      CLOSED_APPLICATION_STATUS_TAGS = OPEN_APPLICATION_STATUS_TAGS.merge(
         published: { text: "Closed", colour: "purple" },
         published_with_unpublished_changes: { text: "Closed *", colour: "purple" },
       ).freeze
 
-      SCHEDULED = VACANCIES.merge(
+      SCHEDULED_STATUS_TAGS = OPEN_APPLICATION_STATUS_TAGS.merge(
         published: { text: "Scheduled", colour: "blue" },
         published_with_unpublished_changes: { text: "Scheduled *", colour: "blue" },
       ).freeze
@@ -52,9 +52,9 @@ module Publish
 
       def status_tags
         if current_or_previous_cycle?
-          course.application_status_open? ? VACANCIES : NO_VACANCIES
+          course.application_status_open? ? OPEN_APPLICATION_STATUS_TAGS : CLOSED_APPLICATION_STATUS_TAGS
         else
-          SCHEDULED
+          SCHEDULED_STATUS_TAGS
         end
       end
 
