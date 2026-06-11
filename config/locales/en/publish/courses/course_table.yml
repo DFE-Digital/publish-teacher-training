@@ -5,3 +5,7 @@ en:
         course: Course
         course_information: Course information
         status: Status
+        funding:
+          fee: Fee-paying
+          salary: Salaried
+          apprenticeship: Apprenticeship
