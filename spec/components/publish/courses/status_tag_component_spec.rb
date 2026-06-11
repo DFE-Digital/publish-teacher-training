@@ -16,7 +16,9 @@ RSpec.describe Publish::Courses::StatusTagComponent, type: :component do
   end
 
   def normalize(html)
-    html.to_s.gsub(/\s+/, " ").strip
+    # The decorator emits &nbsp; where the component uses a plain space; treat them
+    # the same so the comparison is about text/colour/structure, not whitespace.
+    html.to_s.gsub("&nbsp;", " ").gsub(/\s+/, " ").strip
   end
 
   def expect_match(course)
