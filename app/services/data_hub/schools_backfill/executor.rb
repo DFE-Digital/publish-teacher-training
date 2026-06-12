@@ -37,15 +37,42 @@ module DataHub
 
       def insert_provider_schools
         inserted_rows = ActiveRecord::Base.connection.exec_query(<<~SQL)
+          WITH main_site_provider_schools AS (
+            SELECT DISTINCT ON (site.provider_id)
+                   site.provider_id,
+                   gias_school.id AS gias_school_id,
+                   site.code AS site_code
+            FROM site
+            JOIN gias_school ON gias_school.urn = site.urn
+            WHERE site.site_type = 0
+              AND site.discarded_at IS NULL
+              AND site.urn IS NOT NULL
+              AND site.urn <> ''
+              AND site.code = '-'
+            ORDER BY site.provider_id, site.id
+          ),
+          non_main_provider_schools AS (
+            SELECT DISTINCT ON (site.provider_id, gias_school.id)
+                   site.provider_id,
+                   gias_school.id AS gias_school_id,
+                   site.code AS site_code
+            FROM site
+            JOIN gias_school ON gias_school.urn = site.urn
+            WHERE site.site_type = 0
+              AND site.discarded_at IS NULL
+              AND site.urn IS NOT NULL
+              AND site.urn <> ''
+              AND site.code <> '-'
+            ORDER BY site.provider_id, gias_school.id, site.id
+          ),
+          source_provider_schools AS (
+            SELECT * FROM main_site_provider_schools
+            UNION ALL
+            SELECT * FROM non_main_provider_schools
+          )
           INSERT INTO provider_school (provider_id, gias_school_id, site_code, created_at, updated_at)
-          SELECT DISTINCT ON (site.provider_id, gias_school.id, site.code)
-                 site.provider_id, gias_school.id, site.code, NOW(), NOW()
-          FROM site
-          JOIN gias_school ON gias_school.urn = site.urn
-          WHERE site.site_type = 0
-            AND site.discarded_at IS NULL
-            AND site.urn IS NOT NULL
-            AND site.urn <> ''
+          SELECT provider_id, gias_school_id, site_code, NOW(), NOW()
+          FROM source_provider_schools
           ON CONFLICT DO NOTHING
           RETURNING 1
         SQL
@@ -54,16 +81,44 @@ module DataHub
 
       def insert_course_schools
         inserted_rows = ActiveRecord::Base.connection.exec_query(<<~SQL)
+          WITH main_site_course_schools AS (
+            SELECT DISTINCT ON (course_site.course_id, gias_school.id)
+                   course_site.course_id,
+                   gias_school.id AS gias_school_id,
+                   site.code AS site_code
+            FROM course_site
+            JOIN site        ON site.id = course_site.site_id
+            JOIN gias_school ON gias_school.urn = site.urn
+            WHERE site.site_type = 0
+              AND site.discarded_at IS NULL
+              AND site.urn IS NOT NULL
+              AND site.urn <> ''
+              AND site.code = '-'
+            ORDER BY course_site.course_id, gias_school.id, site.id
+          ),
+          non_main_course_schools AS (
+            SELECT DISTINCT ON (course_site.course_id, gias_school.id)
+                   course_site.course_id,
+                   gias_school.id AS gias_school_id,
+                   site.code AS site_code
+            FROM course_site
+            JOIN site        ON site.id = course_site.site_id
+            JOIN gias_school ON gias_school.urn = site.urn
+            WHERE site.site_type = 0
+              AND site.discarded_at IS NULL
+              AND site.urn IS NOT NULL
+              AND site.urn <> ''
+              AND site.code <> '-'
+            ORDER BY course_site.course_id, gias_school.id, site.id
+          ),
+          source_course_schools AS (
+            SELECT * FROM main_site_course_schools
+            UNION ALL
+            SELECT * FROM non_main_course_schools
+          )
           INSERT INTO course_school (course_id, gias_school_id, site_code, created_at, updated_at)
-          SELECT DISTINCT ON (course_site.course_id, gias_school.id, site.code)
-                 course_site.course_id, gias_school.id, site.code, NOW(), NOW()
-          FROM course_site
-          JOIN site        ON site.id = course_site.site_id
-          JOIN gias_school ON gias_school.urn = site.urn
-          WHERE site.site_type = 0
-            AND site.discarded_at IS NULL
-            AND site.urn IS NOT NULL
-            AND site.urn <> ''
+          SELECT course_id, gias_school_id, site_code, NOW(), NOW()
+          FROM source_course_schools
           ON CONFLICT DO NOTHING
           RETURNING 1
         SQL
