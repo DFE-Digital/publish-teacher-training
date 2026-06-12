@@ -8,30 +8,41 @@ Accepted
 
 ## Context
 
-Publish has historically represented school-related course and provider locations through `Site` records. This includes the legacy main-site concept, where `site_code = "-"` carries special meaning for some downstream behaviour.
+Publish has historically used the `Site` table as the backing model for provider and course school/location relationships. This is the wrong shape for the data.
 
-This model has become difficult to reason about:
+A school is an external organisation with authoritative data in GIAS. A provider-school or course-school entry is a relationship to that school. A study placement is a different concept again. The current model mixes these together by storing school-like records in `Site`, even when the school itself already exists in `GiasSchool`.
 
-- school-like data is duplicated in `Site` even though GIAS is the authoritative source for schools;
-- behaviour differs between Publish, Find, Apply and API consumers;
-- main-site behaviour is implicit and coupled to `Site`;
-- provider school creation can take a long time when providers bulk add schools, so the current model has pushed that work into asynchronous processing;
-- the whole `Site` table is copied during rollover for each year's courses;
-- location-based search queries the `Site` table, which is heavily duplicated and bloated because sites are copied every recruitment cycle;
-- `Site` records are not updated when their source `GiasSchool` data changes;
-- location-based search and API responses depend on legacy school lookup rules;
-- the data model is complicated because `Site` carries school relationships, study placements and main-site behaviour; and
-- salaried courses need deterministic school/location behaviour even when courses do not have course-specific schools attached.
+This creates several problems.
 
-One of the earlier hurdles was that many main sites could not be matched to a GIAS school. That would have left some school-like records in `Site` and weakened the target model. We have now resolved that blocker and can link the main sites to GIAS schools, so all schools can move into the new join tables. The migration detail is covered in [ADR 17](0017-migrate-school-data-into-new-relationship-model.md).
+`Site` duplicates school data instead of relating providers and courses to an authoritative `GiasSchool` record. When the GIAS source changes, copied `Site` records do not automatically reflect those changes, so school data can drift from its source.
 
-We need a school relationship model that separates authoritative school data from study placements, preserves required legacy site-code behaviour, and gives later API, search, publishing and rollover work a clear data model to target.
+`Site` is copied during rollover for each year's courses. That means the table grows with repeated copies of school-like records across recruitment cycles. The same school can appear many times because the model stores copied locations rather than stable relationships to a school.
+
+Location-based search queries this duplicated `Site` data. Search therefore depends on a bloated table containing repeated school copies rather than querying a smaller relationship model backed by GIAS school data.
+
+Adding provider schools can be slow when a provider bulk adds many schools because the current model creates many `Site` records. This has pushed that work into asynchronous processing, but the underlying issue is that the model stores copied location rows instead of simple provider-school relationships.
+
+The model also makes behaviour harder to reason about across Publish, Find, Apply and API consumers. School retrieval, publishing checks, API location responses, rollover and search all have to understand legacy `Site` behaviour. The lack of an explicit provider-school relationship also makes it harder for course-school records to refer back to the provider-level school they came from.
+
+Main-site behaviour is one compatibility constraint within this wider remodel. `site_code = "-"` carries special meaning for some downstream behaviour, so the new model must preserve that value. It should not drive the shape of the model, and we should not keep school relationships in `Site` just to preserve main-site semantics.
+
+One implementation hurdle was that many main sites could not be matched to a GIAS school. That would have left some school-like records in `Site` and weakened the target model. We have now resolved that blocker and can link the main sites to GIAS schools, so all schools can move into the new join tables. The migration detail is covered in [ADR 17](0017-migrate-school-data-into-new-relationship-model.md).
+
+We need to change the data model so that:
+
+- `GiasSchool` remains the source of school data;
+- provider-school and course-school rows represent relationships to those schools;
+- `Site` is kept for study placements rather than school relationships;
+- rollover copies relationship rows instead of copied school-like site rows;
+- location search can query GIAS-backed school relationships;
+- school data can stay aligned with GIAS imports; and
+- legacy site-code behaviour is preserved as relationship metadata.
 
 ## Options
 
-### 1. Keep using `Site` as the school relationship model
+### 1. Keep using `Site` as the school/location relationship model
 
-Continue storing school relationships and main-site semantics in `Site`, while adding incremental fixes around API, search and publishing.
+Continue storing provider and course school/location relationships in `Site`, while adding incremental fixes around API, search and publishing.
 
 #### Pros
 
@@ -47,18 +58,18 @@ Continue storing school relationships and main-site semantics in `Site`, while a
 - Leaves location-based search querying a duplicated and increasingly bloated table.
 - Leaves `Site` school data stale when the source GIAS record changes.
 - Keeps bulk provider-school additions dependent on long-running asynchronous writes to the old model.
-- Leaves main-site behaviour implicit and harder to validate.
+- Leaves legacy site-code behaviour implicit and harder to validate.
 - Makes search, API, publishing and rollover changes harder to align.
 - Does not provide a clean provider-school relationship for course-school records to reference.
 
-### 2. Keep `Site` for main sites and add GIAS-backed relationships alongside it
+### 2. Add GIAS-backed relationships but keep some school data in `Site`
 
-Introduce provider-school and course-school relationships, but continue treating main sites as `Site` records.
+Introduce provider-school and course-school relationships, but continue treating some legacy school/location behaviour as `Site` records.
 
 #### Pros
 
 - Reduces some dependency on `Site` for ordinary school relationships.
-- Keeps the legacy main-site representation intact during migration.
+- Keeps legacy `Site`-based behaviour intact during migration.
 - Can be introduced gradually.
 
 #### Cons
@@ -66,8 +77,8 @@ Introduce provider-school and course-school relationships, but continue treating
 - Leaves two school representations in active use.
 - Requires code to decide whether school behaviour comes from `Site` or the new relationships.
 - Preserves the ambiguity this work is intended to remove.
-- Makes main-site compatibility a special case rather than part of the relationship model.
-- Keeps some school data outside the GIAS-backed relationship model even though main sites can now be linked to GIAS schools.
+- Makes legacy compatibility a special case rather than part of the relationship model.
+- Keeps some school data outside the GIAS-backed relationship model even though main sites and other school relationships can now be linked to GIAS schools.
 
 ### 3. Use GIAS-backed join tables for school relationships and keep `Site` for study placements
 
@@ -119,7 +130,7 @@ The UUID belongs on `provider_school` because it represents the provider/school 
 
 `course_school.provider_school_id` is part of the model, not just an API convenience. It records which provider-school relationship a course-school relationship came from, avoids duplicating UUIDs, and supports deletion rules for provider schools that are used by courses.
 
-Main-site behaviour is represented by `site_code = "-"`, not by a separate `main_site` boolean. A provider may have at most one provider-school relationship with `site_code = "-"`. This rule should be enforced with database constraints where practical and with matching model validations.
+Because main-site behaviour remains a compatibility constraint, it is represented by `site_code = "-"`, not by a separate `main_site` boolean and not by retaining school rows in `Site`. A provider may have at most one provider-school relationship with `site_code = "-"`. This rule should be enforced with database constraints where practical and with matching model validations.
 
 Course-school records should copy `site_code` from the matching provider-school relationship. If the provider-school relationship has `site_code = "-"`, the course-school relationship should also use `site_code = "-"`.
 
@@ -139,7 +150,7 @@ Location-based search can move away from a duplicated `Site` table and query GIA
 
 School metadata can be kept aligned with GIAS imports because school attributes live on `GiasSchool`, not on copied `Site` records that drift from their source.
 
-Legacy site-code behaviour is preserved, including main-site semantics, but it is carried on the relationship rows rather than requiring school lookup through `Site`.
+Legacy site-code behaviour is preserved, including main-site semantics, as a compatibility concern within the new model. It is carried on the relationship rows rather than requiring school lookup through `Site`.
 
 The provider-school relationship becomes the single source for school/location UUIDs used by downstream systems such as Apply. This avoids denormalising UUIDs into `course_school` and keeps `gias_school` free of relationship-specific identifiers.
 
