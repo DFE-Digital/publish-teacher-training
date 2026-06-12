@@ -12,6 +12,12 @@ class Provider::School < ApplicationRecord
 
   validates :site_code, presence: true
   validates :gias_school_id, uniqueness: { scope: %i[provider_id site_code] }
+  validates :gias_school_id,
+            uniqueness: {
+              scope: :provider_id,
+              conditions: -> { where.not(site_code: MAIN_SITE_CODE) },
+            },
+            if: -> { site_code != MAIN_SITE_CODE }
   validates :site_code,
             uniqueness: {
               scope: :provider_id,

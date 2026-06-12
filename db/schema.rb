@@ -263,6 +263,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_120100) do
     t.text "site_code", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id", "gias_school_id", "site_code"], name: "index_course_school_unique", unique: true
+    t.index ["course_id", "gias_school_id"], name: "index_course_school_unique_non_main", unique: true, where: "(site_code <> '-'::text)"
     t.index ["gias_school_id"], name: "index_course_school_on_gias_school_id"
   end
 
@@ -467,6 +468,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_120100) do
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.index ["gias_school_id"], name: "index_provider_school_on_gias_school_id"
     t.index ["provider_id", "gias_school_id", "site_code"], name: "index_provider_school_unique", unique: true
+    t.index ["provider_id", "gias_school_id"], name: "index_provider_school_unique_non_main", unique: true, where: "(site_code <> '-'::text)"
     t.index ["provider_id"], name: "index_provider_school_one_main_per_provider", unique: true, where: "(site_code = '-'::text)"
   end
 

@@ -10,4 +10,10 @@ class Course::School < ApplicationRecord
 
   validates :site_code, presence: true
   validates :gias_school_id, uniqueness: { scope: %i[course_id site_code] }
+  validates :gias_school_id,
+            uniqueness: {
+              scope: :course_id,
+              conditions: -> { where.not(site_code: Provider::School::MAIN_SITE_CODE) },
+            },
+            if: -> { site_code != Provider::School::MAIN_SITE_CODE }
 end

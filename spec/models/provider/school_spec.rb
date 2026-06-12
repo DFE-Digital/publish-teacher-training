@@ -33,6 +33,40 @@ describe Provider::School do
         expect(duplicate.errors[:gias_school_id]).to be_present
       end
     end
+
+    context "with the same gias_school and different non-main site codes for one provider" do
+      let(:existing) { create(:provider_school, :additional, site_code: "A") }
+      let(:duplicate) do
+        build(
+          :provider_school,
+          :additional,
+          provider: existing.provider,
+          gias_school: existing.gias_school,
+          site_code: "B",
+        )
+      end
+
+      it "is invalid" do
+        duplicate.validate
+        expect(duplicate.errors[:gias_school_id]).to be_present
+      end
+    end
+
+    context "with the same gias_school when one relationship is a main site" do
+      let(:existing) { create(:provider_school, :additional, site_code: "A") }
+      let(:main_site_duplicate) do
+        build(
+          :provider_school,
+          provider: existing.provider,
+          gias_school: existing.gias_school,
+          site_code: "-",
+        )
+      end
+
+      it "is valid" do
+        expect(main_site_duplicate).to be_valid
+      end
+    end
   end
 
   describe "main-site uniqueness (site_code = '-')" do
