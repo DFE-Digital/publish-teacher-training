@@ -13,39 +13,30 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(
-          model: @fees_and_financial_support_form,
-          url: fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
-            @provider.provider_code,
-            @course.recruitment_cycle_year,
-            @course.course_code,
-          ),
-          data: { qa: "enrichment-form", module: "form-check-leave" },
-          method: :patch,
-          local: true,
-        ) do |f| %>
+    <%= form_with url: bulk_update_fees_publish_provider_recruitment_cycle_course_path(
+      @provider.provider_code,
+      @course.recruitment_cycle_year,
+      @course.course_code
+    ),
+    method: :get,
+    local: true do |f| %>
+
       <%= f.hidden_field :goto_preview, value: params[:goto_preview] %>
 
       <% content_for :before_content do %>
-        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @course.recruitment_cycle_year, course_code: @course.course_code)) %>
+        <%= govuk_back_link_to(
+          publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code
+          )
+        ) %>
       <% end %>
-
-      <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
         <%= t(".heading") %>
       </h1>
-
-      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-        texts: [
-          [t(".fee_uk"), number_to_currency(@course.fee_uk_eu).to_s],
-          [@course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), number_to_currency(@course.fee_international).to_s],
-          [t(".fee_schedule"), @course.fee_schedule],
-          [t(".additional_fees"), @course.additional_fees],
-          [t(".financial_support"), @course.financial_support],
-        ],
-      } %>
 
       <%= render partial: "publish/courses/markdown_formatting" %>
 
@@ -53,7 +44,7 @@
         <%= f.govuk_text_field(:fee_uk_eu,
             form_group: { id: "fee-uk" },
             label: { text: t(".fee_uk"), size: "s" },
-            value: @copied_fields_values&.dig("fee_uk_eu"),
+            value: params[:fee_uk_eu].presence || @copied_fields_values&.dig("fee_uk_eu") || @fees_and_financial_support_form.fee_uk_eu,
             prefix_text: "£",
             width: 5,
             data: { input_preview_target: "input",
@@ -63,7 +54,7 @@
         <%= f.govuk_text_field(:fee_international,
             form_group: { id: "fee-international" },
             label: { text: @course.can_sponsor_student_visa? ? t(".fee_international") : t(".fee_international_optional"), size: "s" },
-            value: @copied_fields_values&.dig("fee_international"),
+            value: params[:fee_international].presence || @copied_fields_values&.dig("fee_international") || @fees_and_financial_support_form.fee_international,
             prefix_text: "£",
             width: 5,
             data: { input_preview_target: "input",
@@ -72,7 +63,7 @@
 
         <%= f.govuk_text_area(:fee_schedule,
             label: { text: t(".fee_schedule"), size: "s" },
-            value: @copied_fields_values&.dig("fee_schedule"),
+            value: params[:fee_schedule].presence || @copied_fields_values&.dig("fee_schedule") || @fees_and_financial_support_form.fee_schedule,
             rows: 5,
             max_words: 50,
             data: { input_preview_target: "input",
@@ -81,7 +72,7 @@
 
         <%= f.govuk_text_area(:additional_fees,
             label: { text: t(".additional_fees"), size: "s" },
-            value: @copied_fields_values&.dig("additional_fees"),
+            value: params[:additional_fees].presence || @copied_fields_values&.dig("additional_fees") || @fees_and_financial_support_form.additional_fees,
             hint: { text: t(".additional_fees_hint"), size: "s" },
             rows: 5,
             max_words: 50,
@@ -91,7 +82,7 @@
 
         <%= f.govuk_text_area(:financial_support,
             label: { text: t(".financial_support"), size: "s" },
-            value: @copied_fields_values&.dig("financial_support"),
+            value: params[:financial_support].presence || @copied_fields_values&.dig("financial_support") || @fees_and_financial_support_form.financial_support,
             hint: { text: t(".financial_support_hint"), size: "s" },
             rows: 5,
             max_words: 50,
@@ -102,7 +93,9 @@
         <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
 
       </div>
-      <%= f.govuk_submit t(".submit_button") %>
+
+    <%= f.govuk_submit "Continue" %>
+
     <% end %>
 
     <p class="govuk-body">

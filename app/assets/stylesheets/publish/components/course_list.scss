@@ -1,0 +1,34 @@
+.app-table--courses {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.app-table--courses th,
+.app-table--courses td {
+  vertical-align: top;
+}
+
+/* ===== Column widths ===== */
+
+/* Default: 2-column layout (no course info) */
+.app-col-course {
+  width: 70%;
+}
+
+.app-col-status {
+  width: 30%;
+}
+
+/* 3-column layout */
+.app-col-info {
+  width: 40%;
+}
+
+/* When course info is present, override course/status widths */
+.app-table--courses col.app-col-course:nth-of-type(1):not(:last-child) {
+  width: 40%;
+}
+
+.app-table--courses col.app-col-status:last-child:not(:only-child) {
+  width: 20%;
+}

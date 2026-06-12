@@ -1,0 +1,74 @@
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <%= govuk_back_link_to(
+      school_experience_publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code,
+        school_experience: params[:school_experience],
+        school_experience_required: params[:school_experience_required]
+      )
+    ) %>
+
+    <span class="govuk-caption-l">
+      <%= @course.name_and_code %>
+    </span>
+
+    <h1 class="govuk-heading-l">
+      School experience
+    </h1>
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+<%= render partial: "publish/courses/markdown_formatting" %>
+
+<%= form_with url: bulk_update_school_experience_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          params[:recruitment_cycle_year],
+          @course.course_code
+        ),
+        method: :get,
+        local: true do %>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="school_experience">
+            What school experience are you looking for?
+          </label>
+           <p class="govuk-hint">Candidates have said they would like to know:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-hint">
+        <li>Is school experience required or just recommended?</li>
+        <li>How much time should they have spent in a school?</li>
+        <li>What types of activities should they have experience in? For example, observing lessons, teaching classes, behaviour management</li>
+        <li>Must it have been paid work or could it be voluntary?</li>
+        <li>Do they need to have had experience in the particular subject they're applying for?</li>
+        <li>Must their experience have been in a UK school?</li>
+      </ul>
+
+      <textarea
+        class="govuk-textarea"
+        name="school_experience"
+        id="school_experience"
+        rows="10"><%= h(params[:school_experience]) %></textarea>
+        </div>
+
+        <button class="govuk-button" type="submit">
+          Continue
+        </button>
+
+      <% end %>
+
+
+    <p class="govuk-body">
+      <a href="../" class="govuk-link">Cancel</a>
+    </p>
+
+      </div>
+<!-- End column 2 thirds -->
+    </div>
+  </div>

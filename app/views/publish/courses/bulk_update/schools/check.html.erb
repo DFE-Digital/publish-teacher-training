@@ -1,0 +1,153 @@
+<% page_title = "Check bulk update schools" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :before_content do %>
+  <!-- Fix Back link to udpate placement schools page -->
+  <%= govuk_back_link_to(
+    edit_bulk_schools_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code, bulk_apply: params[:bulk_apply], added_count: @added_count,
+    removed_count: @removed_count,
+    added_site_ids: @added_site_ids,
+    removed_site_ids: @removed_site_ids,
+),
+  ) %>
+<% end %>
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-caption-l">
+        <%= course.name_and_code %>
+      </div>
+      <p class="govuk-heading-l">
+        Updating placement schools
+      </p>
+      <!-- List of schools being added or removed -->
+      <p class="govuk-heading-m">
+        You are updating these schools
+      </p>
+      <% if @added_schools.empty? && @removed_schools.empty? %>
+        <p class="govuk-body">
+          No placement schools added or removed.
+        </p>
+      <% else %>
+        <!-- move all schools into details component if more than 10 schools are being added OR removed -->
+        <% use_details = @added_schools.size >= 10 || @removed_schools.size >= 10 %>
+        <%# Added schools %>
+        <% if @added_schools.any? %>
+          <% if use_details %>
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  You are adding <%= pluralize(@added_schools.size, "school") %>
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+              <% else %>
+                <p class="govuk-body govuk-!-margin-bottom-1">
+                  <strong>
+                    You are adding <%= pluralize(@added_schools.size, "school") %>:
+                  </strong>
+                </p>
+              <% end %>
+              <ul class="govuk-list govuk-list--bullet">
+                <% @added_schools.each do |school| %>
+                  <li><%= school.location_name %></li>
+                <% end %>
+              </ul>
+              <% if use_details %>
+              </div>
+            </details>
+          <% end %>
+        <% end %>
+        <%# Removed schools %>
+        <% if @removed_schools.any? %>
+          <% if use_details %>
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  You are removing <%= pluralize(@removed_schools.size, "school") %>
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+              <% else %>
+                <p class="govuk-body govuk-!-margin-bottom-1">
+                  <strong>
+                    You are removing <%= pluralize(@removed_schools.size, "school") %>:
+                  </strong>
+                </p>
+              <% end %>
+              <ul class="govuk-list govuk-list--bullet">
+                <% @removed_schools.each do |school| %>
+                  <li><%= school.location_name %></li>
+                <% end %>
+              </ul>
+              <% if use_details %>
+              </div>
+            </details>
+          <% end %>
+        <% end %>
+      <% end %>
+      <br>
+      <p class="govuk-heading-m">
+        <strong>You are updating these courses:</strong>
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <% if @bulk_apply_scope_label.include?("All courses") %>
+          <li>All courses</li>
+        <% elsif @bulk_apply_scope_label.include?("Only this course") %>
+          <li>Only this course - <%= course.name_and_code %></li>
+        <% else %>
+          <li><%= @bulk_apply_scope_label %></li>
+        <% end %>
+      </ul>
+      <% if @show_courses_table %>
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Course</th>
+              <th scope="col" class="govuk-table__header">Course information</th>
+              <th scope="col" class="govuk-table__header">Status</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body govuk-margin-bottom-0">
+            <% @courses_for_check.each do |course| %>
+              <tr class="govuk-table__row">
+                <!-- Column 1: Course -->
+                <td class="govuk-table__cell govuk-!-padding-top-4 govuk-!-padding-bottom-4">
+                  <strong><%= course[:name] %></strong>
+                </td>
+                <!-- Column 2: Course information -->
+                <td class="govuk-table__cell govuk-!-padding-top-4 govuk-!-padding-bottom-4">
+                  <ul class="govuk-list govuk-hint govuk-!-margin-bottom-0">
+                    <% @bulk_apply_short_label.each do |line| %>
+                      <li class="govuk-body-s govuk-!-margin-bottom-0"><%= line %></li>
+                    <% end %>
+                  </ul>
+                </td>
+                <!-- Column 3: Status -->
+                <td class="govuk-table__cell govuk-!-padding-top-4 govuk-!-padding-bottom-4">
+                  <strong class="govuk-tag govuk-tag--<%= course[:status][:colour] %>">
+                    <%= course[:status][:label] %>
+                  </strong>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+      <% button_text = @bulk_apply == "this_course" ? "Update placement schools on 1 course" : "Update placement schools on 20 courses" %>
+      <%= form_with(
+  url: confirm_bulk_schools_publish_provider_recruitment_cycle_course_path(
+    course.provider_code,
+    course.recruitment_cycle_year,
+    course.course_code,
+  ),
+  method: :post
+) do |f| %>
+        <%= hidden_field_tag :bulk_apply, @bulk_apply %>
+        <%= f.govuk_submit button_text %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="govuk-body">
+  <%= govuk_link_to "Cancel", details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code) %>
+</div>

@@ -1,0 +1,141 @@
+<% page_title = "Bulk update schools" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :before_content do %>
+  <!-- Fix Back link to udpate placement schools page -->
+  <%= govuk_back_link_to(
+    schools_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code),
+  ) %>
+<% end %>
+<div class="govuk-caption-l">
+  <%= course.name_and_code %>
+</div>
+<div class="govuk-heading-l">
+  Updating placement schools
+</div>
+<%# <p class="govuk-body">
+  You are updating this information:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>Placement schools</li>
+</ul> %>
+<!-- Number of schools added or removed message -->
+<!-- <% if @added_count.positive? || @removed_count.positive? %>
+  <p class="govuk-body">
+    <% parts = [] %>
+    <% parts << "#{pluralize(@added_count, 'school')} added" if @added_count.positive? %>
+    <% parts << "#{pluralize(@removed_count, 'school')} removed" if @removed_count.positive? %>
+    <%= parts.join(' and ') %>.
+  </p>
+<% end %> -->
+<!-- List of schools being added or removed -->
+<p class="govuk-heading-m">
+  You are updating these schools
+</p>
+<% if @added_schools.empty? && @removed_schools.empty? %>
+  <p class="govuk-body">
+    No placement schools added or removed.
+  </p>
+<% else %>
+  <!-- move all schools into details component if more than 10 schools are being added OR removed -->
+  <% use_details = @added_schools.size >= 10 || @removed_schools.size >= 10 %>
+  <%# Added schools %>
+  <% if @added_schools.any? %>
+    <% if use_details %>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            You are adding <%= pluralize(@added_schools.size, "school") %>
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+        <% else %>
+          <p class="govuk-body govuk-!-margin-bottom-1">
+            <strong>
+              You are adding <%= pluralize(@added_schools.size, "school") %>:
+            </strong>
+          </p>
+        <% end %>
+        <ul class="govuk-list govuk-list--bullet">
+          <% @added_schools.each do |school| %>
+            <li><%= school.location_name %></li>
+          <% end %>
+        </ul>
+        <% if use_details %>
+        </div>
+      </details>
+    <% end %>
+  <% end %>
+  <%# Removed schools %>
+  <% if @removed_schools.any? %>
+    <% if use_details %>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            You are removing <%= pluralize(@removed_schools.size, "school") %>
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+        <% else %>
+          <p class="govuk-body govuk-!-margin-bottom-1">
+            <strong>
+              You are removing <%= pluralize(@removed_schools.size, "school") %>:
+            </strong>
+          </p>
+        <% end %>
+        <ul class="govuk-list govuk-list--bullet">
+          <% @removed_schools.each do |school| %>
+            <li><%= school.location_name %></li>
+          <% end %>
+        </ul>
+        <% if use_details %>
+        </div>
+      </details>
+    <% end %>
+  <% end %>
+<% end %>
+<br>
+<%= form_with(
+  url: edit_bulk_schools_publish_provider_recruitment_cycle_course_path,
+  method: :post
+) do |f| %>
+  <!-- Hidden fields to pass the updated school information -->
+  <%= hidden_field_tag :added_count, @added_count %>
+  <%= hidden_field_tag :removed_count, @removed_count %>
+  <% @added_site_ids.each do |id| %>
+    <%= hidden_field_tag "added_site_ids[]", id %>
+  <% end %>
+  <% @removed_site_ids.each do |id| %>
+    <%= hidden_field_tag "removed_site_ids[]", id %>
+  <% end %>
+  <div class="govuk-form-group govuk-!-margin-bottom-6">
+    <%= f.govuk_radio_buttons_fieldset :bulk_apply,
+    legend: {
+      text: "What courses do you want to apply this change to?",
+      size: "m",
+    } do %>
+      <%= f.govuk_radio_button(
+      :bulk_apply,
+      @this_course_option.id,
+      label: { text: @this_course_option.name },
+      hint: { text: @this_course_hint }
+    ) %>
+      <div class="govuk-radios__divider">
+        or
+      </div>
+      <% @bulk_options.each do |option| %>
+        <% radio_options = {
+        label: { text: option.name }
+      } %>
+        <% if option.respond_to?(:hint) && option.hint.present? %>
+          <% radio_options[:hint] = { text: option.hint } %>
+        <% end %>
+        <%= f.govuk_radio_button(
+        :bulk_apply,
+        option.id,
+        **radio_options
+      ) %>
+      <% end %>
+    <% end %>
+  </div>
+  <%= f.govuk_submit "Continue to view the courses that will be updated" %>
+<% end %>

@@ -1,11 +1,37 @@
-<table class="govuk-table app-table--vertical-align-middle app-table--courses">
+<%# Number of courses currently being displayed %>
+<p class="govuk-body-s number-of-courses govuk-!-margin-bottom-1">
+  <%= "#{courses.count} courses" %>
+</p>
+<hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-4">
+<table class="govuk-table app-table--vertical-align-top app-table--courses">
+  <colgroup>
+    <% if @show_course_info_column %>
+      <col class="app-col-course">
+      <col class="app-col-info">
+      <col class="app-col-status">
+    <% else %>
+      <col class="app-col-course">
+      <col class="app-col-status">
+    <% end %>
+  </colgroup>
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th class="govuk-table__header"><%= t(".course") %></th>
-      <th class="govuk-table__header"><%= t(".status") %></th>
+      <th class="govuk-table__header">
+        <%= t(".course") %>
+      </th>
+      <% if @show_course_info_column %>
+        <th class="govuk-table__header">
+          Course information
+        </th>
+      <% end %>
+      <th class="govuk-table__header">
+        Status
+      </th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-    <%= render partial: "publish/courses/course_table_row", collection: courses, as: :course %>
+    <%= render partial: "publish/courses/course_table_row",
+               collection: courses,
+               as: :course %>
   </tbody>
 </table>

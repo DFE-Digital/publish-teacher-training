@@ -1,7 +1,6 @@
 <h2 class="govuk-heading-m">
   <%= t("publish.providers.courses.description_content.course_length_and_fees_heading") %>
 </h2>
-
 <%= govuk_summary_list do |summary_list| %>
   <% if course.has_fees? %>
     <% enrichment_summary(
@@ -23,11 +22,10 @@
          action_visually_hidden_text: t("publish.providers.courses.description_content.course_length_hidden_text"),
        ) %>
   <% end %>
-
   <% if course.fee_based? %>
     <%= render partial: "publish/courses/fees_and_financial_support", locals: { course: course, summary_list: summary_list } %>
   <% else %>
-      <% enrichment_summary(
+    <% enrichment_summary(
       summary_list,
       :course,
       t("publish.providers.courses.description_content.salary_details_label"),
@@ -37,12 +35,54 @@
     ) %>
   <% end %>
 <% end %>
-
 <h2 class="govuk-heading-m">
   <%= t("publish.providers.courses.description_content.course_requirements_heading") %>
 </h2>
-
 <%= govuk_summary_list do |summary_list| %>
+  <% unless course.fee_based? %>
+    <% school_experience_text = params[:school_experience] %>
+    <% school_experience_required = params[:school_experience_required] %>
+
+    <% school_experience_value =
+        if school_experience_required == "false"
+          "No, school experience is not required"
+        elsif school_experience_text.present?
+  safe_join([
+    content_tag(:p, "Yes, school experience is required"),
+    simple_format(h(school_experience_text))
+  ])
+        else
+          link_to(
+            "Enter school experience",
+            school_experience_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              course.course_code
+            ),
+            class: "govuk-link govuk-inset-text app-inset-text--narrow-border app-inset-text--important"
+          )
+        end %>
+
+    <% change_path =
+        if school_experience_required.present? || school_experience_text.present?
+          school_experience_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+            course.course_code,
+            school_experience: school_experience_text,
+            school_experience_required: school_experience_required
+          )
+        end %>
+
+    <% enrichment_summary(
+      summary_list,
+      :course,
+      "School experience (optional)",
+      school_experience_value,
+      [],
+      action_path: change_path
+    ) %>
+  <% end %>
   <% if course.show_degree_requirements_row? %>
     <% enrichment_summary(
       summary_list,
@@ -53,7 +93,6 @@
       action_path: !course.is_withdrawn? && course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
     ) %>
   <% end %>
-
   <% if course.teacher_degree_apprenticeship? %>
     <% enrichment_summary(
       summary_list,
@@ -66,7 +105,6 @@
       render_errors: false,
     ) %>
   <% end %>
-
   <% enrichment_summary(
     summary_list,
     :course,
@@ -76,11 +114,9 @@
     action_path: !course.is_withdrawn? && course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
   ) %>
 <% end %>
-
 <h2 class="govuk-heading-m">
   <%= t("publish.providers.courses.description_content.course_about_heading") %>
 </h2>
-
 <%= govuk_summary_list do |summary_list| %>
   <%= render "publish/courses/where_you_will_train", course:, summary_list: summary_list %>
 <% end %>
@@ -98,11 +134,8 @@
     action_visually_hidden_text: t("publish.providers.courses.description_content.school_palcement_hidden_text"),
   ) %>
 <% end %>
-
 <%= render partial: "publish/courses/what_you_will_study" %>
-
 <h2 class="govuk-heading-m"><%= t("publish.providers.courses.description_content.course_interview_process_heading") %></h2>
-
 <%= govuk_summary_list do |summary_list| %>
   <%= render partial: "publish/courses/interview_process", locals: { course: course, summary_list: summary_list } %>
 <% end %>

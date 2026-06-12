@@ -91,6 +91,12 @@ class Site < ApplicationRecord
     address.compact_blank.join(", ")
   end
 
+  def address_without_name
+    [address1, address2, address3, town, address4, postcode]
+      .compact_blank
+      .join(", ")
+  end
+
   def address
     [address1, address2, address3, town, address4, postcode]
   end

@@ -1,0 +1,139 @@
+<%
+  bulk_update_scope_labels = @bulk_options.index_by(&:id).transform_values(&:name).merge(
+    @this_course_option.id => @this_course_option.name,
+  )
+%>
+
+<%
+  bulk_update_course_type_labels = {
+    "all_apprenticeship" => @target_course_type_label,
+    "qts_only" => "#{@target_course_type_label} QTS only",
+    "qts_with_pgce" => "#{@target_course_type_label} QTS with PGCE",
+    "full_time" => "#{@target_course_type_label} Full time",
+    "part_time" => "#{@target_course_type_label} Part time",
+    "primary" => "#{@target_course_type_label} Primary",
+    "secondary" => "#{@target_course_type_label} Secondary",
+  }
+%>
+
+<%
+  school_experience_required =
+    ActiveModel::Type::Boolean.new.cast(params[:school_experience_required])
+%>
+
+ <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+      <%= govuk_back_link_to(
+        bulk_update_school_experience_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @provider.recruitment_cycle_year,
+          @course.course_code,
+          school_experience: params[:school_experience],
+          school_experience_required: params[:school_experience_required]
+        )
+      ) %>
+
+  <span class="govuk-caption-l">
+    <%= @course.name_and_code %>
+  </span>
+
+  <h1 class="govuk-heading-l">
+    Updating school experience
+  </h1>
+
+<p class="govuk-body">You are updating this information:</p>
+
+  <% if params[:school_experience].present? || params[:school_experience_required].present? %>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Is school experience required or strongly recommended?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% if params[:school_experience_required] == "false" %>
+            School experience is not required or strongly recommended.
+        <% else %>
+            School experience is required or strongly recommended.
+        <% end %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> name</span></a>
+        </dd>
+      </div>
+      <% if params[:school_experience_required] == "true" && params[:school_experience].present? %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          School experience details
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= h(params[:school_experience]).gsub(/\n/, "<br>").html_safe %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> name</span></a>
+        </dd>
+      </div>
+    <% end %>
+    </dl>
+  <% end %>
+<br>
+
+<p class="govuk-body">You are updating these courses:</p>
+
+  <% if params[:bulk_update_scope].present? %>
+    <ul class="govuk-list govuk-list--bullet">
+      <li><%= bulk_update_scope_labels[params[:bulk_update_scope]] %></li>
+    </ul>
+  <% end %>
+
+
+<%
+  displayed_course_names = (1..20).map do |index|
+    "Course name (X#{index.to_s.rjust(3, "0")})"
+  end
+
+  courses_count_label = params[:bulk_update_scope] == "single_course" ? "1 course" : "20 courses"
+%>
+
+<% unless params[:bulk_update_scope] == "single_course" %>
+  <dl class="govuk-summary-list">
+    <% displayed_course_names.each do |course_name| %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          <%= course_name %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= bulk_update_course_type_labels[params[:bulk_update_scope]] %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+    <% end %>
+  </dl>
+<% end %>
+
+<%= form_with(
+  url: confirm_bulk_update_school_experience_publish_provider_recruitment_cycle_course_path(
+    @provider.provider_code,
+    @provider.recruitment_cycle_year,
+    @course.course_code,
+  ),
+  method: :post,
+  local: true,
+) do |f| %>
+  <%= hidden_field_tag :bulk_update_scope, params[:bulk_update_scope] %>
+  <%= f.govuk_submit "Update school experience on #{courses_count_label}" %>
+<% end %>
+
+<p class="govuk-body">
+      <%= link_to "Cancel",
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ),
+      class: "govuk-link" %>
+    </p>
+
+  </div>
+</div>

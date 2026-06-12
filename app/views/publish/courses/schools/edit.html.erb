@@ -1,71 +1,219 @@
 <% page_title = school_label_for(course) %>
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", @course_school_form.errors.present?) %>
-
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+  <%= govuk_back_link_to(
+    details_publish_provider_recruitment_cycle_course_path(
+      @provider.provider_code,
+      course.recruitment_cycle_year,
+      course.course_code,
+    ),
+  ) %>
 <% end %>
-
 <%= form_with(
   model: @course_school_form,
-  url: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+  url: schools_publish_provider_recruitment_cycle_course_path(
+    @provider.provider_code,
+    course.recruitment_cycle_year,
+    course.course_code,
+  ),
   method: :put,
   local: true,
 ) do |f| %>
   <%= f.govuk_error_summary %>
-
   <% if @course.recruitment_cycle_rollover_period_2026? %>
     <%= f.hidden_field :schools_validated, value: "true" %>
   <% end %>
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= render ::Publish::Schools::NotificationBannerComponent.new(
         recruitment_cycle: @recruitment_cycle,
         provider: @provider,
       ) %>
-
-    <%= f.govuk_check_boxes_fieldset :site_ids,
-        legend:
-        {
+      <div
+  data-controller="school-diff"
+  data-school-diff-initial-site-ids-value="<%= @course.site_ids.join(',') %>"
+>
+        <%= f.govuk_check_boxes_fieldset :site_ids,
+        legend: {
           text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe,
           tag: "h1",
           size: "l",
         },
-        form_group: { data: { controller: "select-all-checkboxes" } } do %>
-
-          <div class="govuk-checkboxes__item">
-            <input type="checkbox"
-                   class="govuk-checkboxes__input"
-                   id="select-all-schools"
-                   data-select-all-checkboxes-target="selectAll"
-                   data-action="select-all-checkboxes#toggleAll">
-
-            <label class="govuk-label govuk-checkboxes__label" for="select-all-schools">
-              <%= t("publish.courses.schools.select_all") %>
-            </label>
+        form_group: {
+          data: {
+            controller: "select-all-checkboxes school-search",
+          },
+        } do %>
+          <!-- Number of schools currently attached to the course -->
+          <p class="govuk-body">
+            <%= "You currently have #{@course.sites.count} schools attached to this course" %>
+          </p>
+          <!-- placeholder button for downloading list of attached schools as CSV -->
+          <%# <div class="govuk-button-group">
+          <button type="button" class="govuk-button govuk-button--secondary">
+            Download list of attached schools (CSV)
+          </button>
+        </div> %>
+          <!-- ✅ Search box -->
+          <div class="school-search-container">
+            <div class="school-search-content">
+              <div class="govuk-form-group govuk-!-margin-bottom-0">
+                <p class="govuk-heading-m">
+                  Search for a school in the list
+                </p>
+                <label class="govuk-label" for="school-search">
+                  Enter the name of a school, university or college. You can also enter a postcode or URN.
+                </label>
+                <div class="school-search-form-container">
+                  <input
+              class="govuk-input"
+              id="school-search"
+              type="search"
+              placeholder="Enter school name, postcode or URN"
+              autoComplete="off"
+              data-school-search-target="input"
+              data-action="keydown.enter->school-search#search">
+                    <button
+              class="govuk-button govuk-button--primary govuk-!-margin-bottom-3"
+              type="button"
+              data-action="school-search#search">
+                      Search
+                    </button>
+                  </div>
+                  <div class="govuk-!-margin-top-0 govuk-body">
+                    <a
+  href="#"
+  class="app-button-link govuk-link"
+  data-action="school-search#clear"
+  data-show-more-target="button">
+                      Clear search
+                    </a>
+                  </div>
+                </div>
+                <!-- Placeholder: Checkbox for filtering to show only attached schools - DOESN"T WORK -->
+                <%# <div class="govuk-checkboxes__item govuk-!-margin-bottom-3 govuk-checkboxes--small">
+                <input
+                  type="checkbox"
+                  class="govuk-checkboxes__input"
+                  id="show-attached-only"
+                  data-action="attached-schools#toggle">
+                  <label
+                  class="govuk-label govuk-checkboxes__label"
+                  for="show-attached-only">
+                    Only show schools attached to this course
+                  </label>
+                </div> %>
+              </div>
+            </div>
+            <!-- Select all -->
+            <div data-school-search-target="selectAllSection">
+              <div class="govuk-checkboxes__item">
+                <input
+      type="checkbox"
+      class="govuk-checkboxes__input"
+      id="select-all-schools"
+      data-select-all-checkboxes-target="selectAll"
+      data-action="select-all-checkboxes#toggleAll change->school-diff#update">
+                  <label
+      class="govuk-label govuk-checkboxes__label"
+      for="select-all-schools">
+                    <%= t("publish.courses.schools.select_all") %>
+                  </label>
+                </div>
+                <div class="govuk-body govuk-!-margin-left-2">or</div>
+                <div class="govuk-hint">
+                  <%= t("publish.courses.schools.new.selection") %>
+                </div>
+              </div>
+              <div
+          class="govuk-body govuk-!-margin-top-3"
+          hidden
+          data-school-search-target="noResults"
+        >
+                <p class="govuk-body">
+                  No results found. Please clear the search and try again.
+                </p>
+              </div>
+              <div data-controller="show-more" data-show-more-page-size-value="20">
+                <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+                  <div
+                  class="govuk-!-padding-top-4"
+      data-show-more-target="item"
+      data-school-search-target="school"
+      data-search-text="<%= [
+        site.location_name,
+        site.postcode,
+        site.urn,
+      ].compact.join(" ").downcase %>">
+                    <%= f.govuk_check_box :site_ids,
+        site.id,
+        label: {
+          text: [
+            site.location_name,
+            render(Publish::Schools::NewlyAddedTagComponent.new(school: site)),
+          ].compact_blank.join(" ").html_safe,
+        },
+        hint: { text: site.address_without_name },
+        link_errors: index.zero?,
+        data: {
+          select_all_checkboxes_target: "checkbox",
+          action: "change->school-diff#update select-all-checkboxes#updateSelectAll",
+          school_name: site.location_name,
+        } %>
+                  </div>
+                <% end %>
+                <div class="govuk-!-margin-top-4 govuk-body">
+                  <a
+  href="#"
+  class="app-button-link govuk-link"
+  data-show-more-target="button"
+  data-school-search-target="showMoreButton"
+  data-action="school-search#showMore show-more#showMore">
+                    Show all schools
+                  </a>
+                </div>
+              </div>
+            <% end %>
+            <!-- REMOVED: Radio buttons for "Have you finished updating schools?" -->
+            <!-- <%= f.govuk_radio_buttons_fieldset :finished_updating_schools,
+  legend: { text: "Have you finished updating placement schools?", size: "m" } do %>
+            <%= f.govuk_radio_button :finished_updating_schools, "yes",
+    label: { text: "Yes, I have finished updating placement schools" } %>
+            <%= f.govuk_radio_button :finished_updating_schools, "no",
+    label: { text: "No, I want to add or remove more placement schools" } %>
+          <% end %>
+          <div class="govuk-button-group">
+            <%= f.govuk_submit "Continue" %> -->
+            <!-- <%= f.govuk_submit "Update #{page_title.downcase}" %> -->
+            <!-- <%= f.govuk_submit "Update and add another placement school", class: "govuk-button--secondary" %> -->
+            <%# </div> %>
+            <!-- SUMMARY of changes i.e. number of schools added and removed -->
+            <div
+  class="govuk-body govuk-!-margin-top-4"
+  data-school-diff-target="summary"
+  hidden
+>
+              <h2 class="govuk-heading-m">
+                <strong>You are updating these schools</strong>
+              </h2>
+              <div data-school-diff-target="addedSection"></div>
+              <div data-school-diff-target="removedSection"></div>
+            </div>
+            <!-- BUTTON: Radio button replaced with one button to behave like selecting "yes" on the old radion button (minimal refactor so I didn't have to update the controller) -->
+            <%= f.hidden_field :finished_updating_schools, value: "yes" %>
+            <div class="govuk-button-group">
+              <%= f.govuk_submit "Continue to choose which courses to apply this change to" %>
+            </div>
+            <p class="govuk-body">
+              <%= govuk_link_to(
+          t("cancel"),
+          details_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle.year,
+            @course.course_code,
+          ),
+        ) %>
+            </p>
           </div>
-
-          <div class="govuk-body govuk-!-margin-left-2">or</div>
-          <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
-
-          <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
-            <%= f.govuk_check_box :site_ids,
-                site.id,
-                label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
-                hint: { text: site.full_address },
-                link_errors: index.zero?,
-                data: {
-                  select_all_checkboxes_target: "checkbox",
-                  action: "select-all-checkboxes#updateSelectAll",
-                } %>
-         <% end %>
+        </div>
       <% end %>
-
-      <%= f.govuk_submit "Update #{page_title.downcase}" %>
-    <% end %>
-
-    <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
-    </p>
-  </div>
-</div>

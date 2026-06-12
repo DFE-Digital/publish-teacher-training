@@ -352,6 +352,42 @@ class Course < ApplicationRecord
     end
   }
 
+  scope :with_start_dates, lambda { |start_date_filters|
+    return all if start_date_filters.blank?
+
+    ranges = Array(start_date_filters).map { |filter|
+      case filter
+      when "jan_aug_2026"
+        Date.new(2026, 1, 1)..Date.new(2026, 8, 31)
+      when "sep_2026"
+        Date.new(2026, 9, 1)..Date.new(2026, 9, 30)
+      when "oct_2026_jul_2027"
+        Date.new(2026, 10, 1)..Date.new(2027, 7, 31)
+      end
+    }.compact
+
+    return all if ranges.empty?
+
+    where(
+      ranges.map { "(course.start_date BETWEEN ? AND ?)" }.join(" OR "),
+      *ranges.flat_map { |r| [r.begin, r.end] },
+    )
+  }
+
+  # Filter by start month (YYYY-MM)
+  scope :with_start_months, lambda { |start_months|
+    return all if start_months.blank?
+
+    months = Array(start_months).map do |value|
+      Date.strptime(value, "%Y-%m")
+    end
+
+    where(
+      months.map { "(course.start_date BETWEEN ? AND ?)" }.join(" OR "),
+      *months.flat_map { |m| [m.beginning_of_month, m.end_of_month] },
+    )
+  }
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
@@ -530,7 +566,7 @@ class Course < ApplicationRecord
 
   def program_type_description
     if salary? then " with salary"
-    elsif apprenticeship? then " teaching apprenticeship"
+    elsif apprenticeship? then " apprenticeship"
     else
       ""
     end
@@ -546,6 +582,15 @@ class Course < ApplicationRecord
     return qualifications_summary if teacher_degree_apprenticeship?
 
     qualifications_summary + study_mode_string + program_type_description
+  end
+
+  def summary_parts
+    return [qualifications_summary] if teacher_degree_apprenticeship?
+
+    [
+      qualifications_summary,
+      study_mode_description.capitalize,
+    ].compact
   end
 
   def study_mode_string
@@ -909,6 +954,34 @@ class Course < ApplicationRecord
 
   def offers_sponsorship?
     !no_visa_sponsorship?
+  end
+
+  def funding_description
+    {
+      "fee" => "Fee-paying",
+      "salary" => "Salaried",
+      "apprenticeship" => "Apprenticeship",
+    }[funding]
+  end
+
+  def funding_type_label
+    if apprenticeship?
+      if qualifications_summary&.include?("Teacher degree apprenticeship")
+        "Teacher degree apprenticeship"
+      else
+        "Postgraduate teaching apprenticeship"
+      end
+    elsif salary?
+      "School direct salaried"
+    else
+      funding_description
+    end
+  end
+
+  def start_date_description
+    return if start_date.blank?
+
+    start_date.strftime("%B %Y").to_s
   end
 
 private

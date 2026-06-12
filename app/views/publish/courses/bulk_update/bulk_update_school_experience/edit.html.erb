@@ -1,0 +1,159 @@
+ <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+      <%= govuk_back_link_to(
+        params[:school_experience_required] == "false" ?
+          school_experience_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+            @course.course_code,
+            school_experience_required: "false"
+          ) :
+          school_experience_details_publish_provider_recruitment_cycle_course_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+            @course.course_code,
+            school_experience: params[:school_experience],
+            school_experience_required: params[:school_experience_required]
+          )
+      ) %>
+
+<%= form_with url: bulk_update_school_experience_review_publish_provider_recruitment_cycle_course_path(
+      @provider.provider_code,
+      @provider.recruitment_cycle_year,
+      @course.course_code
+    ),
+    method: :get,
+    local: true do %>
+
+  <%= hidden_field_tag :school_experience, params[:school_experience] %>
+  <%= hidden_field_tag :school_experience_required,
+     params[:school_experience_required].presence || "true" %>
+
+
+
+  <span class="govuk-caption-l">
+    <%= @course.name_and_code %>
+  </span>
+
+  <h1 class="govuk-heading-l">
+    Updating school experience
+  </h1>
+
+  <p class="govuk-body">You are updating this information:</p>
+
+  <% if params[:school_experience].present? || params[:school_experience_required].present? %>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Is school experience required or strongly recommended?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% if params[:school_experience_required] == "false" %>
+            School experience is not required or strongly recommended.
+        <% else %>
+            School experience is required or strongly recommended.
+        <% end %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <%= link_to "Change",
+            school_experience_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              @course.course_code,
+              school_experience: params[:school_experience],
+              school_experience_required: params[:school_experience_required]
+            ),
+            class: "govuk-link" %>
+        </dd>
+      </div>
+        <% if params[:school_experience_required] != "false" && params[:school_experience].present? %>        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            School experience details
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= h(params[:school_experience]).gsub(/\n/, "<br>").html_safe %>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <%= link_to "Change",
+              school_experience_details_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                @course.course_code,
+                school_experience: params[:school_experience],
+                school_experience_required: params[:school_experience_required]
+              ),
+              class: "govuk-link" %>
+          </dd>
+        </div>
+      <% end %>
+    </dl>
+  <% end %>
+<br>
+
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <h1 class="govuk-fieldset__heading">
+        What courses do you want to apply this change to?
+      </h1>
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+
+      <div class="govuk-radios__item govuk-!-margin-bottom-0">
+        <input class="govuk-radios__input"
+              id="bulk_update_scope_single"
+              name="bulk_update_scope"
+              type="radio"
+              value="<%= @this_course_option.id %>">
+        <label class="govuk-label govuk-radios__label"
+              for="bulk_update_scope_single">
+              <%= @this_course_option.name %><br>
+              <span class="govuk-hint govuk-!-font-size-16">
+                <%= @course.funding_type_label %>
+              </span>
+        </label>
+      </div>
+
+      <div class="govuk-radios__divider">or</div>
+
+    <% @bulk_options.first(1).each do |option| %>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input"
+              id="bulk_update_scope_<%= option.id %>"
+              name="bulk_update_scope"
+              type="radio"
+              value="<%= option.id %>">
+        <label class="govuk-label govuk-radios__label"
+              for="bulk_update_scope_<%= option.id %>">
+          <%= option.name %>
+        </label>
+      </div>
+    <% end %>
+
+    </div>
+    </div>
+  </fieldset>
+</div>
+
+
+<button class="govuk-button" type="submit">
+  Continue to view the courses that will be updated
+</button>
+
+
+
+  <% end %>
+
+  <p class="govuk-body">
+      <%= link_to "Cancel",
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        params[:recruitment_cycle_year],
+        @course.course_code
+      ),
+      class: "govuk-link" %>
+    </p>
+
+  </div>
+</div>

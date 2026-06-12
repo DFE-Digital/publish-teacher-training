@@ -31,6 +31,10 @@ $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 @import "./components/secondary-navigation";
 @import "./components/dynamic_preview";
 @import "./components/newly_added_tag";
+@import "./components/school-search";
+@import "./components/course_list_filters";
+@import "./components/course_list";
+@import "./components/bulk_update";
 
 .app-list--dash {
   padding-left: govuk-spacing(3);
@@ -77,4 +81,79 @@ $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
     column-gap: govuk-spacing(4);
     align-items: center;
   }
+}
+
+.app-c-filter-section {
+  padding: 5px 0;
+  border-bottom: 1px solid rgb(177, 180, 182);
+}
+
+.app-c-filter-section__summary {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  grid-auto-rows: auto;
+  column-gap: 12px;
+  align-items: baseline;
+  width: 100%;
+  padding: 15px 0;
+  margin-bottom: 0;
+  color: #0b0c0c;
+  cursor: pointer;
+  list-style: none;
+}
+
+.app-c-filter-section__summary::before {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  grid-row: 1;
+  grid-column: 1;
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  margin-left: 4px;
+  content: "";
+  border-color: currentColor;
+  border-style: solid;
+  border-width: 2px 2px 0 0;
+  clip-path: unset;
+  transform: translateY(-25%) rotate(135deg) scale(1);
+}
+
+.app-c-filter-section[open] .app-c-filter-section__summary::before {
+  transform: translateY(30%) rotate(-45deg) scale(1);
+}
+
+.app-c-filter-section__summary:hover:not(:focus):not(:focus-within)
+  .app-c-filter-section__summary-heading {
+  text-decoration: underline;
+  text-decoration-thickness: max(1px, 0.0625rem);
+  text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
+  text-underline-offset: 0.1578em;
+  -webkit-text-decoration-skip-ink: none;
+  text-decoration-skip-ink: none;
+  -webkit-text-decoration-skip: none;
+  text-decoration-skip: none;
+}
+
+.app-c-filter-panel__top .app-c-filter-section__summary-heading {
+  margin-bottom: 5px;
+}
+
+.app-c-filter-section__summary-heading {
+  display: inline-block;
+  grid-row: 1;
+  grid-column: 2;
+  width: fit-content;
+  margin: 0;
+  font-family: "GDS Transport", arial, sans-serif;
+  font-size: 1.1875rem;
+  font-weight: 400;
+  line-height: 1.31579;
+  color: #1d70b8;
+}
+
+.app-course-list-padding {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }

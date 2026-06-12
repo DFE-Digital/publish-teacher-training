@@ -10,23 +10,46 @@
     ),
   )) %>
 <% end %>
-
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>
-
-<% if @self_accredited_courses %>
-  <section>
-    <%= render partial: "course_table", locals: { courses: @self_accredited_courses } %>
-  </section>
-<% end %>
-
-<% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
-  <section>
-    <h2 class="govuk-heading-m">
-      <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
-      <%= accrediting_provider %>
-    </h2>
-
-    <%= render partial: "course_table", locals: { courses: } %>
-  </section>
-<% end %>
+<!-- TEST button for downloading course list as CSV -->
+<%= link_to "Download all course information (CSV)",
+    publish_provider_recruitment_cycle_courses_path(
+      @provider.provider_code,
+      @provider.recruitment_cycle.year,
+      request.query_parameters.merge(format: :csv)
+    ),
+    class: "govuk-button govuk-button--secondary govuk-margin-left-2"
+%>
+<br>
+<br>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third">
+    <%= render "filters" %>
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+    <% total_courses =
+       (@self_accredited_courses&.size || 0) +
+       (@courses_by_accrediting_provider&.values || []).sum(&:size) %>
+    <% if total_courses.zero? %>
+      <p class="govuk-body">
+        No courses found
+      </p>
+    <% else %>
+      <% if @self_accredited_courses.present? %>
+        <section data-qa="courses__table-section">
+          <%= render partial: "course_table",
+                   locals: { courses: @self_accredited_courses } %>
+        </section>
+      <% end %>
+      <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
+        <section data-qa="courses__table-section">
+          <h2 class="govuk-heading-m">
+            <span class="govuk-caption-m"><%= t(".ratifying_provider") %></span>
+            <%= accrediting_provider %>
+          </h2>
+          <%= render partial: "course_table", locals: { courses: } %>
+        </section>
+      <% end %>
+    <% end %>
+  </div>
