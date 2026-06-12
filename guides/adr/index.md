@@ -15,3 +15,7 @@
 * [13. Database backed sessions with polymorphism](0013-database-backed-sessions.md)
 * [14. Recent Searches and Email Alerts for Find Teacher Training](0014-recent-searches-email-alert.md)
 * [15. Store financial incentives by year with display control](0015-store-financial-incentives-by-year-with-display-control.md)
+* [16. Model school relationships with GIAS-backed join tables](0016-model-school-relationships-with-gias-backed-join-tables.md)
+* [17. Migrate school data into the new relationship model](0017-migrate-school-data-into-new-relationship-model.md)
+* [18. Roll out school relationship changes with dual writes and feature flags](0018-roll-out-school-relationship-model-with-dual-writes-and-feature-flags.md)
+* [19. Use new school relationships in API, search, publishing and operations](0019-use-new-school-relationships-in-api-search-publishing-and-operations.md)
