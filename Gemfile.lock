@@ -720,9 +720,9 @@ GEM
     securerandom (0.4.1)
     semantic_logger (4.18.0)
       concurrent-ruby (~> 1.0)
-    sentry-rails (6.6.1)
+    sentry-rails (6.6.2)
       railties (>= 5.2.0)
-      sentry-ruby (~> 6.6.1)
+      sentry-ruby (~> 6.6.2)
     sentry-ruby (6.6.2)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
