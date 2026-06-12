@@ -406,8 +406,11 @@ RSpec.describe Courses::SearchForm do
     end
 
     it "excludes non-filter address fields from active filters" do
+      # No explicit order: a geocoded search defaults to "distance", which is
+      # the natural default for this state — so no order chip surfaces and
+      # the test focuses on what it cares about (address-related fields do
+      # not become chips).
       search_form = described_class.new(
-        order: "course_name_ascending",
         level: "all",
         minimum_degree_required: "show_all_courses",
         applications_open: true,
@@ -578,7 +581,7 @@ RSpec.describe Courses::SearchForm do
 
     context "with ordering" do
       context "when location is present and order is not distance" do
-        let(:form) { described_class.new(location: "London, UK", order: "course_name_ascending") }
+        let(:form) { described_class.new(location: "London, UK", latitude: 51.5074, longitude: -0.1278, order: "course_name_ascending") }
 
         it "returns 1 for ordering" do
           expect(form.filter_counts[:ordering]).to eq(1)
@@ -837,7 +840,7 @@ RSpec.describe Courses::SearchForm do
 
   describe "resetting defaults when location category changes" do
     describe "#order" do
-      context "when location category changed from nil to regional" do
+      context "when the user is adding a location for the first time (no previous location category)" do
         let(:form) do
           described_class.new(
             previous_location_category: "",
@@ -850,23 +853,43 @@ RSpec.describe Courses::SearchForm do
           )
         end
 
-        it "resets to distance (location default)" do
+        it "resets to distance (location default) — the carried-over order was the no-location default" do
           expect(form.order).to eq("distance")
         end
       end
 
-      context "when location category unchanged" do
+      context "when the user already had a location and picks a different order" do
         let(:form) do
           described_class.new(
             previous_location_category: "regional",
             location: "Cornwall, UK",
             formatted_address: "Cornwall, UK",
+            latitude: 50.2660,
+            longitude: -5.0527,
             address_types: %w[administrative_area_level_2 political],
             order: "course_name_ascending",
           )
         end
 
-        it "preserves user selection" do
+        it "preserves the explicit sort choice" do
+          expect(form.order).to eq("course_name_ascending")
+        end
+      end
+
+      context "when the location category drifts between two location categories (e.g. geocoder inconsistency)" do
+        let(:form) do
+          described_class.new(
+            previous_location_category: "regional",
+            location: "BS1 4SB, Bristol",
+            formatted_address: "Bristol BS1 4SB, UK",
+            latitude: 51.4505,
+            longitude: -2.5867,
+            address_types: %w[postal_code],
+            order: "course_name_ascending",
+          )
+        end
+
+        it "preserves the explicit sort choice (does not silently override)" do
           expect(form.order).to eq("course_name_ascending")
         end
       end

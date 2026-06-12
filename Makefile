@@ -175,6 +175,8 @@ deploy-init: vendor-modules
 deploy-plan: deploy-init
 	terraform -chdir=terraform/aks plan ${DETAILED_EXITCODE} -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS}
 
+terraform-plan : deploy-plan
+
 deploy: deploy-init
 	terraform -chdir=terraform/aks apply -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS} $(AUTO_APPROVE)
 

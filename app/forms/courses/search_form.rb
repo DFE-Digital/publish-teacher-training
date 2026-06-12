@@ -102,10 +102,17 @@ module Courses
     end
 
     def order
+      # The user's explicit sort choice is preserved across requests EXCEPT
+      # the one-time transition from "no location" to "with location" — at
+      # that moment the carried-over order (course_name_ascending, the
+      # no-location default) should yield to the new location's natural
+      # default. Other incompatible combinations (distance without coords,
+      # fee ordering without fee funding) are still caught inside
+      # OrderingStrategy.
       OrderingStrategy.new(
-        location: geocoded_location,
+        search_location: search_location,
         funding: funding,
-        current_order: location_category_changed? ? nil : super,
+        current_order: location_category_first_set? ? nil : super,
       ).call
     end
 
@@ -248,10 +255,26 @@ module Courses
 
   private
 
-    def geocoded_location
-      return nil unless latitude.present? && longitude.present?
+    def search_location
+      @search_location ||= SearchLocation.new(
+        text: location,
+        latitude: latitude,
+        longitude: longitude,
+        formatted_address: formatted_address,
+        short_address: short_address,
+      )
+    end
 
-      location
+    # True only when the user is moving from "no location" to "with
+    # location" on this request. Distinct from #location_category_changed?,
+    # which also fires when the category drifts between two location
+    # categories (locality ↔ regional) — that drift can be caused by Google
+    # returning different address_types for the same query and would
+    # otherwise silently override a sort the user just picked.
+    def location_category_first_set?
+      return false if attributes["previous_location_category"].nil?
+
+      previous_location_category.blank? && location_category.present?
     end
 
     def boolean_filter_count(value)
@@ -273,8 +296,7 @@ module Courses
     end
 
     def ordering_filter_count
-      default_order = location.present? ? "distance" : "course_name_ascending"
-      order == default_order ? nil : 1
+      order == OrderingStrategy.default_for(search_location) ? nil : 1
     end
 
     def radius_filter_count

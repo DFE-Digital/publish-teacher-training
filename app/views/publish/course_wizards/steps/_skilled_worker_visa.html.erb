@@ -1,0 +1,13 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.skilled_worker_visa.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.skilled_worker_visa.caption")) %>
+  <%= t("course_wizard.steps.skilled_worker_visa.heading") %>
+</h1>
+
+<%= form.govuk_radio_buttons_fieldset :can_sponsor_skilled_worker_visa, legend: { text: t("course_wizard.steps.skilled_worker_visa.question") } do %>
+  <%= form.govuk_radio_button :can_sponsor_skilled_worker_visa, true, label: { text: t("course_wizard.steps.skilled_worker_visa.options.can_sponsor_skilled_worker_visa.label") } %>
+  <%= form.govuk_radio_button :can_sponsor_skilled_worker_visa, false, label: { text: t("course_wizard.steps.skilled_worker_visa.options.cannot_sponsor_skilled_worker_visa.label") } %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.skilled_worker_visa.submit") %>

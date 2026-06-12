@@ -176,4 +176,108 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       expect(wizard).to have_previous_step(:study_sites)
     end
   end
+
+  context "from visa sponsorship" do
+    let(:current_step) { :visa_sponsorship }
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
+
+    context "when provider has multiple accredited partners" do
+      let!(:provider) do
+        school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+        create(:site, :study_site, provider: school_provider)
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        school_provider
+      end
+
+      it "goes back to accredited provider when fee based course" do
+        state_store.write(funding_type: "fee")
+        expect(wizard).to have_previous_step(:accredited_provider)
+      end
+    end
+  end
+
+  context "from skilled worker visa" do
+    let(:current_step) { :skilled_worker_visa }
+
+    before do
+      state_store.write(funding_type: "salary")
+    end
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
+
+    context "when provider has multiple accredited partners" do
+      let!(:provider) do
+        school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+        create(:site, :study_site, provider: school_provider)
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+        school_provider
+      end
+
+      it "goes back to accredited provider when provider has multiple accredited partners" do
+        expect(wizard).to have_previous_step(:accredited_provider)
+      end
+    end
+  end
+
+  context "from accredited provider" do
+    let(:current_step) { :accredited_provider }
+    let!(:provider) do
+      school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+      create(:site, :study_site, provider: school_provider)
+      create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+      create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+      school_provider
+    end
+
+    it "goes back to study sites" do
+      expect(wizard).to have_previous_step(:study_sites)
+    end
+  end
+
+  context "from visa sponsorship application deadline required" do
+    let(:current_step) { :visa_sponsorship_application_deadline_required }
+
+    it "goes back to skilled worker visa when funding type is salary and can sponsor skilled worker visa is true" do
+      state_store.write(funding_type: "salary")
+      state_store.write(can_sponsor_skilled_worker_visa: true)
+      expect(wizard).to have_previous_step(:skilled_worker_visa)
+    end
+
+    it "goes back to skilled worker visa when funding type is apprenticeship and can sponsor skilled worker visa is true" do
+      state_store.write(funding_type: "apprenticeship")
+      state_store.write(can_sponsor_skilled_worker_visa: true)
+      expect(wizard).to have_previous_step(:skilled_worker_visa)
+    end
+
+    it "goes back to visa sponsorship when funding type is fee and can sponsor student visa is true" do
+      state_store.write(funding_type: "fee")
+      state_store.write(can_sponsor_student_visa: true)
+      expect(wizard).to have_previous_step(:visa_sponsorship)
+    end
+  end
+
+  context "from visa sponsorship application deadline at" do
+    let(:current_step) { :visa_sponsorship_application_deadline_at }
+
+    it "goes back to visa sponsorship application deadline required when funding type is fee and can sponsor student visa is true" do
+      state_store.write(funding_type: "fee")
+      state_store.write(can_sponsor_student_visa: true)
+      state_store.write(visa_sponsorship_application_deadline_required: true)
+      expect(wizard).to have_previous_step(:visa_sponsorship_application_deadline_required)
+    end
+
+    it "goes back to visa sponsorship application deadline required when funding type is salary and can sponsor skilled worker visa is true" do
+      state_store.write(funding_type: "salary")
+      state_store.write(can_sponsor_skilled_worker_visa: true)
+      state_store.write(visa_sponsorship_application_deadline_required: true)
+      expect(wizard).to have_previous_step(:visa_sponsorship_application_deadline_required)
+    end
+  end
 end

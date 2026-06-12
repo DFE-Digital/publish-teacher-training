@@ -1,0 +1,35 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.visa_sponsorship.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.visa_sponsorship.caption")) %>
+  <%= t("course_wizard.steps.visa_sponsorship.heading") %>
+</h1>
+
+<% if current_step.show_recruiting_from_overseas_guidance? %>
+  <p class="govuk-body">
+    <%= t("course_wizard.steps.visa_sponsorship.recruiting_from_overseas.prefix") %>
+    <%= govuk_link_to t("course_wizard.steps.visa_sponsorship.recruiting_from_overseas.link_text"), t("course_wizard.steps.visa_sponsorship.recruiting_from_overseas.link_url"), target: "_blank" %>.
+  </p>
+<% end %>
+
+<h2 class="govuk-heading-m">
+  <%= current_step.question %>
+</h2>
+
+<% if current_step.show_accrediting_provider_inset_text? %>
+  <div class="govuk-inset-text">
+    <% if current_step.accrediting_provider_can_sponsor_student_visa? %>
+      <p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship.inset.can_sponsor", provider_name: current_step.accrediting_provider_name) %></p>
+    <% else %>
+      <p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship.inset.cannot_sponsor", provider_name: current_step.accrediting_provider_name) %></p>
+      <p class="govuk-body"><%= t("course_wizard.steps.visa_sponsorship.inset.contact_provider", provider_name: current_step.accrediting_provider_name) %></p>
+    <% end %>
+  </div>
+<% end %>
+
+<%= form.govuk_radio_buttons_fieldset :can_sponsor_student_visa, legend: { hidden: true } do %>
+  <%= form.govuk_radio_button :can_sponsor_student_visa, true, label: { text: t("course_wizard.steps.visa_sponsorship.options.can_sponsor_student_visa.label") } %>
+  <%= form.govuk_radio_button :can_sponsor_student_visa, false, label: { text: t("course_wizard.steps.visa_sponsorship.options.cannot_sponsor_student_visa.label") } %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.visa_sponsorship.submit") %>

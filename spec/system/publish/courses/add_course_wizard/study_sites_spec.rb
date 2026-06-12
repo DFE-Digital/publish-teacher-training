@@ -8,11 +8,11 @@ RSpec.describe "Add course wizard study sites step", type: :system do
     given_i_am_authenticated_as_a_provider_user_with_multiple_schools
   end
 
-  scenario "choosing a study site and continues to courses index page when qualification is not TDA or further education" do
+  scenario "choosing a study site and continues to visa sponsorship page when qualification is not TDA or further education" do
     when_i_visit_the_wizard_study_sites_page
     and_i_choose_a_study_site_from_the_list
     and_i_click_continue
-    then_i_am_taken_to_the_courses_index_page
+    then_i_am_taken_to_the_visa_sponsorship_page
   end
 
   scenario "choosing a study site and continues to start date page when qualification is TDA" do
@@ -31,6 +31,15 @@ RSpec.describe "Add course wizard study sites step", type: :system do
     then_i_am_taken_to_the_start_date_page
   end
 
+  scenario "provider with no study sites skips study sites and continues to accredited provider page" do
+    given_i_am_authenticated_as_a_school_based_provider_user_with_no_study_sites_and_multiple_accredited_partners
+    and_i_have_wizard_state_for_schools
+    when_i_visit_the_wizard_schools_page
+    and_i_choose_a_school_from_the_list
+    and_i_click_continue
+    then_i_am_taken_to_the_accredited_provider_page
+  end
+
 private
 
   def when_i_visit_the_wizard_study_sites_page
@@ -42,19 +51,34 @@ private
     )
   end
 
+  def when_i_visit_the_wizard_schools_page
+    visit publish_provider_recruitment_cycle_course_wizard_path(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: provider.recruitment_cycle_year,
+      step: :schools,
+      state_key: wizard_state_key,
+    )
+  end
+
   def and_i_choose_a_study_site_from_the_list
     check provider.study_sites.first.location_name
+  end
+
+  def and_i_choose_a_school_from_the_list
+    check provider.sites.first.location_name
   end
 
   def and_i_click_continue
     click_on "Continue"
   end
 
-  def then_i_am_taken_to_the_courses_index_page
+  def then_i_am_taken_to_the_visa_sponsorship_page
     expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_courses_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :visa_sponsorship,
+        state_key: wizard_state_key,
       ),
       ignore_query: true,
     )
@@ -66,6 +90,18 @@ private
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
         step: :start_date,
+        state_key: wizard_state_key,
+      ),
+      ignore_query: true,
+    )
+  end
+
+  def then_i_am_taken_to_the_accredited_provider_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :accredited_provider,
         state_key: wizard_state_key,
       ),
       ignore_query: true,
@@ -92,6 +128,33 @@ private
     given_i_am_authenticated(user: @user)
   end
 
+  def given_i_am_authenticated_as_a_school_based_provider_user_with_no_study_sites_and_multiple_accredited_partners
+    @user = create(
+      :user,
+      providers: [
+        create(
+          :provider,
+          provider_type: :lead_school,
+          sites: [build(:site), build(:site)],
+        ),
+      ],
+    )
+
+    school_provider = @user.providers.first
+    create(
+      :provider_partnership,
+      training_provider: school_provider,
+      accredited_provider: create(:accredited_provider, recruitment_cycle: school_provider.recruitment_cycle),
+    )
+    create(
+      :provider_partnership,
+      training_provider: school_provider,
+      accredited_provider: create(:accredited_provider, recruitment_cycle: school_provider.recruitment_cycle),
+    )
+
+    given_i_am_authenticated(user: @user)
+  end
+
   def provider
     @provider ||= @user.providers.first
   end
@@ -110,5 +173,17 @@ private
 
     state_store = CourseWizard::StateStores::CourseWizardStore.new(repository:)
     state_store.write(qualification:, level:)
+  end
+
+  def and_i_have_wizard_state_for_schools
+    repository = CourseWizard::Repositories::Course.new(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: provider.recruitment_cycle_year,
+      state_key: wizard_state_key,
+      expires_in: 24.hours,
+    )
+
+    state_store = CourseWizard::StateStores::CourseWizardStore.new(repository:)
+    state_store.write(funding_type: "fee")
   end
 end

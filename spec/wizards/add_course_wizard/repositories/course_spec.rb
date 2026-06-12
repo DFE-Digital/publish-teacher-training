@@ -4,6 +4,7 @@ require "rails_helper"
 
 RSpec.describe CourseWizard::Repositories::Course do
   let(:cache) { ActiveSupport::Cache::MemoryStore.new }
+  let(:visa_deadline_payload) { { year: "2026", month: "9", day: "1" } }
   let(:repository) do
     described_class.new(
       provider_code: "PROV",
@@ -28,6 +29,11 @@ RSpec.describe CourseWizard::Repositories::Course do
       repository.write({ "site_ids" => %w[1 2] })
       repository.write({ "study_sites_ids" => %w[3 4] })
       repository.write({ "start_date" => "January 2026" })
+      repository.write({ "accredited_provider_code" => "123" })
+      repository.write({ "can_sponsor_student_visa" => true })
+      repository.write({ "can_sponsor_skilled_worker_visa" => true })
+      repository.write({ "visa_sponsorship_application_deadline_required" => true })
+      repository.write({ "visa_sponsorship_application_deadline_at" => visa_deadline_payload })
 
       data = repository.read
       expect(data[:level]).to eq("secondary")
@@ -44,6 +50,11 @@ RSpec.describe CourseWizard::Repositories::Course do
       expect(data[:site_ids]).to eq(%w[1 2])
       expect(data[:study_sites_ids]).to eq(%w[3 4])
       expect(data[:start_date]).to eq("January 2026")
+      expect(data[:accredited_provider_code]).to eq("123")
+      expect(data[:can_sponsor_student_visa]).to be(true)
+      expect(data[:can_sponsor_skilled_worker_visa]).to be(true)
+      expect(data[:visa_sponsorship_application_deadline_required]).to be(true)
+      expect(data[:visa_sponsorship_application_deadline_at]).to eq(visa_deadline_payload)
 
       expect(data.keys.map(&:class).uniq).to eq([Symbol])
     end

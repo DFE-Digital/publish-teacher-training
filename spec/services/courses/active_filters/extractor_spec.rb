@@ -481,12 +481,6 @@ RSpec.describe Courses::ActiveFilters::Extractor do
 
         expected_filters = [
           Courses::ActiveFilter.new(
-            id: :order,
-            raw_value: "course_name_ascending",
-            value: "course_name_ascending",
-            remove_params: { order: nil },
-          ),
-          Courses::ActiveFilter.new(
             id: :short_address,
             raw_value: "London",
             value: "London",

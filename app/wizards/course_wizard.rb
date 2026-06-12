@@ -5,7 +5,17 @@ class CourseWizard
 
   attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
-  delegate :further_education_level?, :primary_level?, :undergraduate_degree_with_qts?, to: :state_store
+  delegate :accrediting_provider, to: :accreditation
+
+  delegate :further_education_level?,
+           :primary_level?,
+           :undergraduate_degree_with_qts?,
+           :visa_sponsorship_required?,
+           :salary_based?,
+           :fee_based?,
+           :skilled_worker_visa_sponsorship_required?,
+           :deadline_for_application_visa_sponsorship_required?,
+           to: :state_store
 
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
@@ -19,8 +29,13 @@ class CourseWizard
       graph.add_node :funding_type, Steps::FundingType
       graph.add_node :study_pattern, Steps::StudyPattern
       graph.add_node :schools, Steps::Schools
-      graph.add_node :study_sites, Steps::StudySites
+      graph.add_node :study_sites, Steps::StudySites, skip_when: :skip_study_sites?
+      graph.add_node :accredited_provider, Steps::AccreditedProvider
       graph.add_node :start_date, Steps::StartDate
+      graph.add_node :visa_sponsorship, Steps::VisaSponsorship
+      graph.add_node :skilled_worker_visa, Steps::SkilledWorkerVisa
+      graph.add_node :visa_sponsorship_application_deadline_required, Steps::VisaSponsorshipApplicationDeadlineRequired
+      graph.add_node :visa_sponsorship_application_deadline_at, Steps::VisaSponsorshipApplicationDeadlineAt
 
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
 
@@ -58,14 +73,54 @@ class CourseWizard
           # Further education does not require visa sponsorship in the
           # existing flow, so it goes straight to start date.
           { when: :further_education_level?, then: :start_date },
-          # TDA also goes straight to start date.
+          # School-based providers with multiple accredited partners need
+          # to choose who is accrediting the course.
+          { when: :accredited_provider_selection_required?, then: :accredited_provider },
+          # TDA goes straight to start date when no accredited provider
+          # selection is required.
           { when: :undergraduate_degree_with_qts?, then: :start_date },
+          { when: :salary_based?, then: :skilled_worker_visa },
         ],
-        # TODO: Visa sponsorship steps for other routes will go here.
-        default: :courses_index,
+        default: :visa_sponsorship,
+      )
+
+      graph.add_multiple_conditional_edges(
+        from: :accredited_provider,
+        branches: [
+          { when: :undergraduate_degree_with_qts?, then: :start_date },
+          { when: :salary_based?, then: :skilled_worker_visa },
+          { when: :fee_based?, then: :visa_sponsorship },
+        ],
+        default: :start_date,
+      )
+
+      graph.add_multiple_conditional_edges(
+        from: :visa_sponsorship,
+        branches: [
+          { when: :visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_required },
+        ],
+        default: :start_date,
       )
 
       graph.add_edge from: :start_date, to: :courses_index
+
+      graph.add_multiple_conditional_edges(
+        from: :skilled_worker_visa,
+        branches: [
+          { when: :skilled_worker_visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_required },
+        ],
+        default: :start_date,
+      )
+
+      graph.add_multiple_conditional_edges(
+        from: :visa_sponsorship_application_deadline_required,
+        branches: [
+          { when: :deadline_for_application_visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_at },
+        ],
+        default: :start_date,
+      )
+
+      graph.add_edge from: :visa_sponsorship_application_deadline_at, to: :start_date
     end
   end
 
@@ -99,5 +154,20 @@ class CourseWizard
 
   def recruitment_cycle
     @recruitment_cycle ||= RecruitmentCycle.find_by!(year: recruitment_cycle_year)
+  end
+
+  def skip_study_sites?
+    provider.study_sites.none?
+  end
+
+  def accredited_provider_selection_required?
+    accreditation.selection_required?
+  end
+
+  def accreditation
+    @accreditation ||= Accreditation.new(
+      provider:,
+      selected_provider_code: state_store.accredited_provider_code,
+    )
   end
 end
