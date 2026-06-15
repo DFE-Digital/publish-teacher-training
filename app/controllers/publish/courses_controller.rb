@@ -124,26 +124,31 @@ module Publish
       respond_to do |format|
         format.html
         format.csv do
-          export = Publish::DataExports::CourseInformationExport.new(
-            courses: filtered_courses,
-            provider: provider,
-            params: params,
-          )
+          export =
+            if params[:export] == "schools"
+              Publish::DataExports::CourseSchoolsExport.new(
+                courses: filtered_courses,
+              )
+            else
+              Publish::DataExports::CourseInformationExport.new(
+                courses: filtered_courses,
+                provider: provider,
+                params: params,
+              )
+            end
 
-          begin
-            send_data export.to_csv,
-                      filename: export.filename,
-                      type: "text/csv",
-                      disposition: :attachment
-          rescue StandardError => e
-            Rails.logger.error("CSV export failed: #{e.message}")
-            Sentry.capture_exception(e)
+          send_data export.to_csv,
+                    filename: export.filename,
+                    type: "text/csv",
+                    disposition: :attachment
+        rescue StandardError => e
+          Rails.logger.error("CSV export failed: #{e.message}")
+          Sentry.capture_exception(e)
 
-            redirect_to publish_provider_recruitment_cycle_courses_path(
-              provider.provider_code,
-              provider.recruitment_cycle_year,
-            ), flash: { alert: "Unable to download course data" }
-          end
+          redirect_to publish_provider_recruitment_cycle_courses_path(
+            provider.provider_code,
+            provider.recruitment_cycle_year,
+          ), flash: { alert: "Unable to download course data" }
         end
       end
     end
@@ -333,7 +338,13 @@ module Publish
     # The filtered_courses method is used to filter courses by the selected filters in the index action. It applies the filters to the courses and returns the filtered courses.
     def filtered_courses
       @filtered_courses ||= begin
-        courses = filtered_courses_scope.includes(:accrediting_provider, site_statuses: [:site])
+        courses = filtered_courses_scope.includes(
+          :accrediting_provider,
+          :provider,
+          :latest_enrichment,
+          :enrichments,
+          site_statuses: :site,
+        )
 
         if params[:status].present?
           selected = Array(params[:status])
