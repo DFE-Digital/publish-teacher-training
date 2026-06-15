@@ -233,7 +233,7 @@ group :test do
   gem "jsonapi-rspec"
   gem "mock_redis", "0.46.0"
   gem "rspec_junit_formatter"
-  gem "shoulda-matchers", "~> 7.0"
+  gem "shoulda-matchers", "~> 8.0"
   gem "simplecov", "< 0.23", require: false
 
   # Page objects
