@@ -18,6 +18,40 @@ RSpec.describe Publish::CourseList do
     end
   end
 
+  describe "#visible_course_information_fields" do
+    let(:provider) { create(:provider, :accredited_provider) }
+
+    context "when every course shares the same values" do
+      before { create_list(:course, 2, :without_validation, provider:) }
+
+      it "returns no fields" do
+        expect(course_list.visible_course_information_fields).to eq([])
+      end
+    end
+
+    context "when only one field varies across the courses" do
+      before do
+        create(:course, :without_validation, provider:, study_mode: :full_time)
+        create(:course, :without_validation, provider:, study_mode: :part_time)
+      end
+
+      it "returns just that field" do
+        expect(course_list.visible_course_information_fields).to eq([:study_mode])
+      end
+    end
+
+    context "when several fields vary" do
+      before do
+        create(:course, :without_validation, provider:, funding: "fee", study_mode: :full_time)
+        create(:course, :without_validation, provider:, funding: "salary", study_mode: :part_time)
+      end
+
+      it "returns the varying fields in display order" do
+        expect(course_list.visible_course_information_fields).to eq(%i[funding study_mode])
+      end
+    end
+  end
+
   describe "enumerable facade" do
     let(:provider) { create(:provider, :accredited_provider) }
 
