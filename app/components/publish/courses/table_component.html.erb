@@ -22,10 +22,16 @@
           <% end %>
         </td>
         <td class="govuk-table__cell app-table--courses__course-information">
-          <span class="govuk-body-s govuk-!-display-block"><%= funding_label(course) %></span>
-          <span class="govuk-body-s govuk-!-display-block"><%= course.qualifications_summary %></span>
-          <span class="govuk-body-s govuk-!-display-block"><%= study_type_label(course) %></span>
-          <% if start_date(course) %>
+          <% if show_field?(:funding) %>
+            <span class="govuk-body-s govuk-!-display-block"><%= funding_label(course) %></span>
+          <% end %>
+          <% if show_field?(:qualification) %>
+            <span class="govuk-body-s govuk-!-display-block"><%= course.qualifications_summary %></span>
+          <% end %>
+          <% if show_field?(:study_mode) %>
+            <span class="govuk-body-s govuk-!-display-block"><%= study_type_label(course) %></span>
+          <% end %>
+          <% if show_field?(:start_date) && start_date(course) %>
             <span class="govuk-body-s govuk-!-display-block govuk-!-font-size-16"><%= start_date(course) %></span>
           <% end %>
         </td>
