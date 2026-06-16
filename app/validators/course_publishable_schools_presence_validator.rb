@@ -7,6 +7,7 @@
 class CoursePublishableSchoolsPresenceValidator < ActiveModel::Validator
   def validate(course)
     return if Courses::PublishRules::SchoolPresence.any?(course)
+    return if Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
     course.errors.add(:sites, :blank)
   end
