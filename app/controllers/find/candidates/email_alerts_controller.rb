@@ -5,13 +5,23 @@ module Find
     class EmailAlertsController < ApplicationController
       include ::Courses::ActiveFilters::SummaryRowBuilder
 
-      before_action :require_authentication, except: %i[unsubscribe_from_email confirm_unsubscribe_from_email]
+      before_action :require_authentication, except: %i[unsubscribe_from_email confirm_unsubscribe_from_email index sign_in]
       before_action :redirect_if_subscription_limit_reached, only: %i[new create]
 
       def index
+        return redirect_to sign_in_find_candidate_email_alerts_path unless authenticated?
+
         @email_alerts = @candidate.email_alerts.active.order(created_at: :desc)
         all_codes = @email_alerts.flat_map(&:subjects).compact.uniq
         @subject_names_by_code = all_codes.any? ? Subject.where(subject_code: all_codes).pluck(:subject_code, :subject_name).to_h : {}
+      end
+
+      def sign_in
+        @sign_in_url = if Settings.one_login.enabled
+                         "/auth/one-login"
+                       else
+                         "/auth/find-developer"
+                       end
       end
 
       def new

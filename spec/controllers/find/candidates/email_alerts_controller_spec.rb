@@ -31,6 +31,28 @@ module Find
         end
       end
 
+      describe "GET #sign_in" do
+        context "with rendered views" do
+          render_views
+
+          it "points the sign-in button at one-login when one_login is enabled" do
+            allow(Settings.one_login).to receive(:enabled).and_return(true)
+
+            get :sign_in
+
+            expect(response.body).to include("/auth/one-login")
+          end
+
+          it "points the sign-in button at the find developer strategy when one_login is disabled" do
+            allow(Settings.one_login).to receive(:enabled).and_return(false)
+
+            get :sign_in
+
+            expect(response.body).to include("/auth/find-developer")
+          end
+        end
+      end
+
       describe "GET #new" do
         it "renders the new alert form" do
           get :new, params: { subjects: %w[C1], level: "secondary" }
@@ -131,6 +153,22 @@ module Find
 
           expect(response).to have_http_status(:ok)
         end
+
+        it "returns not found for an invalid token" do
+          get :confirm_unsubscribe, params: { token: "invalid" }
+
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "returns not found for another candidate's alert" do
+          other = create(:candidate)
+          alert = create(:email_alert, candidate: other)
+          token = alert.signed_id(purpose: :unsubscribe, expires_in: 30.days)
+
+          get :confirm_unsubscribe, params: { token: }
+
+          expect(response).to have_http_status(:not_found)
+        end
       end
 
       describe "DELETE #unsubscribe" do
@@ -153,6 +191,13 @@ module Find
           delete :unsubscribe, params: { token: }
 
           expect(alert.reload.unsubscribed_at).to be_nil
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "returns not found for an invalid token" do
+          delete :unsubscribe, params: { token: "invalid" }
+
+          expect(response).to have_http_status(:not_found)
         end
       end
 

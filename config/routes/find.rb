@@ -59,7 +59,10 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
       end
 
       constraints ->(_req) { FeatureFlag.active?(:email_alerts) } do
-        resources :email_alerts, only: %i[index new create], path: "email-alerts"
+        resources :email_alerts, only: %i[index new create], path: "email-alerts" do
+          get "sign-in", on: :collection, as: :sign_in
+        end
+
         get "email-alerts/:token/unsubscribe",
             to: "email_alerts#confirm_unsubscribe",
             as: :confirm_unsubscribe_email_alert
