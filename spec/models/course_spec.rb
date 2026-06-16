@@ -38,6 +38,19 @@ describe Course do
     end
   end
 
+  describe "#publish_without_schools_allowed" do
+    it "defaults to false for a new course" do
+      expect(build(:course).publish_without_schools_allowed?).to be(false)
+      expect(create(:course).reload.publish_without_schools_allowed?).to be(false)
+    end
+
+    it "can be persisted as true" do
+      course.update!(publish_without_schools_allowed: true)
+
+      expect(course.reload.publish_without_schools_allowed?).to be(true)
+    end
+  end
+
   describe "auditing" do
     it { is_expected.to be_audited }
     it { is_expected.to have_associated_audits }
