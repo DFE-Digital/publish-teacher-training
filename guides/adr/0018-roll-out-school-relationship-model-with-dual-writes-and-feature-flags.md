@@ -20,7 +20,8 @@ The key write paths are:
 - bulk URN import for provider schools;
 - adding a school to a course through the existing flow;
 - adding a school to a course through the new flagged flow;
-- removing a provider school; and
+- removing a provider school
+- removing a course school and
 - touching parent providers when school relationships change.
 
 ## Options
@@ -79,7 +80,7 @@ Keep existing flows working, but make them write to both the old and new models.
 
 ## Decision
 
-Use dual writes during the transition, with feature flags controlling new read paths and new UI flows.
+Use dual writes and deletes during the transition, with feature flags controlling new read paths and new UI flows.
 
 When a school is added to a provider, both the normal provider-school add flow and bulk URN import should write to:
 
@@ -99,7 +100,7 @@ The new add-school-to-course flow should sit behind a feature flag. In the new f
 - `site_code` is copied from the provider-school relationship; and
 - `course_school.provider_school_id` is set.
 
-Failures should be handled so that we do not silently create records in only one model without knowing.
+Failures should be handled so that we do not silently create or remove records in only one model without knowing (Ideally in DB a transaction).
 
 Removing a provider-school relationship should be allowed only when no course-school records reference it through `course_school.provider_school_id`. If one or more course-school records reference the provider-school, removal should be blocked and the provider should be told to remove the school from the course first.
 
