@@ -34,6 +34,25 @@ RSpec.describe Publish::Courses::ListComponent, type: :component do
     end
   end
 
+  context "course information column across the whole list" do
+    let(:provider) { create(:provider, :accredited_provider) }
+
+    it "hides the column when every course shares the same information" do
+      create_list(:course, 2, :without_validation, provider:)
+      render_component
+
+      expect(page).to have_no_text("Course information")
+    end
+
+    it "shows the column when course information varies" do
+      create(:course, :without_validation, provider:, study_mode: :full_time)
+      create(:course, :without_validation, provider:, study_mode: :part_time)
+      render_component
+
+      expect(page).to have_text("Course information")
+    end
+  end
+
   context "when the provider has no courses" do
     let(:provider) { create(:provider) }
 
