@@ -32,5 +32,13 @@
     .govuk-body-s {
       margin-bottom: 0;
     }
+
+    // With only one line (or none, when a shown start date is blank for a row)
+    // the cell looks cramped against multi-line rows, so give it more vertical
+    // breathing room.
+    &--sparse {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
   }
 }
