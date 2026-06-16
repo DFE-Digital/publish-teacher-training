@@ -55,7 +55,7 @@ RSpec.describe Publish::CourseList do
       before do
         create(:course, :without_validation, provider:, study_mode: :full_time)
         create(:course, :without_validation, provider:, study_mode: :part_time,
-                                              accrediting_provider: create(:accredited_provider, provider_name: "Other University"))
+                                             accrediting_provider: create(:accredited_provider, provider_name: "Other University"))
       end
 
       it "treats uniformity across the whole list, not per group" do
