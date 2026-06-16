@@ -33,6 +33,7 @@ module Publish
       end
 
       def age_range(course)
+        return if course.secondary_course?
         return if course.age_range_in_years.blank?
 
         "Ages #{course.age_range}"
