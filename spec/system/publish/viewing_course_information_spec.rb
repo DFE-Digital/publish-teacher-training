@@ -25,12 +25,28 @@ RSpec.describe "Viewing course information in the course list" do
   def given_a_course_with_known_information
     create(
       :course,
+      :without_validation,
       provider:,
       accrediting_provider: nil,
+      name: "Known course",
       funding: :fee,
       qualification: :pgce_with_qts,
       study_mode: :full_time,
       start_date: Time.zone.local(2026, 9, 1),
+    )
+    # A contrasting course so every field varies across the list and the column
+    # is shown — uniform values are hidden, so without variation there is nothing
+    # to display.
+    create(
+      :course,
+      :without_validation,
+      provider:,
+      accrediting_provider: nil,
+      name: "Other course",
+      funding: :salary,
+      qualification: :qts,
+      study_mode: :part_time,
+      start_date: Time.zone.local(2027, 1, 1),
     )
   end
 
@@ -46,16 +62,24 @@ RSpec.describe "Viewing course information in the course list" do
   end
 
   def then_i_see_the_course_information_on_separate_lines
-    within ".app-table--courses__course-information" do
-      expect(page).to have_text("Fee-paying")
-      expect(page).to have_text("QTS with PGCE")
-      expect(page).to have_text("Full time")
-      expect(page).to have_text("September 2026")
+    within(course_row("Known course")) do
+      within ".app-table--courses__course-information" do
+        expect(page).to have_text("Fee-paying")
+        expect(page).to have_text("QTS with PGCE")
+        expect(page).to have_text("Full time")
+        expect(page).to have_text("September 2026")
+      end
     end
   end
 
   def and_i_see_the_start_date_in_the_smaller_font
-    expect(page).to have_css('.app-table--courses__course-information .govuk-\!-font-size-16', text: "September 2026")
+    within(course_row("Known course")) do
+      expect(page).to have_css('.app-table--courses__course-information .govuk-\!-font-size-16', text: "September 2026")
+    end
+  end
+
+  def course_row(name)
+    page.find(".govuk-table__row", text: name)
   end
 
   def then_i_see_both_start_dates
