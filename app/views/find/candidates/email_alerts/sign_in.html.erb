@@ -1,0 +1,7 @@
+<h1 class="govuk-heading-l">
+  Sign in to view all your email alerts
+</h1>
+
+<%= button_to("#{@sign_in_url}?origin=#{find_candidate_email_alerts_path}", class: %w[govuk-button], method: :post) do
+      tag.span("Sign in")
+    end %>

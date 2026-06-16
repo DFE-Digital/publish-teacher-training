@@ -43,7 +43,7 @@ module Find
             redirect_to after_auth_find_candidate_saved_courses_path
           else
             flash[:success] = t(".sign_in")
-            redirect_to(session.delete("return_to_after_authenticating") || find_root_path, allow_remote_host: false)
+            redirect_to(request.env["omniauth.origin"] || session.delete("return_to_after_authenticating") || find_root_path, allow_remote_host: false)
           end
         else
           redirect_to find_root_path, flash: { warning: t(".authentication_error") }
