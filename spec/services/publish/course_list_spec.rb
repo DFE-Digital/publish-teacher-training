@@ -50,6 +50,34 @@ RSpec.describe Publish::CourseList do
         expect(course_list.visible_course_information_fields).to eq(%i[funding study_mode])
       end
     end
+
+    context "when a field is uniform within each group but differs between groups" do
+      before do
+        create(:course, :without_validation, provider:, study_mode: :full_time)
+        create(:course, :without_validation, provider:, study_mode: :part_time,
+                                              accrediting_provider: create(:accredited_provider, provider_name: "Other University"))
+      end
+
+      it "treats uniformity across the whole list, not per group" do
+        expect(course_list.groups.size).to eq(2)
+        expect(course_list.visible_course_information_fields).to eq([:study_mode])
+      end
+    end
+
+    context "with start dates" do
+      it "hides the start date when every course is missing one" do
+        create_list(:course, 2, :without_validation, provider:, start_date: nil)
+
+        expect(course_list.visible_course_information_fields).to eq([])
+      end
+
+      it "shows the start date when some courses have one and others do not" do
+        create(:course, :without_validation, provider:, start_date: nil)
+        create(:course, :without_validation, provider:, start_date: Time.zone.local(2026, 9, 1))
+
+        expect(course_list.visible_course_information_fields).to eq([:start_date])
+      end
+    end
   end
 
   describe "enumerable facade" do
