@@ -7,13 +7,22 @@ module Publish
     # the course-information column (funding / qualification / study type / start
     # date) and the status tag. Rows are read-model rows from Publish::Courses::Query.
     class TableComponent < ApplicationComponent
-      def initialize(courses:, provider:, classes: [], html_attributes: {})
+      def initialize(courses:, provider:, course_information_fields: Publish::CourseList::FIELDS.keys, classes: [], html_attributes: {})
         super(classes:, html_attributes:)
         @courses = courses
         @provider = provider
+        @course_information_fields = course_information_fields
       end
 
-      attr_reader :courses, :provider
+      attr_reader :courses, :provider, :course_information_fields
+
+      def show_field?(key)
+        course_information_fields.include?(key)
+      end
+
+      def course_information_column?
+        course_information_fields.any?
+      end
 
       def course_path(course)
         helpers.publish_provider_recruitment_cycle_course_path(
