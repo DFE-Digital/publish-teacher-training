@@ -103,6 +103,12 @@ ci:	## Run in automation environment
 	$(eval SKIP_CONFIRM=true)
 	$(eval SKIP_AZURE_LOGIN=true)
 
+airbyte: ## Add airbyte for review apps
+	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER", Please specify a pr number for your review app))
+	$(eval export TF_VAR_pg_airbyte_enabled=true)
+	$(eval export TF_VAR_airbyte_enabled=true)
+	$(eval export TF_VAR_connection_status=active)
+
 read-keyvault-config:
 	$(eval export key_vault_name=$(shell jq -r '.key_vault_name' terraform/aks/workspace_variables/$(DEPLOY_ENV).tfvars.json))
 	$(eval key_vault_app_secret_name=$(shell jq -r '.key_vault_app_secret_name' terraform/aks/workspace_variables/$(DEPLOY_ENV).tfvars.json))

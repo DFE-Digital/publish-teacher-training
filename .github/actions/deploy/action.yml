@@ -76,6 +76,12 @@ runs:
         subscription-id: ${{ inputs.azure-subscription-id }}
         client-id: ${{ inputs.azure-client-id }}
 
+    - uses: google-github-actions/auth@v2
+      with:
+        project_id: rugged-abacus-218110
+        workload_identity_provider: projects/712009772377/locations/global/workloadIdentityPools/publish-teacher-training/providers/publish-teacher-training
+
+
     - name: Set up environment variables
       shell: bash
       run: |
