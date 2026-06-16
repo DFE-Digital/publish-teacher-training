@@ -151,3 +151,6 @@ variable "server_docker_image" {
   default     = null
   description = "Docker Hub image for the kubernetes deployment, eg. postgis/postgis:16-3.5. Default is postgres:<server_version>-alpine"
 }
+
+# pg_airbyte_enabled used in the postgres module
+variable "pg_airbyte_enabled" { default = false }

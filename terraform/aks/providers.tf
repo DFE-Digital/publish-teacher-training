@@ -16,6 +16,10 @@ terraform {
       source = "hashicorp/kubernetes"
       version = "2.32.0"
     }
+    airbyte = {
+      source  = "airbytehq/airbyte"
+      version = "0.10.0"
+    }
   }
 }
 
@@ -38,4 +42,11 @@ exec {
 
 provider "statuscake" {
   api_token = data.azurerm_key_vault_secret.statuscake_api_token.value
+}
+
+provider "airbyte" {
+  # Configuration options
+  server_url = var.airbyte_enabled ? "https://airbyte-${var.namespace}.${module.cluster_data.ingress_domain}/api/public/v1" : ""
+  client_id = var.airbyte_enabled ? module.secrets.map.AIRBYTE-CLIENT-ID : ""
+  client_secret = var.airbyte_enabled ? module.secrets.map.AIRBYTE-CLIENT-SECRET : ""
 }
