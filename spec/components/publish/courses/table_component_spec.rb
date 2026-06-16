@@ -32,6 +32,19 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
       end
     end
 
+    context "when the course is secondary" do
+      before do
+        create(:course, :secondary, :published_postgraduate, provider:, name: "Physics", course_code: "P456")
+      end
+
+      it "does not render the age range" do
+        render_component
+
+        expect(page).to have_text("Physics (P456)")
+        expect(page).to have_no_text("Ages 11 to 18")
+      end
+    end
+
     it "renders the course information lines" do
       render_component
 
