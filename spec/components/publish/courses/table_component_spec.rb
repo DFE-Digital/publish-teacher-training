@@ -102,4 +102,48 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
       expect(page).to have_no_css('span.govuk-\!-font-size-16')
     end
   end
+
+  describe "course information field gating" do
+    subject(:render_with) { render_inline(described_class.new(courses:, provider:, course_information_fields:)) }
+
+    before do
+      create(:course, :published_postgraduate, provider:, name: "Biology", course_code: "B123", start_date: Time.zone.local(2026, 9, 1))
+    end
+
+    context "when only one field is shown" do
+      let(:course_information_fields) { [:funding] }
+
+      it "renders only that field and marks the cell as sparse" do
+        render_with
+
+        within(".app-table--courses__course-information") do
+          expect(page).to have_text("Fee-paying")
+          expect(page).to have_no_text("QTS with PGCE")
+          expect(page).to have_no_text("Full time")
+        end
+        expect(page).to have_css(".app-table--courses__course-information--sparse")
+      end
+    end
+
+    context "when several fields are shown" do
+      let(:course_information_fields) { %i[funding qualification study_mode] }
+
+      it "does not mark the cell as sparse" do
+        render_with
+
+        expect(page).to have_no_css(".app-table--courses__course-information--sparse")
+      end
+    end
+
+    context "when no fields are shown" do
+      let(:course_information_fields) { [] }
+
+      it "drops the Course information column entirely" do
+        render_with
+
+        expect(page.all(".govuk-table__header").map(&:text)).to eq(%w[Course Status])
+        expect(page).to have_no_css(".app-table--courses__course-information")
+      end
+    end
+  end
 end
