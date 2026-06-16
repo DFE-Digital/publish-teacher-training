@@ -137,6 +137,7 @@ Instead, rollover should copy school relationship data:
 - copied records should point at the correct copied provider and course records;
 - `gias_school_id` should be carried across; and
 - `site_code` should be carried across.
+- `uuid` in the provider_school model should be carried over
 
 The old `Site` school-copying path should be isolated behind clear logic or branching so it can be removed later.
 
