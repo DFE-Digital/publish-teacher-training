@@ -245,7 +245,7 @@ module Find
 
         it "redirects unauthenticated users for index" do
           get :index
-          expect(response).to redirect_to(find_root_path)
+          expect(response).to redirect_to(sign_in_find_candidate_email_alerts_path)
         end
 
         it "redirects unauthenticated users for new" do
