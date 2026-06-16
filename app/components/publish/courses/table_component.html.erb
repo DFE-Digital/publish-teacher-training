@@ -2,7 +2,9 @@
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header"><%= t("publish.courses.course_table.course") %></th>
-      <th class="govuk-table__header"><%= t("publish.courses.course_table.course_information") %></th>
+      <% if course_information_column? %>
+        <th class="govuk-table__header"><%= t("publish.courses.course_table.course_information") %></th>
+      <% end %>
       <th class="govuk-table__header"><%= t("publish.courses.course_table.status") %></th>
     </tr>
   </thead>
@@ -21,20 +23,22 @@
             <div class="govuk-hint govuk-!-margin-0"><%= age_range(course) %></div>
           <% end %>
         </td>
-        <td class="govuk-table__cell app-table--courses__course-information">
-          <% if show_field?(:funding) %>
-            <span class="govuk-body-s govuk-!-display-block"><%= funding_label(course) %></span>
-          <% end %>
-          <% if show_field?(:qualification) %>
-            <span class="govuk-body-s govuk-!-display-block"><%= course.qualifications_summary %></span>
-          <% end %>
-          <% if show_field?(:study_mode) %>
-            <span class="govuk-body-s govuk-!-display-block"><%= study_type_label(course) %></span>
-          <% end %>
-          <% if show_field?(:start_date) && start_date(course) %>
-            <span class="govuk-body-s govuk-!-display-block govuk-!-font-size-16"><%= start_date(course) %></span>
-          <% end %>
-        </td>
+        <% if course_information_column? %>
+          <td class="<%= course_information_cell_classes(course) %>">
+            <% if show_field?(:funding) %>
+              <span class="govuk-body-s govuk-!-display-block"><%= funding_label(course) %></span>
+            <% end %>
+            <% if show_field?(:qualification) %>
+              <span class="govuk-body-s govuk-!-display-block"><%= course.qualifications_summary %></span>
+            <% end %>
+            <% if show_field?(:study_mode) %>
+              <span class="govuk-body-s govuk-!-display-block"><%= study_type_label(course) %></span>
+            <% end %>
+            <% if show_field?(:start_date) && start_date(course) %>
+              <span class="govuk-body-s govuk-!-display-block govuk-!-font-size-16"><%= start_date(course) %></span>
+            <% end %>
+          </td>
+        <% end %>
         <td class="govuk-table__cell app-table--courses__status">
           <%= render Publish::Courses::StatusTagComponent.new(course:, recruitment_cycle_year: recruitment_cycle_year(course)) %>
         </td>
