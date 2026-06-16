@@ -50,11 +50,30 @@ describe CoursePublishableSchoolsRolloverValidator do
     expect(course.errors.details[:sites]).to include(error: :check_schools)
   end
 
-  it "adds an :enter_schools error when no school is attached" do
+  it "adds an :enter_schools error when no school is attached and the exemption does not apply" do
     allow(Courses::PublishRules::SchoolPresence).to receive(:any?).with(course).and_return(false)
+    allow(Courses::PublishRules::SchoolPresenceExemption).to receive(:applies?).with(course).and_return(false)
 
     run_validator
 
     expect(course.errors.details[:sites]).to include(error: :enter_schools)
+  end
+
+  it "does not add an :enter_schools error when no school is attached but the exemption applies" do
+    allow(Courses::PublishRules::SchoolPresence).to receive(:any?).with(course).and_return(false)
+    allow(Courses::PublishRules::SchoolPresenceExemption).to receive(:applies?).with(course).and_return(true)
+
+    run_validator
+
+    expect(course.errors[:sites]).to be_empty
+  end
+
+  it "still adds a :check_schools error when schools are attached, regardless of the exemption" do
+    allow(Courses::PublishRules::SchoolPresence).to receive(:any?).with(course).and_return(true)
+    allow(Courses::PublishRules::SchoolPresenceExemption).to receive(:applies?).with(course).and_return(true)
+
+    run_validator
+
+    expect(course.errors.details[:sites]).to include(error: :check_schools)
   end
 end

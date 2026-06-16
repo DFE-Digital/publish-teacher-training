@@ -16,7 +16,7 @@ class CoursePublishableSchoolsRolloverValidator < ActiveModel::Validator
 
     if Courses::PublishRules::SchoolPresence.any?(course)
       course.errors.add(:sites, :check_schools)
-    else
+    elsif !Courses::PublishRules::SchoolPresenceExemption.applies?(course)
       course.errors.add(:sites, :enter_schools)
     end
   end
