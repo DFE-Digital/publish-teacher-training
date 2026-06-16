@@ -73,6 +73,20 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.visa_sponsorship_application_deadline_at).to be_nil
   end
 
+  it "carries over publish_without_schools_allowed when set" do
+    course.update!(publish_without_schools_allowed: true)
+
+    service.execute(course:, new_provider:)
+
+    expect(new_course.publish_without_schools_allowed).to be(true)
+  end
+
+  it "carries over the default publish_without_schools_allowed of false" do
+    service.execute(course:, new_provider:)
+
+    expect(new_course.publish_without_schools_allowed).to be(false)
+  end
+
   context "when the original course has first_published_at set" do
     let(:course) do
       create(:course, :published, accrediting_provider:, subjects: [maths], level: "secondary")
