@@ -50,14 +50,14 @@ describe CoursePublishableSchoolsPresenceValidator do
     before { allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true) }
 
     {
-      [:salary,         true,  true]  => :no_error,
+      [:salary,         true,  true] => :no_error,
       [:salary,         true,  false] => :no_error,
-      [:salary,         false, true]  => :no_error,
+      [:salary,         false, true] => :no_error,
       [:salary,         false, false] => :blank,
-      [:apprenticeship, false, true]  => :no_error,
+      [:apprenticeship, false, true] => :no_error,
       [:apprenticeship, false, false] => :blank,
-      [:fee,            false, true]  => :blank,
-      [:fee,            true,  true]  => :no_error,
+      [:fee,            false, true] => :blank,
+      [:fee,            true,  true] => :no_error,
       [:fee,            false, false] => :blank,
     }.each do |(funding, has_school, exemption), expected|
       context "#{funding}, #{has_school ? 'with' : 'without'} schools, exemption #{exemption ? 'on' : 'off'}" do
