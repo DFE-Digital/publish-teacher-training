@@ -24,6 +24,21 @@ module Publish
         course_information_fields.any?
       end
 
+      # Lines this row actually renders: a shown start-date field still produces
+      # no line when this particular course has no start date, so the count is
+      # decided per row rather than per column.
+      def course_information_line_count(course)
+        course_information_fields.count do |key|
+          key == :start_date ? start_date(course).present? : true
+        end
+      end
+
+      def course_information_cell_classes(course)
+        classes = %w[govuk-table__cell app-table--courses__course-information]
+        classes << "app-table--courses__course-information--sparse" if course_information_line_count(course) <= 1
+        classes.join(" ")
+      end
+
       def course_path(course)
         helpers.publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
