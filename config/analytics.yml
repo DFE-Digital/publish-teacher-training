@@ -81,6 +81,7 @@ shared:
     - schools_validated
     - school_experience_required
     - school_experience_required_content
+    - publish_without_schools_allowed
   course_site:
     - id
     - course_id
