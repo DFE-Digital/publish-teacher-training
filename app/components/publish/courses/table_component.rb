@@ -33,9 +33,15 @@ module Publish
         end
       end
 
-      def course_information_cell_classes(course)
-        classes = %w[govuk-table__cell app-table--courses__course-information]
-        classes << "app-table--courses__course-information--sparse" if course_information_line_count(course) <= 1
+      # A row is sparse when it shows at most one course-information line
+      # (including the "column dropped entirely" case, where the count is 0).
+      def sparse_row?(course)
+        course_information_line_count(course) <= 1
+      end
+
+      def row_classes(course)
+        classes = %w[govuk-table__row]
+        classes << "app-table--courses__row--sparse" if sparse_row?(course)
         classes.join(" ")
       end
 
