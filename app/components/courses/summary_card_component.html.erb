@@ -37,10 +37,12 @@
         <% row.with_value(text: qualification_value) %>
       <% end %>
 
-      <% if course.school_experience_required? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: "School experience") %>
-          <% row.with_value(text: "Required or strongly recommended") %>
+      <% if course.show_school_experience? %>
+        <% if course.school_experience_required? %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key(text: "School experience") %>
+            <% row.with_value(text: "Required or strongly recommended") %>
+          <% end %>
         <% end %>
       <% end %>
 
