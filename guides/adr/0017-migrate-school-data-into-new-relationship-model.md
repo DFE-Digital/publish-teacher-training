@@ -34,6 +34,8 @@ An edge case exists where a provider or course can have:
 
 The migration must not collapse those into one row when one row represents a main site.
 
+This is required because main-site relationships preserve existing provider behaviour and API behaviour. Some providers have processes around main sites, and the API exposes relationships with `site_code = "-"` as `Main Site`. These relationships also need their own UUIDs, so they cannot always be treated as the same location as the normal school relationship, even when both point to the same `GiasSchool`.
+
 ## Options
 
 ### 1. Perform a broad automatic migration and infer missing school links aggressively
@@ -59,7 +61,7 @@ Skip all records without URNs and leave unresolved main sites to be handled sepa
 
 #### Pros
 
-- Very conservative.
+- Minimises the risk of raised exceptions during the migration
 - Avoids accidental wrong matches.
 - Easier migration logic.
 
@@ -76,6 +78,7 @@ Backfill new relationship rows from existing data by resolving URNs to `gias_sch
 #### Pros
 
 - Preserves externally visible identifiers and site-code behaviour.
+- Preserves existing main-site behaviour for providers and API consumers.
 - Avoids risky automatic updates for ambiguous missing-URN records.
 - Allows confident postcode matches to reduce manual work.
 - Supports production data volumes with a bulk approach where practical.
@@ -115,7 +118,11 @@ The main backfill should:
 
 The implementation should be designed for production data volumes. A SQL-first or bulk approach is preferred where practical. If a non-bulk ActiveRecord-heavy approach is chosen, the performance trade-off should be documented.
 
-The backfill may create separate provider-school or course-school records for the same provider/course and `gias_school_id` only where one of those records represents a main site using `site_code = "-"`. Normal duplicate protection still applies for non-main-site rows.
+The backfill may create separate provider-school or course-school records for the same provider/course and `gias_school_id` only where one of those records represents a main site using `site_code = "-"`.
+
+This preserves the existing distinction between a normal school relationship and a main-site relationship. A main-site relationship is externally visible as `Main Site` through the API and can have its own UUID, so it is not always equivalent to the normal school relationship even when both rows point to the same `GiasSchool`.
+
+Normal duplicate protection still applies for non-main-site rows.
 
 Any database uniqueness assumptions that prevent this valid main-site duplicate should be reviewed and amended narrowly. The duplicate rule should not be relaxed more broadly than needed.
 
@@ -129,7 +136,11 @@ The idempotent design allows the backfill to be rerun during rollout without dup
 
 Preserving UUIDs on `provider_school` keeps the new model compatible with downstream location lookups. Linking `course_school` to `provider_school` means course-school API responses can return the same relationship UUID without duplicating it.
 
-Allowing the main-site duplicate case prevents data loss where a provider or course has both a normal school relationship and a main-site relationship for the same GIAS school. The cost is more careful uniqueness logic and clearer tests around duplicate protection.
+Allowing the main-site duplicate case prevents data loss where a provider or course has both a normal school relationship and a main-site relationship for the same GIAS school.
+
+It also preserves existing provider workflows and API behaviour. The main-site relationship can continue to appear as `Main Site` externally and can retain a separate UUID from the normal school relationship.
+
+The cost is more careful uniqueness logic and clearer tests around duplicate protection.
 
 The migration deliberately does not switch application read paths by itself. Dual-write and feature-flag rollout decisions are covered by [ADR 18](0018-roll-out-school-relationship-model-with-dual-writes-and-feature-flags.md).
 
