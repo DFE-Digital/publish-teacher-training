@@ -8,11 +8,19 @@ Accepted
 
 ## Context
 
-Publish has historically used the `Site` table as the backing model for provider and course school/location relationships. This is the wrong shape for the data.
+### How the current model evolved
+
+Publish has historically used the `Site` table as the backing model for provider and course school/location relationships.
+
+That was not wrong when it was introduced. At the time, Publish did not have an imported GIAS schools table to rely on. School and location data was added manually by providers, so `Site` was the place where those provider-entered locations were stored.
+
+That model became less appropriate once we introduced the GIAS import.
+
+### What the current model mixes together
 
 A school is an external organisation with authoritative data in GIAS. A provider-school or course-school entry is a relationship to that school. A study placement is a different concept again. The current model mixes these together by storing school-like records in `Site`, even when the school itself already exists in `GiasSchool`.
 
-This creates several problems.
+### Problems with keeping school relationships in `Site`
 
 `Site` duplicates school data instead of relating providers and courses to an authoritative `GiasSchool` record. When the GIAS source changes, copied `Site` records do not automatically reflect those changes, so school data can drift from its source.
 
@@ -24,9 +32,15 @@ Adding provider schools can be slow when a provider bulk adds many schools becau
 
 The model also makes behaviour harder to reason about across Publish, Find, Apply and API consumers. School retrieval, publishing checks, API location responses, rollover and search all have to understand legacy `Site` behaviour. The lack of an explicit provider-school relationship also makes it harder for course-school records to refer back to the provider-level school they came from.
 
+### Main-site compatibility
+
 Main-site behaviour is one compatibility constraint within this wider remodel. `site_code = "-"` carries special meaning for some downstream behaviour, so the new model must preserve that value. It should not drive the shape of the model, and we should not keep school relationships in `Site` just to preserve main-site semantics.
 
+### Why all school relationships can now move
+
 One implementation hurdle was that many main sites could not be matched to a GIAS school. That would have left some school-like records in `Site` and weakened the target model. We have now resolved that blocker and can link the main sites to GIAS schools, so all schools can move into the new join tables. The migration detail is covered in [ADR 17](0017-migrate-school-data-into-new-relationship-model.md).
+
+### What's the goal of this project
 
 We need to change the data model so that:
 
