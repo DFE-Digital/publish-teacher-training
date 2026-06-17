@@ -1,4 +1,4 @@
-<table class="govuk-table app-table--courses">
+<table class="govuk-table app-table--courses<%= " app-table--courses--no-information" unless course_information_column? %>">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header"><%= t("publish.courses.course_table.course") %></th>
@@ -10,7 +10,7 @@
   </thead>
   <tbody class="govuk-table__body">
     <% courses.each do |course| %>
-      <tr class="govuk-table__row">
+      <tr class="<%= row_classes(course) %>">
         <td class="govuk-table__cell app-table--courses__course-name">
           <% if on_courses_index_page?(course) %>
             <%= govuk_link_to course.name_and_code, course_path(course), class: "govuk-heading-s govuk-!-margin-bottom-0" %>
@@ -24,7 +24,7 @@
           <% end %>
         </td>
         <% if course_information_column? %>
-          <td class="<%= course_information_cell_classes(course) %>">
+          <td class="govuk-table__cell app-table--courses__course-information">
             <% if show_field?(:funding) %>
               <span class="govuk-body-s govuk-!-display-block"><%= funding_label(course) %></span>
             <% end %>
