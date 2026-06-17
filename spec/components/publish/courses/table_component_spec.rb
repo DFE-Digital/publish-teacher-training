@@ -113,7 +113,7 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
     context "when only one field is shown" do
       let(:course_information_fields) { [:funding] }
 
-      it "renders only that field and marks the cell as sparse" do
+      it "renders only that field and marks the row as sparse" do
         render_with
 
         within(".app-table--courses__course-information") do
@@ -121,28 +121,30 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
           expect(page).to have_no_text("QTS with PGCE")
           expect(page).to have_no_text("Full time")
         end
-        expect(page).to have_css(".app-table--courses__course-information--sparse")
+        expect(page).to have_css(".app-table--courses__row--sparse")
       end
     end
 
     context "when several fields are shown" do
       let(:course_information_fields) { %i[funding qualification study_mode] }
 
-      it "does not mark the cell as sparse" do
+      it "does not mark the row as sparse" do
         render_with
 
-        expect(page).to have_no_css(".app-table--courses__course-information--sparse")
+        expect(page).to have_no_css(".app-table--courses__row--sparse")
       end
     end
 
     context "when no fields are shown" do
       let(:course_information_fields) { [] }
 
-      it "drops the Course information column entirely" do
+      it "drops the Course information column and lays out for Course and Status only" do
         render_with
 
         expect(page.all(".govuk-table__header").map(&:text)).to eq(%w[Course Status])
         expect(page).to have_no_css(".app-table--courses__course-information")
+        expect(page).to have_css("table.app-table--courses--no-information")
+        expect(page).to have_css(".app-table--courses__row--sparse")
       end
     end
   end
