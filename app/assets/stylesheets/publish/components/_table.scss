@@ -32,13 +32,25 @@
     .govuk-body-s {
       margin-bottom: 0;
     }
+  }
 
-    // With only one line (or none, when a shown start date is blank for a row)
-    // the cell looks cramped against multi-line rows, so give it more vertical
-    // breathing room.
-    &--sparse {
-      padding-top: 20px;
-      padding-bottom: 20px;
-    }
+  // Sparse rows (0 or 1 course-information line) get more vertical breathing
+  // room across every column so the row stays balanced rather than the
+  // course-information cell looking cramped against multi-line rows.
+  &__row--sparse .govuk-table__cell {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+
+// With no course information at all, the column is dropped: let the Course
+// column take the remaining width and shrink Status to its content on the right.
+.app-table--courses--no-information {
+  table-layout: auto;
+
+  .app-table--courses__status {
+    width: 1%;
+
+    white-space: nowrap;
   }
 }
