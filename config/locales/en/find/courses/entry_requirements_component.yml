@@ -1,0 +1,17 @@
+en:
+  find:
+    courses:
+      entry_requirements_component:
+        view:
+          heading: Entry requirements
+          visa_sponsorship: Visa sponsorship
+          gcses: GCSEs
+          degree: Degree required
+          or_equivalent_qualification: or equivalent qualification
+          equivalency_tests: Equivalency tests
+          degree_subject_requirements: Degree subject requirements
+          degree_requirements: Degree requirements
+          a_levels: A levels
+          above_or_equivalent_qualification: or above, or equivalent qualification
+          school_experience_details_key: School experience
+          school_experience_details_text: Yes, school experience is required or strongly recommended

@@ -327,6 +327,8 @@ en:
         ThreeYears: 3 years
         FourYears: 4 years
       age_group_key: Age group
+      experience_key: School experience
+      experience_value: Required or strongly recommended
       qualification_key: Qualification awarded
       qualification_value:
         qts_html: <abbr title='Qualified teacher status'>QTS</abbr> only

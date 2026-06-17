@@ -39,18 +39,6 @@ en:
       a_level_component:
         view:
           equivalency_tests: Equivalency tests
-      entry_requirements_component:
-        view:
-          heading: Entry requirements
-          visa_sponsorship: Visa sponsorship
-          gcses: GCSEs
-          degree: Degree required
-          or_equivalent_qualification: or equivalent qualification
-          equivalency_tests: Equivalency tests
-          degree_subject_requirements: Degree subject requirements
-          degree_requirements: Degree requirements
-          a_levels: A levels
-          above_or_equivalent_qualification: or above, or equivalent qualification
       qualifications_summary_component:
         view:
           tda_with_qts: Teacher degree apprenticeship (TDA) with QTS

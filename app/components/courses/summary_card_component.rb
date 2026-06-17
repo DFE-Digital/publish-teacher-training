@@ -109,6 +109,14 @@ module Courses
       t(".qualification_key")
     end
 
+    def experience_key
+      t(".experience_key")
+    end
+
+    def experience_value
+      t(".experience_value")
+    end
+
     def qualification_value
       t(".qualification_value.#{course.qualification}_html")
     end
