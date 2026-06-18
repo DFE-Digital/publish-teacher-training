@@ -44,7 +44,7 @@
 
 <%= govuk_summary_list do |summary_list| %>
 
-  <% if FeatureFlag.active?(:school_experience) %>
+  <% if course.show_school_experience? %>
     <% if course.salaried? %>
       <% summary_list.with_row do |row|
         row.with_key { t("publish.providers.courses.description_content.experience_required_key") }
