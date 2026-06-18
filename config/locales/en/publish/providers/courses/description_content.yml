@@ -15,6 +15,9 @@ en:
           course_length_label: Course length
           course_requirements_heading: Requirements and eligibility
           degree_label: Degree
+          experience_required_key: School experience (optional)
+          experience_required: Yes, school experience is required or strongly recommended
+          experience_not_required: No, school experience is not required
           enter_a_levels: Enter A levels and equivalency test requirements
           fee_details_label: Fees and financial support
           fee_for_international_citizens_label: Fee for international citizens
