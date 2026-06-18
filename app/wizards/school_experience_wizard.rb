@@ -7,6 +7,9 @@ class SchoolExperienceWizard
 
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
+      graph.root(:experience_required)
+
+      graph.add_node :experience_required, Steps::ExperienceRequired
     end
   end
 

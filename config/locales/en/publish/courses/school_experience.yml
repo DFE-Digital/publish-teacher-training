@@ -1,0 +1,10 @@
+en:
+  publish:
+    courses:
+      school_experience:
+        experience_required:
+          create:
+            flash_success: School experience updated
+        experience_details:
+          create:
+            flash_success: School experience updated
