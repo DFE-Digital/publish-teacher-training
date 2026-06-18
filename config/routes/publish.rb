@@ -242,6 +242,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/full-part-time", on: :member, to: "courses/study_mode#edit"
         put "/full-part-time", on: :member, to: "courses/study_mode#update"
 
+        get "/school-experience/experience-required", to: "courses/school_experience/experience_required#new", as: :school_experience_required
+        post "/school-experience/experience-required", to: "courses/school_experience/experience_required#create"
+
         get "/degrees/start", on: :member, to: "courses/degrees/start#edit"
         put "/degrees/start", on: :member, to: "courses/degrees/start#update"
 
