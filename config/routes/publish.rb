@@ -245,6 +245,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/school-experience/experience-required", to: "courses/school_experience/experience_required#new", as: :school_experience_required
         post "/school-experience/experience-required", to: "courses/school_experience/experience_required#create"
 
+        get "/school-experience/experience-details", to: "courses/school_experience/experience_details#new", as: :school_experience_details
+        post "/school-experience/experience-details", to: "courses/school_experience/experience_details#create"
+
         get "/degrees/start", on: :member, to: "courses/degrees/start#edit"
         put "/degrees/start", on: :member, to: "courses/degrees/start#update"
 
