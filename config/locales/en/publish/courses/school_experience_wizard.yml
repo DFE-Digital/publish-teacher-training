@@ -1,0 +1,17 @@
+en:
+  activemodel:
+    errors:
+      models:
+        school_experience_wizard/steps/experience_required:
+          attributes:
+            experience_required:
+              blank: Pick an option
+  publish:
+    courses:
+      school_experience_wizard/steps/experience_required:
+        page_title: School experience (optional)
+        heading: School experience (optional)
+        subtitle: Is school experience required or strongly recommended for this course? (optional)
+        yes_label: Yes, school experience is required or strongly recommended
+        no_label: No, school experience is not required
+        submit: Continue to add school experience details
