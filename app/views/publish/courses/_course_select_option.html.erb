@@ -1,1 +1,82 @@
-<option value="<%= other_course.course_code %>"><%= other_course.name %> (<%= other_course.course_code %>)</option>
+<!-- ALL INFO IN DROPDOWN -->
+<!-- 
+<% funding_label =
+     if other_course.funding == "fee"
+       "Fee-paying"
+     elsif other_course.funding == "salary"
+       "Salaried"
+      elsif other_course.funding == "apprenticeship"
+       "Apprenticeship"
+      else
+        other_course.funding
+     end
+%>
+<% primary_age_range =
+  if other_course.level == "primary" 
+    "Ages 5-11,"
+  end
+  %>
+<% qualifcation_label =
+    if other_course.qualification == "pgce_with_qts"
+      "QTS with PGCE"
+    elsif other_course.qualification == "qts"
+      "QTS"
+    else
+      other_course.qualification
+    end
+  %>
+<% study_mode_label =
+    if other_course.study_mode == "full_time"
+      "Full-time"
+    elsif other_course.study_mode == "part_time"
+      "Part-time"
+    else
+      other_course.study_mode
+    end
+  %>
+<option value="<%= other_course.course_code %>">
+  <%= other_course.name %> (<%= other_course.course_code %>),
+  <%= primary_age_range %>
+  <%= funding_label %>,
+  <%= qualifcation_label %>, 
+  <%= study_mode_label %>
+</option>
+-->
+<!-- COURSE INFORMATION APPEARS ONCE A COURSE IS SELECTED -->
+<% primary_age_range =
+  if other_course.level == "primary"
+    "Ages 5–11"
+  end
+%>
+<% funding_label =
+  case other_course.funding
+  when "fee" then "Fee-paying"
+  when "salary" then "Salaried"
+  when "apprenticeship" then "Apprenticeship"
+  else other_course.funding
+  end
+%>
+<% qualification_label =
+  case other_course.qualification
+  when "pgce_with_qts" then "QTS with PGCE"
+  when "qts" then "QTS"
+  else other_course.qualification
+  end
+%>
+<% study_mode_label =
+  case other_course.study_mode
+  when "full_time" then "Full time"
+  when "part_time" then "Part time"
+  else other_course.study_mode
+  end
+%>
+<option value="<%= other_course.course_code %>"
+  data-name="<%= other_course.name %>"
+  data-code="<%= other_course.course_code %>"
+  data-age="<%= primary_age_range %>"
+  data-funding="<%= funding_label %>"
+  data-qualification="<%= qualification_label %>"
+  data-study-mode="<%= study_mode_label %>">
+  <%= other_course.name %> (<%= other_course.course_code %>)
+  <%= primary_age_range %>
+</option>

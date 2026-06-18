@@ -6,18 +6,37 @@
     <%= form_for course, url: page_path, data: { qa: "course__copy-content-form" }, method: :get do |form| %>
       <div class="govuk-form-group">
         <label class="govuk-label govuk-label--s" for="copy-from">Copy from</label>
-        <select id="copy-from" name="copy_from" class="govuk-select">
-          <option value="" selected="selected">Pick a course</option>
-          <% if @self_accredited_courses %>
-            <%= render partial: "publish/courses/course_select_option", collection: @self_accredited_courses, as: :other_course %>
-          <% end %>
-
-          <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
-            <optgroup label="<%= accrediting_provider %>">
-              <%= render partial: "publish/courses/course_select_option", collection: courses, as: :other_course %>
-            </optgroup>
-          <% end %>
-        </select>
+        <div class="app-status-box" data-controller="copy-course-details">
+          <select id="copy-from"
+        name="copy_from"
+        class="govuk-select"
+        data-action="change->copy-course-details#update">
+            <option value="" selected="selected">Pick a course</option>
+            <% if @self_accredited_courses %>
+              <%= render partial: "publish/courses/course_select_option", collection: @self_accredited_courses, as: :other_course %>
+            <% end %>
+            <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
+              <optgroup label="<%= accrediting_provider %>">
+                <%= render partial: "publish/courses/course_select_option", collection: courses, as: :other_course %>
+              </optgroup>
+            <% end %>
+          </select>
+          <div data-copy-course-details-target="details"
+     class="govuk-body"
+     hidden>
+            <p class="govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+              <strong data-copy-course-details-target="title"></strong>
+            </p>
+            <p class="govuk-body govuk-!-margin-bottom-0"
+     data-copy-course-details-target="age"></p>
+            <p class="govuk-body govuk-!-margin-bottom-0"
+     data-copy-course-details-target="funding"></p>
+            <p class="govuk-body govuk-!-margin-bottom-0"
+     data-copy-course-details-target="qualification"></p>
+            <p class="govuk-body govuk-!-margin-bottom-0"
+     data-copy-course-details-target="studyMode"></p>
+          </div>
+        </div>
       </div>
       <%= form.submit "Copy content", class: "govuk-button govuk-!-margin-bottom-0", name: nil, data: { qa: "course__copy" } %>
     <% end %>
@@ -26,3 +45,69 @@
     <p class="govuk-body">When you&#8217;ve added content to this page, you can copy it to other courses</p>
   <% end %>
 </div>
+<%# <script>
+  document.addEventListener("turbo:load", function () {
+    const select = document.querySelector("#copy-from");
+    const details = document.querySelector("#course-details");
+
+    if (!select || !details) return;
+
+    // prevent double-binding if turbo reloads
+    if (select.dataset.listenerAttached) return;
+    select.dataset.listenerAttached = "true";
+
+    select.addEventListener("change", function () {
+      const selected = this.selectedOptions[0];
+
+      if (!selected || !selected.value) {
+        details.hidden = true;
+        return;
+      }
+
+      document.getElementById("course-title").textContent =
+        `${selected.dataset.name} (${selected.dataset.code})`;
+
+      document.getElementById("course-age").textContent =
+        selected.dataset.age || "";
+
+      document.getElementById("course-funding").textContent =
+        selected.dataset.funding || "";
+
+      document.getElementById("course-qualification").textContent =
+        selected.dataset.qualification || "";
+
+      document.getElementById("course-study-mode").textContent =
+        selected.dataset.studyMode || "";
+
+      details.hidden = false;
+    });
+  });
+</script> %>
+<!-- sript doesn't work but you can paste this into the console, press enter and select a courses and it will work for siplay purspoes or screenshotting -->
+<%# const select = document.querySelector("#copy-from");
+const details = document.querySelector("#course-details");
+
+select.addEventListener("change", function () {
+  console.log("🔥 event firing");
+
+  const selected = this.selectedOptions[0];
+
+  console.log(selected.dataset); // 👈 ADD THIS
+
+  document.getElementById("course-title").textContent =
+    `${selected.dataset.name} (${selected.dataset.code})`;
+
+  document.getElementById("course-age").textContent =
+    selected.dataset.age || "";
+
+  document.getElementById("course-funding").textContent =
+    selected.dataset.funding || "";
+
+  document.getElementById("course-qualification").textContent =
+    selected.dataset.qualification || "";
+
+  document.getElementById("course-study-mode").textContent =
+    selected.dataset.studyMode || "";
+
+  details.hidden = false;
+}); %>
