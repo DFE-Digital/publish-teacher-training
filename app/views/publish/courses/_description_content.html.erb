@@ -27,7 +27,7 @@
   <% if course.fee_based? %>
     <%= render partial: "publish/courses/fees_and_financial_support", locals: { course: course, summary_list: summary_list } %>
   <% else %>
-      <% enrichment_summary(
+    <% enrichment_summary(
       summary_list,
       :course,
       t("publish.providers.courses.description_content.salary_details_label"),
@@ -43,6 +43,26 @@
 </h2>
 
 <%= govuk_summary_list do |summary_list| %>
+
+  <% if FeatureFlag.active?(:school_experience) %>
+    <% if course.salaried? %>
+      <% summary_list.with_row do |row|
+        row.with_key { t("publish.providers.courses.description_content.experience_required_key") }
+        if course.school_experience_required.nil?
+          row.with_value(classes: %w[govuk-summary-list__value]) { tag.span(t("value_not_entered"), class: "govuk-hint").html_safe }
+        elsif course.school_experience_required
+          row.with_value(classes: %w[govuk-summary-list__value]) {
+            tag.div(t("publish.providers.courses.description_content.experience_required"), class:"govuk-body")
+            .concat(markdown(course.school_experience_required_content))
+          }
+        else
+          row.with_value(classes: %w[govuk-summary-list__value]) { t("publish.providers.courses.description_content.experience_not_required") }
+        end
+        row.with_action(text: t("change"), href: publish_provider_recruitment_cycle_course_school_experience_required_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+
   <% if course.show_degree_requirements_row? %>
     <% enrichment_summary(
       summary_list,
