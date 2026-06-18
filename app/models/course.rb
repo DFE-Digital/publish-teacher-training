@@ -128,7 +128,7 @@ class Course < ApplicationRecord
   has_many :gias_schools, through: :schools
 
   delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
-  delegate :after_2021?, :year, :rollover_period_2026?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
+  delegate :after_2021?, :after_2026?, :year, :rollover_period_2026?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def set_subject_position(course_subject)
     return if course_subject.position.present?

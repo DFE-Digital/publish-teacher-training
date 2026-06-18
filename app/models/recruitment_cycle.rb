@@ -143,4 +143,8 @@ class RecruitmentCycle < ApplicationRecord
   def after_2025?
     year.to_i > 2025
   end
+
+  def after_2026?
+    year.to_i > 2026
+  end
 end
