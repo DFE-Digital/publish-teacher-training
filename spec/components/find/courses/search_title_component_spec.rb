@@ -110,7 +110,7 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:subjects) { %w[Primary] }
     let(:search_attributes) { { "level" => "further_education" } }
 
-    it { expect(rendered.text).to eq("Primary and Further education courses in England") }
+    it { expect(rendered.text).to eq("primary and further education courses in England") }
   end
 
   context "with 1 filter in fallback" do
