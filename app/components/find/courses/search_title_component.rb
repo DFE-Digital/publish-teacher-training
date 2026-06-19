@@ -24,6 +24,7 @@ module Find
         return fallback_title if @subjects.empty? && no_location?
 
         named = @subjects.count.between?(1, 2)
+        @subjects = @subjects.map { |subject| SubjectHelper.subject_name_in_sentence(subject) }
 
         if location? && named
           I18n.t("find.courses.search_title.subjects_with_location",
