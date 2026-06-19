@@ -19,7 +19,7 @@ module Find
           location_name: @email_alert.location_name,
           radius: @email_alert.radius,
           search_attributes: @attrs,
-        ).title_text
+        ).heading
       end
 
       def filter_rows

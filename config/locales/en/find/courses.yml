@@ -116,11 +116,14 @@ en:
         not_consider_pending_a_level: We will not consider candidates with pending A levels.
         consider_a_level_equivalency: We’ll consider candidates who need to take A level equivalency tests.
         not_consider_a_level_equivalency: We will not consider candidates who need to take A level equivalency tests.
+      # These titles are lower-cased sentence fragments: they read naturally when
+      # interpolated mid-sentence (e.g. "Get email alerts for ..."). Standalone
+      # headings capitalise the first letter via SearchTitleComponent#heading.
       search_title:
-        visa_sponsorship: Courses with visa sponsorship
-        apprenticeship: Apprenticeship courses in England
-        salary: Salaried courses in England
-        further_education: Further education courses across England
+        visa_sponsorship: courses with visa sponsorship
+        apprenticeship: apprenticeship courses in England
+        salary: salaried courses in England
+        further_education: further education courses across England
         subjects_no_location: "%{subject} courses in England"
         many_subjects_no_location: "%{count} subjects in England"
         subjects_with_location: "%{subject} courses within %{radius} miles of %{location}"
