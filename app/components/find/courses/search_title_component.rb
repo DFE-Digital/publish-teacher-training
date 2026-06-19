@@ -95,13 +95,29 @@ module Find
         end
       end
 
-      # These keys represent a specific provider search, not user-selected filters,
-      # so they are excluded from the active filter count displayed in the title.
-      DISPLAY_EXCLUDED_KEYS = %w[provider_code provider_name].freeze
+      # Search attributes that represent candidate-selected filters. Only these
+      # contribute to the active filter count shown in the fallback title. Any
+      # other key — e.g. return_to, the provider_code/provider_name keys of a
+      # provider search, or the location/subject keys handled elsewhere in the
+      # title — is ignored automatically by not appearing in this whitelist.
+      FILTER_KEYS = %w[
+        applications_open
+        can_sponsor_visa
+        engineers_teach_physics
+        funding
+        interview_location
+        level
+        minimum_degree_required
+        order
+        qualifications
+        send_courses
+        start_date
+        study_types
+      ].freeze
 
       def active_filter_count
         defaults = Find::SearchParamDefaults.new(@attrs)
-        @attrs.count { |k, v| v.present? && DISPLAY_EXCLUDED_KEYS.exclude?(k) && defaults.non_default?(k, v) }
+        @attrs.slice(*FILTER_KEYS).count { |k, v| v.present? && defaults.non_default?(k, v) }
       end
     end
   end
