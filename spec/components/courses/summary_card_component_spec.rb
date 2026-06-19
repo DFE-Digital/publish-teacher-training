@@ -575,6 +575,38 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     it_behaves_like "course qualification row", :undergraduate_degree_with_qts, "Teacher degree apprenticeship with QTS"
   end
 
+  describe "when displaying school experience" do
+    let(:course) { create(:course, school_experience_required:) }
+
+    context "when the school_experience feature flag is active" do
+      before { FeatureFlag.activate(:school_experience) }
+
+      context "when school experience is required" do
+        let(:school_experience_required) { true }
+
+        it "displays the school experience row" do
+          expect(summary_card_content).to include("School experienceRequired or strongly recommended")
+        end
+      end
+
+      context "when school experience is not required" do
+        let(:school_experience_required) { false }
+
+        it "does not display the school experience row" do
+          expect(summary_card_content).not_to include("School experience")
+        end
+      end
+    end
+
+    context "when the school_experience feature flag is inactive" do
+      let(:school_experience_required) { true }
+
+      it "does not display the school experience row" do
+        expect(summary_card_content).not_to include("School experience")
+      end
+    end
+  end
+
   shared_examples "course degree requirements row" do |course_degree_type, course_degree_grade_required, expected_output|
     let(:course) { create(:course, degree_type:, degree_grade:) }
     let(:degree_type) { course_degree_type }

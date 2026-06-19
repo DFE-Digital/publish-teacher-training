@@ -488,6 +488,47 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
   end
 
+  describe "school experience" do
+    let(:course) do
+      build(
+        :course,
+        school_experience_required:,
+        school_experience_required_content: "You should arrange a school visit before applying.",
+        provider: build(:provider),
+      )
+    end
+
+    context "when the school_experience feature flag is active" do
+      before { FeatureFlag.activate(:school_experience) }
+
+      context "when school experience is required" do
+        let(:school_experience_required) { true }
+
+        it "renders the school experience row with details" do
+          expect(result.text).to include("School experience")
+          expect(result.text).to include("Yes, school experience is required or strongly recommended")
+          expect(result.text).to include("You should arrange a school visit before applying.")
+        end
+      end
+
+      context "when school experience is not required" do
+        let(:school_experience_required) { false }
+
+        it "does not render the school experience row" do
+          expect(result.text).not_to include("Yes, school experience is required or strongly recommended")
+        end
+      end
+    end
+
+    context "when the school_experience feature flag is inactive" do
+      let(:school_experience_required) { true }
+
+      it "does not render the school experience row" do
+        expect(result.text).not_to include("Yes, school experience is required or strongly recommended")
+      end
+    end
+  end
+
   describe "#qualification_required" do
     let(:course) { build(:course) }
 
