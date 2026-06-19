@@ -71,7 +71,7 @@ module Find
       end
 
       def visa_title
-        I18n.t("find.courses.search_title.visa_sponsorship")
+        I18n.t("find.courses.search_title.visa_sponsorship").downcase
       end
 
       def apprenticeship_title
