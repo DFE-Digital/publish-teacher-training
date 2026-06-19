@@ -410,6 +410,18 @@ class Course < ApplicationRecord
     provider.provider_type == "university"
   end
 
+  def show_school_experience?
+    return false unless FeatureFlag.active?(:school_experience)
+
+    # Hide in production and sandbox until the 2027 recruitment cycle. We use
+    # an absolute cycle year (rather than "next cycle") so the feature keeps
+    # showing once 2027 rolls over to become the current cycle. Other (lower)
+    # environments can show it for any cycle so the feature can be tested.
+    return recruitment_cycle_after_2026? if Settings.environment.name.in?(%w[production sandbox])
+
+    true
+  end
+
   def academic_year
     if start_date.month >= 9
       "#{start_date.year} to #{start_date.year.to_i + 1}"

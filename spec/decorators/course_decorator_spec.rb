@@ -627,55 +627,6 @@ describe CourseDecorator do
     end
   end
 
-  describe "#show_school_experience?" do
-    let(:cycle_year) { 2027 }
-    let(:provider) { build_stubbed(:provider, recruitment_cycle: build_stubbed(:recruitment_cycle, year: cycle_year)) }
-
-    context "when the school_experience feature flag is inactive" do
-      it "returns false" do
-        expect(decorated_course.show_school_experience?).to be false
-      end
-    end
-
-    context "when the school_experience feature flag is active" do
-      before { FeatureFlag.activate(:school_experience) }
-
-      %w[production sandbox].each do |environment|
-        context "in #{environment}" do
-          before { allow(Settings.environment).to receive(:name).and_return(environment) }
-
-          context "and the course is in the 2027 cycle or later" do
-            let(:cycle_year) { 2027 }
-
-            it "returns true" do
-              expect(decorated_course.show_school_experience?).to be true
-            end
-          end
-
-          context "and the course is in a cycle before 2027" do
-            let(:cycle_year) { 2026 }
-
-            it "returns false" do
-              expect(decorated_course.show_school_experience?).to be false
-            end
-          end
-        end
-      end
-
-      context "in a lower environment" do
-        before { allow(Settings.environment).to receive(:name).and_return("qa") }
-
-        context "and the course is in a cycle before 2027" do
-          let(:cycle_year) { 2026 }
-
-          it "returns true" do
-            expect(decorated_course.show_school_experience?).to be true
-          end
-        end
-      end
-    end
-  end
-
   describe "#a_level_change_path" do
     subject(:a_level_change_path) { course.decorate.a_level_change_path }
 
