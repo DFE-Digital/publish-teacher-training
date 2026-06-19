@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_04_142930) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_12_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -262,6 +262,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_04_142930) do
     t.text "site_code", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id", "gias_school_id", "site_code"], name: "index_course_school_unique", unique: true
+    t.index ["course_id", "gias_school_id"], name: "index_course_school_unique_non_main", unique: true, where: "(site_code <> '-'::text)"
     t.index ["gias_school_id"], name: "index_course_school_on_gias_school_id"
   end
 
@@ -465,6 +466,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_04_142930) do
     t.datetime "updated_at", null: false
     t.index ["gias_school_id"], name: "index_provider_school_on_gias_school_id"
     t.index ["provider_id", "gias_school_id", "site_code"], name: "index_provider_school_unique", unique: true
+    t.index ["provider_id", "gias_school_id"], name: "index_provider_school_unique_non_main", unique: true, where: "(site_code <> '-'::text)"
     t.index ["provider_id"], name: "index_provider_school_one_main_per_provider", unique: true, where: "(site_code = '-'::text)"
   end
 

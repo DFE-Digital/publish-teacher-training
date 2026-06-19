@@ -5,6 +5,12 @@ require "rails_helper"
 describe DataHub::SchoolsBackfill::Executor do
   subject(:executor) { described_class.new }
 
+  def create_school_site_without_validation(attributes)
+    build(:site, attributes).tap do |site|
+      site.save!(validate: false)
+    end
+  end
+
   describe "#execute" do
     context "with a provider whose school-type site has a matching GIAS school" do
       let(:provider) { create(:provider) }
@@ -61,6 +67,89 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(Course::School.where(course_id: course.id).count).to eq(0)
         executor.execute
         expect(Course::School.where(course_id: course.id).count).to eq(1)
+      end
+    end
+
+    context "with a normal site and main site linked to the same GIAS school" do
+      let(:provider) { create(:provider) }
+      let(:gias_school) { create(:gias_school, urn: "210002") }
+      let(:course) { create(:course, provider: provider) }
+      let!(:normal_site) do
+        create(:site, provider: provider, urn: gias_school.urn, code: "A")
+      end
+      let!(:main_site) do
+        create_school_site_without_validation(
+          provider: provider,
+          urn: gias_school.urn,
+          code: "-",
+          location_name: "Main site",
+        )
+      end
+
+      before do
+        create(:site_status, course: course, site: normal_site)
+        create(:site_status, course: course, site: main_site)
+      end
+
+      it "creates separate provider_school rows for the normal and main-site relationships" do
+        executor.execute
+
+        expect(
+          Provider::School.where(provider_id: provider.id, gias_school_id: gias_school.id).pluck(:site_code),
+        ).to contain_exactly("A", "-")
+      end
+
+      it "creates separate course_school rows for the normal and main-site relationships" do
+        executor.execute
+
+        expect(
+          Course::School.where(course_id: course.id, gias_school_id: gias_school.id).pluck(:site_code),
+        ).to contain_exactly("A", "-")
+      end
+
+      it "does not duplicate the main-site rows on a rerun" do
+        executor.execute
+
+        expect { described_class.new.execute }
+          .to not_change { Provider::School.count }
+          .and(not_change { Course::School.count })
+      end
+    end
+
+    context "with multiple non-main sites linked to the same GIAS school" do
+      let(:provider) { create(:provider) }
+      let(:gias_school) { create(:gias_school, urn: "220002") }
+      let(:course) { create(:course, provider: provider) }
+      let!(:first_site) do
+        create(:site, provider: provider, urn: gias_school.urn, code: "A")
+      end
+      let!(:second_site) do
+        create_school_site_without_validation(
+          provider: provider,
+          urn: gias_school.urn,
+          code: "B",
+        )
+      end
+
+      before do
+        create(:site_status, course: course, site: first_site)
+        create(:site_status, course: course, site: second_site)
+      end
+
+      it "creates one provider_school row using the first source site" do
+        executor.execute
+
+        expect(
+          Provider::School.where(provider_id: provider.id, gias_school_id: gias_school.id).pluck(:site_code),
+        ).to contain_exactly("A")
+      end
+
+      it "creates one course_school row using the first source site" do
+        executor.execute
+
+        expect(
+          Course::School.where(course_id: course.id, gias_school_id: gias_school.id).pluck(:site_code),
+        ).to contain_exactly("A")
       end
     end
 

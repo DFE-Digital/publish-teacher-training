@@ -29,7 +29,7 @@ describe Course::School do
       expect(dup.errors[:gias_school_id]).to be_present
     end
 
-    it "allows the same course and gias_school with different site codes" do
+    it "allows the same course and gias_school when one relationship is a main site" do
       existing = create(:course_school, site_code: "-")
       second = build(
         :course_school,
@@ -38,6 +38,18 @@ describe Course::School do
         site_code: "A",
       )
       expect(second).to be_valid
+    end
+
+    it "rejects the same course and gias_school with different non-main site codes" do
+      existing = create(:course_school, site_code: "A")
+      second = build(
+        :course_school,
+        course: existing.course,
+        gias_school: existing.gias_school,
+        site_code: "B",
+      )
+      expect(second).not_to be_valid
+      expect(second.errors[:gias_school_id]).to be_present
     end
   end
 
