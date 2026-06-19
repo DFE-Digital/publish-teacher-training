@@ -34,7 +34,9 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:location_name) { "Manchester" }
     let(:radius) { 10 }
 
-    it { expect(rendered.text).to eq("courses within 10 miles of Manchester") }
+    # The first letter is upcased so it reads correctly as an email alert card title,
+    # while leaving the location name intact.
+    it { expect(rendered.text).to eq("Courses within 10 miles of Manchester") }
   end
 
   context "with 1 subject and a location" do
@@ -58,7 +60,8 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:location_name) { "Manchester" }
     let(:radius) { 15 }
 
-    it { expect(rendered.text).to eq("courses within 15 miles of Manchester") }
+    # 3+ subjects falls back to the no-subjects-with-location title, which is upcased.
+    it { expect(rendered.text).to eq("Courses within 15 miles of Manchester") }
   end
 
   context "with a provider name only" do
@@ -82,7 +85,7 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
   context "with no subject/location but visa sponsorship" do
     let(:search_attributes) { { "can_sponsor_visa" => "true" } }
 
-    it { expect(rendered.text).to eq("Courses with visa sponsorship") }
+    it { expect(rendered.text).to eq("courses with visa sponsorship") }
   end
 
   context "with no subject/location/visa but apprenticeship funding" do
@@ -135,6 +138,22 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
 
     it "excludes provider_code from filter count and uses singular filter" do
       expect(rendered.text).to eq("courses across England (1 filter applied)")
+    end
+  end
+
+  context "with a non-filter param alongside a filter" do
+    let(:search_attributes) { { "return_to" => "/results", "send_courses" => "true" } }
+
+    it "counts only whitelisted filter keys" do
+      expect(rendered.text).to eq("courses across England (1 filter applied)")
+    end
+  end
+
+  context "with a non-filter param as the only non-default key" do
+    let(:search_attributes) { { "return_to" => "/results" } }
+
+    it "ignores keys that are not in the filter whitelist" do
+      expect(rendered.text).to eq("courses across England")
     end
   end
 
