@@ -25,10 +25,13 @@ module Find
 
         named = @subjects.count.between?(1, 2)
 
-        if location?
-          key = named ? "subjects_with_location" : "no_subjects_with_location"
-          I18n.t("find.courses.search_title.#{key}",
+        if location? && named
+          I18n.t("find.courses.search_title.subjects_with_location",
                  subject: @subjects.to_sentence, radius: @radius, location: @location_name)
+        elsif location? && !named
+          I18n.t("find.courses.search_title.no_subjects_with_location",
+                 subject: @subjects.to_sentence, radius: @radius, location: @location_name).upcase_first
+
         elsif named
           I18n.t("find.courses.search_title.subjects_no_location", subject: @subjects.to_sentence)
         else
