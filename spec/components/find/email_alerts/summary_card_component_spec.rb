@@ -68,6 +68,24 @@ RSpec.describe Find::EmailAlerts::SummaryCardComponent, type: :component do
     end
   end
 
+  describe "card title capitalisation" do
+    let(:email_alert) do
+      create(
+        :email_alert,
+        candidate:,
+        subjects: [],
+        location_name: nil,
+        radius: nil,
+      )
+    end
+
+    it "capitalises the first letter of the lower-cased shared title" do
+      rendered = render_inline(described_class.new(email_alert:, subject_names: %w[Mathematics]))
+
+      expect(rendered.text).to include("Mathematics courses in England")
+    end
+  end
+
   describe "further_education level" do
     let(:email_alert) do
       create(

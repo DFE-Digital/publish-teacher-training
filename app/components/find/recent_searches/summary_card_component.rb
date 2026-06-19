@@ -12,12 +12,12 @@ module Find
       end
 
       def title
-        render(Find::Courses::SearchTitleComponent.new(
-                 subjects: resolved_subject_names,
-                 location_name: location_display_name,
-                 radius: @recent_search.radius,
-                 search_attributes: @attrs,
-               ))
+        Find::Courses::SearchTitleComponent.new(
+          subjects: resolved_subject_names,
+          location_name: location_display_name,
+          radius: @recent_search.radius,
+          search_attributes: @attrs,
+        ).heading
       end
 
       def filter_tags

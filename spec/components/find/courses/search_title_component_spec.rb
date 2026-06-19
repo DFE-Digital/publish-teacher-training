@@ -12,16 +12,59 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
   let(:radius) { nil }
   let(:search_attributes) { {} }
 
+  describe "#heading" do
+    subject(:component) { described_class.new(subjects:, location_name:, radius:, search_attributes:) }
+
+    let(:subjects) { %w[Mathematics] }
+
+    it "capitalises the first letter of the lower-cased title" do
+      expect(component.heading).to eq("Mathematics courses in England")
+    end
+
+    it "leaves title_text as a lower-cased sentence fragment" do
+      expect(component.title_text).to eq("mathematics courses in England")
+    end
+  end
+
+  # The component produces a lower-cased, sentence-fragment title so it reads
+  # naturally when interpolated mid-sentence (e.g. "Get email alerts for ...").
+  # The standalone card components capitalise the first letter themselves.
   context "with 1 subject and no location" do
     let(:subjects) { %w[Mathematics] }
 
-    it { expect(rendered.text).to eq("Mathematics courses in England") }
+    it "downcases the non-proper-noun subject" do
+      expect(rendered.text).to eq("mathematics courses in England")
+    end
   end
 
   context "with 2 subjects and no location" do
     let(:subjects) { %w[Mathematics Physics] }
 
-    it { expect(rendered.text).to eq("Mathematics and Physics courses in England") }
+    it { expect(rendered.text).to eq("mathematics and physics courses in England") }
+  end
+
+  context "with a language subject that is a proper noun" do
+    let(:subjects) { %w[French] }
+
+    it "preserves the capitalisation of the proper noun" do
+      expect(rendered.text).to eq("French courses in England")
+    end
+  end
+
+  context "with a mix of proper-noun and non-proper-noun subjects" do
+    let(:subjects) { %w[French Mathematics] }
+
+    it "downcases only the non-proper-noun subject" do
+      expect(rendered.text).to eq("French and mathematics courses in England")
+    end
+  end
+
+  context "with a composite subject embedding a language proper noun" do
+    let(:subjects) { ["Primary with English", "Russian"] }
+
+    it "downcases the subject word by word, preserving embedded proper nouns" do
+      expect(rendered.text).to eq("primary with English and Russian courses in England")
+    end
   end
 
   context "with 3+ subjects and no location" do
@@ -34,9 +77,7 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:location_name) { "Manchester" }
     let(:radius) { 10 }
 
-    # The first letter is upcased so it reads correctly as an email alert card title,
-    # while leaving the location name intact.
-    it { expect(rendered.text).to eq("Courses within 10 miles of Manchester") }
+    it { expect(rendered.text).to eq("courses within 10 miles of Manchester") }
   end
 
   context "with 1 subject and a location" do
@@ -44,7 +85,7 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:location_name) { "Manchester" }
     let(:radius) { 15 }
 
-    it { expect(rendered.text).to eq("Mathematics courses within 15 miles of Manchester") }
+    it { expect(rendered.text).to eq("mathematics courses within 15 miles of Manchester") }
   end
 
   context "with 2 subjects and a location" do
@@ -52,7 +93,7 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:location_name) { "Manchester" }
     let(:radius) { 15 }
 
-    it { expect(rendered.text).to eq("Mathematics and Physics courses within 15 miles of Manchester") }
+    it { expect(rendered.text).to eq("mathematics and physics courses within 15 miles of Manchester") }
   end
 
   context "with 3+ subjects and a location" do
@@ -60,8 +101,8 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
     let(:location_name) { "Manchester" }
     let(:radius) { 15 }
 
-    # 3+ subjects falls back to the no-subjects-with-location title, which is upcased.
-    it { expect(rendered.text).to eq("Courses within 15 miles of Manchester") }
+    # 3+ subjects falls back to the no-subjects-with-location title.
+    it { expect(rendered.text).to eq("courses within 15 miles of Manchester") }
   end
 
   context "with a provider name only" do
@@ -91,19 +132,19 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
   context "with no subject/location/visa but apprenticeship funding" do
     let(:search_attributes) { { "funding" => %w[apprenticeship] } }
 
-    it { expect(rendered.text).to eq("Apprenticeship courses in England") }
+    it { expect(rendered.text).to eq("apprenticeship courses in England") }
   end
 
   context "with no subject/location/visa but salary funding" do
     let(:search_attributes) { { "funding" => %w[salary] } }
 
-    it { expect(rendered.text).to eq("Salaried courses in England") }
+    it { expect(rendered.text).to eq("salaried courses in England") }
   end
 
   context "with no subject/location/visa but further education level" do
     let(:search_attributes) { { "level" => "further_education" } }
 
-    it { expect(rendered.text).to eq("Further education courses across England") }
+    it { expect(rendered.text).to eq("further education courses across England") }
   end
 
   context "with primary subjects and further education level" do

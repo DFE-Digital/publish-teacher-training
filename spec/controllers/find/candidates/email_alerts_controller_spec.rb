@@ -123,7 +123,7 @@ module Find
             get :new, params: { subjects: %w[C1], level: "further_education" }
 
             expect(response.body).to include("Biology")
-            expect(response.body).to include("Further education")
+            expect(response.body).to include("further education")
           end
         end
       end

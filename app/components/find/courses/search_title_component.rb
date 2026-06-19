@@ -2,6 +2,10 @@
 
 module Find
   module Courses
+    # Builds the search title shown for a set of search criteria.
+    #
+    # All the translations are downcase. When they're at the start of a
+    # sentence in the app we upcase the first char
     class SearchTitleComponent < ViewComponent::Base
       def initialize(subjects:, location_name:, radius:, search_attributes:)
         super()
@@ -14,6 +18,10 @@ module Find
 
       def call
         content_tag(:span, title_text)
+      end
+
+      def heading
+        title_text.upcase_first
       end
 
       def title_text
@@ -31,8 +39,7 @@ module Find
                  subject: @subjects.to_sentence, radius: @radius, location: @location_name)
         elsif location? && !named
           I18n.t("find.courses.search_title.no_subjects_with_location",
-                 subject: @subjects.to_sentence, radius: @radius, location: @location_name).upcase_first
-
+                 subject: @subjects.to_sentence, radius: @radius, location: @location_name)
         elsif named
           I18n.t("find.courses.search_title.subjects_no_location", subject: @subjects.to_sentence)
         else
@@ -75,7 +82,7 @@ module Find
       end
 
       def visa_title
-        I18n.t("find.courses.search_title.visa_sponsorship").downcase
+        I18n.t("find.courses.search_title.visa_sponsorship")
       end
 
       def apprenticeship_title
