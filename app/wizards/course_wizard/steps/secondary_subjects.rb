@@ -14,7 +14,7 @@ class CourseWizard
       validate :validate_secondary_master_subject_id_is_not_same_as_subordinate_subject_id
 
       def selectable_subjects
-        SubjectsCache.new.secondary_subjects.map { |subject| [subject.subject_name, subject.id] }
+        SecondarySubject.order(:subject_name).map { |subject| [subject.subject_name, subject.id] }
       end
 
       def self.permitted_params

@@ -13,6 +13,10 @@ RSpec.shared_context "add_course_wizard" do
     end
   end
 
+  before do
+    SecondarySubject.clear_cache
+  end
+
   let(:repository) { DfE::Wizard::Repository::InMemory.new }
   let(:state_store) { CourseWizard::StateStores::CourseWizardStore.new(repository:) }
   let(:current_step) { :level }

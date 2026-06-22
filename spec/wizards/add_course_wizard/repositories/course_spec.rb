@@ -34,6 +34,9 @@ RSpec.describe CourseWizard::Repositories::Course do
       repository.write({ "can_sponsor_skilled_worker_visa" => true })
       repository.write({ "visa_sponsorship_application_deadline_required" => true })
       repository.write({ "visa_sponsorship_application_deadline_at" => visa_deadline_payload })
+      repository.write({ "design_technology_ids" => %w[1 2] })
+      repository.write({ "campaign_name" => "engineers_teach_physics" })
+      repository.write({ "language_ids" => %w[5 6] })
 
       data = repository.read
       expect(data[:level]).to eq("secondary")
@@ -55,6 +58,9 @@ RSpec.describe CourseWizard::Repositories::Course do
       expect(data[:can_sponsor_skilled_worker_visa]).to be(true)
       expect(data[:visa_sponsorship_application_deadline_required]).to be(true)
       expect(data[:visa_sponsorship_application_deadline_at]).to eq(visa_deadline_payload)
+      expect(data[:design_technology_ids]).to eq(%w[1 2])
+      expect(data[:campaign_name]).to eq("engineers_teach_physics")
+      expect(data[:language_ids]).to eq(%w[5 6])
 
       expect(data.keys.map(&:class).uniq).to eq([Symbol])
     end
