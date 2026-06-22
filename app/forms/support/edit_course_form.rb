@@ -9,7 +9,7 @@ module Support
       course_code name
     ].freeze
 
-    attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, :accredited_provider_code)
+    attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, :accredited_provider_code, :publish_without_schools_allowed)
 
     validate :validate_start_date_format
     validate :validate_applications_open_from_format
@@ -29,7 +29,8 @@ module Support
         is_send: @course.is_send,
         can_sponsor_student_visa: @course.can_sponsor_student_visa,
         can_sponsor_skilled_worker_visa: @course.can_sponsor_skilled_worker_visa,
-        accredited_provider_code: @course.accredited_provider_code
+        accredited_provider_code: @course.accredited_provider_code,
+        publish_without_schools_allowed: @course.publish_without_schools_allowed
       )
     end
 
@@ -87,6 +88,7 @@ module Support
         can_sponsor_student_visa:,
         can_sponsor_skilled_worker_visa:,
         accredited_provider_code:,
+        publish_without_schools_allowed: publish_without_schools_allowed?,
       }
 
       course.assign_attributes(attributes)
@@ -98,6 +100,13 @@ module Support
 
     def send?
       ActiveModel::Type::Boolean.new.cast(is_send)
+    end
+
+    # Only salaried and apprenticeship courses can be exempted from needing
+    # schools attached at publish time, so refuse to set the flag on any other
+    # funding type even if a value is submitted.
+    def publish_without_schools_allowed?
+      course.decorate.salaried? && ActiveModel::Type::Boolean.new.cast(publish_without_schools_allowed)
     end
 
     def validate_start_date_format
