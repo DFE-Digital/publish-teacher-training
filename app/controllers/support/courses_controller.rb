@@ -46,7 +46,8 @@ module Support
                                    :is_send,
                                    :can_sponsor_student_visa,
                                    :can_sponsor_skilled_worker_visa,
-                                   :accredited_provider_code],
+                                   :accredited_provider_code,
+                                   :publish_without_schools_allowed],
       ).transform_keys { |key| date_field_to_attribute(key) }
     end
 
