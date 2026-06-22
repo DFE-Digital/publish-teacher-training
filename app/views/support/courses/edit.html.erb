@@ -52,6 +52,15 @@
 
       <% end %>
 
+      <% if @course.decorate.salaried? %>
+        <%= f.govuk_check_boxes_fieldset :publish_without_schools_allowed,
+              legend: { text: "Publishing this course without schools" },
+              hint: { text: "Only tick this box if you have confirmed that this provider is allowed to publish courses without schools attached." },
+              multiple: false do %>
+          <% f.govuk_check_box :publish_without_schools_allowed, "true", "false", label: { text: "Allow this course to be published without schools attached" }, multiple: false %>
+        <% end %>
+      <% end %>
+
       <%= f.govuk_submit t("support.update_record") %>
     <% end %>
 
