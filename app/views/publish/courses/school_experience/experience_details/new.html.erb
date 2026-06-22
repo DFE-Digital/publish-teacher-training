@@ -6,7 +6,7 @@
 </h1>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(@wizard.previous_step_path) %>
+  <%= govuk_back_link_to(@wizard.resolve_step_path(:experience_required)) %>
 <% end %>
 
 <div class="govuk-grid-row">
