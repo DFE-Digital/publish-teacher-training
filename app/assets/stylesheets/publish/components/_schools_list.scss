@@ -1,0 +1,13 @@
+.govuk-table__row {
+  border-bottom: 1px solid #b1b4b6;
+}
+
+.govuk-table__cell,
+.govuk-table__header {
+  border-bottom: none;
+}
+
+.govuk-table__cell:last-child,
+.govuk-table__header:last-child {
+  white-space: nowrap;
+}
