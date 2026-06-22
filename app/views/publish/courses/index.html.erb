@@ -12,7 +12,8 @@
 <% end %>
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>
-<%= link_to "Download all course information (CSV)",
+<!-- TEST button for downloading course information as CSV - HIDDEN AS NOT TESTING-->
+<%#= link_to "Download all course information (CSV)",
     publish_provider_recruitment_cycle_courses_path(
       @provider.provider_code,
       @provider.recruitment_cycle.year,
@@ -21,7 +22,7 @@
     class: "govuk-button govuk-button--secondary govuk-margin-left-2"
 %>
 <!-- TEST button for downloading course schools list as CSV -->
-<%= link_to "Download schools information by course (CSV)",
+<%= link_to "Download course information (CSV)",
     publish_provider_recruitment_cycle_courses_path(
       @provider.provider_code,
       @provider.recruitment_cycle.year,
