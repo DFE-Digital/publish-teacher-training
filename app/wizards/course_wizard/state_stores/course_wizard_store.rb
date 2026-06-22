@@ -37,6 +37,30 @@ class CourseWizard
       def deadline_for_application_visa_sponsorship_required?
         ActiveModel::Type::Boolean.new.cast(visa_sponsorship_application_deadline_required)
       end
+
+      def design_technology_specialisms?
+        secondary_subject_selected?(SecondarySubject.design_technology&.id)
+      end
+
+      def physics_specialisms?
+        secondary_subject_selected?(SecondarySubject.physics&.id)
+      end
+
+      def modern_languages_specialisms?
+        secondary_subject_selected?(SecondarySubject.modern_languages&.id)
+      end
+
+    private
+
+      def secondary_subject_selected?(subject_id)
+        return false if subject_id.blank?
+
+        selected_secondary_subject_ids.include?(subject_id.to_s)
+      end
+
+      def selected_secondary_subject_ids
+        [secondary_master_subject_id, subordinate_subject_id].compact_blank.map(&:to_s)
+      end
     end
   end
 end

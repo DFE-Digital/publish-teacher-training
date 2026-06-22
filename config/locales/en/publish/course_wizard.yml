@@ -41,6 +41,36 @@ en:
           secondary_master_subject_id:
             blank: Select a subject
             same_as_subordinate_subject_id: The second subject must be different to the first subject
+      physics_specialisms:
+        caption: Add course
+        heading: Engineers Teach Physics
+        programme_description: Engineers Teach Physics is a new campaign to help engineers become physics teachers.
+        question: Is this course part of the Engineers Teach Physics programme?
+        submit: Continue
+        options:
+          engineers_teach_physics:
+            label: "Yes"
+          no_campaign:
+            label: "No"
+        errors:
+          campaign_name:
+            blank: Select if this course is part of the Engineers teach physics programme
+      modern_languages_specialisms:
+        caption: Add course
+        heading: Languages
+        hint: Select all that apply
+        submit: Continue
+        errors:
+          language_ids:
+            blank: Select at least one language
+      design_technology_specialisms:
+        caption: Add course
+        heading: Specialisms
+        hint: Select all that apply
+        submit: Continue
+        errors:
+          design_technology_ids:
+            blank: Select at least one specialism
       age_range:
         caption: Add course
         heading: Age range

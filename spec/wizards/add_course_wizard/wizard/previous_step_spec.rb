@@ -33,6 +33,94 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
     end
   end
 
+  context "from physics specialisms" do
+    let(:current_step) { :physics_specialisms }
+
+    before do
+      state_store.write(level: "secondary", is_send: false)
+      state_store.write(secondary_master_subject_id: find_or_create(:secondary_subject, :physics).id.to_s)
+    end
+
+    it "goes back to secondary subjects" do
+      expect(wizard).to have_previous_step(:secondary_subjects)
+    end
+  end
+
+  context "from modern languages specialisms" do
+    let(:current_step) { :modern_languages_specialisms }
+
+    before do
+      state_store.write(level: "secondary", is_send: false)
+    end
+
+    context "when physics is also selected" do
+      before do
+        state_store.write(
+          secondary_master_subject_id: find_or_create(:secondary_subject, :physics).id.to_s,
+          subordinate_subject_id: find_or_create(:secondary_subject, :modern_languages).id.to_s,
+        )
+      end
+
+      it "goes back to physics specialisms" do
+        expect(wizard).to have_previous_step(:physics_specialisms)
+      end
+    end
+
+    context "when physics is not selected" do
+      before do
+        state_store.write(secondary_master_subject_id: find_or_create(:secondary_subject, :modern_languages).id.to_s)
+      end
+
+      it "goes back to secondary subjects" do
+        expect(wizard).to have_previous_step(:secondary_subjects)
+      end
+    end
+  end
+
+  context "from design technology specialisms" do
+    let(:current_step) { :design_technology_specialisms }
+
+    before do
+      state_store.write(level: "secondary", is_send: false)
+    end
+
+    context "when modern languages is also selected" do
+      before do
+        state_store.write(
+          secondary_master_subject_id: find_or_create(:secondary_subject, :modern_languages).id.to_s,
+          subordinate_subject_id: find_or_create(:secondary_subject, :design_and_technology).id.to_s,
+        )
+      end
+
+      it "goes back to modern languages specialisms" do
+        expect(wizard).to have_previous_step(:modern_languages_specialisms)
+      end
+    end
+
+    context "when physics is also selected and modern languages is not selected" do
+      before do
+        state_store.write(
+          secondary_master_subject_id: find_or_create(:secondary_subject, :physics).id.to_s,
+          subordinate_subject_id: find_or_create(:secondary_subject, :design_and_technology).id.to_s,
+        )
+      end
+
+      it "goes back to physics specialisms" do
+        expect(wizard).to have_previous_step(:physics_specialisms)
+      end
+    end
+
+    context "when design technology is selected on its own" do
+      before do
+        state_store.write(secondary_master_subject_id: find_or_create(:secondary_subject, :design_and_technology).id.to_s)
+      end
+
+      it "goes back to secondary subjects" do
+        expect(wizard).to have_previous_step(:secondary_subjects)
+      end
+    end
+  end
+
   context "from age range with primary level" do
     let(:current_step) { :age_range }
 

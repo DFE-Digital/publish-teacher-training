@@ -1,0 +1,20 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.modern_languages_specialisms.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.modern_languages_specialisms.caption")) %>
+  <%= t("course_wizard.steps.modern_languages_specialisms.heading") %>
+</h1>
+
+<%= form.govuk_check_boxes_fieldset :language_ids,
+      legend: { hidden: true, text: t("course_wizard.steps.modern_languages_specialisms.heading") },
+      hint: { text: t("course_wizard.steps.modern_languages_specialisms.hint") } do %>
+  <% current_step.modern_languages.each_with_index do |language, index| %>
+    <%= form.govuk_check_box :language_ids,
+          language.id.to_s,
+          label: { text: language.subject_name },
+          include_hidden: false,
+          link_errors: index.zero? %>
+  <% end %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.modern_languages_specialisms.submit") %>

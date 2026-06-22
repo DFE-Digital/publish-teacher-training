@@ -15,6 +15,9 @@ class CourseWizard
            :fee_based?,
            :skilled_worker_visa_sponsorship_required?,
            :deadline_for_application_visa_sponsorship_required?,
+           :design_technology_specialisms?,
+           :physics_specialisms?,
+           :modern_languages_specialisms?,
            to: :state_store
 
   def steps_processor
@@ -24,6 +27,12 @@ class CourseWizard
       graph.add_node :level, Steps::Level
       graph.add_node :primary_subjects, Steps::PrimarySubjects
       graph.add_node :secondary_subjects, Steps::SecondarySubjects
+
+      # Secondary Subject specialist flows
+      graph.add_node :design_technology_specialisms, Steps::DesignTechnologySpecialisms
+      graph.add_node :physics_specialisms, Steps::PhysicsSpecialisms
+      graph.add_node :modern_languages_specialisms, Steps::ModernLanguagesSpecialisms
+
       graph.add_node :age_range, Steps::AgeRange
       graph.add_node :qualifications, Steps::Qualifications
       graph.add_node :funding_type, Steps::FundingType
@@ -49,6 +58,35 @@ class CourseWizard
       )
 
       graph.add_multiple_conditional_edges(
+        from: :secondary_subjects,
+        branches: [
+          { when: :physics_specialisms?, then: :physics_specialisms },
+          { when: :modern_languages_specialisms?, then: :modern_languages_specialisms },
+          { when: :design_technology_specialisms?, then: :design_technology_specialisms },
+        ],
+        default: :age_range,
+      )
+
+      graph.add_multiple_conditional_edges(
+        from: :physics_specialisms,
+        branches: [
+          { when: :modern_languages_specialisms?, then: :modern_languages_specialisms },
+          { when: :design_technology_specialisms?, then: :design_technology_specialisms },
+        ],
+        default: :age_range,
+      )
+
+      graph.add_multiple_conditional_edges(
+        from: :modern_languages_specialisms,
+        branches: [
+          { when: :design_technology_specialisms?, then: :design_technology_specialisms },
+        ],
+        default: :age_range,
+      )
+
+      graph.add_edge from: :design_technology_specialisms, to: :age_range
+
+      graph.add_multiple_conditional_edges(
         from: :qualifications,
         branches: [
           { when: :undergraduate_degree_with_qts?, then: :schools },
@@ -57,7 +95,6 @@ class CourseWizard
       )
 
       graph.add_edge from: :primary_subjects, to: :age_range
-      graph.add_edge from: :secondary_subjects, to: :age_range
 
       graph.add_edge from: :age_range, to: :qualifications
 

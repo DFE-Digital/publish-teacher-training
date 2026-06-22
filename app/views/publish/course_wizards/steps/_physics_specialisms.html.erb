@@ -1,0 +1,15 @@
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.physics_specialisms.heading"), current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: t("course_wizard.steps.physics_specialisms.caption")) %>
+  <%= t("course_wizard.steps.physics_specialisms.heading") %>
+</h1>
+
+<p class="govuk-body"><%= t("course_wizard.steps.physics_specialisms.programme_description") %></p>
+
+<%= form.govuk_radio_buttons_fieldset :campaign_name, legend: { text: t("course_wizard.steps.physics_specialisms.question") } do %>
+  <%= form.govuk_radio_button :campaign_name, "engineers_teach_physics", label: { text: t("course_wizard.steps.physics_specialisms.options.engineers_teach_physics.label") } %>
+  <%= form.govuk_radio_button :campaign_name, "no_campaign", label: { text: t("course_wizard.steps.physics_specialisms.options.no_campaign.label") } %>
+<% end %>
+
+<%= form.govuk_submit t("course_wizard.steps.physics_specialisms.submit") %>
