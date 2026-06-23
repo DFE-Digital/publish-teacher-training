@@ -8,12 +8,14 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
     given_i_am_authenticated_as_a_provider_user(cycle_year: Date.current.year)
   end
 
-  scenario "choosing a start date and continues to check answers" do
+  scenario "choosing a start date and adds the course from check answers" do
     and_i_have_wizard_state_for_start_date
     when_i_visit_the_wizard_start_date_page
     and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Date.current.year))
     and_i_click_continue
     then_i_am_taken_to_the_check_answers_page
+    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+    then_i_am_taken_to_the_courses_index_page
   end
 
   scenario "submitting start date without selecting an option shows validation errors" do
@@ -80,6 +82,16 @@ private
     click_on "Add course"
   end
 
+  def then_i_am_taken_to_the_courses_index_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_courses_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      ),
+      ignore_query: true,
+    )
+  end
+
   def then_i_have_errors_on_the_start_date_step
     expect(page).to have_content("There is a problem")
     expect(page).to have_content("Select a course start date")
@@ -115,6 +127,10 @@ private
   end
 
   def and_i_have_wizard_state_for_start_date
+    primary_subject = find_or_create(:primary_subject, :primary)
+    placement_site = provider.sites.first || create(:site, provider:)
+    study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
@@ -125,7 +141,12 @@ private
     state_store = CourseWizard::StateStores::CourseWizardStore.new(repository:)
     state_store.write(
       level: "primary",
+      is_send: "false",
+      primary_master_subject_id: primary_subject.id.to_s,
+      age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
+      site_ids: [placement_site.id.to_s],
+      study_sites_ids: [study_site.id.to_s],
     )
   end
 end
