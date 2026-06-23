@@ -30,14 +30,7 @@ module Courses
                  .where(
                    provider: { recruitment_cycle_id: @current_recruitment_cycle.id },
                  )
-                 .where(<<~SQL)
-                   EXISTS (
-                     SELECT 1 FROM course_site
-                     WHERE course_site.course_id = course.id
-                       AND course_site.status = 'R'
-                       AND course_site.publish = 'Y'
-                   )
-                 SQL
+                 .where(findable_courses_sql)
     end
 
     def call
@@ -77,6 +70,7 @@ module Courses
     def optimisation_scope
       @scope.preload(
         :site_statuses,
+        :schools,
         :latest_published_enrichment,
         :provider,
         subjects: [:financial_incentive],
@@ -501,6 +495,45 @@ module Courses
     end
 
   private
+
+    # A course is findable when it has at least one running, published site
+    # (the legacy proxy for "published"). Salaried/apprenticeship courses that
+    # support has approved to publish without an employing school have no such
+    # site, so — only under the new school model flag — they are also findable
+    # when they are exempt and their latest enrichment is published (mirroring
+    # Course#is_published? so a returned course never 404s on the show page).
+    def findable_courses_sql
+      sql = +<<~SQL
+        EXISTS (
+          SELECT 1 FROM course_site
+          WHERE course_site.course_id = course.id
+            AND course_site.status = 'R'
+            AND course_site.publish = 'Y'
+        )
+      SQL
+
+      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
+        sql << <<~SQL
+          OR (
+            course.publish_without_schools_allowed = TRUE
+            AND course.funding IN ('salary', 'apprenticeship')
+            AND EXISTS (
+              SELECT 1 FROM course_enrichment ce
+              WHERE ce.course_id = course.id
+                AND ce.status = #{CourseEnrichment.statuses[:published]}
+                AND ce.id = (
+                  SELECT ce2.id FROM course_enrichment ce2
+                  WHERE ce2.course_id = course.id
+                  ORDER BY ce2.created_at DESC, ce2.id DESC
+                  LIMIT 1
+                )
+            )
+          )
+        SQL
+      end
+
+      sql
+    end
 
     def master_subject_ordering_scope
       return @scope if @searched_subject_ids.blank?

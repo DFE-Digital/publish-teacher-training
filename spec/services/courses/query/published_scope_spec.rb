@@ -52,6 +52,22 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
 
+    context "when course has no sites but is an exempt salaried course (publish without schools)" do
+      let!(:course) do
+        create(:course, :with_salary, :published, name: "Exempt No Sites Course", publish_without_schools_allowed: true)
+      end
+
+      it "excludes the course unless the new school model flag is active" do
+        expect(results).not_to include(course)
+      end
+
+      it "includes the course when the new school model flag is active" do
+        FeatureFlag.activate(:course_publishing_uses_new_school_model)
+
+        expect(results).to include(course)
+      end
+    end
+
     context "when course has a mix of suspended and findable sites" do
       let!(:course) do
         create(:course, name: "Mixed Sites Course").tap do |c|
