@@ -305,6 +305,7 @@ en:
         apprenticeship: Nearest employing schools
       location_value:
         not_listed: Not listed yet
+        no_employing_schools: No employing schools listed
         school_term:
           fee: "placement"
           default: "employing"
