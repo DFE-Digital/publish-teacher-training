@@ -54,6 +54,16 @@ module Courses
       @candidate_accounts_enabled ||= FeatureFlag.active?(:candidate_accounts)
     end
 
+    def no_employing_schools?
+      return @no_employing_schools unless @no_employing_schools.nil?
+
+      @no_employing_schools = course.without_employing_school?
+    end
+
+    def no_employing_schools_text
+      t(".location_value.no_employing_schools")
+    end
+
     def location_value
       return unless search_by_location?
 
