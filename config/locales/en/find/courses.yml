@@ -11,6 +11,7 @@ en:
           guaranteed: Schools can change and are not guaranteed
           nearest_placement_school: Nearest placement school
           nearest_employing_school: Nearest employing school
+          no_employing_schools: No employing schools listed
       fees_component:
         view:
           uk_citizens: UK citizens

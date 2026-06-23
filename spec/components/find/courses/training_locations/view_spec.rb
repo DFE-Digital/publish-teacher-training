@@ -57,6 +57,34 @@ describe Find::Courses::TrainingLocations::View, type: :component do
         expect(subject).to have_css(".govuk-hint", text: study_site.decorate.full_address)
       end
     end
+
+    context "for salaried/apprenticeship courses published without an employing school" do
+      before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
+
+      let(:course) do
+        create(:course, :with_salary, publish_without_schools_allowed: true, study_sites: [build(:site, :study_site)])
+      end
+
+      it "renders 'No employing schools listed' instead of a distance/search hint" do
+        expect(subject).to have_text("No employing schools listed")
+      end
+
+      it "keeps the 'Nearest employing school' heading" do
+        expect(subject).to have_css(".govuk-summary-list__key", text: "Nearest employing school")
+      end
+
+      it "does not render the link to school placements" do
+        expect(subject).to have_no_link("View list of school placements")
+      end
+
+      it "does not render the 'not guaranteed' hint" do
+        expect(subject).to have_no_css(".govuk-hint", text: "Schools can change and are not guaranteed")
+      end
+
+      it "still renders the 'Where you will study' study sites" do
+        expect(subject).to have_css(".govuk-summary-list__key", text: "Where you will study")
+      end
+    end
   end
 
   describe "#placements_url" do
