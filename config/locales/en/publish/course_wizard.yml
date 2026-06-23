@@ -1,4 +1,10 @@
 en:
+  publish:
+    course_wizards:
+      flash:
+        success_with_body:
+          title: Your course has been created
+          body: Add the rest of your details and publish the course, so that candidates can find and apply to it.
   course_wizard:
     show:
       cancel: Cancel
