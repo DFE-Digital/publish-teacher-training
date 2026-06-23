@@ -5,6 +5,7 @@ class Provider::School < ApplicationRecord
 
   self.table_name = "provider_school"
 
+  # The main site code is used to identify the main site for a provider. It is used in the uniqueness validation to ensure that there is only one main site per provider.
   MAIN_SITE_CODE = "-"
 
   belongs_to :provider, class_name: "::Provider", inverse_of: :schools
