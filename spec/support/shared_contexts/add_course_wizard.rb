@@ -5,7 +5,7 @@ RSpec.shared_context "add_course_wizard" do
     CourseWizard.new(
       state_store:,
       current_step:,
-      current_step_params: { current_step => current_step_params },
+      current_step_params: request_params,
     ).tap do |course_wizard|
       course_wizard.provider_code = provider_code
       course_wizard.recruitment_cycle_year = recruitment_cycle_year
@@ -21,6 +21,7 @@ RSpec.shared_context "add_course_wizard" do
   let(:state_store) { CourseWizard::StateStores::CourseWizardStore.new(repository:) }
   let(:current_step) { :level }
   let(:current_step_params) { {} }
+  let(:request_params) { { current_step => current_step_params } }
   let(:provider_code) { "ABC" }
   let(:recruitment_cycle_year) { 2026 }
   let(:state_key) { SecureRandom.uuid }

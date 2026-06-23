@@ -74,9 +74,27 @@ en:
       age_range:
         caption: Add course
         heading: Age range
+        other_range_format: "%{from} to %{to}"
         other_hint: "Enter an age range in years, for example: 5 to 11. The course must cover 4 or more school years."
         other_from_label: From
         other_to_label: To
+        options:
+          3_to_7:
+            label: 3 to 7
+          5_to_11:
+            label: 5 to 11
+          7_to_11:
+            label: 7 to 11
+          7_to_14:
+            label: 7 to 14
+          11_to_16:
+            label: 11 to 16
+          11_to_18:
+            label: 11 to 18
+          14_to_19:
+            label: 14 to 19
+          other:
+            label: Other
         submit: Continue
         errors:
           age_range_in_years:
@@ -223,6 +241,46 @@ en:
           hint_date: For example 31 3 2024
           hint_time: Applications will close at 11:59pm on the date you enter
         submit: Continue
+      check_answers:
+        caption: Add course
+        heading: Check your answers
+        submit: Add course
+        change: Change
+        answers:
+          "yes": "Yes"
+          "no": "No"
+          can_sponsor: "Yes - can sponsor"
+          cannot_sponsor: "No - cannot sponsor"
+          salary_apprenticeship: "Salary (apprenticeship)"
+          full_time_or_part_time: "Full time or part time"
+          select_study_site: "Select a study site"
+          add_a_study_site: "Add a study site"
+        labels:
+          level: Subject level
+          send: Special educational needs and disability (SEND)
+          subjects:
+            one: Subject
+            other: Subjects
+          engineers: Engineers Teach Physics
+          age_range: Age range
+          qualification: Qualification
+          funding_type: Funding type
+          study_pattern: Study pattern
+          schools:
+            one: "%{prefix} school"
+            other: "%{prefix} schools"
+          schools_prefix:
+            salaried: Employing
+            unsalaried: Placement
+          study_site:
+            one: Study site
+            other: Study sites
+          accredited_provider: Accredited provider
+          student_visas: Student visas
+          skilled_worker_visas: Skilled Worker visas
+          is_there_a_visa_sponsorship_deadline: Is there a visa sponsorship deadline?
+          visa_sponsorship_application_deadline_date: Visa sponsorship deadline
+          start_date: Course start date
   activemodel:
     errors:
       models:

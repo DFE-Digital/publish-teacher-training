@@ -119,6 +119,38 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
         expect(wizard).to have_next_step(:modern_languages_specialisms)
       end
     end
+
+    context "when returning from check answers and subjects now require a specialism page" do
+      let(:request_params) { { current_step => current_step_params, return_to_review: :secondary_subjects } }
+
+      before do
+        state_store.write(secondary_master_subject_id: find_or_create(:secondary_subject, :physics).id.to_s)
+      end
+
+      it "continues through the specialism flow instead of jumping to check answers" do
+        expect(wizard).to have_next_step(:physics_specialisms)
+      end
+    end
+
+    context "when stale specialism answers exist but subjects no longer require them" do
+      before do
+        state_store.write(
+          secondary_master_subject_id: find_or_create(:secondary_subject, :business_studies).id.to_s,
+          subordinate_subject_id: find_or_create(:secondary_subject, :religious_education).id.to_s,
+          campaign_name: "engineers_teach_physics",
+          language_ids: [find_or_create(:secondary_subject, :french).id.to_s],
+          design_technology_ids: [find_or_create(:secondary_subject, :design_and_technology).id.to_s],
+        )
+      end
+
+      it "clears the specialism answers" do
+        expect(wizard).to have_next_step(:age_range)
+
+        expect(state_store.campaign_name).to be_nil
+        expect(state_store.language_ids).to be_nil
+        expect(state_store.design_technology_ids).to be_nil
+      end
+    end
   end
 
   context "from physics specialisms" do
@@ -435,6 +467,14 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
 
   context "from start date" do
     let(:current_step) { :start_date }
+
+    it "proceeds to courses page" do
+      expect(wizard).to have_next_step(:check_answers)
+    end
+  end
+
+  context "from check answers" do
+    let(:current_step) { :check_answers }
 
     it "proceeds to courses page" do
       expect(wizard).to have_next_step(:courses_index)
