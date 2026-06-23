@@ -61,4 +61,18 @@ describe Courses::PublishRules::SchoolPresence do
       end
     end
   end
+
+  describe ".none?" do
+    before { allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true) }
+
+    it "returns true when the course has no school attached" do
+      expect(described_class.none?(course)).to be(true)
+    end
+
+    it "returns false when the course has a school attached" do
+      attach_new_course_school(create(:gias_school))
+
+      expect(described_class.none?(course)).to be(false)
+    end
+  end
 end
