@@ -1,17 +1,16 @@
 <tr class="govuk-table__row school-row">
-  <th class="govuk-table__header name" scope="row">
-    <%= govuk_link_to school.location_name,
-      publish_provider_recruitment_cycle_school_path(
-        @provider.provider_code,
-        school.recruitment_cycle.year,
-        school.id
-      )
-    %>
-    <%= render Publish::Schools::NewlyAddedTagComponent.new(school:) %>
-    <div class="govuk-hint">
+  <td class="govuk-table__header name"">
+      <%= govuk_link_to school.location_name,
+        publish_provider_recruitment_cycle_school_path(
+          @provider.provider_code,
+          school.recruitment_cycle.year,
+          school.id
+        )
+      %>
+    <div class="govuk-hint school-landing-address">
       <%= school.address_without_name %>
     </div>
-  </th>
+  </td>
   <!--
   <td class="govuk-table__cell govuk-hint">
     <%= school.address_without_name %>
