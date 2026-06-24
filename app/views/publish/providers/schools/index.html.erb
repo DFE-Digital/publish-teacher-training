@@ -1,7 +1,7 @@
 <% content_for :page_title, t(".title") %>
 <%= content_for :before_content, render_breadcrumbs(:sites) %>
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full-width">
+  <div class="govuk-grid-column-full">
     <%= render Publish::SchoolsChangedBannerComponent.new(provider: @provider) %>
     <h1 class="govuk-heading-l">
       <%= t(".title") %>
