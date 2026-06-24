@@ -542,6 +542,21 @@
             "fieldPath": [
               "schools_validated"
             ]
+          },
+          {
+            "fieldPath": [
+              "school_experience_required"
+            ]
+          },
+          {
+            "fieldPath": [
+              "school_experience_required_content"
+            ]
+          },
+          {
+            "fieldPath": [
+              "publish_without_schools_allowed"
+            ]
           }
         ]
       },
