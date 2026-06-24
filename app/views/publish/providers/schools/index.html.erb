@@ -1,7 +1,7 @@
 <% content_for :page_title, t(".title") %>
 <%= content_for :before_content, render_breadcrumbs(:sites) %>
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
     <%= render Publish::SchoolsChangedBannerComponent.new(provider: @provider) %>
     <h1 class="govuk-heading-l">
       <%= t(".title") %>
@@ -12,7 +12,7 @@
       <%= govuk_button_link_to t(".add_school"), search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
       <%= govuk_link_to("Add multiple schools", new_publish_provider_recruitment_cycle_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") %>
     </div>
-    <p class="govuk-body">You can only add schools that are on <%= govuk_link_to("Get Information About Schools (GIAS)", "https://get-information-schools.service.gov.uk/") %></p>
+    <p class="govuk-body">You can only add schools that are on <%= govuk_link_to("Get Information About Schools (GIAS)", "https://get-information-schools.service.gov.uk/") %>.</p>
     <% if @schools.any? %>
 
     <!-- ✅ Search box -->
@@ -70,7 +70,7 @@
   </div>
 </div>
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-three-quarters">
+  <div class="govuk-grid-column-two-thirds">
     <%= render Shared::AdviceComponent::View.new(title: "Attaching schools to courses") do %>
       <%= render Publish::Providers::SchoolPlacements::OutcomeExplainerComponent.new(
         recruitment_cycle: @recruitment_cycle,

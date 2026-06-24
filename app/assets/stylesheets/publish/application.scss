@@ -93,3 +93,8 @@ $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 .school-search-content {
   padding: 30px 30px 10px;
 }
+
+.school-search-form-container {
+        display: flex;
+        column-gap: 20px;
+}
