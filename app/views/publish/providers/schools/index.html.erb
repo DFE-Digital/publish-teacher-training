@@ -28,11 +28,15 @@
     </table>
     <%= govuk_pagination(pagy: @pagy) %>
   <% end %>
-  <%= render Shared::AdviceComponent::View.new(title: "Attaching schools to courses") do %>
-    <%= render Publish::Providers::SchoolPlacements::OutcomeExplainerComponent.new(
-      recruitment_cycle: @recruitment_cycle,
-      provider: @provider,
-    ) %>
-  <% end %>
+  </div>
 </div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <%= render Shared::AdviceComponent::View.new(title: "Attaching schools to courses") do %>
+      <%= render Publish::Providers::SchoolPlacements::OutcomeExplainerComponent.new(
+        recruitment_cycle: @recruitment_cycle,
+        provider: @provider,
+      ) %>
+    <% end %>
+  </div>
 </div>
