@@ -219,6 +219,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#edit"
         patch "/fields/what-you-will-study", on: :member, to: "courses/fields/what_you_will_study#update"
 
+        get "/salary-fees", on: :member, to: "courses/salary_fees#edit"
+        patch "/salary-fees", on: :member, to: "courses/salary_fees#update"
+
         get "/salary", on: :member, to: "courses/salary#edit"
         patch "/salary", on: :member, to: "courses/salary#update"
 
