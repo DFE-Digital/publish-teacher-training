@@ -26,6 +26,8 @@
         texts: [["Salary fees", @previous_cycle_enrichment&.salary_details]],
       } %>
 
+      <%= render partial: "publish/courses/markdown_formatting" %>
+
       <%= f.govuk_text_area(:salary_fee_details,
         form_group: { id: @course_salary_fees_form.errors.key?(:salary_fee_details) ? "salary_fee_details-error" : "salary_fee_details" },
         label: { text: "Give details about any fees or other costs that the trainee might have to pay (optional)
