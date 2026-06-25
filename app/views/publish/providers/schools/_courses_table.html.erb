@@ -11,7 +11,7 @@
     <% courses.each do |course| %>
       <tr class="govuk-table__row">
         <!-- Course name -->
-        <td>
+        <td class="govuk-table__cell app-table--courses__course-name">
           <strong>
             <%= govuk_link_to course.name_and_code,
       publish_provider_recruitment_cycle_course_path(
@@ -27,7 +27,7 @@
           <% end %>
         </td>
         <!-- Course info -->
-        <td class="govuk-table__cell govuk-body-s">
+        <td class="govuk-table__cell govuk-body-s app-table--courses__course-information">
           <% if course.funding.present? %>
             <div>
               <%= case course.funding
@@ -50,14 +50,14 @@
           <% end %>
         </td>
         <!-- Status -->
-        <td class="govuk-table__cell">
+        <td class="govuk-table__cell app-table--courses__status">
           <%= render Publish::Courses::StatusTagComponent.new(
                 course: course,
                 recruitment_cycle_year: course.recruitment_cycle.year
               ) %>
         </td>
         <!-- Remove link -->
-        <td class="govuk-table__cell">
+        <td class="govuk-table__cell app-table--courses__status">
           <%= govuk_link_to "Remove",
                 "#", # replace with your actual route
                 class: "app-link--destructive" %>
