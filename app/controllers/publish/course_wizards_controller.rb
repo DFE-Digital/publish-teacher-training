@@ -34,7 +34,8 @@ module Publish
 
     def update
       if @wizard.save_current_step
-        return persist_course if current_step_name == :check_answers
+        @wizard.clear_stale_specialism_answers
+        return persist_course if @wizard.final_step?
 
         redirect_to @wizard.next_step_path
       else
@@ -45,7 +46,7 @@ module Publish
   private
 
     def persist_course
-      course_params = ::Courses::WizardParamsMapper.call(wizard: @wizard)
+      course_params = ::Courses::WizardParamsSerializer.call(wizard: @wizard)
       @course = ::Courses::CreationService.call(course_params:, provider:, next_available_course_code: true)
 
       if @course.save

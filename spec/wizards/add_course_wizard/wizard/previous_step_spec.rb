@@ -28,8 +28,18 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
   context "from secondary subjects" do
     let(:current_step) { :secondary_subjects }
 
-    it "goes back to level" do
-      expect(wizard).to have_previous_step(:level)
+    context "when return_to_review is set for the edited origin step" do
+      let(:request_params) { { current_step => current_step_params, return_to_review: :secondary_subjects } }
+
+      it "goes back to check answers" do
+        expect(wizard).to have_previous_step(:check_answers)
+      end
+    end
+
+    context "when return_to_review is not set" do
+      it "goes back to level" do
+        expect(wizard).to have_previous_step(:level)
+      end
     end
   end
 
@@ -142,8 +152,18 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       state_store.write(secondary_master_subject_id: "123", subordinate_subject_id: "456")
     end
 
-    it "goes back to secondary subjects" do
-      expect(wizard).to have_previous_step(:secondary_subjects)
+    context "when return_to_review is set for the edited origin step" do
+      let(:request_params) { { current_step => current_step_params, return_to_review: :age_range } }
+
+      it "goes back to check answers" do
+        expect(wizard).to have_previous_step(:check_answers)
+      end
+    end
+
+    context "when return_to_review is not set" do
+      it "goes back to secondary subjects" do
+        expect(wizard).to have_previous_step(:secondary_subjects)
+      end
     end
   end
 
