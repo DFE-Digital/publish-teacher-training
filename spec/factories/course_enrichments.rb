@@ -58,6 +58,8 @@ FactoryBot.define do
       ].sample
     end
 
+    salary_fee_details { Faker::Lorem.sentence }
+
     placement_selection_criteria { Faker::Lorem.sentence }
     duration_per_school { Faker::Lorem.sentence }
     theoretical_training_location { Faker::Lorem.sentence }
@@ -113,6 +115,7 @@ FactoryBot.define do
       required_qualifications { nil }
       how_school_placements_work { nil }
       salary_details { nil }
+      salary_fee_details { nil }
       course_length { nil }
       interview_process { nil }
       placement_selection_criteria { nil }

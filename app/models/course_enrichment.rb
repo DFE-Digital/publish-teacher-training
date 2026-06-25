@@ -23,6 +23,7 @@ class CourseEnrichment < ApplicationRecord
                  personal_qualities: [:string, { store_key: "PersonalQualities" }],
                  required_qualifications: [:string, { store_key: "Qualifications" }],
                  salary_details: [:string, { store_key: "SalaryDetails" }],
+                 salary_fee_details: [:string, { store_key: "SalaryFeeDetails" }],
                  placement_selection_criteria: [:string, { store_key: "PlacementSelectionCriteria" }],
                  duration_per_school: [:string, { store_key: "DurationPerSchool" }],
                  theoretical_training_location: [:string, { store_key: "TheoreticalTrainingLocation" }],
