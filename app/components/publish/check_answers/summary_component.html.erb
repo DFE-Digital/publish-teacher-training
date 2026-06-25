@@ -1,0 +1,11 @@
+<%= govuk_summary_list do |summary_list| %>
+  <% rows.each do |row| %>
+    <% summary_list.with_row do |item| %>
+      <% item.with_key { row.label } %>
+      <% item.with_value { row.value } %>
+      <% if row.change_path.present? %>
+        <% item.with_action(text: change_text, href: row.change_path, visually_hidden_text: row.label.downcase) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

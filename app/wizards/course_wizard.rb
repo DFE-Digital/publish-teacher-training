@@ -68,8 +68,6 @@ class CourseWizard
         default: :age_range,
       )
 
-      graph.before_next_step(:clear_specialism_answers_when_subjects_change)
-
       graph.add_multiple_conditional_edges(
         from: :physics_specialisms,
         branches: [
@@ -215,13 +213,11 @@ class CourseWizard
     )
   end
 
-  def handle_return_to_review
-    return if return_to_review_param.blank?
-
-    handle_return_to_check_your_answers(:check_answers)
+  def final_step?
+    current_step_name == :check_answers
   end
 
-  def clear_specialism_answers_when_subjects_change
+  def clear_stale_specialism_answers
     return unless current_step_name == :secondary_subjects
 
     reset_attributes = {}
@@ -232,6 +228,12 @@ class CourseWizard
 
     state_store.write(**reset_attributes)
     nil
+  end
+
+  def handle_return_to_review
+    return if return_to_review_param.blank?
+
+    handle_return_to_check_your_answers(:check_answers)
   end
 
   def handle_back_to_review

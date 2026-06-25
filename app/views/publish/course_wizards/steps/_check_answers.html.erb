@@ -5,14 +5,6 @@
   <%= t("course_wizard.steps.check_answers.heading") %>
 </h1>
 
-<%= govuk_summary_list do |summary_list| %>
-  <% CourseWizard::Review.new(@wizard).course_details.each do |row| %>
-    <% summary_list.with_row do |item| %>
-      <% item.with_key { row.label } %>
-      <% item.with_value { row.formatted_value } %>
-      <% item.with_action(text: t("course_wizard.steps.check_answers.change"), href: row.change_path, visually_hidden_text: row.label.downcase) %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= render Publish::CheckAnswers::SummaryComponent.new(wizard: @wizard) %>
 
 <%= form.govuk_submit t("course_wizard.steps.check_answers.submit") %>

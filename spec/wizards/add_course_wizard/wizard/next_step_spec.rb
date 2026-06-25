@@ -132,6 +132,32 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
       end
     end
 
+    context "when returning from check answers and subjects do not require specialism pages" do
+      let(:request_params) { { current_step => current_step_params, return_to_review: :secondary_subjects } }
+
+      before do
+        study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+
+        state_store.write(
+          is_send: "false",
+          secondary_master_subject_id: find_or_create(:secondary_subject, :business_studies).id.to_s,
+          subordinate_subject_id: find_or_create(:secondary_subject, :religious_education).id.to_s,
+          age_range_in_years: "11_to_16",
+          qualification: "pgce_with_qts",
+          funding_type: "fee",
+          study_pattern: %w[full_time],
+          site_ids: [provider.sites.first.id.to_s],
+          study_sites_ids: [study_site.id.to_s],
+          can_sponsor_student_visa: false,
+          start_date: "July 2027",
+        )
+      end
+
+      it "returns to check answers for a complete valid path" do
+        expect(wizard).to have_next_step(:check_answers)
+      end
+    end
+
     context "when stale specialism answers exist but subjects no longer require them" do
       before do
         state_store.write(
@@ -143,12 +169,12 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
         )
       end
 
-      it "clears the specialism answers" do
+      it "does not mutate state while resolving next_step" do
         expect(wizard).to have_next_step(:age_range)
 
-        expect(state_store.campaign_name).to be_nil
-        expect(state_store.language_ids).to be_nil
-        expect(state_store.design_technology_ids).to be_nil
+        expect(state_store.campaign_name).to eq("engineers_teach_physics")
+        expect(state_store.language_ids).to be_present
+        expect(state_store.design_technology_ids).to be_present
       end
     end
   end

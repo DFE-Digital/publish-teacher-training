@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Courses::WizardParamsMapper do
+RSpec.describe Courses::WizardParamsSerializer do
   subject(:params) { described_class.call(wizard:) }
 
   let(:state_overrides) { {} }
@@ -43,7 +43,7 @@ RSpec.describe Courses::WizardParamsMapper do
       **base_state.merge(state_overrides),
     )
   end
-  let(:wizard) { instance_double(CourseWizard, state_store:) }
+  let(:wizard) { instance_double(CourseWizard, state_store:, accrediting_provider: nil) }
 
   describe "key translations" do
     it "maps the canonical wizard keys to creation-service keys" do
