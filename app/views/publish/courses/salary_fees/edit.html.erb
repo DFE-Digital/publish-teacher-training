@@ -40,7 +40,7 @@
 
         <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
       </div>
-      <%= f.govuk_submit @course.only_published? ? "Save and publish" : "Save" %>
+      <%= f.govuk_submit t(".update") %>
     <% end %>
   </div>
 </div>
