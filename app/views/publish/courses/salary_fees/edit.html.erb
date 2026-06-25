@@ -28,12 +28,18 @@
 
       <%= render partial: "publish/courses/markdown_formatting" %>
 
-      <%= f.govuk_text_area(:salary_fee_details,
+      <div data-controller="input-preview">
+        <%= f.govuk_text_area(:salary_fee_details,
         form_group: { id: @course_salary_fees_form.errors.key?(:salary_fee_details) ? "salary_fee_details-error" : "salary_fee_details" },
+        data: { input_preview_target: "input",
+                action: "input-preview#updatePreview",
+                preview_output_target: "shared" },
         label: { text: t(".label"), size: "s" },
         rows: 15,
         max_words: 250) %>
 
+        <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
+      </div>
       <%= f.govuk_submit @course.only_published? ? "Save and publish" : "Save" %>
     <% end %>
   </div>
