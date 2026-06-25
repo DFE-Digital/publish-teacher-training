@@ -87,6 +87,10 @@ en:
       course_salary:
         edit:
           course_salary: Course salary
+      course_salary_fees:
+        edit:
+          course_salary_fees_title: Fees (optional)
+          course_salary_fee: Fees
       course_fees:
         edit:
           course_fees: Course fees
