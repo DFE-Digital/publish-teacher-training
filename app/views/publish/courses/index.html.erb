@@ -11,23 +11,25 @@
   )) %>
 <% end %>
 <h1 class="govuk-heading-l">Courses</h1>
-<%= render AddCourseButton.new(provider: @provider) %>
-<!-- TEST button for downloading course information as CSV - HIDDEN AS NOT TESTING-->
-<%#= link_to "Download all course information (CSV)",
-    publish_provider_recruitment_cycle_courses_path(
-      @provider.provider_code,
-      @provider.recruitment_cycle.year,
-      request.query_parameters.merge(format: :csv)
-    ),
-    class: "govuk-button govuk-button--secondary govuk-margin-left-2"
-%>
-<!-- TEST button for downloading course schools list as CSV -->
-<%= link_to "Download course information (CSV)",
-    publish_provider_recruitment_cycle_courses_path(
-      @provider.provider_code,
-      @provider.recruitment_cycle.year,
-      request.query_parameters.merge(format: :csv, export: "schools")
-    ),
-    class: "govuk-button govuk-button--secondary govuk-margin-left-2"
-%>
+<div class="govuk-button-group">
+  <%= render AddCourseButton.new(provider: @provider) %>
+  <!-- TEST button for downloading course information as CSV - HIDDEN AS NOT TESTING-->
+  <%#= link_to "Download all course information (CSV)",
+      publish_provider_recruitment_cycle_courses_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle.year,
+        request.query_parameters.merge(format: :csv)
+      ),
+      class: "govuk-button govuk-button--secondary govuk-margin-left-2"
+  %>
+  <!-- TEST button for downloading course schools list as CSV -->
+  <%= link_to "Download course information (CSV)",
+      publish_provider_recruitment_cycle_courses_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle.year,
+        request.query_parameters.merge(format: :csv, export: "schools")
+      ),
+      class: "govuk-button govuk-button--secondary govuk-margin-left-2"
+  %>
+</div>
 <%= render Publish::Courses::ListComponent.new(course_list: @course_list, provider: @provider) %>
