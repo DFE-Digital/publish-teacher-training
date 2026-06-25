@@ -14,7 +14,7 @@ module Publish
         @course_salary_fees_form = ::Publish::CourseSalaryFeesForm.new(course_enrichment, params: form_params)
 
         if @course_salary_fees_form.save!
-          course_updated_message I18n.t("publish.providers.course_salary_fees.edit.course_salary_fee")
+          course_updated_message t(".course_salary_fee")
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,

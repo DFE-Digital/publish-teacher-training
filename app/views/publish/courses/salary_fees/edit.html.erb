@@ -1,4 +1,4 @@
-<% page_title = t("publish.providers.course_salary_fees.edit.course_salary_fees_title") %>
+<% page_title = t(".course_salary_fees_title") %>
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_salary_fees_form.errors.any?) %>
 
 <% content_for :before_content do %>
@@ -23,19 +23,16 @@
       </h1>
 
       <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-        texts: [["Salary fees", @previous_cycle_enrichment&.salary_details]],
+        texts: [[t(".last_cycle_title"), @previous_cycle_enrichment&.salary_details]],
       } %>
 
       <%= render partial: "publish/courses/markdown_formatting" %>
 
       <%= f.govuk_text_area(:salary_fee_details,
         form_group: { id: @course_salary_fees_form.errors.key?(:salary_fee_details) ? "salary_fee_details-error" : "salary_fee_details" },
-        label: { text: "Give details about any fees or other costs that the trainee might have to pay (optional)
-
-", size: "s" },
+        label: { text: t(".label"), size: "s" },
         rows: 15,
-        max_words: 250,
-        data: { qa: "course_salary_fees_details" }) %>
+        max_words: 250) %>
 
       <%= f.govuk_submit @course.only_published? ? "Save and publish" : "Save" %>
     <% end %>

@@ -1,0 +1,18 @@
+en:
+  publish:
+    courses:
+      salary_fees:
+        edit:
+          course_salary_fees_title: Fees (optional)
+          label: Give details about any fees or other costs that the trainee might have to pay (optional)
+          last_cycle_title: Salary fees
+        update:
+          course_salary_fee: Fees
+
+  activemodel:
+    errors:
+      models:
+        publish/course_salary_fees_form:
+          attributes:
+            salary_fee_details:
+              too_long: "Reduce the word count for fees"
