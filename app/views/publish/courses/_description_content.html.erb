@@ -32,7 +32,7 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.salary_fee_details_label"),
-      value_provided?(course.salary_fee_details),
+      value_provided?(markdown(course.salary_fee_details)),
       %w[salary_fee_details],
       action_path: salary_fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code),
     ) %>
