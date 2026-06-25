@@ -1210,10 +1210,6 @@ en:
           attributes:
             course_length:
               blank: Enter a course length
-        publish/course_salary_fees_form:
-          attributes:
-            salary_fee_details:
-              too_long: "Reduce the word count for fees"
         publish/course_salary_form:
           attributes:
             course_length:
