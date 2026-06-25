@@ -27,6 +27,7 @@ en:
           fee_international_optional_label: Fee for non-UK citizens (optional)
           financial_incentive_details_label: Financial support from the government
           salary_details_label: Salary details
+          salary_fee_details_label: Fees (optional)
           gcse_label: GCSEs
           interview_location_label: Where will the interviews take place (optional)
           interview_process_hidden_text: details about the interview process
