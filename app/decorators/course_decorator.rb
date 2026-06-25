@@ -436,7 +436,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def show_school_experience?
-    recruitment_cycle_after_2026?
+    recruitment_cycle_after?(2026)
   end
 
   def visa_sponsorship_deadline_required

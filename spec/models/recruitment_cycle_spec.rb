@@ -175,4 +175,18 @@ describe RecruitmentCycle, travel: mid_cycle(2025) do
       end
     end
   end
+
+  describe "#after?" do
+    it "returns true when the cycle year is after the target year" do
+      expect(described_class.new(year: 2027).after?(2026)).to be(true)
+    end
+
+    it "returns false when the cycle year equals the target year" do
+      expect(described_class.new(year: 2026).after?(2026)).to be(false)
+    end
+
+    it "returns false when the cycle year is before the target year" do
+      expect(described_class.new(year: 2025).after?(2026)).to be(false)
+    end
+  end
 end
