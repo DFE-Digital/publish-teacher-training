@@ -23,6 +23,7 @@ describe Course do
 
   it { is_expected.to delegate_method(:provider_name).to(:provider).allow_nil }
   it { is_expected.to delegate_method(:provider_code).to(:provider).allow_nil }
+  it { is_expected.to delegate_method(:after?).to(:recruitment_cycle).with_prefix.with_arguments(2026).allow_nil }
 
   describe "#name_and_code" do
     it "returns the course name and code in brackets" do
