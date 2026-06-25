@@ -12,7 +12,13 @@ module Publish
         @pagy, @schools = pagy(provider.sites.order(:location_name), limit: PER_PAGE)
       end
 
-      def show; end
+      def show
+        all_courses = Publish::Courses::Query.call(provider:)
+
+        @courses = all_courses.select do |course|
+          course.sites.map(&:id).include?(@site.id)
+        end
+      end
 
       def create
         @site = provider.sites.build
@@ -34,8 +40,12 @@ module Publish
 
     private
 
+      # Load associated courses with the site to prevent multiple database queries in the view (this will show courses that are connected to the school)
       def site
-        @site ||= provider.sites.find(params[:id])
+        @site ||= provider
+          .sites
+          .includes(site_statuses: :course)
+          .find(params[:id])
       end
 
       def site_params(param_form_key)

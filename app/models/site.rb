@@ -19,6 +19,7 @@ class Site < ApplicationRecord
 
   has_many :site_statuses, dependent: :destroy
   has_many :study_site_placements, dependent: :destroy
+  has_many :courses, through: :site_statuses
 
   belongs_to :provider
 
