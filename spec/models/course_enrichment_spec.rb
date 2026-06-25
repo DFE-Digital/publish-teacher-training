@@ -126,6 +126,22 @@ RSpec.describe CourseEnrichment do
                   word_limit: [250, 50]
 
   #
+  # Salary fee details (jsonb accessor, no validation yet)
+  #
+  describe "salary_fee_details" do
+    it "is allowed to be nil" do
+      expect(build(:course_enrichment, salary_fee_details: nil)).to be_valid
+    end
+
+    it "persists the value under the SalaryFeeDetails store key" do
+      enrichment = create(:course_enrichment, salary_fee_details: "Some fees text")
+
+      expect(enrichment.reload.salary_fee_details).to eq("Some fees text")
+      expect(enrichment.json_data).to include("SalaryFeeDetails" => "Some fees text")
+    end
+  end
+
+  #
   # Existing specs we already had
   #
   describe "#publish" do

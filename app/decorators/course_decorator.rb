@@ -237,6 +237,7 @@ class CourseDecorator < ApplicationDecorator
     placement_school_activities
     support_and_mentorship
     salary_details
+    salary_fee_details
     interview_process
     duration_per_school
     how_school_placements_work
