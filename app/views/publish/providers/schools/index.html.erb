@@ -14,19 +14,18 @@
     </div>
     <p class="govuk-body">You can only add schools that are on <%= govuk_link_to("Get Information About Schools (GIAS)", "https://get-information-schools.service.gov.uk/") %>.</p>
     <% if @schools.any? %>
-
-    <!-- ✅ Search box -->
-          <div class="school-search-container">
-            <div class="school-search-content">
-              <div class="govuk-form-group govuk-!-margin-bottom-0">
-                <p class="govuk-heading-m">
-                  Search for a school in the list
-                </p>
-                <label class="govuk-label" for="school-search">
-                  Enter the name of a school, university or college. You can also enter a postcode or URN.
-                </label>
-                <div class="school-search-form-container">
-                  <input
+      <!-- Search box -->
+      <div class="school-search-container">
+        <div class="school-search-content">
+          <div class="govuk-form-group govuk-!-margin-bottom-0">
+            <p class="govuk-heading-m">
+              Search for a school in the list
+            </p>
+            <label class="govuk-label" for="school-search">
+              Enter the name of a school, university or college. You can also enter a postcode or URN.
+            </label>
+            <div class="school-search-form-container">
+              <input
               class="govuk-input"
               id="school-search"
               type="search"
@@ -34,48 +33,47 @@
               autoComplete="off"
               data-school-search-target="input"
               data-action="keydown.enter->school-search#search">
-                    <button
+                <button
               class="govuk-button govuk-button--primary govuk-!-margin-bottom-3"
               type="button"
               data-action="school-search#search">
-                      Search
-                    </button>
-                  </div>
-                  <div class="govuk-!-margin-top-0 govuk-body">
-                    <a
+                  Search
+                </button>
+              </div>
+              <div class="govuk-!-margin-top-0 govuk-body">
+                <a
   href="#"
   class="app-button-link govuk-link"
   data-action="school-search#clear"
   data-show-more-target="button">
-                      Clear search
-                    </a>
-                  </div>
-                </div>
-</div></div>
-
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col"><%= t(".name") %></th>
-            <%# <th class="govuk-table__header" scope="col"><%= "Address" %></th>
-          <th class="govuk-table__header" scope="col"><%= "Remove school" %></th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <%= render partial: "school", collection: @schools %>
-      </tbody>
-    </table>
-    <%= govuk_pagination(pagy: @pagy) %>
-  <% end %>
+                  Clear search
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col"><%= t(".name") %></th>
+              <th class="govuk-table__header" scope="col"><%= "Remove school" %></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <%= render partial: "school", collection: @schools %>
+          </tbody>
+        </table>
+        <%= govuk_pagination(pagy: @pagy) %>
+      <% end %>
+    </div>
   </div>
-</div>
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <%= render Shared::AdviceComponent::View.new(title: "Attaching schools to courses") do %>
-      <%= render Publish::Providers::SchoolPlacements::OutcomeExplainerComponent.new(
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= render Shared::AdviceComponent::View.new(title: "Attaching schools to courses") do %>
+        <%= render Publish::Providers::SchoolPlacements::OutcomeExplainerComponent.new(
         recruitment_cycle: @recruitment_cycle,
         provider: @provider,
       ) %>
-    <% end %>
+      <% end %>
+    </div>
   </div>
-</div>
