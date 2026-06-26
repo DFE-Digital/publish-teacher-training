@@ -30,9 +30,7 @@ module Find
         end
 
         def no_employing_schools?
-          return @no_employing_schools unless @no_employing_schools.nil?
-
-          @no_employing_schools = course.without_employing_school?
+          course.without_employing_school?
         end
 
         def potential_placements_text
