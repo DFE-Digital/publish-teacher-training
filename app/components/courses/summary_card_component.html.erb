@@ -5,7 +5,7 @@
         <% row.with_key(text: t(".location_key.#{course.funding}")) %>
         <% row.with_value do %>
           <% if no_employing_schools? %>
-            <%= no_employing_schools_text %>
+            <%= t(".location_value.no_employing_schools") %>
           <% else %>
             <%= location_value %>
 
