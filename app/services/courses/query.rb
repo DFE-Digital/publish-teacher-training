@@ -503,7 +503,17 @@ module Courses
     # when they are exempt and their latest enrichment is published (mirroring
     # Course#is_published? so a returned course never 404s on the show page).
     def findable_courses_sql
-      sql = +<<~SQL
+      conditions = [running_published_site_sql]
+
+      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
+        conditions << exempt_school_less_course_sql
+      end
+
+      conditions.join(" OR ")
+    end
+
+    def running_published_site_sql
+      <<~SQL
         EXISTS (
           SELECT 1 FROM course_site
           WHERE course_site.course_id = course.id
@@ -511,28 +521,26 @@ module Courses
             AND course_site.publish = 'Y'
         )
       SQL
+    end
 
-      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-        sql << <<~SQL
-          OR (
-            course.publish_without_schools_allowed = TRUE
-            AND course.funding IN ('salary', 'apprenticeship')
-            AND EXISTS (
-              SELECT 1 FROM course_enrichment ce
-              WHERE ce.course_id = course.id
-                AND ce.status = #{CourseEnrichment.statuses[:published]}
-                AND ce.id = (
-                  SELECT ce2.id FROM course_enrichment ce2
-                  WHERE ce2.course_id = course.id
-                  ORDER BY ce2.created_at DESC, ce2.id DESC
-                  LIMIT 1
-                )
-            )
+    def exempt_school_less_course_sql
+      <<~SQL
+        (
+          course.publish_without_schools_allowed = TRUE
+          AND course.funding IN ('salary', 'apprenticeship')
+          AND EXISTS (
+            SELECT 1 FROM course_enrichment ce
+            WHERE ce.course_id = course.id
+              AND ce.status = #{CourseEnrichment.statuses[:published]}
+              AND ce.id = (
+                SELECT ce2.id FROM course_enrichment ce2
+                WHERE ce2.course_id = course.id
+                ORDER BY ce2.created_at DESC, ce2.id DESC
+                LIMIT 1
+              )
           )
-        SQL
-      end
-
-      sql
+        )
+      SQL
     end
 
     def master_subject_ordering_scope
