@@ -97,8 +97,12 @@ RSpec.describe Courses::WizardParamsSerializer do
     end
 
     context "when modern languages and design technology specialisms are active" do
+      let(:modern_languages_id) { SecondarySubject.modern_languages.id.to_s }
+      let(:design_technology_id) { SecondarySubject.design_technology.id.to_s }
       let(:state_overrides) do
         {
+          secondary_master_subject_id: modern_languages_id,
+          subordinate_subject_id: design_technology_id,
           modern_languages_specialisms?: true,
           design_technology_specialisms?: true,
           language_ids: %w[300],
@@ -107,7 +111,7 @@ RSpec.describe Courses::WizardParamsSerializer do
       end
 
       it "includes both specialism ids" do
-        expect(params["subjects_ids"]).to eq(%w[100 200 300 400])
+        expect(params["subjects_ids"]).to eq([modern_languages_id, "300", design_technology_id, "400"])
       end
     end
 

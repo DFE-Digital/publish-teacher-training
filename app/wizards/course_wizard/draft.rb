@@ -80,13 +80,9 @@ class CourseWizard
 
     def subject_ids
       return [] if state_store.further_education_level?
+      return [state_store.primary_master_subject_id].compact_blank if state_store.primary_level?
 
-      [
-        state_store.primary_master_subject_id,
-        state_store.secondary_master_subject_id,
-        state_store.subordinate_subject_id,
-        *selected_specialism_subject_ids,
-      ].compact_blank.uniq
+      secondary_subject_ids_with_grouped_specialisms
     end
 
     def subjects
@@ -129,11 +125,40 @@ class CourseWizard
 
   private
 
-    def selected_specialism_subject_ids
-      specialism_ids = []
-      specialism_ids.concat(Array(state_store.language_ids)) if state_store.modern_languages_specialisms?
-      specialism_ids.concat(Array(state_store.design_technology_ids)) if state_store.design_technology_specialisms?
-      specialism_ids
+    def secondary_subject_ids_with_grouped_specialisms
+      secondary_parent_ids.each_with_object([]) { |parent_id, ordered_ids|
+        ordered_ids << parent_id
+        ordered_ids.concat(specialism_ids_for_parent(parent_id))
+      }.uniq
+    end
+
+    def secondary_parent_ids
+      [
+        state_store.secondary_master_subject_id,
+        state_store.subordinate_subject_id,
+      ].compact_blank
+    end
+
+    def specialism_ids_for_parent(parent_id)
+      ids = []
+
+      if state_store.modern_languages_specialisms? && parent_id.to_s == modern_languages_subject_id
+        ids.concat(Array(state_store.language_ids))
+      end
+
+      if state_store.design_technology_specialisms? && parent_id.to_s == design_technology_subject_id
+        ids.concat(Array(state_store.design_technology_ids))
+      end
+
+      ids.compact_blank
+    end
+
+    def modern_languages_subject_id
+      @modern_languages_subject_id ||= SecondarySubject.modern_languages&.id&.to_s
+    end
+
+    def design_technology_subject_id
+      @design_technology_subject_id ||= SecondarySubject.design_technology&.id&.to_s
     end
 
     def ordered_subject_records(ids)

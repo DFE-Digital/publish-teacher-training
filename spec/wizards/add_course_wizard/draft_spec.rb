@@ -67,6 +67,29 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       expect(draft.subject_ids).not_to include(design_technology.id.to_s)
     end
 
+    it "orders secondary specialisms directly below their parent subjects" do
+      modern_languages = SecondarySubject.modern_languages
+      french = find_or_create(:secondary_subject, :french)
+      design_technology = SecondarySubject.design_technology
+      engineering = find_or_create(:design_technology_subject, :engineering)
+
+      state_store.write(
+        secondary_master_subject_id: modern_languages.id.to_s,
+        subordinate_subject_id: design_technology.id.to_s,
+        language_ids: [french.id.to_s],
+        design_technology_ids: [engineering.id.to_s],
+      )
+
+      expect(draft.subject_ids).to eq(
+        [
+          modern_languages.id.to_s,
+          french.id.to_s,
+          design_technology.id.to_s,
+          engineering.id.to_s,
+        ],
+      )
+    end
+
     it "returns no subject ids for further education" do
       state_store.write(level: "further_education")
 
