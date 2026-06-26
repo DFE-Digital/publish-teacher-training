@@ -46,10 +46,7 @@ module Publish
   private
 
     def complete_course
-      flash[:success_with_body] = {
-        title: I18n.t("publish.course_wizards.flash.success_with_body.title"),
-        body: I18n.t("publish.course_wizards.flash.success_with_body.body"),
-      }
+      flash[:success_with_body] = t("publish.course_wizards.flash.success_with_body").to_h
       @wizard.clear_state
       redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
     end

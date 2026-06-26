@@ -9,7 +9,7 @@ class CourseWizard
       :label_key,
       :label_options,
       :value,
-      :formatter,
+      :format,
       :show_when_blank,
       :changeable,
       keyword_init: true,
@@ -50,13 +50,13 @@ class CourseWizard
         @rows = []
       end
 
-      def row(label:, value: nil, formatter: nil, label_options: {}, show_when_blank: false, changeable: true)
+      def row(label:, value: nil, format: nil, label_options: {}, show_when_blank: false, changeable: true)
         @rows << CourseWizard::Reviewable::RowSpec.new(
           step_id: @step.step_id,
           label_key: label,
           label_options: resolve(label_options),
           value: resolve(value),
-          formatter:,
+          format:,
           show_when_blank:,
           changeable: resolve(changeable),
         )

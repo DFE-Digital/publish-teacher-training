@@ -20,7 +20,7 @@ class CourseWizard
             label_key: :accredited_provider,
             label_options: {},
             value: provider.provider_name,
-            formatter: nil,
+            format: nil,
             show_when_blank: true,
             changeable: wizard.saved?(:accredited_provider),
           ),

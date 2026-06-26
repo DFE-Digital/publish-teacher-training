@@ -24,7 +24,12 @@ class CourseWizard
         r.row(
           label: :funding_type,
           value: ->(draft) { draft.funding },
-          formatter: :funding,
+          format: Publish::CheckAnswers::Formatters::Enum.new(
+            scope: "course_wizard.steps.funding_type.options",
+            translation_key_overrides: {
+              "apprenticeship" => "course_wizard.steps.check_answers.answers.salary_apprenticeship",
+            },
+          ),
           show_when_blank: true,
           changeable: ->(draft) { !draft.tda? },
         )

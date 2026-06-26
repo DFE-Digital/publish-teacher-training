@@ -20,8 +20,24 @@ class CourseWizard
                 inclusion: { in: SEND_OPTIONS, message: I18n.t("course_wizard.steps.level.errors.is_send.blank") }
 
       review do |r|
-        r.row label: :level, value: ->(draft) { draft.level }, formatter: :level, changeable: false
-        r.row label: :send, value: ->(draft) { draft.is_send }, formatter: :send, changeable: false
+        r.row(
+          label: :level,
+          value: ->(draft) { draft.level },
+          format: Publish::CheckAnswers::Formatters::Enum.new(
+            scope: "course_wizard.steps.level.options",
+            suffix: "",
+          ),
+          changeable: false,
+        )
+        r.row(
+          label: :send,
+          value: ->(draft) { draft.is_send },
+          format: Publish::CheckAnswers::Formatters::Bool.new(
+            yes_key: "course_wizard.steps.level.options.yes_send",
+            no_key: "course_wizard.steps.level.options.no_send",
+          ),
+          changeable: false,
+        )
       end
 
       def self.permitted_params

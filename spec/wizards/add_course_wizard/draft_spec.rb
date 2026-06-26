@@ -238,5 +238,15 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       expect(draft.visa_deadline.day).to eq(1)
       expect(draft.visa_deadline.to_formatted_string).to eq(Date.new(2027, 3, 1).to_fs(:govuk_date))
     end
+
+    it "coerces hash values into canonical date parts" do
+      state_store.write(
+        visa_sponsorship_application_deadline_at: { "year" => "2028", "month" => "4", "day" => "2" },
+      )
+
+      expect(draft.visa_deadline.year).to eq(2028)
+      expect(draft.visa_deadline.month).to eq(4)
+      expect(draft.visa_deadline.day).to eq(2)
+    end
   end
 end

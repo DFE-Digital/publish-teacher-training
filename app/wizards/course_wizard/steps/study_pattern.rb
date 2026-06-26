@@ -17,7 +17,7 @@ class CourseWizard
         r.row(
           label: :study_pattern,
           value: ->(draft) { draft.study_patterns_for_display },
-          formatter: :study_pattern,
+          format: Publish::CheckAnswers::Formatters::StudyPattern.new,
           show_when_blank: true,
           changeable: ->(draft) { !draft.tda? },
         )

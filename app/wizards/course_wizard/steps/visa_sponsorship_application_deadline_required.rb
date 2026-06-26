@@ -14,7 +14,10 @@ class CourseWizard
         r.row(
           label: :is_there_a_visa_sponsorship_deadline,
           value: ->(draft) { draft.visa_sponsorship_application_deadline_required },
-          formatter: :yes_no,
+          format: Publish::CheckAnswers::Formatters::Bool.new(
+            yes_key: "course_wizard.steps.check_answers.answers.yes",
+            no_key: "course_wizard.steps.check_answers.answers.no",
+          ),
           show_when_blank: true,
         )
       end

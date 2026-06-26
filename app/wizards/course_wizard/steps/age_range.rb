@@ -15,7 +15,7 @@ class CourseWizard
       validates :age_range_in_years, presence: { message: I18n.t("course_wizard.steps.age_range.errors.age_range_in_years.blank") }
 
       review do |r|
-        r.row label: :age_range, value: ->(draft) { draft.age_range_choice }, formatter: :age_range
+        r.row label: :age_range, value: ->(draft) { draft.age_range_choice }, format: Publish::CheckAnswers::Formatters::AgeRange.new
       end
 
       with_options if: :age_range_other? do

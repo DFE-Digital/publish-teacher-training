@@ -18,33 +18,11 @@ class CourseWizard
                 allow_blank: true
 
       review do |r|
-        r.row label: :qualification, value: ->(draft) { draft.qualification }, formatter: :qualification
-      end
-
-      def review_rows(draft)
-        rows = super
-        return rows unless draft.tda?
-
-        rows + [
-          CourseWizard::Reviewable::RowSpec.new(
-            step_id: :funding_type,
-            label_key: :funding_type,
-            label_options: {},
-            value: draft.funding,
-            formatter: :funding,
-            show_when_blank: true,
-            changeable: false,
-          ),
-          CourseWizard::Reviewable::RowSpec.new(
-            step_id: :study_pattern,
-            label_key: :study_pattern,
-            label_options: {},
-            value: draft.study_patterns_for_display,
-            formatter: :study_pattern,
-            show_when_blank: true,
-            changeable: false,
-          ),
-        ]
+        r.row(
+          label: :qualification,
+          value: ->(draft) { draft.qualification },
+          format: Publish::CheckAnswers::Formatters::Enum.new(scope: "course_wizard.steps.qualifications.options"),
+        )
       end
 
       def qualification_options
