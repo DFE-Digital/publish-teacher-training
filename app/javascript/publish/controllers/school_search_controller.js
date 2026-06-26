@@ -21,7 +21,7 @@ export default class extends Controller {
       const text = element.dataset.searchText || "";
       const matches = query === "" || text.includes(query);
 
-      element.hidden = !matches;
+      element.style.display = matches ? "" : "none";
 
       if (matches) matchCount += 1;
     });
@@ -29,7 +29,17 @@ export default class extends Controller {
     const hasResults = matchCount > 0;
 
     // No results message
-    this.noResultsTarget.hidden = hasResults;
+    if (this.hasNoResultsTarget) {
+      this.noResultsTarget.hidden = hasResults;
+    }
+
+    // Hide pagination when searching on schools landing page
+    if (query.length > 0) {
+      this.paginationTarget.style.display = "none"
+    } else {
+      this.paginationTarget.style.display = ""
+    }
+
 
     // Select all section
     this.selectAllSectionTarget.hidden = !hasResults;

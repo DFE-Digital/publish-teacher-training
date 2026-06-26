@@ -14,6 +14,8 @@
     </div>
     <p class="govuk-body">You can only add schools that are on <%= govuk_link_to("Get Information About Schools (GIAS)", "https://get-information-schools.service.gov.uk/") %>.</p>
     <% if @schools.any? %>
+
+     <div data-controller="school-search">
       <!-- Search box -->
       <div class="school-search-container">
         <div class="school-search-content">
@@ -26,13 +28,13 @@
             </label>
             <div class="school-search-form-container">
               <input
-              class="govuk-input"
-              id="school-search"
-              type="search"
-              placeholder="Enter school name, postcode or URN"
-              autoComplete="off"
-              data-school-search-target="input"
-              data-action="keydown.enter->school-search#search">
+                class="govuk-input"
+                id="school-search"
+                type="search"
+                placeholder="Enter school name, postcode or URN"
+                autocomplete="off"
+                data-school-search-target="input"
+                data-action="input->school-search#search keydown.enter->school-search#search">
                 <button
               class="govuk-button govuk-button--primary govuk-!-margin-bottom-3"
               type="button"
@@ -42,16 +44,24 @@
               </div>
               <div class="govuk-!-margin-top-0 govuk-body">
                 <a
-  href="#"
-  class="app-button-link govuk-link"
-  data-action="school-search#clear"
-  data-show-more-target="button">
+                  href="#"
+                  class="app-button-link govuk-link"
+                  data-action="school-search#clear"
+                  data-show-more-target="button">
                   Clear search
                 </a>
               </div>
             </div>
           </div>
         </div>
+          <div
+            class="govuk-body govuk-!-margin-top-3"
+            hidden
+            data-school-search-target="noResults"
+          >
+            No results found. Please clear the search and try again.
+          </div>
+
         <table class="govuk-table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
@@ -63,7 +73,14 @@
             <%= render partial: "school", collection: @schools %>
           </tbody>
         </table>
-        <%= govuk_pagination(pagy: @pagy) %>
+
+        </div>
+
+
+        <div data-school-search-target="pagination">
+          <%= govuk_pagination(pagy: @pagy) %>
+        </div>
+
       <% end %>
     </div>
   </div>
