@@ -4,6 +4,7 @@ class CourseWizard
   module Steps
     class FundingType
       include DfE::Wizard::Step
+      include CourseWizard::Reviewable
 
       FUNDING_TYPE_OPTIONS = %w[fee salary apprenticeship].freeze
 
@@ -18,6 +19,16 @@ class CourseWizard
                   message: I18n.t("course_wizard.steps.funding_type.errors.funding_type.blank"),
                 },
                 allow_blank: true
+
+      review do |r|
+        r.row(
+          label: :funding_type,
+          value: ->(draft) { draft.funding },
+          formatter: :funding,
+          show_when_blank: true,
+          changeable: ->(draft) { !draft.tda? },
+        )
+      end
 
       def funding_type_options
         FUNDING_TYPE_OPTIONS

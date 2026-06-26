@@ -166,6 +166,12 @@ class CourseWizard
     end
   end
 
+  def steps_operator
+    DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |builder|
+      builder.on_step(:check_answers, use: [Operations::CreateCourse])
+    end
+  end
+
   def route_strategy
     DfE::Wizard::RouteStrategy::DynamicRoutes.new(
       state_store:,

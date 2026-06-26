@@ -35,31 +35,23 @@ module Publish
     def update
       if @wizard.save_current_step
         @wizard.clear_stale_specialism_answers
-        return persist_course if @wizard.final_step?
+        return complete_course if @wizard.final_step?
 
         redirect_to @wizard.next_step_path
       else
-        render :show
+        render :show, status: :unprocessable_entity
       end
     end
 
   private
 
-    def persist_course
-      course_params = ::Courses::WizardParamsSerializer.call(wizard: @wizard)
-      @course = ::Courses::CreationService.call(course_params:, provider:, next_available_course_code: true)
-
-      if @course.save
-        flash[:success_with_body] = {
-          title: I18n.t("publish.course_wizards.flash.success_with_body.title"),
-          body: I18n.t("publish.course_wizards.flash.success_with_body.body"),
-        }
-        @wizard.clear_state
-        redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
-      else
-        @course.errors.full_messages.each { |message| @wizard.current_step.errors.add(:base, message) }
-        render :show, status: :unprocessable_entity
-      end
+    def complete_course
+      flash[:success_with_body] = {
+        title: I18n.t("publish.course_wizards.flash.success_with_body.title"),
+        body: I18n.t("publish.course_wizards.flash.success_with_body.body"),
+      }
+      @wizard.clear_state
+      redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
     end
 
     def authorize_course_creation

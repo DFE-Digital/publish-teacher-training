@@ -2,6 +2,7 @@ class CourseWizard
   module Steps
     class Schools
       include DfE::Wizard::Step
+      include CourseWizard::Reviewable
 
       FUNDING_TYPES_WITH_SALARY = %w[salary apprenticeship].freeze
       QUALIFICATIONS_WITH_SALARY = %w[undergraduate_degree_with_qts].freeze
@@ -9,6 +10,20 @@ class CourseWizard
       attribute :site_ids
 
       validate :site_ids_selected
+
+      review do |r|
+        r.row(
+          label: :schools,
+          label_options: lambda { |draft|
+            {
+              count: draft.schools.count,
+              prefix: I18n.t("course_wizard.steps.check_answers.labels.schools_prefix.#{draft.employment_based? ? 'salaried' : 'unsalaried'}"),
+            }
+          },
+          value: ->(draft) { draft.schools.map(&:location_name) },
+          formatter: :schools,
+        )
+      end
 
       def sites
         provider_sites.sort_by(&:location_name)

@@ -79,11 +79,11 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       state_store.write(qualification: "undergraduate_degree_with_qts", funding_type: nil, study_pattern: nil)
     end
 
-    it "defaults funding and display study pattern but keeps serializer study mode nil" do
+    it "defaults funding plus full-time study mode for display and serializer" do
       expect(draft.tda?).to be(true)
       expect(draft.funding).to eq("apprenticeship")
       expect(draft.study_patterns_for_display).to eq(%w[full_time])
-      expect(draft.study_modes).to be_nil
+      expect(draft.study_modes).to eq(%w[full_time])
       expect(draft).to be_employment_based
     end
   end

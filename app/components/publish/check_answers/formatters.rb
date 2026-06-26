@@ -13,6 +13,25 @@ module Publish
         attr_reader :context
       end
 
+      class LevelFormatter < Base
+        def call(value, _draft)
+          I18n.t("course_wizard.steps.level.options.#{value}", default: value)
+        end
+      end
+
+      class SendFormatter < Base
+        def call(value, _draft)
+          key = ActiveModel::Type::Boolean.new.cast(value) ? "yes_send" : "no_send"
+          I18n.t("course_wizard.steps.level.options.#{key}", default: value)
+        end
+      end
+
+      class QualificationFormatter < Base
+        def call(value, _draft)
+          I18n.t("course_wizard.steps.qualifications.options.#{value}.label", default: value)
+        end
+      end
+
       class FundingFormatter < Base
         def call(value, _draft)
           return if value.blank?
@@ -85,6 +104,27 @@ module Publish
           return if value.blank?
 
           @separator == "<br>" ? context.safe_join(value, context.tag.br) : value.join(@separator)
+        end
+      end
+
+      class StudySitesFormatter < Base
+        def call(value, draft)
+          return value.join(", ") if value.present?
+
+          if draft.wizard.provider.study_sites.any?
+            context.govuk_link_to(
+              context.t("course_wizard.steps.check_answers.answers.select_study_site"),
+              draft.wizard.route_strategy.resolve(step_id: :study_sites, options: { return_to_review: :study_sites }),
+            )
+          else
+            context.govuk_link_to(
+              context.t("course_wizard.steps.check_answers.answers.add_a_study_site"),
+              context.helpers.publish_provider_recruitment_cycle_study_sites_path(
+                draft.wizard.provider_code,
+                draft.wizard.recruitment_cycle_year,
+              ),
+            )
+          end
         end
       end
 
