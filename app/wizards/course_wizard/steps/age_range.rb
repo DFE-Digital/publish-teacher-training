@@ -4,6 +4,7 @@ class CourseWizard
   module Steps
     class AgeRange
       include DfE::Wizard::Step
+      include CourseWizard::Reviewable
 
       CUSTOM_AGE_RANGE_VALIDATOR = Courses::ValidateCustomAgeRangeService
 
@@ -12,6 +13,10 @@ class CourseWizard
       attribute :course_age_range_in_years_other_to, :string
 
       validates :age_range_in_years, presence: { message: I18n.t("course_wizard.steps.age_range.errors.age_range_in_years.blank") }
+
+      review do |r|
+        r.row label: :age_range, value: ->(draft) { draft.age_range_choice }, formatter: :age_range
+      end
 
       with_options if: :age_range_other? do
         validates :course_age_range_in_years_other_from, numericality: {

@@ -4,10 +4,15 @@ class CourseWizard
   module Steps
     class VisaSponsorship
       include DfE::Wizard::Step
+      include CourseWizard::Reviewable
 
       attribute :can_sponsor_student_visa, :boolean
 
       validates :can_sponsor_student_visa, inclusion: { in: [true, false], message: I18n.t("course_wizard.steps.visa_sponsorship.errors.can_sponsor_student_visa.blank") }
+
+      review do |r|
+        r.row label: :student_visas, value: ->(draft) { draft.can_sponsor_student_visa }, formatter: :sponsor
+      end
 
       def can_sponsor_student_visa
         return super unless super.nil? && default_to_no_from_accrediting_provider?

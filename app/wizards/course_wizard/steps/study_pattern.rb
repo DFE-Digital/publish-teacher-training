@@ -4,6 +4,7 @@ class CourseWizard
   module Steps
     class StudyPattern
       include DfE::Wizard::Step
+      include CourseWizard::Reviewable
 
       STUDY_PATTERN_OPTIONS = %w[full_time part_time].freeze
 
@@ -11,6 +12,16 @@ class CourseWizard
 
       validate :study_pattern_selected
       validate :study_pattern_values_are_valid
+
+      review do |r|
+        r.row(
+          label: :study_pattern,
+          value: ->(draft) { draft.study_patterns_for_display },
+          formatter: :study_pattern,
+          show_when_blank: true,
+          changeable: ->(draft) { !draft.tda? },
+        )
+      end
 
       def study_pattern_options
         STUDY_PATTERN_OPTIONS

@@ -43,6 +43,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
 
   it "renders the engineers row when physics specialisms are saved" do
     state_store.write(campaign_name: "engineers_teach_physics")
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:physics_specialisms)])
     allow(wizard).to receive(:saved?).with(:physics_specialisms).and_return(true)
 
     expect(rendered_component).to have_text("Engineers Teach Physics")
@@ -50,7 +51,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_link("Change", href: /return_to_review=physics_specialisms/)
   end
 
-  it "renders age range, qualification, funding, study pattern and start date rows" do
+  it "renders TDA defaults for funding, study pattern and skilled worker visa without change links" do
     primary_subject = find_or_create(:primary_subject, :primary)
 
     state_store.write(
@@ -64,11 +65,17 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
       start_date: "July 2027",
     )
 
+    allow(wizard).to receive(:flow_steps).and_return(
+      [
+        wizard.step(:age_range),
+        wizard.step(:qualifications),
+        wizard.step(:study_sites),
+        wizard.step(:start_date),
+      ],
+    )
     allow(wizard).to receive(:saved?).with(:primary_subjects).and_return(true)
     allow(wizard).to receive(:saved?).with(:age_range).and_return(true)
     allow(wizard).to receive(:saved?).with(:qualifications).and_return(true)
-    allow(wizard).to receive(:saved?).with(:funding_type).and_return(true)
-    allow(wizard).to receive(:saved?).with(:study_pattern).and_return(true)
     allow(wizard).to receive(:saved?).with(:start_date).and_return(true)
 
     expect(rendered_component).to have_text("Age range")
@@ -79,8 +86,13 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_text("Salary (apprenticeship)")
     expect(rendered_component).to have_text("Study pattern")
     expect(rendered_component).to have_text("Full time")
+    expect(rendered_component).to have_text("Skilled Worker visas")
+    expect(rendered_component).to have_text("No - cannot sponsor")
     expect(rendered_component).to have_text("Course start date")
     expect(rendered_component).to have_text("July 2027")
+    expect(rendered_component).to have_no_selector("a[href*='return_to_review=funding_type']")
+    expect(rendered_component).to have_no_selector("a[href*='return_to_review=study_pattern']")
+    expect(rendered_component).to have_no_selector("a[href*='return_to_review=skilled_worker_visa']")
   end
 
   it "renders school and study-site rows with selected values and change links" do
@@ -129,6 +141,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
       study_sites_ids: [],
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:study_sites)])
 
     expect(rendered_component).to have_link("Add a study site")
     expect(rendered_component).to have_no_selector("a[href*='return_to_review=study_sites']", text: "Change")
@@ -136,7 +149,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
 
   it "renders accredited provider row with and without change link depending on saved state" do
     accrediting_provider = instance_double(Provider, provider_name: "Acme Accreditor", provider_code: "AC1")
-    allow(wizard).to receive(:accrediting_provider).and_return(accrediting_provider)
+    allow(wizard).to receive_messages(accrediting_provider: accrediting_provider, flow_steps: [wizard.step(:accredited_provider)])
     allow(wizard).to receive(:saved?).with(:accredited_provider).and_return(true)
 
     expect(rendered_component).to have_text("Accredited provider")
@@ -153,6 +166,14 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
       visa_sponsorship_application_deadline_at: CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt::DateParts.new("2027", "3", "1"),
     )
 
+    allow(wizard).to receive(:flow_steps).and_return(
+      [
+        wizard.step(:visa_sponsorship),
+        wizard.step(:skilled_worker_visa),
+        wizard.step(:visa_sponsorship_application_deadline_required),
+        wizard.step(:visa_sponsorship_application_deadline_at),
+      ],
+    )
     allow(wizard).to receive(:saved?).with(:visa_sponsorship).and_return(true)
     allow(wizard).to receive(:saved?).with(:skilled_worker_visa).and_return(true)
     allow(wizard).to receive(:saved?).with(:visa_sponsorship_application_deadline_required).and_return(true)

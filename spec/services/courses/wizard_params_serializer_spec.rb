@@ -198,8 +198,18 @@ RSpec.describe Courses::WizardParamsSerializer do
     context "when TDA and no study_pattern" do
       let(:state_overrides) { { study_pattern: nil, undergraduate_degree_with_qts?: true } }
 
-      it "does not force study_mode" do
-        expect(params["study_mode"]).to be_nil
+      it "defaults to full time study mode" do
+        expect(params["study_mode"]).to eq(%w[full_time])
+      end
+    end
+  end
+
+  describe "skilled worker visa defaults" do
+    context "when TDA and skilled worker visa is unset" do
+      let(:state_overrides) { { undergraduate_degree_with_qts?: true, can_sponsor_skilled_worker_visa: nil } }
+
+      it "defaults to cannot sponsor" do
+        expect(params["can_sponsor_skilled_worker_visa"]).to be(false)
       end
     end
   end

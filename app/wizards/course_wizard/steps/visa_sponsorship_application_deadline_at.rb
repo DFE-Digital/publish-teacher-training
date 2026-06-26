@@ -4,6 +4,7 @@ class CourseWizard
   module Steps
     class VisaSponsorshipApplicationDeadlineAt
       include DfE::Wizard::Step
+      include CourseWizard::Reviewable
 
       DateParts = Struct.new(:year, :month, :day)
 
@@ -11,6 +12,14 @@ class CourseWizard
 
       validate :date_present
       validate :within_range
+
+      review do |r|
+        r.row(
+          label: :visa_sponsorship_application_deadline_date,
+          value: ->(draft) { draft.visa_deadline },
+          formatter: :visa_deadline,
+        )
+      end
 
       # rubocop:disable Naming/MethodName
       define_method("visa_sponsorship_application_deadline_at(1i)=") do |value|
