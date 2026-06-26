@@ -6,17 +6,26 @@
   <div class="govuk-grid-column-two-thirds">
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-0"><%= @site.location_name %></h1>
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-2"><%= @site.location_name %></h1>
         <span class="govuk-caption-m"><%= @site.address_without_name %></span>
         <span class="govuk-caption-m">URN: <%= @site.urn %></span>
       </legend>
       <p class="govuk-body">
-        <%= govuk_link_to t(".remove", resource: "location"), delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id), class: "app-link--destructive" %>
+
+      <%= govuk_link_to t(".remove", resource: "location"),
+        remove_publish_provider_recruitment_cycle_school_path(
+          @provider.provider_code,
+          @site.recruitment_cycle.year,
+          @site.id
+        ),
+        class: "app-link--destructive" %>
+
       </p>
     </fieldset>
+    <br>
     <% if @site.courses.any? %>
-      <p class="govuk-body">
-        This school is attached to <%= pluralize(@site.courses.length, "course") %>
+      <p class="govuk-heading-m">
+        This school is attached to <%= pluralize(@site.courses.length, "course") %>:
       </p>
       <%= render "courses_table", courses: @courses %>
     <% else %>
