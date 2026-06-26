@@ -3,11 +3,15 @@
 module Publish
   module Courses
     class SalaryFeesController < ApplicationController
+      include CopyCourseContent
+
       before_action :previous_cycle_enrichment, only: :edit
 
       def edit
         @course_salary_fees_form = ::Publish::CourseSalaryFeesForm.new(course_enrichment)
         @course_salary_fees_form.valid? if show_errors_on_publish?
+        @copied_fields = copy_content_check(::Courses::Copy::SALARY_FEES_FIELDS)
+        @copied_fields_values = copied_fields_values if @copied_fields.present?
       end
 
       def update
@@ -22,6 +26,7 @@ module Publish
             course.course_code,
           )
         else
+          fetch_course_list_to_copy_from
           render :edit
         end
       end
