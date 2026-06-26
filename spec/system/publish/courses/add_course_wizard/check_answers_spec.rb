@@ -103,6 +103,16 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     then_i_see_salary_branch_check_answers_rows
   end
 
+  scenario "shows modern languages and design technology specialisms below their parent subjects" do
+    given_i_have_completed_secondary_specialism_wizard_state
+    when_i_visit_check_answers_page
+    then_i_am_taken_to_the_check_answers_page
+
+    rendered_text = page.text.gsub(/\s+/, " ")
+    expect(rendered_text.index(@modern_languages.subject_name)).to be < rendered_text.index(@language_specialism.subject_name)
+    expect(rendered_text.index(@design_technology.subject_name)).to be < rendered_text.index(@design_technology_specialism.subject_name)
+  end
+
   scenario "TDA flow still shows the skilled worker visa default row when study sites are skipped" do
     given_the_provider_has_no_study_sites
     given_i_have_completed_tda_wizard_state_without_study_sites
@@ -563,6 +573,40 @@ private
       can_sponsor_skilled_worker_visa: true,
       visa_sponsorship_application_deadline_required: true,
       visa_sponsorship_application_deadline_at: visa_deadline_date_parts,
+      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+    )
+  end
+
+  def given_i_have_completed_secondary_specialism_wizard_state
+    @modern_languages = SecondarySubject.modern_languages
+    @design_technology = SecondarySubject.design_technology
+    @language_specialism = find_or_create(:secondary_subject, :french)
+    @design_technology_specialism = find_or_create(:design_technology_subject, :engineering)
+    placement_site = provider.sites.first || create(:site, provider:)
+    study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+
+    repository = CourseWizard::Repositories::Course.new(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: provider.recruitment_cycle_year,
+      state_key: wizard_state_key,
+      expires_in: 24.hours,
+    )
+    state_store = CourseWizard::StateStores::CourseWizardStore.new(repository:)
+    state_store.write(
+      level: "secondary",
+      is_send: "false",
+      secondary_master_subject_id: @modern_languages.id.to_s,
+      subordinate_subject_id: @design_technology.id.to_s,
+      language_ids: [@language_specialism.id.to_s],
+      design_technology_ids: [@design_technology_specialism.id.to_s],
+      age_range_in_years: "11_to_16",
+      qualification: "qts",
+      funding_type: "fee",
+      study_pattern: %w[full_time],
+      site_ids: [placement_site.id.to_s],
+      study_sites_ids: [study_site.id.to_s],
+      can_sponsor_student_visa: false,
+      visa_sponsorship_application_deadline_required: false,
       start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
     )
   end
