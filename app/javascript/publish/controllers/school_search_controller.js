@@ -7,6 +7,8 @@ export default class extends Controller {
     "noResults",
     "selectAllSection",
     "showMoreButton",
+    "pagination",
+    "table",
   ];
 
   search(event) {
@@ -26,20 +28,23 @@ export default class extends Controller {
       if (matches) matchCount += 1;
     });
 
-    const hasResults = matchCount > 0;
+      const hasResults = matchCount > 0;
 
-    // No results message
-    if (this.hasNoResultsTarget) {
-      this.noResultsTarget.hidden = hasResults;
-    }
+      // No results message
+      if (this.hasNoResultsTarget) {
+        this.noResultsTarget.hidden = hasResults;
+      }
 
-    // Hide pagination when searching on schools landing page
-    if (query.length > 0) {
-      this.paginationTarget.style.display = "none"
-    } else {
-      this.paginationTarget.style.display = ""
-    }
 
+      // Hide pagination when searching
+      if (this.hasPaginationTarget) {
+        this.paginationTarget.style.display = hasSearchTerm ? "none" : "";
+      }
+
+      // Hide table when no results
+      if (this.hasTableTarget) {
+        this.tableTarget.hidden = !hasResults;
+      }
 
     // Select all section
     this.selectAllSectionTarget.hidden = !hasResults;
