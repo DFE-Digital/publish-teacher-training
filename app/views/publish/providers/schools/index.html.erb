@@ -59,9 +59,17 @@
             hidden
             data-school-search-target="noResults"
           >
-            No results found. Please clear the search and try again.
+            No schools found with that search. <a
+                  href="#"
+                  class="app-button-link govuk-link"
+                  data-action="school-search#clear"
+                  data-show-more-target="button">
+                  View all schools
+                </a>
           </div>
 
+
+      <div data-school-search-target="table">
         <table class="govuk-table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
@@ -73,19 +81,16 @@
             <%= render partial: "school", collection: @schools %>
           </tbody>
         </table>
+      </table>
 
         </div>
-
 
         <div data-school-search-target="pagination">
           <%= govuk_pagination(pagy: @pagy) %>
         </div>
 
       <% end %>
-    </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+
       <%= render Shared::AdviceComponent::View.new(title: "Attaching schools to courses") do %>
         <%= render Publish::Providers::SchoolPlacements::OutcomeExplainerComponent.new(
         recruitment_cycle: @recruitment_cycle,
