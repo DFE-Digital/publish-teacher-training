@@ -38,6 +38,11 @@ module Publish
         redirect_to publish_provider_recruitment_cycle_schools_path
       end
 
+      def remove
+        @site = Site.find(params[:id])
+      end
+
+
     private
 
       # Load associated courses with the site to prevent multiple database queries in the view (this will show courses that are connected to the school)

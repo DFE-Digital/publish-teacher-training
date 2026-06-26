@@ -24,12 +24,19 @@
     <%= school.address_without_name %>
   </td>
   -->
-  <td class="govuk-table__cell">
-    <a class="govuk-link app-link--destructive" href="#">
-      Remove school
-      <span class="govuk-visually-hidden">
-        <%= school.location_name %>
-      </span>
-    </a>
-  </td>
+<td class="govuk-table__cell">
+  <%= govuk_link_to remove_publish_provider_recruitment_cycle_school_path(
+    @provider.provider_code,
+    school.recruitment_cycle.year,
+    school.id
+  ),
+  class: "govuk-link app-link--destructive" do %>
+
+    Remove school
+    <span class="govuk-visually-hidden">
+      <%= school.location_name %>
+    </span>
+
+  <% end %>
+</td>
 </tr>

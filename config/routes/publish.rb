@@ -338,6 +338,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
           member do
             get :delete
             delete :delete, to: "schools#destroy"
+            get :remove
           end
 
           collection do
