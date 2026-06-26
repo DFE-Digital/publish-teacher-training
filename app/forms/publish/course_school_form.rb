@@ -16,6 +16,7 @@ module Publish
 
     def no_schools_selected
       return if params[:site_ids].present?
+      return if ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
       if course.recruitment_cycle_rollover_period_2026?
         errors.add(:site_ids, :check_schools) if course.sites.school.present?

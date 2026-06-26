@@ -20,6 +20,20 @@ module Publish
       it "validates :site_ids" do
         expect(subject.errors[:site_ids]).to include(I18n.t("activemodel.errors.models.publish/course_school_form.attributes.site_ids.no_schools"))
       end
+
+      context "when the course is exempt from needing a school (publish without schools allowed)" do
+        let(:course) do
+          create(:course, :with_salary, provider:, site_statuses: [site_status], publish_without_schools_allowed: true)
+        end
+
+        before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
+
+        it "does not require at least one school" do
+          subject.valid?
+
+          expect(subject.errors[:site_ids]).to be_empty
+        end
+      end
     end
   end
 end
