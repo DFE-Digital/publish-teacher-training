@@ -6,7 +6,7 @@ class CourseWizard
       include DfE::Wizard::Step
       include CourseWizard::Reviewable
 
-      DateParts = Struct.new(:year, :month, :day)
+      DateParts = CourseWizard::Draft::DateParts
 
       attribute :visa_sponsorship_application_deadline_at
 
@@ -17,7 +17,7 @@ class CourseWizard
         r.row(
           label: :visa_sponsorship_application_deadline_date,
           value: ->(draft) { draft.visa_deadline },
-          formatter: :visa_deadline,
+          format: Publish::CheckAnswers::Formatters::VisaDeadline.new,
         )
       end
 

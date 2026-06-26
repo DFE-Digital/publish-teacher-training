@@ -120,7 +120,7 @@ class CourseWizard
     end
 
     def visa_deadline
-      @visa_deadline ||= VisaDeadline.new(state_store.visa_sponsorship_application_deadline_at)
+      @visa_deadline ||= VisaDeadline.wrap(state_store.visa_sponsorship_application_deadline_at)
     end
 
   private

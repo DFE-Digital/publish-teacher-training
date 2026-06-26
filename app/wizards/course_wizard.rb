@@ -3,6 +3,8 @@
 class CourseWizard
   include DfE::Wizard
 
+  TDA_REVIEW_DEFAULTS = %i[funding_type study_pattern skilled_worker_visa].freeze
+
   attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
   delegate :accrediting_provider, to: :accreditation
@@ -223,6 +225,23 @@ class CourseWizard
     current_step_name == :check_answers
   end
 
+  def review_steps(draft:)
+    steps = flow_steps
+    steps = ensure_review_step(steps, :study_sites)
+    steps = ensure_review_step(steps, :accredited_provider) if draft.accrediting_provider.present?
+    return steps unless draft.tda?
+
+    anchor_steps = {
+      funding_type: :qualifications,
+      study_pattern: :funding_type,
+      skilled_worker_visa: :study_sites,
+    }
+
+    TDA_REVIEW_DEFAULTS.reduce(steps) do |ordered_steps, step_id|
+      ensure_review_step_after(ordered_steps, step_id, after: anchor_steps.fetch(step_id))
+    end
+  end
+
   def clear_stale_specialism_answers
     return unless current_step_name == :secondary_subjects
 
@@ -252,5 +271,23 @@ class CourseWizard
     # dfe-wizard's current pinned version of current_step_params only returns permitted step attributes,
     # so we need raw request params for return_to_review callback routing.
     @current_step_params&.[](:return_to_review) || @current_step_params&.[]("return_to_review")
+  end
+
+private
+
+  def ensure_review_step(steps, step_id)
+    return steps if steps.any? { |step| step.step_id == step_id }
+
+    steps + [step(step_id)]
+  end
+
+  def ensure_review_step_after(steps, step_id, after:)
+    return steps if steps.any? { |current_step| current_step.step_id == step_id }
+
+    review_step = step(step_id)
+    insert_after_index = steps.index { |current_step| current_step.step_id == after }
+    return steps + [review_step] if insert_after_index.nil?
+
+    steps.dup.insert(insert_after_index + 1, review_step)
   end
 end

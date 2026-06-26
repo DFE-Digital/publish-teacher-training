@@ -43,9 +43,9 @@ module Publish
       end
 
       def format_value(spec)
-        return spec.value unless spec.formatter
+        return spec.value unless spec.format
 
-        formatter(spec.formatter).call(spec.value, draft)
+        spec.format.call(spec.value, draft, self)
       end
 
       def present_value?(value)
@@ -94,34 +94,7 @@ module Publish
     private
 
       def review_steps
-        @review_steps ||= begin
-          steps = wizard.flow_steps
-          steps_to_append = []
-          steps_to_append << wizard.step(:study_sites) unless steps.any? { |step| step.step_id == :study_sites }
-          if steps.none? { |step| step.step_id == :accredited_provider } && draft.accrediting_provider.present?
-            steps_to_append << wizard.step(:accredited_provider)
-          end
-
-          steps + steps_to_append
-        end
-      end
-
-      def formatter(key)
-        @formatters ||= {
-          level: Formatters::LevelFormatter.new(context: self),
-          send: Formatters::SendFormatter.new(context: self),
-          qualification: Formatters::QualificationFormatter.new(context: self),
-          funding: Formatters::FundingFormatter.new(context: self),
-          age_range: Formatters::AgeRangeFormatter.new(context: self),
-          study_pattern: Formatters::StudyPatternFormatter.new(context: self),
-          subjects: Formatters::SubjectsFormatter.new(context: self),
-          schools: Formatters::SitesFormatter.new(context: self, separator: "<br>"),
-          study_sites: Formatters::StudySitesFormatter.new(context: self),
-          visa_deadline: Formatters::VisaDeadlineFormatter.new(context: self),
-          sponsor: Formatters::SponsorFormatter.new(context: self),
-          yes_no: Formatters::YesNoFormatter.new(context: self),
-        }
-        @formatters.fetch(key)
+        @review_steps ||= wizard.review_steps(draft:)
       end
     end
   end

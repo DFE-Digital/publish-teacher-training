@@ -3,46 +3,52 @@
 module Publish
   module CheckAnswers
     module Formatters
-      class Base
-        def initialize(context:)
-          @context = context
+      class Enum
+        def initialize(scope:, suffix: ".label", value_key_overrides: {}, translation_key_overrides: {})
+          @scope = scope
+          @suffix = suffix
+          @value_key_overrides = value_key_overrides
+          @translation_key_overrides = translation_key_overrides
         end
 
-      private
-
-        attr_reader :context
-      end
-
-      class LevelFormatter < Base
-        def call(value, _draft)
-          I18n.t("course_wizard.steps.level.options.#{value}", default: value)
-        end
-      end
-
-      class SendFormatter < Base
-        def call(value, _draft)
-          key = ActiveModel::Type::Boolean.new.cast(value) ? "yes_send" : "no_send"
-          I18n.t("course_wizard.steps.level.options.#{key}", default: value)
-        end
-      end
-
-      class QualificationFormatter < Base
-        def call(value, _draft)
-          I18n.t("course_wizard.steps.qualifications.options.#{value}.label", default: value)
-        end
-      end
-
-      class FundingFormatter < Base
-        def call(value, _draft)
+        def call(value, _draft, _view)
           return if value.blank?
-          return context.t("course_wizard.steps.check_answers.answers.salary_apprenticeship") if value == "apprenticeship"
 
-          I18n.t("course_wizard.steps.funding_type.options.#{value}.label", default: value)
+          translated_key = @translation_key_overrides[value.to_s]
+          return I18n.t(translated_key) if translated_key.present?
+
+          translation_value = @value_key_overrides.fetch(value.to_s, value.to_s)
+          I18n.t("#{@scope}.#{translation_value}#{@suffix}", default: value.to_s.humanize)
         end
       end
 
-      class AgeRangeFormatter < Base
-        def call(value, draft)
+      class Bool
+        def initialize(yes_key:, no_key:)
+          @yes_key = yes_key
+          @no_key = no_key
+        end
+
+        def call(value, _draft, _view)
+          key = ActiveModel::Type::Boolean.new.cast(value) ? @yes_key : @no_key
+          I18n.t(key)
+        end
+      end
+
+      class List
+        def initialize(separator: ", ")
+          @separator = separator
+        end
+
+        def call(value, _draft, view)
+          return if value.blank?
+
+          escaped = value.map { |entry| ERB::Util.html_escape(entry) }
+          @separator == :br ? view.safe_join(escaped, view.tag.br) : value.join(@separator)
+        end
+      end
+
+      class AgeRange
+        def call(value, draft, _view)
           return if value.blank?
           return format_other(draft) if value == "other"
 
@@ -65,11 +71,11 @@ module Publish
         end
       end
 
-      class StudyPatternFormatter < Base
-        def call(_value, draft)
+      class StudyPattern
+        def call(_value, draft, _view)
           patterns = draft.study_patterns_for_display
           return if patterns.blank?
-          return context.t("course_wizard.steps.check_answers.answers.full_time_or_part_time") if patterns.sort == %w[full_time part_time]
+          return I18n.t("course_wizard.steps.check_answers.answers.full_time_or_part_time") if patterns.sort == %w[full_time part_time]
 
           patterns.map { |pattern|
             I18n.t(
@@ -80,58 +86,17 @@ module Publish
         end
       end
 
-      class SubjectsFormatter < Base
-        def call(value, _draft)
-          return if value.blank?
-
-          context.safe_join(value.map { |name| ERB::Util.html_escape(name) }, tag_break)
-        end
-
-      private
-
-        def tag_break
-          context.tag.br
-        end
-      end
-
-      class SitesFormatter < Base
-        def initialize(context:, separator: ", ")
-          super(context:)
-          @separator = separator
-        end
-
-        def call(value, _draft)
-          return if value.blank?
-
-          @separator == "<br>" ? context.safe_join(value, context.tag.br) : value.join(@separator)
-        end
-      end
-
-      class StudySitesFormatter < Base
-        def call(value, _draft)
+      class StudySites
+        def call(value, _draft, view)
           return value.join(", ") if value.present?
 
-          context.study_sites_call_to_action_link
+          view.study_sites_call_to_action_link
         end
       end
 
-      class VisaDeadlineFormatter < Base
-        def call(_value, draft)
+      class VisaDeadline
+        def call(_value, draft, _view)
           draft.visa_deadline.to_formatted_string
-        end
-      end
-
-      class SponsorFormatter < Base
-        def call(value, _draft)
-          bool = ActiveModel::Type::Boolean.new.cast(value)
-          context.t(bool ? "course_wizard.steps.check_answers.answers.can_sponsor" : "course_wizard.steps.check_answers.answers.cannot_sponsor")
-        end
-      end
-
-      class YesNoFormatter < Base
-        def call(value, _draft)
-          bool = ActiveModel::Type::Boolean.new.cast(value)
-          context.t(bool ? "course_wizard.steps.check_answers.answers.yes" : "course_wizard.steps.check_answers.answers.no")
         end
       end
     end

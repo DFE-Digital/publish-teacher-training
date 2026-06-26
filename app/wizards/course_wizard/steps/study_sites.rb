@@ -13,27 +13,10 @@ class CourseWizard
           label: :study_site,
           label_options: ->(draft) { { count: draft.selected_study_site_ids.count } },
           value: ->(draft) { draft.study_sites.map(&:location_name) },
-          formatter: :study_sites,
+          format: Publish::CheckAnswers::Formatters::StudySites.new,
           show_when_blank: true,
           changeable: ->(draft) { draft.selected_study_site_ids.any? },
         )
-      end
-
-      def review_rows(draft)
-        rows = super
-        return rows unless draft.tda?
-
-        rows + [
-          CourseWizard::Reviewable::RowSpec.new(
-            step_id: :skilled_worker_visa,
-            label_key: :skilled_worker_visas,
-            label_options: {},
-            value: draft.can_sponsor_skilled_worker_visa,
-            formatter: :sponsor,
-            show_when_blank: true,
-            changeable: false,
-          ),
-        ]
       end
 
       def study_sites

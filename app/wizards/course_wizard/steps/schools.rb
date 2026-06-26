@@ -16,7 +16,7 @@ class CourseWizard
           label: :schools,
           label_options: ->(draft) { { count: draft.schools.count, employment_based: draft.employment_based? } },
           value: ->(draft) { draft.schools.map(&:location_name) },
-          formatter: :schools,
+          format: Publish::CheckAnswers::Formatters::List.new(separator: :br),
         )
       end
 

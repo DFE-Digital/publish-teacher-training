@@ -11,7 +11,14 @@ class CourseWizard
       validates :can_sponsor_student_visa, inclusion: { in: [true, false], message: I18n.t("course_wizard.steps.visa_sponsorship.errors.can_sponsor_student_visa.blank") }
 
       review do |r|
-        r.row label: :student_visas, value: ->(draft) { draft.can_sponsor_student_visa }, formatter: :sponsor
+        r.row(
+          label: :student_visas,
+          value: ->(draft) { draft.can_sponsor_student_visa },
+          format: Publish::CheckAnswers::Formatters::Bool.new(
+            yes_key: "course_wizard.steps.check_answers.answers.can_sponsor",
+            no_key: "course_wizard.steps.check_answers.answers.cannot_sponsor",
+          ),
+        )
       end
 
       def can_sponsor_student_visa
