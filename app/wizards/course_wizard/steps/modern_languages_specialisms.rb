@@ -4,6 +4,7 @@ class CourseWizard
   module Steps
     class ModernLanguagesSpecialisms
       include DfE::Wizard::Step
+      include CourseWizard::Reviewable
 
       attribute :language_ids
 

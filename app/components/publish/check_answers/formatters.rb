@@ -108,23 +108,10 @@ module Publish
       end
 
       class StudySitesFormatter < Base
-        def call(value, draft)
+        def call(value, _draft)
           return value.join(", ") if value.present?
 
-          if draft.wizard.provider.study_sites.any?
-            context.govuk_link_to(
-              context.t("course_wizard.steps.check_answers.answers.select_study_site"),
-              draft.wizard.route_strategy.resolve(step_id: :study_sites, options: { return_to_review: :study_sites }),
-            )
-          else
-            context.govuk_link_to(
-              context.t("course_wizard.steps.check_answers.answers.add_a_study_site"),
-              context.helpers.publish_provider_recruitment_cycle_study_sites_path(
-                draft.wizard.provider_code,
-                draft.wizard.recruitment_cycle_year,
-              ),
-            )
-          end
+          context.study_sites_call_to_action_link
         end
       end
 

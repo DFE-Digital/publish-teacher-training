@@ -14,12 +14,7 @@ class CourseWizard
       review do |r|
         r.row(
           label: :schools,
-          label_options: lambda { |draft|
-            {
-              count: draft.schools.count,
-              prefix: I18n.t("course_wizard.steps.check_answers.labels.schools_prefix.#{draft.employment_based? ? 'salaried' : 'unsalaried'}"),
-            }
-          },
+          label_options: ->(draft) { { count: draft.schools.count, employment_based: draft.employment_based? } },
           value: ->(draft) { draft.schools.map(&:location_name) },
           formatter: :schools,
         )
