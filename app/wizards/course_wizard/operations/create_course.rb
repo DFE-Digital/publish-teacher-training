@@ -3,11 +3,13 @@
 class CourseWizard
   module Operations
     class CreateCourse
+      # repository is part of the DfE::Wizard operation interface
+      # rubocop:disable Lint/UnusedMethodArgument
       def initialize(repository:, step:)
-        _repository = repository
         @step = step
         @wizard = step.wizard
       end
+      # rubocop:enable Lint/UnusedMethodArgument
 
       def execute
         params = ::Courses::WizardParamsSerializer.call(wizard: @wizard)

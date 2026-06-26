@@ -4,6 +4,7 @@ class CourseWizard
   module Steps
     class DesignTechnologySpecialisms
       include DfE::Wizard::Step
+      include CourseWizard::Reviewable
 
       attribute :design_technology_ids
 
