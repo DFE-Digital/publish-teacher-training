@@ -5,7 +5,70 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Hello world
-    </h1>
+        <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-2">Remove <%= @site.location_name %></h1>
+        <span class="govuk-caption-m"><%= @site.address_without_name %></span>
+        <span class="govuk-caption-m">URN: <%= @site.urn %></span>
+      </legend>
+    </fieldset>
+
+    <br>
+    <p class="govuk-heading-m">
+      Are you sure you want to remove this school from your account?
+    </p>
+
+    <% if @site.courses.any? %>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-visually-hidden">Warning</span>
+          Removing this school from your account will detach it from <%= pluralize(@site.courses.length, "course") %>:
+      </strong>
+    </div>
+
+      <ul class="govuk-list govuk-list--bullet">
+  <% @site.courses.each do |course| %>
+    <li>
+      <strong><%= course.name_and_code %></strong><br>
+
+      <% details = [] %>
+
+      <% if course.funding.present? %>
+        <% details << case course.funding
+          when "fee" then "Fee‑paying"
+          when "salary" then "Salaried"
+          when "apprenticeship" then "Apprenticeship"
+          else course.funding
+        end %>
+      <% end %>
+
+      <% if course.respond_to?(:qualifications_summary) && course.qualifications_summary.present? %>
+        <% details << course.qualifications_summary %>
+      <% end %>
+
+      <% if course.respond_to?(:study_mode_description) && course.study_mode_description.present? %>
+        <% details << course.study_mode_description.capitalize %>
+      <% end %>
+
+      <% if course.start_date.present? %>
+        <% details << course.start_date.strftime("%B %Y") %>
+      <% end %>
+
+      <span class="govuk-hint govuk-!-font-size-16">
+        <%= details.join(", ") %>
+      </span>
+    </li>
+  <% end %>
+</ul>
+
+    <% else %>
+      <p class="govuk-body">
+        This school is not attached to any courses
+      </p>
+    <% end %>
+    <br>
+    <a href="#" class="govuk-button govuk-button--warning">Remove school from account and detach from <%= pluralize(@site.courses.length, "course") %></a>
   </div>
 </div>
