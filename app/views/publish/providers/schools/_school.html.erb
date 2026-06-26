@@ -1,5 +1,13 @@
-<tr class="govuk-table__row school-row">
-  <td class="govuk-table__header name"">
+<tr
+  class="govuk-table__row school-row"
+  data-school-search-target="school"
+  data-search-text="<%= [
+    school.location_name,
+    school.postcode,
+    school.urn
+  ].compact.join(' ').downcase %>"
+>
+  <td class="govuk-table__header name">
     <%= govuk_link_to school.location_name,
         publish_provider_recruitment_cycle_school_path(
           @provider.provider_code,
