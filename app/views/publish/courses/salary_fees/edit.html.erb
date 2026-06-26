@@ -5,6 +5,14 @@
   <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
 <% end %>
 
+<% if params[:copy_from].present? %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-course-salary-fees-form",
+    @source_course,
+  ) %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -31,6 +39,7 @@
       <div data-controller="input-preview">
         <%= f.govuk_text_area(:salary_fee_details,
         form_group: { id: @course_salary_fees_form.errors.key?(:salary_fee_details) ? "salary_fee_details-error" : "salary_fee_details" },
+        value: @copied_fields_values&.[]("salary_fee_details"),
         data: { input_preview_target: "input",
                 action: "input-preview#updatePreview",
                 preview_output_target: "shared" },
@@ -43,4 +52,13 @@
       <%= f.govuk_submit t(".update") %>
     <% end %>
   </div>
+  <aside class="govuk-grid-column-one-third">
+     <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: salary_fees_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      },
+    ) %>
+  </aside>
 </div>

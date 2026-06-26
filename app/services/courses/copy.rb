@@ -52,6 +52,10 @@ module Courses
       ["Salary details", "salary_details"],
     ].freeze
 
+    SALARY_FEES_FIELDS = [
+      %w[Fees salary_fee_details],
+    ].freeze
+
     WHAT_YOU_WILL_STUDY_FIELDS = [
       ["What will trainees do during their theoretical training?", "theoretical_training_activities"],
       ["How will they be assessed?", "assessment_methods"],
