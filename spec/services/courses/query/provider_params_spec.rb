@@ -11,8 +11,8 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     end
     let!(:warwick_courses) do
       [
-        create(:course, :with_full_time_sites, provider: warwick_provider, name: "Biology"),
-        create(:course, :with_full_time_sites, provider: warwick_provider, name: "Computing"),
+        create(:course, :with_full_time_sites, :published, provider: warwick_provider, name: "Biology"),
+        create(:course, :with_full_time_sites, :published, provider: warwick_provider, name: "Computing"),
       ]
     end
     let!(:niot_provider) do
@@ -20,8 +20,8 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     end
     let!(:niot_accredited_courses) do
       [
-        create(:course, :with_full_time_sites, accredited_provider_code: niot_provider.provider_code, name: "Biology"),
-        create(:course, :with_full_time_sites, accredited_provider_code: niot_provider.provider_code, name: "Computing"),
+        create(:course, :with_full_time_sites, :published, accredited_provider_code: niot_provider.provider_code, name: "Biology"),
+        create(:course, :with_full_time_sites, :published, accredited_provider_code: niot_provider.provider_code, name: "Computing"),
       ]
     end
     let!(:essex_provider) do
@@ -29,8 +29,8 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     end
     let!(:essex_courses) do
       [
-        create(:course, :with_full_time_sites, provider: essex_provider, name: "Biology"),
-        create(:course, :with_full_time_sites, provider: essex_provider, name: "Computing"),
+        create(:course, :with_full_time_sites, :published, provider: essex_provider, name: "Biology"),
+        create(:course, :with_full_time_sites, :published, provider: essex_provider, name: "Computing"),
       ]
     end
 
@@ -99,13 +99,13 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
         )
       end
       let!(:last_cycle_niot_accredited_courses) do
-        create_list(:course, 2, :with_full_time_sites, accredited_provider_code: last_cycle_niot.provider_code, provider: create(:provider, recruitment_cycle: last_cycle))
+        create_list(:course, 2, :with_full_time_sites, :published, accredited_provider_code: last_cycle_niot.provider_code, provider: create(:provider, recruitment_cycle: last_cycle))
       end
       let!(:last_cycle_essex_provider) do
         create(:provider, provider_code: essex_provider.provider_code, recruitment_cycle: last_cycle)
       end
       let!(:last_cycle_essex_courses) do
-        create_list(:course, 2, :with_full_time_sites, provider: last_cycle_essex_provider)
+        create_list(:course, 2, :with_full_time_sites, :published, provider: last_cycle_essex_provider)
       end
 
       it "returns only accredited courses from current cycle" do
@@ -138,18 +138,18 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let(:params) { { excluded_courses: { provider_code: provider.provider_code, course_code: } } }
 
     it "excludes specified courses from the results" do
-      create(:course, :with_full_time_sites,
+      create(:course, :with_full_time_sites, :published,
              name: "Excluded Course",
              course_code:,
              provider:)
 
       included_course_provider = create(:provider)
-      included_course = create(:course, :with_full_time_sites,
+      included_course = create(:course, :with_full_time_sites, :published,
                                name: "Included Course",
                                provider: included_course_provider)
 
       different_provider = create(:provider)
-      same_course_code_different_provider_course = create(:course, :with_full_time_sites,
+      same_course_code_different_provider_course = create(:course, :with_full_time_sites, :published,
                                                           name: "Included Course with same course code but different provider",
                                                           course_code:,
                                                           provider: different_provider)
@@ -168,16 +168,16 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let(:params) { { excluded_courses: [{ provider_code: excluded_provider.provider_code, course_code: }] } }
 
     it "excludes specified courses from the results" do
-      create(:course, :with_full_time_sites,
+      create(:course, :with_full_time_sites, :published,
              name: "Excluded Course",
              course_code:,
              provider: excluded_provider)
 
-      included_course = create(:course, :with_full_time_sites,
+      included_course = create(:course, :with_full_time_sites, :published,
                                name: "Included Course",
                                provider: included_course_provider)
 
-      same_course_code_different_provider = create(:course, :with_full_time_sites,
+      same_course_code_different_provider = create(:course, :with_full_time_sites, :published,
                                                    name: "Included Course with same course code but different provider",
                                                    course_code:,
                                                    provider: create(:provider))

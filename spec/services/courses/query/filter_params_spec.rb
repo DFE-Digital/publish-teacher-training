@@ -6,8 +6,8 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   subject(:results) { described_class.call(params:) }
 
   context "when no filters or sorting are applied" do
-    let!(:findable_course) { create(:course, :with_full_time_sites) }
-    let!(:another_course) { create(:course, :with_full_time_sites) }
+    let!(:findable_course) { create(:course, :with_full_time_sites, :published) }
+    let!(:another_course) { create(:course, :with_full_time_sites, :published) }
     let!(:non_findable_course) { create(:course) }
 
     let(:params) { {} }
@@ -19,27 +19,23 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter for interview location (online)" do
     let!(:course_with_online_interviews) do
-      create(:course, :with_full_time_sites, name: "Course Online").tap do |course|
-        create(:course_enrichment, :published, course:, interview_location: "online")
-      end
+      create(:course, :with_full_time_sites, name: "Course Online",
+                                             enrichments: [build(:course_enrichment, :published, interview_location: "online")])
     end
 
     let!(:course_with_both_interviews) do
-      create(:course, :with_full_time_sites, name: "Course Both").tap do |course|
-        create(:course_enrichment, :published, course:, interview_location: "both")
-      end
+      create(:course, :with_full_time_sites, name: "Course Both",
+                                             enrichments: [build(:course_enrichment, :published, interview_location: "both")])
     end
 
     let!(:course_in_person_only) do
-      create(:course, :with_full_time_sites, name: "Course In person").tap do |course|
-        create(:course_enrichment, :published, course:, interview_location: "in person")
-      end
+      create(:course, :with_full_time_sites, name: "Course In person",
+                                             enrichments: [build(:course_enrichment, :published, interview_location: "in person")])
     end
 
     let!(:course_without_published_enrichment) do
-      create(:course, :with_full_time_sites, name: "Course Draft only").tap do |course|
-        create(:course_enrichment, :initial_draft, course:, interview_location: "online")
-      end
+      create(:course, :with_full_time_sites, name: "Course Draft only",
+                                             enrichments: [build(:course_enrichment, :initial_draft, interview_location: "online")])
     end
 
     let(:params) { { interview_location: "online" } }
@@ -59,16 +55,16 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter for visa sponsorship" do
     let!(:course_that_sponsor_visa) do
-      create(:course, :with_full_time_sites, :can_sponsor_skilled_worker_visa, name: "Art and design")
+      create(:course, :with_full_time_sites, :published, :can_sponsor_skilled_worker_visa, name: "Art and design")
     end
     let!(:another_course_that_sponsor_visa) do
-      create(:course, :with_full_time_sites, :can_sponsor_student_visa, name: "Biology")
+      create(:course, :with_full_time_sites, :published, :can_sponsor_student_visa, name: "Biology")
     end
     let!(:another_course_that_sponsor_all_visas) do
-      create(:course, :with_full_time_sites, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, name: "Computing")
+      create(:course, :with_full_time_sites, :published, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, name: "Computing")
     end
     let!(:course_that_does_not_sponsor_visa) do
-      create(:course, :with_full_time_sites, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false, name: "Drama")
+      create(:course, :with_full_time_sites, :published, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false, name: "Drama")
     end
 
     let(:params) { { can_sponsor_visa: "true" } }
@@ -85,32 +81,32 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let!(:biology_course) do
       create(
         :course,
-        :with_full_time_sites,
+        :with_full_time_sites, :published,
         :secondary,
         name: "Biology",
         course_code: "S872",
-        subjects: [find_or_create(:secondary_subject, :biology)],
+        subjects: [find_or_create(:secondary_subject, :biology)]
       )
     end
     let!(:physics_course) do
       create(
         :course,
-        :with_full_time_sites,
+        :with_full_time_sites, :published,
         :secondary,
         name: "Physics",
         course_code: "P45D",
-        subjects: [find_or_create(:secondary_subject, :physics)],
+        subjects: [find_or_create(:secondary_subject, :physics)]
       )
     end
     let!(:engineers_teach_physics_course) do
       create(
         :course,
-        :with_full_time_sites,
+        :with_full_time_sites, :published,
         :secondary,
         :engineers_teach_physics,
         name: "Engineers teach physics",
         course_code: "ETP1",
-        subjects: [find_or_create(:secondary_subject, :physics)],
+        subjects: [find_or_create(:secondary_subject, :physics)]
       )
     end
 
@@ -126,13 +122,13 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter by subject code" do
     let!(:biology) do
-      create(:course, :with_full_time_sites, :secondary, name: "Biology", subjects: [find_or_create(:secondary_subject, :biology)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Biology", subjects: [find_or_create(:secondary_subject, :biology)])
     end
     let!(:chemistry) do
-      create(:course, :with_full_time_sites, :secondary, name: "Chemistry", subjects: [find_or_create(:secondary_subject, :chemistry)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Chemistry", subjects: [find_or_create(:secondary_subject, :chemistry)])
     end
     let!(:mathematics) do
-      create(:course, :with_full_time_sites, :secondary, name: "Mathematics", subjects: [find_or_create(:secondary_subject, :mathematics)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Mathematics", subjects: [find_or_create(:secondary_subject, :mathematics)])
     end
 
     let(:params) { { subject_code: "C1" } }
@@ -147,13 +143,13 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter by subject code and subjects" do
     let!(:biology) do
-      create(:course, :with_full_time_sites, :secondary, name: "Biology", subjects: [find_or_create(:secondary_subject, :biology)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Biology", subjects: [find_or_create(:secondary_subject, :biology)])
     end
     let!(:chemistry) do
-      create(:course, :with_full_time_sites, :secondary, name: "Chemistry", subjects: [find_or_create(:secondary_subject, :chemistry)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Chemistry", subjects: [find_or_create(:secondary_subject, :chemistry)])
     end
     let!(:mathematics) do
-      create(:course, :with_full_time_sites, :secondary, name: "Mathematics", subjects: [find_or_create(:secondary_subject, :mathematics)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Mathematics", subjects: [find_or_create(:secondary_subject, :mathematics)])
     end
 
     let(:params) { { subjects: %w[F1], subject_code: "C1" } }
@@ -168,13 +164,13 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter by secondary subjects" do
     let!(:biology) do
-      create(:course, :with_full_time_sites, :secondary, name: "Biology", subjects: [find_or_create(:secondary_subject, :biology)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Biology", subjects: [find_or_create(:secondary_subject, :biology)])
     end
     let!(:chemistry) do
-      create(:course, :with_full_time_sites, :secondary, name: "Chemistry", subjects: [find_or_create(:secondary_subject, :chemistry)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Chemistry", subjects: [find_or_create(:secondary_subject, :chemistry)])
     end
     let!(:mathematics) do
-      create(:course, :with_full_time_sites, :secondary, name: "Mathematics", subjects: [find_or_create(:secondary_subject, :mathematics)])
+      create(:course, :with_full_time_sites, :published, :secondary, name: "Mathematics", subjects: [find_or_create(:secondary_subject, :mathematics)])
     end
 
     let(:params) { { subjects: %w[C1 F1] } }
@@ -189,13 +185,13 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter by study mode" do
     let!(:full_time_course) do
-      create(:course, :with_full_time_sites, study_mode: "full_time", name: "Biology", course_code: "S872")
+      create(:course, :with_full_time_sites, :published, study_mode: "full_time", name: "Biology", course_code: "S872")
     end
     let!(:part_time_course) do
-      create(:course, :with_part_time_sites, study_mode: "part_time", name: "Chemistry", course_code: "K592")
+      create(:course, :with_part_time_sites, :published, study_mode: "part_time", name: "Chemistry", course_code: "K592")
     end
     let!(:full_time_or_part_time_course) do
-      create(:course, :with_full_time_or_part_time_sites, study_mode: "full_time_or_part_time", name: "Computing", course_code: "L364")
+      create(:course, :with_full_time_or_part_time_sites, :published, study_mode: "full_time_or_part_time", name: "Computing", course_code: "L364")
     end
 
     context "when filter by full time only" do
@@ -245,16 +241,16 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter by qualifications" do
     let!(:qts_course) do
-      create(:course, :with_full_time_sites, qualification: "qts", name: "Art and design")
+      create(:course, :with_full_time_sites, :published, qualification: "qts", name: "Art and design")
     end
     let!(:pgce_with_qts_course) do
-      create(:course, :with_full_time_sites, qualification: "pgce_with_qts", name: "Biology")
+      create(:course, :with_full_time_sites, :published, qualification: "pgce_with_qts", name: "Biology")
     end
     let!(:pgde_with_qts_course) do
-      create(:course, :with_full_time_sites, qualification: "pgde_with_qts", name: "Computing")
+      create(:course, :with_full_time_sites, :published, qualification: "pgde_with_qts", name: "Computing")
     end
     let!(:course_without_qts) do
-      create(:course, :with_full_time_sites, qualification: "undergraduate_degree_with_qts", name: "Drama")
+      create(:course, :with_full_time_sites, :published, qualification: "undergraduate_degree_with_qts", name: "Drama")
     end
 
     context "when filter by qts" do
@@ -293,10 +289,10 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter for further education" do
     let!(:further_education_course) do
-      create(:course, :with_full_time_sites, level: "further_education")
+      create(:course, :with_full_time_sites, :published, level: "further_education")
     end
     let!(:regular_course) do
-      create(:course, :with_full_time_sites, level: "secondary")
+      create(:course, :with_full_time_sites, :published, level: "secondary")
     end
     let(:params) { { level: "further_education" } }
 
@@ -310,10 +306,10 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter for applications open" do
     let!(:course_opened) do
-      create(:course, :with_full_time_sites, :open)
+      create(:course, :with_full_time_sites, :published, :open)
     end
     let!(:course_closed) do
-      create(:course, :with_full_time_sites, :closed)
+      create(:course, :with_full_time_sites, :published, :closed)
     end
     let(:params) { { applications_open: "true" } }
 
@@ -327,10 +323,10 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter for special education needs" do
     let!(:course_with_special_education_needs) do
-      create(:course, :with_full_time_sites, :with_special_education_needs)
+      create(:course, :with_full_time_sites, :published, :with_special_education_needs)
     end
     let!(:course_with_no_special_education_needs) do
-      create(:course, :with_full_time_sites, is_send: false)
+      create(:course, :with_full_time_sites, :published, is_send: false)
     end
     let(:params) { { send_courses: "true" } }
 
@@ -417,13 +413,13 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when filter by funding" do
     let!(:fee_course) do
-      create(:course, :with_full_time_sites, funding: "fee", name: "Art and design")
+      create(:course, :with_full_time_sites, :published, funding: "fee", name: "Art and design")
     end
     let!(:salaried_course) do
-      create(:course, :with_full_time_sites, funding: "salary", name: "Biology")
+      create(:course, :with_full_time_sites, :published, funding: "salary", name: "Biology")
     end
     let!(:apprenticeship_course) do
-      create(:course, :with_full_time_sites, funding: "apprenticeship", name: "Computing")
+      create(:course, :with_full_time_sites, :published, funding: "apprenticeship", name: "Computing")
     end
 
     context "when filter by fee" do
@@ -497,28 +493,28 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let(:current_recruitment_cycle_year) { RecruitmentCycle.current.year.to_i }
     let(:next_recruitment_cycle_year) { current_recruitment_cycle_year + 1 }
     let!(:january_course) do
-      create(:course, :with_full_time_sites, name: "Art and design", start_date: Time.zone.local(current_recruitment_cycle_year, 1, 1))
+      create(:course, :with_full_time_sites, :published, name: "Art and design", start_date: Time.zone.local(current_recruitment_cycle_year, 1, 1))
     end
     let!(:august_course) do
-      create(:course, :with_full_time_sites, name: "Biology", start_date: Time.zone.local(current_recruitment_cycle_year, 8, 1))
+      create(:course, :with_full_time_sites, :published, name: "Biology", start_date: Time.zone.local(current_recruitment_cycle_year, 8, 1))
     end
     let!(:beginning_of_september_course) do
-      create(:course, :with_full_time_sites, name: "Computing", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 1))
+      create(:course, :with_full_time_sites, :published, name: "Computing", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 1))
     end
     let!(:middle_of_september_course) do
-      create(:course, :with_full_time_sites, name: "English", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 15))
+      create(:course, :with_full_time_sites, :published, name: "English", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 15))
     end
     let!(:end_of_september_course) do
-      create(:course, :with_full_time_sites, name: "Primary with english", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 30))
+      create(:course, :with_full_time_sites, :published, name: "Primary with english", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 30))
     end
     let!(:october_course) do
-      create(:course, :with_full_time_sites, name: "Spanish", start_date: Time.zone.local(current_recruitment_cycle_year, 10, 1))
+      create(:course, :with_full_time_sites, :published, name: "Spanish", start_date: Time.zone.local(current_recruitment_cycle_year, 10, 1))
     end
     let!(:next_year_january_course) do
-      create(:course, :with_full_time_sites, name: "Mathematics", start_date: Time.zone.local(next_recruitment_cycle_year, 1, 15))
+      create(:course, :with_full_time_sites, :published, name: "Mathematics", start_date: Time.zone.local(next_recruitment_cycle_year, 1, 15))
     end
     let!(:next_year_july_course) do
-      create(:course, :with_full_time_sites, name: "Physics", start_date: Time.zone.local(next_recruitment_cycle_year, 7, 31))
+      create(:course, :with_full_time_sites, :published, name: "Physics", start_date: Time.zone.local(next_recruitment_cycle_year, 7, 31))
     end
 
     context "when searching for january to august courses" do
