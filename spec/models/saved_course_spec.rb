@@ -38,7 +38,7 @@ RSpec.describe SavedCourse, type: :model do
       )
       create(
         :saved_course,
-        course: create(:course, :withdrawn, :with_full_time_sites),
+        course: create(:course, :with_full_time_sites, enrichments: [build(:course_enrichment, :withdrawn)]),
       )
 
       expect(described_class.not_withdrawn).to contain_exactly(included_saved_course)
