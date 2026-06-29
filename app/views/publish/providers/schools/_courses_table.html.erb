@@ -58,9 +58,15 @@
         </td>
         <!-- Remove link -->
         <td class="govuk-table__cell app-table--courses__status">
-          <%= govuk_link_to "Remove",
-                "#", # replace with your actual route
-                class: "app-link--destructive" %>
+          <%= govuk_link_to "Remove course",
+      remove_course_publish_provider_recruitment_cycle_school_path(
+        @provider.provider_code,
+        @recruitment_cycle.year,
+        @site.id,
+        course_code: course.course_code
+      ),
+      class: "app-link--destructive"
+%>
         </td>
       </tr>
     <% end %>
