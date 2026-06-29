@@ -111,4 +111,48 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
       expect(form.css("input[name='_method'][value='delete']")).to be_present
     end
   end
+
+  context "when the course is published without an employing school" do
+    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
+
+    let(:course) { create(:course, funding:, publish_without_schools_allowed: true) }
+
+    context "when funding is 'salary'" do
+      let(:funding) { :salary }
+
+      it "shows 'No employing schools listed' as the value" do
+        expect(summary_card_content).to include("No employing schools listed")
+      end
+
+      it "does not show the misleading placement-school hint" do
+        expect(summary_card_content).not_to include("Add a location to see the nearest potential placement school")
+      end
+    end
+
+    context "when funding is 'apprenticeship'" do
+      let(:funding) { :apprenticeship }
+
+      it "shows 'No employing schools listed' as the value" do
+        expect(summary_card_content).to include("No employing schools listed")
+      end
+    end
+
+    context "when funding is 'fee'" do
+      let(:funding) { :fee }
+
+      it "does not show 'No employing schools listed' (fee courses are never exempt)" do
+        expect(summary_card_content).not_to include("No employing schools listed")
+      end
+    end
+
+    context "when the salaried course has a school attached" do
+      let(:funding) { :salary }
+
+      before { create(:course_school, course:) }
+
+      it "does not show 'No employing schools listed'" do
+        expect(summary_card_content).not_to include("No employing schools listed")
+      end
+    end
+  end
 end
