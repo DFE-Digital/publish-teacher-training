@@ -33,6 +33,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Mathematics (London)",
           provider: london_provider,
           site_statuses: [
@@ -51,6 +52,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Science (Canary Wharf)",
           provider: london_provider,
           site_statuses: [
@@ -69,6 +71,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Science (Lewisham)",
           site_statuses: [
             create(
@@ -86,6 +89,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Science (Romford)",
           site_statuses: [
             create(
@@ -103,6 +107,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Music (Watford)",
           site_statuses: [
             create(
@@ -120,6 +125,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Engineering (Woking)",
           site_statuses: [
             create(
@@ -137,6 +143,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Art (Guildford)",
           site_statuses: [
             create(
@@ -154,6 +161,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Chemistry (Cambridge)",
           site_statuses: [
             create(
@@ -171,6 +179,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       test_search_result_wrapper_klass.new(
         create(
           :course,
+          :published,
           name: "Biology (Oxford)",
           site_statuses: [
             create(
@@ -342,6 +351,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let!(:course_at_shared_site_zebra) do
       create(
         :course,
+        :published,
         name: "Mathematics",
         provider: zebra_provider,
         site_statuses: [
@@ -353,6 +363,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let!(:course_at_shared_site_apple) do
       create(
         :course,
+        :published,
         name: "Biology",
         provider: apple_provider,
         site_statuses: [
@@ -364,6 +375,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let!(:course_at_shared_site_middle) do
       create(
         :course,
+        :published,
         name: "Chemistry",
         provider: middle_provider,
         site_statuses: [
@@ -395,6 +407,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       let!(:course_at_nearby_site_yankee) do
         create(
           :course,
+          :published,
           name: "Physics",
           provider: yankee_provider,
           site_statuses: [
@@ -406,6 +419,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       let!(:course_at_nearby_site_bravo) do
         create(
           :course,
+          :published,
           name: "English",
           provider: bravo_provider,
           site_statuses: [
@@ -438,6 +452,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     before do
       create(
         :course,
+        :published,
         site_statuses: [
           create(
             :site_status,
