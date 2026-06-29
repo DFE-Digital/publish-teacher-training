@@ -496,50 +496,34 @@ module Courses
 
   private
 
-    # A course is findable when it has at least one running, published site
-    # (the legacy proxy for "published"). Salaried/apprenticeship courses that
-    # support has approved to publish without an employing school have no such
-    # site, so — only under the new school model flag — they are also findable
-    # when they are exempt and their latest enrichment is published (mirroring
-    # Course#is_published? so a returned course never 404s on the show page).
+    # Find shows published courses only — nothing in draft, rolled over or
+    # withdrawn — regardless of whether the course has schools/sites attached.
+    # Findability is therefore exactly Course#is_published?.
     def findable_courses_sql
-      conditions = [running_published_site_sql]
-
-      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-        conditions << exempt_school_less_course_sql
-      end
-
-      conditions.join(" OR ")
+      published_course_sql
     end
 
-    def running_published_site_sql
+    # SQL mirror of Course#is_published? (content_status in published /
+    # published_with_unpublished_changes). A course counts as published when it
+    # has a published enrichment AND its latest enrichment has not since been
+    # rolled over or withdrawn. The published row + "latest not rolled_over /
+    # withdrawn" pair is what keeps a draft-on-top-of-published course findable
+    # (unpublished changes, like fee courses) while excluding draft-only,
+    # rolled-over and withdrawn courses. The created_at/id ordering matches
+    # CourseEnrichment.most_recent.
+    def published_course_sql
       <<~SQL
         EXISTS (
-          SELECT 1 FROM course_site
-          WHERE course_site.course_id = course.id
-            AND course_site.status = 'R'
-            AND course_site.publish = 'Y'
+          SELECT 1 FROM course_enrichment ce
+          WHERE ce.course_id = course.id
+            AND ce.status = #{CourseEnrichment.statuses[:published]}
         )
-      SQL
-    end
-
-    def exempt_school_less_course_sql
-      <<~SQL
-        (
-          course.publish_without_schools_allowed = TRUE
-          AND course.funding IN ('salary', 'apprenticeship')
-          AND EXISTS (
-            SELECT 1 FROM course_enrichment ce
-            WHERE ce.course_id = course.id
-              AND ce.status = #{CourseEnrichment.statuses[:published]}
-              AND ce.id = (
-                SELECT ce2.id FROM course_enrichment ce2
-                WHERE ce2.course_id = course.id
-                ORDER BY ce2.created_at DESC, ce2.id DESC
-                LIMIT 1
-              )
-          )
-        )
+        AND (
+          SELECT ce_latest.status FROM course_enrichment ce_latest
+          WHERE ce_latest.course_id = course.id
+          ORDER BY ce_latest.created_at DESC, ce_latest.id DESC
+          LIMIT 1
+        ) NOT IN (#{CourseEnrichment.statuses[:rolled_over]}, #{CourseEnrichment.statuses[:withdrawn]})
       SQL
     end
 
