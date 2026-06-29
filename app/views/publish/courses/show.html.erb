@@ -30,7 +30,7 @@
   <%= course.name_and_code %> <span data-qa="course__content-status"><%= course.status_tag %></span>
 </h1>
 
-<%= render partial: "course_button_panel" %>
+<%= render partial: "publish/courses/course_button_panel", locals: { course: @course } %>
 <%= render partial: "rolled_over_link" %>
 
 <%= render partial: "publish/courses/course_navigation" %>

@@ -1,0 +1,11 @@
+<p class="govuk-body">
+  <% unless course.has_unpublished_changes? %>
+    <% if course.scheduled? %>
+     <%= govuk_link_to t(".preview_course"), preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__preview-link" } %>
+    <% else %>
+      <%= govuk_link_to find_course_url(course.provider_code, course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__is_findable" } do %>
+      <%= t(".view_live_course") %> <span class="govuk-visually-hidden"><%= t(".hidden_text") %></span>
+      <% end %>
+    <% end %>
+  <% end %>
+</p>
