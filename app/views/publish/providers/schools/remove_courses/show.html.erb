@@ -1,0 +1,41 @@
+<%= content_for :page_title, "Remove course" %>
+<%= govuk_back_link_to(
+  publish_provider_recruitment_cycle_school_path(
+    provider.provider_code,
+    @recruitment_cycle.year,
+    @school.id
+  )
+) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-2"><%= @school.location_name %></h1>
+        <span class="govuk-caption-m"><%= @school.address_without_name %></span>
+        <span class="govuk-caption-m">URN: <%= @school.urn %></span>
+      </legend>
+    </fieldset>
+    <p class="govuk-body">
+      Are you sure you want to remove <strong><%= @course.name_and_code %></strong>
+      from <strong><%= @school.location_name %></strong>?
+    </p>
+    <%= form_with url: remove_course_publish_provider_recruitment_cycle_school_path(
+  provider.provider_code,
+  @recruitment_cycle.year,
+  @school.id,
+  course_code: @course.course_code
+),
+method: :delete,
+local: true do |f| %>
+      <div class="govuk-!-margin-bottom-2">
+        <%= f.submit "Remove course", class: "govuk-button govuk-button--warning" %>
+      </div>
+    <% end %>
+    <%= govuk_link_to "Cancel",
+  publish_provider_recruitment_cycle_school_path(
+    provider.provider_code,
+    @recruitment_cycle.year,
+    @school.id
+  ), class: "govuk-link govuk-body" %>
+  </div>
+</div>
