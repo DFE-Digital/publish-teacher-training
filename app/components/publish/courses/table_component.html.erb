@@ -6,6 +6,7 @@
         <th class="govuk-table__header"><%= t("publish.courses.course_table.course_information") %></th>
       <% end %>
       <th class="govuk-table__header"><%= t("publish.courses.course_table.status") %></th>
+      <th class="govuk-table__header">View course</th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
@@ -41,6 +42,27 @@
         <% end %>
         <td class="govuk-table__cell app-table--courses__status">
           <%= render Publish::Courses::StatusTagComponent.new(course:, recruitment_cycle_year: recruitment_cycle_year(course)) %>
+        </td>
+        <td class="govuk-table__cell app-table--courses__status">
+
+<% if course.is_published? %>
+  <%= govuk_link_to find_course_url(course.provider_code, course.course_code),
+      class: "govuk-!-margin-right-2",
+      data: { qa: "course__is_findable" } do %>
+    View live course
+  <% end %>
+<% else %>
+  <%= govuk_link_to preview_publish_provider_recruitment_cycle_course_path(
+        course.provider.provider_code,
+        course.recruitment_cycle_year,
+        course.course_code
+      ),
+      class: "govuk-!-margin-right-2",
+      data: { qa: "course__preview-link" } do %>
+    Preview course
+  <% end %>
+<% end %>
+
         </td>
       </tr>
     <% end %>
