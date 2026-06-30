@@ -22,14 +22,36 @@
       ),
       class: "govuk-button govuk-button--secondary govuk-margin-left-2"
   %>
-  <!-- TEST button for downloading course schools list as CSV -->
-  <%= link_to "Download course information (CSV)",
-      publish_provider_recruitment_cycle_courses_path(
-        @provider.provider_code,
-        @provider.recruitment_cycle.year,
-        request.query_parameters.merge(format: :csv, export: "schools")
-      ),
-      class: "govuk-button govuk-button--secondary govuk-margin-left-2"
-  %>
+
 </div>
 <%= render Publish::Courses::ListComponent.new(course_list: @course_list, provider: @provider) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <div class="school-search-container">
+      <div class="school-search-content">
+        <div class="govuk-form-group">
+          <h2 class="govuk-heading-m">
+            Download course information
+          </h2>
+          <p class="govuk-body">
+            Download a CSV file with:
+          </p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>basic information about each course</li>
+            <li>the schools attached to each course</li>
+          </ul>
+            <!-- TEST button for downloading course schools list as CSV -->
+              <%= link_to "Download as a CSV file",
+                  publish_provider_recruitment_cycle_courses_path(
+                    @provider.provider_code,
+                    @provider.recruitment_cycle.year,
+                    request.query_parameters.merge(format: :csv, export: "schools")
+                  ),
+                  class: "govuk-body govuk-link"
+              %>
+        <div class="govuk-form-group">
+      </div>
+    </div>
+  </div>
+</div>
