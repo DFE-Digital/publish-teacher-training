@@ -46,7 +46,7 @@ module Publish
 
       def destroy
         site.destroy!
-        flash[:success] = "School removed"
+        flash[:success] = "#{@site.location_name} has been removed from your account"
         redirect_to publish_provider_recruitment_cycle_schools_path
       end
 
