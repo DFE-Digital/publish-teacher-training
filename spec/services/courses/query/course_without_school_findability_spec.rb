@@ -10,7 +10,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   # exactly the same terms as every other course: they must be published.
   # Neither school presence nor the publish_without_schools_allowed flag affects
   # findability — only publication does.
-  describe "school-less course findability" do
+  describe "findability of courses without a school" do
     context "when a published salaried course has no schools" do
       let!(:course) do
         create(:course, :with_salary, :published, publish_without_schools_allowed: true, name: "Salary School-less")
