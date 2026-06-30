@@ -37,18 +37,20 @@
             <%= form_with url: publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
                           method: :get,
                           local: true do %>
-              <%= text_field_tag :query,
+              <div class="school-search__input-container">
+                <%= text_field_tag :query,
                     params[:query],
                     id: "school-search",
                     class: "govuk-input",
                     placeholder: "Enter school name, postcode or URN" %>
-              <div class="govuk-button-group govuk-!-margin-top-2">
-                <%= submit_tag "Search", class: "govuk-button" %>
-                <!-- Clear search -->
-                <%= link_to "Clear search",
-                      publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
-                      class: "govuk-link" %>
+                <div class="govuk-button-group">
+                  <%= submit_tag "Search", class: "govuk-button gap-left-2" %>
+                  <!-- Clear search -->
+                </div>
               </div>
+              <%= link_to "Clear search",
+                      publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
+                      class: "govuk-link govuk-body" %>
             <% end %>
           </div>
         </div>
