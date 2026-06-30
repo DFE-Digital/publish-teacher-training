@@ -28,6 +28,16 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     expect(page).not_to have_content("See what you wrote last cycle")
   end
 
+  scenario "A user editing a next cycle provider sees content from that provider's previous cycle" do
+    given_there_is_a_provider_in_the_next_cycle
+    and_the_same_provider_existed_this_cycle_with_disability_filled_in
+
+    when_i_visit_the_next_cycle_disability_support_page
+    expect(page).to have_content("Training with disabilities and other needs")
+    expect(page).to have_content("See what you wrote last cycle")
+    expect(page).to have_content(@current_cycle_provider.train_with_disability)
+  end
+
   def when_i_visit_the_organisation_page
     visit "/publish/organisations/#{@provider.provider_code}/#{RecruitmentCycle.current.year}/details"
     expect(page).to have_content("Organisation details")
@@ -44,6 +54,26 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     @provider = create(:provider, recruitment_cycle: @current_cycle)
     user.providers << @provider
     expect(user.providers.count).to eq(1)
+  end
+
+  def given_there_is_a_provider_in_the_next_cycle
+    @next_cycle = create(:recruitment_cycle, :next)
+    @next_cycle_provider = create(:provider, recruitment_cycle: @next_cycle)
+    user.providers << @next_cycle_provider
+  end
+
+  def and_the_same_provider_existed_this_cycle_with_disability_filled_in
+    @current_cycle_provider = create(
+      :provider,
+      recruitment_cycle: RecruitmentCycle.current,
+      provider_code: @next_cycle_provider.provider_code,
+      train_with_disability: generate_text(50),
+    )
+    user.providers << @current_cycle_provider
+  end
+
+  def when_i_visit_the_next_cycle_disability_support_page
+    visit "/publish/organisations/#{@next_cycle_provider.provider_code}/#{@next_cycle.year}/training-with-disabilities/edit"
   end
 
   def and_this_provider_existed_last_cycle_with_disability_filled_in
