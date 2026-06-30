@@ -6,8 +6,8 @@
 </h1>
 
 <%= form.govuk_radio_buttons_fieldset :start_date, legend: { hidden: true, text: t("course_wizard.steps.start_date.heading") } do %>
-  <% current_step.start_date_options.each do |option| %>
-    <%= form.govuk_radio_button :start_date, option, label: { text: option } %>
+  <% current_step.start_date_options.each_with_index do |option, index| %>
+    <%= form.govuk_radio_button :start_date, option, label: { text: option }, link_errors: index.zero? %>
   <% end %>
 <% end %>
 

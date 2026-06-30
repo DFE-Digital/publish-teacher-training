@@ -28,7 +28,7 @@
 <% end %>
 
 <%= form.govuk_radio_buttons_fieldset :can_sponsor_student_visa, legend: { hidden: true } do %>
-  <%= form.govuk_radio_button :can_sponsor_student_visa, true, label: { text: t("course_wizard.steps.visa_sponsorship.options.can_sponsor_student_visa.label") } %>
+  <%= form.govuk_radio_button :can_sponsor_student_visa, true, label: { text: t("course_wizard.steps.visa_sponsorship.options.can_sponsor_student_visa.label") }, link_errors: true %>
   <%= form.govuk_radio_button :can_sponsor_student_visa, false, label: { text: t("course_wizard.steps.visa_sponsorship.options.cannot_sponsor_student_visa.label") } %>
 <% end %>
 

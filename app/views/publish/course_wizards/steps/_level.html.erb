@@ -6,13 +6,13 @@
 </h1>
 
 <%= form.govuk_radio_buttons_fieldset :level, legend: { text: t("course_wizard.steps.level.level_label"), size: "m" } do %>
-  <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.primary").downcase, label: { text: t("course_wizard.steps.level.options.primary") } %>
+  <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.primary").downcase, label: { text: t("course_wizard.steps.level.options.primary") }, link_errors: true %>
   <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.secondary").downcase, label: { text: t("course_wizard.steps.level.options.secondary") } %>
   <%= form.govuk_radio_button :level, t("course_wizard.steps.level.options.further_education_value"), label: { text: t("course_wizard.steps.level.options.further_education") } %>
 <% end %>
 
 <%= form.govuk_radio_buttons_fieldset :is_send, legend: { text: t("course_wizard.steps.level.send_label"), size: "m" } do %>
-  <%= form.govuk_radio_button :is_send, "true", label: { text: t("course_wizard.steps.level.options.yes_send") } %>
+  <%= form.govuk_radio_button :is_send, "true", label: { text: t("course_wizard.steps.level.options.yes_send") }, link_errors: true %>
   <%= form.govuk_radio_button :is_send, "false", label: { text: t("course_wizard.steps.level.options.no_send") } %>
 <% end %>
 
