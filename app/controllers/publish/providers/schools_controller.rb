@@ -25,11 +25,15 @@ module Publish
       end
 
       def show
-        all_courses = Publish::Courses::Query.call(provider:)
-
-        @courses = all_courses.select do |course|
-          course.sites.map(&:id).include?(@site.id)
-        end
+        @courses = Publish::Courses::Query.call(provider:)
+          .joins(:site_statuses)
+          .where(
+            site_statuses: {
+              site_id: @site.id,
+              status: %i[new_status running],
+            },
+          )
+          .uniq(&:id)
       end
 
       def create
