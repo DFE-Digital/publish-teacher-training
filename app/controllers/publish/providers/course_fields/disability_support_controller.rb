@@ -36,7 +36,7 @@ module Publish
       private
 
         def last_cycle_provider
-          @last_cycle_provider ||= RecruitmentCycle.current.previous&.providers&.find_by(provider_code: @provider.provider_code)
+          @last_cycle_provider ||= @provider.recruitment_cycle.previous&.providers&.find_by(provider_code: @provider.provider_code)
         end
 
         def redirect_params
