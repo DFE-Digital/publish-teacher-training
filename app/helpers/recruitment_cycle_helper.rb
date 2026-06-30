@@ -52,4 +52,14 @@ module RecruitmentCycleHelper
   def next_cycle_provider(provider)
     RecruitmentCycle.next.providers.find_by(provider_code: provider.provider_code)
   end
+
+  def bursary_and_scholarship_link_url(recruitment_cycle_year)
+    start_year = recruitment_cycle_year.to_i
+    academic_year_range = "#{start_year}-to-#{start_year + 1}"
+
+    t(
+      "publish.itt_funding.bursary_and_scholarship_link_url",
+      academic_year_range:,
+    )
+  end
 end

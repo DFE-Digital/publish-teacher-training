@@ -36,6 +36,11 @@ RSpec.describe "Add course wizard subjects step", type: :system do
     then_i_have_errors_on_the_subjects_step
   end
 
+  scenario "secondary subjects page shows bursary and scholarship link for the recruitment cycle", travel: mid_cycle(2026) do
+    when_i_visit_the_wizard_subjects_page_for_secondary
+    then_i_see_the_bursary_and_scholarship_link_for_the_recruitment_cycle
+  end
+
   scenario "submitting secondary with a duplicate master and subordinate subject shows validation errors" do
     when_i_visit_the_wizard_subjects_page_for_secondary
     and_i_choose_duplicate_master_and_subordinate_subject
@@ -285,6 +290,13 @@ private
   def then_i_should_see_a_duplicate_master_and_subordinate_subject_error
     expect(page).to have_content("There is a problem")
     expect(page).to have_content("The second subject must be different to the first subject")
+  end
+
+  def then_i_see_the_bursary_and_scholarship_link_for_the_recruitment_cycle
+    expect(page).to have_link(
+      "Learn more about the bursaries and scholarships",
+      href: "https://www.gov.uk/government/publications/funding-initial-teacher-training-itt/funding-initial-teacher-training-itt-academic-year-2026-to-2027#postgraduate-bursaries-and-scholarships",
+    )
   end
 
   def primary_subject
