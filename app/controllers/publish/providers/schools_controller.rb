@@ -9,7 +9,19 @@ module Publish
       PER_PAGE = 20
 
       def index
-        @pagy, @schools = pagy(provider.sites.order(:location_name), limit: PER_PAGE)
+        schools = provider.sites.order(:location_name)
+
+        # Filter by search query if present
+        if params[:query].present?
+          q = params[:query].downcase
+
+          schools = schools.where(
+            "LOWER(location_name) LIKE :q OR LOWER(address1) LIKE :q OR CAST(urn AS TEXT) LIKE :q",
+            q: "%#{q}%",
+          )
+        end
+
+        @pagy, @schools = pagy(schools, limit: PER_PAGE)
       end
 
       def show
@@ -41,7 +53,6 @@ module Publish
       def remove
         @site = Site.find(params[:id])
       end
-
 
     private
 
