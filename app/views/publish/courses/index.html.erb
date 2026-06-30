@@ -22,10 +22,8 @@
       ),
       class: "govuk-button govuk-button--secondary govuk-margin-left-2"
   %>
-
 </div>
 <%= render Publish::Courses::ListComponent.new(course_list: @course_list, provider: @provider) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
     <div class="school-search-container">
@@ -41,8 +39,8 @@
             <li>basic information about each course</li>
             <li>the schools attached to each course</li>
           </ul>
-            <!-- TEST button for downloading course schools list as CSV -->
-              <%= link_to "Download as a CSV file",
+          <!-- TEST button for downloading course schools list as CSV -->
+          <%= link_to "Download as a CSV file",
                   publish_provider_recruitment_cycle_courses_path(
                     @provider.provider_code,
                     @provider.recruitment_cycle.year,
@@ -50,8 +48,8 @@
                   ),
                   class: "govuk-body govuk-link"
               %>
-        <div class="govuk-form-group">
+          <div class="govuk-form-group">
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
