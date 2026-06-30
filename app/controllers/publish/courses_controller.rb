@@ -9,6 +9,8 @@ module Publish
     def index
       authorize :provider, :index?
 
+      @course = Course.new
+
       @course_list = ::Publish::CourseList.new(provider:)
 
       # 2 x CSV exports: course information and schools list by course
