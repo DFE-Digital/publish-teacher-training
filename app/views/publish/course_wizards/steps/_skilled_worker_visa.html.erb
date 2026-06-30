@@ -6,7 +6,7 @@
 </h1>
 
 <%= form.govuk_radio_buttons_fieldset :can_sponsor_skilled_worker_visa, legend: { text: t("course_wizard.steps.skilled_worker_visa.question") } do %>
-  <%= form.govuk_radio_button :can_sponsor_skilled_worker_visa, true, label: { text: t("course_wizard.steps.skilled_worker_visa.options.can_sponsor_skilled_worker_visa.label") } %>
+  <%= form.govuk_radio_button :can_sponsor_skilled_worker_visa, true, label: { text: t("course_wizard.steps.skilled_worker_visa.options.can_sponsor_skilled_worker_visa.label") }, link_errors: true %>
   <%= form.govuk_radio_button :can_sponsor_skilled_worker_visa, false, label: { text: t("course_wizard.steps.skilled_worker_visa.options.cannot_sponsor_skilled_worker_visa.label") } %>
 <% end %>
 
