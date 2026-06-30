@@ -22,8 +22,8 @@
       class: "govuk-heading-s govuk-!-margin-bottom-0"
     %>
           </strong>
-          <% if course.respond_to?(:age_range) && course.age_range.present? %>
-            <div class="govuk-hint"><%= "Ages #{course.age_range}" %></div>
+          <% if course.level == "primary" && course.age_range_in_years.present? %>
+            <div class="govuk-hint"><%= "Ages #{course.age_range_in_years.humanize}" %></div>
           <% end %>
         </td>
         <!-- Course info -->
