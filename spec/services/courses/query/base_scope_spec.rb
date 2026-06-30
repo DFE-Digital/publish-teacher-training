@@ -34,20 +34,16 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     end
   end
 
-  describe "#count with active filters" do
+  describe "with an active filter" do
     let(:params) { { funding: "salary" } }
 
-    before do
-      create(:course, :with_salary, :published, name: "Salary One").tap { |c| create(:site_status, :findable, course: c) }
-      create(:course, :with_salary, :published, name: "Salary Two").tap { |c| create(:site_status, :findable, course: c) }
-      create(:course, :fee, :published, name: "Fee One").tap { |c| create(:site_status, :findable, course: c) }
-    end
+    let!(:salary_one) { create(:course, :with_salary, :published, name: "Salary One").tap { |c| create(:site_status, :findable, course: c) } }
+    let!(:salary_two) { create(:course, :with_salary, :published, name: "Salary Two").tap { |c| create(:site_status, :findable, course: c) } }
+    let!(:fee_course) { create(:course, :fee, :published, name: "Fee One").tap { |c| create(:site_status, :findable, course: c) } }
 
-    it "counts only the courses matching the filter" do
-      query = described_class.new(params:)
-      query.call
-
-      expect(query.count).to eq(2)
+    it "returns only the courses matching the filter, omitting the fee course" do
+      expect(results).to contain_exactly(salary_one, salary_two)
+      expect(results).not_to include(fee_course)
     end
   end
 end
