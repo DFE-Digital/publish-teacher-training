@@ -16,12 +16,13 @@ module Publish
             rows << {
               "Course name" => course.name.titleize,
               "Course code" => course.course_code,
+              "Age range" => course.age_range_in_years&.humanize,
               "Status" => status(course).titleize,
-              "Funding" => course.funding.titleize,
+              "Fee or salary" => course.funding.titleize,
               "Qualification" => qualification(course),
               "Study mode" => course.study_mode.titleize,
               "Start date" => format_date(course.start_date),
-              "Placement school" => site.location_name || site.code,
+              "Placement schools" => site.location_name || site.code,
             }
           end
         end

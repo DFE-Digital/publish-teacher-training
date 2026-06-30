@@ -5,17 +5,15 @@ require "csv"
 module Exports
   class AccreditedCourseList
     CSV_HEADERS = [
-      "Provider code",
       "Provider",
+      "Course name",
       "Course code",
-      "Course",
-      "Study mode",
-      "Programme type",
+      "Age range",
+      "Fee or salary",
       "Qualification",
+      "Full time or part time",
       "Status",
       "View on Find",
-      "Applications open from",
-      "Campus Codes",
     ].freeze
 
     def initialize(courses:)
@@ -28,17 +26,15 @@ module Exports
           decorated_course = course.decorate
 
           csv << [
-            decorated_course.provider.provider_code,
             decorated_course.provider.provider_name,
-            decorated_course.course_code,
             decorated_course.name,
-            decorated_course.study_mode&.humanize,
-            decorated_course.program_type&.humanize,
+            decorated_course.course_code,
+            decorated_course.age_range,
+            decorated_course.funding.titleize,
             decorated_course.outcome,
+            decorated_course.study_mode&.humanize,
             decorated_course.content_status&.to_s&.humanize,
             decorated_course.find_url,
-            I18n.l(decorated_course.applications_open_from&.to_date),
-            decorated_course.sites&.map(&:code)&.join(" "),
           ]
         end
       end
