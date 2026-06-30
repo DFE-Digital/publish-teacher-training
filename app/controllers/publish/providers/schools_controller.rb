@@ -21,6 +21,16 @@ module Publish
           )
         end
 
+        schools = schools
+          .left_joins(site_statuses: :course)
+          .group("site.id")
+          .select(
+            "site.*, COUNT(DISTINCT CASE
+      WHEN course_site.status IN ('N','R')
+      THEN course.id
+    END) AS courses_count",
+          )
+
         @pagy, @schools = pagy(schools, limit: PER_PAGE)
       end
 
