@@ -11,3 +11,9 @@
 .govuk-table__header:last-child {
   white-space: nowrap;
 }
+
+.school-search__input-container {
+  display: flex;
+  justify-content: space-between;
+  column-gap: govuk-spacing(4);
+}
