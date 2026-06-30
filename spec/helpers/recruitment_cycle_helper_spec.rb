@@ -50,4 +50,12 @@ RSpec.describe RecruitmentCycleHelper do
       end
     end
   end
+
+  describe "#bursary_and_scholarship_link_url" do
+    it "returns the gov.uk URL for the recruitment cycle academic year" do
+      expect(helper.bursary_and_scholarship_link_url(2026)).to eq(
+        "https://www.gov.uk/government/publications/funding-initial-teacher-training-itt/funding-initial-teacher-training-itt-academic-year-2026-to-2027#postgraduate-bursaries-and-scholarships",
+      )
+    end
+  end
 end
