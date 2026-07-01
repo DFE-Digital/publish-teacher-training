@@ -17,7 +17,7 @@ module Publish
       private
 
         def courses
-          @courses ||= provider.current_accredited_courses
+          @courses ||= provider.current_accredited_courses.includes(:enrichments)
         end
 
         def data_export
