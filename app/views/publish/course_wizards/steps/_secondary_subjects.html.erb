@@ -7,7 +7,7 @@
 
 <p class="govuk-body"><%= t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_text") %></p>
 <p class="govuk-body">
-  <%= govuk_link_to t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_text"), t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_url") %>
+  <%= govuk_link_to t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_text"), t("course_wizard.steps.secondary_subjects.bursary_and_scholarship_link_url"), target: "_blank" %>
 </p>
 <%= form.govuk_select :secondary_master_subject_id,
       options_for_select(current_step.selectable_subjects, current_step.secondary_master_subject_id),
