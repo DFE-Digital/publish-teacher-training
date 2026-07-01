@@ -39,8 +39,7 @@ en:
         heading: Subject
         bursary_and_scholarship_text: Candidates may be able to get a bursary or scholarship for some subjects.If the course content is made up of at least 50% of a subject that is eligible for a bursary, add this as the first subject. This means we can show the correct financial information to candidates.
         bursary_and_scholarship_link_text: Learn more about the bursaries and scholarships
-        first_subject_label: First subject
-        second_subject_label: Second subject (optional)
+        bursary_and_scholarship_link_url: https://www.gov.uk/government/publications/funding-initial-teacher-training-itt
         submit: Continue
         errors:
           secondary_master_subject_id:

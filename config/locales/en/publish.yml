@@ -150,5 +150,3 @@ en:
         new:
           title: Enter a provider name, UKPRN or postcode
           caption: Add accredited provider
-    itt_funding:
-      bursary_and_scholarship_link_url: https://www.gov.uk/government/publications/funding-initial-teacher-training-itt/funding-initial-teacher-training-itt-academic-year-%{academic_year_range}#postgraduate-bursaries-and-scholarships
