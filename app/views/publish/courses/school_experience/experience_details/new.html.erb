@@ -21,6 +21,7 @@
       <%= form.govuk_error_summary %>
 
       <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+          markdown: true,
           texts: [["School experience", @course.in_previous_cycle&.school_experience_required_content]],
       } %>
       <%= render partial: "publish/courses/markdown_formatting" %>

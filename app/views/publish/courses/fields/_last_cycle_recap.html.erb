@@ -15,7 +15,11 @@
         </p>
       <% end %>
       <p class="govuk-body">
+      <% if local_assigns[:markdown] %>
+          <%= markdown(text) %>
+        <% else %>
           <%= text %>
+        <% end %>
       </p>
     <% end %>
   </div>
