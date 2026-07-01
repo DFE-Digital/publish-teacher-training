@@ -11,7 +11,6 @@ class FeatureFlags
       [:course_sites_updated_email_notification, "Send email notifications when a course's associated schools are updated", "Find and Publish team"],
       [:wizard_add_course_flow, "Enables the wizard add course flow that uses the DfE wizard", "Find and Publish team"],
       [:course_publishing_uses_new_school_model, "Read publish-side school checks from Course::School instead of Site", "Find and Publish team"],
-      [:school_experience, "Enables schools experience requirement feature on courses in Publish", "Find and Publish team"],
     ]
   end
 end
