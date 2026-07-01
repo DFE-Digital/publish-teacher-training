@@ -72,7 +72,8 @@ RSpec.describe "Editing school experience requirements", travel: mid_cycle, type
 private
 
   def given_i_am_authenticated_as_a_provider_user
-    @user = create(:user, providers: [build(:provider)])
+    # School experience is only shown for courses in the 2027 cycle or later.
+    @user = create(:user, providers: [build(:provider, recruitment_cycle: create(:recruitment_cycle, :next))])
     @provider = @user.providers.first
     given_i_am_authenticated(user: @user)
   end
