@@ -35,7 +35,7 @@
 
 <%# Where you will train %>
 <% if published_where_you_will_train_present?(course) || preview?(params) %>
-    <%= render partial: "find/courses/where_you_will_train", locals: { course: course, enrichment: @enrichment } %>
+  <%= render partial: "find/courses/where_you_will_train", locals: { course: course, enrichment: @enrichment } %>
 <% end %>
 
 <%# What you will do on school placements %>
@@ -62,9 +62,10 @@
     <%= t("find.courses.show.training_with_disabilities") %>
   </h2>
 
-  <% if preview?(params) %>
-    <p class="govuk-body govuk-!-margin-bottom-8">
-    <%= govuk_link_to(
+  <p class="govuk-body govuk-!-margin-bottom-8">
+    <% if preview?(params) %>
+
+      <%= govuk_link_to(
       t("find.courses.show.training_with_disabilities_link", provider_name: course.provider_name),
       training_with_disabilities_publish_provider_recruitment_cycle_course_path(
         course.provider_code,
@@ -72,16 +73,17 @@
         course.course_code,
       ),
     ) %>
-    </p>
-  <% else %>
-    <p class="govuk-body govuk-!-margin-bottom-8">
-    <%= govuk_link_to(
+
+    <% else %>
+
+      <%= govuk_link_to(
       t("find.courses.show.training_with_disabilities_link", provider_name: course.provider_name),
       find_track_click_path(url: find_training_with_disabilities_path(
         course.provider_code,
         course.course_code,
       )),
     ) %>
-    </p>
-  <% end %>
+
+    <% end %>
+  </p>
 <% end %>

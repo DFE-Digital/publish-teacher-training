@@ -23,6 +23,28 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     end
   end
 
+  context "Salaried course salary details" do
+    it "renders the salary fee details for cycles after 2026" do
+      recruitment_cycle = create(:recruitment_cycle, :next)
+      provider = create(:provider, recruitment_cycle:)
+      enrichment = create(:course_enrichment, salary_fee_details: "Trainees may need to pay for a DBS check")
+      course = create(:course, funding: "salary", qualification: "pgce_with_qts", provider:, enrichments: [enrichment]).decorate
+
+      result = render_inline(described_class.new(course, enrichment))
+
+      expect(result.text).to include("Trainees may need to pay for a DBS check")
+    end
+
+    it "renders the salary details for cycles up to 2026" do
+      enrichment = create(:course_enrichment, salary_details: "We pay the unqualified teacher salary", salary_fee_details: nil)
+      course = create(:course, funding: "salary", qualification: "pgce_with_qts", enrichments: [enrichment]).decorate
+
+      result = render_inline(described_class.new(course, enrichment))
+
+      expect(result.text).to include("We pay the unqualified teacher salary")
+    end
+  end
+
   context "Courses excluded from bursary" do
     it "renders the student loans section if the course is excluded from bursary" do
       enrichment = create(:course_enrichment)
