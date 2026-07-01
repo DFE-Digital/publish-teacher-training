@@ -83,6 +83,32 @@ describe Course do
     end
   end
 
+  describe "#in_previous_cycle" do
+    let(:previous_cycle) { create(:recruitment_cycle, year: "2026") }
+    let(:current_cycle) { create(:recruitment_cycle, year: "2027") }
+    let(:previous_provider) { create(:provider, provider_code: "A1", recruitment_cycle: previous_cycle) }
+    let(:current_provider) { create(:provider, provider_code: "A1", recruitment_cycle: current_cycle) }
+    let(:course) { create(:course, course_code: "B123", provider: current_provider) }
+
+    it "returns the same course in the previous cycle" do
+      previous_course = create(:course, course_code: "B123", provider: previous_provider)
+
+      expect(course.in_previous_cycle).to eq(previous_course)
+    end
+
+    it "returns nil when there is no matching course in the previous cycle" do
+      create(:course, course_code: "B123", provider: create(:provider, provider_code: "Z9", recruitment_cycle: previous_cycle))
+
+      expect(course.in_previous_cycle).to be_nil
+    end
+
+    it "returns nil when the previous-cycle course is discarded" do
+      create(:course, course_code: "B123", provider: previous_provider).discard!
+
+      expect(course.in_previous_cycle).to be_nil
+    end
+  end
+
   describe "auditing" do
     it { is_expected.to be_audited }
     it { is_expected.to have_associated_audits }
