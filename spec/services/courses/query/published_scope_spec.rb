@@ -101,6 +101,33 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
 
+    context "when the latest enrichment is a draft with several edits stacked on top" do
+      let!(:edited_after_publishing) do
+        create(:course, name: "Drafts On Published",
+                        enrichments: [
+                          build(:course_enrichment, :published, created_at: 3.days.ago),
+                          build(:course_enrichment, status: :draft, created_at: 2.days.ago),
+                          build(:course_enrichment, status: :draft, created_at: 1.day.ago),
+                        ])
+      end
+
+      let!(:never_published) do
+        create(:course, name: "Drafts Only",
+                        enrichments: [
+                          build(:course_enrichment, status: :draft, created_at: 2.days.ago),
+                          build(:course_enrichment, status: :draft, created_at: 1.day.ago),
+                        ])
+      end
+
+      it "includes the course when a published version exists in history (not just as the previous enrichment)" do
+        expect(results).to include(edited_after_publishing)
+      end
+
+      it "excludes the course when it was never published" do
+        expect(results).not_to include(never_published)
+      end
+    end
+
     context "when a course was published and then withdrawn (a withdrawn enrichment on top of published history)" do
       let!(:course) do
         create(:course, name: "Published Then Withdrawn",
