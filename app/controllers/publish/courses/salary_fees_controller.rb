@@ -49,7 +49,7 @@ module Publish
         @previous_cycle_enrichment ||= course.recruitment_cycle.previous&.providers&.find_by(
           provider_code: @provider.provider_code,
         )&.courses&.find_by(
-          course_code: course_enrichment.course.course_code,
+          course_code: course.course_code,
         )&.enrichments&.where(
           status: "published",
         )&.last
