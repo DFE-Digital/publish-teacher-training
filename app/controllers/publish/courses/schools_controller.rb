@@ -80,7 +80,7 @@ module Publish
       end
 
       def section_key
-        "School".pluralize(school_params[:site_ids].compact_blank.count)
+        "School".pluralize(Array(school_params[:site_ids]).compact_blank.count)
       end
     end
   end
