@@ -51,6 +51,38 @@ describe Course do
     end
   end
 
+  describe "school experience content validation" do
+    it "is valid with content when school experience is required" do
+      course.school_experience_required = true
+      course.school_experience_required_content = "Spend two weeks in a UK school."
+
+      expect(course).to be_valid
+    end
+
+    it "is valid with no content when school experience is required" do
+      course.school_experience_required = true
+      course.school_experience_required_content = nil
+
+      expect(course).to be_valid
+    end
+
+    it "is invalid with content when school experience is not required" do
+      course.school_experience_required = false
+      course.school_experience_required_content = "Spend two weeks in a UK school."
+
+      expect(course).not_to be_valid
+      expect(course.errors).to be_added(:school_experience_required_content, :present)
+    end
+
+    it "is invalid with content when school experience requirement is unanswered" do
+      course.school_experience_required = nil
+      course.school_experience_required_content = "Spend two weeks in a UK school."
+
+      expect(course).not_to be_valid
+      expect(course.errors).to be_added(:school_experience_required_content, :present)
+    end
+  end
+
   describe "auditing" do
     it { is_expected.to be_audited }
     it { is_expected.to have_associated_audits }
