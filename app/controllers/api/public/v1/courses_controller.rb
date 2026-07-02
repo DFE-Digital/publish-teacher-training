@@ -30,7 +30,8 @@ module API
         end
 
         def courses
-          @courses ||= APICourseSearchService.call(
+          service = FeatureFlag.active?(:course_publishing_uses_new_school_model) ? APICourseSearchServiceSchools : APICourseSearchService
+          @courses ||= service.call(
             filter: permitted_params[:filter],
             sort: permitted_params[:sort],
             course_scope: recruitment_cycle.courses,

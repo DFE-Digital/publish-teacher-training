@@ -21,8 +21,9 @@ module API
         private
 
           def courses
-            @courses ||= APICourseSearchService.call(filter: params[:filter],
-                                                     course_scope: provider.courses)
+            service = FeatureFlag.active?(:course_publishing_uses_new_school_model) ? APICourseSearchServiceSchools : APICourseSearchService
+            @courses ||= service.call(filter: params[:filter],
+                                      course_scope: provider.courses)
           end
 
           def course

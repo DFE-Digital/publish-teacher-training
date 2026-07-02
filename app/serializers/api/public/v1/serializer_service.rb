@@ -12,6 +12,7 @@ module API
             Provider: API::Public::V1::SerializableProvider,
             RecruitmentCycle: API::Public::V1::SerializableRecruitmentCycle,
             Site: API::Public::V1::SerializableLocation,
+            "Provider::School": API::Public::V1::SerializableSchool,
             SiteStatus: API::Public::V1::SerializableLocationStatus,
             Subject: API::Public::V1::SerializableSubject,
             SubjectArea: API::Public::V1::SerializableSubjectArea,
