@@ -128,7 +128,7 @@ class Course < ApplicationRecord
   has_many :gias_schools, through: :schools
 
   delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
-  delegate :after_2021?, :year, :rollover_period_2026?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
+  delegate :after_2021?, :after_2026?, :year, :rollover_period_2026?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def set_subject_position(course_subject)
     return if course_subject.position.present?
@@ -400,6 +400,7 @@ class Course < ApplicationRecord
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
   validates :is_send, inclusion: { in: [true, false] }, on: %i[new create publish]
+  validates :school_experience_required_content, absence: true, unless: :school_experience_required
   # TODO: validates :master_subject_id ?
 
   def is_engineers_teach_physics?
@@ -444,6 +445,15 @@ class Course < ApplicationRecord
     RecruitmentCycle.find_by(year:)
                     .providers.find_by(provider_code:)
                     .courses.find_by(course_code:)
+  end
+
+  # The same course (same provider and course code) in the previous
+  # recruitment cycle, or nil if it does not exist.
+  def in_previous_cycle
+    Course.kept
+          .with_recruitment_cycle((recruitment_cycle_year.to_i - 1).to_s)
+          .merge(Provider.kept)
+          .find_by(course_code:, provider: { provider_code: })
   end
 
   def generate_name

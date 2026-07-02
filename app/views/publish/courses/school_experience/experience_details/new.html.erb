@@ -1,0 +1,43 @@
+<% content_for :page_title, title_with_error_prefix(t("publish.courses.#{current_step.model_name.i18n_key}.heading"), current_step.errors && current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+  <%= t("publish.courses.#{current_step.model_name.i18n_key}.page_title") %>
+</h1>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(@wizard.resolve_step_path(:experience_required)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: current_step,
+                  scope: current_step_name,
+                  url: publish_provider_recruitment_cycle_course_school_experience_experience_details_path(
+                    @provider.provider_code,
+                    @provider.recruitment_cycle_year,
+                    @course.course_code,
+                  ) do |form| %>
+      <%= form.govuk_error_summary %>
+
+      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+          markdown: true,
+          texts: [["School experience", @course.in_previous_cycle&.school_experience_required_content]],
+      } %>
+      <%= render partial: "publish/courses/markdown_formatting" %>
+
+      <%= form.govuk_text_area :experience_details,
+          label: { text: t("publish.courses.#{current_step.model_name.i18n_key}.subtitle"), size: "s" },
+          hint: { text: t("publish.courses.#{current_step.model_name.i18n_key}.hint_html") },
+          rows: 8,
+          max_words: 250,
+          value: "" %>
+
+      <%= form.submit t("publish.courses.#{current_step.model_name.i18n_key}.submit"), class: "govuk-button" %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), @wizard.resolve_step_path(:course_edit)) %>
+    </p>
+  </div>
+</div>

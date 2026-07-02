@@ -51,6 +51,64 @@ describe Course do
     end
   end
 
+  describe "school experience content validation" do
+    it "is valid with content when school experience is required" do
+      course.school_experience_required = true
+      course.school_experience_required_content = "Spend two weeks in a UK school."
+
+      expect(course).to be_valid
+    end
+
+    it "is valid with no content when school experience is required" do
+      course.school_experience_required = true
+      course.school_experience_required_content = nil
+
+      expect(course).to be_valid
+    end
+
+    it "is invalid with content when school experience is not required" do
+      course.school_experience_required = false
+      course.school_experience_required_content = "Spend two weeks in a UK school."
+
+      expect(course).not_to be_valid
+      expect(course.errors).to be_added(:school_experience_required_content, :present)
+    end
+
+    it "is invalid with content when school experience requirement is unanswered" do
+      course.school_experience_required = nil
+      course.school_experience_required_content = "Spend two weeks in a UK school."
+
+      expect(course).not_to be_valid
+      expect(course.errors).to be_added(:school_experience_required_content, :present)
+    end
+  end
+
+  describe "#in_previous_cycle" do
+    let(:previous_cycle) { create(:recruitment_cycle, year: "2026") }
+    let(:current_cycle) { create(:recruitment_cycle, year: "2027") }
+    let(:previous_provider) { create(:provider, provider_code: "A1", recruitment_cycle: previous_cycle) }
+    let(:current_provider) { create(:provider, provider_code: "A1", recruitment_cycle: current_cycle) }
+    let(:course) { create(:course, course_code: "B123", provider: current_provider) }
+
+    it "returns the same course in the previous cycle" do
+      previous_course = create(:course, course_code: "B123", provider: previous_provider)
+
+      expect(course.in_previous_cycle).to eq(previous_course)
+    end
+
+    it "returns nil when there is no matching course in the previous cycle" do
+      create(:course, course_code: "B123", provider: create(:provider, provider_code: "Z9", recruitment_cycle: previous_cycle))
+
+      expect(course.in_previous_cycle).to be_nil
+    end
+
+    it "returns nil when the previous-cycle course is discarded" do
+      create(:course, course_code: "B123", provider: previous_provider).discard!
+
+      expect(course.in_previous_cycle).to be_nil
+    end
+  end
+
   describe "auditing" do
     it { is_expected.to be_audited }
     it { is_expected.to have_associated_audits }

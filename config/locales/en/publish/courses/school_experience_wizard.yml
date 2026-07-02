@@ -1,0 +1,37 @@
+en:
+  activemodel:
+    errors:
+      models:
+        school_experience_wizard/steps/experience_required:
+          attributes:
+            experience_required:
+              blank: Pick an option
+        school_experience_wizard/steps/experience_details:
+          attributes:
+            experience_details:
+              blank: Enter the school experience you are looking for
+  publish:
+    courses:
+      school_experience_wizard/steps/experience_required:
+        page_title: School experience (optional)
+        heading: School experience (optional)
+        subtitle: Is school experience required or strongly recommended for this course? (optional)
+        yes_label: Yes, school experience is required or strongly recommended
+        no_label: No, school experience is not required
+        submit: Continue to add school experience details
+      school_experience_wizard/steps/experience_details:
+        page_title: School experience
+        heading: School experience
+        label: School experience
+        subtitle: What school experience are you looking for?
+        hint_html: |
+          Candidates have said they would like to know:
+          <ul>
+          <li>Is school experience required or just recommended?</li>
+          <li>How much time should they have spent in a school?</li>
+          <li>What types of activities should they have experience in? For example, observing lessons, teaching classes, behaviour management</li>
+          <li>Must it have been paid work or could it be voluntary?</li>
+          <li>Do they need to have had experience in the particular subject they're applying for?</li>
+          <li>Must their experience have been in a UK school?</li>
+          </ul>
+        submit: Update school experience
