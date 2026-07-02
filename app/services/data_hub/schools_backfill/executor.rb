@@ -257,7 +257,17 @@ module DataHub
       end
 
       def fetch_skipped_sites
-        ActiveRecord::Base.connection.exec_query(<<~SQL).to_a
+        ActiveRecord::Base.connection.exec_query(skipped_sites_sql).to_a
+      end
+
+      def fetch_skipped_course_sites
+        ActiveRecord::Base.connection.exec_query(skipped_course_sites_sql).to_a
+      end
+
+      # Reports eligible school sites that cannot be backfilled because they
+      # either have no URN or their URN does not resolve to GIAS.
+      def skipped_sites_sql
+        <<~SQL
           SELECT site.id AS site_id,
                  site.provider_id,
                  site.code,
@@ -278,8 +288,11 @@ module DataHub
         SQL
       end
 
-      def fetch_skipped_course_sites
-        ActiveRecord::Base.connection.exec_query(<<~SQL).to_a
+      # Reports course_site rows that cannot produce course_school rows. This
+      # includes broken course_site references, non-school/stale sites, missing
+      # URNs, and URNs that do not resolve to GIAS.
+      def skipped_course_sites_sql
+        <<~SQL
           SELECT course_site.course_id,
                  course_site.site_id,
                  site.provider_id,
