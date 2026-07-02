@@ -469,4 +469,117 @@ describe Courses::CreationService do
       end
     end
   end
+
+  describe "writing schools to the new school data model" do
+    subject(:created_course) do
+      described_class.call(course_params: valid_course_params, provider:, next_available_course_code: true)
+    end
+
+    let(:primary_subject) { find_or_create(:primary_subject, :primary) }
+
+    # A GIAS school + provider_school that mirror the legacy `site` selected in
+    # the wizard, joined to the legacy site by matching URN (same mapping the
+    # edit flow uses in Publish::Schools::UpdateCourseSchoolsService).
+    let(:gias_school) { create(:gias_school, urn: site.urn) }
+    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
+
+    let(:valid_course_params) do
+      {
+        "age_range_in_years" => "3_to_7",
+        "applications_open_from" => recruitment_cycle.application_start_date,
+        "funding" => "fee",
+        "is_send" => "1",
+        "level" => "primary",
+        "qualification" => "qts",
+        "start_date" => "September #{recruitment_cycle.year}",
+        "study_mode" => %w[full_time],
+        "sites_ids" => [site.id],
+        "study_sites_ids" => [study_site.id],
+        "master_subject_id" => primary_subject.id,
+        "subjects_ids" => [primary_subject.id],
+      }
+    end
+
+    context "when the flag is off" do
+      before do
+        allow(FeatureFlag).to receive(:active?).and_call_original
+        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
+      end
+
+      it "dual-writes: builds both the legacy site_status and the new Course::School" do
+        expect(created_course.sites.map(&:id)).to eq([site.id])
+        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
+        expect(created_course.schools.first.site_code).to eq("-")
+        expect(created_course.errors).to be_empty
+      end
+
+      it "persists both models on save" do
+        created_course.save!
+
+        expect(created_course.reload.sites.map(&:id)).to eq([site.id])
+        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :site_code))
+          .to eq([[gias_school.id, "-"]])
+      end
+    end
+
+    context "when the flag is on" do
+      before do
+        allow(FeatureFlag).to receive(:active?).and_call_original
+        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
+      end
+
+      it "builds the new Course::School and passes :new validation" do
+        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
+        expect(created_course.schools.first.site_code).to eq("-")
+        expect(created_course.errors).to be_empty
+      end
+
+      it "persists the Course::School on save" do
+        created_course.save!
+
+        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :site_code))
+          .to eq([[gias_school.id, "-"]])
+      end
+    end
+
+    context "when there is no matching provider_school (not backfilled)" do
+      # GIAS school exists (matched by URN) but the provider has not been
+      # backfilled, so no Provider::School exists for the pair.
+      let!(:gias_school) { create(:gias_school, urn: site.urn) }
+      let!(:provider_school) { nil }
+
+      before do
+        allow(FeatureFlag).to receive(:active?).and_call_original
+        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
+      end
+
+      it "skips the new-model write, logs a warning, and still builds the legacy site_status" do
+        expect(Rails.logger).to receive(:warn).with(/course_school/)
+
+        expect(created_course.schools).to be_empty
+        expect(created_course.sites.map(&:id)).to eq([site.id])
+      end
+    end
+
+    context "when no schools are selected" do
+      let(:valid_course_params) do
+        {
+          "level" => "primary",
+          "qualification" => "qts",
+          "funding" => "fee",
+          "sites_ids" => [],
+        }
+      end
+
+      before do
+        allow(FeatureFlag).to receive(:active?).and_call_original
+        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
+      end
+
+      it "adds the existing error and builds no Course::School" do
+        expect(created_course.errors[:sites]).to include("Select at least one school")
+        expect(created_course.schools).to be_empty
+      end
+    end
+  end
 end
