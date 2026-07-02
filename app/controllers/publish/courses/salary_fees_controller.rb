@@ -4,6 +4,7 @@ module Publish
   module Courses
     class SalaryFeesController < ApplicationController
       include CopyCourseContent
+      include GotoPreview
 
       before_action :previous_cycle_enrichment, only: :edit
 
@@ -20,11 +21,19 @@ module Publish
         if @course_salary_fees_form.save!
           course_updated_message t(".course_salary_fee")
 
-          redirect_to publish_provider_recruitment_cycle_course_path(
-            provider.provider_code,
-            recruitment_cycle.year,
-            course.course_code,
-          )
+          if goto_preview?
+            redirect_to preview_publish_provider_recruitment_cycle_course_path(
+              provider.provider_code,
+              recruitment_cycle.year,
+              course.course_code,
+            )
+          else
+            redirect_to publish_provider_recruitment_cycle_course_path(
+              provider.provider_code,
+              recruitment_cycle.year,
+              course.course_code,
+            )
+          end
         else
           fetch_course_list_to_copy_from
           render :edit
@@ -53,6 +62,10 @@ module Publish
         )&.enrichments&.where(
           status: "published",
         )&.last
+      end
+
+      def param_form_key
+        :publish_course_salary_fees_form
       end
     end
   end
