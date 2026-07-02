@@ -47,6 +47,8 @@
         rows: 15,
         max_words: 250) %>
 
+        <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
+
         <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
       </div>
       <%= f.govuk_submit t(".update") %>

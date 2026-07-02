@@ -565,6 +565,8 @@ en:
           text: "Enter details about the training provider"
         what_you_will_study:
           text: "Enter details about what you will study"
+        salary_fee_details:
+          text: "Enter details about fees"
         school_placement:
           text: "Enter details about what you will do on school placements"
         interview_process:

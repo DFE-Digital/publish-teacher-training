@@ -1,6 +1,8 @@
 <% if course.recruitment_cycle_after?(2026) %>
   <% if course.salary_fee_details.present? %>
     <%= markdown(course.salary_fee_details) %>
+  <% else %>
+    <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :salary_fee_details, is_preview: preview?(params)) %>
   <% end %>
 <% else %>
   <% if course.salary_details.present? %>
