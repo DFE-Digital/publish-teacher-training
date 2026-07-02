@@ -224,8 +224,10 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
           patch "/salary-fees", on: :member, to: "courses/salary_fees#update"
         end
 
-        get "/salary", on: :member, to: "courses/salary#edit"
-        patch "/salary", on: :member, to: "courses/salary#update"
+        constraints ->(req) { req.params["recruitment_cycle_year"].to_i <= 2026 } do
+          get "/salary", on: :member, to: "courses/salary#edit"
+          patch "/salary", on: :member, to: "courses/salary#update"
+        end
 
         get "/withdraw", on: :member, to: "courses/withdrawals#edit"
         patch "/withdraw", on: :member, to: "courses/withdrawals#update"
