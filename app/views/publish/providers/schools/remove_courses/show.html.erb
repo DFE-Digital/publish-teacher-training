@@ -16,7 +16,7 @@
       </legend>
     </fieldset>
     <p class="govuk-body">
-      Are you sure you want to remove <strong><%= @course.name_and_code %></strong>
+      Are you sure you want to detach <strong><%= @course.name_and_code %></strong>
       from <strong><%= @school.location_name %></strong>?
     </p>
     <%= form_with url: remove_course_publish_provider_recruitment_cycle_school_path(
@@ -28,7 +28,7 @@
 method: :delete,
 local: true do |f| %>
       <div class="govuk-!-margin-bottom-2">
-        <%= f.submit "Remove course", class: "govuk-button govuk-button--warning" %>
+        <%= f.submit "Detach course", class: "govuk-button govuk-button--warning" %>
       </div>
     <% end %>
     <%= govuk_link_to "Cancel",

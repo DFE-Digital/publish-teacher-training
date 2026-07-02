@@ -25,6 +25,16 @@
   </td>
   -->
   <td class="govuk-table__cell">
+    <% count = school.courses_count.to_i %>
+    <div class="govuk-body">
+      <% if count.zero? %>
+        0 courses
+      <% else %>
+        <%= pluralize(count, "course") %>
+      <% end %>
+    </div>
+  </td>
+  <td class="govuk-table__cell">
     <%= govuk_link_to remove_publish_provider_recruitment_cycle_school_path(
     @provider.provider_code,
     school.recruitment_cycle.year,
@@ -36,13 +46,5 @@
         <%= school.location_name %>
       </span>
     <% end %>
-    <% count = school.courses_count.to_i %>
-    <div class="govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1">
-      <% if count.zero? %>
-        No courses attached
-      <% else %>
-        <%= pluralize(count, "course") %> attached
-      <% end %>
-    </div>
   </td>
 </tr>

@@ -73,11 +73,17 @@
       <!-- TABLE OF SCHOOLS -->
       <% if @schools.any? %>
         <div>
-          <table class="govuk-table">
+          <table class="govuk-table app-table--align-bottom">
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="col">
-                  <%= t(".name") %>
+                  School
+                </th>
+                <th class="govuk-table__header" scope="col">
+                  Number of attached courses
+                  <%# <div class="govuk-hint govuk-!-font-size-16">
+                    Number of courses the school is attached to
+                  </div> %>
                 </th>
                 <th class="govuk-table__header" scope="col">
                   Remove school
