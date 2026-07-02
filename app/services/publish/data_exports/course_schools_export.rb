@@ -26,8 +26,8 @@ module Publish
             row = {
               "Course name" => course.name.titleize,
               "Course code" => course.course_code,
-              "Age range" => course.age_range_in_years&.humanize,
               "Status" => status(course).titleize,
+              "Age range" => course.age_range_in_years&.humanize,
               "Fee or salary" => funding_label(course),
               "UK fee" => uk_fee(course),
             }
@@ -40,7 +40,7 @@ module Publish
             # Add remaining fields
             row.merge!(
               "Qualification" => qualification(course),
-              "Study mode" => course.study_mode.humanize,
+              "Full time or part time" => course.study_mode.humanize,
               "Start date" => format_date(course.start_date),
               "Placement schools" => site.location_name || site.code,
             )
