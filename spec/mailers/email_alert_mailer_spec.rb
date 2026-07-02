@@ -61,6 +61,18 @@ describe EmailAlertMailer do
     expect(body).to include("Get a free teacher training adviser")
   end
 
+  it "adds utm tracking params to the links in the body" do
+    body = mail.govuk_notify_personalisation[:body]
+    expect(body).to include("utm_source=email")
+    expect(body).to include("utm_medium=email")
+    expect(body).to include("utm_campaign=weekly_digest")
+    expect(body).to include("utm_content=course_link")
+    expect(body).to include("utm_content=search_for_a_course")
+    expect(body).to include("utm_content=choose_course")
+    expect(body).to include("utm_content=training_adviser")
+    expect(body).to include("utm_content=unsubscribe")
+  end
+
   context "with course limit stubbed" do
     before { stub_const("EmailAlertMailer::COURSE_LIMIT", 2) }
 
