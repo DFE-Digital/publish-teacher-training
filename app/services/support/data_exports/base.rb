@@ -5,13 +5,17 @@ module Support
     class Base
       def to_csv(data_for_export: data)
         require "csv"
+
         header_row = data_for_export.first.keys
-        ::CSV.generate(headers: true) do |rows|
+
+        csv_string = CSV.generate(headers: true) do |rows|
           rows << header_row
           data_for_export.map(&:values).each do |value|
             rows << value
           end
         end
+
+        "\uFEFF" + csv_string
       end
 
       def filename
