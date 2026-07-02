@@ -33,3 +33,6 @@ basic_auth:
 
 skylight:
   enable: false
+
+features:
+  send_request_data_to_bigquery: true
