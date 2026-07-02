@@ -21,15 +21,15 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
         peterborough_site = build(:site, latitude: 52.5769, longitude: -0.2424)
         birmingham_site = build(:site, latitude: 52.4862, longitude: -1.8904)
 
-        create(:course, :secondary, subjects: [subject_record], site_statuses: [
+        create(:course, :secondary, :published, subjects: [subject_record], site_statuses: [
           build(:site_status, :findable, site: reading_site),
         ])
 
-        create(:course, :secondary, subjects: [subject_record], site_statuses: [
+        create(:course, :secondary, :published, subjects: [subject_record], site_statuses: [
           build(:site_status, :findable, site: peterborough_site),
         ])
 
-        create(:course, :secondary, subjects: [subject_record], site_statuses: [
+        create(:course, :secondary, :published, subjects: [subject_record], site_statuses: [
           build(:site_status, :findable, site: birmingham_site),
         ])
       end
@@ -50,7 +50,7 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
     context "when a bucket has over 100 results" do
       before do
         101.times do
-          create(:course, :secondary, subjects: [find_or_create(:secondary_subject, :mathematics)], site_statuses: [
+          create(:course, :secondary, :published, subjects: [find_or_create(:secondary_subject, :mathematics)], site_statuses: [
             build(:site_status, :findable, site: build(:site, latitude: 51.5074, longitude: -0.1278)),
           ])
         end

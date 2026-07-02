@@ -2757,6 +2757,51 @@ describe Course do
     end
   end
 
+  describe "#without_employing_school?" do
+    context "when the new school model flag is active" do
+      before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
+
+      it "is true for an exempt salaried course with no school attached" do
+        course = create(:course, :with_salary, publish_without_schools_allowed: true)
+
+        expect(course.without_employing_school?).to be(true)
+      end
+
+      it "is true for an exempt apprenticeship course with no school attached" do
+        course = create(:course, :with_apprenticeship, publish_without_schools_allowed: true)
+
+        expect(course.without_employing_school?).to be(true)
+      end
+
+      it "is false when a school is attached" do
+        course = create(:course, :with_salary, publish_without_schools_allowed: true)
+        create(:course_school, course:)
+
+        expect(course.reload.without_employing_school?).to be(false)
+      end
+
+      it "is false when publish_without_schools_allowed is false" do
+        course = create(:course, :with_salary, publish_without_schools_allowed: false)
+
+        expect(course.without_employing_school?).to be(false)
+      end
+
+      it "is false for fee courses" do
+        course = create(:course, :fee, publish_without_schools_allowed: true)
+
+        expect(course.without_employing_school?).to be(false)
+      end
+    end
+
+    context "when the new school model flag is inactive" do
+      it "is false even for an exempt salaried course with no school" do
+        course = create(:course, :with_salary, publish_without_schools_allowed: true)
+
+        expect(course.without_employing_school?).to be(false)
+      end
+    end
+  end
+
   describe "#visa_sponsorship" do
     context "when the funding type is fee-based" do
       let(:course) { build(:course, funding: "fee", can_sponsor_student_visa:) }

@@ -276,15 +276,23 @@ FactoryBot.define do
       sites { build_list(:site, 1, provider:) }
     end
 
+    # A findable site implies the course is published (in production a course's
+    # sites are only publish='Y' once it is published). Give these courses a
+    # published enrichment so Courses::Query (findable == Course#is_published?)
+    # returns them. Specs that need a different enrichment state pass their own
+    # `enrichments:`, which overrides this.
     trait :with_full_time_sites do
+      enrichments { [build(:course_enrichment, :published)] }
       site_statuses { [build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
     end
 
     trait :with_part_time_sites do
+      enrichments { [build(:course_enrichment, :published)] }
       site_statuses { [build(:site_status, :findable, vac_status: :part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
     end
 
     trait :with_full_time_or_part_time_sites do
+      enrichments { [build(:course_enrichment, :published)] }
       site_statuses { [build(:site_status, :findable, vac_status: :both_full_time_and_part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
     end
 

@@ -30,14 +30,7 @@ module Courses
                  .where(
                    provider: { recruitment_cycle_id: @current_recruitment_cycle.id },
                  )
-                 .where(<<~SQL)
-                   EXISTS (
-                     SELECT 1 FROM course_site
-                     WHERE course_site.course_id = course.id
-                       AND course_site.status = 'R'
-                       AND course_site.publish = 'Y'
-                   )
-                 SQL
+                 .where(findable_courses_sql)
     end
 
     def call
@@ -77,6 +70,7 @@ module Courses
     def optimisation_scope
       @scope.preload(
         :site_statuses,
+        :schools,
         :latest_published_enrichment,
         :provider,
         subjects: [:financial_incentive],
@@ -501,6 +495,37 @@ module Courses
     end
 
   private
+
+    # Find shows published courses only — nothing in draft, rolled over or
+    # withdrawn — regardless of whether the course has schools/sites attached.
+    # Findability is therefore exactly Course#is_published?.
+    def findable_courses_sql
+      published_course_sql
+    end
+
+    # SQL mirror of Course#is_published? (content_status in published /
+    # published_with_unpublished_changes). A course counts as published when it
+    # has a published enrichment AND its latest enrichment has not since been
+    # rolled over or withdrawn. The published row + "latest not rolled_over /
+    # withdrawn" pair is what keeps a draft-on-top-of-published course findable
+    # (unpublished changes, like fee courses) while excluding draft-only,
+    # rolled-over and withdrawn courses. The created_at/id ordering matches
+    # CourseEnrichment.most_recent.
+    def published_course_sql
+      <<~SQL
+        EXISTS (
+          SELECT 1 FROM course_enrichment ce
+          WHERE ce.course_id = course.id
+            AND ce.status = #{CourseEnrichment.statuses[:published]}
+        )
+        AND (
+          SELECT ce_latest.status FROM course_enrichment ce_latest
+          WHERE ce_latest.course_id = course.id
+          ORDER BY ce_latest.created_at DESC, ce_latest.id DESC
+          LIMIT 1
+        ) NOT IN (#{CourseEnrichment.statuses[:rolled_over]}, #{CourseEnrichment.statuses[:withdrawn]})
+      SQL
+    end
 
     def master_subject_ordering_scope
       return @scope if @searched_subject_ids.blank?

@@ -241,23 +241,19 @@ RSpec.describe "Search Results", :js, service: :find do
   end
 
   def given_there_are_courses_offering_online_interviews
-    create(:course, :with_full_time_sites, name: "Biology Online", course_code: "BOL1").tap do |course|
-      create(:course_enrichment, :published, course:, interview_location: "online")
-    end
+    create(:course, :with_full_time_sites, name: "Biology Online", course_code: "BOL1",
+                                           enrichments: [build(:course_enrichment, :published, interview_location: "online")])
 
-    create(:course, :with_full_time_sites, name: "Chemistry Both", course_code: "CBOT").tap do |course|
-      create(:course_enrichment, :published, course:, interview_location: "both")
-    end
+    create(:course, :with_full_time_sites, name: "Chemistry Both", course_code: "CBOT",
+                                           enrichments: [build(:course_enrichment, :published, interview_location: "both")])
   end
 
   def and_there_are_courses_that_offer_in_person_only_interviews
-    create(:course, :with_full_time_sites, name: "Physics In person", course_code: "PIP1").tap do |course|
-      create(:course_enrichment, :published, course:, interview_location: "in person")
-    end
+    create(:course, :with_full_time_sites, name: "Physics In person", course_code: "PIP1",
+                                           enrichments: [build(:course_enrichment, :published, interview_location: "in person")])
 
-    create(:course, :with_full_time_sites, name: "Draft Only Online", course_code: "DOON").tap do |course|
-      create(:course_enrichment, :initial_draft, course:, interview_location: "online")
-    end
+    create(:course, :with_full_time_sites, name: "Draft Only Online", course_code: "DOON",
+                                           enrichments: [build(:course_enrichment, :initial_draft, interview_location: "online")])
   end
 
   def and_i_filter_by_online_interviews

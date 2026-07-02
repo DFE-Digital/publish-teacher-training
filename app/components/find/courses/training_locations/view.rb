@@ -29,8 +29,14 @@ module Find
           end
         end
 
+        def no_employing_schools?
+          course.without_employing_school?
+        end
+
         def potential_placements_text
-          if address
+          if no_employing_schools?
+            I18n.t(".find.courses.training_locations.view.no_employing_schools")
+          elsif address
             distance_text
           else
             content_tag(:span, I18n.t(".find.courses.training_locations.view.search_help_#{course.funding}"), class: "govuk-hint govuk-!-font-size-16")
@@ -38,6 +44,7 @@ module Find
         end
 
         def guaranteed_text
+          return if no_employing_schools?
           return unless address
 
           I18n.t(".find.courses.training_locations.view.guaranteed") if course.fee? || course.salary?
@@ -74,6 +81,8 @@ module Find
         end
 
         def show_school_placements_link?
+          return false if no_employing_schools?
+
           course.provider.selectable_school?
         end
       end

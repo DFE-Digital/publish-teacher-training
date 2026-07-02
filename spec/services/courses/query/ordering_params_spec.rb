@@ -12,16 +12,16 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     let(:manchester_provider) { create(:provider, provider_name: "Manchester University") }
 
     let!(:biology) do
-      create(:course, :with_full_time_sites, name: "Biology", provider: niot_provider)
+      create(:course, :with_full_time_sites, :published, name: "Biology", provider: niot_provider)
     end
     let!(:chemistry) do
-      create(:course, :with_full_time_sites, name: "Chemistry", provider: essex_provider)
+      create(:course, :with_full_time_sites, :published, name: "Chemistry", provider: essex_provider)
     end
     let!(:mathematics) do
-      create(:course, :with_full_time_sites, name: "Mathematics", provider: oxford_provider)
+      create(:course, :with_full_time_sites, :published, name: "Mathematics", provider: oxford_provider)
     end
     let!(:art_and_design) do
-      create(:course, :with_full_time_sites, name: "Art and Design", provider: manchester_provider)
+      create(:course, :with_full_time_sites, :published, name: "Art and Design", provider: manchester_provider)
     end
 
     context "when ordering by course name ascending" do
@@ -44,10 +44,10 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
         let(:zeta_provider) { create(:provider, provider_name: "Zeta University") }
 
         let!(:biology_alpha) do
-          create(:course, :with_full_time_sites, name: "Biology", provider: alpha_provider)
+          create(:course, :with_full_time_sites, :published, name: "Biology", provider: alpha_provider)
         end
         let!(:biology_zeta) do
-          create(:course, :with_full_time_sites, name: "Biology", provider: zeta_provider)
+          create(:course, :with_full_time_sites, :published, name: "Biology", provider: zeta_provider)
         end
 
         it "orders by provider name ascending as secondary sort" do
@@ -82,10 +82,10 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
       context "when a provider has multiple courses" do
         let!(:niot_art) do
-          create(:course, :with_full_time_sites, name: "Art", provider: niot_provider)
+          create(:course, :with_full_time_sites, :published, name: "Art", provider: niot_provider)
         end
         let!(:niot_zoology) do
-          create(:course, :with_full_time_sites, name: "Zoology", provider: niot_provider)
+          create(:course, :with_full_time_sites, :published, name: "Zoology", provider: niot_provider)
         end
 
         it "orders by course name ascending as secondary sort" do
@@ -106,19 +106,19 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     context "when searching by provider name" do
       let(:provider) { create(:provider, provider_name: "Manchester University") }
       let!(:manchester_computing_course) do
-        create(:course, :with_full_time_sites, name: "Computing", provider:)
+        create(:course, :with_full_time_sites, :published, name: "Computing", provider:)
       end
       let!(:manchester_biology_course) do
-        create(:course, :with_full_time_sites, name: "Biology", provider:)
+        create(:course, :with_full_time_sites, :published, name: "Biology", provider:)
       end
       let!(:manchester_science_course) do
-        create(:course, :with_full_time_sites, name: "Science", provider:)
+        create(:course, :with_full_time_sites, :published, name: "Science", provider:)
       end
       let!(:manchester_primary_course) do
-        create(:course, :with_full_time_sites, name: "Primary", provider:)
+        create(:course, :with_full_time_sites, :published, name: "Primary", provider:)
       end
       let!(:manchester_art_and_design_course) do
-        create(:course, :with_full_time_sites, name: "Art and design", provider:)
+        create(:course, :with_full_time_sites, :published, name: "Art and design", provider:)
       end
       let(:params) { { provider_code: provider.provider_code } }
 
@@ -143,16 +143,16 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       let(:beta_provider) { create(:provider, provider_name: "Beta University") }
 
       let!(:course_old) do
-        create(:course, :with_full_time_sites, name: "Geology", provider: alpha_provider,
-                                               enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 3.days.ago)])
+        create(:course, :with_full_time_sites, :published, name: "Geology", provider: alpha_provider,
+                                                           enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 3.days.ago)])
       end
       let!(:course_new) do
-        create(:course, :with_full_time_sites, name: "Astronomy", provider: beta_provider,
-                                               enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 1.day.ago)])
+        create(:course, :with_full_time_sites, :published, name: "Astronomy", provider: beta_provider,
+                                                           enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 1.day.ago)])
       end
       let!(:course_mid) do
-        create(:course, :with_full_time_sites, name: "Ecology", provider: alpha_provider,
-                                               enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 2.days.ago)])
+        create(:course, :with_full_time_sites, :published, name: "Ecology", provider: alpha_provider,
+                                                           enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 2.days.ago)])
       end
 
       it "returns courses ordered by newest first" do
@@ -169,8 +169,8 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
         let(:same_published_at) { Time.zone.parse("2026-03-20 12:00:00") }
 
         let!(:course_same_time_zeta) do
-          create(:course, :with_full_time_sites, name: "Robotics", provider: zeta_provider,
-                                                 enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: same_published_at)])
+          create(:course, :with_full_time_sites, :published, name: "Robotics", provider: zeta_provider,
+                                                             enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: same_published_at)])
         end
 
         before do
@@ -198,13 +198,13 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       let(:beta_provider) { create(:provider, provider_name: "Beta University") }
 
       let!(:course_sept_alpha) do
-        create(:course, :with_full_time_sites, name: "Physics", start_date: september_start, provider: alpha_provider)
+        create(:course, :with_full_time_sites, :published, name: "Physics", start_date: september_start, provider: alpha_provider)
       end
       let!(:course_sept_beta) do
-        create(:course, :with_full_time_sites, name: "Physics", start_date: september_start, provider: beta_provider)
+        create(:course, :with_full_time_sites, :published, name: "Physics", start_date: september_start, provider: beta_provider)
       end
       let!(:course_oct_alpha) do
-        create(:course, :with_full_time_sites, name: "Physics", start_date: october_start, provider: alpha_provider)
+        create(:course, :with_full_time_sites, :published, name: "Physics", start_date: october_start, provider: alpha_provider)
       end
 
       it "orders by provider name ascending as secondary sort when start dates match" do
@@ -283,7 +283,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
           :course,
           :with_full_time_sites,
           :fee,
-          name: "Chemistry",
+          name: "Chemistry Intl",
           provider: alpha_provider,
           enrichments: [build(:course_enrichment, :published, fee_international: 12_000)],
         )
@@ -293,7 +293,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
           :course,
           :with_full_time_sites,
           :fee,
-          name: "Chemistry",
+          name: "Chemistry Intl",
           provider: zeta_provider,
           enrichments: [build(:course_enrichment, :published, fee_international: 12_000)],
         )
@@ -303,14 +303,14 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
           :course,
           :with_full_time_sites,
           :fee,
-          name: "Chemistry",
+          name: "Chemistry Intl",
           provider: alpha_provider,
           enrichments: [build(:course_enrichment, :published, fee_international: 18_000)],
         )
       end
 
       it "orders by course name then provider name ascending as secondary sort when fees match" do
-        chemistry_courses = results.select { |c| c.name == "Chemistry" }
+        chemistry_courses = results.select { |c| c.name == "Chemistry Intl" }
 
         expect(chemistry_courses).to match_collection(
           [

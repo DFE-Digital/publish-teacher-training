@@ -19,6 +19,10 @@ module Courses
           course.sites.any?(&:school?)
         end
       end
+
+      def self.none?(course)
+        !any?(course)
+      end
     end
   end
 end

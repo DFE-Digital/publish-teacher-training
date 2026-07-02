@@ -41,6 +41,7 @@ RSpec.describe "No search results", :js, service: :find do
     create(
       :course,
       :primary,
+      :published,
       name: "Primary - London",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
       subjects: [find_or_create(:primary_subject, :primary)],
@@ -49,6 +50,7 @@ RSpec.describe "No search results", :js, service: :find do
     create(
       :course,
       :secondary,
+      :published,
       name: "Mathematics - Reading",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: reading.latitude, longitude: reading.longitude))],
       subjects: [find_or_create(:secondary_subject, :mathematics)],

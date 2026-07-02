@@ -38,6 +38,7 @@ RSpec.describe "Searching in Wales", :js, service: :find do
     @bristol_course = create(
       :course,
       :secondary,
+      :published,
       name: "Mathematics - Bristol",
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: bristol.latitude, longitude: bristol.longitude))],
       subjects: [find_or_create(:secondary_subject, :mathematics)],
