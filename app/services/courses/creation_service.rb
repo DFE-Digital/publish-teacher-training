@@ -118,6 +118,56 @@ module Courses
       course.errors.add(:sites, message: "Select at least one school") if site_ids.empty?
     end
 
+    # Dual-writes the selected schools to the new Course::School model,
+    # building the records in memory so they persist atomically with the
+    # course on save and are visible to CoursePublishableSchoolsPresence-
+    # Validator's :new-context read (which the new-school-model flag routes
+    # to course.schools). Mirrors the site→gias_school→provider_school
+    # mapping used by Publish::Schools::UpdateCourseSchoolsService.
+    def update_schools(course)
+      return if site_ids.nil?
+      # Nothing selected — update_sites already records the "Select at least
+      # one school" error; skip before touching `sites` (find([]) would raise).
+      return if site_ids.compact_blank.empty?
+
+      school_sites.each do |site|
+        gias_school = gias_schools_by_urn[site.urn]
+        next unless gias_school
+
+        provider_school = provider_schools_by_gias_id[gias_school.id]
+
+        unless provider_school
+          # No matching Provider::School yet — provider not fully backfilled
+          # (or its site predates the dual-write). Skip the new-model build;
+          # the schools backfill (or the next provider-side write) reconciles
+          # later. Same rationale as UpdateCourseSchoolsService#attach_school.
+          Rails.logger.warn(
+            "[CourseSchools] skipped course_school build — no provider_school for " \
+            "provider=#{provider.id} gias_school=#{gias_school.id}",
+          )
+          next
+        end
+
+        course.schools.build(gias_school_id: gias_school.id, site_code: provider_school.site_code)
+      end
+    end
+
+    def school_sites
+      @school_sites ||= sites.select(&:school?)
+    end
+
+    def gias_schools_by_urn
+      @gias_schools_by_urn ||= GiasSchool
+        .where(urn: school_sites.map(&:urn).compact_blank)
+        .index_by(&:urn)
+    end
+
+    def provider_schools_by_gias_id
+      @provider_schools_by_gias_id ||= provider.schools
+        .where(gias_school_id: gias_schools_by_urn.values.map(&:id))
+        .index_by(&:gias_school_id)
+    end
+
     def update_study_sites(course)
       return if study_site_ids.nil?
 
