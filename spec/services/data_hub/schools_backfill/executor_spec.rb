@@ -320,6 +320,80 @@ describe DataHub::SchoolsBackfill::Executor do
           Provider::School.where(provider_id: current_provider.id, gias_school_id: current_gias_school.id),
         ).to exist
       end
+
+      it "can be scoped to one recruitment cycle" do
+        previous_cycle = create(:recruitment_cycle, :previous)
+        current_cycle = find_or_create(:recruitment_cycle)
+
+        previous_provider = create(:provider, recruitment_cycle: previous_cycle)
+        current_provider = create(:provider, recruitment_cycle: current_cycle)
+        previous_gias_school = create(:gias_school, urn: "830008")
+        current_gias_school = create(:gias_school, urn: "840008")
+        previous_site = create(:site, provider: previous_provider, urn: previous_gias_school.urn, code: "P")
+        current_site = create(:site, provider: current_provider, urn: current_gias_school.urn, code: "Q")
+        previous_course = create(:course, provider: previous_provider)
+        current_course = create(:course, provider: current_provider)
+        create(:site_status, course: previous_course, site: previous_site)
+        create(:site_status, course: current_course, site: current_site)
+
+        described_class.new(recruitment_cycle_years: current_cycle.year).execute
+
+        expect(
+          Provider::School.where(provider_id: current_provider.id, gias_school_id: current_gias_school.id),
+        ).to exist
+        expect(
+          Course::School.where(course_id: current_course.id, gias_school_id: current_gias_school.id),
+        ).to exist
+        expect(
+          Provider::School.where(provider_id: previous_provider.id, gias_school_id: previous_gias_school.id),
+        ).to be_empty
+        expect(
+          Course::School.where(course_id: previous_course.id, gias_school_id: previous_gias_school.id),
+        ).to be_empty
+      end
+
+      it "accepts comma-separated recruitment cycle years" do
+        previous_cycle = create(:recruitment_cycle, :previous)
+        current_cycle = find_or_create(:recruitment_cycle)
+
+        previous_provider = create(:provider, recruitment_cycle: previous_cycle)
+        current_provider = create(:provider, recruitment_cycle: current_cycle)
+        previous_gias_school = create(:gias_school, urn: "850008")
+        current_gias_school = create(:gias_school, urn: "860008")
+
+        create(:site, provider: previous_provider, urn: previous_gias_school.urn, code: "P")
+        create(:site, provider: current_provider, urn: current_gias_school.urn, code: "Q")
+
+        described_class.new(recruitment_cycle_years: "#{previous_cycle.year}, #{current_cycle.year}").execute
+
+        expect(
+          Provider::School.where(provider_id: previous_provider.id, gias_school_id: previous_gias_school.id),
+        ).to exist
+        expect(
+          Provider::School.where(provider_id: current_provider.id, gias_school_id: current_gias_school.id),
+        ).to exist
+      end
+
+      it "scopes skipped-row reporting to the selected recruitment cycle" do
+        previous_cycle = create(:recruitment_cycle, :previous)
+        current_cycle = find_or_create(:recruitment_cycle)
+        previous_provider = create(:provider, recruitment_cycle: previous_cycle)
+        current_provider = create(:provider, recruitment_cycle: current_cycle)
+        previous_site = create_school_site_without_validation(provider: previous_provider, urn: nil, code: "P")
+        current_site = create_school_site_without_validation(provider: current_provider, urn: nil, code: "Q")
+
+        summary = described_class.new(recruitment_cycle_years: current_cycle.year).execute
+
+        skipped_site_ids = summary.full_summary["skipped_sites"].map { |row| row["site_id"] }
+        expect(skipped_site_ids).to contain_exactly(current_site.id)
+        expect(skipped_site_ids).not_to include(previous_site.id)
+      end
+
+      it "raises when a requested recruitment cycle year does not exist" do
+        expect {
+          described_class.new(recruitment_cycle_years: "1900").execute
+        }.to raise_error(ArgumentError, "Could not find recruitment cycle(s) for year(s): 1900")
+      end
     end
   end
 end

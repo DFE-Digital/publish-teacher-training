@@ -3,6 +3,13 @@
 module DataHub
   module SchoolsBackfill
     class Executor
+      attr_reader :recruitment_cycle_years, :recruitment_cycle_ids
+
+      def initialize(recruitment_cycle_years: nil)
+        @recruitment_cycle_years = parse_recruitment_cycle_years(recruitment_cycle_years)
+        @recruitment_cycle_ids = resolve_recruitment_cycle_ids
+      end
+
       def execute
         process_summary = DataHub::SchoolsBackfillProcessSummary.start!
 
@@ -34,6 +41,56 @@ module DataHub
       end
 
     private
+
+      def parse_recruitment_cycle_years(raw_years)
+        Array(raw_years)
+          .flat_map { |value| value.to_s.split(",") }
+          .map(&:strip)
+          .reject(&:blank?)
+          .uniq
+      end
+
+      def resolve_recruitment_cycle_ids
+        return [] if recruitment_cycle_years.empty?
+
+        ids_by_year = RecruitmentCycle.where(year: recruitment_cycle_years).pluck(:year, :id).to_h
+        missing_years = recruitment_cycle_years - ids_by_year.keys
+
+        if missing_years.any?
+          raise ArgumentError, "Could not find recruitment cycle(s) for year(s): #{missing_years.join(', ')}"
+        end
+
+        ids_by_year.values
+      end
+
+      def scoped_to_recruitment_cycles?
+        recruitment_cycle_ids.any?
+      end
+
+      def recruitment_cycle_ids_sql
+        recruitment_cycle_ids.join(", ")
+      end
+
+      def site_provider_scope_join_sql
+        return "" unless scoped_to_recruitment_cycles?
+
+        "JOIN provider ON provider.id = site.provider_id"
+      end
+
+      def course_provider_scope_join_sql
+        return "" unless scoped_to_recruitment_cycles?
+
+        <<~SQL.squish
+          JOIN course ON course.id = course_site.course_id
+          JOIN provider ON provider.id = course.provider_id
+        SQL
+      end
+
+      def recruitment_cycle_scope_sql
+        return "" unless scoped_to_recruitment_cycles?
+
+        "AND provider.recruitment_cycle_id IN (#{recruitment_cycle_ids_sql})"
+      end
 
       def insert_provider_schools
         inserted_rows = ActiveRecord::Base.connection.exec_query(provider_schools_insert_sql)
@@ -72,12 +129,14 @@ module DataHub
                    gias_school.id AS gias_school_id,
                    site.code AS site_code
             FROM site
+            #{site_provider_scope_join_sql}
             JOIN gias_school ON gias_school.urn = site.urn
             WHERE site.site_type = 0
               AND site.discarded_at IS NULL
               AND site.urn IS NOT NULL
               AND site.urn <> ''
               AND site.code = '-'
+              #{recruitment_cycle_scope_sql}
             ORDER BY site.provider_id, site.id
           )
         SQL
@@ -94,12 +153,14 @@ module DataHub
                    gias_school.id AS gias_school_id,
                    site.code AS site_code
             FROM site
+            #{site_provider_scope_join_sql}
             JOIN gias_school ON gias_school.urn = site.urn
             WHERE site.site_type = 0
               AND site.discarded_at IS NULL
               AND site.urn IS NOT NULL
               AND site.urn <> ''
               AND site.code <> '-'
+              #{recruitment_cycle_scope_sql}
             ORDER BY site.provider_id, gias_school.id, site.id
           )
         SQL
@@ -144,6 +205,7 @@ module DataHub
                    gias_school.id AS gias_school_id,
                    site.code AS site_code
             FROM course_site
+            #{course_provider_scope_join_sql}
             JOIN site        ON site.id = course_site.site_id
             JOIN gias_school ON gias_school.urn = site.urn
             WHERE site.site_type = 0
@@ -151,6 +213,7 @@ module DataHub
               AND site.urn IS NOT NULL
               AND site.urn <> ''
               AND site.code = '-'
+              #{recruitment_cycle_scope_sql}
             ORDER BY course_site.course_id, gias_school.id, site.id
           )
         SQL
@@ -167,6 +230,7 @@ module DataHub
                    gias_school.id AS gias_school_id,
                    site.code AS site_code
             FROM course_site
+            #{course_provider_scope_join_sql}
             JOIN site        ON site.id = course_site.site_id
             JOIN gias_school ON gias_school.urn = site.urn
             WHERE site.site_type = 0
@@ -174,6 +238,7 @@ module DataHub
               AND site.urn IS NOT NULL
               AND site.urn <> ''
               AND site.code <> '-'
+              #{recruitment_cycle_scope_sql}
             ORDER BY course_site.course_id, gias_school.id, site.id
           )
         SQL
@@ -203,10 +268,12 @@ module DataHub
                    ELSE 'urn_not_in_gias_school'
                  END AS reason
           FROM site
+          #{site_provider_scope_join_sql}
           LEFT JOIN gias_school ON gias_school.urn = site.urn
           WHERE site.site_type = 0
             AND site.discarded_at IS NULL
             AND (site.urn IS NULL OR site.urn = '' OR gias_school.id IS NULL)
+            #{recruitment_cycle_scope_sql}
           ORDER BY site.id
         SQL
       end
@@ -226,14 +293,18 @@ module DataHub
                    ELSE 'urn_not_in_gias_school'
                  END AS reason
           FROM course_site
+          #{course_provider_scope_join_sql}
           LEFT JOIN site        ON site.id = course_site.site_id
           LEFT JOIN gias_school ON gias_school.urn = site.urn
-          WHERE site.id IS NULL
-             OR site.site_type <> 0
-             OR site.discarded_at IS NOT NULL
-             OR site.urn IS NULL
-             OR site.urn = ''
-             OR gias_school.id IS NULL
+          WHERE (
+              site.id IS NULL
+              OR site.site_type <> 0
+              OR site.discarded_at IS NOT NULL
+              OR site.urn IS NULL
+              OR site.urn = ''
+              OR gias_school.id IS NULL
+            )
+            #{recruitment_cycle_scope_sql}
           ORDER BY course_site.course_id, course_site.site_id
         SQL
       end
