@@ -107,6 +107,8 @@ module Exports
     end
 
     def interview_location(enrichment)
+      return nil unless enrichment
+
       case enrichment.interview_location
       when "in person"
         "In person interviews"
