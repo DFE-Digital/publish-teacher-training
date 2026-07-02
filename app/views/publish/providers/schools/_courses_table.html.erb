@@ -1,0 +1,75 @@
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header">Course</th>
+      <th class="govuk-table__header">Course information</th>
+      <th class="govuk-table__header">Status</th>
+      <th class="govuk-table__header">Remove</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <% courses.each do |course| %>
+      <tr class="govuk-table__row">
+        <!-- Course name -->
+        <td class="govuk-table__cell app-table--courses__course-name">
+          <strong>
+            <%= govuk_link_to course.name_and_code,
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        @recruitment_cycle.year,
+        course.course_code
+      ),
+      class: "govuk-heading-s govuk-!-margin-bottom-0"
+    %>
+          </strong>
+          <% if course.level == "primary" && course.age_range_in_years.present? %>
+            <div class="govuk-hint"><%= "Ages #{course.age_range_in_years.humanize}" %></div>
+          <% end %>
+        </td>
+        <!-- Course info -->
+        <td class="govuk-table__cell govuk-body-s app-table--courses__course-information">
+          <% if course.funding.present? %>
+            <div>
+              <%= case course.funding
+        when "fee" then "Fee‑paying"
+        when "salary" then "Salaried"
+        when "apprenticeship" then "Apprenticeship"
+        else course.funding
+        end
+    %>
+            </div>
+          <% end %>
+          <% if course.respond_to?(:qualifications_summary) %>
+            <div><%= course.qualifications_summary %></div>
+          <% end %>
+          <% if course.respond_to?(:study_mode_description) %>
+            <div><%= course.study_mode_description&.capitalize %></div>
+          <% end %>
+          <% if course.start_date.present? %>
+            <%= course.start_date.strftime("%B %Y") %>
+          <% end %>
+        </td>
+        <!-- Status -->
+        <td class="govuk-table__cell app-table--courses__status">
+          <%= render Publish::Courses::StatusTagComponent.new(
+                course: course,
+                recruitment_cycle_year: course.recruitment_cycle.year
+              ) %>
+        </td>
+        <!-- Remove link -->
+        <td class="govuk-table__cell app-table--courses__status">
+          <%= govuk_link_to "Remove course",
+      remove_course_publish_provider_recruitment_cycle_school_path(
+        @provider.provider_code,
+        @recruitment_cycle.year,
+        @site.id,
+        course_code: course.course_code
+      ),
+      class: "app-link--destructive"
+%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+`

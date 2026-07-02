@@ -9,7 +9,41 @@ module Publish
     def index
       authorize :provider, :index?
 
+      @course = Course.new
+
       @course_list = ::Publish::CourseList.new(provider:)
+
+      # 2 x CSV exports: course information and schools list by course
+      respond_to do |format|
+        format.html
+        format.csv do
+          export =
+            if params[:export] == "schools"
+              Publish::DataExports::CourseSchoolsExport.new(
+                courses: all_courses,
+              )
+            else
+              Publish::DataExports::CourseInformationExport.new(
+                courses: all_courses,
+                provider: provider,
+                params: params,
+              )
+            end
+
+          send_data export.to_csv,
+                    filename: export.filename,
+                    type: "text/csv",
+                    disposition: :attachment
+        rescue StandardError => e
+          Rails.logger.error("CSV export failed: #{e.message}")
+          Sentry.capture_exception(e)
+
+          redirect_to publish_provider_recruitment_cycle_courses_path(
+            provider.provider_code,
+            provider.recruitment_cycle_year,
+          ), flash: { alert: "Unable to download course data" }
+        end
+      end
     end
 
     def show
@@ -102,6 +136,13 @@ module Publish
     end
 
   private
+
+    def all_courses
+      @all_courses ||= provider.courses.includes(
+        site_statuses: :site,
+        subjects: [:financial_incentive],
+      )
+    end
 
     def render_flash_message_content
       @course.scheduled? ? "Your course has been scheduled." : "Your course has been published."

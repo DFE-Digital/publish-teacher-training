@@ -31,6 +31,7 @@ $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 @import "./components/secondary-navigation";
 @import "./components/dynamic_preview";
 @import "./components/newly_added_tag";
+@import "./components/schools_list";
 
 .app-list--dash {
   padding-left: govuk-spacing(3);
@@ -77,4 +78,23 @@ $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
     column-gap: govuk-spacing(4);
     align-items: center;
   }
+}
+
+.school-landing-address {
+  margin-bottom:0;
+}
+
+.school-search-container {
+  background-color: rgb(243, 242, 241);
+  margin-bottom:20px;
+  margin-top:30px
+}
+
+.school-search-content {
+  padding: 30px 30px 10px;
+}
+
+.school-search-form-container {
+        display: flex;
+        column-gap: 20px;
 }

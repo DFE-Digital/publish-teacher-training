@@ -62,6 +62,15 @@ module Publish
         )
       end
 
+      def show_view_course_column?
+        !helpers.current_page?(
+          helpers.publish_provider_recruitment_cycle_courses_path(
+            provider.provider_code,
+            courses.first.recruitment_cycle.year,
+          ),
+        )
+      end
+
       def age_range(course)
         return if course.secondary_course?
         return if course.age_range_in_years.blank?

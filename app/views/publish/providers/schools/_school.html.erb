@@ -1,16 +1,48 @@
-<tr class="govuk-table__row school-row">
-  <th class="govuk-table__header name" scope="row">
-    <%= govuk_link_to school.location_name, publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.id) %>
-
-    <%= render Publish::Schools::NewlyAddedTagComponent.new(school:) %>
-  </th>
-
-  <td class="govuk-table__cell code">
-    <%= school.code %> <%= school.code == "-" ? "(dash)" : "" %>
+<tr
+  class="govuk-table__row school-row"
+  data-school-search-target="school"
+  data-search-text="<%= [
+    school.location_name,
+    school.postcode,
+    school.urn
+  ].compact.join(' ').downcase %>"
+>
+  <td class="govuk-table__header name">
+    <%= govuk_link_to school.location_name,
+        publish_provider_recruitment_cycle_school_path(
+          @provider.provider_code,
+          school.recruitment_cycle.year,
+          school.id
+        )
+      %>
+    <div class="govuk-hint school-landing-address">
+      <%= school.address_without_name %>
+    </div>
   </td>
-  <% if urn_required?(@recruitment_cycle.year.to_i) %>
-    <td class="govuk-table__cell urn">
-      <%= value_provided?(school.urn) %>
-    </td>
-  <% end %>
+  <!--
+  <td class="govuk-table__cell govuk-hint">
+    <%= school.address_without_name %>
+  </td>
+  -->
+  <td class="govuk-table__cell">
+    <%= govuk_link_to remove_publish_provider_recruitment_cycle_school_path(
+    @provider.provider_code,
+    school.recruitment_cycle.year,
+    school.id
+  ),
+  class: "govuk-link app-link--destructive" do %>
+      Remove school
+      <span class="govuk-visually-hidden">
+        <%= school.location_name %>
+      </span>
+    <% end %>
+    <% count = school.courses_count.to_i %>
+    <div class="govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1">
+      <% if count.zero? %>
+        No courses attached
+      <% else %>
+        <%= pluralize(count, "course") %> attached
+      <% end %>
+    </div>
+  </td>
 </tr>
