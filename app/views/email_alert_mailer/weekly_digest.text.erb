@@ -25,9 +25,9 @@
 
 # Not sure which course is right for you?
 
-[Find out how to choose a course](<%= with_utm(I18n.t("find.get_into_teaching.url_choose_course"), params: @utm_params, content: "choose_course") %>).
+[Find out how to choose a course](<%= find_track_click_url(**@utm_params, utm_content: "choose_course", url: I18n.t("find.get_into_teaching.url_choose_course")) %>).
 
-[Get a free teacher training adviser](<%= with_utm(I18n.t("find.get_into_teaching.url_training_adviser"), params: @utm_params, content: "training_adviser") %>).
+[Get a free teacher training adviser](<%= find_track_click_url(**@utm_params, utm_content: "training_adviser", url: I18n.t("find.get_into_teaching.url_training_adviser")) %>).
 
 ---
 
