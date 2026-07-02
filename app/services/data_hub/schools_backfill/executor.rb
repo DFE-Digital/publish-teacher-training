@@ -36,8 +36,37 @@ module DataHub
     private
 
       def insert_provider_schools
-        inserted_rows = ActiveRecord::Base.connection.exec_query(<<~SQL)
-          WITH main_site_provider_schools AS (
+        inserted_rows = ActiveRecord::Base.connection.exec_query(provider_schools_insert_sql)
+        inserted_rows.length
+      end
+
+      def insert_course_schools
+        inserted_rows = ActiveRecord::Base.connection.exec_query(course_schools_insert_sql)
+        inserted_rows.length
+      end
+
+      # Builds the provider_school insert from readable CTEs. Main-site rows are
+      # allowed to sit alongside non-main rows, while ordinary non-main rows are
+      # deduplicated before the final idempotent INSERT.
+      def provider_schools_insert_sql
+        <<~SQL
+          WITH #{main_site_provider_schools_cte},
+               #{non_main_provider_schools_cte},
+               #{source_provider_schools_cte}
+          INSERT INTO provider_school (provider_id, gias_school_id, site_code, created_at, updated_at)
+          SELECT provider_id, gias_school_id, site_code, NOW(), NOW()
+          FROM source_provider_schools
+          ON CONFLICT DO NOTHING
+          RETURNING 1
+        SQL
+      end
+
+      # Selects one main-site relationship per provider. Main sites are marked by
+      # site.code = '-', and if legacy data has more than one, the earliest source
+      # site wins to match the one-main-site-per-provider constraint.
+      def main_site_provider_schools_cte
+        <<~SQL.squish
+          main_site_provider_schools AS (
             SELECT DISTINCT ON (site.provider_id)
                    site.provider_id,
                    gias_school.id AS gias_school_id,
@@ -50,7 +79,15 @@ module DataHub
               AND site.urn <> ''
               AND site.code = '-'
             ORDER BY site.provider_id, site.id
-          ),
+          )
+        SQL
+      end
+
+      # Selects ordinary provider-school relationships. The new model permits
+      # only one non-main row for a provider/GIAS pair, so duplicate legacy rows
+      # collapse to the earliest source site.
+      def non_main_provider_schools_cte
+        <<~SQL.squish
           non_main_provider_schools AS (
             SELECT DISTINCT ON (site.provider_id, gias_school.id)
                    site.provider_id,
@@ -64,24 +101,44 @@ module DataHub
               AND site.urn <> ''
               AND site.code <> '-'
             ORDER BY site.provider_id, gias_school.id, site.id
-          ),
+          )
+        SQL
+      end
+
+      # Combines the allowed main-site rows and deduplicated non-main rows into
+      # the source relation used by the provider_school INSERT.
+      def source_provider_schools_cte
+        <<~SQL.squish
           source_provider_schools AS (
             SELECT * FROM main_site_provider_schools
             UNION ALL
             SELECT * FROM non_main_provider_schools
           )
-          INSERT INTO provider_school (provider_id, gias_school_id, site_code, created_at, updated_at)
-          SELECT provider_id, gias_school_id, site_code, NOW(), NOW()
-          FROM source_provider_schools
+        SQL
+      end
+
+      # Builds the course_school insert from readable CTEs. Course main-site rows
+      # are allowed to sit alongside normal course-school rows for the same GIAS
+      # school; ordinary non-main duplicates are collapsed before insert.
+      def course_schools_insert_sql
+        <<~SQL
+          WITH #{main_site_course_schools_cte},
+               #{non_main_course_schools_cte},
+               #{source_course_schools_cte}
+          INSERT INTO course_school (course_id, gias_school_id, site_code, created_at, updated_at)
+          SELECT course_id, gias_school_id, site_code, NOW(), NOW()
+          FROM source_course_schools
           ON CONFLICT DO NOTHING
           RETURNING 1
         SQL
-        inserted_rows.length
       end
 
-      def insert_course_schools
-        inserted_rows = ActiveRecord::Base.connection.exec_query(<<~SQL)
-          WITH main_site_course_schools AS (
+      # Selects course-level main-site relationships. site.code = '-' is the
+      # marker that lets a main-site course_school row coexist with a normal row
+      # for the same course/GIAS school.
+      def main_site_course_schools_cte
+        <<~SQL.squish
+          main_site_course_schools AS (
             SELECT DISTINCT ON (course_site.course_id, gias_school.id)
                    course_site.course_id,
                    gias_school.id AS gias_school_id,
@@ -95,7 +152,15 @@ module DataHub
               AND site.urn <> ''
               AND site.code = '-'
             ORDER BY course_site.course_id, gias_school.id, site.id
-          ),
+          )
+        SQL
+      end
+
+      # Selects ordinary course-school relationships. The new model permits only
+      # one non-main row for a course/GIAS pair, so duplicate legacy course_site
+      # rows collapse to the earliest source site.
+      def non_main_course_schools_cte
+        <<~SQL.squish
           non_main_course_schools AS (
             SELECT DISTINCT ON (course_site.course_id, gias_school.id)
                    course_site.course_id,
@@ -110,19 +175,20 @@ module DataHub
               AND site.urn <> ''
               AND site.code <> '-'
             ORDER BY course_site.course_id, gias_school.id, site.id
-          ),
+          )
+        SQL
+      end
+
+      # Combines the allowed main-site rows and deduplicated non-main rows into
+      # the source relation used by the course_school INSERT.
+      def source_course_schools_cte
+        <<~SQL.squish
           source_course_schools AS (
             SELECT * FROM main_site_course_schools
             UNION ALL
             SELECT * FROM non_main_course_schools
           )
-          INSERT INTO course_school (course_id, gias_school_id, site_code, created_at, updated_at)
-          SELECT course_id, gias_school_id, site_code, NOW(), NOW()
-          FROM source_course_schools
-          ON CONFLICT DO NOTHING
-          RETURNING 1
         SQL
-        inserted_rows.length
       end
 
       def fetch_skipped_sites
