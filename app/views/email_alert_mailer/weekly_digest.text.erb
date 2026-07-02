@@ -4,11 +4,11 @@
 
 <% @courses.each do |course| -%>
 <%= course.provider.provider_name %>
-[<%= course.name %> (<%= course.course_code %>)](<%= find_course_url(course.provider.provider_code, course.course_code) %>)
+[<%= course.name %> (<%= course.course_code %>)](<%= with_utm(find_course_url(course.provider.provider_code, course.course_code), params: @utm_params, content: "course_link") %>)
 
 <% end -%>
 <% if @remaining_count > 0 -%>
-[View more courses that meet your criteria on Find teacher training courses.](<%= @search_url %>)
+[View more courses that meet your criteria on Find teacher training courses.](<%= with_utm(@search_url, params: @utm_params, content: "view_more_courses") %>)
 
 <% end -%>
 ---
@@ -19,16 +19,16 @@
 <%= row[:label] %>: <%= row[:value] %>
 <% end -%>
 
-[Search for a course](<%= @search_url %>) to set up a new email alert for similar courses.
+[Search for a course](<%= with_utm(@search_url, params: @utm_params, content: "search_for_a_course") %>) to set up a new email alert for similar courses.
 
 ---
 
 # Not sure which course is right for you?
 
-[Find out how to choose a course](<%= I18n.t("find.get_into_teaching.url_choose_course") %>).
+[Find out how to choose a course](<%= with_utm(I18n.t("find.get_into_teaching.url_choose_course"), params: @utm_params, content: "choose_course") %>).
 
-[Get a free teacher training adviser](<%= I18n.t("find.get_into_teaching.url_training_adviser") %>).
+[Get a free teacher training adviser](<%= with_utm(I18n.t("find.get_into_teaching.url_training_adviser"), params: @utm_params, content: "training_adviser") %>).
 
 ---
 
-Don't want to receive these email alerts? [Unsubscribe here](<%= @unsubscribe_url %>).
+Don't want to receive these email alerts? [Unsubscribe here](<%= with_utm(@unsubscribe_url, params: @utm_params, content: "unsubscribe") %>).

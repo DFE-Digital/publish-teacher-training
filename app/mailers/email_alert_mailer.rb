@@ -2,9 +2,15 @@
 
 class EmailAlertMailer < GovukNotifyRails::Mailer
   include ::Courses::ActiveFilters::SummaryRowBuilder
+  helper UtmHelper
 
   MAX_USER_INPUT_LENGTH = 200
   COURSE_LIMIT = 10
+  UTM_PARAMS = {
+    utm_source: "email",
+    utm_medium: "email",
+    utm_campaign: "weekly_digest",
+  }.freeze
 
   def weekly_digest(email_alert, courses)
     set_template(Settings.govuk_notify.email_alert_weekly_digest_template_id)
@@ -17,6 +23,7 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
     @title = email_subject
     @body_intro = body_intro
     @unsubscribe_url = unsubscribe_url(email_alert)
+    @utm_params = UTM_PARAMS
 
     search_params = email_alert.search_params
     search_params[:order] = "newest_course" if @remaining_count.positive?
