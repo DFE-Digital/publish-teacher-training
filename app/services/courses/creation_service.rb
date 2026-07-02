@@ -33,7 +33,12 @@ module Courses
       end
 
       update_study_mode(course)
+      # Legacy site_status write always runs (it is the only home for vacancy
+      # and study-mode data). To move to strict "flag-on ⇒ new-model only"
+      # once vacancies migrate off site_status, guard this call with
+      # `unless FeatureFlag.active?(:course_publishing_uses_new_school_model)`.
       update_sites(course)
+      update_schools(course)
       update_study_sites(course)
 
       if assign_accrediting_provider_by_single_partner?(course)
