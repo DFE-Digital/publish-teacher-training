@@ -1,3 +1,9 @@
-<% if course.salary_details.present? %>
-  <%= markdown(course.salary_details) %>
+<% if course.recruitment_cycle_after?(2026) %>
+  <% if course.salary_fee_details.present? %>
+    <%= markdown(course.latest_enrichment.salary_fee_details) %>
+  <% end %>
+<% else %>
+  <% if course.salary_details.present? %>
+    <%= markdown(course.salary_details) %>
+  <% end %>
 <% end %>

@@ -1,0 +1,64 @@
+<% page_title = t(".course_salary_fees_title") %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_salary_fees_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+<% end %>
+
+<% if params[:copy_from].present? %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-course-salary-fees-form",
+    @source_course,
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @course_salary_fees_form,
+      url: salary_fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      data: { qa: "enrichment-form", module: "form-check-leave" },
+      method: :patch,
+      local: true,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        <%= page_title %>
+      </h1>
+
+      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
+        texts: [[t(".last_cycle_title"), @previous_cycle_enrichment&.salary_details]],
+      } %>
+
+      <%= render partial: "publish/courses/markdown_formatting" %>
+
+      <div data-controller="input-preview">
+        <%= f.govuk_text_area(:salary_fee_details,
+        form_group: { id: @course_salary_fees_form.errors.key?(:salary_fee_details) ? "salary_fee_details-error" : "salary_fee_details" },
+        value: @copied_fields_values&.[]("salary_fee_details"),
+        data: { input_preview_target: "input",
+                action: "input-preview#updatePreview",
+                preview_output_target: "shared" },
+        label: { text: t(".label"), size: "s" },
+        rows: 15,
+        max_words: 250) %>
+
+        <%= render partial: "publish/courses/fields/dynamic_preview", locals: { preview_heading: t(".preview_heading") } %>
+      </div>
+      <%= f.govuk_submit t(".update") %>
+    <% end %>
+  </div>
+  <aside class="govuk-grid-column-one-third">
+     <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: salary_fees_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      },
+    ) %>
+  </aside>
+</div>
