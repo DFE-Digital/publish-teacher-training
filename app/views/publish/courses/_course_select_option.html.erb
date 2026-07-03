@@ -1,1 +1,42 @@
-<option value="<%= other_course.course_code %>"><%= other_course.name %> (<%= other_course.course_code %>)</option>
+<!-- COURSE INFORMATION: details are in the dropdown and displayed when selected -->
+<!-- If the course is a primary course, display the age range -->
+<% primary_age_range =
+  other_course.primary_course? ? other_course.age_range_label : nil
+%>
+<% funding_label =
+  case other_course.funding
+  when "fee" then "Fee-paying"
+  when "salary" then "Salaried"
+  when "apprenticeship" then "Apprenticeship"
+  else other_course.funding
+  end
+%>
+<% qualification_label =
+  case other_course.qualification
+  when "pgce_with_qts" then "QTS with PGCE"
+  when "qts" then "QTS"
+  else other_course.qualification
+  end
+%>
+<% study_mode_label =
+  case other_course.study_mode
+  when "full_time" then "Full time"
+  when "part_time" then "Part time"
+  else other_course.study_mode
+  end
+%>
+<option value="<%= other_course.course_code %>"
+  data-name="<%= other_course.name %>"
+  data-code="<%= other_course.course_code %>"
+  data-age="<%= primary_age_range %>"
+  data-funding="<%= funding_label %>"
+  data-qualification="<%= qualification_label %>"
+  data-study-mode="<%= study_mode_label %>">
+  <%= [
+    "#{other_course.name} (#{other_course.course_code})",
+    primary_age_range,
+    funding_label,
+    qualification_label,
+    study_mode_label
+  ].compact.reject(&:blank?).join(", ") %>
+</option>
