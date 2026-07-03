@@ -25,6 +25,7 @@
   - provider_id
   - gias_school_id
   - site_code
+  - uuid
   - created_at
   - updated_at
   :data_hub_process_summary:
