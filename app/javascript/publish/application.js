@@ -10,6 +10,7 @@ import SelectAllCheckboxesController from "./controllers/select_all_checkboxes_c
 import CopyLinkController from "./controllers/copy_link_controller";
 import RemoteAutocompleteController from "../shared/remote_autocomplete_controller";
 import SchoolSearchCotroller from "./controllers/school_search_controller";
+import CopyCourseDetailsController from "./controllers/copy_course_details_controller";
 
 window.jQuery = jQuery;
 window.$ = jQuery;
@@ -23,3 +24,4 @@ Stimulus.register("select-all-checkboxes", SelectAllCheckboxesController);
 Stimulus.register("copy-link", CopyLinkController);
 Stimulus.register("remote-autocomplete", RemoteAutocompleteController);
 Stimulus.register("school-search", SchoolSearchCotroller);
+Stimulus.register("copy-course-details", CopyCourseDetailsController);
