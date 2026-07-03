@@ -170,6 +170,19 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(created_course.visa_sponsorship_application_deadline_at.to_date).to eq(visa_deadline)
   end
 
+  scenario "writes the selected school to the new Course::School model when the flag is off" do
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    and_the_selected_school_is_mapped_to_the_new_model
+    given_i_have_completed_secondary_fee_wizard_state
+    when_i_visit_check_answers_page
+    then_i_am_taken_to_the_check_answers_page
+
+    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+
+    then_the_created_course_has_the_new_course_school
+    and_the_created_course_still_has_the_legacy_site
+  end
+
   scenario "further education flow renders expected rows and creates successfully" do
     given_i_have_completed_further_education_wizard_state
     when_i_visit_check_answers_page
@@ -477,6 +490,26 @@ private
 
   def and_i_click_add_course
     click_on "Add course"
+  end
+
+  # Mirror the selected legacy school into the new data model: a GIAS school
+  # matched by URN plus a Provider::School carrying the site_code. This is the
+  # backfilled state the add-course flow maps through when writing Course::School.
+  def and_the_selected_school_is_mapped_to_the_new_model
+    @selected_site = provider.sites.first
+    @gias_school = create(:gias_school, urn: @selected_site.urn)
+    create(:provider_school, provider:, gias_school: @gias_school, site_code: @selected_site.code)
+  end
+
+  def then_the_created_course_has_the_new_course_school
+    created_course = provider.courses.order(:created_at).last
+    expect(created_course.schools.map(&:gias_school_id)).to eq([@gias_school.id])
+    expect(created_course.schools.first.site_code).to eq(@selected_site.code)
+  end
+
+  def and_the_created_course_still_has_the_legacy_site
+    created_course = provider.courses.order(:created_at).last
+    expect(created_course.sites.map(&:id)).to include(@selected_site.id)
   end
 
   def current_cycle_current_month_label(cycle_year:)
