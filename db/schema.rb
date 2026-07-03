@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_01_194000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_145835) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -464,6 +464,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_194000) do
     t.bigint "provider_id", null: false
     t.text "site_code", null: false
     t.datetime "updated_at", null: false
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.index ["gias_school_id"], name: "index_provider_school_on_gias_school_id"
     t.index ["provider_id", "gias_school_id", "site_code"], name: "index_provider_school_unique", unique: true
     t.index ["provider_id"], name: "index_provider_school_one_main_per_provider", unique: true, where: "(site_code = '-'::text)"
