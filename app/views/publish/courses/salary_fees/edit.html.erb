@@ -31,7 +31,7 @@
       </h1>
 
       <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-        texts: [[t(".last_cycle_title"), @previous_cycle_enrichment&.salary_details]],
+        texts: [["", @previous_cycle_enrichment&.salary_details]],
       } %>
 
       <%= render partial: "publish/courses/markdown_formatting" %>
