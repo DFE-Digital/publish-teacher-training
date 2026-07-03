@@ -29,21 +29,20 @@ module Publish
               "Status" => status(course).titleize,
               "Age range" => course.age_range_in_years&.humanize,
               "Fee or salary" => funding_label(course),
-              "UK fee" => uk_fee(course),
+              "Qualification" => qualification(course),
+              "Full time or part time" => course.study_mode.humanize,
+              "Start date" => format_date(course.start_date),
+              "Course length" => course_length(course),
             }
 
-            # Conditionally add Non-UK fee column
+            row["UK fee"] = uk_fee(course)
+
             if @include_international_fee_column
               row["Non-UK fee"] = international_fee(course)
             end
 
-            # Add remaining fields
-            row.merge!(
-              "Qualification" => qualification(course),
-              "Full time or part time" => course.study_mode.humanize,
-              "Start date" => format_date(course.start_date),
-              "Placement schools" => site.location_name || site.code,
-            )
+            row["Placement schools"] = site.location_name || site.code
+
             if @include_study_sites_column
               row["Study sites"] = study_sites(course)
             end
@@ -58,9 +57,22 @@ module Publish
     private
 
       def format_date(date)
-        return if date.blank?
+        date&.strftime("%B %Y")
+      end
 
-        "=\"#{date.strftime("%B %Y")}\""
+      def course_length(course)
+        enrichment = course.latest_enrichment || course.latest_published_enrichment
+        value = enrichment&.course_length
+
+        return if value.blank?
+
+        case value
+        when "OneYear" then "1 year"
+        when "TwoYears" then "2 years"
+        when "ThreeYears" then "3 years"
+        when "FourYears" then "4 years"
+        else value
+        end
       end
 
       def qualification(course)
