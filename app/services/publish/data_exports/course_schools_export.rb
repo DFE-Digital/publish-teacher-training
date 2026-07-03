@@ -96,7 +96,7 @@ module Publish
         when "salary"
           "Salary"
         when "apprenticeship"
-          "Apprenticeship" # 👈 IMPORTANT: confirm this is correct for your business rules
+          "Apprenticeship"
         else
           course.funding.to_s.humanize
         end
