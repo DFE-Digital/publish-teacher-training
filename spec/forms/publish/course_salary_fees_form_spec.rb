@@ -13,7 +13,7 @@ module Publish
     describe "validations" do
       context "when salary fee details are within the word limit" do
         before do
-          enrichment.salary_fee_details = Faker::Lorem.sentence(word_count: 250)
+          enrichment.salary_fee_details = Faker::Lorem.sentence(word_count: 100)
         end
 
         it "is valid" do
@@ -23,7 +23,7 @@ module Publish
 
       context "when salary fee details exceed the word limit" do
         before do
-          enrichment.salary_fee_details = Faker::Lorem.sentence(word_count: 251)
+          enrichment.salary_fee_details = Faker::Lorem.sentence(word_count: 101)
           subject.valid?
         end
 

@@ -8,7 +8,7 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :salary_fee_details, words_count: { maximum: 250, message: :too_long }
+    validates :salary_fee_details, words_count: { maximum: 100, message: :too_long }
 
   private
 

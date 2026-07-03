@@ -90,6 +90,7 @@ class CourseEnrichment < ApplicationRecord
   validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
   validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
 
+  validates :salary_fee_details, words_count: { maximum: 100 }
   # Requirements and qualifications
 
   validates :required_qualifications, presence: true, on: :publish, if: :required_qualifications_needed?

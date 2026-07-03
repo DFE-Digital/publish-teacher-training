@@ -45,7 +45,7 @@
                 preview_output_target: "shared" },
         label: { text: t(".label"), size: "s" },
         rows: 15,
-        max_words: 250) %>
+        max_words: 100) %>
 
         <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
 
