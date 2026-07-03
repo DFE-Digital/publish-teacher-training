@@ -5,7 +5,6 @@ en:
         edit:
           course_salary_fees_title: Fees (optional)
           label: Give details about any fees or other costs that the trainee might have to pay (optional)
-          preview_heading: Fees
           update: Update fees
         update:
           course_salary_fee: Fees
