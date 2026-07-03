@@ -7,7 +7,7 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
   MAX_USER_INPUT_LENGTH = 200
   COURSE_LIMIT = 10
   UTM_PARAMS = {
-    utm_source: "email",
+    utm_source: "email_alerts",
     utm_medium: "email",
     utm_campaign: "weekly_digest",
   }.freeze
