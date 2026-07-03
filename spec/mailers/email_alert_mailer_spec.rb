@@ -63,7 +63,7 @@ describe EmailAlertMailer do
 
   it "adds utm tracking params to the internal links in the body" do
     body = mail.govuk_notify_personalisation[:body]
-    expect(body).to include("utm_source=email")
+    expect(body).to include("utm_source=email_alerts")
     expect(body).to include("utm_medium=email")
     expect(body).to include("utm_campaign=weekly_digest")
     expect(body).to include("utm_content=course_link")
@@ -76,7 +76,7 @@ describe EmailAlertMailer do
     track_click_links = body.scan(%r{\S*/track_click\?\S+})
 
     expect(track_click_links.size).to eq(2)
-    expect(track_click_links).to all(include("utm_source=email"))
+    expect(track_click_links).to all(include("utm_source=email_alerts"))
     expect(track_click_links).to all(include("utm_medium=email"))
     expect(track_click_links).to all(include("utm_campaign=weekly_digest"))
     expect(track_click_links).to all(include(CGI.escape("getintoteaching.education.gov.uk")))
