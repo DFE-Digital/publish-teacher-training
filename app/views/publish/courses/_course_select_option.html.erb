@@ -25,18 +25,27 @@
   else other_course.study_mode
   end
 %>
+<% start_date_label =
+  if other_course.start_date.present?
+    "#{other_course.start_date.to_fs(:month_and_year)}"
+  else
+    nil
+  end
+%>
 <option value="<%= other_course.course_code %>"
-  data-name="<%= other_course.name %>"
-  data-code="<%= other_course.course_code %>"
-  data-age="<%= primary_age_range %>"
-  data-funding="<%= funding_label %>"
-  data-qualification="<%= qualification_label %>"
-  data-study-mode="<%= study_mode_label %>">
+data-name="<%= other_course.name %>"
+data-code="<%= other_course.course_code %>"
+data-age="<%= primary_age_range %>"
+data-funding="<%= funding_label %>"
+data-qualification="<%= qualification_label %>"
+data-study-mode="<%= study_mode_label %>"
+data-start-date="<%= start_date_label %>">
   <%= [
     "#{other_course.name} (#{other_course.course_code})",
     primary_age_range,
     funding_label,
     qualification_label,
-    study_mode_label
+    study_mode_label,
+    # start_date_label,
   ].compact.reject(&:blank?).join(", ") %>
 </option>

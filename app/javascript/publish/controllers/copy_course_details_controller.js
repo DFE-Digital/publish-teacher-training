@@ -8,6 +8,7 @@ export default class extends Controller {
     "funding",
     "qualification",
     "studyMode",
+    "startDate",
   ];
 
   update(event) {
@@ -27,6 +28,8 @@ export default class extends Controller {
     this.qualificationTarget.textContent = selected.dataset.qualification || "";
 
     this.studyModeTarget.textContent = selected.dataset.studyMode || "";
+
+    this.startDateTarget.textContent = selected.dataset.startDate || "";
 
     this.detailsTarget.hidden = false;
   }
