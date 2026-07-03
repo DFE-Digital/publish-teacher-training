@@ -5,6 +5,7 @@ module Find
     module EntryRequirementsComponent
       class View < ViewComponent::Base
         include PreviewHelper
+        include MarkdownHelper
 
         attr_accessor :course
 
@@ -27,6 +28,10 @@ module Find
         end
 
       private
+
+        def school_experience_title
+          t(".school_experience")
+        end
 
         def degree_requirements_title
           if course.subjects.map(&:subject_code).intersect?(NON_SKE_SUBJECT_CODES)

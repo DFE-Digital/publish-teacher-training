@@ -123,7 +123,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
         let(:course) { build(:course, :open, :salary, provider:) }
 
         it "returns the school experience interstitial path" do
-          allow(course).to receive(:school_experience_interruption_required?).and_return(true)
+          allow(course).to receive(:show_school_experience?).and_return(true)
 
           render_component
 
@@ -135,7 +135,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
         let(:course) { build(:course, :open, provider:) }
 
         it "returns the confirm apply path" do
-          allow(course).to receive(:school_experience_interruption_required?).and_return(false)
+          allow(course).to receive(:show_school_experience?).and_return(false)
           allow(FeatureFlag).to receive(:active?).with(:candidate_accounts).and_return(true)
 
           render_component
@@ -148,7 +148,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
         let(:course) { build(:course, :open, provider:) }
 
         it "returns the apply path" do
-          allow(course).to receive(:school_experience_interruption_required?).and_return(false)
+          allow(course).to receive(:show_school_experience?).and_return(false)
           allow(FeatureFlag).to receive(:active?).with(:candidate_accounts).and_return(false)
 
           render_component

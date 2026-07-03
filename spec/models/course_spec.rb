@@ -96,39 +96,6 @@ describe Course do
     end
   end
 
-  describe "#school_experience_interruption_required?" do
-    it "returns true when school experience is required on a salaried course" do
-      course.school_experience_required = true
-      course.funding = "salary"
-      allow(course).to receive(:show_school_experience?).and_return(true)
-
-      expect(course.school_experience_interruption_required?).to be(true)
-    end
-
-    it "returns true when school experience is required on an apprenticeship course" do
-      course.school_experience_required = true
-      course.funding = "apprenticeship"
-      allow(course).to receive(:show_school_experience?).and_return(true)
-
-      expect(course.school_experience_interruption_required?).to be(true)
-    end
-
-    it "returns false when school experience is not required on a salaried course" do
-      course.school_experience_required = false
-      course.funding = "salary"
-
-      expect(course.school_experience_interruption_required?).to be(false)
-    end
-
-    it "returns false when school experience is not shown for the course cycle" do
-      course.school_experience_required = true
-      course.funding = "salary"
-      allow(course).to receive(:show_school_experience?).and_return(false)
-
-      expect(course.school_experience_interruption_required?).to be(false)
-    end
-  end
-
   describe "#in_previous_cycle" do
     let(:previous_cycle) { create(:recruitment_cycle, year: "2026") }
     let(:current_cycle) { create(:recruitment_cycle, year: "2027") }
@@ -152,6 +119,37 @@ describe Course do
       create(:course, course_code: "B123", provider: previous_provider).discard!
 
       expect(course.in_previous_cycle).to be_nil
+    end
+  end
+
+  describe "#show_school_experience?" do
+    let(:cycle_year) { 2027 }
+    let(:provider) { build_stubbed(:provider, recruitment_cycle: build_stubbed(:recruitment_cycle, year: cycle_year)) }
+    let(:course) { build_stubbed(:course, school_experience_required: true, provider:) }
+
+    context "and the course is in the 2027 cycle or later" do
+      let(:cycle_year) { 2027 }
+
+      it "returns true" do
+        expect(course.show_school_experience?).to be true
+      end
+    end
+
+    context "and the course is in a cycle before 2027" do
+      let(:cycle_year) { 2026 }
+
+      it "returns false" do
+        expect(course.show_school_experience?).to be false
+      end
+    end
+
+    context "and school experience is not required" do
+      let(:cycle_year) { 2027 }
+      let(:course) { build_stubbed(:course, school_experience_required: false, provider:) }
+
+      it "returns false" do
+        expect(course.show_school_experience?).to be false
+      end
     end
   end
 
