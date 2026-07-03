@@ -139,6 +139,11 @@ RSpec.describe CourseEnrichment do
       expect(enrichment.reload.salary_fee_details).to eq("Some fees text")
       expect(enrichment.json_data).to include("SalaryFeeDetails" => "Some fees text")
     end
+
+    it "has a maximum worrd count of 100" do
+      expect(build(:course_enrichment, salary_fee_details: "a " * 101)).to be_invalid
+      expect(build(:course_enrichment, salary_fee_details: "a " * 100)).to be_valid
+    end
   end
 
   #
