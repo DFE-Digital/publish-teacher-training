@@ -183,6 +183,19 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     and_the_created_course_still_has_the_legacy_site
   end
 
+  scenario "writes the selected school to the new Course::School model when the flag is on" do
+    FeatureFlag.activate(:course_publishing_uses_new_school_model)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    and_the_selected_school_is_mapped_to_the_new_model
+    given_i_have_completed_secondary_fee_wizard_state
+    when_i_visit_check_answers_page
+    then_i_am_taken_to_the_check_answers_page
+
+    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+
+    then_the_created_course_has_the_new_course_school
+  end
+
   scenario "further education flow renders expected rows and creates successfully" do
     given_i_have_completed_further_education_wizard_state
     when_i_visit_check_answers_page
