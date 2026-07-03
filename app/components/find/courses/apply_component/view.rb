@@ -38,7 +38,7 @@ module Find
         end
 
         def school_experience_interstitial_path?
-          course.school_experience_interruption_required?
+          course.show_school_experience?
         end
 
         def find_apply_destination_path

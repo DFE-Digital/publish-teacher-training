@@ -26,7 +26,7 @@ module Find
     def confirm_apply; end
 
     def school_experience_interstitial
-      redirect_to find_confirm_apply_path(provider_code: @course.provider_code, course_code: @course.course_code) unless @course.school_experience_interruption_required?
+      redirect_to find_confirm_apply_path(provider_code: @course.provider_code, course_code: @course.course_code) unless @course.show_school_experience?
     end
 
     def location_params

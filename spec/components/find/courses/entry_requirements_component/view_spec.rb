@@ -488,6 +488,60 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
   end
 
+  describe "school experience row" do
+    let(:subjects) { [build(:secondary_subject, :mathematics)] }
+
+    context "when the recruitment cycle is after 2026 and school experience is required" do
+      let(:course) do
+        build(
+          :course,
+          subjects:,
+          school_experience_required: true,
+          school_experience_required_content: "You must complete two weeks in a school.",
+          provider: build(:provider, recruitment_cycle: build(:recruitment_cycle, year: 2027)),
+        )
+      end
+
+      it "renders the school experience row" do
+        expect(result.text).to include("School experience")
+        expect(result.text).to include("Yes, school experience is required or strongly recommended")
+        expect(result.text).to include("You must complete two weeks in a school.")
+      end
+    end
+
+    context "when the recruitment cycle is after 2026 but school experience is not required" do
+      let(:course) do
+        build(
+          :course,
+          subjects:,
+          school_experience_required: false,
+          provider: build(:provider, recruitment_cycle: build(:recruitment_cycle, year: 2027)),
+        )
+      end
+
+      it "does not render the school experience row" do
+        expect(result.text).not_to include("School experience")
+      end
+    end
+
+    context "when the recruitment cycle is 2026 or earlier and school experience is required" do
+      let(:course) do
+        build(
+          :course,
+          subjects:,
+          school_experience_required: true,
+          school_experience_required_content: "You must complete two weeks in a school.",
+          provider: build(:provider, recruitment_cycle: build(:recruitment_cycle, year: 2026)),
+        )
+      end
+
+      it "does not render the school experience row" do
+        expect(result.text).not_to include("School experience")
+        expect(result.text).not_to include("You must complete two weeks in a school.")
+      end
+    end
+  end
+
   describe "#qualification_required" do
     let(:course) { build(:course) }
 

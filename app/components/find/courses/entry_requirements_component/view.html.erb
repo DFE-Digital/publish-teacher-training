@@ -3,6 +3,15 @@
   <div data-qa="course__required_qualifications">
 
     <%= govuk_summary_list(actions: false) do |summary_list| %>
+      <% if course.show_school_experience? %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key(text: school_experience_title) %>
+          <% row.with_value do %>
+            <%= govuk_details(summary_text: t(".yes_school_experience")) { markdown(course.school_experience_required_content) } %>
+          <% end %>
+        <% end %>
+      <% end %>
+
       <% summary_list.with_row do |row| %>
         <% row.with_key(text: qualification_required) %>
         <% row.with_value do %>

@@ -932,12 +932,8 @@ class Course < ApplicationRecord
       Courses::PublishRules::SchoolPresence.none?(self)
   end
 
-  def school_experience_interruption_required?
-    show_school_experience? && school_experience_required?
-  end
-
   def show_school_experience?
-    recruitment_cycle_after?(2026)
+    recruitment_cycle_after?(2026) && school_experience_required?
   end
 
 private
