@@ -6,5 +6,7 @@ en:
           create:
             flash_success: School experience updated
         experience_details:
+          new:
+            preview_heading: School experience
           create:
             flash_success: School experience updated

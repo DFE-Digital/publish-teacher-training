@@ -22,12 +22,20 @@
 
       <%= render partial: "publish/courses/markdown_formatting" %>
 
-      <%= form.govuk_text_area :experience_details,
+      <div data-controller="input-preview">
+        <%= form.govuk_text_area :experience_details,
+          data: {
+            input_preview_target: "input",
+            action: "input-preview#updatePreview",
+            preview_output_target: "shared",
+          },
           label: { text: t("publish.courses.#{current_step.model_name.i18n_key}.subtitle"), size: "s" },
           hint: { text: t("publish.courses.#{current_step.model_name.i18n_key}.hint_html") },
-          rows: 8,
-          max_words: 250,
-          value: "" %>
+          rows: 10,
+          max_words: 250 %>
+
+        <%= render "publish/courses/fields/dynamic_preview", preview_heading: t(".preview_heading") %>
+      </div>
 
       <%= form.submit t("publish.courses.#{current_step.model_name.i18n_key}.submit"), class: "govuk-button" %>
     <% end %>
