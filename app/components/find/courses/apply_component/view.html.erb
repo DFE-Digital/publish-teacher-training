@@ -5,7 +5,7 @@
         <% if FeatureFlag.active?(:candidate_accounts) %>
           <%= govuk_link_to(
                 t(".apply_to_course"),
-                find_confirm_apply_path(provider_code: course.provider_code, course_code: course.course_code),
+                apply_path,
                 class: "govuk-button govuk-!-margin-0",
               ) %>
         <% else %>

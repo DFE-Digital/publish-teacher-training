@@ -18,6 +18,11 @@
     border-color: govuk-colour("blue");
   }
 
+  &.app-callout--light-blue {
+    background-color: govuk-tint(govuk-colour("blue"), 92%);
+    border-color: govuk-tint(govuk-colour("blue"), 70%);
+  }
+
   &.app-callout--border {
     border-style: solid;
     border-width: govuk-spacing(1);

@@ -930,6 +930,10 @@ class Course < ApplicationRecord
       Courses::PublishRules::SchoolPresence.none?(self)
   end
 
+  def school_experience_interruption_required?
+    school_experience_required? && (salary? || apprenticeship?)
+  end
+
 private
 
   def publication_datetime_for_first_publish
