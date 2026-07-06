@@ -166,6 +166,13 @@ describe Provider::School do
       }.to raise_error(ActiveRecord::NotNullViolation)
     end
 
+    it "enforces NOT NULL on uuid" do
+      provider_school = create(:provider_school, provider:, gias_school:)
+      expect {
+        provider_school.update_column(:uuid, nil)
+      }.to raise_error(ActiveRecord::NotNullViolation)
+    end
+
     it "enforces the gias_school_id foreign key" do
       missing_id = GiasSchool.maximum(:id).to_i + 1_000
       record = described_class.new(provider:, site_code: "-")
