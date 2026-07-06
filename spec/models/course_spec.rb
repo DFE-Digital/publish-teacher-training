@@ -2794,10 +2794,19 @@ describe Course do
     end
 
     context "when the new school model flag is inactive" do
-      it "is false even for an exempt salaried course with no school" do
+      # The exemption is flag-independent; only the school-presence read falls
+      # back to legacy Site data when the flag is off.
+      it "is true for an exempt salaried course with no school site attached" do
         course = create(:course, :with_salary, publish_without_schools_allowed: true)
 
-        expect(course.without_employing_school?).to be(false)
+        expect(course.without_employing_school?).to be(true)
+      end
+
+      it "is false when a school-type site is attached" do
+        course = create(:course, :with_salary, publish_without_schools_allowed: true)
+        create(:site_status, course:, site: build(:site))
+
+        expect(course.reload.without_employing_school?).to be(false)
       end
     end
   end

@@ -33,6 +33,19 @@ module Publish
 
           expect(subject.errors[:site_ids]).to be_empty
         end
+
+        context "when the new school model flag is OFF" do
+          # Support has approved this course to publish without schools; that
+          # decision should hold regardless of the course_publishing_uses_new_school_model
+          # rollout flag. (Flag deliberately NOT activated here.)
+          before { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
+
+          it "still does not require at least one school" do
+            subject.valid?
+
+            expect(subject.errors[:site_ids]).to be_empty
+          end
+        end
       end
     end
   end
