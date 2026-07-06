@@ -115,6 +115,35 @@ describe Provider::School do
     end
   end
 
+  describe "uuid" do
+    it "is auto-generated on create" do
+      provider_school = create(:provider_school)
+      expect(provider_school.reload.uuid).to be_present
+    end
+
+    it "is a valid v4 uuid" do
+      provider_school = create(:provider_school)
+      expect(provider_school.reload.uuid).to match(
+        /\A[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/,
+      )
+    end
+
+    it "assigns a distinct uuid to each record" do
+      first = create(:provider_school, site_code: "A")
+      second = create(:provider_school, site_code: "B", provider: first.provider)
+      expect(first.reload.uuid).not_to eq(second.reload.uuid)
+    end
+
+    it "can be updated" do
+      provider_school = create(:provider_school)
+      new_uuid = "11111111-1111-4111-8111-111111111111"
+
+      provider_school.update!(uuid: new_uuid)
+
+      expect(provider_school.reload.uuid).to eq(new_uuid)
+    end
+  end
+
   describe "database constraints" do
     let(:provider) { create(:provider) }
     let(:gias_school) { create(:gias_school) }
