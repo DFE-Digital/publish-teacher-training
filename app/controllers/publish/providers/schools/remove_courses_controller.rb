@@ -18,7 +18,7 @@ module Publish
             @recruitment_cycle.year,
             @school.id,
           ),
-                      flash: { success: "#{@course.name_and_code} removed from #{@school.location_name}" }
+                      flash: { success: "#{@course.name_and_code} detached from #{@school.location_name}" }
         end
 
       private
