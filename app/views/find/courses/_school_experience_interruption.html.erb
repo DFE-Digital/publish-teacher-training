@@ -1,0 +1,71 @@
+<span class="govuk-caption-xl">
+  <%= course.provider_name %><br>
+  <%= course.name_and_code %>
+</span>
+<h1 class="govuk-heading-xl"><%= t("find.courses.confirm_apply.school_experience_interruption.heading") %></h1>
+
+<div class="app-callout app-callout--light-blue app-callout--border govuk-!-margin-bottom-6">
+  <h2 class="govuk-heading-m"><%= t("find.courses.confirm_apply.school_experience_interruption.callout_heading") %></h2>
+  <p class="govuk-body"><%= markdown(course.school_experience_required_content) %></p>
+  <p class="govuk-body govuk-!-margin-bottom-0">
+    <%= govuk_link_to(
+          t("find.courses.confirm_apply.school_experience_interruption.contact_provider", provider_name: course.provider_name),
+          find_provider_path(course.provider_code, course.course_code),
+        ) %>
+  </p>
+
+  <h3 class="govuk-heading-s govuk-!-margin-top-5"><%= t("find.courses.confirm_apply.school_experience_interruption.question_heading") %></h3>
+  <%= govuk_button_link_to(
+        t("find.courses.confirm_apply.school_experience_interruption.confirm_button"),
+        find_track_apply_to_course_click_path(
+          utm_content: "confirm_apply_course_button",
+          course_id: course.id,
+          url: find_apply_path(
+            provider_code: course.provider.provider_code,
+            course_code: course.course_code,
+          ),
+        ),
+      ) %>
+
+  <p class="govuk-body govuk-!-margin-bottom-0">
+    <%= govuk_link_to(
+          t("find.courses.confirm_apply.cancel"),
+          find_course_path(
+            provider_code: course.provider_code,
+            course_code: course.course_code,
+          ),
+          class: "govuk-link govuk-body",
+        ) %>
+  </p>
+</div>
+
+<%= govuk_inset_text classes: "app-callout app-callout--orange govuk-!-margin-top-0" do %>
+  <h2 class="govuk-heading-m"><%= t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_heading") %></h2>
+  <p class="govuk-body"><%= t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_body_one") %></p>
+  <p class="govuk-body"><%= t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_body_two") %></p>
+  <p class="govuk-body govuk-!-margin-bottom-0">
+    <%= govuk_link_to(
+          t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_link_text"),
+          find_track_click_path(
+            url: t("find.get_into_teaching.url_teacher_salaries"),
+            utm_content: "school_experience_interruption_salaried_courses",
+          ),
+        ) %>
+  </p>
+<% end %>
+
+<%= govuk_inset_text classes: "app-callout app-callout--orange govuk-!-margin-top-4" do %>
+  <h2 class="govuk-heading-m"><%= t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_heading") %></h2>
+  <p class="govuk-body govuk-!-margin-bottom-0">
+    <%= t(
+          "find.courses.confirm_apply.school_experience_interruption.adviser_callout_body_html",
+          teacher_training_adviser_link: govuk_link_to(
+            t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_link_text"),
+            find_track_click_path(
+              url: t("get_into_teaching.url_teacher_training_advisers"),
+              utm_content: "school_experience_interruption_teacher_training_adviser",
+            ),
+          ),
+        ) %>
+  </p>
+<% end %>

@@ -15,8 +15,16 @@ module Find
           @utm_content = utm_content
         end
 
+        def find_confirm_apply_path?
+          controller.class.module_parent == Find && (FeatureFlag.active?(:candidate_accounts) || course.school_experience_interruption_required?)
+        end
+
         def apply_path
-          return find_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code) if controller.class.module_parent == Find
+          if controller.class.module_parent == Find
+            return find_confirm_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code) if find_confirm_apply_path?
+
+            return find_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code)
+          end
 
           apply_publish_provider_recruitment_cycle_course_path(provider_code: course.provider.provider_code, code: course.course_code, recruitment_cycle_year: provider.recruitment_cycle.year)
         end

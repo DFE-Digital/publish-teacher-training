@@ -23,7 +23,9 @@ module Find
       @enrichment = @course.latest_published_enrichment
     end
 
-    def confirm_apply; end
+    def confirm_apply
+      @school_experience_interruption_required = @course.school_experience_interruption_required?
+    end
 
     def location_params
       location = params[:location]

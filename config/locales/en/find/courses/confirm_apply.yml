@@ -10,3 +10,16 @@ en:
         start_application: Start your application on the Apply for teacher training website.
         start_now: Start now
         cancel: Cancel and return to the course page
+        school_experience_interruption:
+          heading: Before you apply for this course
+          callout_heading: You need to confirm that you understand the school experience requirements
+          contact_provider: For more information contact %{provider_name}
+          question_heading: Do you understand the school experience requirements for this course?
+          confirm_button: Yes, I understand the school experience requirements
+          salaried_callout_heading: Is a salaried course right for me?
+          salaried_callout_body_one: Courses with a salary are in high demand and very competitive.
+          salaried_callout_body_two: Fee-paying courses tend to have a higher success rate, and you could receive more money if you are eligible for bursaries or scholarships.
+          salaried_callout_link_text: Find out more about salaried courses.
+          adviser_callout_heading: Get free one-to-one support
+          adviser_callout_body_html: Talk to a %{teacher_training_adviser_link} who can help you understand which courses you could be eligible for.
+          adviser_callout_link_text: teacher training adviser
