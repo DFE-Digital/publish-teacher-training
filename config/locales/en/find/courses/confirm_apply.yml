@@ -13,7 +13,7 @@ en:
         school_experience_interruption:
           heading: Before you apply for this course
           callout_heading: You need to confirm that you understand the school experience requirements
-          contact_provider: For more information contact %{provider_name}
+          contact_provider: For more information contact %{provider_name}.
           question_heading: Do you understand the school experience requirements for this course?
           confirm_button: Yes, I understand the school experience requirements
           salaried_callout_heading: Is a salaried course right for me?

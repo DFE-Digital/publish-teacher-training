@@ -392,6 +392,7 @@ class Course < ApplicationRecord
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
   validate :visa_sponsorship_application_deadline_in_recruitment_cycle_year, if: -> { provider.present? }
   validate :visa_sponsorship_application_deadline_when_no_sponsorship
+  validate :school_experience_allowed_for_course_funding
 
   validates_with UniqueCourseValidator, on: :new
   validates_with ALevelCourseValidator, on: :publish, if: :teacher_degree_apprenticeship?
@@ -932,10 +933,21 @@ class Course < ApplicationRecord
   end
 
   def school_experience_interruption_required?
-    school_experience_required? && (salary? || apprenticeship?)
+    show_school_experience? && school_experience_required?
+  end
+
+  def show_school_experience?
+    recruitment_cycle_after?(2026)
   end
 
 private
+
+  def school_experience_allowed_for_course_funding
+    return unless school_experience_required?
+    return if salary? || apprenticeship?
+
+    errors.add(:school_experience_required, "can only be required for salaried or apprenticeship courses")
+  end
 
   def publication_datetime_for_first_publish
     if next_recruitment_cycle? && Time.zone.now < Find::CycleTimetable.find_opens(recruitment_cycle.year)
