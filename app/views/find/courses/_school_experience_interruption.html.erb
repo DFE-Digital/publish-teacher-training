@@ -41,7 +41,16 @@
 <%= govuk_inset_text classes: "app-callout app-callout--orange govuk-!-margin-top-0" do %>
   <h2 class="govuk-heading-m"><%= t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_heading") %></h2>
   <p class="govuk-body"><%= t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_body_one") %></p>
-  <p class="govuk-body"><%= t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_body_two") %></p>
+  <p class="govuk-body">
+    <%= t(
+          "find.courses.confirm_apply.school_experience_interruption.salaried_callout_body_two_html",
+          bursaries_and_scholarships_link: govuk_link_to(
+            t("find.courses.confirm_apply.school_experience_interruption.bursaries_and_scholarships_link_text"),
+            t("find.courses.confirm_apply.school_experience_interruption.bursaries_and_scholarships_link_url"),
+            target: "_blank",
+          ),
+        ) %>
+  </p>
   <p class="govuk-body govuk-!-margin-bottom-0">
     <%= govuk_link_to(
           t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_link_text"),
