@@ -153,6 +153,20 @@ class CourseDecorator < ApplicationDecorator
     object.sites.sort_by(&:location_name)
   end
 
+  # Display names of the schools attached to the course, alphabetically sorted.
+  # Reads from the new Course::School/GiasSchool model or the legacy Site model
+  # depending on the :course_publishing_uses_new_school_model rollout flag, so
+  # the schools list keeps working from either data model.
+  def sorted_school_names
+    names = if FeatureFlag.active?(:course_publishing_uses_new_school_model)
+              object.gias_schools.map(&:name)
+            else
+              object.sites.map(&:location_name)
+            end
+
+    names.sort_by(&:downcase)
+  end
+
   def alphabetically_sorted_study_sites
     object.study_sites.sort_by(&:location_name)
   end
