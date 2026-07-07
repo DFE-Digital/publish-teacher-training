@@ -37,6 +37,9 @@ en:
         label:
           one: "%{prefix} school"
           other: "%{prefix} schools"
+        attached:
+          one: "%{count} school attached"
+          other: "%{count} schools attached"
         new:
           schools_selection: The more schools you select, the more searches your course will appear in. You should only add schools that are relevent to this course.
           searches_by_location: 60% of searches are by location.
