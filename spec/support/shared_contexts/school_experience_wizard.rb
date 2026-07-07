@@ -14,7 +14,9 @@ RSpec.shared_context "school_experience_wizard" do
   end
 
   let(:school_experience_required) { nil }
-  let(:school_experience_required_content) { nil }
+  let(:school_experience_required_content) do
+    school_experience_required ? "Spend time in a school before applying." : nil
+  end
   let(:course) do
     create(
       :course,
