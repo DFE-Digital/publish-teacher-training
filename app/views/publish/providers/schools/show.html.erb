@@ -11,21 +11,19 @@
         <span class="govuk-caption-m">URN: <%= @site.urn %></span>
       </legend>
       <p class="govuk-body">
-
-      <%= govuk_link_to t(".remove", resource: "location"),
+        <%= govuk_link_to t(".remove", resource: "location"),
         remove_publish_provider_recruitment_cycle_school_path(
           @provider.provider_code,
           @site.recruitment_cycle.year,
           @site.id
         ),
         class: "app-link--destructive" %>
-
       </p>
     </fieldset>
     <br>
-    <% if @site.courses.any? %>
+    <% if @courses.any? %>
       <p class="govuk-heading-m">
-        This school is attached to <%= pluralize(@site.courses.length, "course") %>:
+        This school is attached to <%= pluralize(@courses.size, "course") %>:
       </p>
       <%= render "courses_table", courses: @courses %>
     <% else %>
