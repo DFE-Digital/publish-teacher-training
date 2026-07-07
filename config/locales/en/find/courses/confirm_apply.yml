@@ -18,7 +18,9 @@ en:
           confirm_button: Yes, I understand the school experience requirements
           salaried_callout_heading: Is a salaried course right for me?
           salaried_callout_body_one: Courses with a salary are in high demand and very competitive.
-          salaried_callout_body_two: Fee-paying courses tend to have a higher success rate, and you could receive more money if you are eligible for bursaries or scholarships.
+          salaried_callout_body_two_html: Fee-paying courses tend to have a higher success rate, and you could receive more money if you are eligible for %{bursaries_and_scholarships_link}.
+          bursaries_and_scholarships_link_text: bursaries or scholarships
+          bursaries_and_scholarships_link_url: https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries
           salaried_callout_link_text: Find out more about salaried courses.
           adviser_callout_heading: Get free one-to-one support
           adviser_callout_body_html: Talk to a %{teacher_training_adviser_link} who can help you understand which courses you could be eligible for.
