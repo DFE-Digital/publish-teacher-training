@@ -5,7 +5,7 @@ module Shared
     module FinancialSupport
       module FeesAndFinancialSupportComponent
         class View < ViewComponent::Base
-          include PublishHelper
+          include MarkdownHelper
 
           attr_reader :course, :enrichment
 

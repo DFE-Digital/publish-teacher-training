@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class GcseRowContent < GcseRequirements
-  include PublishHelper
+  include MarkdownHelper
 end

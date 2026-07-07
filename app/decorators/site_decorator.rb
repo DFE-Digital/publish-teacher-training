@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SiteDecorator < Draper::Decorator
-  include PublishHelper
+  include MarkdownHelper
   delegate_all
 
   def full_address(join_on_separator = ", ")

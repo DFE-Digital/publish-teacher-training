@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AccreditedProviderComponent < ViewComponent::Base
-  include PublishHelper
+  include MarkdownHelper
 
   attr_reader :provider, :remove_path
 
