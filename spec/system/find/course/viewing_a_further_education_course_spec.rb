@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Viewing a findable course" do
-  include PublishHelper
+  include MarkdownHelper
   include Rails.application.routes.url_helpers
 
   before do

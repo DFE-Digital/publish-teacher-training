@@ -4,7 +4,7 @@ module Find
   module Courses
     module TrainingLocations
       class View < ViewComponent::Base
-        include PublishHelper
+        include MarkdownHelper
         include PreviewHelper
 
         attr_reader :course, :address, :distance_from_location, :preview

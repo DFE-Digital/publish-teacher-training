@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module PublishHelper
+module MarkdownHelper
   def markdown(source)
     return "".html_safe if source.blank?
 

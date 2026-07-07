@@ -3,6 +3,7 @@
 module ApplicationHelper
   include Pagy::Frontend
   include DfE::Autocomplete::ApplicationHelper
+  include MarkdownHelper
 
   def pagy_govuk_nav(pagy)
     render "pagy/paginator", pagy:
