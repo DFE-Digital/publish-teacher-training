@@ -16,11 +16,11 @@ module Find
         end
 
         def find_confirm_apply_path?
-          controller.class.module_parent == Find && (FeatureFlag.active?(:candidate_accounts) || course.school_experience_interruption_required?)
+          find_namespace? && (FeatureFlag.active?(:candidate_accounts) || course.school_experience_interruption_required?)
         end
 
         def apply_path
-          if controller.class.module_parent == Find
+          if find_namespace?
             return find_confirm_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code) if find_confirm_apply_path?
 
             return find_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code)
@@ -35,6 +35,12 @@ module Find
 
         def application_deadline
           course.visa_sponsorship_application_deadline_at.to_fs(:govuk_date)
+        end
+
+      private
+
+        def find_namespace?
+          controller.class.module_parent == Find
         end
       end
     end
