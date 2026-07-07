@@ -893,4 +893,35 @@ describe CourseDecorator do
       end
     end
   end
+
+  describe "#sorted_school_names" do
+    context "when the new school model flag is off (legacy sites)" do
+      let(:course) do
+        create(:course, sites: [
+          build(:site, location_name: "Zebra School"),
+          build(:site, location_name: "alpha school"),
+          build(:site, location_name: "Mango School"),
+        ])
+      end
+
+      it "returns site location names sorted case-insensitively" do
+        expect(course.decorate.sorted_school_names).to eq(["alpha school", "Mango School", "Zebra School"])
+      end
+    end
+
+    context "when the new school model flag is on (Course::School / GiasSchool)" do
+      let(:course) { create(:course) }
+
+      before do
+        FeatureFlag.activate(:course_publishing_uses_new_school_model)
+        create(:course_school, course:, gias_school: build(:gias_school, name: "Zebra School"))
+        create(:course_school, course:, gias_school: build(:gias_school, name: "alpha school"))
+        create(:course_school, course:, gias_school: build(:gias_school, name: "Mango School"))
+      end
+
+      it "returns gias school names sorted case-insensitively" do
+        expect(course.decorate.sorted_school_names).to eq(["alpha school", "Mango School", "Zebra School"])
+      end
+    end
+  end
 end
