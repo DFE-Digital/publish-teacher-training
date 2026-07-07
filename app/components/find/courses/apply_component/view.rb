@@ -4,23 +4,24 @@ module Find
   module Courses
     module ApplyComponent
       class View < ViewComponent::Base
-        attr_reader :course, :preview, :utm_content
+        attr_reader :course, :preview, :utm_content, :context
 
         delegate :application_status_open?, :provider, to: :course
 
-        def initialize(course, preview: false, utm_content: nil)
+        def initialize(course, preview: false, utm_content: nil, context: :publish)
           super()
           @course = course
           @preview = preview
           @utm_content = utm_content
+          @context = context
         end
 
         def find_confirm_apply_path?
-          find_namespace? && (FeatureFlag.active?(:candidate_accounts) || course.school_experience_interruption_required?)
+          find_context? && (FeatureFlag.active?(:candidate_accounts) || course.school_experience_interruption_required?)
         end
 
         def apply_path
-          if find_namespace?
+          if find_context?
             return find_confirm_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code) if find_confirm_apply_path?
 
             return find_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code)
@@ -39,8 +40,8 @@ module Find
 
       private
 
-        def find_namespace?
-          controller.class.module_parent == Find
+        def find_context?
+          context == :find
         end
       end
     end

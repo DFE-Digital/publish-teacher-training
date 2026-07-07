@@ -15,18 +15,16 @@ RSpec.describe "Saving a course", service: :find do
     then_i_see_the_confirm_apply_page
   end
 
-  scenario "A signed-in candidate sees a school experience interruption for salaried courses", travel: mid_cycle(2026) do
+  scenario "A signed-in candidate sees a school experience interruption for salaried courses", travel: mid_cycle(2027) do
     given_a_salaried_course_with_required_school_experience_exists
-    when_i_view_a_course
-    when_i_click_apply_for_this_course
+    when_i_visit_confirm_apply_page
 
     then_i_see_the_school_experience_interruption_page
   end
 
-  scenario "A signed-in candidate does not see the interruption for fee-funded courses", travel: mid_cycle(2026) do
-    given_a_fee_course_with_required_school_experience_exists
-    when_i_view_a_course
-    when_i_click_apply_for_this_course
+  scenario "A signed-in candidate does not see the interruption for fee-funded courses", travel: mid_cycle(2027) do
+    given_a_fee_course_without_required_school_experience_exists
+    when_i_visit_confirm_apply_page
 
     then_i_see_the_confirm_apply_page
   end
@@ -47,6 +45,10 @@ RSpec.describe "Saving a course", service: :find do
 
   def when_i_click_apply_for_this_course
     page.find("a", text: "Apply for this course", match: :first).click
+  end
+
+  def when_i_visit_confirm_apply_page
+    visit find_confirm_apply_path(provider_code: @course.provider.provider_code, course_code: @course.course_code)
   end
 
   def then_i_see_the_confirm_apply_page
@@ -118,7 +120,7 @@ RSpec.describe "Saving a course", service: :find do
     )
   end
 
-  def given_a_fee_course_with_required_school_experience_exists
+  def given_a_fee_course_without_required_school_experience_exists
     @course = create(
       :course,
       :with_full_time_sites,
@@ -128,8 +130,8 @@ RSpec.describe "Saving a course", service: :find do
       :open,
       name: "Art and design (SEND)",
       course_code: "F314",
-      school_experience_required: true,
-      school_experience_required_content: "You must have completed 10 days of school experience in the last 12 months.",
+      school_experience_required: false,
+      school_experience_required_content: nil,
       provider: create(:provider, provider_name: "York university"),
       subjects: [find_or_create(:secondary_subject, :art_and_design)],
     )

@@ -435,9 +435,7 @@ class CourseDecorator < ApplicationDecorator
     !teacher_degree_apprenticeship?
   end
 
-  def show_school_experience?
-    recruitment_cycle_after?(2026)
-  end
+  delegate :show_school_experience?, to: :object
 
   def visa_sponsorship_deadline_required
     visa_sponsorship_application_deadline_at.respond_to?(:to_fs) ? "Yes" : "No"
