@@ -400,6 +400,7 @@ class Course < ApplicationRecord
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
   validates :is_send, inclusion: { in: [true, false] }, on: %i[new create publish]
+  validates :school_experience_required_content, presence: true, if: :school_experience_required
   validates :school_experience_required_content, absence: true, unless: :school_experience_required
   # TODO: validates :master_subject_id ?
 

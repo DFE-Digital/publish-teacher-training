@@ -60,11 +60,12 @@ describe Course do
       expect(course).to be_valid
     end
 
-    it "is valid with no content when school experience is required" do
+    it "is invalid with no content when school experience is required" do
       course.school_experience_required = true
       course.school_experience_required_content = nil
 
-      expect(course).to be_valid
+      expect(course).not_to be_valid
+      expect(course.errors).to be_added(:school_experience_required_content, :blank)
     end
 
     it "is invalid with content when school experience is not required" do
@@ -81,6 +82,36 @@ describe Course do
 
       expect(course).not_to be_valid
       expect(course.errors).to be_added(:school_experience_required_content, :present)
+    end
+  end
+
+  describe "#school_experience_interruption_required?" do
+    it "returns true when school experience is required on a salaried course" do
+      course.school_experience_required = true
+      course.funding = "salary"
+
+      expect(course.school_experience_interruption_required?).to be(true)
+    end
+
+    it "returns true when school experience is required on an apprenticeship course" do
+      course.school_experience_required = true
+      course.funding = "apprenticeship"
+
+      expect(course.school_experience_interruption_required?).to be(true)
+    end
+
+    it "returns false when school experience is required on a fee-funded course" do
+      course.school_experience_required = true
+      course.funding = "fee"
+
+      expect(course.school_experience_interruption_required?).to be(false)
+    end
+
+    it "returns false when school experience is not required on a salaried course" do
+      course.school_experience_required = false
+      course.funding = "salary"
+
+      expect(course.school_experience_interruption_required?).to be(false)
     end
   end
 

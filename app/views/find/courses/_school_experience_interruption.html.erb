@@ -6,7 +6,7 @@
 
 <div class="app-callout app-callout--light-blue app-callout--border govuk-!-margin-bottom-6">
   <h2 class="govuk-heading-m"><%= t("find.courses.confirm_apply.school_experience_interruption.callout_heading") %></h2>
-  <p class="govuk-body"><%= markdown(course.school_experience_required_content) %></p>
+  <%= markdown(course.school_experience_required_content) %>
   <p class="govuk-body govuk-!-margin-bottom-0">
     <%= govuk_link_to(
           t("find.courses.confirm_apply.school_experience_interruption.contact_provider", provider_name: course.provider_name),
@@ -62,7 +62,7 @@
           teacher_training_adviser_link: govuk_link_to(
             t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_link_text"),
             find_track_click_path(
-              url: t("get_into_teaching.url_teacher_training_advisers"),
+              url: t("find.get_into_teaching.url_training_adviser"),
               utm_content: "school_experience_interruption_teacher_training_adviser",
             ),
           ),
