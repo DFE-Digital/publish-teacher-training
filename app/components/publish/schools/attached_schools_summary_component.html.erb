@@ -1,0 +1,11 @@
+<% if school_names.empty? %>
+  <span class="app-!-colour-muted">None</span>
+<% elsif school_names.one? %>
+  <%= school_names.first %>
+<% elsif details? %>
+  <%= govuk_details(summary_text: summary_text) do %>
+    <%= school_list %>
+  <% end %>
+<% else %>
+  <%= school_list %>
+<% end %>
