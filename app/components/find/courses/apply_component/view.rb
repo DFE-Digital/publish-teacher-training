@@ -42,10 +42,22 @@ module Find
         end
 
         def find_apply_destination_path
-          return find_school_experience_interstitial_path(provider_code: course.provider.provider_code, course_code: course.course_code) if school_experience_interstitial_path?
-          return find_confirm_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code) if find_confirm_apply_path?
-
-          find_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code)
+          if school_experience_interstitial_path?
+            find_school_experience_interstitial_path(
+              provider_code: course.provider.provider_code,
+              course_code: course.course_code,
+            )
+          elsif find_confirm_apply_path?
+            find_confirm_apply_path(
+              provider_code: course.provider.provider_code,
+              course_code: course.course_code,
+            )
+          else
+            find_apply_path(
+              provider_code: course.provider.provider_code,
+              course_code: course.course_code,
+            )
+          end
         end
       end
     end
