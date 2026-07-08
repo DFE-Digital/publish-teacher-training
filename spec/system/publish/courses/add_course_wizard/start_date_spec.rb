@@ -14,7 +14,8 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
     and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year))
     and_i_click_continue
     then_i_am_taken_to_the_check_answers_page
-    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+    and_i_click_add_course
+    then_a_course_is_created
     then_i_am_taken_to_the_courses_index_page
   end
 
@@ -114,6 +115,10 @@ private
 
   def and_i_click_add_course
     click_on "Add course"
+  end
+
+  def then_a_course_is_created
+    expect(provider.courses.count).to eq(1)
   end
 
   def then_i_am_taken_to_the_courses_index_page

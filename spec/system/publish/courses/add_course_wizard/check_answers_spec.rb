@@ -140,7 +140,8 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
 
-    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+    and_i_click_add_course
+    then_a_course_is_created
 
     created_course = provider.courses.order(:created_at).last
     visa_deadline = expected_visa_deadline_date
@@ -158,7 +159,8 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
 
-    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+    and_i_click_add_course
+    then_a_course_is_created
 
     created_course = provider.courses.order(:created_at).last
     visa_deadline = expected_visa_deadline_date
@@ -177,7 +179,8 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
 
-    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+    and_i_click_add_course
+    then_a_course_is_created
 
     then_the_created_course_has_the_new_course_school
     and_the_created_course_still_has_the_legacy_site
@@ -191,7 +194,8 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
 
-    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+    and_i_click_add_course
+    then_a_course_is_created
 
     then_the_created_course_has_the_new_course_school
   end
@@ -215,7 +219,8 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(page).to have_no_text("Skilled Worker visas")
     expect(page).to have_no_text("Visa sponsorship deadline")
 
-    expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
+    and_i_click_add_course
+    then_a_course_is_created
     created_course = provider.courses.order(:created_at).last
     expect(created_course.level).to eq("further_education")
     expect(created_course.qualification).to eq("pgde")
@@ -503,6 +508,10 @@ private
 
   def and_i_click_add_course
     click_on "Add course"
+  end
+
+  def then_a_course_is_created
+    expect(provider.courses.count).to eq(1)
   end
 
   # Mirror the selected legacy school into the new data model: a GIAS school
