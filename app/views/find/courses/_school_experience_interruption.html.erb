@@ -16,13 +16,9 @@
   <h3 class="govuk-heading-s govuk-!-margin-top-5"><%= t("find.courses.confirm_apply.school_experience_interruption.question_heading") %></h3>
   <%= govuk_button_link_to(
         t("find.courses.confirm_apply.school_experience_interruption.confirm_button"),
-        find_track_apply_to_course_click_path(
-          utm_content: "confirm_apply_course_button",
-          course_id: course.id,
-          url: find_apply_path(
-            provider_code: course.provider.provider_code,
-            course_code: course.course_code,
-          ),
+        find_confirm_apply_path(
+          provider_code: course.provider.provider_code,
+          course_code: course.course_code,
         ),
       ) %>
 

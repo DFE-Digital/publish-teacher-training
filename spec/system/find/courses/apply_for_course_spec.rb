@@ -22,6 +22,15 @@ RSpec.describe "Saving a course", service: :find do
     then_i_see_the_school_experience_interruption_page
   end
 
+  scenario "A signed-in candidate sees the school experience interruption and then confirm apply page", travel: mid_cycle(2027) do
+    given_a_salaried_course_with_required_school_experience_exists
+    when_i_visit_school_experience_interstitial_page
+
+    then_i_see_the_school_experience_interruption_page
+    when_i_confirm_school_experience_requirements
+    then_i_see_the_confirm_apply_page
+  end
+
   scenario "A signed-in candidate does not see the interruption for fee-funded courses", travel: mid_cycle(2027) do
     given_a_fee_course_without_required_school_experience_exists
     when_i_visit_confirm_apply_page
@@ -55,6 +64,10 @@ RSpec.describe "Saving a course", service: :find do
     visit find_school_experience_interstitial_path(provider_code: @course.provider.provider_code, course_code: @course.course_code)
   end
 
+  def when_i_confirm_school_experience_requirements
+    click_on "Yes, I understand the school experience requirements"
+  end
+
   def then_i_see_the_confirm_apply_page
     expect(page).to have_content("Back to #{@course.name_and_code}")
     expect(page).to have_content("Apply for this course")
@@ -80,13 +93,10 @@ RSpec.describe "Saving a course", service: :find do
       href: find_provider_path(@course.provider_code, @course.course_code),
     )
 
-    expected_href = find_track_apply_to_course_click_path(
-      utm_content: "confirm_apply_course_button",
-      course_id: @course.id,
-      url: find_apply_path(provider_code: @course.provider.provider_code, course_code: @course.course_code),
+    expect(page).to have_link(
+      "Yes, I understand the school experience requirements",
+      href: find_confirm_apply_path(provider_code: @course.provider.provider_code, course_code: @course.course_code),
     )
-
-    expect(page).to have_link("Yes, I understand the school experience requirements", href: expected_href)
     expect(page).to have_link("Cancel and return to the course page", href: find_course_path(provider_code: @course.provider_code, course_code: @course.course_code))
     expect(page).to have_content("Is a salaried course right for me?")
     expect(page).to have_content("Get free one-to-one support")
