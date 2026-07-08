@@ -625,6 +625,42 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     it_behaves_like "course qualification row", :undergraduate_degree_with_qts, "Teacher degree apprenticeship with QTS"
   end
 
+  describe "when displaying school experience" do
+    let(:cycle_year) { 2027 }
+    let(:course) do
+      create(
+        :course,
+        school_experience_required:,
+        provider: build(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: cycle_year)),
+      )
+    end
+
+    context "when the course is in the 2027 cycle or later and school experience is required" do
+      let(:school_experience_required) { true }
+
+      it "displays the school experience row" do
+        expect(summary_card_content).to include("School experienceRequired or strongly recommended")
+      end
+    end
+
+    context "when school experience is not required" do
+      let(:school_experience_required) { false }
+
+      it "does not display the school experience row" do
+        expect(summary_card_content).not_to include("School experience")
+      end
+    end
+
+    context "when the course is in a cycle before 2027" do
+      let(:cycle_year) { 2026 }
+      let(:school_experience_required) { true }
+
+      it "does not display the school experience row" do
+        expect(summary_card_content).not_to include("School experience")
+      end
+    end
+  end
+
   shared_examples "course degree requirements row" do |course_degree_type, course_degree_grade_required, expected_output|
     let(:course) { create(:course, degree_type:, degree_grade:) }
     let(:degree_type) { course_degree_type }
