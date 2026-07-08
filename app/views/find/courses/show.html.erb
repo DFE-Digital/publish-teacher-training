@@ -33,7 +33,6 @@
                 @course,
                 preview: preview?(params),
                 utm_content: "apply_course_button_top",
-                context: :find,
               ) %>
         </div>
 
@@ -61,6 +60,6 @@
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom", context: :find) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
   </div>
 </div>
