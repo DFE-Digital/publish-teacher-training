@@ -15,25 +15,8 @@ module Find
           @utm_content = utm_content
         end
 
-        def find_confirm_apply_path?
-          return false if preview || school_experience_interstitial_path?
-
-          FeatureFlag.active?(:candidate_accounts) || course.school_experience_interruption_required?
-        end
-
-        def school_experience_interstitial_path?
-          return false if preview
-
-          course.school_experience_interruption_required?
-        end
-
         def apply_path
-          unless preview
-            return find_school_experience_interstitial_path(provider_code: course.provider.provider_code, course_code: course.course_code) if school_experience_interstitial_path?
-            return find_confirm_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code) if find_confirm_apply_path?
-
-            return find_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code)
-          end
+          return find_apply_destination_path unless preview
 
           apply_publish_provider_recruitment_cycle_course_path(provider_code: course.provider.provider_code, code: course.course_code, recruitment_cycle_year: provider.recruitment_cycle.year)
         end
@@ -44,6 +27,25 @@ module Find
 
         def application_deadline
           course.visa_sponsorship_application_deadline_at.to_fs(:govuk_date)
+        end
+
+      private
+
+        def find_confirm_apply_path?
+          return false if school_experience_interstitial_path?
+
+          FeatureFlag.active?(:candidate_accounts)
+        end
+
+        def school_experience_interstitial_path?
+          course.school_experience_interruption_required?
+        end
+
+        def find_apply_destination_path
+          return find_school_experience_interstitial_path(provider_code: course.provider.provider_code, course_code: course.course_code) if school_experience_interstitial_path?
+          return find_confirm_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code) if find_confirm_apply_path?
+
+          find_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code)
         end
       end
     end
