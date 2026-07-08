@@ -4,7 +4,7 @@ module Find
   module Courses
     module ApplyComponent
       class View < ViewComponent::Base
-        attr_reader :course, :preview, :utm_content, :context
+        attr_reader :course, :preview, :utm_content
 
         delegate :application_status_open?, :provider, to: :course
 

@@ -17,7 +17,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
       course = build(:course, :open, provider:)
 
       result = render_inline(described_class.new(course, preview: false, utm_content: utm_content))
-      expected_url = "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply"
+      expected_url = "/course/#{course.provider.provider_code}/#{course.course_code}/apply"
 
       expect(result).to have_link("Apply for this course", href: find_track_click_path(url: expected_url, utm_content: utm_content))
     end
@@ -26,7 +26,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
       it "renders the apply button when the course is open" do
         course = build(:course, :open, provider:)
         result = with_controller_class(Find::CoursesController) do
-          render_inline(described_class.new(course, preview: false, utm_content: utm_content, context: :find))
+          render_inline(described_class.new(course, preview: false, utm_content: utm_content))
         end
 
         expected_url = find_track_click_path(url: "/course/#{course.provider.provider_code}/#{course.course_code}/apply", utm_content: utm_content)
@@ -38,7 +38,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
         course = build(:course, :open, :salary, school_experience_required: true, provider:)
         allow(course).to receive(:show_school_experience?).and_return(true)
         result = with_controller_class(Find::CoursesController) do
-          render_inline(described_class.new(course, preview: false, utm_content: utm_content, context: :find))
+          render_inline(described_class.new(course, preview: false, utm_content: utm_content))
         end
 
         expected_url = find_track_click_path(url: "/course/#{course.provider.provider_code}/#{course.course_code}/confirm-apply", utm_content: utm_content)
@@ -49,7 +49,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
       it "does not route fee-funded courses through confirm apply" do
         course = build(:course, :open, :fee, school_experience_required: false, provider:)
         result = with_controller_class(Find::CoursesController) do
-          render_inline(described_class.new(course, preview: false, utm_content: utm_content, context: :find))
+          render_inline(described_class.new(course, preview: false, utm_content: utm_content))
         end
 
         expected_url = find_track_click_path(url: "/course/#{course.provider.provider_code}/#{course.course_code}/apply", utm_content: utm_content)
@@ -60,10 +60,13 @@ describe Find::Courses::ApplyComponent::View, type: :component do
       it "renders the apply button without tracking when previewing the open course" do
         course = build(:course, :open, provider:)
         result = with_controller_class(Find::CoursesController) do
-          render_inline(described_class.new(course, preview: true, context: :find))
+          render_inline(described_class.new(course, preview: true))
         end
 
-        expect(result).to have_link("Apply for this course", href: "/course/#{course.provider.provider_code}/#{course.course_code}/apply")
+        expect(result).to have_link(
+          "Apply for this course",
+          href: "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply",
+        )
       end
     end
 
