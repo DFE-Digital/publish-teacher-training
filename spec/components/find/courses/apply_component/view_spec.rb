@@ -34,14 +34,14 @@ describe Find::Courses::ApplyComponent::View, type: :component do
         expect(result).to have_link("Apply for this course", href: expected_url)
       end
 
-      it "routes through confirm apply for salaried courses that require school experience" do
+      it "routes through school experience interstitial for salaried courses that require school experience" do
         course = build(:course, :open, :salary, school_experience_required: true, provider:)
         allow(course).to receive(:show_school_experience?).and_return(true)
         result = with_controller_class(Find::CoursesController) do
           render_inline(described_class.new(course, preview: false, utm_content: utm_content))
         end
 
-        expected_url = find_track_click_path(url: "/course/#{course.provider.provider_code}/#{course.course_code}/confirm-apply", utm_content: utm_content)
+        expected_url = find_track_click_path(url: "/course/#{course.provider.provider_code}/#{course.course_code}/school-experience-interstitial", utm_content: utm_content)
 
         expect(result).to have_link("Apply for this course", href: expected_url)
       end

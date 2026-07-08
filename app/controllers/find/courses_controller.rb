@@ -9,7 +9,7 @@ module Find
     before_action -> { render_not_found if provider.nil? }
 
     before_action :render_feedback_component, only: :show
-    before_action :set_course, only: %i[show confirm_apply]
+    before_action :set_course, only: %i[show confirm_apply school_experience_interstitial]
 
     def show
       distance_from_location if location_params.present?
@@ -23,8 +23,10 @@ module Find
       @enrichment = @course.latest_published_enrichment
     end
 
-    def confirm_apply
-      @school_experience_interruption_required = @course.school_experience_interruption_required?
+    def confirm_apply; end
+
+    def school_experience_interstitial
+      redirect_to find_confirm_apply_path(provider_code: @course.provider_code, course_code: @course.course_code) unless @course.school_experience_interruption_required?
     end
 
     def location_params
