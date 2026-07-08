@@ -937,7 +937,7 @@ class Course < ApplicationRecord
   end
 
   def show_school_experience?
-    recruitment_cycle_after?(2023)
+    recruitment_cycle_after?(2026)
   end
 
 private
