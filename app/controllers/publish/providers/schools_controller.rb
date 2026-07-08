@@ -10,6 +10,7 @@ module Publish
 
       def index
         schools = provider.sites.order(:location_name)
+        Rails.logger.debug(schools.to_sql)
 
         # Filter by search query if present
         if params[:query].present?
@@ -25,10 +26,10 @@ module Publish
           .left_joins(site_statuses: :course)
           .group("site.id")
           .select(
-            "site.*, COUNT(DISTINCT CASE
-      WHEN course_site.status IN ('N','R')
-      THEN course.id
-    END) AS courses_count",
+            <<~SQL,
+              site.*,
+              COUNT(DISTINCT course.id) AS courses_count
+            SQL
           )
 
         @pagy, @schools = pagy(schools, limit: PER_PAGE)
@@ -37,12 +38,8 @@ module Publish
       def show
         @courses = Publish::Courses::Query.call(provider:)
           .joins(:site_statuses)
-          .where(
-            site_statuses: {
-              site_id: @site.id,
-              status: %i[new_status running],
-            },
-          )
+          .where(site_statuses: { site_id: @site.id })
+          .to_a
           .uniq(&:id)
       end
 
@@ -66,6 +63,7 @@ module Publish
 
       def remove
         @site = Site.find(params[:id])
+        @from_school_show = params[:from] == "show"
       end
 
     private
