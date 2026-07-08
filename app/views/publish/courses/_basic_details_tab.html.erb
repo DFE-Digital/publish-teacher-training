@@ -101,19 +101,12 @@
      end
 
      summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row|
-       row.with_key { school_label_with_plural(course, count: course.sites.length) }
+       row.with_key { school_label_with_plural(course, count: course.sorted_school_names.length) }
        row.with_value do
          if course.recruitment_cycle_rollover_period_2026?
            raw(render(::Publish::Schools::SchoolSummaryValueComponent.new(course:)))
-         elsif course.sites.blank?
-           raw("<span class=\"app-!-colour-muted\">None</span>")
-         elsif course.sites.size == 1
-           course.sites.first.location_name
          else
-           school_names = course.alphabetically_sorted_sites.map do |site|
-             "<li>#{site.location_name}</li>"
-           end
-           raw("<ul class=\"govuk-list\">#{school_names.join}</ul>")
+           raw(render(::Publish::Schools::AttachedSchoolsSummaryComponent.new(course:)))
          end
        end
 
