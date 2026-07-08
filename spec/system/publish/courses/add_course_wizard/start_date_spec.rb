@@ -5,13 +5,13 @@ require "rails_helper"
 RSpec.describe "Add course wizard start date step when qualification is undergraduate degree with qts", type: :system do
   before do
     FeatureFlag.activate(:wizard_add_course_flow)
-    given_i_am_authenticated_as_a_provider_user(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_a_provider_user(cycle_year: Find::CycleTimetable.current_year)
   end
 
   scenario "choosing a start date and adds the course from check answers" do
     and_i_have_wizard_state_for_start_date
     when_i_visit_the_wizard_start_date_page
-    and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Date.current.year))
+    and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year))
     and_i_click_continue
     then_i_am_taken_to_the_check_answers_page
     expect { and_i_click_add_course }.to change { provider.courses.count }.by(1)
@@ -21,7 +21,7 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
   scenario "failed course creation rerenders check answers with the error summary" do
     and_i_have_wizard_state_for_start_date
     when_i_visit_the_wizard_start_date_page
-    and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Date.current.year))
+    and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year))
     and_i_click_continue
     then_i_am_taken_to_the_check_answers_page
 
@@ -38,18 +38,18 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
   scenario "editing start date from check answers returns to check answers with updated value" do
     and_i_have_wizard_state_for_start_date
     when_i_visit_the_wizard_start_date_page
-    and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Date.current.year))
+    and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year))
     and_i_click_continue
     then_i_am_taken_to_the_check_answers_page
 
     when_i_visit_start_date_for_review
     then_i_am_taken_back_to_start_date_page_for_review
 
-    and_i_choose_a_start_date(alternative_start_date_label(cycle_year: Date.current.year))
+    and_i_choose_a_start_date(alternative_start_date_label(cycle_year: Find::CycleTimetable.current_year))
     and_i_click_continue
 
     then_i_am_taken_to_the_check_answers_page
-    then_i_see_the_updated_start_date_is_persisted(alternative_start_date_label(cycle_year: Date.current.year))
+    then_i_see_the_updated_start_date_is_persisted(alternative_start_date_label(cycle_year: Find::CycleTimetable.current_year))
   end
 
   scenario "submitting start date without selecting an option shows validation errors" do
@@ -64,20 +64,20 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
     when_i_visit_the_wizard_start_date_page
 
     expect(page).to have_content("Course start date")
-    expect(page).to have_field(current_cycle_current_month_label(cycle_year: Date.current.year))
-    expect(page).to have_field("July #{Date.current.year + 1}")
-    expect(page).not_to have_field(previous_month_label(cycle_year: Date.current.year)) if Date.current.month > 1
+    expect(page).to have_field(current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year))
+    expect(page).to have_field("July #{Find::CycleTimetable.current_year + 1}")
+    expect(page).not_to have_field(previous_month_label(cycle_year: Find::CycleTimetable.current_year)) if Date.current.month > 1
   end
 
   scenario "shows options starting from January when provider recruitment cycle is in the future" do
-    given_i_am_authenticated_as_a_provider_user(cycle_year: Date.current.year + 1)
+    given_i_am_authenticated_as_a_provider_user(cycle_year: Find::CycleTimetable.current_year + 1)
     and_i_have_wizard_state_for_start_date
     when_i_visit_the_wizard_start_date_page
 
     expect(page).to have_content("Course start date")
-    expect(page).to have_field("January #{Date.current.year + 1}")
-    expect(page).not_to have_field("December #{Date.current.year}")
-    expect(page).to have_field("July #{Date.current.year + 2}")
+    expect(page).to have_field("January #{Find::CycleTimetable.current_year + 1}")
+    expect(page).not_to have_field("December #{Find::CycleTimetable.current_year}")
+    expect(page).to have_field("July #{Find::CycleTimetable.current_year + 2}")
   end
 
 private

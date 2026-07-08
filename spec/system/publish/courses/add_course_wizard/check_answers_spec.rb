@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Add course wizard check your answers navigation", type: :system do
   before do
     FeatureFlag.activate(:wizard_add_course_flow)
-    given_i_am_authenticated_as_a_provider_user(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_a_provider_user(cycle_year: Find::CycleTimetable.current_year)
   end
 
   scenario "every TDA change-link row round-trips back to check answers" do
@@ -23,7 +23,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
   end
 
   scenario "every fee-branch change-link row navigates to the expected step" do
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     given_i_have_completed_secondary_fee_wizard_state
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
@@ -37,7 +37,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
   end
 
   scenario "every salary-branch change-link row navigates to the expected step" do
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     given_i_have_completed_secondary_salary_wizard_state
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
@@ -86,7 +86,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
   end
 
   scenario "shows fee-branch rows including accredited provider and visa sponsorship" do
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     given_i_have_completed_secondary_fee_wizard_state
 
     when_i_visit_check_answers_page
@@ -95,7 +95,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
   end
 
   scenario "shows skilled worker visa row on salary branch" do
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     given_i_have_completed_secondary_salary_wizard_state
 
     when_i_visit_check_answers_page
@@ -135,7 +135,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
   end
 
   scenario "creates a course from secondary fee branch with mapped attributes" do
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     given_i_have_completed_secondary_fee_wizard_state
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
@@ -153,7 +153,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
   end
 
   scenario "creates a course from secondary salary branch with mapped attributes" do
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     given_i_have_completed_secondary_salary_wizard_state
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
@@ -171,7 +171,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
   end
 
   scenario "writes the selected school to the new Course::School model when the flag is off" do
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     and_the_selected_school_is_mapped_to_the_new_model
     given_i_have_completed_secondary_fee_wizard_state
     when_i_visit_check_answers_page
@@ -185,7 +185,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
 
   scenario "writes the selected school to the new Course::School model when the flag is on" do
     FeatureFlag.activate(:course_publishing_uses_new_school_model)
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     and_the_selected_school_is_mapped_to_the_new_model
     given_i_have_completed_secondary_fee_wizard_state
     when_i_visit_check_answers_page
@@ -243,7 +243,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
   end
 
   scenario "shows visa deadline question as no and hides date row when deadline step is skipped" do
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     given_i_have_completed_secondary_fee_wizard_state_with_no_visa_deadline
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
@@ -365,7 +365,7 @@ private
       qualification: "undergraduate_degree_with_qts",
       site_ids: [placement_site.id.to_s],
       study_sites_ids: [study_site.id.to_s],
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
       visa_sponsorship_application_deadline_required: false,
     )
@@ -390,7 +390,7 @@ private
       qualification: "undergraduate_degree_with_qts",
       site_ids: [@placement_site.id.to_s],
       study_sites_ids: [],
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
       visa_sponsorship_application_deadline_required: false,
     )
@@ -417,7 +417,7 @@ private
       study_pattern: %w[full_time],
       site_ids: [@placement_site.id.to_s],
       study_sites_ids: [],
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
       visa_sponsorship_application_deadline_required: false,
     )
@@ -585,7 +585,7 @@ private
       can_sponsor_student_visa: true,
       visa_sponsorship_application_deadline_required: true,
       visa_sponsorship_application_deadline_at: visa_deadline_date_parts,
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
     )
   end
 
@@ -619,7 +619,7 @@ private
       can_sponsor_skilled_worker_visa: true,
       visa_sponsorship_application_deadline_required: true,
       visa_sponsorship_application_deadline_at: visa_deadline_date_parts,
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
     )
   end
 
@@ -653,7 +653,7 @@ private
       study_sites_ids: [study_site.id.to_s],
       can_sponsor_student_visa: false,
       visa_sponsorship_application_deadline_required: false,
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
     )
   end
 
@@ -678,7 +678,7 @@ private
       study_pattern: %w[full_time],
       site_ids: [placement_site.id.to_s],
       study_sites_ids: [study_site.id.to_s],
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
       primary_master_subject_id: nil,
       secondary_master_subject_id: nil,
@@ -708,14 +708,14 @@ private
       qualification: "undergraduate_degree_with_qts",
       site_ids: [placement_site.id.to_s],
       study_sites_ids: [study_site.id.to_s],
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
       visa_sponsorship_application_deadline_required: false,
     )
   end
 
   def given_i_have_completed_secondary_fee_wizard_state_with_single_partner
-    given_i_am_authenticated_as_school_provider_with_single_partner(cycle_year: Date.current.year)
+    given_i_am_authenticated_as_school_provider_with_single_partner(cycle_year: Find::CycleTimetable.current_year)
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
     placement_site = provider.sites.first || create(:site, provider:)
@@ -741,7 +741,7 @@ private
       study_sites_ids: [study_site.id.to_s],
       can_sponsor_student_visa: true,
       visa_sponsorship_application_deadline_required: false,
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
     )
   end
 
@@ -774,7 +774,7 @@ private
       can_sponsor_student_visa: true,
       visa_sponsorship_application_deadline_required: false,
       visa_sponsorship_application_deadline_at: nil,
-      start_date: current_cycle_current_month_label(cycle_year: Date.current.year),
+      start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
     )
   end
 
