@@ -17,7 +17,7 @@ RSpec.describe "Saving a course", service: :find do
 
   scenario "A signed-in candidate sees a school experience interruption for salaried courses", travel: mid_cycle(2027) do
     given_a_salaried_course_with_required_school_experience_exists
-    when_i_visit_confirm_apply_page
+    when_i_visit_school_experience_interstitial_page
 
     then_i_see_the_school_experience_interruption_page
   end
@@ -49,6 +49,10 @@ RSpec.describe "Saving a course", service: :find do
 
   def when_i_visit_confirm_apply_page
     visit find_confirm_apply_path(provider_code: @course.provider.provider_code, course_code: @course.course_code)
+  end
+
+  def when_i_visit_school_experience_interstitial_page
+    visit find_school_experience_interstitial_path(provider_code: @course.provider.provider_code, course_code: @course.course_code)
   end
 
   def then_i_see_the_confirm_apply_page

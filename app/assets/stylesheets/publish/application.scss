@@ -5,6 +5,8 @@ $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 @import "dfe-autocomplete/src/dfe-autocomplete";
 @import "../one-login";
 
+$app-callout-light-blue-colour: #f3f8f6;
+
 @import "../components/accordion";
 @import "../components/autocomplete";
 @import "../components/card";

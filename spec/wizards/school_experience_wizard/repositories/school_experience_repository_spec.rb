@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe SchoolExperienceWizard::Repositories::SchoolExperienceRepository do
   subject(:repository) { described_class.new(record: course) }
 
-  let(:course) { create(:course, funding: "salary") }
+  let(:course) { create(:course, :salary) }
 
   describe "#transform_for_read" do
     it "exposes school_experience_required as the boolean experience_required" do

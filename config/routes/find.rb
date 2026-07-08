@@ -15,6 +15,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
   get "/course/:provider_code/:course_code/git/:git_path", to: "courses#git_redirect", as: :get_into_teaching_redirect
   get "/course/:provider_code/:course_code/provider/website", to: "courses#provider_website", as: :provider_website
   get "/course/:provider_code/:course_code/confirm-apply", to: "courses#confirm_apply", as: :confirm_apply
+  get "/course/:provider_code/:course_code/school-experience-interstitial", to: "courses#school_experience_interstitial", as: :school_experience_interstitial
 
   get "/geolocation-suggestions", to: "geolocation_suggestions#index"
 

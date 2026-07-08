@@ -1,0 +1,14 @@
+<%= content_for :page_title, t("find.courses.confirm_apply.school_experience_interruption.heading") %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_back_link(
+    text: t("find.courses.confirm_apply.back_link_text", course_name_and_code: @course.name_and_code),
+    href: find_course_path(provider_code: @course.provider_code, course_code: @course.course_code),
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "find/courses/school_experience_interruption", course: @course %>
+  </div>
+</div>

@@ -16,11 +16,20 @@ module Find
         end
 
         def find_confirm_apply_path?
-          preview == false && (FeatureFlag.active?(:candidate_accounts) || course.school_experience_interruption_required?)
+          return false if preview || school_experience_interstitial_path?
+
+          FeatureFlag.active?(:candidate_accounts) || course.school_experience_interruption_required?
+        end
+
+        def school_experience_interstitial_path?
+          return false if preview
+
+          course.school_experience_interruption_required?
         end
 
         def apply_path
-          if preview == false
+          unless preview
+            return find_school_experience_interstitial_path(provider_code: course.provider.provider_code, course_code: course.course_code) if school_experience_interstitial_path?
             return find_confirm_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code) if find_confirm_apply_path?
 
             return find_apply_path(provider_code: course.provider.provider_code, course_code: course.course_code)
