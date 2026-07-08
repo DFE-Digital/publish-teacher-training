@@ -101,19 +101,9 @@
         <% end %>
 
         <% summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row| %>
-          <% row.with_key { school_label_with_plural(course, count: course.sites.length) } %>
+          <% row.with_key { school_label_with_plural(course, count: course.sorted_school_names.length) } %>
           <% row.with_value do %>
-            <% if course.sites.nil? || course.sites.empty? %>
-              <span class="app-!-colour-muted"><%= t(".none") %></span>
-            <% elsif course.sites.size == 1 %>
-              <%= course.sites.first.location_name %>
-            <% else %>
-              <ul class="govuk-list">
-                <% course.alphabetically_sorted_sites.each do |site| %>
-                  <li><%= site.location_name %></li>
-                <% end %>
-              </ul>
-            <% end %>
+            <%= render(::Publish::Schools::AttachedSchoolsSummaryComponent.new(course:)) %>
           <% end %>
           <% if @course.provider.sites.count > 1 %>
             <% row.with_action(
