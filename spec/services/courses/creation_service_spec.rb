@@ -561,6 +561,24 @@ describe Courses::CreationService do
       end
     end
 
+    context "when the selected site's GIAS school is closed" do
+      # A site can still point at a school the GIAS import later flipped to
+      # closed. We must not build a Course::School for it, but the legacy site
+      # is still attached.
+      let!(:gias_school) { create(:gias_school, :closed, urn: site.urn) }
+      let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
+
+      before do
+        allow(FeatureFlag).to receive(:active?).and_call_original
+        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
+      end
+
+      it "builds no Course::School but still attaches the legacy site" do
+        expect(created_course.schools).to be_empty
+        expect(created_course.sites.map(&:id)).to eq([site.id])
+      end
+    end
+
     context "when no schools are selected" do
       let(:valid_course_params) do
         {
@@ -574,6 +592,27 @@ describe Courses::CreationService do
       before do
         allow(FeatureFlag).to receive(:active?).and_call_original
         allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
+      end
+
+      it "adds the existing error and builds no Course::School" do
+        expect(created_course.errors[:sites]).to include("Select at least one school")
+        expect(created_course.schools).to be_empty
+      end
+    end
+
+    context "when no schools are selected and the flag is on" do
+      let(:valid_course_params) do
+        {
+          "level" => "primary",
+          "qualification" => "qts",
+          "funding" => "fee",
+          "sites_ids" => [],
+        }
+      end
+
+      before do
+        allow(FeatureFlag).to receive(:active?).and_call_original
+        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
       end
 
       it "adds the existing error and builds no Course::School" do
