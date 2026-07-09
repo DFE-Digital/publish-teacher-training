@@ -110,8 +110,8 @@ module DataHub
           WITH #{main_site_provider_schools_cte},
                #{non_main_provider_schools_cte},
                #{source_provider_schools_cte}
-          INSERT INTO provider_school (provider_id, gias_school_id, site_code, created_at, updated_at)
-          SELECT provider_id, gias_school_id, site_code, NOW(), NOW()
+          INSERT INTO provider_school (provider_id, gias_school_id, site_code, uuid, created_at, updated_at)
+          SELECT provider_id, gias_school_id, site_code, uuid, NOW(), NOW()
           FROM source_provider_schools
           ON CONFLICT DO NOTHING
           RETURNING 1
@@ -127,7 +127,8 @@ module DataHub
             SELECT DISTINCT ON (site.provider_id)
                    site.provider_id,
                    gias_school.id AS gias_school_id,
-                   site.code AS site_code
+                   site.code AS site_code,
+                   site.uuid AS uuid
             FROM site
             #{site_provider_scope_join_sql}
             JOIN gias_school ON gias_school.urn = site.urn
@@ -151,7 +152,8 @@ module DataHub
             SELECT DISTINCT ON (site.provider_id, gias_school.id)
                    site.provider_id,
                    gias_school.id AS gias_school_id,
-                   site.code AS site_code
+                   site.code AS site_code,
+                   site.uuid AS uuid
             FROM site
             #{site_provider_scope_join_sql}
             JOIN gias_school ON gias_school.urn = site.urn

@@ -29,6 +29,16 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(provider_school.site_code).to eq("A")
       end
 
+      it "copies the legacy site uuid into provider_school" do
+        executor.execute
+
+        provider_school = Provider::School.find_by!(
+          provider_id: provider.id,
+          gias_school_id: gias_school.id,
+        )
+        expect(provider_school.uuid).to eq(site.uuid)
+      end
+
       it "does not insert provider_school for a different gias_school" do
         other_gias_school = create(:gias_school, urn: "999999")
         executor.execute
@@ -99,6 +109,20 @@ describe DataHub::SchoolsBackfill::Executor do
         ).to contain_exactly("A", "-")
       end
 
+      it "copies the source site uuid for each provider_school relationship" do
+        executor.execute
+
+        provider_school_uuids_by_site_code = Provider::School
+          .where(provider_id: provider.id, gias_school_id: gias_school.id)
+          .pluck(:site_code, :uuid)
+          .to_h
+
+        expect(provider_school_uuids_by_site_code).to eq(
+          "A" => normal_site.uuid,
+          "-" => main_site.uuid,
+        )
+      end
+
       it "creates separate course_school rows for the normal and main-site relationships" do
         executor.execute
 
@@ -142,6 +166,17 @@ describe DataHub::SchoolsBackfill::Executor do
         expect(
           Provider::School.where(provider_id: provider.id, gias_school_id: gias_school.id).pluck(:site_code),
         ).to contain_exactly("A")
+      end
+
+      it "copies the uuid from the first source site" do
+        executor.execute
+
+        provider_school = Provider::School.find_by!(
+          provider_id: provider.id,
+          gias_school_id: gias_school.id,
+        )
+
+        expect(provider_school.uuid).to eq(first_site.uuid)
       end
 
       it "creates one course_school row using the first source site" do
