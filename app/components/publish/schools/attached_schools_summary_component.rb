@@ -11,9 +11,9 @@ module Publish
       attr_reader :course
 
       def initialize(course:)
-        @course = course
-
         super()
+
+        @course = course
       end
 
       def school_names
