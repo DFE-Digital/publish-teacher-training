@@ -630,7 +630,9 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     let(:course) do
       create(
         :course,
+        :with_salary,
         school_experience_required:,
+        school_experience_required_content: school_experience_required ? "Requires a Nobel prize" : nil,
         provider: build(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: cycle_year)),
       )
     end
