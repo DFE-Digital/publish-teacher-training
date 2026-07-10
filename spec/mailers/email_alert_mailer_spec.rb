@@ -67,7 +67,7 @@ describe EmailAlertMailer do
     expect(body).to include("utm_medium=email")
     expect(body).to include("utm_campaign=weekly_digest")
     expect(body).to include("utm_content=course_link")
-    expect(body).to include("utm_content=search_for_a_course")
+    expect(body).to include("utm_content=view_email_alerts")
     expect(body).to include("utm_content=unsubscribe")
   end
 
