@@ -19,7 +19,7 @@
 <%= row[:label] %>: <%= row[:value] %>
 <% end -%>
 
-[Search for a course](<%= with_utm(@search_url, params: @utm_params, content: "search_for_a_course") %>) to set up a new email alert for similar courses.
+[View all your email alerts](<%= with_utm(find_candidate_email_alerts_url, params: @utm_params, content: "view_email_alerts") %>).
 
 ---
 
