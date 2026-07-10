@@ -200,9 +200,6 @@ group :development, :test do
 
   gem "capybara-playwright-driver"
 
-  # Make diffs of Ruby objects much more readable
-  gem "super_diff"
-
   # Allow us to freeze time in tests
   gem "timecop"
 
@@ -238,6 +235,9 @@ group :test do
 
   # Page objects
   gem "site_prism", "~> 6.0"
+
+  # Make diffs of Ruby objects much more readable
+  gem "super_diff"
 
   gem "webmock"
 
