@@ -19,13 +19,13 @@ describe Provider::School do
     end
 
     context "with the same gias_school and site_code for one provider" do
-      let(:existing) { create(:provider_school, :additional) }
+      let(:existing) { create(:provider_school) }
       let(:duplicate) do
         build(
           :provider_school,
-          :additional,
           provider: existing.provider,
           gias_school: existing.gias_school,
+          site_code: existing.site_code,
         )
       end
 
