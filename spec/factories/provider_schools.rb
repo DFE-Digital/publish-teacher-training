@@ -4,10 +4,11 @@ FactoryBot.define do
   factory :provider_school, class: "Provider::School" do
     provider
     gias_school
-    site_code { "-" }
+    # Walks "A", "B", ... "Z", "AA", ... via String#next
+    sequence(:site_code, "A")
 
-    trait :additional do
-      site_code { "A" }
+    trait :main_site do
+      site_code { Provider::School::MAIN_SITE_CODE }
     end
   end
 end
