@@ -8,6 +8,7 @@ describe Provider::School do
   describe "associations" do
     it { is_expected.to belong_to(:provider) }
     it { is_expected.to belong_to(:gias_school) }
+    it { is_expected.to have_many(:course_schools).class_name("Course::School").dependent(:destroy) }
   end
 
   describe "validations" do

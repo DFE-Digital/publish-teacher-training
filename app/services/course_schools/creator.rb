@@ -20,6 +20,7 @@ module CourseSchools
 
       @course.schools.find_or_create_by!(gias_school_id: @gias_school_id) do |course_school|
         course_school.site_code = provider_school.site_code
+        course_school.provider_school = provider_school
       end
     rescue ActiveRecord::RecordNotUnique
       @course.schools.find_by!(gias_school_id: @gias_school_id)

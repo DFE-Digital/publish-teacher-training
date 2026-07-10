@@ -28,6 +28,12 @@ describe CourseSchools::Creator do
       expect(result.site_code).to eq("Q")
     end
 
+    it "links the row to the matching Provider::School" do
+      result = described_class.call(course:, gias_school_id: gias_school.id)
+
+      expect(result.provider_school).to eq(provider_school)
+    end
+
     it "returns the created row" do
       result = described_class.call(course:, gias_school_id: gias_school.id)
 
@@ -44,7 +50,7 @@ describe CourseSchools::Creator do
     end
 
     it "returns the existing row when one already exists for (course, gias_school)" do
-      existing = create(:course_school, course:, gias_school:, site_code: "Q")
+      existing = create(:course_school, course:, gias_school:, provider_school:, site_code: "Q")
 
       result = described_class.call(course:, gias_school_id: gias_school.id)
 
@@ -52,7 +58,7 @@ describe CourseSchools::Creator do
     end
 
     it "returns the existing row when a RecordNotUnique race fires" do
-      existing = create(:course_school, course:, gias_school:, site_code: "Q")
+      existing = create(:course_school, course:, gias_school:, provider_school:, site_code: "Q")
 
       schools_proxy = course.schools
       allow(course).to receive(:schools).and_return(schools_proxy)
