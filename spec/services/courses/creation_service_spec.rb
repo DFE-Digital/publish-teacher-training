@@ -510,6 +510,7 @@ describe Courses::CreationService do
         expect(created_course.sites.map(&:id)).to eq([site.id])
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
         expect(created_course.schools.first.site_code).to eq("-")
+        expect(created_course.schools.first.provider_school).to eq(provider_school)
         expect(created_course.errors).to be_empty
       end
 
@@ -531,6 +532,7 @@ describe Courses::CreationService do
       it "builds the new Course::School and passes :new validation" do
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
         expect(created_course.schools.first.site_code).to eq("-")
+        expect(created_course.schools.first.provider_school).to eq(provider_school)
         expect(created_course.errors).to be_empty
       end
 
