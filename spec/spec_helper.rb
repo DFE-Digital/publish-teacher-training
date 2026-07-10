@@ -2,7 +2,7 @@
 
 require "pundit/rspec"
 require "jsonapi/rspec"
-require "super_diff/rspec"
+require "super_diff/rspec-rails"
 require "fakefs/spec_helpers"
 require "webmock/rspec"
 require "audited-rspec"
