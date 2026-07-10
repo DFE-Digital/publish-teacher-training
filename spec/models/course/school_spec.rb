@@ -8,6 +8,7 @@ describe Course::School do
   describe "associations" do
     it { is_expected.to belong_to(:course) }
     it { is_expected.to belong_to(:gias_school) }
+    it { is_expected.to belong_to(:provider_school).class_name("Provider::School").required }
   end
 
   describe "validations" do
@@ -82,32 +83,55 @@ describe Course::School do
   describe "database constraints" do
     let(:course) { create(:course) }
     let(:gias_school) { create(:gias_school) }
+    let(:provider_school) { create(:provider_school, provider: course.provider, gias_school:) }
 
     it "enforces NOT NULL on course_id" do
       expect {
-        described_class.new(gias_school:, site_code: "-").save(validate: false)
+        described_class.new(gias_school:, provider_school:, site_code: "-").save(validate: false)
       }.to raise_error(ActiveRecord::NotNullViolation)
     end
 
     it "enforces NOT NULL on gias_school_id" do
       expect {
-        described_class.new(course:, site_code: "-").save(validate: false)
+        described_class.new(course:, provider_school:, site_code: "-").save(validate: false)
       }.to raise_error(ActiveRecord::NotNullViolation)
     end
 
     it "enforces NOT NULL on site_code" do
       expect {
-        described_class.new(course:, gias_school:).save(validate: false)
+        described_class.new(course:, gias_school:, provider_school:).save(validate: false)
+      }.to raise_error(ActiveRecord::NotNullViolation)
+    end
+
+    it "enforces NOT NULL on provider_school_id" do
+      expect {
+        described_class.new(course:, gias_school:, site_code: "-").save(validate: false)
       }.to raise_error(ActiveRecord::NotNullViolation)
     end
 
     it "enforces the gias_school_id foreign key" do
       missing_id = GiasSchool.maximum(:id).to_i + 1_000
-      record = described_class.new(course:, site_code: "-")
+      record = described_class.new(course:, provider_school:, site_code: "-")
       record.gias_school_id = missing_id
       expect {
         record.save(validate: false)
       }.to raise_error(ActiveRecord::InvalidForeignKey)
+    end
+
+    it "enforces the provider_school_id foreign key" do
+      missing_id = Provider::School.maximum(:id).to_i + 1_000
+      record = described_class.new(course:, gias_school:, site_code: "-")
+      record.provider_school_id = missing_id
+      expect {
+        record.save(validate: false)
+      }.to raise_error(ActiveRecord::InvalidForeignKey)
+    end
+
+    it "deletes the row when the provider_school row is deleted" do
+      course_school = create(:course_school, course:, gias_school:, provider_school:)
+
+      provider_school.delete
+      expect(described_class.exists?(course_school.id)).to be(false)
     end
 
     it "enforces DB-level uniqueness on (course_id, gias_school_id, site_code)" do
@@ -116,6 +140,7 @@ describe Course::School do
         described_class.new(
           course: existing.course,
           gias_school: existing.gias_school,
+          provider_school: existing.provider_school,
           site_code: existing.site_code,
         ).save(validate: false)
       }.to raise_error(ActiveRecord::RecordNotUnique)
