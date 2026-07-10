@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_06_120100) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_09_100100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -260,10 +260,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_120100) do
     t.integer "course_id", null: false
     t.datetime "created_at", null: false
     t.bigint "gias_school_id", null: false
+    t.bigint "provider_school_id", null: false
     t.text "site_code", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id", "gias_school_id", "site_code"], name: "index_course_school_unique", unique: true
     t.index ["gias_school_id"], name: "index_course_school_on_gias_school_id"
+    t.index ["provider_school_id"], name: "index_course_school_on_provider_school_id"
   end
 
   create_table "course_site", id: :serial, force: :cascade do |t|
@@ -664,6 +666,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_06_120100) do
   add_foreign_key "course_enrichment", "user", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"
   add_foreign_key "course_school", "course", on_delete: :cascade
   add_foreign_key "course_school", "gias_school", on_delete: :cascade
+  add_foreign_key "course_school", "provider_school", on_delete: :cascade
   add_foreign_key "course_site", "course", name: "FK_course_site_course_course_id", on_delete: :cascade
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
   add_foreign_key "course_subject", "course", name: "fk_course_subject__course"
