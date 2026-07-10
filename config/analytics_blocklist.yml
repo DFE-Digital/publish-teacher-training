@@ -66,6 +66,7 @@
   - id
   - course_id
   - gias_school_id
+  - provider_school_id
   - site_code
   - created_at
   - updated_at

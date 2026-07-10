@@ -151,6 +151,7 @@ erDiagram
 		integer course_id FK
 		integer gias_school_id FK
 		integer id PK
+		integer provider_school_id FK
 		text site_code
 	}
 	CourseEnrichment {
@@ -443,6 +444,7 @@ erDiagram
 	Associated o|--}o "Audited::Audit" : ""
 	Provider ||--}o "Provider::School" : ""
 	GiasSchool ||--}o "Provider::School" : ""
+	"Provider::School" ||--}o "Course::School" : ""
 	Course ||--}o "Course::School" : ""
 	GiasSchool ||--}o "Course::School" : ""
 	Candidate ||--}o "Candidate::EmailAlert" : ""
