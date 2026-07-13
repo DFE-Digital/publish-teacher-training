@@ -18,16 +18,17 @@ describe Course::School do
       expect(course_school).to be_valid
     end
 
-    it "rejects a duplicate (course, gias_school, site_code) triple" do
+    it "rejects a duplicate (course, provider_school_id) combination" do
       existing = create(:course_school)
       dup = build(
         :course_school,
         course: existing.course,
+        provider_school: existing.provider_school,
         gias_school: existing.gias_school,
         site_code: existing.site_code,
       )
       expect(dup).not_to be_valid
-      expect(dup.errors[:gias_school_id]).to be_present
+      expect(dup.errors[:provider_school_id]).to be_present
     end
 
     it "allows the same course and gias_school with different site codes" do
