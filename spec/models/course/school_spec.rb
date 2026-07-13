@@ -31,6 +31,25 @@ describe Course::School do
       expect(dup.errors[:provider_school_id]).to be_present
     end
 
+    it "rejects a gias_school_id that disagrees with the provider_school" do
+      provider_school = create(:provider_school)
+      course_school = build(
+        :course_school,
+        provider_school:,
+        gias_school: build(:gias_school),
+        site_code: provider_school.site_code,
+      )
+      expect(course_school).not_to be_valid
+      expect(course_school.errors[:gias_school_id]).to be_present
+    end
+
+    it "rejects a site_code that disagrees with the provider_school" do
+      course_school = build(:course_school)
+      course_school.site_code = "#{course_school.provider_school.site_code}X"
+      expect(course_school).not_to be_valid
+      expect(course_school.errors[:site_code]).to be_present
+    end
+
     it "allows the same course and gias_school with different site codes" do
       existing = create(:course_school, site_code: "-")
       second = build(
@@ -55,10 +74,11 @@ describe Course::School do
 
     it "bumps course.changed_at on update" do
       course_school = create(:course_school, course:)
+      other = create(:provider_school, provider: course.provider)
       course.update_columns(changed_at: 1.hour.ago)
 
       Timecop.freeze do
-        course_school.update!(site_code: "Z")
+        course_school.update!(provider_school: other, gias_school: other.gias_school, site_code: other.site_code)
         expect(course.reload.changed_at).to be_within(1.second).of(Time.zone.now)
       end
     end
@@ -129,7 +149,7 @@ describe Course::School do
     end
 
     it "deletes the row when the provider_school row is deleted" do
-      course_school = create(:course_school, course:, gias_school:, provider_school:)
+      course_school = create(:course_school, course:, gias_school:, provider_school:, site_code: provider_school.site_code)
 
       provider_school.delete
       expect(described_class.exists?(course_school.id)).to be(false)
