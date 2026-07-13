@@ -24,6 +24,9 @@
         provider: @provider,
       ) %>
 
+    <% sorted_sites = @provider.sites.sort_by(&:location_name) %>
+    <% collapse_after = 20 %>
+
     <%= f.govuk_check_boxes_fieldset :site_ids,
         legend:
         {
@@ -31,7 +34,8 @@
           tag: "h1",
           size: "l",
         },
-        form_group: { data: { controller: "select-all-checkboxes" } } do %>
+        hint: { text: t("publish.courses.schools.attached_count", count: course.attached_schools_count) },
+        form_group: { data: { controller: "select-all-checkboxes show-all-schools", show_all_schools_visible_value: collapse_after } } do %>
 
           <div class="govuk-checkboxes__item">
             <input type="checkbox"
@@ -48,17 +52,28 @@
           <div class="govuk-body govuk-!-margin-left-2">or</div>
           <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
-          <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+          <% sorted_sites.each_with_index do |site, index| %>
             <%= f.govuk_check_box :site_ids,
                 site.id,
                 label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
-                hint: { text: site.full_address },
+                hint: { text: site.decorate.full_address },
                 link_errors: index.zero?,
                 data: {
                   select_all_checkboxes_target: "checkbox",
+                  show_all_schools_target: "school",
                   action: "select-all-checkboxes#updateSelectAll",
                 } %>
          <% end %>
+
+          <% if sorted_sites.size > collapse_after %>
+            <button type="button"
+                    class="app-button-link govuk-body"
+                    hidden
+                    data-show-all-schools-target="showAll"
+                    data-action="show-all-schools#showAll">
+              <%= t("publish.courses.schools.show_all") %>
+            </button>
+          <% end %>
       <% end %>
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
