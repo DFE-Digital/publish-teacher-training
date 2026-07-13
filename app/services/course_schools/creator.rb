@@ -18,12 +18,15 @@ module CourseSchools
     def call
       provider_school = @course.provider.schools.find_by!(gias_school_id: @gias_school_id)
 
-      @course.schools.find_or_create_by!(gias_school_id: @gias_school_id) do |course_school|
+      # Key on provider_school_id to match the (course_id, provider_school_id)
+      # unique index; copy gias_school_id and site_code from the provider_school
+      # so the denormalised columns can never disagree with it.
+      @course.schools.find_or_create_by!(provider_school_id: provider_school.id) do |course_school|
+        course_school.gias_school_id = provider_school.gias_school_id
         course_school.site_code = provider_school.site_code
-        course_school.provider_school = provider_school
       end
     rescue ActiveRecord::RecordNotUnique
-      @course.schools.find_by!(gias_school_id: @gias_school_id)
+      @course.schools.find_by!(provider_school_id: provider_school.id)
     end
   end
 end
