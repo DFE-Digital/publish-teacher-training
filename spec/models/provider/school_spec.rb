@@ -97,13 +97,19 @@ describe Provider::School do
       end
     end
 
-    it "does not bump provider.changed_at on destroy" do
+    it "bumps only the associated provider.changed_at on destroy" do
       provider_school = create(:provider_school, provider:)
+      other_provider = create(:provider)
       provider.update_columns(changed_at: 1.hour.ago)
-      before_changed_at = provider.reload.changed_at
+      other_provider.update_columns(changed_at: 2.hours.ago)
+      other_provider_changed_at = other_provider.reload.changed_at
 
-      provider_school.destroy!
-      expect(provider.reload.changed_at).to be_within(1.second).of(before_changed_at)
+      Timecop.freeze do
+        provider_school.destroy!
+
+        expect(provider.reload.changed_at).to be_within(1.second).of(Time.zone.now)
+        expect(other_provider.reload.changed_at).to be_within(1.second).of(other_provider_changed_at)
+      end
     end
 
     it "leaves provider.updated_at unchanged" do

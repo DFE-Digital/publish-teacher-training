@@ -7,6 +7,8 @@ class Provider::School < ApplicationRecord
 
   MAIN_SITE_CODE = "-"
 
+  after_destroy :touch_provider
+
   belongs_to :provider, class_name: "::Provider", inverse_of: :schools
   belongs_to :gias_school
 
