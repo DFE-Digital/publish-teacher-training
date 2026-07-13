@@ -23,6 +23,7 @@ module Publish
             next unless site
 
             row = {
+              "Placement schools" => site.location_name || site.code,
               "Course name" => course.name.titleize,
               "Course code" => course.course_code,
               "Status" => status(course).titleize,
@@ -34,8 +35,7 @@ module Publish
               # "Course length" => course_length(course),
             }
 
-            row["Placement schools"] = site.location_name || site.code
-            row["Placement school postcode"] = site.postcode
+            # row["Placement school postcode"] = site.postcode
 
             # if @include_study_sites_column
             #   row["Study sites"] = study_sites(course)
@@ -46,10 +46,10 @@ module Publish
         end
 
         # sort by course code
-        rows.sort_by! { |row| row["Course code"].to_s.downcase }
+        # rows.sort_by! { |row| row["Course code"].to_s.downcase }
 
         # sort by placement school name
-        # rows.sort_by! { |row| row["Placement schools"].to_s.downcase }
+        rows.sort_by! { |row| row["Placement schools"].to_s.downcase }
 
         rows
       end
