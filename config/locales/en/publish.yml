@@ -31,6 +31,11 @@ en:
         salaried: Employing
         unsalaried: Placement
         select_all: Select all schools
+        show_all: Show all schools
+        attached_count:
+          zero: You do not have any schools attached to this course
+          one: You currently have %{count} school attached to this course
+          other: You currently have %{count} schools attached to this course
         heading:
           salaried: Employing schools
           unsalaried: Placement schools
