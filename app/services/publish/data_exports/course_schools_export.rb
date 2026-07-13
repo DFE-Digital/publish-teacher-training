@@ -12,7 +12,6 @@ module Publish
         @include_study_sites_column = courses.any? do |course|
           course.study_sites.any?
         end
-
       end
 
       def data
@@ -28,28 +27,29 @@ module Publish
               "Course code" => course.course_code,
               "Status" => status(course).titleize,
               "Age range" => course.age_range_in_years&.humanize,
-              "Fee or salary" => funding_label(course),
-              "Qualification" => qualification(course),
-              "Full time or part time" => course.study_mode.humanize,
-              "Start date" => format_date(course.start_date),
-              "Course length" => course_length(course),
+              # "Fee or salary" => funding_label(course),
+              # "Qualification" => qualification(course),
+              # "Full time or part time" => course.study_mode.humanize,
+              # "Start date" => format_date(course.start_date),
+              # "Course length" => course_length(course),
             }
 
-            row["UK fee"] = uk_fee(course)
-
-            if @include_international_fee_column
-              row["Non-UK fee"] = international_fee(course)
-            end
-
             row["Placement schools"] = site.location_name || site.code
+            row["Placement school postcode"] = site.postcode
 
-            if @include_study_sites_column
-              row["Study sites"] = study_sites(course)
-            end
+            # if @include_study_sites_column
+            #   row["Study sites"] = study_sites(course)
+            # end
 
             rows << row
           end
         end
+
+        # sort by course code
+        rows.sort_by! { |row| row["Course code"].to_s.downcase }
+
+        # sort by placement school name
+        # rows.sort_by! { |row| row["Placement schools"].to_s.downcase }
 
         rows
       end

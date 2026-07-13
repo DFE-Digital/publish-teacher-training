@@ -40,7 +40,8 @@
         </strong>
       </div>
       <ul class="govuk-list govuk-list--bullet">
-        <% @site.courses.each do |course| %>
+        <!-- List the courses that this school is attached to in alphabetical order -->
+        <% @site.courses.sort_by(&:name).each do |course| %>
           <li>
             <strong><%= course.name_and_code %></strong><br>
             <% details = [] %>
