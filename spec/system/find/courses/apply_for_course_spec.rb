@@ -117,7 +117,10 @@ RSpec.describe "Saving a course", service: :find do
     expect(page).to have_content("Get free one-to-one support")
     expect(page).to have_link(
       "bursaries or scholarships",
-      href: "https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries?utm_content=school_experience_interruption_bursaries_and_scholarships",
+      href: find_track_click_path(
+        url: "https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries",
+        utm_content: "school_experience_interruption_bursaries_and_scholarships",
+      ),
     )
   end
 

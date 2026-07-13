@@ -59,10 +59,9 @@
               "find.courses.confirm_apply.school_experience_interruption.salaried_callout_body_two_html",
               bursaries_and_scholarships_link: govuk_link_to(
                 t("find.courses.confirm_apply.school_experience_interruption.bursaries_and_scholarships_link_text"),
-                with_utm(
-                  t("find.courses.confirm_apply.school_experience_interruption.bursaries_and_scholarships_link_url"),
-                  params: {},
-                  content: "school_experience_interruption_bursaries_and_scholarships",
+                find_track_click_path(
+                  url: t("find.courses.confirm_apply.school_experience_interruption.bursaries_and_scholarships_link_url"),
+                  utm_content: "school_experience_interruption_bursaries_and_scholarships",
                 ),
                 target: "_blank",
               ),
@@ -71,10 +70,9 @@
       <p class="govuk-body govuk-!-margin-bottom-0">
         <%= govuk_link_to(
               t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_link_text"),
-              with_utm(
-                t("find.get_into_teaching.url_teacher_salaries"),
-                params: {},
-                content: "school_experience_interruption_salaried_courses",
+              find_track_click_path(
+                url: t("find.get_into_teaching.url_teacher_salaries"),
+                utm_content: "school_experience_interruption_salaried_courses",
               ),
             ) %>
       </p>
@@ -87,10 +85,9 @@
               "find.courses.confirm_apply.school_experience_interruption.adviser_callout_body_html",
               teacher_training_adviser_link: govuk_link_to(
                 t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_link_text"),
-                with_utm(
-                  t("find.get_into_teaching.url_training_adviser"),
-                  params: {},
-                  content: "school_experience_interruption_teacher_training_adviser",
+                find_track_click_path(
+                  url: t("find.get_into_teaching.url_training_adviser"),
+                  utm_content: "school_experience_interruption_teacher_training_adviser",
                 ),
               ),
             ) %>
