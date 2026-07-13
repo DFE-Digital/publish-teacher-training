@@ -90,23 +90,26 @@ RSpec.describe "Saving a course", service: :find do
 
     expect(page).to have_link(
       "For more information contact #{@course.provider_name}.",
-      href: find_track_click_path(
-        url: find_provider_path(@course.provider_code, @course.course_code),
+      href: find_provider_path(
+        @course.provider_code,
+        @course.course_code,
         utm_content: "school_experience_interruption_contact_provider",
       ),
     )
 
     expect(page).to have_link(
       "Yes, I understand the school experience requirements",
-      href: find_track_click_path(
-        url: find_confirm_apply_path(provider_code: @course.provider.provider_code, course_code: @course.course_code),
+      href: find_confirm_apply_path(
+        provider_code: @course.provider.provider_code,
+        course_code: @course.course_code,
         utm_content: "school_experience_interruption_confirm_button",
       ),
     )
     expect(page).to have_link(
       "Cancel and return to the course page",
-      href: find_track_click_path(
-        url: find_course_path(provider_code: @course.provider_code, course_code: @course.course_code),
+      href: find_course_path(
+        provider_code: @course.provider_code,
+        course_code: @course.course_code,
         utm_content: "school_experience_interruption_cancel_link",
       ),
     )
@@ -114,10 +117,7 @@ RSpec.describe "Saving a course", service: :find do
     expect(page).to have_content("Get free one-to-one support")
     expect(page).to have_link(
       "bursaries or scholarships",
-      href: find_track_click_path(
-        url: "https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries",
-        utm_content: "school_experience_interruption_bursaries_and_scholarships",
-      ),
+      href: "https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries?utm_content=school_experience_interruption_bursaries_and_scholarships",
     )
   end
 
