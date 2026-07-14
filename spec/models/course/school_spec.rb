@@ -12,8 +12,6 @@ describe Course::School do
   end
 
   describe "validations" do
-    it { is_expected.to validate_presence_of(:site_code) }
-
     it "creates a valid record" do
       expect(course_school).to be_valid
     end
@@ -25,7 +23,6 @@ describe Course::School do
         course: existing.course,
         provider_school: existing.provider_school,
         gias_school: existing.gias_school,
-        site_code: existing.site_code,
       )
       expect(dup).not_to be_valid
       expect(dup.errors[:provider_school_id]).to be_present
@@ -38,7 +35,6 @@ describe Course::School do
         course: build(:course, provider: build(:provider)),
         provider_school:,
         gias_school: provider_school.gias_school,
-        site_code: provider_school.site_code,
       )
       expect(course_school).not_to be_valid
       expect(course_school.errors[:provider_school_id]).to be_present
@@ -50,26 +46,24 @@ describe Course::School do
         :course_school,
         provider_school:,
         gias_school: build(:gias_school),
-        site_code: provider_school.site_code,
       )
       expect(course_school).not_to be_valid
       expect(course_school.errors[:gias_school_id]).to be_present
     end
 
-    it "rejects a site_code that disagrees with the provider_school" do
-      course_school = build(:course_school)
-      course_school.site_code = "#{course_school.provider_school.site_code}X"
-      expect(course_school).not_to be_valid
-      expect(course_school.errors[:site_code]).to be_present
-    end
-
     it "allows the same course and gias_school with different site codes" do
       existing = create(:course_school, site_code: "-")
+      second_provider_school = create(
+        :provider_school,
+        provider: existing.course.provider,
+        gias_school: existing.gias_school,
+        site_code: "A",
+      )
       second = build(
         :course_school,
         course: existing.course,
         gias_school: existing.gias_school,
-        site_code: "A",
+        provider_school: second_provider_school,
       )
       expect(second).to be_valid
     end
@@ -91,7 +85,7 @@ describe Course::School do
       course.update_columns(changed_at: 1.hour.ago)
 
       Timecop.freeze do
-        course_school.update!(provider_school: other, gias_school: other.gias_school, site_code: other.site_code)
+        course_school.update!(provider_school: other, gias_school: other.gias_school)
         expect(course.reload.changed_at).to be_within(1.second).of(Time.zone.now)
       end
     end
@@ -121,31 +115,25 @@ describe Course::School do
 
     it "enforces NOT NULL on course_id" do
       expect {
-        described_class.new(gias_school:, provider_school:, site_code: "-").save(validate: false)
+        described_class.new(gias_school:, provider_school:).save(validate: false)
       }.to raise_error(ActiveRecord::NotNullViolation)
     end
 
     it "enforces NOT NULL on gias_school_id" do
       expect {
-        described_class.new(course:, provider_school:, site_code: "-").save(validate: false)
-      }.to raise_error(ActiveRecord::NotNullViolation)
-    end
-
-    it "enforces NOT NULL on site_code" do
-      expect {
-        described_class.new(course:, gias_school:, provider_school:).save(validate: false)
+        described_class.new(course:, provider_school:).save(validate: false)
       }.to raise_error(ActiveRecord::NotNullViolation)
     end
 
     it "enforces NOT NULL on provider_school_id" do
       expect {
-        described_class.new(course:, gias_school:, site_code: "-").save(validate: false)
+        described_class.new(course:, gias_school:).save(validate: false)
       }.to raise_error(ActiveRecord::NotNullViolation)
     end
 
     it "enforces the gias_school_id foreign key" do
       missing_id = GiasSchool.maximum(:id).to_i + 1_000
-      record = described_class.new(course:, provider_school:, site_code: "-")
+      record = described_class.new(course:, provider_school:)
       record.gias_school_id = missing_id
       expect {
         record.save(validate: false)
@@ -154,7 +142,7 @@ describe Course::School do
 
     it "enforces the provider_school_id foreign key" do
       missing_id = Provider::School.maximum(:id).to_i + 1_000
-      record = described_class.new(course:, gias_school:, site_code: "-")
+      record = described_class.new(course:, gias_school:)
       record.provider_school_id = missing_id
       expect {
         record.save(validate: false)
@@ -162,20 +150,19 @@ describe Course::School do
     end
 
     it "deletes the row when the provider_school row is deleted" do
-      course_school = create(:course_school, course:, gias_school:, provider_school:, site_code: provider_school.site_code)
+      course_school = create(:course_school, course:, gias_school:, provider_school:)
 
       provider_school.delete
       expect(described_class.exists?(course_school.id)).to be(false)
     end
 
-    it "enforces DB-level uniqueness on (course_id, gias_school_id, site_code)" do
+    it "enforces DB-level uniqueness on (course_id, provider_school_id)" do
       existing = create(:course_school)
       expect {
         described_class.new(
           course: existing.course,
           gias_school: existing.gias_school,
           provider_school: existing.provider_school,
-          site_code: existing.site_code,
         ).save(validate: false)
       }.to raise_error(ActiveRecord::RecordNotUnique)
     end
