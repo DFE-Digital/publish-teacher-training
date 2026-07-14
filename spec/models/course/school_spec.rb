@@ -31,6 +31,19 @@ describe Course::School do
       expect(dup.errors[:provider_school_id]).to be_present
     end
 
+    it "rejects a provider_school belonging to a different provider" do
+      provider_school = create(:provider_school)
+      course_school = build(
+        :course_school,
+        course: build(:course, provider: build(:provider)),
+        provider_school:,
+        gias_school: provider_school.gias_school,
+        site_code: provider_school.site_code,
+      )
+      expect(course_school).not_to be_valid
+      expect(course_school.errors[:provider_school_id]).to be_present
+    end
+
     it "rejects a gias_school_id that disagrees with the provider_school" do
       provider_school = create(:provider_school)
       course_school = build(

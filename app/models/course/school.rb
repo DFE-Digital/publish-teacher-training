@@ -25,6 +25,10 @@ private
     # Compare the records, not the *_id columns: a not-yet-saved gias_school has
     # a nil foreign key until belongs_to autosave runs (after validation), so a
     # column comparison would spuriously fail on create.
+    if course.present? && course.provider != provider_school.provider
+      errors.add(:provider_school_id, "must belong to the course's provider")
+    end
+
     if gias_school != provider_school.gias_school
       errors.add(:gias_school_id, "must match the provider school's GIAS school")
     end
