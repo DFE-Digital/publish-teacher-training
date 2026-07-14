@@ -1,4 +1,11 @@
-<%= form_with url: publish_provider_recruitment_cycle_school_path(@site), method: :patch do %>
+<%= form_with(
+      url: publish_provider_recruitment_cycle_school_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @site.id
+      ),
+      method: :patch
+    ) do %>
   <%= content_for :page_title, @site.location_name %>
   <% content_for :before_content do %>
     <%= govuk_back_link_to(publish_provider_recruitment_cycle_schools_path) %>
@@ -14,74 +21,94 @@
             </h1>
           </legend>
           <div
-            class="govuk-checkboxes"
-            data-module="govuk-checkboxes"
-            data-controller="select-all-checkboxes"
+            data-controller="select-all-checkboxes course-diff"
+            data-course-diff-initial-course-ids-value="<%= @site.courses.pluck(:id).join(',') %>"
           >
-            <div class="govuk-checkboxes__item">
-              <input
-  class="govuk-checkboxes__input"
-  id="select-all"
-  type="checkbox"
-  data-select-all-checkboxes-target="selectAll"
-  data-action="change->select-all-checkboxes#toggleAll">
-                <label
-                class="govuk-label govuk-checkboxes__label"
-                for="select-all"
-              >
-                  Select all courses
-                </label>
-              </div>
-              <div class="govuk-checkboxes__divider">or</div>
-              <div id="courses-hint" class="govuk-hint">
-                Select all that apply
-              </div>
-              <% @courses.each do |course| %>
-                <div class="govuk-checkboxes__item">
-                  <input
+            <div
+              class="govuk-checkboxes"
+              data-module="govuk-checkboxes"
+            >
+              <div class="govuk-checkboxes__item">
+                <input
                   class="govuk-checkboxes__input"
-                  id="course_<%= course.id %>"
-                  name="course_ids[]"
+                  id="select-all"
                   type="checkbox"
-                  value="<%= course.id %>"
-                  data-select-all-checkboxes-target="checkbox"
-                  data-action="change->select-all-checkboxes#updateSelectAll"
-                    <%= "checked" if @site.courses.include?(course) %>
-                    >
-                    <label
+                  data-select-all-checkboxes-target="selectAll"
+                  data-action="
+                    change->select-all-checkboxes#toggleAll
+                  change->course-diff#update
+                  "
+                  >
+                  <label
                   class="govuk-label govuk-checkboxes__label"
-                  for="course_<%= course.id %>"
+                  for="select-all"
                 >
-                      <%= course.name %> (<%= course.course_code %>)
-                      <%= render Publish::Courses::StatusTagComponent.new(
-                        course: course,
-                        recruitment_cycle_year: course.recruitment_cycle.year
-                      ) %>
-                    </label>
-                    <div class="govuk-hint govuk-checkboxes__hint govuk-!-font-size-16 govuk-!-padding-bottom-3">
-                      <% parts = [] %>
-                      <% if course.funding.present? %>
-                        <% funding_text = case course.funding
-                      when "fee" then "Fee‑paying"
-                      when "salary" then "Salaried"
-                      when "apprenticeship" then "Apprenticeship"
-                      else course.funding
-                    end %>
-                        <% parts << funding_text %>
-                      <% end %>
-                      <% if course.respond_to?(:qualifications_summary) && course.qualifications_summary.present? %>
-                        <% parts << course.qualifications_summary %>
-                      <% end %>
-                      <% if course.respond_to?(:study_mode_description) && course.study_mode_description.present? %>
-                        <% parts << course.study_mode_description.capitalize %>
-                      <% end %>
-                      <% if course.start_date.present? %>
-                        <% parts << course.start_date.strftime("%B %Y") %>
-                      <% end %>
-                      <%= parts.join(", ") %>
+                    Select all courses
+                  </label>
+                </div>
+                <div class="govuk-checkboxes__divider">or</div>
+                <div id="courses-hint" class="govuk-hint">
+                  Select all that apply
+                </div>
+                <% @courses.each do |course| %>
+                  <div class="govuk-checkboxes__item">
+                    <input
+                    class="govuk-checkboxes__input"
+                    id="course_<%= course.id %>"
+                    name="course_ids[]"
+                    type="checkbox"
+                    value="<%= course.id %>"
+                    data-course-name="<%= course.name %> (<%= course.course_code %>)"
+                    data-select-all-checkboxes-target="checkbox"
+                    data-action="
+                      change->select-all-checkboxes#updateSelectAll
+                      change->course-diff#update
+                      "
+                      <%= "checked" if @site.courses.include?(course) %>
+                      >
+                      <label
+                    class="govuk-label govuk-checkboxes__label"
+                    for="course_<%= course.id %>"
+                  >
+                        <%= course.name %> (<%= course.course_code %>)
+                        <%= render Publish::Courses::StatusTagComponent.new(
+                      course: course,
+                      recruitment_cycle_year: course.recruitment_cycle.year
+                    ) %>
+                      </label>
+                      <div class="govuk-hint govuk-checkboxes__hint govuk-!-font-size-16 govuk-!-padding-bottom-3">
+                        <% parts = [] %>
+                        <% if course.funding.present? %>
+                          <% funding_text = case course.funding
+                        when "fee" then "Fee‑paying"
+                        when "salary" then "Salaried"
+                        when "apprenticeship" then "Apprenticeship"
+                        else course.funding
+                      end %>
+                          <% parts << funding_text %>
+                        <% end %>
+                        <% if course.respond_to?(:qualifications_summary) && course.qualifications_summary.present? %>
+                          <% parts << course.qualifications_summary %>
+                        <% end %>
+                        <% if course.respond_to?(:study_mode_description) && course.study_mode_description.present? %>
+                          <% parts << course.study_mode_description.capitalize %>
+                        <% end %>
+                        <% if course.start_date.present? %>
+                          <% parts << course.start_date.strftime("%B %Y") %>
+                        <% end %>
+                        <%= parts.join(", ") %>
+                      </div>
                     </div>
-                  </div>
-                <% end %>
+                  <% end %>
+                </div>
+                <div
+              class="govuk-body govuk-!-margin-top-3"
+              data-course-diff-target="summary"
+              hidden
+            >
+                  <div data-course-diff-target="addedSection"></div>
+                  <div data-course-diff-target="removedSection"></div>
+                </div>
               </div>
             </fieldset>
           </div>
