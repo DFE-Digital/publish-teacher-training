@@ -62,6 +62,12 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
       then_i_should_see_the_success_message
       and_all_25_schools_should_be_attached
     end
+
+    scenario "a school already attached beyond the first 20 is never hidden by the collapse" do
+      given_the_last_school_is_already_attached_to_the_course
+      when_i_visit_the_publish_course_school_edit_page
+      then_the_last_school_is_visible_and_checked
+    end
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -165,6 +171,29 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
 
   def and_all_25_schools_should_be_attached
     expect(course.reload.sites.count).to eq(25)
+  end
+
+  # "Site 3" sorts last of the 25 (the other 22 are "Main Site..."), so it renders
+  # at position 25 — beyond the 20-school collapse.
+  def last_school
+    @last_school ||= @provider.sites.max_by(&:location_name)
+  end
+
+  def given_the_last_school_is_already_attached_to_the_course
+    course.site_statuses.create!(site: last_school, status: :new_status, publish: :unpublished)
+  end
+
+  # Regression: the collapse must never hide an attached school, or the provider
+  # sees an apparently empty selection while the hidden school stays attached.
+  def then_the_last_school_is_visible_and_checked
+    # The list is still collapsed...
+    expect(publish_course_school_edit_page).to have_show_all_schools
+
+    # ...but the attached school is shown anyway: only the 4 unchecked overflow
+    # rows are hidden, leaving the first 20 plus the checked 25th.
+    expect(publish_course_school_edit_page.visible_school_checkbox_count).to eq(21)
+    expect(page).to have_css(".govuk-checkboxes__label", text: last_school.location_name)
+    expect(page.find(:checkbox, last_school.location_name, visible: :all)).to be_checked
   end
 
   def given_a_course_exists(sites: [])

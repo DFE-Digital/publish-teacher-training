@@ -12,30 +12,53 @@ export default class extends Controller {
   connect () {
     if (this.schoolTargets.length <= this.visibleValue) return
 
-    this.overflow().forEach(checkbox => this.hideRow(checkbox))
+    const hideable = this.hideable()
+    if (hideable.length === 0) return
+
+    hideable.forEach(checkbox => this.hideRow(checkbox))
 
     if (this.hasShowAllTarget) this.showAllTarget.hidden = false
   }
 
   showAll () {
-    this.overflow().forEach(checkbox => this.showRow(checkbox))
+    const revealed = this.overflow().filter(checkbox => this.isHidden(checkbox))
+
+    revealed.forEach(checkbox => this.showRow(checkbox))
 
     if (this.hasShowAllTarget) this.showAllTarget.hidden = true
+
+    // The button we just hid held focus, which would otherwise fall back to the
+    // document root. Move focus to the first school we revealed instead.
+    if (revealed.length > 0) revealed[0].focus()
   }
 
   overflow () {
     return this.schoolTargets.slice(this.visibleValue)
   }
 
+  // A selected school is never hidden: it would render checked but invisible, so
+  // the user could not see or undo a selection that still gets submitted.
+  hideable () {
+    return this.overflow().filter(checkbox => !checkbox.checked)
+  }
+
+  isHidden (checkbox) {
+    return this.row(checkbox).hidden
+  }
+
   hideRow (checkbox) {
-    const row = checkbox.closest('.govuk-checkboxes__item')
+    const row = this.row(checkbox)
     row.classList.add(HIDDEN_CLASS)
     row.hidden = true
   }
 
   showRow (checkbox) {
-    const row = checkbox.closest('.govuk-checkboxes__item')
+    const row = this.row(checkbox)
     row.classList.remove(HIDDEN_CLASS)
     row.hidden = false
+  }
+
+  row (checkbox) {
+    return checkbox.closest('.govuk-checkboxes__item')
   }
 }
