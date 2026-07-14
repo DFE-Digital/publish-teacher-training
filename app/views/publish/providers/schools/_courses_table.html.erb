@@ -4,7 +4,6 @@
       <th class="govuk-table__header">Course</th>
       <th class="govuk-table__header">Course information</th>
       <th class="govuk-table__header">Status</th>
-      <th class="govuk-table__header">Remove</th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
@@ -55,18 +54,6 @@
                 course: course,
                 recruitment_cycle_year: course.recruitment_cycle.year
               ) %>
-        </td>
-        <!-- Remove link -->
-        <td class="govuk-table__cell app-table--courses__status">
-          <%= govuk_link_to "Detach course",
-      remove_course_publish_provider_recruitment_cycle_school_path(
-        @provider.provider_code,
-        @recruitment_cycle.year,
-        @site.id,
-        course_code: course.course_code
-      ),
-      class: "app-link--destructive"
-%>
         </td>
       </tr>
     <% end %>

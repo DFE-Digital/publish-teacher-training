@@ -10,25 +10,30 @@
         <span class="govuk-caption-m"><%= @site.address_without_name %></span>
         <span class="govuk-caption-m">URN: <%= @site.urn %></span>
       </legend>
-      <p class="govuk-body">
-        <%= govuk_link_to t(".remove", resource: "location"),
-        remove_publish_provider_recruitment_cycle_school_path(
-          @provider.provider_code,
-          @site.recruitment_cycle.year,
-          @site.id,
-          from: "show"
-        ),
-        class: "app-link--destructive" %>
-      </p>
     </fieldset>
     <br>
+    <%= link_to "Update courses attached to this school",
+      edit_publish_provider_recruitment_cycle_school_path(
+        @provider.provider_code,
+        @recruitment_cycle.year,
+        @site
+      ),
+      class: "govuk-button"
+    %>
     <% if @courses.any? %>
-      <p class="govuk-heading-m">
-        This school is attached to <%= pluralize(@courses.size, "course") %>:
-      </p>
       <%= render "courses_table", courses: @courses %>
     <% else %>
       <p class="govuk-body">This school is not attached to any courses.</p>
     <% end %>
+     <p class="govuk-body">
+        <%= govuk_link_to t(".remove", location_name: @site.location_name),
+          remove_publish_provider_recruitment_cycle_school_path(
+            @provider.provider_code,
+            @site.recruitment_cycle.year,
+            @site.id,
+            from: "show"
+          ),
+          class: "app-link--destructive" %>
+      </p>
   </div>
 </div>

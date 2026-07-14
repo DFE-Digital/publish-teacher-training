@@ -347,7 +347,7 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
           resource :check, only: %i[show update]
         end
-        resources :schools, only: %i[index create show destroy] do
+        resources :schools, only: %i[index create show edit update destroy] do
           member do
             get :delete
             delete :delete, to: "schools#destroy"

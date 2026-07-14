@@ -466,11 +466,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_13_102253) do
     t.bigint "provider_id", null: false
     t.text "site_code", null: false
     t.datetime "updated_at", null: false
-    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }
     t.index ["gias_school_id"], name: "index_provider_school_on_gias_school_id"
     t.index ["provider_id", "gias_school_id", "site_code"], name: "index_provider_school_unique", unique: true
     t.index ["provider_id"], name: "index_provider_school_one_main_per_provider", unique: true, where: "(site_code = '-'::text)"
   end
+
+  add_check_constraint "provider_school", "uuid IS NOT NULL", name: "provider_school_uuid_not_null", validate: false
 
   create_table "provider_ucas_preference", force: :cascade do |t|
     t.text "application_alert_email"
