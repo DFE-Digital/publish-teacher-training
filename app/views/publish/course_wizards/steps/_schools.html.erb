@@ -25,13 +25,10 @@
   <%= t("course_wizard.steps.schools.hint") %>
 </p>
 
-<% sorted_sites = current_step.sites %>
-<% collapse_after = schools_collapse_threshold %>
-
 <%= form.govuk_check_boxes_fieldset :site_ids,
       legend: { hidden: true, text: heading },
-      form_group: { data: { controller: "show-all-schools", show_all_schools_visible_value: collapse_after } } do %>
-  <% sorted_sites.each_with_index do |site, index| %>
+      form_group: { data: { controller: "show-all-schools", show_all_schools_visible_value: current_step.schools_collapse_threshold } } do %>
+  <% current_step.sites.each_with_index do |site, index| %>
     <%= form.govuk_check_box :site_ids,
           site.id.to_s,
           label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
@@ -41,7 +38,7 @@
           data: { show_all_schools_target: "school" } %>
   <% end %>
 
-  <% if sorted_sites.size > collapse_after %>
+  <% if current_step.collapse_schools? %>
     <button type="button"
             class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
             hidden

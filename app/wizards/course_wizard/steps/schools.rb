@@ -3,6 +3,7 @@ class CourseWizard
     class Schools
       include DfE::Wizard::Step
       include CourseWizard::Reviewable
+      include CollapsibleSchoolsList
 
       FUNDING_TYPES_WITH_SALARY = %w[salary apprenticeship].freeze
       QUALIFICATIONS_WITH_SALARY = %w[undergraduate_degree_with_qts].freeze
@@ -21,7 +22,7 @@ class CourseWizard
       end
 
       def sites
-        provider_sites.sort_by(&:location_name)
+        @sites ||= provider_sites.sort_by(&:location_name)
       end
 
       def salaried?
