@@ -78,7 +78,7 @@ RSpec.describe "Add course wizard schools step", type: :system do
       when_i_click_show_all_schools
       and_i_choose_the_last_school_in_the_list
       and_i_click_continue
-      then_i_am_taken_to_the_visa_sponsorship_page
+      then_i_am_taken_to_the_study_sites_page
       and_the_last_school_is_stored_in_the_wizard_state
     end
 
@@ -189,6 +189,10 @@ private
   # Deterministic, non-ambiguous names: the site factory's default is
   # "Main Site#{rand(1_000_000)}", and Capybara's `check` matches label text on a
   # substring, so random names can collide or prefix each other.
+  #
+  # The study site keeps this provider on the same route as the other scenarios
+  # (schools -> study sites). It does not show up in the schools list, since
+  # Provider#sites is scoped to school-type sites.
   def given_i_am_authenticated_as_a_provider_user_with_25_schools
     @user = create(
       :user,
@@ -196,7 +200,7 @@ private
         create(
           :provider,
           :accredited_provider,
-          sites: (1..25).map { |n| build(:site, location_name: sprintf("School %02d", n)) },
+          sites: (1..25).map { |n| build(:site, location_name: sprintf("School %02d", n)) } + [build(:site, :study_site)],
         ),
       ],
     )
@@ -267,20 +271,6 @@ private
 
   def and_i_choose_the_last_school_in_the_list
     check last_school.location_name
-  end
-
-  # This provider has no study sites, so the wizard skips that step and goes
-  # straight to visa sponsorship.
-  def then_i_am_taken_to_the_visa_sponsorship_page
-    expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_course_wizard_path(
-        provider_code: provider.provider_code,
-        recruitment_cycle_year: provider.recruitment_cycle_year,
-        step: :visa_sponsorship,
-        state_key: wizard_state_key,
-      ),
-      ignore_query: true,
-    )
   end
 
   def and_the_last_school_is_stored_in_the_wizard_state
