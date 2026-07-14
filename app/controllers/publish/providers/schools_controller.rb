@@ -3,7 +3,7 @@
 module Publish
   module Providers
     class SchoolsController < ApplicationController
-      before_action :site, only: %i[show delete edit]
+      before_action :site, only: %i[show delete edit update]
       before_action :reset_urn_form, only: %i[index]
 
       PER_PAGE = 20
@@ -58,6 +58,17 @@ module Publish
         else
           render :new
         end
+      end
+
+      # update action to redirect to show page with a success banner
+      def update
+        flash[:success] = "Courses updated for #{@site.location_name}"
+
+        redirect_to publish_provider_recruitment_cycle_school_path(
+          provider_code: provider.provider_code,
+          recruitment_cycle_year: provider.recruitment_cycle_year,
+          id: @site.id,
+        )
       end
 
       def delete; end
