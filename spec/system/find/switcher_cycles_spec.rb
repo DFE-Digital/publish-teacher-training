@@ -106,14 +106,14 @@ RSpec.describe "switcher cycle" do
   def and_i_see_mid_cycle_banner
     cycle_year_range = Find::CycleTimetable.cycle_year_range
     apply_deadline = Find::CycleTimetable.apply_deadline.to_fs(:govuk_date_and_time)
-    banner_text = "The deadline for applying to courses starting in #{cycle_year_range} is #{apply_deadline}"
+    banner_text = "The deadline for applying to courses starting in the #{cycle_year_range} academic year is #{apply_deadline}"
     and_i_see_deadline_banner(banner_text)
   end
 
   def and_i_do_not_see_mid_cycle_banner
     cycle_year_range = Find::CycleTimetable.cycle_year_range
     apply_deadline = Find::CycleTimetable.apply_deadline.to_fs(:govuk_date_and_time)
-    banner_text = "The deadline for applying to courses starting in #{cycle_year_range} is #{apply_deadline}"
+    banner_text = "The deadline for applying to courses starting in the #{cycle_year_range} academic year is #{apply_deadline}"
     and_i_do_not_see_deadline_banner(banner_text)
   end
 
