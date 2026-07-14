@@ -123,9 +123,10 @@ RSpec.describe "Multiple schools" do
   def and_provider_school_rows_are_created_for_each
     @gias_schools.each do |gias_school|
       site = @provider.sites.find_by(urn: gias_school.urn)
-      provider_school = @provider.schools.find_by(gias_school_id: gias_school.id)
+      provider_school = @provider.schools.find_by(gias_school_id: gias_school.id, site_code: site.code)
       expect(provider_school).to be_present
       expect(provider_school.site_code).to eq(site.code)
+      expect(provider_school.uuid).to eq(site.uuid)
     end
   end
 
