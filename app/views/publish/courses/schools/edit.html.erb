@@ -24,9 +24,6 @@
         provider: @provider,
       ) %>
 
-    <% sorted_sites = @provider.sites.sort_by(&:location_name) %>
-    <% collapse_after = schools_collapse_threshold %>
-
     <%= f.govuk_check_boxes_fieldset :site_ids,
         legend:
         {
@@ -34,7 +31,7 @@
           tag: "h1",
           size: "l",
         },
-        form_group: { data: { controller: "select-all-checkboxes show-all-schools", show_all_schools_visible_value: collapse_after } } do %>
+        form_group: { data: { controller: "select-all-checkboxes show-all-schools", show_all_schools_visible_value: @course_school_form.schools_collapse_threshold } } do %>
 
           <p class="govuk-body">
             <%= t("publish.courses.schools.attached_count", count: course.attached_schools_count) %>
@@ -55,7 +52,7 @@
           <div class="govuk-body govuk-!-margin-left-2">or</div>
           <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
-          <% sorted_sites.each_with_index do |site, index| %>
+          <% @course_school_form.sites.each_with_index do |site, index| %>
             <%= f.govuk_check_box :site_ids,
                 site.id,
                 label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
@@ -68,7 +65,7 @@
                 } %>
          <% end %>
 
-          <% if sorted_sites.size > collapse_after %>
+          <% if @course_school_form.collapse_schools? %>
             <button type="button"
                     class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
                     hidden

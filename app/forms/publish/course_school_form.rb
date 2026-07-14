@@ -2,6 +2,8 @@
 
 module Publish
   class CourseSchoolForm < BaseCourseForm
+    include CollapsibleSchoolsList
+
     FIELDS = %i[site_ids schools_validated].freeze
 
     attr_accessor(*FIELDS)
@@ -10,6 +12,11 @@ module Publish
 
     def compute_fields
       { site_ids: course.site_ids }.merge(new_attributes)
+    end
+
+    # Every school the provider could attach, in the order they are listed.
+    def sites
+      @sites ||= course.provider.sites.sort_by(&:location_name)
     end
 
   private

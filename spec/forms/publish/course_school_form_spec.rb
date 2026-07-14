@@ -14,6 +14,31 @@ module Publish
 
     subject { described_class.new(course, params:) }
 
+    describe "#sites" do
+      it "returns the provider's schools sorted by location name" do
+        provider = create(:provider, sites: [build(:site, location_name: "B School"), build(:site, location_name: "A School")])
+        form = described_class.new(create(:course, provider:), params: {})
+
+        expect(form.sites.map(&:location_name)).to eq(["A School", "B School"])
+      end
+    end
+
+    describe "#collapse_schools?" do
+      it "is false when the provider has 20 schools or fewer" do
+        provider = create(:provider, sites: build_list(:site, 20))
+        form = described_class.new(create(:course, provider:), params: {})
+
+        expect(form.collapse_schools?).to be(false)
+      end
+
+      it "is true when the provider has more than 20 schools" do
+        provider = create(:provider, sites: build_list(:site, 21))
+        form = described_class.new(create(:course, provider:), params: {})
+
+        expect(form.collapse_schools?).to be(true)
+      end
+    end
+
     describe "validations", travel: Find::CycleTimetable.mid_cycle(2026) do
       before { subject.valid? }
 
