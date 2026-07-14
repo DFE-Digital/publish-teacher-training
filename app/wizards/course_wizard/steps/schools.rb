@@ -3,7 +3,6 @@ class CourseWizard
     class Schools
       include DfE::Wizard::Step
       include CourseWizard::Reviewable
-      include CollapsibleSchoolsList
 
       FUNDING_TYPES_WITH_SALARY = %w[salary apprenticeship].freeze
       QUALIFICATIONS_WITH_SALARY = %w[undergraduate_degree_with_qts].freeze
@@ -23,6 +22,14 @@ class CourseWizard
 
       def sites
         @sites ||= provider_sites.sort_by(&:location_name)
+      end
+
+      def schools_collapse_threshold
+        SchoolsList::COLLAPSE_AFTER
+      end
+
+      def collapse_schools?
+        sites.size > schools_collapse_threshold
       end
 
       def salaried?

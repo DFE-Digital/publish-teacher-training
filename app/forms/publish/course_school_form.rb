@@ -2,8 +2,6 @@
 
 module Publish
   class CourseSchoolForm < BaseCourseForm
-    include CollapsibleSchoolsList
-
     FIELDS = %i[site_ids schools_validated].freeze
 
     attr_accessor(*FIELDS)
@@ -17,6 +15,14 @@ module Publish
     # Every school the provider could attach, in the order they are listed.
     def sites
       @sites ||= course.provider.sites.sort_by(&:location_name)
+    end
+
+    def schools_collapse_threshold
+      SchoolsList::COLLAPSE_AFTER
+    end
+
+    def collapse_schools?
+      sites.size > schools_collapse_threshold
     end
 
   private
