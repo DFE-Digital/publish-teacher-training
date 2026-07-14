@@ -1,6 +1,6 @@
 ARG ZLIB_VERSION=1.3.2-r0
 
-FROM ruby:3.4.8-alpine3.23 AS middleman
+FROM ruby:3.4.10-alpine3.23 AS middleman
 ARG ZLIB_VERSION
 # TODO: remove zlib pin when ruby:3.4.8-alpine3.23 base image is refreshed.
 RUN apk add --no-cache zlib=${ZLIB_VERSION} libxml2
@@ -20,7 +20,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:3.4.8-alpine3.23
+FROM ruby:3.4.10-alpine3.23
 ARG ZLIB_VERSION
 
 RUN apk add --no-cache zlib=${ZLIB_VERSION} libxml2 yaml-dev
