@@ -43,10 +43,17 @@ module Support
 
           gias_schools.each do |gias_school|
             ActiveRecord::Base.transaction do
-              provider_school = ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
-
-              site = provider.sites.build(gias_school.school_attributes.merge(code: provider_school.site_code))
+              # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+              # TODO School data remodel removal - remove this legacy Site write when support creates Provider::School directly.
+              site = provider.sites.build(gias_school.school_attributes)
+              # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
               ::ProviderSchools::LegacySiteCreator.call(site:)
+              ::ProviderSchools::Creator.call(
+                provider:,
+                gias_school_id: gias_school.id,
+                site_code: site.code,
+                uuid: site.uuid,
+              )
               saved_sites << site
             end
           end
@@ -66,9 +73,12 @@ module Support
           @gias_schools ||= GiasSchool.where(urn: urn_service[:new_urns])
         end
 
+        # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+        # TODO School data remodel removal - remove when support multiple-school checks no longer preview unsaved Site rows.
         def schools
           @schools ||= gias_schools.map { |gias_school| provider.sites.build(gias_school.school_attributes) }
         end
+        # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
         def unfound_urns
           @unfound_urns = urn_service[:unfound_urns]

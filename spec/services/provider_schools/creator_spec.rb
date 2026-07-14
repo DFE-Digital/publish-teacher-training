@@ -24,6 +24,20 @@ describe ProviderSchools::Creator do
     expect(result.site_code).to eq("Q")
   end
 
+  it "uses the supplied site_code when a legacy site was created first" do
+    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "Z")
+
+    expect(result.site_code).to eq("Z")
+  end
+
+  it "uses the supplied uuid when a legacy site was created first" do
+    uuid = SecureRandom.uuid
+
+    result = described_class.call(provider:, gias_school_id: gias_school.id, uuid:)
+
+    expect(result.uuid).to eq(uuid)
+  end
+
   it "returns the created row" do
     result = described_class.call(provider:, gias_school_id: gias_school.id)
 
@@ -31,31 +45,49 @@ describe ProviderSchools::Creator do
     expect(result).to be_persisted
   end
 
-  it "is idempotent when called twice with the same provider and gias_school" do
-    described_class.call(provider:, gias_school_id: gias_school.id)
+  it "is idempotent when called twice with the same provider, gias_school and site_code" do
+    described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
 
     expect {
-      described_class.call(provider:, gias_school_id: gias_school.id)
+      described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
     }.not_to change(Provider::School, :count)
   end
 
-  it "returns the existing row when one already exists for this (provider, gias_school)" do
+  it "returns the existing row when one already exists for this provider, gias_school and site_code" do
     existing = create(:provider_school, provider:, gias_school:, site_code: "A")
 
-    result = described_class.call(provider:, gias_school_id: gias_school.id)
+    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
 
     expect(result).to eq(existing)
     expect(result.site_code).to eq("A")
   end
 
+  it "does not reuse a main-site row when creating a normal school row for the same GIAS school" do
+    main_site = create(:provider_school, :main_site, provider:, gias_school:)
+
+    expect {
+      result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
+      expect(result).not_to eq(main_site)
+      expect(result.site_code).to eq("A")
+    }.to change(Provider::School, :count).by(1)
+  end
+
+  it "updates the uuid on an existing row when one is supplied" do
+    existing = create(:provider_school, provider:, gias_school:, site_code: "A", uuid: SecureRandom.uuid)
+    uuid = SecureRandom.uuid
+
+    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A", uuid:)
+
+    expect(result).to eq(existing)
+    expect(result.uuid).to eq(uuid)
+  end
+
   it "returns the existing row when a RecordNotUnique race fires" do
     existing = create(:provider_school, provider:, gias_school:, site_code: "B")
 
-    schools_proxy = provider.schools
-    allow(provider).to receive(:schools).and_return(schools_proxy)
-    allow(schools_proxy).to receive(:find_or_create_by!).and_raise(ActiveRecord::RecordNotUnique)
+    allow(provider).to receive(:with_lock).and_raise(ActiveRecord::RecordNotUnique)
 
-    result = described_class.call(provider:, gias_school_id: gias_school.id)
+    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "B")
 
     expect(result).to eq(existing)
   end

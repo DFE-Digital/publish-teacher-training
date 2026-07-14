@@ -4,6 +4,7 @@ module ProviderSchools
   # Writes the legacy Site row for a provider-school addition. Kept isolated
   # from ProviderSchools::Creator so the old write path can be removed in a
   # single step once the new model is switched on.
+  # TODO School data remodel removal - delete when provider schools are no longer dual-written to Site.
   class LegacySiteCreator
     include ServicePattern
 
