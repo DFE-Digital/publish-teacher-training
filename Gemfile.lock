@@ -229,12 +229,6 @@ GEM
     data_migrate (11.3.1)
       activerecord (>= 6.1)
       railties (>= 6.1)
-    database_cleaner (2.1.0)
-      database_cleaner-active_record (>= 2, < 3)
-    database_cleaner-active_record (2.2.2)
-      activerecord (>= 5.a)
-      database_cleaner-core (~> 2.0)
-    database_cleaner-core (2.0.1)
     date (3.5.1)
     debug_inspector (1.2.0)
     declarative (0.0.20)
@@ -841,7 +835,6 @@ DEPENDENCIES
   cssbundling-rails (~> 1.4)
   custom_error_message!
   data_migrate (= 11.3.1)
-  database_cleaner
   dfe-analytics!
   dfe-autocomplete!
   dfe-wizard!

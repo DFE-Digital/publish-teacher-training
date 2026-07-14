@@ -226,7 +226,6 @@ group :development do
 end
 
 group :test do
-  gem "database_cleaner"
   gem "jsonapi-rspec"
   gem "mock_redis", "0.46.0"
   gem "rspec_junit_formatter"

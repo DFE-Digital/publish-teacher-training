@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-require "database_cleaner"
 require "spec_helper"
 require_relative "./support/system_retry_helper"
 
@@ -71,10 +70,12 @@ RSpec.configure do |config|
   config.include SystemRetryHelper, type: :system
   config.include DfE::Wizard::Test::RSpecMatchers, type: :wizard
 
-  # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
+  # Start from a clean database in case a previous run crashed mid-example;
+  # each example then runs inside a rolled-back transaction (use_transactional_fixtures).
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.strategy = :transaction
+    connection = ActiveRecord::Base.connection
+    tables = connection.tables.excluding("schema_migrations", "ar_internal_metadata", "spatial_ref_sys")
+    connection.truncate_tables(*tables)
 
     postgis_table_count = ActiveRecord::Base.connection.execute(
       "SELECT COUNT(*) FROM spatial_ref_sys;",
@@ -91,13 +92,6 @@ RSpec.configure do |config|
     # ../.github/workflows/build-and-deploy.yml (Jobs: Test)
     Settings.add_source!(ENV.select { |k, _v| k[/SETTINGS__FEATURES_/] })
     Settings.reload!
-  end
-
-  # start the transaction strategy as examples are run
-  config.around do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
