@@ -2,15 +2,26 @@
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", @course_school_form.errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+  <%= govuk_back_link_to(
+    details_publish_provider_recruitment_cycle_course_path(
+      @provider.provider_code,
+      course.recruitment_cycle_year,
+      course.course_code
+    )
+  ) %>
 <% end %>
 
 <%= form_with(
   model: @course_school_form,
-  url: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+  url: schools_publish_provider_recruitment_cycle_course_path(
+    @provider.provider_code,
+    course.recruitment_cycle_year,
+    course.course_code
+  ),
   method: :put,
   local: true,
 ) do |f| %>
+
   <%= f.govuk_error_summary %>
 
   <% if @course.recruitment_cycle_rollover_period_2026? %>
@@ -19,26 +30,35 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+
       <%= render ::Publish::Schools::NotificationBannerComponent.new(
         recruitment_cycle: @recruitment_cycle,
         provider: @provider,
       ) %>
 
-    <%= f.govuk_check_boxes_fieldset :site_ids,
-        legend:
-        {
-          text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe,
-          tag: "h1",
-          size: "l",
-        },
-        form_group: { data: { controller: "select-all-checkboxes" } } do %>
+      <!-- ✅ START school-diff wrapper -->
+      <div
+        data-controller="school-diff"
+        data-school-diff-initial-site-ids-value="<%= @course.site_ids.join(',') %>"
+      >
 
+        <%= f.govuk_check_boxes_fieldset :site_ids,
+          legend: {
+            text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe,
+            tag: "h1",
+            size: "l",
+          },
+          form_group: { data: { controller: "select-all-checkboxes" } } do %>
+
+          <!-- ✅ Select all -->
           <div class="govuk-checkboxes__item">
-            <input type="checkbox"
-                   class="govuk-checkboxes__input"
-                   id="select-all-schools"
-                   data-select-all-checkboxes-target="selectAll"
-                   data-action="select-all-checkboxes#toggleAll">
+            <input
+              type="checkbox"
+              class="govuk-checkboxes__input"
+              id="select-all-schools"
+              data-select-all-checkboxes-target="selectAll"
+              data-action="select-all-checkboxes#toggleAll change->school-diff#update"
+            >
 
             <label class="govuk-label govuk-checkboxes__label" for="select-all-schools">
               <%= t("publish.courses.schools.select_all") %>
@@ -48,24 +68,59 @@
           <div class="govuk-body govuk-!-margin-left-2">or</div>
           <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
+          <!-- ✅ Schools list -->
           <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
             <%= f.govuk_check_box :site_ids,
-                site.id,
-                label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
-                hint: { text: site.full_address },
-                link_errors: index.zero?,
-                data: {
-                  select_all_checkboxes_target: "checkbox",
-                  action: "select-all-checkboxes#updateSelectAll",
-                } %>
-         <% end %>
-      <% end %>
+              site.id,
+              label: {
+                text: [
+                  site.location_name,
+                  render(Publish::Schools::NewlyAddedTagComponent.new(school: site))
+                ].compact_blank.join(" ").html_safe
+              },
+              hint: { text: site.full_address },
+              link_errors: index.zero?,
+              data: {
+                select_all_checkboxes_target: "checkbox",
+                action: "change->school-diff#update select-all-checkboxes#updateSelectAll",
+                school_name: site.location_name
+              } %>
+          <% end %>
+
+        <% end %>
+
+        <!-- ✅ Summary (unordered list gets injected here by JS) -->
+        <div
+          class="govuk-body govuk-!-margin-top-4"
+          data-school-diff-target="summary"
+          aria-live="polite"
+          hidden
+        >
+          <h2 class="govuk-heading-m">
+            <strong>You are updating these schools</strong>
+          </h2>
+
+          <div data-school-diff-target="addedSection"></div>
+          <div data-school-diff-target="removedSection"></div>
+        </div>
+
+      </div>
+      <!-- ✅ END school-diff wrapper -->
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
+
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
+      <%= govuk_link_to(
+        t("cancel"),
+        details_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @provider.recruitment_cycle.year,
+          @course.course_code
+        )
+      ) %>
     </p>
+
+    </div>
   </div>
-</div>

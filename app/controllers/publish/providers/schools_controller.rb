@@ -3,7 +3,7 @@
 module Publish
   module Providers
     class SchoolsController < ApplicationController
-      before_action :site, only: %i[show delete]
+      before_action :site, only: %i[show delete edit]
       before_action :reset_urn_form, only: %i[index]
 
       PER_PAGE = 20
@@ -41,6 +41,11 @@ module Publish
           .where(site_statuses: { site_id: @site.id })
           .to_a
           .uniq(&:id)
+      end
+
+      def edit
+        @site = Site.find(params[:id])
+        @courses = @site.provider.courses.select { |c| c.content_status.present? }
       end
 
       def create
