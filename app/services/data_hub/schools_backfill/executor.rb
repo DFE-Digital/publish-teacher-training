@@ -37,11 +37,37 @@ module DataHub
 
       def insert_provider_schools
         inserted_rows = ActiveRecord::Base.connection.exec_query(<<~SQL)
-          INSERT INTO provider_school (provider_id, gias_school_id, site_code, created_at, updated_at)
+          INSERT INTO provider_school (provider_id, gias_school_id, site_code, uuid, created_at, updated_at)
           SELECT DISTINCT ON (site.provider_id, gias_school.id, site.code)
-                 site.provider_id, gias_school.id, site.code, NOW(), NOW()
+                 site.provider_id, gias_school.id, site.code, site.uuid, NOW(), NOW()
           FROM site
           JOIN gias_school ON gias_school.urn = site.urn
+          WHERE site.site_type = 0
+            AND site.discarded_at IS NULL
+            AND site.urn IS NOT NULL
+            AND site.urn <> ''
+          ON CONFLICT (provider_id, gias_school_id, site_code) DO UPDATE
+            SET uuid = EXCLUDED.uuid,
+                updated_at = NOW()
+            WHERE provider_school.uuid IS DISTINCT FROM EXCLUDED.uuid
+          RETURNING 1
+        SQL
+        inserted_rows.length
+      end
+
+      def insert_course_schools
+        return insert_course_schools_with_site_code if course_school_has_site_code?
+
+        inserted_rows = ActiveRecord::Base.connection.exec_query(<<~SQL)
+          INSERT INTO course_school (course_id, gias_school_id, provider_school_id, created_at, updated_at)
+          SELECT DISTINCT ON (course_site.course_id, provider_school.id)
+                 course_site.course_id, gias_school.id, provider_school.id, NOW(), NOW()
+          FROM course_site
+          JOIN site            ON site.id = course_site.site_id
+          JOIN gias_school     ON gias_school.urn = site.urn
+          JOIN provider_school ON provider_school.provider_id = site.provider_id
+                              AND provider_school.gias_school_id = gias_school.id
+                              AND provider_school.site_code = site.code
           WHERE site.site_type = 0
             AND site.discarded_at IS NULL
             AND site.urn IS NOT NULL
@@ -52,14 +78,17 @@ module DataHub
         inserted_rows.length
       end
 
-      def insert_course_schools
+      def insert_course_schools_with_site_code
         inserted_rows = ActiveRecord::Base.connection.exec_query(<<~SQL)
-          INSERT INTO course_school (course_id, gias_school_id, site_code, created_at, updated_at)
-          SELECT DISTINCT ON (course_site.course_id, gias_school.id, site.code)
-                 course_site.course_id, gias_school.id, site.code, NOW(), NOW()
+          INSERT INTO course_school (course_id, gias_school_id, provider_school_id, site_code, created_at, updated_at)
+          SELECT DISTINCT ON (course_site.course_id, provider_school.id)
+                 course_site.course_id, gias_school.id, provider_school.id, provider_school.site_code, NOW(), NOW()
           FROM course_site
-          JOIN site        ON site.id = course_site.site_id
-          JOIN gias_school ON gias_school.urn = site.urn
+          JOIN site            ON site.id = course_site.site_id
+          JOIN gias_school     ON gias_school.urn = site.urn
+          JOIN provider_school ON provider_school.provider_id = site.provider_id
+                              AND provider_school.gias_school_id = gias_school.id
+                              AND provider_school.site_code = site.code
           WHERE site.site_type = 0
             AND site.discarded_at IS NULL
             AND site.urn IS NOT NULL
@@ -68,6 +97,10 @@ module DataHub
           RETURNING 1
         SQL
         inserted_rows.length
+      end
+
+      def course_school_has_site_code?
+        @course_school_has_site_code ||= Course::School.column_names.include?("site_code")
       end
 
       def fetch_skipped_sites
@@ -102,17 +135,23 @@ module DataHub
                    WHEN site.site_type <> 0 THEN 'non_school_site'
                    WHEN site.discarded_at IS NOT NULL THEN 'site_discarded'
                    WHEN site.urn IS NULL OR site.urn = '' THEN 'no_urn'
+                   WHEN gias_school.id IS NULL THEN 'urn_not_in_gias_school'
+                   WHEN provider_school.id IS NULL THEN 'provider_school_missing'
                    ELSE 'urn_not_in_gias_school'
                  END AS reason
           FROM course_site
-          LEFT JOIN site        ON site.id = course_site.site_id
-          LEFT JOIN gias_school ON gias_school.urn = site.urn
+          LEFT JOIN site            ON site.id = course_site.site_id
+          LEFT JOIN gias_school     ON gias_school.urn = site.urn
+          LEFT JOIN provider_school ON provider_school.provider_id = site.provider_id
+                                  AND provider_school.gias_school_id = gias_school.id
+                                  AND provider_school.site_code = site.code
           WHERE site.id IS NULL
              OR site.site_type <> 0
              OR site.discarded_at IS NOT NULL
              OR site.urn IS NULL
              OR site.urn = ''
              OR gias_school.id IS NULL
+             OR provider_school.id IS NULL
           ORDER BY course_site.course_id, course_site.site_id
         SQL
       end
