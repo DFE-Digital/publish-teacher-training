@@ -1,5 +1,14 @@
 module Publish
   module CourseSchoolsHelper
+    # Long school lists are collapsed to this many rows, with a "Show all schools"
+    # link revealing the rest. Shared by the course schools edit page and the add
+    # course wizard's schools step.
+    SCHOOLS_COLLAPSE_THRESHOLD = 20
+
+    def schools_collapse_threshold
+      SCHOOLS_COLLAPSE_THRESHOLD
+    end
+
     def school_label_for(course)
       t("publish.courses.schools.heading.#{course_type_key(course)}")
     end
