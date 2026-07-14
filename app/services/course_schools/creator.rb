@@ -23,7 +23,6 @@ module CourseSchools
       # so the denormalised columns can never disagree with it.
       @course.schools.find_or_create_by!(provider_school_id: provider_school.id) do |course_school|
         course_school.gias_school_id = provider_school.gias_school_id
-        course_school.site_code = provider_school.site_code
       end
     rescue ActiveRecord::RecordNotUnique
       @course.schools.find_by!(provider_school_id: provider_school.id)
