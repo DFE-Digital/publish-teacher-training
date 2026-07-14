@@ -25,7 +25,7 @@
       ) %>
 
     <% sorted_sites = @provider.sites.sort_by(&:location_name) %>
-    <% collapse_after = 20 %>
+    <% collapse_after = schools_collapse_threshold %>
 
     <%= f.govuk_check_boxes_fieldset :site_ids,
         legend:
