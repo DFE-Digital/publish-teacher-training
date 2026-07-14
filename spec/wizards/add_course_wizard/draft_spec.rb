@@ -193,9 +193,9 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
     it "returns school ids and ordered school records" do
       site_one = provider.sites.first || create(:site, provider:)
       site_two = create(:site, provider:)
-      state_store.write(site_ids: [site_two.id.to_s, site_one.id.to_s])
+      state_store.write(site_ids: [site_two.uuid, site_one.uuid])
 
-      expect(draft.school_ids).to eq([site_two.id.to_s, site_one.id.to_s])
+      expect(draft.school_ids).to eq([site_two.uuid, site_one.uuid])
       expect(draft.schools.map(&:id)).to eq([site_two.id, site_one.id])
     end
 

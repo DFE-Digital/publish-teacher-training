@@ -5,6 +5,8 @@
 # file, deletable as a single step when course reads migrate to the
 # new Course::School model.
 module CourseSchools
+  # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+  # TODO School data remodel removal - delete when courses no longer attach schools through legacy SiteStatus.
   class LegacySiteStatusCreator
     include ServicePattern
 
@@ -19,4 +21,5 @@ module CourseSchools
       @course.send(:add_site!, site: @site)
     end
   end
+  # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 end

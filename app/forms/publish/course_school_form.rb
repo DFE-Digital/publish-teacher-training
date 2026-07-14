@@ -2,14 +2,16 @@
 
 module Publish
   class CourseSchoolForm < BaseCourseForm
-    FIELDS = %i[site_ids schools_validated].freeze
+    FIELDS = %i[school_uuids schools_validated].freeze
 
     attr_accessor(*FIELDS)
 
     validate :no_schools_selected
 
+    # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+    # TODO School data remodel removal - replace course.sites with course.schools/provider_schools when Site is retired for schools.
     def compute_fields
-      { site_ids: course.site_ids }.merge(new_attributes)
+      { school_uuids: course.sites.map(&:uuid) }.merge(new_attributes)
     end
 
     # Every school the provider could attach, in the order they are listed.
@@ -27,16 +29,18 @@ module Publish
 
   private
 
+    # TODO School data remodel removal - remove Site-based rollover checks when school presence is fully based on Course::School.
     def no_schools_selected
-      return if params[:site_ids].present?
+      return if params[:school_uuids].present?
       return if ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
       if course.recruitment_cycle_rollover_period_2026?
-        errors.add(:site_ids, :check_schools) if course.sites.school.present?
-        errors.add(:site_ids, :enter_schools) if course.sites.school.blank?
+        errors.add(:school_uuids, :check_schools) if course.sites.school.present?
+        errors.add(:school_uuids, :enter_schools) if course.sites.school.blank?
       else
-        errors.add(:site_ids, :no_schools)
+        errors.add(:school_uuids, :no_schools)
       end
     end
+    # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
   end
 end

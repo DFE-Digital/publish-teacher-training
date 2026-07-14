@@ -16,6 +16,12 @@ FactoryBot.define do
         association(:provider_school, provider: course.provider, gias_school:, site_code:)
     end
 
+    after(:build) do |course_school, evaluator|
+      if course_school.has_attribute?(:site_code)
+        course_school.site_code = evaluator.site_code || course_school.provider_school.site_code
+      end
+    end
+
     trait :main_site do
       site_code { Provider::School::MAIN_SITE_CODE }
     end

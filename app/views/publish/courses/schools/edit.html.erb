@@ -24,7 +24,7 @@
         provider: @provider,
       ) %>
 
-    <%= f.govuk_check_boxes_fieldset :site_ids,
+    <%= f.govuk_check_boxes_fieldset :school_uuids,
         legend:
         {
           text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe,
@@ -52,9 +52,9 @@
           <div class="govuk-body govuk-!-margin-left-2">or</div>
           <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
-          <% @course_school_form.sites.each_with_index do |site, index| %>
-            <%= f.govuk_check_box :site_ids,
-                site.id,
+          <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+            <%= f.govuk_check_box :school_uuids,
+                site.uuid,
                 label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
                 hint: { text: site.decorate.full_address, class: "govuk-!-font-size-16" },
                 link_errors: index.zero?,

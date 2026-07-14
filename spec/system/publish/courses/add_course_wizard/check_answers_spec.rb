@@ -526,7 +526,7 @@ private
   def then_the_created_course_has_the_new_course_school
     created_course = provider.courses.order(:created_at).last
     expect(created_course.schools.map(&:gias_school_id)).to eq([@gias_school.id])
-    expect(created_course.schools.first.site_code).to eq(@selected_site.code)
+    expect(created_course.schools.first.provider_school.site_code).to eq(@selected_site.code)
   end
 
   def and_the_created_course_still_has_the_legacy_site

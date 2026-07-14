@@ -118,7 +118,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   def then_i_should_see_an_error_message
     expect(publish_course_school_edit_page).to have_content(
-      I18n.t("activemodel.errors.models.publish/course_school_form.attributes.site_ids.no_schools"),
+      I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.no_schools"),
     )
   end
 
@@ -134,7 +134,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     gias_school = GiasSchool.find_by!(urn: site.urn)
     course_school = course.reload.schools.find_by(gias_school:)
     expect(course_school).to be_present
-    expect(course_school.site_code).to eq(site.code)
+    expect(course_school.provider_school.site_code).to eq(site.code)
   end
 
   def given_the_course_already_has_both_sites

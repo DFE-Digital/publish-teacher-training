@@ -42,8 +42,8 @@ module Publish
     describe "validations", travel: Find::CycleTimetable.mid_cycle(2026) do
       before { subject.valid? }
 
-      it "validates :site_ids" do
-        expect(subject.errors[:site_ids]).to include(I18n.t("activemodel.errors.models.publish/course_school_form.attributes.site_ids.no_schools"))
+      it "validates :school_uuids" do
+        expect(subject.errors[:school_uuids]).to include(I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.no_schools"))
       end
 
       context "when the course is exempt from needing a school (publish without schools allowed)" do
@@ -56,7 +56,7 @@ module Publish
         it "does not require at least one school" do
           subject.valid?
 
-          expect(subject.errors[:site_ids]).to be_empty
+          expect(subject.errors[:school_uuids]).to be_empty
         end
 
         context "when the new school model flag is OFF" do
@@ -68,7 +68,7 @@ module Publish
           it "still does not require at least one school" do
             subject.valid?
 
-            expect(subject.errors[:site_ids]).to be_empty
+            expect(subject.errors[:school_uuids]).to be_empty
           end
         end
       end
