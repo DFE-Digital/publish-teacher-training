@@ -45,7 +45,9 @@ module Publish
 
       def edit
         @site = Site.find(params[:id])
-        @courses = @site.provider.courses.select { |c| c.content_status.present? }
+
+        @courses = Publish::Courses::Query.call(provider: @site.provider)
+          .to_a
       end
 
       def create
