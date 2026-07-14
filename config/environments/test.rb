@@ -51,6 +51,19 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # In CI, also collect deprecation warnings in a file so they can be uploaded
+  # as a build artifact (see .github/workflows/build-and-deploy.yml). Each
+  # parallel_rspec process writes to its own file via TEST_ENV_NUMBER. Written
+  # with File.write rather than a Logger because rails_semantic_logger patches
+  # ActiveSupport::Logger.new to ignore its arguments.
+  if ENV["DEPRECATION_WARNINGS_PATH"].present?
+    deprecation_warnings_file = "#{ENV['DEPRECATION_WARNINGS_PATH']}#{ENV['TEST_ENV_NUMBER']}.log"
+    config.active_support.deprecation = [
+      :stderr,
+      ->(message, _callstack, _deprecator = nil, _gem_name = nil) { File.write(deprecation_warnings_file, "#{message}\n", mode: "a") },
+    ]
+  end
+
   config.authentication_token = "bats"
 
   # Check for N+1 queries

@@ -210,6 +210,7 @@ jobs:
           INCLUDE_PATTERN: ${{ matrix.tests.include-pattern }}
           EXCLUDE_PATTERN: ${{ matrix.tests.exclude-pattern || ' ' }}
           FEATURE_FLAGS: ${{ matrix.feature-flags }}
+          DEPRECATION_WARNINGS_PATH: tmp/deprecation_warnings
 
       - name: Upload screenshots
         if: ${{ failure() }}
@@ -217,6 +218,14 @@ jobs:
         with:
           name: Test-screenshots
           path: ${{ github.workspace }}/tmp/capybara/*
+
+      - name: Upload deprecation warnings
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: deprecation-warnings (${{ matrix.tests.name }})
+          path: tmp/deprecation_warnings*.log
+          if-no-files-found: ignore
 
       # - name: Upload coverage results
       #   if: always()
