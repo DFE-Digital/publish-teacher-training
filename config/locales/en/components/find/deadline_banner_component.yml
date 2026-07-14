@@ -1,7 +1,7 @@
 en:
   important: Important
   apply_deadline_banner:
-    heading: The deadline for applying to courses starting in %{academic_cycle_year_range} is %{apply_deadline}
+    heading: The deadline for applying to courses starting in the %{academic_cycle_year_range} academic year is %{apply_deadline}
     text: Courses may fill up before then. Check course availability with the provider.
   apply_opens_soon_banner:
     heading: Apply for courses from %{apply_opens}

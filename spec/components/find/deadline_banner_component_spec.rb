@@ -37,7 +37,7 @@ module Find
 
           cycle_year_range = Find::CycleTimetable.cycle_year_range
           apply_deadline = Find::CycleTimetable.apply_deadline.to_fs(:govuk_date_and_time)
-          expect(result.text).to include("The deadline for applying to courses starting in #{cycle_year_range} is #{apply_deadline}")
+          expect(result.text).to include("The deadline for applying to courses starting in the #{cycle_year_range} academic year is #{apply_deadline}")
           expect(result.text).to include("Courses may fill up before then. Check course availability with the provider.")
         end
       end
