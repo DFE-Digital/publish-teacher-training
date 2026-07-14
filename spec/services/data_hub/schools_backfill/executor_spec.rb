@@ -21,6 +21,7 @@ describe DataHub::SchoolsBackfill::Executor do
           gias_school_id: gias_school.id,
         )
         expect(provider_school.site_code).to eq("A")
+        expect(provider_school.uuid).to eq(site.uuid)
       end
 
       it "does not insert provider_school for a different gias_school" do
@@ -47,19 +48,22 @@ describe DataHub::SchoolsBackfill::Executor do
         create(:site_status, course: course, site: site)
       end
 
-      it "inserts one course_school row with the correct site_code" do
-        pending "insert_course_schools must set the now NOT NULL provider_school_id before the backfill can run again"
+      it "inserts one course_school row linked to the matching provider_school" do
         executor.execute
 
+        provider_school = Provider::School.find_by!(
+          provider_id: provider.id,
+          gias_school_id: gias_school.id,
+          site_code: "B",
+        )
         course_school = Course::School.find_by!(
           course_id: course.id,
           gias_school_id: gias_school.id,
         )
-        expect(course_school.site_code).to eq("B")
+        expect(course_school.provider_school).to eq(provider_school)
       end
 
       it "copies unpublished course_site rows too (parity with source)" do
-        pending "insert_course_schools must set the now NOT NULL provider_school_id before the backfill can run again"
         expect(Course::School.where(course_id: course.id).count).to eq(0)
         executor.execute
         expect(Course::School.where(course_id: course.id).count).to eq(1)
@@ -157,7 +161,6 @@ describe DataHub::SchoolsBackfill::Executor do
       end
 
       it "does not duplicate rows and reports zero inserts on the second run" do
-        pending "insert_course_schools must set the now NOT NULL provider_school_id before the backfill can run again"
         first = executor.execute
         expect(first.short_summary["provider_schools_inserted"]).to eq(1)
         expect(first.short_summary["course_schools_inserted"]).to eq(1)
