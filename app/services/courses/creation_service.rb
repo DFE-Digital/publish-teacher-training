@@ -153,7 +153,7 @@ module Courses
           next
         end
 
-        course.schools.build(gias_school_id: gias_school.id, provider_school:, site_code: provider_school.site_code)
+        course.schools.build(gias_school_id: gias_school.id, provider_school:)
       end
     end
 
