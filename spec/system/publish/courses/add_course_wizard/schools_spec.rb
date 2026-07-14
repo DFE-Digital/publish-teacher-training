@@ -52,6 +52,43 @@ RSpec.describe "Add course wizard schools step", type: :system do
     then_i_am_taken_to_the_study_sites_page
   end
 
+  scenario "the school address does not repeat the school name" do
+    given_i_am_authenticated_as_a_provider_user_with_a_named_school
+    and_i_have_wizard_state_for_schools(funding_type: "fee")
+    when_i_visit_the_wizard_schools_page
+    then_the_school_label_shows_the_name
+    and_the_address_is_shown_without_the_school_name
+  end
+
+  context "when the provider has more than 20 schools", :js do
+    before do
+      given_i_am_authenticated_as_a_provider_user_with_25_schools
+      and_i_have_wizard_state_for_schools(funding_type: "fee")
+      when_i_visit_the_wizard_schools_page
+    end
+
+    scenario "the list is collapsed to 20 schools and can be expanded" do
+      then_only_the_first_20_schools_are_shown
+      when_i_click_show_all_schools
+      then_all_the_schools_are_shown
+    end
+
+    scenario "a school hidden behind the collapse can still be selected and is saved" do
+      then_only_the_first_20_schools_are_shown
+      when_i_click_show_all_schools
+      and_i_choose_the_last_school_in_the_list
+      and_i_click_continue
+      then_i_am_taken_to_the_visa_sponsorship_page
+      and_the_last_school_is_stored_in_the_wizard_state
+    end
+
+    scenario "a school already selected beyond the first 20 is never hidden by the collapse" do
+      given_the_last_school_is_already_selected_in_the_wizard_state
+      when_i_visit_the_wizard_schools_page
+      then_the_last_school_is_visible_and_checked
+    end
+  end
+
 private
 
   def when_i_visit_the_wizard_schools_page
@@ -149,6 +186,135 @@ private
     given_i_am_authenticated(user: @user)
   end
 
+  # Deterministic, non-ambiguous names: the site factory's default is
+  # "Main Site#{rand(1_000_000)}", and Capybara's `check` matches label text on a
+  # substring, so random names can collide or prefix each other.
+  def given_i_am_authenticated_as_a_provider_user_with_25_schools
+    @user = create(
+      :user,
+      providers: [
+        create(
+          :provider,
+          :accredited_provider,
+          sites: (1..25).map { |n| build(:site, location_name: sprintf("School %02d", n)) },
+        ),
+      ],
+    )
+
+    given_i_am_authenticated(user: @user)
+  end
+
+  def given_i_am_authenticated_as_a_provider_user_with_a_named_school
+    @user = create(
+      :user,
+      providers: [
+        create(
+          :provider,
+          :accredited_provider,
+          sites: [
+            build(
+              :site,
+              location_name: "Belvidere School",
+              address1: "Belvidere Lane",
+              address2: "",
+              address3: "",
+              town: "Shrewsbury",
+              address4: "Shropshire",
+              postcode: "SY2 5RJ",
+            ),
+            build(:site),
+          ],
+        ),
+      ],
+    )
+
+    given_i_am_authenticated(user: @user)
+  end
+
+  def school_checkbox_selector
+    "input[name='schools[site_ids][]']"
+  end
+
+  # Counts the visible checkbox rows holding a school checkbox. We check the
+  # wrapper's visibility (a block element) rather than the input, because GOV.UK
+  # visually hides the real <input> element itself.
+  def visible_school_checkbox_count
+    page.all(".govuk-checkboxes__item", visible: true).count do |item|
+      item.has_css?(school_checkbox_selector, visible: :all)
+    end
+  end
+
+  def last_school
+    @last_school ||= provider.sites.max_by(&:location_name)
+  end
+
+  def then_only_the_first_20_schools_are_shown
+    # Wait for the Stimulus controller to collapse the list (it reveals the button
+    # only after hiding the overflow rows) before the count assertion below, which
+    # reads Capybara's synchronous `all` and would otherwise race connect().
+    expect(page).to have_button("Show all schools")
+    expect(visible_school_checkbox_count).to eq(20)
+  end
+
+  def when_i_click_show_all_schools
+    click_on "Show all schools"
+  end
+
+  def then_all_the_schools_are_shown
+    expect(page).to have_no_button("Show all schools")
+    expect(visible_school_checkbox_count).to eq(25)
+  end
+
+  def and_i_choose_the_last_school_in_the_list
+    check last_school.location_name
+  end
+
+  # This provider has no study sites, so the wizard skips that step and goes
+  # straight to visa sponsorship.
+  def then_i_am_taken_to_the_visa_sponsorship_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :visa_sponsorship,
+        state_key: wizard_state_key,
+      ),
+      ignore_query: true,
+    )
+  end
+
+  def and_the_last_school_is_stored_in_the_wizard_state
+    expect(stored_site_ids).to contain_exactly(last_school.id.to_s)
+  end
+
+  def given_the_last_school_is_already_selected_in_the_wizard_state
+    wizard_state_store.write(site_ids: [last_school.id.to_s])
+  end
+
+  # Regression: the collapse must never hide a checked school, or the user sees an
+  # apparently empty selection while the hidden school is still submitted.
+  def then_the_last_school_is_visible_and_checked
+    # The list is still collapsed...
+    expect(page).to have_button("Show all schools")
+
+    # ...but the selected school is shown anyway: only the 4 unchecked overflow
+    # rows are hidden, leaving the first 20 plus the checked 25th.
+    expect(visible_school_checkbox_count).to eq(21)
+    expect(page).to have_css(".govuk-checkboxes__label", text: last_school.location_name)
+    expect(page.find(:checkbox, last_school.location_name, visible: :all)).to be_checked
+  end
+
+  def then_the_school_label_shows_the_name
+    expect(page).to have_css(".govuk-checkboxes__label", text: "Belvidere School")
+  end
+
+  def and_the_address_is_shown_without_the_school_name
+    hint = page.find(".govuk-hint", text: "Belvidere Lane")
+
+    expect(hint.text).to eq("Belvidere Lane, Shrewsbury, Shropshire, SY2 5RJ")
+    expect(hint.text).not_to include("Belvidere School")
+  end
+
   def provider
     @provider ||= @user.providers.first
   end
@@ -158,26 +324,33 @@ private
   end
 
   def and_i_have_wizard_state_for_schools(funding_type:)
-    repository = CourseWizard::Repositories::Course.new(
-      provider_code: provider.provider_code,
-      recruitment_cycle_year: provider.recruitment_cycle_year,
-      state_key: wizard_state_key,
-      expires_in: 24.hours,
-    )
-
-    state_store = CourseWizard::StateStores::CourseWizardStore.new(repository:)
-    state_store.write(funding_type:)
+    wizard_state_store.write(funding_type:)
   end
 
   def and_i_have_wizard_state_for_qualifications(level:)
-    repository = CourseWizard::Repositories::Course.new(
+    wizard_state_store.write(level:)
+  end
+
+  # Built fresh on each call so reads see state written by the browser, rather
+  # than a stale snapshot from when the repository was first constructed.
+  def wizard_state_repository
+    CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
       state_key: wizard_state_key,
       expires_in: 24.hours,
     )
+  end
 
-    state_store = CourseWizard::StateStores::CourseWizardStore.new(repository:)
-    state_store.write(level:)
+  def wizard_state_store
+    CourseWizard::StateStores::CourseWizardStore.new(repository: wizard_state_repository)
+  end
+
+  # Read straight off the repository: the state store only exposes step attributes
+  # through a wizard, which we do not have here.
+  def stored_site_ids
+    state = wizard_state_repository.read
+
+    Array(state[:site_ids] || state["site_ids"]).compact_blank
   end
 end
