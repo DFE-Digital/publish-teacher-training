@@ -509,7 +509,6 @@ describe Courses::CreationService do
       it "dual-writes: builds both the legacy site_status and the new Course::School" do
         expect(created_course.sites.map(&:id)).to eq([site.id])
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.schools.first.site_code).to eq("-")
         expect(created_course.schools.first.provider_school).to eq(provider_school)
         expect(created_course.errors).to be_empty
       end
@@ -518,8 +517,8 @@ describe Courses::CreationService do
         created_course.save!
 
         expect(created_course.reload.sites.map(&:id)).to eq([site.id])
-        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :site_code))
-          .to eq([[gias_school.id, "-"]])
+        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
+          .to eq([[gias_school.id, provider_school.id]])
       end
     end
 
@@ -539,8 +538,8 @@ describe Courses::CreationService do
       it "persists the Course::School on save" do
         created_course.save!
 
-        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :site_code))
-          .to eq([[gias_school.id, "-"]])
+        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
+          .to eq([[gias_school.id, provider_school.id]])
       end
     end
 
