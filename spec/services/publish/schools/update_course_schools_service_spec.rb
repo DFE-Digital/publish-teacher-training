@@ -11,8 +11,8 @@ module Publish
       let(:previous_site_names) { course.sites.map(&:location_name) }
 
       describe ".call_or_enqueue" do
-        context "when site_ids count exceeds ENQUEUE_THRESHOLD" do
-          let(:params) { { site_ids: Array.new(31) { SecureRandom.uuid } } }
+        context "when school_uuids count exceeds ENQUEUE_THRESHOLD" do
+          let(:params) { { school_uuids: Array.new(31) { SecureRandom.uuid } } }
 
           it "enqueues the job" do
             expect(UpdateCourseSchoolsJob).to receive(:perform_async).with(course.id, params.to_h)
@@ -20,8 +20,8 @@ module Publish
           end
         end
 
-        context "when site_ids count is below or equal to ENQUEUE_THRESHOLD" do
-          let(:params) { { site_ids: provider.site_ids } }
+        context "when school_uuids count is below or equal to ENQUEUE_THRESHOLD" do
+          let(:params) { { school_uuids: provider.sites.map(&:uuid) } }
 
           it "runs the service inline" do
             service_instance = instance_double(described_class)
@@ -30,6 +30,7 @@ module Publish
               .to receive(:new)
               .with(course: course, params: params)
               .and_return(service_instance)
+            allow(UpdateCourseProviderSchoolsService).to receive(:call)
 
             allow(service_instance).to receive(:call)
 
@@ -40,6 +41,7 @@ module Publish
               .with(course: course, params: params)
 
             expect(service_instance).to have_received(:call)
+            expect(UpdateCourseProviderSchoolsService).to have_received(:call).with(course: course, params: params)
           end
         end
       end
@@ -47,8 +49,8 @@ module Publish
       describe "#call" do
         subject(:service_call) { described_class.new(course:, params:).call }
 
-        context "when site_ids are different from course.site_ids" do
-          let(:params) { { site_ids: provider.site_ids } }
+        context "when school_uuids are different from course school UUIDs" do
+          let(:params) { { school_uuids: provider.sites.map(&:uuid) } }
           let(:updated_site_names) { provider.sites.order(:location_name).map(&:location_name) }
 
           context "when feature flag is enabled" do
@@ -88,8 +90,8 @@ module Publish
           end
         end
 
-        context "when site_ids are the same as course.site_ids" do
-          let(:params) { { site_ids: course.site_ids } }
+        context "when school_uuids are the same as course school UUIDs" do
+          let(:params) { { school_uuids: course.sites.map(&:uuid) } }
 
           it "does not call the notification service" do
             expect(NotificationService::CourseSitesUpdated).not_to receive(:call)
@@ -121,7 +123,7 @@ module Publish
                 ],
               )
             end
-            let(:params) { { site_ids: [site_two.id] } }
+            let(:params) { { school_uuids: [site_two.uuid] } }
 
             it "destroys the unticked site_status" do
               described_class.new(course:, params:).call
@@ -156,7 +158,7 @@ module Publish
                 ],
               )
             end
-            let(:params) { { site_ids: [site_one.id] } }
+            let(:params) { { school_uuids: [site_one.uuid] } }
 
             it "does not flip the suspended site_status back to running" do
               described_class.new(course:, params:).call
@@ -185,7 +187,7 @@ module Publish
                 ],
               )
             end
-            let(:params) { { site_ids: [site_one.id] } }
+            let(:params) { { school_uuids: [site_one.uuid] } }
 
             it "does not touch the discontinued site_status" do
               described_class.new(course:, params:).call
@@ -198,7 +200,7 @@ module Publish
 
           context "when adding a school to a draft (unpublished) course" do
             let(:course) { create(:course, provider:, site_statuses: []) }
-            let(:params) { { site_ids: [site_one.id] } }
+            let(:params) { { school_uuids: [site_one.uuid] } }
 
             it "the newly attached site_status is :new_status :unpublished" do
               described_class.new(course:, params:).call
@@ -206,78 +208,6 @@ module Publish
               site_status = course.reload.site_statuses.find_by!(site: site_one)
               expect(site_status).to be_status_new_status
               expect(site_status).to be_unpublished_on_ucas
-            end
-          end
-        end
-
-        context "dual-write to Course::School" do
-          let(:gias_school_one) { create(:gias_school, urn: site_one.urn) }
-          let(:gias_school_two) { create(:gias_school, urn: site_two.urn) }
-
-          before do
-            # Persist sites so they have IDs / URNs present in the DB
-            provider.save!
-            create(:provider_school, provider:, gias_school: gias_school_one, site_code: "X")
-            create(:provider_school, provider:, gias_school: gias_school_two, site_code: "Y")
-          end
-
-          context "when a site is newly attached" do
-            let(:params) { { site_ids: [site_one.id, site_two.id] } }
-
-            it "creates a Course::School row for the newly attached site" do
-              expect {
-                described_class.new(course:, params:).call
-              }.to change { course.schools.count }.by(1)
-
-              added = course.schools.find_by(gias_school: gias_school_two)
-              expect(added).to be_present
-              expect(added.site_code).to eq("Y")
-            end
-          end
-
-          context "when a site is detached" do
-            let(:params) { { site_ids: [] } }
-
-            before do
-              create(:course_school, course:, gias_school: gias_school_one, site_code: "X")
-            end
-
-            it "destroys the Course::School row for the detached site" do
-              expect {
-                described_class.new(course:, params:).call
-              }.to change { course.schools.count }.by(-1)
-
-              expect(course.schools.where(gias_school: gias_school_one)).to be_empty
-            end
-          end
-
-          context "when the prerequisite provider_school is missing" do
-            let(:params) { { site_ids: [site_one.id, site_two.id] } }
-
-            before do
-              # Simulate an env where the schools backfill has not yet run
-              # for this provider's existing sites.
-              Provider::School.where(provider:, gias_school: gias_school_two).destroy_all
-            end
-
-            it "still attaches the legacy SiteStatus and does not raise" do
-              expect {
-                described_class.new(course:, params:).call
-              }.not_to raise_error
-
-              expect(course.reload.sites.map(&:id)).to include(site_two.id)
-            end
-
-            it "skips the Course::School write for the missing provider_school" do
-              described_class.new(course:, params:).call
-
-              expect(course.reload.schools.where(gias_school: gias_school_two)).to be_empty
-            end
-
-            it "logs the skip so operators can spot environments needing a backfill" do
-              expect(Rails.logger).to receive(:warn).with(/no provider_school for course=/)
-
-              described_class.new(course:, params:).call
             end
           end
         end

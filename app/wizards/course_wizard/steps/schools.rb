@@ -20,6 +20,8 @@ class CourseWizard
         )
       end
 
+      # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+      # TODO School data remodel removal - replace with Provider::School records when the wizard no longer reads provider.sites.
       def sites
         @sites ||= provider_sites.sort_by(&:location_name)
       end
@@ -42,9 +44,10 @@ class CourseWizard
 
     private
 
+      # TODO School data remodel removal - remove Site-based defaulting when selected schools are Provider::School-backed.
       def site_ids_selected
         if selected_site_ids.empty? && provider_sites.one?
-          self.site_ids = [provider_sites.first.id.to_s]
+          self.site_ids = [provider_sites.first.uuid]
         end
 
         return if selected_site_ids.any?
@@ -56,6 +59,7 @@ class CourseWizard
         Array(site_ids).compact_blank
       end
 
+      # TODO School data remodel removal - replace with provider schools when school selection no longer uses Site.
       def provider_sites
         wizard.provider.sites
       end
@@ -63,6 +67,7 @@ class CourseWizard
       def funding_type
         wizard.state_store.funding_type
       end
+      # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
       def qualification
         wizard.state_store.qualification

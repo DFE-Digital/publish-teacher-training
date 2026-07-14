@@ -12,13 +12,19 @@ module Support
           saved = false
 
           ActiveRecord::Base.transaction do
-            provider_school = ::ProviderSchools::Creator.call(
-              provider: provider,
-              gias_school_id: params[:school_id],
-            )
-
-            @school_form.fields[:code] = provider_school.site_code
+            # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+            # TODO School data remodel removal - replace this legacy Site-backed form save when support adds Provider::School directly.
             saved = @school_form.save!
+            # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+
+            if saved
+              ::ProviderSchools::Creator.call(
+                provider: provider,
+                gias_school_id: params[:school_id],
+                site_code: @site.code,
+                uuid: @site.uuid,
+              )
+            end
           end
 
           if saved
@@ -35,12 +41,15 @@ module Support
           @school_form = SchoolForm.new(provider, site, params: { gias_school_id: params[:school_id] })
         end
 
+        # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+        # TODO School data remodel removal - remove when support school checks build Provider::School directly.
         def site
           @site ||= begin
             gias_school = GiasSchool.find(params[:school_id])
             @provider.sites.school.build(gias_school.school_attributes)
           end
         end
+        # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
         def provider
           @provider ||= Provider.find(params[:provider_id])

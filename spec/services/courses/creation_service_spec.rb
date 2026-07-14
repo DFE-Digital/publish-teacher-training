@@ -107,7 +107,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "sites_ids" => [site.id],
+        "sites_ids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -481,7 +481,7 @@ describe Courses::CreationService do
     # the wizard, joined to the legacy site by matching URN (same mapping the
     # edit flow uses in Publish::Schools::UpdateCourseSchoolsService).
     let(:gias_school) { create(:gias_school, urn: site.urn) }
-    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
+    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code) }
 
     let(:valid_course_params) do
       {
@@ -493,7 +493,7 @@ describe Courses::CreationService do
         "qualification" => "qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time],
-        "sites_ids" => [site.id],
+        "sites_ids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
         "master_subject_id" => primary_subject.id,
         "subjects_ids" => [primary_subject.id],
@@ -509,6 +509,7 @@ describe Courses::CreationService do
       it "dual-writes: builds both the legacy site_status and the new Course::School" do
         expect(created_course.sites.map(&:id)).to eq([site.id])
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
+        expect(created_course.schools.first.provider_school.site_code).to eq(provider_school.site_code)
         expect(created_course.schools.first.provider_school).to eq(provider_school)
         expect(created_course.errors).to be_empty
       end
@@ -517,8 +518,10 @@ describe Courses::CreationService do
         created_course.save!
 
         expect(created_course.reload.sites.map(&:id)).to eq([site.id])
-        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
-          .to eq([[gias_school.id, provider_school.id]])
+        course_school_attributes = Course::School.where(course: created_course).includes(:provider_school).map do |course_school|
+          [course_school.gias_school_id, course_school.provider_school.site_code]
+        end
+        expect(course_school_attributes).to eq([[gias_school.id, provider_school.site_code]])
       end
     end
 
@@ -530,7 +533,7 @@ describe Courses::CreationService do
 
       it "builds the new Course::School and passes :new validation" do
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.schools.first.site_code).to eq("-")
+        expect(created_course.schools.first.provider_school.site_code).to eq(provider_school.site_code)
         expect(created_course.schools.first.provider_school).to eq(provider_school)
         expect(created_course.errors).to be_empty
       end
@@ -538,8 +541,10 @@ describe Courses::CreationService do
       it "persists the Course::School on save" do
         created_course.save!
 
-        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
-          .to eq([[gias_school.id, provider_school.id]])
+        course_school_attributes = Course::School.where(course: created_course).includes(:provider_school).map do |course_school|
+          [course_school.gias_school_id, course_school.provider_school.site_code]
+        end
+        expect(course_school_attributes).to eq([[gias_school.id, provider_school.site_code]])
       end
     end
 

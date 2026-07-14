@@ -18,7 +18,7 @@ RSpec.describe CourseWizard::Steps::Schools do
     subject(:wizard_step) { wizard.current_step }
 
     it "is valid when at least one site is selected" do
-      wizard_step.site_ids = [site_a.id.to_s]
+      wizard_step.site_ids = [site_a.uuid]
 
       expect(wizard_step).to be_valid
     end
@@ -37,7 +37,7 @@ RSpec.describe CourseWizard::Steps::Schools do
         wizard_step.site_ids = nil
 
         expect(wizard_step).to be_valid
-        expect(wizard_step.site_ids).to eq([site_a.id.to_s])
+        expect(wizard_step.site_ids).to eq([site_a.uuid])
       end
     end
   end

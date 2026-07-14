@@ -178,9 +178,10 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
 
   def and_the_provider_school_row_is_created
     added_site = provider.sites.find_by(urn: @gias_school.urn)
-    provider_school = provider.schools.find_by(gias_school_id: @gias_school.id)
+    provider_school = provider.schools.find_by(gias_school_id: @gias_school.id, site_code: added_site.code)
     expect(provider_school).to be_present
     expect(provider_school.site_code).to eq(added_site.code)
+    expect(provider_school.uuid).to eq(added_site.uuid)
   end
 
   def and_no_provider_school_row_is_created

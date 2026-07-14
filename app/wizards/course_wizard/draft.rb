@@ -89,13 +89,17 @@ class CourseWizard
       @subjects ||= ordered_subject_records(subject_ids)
     end
 
+    # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+    # TODO School data remodel removal - remove when the add-course wizard stores Provider::School identifiers.
     def school_ids
       Array(state_store.site_ids).compact_blank
     end
 
+    # TODO School data remodel removal - replace ordered Site records with Provider::School-backed school records.
     def schools
       @schools ||= ordered_site_records(school_ids)
     end
+    # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
     def study_site_ids
       return nil if state_store.study_sites_ids.nil?
@@ -171,8 +175,17 @@ class CourseWizard
     def ordered_site_records(ids)
       return [] if ids.blank?
 
-      records_by_id = Site.where(id: ids).index_by { |site| site.id.to_s }
-      ids.filter_map { |id| records_by_id[id.to_s] }
+      if ids.all? { |id| uuid?(id) }
+        records_by_uuid = Site.where(uuid: ids).index_by { |site| site.uuid.to_s }
+        ids.filter_map { |id| records_by_uuid[id.to_s] }
+      else
+        records_by_id = Site.where(id: ids).index_by { |site| site.id.to_s }
+        ids.filter_map { |id| records_by_id[id.to_s] }
+      end
+    end
+
+    def uuid?(identifier)
+      identifier.to_s.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/i)
     end
   end
 end

@@ -4,6 +4,8 @@
 # wrapper around Course#remove_site! — destroy for new courses, suspend
 # for live ones, matching existing behaviour.
 module CourseSchools
+  # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+  # TODO School data remodel removal - delete when courses no longer detach schools through legacy SiteStatus.
   class LegacySiteStatusRemover
     include ServicePattern
 
@@ -18,4 +20,5 @@ module CourseSchools
       @course.send(:remove_site!, site: @site)
     end
   end
+  # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 end

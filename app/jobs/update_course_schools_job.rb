@@ -5,5 +5,6 @@ class UpdateCourseSchoolsJob
     course = Course.find(course_id)
 
     Publish::Schools::UpdateCourseSchoolsService.new(course:, params:).call
+    Publish::Schools::UpdateCourseProviderSchoolsService.call(course:, params:)
   end
 end

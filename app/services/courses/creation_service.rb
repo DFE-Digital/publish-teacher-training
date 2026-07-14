@@ -74,8 +74,18 @@ module Courses
       @permitted_new_course_attributes ||= CoursePolicy.new(nil, new_course).permitted_new_course_attributes
     end
 
+    # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+    # TODO School data remodel removal - remove when add-course school selection uses Provider::School instead of Site.
     def sites
-      @sites ||= provider.sites.find(site_ids.compact_blank)
+      @sites ||= begin
+        identifiers = site_ids.compact_blank
+
+        if identifiers.all? { |identifier| uuid?(identifier) }
+          provider.sites.where(uuid: identifiers)
+        else
+          provider.sites.find(identifiers)
+        end
+      end
     end
 
     def study_sites
@@ -86,6 +96,7 @@ module Courses
       @subject_ids ||= course_params["subjects_ids"]
     end
 
+    # TODO School data remodel removal - remove when the add-course wizard stops storing selected schools as sites_ids.
     def site_ids
       @site_ids ||= course_params["sites_ids"]
     end
@@ -115,6 +126,7 @@ module Courses
       end
     end
 
+    # TODO School data remodel removal - remove when new courses no longer need legacy SiteStatus school writes.
     def update_sites(course)
       return if site_ids.nil?
 
@@ -127,55 +139,38 @@ module Courses
     # building the records in memory so they persist atomically with the
     # course on save and are visible to CoursePublishableSchoolsPresence-
     # Validator's :new-context read (which the new-school-model flag routes
-    # to course.schools). Mirrors the site→gias_school→provider_school
-    # mapping used by Publish::Schools::UpdateCourseSchoolsService.
+    # to course.schools).
     def update_schools(course)
       return if site_ids.nil?
       # Nothing selected — update_sites already records the "Select at least
       # one school" error; skip before touching `sites` (find([]) would raise).
       return if site_ids.compact_blank.empty?
 
-      school_sites.each do |site|
-        gias_school = gias_schools_by_urn[site.urn]
-        next unless gias_school
-
-        provider_school = provider_schools_by_gias_id[gias_school.id]
-
-        unless provider_school
-          # No matching Provider::School yet — provider not fully backfilled
-          # (or its site predates the dual-write). Skip the new-model build;
-          # the schools backfill (or the next provider-side write) reconciles
-          # later. Same rationale as UpdateCourseSchoolsService#attach_school.
-          Rails.logger.warn(
-            "[CourseSchools] skipped course_school build — no provider_school for " \
-            "provider=#{provider.id} gias_school=#{gias_school.id}",
-          )
-          next
-        end
-
-        course.schools.build(gias_school_id: gias_school.id, provider_school:)
+      provider_schools_for_selected_sites.each do |provider_school|
+        course_school = course.schools.build(
+          gias_school_id: provider_school.gias_school_id,
+          provider_school:,
+        )
       end
     end
 
+    # TODO School data remodel removal - remove when Course::School creation no longer maps through selected Site rows.
     def school_sites
       @school_sites ||= sites.select(&:school?)
     end
 
-    # Only map selectable (non-closed) GIAS schools into the new model. A site
-    # can still point at a school the GIAS import later flipped to closed; we
-    # intentionally leave that school out of course.schools (the legacy
-    # course.sites write above still keeps the site) so the new model never
-    # gains a closed school. `available` excludes only `closed`.
-    def gias_schools_by_urn
-      @gias_schools_by_urn ||= GiasSchool.available
-        .where(urn: school_sites.map(&:urn).compact_blank)
-        .index_by(&:urn)
+    # TODO School data remodel removal - remove the legacy Site UUID resolver path when the wizard posts Provider::School IDs or UUIDs.
+    def provider_schools_for_selected_sites
+      @provider_schools_for_selected_sites ||= Publish::Schools::ProviderSchoolResolver.call(
+        provider:,
+        school_uuids: school_sites.map(&:uuid),
+        gias_school_scope: GiasSchool.available,
+      )
     end
+    # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
-    def provider_schools_by_gias_id
-      @provider_schools_by_gias_id ||= provider.schools
-        .where(gias_school_id: gias_schools_by_urn.values.map(&:id))
-        .index_by(&:gias_school_id)
+    def uuid?(identifier)
+      identifier.to_s.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/i)
     end
 
     def update_study_sites(course)
