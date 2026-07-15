@@ -63,10 +63,14 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
       and_all_25_schools_should_be_attached
     end
 
-    scenario "a school already attached beyond the first 20 is never hidden by the collapse" do
+    scenario "a school attached beyond the first 20 is collapsed but stays attached" do
       given_the_last_school_is_already_attached_to_the_course
       when_i_visit_the_publish_course_school_edit_page
-      then_the_last_school_is_visible_and_checked
+      then_only_the_first_20_schools_are_shown
+      and_the_last_school_is_hidden_but_still_checked
+      and_i_submit
+      then_the_school_update_succeeds
+      and_the_last_school_is_still_attached
     end
   end
 
@@ -183,17 +187,20 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
     course.site_statuses.create!(site: last_school, status: :new_status, publish: :unpublished)
   end
 
-  # Regression: the collapse must never hide an attached school, or the provider
-  # sees an apparently empty selection while the hidden school stays attached.
-  def then_the_last_school_is_visible_and_checked
-    # The list is still collapsed...
-    expect(publish_course_school_edit_page).to have_show_all_schools
-
-    # ...but the attached school is shown anyway: only the 4 unchecked overflow
-    # rows are hidden, leaving the first 20 plus the checked 25th.
-    expect(publish_course_school_edit_page.visible_school_checkbox_count).to eq(21)
-    expect(page).to have_css(".govuk-checkboxes__label", text: last_school.location_name)
+  # A collapsed school keeps its checked state in the DOM even though its row is
+  # hidden, so the attached school is not visible but is not dropped either.
+  def and_the_last_school_is_hidden_but_still_checked
+    expect(page).to have_no_css(".govuk-checkboxes__label", text: last_school.location_name)
     expect(page.find(:checkbox, last_school.location_name, visible: :all)).to be_checked
+  end
+
+  # Only the one already-attached school is submitted, so the flash is singular.
+  def then_the_school_update_succeeds
+    expect(page).to have_content("School updated")
+  end
+
+  def and_the_last_school_is_still_attached
+    expect(course.reload.sites).to include(last_school)
   end
 
   def given_a_course_exists(sites: [])
