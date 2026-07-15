@@ -41,6 +41,39 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
     end
   end
 
+  context "when there are more than 20 schools" do
+    before do
+      given_the_provider_has_25_schools
+      when_i_visit_the_publish_course_school_edit_page
+    end
+
+    scenario "the list is collapsed and can be expanded with 'Show all schools'" do
+      then_only_the_first_20_schools_are_shown
+      and_i_can_see_the_show_all_schools_button
+      when_i_click_show_all_schools
+      then_all_25_schools_are_shown
+      and_the_show_all_schools_button_is_hidden
+    end
+
+    scenario "selecting all schools attaches the full list even while collapsed" do
+      then_only_the_first_20_schools_are_shown
+      when_i_select_all_schools
+      and_i_submit
+      then_i_should_see_the_success_message
+      and_all_25_schools_should_be_attached
+    end
+
+    scenario "a school attached beyond the first 20 is collapsed but stays attached" do
+      given_the_last_school_is_already_attached_to_the_course
+      when_i_visit_the_publish_course_school_edit_page
+      then_only_the_first_20_schools_are_shown
+      and_the_last_school_is_hidden_but_still_checked
+      and_i_submit
+      then_the_school_update_succeeds
+      and_the_last_school_is_still_attached
+    end
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     @provider = build(
       :provider,
@@ -60,6 +93,12 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
 
   def given_there_are_many_schools
     @schools = create_list(:site, 30, provider: @provider)
+  end
+
+  def given_the_provider_has_25_schools
+    # the provider already has 3 sites from authentication setup
+    create_list(:site, 22, provider: @provider)
+    @provider.reload
   end
 
   def and_there_is_a_course_i_want_to_edit
@@ -108,6 +147,60 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
     expect(page).to have_content(
       "We are adding your schools to this course. After a minute, refresh your browser to see the schools that have been added.",
     )
+  end
+
+  def then_only_the_first_20_schools_are_shown
+    # Wait for the Stimulus controller to finish collapsing the list (it reveals
+    # the button only after hiding the overflow rows) before the count assertion,
+    # which reads Capybara's synchronous `all` and would otherwise race connect().
+    expect(publish_course_school_edit_page).to have_show_all_schools
+    expect(publish_course_school_edit_page.visible_school_checkbox_count).to eq(20)
+  end
+
+  def and_i_can_see_the_show_all_schools_button
+    expect(publish_course_school_edit_page).to have_show_all_schools
+  end
+
+  def when_i_click_show_all_schools
+    publish_course_school_edit_page.show_all_schools.click
+  end
+
+  def then_all_25_schools_are_shown
+    expect(publish_course_school_edit_page.visible_school_checkbox_count).to eq(25)
+  end
+
+  def and_the_show_all_schools_button_is_hidden
+    expect(publish_course_school_edit_page).to have_no_show_all_schools
+  end
+
+  def and_all_25_schools_should_be_attached
+    expect(course.reload.sites.count).to eq(25)
+  end
+
+  # "Site 3" sorts last of the 25 (the other 22 are "Main Site..."), so it renders
+  # at position 25 — beyond the 20-school collapse.
+  def last_school
+    @last_school ||= @provider.sites.max_by(&:location_name)
+  end
+
+  def given_the_last_school_is_already_attached_to_the_course
+    course.site_statuses.create!(site: last_school, status: :new_status, publish: :unpublished)
+  end
+
+  # A collapsed school keeps its checked state in the DOM even though its row is
+  # hidden, so the attached school is not visible but is not dropped either.
+  def and_the_last_school_is_hidden_but_still_checked
+    expect(page).to have_no_css(".govuk-checkboxes__label", text: last_school.location_name)
+    expect(page.find(:checkbox, last_school.location_name, visible: :all)).to be_checked
+  end
+
+  # Only the one already-attached school is submitted, so the flash is singular.
+  def then_the_school_update_succeeds
+    expect(page).to have_content("School updated")
+  end
+
+  def and_the_last_school_is_still_attached
+    expect(course.reload.sites).to include(last_school)
   end
 
   def given_a_course_exists(sites: [])

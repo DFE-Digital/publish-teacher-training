@@ -21,7 +21,15 @@ class CourseWizard
       end
 
       def sites
-        provider_sites.sort_by(&:location_name)
+        @sites ||= provider_sites.sort_by(&:location_name)
+      end
+
+      def schools_collapse_threshold
+        SchoolsList::COLLAPSE_AFTER
+      end
+
+      def collapse_schools?
+        sites.size > schools_collapse_threshold
       end
 
       def salaried?

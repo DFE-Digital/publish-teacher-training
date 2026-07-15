@@ -55,6 +55,22 @@ RSpec.describe CourseWizard::Steps::Schools do
     end
   end
 
+  describe "#collapse_schools?" do
+    subject(:wizard_step) { wizard.current_step }
+
+    it "is false when the provider has 20 schools or fewer" do
+      expect(wizard_step.collapse_schools?).to be(false)
+    end
+
+    context "when the provider has more than 20 schools" do
+      before { create_list(:site, 19, provider:) }
+
+      it "is true" do
+        expect(wizard_step.collapse_schools?).to be(true)
+      end
+    end
+  end
+
   describe ".permitted_params" do
     it "returns the correct permitted params" do
       expect(described_class.permitted_params).to eq([{ site_ids: [] }])

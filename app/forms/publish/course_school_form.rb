@@ -12,6 +12,19 @@ module Publish
       { site_ids: course.site_ids }.merge(new_attributes)
     end
 
+    # Every school the provider could attach, in the order they are listed.
+    def sites
+      @sites ||= course.provider.sites.sort_by(&:location_name)
+    end
+
+    def schools_collapse_threshold
+      SchoolsList::COLLAPSE_AFTER
+    end
+
+    def collapse_schools?
+      sites.size > schools_collapse_threshold
+    end
+
   private
 
     def no_schools_selected
