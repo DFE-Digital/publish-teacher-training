@@ -82,10 +82,14 @@ RSpec.describe "Add course wizard schools step", type: :system do
       and_the_last_school_is_stored_in_the_wizard_state
     end
 
-    scenario "a school already selected beyond the first 20 is never hidden by the collapse" do
+    scenario "a school already selected beyond the first 20 is collapsed but stays selected" do
       given_the_last_school_is_already_selected_in_the_wizard_state
       when_i_visit_the_wizard_schools_page
-      then_the_last_school_is_visible_and_checked
+      then_only_the_first_20_schools_are_shown
+      and_the_last_school_is_hidden_but_still_checked
+      and_i_click_continue
+      then_i_am_taken_to_the_study_sites_page
+      and_the_last_school_is_stored_in_the_wizard_state
     end
   end
 
@@ -281,16 +285,10 @@ private
     wizard_state_store.write(site_ids: [last_school.id.to_s])
   end
 
-  # Regression: the collapse must never hide a checked school, or the user sees an
-  # apparently empty selection while the hidden school is still submitted.
-  def then_the_last_school_is_visible_and_checked
-    # The list is still collapsed...
-    expect(page).to have_button("Show all schools")
-
-    # ...but the selected school is shown anyway: only the 4 unchecked overflow
-    # rows are hidden, leaving the first 20 plus the checked 25th.
-    expect(visible_school_checkbox_count).to eq(21)
-    expect(page).to have_css(".govuk-checkboxes__label", text: last_school.location_name)
+  # A collapsed school keeps its checked state in the DOM even though its row is
+  # hidden, so the selection is not visible but is not dropped either.
+  def and_the_last_school_is_hidden_but_still_checked
+    expect(page).to have_no_css(".govuk-checkboxes__label", text: last_school.location_name)
     expect(page.find(:checkbox, last_school.location_name, visible: :all)).to be_checked
   end
 

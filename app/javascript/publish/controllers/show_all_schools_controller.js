@@ -10,40 +10,28 @@ export default class extends Controller {
   static values = { visible: { type: Number, default: 20 } }
 
   connect () {
-    if (this.schoolTargets.length <= this.visibleValue) return
+    if (this.overflow().length === 0) return
 
-    const hideable = this.hideable()
-    if (hideable.length === 0) return
-
-    hideable.forEach(checkbox => this.hideRow(checkbox))
+    this.overflow().forEach(checkbox => this.hideRow(checkbox))
 
     if (this.hasShowAllTarget) this.showAllTarget.hidden = false
   }
 
   showAll () {
-    const revealed = this.overflow().filter(checkbox => this.isHidden(checkbox))
-
-    revealed.forEach(checkbox => this.showRow(checkbox))
+    this.overflow().forEach(checkbox => this.showRow(checkbox))
 
     if (this.hasShowAllTarget) this.showAllTarget.hidden = true
 
     // The button we just hid held focus, which would otherwise fall back to the
     // document root. Move focus to the first school we revealed instead.
-    if (revealed.length > 0) revealed[0].focus()
+    const firstRevealed = this.overflow()[0]
+    if (firstRevealed) firstRevealed.focus()
   }
 
+  // The rows past the visible threshold. Hidden rows stay in the DOM and keep
+  // their checked state, so a selected-but-hidden school is still submitted.
   overflow () {
     return this.schoolTargets.slice(this.visibleValue)
-  }
-
-  // A selected school is never hidden: it would render checked but invisible, so
-  // the user could not see or undo a selection that still gets submitted.
-  hideable () {
-    return this.overflow().filter(checkbox => !checkbox.checked)
-  }
-
-  isHidden (checkbox) {
-    return this.row(checkbox).hidden
   }
 
   hideRow (checkbox) {
