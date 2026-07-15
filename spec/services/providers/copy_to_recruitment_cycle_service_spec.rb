@@ -36,10 +36,14 @@ describe Providers::CopyToRecruitmentCycleService do
     end
     let(:mocked_copy_course_service) { double(execute: nil) }
     let(:mocked_copy_site_service) { double }
+    let(:copy_schools_to_provider_service) do
+      Rollover::Schools::LegacyProviderCopier.new(site_copier: mocked_copy_site_service)
+    end
     let(:mocked_copy_partnership_service) { double(execute: 1) }
     let(:service) do
       described_class.new(
         copy_course_to_provider_service: mocked_copy_course_service,
+        copy_schools_to_provider_service:,
         copy_site_to_provider_service: mocked_copy_site_service,
         copy_partnership_to_provider_service: mocked_copy_partnership_service,
         force: force,
@@ -171,6 +175,18 @@ describe Providers::CopyToRecruitmentCycleService do
       service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       expect(mocked_copy_site_service).to have_received(:execute).with(site: site, new_provider: new_provider)
+    end
+
+    context "with the new school relationship copier" do
+      let(:copy_schools_to_provider_service) { Rollover::Schools::NewProviderCopier.new }
+      let!(:provider_school) { create(:provider_school, provider:, site_code: "S") }
+
+      it "copies provider-school relationships instead of legacy school sites" do
+        service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+        expect(new_provider.schools.find_by(gias_school_id: provider_school.gias_school_id, site_code: "S")).to be_present
+        expect(mocked_copy_site_service).not_to have_received(:execute).with(site:, new_provider:)
+      end
     end
 
     it "copies over the courses" do

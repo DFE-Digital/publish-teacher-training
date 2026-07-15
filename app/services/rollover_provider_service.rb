@@ -53,7 +53,8 @@ private
   def copy_provider_to_recruitment_cycle
     @copy_provider_to_recruitment_cycle ||= Providers::CopyToRecruitmentCycleService.new(
       copy_course_to_provider_service: copy_courses_to_provider_service,
-      copy_site_to_provider_service: Sites::CopyToProviderService.new,
+      copy_schools_to_provider_service: schools_copy_to_provider_service,
+      copy_site_to_provider_service: site_copy_to_provider_service,
       copy_partnership_to_provider_service: Partnerships::CopyToProviderService.new,
       force:,
     )
@@ -61,9 +62,36 @@ private
 
   def copy_courses_to_provider_service
     @copy_courses_to_provider_service ||= Courses::CopyToProviderService.new(
+      schools_copy_to_course: schools_copy_to_course,
       sites_copy_to_course: Sites::CopyToCourseService,
       enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
       force:,
     )
+  end
+
+  def schools_copy_to_provider_service
+    @schools_copy_to_provider_service ||= if use_new_school_model?
+                                            Rollover::Schools::NewProviderCopier.new
+                                          else
+                                            Rollover::Schools::LegacyProviderCopier.new(site_copier: site_copy_to_provider_service)
+                                          end
+  end
+
+  def schools_copy_to_course
+    @schools_copy_to_course ||= if use_new_school_model?
+                                  Rollover::Schools::NewCourseCopier.new
+                                else
+                                  Rollover::Schools::LegacyCourseCopier.new(site_copier: Sites::CopyToCourseService)
+                                end
+  end
+
+  def site_copy_to_provider_service
+    @site_copy_to_provider_service ||= Sites::CopyToProviderService.new
+  end
+
+  def use_new_school_model?
+    return @use_new_school_model if defined?(@use_new_school_model)
+
+    @use_new_school_model = FeatureFlag.active?(:rollover_uses_new_school_model)
   end
 end

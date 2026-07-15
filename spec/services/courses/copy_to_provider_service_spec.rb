@@ -26,8 +26,12 @@ RSpec.describe Courses::CopyToProviderService do
 
   let(:mocked_sites_copy_to_course_service) { double(call: nil) }
   let(:mocked_enrichments_copy_to_course_service) { double(execute: nil) }
+  let(:schools_copy_to_course_service) do
+    Rollover::Schools::LegacyCourseCopier.new(site_copier: mocked_sites_copy_to_course_service)
+  end
   let(:service) do
     described_class.new(
+      schools_copy_to_course: schools_copy_to_course_service,
       sites_copy_to_course: mocked_sites_copy_to_course_service,
       enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
       force:,
@@ -278,6 +282,7 @@ RSpec.describe Courses::CopyToProviderService do
 
     before do
       described_class.new(
+        schools_copy_to_course: schools_copy_to_course_service,
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
         force:,
@@ -296,6 +301,38 @@ RSpec.describe Courses::CopyToProviderService do
     end
   end
 
+  context "the original course has new school relationships" do
+    let(:schools_copy_to_course_service) { Rollover::Schools::NewCourseCopier.new }
+    let!(:provider_school) { create(:provider_school, provider:, site_code: "S") }
+    let!(:course_school) do
+      create(
+        :course_school,
+        course:,
+        provider_school:,
+        gias_school: provider_school.gias_school,
+        site_code: provider_school.site_code,
+      )
+    end
+    let!(:new_provider_school) do
+      create(
+        :provider_school,
+        provider: new_provider,
+        gias_school: provider_school.gias_school,
+        site_code: provider_school.site_code,
+      )
+    end
+
+    it "links the copied course to the copied provider-school relationship" do
+      service.execute(course:, new_provider:)
+
+      expect(new_course.schools.first).to have_attributes(
+        provider_school_id: new_provider_school.id,
+        gias_school_id: course_school.gias_school_id,
+        site_code: course_school.site_code,
+      )
+    end
+  end
+
   context "the original course has study sites" do
     let(:site) { create(:site, :study_site, provider:) }
     let!(:new_site) { create(:site, :study_site, provider: new_provider, code: site.code) }
@@ -303,6 +340,7 @@ RSpec.describe Courses::CopyToProviderService do
 
     before do
       described_class.new(
+        schools_copy_to_course: schools_copy_to_course_service,
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
         force:,
@@ -329,6 +367,7 @@ RSpec.describe Courses::CopyToProviderService do
       allow(course).to receive(:rollable?).and_return(false)
 
       described_class.new(
+        schools_copy_to_course: schools_copy_to_course_service,
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
         force:,

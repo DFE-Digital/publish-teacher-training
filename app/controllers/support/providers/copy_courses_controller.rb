@@ -15,9 +15,18 @@ module Support
         @copy_courses_form = CopyCoursesForm.new(@target_provider, recruitment_cycle.providers.find_by(provider_code: params[:course][:autocompleted_provider_code]))
 
         if @copy_courses_form.valid?
-          sites_copy_to_course = params[:schools] ? Sites::CopyToCourseService : ->(*) {}
+          schools_copy_to_course = if params[:schools]
+                                     Rollover::Schools::LegacyCourseCopier.new(site_copier: Sites::CopyToCourseService)
+                                   else
+                                     ->(**) {}
+                                   end
 
-          copier = ::Courses::CopyToProviderService.new(sites_copy_to_course:, enrichments_copy_to_course: Enrichments::CopyToCourseService.new, force: true)
+          copier = ::Courses::CopyToProviderService.new(
+            schools_copy_to_course:,
+            sites_copy_to_course: Sites::CopyToCourseService,
+            enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
+            force: true,
+          )
 
           Provider.transaction do
             @copy_courses_form.provider.courses.map do |course|

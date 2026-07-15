@@ -4,7 +4,8 @@ module Courses
   class CopyToProviderService
     attr_reader :courses_copied, :courses_not_copied
 
-    def initialize(sites_copy_to_course:, enrichments_copy_to_course:, force:)
+    def initialize(schools_copy_to_course:, sites_copy_to_course:, enrichments_copy_to_course:, force:)
+      @schools_copy_to_course = schools_copy_to_course
       @sites_copy_to_course = sites_copy_to_course
       @enrichments_copy_to_course = enrichments_copy_to_course
       @force = force
@@ -47,7 +48,7 @@ module Courses
 
   private
 
-    attr_reader :sites_copy_to_course, :enrichments_copy_to_course, :force
+    attr_reader :schools_copy_to_course, :sites_copy_to_course, :enrichments_copy_to_course, :force
 
     def course_code_already_exists_on_provider?(course:, new_provider:)
       new_provider.courses.with_discarded.where(course_code: course.course_code).any?
@@ -78,11 +79,7 @@ module Courses
     end
 
     def copy_schools(course:, new_provider:, new_course:)
-      course.sites.each do |site|
-        new_site = new_provider.sites.find_by(code: site.code)
-
-        @sites_copy_to_course.call(new_site:, new_course:) if new_site.present?
-      end
+      schools_copy_to_course.call(course:, new_provider:, new_course:)
     end
 
     def course_start_is_same_as_current_cycle_start?(course)

@@ -2,8 +2,9 @@
 
 module Providers
   class CopyToRecruitmentCycleService
-    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, copy_partnership_to_provider_service:, force:)
+    def initialize(copy_course_to_provider_service:, copy_schools_to_provider_service:, copy_site_to_provider_service:, copy_partnership_to_provider_service:, force:)
       @copy_course_to_provider_service = copy_course_to_provider_service
+      @copy_schools_to_provider_service = copy_schools_to_provider_service
       @copy_site_to_provider_service = copy_site_to_provider_service
       @copy_partnership_to_provider_service = copy_partnership_to_provider_service
       @force = force
@@ -16,7 +17,7 @@ module Providers
         ActiveRecord::Base.transaction do
           rolled_over_provider = find_or_create_provider_in_cycle(provider, new_recruitment_cycle, result)
 
-          copy_sites(provider, rolled_over_provider, result)
+          copy_schools(provider, rolled_over_provider, result)
           copy_study_sites(provider, rolled_over_provider, result)
           copy_courses(provider, rolled_over_provider, course_codes, result)
           result[:partnerships] = copy_partnerships(provider, rolled_over_provider, new_recruitment_cycle)
@@ -28,7 +29,11 @@ module Providers
 
   private
 
-    attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service, :copy_partnership_to_provider_service, :force
+    attr_reader :copy_course_to_provider_service,
+                :copy_schools_to_provider_service,
+                :copy_site_to_provider_service,
+                :copy_partnership_to_provider_service,
+                :force
 
     def init_result_hash
       {
@@ -69,11 +74,10 @@ module Providers
       rolled
     end
 
-    def copy_sites(provider, new_provider, result)
-      provider.sites.each do |site|
-        site_result = copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
-        save_site_result(site_result: site_result, result: result, count_key: :sites, skip_key: :sites_skipped, site_code: site.code)
-      end
+    def copy_schools(provider, new_provider, result)
+      school_result = copy_schools_to_provider_service.execute(provider:, new_provider:)
+      result[:sites] += school_result[:copied]
+      result[:sites_skipped].concat(school_result[:skipped])
     end
 
     def copy_study_sites(provider, new_provider, result)
