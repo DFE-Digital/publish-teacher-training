@@ -61,11 +61,21 @@ describe Course::School do
       end
     end
 
-    it "bumps the course and only its provider.changed_at on destroy" do
+    it "bumps course.changed_at on destroy" do
+      course_school = create(:course_school, course:)
+      course.update_columns(changed_at: 1.hour.ago)
+
+      Timecop.freeze do
+        course_school.destroy!
+
+        expect(course.reload.changed_at).to be_within(1.second).of(Time.zone.now)
+      end
+    end
+
+    it "bumps only the course's provider.changed_at on destroy" do
       course_school = create(:course_school, course:)
       provider = course.provider
       other_provider = create(:provider)
-      course.update_columns(changed_at: 1.hour.ago)
       provider.update_columns(changed_at: 1.hour.ago)
       other_provider.update_columns(changed_at: 2.hours.ago)
       other_provider_changed_at = other_provider.reload.changed_at
@@ -73,7 +83,6 @@ describe Course::School do
       Timecop.freeze do
         course_school.destroy!
 
-        expect(course.reload.changed_at).to be_within(1.second).of(Time.zone.now)
         expect(provider.reload.changed_at).to be_within(1.second).of(Time.zone.now)
         expect(other_provider.reload.changed_at).to be_within(1.second).of(other_provider_changed_at)
       end
