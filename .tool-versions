@@ -1,4 +1,4 @@
-ruby            3.4.8
+ruby            3.4.10
 kubectl         1.32.2
 yarn            1.22.22
 nodejs          24.13.0
