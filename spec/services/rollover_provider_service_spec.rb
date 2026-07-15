@@ -7,9 +7,19 @@ describe RolloverProviderService do
 
   let(:copy_course_to_provider_service) { instance_double(Courses::CopyToProviderService) }
   let(:copy_provider_to_recruitment_cycle_service) { instance_double(Providers::CopyToRecruitmentCycleService) }
+  let(:use_new_school_model) { false }
+  let(:provider_school_copier_class) do
+    use_new_school_model ? Rollover::Schools::NewProviderCopier : Rollover::Schools::LegacyProviderCopier
+  end
+  let(:course_school_copier_class) do
+    use_new_school_model ? Rollover::Schools::NewCourseCopier : Rollover::Schools::LegacyCourseCopier
+  end
 
   before do
+    allow(FeatureFlag).to receive(:active?).with(:rollover_uses_new_school_model).and_return(use_new_school_model)
+
     allow(Courses::CopyToProviderService).to receive(:new).with(
+      schools_copy_to_course: instance_of(course_school_copier_class),
       sites_copy_to_course: Sites::CopyToCourseService,
       enrichments_copy_to_course: instance_of(Enrichments::CopyToCourseService),
       force:,
@@ -17,6 +27,7 @@ describe RolloverProviderService do
 
     allow(Providers::CopyToRecruitmentCycleService).to receive(:new).with(
       copy_course_to_provider_service:,
+      copy_schools_to_provider_service: instance_of(provider_school_copier_class),
       copy_site_to_provider_service: instance_of(Sites::CopyToProviderService),
       copy_partnership_to_provider_service: instance_of(Partnerships::CopyToProviderService),
       force:,
@@ -46,6 +57,28 @@ describe RolloverProviderService do
       )
 
       described_class.call(provider_code: provider.provider_code, course_codes:, force:)
+    end
+
+    context "when new school model rollover is enabled" do
+      let(:use_new_school_model) { true }
+
+      it "configures rollover with the new school relationship copiers" do
+        described_class.call(provider_code: provider.provider_code, course_codes:, force:)
+
+        expect(Courses::CopyToProviderService).to have_received(:new).with(
+          schools_copy_to_course: instance_of(Rollover::Schools::NewCourseCopier),
+          sites_copy_to_course: Sites::CopyToCourseService,
+          enrichments_copy_to_course: instance_of(Enrichments::CopyToCourseService),
+          force:,
+        )
+        expect(Providers::CopyToRecruitmentCycleService).to have_received(:new).with(
+          copy_course_to_provider_service:,
+          copy_schools_to_provider_service: instance_of(Rollover::Schools::NewProviderCopier),
+          copy_site_to_provider_service: instance_of(Sites::CopyToProviderService),
+          copy_partnership_to_provider_service: instance_of(Partnerships::CopyToProviderService),
+          force:,
+        )
+      end
     end
 
     context "when a new_recruitment_cycle_id is provided" do
