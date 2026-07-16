@@ -35,10 +35,15 @@ module SavedCourses
 
       @applied_scopes[:location] = { latitude:, longitude:, radius: radius_in_miles }
 
-      sites_location_scope(latitude:, longitude:)
+      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
+        schools_location_scope(latitude:, longitude:)
+      else
+        sites_location_scope(latitude:, longitude:)
+      end
     end
 
-    # Distance annotation over the course_site -> site model. Saved courses are
+    # Distance annotation over the legacy course_site -> site model, used while
+    # the :course_publishing_uses_new_school_model flag is off. Saved courses are
     # annotated with distance but not filtered by radius.
     def sites_location_scope(latitude:, longitude:)
       @scope
@@ -58,6 +63,35 @@ module SavedCourses
                 saved_course.*,
                 MIN(ST_DistanceSphere(
                   ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
+                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
+                ) / 1609.344) AS minimum_distance_to_search_location
+              SQL
+              longitude,
+              latitude,
+            ],
+          ),
+        )
+        .group("saved_course.id, provider.provider_name")
+    end
+
+    # Distance annotation over the canonical course_school -> gias_school model,
+    # used while the :course_publishing_uses_new_school_model flag is on. As with
+    # the legacy path, saved courses are annotated with distance but not filtered
+    # by radius.
+    def schools_location_scope(latitude:, longitude:)
+      @scope
+        .joins(<<~SQL)
+          INNER JOIN course_school ON course_school.course_id = course.id
+          INNER JOIN gias_school   ON gias_school.id = course_school.gias_school_id
+        SQL
+        .where("gias_school.latitude IS NOT NULL AND gias_school.longitude IS NOT NULL")
+        .select(
+          Course.sanitize_sql_array(
+            [
+              <<~SQL.squish,
+                saved_course.*,
+                MIN(ST_DistanceSphere(
+                  ST_SetSRID(ST_MakePoint(gias_school.longitude::float, gias_school.latitude::float), 4326),
                   ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
                 ) / 1609.344) AS minimum_distance_to_search_location
               SQL
