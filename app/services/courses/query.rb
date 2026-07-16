@@ -296,10 +296,16 @@ module Courses
         radius: radius_in_miles,
       }
 
-      @scope = sites_location_scope(latitude:, longitude:, radius_in_meters:)
+      @scope =
+        if FeatureFlag.active?(:course_publishing_uses_new_school_model)
+          schools_location_scope(latitude:, longitude:, radius_in_meters:)
+        else
+          sites_location_scope(latitude:, longitude:, radius_in_meters:)
+        end
     end
 
-    # Location filter over the course_site -> site model.
+    # Location filter over the legacy course_site -> site model, used while the
+    # :course_publishing_uses_new_school_model flag is off.
     def sites_location_scope(latitude:, longitude:, radius_in_meters:)
       @scope
         .joins(<<~SQL)
@@ -327,6 +333,44 @@ module Courses
                 provider.provider_name,
                 MIN(ST_DistanceSphere(
                   ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
+                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
+                ) / 1609.344) AS minimum_distance_to_search_location
+              SQL
+              longitude,
+              latitude,
+            ],
+          ),
+        )
+        .group(:id, "provider.provider_name")
+    end
+
+    # Location filter over the canonical course_school -> gias_school model, used
+    # while the :course_publishing_uses_new_school_model flag is on. Distance is
+    # measured from each school's coordinate once and exposed in miles, matching
+    # the legacy path's minimum_distance_to_search_location contract.
+    def schools_location_scope(latitude:, longitude:, radius_in_meters:)
+      @scope
+        .joins(<<~SQL)
+          INNER JOIN course_school ON course_school.course_id = course.id
+          INNER JOIN gias_school   ON gias_school.id = course_school.gias_school_id
+        SQL
+        .where("gias_school.latitude IS NOT NULL AND gias_school.longitude IS NOT NULL")
+        .where(
+          <<~SQL.squish, longitude, latitude, radius_in_meters
+            ST_DistanceSphere(
+              ST_SetSRID(ST_MakePoint(gias_school.longitude::float, gias_school.latitude::float), 4326),
+              ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
+            ) <= ?
+          SQL
+        )
+        .select(
+          Course.sanitize_sql_array(
+            [
+              <<~SQL.squish,
+                course.*,
+                provider.provider_name,
+                MIN(ST_DistanceSphere(
+                  ST_SetSRID(ST_MakePoint(gias_school.longitude::float, gias_school.latitude::float), 4326),
                   ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
                 ) / 1609.344) AS minimum_distance_to_search_location
               SQL
