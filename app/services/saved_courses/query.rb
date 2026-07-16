@@ -35,6 +35,12 @@ module SavedCourses
 
       @applied_scopes[:location] = { latitude:, longitude:, radius: radius_in_miles }
 
+      sites_location_scope(latitude:, longitude:)
+    end
+
+    # Distance annotation over the course_site -> site model. Saved courses are
+    # annotated with distance but not filtered by radius.
+    def sites_location_scope(latitude:, longitude:)
       @scope
         .joins(<<~SQL)
           INNER JOIN course_site ON (
