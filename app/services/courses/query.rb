@@ -296,7 +296,12 @@ module Courses
         radius: radius_in_miles,
       }
 
-      @scope = @scope
+      @scope = sites_location_scope(latitude:, longitude:, radius_in_meters:)
+    end
+
+    # Location filter over the course_site -> site model.
+    def sites_location_scope(latitude:, longitude:, radius_in_meters:)
+      @scope
         .joins(<<~SQL)
           INNER JOIN course_site site_statuses ON (
             site_statuses.course_id = course.id
