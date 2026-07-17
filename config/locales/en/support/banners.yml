@@ -1,0 +1,19 @@
+en:
+  support:
+    banners:
+      index:
+        page_title: "Banners"
+        add_banner: "Add banner"
+        statuses:
+          draft: "Draft"
+          active: "Active"
+          scheduled: "Scheduled"
+          expired: "Expired"
+          unknown: "Unknown"
+        missing_published_at: "Not published"
+        missing_expired_at: "No expiry"
+        displayed_on:
+          find: "Find"
+          publish: "Publish"
+          support: "Support"
+          none: "Not displayed"
