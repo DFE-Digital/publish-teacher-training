@@ -348,39 +348,37 @@ module Courses
     end
 
     # Location filter over the canonical course_school -> gias_school model, used
-    # while the :course_publishing_uses_new_school_model flag is on. Distance is
-    # measured from each school's coordinate once and exposed in miles, matching
-    # the legacy path's minimum_distance_to_search_location contract.
+    # while the :course_publishing_uses_new_school_model flag is on.
+    #
+    # A derived table finds the nearby schools via the partial GiST index
+    # (ST_DWithin prunes far-away schools) and reduces them to one row per course
+    # with its nearest-school distance BEFORE the join to `course`. Postgres does
+    # not flatten a GROUP BY subquery, so the course-side filters (published, etc.)
+    # run once per distinct course rather than once per (school x course) edge.
+    #
+    # ST_Distance/ST_DWithin take the trailing `false` to force sphere maths, so
+    # results match the legacy ST_DistanceSphere path. Distance is returned in
+    # miles, preserving the minimum_distance_to_search_location contract.
     def schools_location_scope(latitude:, longitude:, radius_in_meters:)
+      point = Course.sanitize_sql_array(
+        ["ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)::geography", longitude, latitude],
+      )
+
+      nearby_courses = Course.sanitize_sql_array([<<~SQL, radius_in_meters])
+        INNER JOIN (
+          SELECT course_school.course_id,
+                 MIN(ST_Distance(gias_school.geo_location, #{point}, false)) AS distance_m
+          FROM gias_school
+          INNER JOIN course_school ON course_school.gias_school_id = gias_school.id
+          WHERE gias_school.geo_location IS NOT NULL
+            AND ST_DWithin(gias_school.geo_location, #{point}, ?, false)
+          GROUP BY course_school.course_id
+        ) nearby_courses ON nearby_courses.course_id = course.id
+      SQL
+
       @scope
-        .joins(schools: :gias_school)
-        .where.not(gias_school: { latitude: nil })
-        .where.not(gias_school: { longitude: nil })
-        .where(
-          <<~SQL.squish, longitude, latitude, radius_in_meters
-            ST_DistanceSphere(
-              ST_SetSRID(ST_MakePoint(gias_school.longitude::float, gias_school.latitude::float), 4326),
-              ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-            ) <= ?
-          SQL
-        )
-        .select(
-          Course.sanitize_sql_array(
-            [
-              <<~SQL.squish,
-                course.*,
-                provider.provider_name,
-                MIN(ST_DistanceSphere(
-                  ST_SetSRID(ST_MakePoint(gias_school.longitude::float, gias_school.latitude::float), 4326),
-                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-                ) / 1609.344) AS minimum_distance_to_search_location
-              SQL
-              longitude,
-              latitude,
-            ],
-          ),
-        )
-        .group(:id, "provider.provider_name")
+        .joins(nearby_courses)
+        .select("course.*, provider.provider_name, (nearby_courses.distance_m / 1609.344) AS minimum_distance_to_search_location")
     end
 
     def default_ordering_scope
