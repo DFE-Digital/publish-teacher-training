@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_14_120500) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_17_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -263,6 +263,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_120500) do
     t.bigint "provider_school_id", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id", "provider_school_id"], name: "index_course_school_on_course_id_and_provider_school_id", unique: true
+    t.index ["gias_school_id"], name: "index_course_school_fanout", include: ["course_id"]
     t.index ["gias_school_id"], name: "index_course_school_on_gias_school_id"
     t.index ["provider_school_id"], name: "index_course_school_on_provider_school_id"
   end
@@ -355,6 +356,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_120500) do
     t.text "address3"
     t.text "county"
     t.datetime "created_at", null: false
+    t.virtual "geo_location", type: :geography, limit: {srid: 4326, type: "st_point", geographic: true}, as: "(st_setsrid(st_makepoint(longitude, latitude), 4326))::geography", stored: true
     t.text "group_code"
     t.float "latitude"
     t.float "longitude"
@@ -373,6 +375,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_120500) do
     t.datetime "updated_at", null: false
     t.text "urn", null: false
     t.text "website"
+    t.index ["geo_location"], name: "index_gias_school_on_geo_location", where: "(geo_location IS NOT NULL)", using: :gist
     t.index ["region_code"], name: "index_gias_school_on_region_code"
     t.index ["searchable"], name: "index_gias_school_on_searchable", using: :gin
     t.index ["status_code"], name: "index_gias_school_on_status_code", where: "(status_code = '1'::text)"
