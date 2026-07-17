@@ -27,7 +27,11 @@ RSpec.describe Rollover::Schools::NewCourseCopier do
   it "copies relationships to the copied course and matching copied provider schools" do
     copy_schools
 
-    expect(new_course.schools.pluck(:provider_school_id, :gias_school_id, :site_code)).to contain_exactly(
+    copied_relationships = new_course.schools.map do |school|
+      [school.provider_school_id, school.gias_school_id, school.site_code]
+    end
+
+    expect(copied_relationships).to contain_exactly(
       [new_provider_school.id, course_school.gias_school_id, course_school.site_code],
       [new_main_site.id, course_main_site.gias_school_id, course_main_site.site_code],
     )
