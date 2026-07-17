@@ -98,6 +98,7 @@
   - org_id
   :gias_school:
   - searchable
+  - geo_location
   :course_enrichment:
   - about_course
   - course_length
