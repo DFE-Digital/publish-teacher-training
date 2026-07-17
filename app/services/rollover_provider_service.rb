@@ -70,28 +70,20 @@ private
   end
 
   def schools_copy_to_provider_service
-    @schools_copy_to_provider_service ||= if use_new_school_model?
-                                            Rollover::Schools::NewProviderCopier.new
-                                          else
-                                            Rollover::Schools::LegacyProviderCopier.new(site_copier: site_copy_to_provider_service)
-                                          end
+    @schools_copy_to_provider_service ||= Rollover::Schools::DualProviderCopier.new(
+      legacy_copier: Rollover::Schools::LegacyProviderCopier.new(site_copier: site_copy_to_provider_service),
+      new_copier: Rollover::Schools::NewProviderCopier.new,
+    )
   end
 
   def schools_copy_to_course
-    @schools_copy_to_course ||= if use_new_school_model?
-                                  Rollover::Schools::NewCourseCopier.new
-                                else
-                                  Rollover::Schools::LegacyCourseCopier.new(site_copier: Sites::CopyToCourseService)
-                                end
+    @schools_copy_to_course ||= Rollover::Schools::DualCourseCopier.new(
+      legacy_copier: Rollover::Schools::LegacyCourseCopier.new(site_copier: Sites::CopyToCourseService),
+      new_copier: Rollover::Schools::NewCourseCopier.new,
+    )
   end
 
   def site_copy_to_provider_service
     @site_copy_to_provider_service ||= Sites::CopyToProviderService.new
-  end
-
-  def use_new_school_model?
-    return @use_new_school_model if defined?(@use_new_school_model)
-
-    @use_new_school_model = FeatureFlag.active?(:rollover_uses_new_school_model)
   end
 end
