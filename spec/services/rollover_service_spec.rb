@@ -9,10 +9,8 @@ describe RolloverService do
   let(:copy_provider_to_recruitment_cycle_service) { instance_double(Providers::CopyToRecruitmentCycleService) }
 
   before do
-    allow(FeatureFlag).to receive(:active?).with(:rollover_uses_new_school_model).and_return(false)
-
     allow(Courses::CopyToProviderService).to receive(:new).with(
-      schools_copy_to_course: instance_of(Rollover::Schools::LegacyCourseCopier),
+      schools_copy_to_course: instance_of(Rollover::Schools::DualCourseCopier),
       sites_copy_to_course: Sites::CopyToCourseService,
       enrichments_copy_to_course: instance_of(Enrichments::CopyToCourseService),
       force:,
@@ -20,7 +18,7 @@ describe RolloverService do
 
     allow(Providers::CopyToRecruitmentCycleService).to receive(:new).with(
       copy_course_to_provider_service:,
-      copy_schools_to_provider_service: instance_of(Rollover::Schools::LegacyProviderCopier),
+      copy_schools_to_provider_service: instance_of(Rollover::Schools::DualProviderCopier),
       copy_site_to_provider_service: instance_of(Sites::CopyToProviderService),
       copy_partnership_to_provider_service: instance_of(Partnerships::CopyToProviderService),
       force:,
