@@ -302,7 +302,7 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context "the original course has new school relationships" do
-    let(:schools_copy_to_course_service) { Rollover::Schools::NewCourseCopier.new }
+    let(:schools_copy_to_course_service) { Rollover::Schools::CourseCopier.new }
     let!(:provider_school) { create(:provider_school, provider:, site_code: "S") }
     let!(:course_school) do
       create(
@@ -319,6 +319,7 @@ RSpec.describe Courses::CopyToProviderService do
         provider: new_provider,
         gias_school: provider_school.gias_school,
         site_code: provider_school.site_code,
+        uuid: provider_school.uuid,
       )
     end
 
