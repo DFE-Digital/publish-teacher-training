@@ -178,7 +178,7 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     context "with the new school relationship copier" do
-      let(:copy_schools_to_provider_service) { Rollover::Schools::NewProviderCopier.new }
+      let(:copy_schools_to_provider_service) { Rollover::Schools::ProviderCopier.new }
       let!(:provider_school) { create(:provider_school, provider:, site_code: "S") }
 
       it "copies provider-school relationships instead of legacy school sites" do

@@ -6,7 +6,7 @@ RSpec.describe Rollover::Schools::DualProviderCopier do
   subject(:copier) { described_class.new(legacy_copier:, new_copier:) }
 
   let(:legacy_copier) { instance_double(Rollover::Schools::LegacyProviderCopier) }
-  let(:new_copier) { instance_double(Rollover::Schools::NewProviderCopier) }
+  let(:new_copier) { instance_double(Rollover::Schools::ProviderCopier) }
   let(:provider) { build_stubbed(:provider) }
   let(:new_provider) { build_stubbed(:provider) }
   let(:legacy_result) { { copied: 2, skipped: [] } }
