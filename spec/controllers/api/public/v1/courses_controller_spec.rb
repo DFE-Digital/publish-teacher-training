@@ -19,6 +19,62 @@ RSpec.describe API::Public::V1::CoursesController do
       end
     end
 
+    context "when the new school model feature flag is active" do
+      let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)) }
+
+      before do
+        FeatureFlag.activate(:course_publishing_uses_new_school_model)
+      end
+
+      context "and the recruitment cycle is after the remodel cutover year" do
+        it "searches using the schools course search service" do
+          allow(APICourseSearchServiceSchools).to receive(:call).and_return(Course.all)
+
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year,
+          }
+
+          expect(APICourseSearchServiceSchools).to have_received(:call)
+        end
+
+        it "returns the courses" do
+          provider.courses << build_list(:course, 2, provider:)
+
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year,
+          }
+
+          expect(json_response["data"].size).to be(2)
+        end
+      end
+
+      context "and the recruitment cycle is not after the remodel cutover year" do
+        let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)) }
+
+        it "searches using the sites course search service" do
+          allow(APICourseSearchService).to receive(:call).and_return(Course.all)
+
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year,
+          }
+
+          expect(APICourseSearchService).to have_received(:call)
+        end
+      end
+    end
+
+    context "when the new school model feature flag is inactive" do
+      it "searches using the sites course search service" do
+        allow(APICourseSearchService).to receive(:call).and_return(Course.all)
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year,
+        }
+
+        expect(APICourseSearchService).to have_received(:call)
+      end
+    end
+
     context "when course summary" do
       it "returns summary content" do
         pgce_with_qts = create(:course, :resulting_in_pgce_with_qts)
