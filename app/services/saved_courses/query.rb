@@ -42,7 +42,10 @@ module SavedCourses
             AND course_site.status = 'R'
             AND course_site.publish = 'Y'
           )
-          INNER JOIN site ON site.id = course_site.site_id
+          INNER JOIN site ON (
+            site.id = course_site.site_id
+            AND site.discarded_at IS NULL
+          )
         SQL
         .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
         .select(

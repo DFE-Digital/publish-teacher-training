@@ -303,7 +303,10 @@ module Courses
             AND site_statuses.status = 'R'
             AND site_statuses.publish = 'Y'
           )
-          INNER JOIN site ON site.id = site_statuses.site_id
+          INNER JOIN site ON (
+            site.id = site_statuses.site_id
+            AND site.discarded_at IS NULL
+          )
         SQL
         .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
         .where(
