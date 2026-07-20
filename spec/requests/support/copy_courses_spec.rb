@@ -41,6 +41,31 @@ RSpec.describe "Support::CopyCourses" do
         follow_redirect!
         expect(response.parsed_body.css(".govuk-notification-banner--success").text).to match(sprintf("Courses copied: %s", source_provider.courses.map(&:course_code).sort.to_sentence))
       end
+
+      it "copies course-school relationships when the source course uses the new model" do
+        source_course = source_provider.courses.first
+        provider_school = create(:provider_school, provider: source_provider, site_code: "S")
+        create(
+          :course_school,
+          course: source_course,
+          provider_school:,
+          gias_school: provider_school.gias_school,
+          site_code: provider_school.site_code,
+        )
+
+        login_user(user)
+        post "/support/#{year}/providers/#{target_provider.id}/copy_courses",
+             params: { "course[autocompleted_provider_code]" => source_provider.provider_code, schools: "1" }
+
+        copied_course = target_provider.reload.courses.find_by!(course_code: source_course.course_code)
+        expect(copied_course.schools.first).to have_attributes(
+          provider_school_id: target_provider.schools.find_by!(
+            gias_school_id: provider_school.gias_school_id,
+            site_code: provider_school.site_code,
+          ).id,
+          gias_school_id: provider_school.gias_school_id,
+        )
+      end
     end
 
     context "course code already exists on target provider" do
