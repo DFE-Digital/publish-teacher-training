@@ -5,10 +5,10 @@ module Rollover
     class ProviderCopier
       def execute(provider:, new_provider:)
         provider.schools.each do |provider_school|
-          new_provider.schools.find_or_create_by!(uuid: provider_school.uuid) do |new_provider_school|
-            new_provider_school.gias_school_id = provider_school.gias_school_id
-            new_provider_school.site_code = provider_school.site_code
-          end
+          new_provider.schools.find_or_create_by!(
+            gias_school_id: provider_school.gias_school_id,
+            site_code: provider_school.site_code,
+          )
         end
 
         { copied: provider.schools.size, skipped: [] }
