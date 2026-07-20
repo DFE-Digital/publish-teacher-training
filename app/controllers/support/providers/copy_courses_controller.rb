@@ -15,14 +15,10 @@ module Support
         @copy_courses_form = CopyCoursesForm.new(@target_provider, recruitment_cycle.providers.find_by(provider_code: params[:course][:autocompleted_provider_code]))
 
         if @copy_courses_form.valid?
-          schools_copy_to_course = if params[:schools]
-                                     Rollover::Schools::LegacyCourseCopier.new(site_copier: Sites::CopyToCourseService)
-                                   else
-                                     ->(**) {}
-                                   end
+          copy_provider_schools_to_target if copy_schools?
 
           copier = ::Courses::CopyToProviderService.new(
-            schools_copy_to_course:,
+            schools_copy_to_course: schools_copy_to_course_service,
             sites_copy_to_course: Sites::CopyToCourseService,
             enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
             force: true,
@@ -43,6 +39,28 @@ module Support
         else
           render :new
         end
+      end
+
+    private
+
+      def copy_schools?
+        params[:schools].present?
+      end
+
+      def copy_provider_schools_to_target
+        Rollover::Schools::ProviderCopier.new.execute(
+          provider: @copy_courses_form.provider,
+          new_provider: @copy_courses_form.target_provider,
+        )
+      end
+
+      def schools_copy_to_course_service
+        return ->(**) {} unless copy_schools?
+
+        Rollover::Schools::DualCourseCopier.new(
+          legacy_copier: Rollover::Schools::LegacyCourseCopier.new(site_copier: Sites::CopyToCourseService),
+          new_copier: Rollover::Schools::CourseCopier.new,
+        )
       end
     end
   end
