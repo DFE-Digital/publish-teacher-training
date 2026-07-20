@@ -341,6 +341,38 @@ RSpec.describe API::Public::V1::CoursesController do
           end
         end
 
+        context "with documented location and subject filters" do
+          before do
+            provider.courses << build(:course, provider:)
+
+            allow(CourseSearchService).to receive(:call).and_return(Course.all)
+
+            get :index, params: {
+              recruitment_cycle_year: recruitment_cycle.year,
+              sort: "distance",
+              filter: {
+                latitude: 53.950124,
+                longitude: -0.894189,
+                radius: 10,
+                subjects: "00,01",
+              },
+            }
+          end
+
+          it "passes the location and subject filters through to the CourseSearchService" do
+            expect(CourseSearchService).to have_received(:call).with(
+              hash_including(
+                filter: ActionController::Parameters.new(
+                  latitude: "53.950124",
+                  longitude: "-0.894189",
+                  radius: "10",
+                  subjects: "00,01",
+                ).permit!,
+              ),
+            )
+          end
+        end
+
         context "when updated_since is invalid" do
           before do
             provider.courses << build(:course, provider:)
