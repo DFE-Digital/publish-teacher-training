@@ -31,6 +31,10 @@ FactoryBot.define do
       urn { nil }
     end
 
+    trait :discarded do
+      discarded_at { Time.zone.now }
+    end
+
     after(:build) do |site, evaluator|
       if evaluator.age.present?
         site.created_at = evaluator.age
