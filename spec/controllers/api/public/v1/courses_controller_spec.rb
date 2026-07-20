@@ -37,6 +37,40 @@ RSpec.describe API::Public::V1::CoursesController do
       end
     end
 
+    context "when courses have school experience information" do
+      it "returns the school experience fields" do
+        course_with_school_experience = create(:course, provider:)
+        course_with_school_experience.update_columns(
+          school_experience_required: true,
+          school_experience_required_content: "At least 2 weeks observing lessons.",
+        )
+        course_without_school_experience = create(:course, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year,
+        }
+
+        actual = json_response["data"].map do |data|
+          {
+            id: data["id"],
+            school_experience_required: data["attributes"]["school_experience_required"],
+            school_experience_required_content: data["attributes"]["school_experience_required_content"],
+          }
+        end
+
+        expect(actual).to include({
+          id: course_with_school_experience.id.to_s,
+          school_experience_required: true,
+          school_experience_required_content: "At least 2 weeks observing lessons.",
+        })
+        expect(actual).to include({
+          id: course_without_school_experience.id.to_s,
+          school_experience_required: nil,
+          school_experience_required_content: nil,
+        })
+      end
+    end
+
     context "when there are courses" do
       before do
         provider.courses << build_list(:course, 2, provider:)
@@ -371,6 +405,8 @@ RSpec.describe API::Public::V1::CoursesController do
                 other_requirements
                 personal_qualities
                 salary_details
+                school_experience_required
+                school_experience_required_content
                 can_sponsor_skilled_worker_visa
                 can_sponsor_student_visa
                 campaign_name

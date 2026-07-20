@@ -55,7 +55,9 @@ module API
                    :campaign_name,
                    :application_status,
                    :training_route,
-                   :degree_type
+                   :degree_type,
+                   :school_experience_required,
+                   :school_experience_required_content
 
         attribute :bursary_amount do
           course_incentive.bursary_amount

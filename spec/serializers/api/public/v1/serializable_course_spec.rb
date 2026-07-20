@@ -125,6 +125,8 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:required_qualifications_science).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:running).with_value(course.findable?) }
   it { is_expected.to have_attribute(:salary_details).with_value(course.latest_published_enrichment.salary_details) }
+  it { is_expected.to have_attribute(:school_experience_required).with_value(nil) }
+  it { is_expected.to have_attribute(:school_experience_required_content).with_value(nil) }
   it { is_expected.to have_attribute(:scholarship_amount).with_value(nil) }
   it { is_expected.to have_attribute(:can_sponsor_skilled_worker_visa) }
   it { is_expected.to have_attribute(:can_sponsor_student_visa) }
@@ -156,6 +158,18 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:accept_maths_gcse_equivalency).with_value(course.accept_maths_gcse_equivalency) }
   it { is_expected.to have_attribute(:accept_science_gcse_equivalency).with_value(course.accept_science_gcse_equivalency) }
   it { is_expected.to have_attribute(:additional_gcse_equivalencies).with_value(course.additional_gcse_equivalencies) }
+
+  context "when school experience information is present" do
+    before do
+      course.update_columns(
+        school_experience_required: true,
+        school_experience_required_content: "At least 2 weeks observing lessons.",
+      )
+    end
+
+    it { is_expected.to have_attribute(:school_experience_required).with_value(true) }
+    it { is_expected.to have_attribute(:school_experience_required_content).with_value("At least 2 weeks observing lessons.") }
+  end
 
   context "when the latest published enrichment is version 1" do
     let(:enrichment) do
