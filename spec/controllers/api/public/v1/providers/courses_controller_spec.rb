@@ -199,6 +199,67 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
     end
 
+    describe "when the new school model feature flag is active" do
+      let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)) }
+
+      before do
+        FeatureFlag.activate(:course_publishing_uses_new_school_model)
+      end
+
+      it "searches using the schools course search service" do
+        expected_filter = ActionController::Parameters.new(funding_type: "salary")
+        expect(APICourseSearchServiceSchools).to receive(:call).with(hash_including(filter: expected_filter)).and_return(Course.all)
+
+        get :index, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          filter: {
+            funding_type: "salary",
+          },
+        }
+      end
+
+      context "when the recruitment cycle is not after the remodel cutover year" do
+        let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)) }
+
+        it "searches using the sites course search service" do
+          expect(APICourseSearchService).to receive(:call).and_return(Course.all)
+
+          get :index, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: provider.provider_code,
+          }
+        end
+      end
+
+      context "when filtering by location" do
+        let(:near_course) { create(:course, provider:) }
+        let(:far_course) { create(:course, provider:) }
+
+        before do
+          create(:course_school, course: near_course, gias_school: create(:gias_school, latitude: 51.5074, longitude: -0.1278))
+          create(:course_school, course: far_course, gias_school: create(:gias_school, latitude: 55.9533, longitude: -3.1883))
+
+          get :index, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: provider.provider_code,
+            filter: {
+              latitude: 51.5074,
+              longitude: -0.1278,
+              radius: 10,
+            },
+          }
+        end
+
+        it "returns only courses with a school within the radius" do
+          ids = json_response["data"].map { |course| course["id"] }
+
+          expect(ids).to include(near_course.id.to_s)
+          expect(ids).not_to include(far_course.id.to_s)
+        end
+      end
+    end
+
     describe "include" do
       let!(:course) { create(:course, :with_accrediting_provider, provider:) }
 

@@ -30,7 +30,8 @@ module API
         end
 
         def courses
-          @courses ||= APICourseSearchService.call(
+          service = schools_remodelled ? APICourseSearchServiceSchools : APICourseSearchService
+          @courses ||= service.call(
             filter: permitted_params[:filter],
             sort: permitted_params[:sort],
             course_scope: recruitment_cycle.courses,
@@ -43,6 +44,10 @@ module API
 
         def permitted_params
           params.permit("page", "sort", "per_page", "courses", "recruitment_cycle_year", "include", "filter" => %w[updated_since funding_type])
+        end
+
+        def schools_remodelled
+          FeatureFlag.active?(:course_publishing_uses_new_school_model) && recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
         end
       end
     end

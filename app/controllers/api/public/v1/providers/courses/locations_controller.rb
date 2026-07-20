@@ -9,14 +9,28 @@ module API
             def index
               render jsonapi: locations,
                      include: include_param,
-                     expose: { course:, location_statuses: },
+                     expose: exposures,
                      class: API::Public::V1::SerializerService.call
             end
 
           private
 
             def locations
-              @locations ||= course&.sites
+              @locations ||= if schools_remodelled
+                               course&.schools
+                             else
+                               course&.sites
+                             end
+            end
+
+            # On the schools path each Course::School serializes its own
+            # SchoolLocationStatus, so there is no site_statuses collection to
+            # expose (and reading course.site_statuses would query the legacy
+            # course_site table for nothing).
+            def exposures
+              return { course: } if schools_remodelled
+
+              { course:, location_statuses: }
             end
 
             def location_statuses
@@ -24,7 +38,11 @@ module API
             end
 
             def course
-              @course ||= provider.courses.includes(site_statuses: [:site]).find_by(course_code: params[:course_code])
+              @course ||= if schools_remodelled
+                            provider.courses.includes(schools: %i[gias_school provider_school]).find_by(course_code: params[:course_code])
+                          else
+                            provider.courses.includes(site_statuses: [:site]).find_by(course_code: params[:course_code])
+                          end
             end
 
             def provider
@@ -33,6 +51,10 @@ module API
 
             def include_param
               params.fetch(:include, "")
+            end
+
+            def schools_remodelled
+              FeatureFlag.active?(:course_publishing_uses_new_school_model) && recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
             end
           end
         end
