@@ -295,6 +295,17 @@ properties:
       Successful applicants will be employed as unqualified teachers on
       at least Point 1 of the Unqualified Teachers' Pay Scale for the
       duration of the programme.
+  school_experience_required:
+    type: boolean
+    nullable: true
+    description: "Whether school experience is required or strongly recommended for this course."
+    example: true
+  school_experience_required_content:
+    type: string
+    nullable: true
+    format: markdown
+    description: "Details of the school experience expected for this course."
+    example: "At least 2 weeks observing lessons in a UK secondary school."
   scholarship_amount:
     type: integer
     nullable: true
