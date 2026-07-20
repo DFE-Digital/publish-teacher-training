@@ -443,6 +443,82 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     end
   end
 
+  context "when a placement school has been discarded" do
+    let(:london) { build(:location, :london) }
+    let(:canary_wharf) { build(:location, :canary_wharf) }
+    let(:lewisham) { build(:location, :lewisham) }
+
+    let(:params) { { latitude: london.latitude, longitude: london.longitude, radius: 10 } }
+
+    let!(:course_with_kept_site_only) do
+      test_search_result_wrapper_klass.new(
+        create(
+          :course,
+          :published,
+          name: "Mathematics (kept school)",
+          provider: create(:provider, provider_name: "Apple University"),
+          site_statuses: [
+            create(
+              :site_status,
+              :findable,
+              site: create(:site, latitude: lewisham.latitude, longitude: lewisham.longitude),
+            ),
+          ],
+        ),
+        minimum_distance_to_search_location: 6.07,
+      )
+    end
+
+    it "excludes a course whose only placement school is discarded" do
+      create(
+        :course,
+        :published,
+        name: "Science (discarded school)",
+        site_statuses: [
+          create(
+            :site_status,
+            :findable,
+            site: create(:site, :discarded, latitude: lewisham.latitude, longitude: lewisham.longitude),
+          ),
+        ],
+      )
+
+      expect(described_class.call(params:)).to match_collection(
+        [course_with_kept_site_only],
+        attribute_names: %w[name minimum_distance_to_search_location],
+      )
+    end
+
+    it "measures distance from the kept school when a course also has a discarded one" do
+      course_with_both = test_search_result_wrapper_klass.new(
+        create(
+          :course,
+          :published,
+          name: "Chemistry (one discarded, one kept)",
+          provider: create(:provider, provider_name: "Zebra University"),
+          site_statuses: [
+            create(
+              :site_status,
+              :findable,
+              site: create(:site, :discarded, latitude: canary_wharf.latitude, longitude: canary_wharf.longitude),
+            ),
+            create(
+              :site_status,
+              :findable,
+              site: create(:site, latitude: lewisham.latitude, longitude: lewisham.longitude),
+            ),
+          ],
+        ),
+        minimum_distance_to_search_location: 6.07,
+      )
+
+      expect(described_class.call(params:)).to match_collection(
+        [course_with_kept_site_only, course_with_both],
+        attribute_names: %w[name minimum_distance_to_search_location],
+      )
+    end
+  end
+
   describe "SQL injection tests for location search" do
     let(:london) { build(:location, :london) }
     let(:valid_latitude) { 51.5074 }

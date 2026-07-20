@@ -110,6 +110,52 @@ RSpec.describe SavedCourses::Query do
       end
     end
 
+    context "when a placement school has been discarded" do
+      let(:params) { { latitude: london.latitude, longitude: london.longitude } }
+
+      it "excludes a saved course whose only placement school is discarded" do
+        create(
+          :saved_course,
+          candidate:,
+          course: create(
+            :course,
+            name: "Discarded School Course",
+            provider: create(:provider, provider_name: "Discarded University"),
+            site_statuses: [create(:site_status, :findable, site: create(:site, :discarded, latitude: london.latitude, longitude: london.longitude))],
+          ),
+        )
+
+        expect(results).to match_collection(
+          [london_saved_result, lewisham_saved_result, cambridge_saved_result],
+          attribute_names: %w[minimum_distance_to_search_location],
+        )
+      end
+
+      it "measures distance from the kept school when a saved course also has a discarded one" do
+        mixed_saved_result = test_saved_course_wrapper_klass.new(
+          create(
+            :saved_course,
+            candidate:,
+            course: create(
+              :course,
+              name: "Mixed Course",
+              provider: create(:provider, provider_name: "Mixed University"),
+              site_statuses: [
+                create(:site_status, :findable, site: create(:site, :discarded, latitude: london.latitude, longitude: london.longitude)),
+                create(:site_status, :findable, site: create(:site, latitude: cambridge.latitude, longitude: cambridge.longitude)),
+              ],
+            ),
+          ),
+          minimum_distance_to_search_location: 49.38,
+        )
+
+        expect(results).to match_collection(
+          [london_saved_result, lewisham_saved_result, cambridge_saved_result, mixed_saved_result],
+          attribute_names: %w[minimum_distance_to_search_location],
+        )
+      end
+    end
+
     context "when distance ordering requested but no location given" do
       let(:params) { { order: "distance" } }
 
