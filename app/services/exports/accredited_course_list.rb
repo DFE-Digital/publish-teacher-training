@@ -24,11 +24,11 @@ module Exports
       "Course length",
       "UK fee",
       "Non-UK fee",
-      "Fees and financial support",
-      "Where you will train",
-      "What you will do on school placements",
-      "What you will study",
-      "Interview process",
+      # "Fees and financial support",
+      # "Where you will train",
+      # "What you will do on school placements",
+      # "What you will study",
+      # "Interview process",
       "View on Find",
     ].freeze
 
@@ -76,34 +76,34 @@ module Exports
           enrichment&.fee_uk_eu && "£#{enrichment.fee_uk_eu}",
           enrichment&.fee_international && "£#{enrichment.fee_international}",
 
-          combined_field(
-            enrichment&.fee_schedule,
-            enrichment&.additional_fees,
-            enrichment&.financial_support,
-          ),
+          # combined_field(
+          #   enrichment&.fee_schedule,
+          #   enrichment&.additional_fees,
+          #   enrichment&.financial_support,
+          # ),
 
-          # Where you will train
-          combined_field(
-            enrichment&.placement_selection_criteria,
-            enrichment&.duration_per_school,
-            enrichment&.theoretical_training_location,
-            enrichment&.theoretical_training_duration,
-          ),
+          # # Where you will train
+          # combined_field(
+          #   enrichment&.placement_selection_criteria,
+          #   enrichment&.duration_per_school,
+          #   enrichment&.theoretical_training_location,
+          #   enrichment&.theoretical_training_duration,
+          # ),
 
-          # School placements
-          school_placements_field(enrichment),
+          # # School placements
+          # school_placements_field(enrichment),
 
-          # What you will study
-          combined_field(
-            enrichment&.theoretical_training_activities,
-            enrichment&.assessment_methods,
-          ),
+          # # What you will study
+          # combined_field(
+          #   enrichment&.theoretical_training_activities,
+          #   enrichment&.assessment_methods,
+          # ),
 
-          # Interview process
-          combined_field(
-            interview_location(enrichment),
-            enrichment&.interview_process,
-          ),
+          # # Interview process
+          # combined_field(
+          #   interview_location(enrichment),
+          #   enrichment&.interview_process,
+          # ),
 
           decorated_course.find_url,
         ]

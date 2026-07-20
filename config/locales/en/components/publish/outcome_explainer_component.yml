@@ -3,7 +3,7 @@ en:
     providers:
       school_placements:
         outcome_explainer_component:
-          placement_school_text_html: You can attach placement schools on the ‘Basic details’ tab of %{link}.
+          placement_school_text_html: Click on the name of a school to update the courses attached to it. You can also update placement schools on the 'Basic details' tab of %{link}.
           courses_link_text: your courses
           location_searches_text_html: "Your courses will not appear in candidate&rsquo;s location searches if you do not attach placement schools to them."
           organisation_details_html: You can choose whether to show or hide placements from candidates in %{link}.
