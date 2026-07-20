@@ -20,34 +20,20 @@ RSpec.describe Rollover::Schools::CourseCopier do
   let(:new_provider) { create(:provider, recruitment_cycle: create(:recruitment_cycle, :next)) }
   let(:new_course) { create(:course, provider: new_provider, course_code: course.course_code) }
   let!(:new_provider_school) do
-    create(
-      :provider_school,
-      provider: new_provider,
-      gias_school:,
-      site_code: provider_school.site_code,
-      uuid: provider_school.uuid,
-    )
+    create(:provider_school, provider: new_provider, gias_school:, site_code: provider_school.site_code)
   end
-  let!(:new_main_site) do
-    create(
-      :provider_school,
-      :main_site,
-      provider: new_provider,
-      gias_school:,
-      uuid: main_site.uuid,
-    )
-  end
+  let!(:new_main_site) { create(:provider_school, :main_site, provider: new_provider, gias_school:) }
 
-  it "copies relationships to the copied course and provider schools with matching UUIDs" do
+  it "copies relationships to the copied course and matching copied provider schools" do
     copy_schools
 
     copied_relationships = new_course.schools.map do |school|
-      [school.provider_school_id, school.provider_school.uuid, school.gias_school_id, school.site_code]
+      [school.provider_school_id, school.gias_school_id, school.site_code]
     end
 
     expect(copied_relationships).to contain_exactly(
-      [new_provider_school.id, provider_school.uuid, course_school.gias_school_id, course_school.site_code],
-      [new_main_site.id, main_site.uuid, course_main_site.gias_school_id, course_main_site.site_code],
+      [new_provider_school.id, course_school.gias_school_id, course_school.site_code],
+      [new_main_site.id, course_main_site.gias_school_id, course_main_site.site_code],
     )
   end
 

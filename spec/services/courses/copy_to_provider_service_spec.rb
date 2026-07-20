@@ -319,7 +319,6 @@ RSpec.describe Courses::CopyToProviderService do
         provider: new_provider,
         gias_school: provider_school.gias_school,
         site_code: provider_school.site_code,
-        uuid: provider_school.uuid,
       )
     end
 
