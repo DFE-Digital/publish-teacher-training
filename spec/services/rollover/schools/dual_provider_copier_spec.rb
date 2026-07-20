@@ -3,28 +3,30 @@
 require "rails_helper"
 
 RSpec.describe Rollover::Schools::DualProviderCopier do
-  subject(:copier) { described_class.new(legacy_copier:, new_copier:) }
+  subject(:copy_schools) do
+    described_class.new(
+      legacy_copier: Rollover::Schools::LegacyProviderCopier.new(site_copier: Sites::CopyToProviderService.new),
+      new_copier: Rollover::Schools::ProviderCopier.new,
+    ).execute(provider:, new_provider:)
+  end
 
-  let(:legacy_copier) { instance_double(Rollover::Schools::LegacyProviderCopier) }
-  let(:new_copier) { instance_double(Rollover::Schools::ProviderCopier) }
-  let(:provider) { build_stubbed(:provider) }
-  let(:new_provider) { build_stubbed(:provider) }
-  let(:legacy_result) { { copied: 2, skipped: [] } }
+  let(:provider) { create(:provider) }
+  let(:new_provider) { create(:provider, recruitment_cycle: create(:recruitment_cycle, :next)) }
+  let!(:legacy_site) { create(:site, provider:, code: "S") }
+  let!(:provider_school) { create(:provider_school, provider:, site_code: "B") }
 
-  it "copies both legacy sites and new provider-school relationships" do
-    allow(legacy_copier).to receive(:execute).and_return(legacy_result)
-    allow(new_copier).to receive(:execute)
+  it "copies both legacy Site and new Provider::School records" do
+    expect { copy_schools }
+      .to change(new_provider.sites, :count).by(1)
+      .and change(new_provider.schools, :count).by(1)
 
-    copier.execute(provider:, new_provider:)
-
-    expect(legacy_copier).to have_received(:execute).with(provider:, new_provider:)
-    expect(new_copier).to have_received(:execute).with(provider:, new_provider:)
+    expect(new_provider.sites.pluck(:code)).to contain_exactly(legacy_site.code)
+    expect(new_provider.schools.pluck(:gias_school_id, :site_code)).to contain_exactly(
+      [provider_school.gias_school_id, provider_school.site_code],
+    )
   end
 
   it "returns the legacy result used by rollover reporting" do
-    allow(legacy_copier).to receive(:execute).and_return(legacy_result)
-    allow(new_copier).to receive(:execute)
-
-    expect(copier.execute(provider:, new_provider:)).to eq(legacy_result)
+    expect(copy_schools).to eq(copied: 1, skipped: [])
   end
 end
