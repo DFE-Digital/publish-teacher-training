@@ -43,7 +43,25 @@ module API
         end
 
         def permitted_params
-          params.permit("page", "sort", "per_page", "courses", "recruitment_cycle_year", "include", "filter" => %w[updated_since funding_type])
+          params.permit(
+            "page", "sort", "per_page", "courses", "recruitment_cycle_year", "include",
+            "filter" => %w[
+              has_vacancies
+              findable
+              funding_type
+              qualification
+              study_type
+              subjects
+              send_courses
+              latitude
+              longitude
+              radius
+              updated_since
+              degree_grade
+              can_sponsor_visa
+              campaign_name
+            ]
+          )
         end
 
         def schools_remodelled
