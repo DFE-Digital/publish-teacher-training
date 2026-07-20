@@ -14,6 +14,8 @@ class Provider::School < ApplicationRecord
 
   has_many :course_schools, class_name: "Course::School", inverse_of: :provider_school, dependent: :destroy
 
+  delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
+
   validates :site_code, presence: true
   validates :gias_school_id, uniqueness: { scope: %i[provider_id site_code] }
   validates :site_code,

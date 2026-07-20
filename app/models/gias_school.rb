@@ -7,6 +7,8 @@ class GiasSchool < ApplicationRecord
   validates :urn, :name, presence: true
   validates :urn, uniqueness: { case_sensitive: false }
 
+  acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
+
   pg_search_scope :search,
                   against: %i[urn name town postcode],
                   using: {
