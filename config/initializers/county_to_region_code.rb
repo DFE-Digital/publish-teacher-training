@@ -555,6 +555,10 @@ def region_code_from(region)
     "south_east"
   when "south_west_england"
     "south_west"
+  when "not_applicable"
+    # GIAS uses the "Z" GOR code (not_applicable) for establishments that don't
+    # sit in one of the 9 English regions - e.g. a remote/online location.
+    "no_region"
   else
     region
   end

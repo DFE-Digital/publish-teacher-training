@@ -8,6 +8,7 @@ FactoryBot.define do
     town { Faker::Address.city }
     postcode { Faker::Address.postcode }
     status_code { GiasSchool.status_codes["open"] }
+    region_code { GiasSchool.region_codes["south_west"] }
 
     trait :open do
       status_code { GiasSchool.status_codes["open"] }

@@ -11,10 +11,12 @@ class Course::School < ApplicationRecord
   belongs_to :gias_school
   belongs_to :provider_school, class_name: "Provider::School", inverse_of: :course_schools
 
+  delegate :provider, :recruitment_cycle, to: :course, allow_nil: true
+
   validates :provider_school_id, uniqueness: { scope: :course_id }
   validate :consistent_with_provider_school
 
-  delegate :site_code, to: :provider_school
+  delegate :site_code, :uuid, to: :provider_school
 
 private
 
