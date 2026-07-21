@@ -122,12 +122,12 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       post :confirm_rollover
     end
   end
-  resources :banners do
+  resources :banners, only: %i[show new create edit update] do
     collection do
-      get :drafts, controller: "banners", action: :index, defaults: { status: :draft}
-      get :active, controller: "banners", action: :index, defaults: { status: :active}
-      get :scheduled, controller: "banners", action: :index, defaults: { status: :scheduled}
-      get :expired, controller: "banners", action: :index, defaults: { status: :expired}
+      get :drafts, controller: "banners", action: :index, defaults: { status: :draft }
+      get :active, controller: "banners", action: :index, defaults: { status: :active }
+      get :scheduled, controller: "banners", action: :index, defaults: { status: :scheduled }
+      get :expired, controller: "banners", action: :index, defaults: { status: :expired }
     end
   end
   resources :candidates, only: %i[index] do

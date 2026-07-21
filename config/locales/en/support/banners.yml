@@ -1,4 +1,35 @@
 en:
+  activerecord:
+    attributes:
+      banner:
+        body: Body
+        body_description: The body text of the banner, displayed to users.
+        display_on_description: Displayed on
+        display_on_find: Find
+        display_on_publish: Publish
+        display_on_support: Support
+        displayed_on: Displayed on
+        expired_at: Expired
+        expired_at_date: Expired date
+        expired_at_date_description: The date when the banner expired.
+        expired_at_time: Expired time
+        expired_at_time_description: The time when the banner expired.
+        heading: Heading
+        heading_description: The heading of the banner, displayed to users.
+        name: Name
+        name_description: The name of the banner, used for internal reference only.
+        published_at: Published
+        published_at_date: Published date
+        published_at_date_description: The date when the banner was published.
+        published_at_time: Published time
+        published_at_time_description: The time when the banner was published.
+        status: Status
+        success_styling: Success styling
+        success_styling_description: Will this banner be displayed with the success styling?
+        title: Title
+        title_description: The title of the banner, displayed to users.
+        title_heading_level: Title heading level
+        title_heading_level_description: The heading level for the title, used for accessibility. Between 1-6.
   support:
     banners:
       index:
@@ -17,3 +48,16 @@ en:
           publish: "Publish"
           support: "Support"
           none: "Not displayed"
+        table:
+          headings:
+            actions: "Actions"
+          actions:
+            edit: "Edit"
+      new:
+        page_title: "Banner details"
+        page_caption: "Add banner"
+      edit:
+        page_caption: "Edit banner"
+        page_title: "Banner details"
+      show:
+        page_caption: "Banner"

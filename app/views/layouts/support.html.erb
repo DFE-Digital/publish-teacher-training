@@ -54,6 +54,10 @@
       <%= yield :before_content %>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
+        <div class="govuk-width-container">
+          <%= render active_banners unless flash.any? %>
+        </div>
+
         <%= render(FlashBanner.new(flash:)) %>
 
         <%= yield %>

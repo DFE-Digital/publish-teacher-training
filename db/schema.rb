@@ -68,7 +68,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_21_100824) do
     t.string "heading"
     t.string "name", null: false
     t.datetime "published_at"
-    t.boolean "success"
+    t.boolean "success_styling"
     t.string "title"
     t.integer "title_heading_level"
     t.datetime "updated_at", null: false
