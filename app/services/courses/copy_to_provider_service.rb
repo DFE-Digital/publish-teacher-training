@@ -87,11 +87,20 @@ module Courses
     end
 
     def copy_study_sites(course:, new_provider:, new_course:)
+      lookup = new_provider_study_sites(new_provider)
+
       course.study_sites.each do |site|
-        new_site = new_provider.study_sites.find_by(code: site.code)
+        new_site = lookup[site.code]
 
         @sites_copy_to_course.call(new_site:, new_course:) if new_site.present?
       end
+    end
+
+    # Every study site belonging to the new provider is created before any
+    # course is copied, so load them once per provider rather than per course.
+    def new_provider_study_sites(new_provider)
+      @new_provider_study_sites ||= {}
+      @new_provider_study_sites[new_provider.id] ||= new_provider.study_sites.index_by(&:code)
     end
 
     def next_cycle
