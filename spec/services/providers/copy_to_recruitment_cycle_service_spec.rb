@@ -195,6 +195,36 @@ describe Providers::CopyToRecruitmentCycleService do
       expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
     end
 
+    # Per-record touches are suppressed during the copy, so the parents are
+    # stamped once at the end instead. Newly created records get `changed_at`
+    # from Rails' timestamp handling, so the case that needs covering is a
+    # provider that already existed in the destination cycle.
+    context "when the provider already exists in the new recruitment cycle" do
+      let(:new_provider) do
+        create(:provider, recruitment_cycle: create(:recruitment_cycle, :previous), provider_code: provider.provider_code)
+      end
+      let(:new_recruitment_cycle) { create(:recruitment_cycle, :next, providers: [new_provider]) }
+
+      before do
+        new_recruitment_cycle # attaching the provider to it updates changed_at, so stamp it afterwards
+        new_provider.update_columns(changed_at: 2.years.ago)
+      end
+
+      it "stamps changed_at on the existing provider" do
+        service.execute(provider:, new_recruitment_cycle:)
+
+        expect(new_provider.reload.changed_at).to be_within(1.minute).of(Time.zone.now)
+      end
+
+      it "leaves the original provider untouched" do
+        provider.update_columns(changed_at: 2.years.ago)
+
+        service.execute(provider:, new_recruitment_cycle:)
+
+        expect(provider.reload.changed_at).to be_within(1.minute).of(2.years.ago)
+      end
+    end
+
     it "returns a hash of the counts of copied objects" do
       output = service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 

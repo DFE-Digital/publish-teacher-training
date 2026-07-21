@@ -10,6 +10,8 @@ module TouchProvider
 private
 
   def touch_provider
+    return if TouchSuppression.suppressed?
+
     provider.update_changed_at
   end
 end

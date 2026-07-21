@@ -10,6 +10,8 @@ module TouchCourse
 private
 
   def touch_course
+    return if TouchSuppression.suppressed?
+
     course.update_changed_at
   end
 end
