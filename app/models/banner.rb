@@ -7,6 +7,10 @@ class Banner < ApplicationRecord
 
   validates :expired_at, comparison: { greater_than_or_equal_to: :published_at, allow_nil: true }
 
+  scope :display_on_find, -> { where(display_on_find: true) }
+  scope :display_on_publish, -> { where(display_on_publish: true) }
+  scope :display_on_support, -> { where(display_on_support: true) }
+
   def displayed_on
     interfaces = []
     interfaces << :find if display_on_find

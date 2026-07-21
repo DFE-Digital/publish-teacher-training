@@ -24,7 +24,7 @@ module Support
     end
 
     def active_banners
-      @active_banners ||= Banner.where(display_on_support: true).active.active_order
+      @active_banners ||= Banner.display_on_support.active.active_order
     end
   end
 end

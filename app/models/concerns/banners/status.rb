@@ -7,23 +7,22 @@ module Banners
     included do
       scope :drafts, -> { where(published_at: nil) }
       scope :not_drafts, -> { where.not(published_at: nil) }
+      scope :drafts_order, -> { order(created_at: :desc) }
 
       scope :scheduled, lambda { |now = Time.current|
         not_drafts.where("published_at > ?", now)
       }
+      scope :scheduled_order, -> { order(published_at: :asc) }
 
       scope :active, lambda { |now = Time.current|
         not_drafts
           .where("tsrange(published_at, COALESCE(expired_at, timestamp 'infinity')::timestamp, '[]') @> ?::timestamp", now)
       }
+      scope :active_order, -> { order(published_at: :desc, expired_at: :asc) }
 
       scope :expired, lambda { |now = Time.current|
         not_drafts.where("COALESCE(expired_at, timestamp 'infinity')::timestamp < ?", now)
       }
-
-      scope :drafts_order, -> { order(created_at: :desc) }
-      scope :scheduled_order, -> { order(published_at: :asc) }
-      scope :active_order, -> { order(published_at: :desc, expired_at: :asc) }
       scope :expired_order, -> { order(expired_at: :desc, published_at: :desc) }
 
       def status(now = Time.current)
@@ -54,7 +53,8 @@ module Banners
       def expired?(now = Time.current)
         return false if draft?
 
-        expired_at.present? && expired_at < now
+        expiry = expired_at.presence || DateTime::Infinity.new
+        expiry < now
       end
     end
   end

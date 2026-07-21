@@ -30,14 +30,14 @@ RSpec.describe Banner, type: :model do
       end
 
       now = Time.zone.local(2026, 7, 1, 12, 0, 0) # matches present datetime
-      expect(described_class.active(now))
+      expect(described_class.active(now).pluck(:name))
         .to contain_exactly(
-          banner_setups.find { |banner_setup| banner_setup[:name] == :published_past_and_expired_nil }[:banner],
-          banner_setups.find { |banner_setup| banner_setup[:name] == :published_past_and_expired_present }[:banner],
-          banner_setups.find { |banner_setup| banner_setup[:name] == :published_past_and_expired_future }[:banner],
-          banner_setups.find { |banner_setup| banner_setup[:name] == :published_present_and_expired_nil }[:banner],
-          banner_setups.find { |banner_setup| banner_setup[:name] == :published_present_and_expired_present }[:banner],
-          banner_setups.find { |banner_setup| banner_setup[:name] == :published_present_and_expired_future }[:banner],
+          "published_past_and_expired_nil",
+          "published_past_and_expired_present",
+          "published_past_and_expired_future",
+          "published_present_and_expired_nil",
+          "published_present_and_expired_present",
+          "published_present_and_expired_future",
         )
 
       expect(described_class.active(now).map { |banner| banner.active?(now) }).to be_all true
