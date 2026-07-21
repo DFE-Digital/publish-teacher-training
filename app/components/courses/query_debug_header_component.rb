@@ -48,5 +48,13 @@ module Courses
     def google_maps_direction_path_from_the_centre(result)
       "#{google_maps_directions_path}/#{result.latitude},#{result.longitude}"
     end
+
+    def school_uuid(result)
+      if result.provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+        result.provider_school_uuid
+      else
+        result.site_uuid
+      end
+    end
   end
 end

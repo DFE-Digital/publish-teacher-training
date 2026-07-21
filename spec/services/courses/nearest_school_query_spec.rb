@@ -14,7 +14,7 @@ RSpec.describe Courses::NearestSchoolQuery do
   let(:edinburgh) { build(:location, :edinburgh) }
 
   let(:london_school) do
-    create(:site, latitude: london.latitude, longitude: london.longitude)
+    create(:site, provider: london_provider, urn: london_gias_school.urn, latitude: london.latitude, longitude: london.longitude)
   end
   let(:manchester_school) do
     create(:site, latitude: manchester.latitude, longitude: manchester.longitude)
@@ -62,8 +62,13 @@ RSpec.describe Courses::NearestSchoolQuery do
   let(:london_provider) { create(:provider, provider_name: "London Provider") }
   let(:manchester_provider) { create(:provider, provider_name: "Manchester Provider") }
   let(:cambridge_provider) { create(:provider, provider_name: "Cambridge Provider") }
+  let(:london_gias_school) { create(:gias_school) }
 
   let(:courses) { [london_course, manchester_course, cambridge_course] }
+
+  before do
+    create(:provider_school, provider: london_provider, gias_school: london_gias_school, site_code: london_school.code)
+  end
 
   it "returns only the nearest school for each course" do
     expect(results).to match_collection(
@@ -76,6 +81,13 @@ RSpec.describe Courses::NearestSchoolQuery do
     )
 
     expect(results.map(&:site_id)).to contain_exactly(london_school.id, cambridge_school.id, manchester_school.id)
+  end
+
+  it "returns the legacy site and provider school uuids for the nearest school" do
+    result = results.find { |course| course.id == london_course.id }
+
+    expect(result.site_uuid).to eq(london_school.uuid)
+    expect(result.provider_school_uuid).to eq(london_provider.schools.find_by!(gias_school: london_gias_school).uuid)
   end
 
   it "orders results by distance from search location" do

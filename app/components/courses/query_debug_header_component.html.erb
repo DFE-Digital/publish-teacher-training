@@ -46,7 +46,7 @@
                   "#{Settings.base_url}#{publish_provider_recruitment_cycle_school_path(
                     result.provider.provider_code,
                     result.provider.recruitment_cycle_year,
-                    result.site_id,
+                    school_uuid(result),
                   )}",
                   host: Settings.base_url,
                   target: "_blank",
