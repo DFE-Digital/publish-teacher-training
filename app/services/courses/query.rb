@@ -353,10 +353,7 @@ module Courses
     # the legacy path's minimum_distance_to_search_location contract.
     def schools_location_scope(latitude:, longitude:, radius_in_meters:)
       @scope
-        .joins(<<~SQL)
-          INNER JOIN course_school ON course_school.course_id = course.id
-          INNER JOIN gias_school   ON gias_school.id = course_school.gias_school_id
-        SQL
+        .joins(schools: :gias_school)
         .where.not(gias_school: { latitude: nil })
         .where.not(gias_school: { longitude: nil })
         .where(
