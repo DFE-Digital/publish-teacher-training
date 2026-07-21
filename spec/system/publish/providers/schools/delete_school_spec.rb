@@ -46,7 +46,7 @@ RSpec.describe "Delete a provider's schools" do
   end
 
   def when_i_visit_the_publish_school_show_page
-    publish_school_show_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, school_id: @site.id)
+    publish_school_show_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, school_id: site.uuid)
   end
 
   def and_i_click_remove_school_link

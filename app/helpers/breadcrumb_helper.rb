@@ -58,7 +58,11 @@ module BreadcrumbHelper
   end
 
   def edit_site_breadcrumb
-    path = edit_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @recruitment_cycle.year, @site.id)
+    path = publish_provider_recruitment_cycle_school_path(
+      @provider.provider_code,
+      @recruitment_cycle.year,
+      ProviderSchools::Identity.uuid_for(site: @site),
+    )
     sites_breadcrumb.merge({ @site.location_name.dup => path })
   end
 

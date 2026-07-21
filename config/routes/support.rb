@@ -52,7 +52,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       namespace :schools, module: "providers/schools" do
         resource :check, only: %i[show update]
       end
-      resources :schools, except: %i[new edit update], module: "providers" do
+      resources :schools, param: :uuid, except: %i[new edit update], module: "providers" do
         member do
           get :delete
           delete :delete, to: "schools#destroy"

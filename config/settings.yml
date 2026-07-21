@@ -4,6 +4,8 @@ environment:
 
 support_email: becomingateacher@digital.education.gov.uk
 
+schools_remodel_cycle_year: 2026
+
 # The canonical URL of the Find service
 find_url: https://find.localhost
 
