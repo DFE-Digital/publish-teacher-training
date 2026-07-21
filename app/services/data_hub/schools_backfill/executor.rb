@@ -3,6 +3,10 @@
 module DataHub
   module SchoolsBackfill
     class Executor
+      # Only backfill the 2026 recruitment cycle onwards; earlier cycles are
+      # historic and are not being remodelled.
+      FROM_RECRUITMENT_CYCLE_YEAR = 2026
+
       def execute
         process_summary = DataHub::SchoolsBackfillProcessSummary.start!
 
@@ -41,8 +45,11 @@ module DataHub
           SELECT DISTINCT ON (site.provider_id, gias_school.id, site.code)
                  site.provider_id, gias_school.id, site.code, site.uuid, NOW(), NOW()
           FROM site
-          JOIN gias_school ON gias_school.urn = site.urn
-          WHERE site.site_type = 0
+          JOIN gias_school       ON gias_school.urn = site.urn
+          JOIN provider          ON provider.id = site.provider_id
+          JOIN recruitment_cycle ON recruitment_cycle.id = provider.recruitment_cycle_id
+          WHERE recruitment_cycle.year::int >= #{FROM_RECRUITMENT_CYCLE_YEAR}
+            AND site.site_type = 0
             AND site.discarded_at IS NULL
             AND site.urn IS NOT NULL
             AND site.urn <> ''
@@ -63,12 +70,15 @@ module DataHub
           SELECT DISTINCT ON (course_site.course_id, provider_school.id)
                  course_site.course_id, gias_school.id, provider_school.id, NOW(), NOW()
           FROM course_site
-          JOIN site            ON site.id = course_site.site_id
-          JOIN gias_school     ON gias_school.urn = site.urn
-          JOIN provider_school ON provider_school.provider_id = site.provider_id
-                              AND provider_school.gias_school_id = gias_school.id
-                              AND provider_school.site_code = site.code
-          WHERE site.site_type = 0
+          JOIN site              ON site.id = course_site.site_id
+          JOIN gias_school       ON gias_school.urn = site.urn
+          JOIN provider          ON provider.id = site.provider_id
+          JOIN recruitment_cycle ON recruitment_cycle.id = provider.recruitment_cycle_id
+          JOIN provider_school   ON provider_school.provider_id = site.provider_id
+                                AND provider_school.gias_school_id = gias_school.id
+                                AND provider_school.site_code = site.code
+          WHERE recruitment_cycle.year::int >= #{FROM_RECRUITMENT_CYCLE_YEAR}
+            AND site.site_type = 0
             AND site.discarded_at IS NULL
             AND site.urn IS NOT NULL
             AND site.urn <> ''
@@ -84,12 +94,15 @@ module DataHub
           SELECT DISTINCT ON (course_site.course_id, provider_school.id)
                  course_site.course_id, gias_school.id, provider_school.id, provider_school.site_code, NOW(), NOW()
           FROM course_site
-          JOIN site            ON site.id = course_site.site_id
-          JOIN gias_school     ON gias_school.urn = site.urn
-          JOIN provider_school ON provider_school.provider_id = site.provider_id
-                              AND provider_school.gias_school_id = gias_school.id
-                              AND provider_school.site_code = site.code
-          WHERE site.site_type = 0
+          JOIN site              ON site.id = course_site.site_id
+          JOIN gias_school       ON gias_school.urn = site.urn
+          JOIN provider          ON provider.id = site.provider_id
+          JOIN recruitment_cycle ON recruitment_cycle.id = provider.recruitment_cycle_id
+          JOIN provider_school   ON provider_school.provider_id = site.provider_id
+                                AND provider_school.gias_school_id = gias_school.id
+                                AND provider_school.site_code = site.code
+          WHERE recruitment_cycle.year::int >= #{FROM_RECRUITMENT_CYCLE_YEAR}
+            AND site.site_type = 0
             AND site.discarded_at IS NULL
             AND site.urn IS NOT NULL
             AND site.urn <> ''
@@ -115,8 +128,11 @@ module DataHub
                    ELSE 'urn_not_in_gias_school'
                  END AS reason
           FROM site
-          LEFT JOIN gias_school ON gias_school.urn = site.urn
-          WHERE site.site_type = 0
+          JOIN provider          ON provider.id = site.provider_id
+          JOIN recruitment_cycle ON recruitment_cycle.id = provider.recruitment_cycle_id
+          LEFT JOIN gias_school  ON gias_school.urn = site.urn
+          WHERE recruitment_cycle.year::int >= #{FROM_RECRUITMENT_CYCLE_YEAR}
+            AND site.site_type = 0
             AND site.discarded_at IS NULL
             AND (site.urn IS NULL OR site.urn = '' OR gias_school.id IS NULL)
           ORDER BY site.id
@@ -140,18 +156,22 @@ module DataHub
                    ELSE 'urn_not_in_gias_school'
                  END AS reason
           FROM course_site
+          JOIN course               ON course.id = course_site.course_id
+          JOIN provider             ON provider.id = course.provider_id
+          JOIN recruitment_cycle    ON recruitment_cycle.id = provider.recruitment_cycle_id
           LEFT JOIN site            ON site.id = course_site.site_id
           LEFT JOIN gias_school     ON gias_school.urn = site.urn
           LEFT JOIN provider_school ON provider_school.provider_id = site.provider_id
                                   AND provider_school.gias_school_id = gias_school.id
                                   AND provider_school.site_code = site.code
-          WHERE site.id IS NULL
+          WHERE recruitment_cycle.year::int >= #{FROM_RECRUITMENT_CYCLE_YEAR}
+            AND (site.id IS NULL
              OR site.site_type <> 0
              OR site.discarded_at IS NOT NULL
              OR site.urn IS NULL
              OR site.urn = ''
              OR gias_school.id IS NULL
-             OR provider_school.id IS NULL
+             OR provider_school.id IS NULL)
           ORDER BY course_site.course_id, course_site.site_id
         SQL
       end

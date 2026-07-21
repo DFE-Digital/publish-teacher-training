@@ -216,26 +216,44 @@ describe DataHub::SchoolsBackfill::Executor do
     end
 
     context "across multiple recruitment cycles" do
-      it "backfills sites and course_sites from every cycle" do
+      it "backfills the 2026 cycle onwards and ignores earlier cycles" do
         previous_cycle = create(:recruitment_cycle, :previous)
         current_cycle = find_or_create(:recruitment_cycle)
+        next_cycle = create(:recruitment_cycle, :next)
 
         previous_provider = create(:provider, recruitment_cycle: previous_cycle)
         current_provider = create(:provider, recruitment_cycle: current_cycle)
+        next_provider = create(:provider, recruitment_cycle: next_cycle)
         previous_gias_school = create(:gias_school, urn: "810008")
         current_gias_school = create(:gias_school, urn: "820008")
+        next_gias_school = create(:gias_school, urn: "830008")
 
         create(:site, provider: previous_provider, urn: previous_gias_school.urn, code: "P")
         create(:site, provider: current_provider, urn: current_gias_school.urn, code: "Q")
+        create(:site, provider: next_provider, urn: next_gias_school.urn, code: "R")
 
         executor.execute
 
         expect(
           Provider::School.where(provider_id: previous_provider.id, gias_school_id: previous_gias_school.id),
-        ).to exist
+        ).not_to exist
         expect(
           Provider::School.where(provider_id: current_provider.id, gias_school_id: current_gias_school.id),
         ).to exist
+        expect(
+          Provider::School.where(provider_id: next_provider.id, gias_school_id: next_gias_school.id),
+        ).to exist
+      end
+
+      it "does not report sites from earlier cycles as skipped" do
+        previous_cycle = create(:recruitment_cycle, :previous)
+        previous_provider = create(:provider, recruitment_cycle: previous_cycle)
+        site = create(:site, provider: previous_provider, urn: nil, code: "-")
+
+        summary = executor.execute
+
+        ids = summary.full_summary["skipped_sites"].map { |row| row["site_id"] }
+        expect(ids).not_to include(site.id)
       end
     end
   end
