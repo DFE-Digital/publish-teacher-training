@@ -15,12 +15,19 @@ module Providers
 
       if provider_eligible?(provider)
         ActiveRecord::Base.transaction do
-          rolled_over_provider = find_or_create_provider_in_cycle(provider, new_recruitment_cycle, result)
+          # Each copied site, school, enrichment and site status would otherwise
+          # touch its parent provider and course on every save. Suppress that and
+          # stamp the parents once, below.
+          TouchSuppression.suppress do
+            rolled_over_provider = find_or_create_provider_in_cycle(provider, new_recruitment_cycle, result)
 
-          copy_schools(provider, rolled_over_provider, result)
-          copy_study_sites(provider, rolled_over_provider, result)
-          copy_courses(provider, rolled_over_provider, course_codes, result)
-          result[:partnerships] = copy_partnerships(provider, rolled_over_provider, new_recruitment_cycle)
+            copy_schools(provider, rolled_over_provider, result)
+            copy_study_sites(provider, rolled_over_provider, result)
+            copy_courses(provider, rolled_over_provider, course_codes, result)
+            result[:partnerships] = copy_partnerships(provider, rolled_over_provider, new_recruitment_cycle)
+
+            touch_copied_records(rolled_over_provider)
+          end
         end
       end
 
@@ -125,6 +132,16 @@ module Providers
       rescue StandardError => e
         result[:courses_failed] << { course_code: course.course_code, error_message: e.message }
       end
+    end
+
+    # Stands in for the per-record touches suppressed during the copy.
+    #
+    # Only the provider needs stamping. Every course here is newly inserted, and
+    # Rails sets `changed_at` on create, so re-stamping them would be redundant
+    # and would risk colliding on its unique index. The provider may already have
+    # existed in the destination cycle, in which case nothing else updates it.
+    def touch_copied_records(rolled_over_provider)
+      rolled_over_provider.update_changed_at
     end
 
     def copy_partnerships(provider, rolled_over_provider, new_recruitment_cycle)
