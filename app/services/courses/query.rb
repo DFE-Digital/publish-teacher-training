@@ -354,7 +354,8 @@ module Courses
           INNER JOIN course_school ON course_school.course_id = course.id
           INNER JOIN gias_school   ON gias_school.id = course_school.gias_school_id
         SQL
-        .where("gias_school.latitude IS NOT NULL AND gias_school.longitude IS NOT NULL")
+        .where.not(gias_school: { latitude: nil })
+        .where.not(gias_school: { longitude: nil })
         .where(
           <<~SQL.squish, longitude, latitude, radius_in_meters
             ST_DistanceSphere(
