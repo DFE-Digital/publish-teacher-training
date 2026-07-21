@@ -83,10 +83,7 @@ module SavedCourses
     # by radius.
     def schools_location_scope(latitude:, longitude:)
       @scope
-        .joins(<<~SQL)
-          INNER JOIN course_school ON course_school.course_id = course.id
-          INNER JOIN gias_school   ON gias_school.id = course_school.gias_school_id
-        SQL
+        .joins(course: { schools: :gias_school })
         .where.not(gias_school: { latitude: nil })
         .where.not(gias_school: { longitude: nil })
         .select(
