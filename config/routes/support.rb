@@ -123,6 +123,8 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
     end
   end
   resources :banners, only: %i[show new create edit update] do
+    resource :expiration, only: [:create], controller: "banners/expirations"
+    resource :publication, only: [:create], controller: "banners/publications"
     collection do
       get :drafts, controller: "banners", action: :index, defaults: { status: :draft }
       get :active, controller: "banners", action: :index, defaults: { status: :active }

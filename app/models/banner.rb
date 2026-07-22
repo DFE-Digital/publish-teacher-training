@@ -11,6 +11,14 @@ class Banner < ApplicationRecord
   scope :display_on_publish, -> { where(display_on_publish: true) }
   scope :display_on_support, -> { where(display_on_support: true) }
 
+  def expire(now = Time.current)
+    update(expired_at: now)
+  end
+
+  def publish(now = Time.current)
+    update(published_at: now)
+  end
+
   def displayed_on
     interfaces = []
     interfaces << :find if display_on_find

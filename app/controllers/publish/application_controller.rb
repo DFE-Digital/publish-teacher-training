@@ -18,6 +18,8 @@ module Publish
       "publish"
     end
 
+    helper_method :active_banners
+
   private
 
     def provider
@@ -61,6 +63,10 @@ module Publish
 
     def rollover_period_2026?
       @recruitment_cycle.rollover_period_2026?
+    end
+
+    def active_banners
+      @active_banners ||= Banner.display_on_publish.active.active_order
     end
   end
 end

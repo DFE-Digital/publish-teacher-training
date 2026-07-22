@@ -57,6 +57,7 @@
     <div class="govuk-width-container">
       <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
+        <%= render partial: "shared/banners/banner", collection: active_banners, as: :banner unless flash.any? %>
         <%= render(FlashBanner.new(flash:)) %>
         <%= render Find::MaintenanceBannerComponent.new %>
         <% if(FeatureFlag.active?(:publish_rollover_soon_banner)) %>

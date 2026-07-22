@@ -55,7 +55,7 @@
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <div class="govuk-width-container">
-          <%= render active_banners unless flash.any? %>
+          <%= render partial: "shared/banners/banner", collection: active_banners, as: :banner unless flash.any? %>
         </div>
 
         <%= render(FlashBanner.new(flash:)) %>

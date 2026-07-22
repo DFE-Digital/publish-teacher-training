@@ -73,6 +73,36 @@ RSpec.describe "Banner management support" do
     then_the_banner_name_is_updated
   end
 
+  scenario "expiring an active banner" do
+    given_there_is_an_active_banner
+    when_i_visit_the_banners_page(:active)
+    and_i_click_expire_on_the_banner
+    then_the_banner_is_expired
+    and_the_banner_is_no_longer_on_the_active_tab
+    and_the_banner_appears_on_the_expired_tab
+  end
+
+  scenario "expire action is only shown for active banners" do
+    given_there_are_draft_banners
+    when_i_visit_the_banners_page(:drafts)
+    then_i_do_not_see_the_expire_action
+  end
+
+  scenario "publishing a scheduled banner" do
+    given_there_is_a_scheduled_banner
+    when_i_visit_the_banners_page(:scheduled)
+    and_i_click_publish_on_the_banner
+    then_the_banner_is_published
+    and_the_banner_is_no_longer_on_the_scheduled_tab
+    and_the_banner_appears_on_the_active_tab
+  end
+
+  scenario "publish action is only shown for scheduled banners" do
+    given_there_are_active_banners
+    when_i_visit_the_banners_page(:active)
+    then_i_do_not_see_the_publish_action
+  end
+
 private
 
   attr_reader :support_user
@@ -272,5 +302,60 @@ private
   def then_the_banner_name_is_updated
     expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
     expect(@active_banner.reload.name).to eq("Updated banner name")
+  end
+
+  def and_i_click_expire_on_the_banner
+    within("tr", text: @active_banner.name) do
+      click_link_or_button "Expire"
+    end
+  end
+
+  def then_the_banner_is_expired
+    expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
+    expect(@active_banner.reload.expired_at).to be_present
+  end
+
+  def and_the_banner_is_no_longer_on_the_active_tab
+    expect(page).to have_no_content(@active_banner.name)
+  end
+
+  def and_the_banner_appears_on_the_expired_tab
+    visit expired_support_banners_path
+    expect(page).to have_content(@active_banner.name)
+    expect(page).to have_css(".govuk-tag", text: "Expired")
+  end
+
+  def then_i_do_not_see_the_expire_action
+    expect(page).to have_no_button("Expire")
+  end
+
+  def given_there_is_a_scheduled_banner
+    @scheduled_banner = create(:banner, name: "Banner to publish", published_at: 1.day.from_now, expired_at: 2.days.from_now)
+  end
+
+  def and_i_click_publish_on_the_banner
+    within("tr", text: @scheduled_banner.name) do
+      click_link_or_button "Publish"
+    end
+  end
+
+  def then_the_banner_is_published
+    expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
+    expect(@scheduled_banner.reload.published_at).to be <= Time.current
+  end
+
+  def and_the_banner_is_no_longer_on_the_scheduled_tab
+    visit scheduled_support_banners_path
+    expect(page).to have_no_content(@scheduled_banner.name)
+  end
+
+  def and_the_banner_appears_on_the_active_tab
+    visit active_support_banners_path
+    expect(page).to have_content(@scheduled_banner.name)
+    expect(page).to have_css(".govuk-tag", text: "Active")
+  end
+
+  def then_i_do_not_see_the_publish_action
+    expect(page).to have_no_button("Publish")
   end
 end

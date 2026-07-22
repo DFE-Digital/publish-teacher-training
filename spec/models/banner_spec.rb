@@ -424,4 +424,65 @@ RSpec.describe Banner, type: :model do
       end
     end
   end
+
+  describe "#expire" do
+    it "sets expired_at to the given time on an active banner" do
+      banner = create(:banner, published_at: 1.day.ago, expired_at: nil)
+      now = Time.current
+
+      banner.expire(now)
+
+      expect(banner.reload.expired_at).to eq(now)
+    end
+
+    it "overwrites an existing future expired_at on an active banner" do
+      banner = create(:banner, published_at: 1.day.ago, expired_at: 1.day.from_now)
+      now = Time.current
+
+      banner.expire(now)
+
+      expect(banner.reload.expired_at).to eq(now)
+    end
+
+    it "returns false on a scheduled banner" do
+      banner = create(:banner, published_at: 1.day.from_now, expired_at: nil)
+
+      expect(banner.expire).to be false
+    end
+
+    it "returns false on a draft banner" do
+      banner = create(:banner, published_at: nil, expired_at: nil)
+
+      expect(banner.expire).to be false
+    end
+  end
+
+  describe "#publish" do
+    it "sets published_at to the given time on a scheduled banner" do
+      banner = create(:banner, published_at: 1.day.from_now, expired_at: nil)
+      now = Time.current
+
+      banner.publish(now)
+
+      expect(banner.reload.published_at).to eq(now)
+    end
+
+    it "sets published_at to the given time on a scheduled banner with an expiry" do
+      banner = create(:banner, published_at: 1.day.from_now, expired_at: 2.days.from_now)
+      now = Time.current
+
+      banner.publish(now)
+
+      expect(banner.reload.published_at).to eq(now)
+    end
+
+    it "sets published_at on a draft banner" do
+      banner = create(:banner, published_at: nil, expired_at: nil)
+      now = Time.current
+
+      banner.publish(now)
+
+      expect(banner.reload.published_at).to eq(now)
+    end
+  end
 end

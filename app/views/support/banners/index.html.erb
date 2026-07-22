@@ -45,6 +45,12 @@
           <% end %>
           <% row.with_cell do %>
             <%= govuk_link_to(t('support.banners.index.table.actions.edit'), edit_support_banner_path(banner), class: 'govuk-link') %>
+            <% if banner.active? %>
+              <%= button_to(t('support.banners.index.table.actions.expire'), support_banner_expiration_path(banner), class: 'govuk-button govuk-button--warning govuk-!-margin-bottom-0 govuk-!-margin-top-1') %>
+            <% end %>
+            <% if banner.scheduled? %>
+              <%= button_to(t('support.banners.index.table.actions.publish'), support_banner_publication_path(banner), class: 'govuk-button govuk-!-margin-bottom-0 govuk-!-margin-top-1') %>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>

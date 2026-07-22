@@ -53,6 +53,8 @@ en:
             actions: "Actions"
           actions:
             edit: "Edit"
+            expire: "Expire"
+            publish: "Publish"
       new:
         page_title: "Banner details"
         page_caption: "Add banner"
