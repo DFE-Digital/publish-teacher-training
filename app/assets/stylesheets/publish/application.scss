@@ -7,6 +7,10 @@ $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 
 $app-callout-light-blue-colour: #f3f8f6;
 
+// Shared with Find: the course list filter panel and its active filter chips.
+@import "../components/filter-panel";
+@import "../components/active-filters";
+
 @import "../components/accordion";
 @import "../components/autocomplete";
 @import "../components/button-link";
