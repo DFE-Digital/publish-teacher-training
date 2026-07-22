@@ -2,20 +2,12 @@
 
 module ProviderSchools
   class Identity
-    def self.uuid_for(school:)
-      new(provider: school.provider).uuid_for(school:)
-    end
-
     def self.ordered_school_scope(provider:)
       new(provider:).ordered_school_scope
     end
 
     def initialize(provider:)
       @provider = provider
-    end
-
-    def uuid_for(school:)
-      school.uuid
     end
 
     def school_scope

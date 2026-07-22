@@ -49,7 +49,7 @@ module ProviderSchools
     end
 
     def uuid_for_path
-      identity.uuid_for(school:)
+      school.uuid
     end
 
     def removable?
