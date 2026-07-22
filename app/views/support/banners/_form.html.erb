@@ -29,6 +29,8 @@
     <div class="govuk-form-group">
       <%= form.govuk_check_box :success_styling,
                                true,
+                               false,
+                               multiple: false,
                                label: { text: Banner.human_attribute_name(:success_styling), size: "s" },
                                hint: { text: Banner.human_attribute_name(:success_styling_description) } %>
     </div>
@@ -80,9 +82,9 @@
     </div>
 
     <%= form.govuk_check_boxes_fieldset :display_on, legend: { text: Banner.human_attribute_name(:display_on_description) } do %>
-      <%= form.govuk_check_box :display_on_find, "true", label: { text: Banner.human_attribute_name(:display_on_find) } %>
-      <%= form.govuk_check_box :display_on_publish, "true", label: { text: Banner.human_attribute_name(:display_on_publish) } %>
-      <%= form.govuk_check_box :display_on_support, "true", label: { text: Banner.human_attribute_name(:display_on_support) } %>
+      <%= form.govuk_check_box :display_on_find, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_find) } %>
+      <%= form.govuk_check_box :display_on_publish, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_publish) } %>
+      <%= form.govuk_check_box :display_on_support, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_support) } %>
     <% end %>
 
     <%= form.govuk_submit t("continue") %>
