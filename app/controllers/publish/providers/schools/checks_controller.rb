@@ -10,10 +10,8 @@ module Publish
         def show; end
 
         def update
-          provider_school = nil
-
-          ActiveRecord::Base.transaction do
-            provider_school = create_provider_school
+          provider_school = ActiveRecord::Base.transaction do
+            create_provider_school
           end
 
           redirect_to publish_provider_recruitment_cycle_schools_path,
@@ -26,11 +24,19 @@ module Publish
 
         def create_provider_school
           if provider_school_identity.after_schools_remodel_cycle?
-            return ::ProviderSchools::Creator.call(provider: @provider, gias_school_id: school_id)
+            create_only_provider_school
+          else
+            create_provider_school_and_legacy_site
           end
+        end
 
-          # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-          # TODO School data remodel removal - remove this legacy Site write when publish creates Provider::School directly.
+        def create_only_provider_school
+          ::ProviderSchools::Creator.call(provider: @provider, gias_school_id: school_id)
+        end
+
+        # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+        # TODO School data remodel removal - remove this legacy Site write when publish creates Provider::School directly.
+        def create_provider_school_and_legacy_site
           ::ProviderSchools::LegacySiteCreator.call(site: @site)
           # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
