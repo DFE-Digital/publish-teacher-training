@@ -20,6 +20,21 @@ module Publish
     # +Courses::ContentStatusService+ and +Course#has_unpublished_changes?+; the
     # Ruby remains the source of truth and a cross-check spec asserts agreement.
     class Query
+      # Ports Courses::ContentStatusService#execute. Held as a constant because
+      # Postgres cannot reference a SELECT alias from WHERE, so the status filter
+      # has to repeat the expression rather than reuse the +content_status+ column.
+      CONTENT_STATUS_SQL = <<~SQL.squish
+        CASE
+          WHEN enrichment_stats.latest_status = 2 THEN 'rolled_over'
+          WHEN enrichment_stats.latest_status = 1 THEN 'published'
+          WHEN enrichment_stats.latest_status = 3 THEN 'withdrawn'
+          WHEN enrichment_stats.latest_status IS NULL THEN 'draft'
+          WHEN enrichment_stats.latest_published_at IS NOT NULL OR enrichment_stats.total > 1
+            THEN 'published_with_unpublished_changes'
+          ELSE 'draft'
+        END
+      SQL
+
       def self.call(...)
         new(...).call
       end
@@ -37,7 +52,8 @@ module Publish
 
       def call
         @scope = accredited_provider_scope
-        @scope = status_columns_scope
+        @scope = enrichment_join_scope
+        @scope = status_columns_select
         @scope = ordering_scope
         @scope
       end
@@ -59,10 +75,11 @@ module Publish
         @scope.where(accredited_provider_code: params[:accredited_provider])
       end
 
-      # Joins the accredited provider (for the heading) and a per-course
-      # aggregate over its enrichments, then selects the computed columns.
+      # Joins the accredited provider (for the heading) and a per-course aggregate
+      # over its enrichments. Applied before the filter scopes, which need
+      # enrichment_stats in scope; the matching SELECT comes after them.
       # course_enrichment.status enum: draft=0 published=1 rolled_over=2 withdrawn=3
-      def status_columns_scope
+      def enrichment_join_scope
         accredited_provider_join = sanitize(<<~SQL, cycle_id: provider.recruitment_cycle_id)
           LEFT OUTER JOIN provider accredited_provider
             ON accredited_provider.provider_code = course.accredited_provider_code
@@ -85,25 +102,19 @@ module Publish
           ) enrichment_stats ON TRUE
         SQL
 
+        @scope
+          .joins(accredited_provider_join)
+          .joins(enrichment_stats_join)
+      end
+
+      # Selects the computed columns the list renders from.
+      def status_columns_select
         # NULL group name == self-accredited (rendered without a heading).
         group_name = sanitize(<<~SQL, own_code: provider.provider_code)
           CASE
             WHEN course.accredited_provider_code IS NULL OR course.accredited_provider_code = :own_code THEN NULL
             ELSE accredited_provider.provider_name
           END AS group_name
-        SQL
-
-        # Ports Courses::ContentStatusService#execute.
-        content_status = <<~SQL.squish
-          CASE
-            WHEN enrichment_stats.latest_status = 2 THEN 'rolled_over'
-            WHEN enrichment_stats.latest_status = 1 THEN 'published'
-            WHEN enrichment_stats.latest_status = 3 THEN 'withdrawn'
-            WHEN enrichment_stats.latest_status IS NULL THEN 'draft'
-            WHEN enrichment_stats.latest_published_at IS NOT NULL OR enrichment_stats.total > 1
-              THEN 'published_with_unpublished_changes'
-            ELSE 'draft'
-          END AS content_status
         SQL
 
         # Ports Course#has_unpublished_changes? (false when all enrichments are published).
@@ -120,10 +131,7 @@ module Publish
           ) AS has_unpublished_changes
         SQL
 
-        @scope
-          .joins(accredited_provider_join)
-          .joins(enrichment_stats_join)
-          .select("course.*", group_name, content_status, has_unpublished_changes)
+        @scope.select("course.*", group_name, "#{CONTENT_STATUS_SQL} AS content_status", has_unpublished_changes)
       end
 
       # Self-accredited group first, then case-insensitive by accredited provider
