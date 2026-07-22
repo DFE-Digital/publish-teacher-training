@@ -106,6 +106,216 @@ RSpec.describe Publish::Courses::Query do
     end
   end
 
+  describe "level filter" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    let(:provider) { create(:provider, :accredited_provider) }
+    let!(:primary) { create(:course, :primary, provider:, name: "Alpha") }
+    let!(:secondary) { create(:course, :secondary, provider:, name: "Bravo") }
+    let!(:further_education) { create(:course, :without_validation, provider:, level: :further_education, name: "Charlie") }
+
+    context "when no level is given" do
+      let(:params) { {} }
+
+      it "returns every course" do
+        expect(rows).to match_collection([primary, secondary, further_education], attribute_names: %w[name level])
+      end
+    end
+
+    context "when one level is given" do
+      let(:params) { { level: %w[secondary] } }
+
+      it "returns only courses at that level" do
+        expect(rows).to match_collection([secondary], attribute_names: %w[name level])
+      end
+    end
+
+    context "when several levels are given" do
+      let(:params) { { level: %w[primary further_education] } }
+
+      it "returns courses at any of them" do
+        expect(rows).to match_collection([primary, further_education], attribute_names: %w[name level])
+      end
+    end
+
+    context "when the level is not a recognised value" do
+      let(:params) { { level: %w[bogus] } }
+
+      it "returns no courses" do
+        expect(rows).to be_empty
+      end
+    end
+
+    context "when a recognised level is mixed with an unrecognised one" do
+      let(:params) { { level: %w[primary bogus] } }
+
+      it "ignores the unrecognised value" do
+        expect(rows).to match_collection([primary], attribute_names: %w[name level])
+      end
+    end
+  end
+
+  describe "funding filter" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    let(:provider) { create(:provider, :accredited_provider) }
+    let!(:fee) { create(:course, :fee, provider:, name: "Alpha") }
+    let!(:salary) { create(:course, :salary, provider:, name: "Bravo") }
+    let!(:apprenticeship) { create(:course, :apprenticeship, provider:, name: "Charlie") }
+
+    context "when one funding type is given" do
+      let(:params) { { funding: %w[salary] } }
+
+      it "returns only courses with that funding" do
+        expect(rows).to match_collection([salary], attribute_names: %w[name funding])
+      end
+    end
+
+    context "when several funding types are given" do
+      let(:params) { { funding: %w[fee apprenticeship] } }
+
+      it "returns courses with any of them" do
+        expect(rows).to match_collection([fee, apprenticeship], attribute_names: %w[name funding])
+      end
+    end
+
+    context "when the funding type is not a recognised value" do
+      let(:params) { { funding: %w[bogus] } }
+
+      it "returns no courses" do
+        expect(rows).to be_empty
+      end
+    end
+  end
+
+  describe "qualification filter" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    let(:provider) { create(:provider, :accredited_provider) }
+    let!(:qts) { create(:course, :resulting_in_qts, provider:, name: "Alpha") }
+    let!(:pgce_with_qts) { create(:course, :resulting_in_pgce_with_qts, provider:, name: "Bravo") }
+    let!(:pgde_with_qts) { create(:course, :resulting_in_pgde_with_qts, provider:, name: "Charlie") }
+
+    before { create(:course, :resulting_in_pgce, provider:, name: "Delta") }
+
+    context "when QTS only is given" do
+      let(:params) { { qualification: %w[qts] } }
+
+      it "returns only QTS courses" do
+        expect(rows).to match_collection([qts], attribute_names: %w[name qualification])
+      end
+    end
+
+    context "when QTS with PGCE or PGDE is given" do
+      let(:params) { { qualification: %w[qts_with_pgce_or_pgde] } }
+
+      it "returns both the PGCE and the PGDE courses" do
+        expect(rows).to match_collection([pgce_with_qts, pgde_with_qts], attribute_names: %w[name qualification])
+      end
+    end
+
+    context "when both options are given" do
+      let(:params) { { qualification: %w[qts qts_with_pgce_or_pgde] } }
+
+      it "returns the union rather than nothing" do
+        expect(rows).to match_collection([qts, pgce_with_qts, pgde_with_qts], attribute_names: %w[name qualification])
+      end
+    end
+
+    context "when the qualification is not a recognised value" do
+      let(:params) { { qualification: %w[bogus] } }
+
+      it "returns no courses" do
+        expect(rows).to be_empty
+      end
+    end
+  end
+
+  describe "study mode filter" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    let(:provider) { create(:provider, :accredited_provider) }
+    let!(:full_time) { create(:course, provider:, study_mode: :full_time, name: "Alpha") }
+    let!(:part_time) { create(:course, provider:, study_mode: :part_time, name: "Bravo") }
+    let!(:either) { create(:course, provider:, study_mode: :full_time_or_part_time, name: "Charlie") }
+
+    context "when full time is given" do
+      let(:params) { { study_mode: %w[full_time] } }
+
+      it "also returns courses offered either way" do
+        expect(rows).to match_collection([full_time, either], attribute_names: %w[name study_mode])
+      end
+    end
+
+    context "when part time is given" do
+      let(:params) { { study_mode: %w[part_time] } }
+
+      it "also returns courses offered either way" do
+        expect(rows).to match_collection([part_time, either], attribute_names: %w[name study_mode])
+      end
+    end
+
+    context "when both options are given" do
+      let(:params) { { study_mode: %w[full_time part_time] } }
+
+      it "returns the union rather than nothing" do
+        expect(rows).to match_collection([full_time, part_time, either], attribute_names: %w[name study_mode])
+      end
+    end
+
+    context "when the study mode is not a recognised value" do
+      let(:params) { { study_mode: %w[bogus] } }
+
+      it "returns no courses" do
+        expect(rows).to be_empty
+      end
+    end
+  end
+
+  describe "combining filters" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    let(:provider) { create(:provider, :accredited_provider) }
+    let!(:wanted) { create(:course, :primary, :salary, provider:, name: "Alpha") }
+    let(:params) { { level: %w[primary], funding: %w[salary] } }
+
+    before do
+      create(:course, :primary, :fee, provider:, name: "Bravo")
+      create(:course, :secondary, :salary, provider:, name: "Charlie")
+    end
+
+    it "narrows on every filter at once" do
+      expect(rows).to match_collection([wanted], attribute_names: %w[name level funding])
+    end
+  end
+
+  describe "applied_scopes" do
+    let(:provider) { create(:provider, :accredited_provider) }
+    let(:query) { described_class.new(provider: provider.reload, params:) }
+
+    context "when filters are given" do
+      let(:params) { { level: %w[primary], funding: %w[fee], qualification: %w[qts], study_mode: %w[part_time] } }
+
+      it "records each applied filter" do
+        query.call
+
+        expect(query.applied_scopes).to eq(
+          level: %w[primary], funding: %w[fee], qualification: %w[qts], study_mode: %w[part_time],
+        )
+      end
+    end
+
+    context "when no filters are given" do
+      let(:params) { {} }
+
+      it "records nothing" do
+        query.call
+
+        expect(query.applied_scopes).to be_empty
+      end
+    end
+  end
+
   describe "content_status / has_unpublished_changes columns match the canonical Ruby" do
     let(:provider) { create(:provider, :accredited_provider) }
 

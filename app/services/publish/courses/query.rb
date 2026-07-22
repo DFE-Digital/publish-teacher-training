@@ -35,6 +35,19 @@ module Publish
         END
       SQL
 
+      # Filter option -> Course enum keys. Both mirror Courses::Query (the Find
+      # search query), except that selecting several options here unions them
+      # rather than falling through to "no filter".
+      QUALIFICATION_OPTIONS = {
+        "qts" => %i[qts],
+        "qts_with_pgce_or_pgde" => %i[pgce_with_qts pgde_with_qts],
+      }.freeze
+
+      STUDY_MODE_OPTIONS = {
+        "full_time" => %i[full_time full_time_or_part_time],
+        "part_time" => %i[part_time full_time_or_part_time],
+      }.freeze
+
       def self.call(...)
         new(...).call
       end
@@ -53,6 +66,10 @@ module Publish
       def call
         @scope = accredited_provider_scope
         @scope = enrichment_join_scope
+        @scope = level_scope
+        @scope = funding_scope
+        @scope = qualification_scope
+        @scope = study_mode_scope
         @scope = status_columns_select
         @scope = ordering_scope
         @scope
@@ -73,6 +90,40 @@ module Publish
 
         @applied_scopes[:accredited_provider] = params[:accredited_provider]
         @scope.where(accredited_provider_code: params[:accredited_provider])
+      end
+
+      # The provider-facing filter offers two qualification choices; the second
+      # covers both of the postgraduate certificate/diploma qualifications.
+      def qualification_scope
+        return @scope if params[:qualification].blank?
+
+        @applied_scopes[:qualification] = params[:qualification]
+        keys = Array(params[:qualification]).flat_map { |option| QUALIFICATION_OPTIONS.fetch(option, []) }.uniq
+        @scope.where(qualification: ::Course.qualifications.values_at(*keys))
+      end
+
+      # A course offered either way satisfies both the full time and the part
+      # time filter, so each option matches its own mode plus the combined one.
+      def study_mode_scope
+        return @scope if params[:study_mode].blank?
+
+        @applied_scopes[:study_mode] = params[:study_mode]
+        keys = Array(params[:study_mode]).flat_map { |option| STUDY_MODE_OPTIONS.fetch(option, []) }.uniq
+        @scope.where(study_mode: ::Course.study_modes.values_at(*keys))
+      end
+
+      def level_scope
+        return @scope if params[:level].blank?
+
+        @applied_scopes[:level] = params[:level]
+        @scope.where(level: ::Course.levels.values_at(*Array(params[:level])).compact)
+      end
+
+      def funding_scope
+        return @scope if params[:funding].blank?
+
+        @applied_scopes[:funding] = params[:funding]
+        @scope.where(funding: ::Course.fundings.values_at(*Array(params[:funding])).compact)
       end
 
       # Joins the accredited provider (for the heading) and a per-course aggregate
