@@ -12,6 +12,8 @@ en:
         multiple: # file
         checks: # file
         search: # file
+        destroy:
+          cannot_remove_school: This school could not be removed because it is used by a course
       users:
         first_name: "First name"
         last_name: "Last name"

@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe ProviderSchools::Identity do
   let(:remodel_cycle_year) { 2026 }
   let(:gias_school) { create(:gias_school, urn: "123456") }
-  let(:site_uuid) { "11111111-1111-4111-8111-111111111111" }
-  let(:provider_school_uuid) { "22222222-2222-4222-8222-222222222222" }
+  let(:site_uuid) { Faker::Internet.uuid }
+  let(:provider_school_uuid) { Faker::Internet.uuid }
 
   before do
     allow(Settings).to receive(:schools_remodel_cycle_year).and_return(remodel_cycle_year)
