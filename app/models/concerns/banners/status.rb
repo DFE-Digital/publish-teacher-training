@@ -52,9 +52,9 @@ module Banners
 
       def expired?(now = Time.current)
         return false if draft?
+        return false unless expired_at
 
-        expiry = expired_at.presence || DateTime::Infinity.new
-        expiry < now
+        expired_at < now && published_at <= now
       end
     end
   end
