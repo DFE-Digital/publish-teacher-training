@@ -100,4 +100,60 @@ RSpec.describe Courses::QueryDebugHeaderComponent, type: :component do
       expect(query_debug_header_component_content).not_to include("longitude")
     end
   end
+
+  context "when rendering nearest school links" do
+    let(:debug) { true }
+    let(:environment_name) { "qa" }
+    let(:latitude) { 51.5 }
+    let(:longitude) { -0.1 }
+    let(:results) { [course] }
+    let(:course) { create(:course, provider:) }
+    let(:site) do
+      create(
+        :site,
+        provider:,
+        urn: gias_school.urn,
+        code: site_code,
+        location_name: gias_school.name,
+        latitude:,
+        longitude:,
+      )
+    end
+    let(:site_code) { "A" }
+    let(:gias_school) { create(:gias_school, name: "Debug School") }
+
+    before do
+      create(:site_status, :findable, course:, site:)
+    end
+
+    context "in the schools remodel cycle" do
+      let(:recruitment_cycle) { create(:recruitment_cycle, year: 2026) }
+      let(:provider) { create(:provider, recruitment_cycle:) }
+
+      it "links to the school using the legacy site uuid" do
+        render_inline(component)
+
+        expect(page.find_link("Debug School", visible: :all)[:href]).to include("/schools/#{site.uuid}")
+      end
+    end
+
+    context "after the schools remodel cycle" do
+      let(:recruitment_cycle) { create(:recruitment_cycle, year: 2027) }
+      let(:provider) { create(:provider, recruitment_cycle:) }
+
+      it "links to the school using the provider school uuid" do
+        provider_school = create(:provider_school, provider:, gias_school:, site_code:)
+        render_inline(component)
+
+        expect(page.find_link("Debug School", visible: :all)[:href]).to include("/schools/#{provider_school.uuid}")
+      end
+
+      it "renders the school name without a school link when the provider school uuid is missing" do
+        render_inline(component)
+
+        expect(page).to have_content("Debug School")
+        expect(page).not_to have_link("Debug School", visible: :all)
+      end
+    end
+  end
 end

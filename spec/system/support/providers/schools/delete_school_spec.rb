@@ -25,11 +25,22 @@ RSpec.describe "Delete school under provider as an admin" do
     scenario "after the schools remodel cycle without a legacy site" do
       recruitment_cycle = create(:recruitment_cycle, year: 2027)
       provider = create(:provider, provider_name: "Future Provider", recruitment_cycle:)
-      gias_school = create(:gias_school, name: "Future School", urn: "654321")
-      provider_school = create(:provider_school, provider:, gias_school:, site_code: "F")
+      gias_school = create(
+        :gias_school,
+        name: "Future School",
+        urn: "654321",
+        address1: "1 Future Road",
+        address2: "Future Building",
+        address3: "Future Quarter",
+        town: "Future Town",
+        county: "Future County",
+        postcode: "FT1 1AA",
+      )
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "-")
 
       support_provider_schools_index_page.load(recruitment_cycle_year: recruitment_cycle.year, provider_id: provider.id)
 
+      expect(page).to have_content("- (dash)")
       expect(page).to have_link(
         "Future School",
         href: support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid),
@@ -37,7 +48,10 @@ RSpec.describe "Delete school under provider as an admin" do
 
       click_link_or_button "Future School"
       expect(support_provider_school_show_page).to be_displayed
-      expect(page).to have_content("Future School")
+      expect(page).to have_content("Future School (Main Site)")
+      expect(page).to have_content("School code-", normalize_ws: true)
+      expect(page).to have_content("URN654321", normalize_ws: true)
+      expect(page).to have_content("Address 1 Future Road Future Building Future Quarter Future Town Future County FT1 1AA", normalize_ws: true)
 
       click_link_or_button "Remove school"
       click_link_or_button "Remove school"
