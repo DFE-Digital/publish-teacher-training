@@ -70,7 +70,7 @@ module ProviderSchools
 
     def destroy_records!
       provider_school.destroy!
-      site.destroy! if after_schools_remodel_cycle?
+      site.destroy! unless after_schools_remodel_cycle?
     end
 
     def provider_school_course_schools_empty?
