@@ -1,0 +1,36 @@
+<h2 class="govuk-heading-m"><%= t("publish.courses.filters.heading") %></h2>
+
+<%= render active_filters_component %>
+
+<%# The builder is named here rather than inherited, so the panel renders the same wherever it is used. %>
+<%= form_with model: filter_form, scope: "", url: courses_path, method: :get,
+              builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+              data: { controller: "course-filters" } do |f| %>
+  <% visible_groups.each do |group| %>
+    <details class="app-c-filter-section" <%= "open" if selected_count(group) %>>
+      <summary class="app-c-filter-section__summary">
+        <h3 class="app-c-filter-section__summary-heading"><%= t("publish.courses.filters.groups.#{group}") %></h3>
+        <% if selected_count(group) %>
+          <span class="app-c-filter-section__count govuk-hint">
+            <%= "#{selected_count(group)} #{t('publish.courses.filters.selected')}" %>
+          </span>
+        <% end %>
+      </summary>
+
+      <div class="app-c-filter-section__content">
+        <%= f.govuk_check_boxes_fieldset group,
+              legend: { text: t("publish.courses.filters.groups.#{group}"), hidden: true },
+              class: "govuk-checkboxes--small",
+              multiple: false do %>
+          <% filter_form.options_for(group).each do |option| %>
+            <%= f.govuk_check_box group, option.value, label: { text: option.label }, include_hidden: false %>
+          <% end %>
+        <% end %>
+      </div>
+    </details>
+  <% end %>
+
+  <%= f.govuk_submit t("publish.courses.filters.apply_filters"),
+        class: "govuk-!-margin-top-4",
+        data: { course_filters_target: "applyFiltersButton" } %>
+<% end %>
