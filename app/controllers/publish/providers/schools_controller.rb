@@ -3,7 +3,7 @@
 module Publish
   module Providers
     class SchoolsController < ApplicationController
-      before_action :site, only: %i[show delete]
+      before_action :site, only: %i[show delete destroy]
       before_action :reset_urn_form, only: %i[index]
 
       PER_PAGE = 20
@@ -27,11 +27,13 @@ module Publish
       def delete; end
 
       def destroy
-        school_removal.call
-        flash[:success] = "School removed"
-        redirect_to publish_provider_recruitment_cycle_schools_path
-      rescue ProviderSchools::Removal::CannotRemoveSchoolError
-        render :delete, status: :unprocessable_entity
+        if school_removal.call
+          flash[:success] = "School removed"
+          redirect_to publish_provider_recruitment_cycle_schools_path
+        else
+          redirect_to delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.uuid),
+                      flash: { warning: t(".cannot_remove_school") }
+        end
       end
 
     private

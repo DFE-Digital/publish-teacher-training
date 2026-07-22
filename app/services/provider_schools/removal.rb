@@ -2,8 +2,6 @@
 
 module ProviderSchools
   class Removal
-    class CannotRemoveSchoolError < StandardError; end
-
     delegate :after_schools_remodel_cycle?, to: :identity
 
     def initialize(provider:, uuid:)
@@ -16,14 +14,10 @@ module ProviderSchools
       ActiveRecord::Base.transaction do
         if provider_school.present?
           provider_school.with_lock do
-            raise CannotRemoveSchoolError unless removable?
-
-            destroy_records!
+            destroy_records_if_removable!
           end
         else
-          raise CannotRemoveSchoolError unless removable?
-
-          site.destroy!
+          destroy_site_if_removable!
         end
       end
     end
@@ -48,10 +42,6 @@ module ProviderSchools
       nil
     end
 
-    def uuid_for_path
-      school.uuid
-    end
-
     def removable?
       if after_schools_remodel_cycle?
         !provider_school.course_schools.exists?
@@ -63,6 +53,20 @@ module ProviderSchools
   private
 
     attr_reader :provider, :uuid, :identity
+
+    def destroy_records_if_removable!
+      return false unless removable?
+
+      destroy_records!
+      true
+    end
+
+    def destroy_site_if_removable!
+      return false unless removable?
+
+      site.destroy!
+      true
+    end
 
     def destroy_records!
       if after_schools_remodel_cycle?

@@ -1,6 +1,6 @@
 <%= render PageTitle.new(title: "support.providers.schools.delete") %>
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school_removal.uuid_for_path)) %>
+  <%= govuk_back_link_to(support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site.uuid)) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -11,7 +11,7 @@
     </h1>
     <% if school_removal.removable? %>
       <%= govuk_button_to "Remove school",
-          delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school_removal.uuid_for_path),
+          delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site.uuid),
           method: :delete,
           class: "govuk-button--warning" %>
     <% else %>
@@ -21,7 +21,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to("Cancel", support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school_removal.uuid_for_path)) %>
+      <%= govuk_link_to("Cancel", support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site.uuid)) %>
     </p>
   </div>
 </div>

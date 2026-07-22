@@ -28,7 +28,7 @@
 
           <p class="govuk-body">
             <%= govuk_link_to t("support.actions.remove_school", resource: "location"),
-                delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school_removal.uuid_for_path),
+                delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site.uuid),
                 class: "app-link--destructive" %>
           </p>
     </fieldset>
