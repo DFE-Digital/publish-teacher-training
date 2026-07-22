@@ -62,6 +62,15 @@ describe ProviderSchools::Creator do
     }.not_to change(Provider::School, :count)
   end
 
+  it "is idempotent when called twice without a site_code" do
+    existing = described_class.call(provider:, gias_school_id: gias_school.id)
+
+    expect {
+      result = described_class.call(provider:, gias_school_id: gias_school.id)
+      expect(result).to eq(existing)
+    }.not_to change(Provider::School, :count)
+  end
+
   it "returns the existing row when one already exists for this provider, gias_school and site_code" do
     existing = create(:provider_school, provider:, gias_school:, site_code: "A")
 
@@ -71,6 +80,14 @@ describe ProviderSchools::Creator do
     expect(result.site_code).to eq("A")
   end
 
+  it "returns the existing normal row when no site_code is supplied" do
+    existing = create(:provider_school, provider:, gias_school:, site_code: "A")
+
+    result = described_class.call(provider:, gias_school_id: gias_school.id)
+
+    expect(result).to eq(existing)
+  end
+
   it "does not reuse a main-site row when creating a normal school row for the same GIAS school" do
     main_site = create(:provider_school, :main_site, provider:, gias_school:)
 
@@ -78,6 +95,16 @@ describe ProviderSchools::Creator do
       result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
       expect(result).not_to eq(main_site)
       expect(result.site_code).to eq("A")
+    }.to change(Provider::School, :count).by(1)
+  end
+
+  it "does not reuse a main-site row when no site_code is supplied" do
+    main_site = create(:provider_school, :main_site, provider:, gias_school:)
+
+    expect {
+      result = described_class.call(provider:, gias_school_id: gias_school.id)
+      expect(result).not_to eq(main_site)
+      expect(result.site_code).not_to eq(Provider::School::MAIN_SITE_CODE)
     }.to change(Provider::School, :count).by(1)
   end
 
@@ -97,6 +124,16 @@ describe ProviderSchools::Creator do
     allow(provider).to receive(:with_lock).and_raise(ActiveRecord::RecordNotUnique)
 
     result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "B")
+
+    expect(result).to eq(existing)
+  end
+
+  it "returns the existing normal row when a RecordNotUnique race fires without a site_code" do
+    existing = create(:provider_school, provider:, gias_school:, site_code: "B")
+
+    allow(provider).to receive(:with_lock).and_raise(ActiveRecord::RecordNotUnique)
+
+    result = described_class.call(provider:, gias_school_id: gias_school.id)
 
     expect(result).to eq(existing)
   end

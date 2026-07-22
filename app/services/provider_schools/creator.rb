@@ -33,13 +33,27 @@ module ProviderSchools
   private
 
     def existing_provider_school
-      provider_school_by_uuid || @provider.schools.find_by(gias_school_id: @gias_school_id, site_code: target_site_code)
+      provider_school_by_uuid || provider_school_by_site_code || normal_provider_school
     end
 
     def provider_school_by_uuid
       return if @uuid.blank?
 
       @provider.schools.find_by(uuid: @uuid)
+    end
+
+    def provider_school_by_site_code
+      return if @site_code.blank?
+
+      @provider.schools.find_by(gias_school_id: @gias_school_id, site_code: @site_code)
+    end
+
+    def normal_provider_school
+      return if @site_code.present?
+
+      @provider.schools.where(gias_school_id: @gias_school_id)
+               .where.not(site_code: Provider::School::MAIN_SITE_CODE)
+               .first
     end
 
     def target_site_code
