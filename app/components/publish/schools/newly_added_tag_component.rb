@@ -9,7 +9,7 @@ module Publish
       end
 
       def render?
-        @school.register_import? && @recruitment_cycle.rollover_period_2026?
+        @school.respond_to?(:register_import?) && @school.register_import? && @recruitment_cycle.rollover_period_2026?
       end
     end
   end
