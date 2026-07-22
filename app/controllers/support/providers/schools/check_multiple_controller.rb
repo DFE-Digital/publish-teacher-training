@@ -39,26 +39,38 @@ module Support
         end
 
         def save
-          saved_sites = []
+          saved_schools = []
 
           gias_schools.each do |gias_school|
             ActiveRecord::Base.transaction do
-              # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-              # TODO School data remodel removal - remove this legacy Site write when support creates Provider::School directly.
-              site = provider.sites.build(gias_school.school_attributes)
-              # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-              ::ProviderSchools::LegacySiteCreator.call(site:)
-              ::ProviderSchools::Creator.call(
-                provider:,
-                gias_school_id: gias_school.id,
-                site_code: site.code,
-                uuid: site.uuid,
-              )
-              saved_sites << site
+              saved_schools << create_provider_school(gias_school:)
             end
           end
 
-          schools_added_message(saved_sites)
+          schools_added_message(saved_schools)
+        end
+
+        def create_provider_school(gias_school:)
+          if provider_school_identity.after_schools_remodel_cycle?
+            return ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
+          end
+
+          # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+          # TODO School data remodel removal - remove this legacy Site write when support creates Provider::School directly.
+          legacy_site = provider.sites.build(gias_school.school_attributes)
+          ::ProviderSchools::LegacySiteCreator.call(site: legacy_site)
+          # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+
+          ::ProviderSchools::Creator.call(
+            provider:,
+            gias_school_id: gias_school.id,
+            site_code: legacy_site.code,
+            uuid: legacy_site.uuid,
+          )
+        end
+
+        def provider_school_identity
+          @provider_school_identity ||= ::ProviderSchools::Identity.new(provider:)
         end
 
         def urn_form

@@ -34,6 +34,19 @@ RSpec.describe "Adding school to provider as an admin" do
       and_the_provider_school_row_is_created
     end
 
+    scenario "with new school after the schools remodel cycle" do
+      and_there_is_a_provider_after_the_schools_remodel_cycle
+
+      given_i_visit_the_support_provider_schools_index_page
+      and_i_click_add_school
+      when_i_search_with_an_partial_query
+      when_i_choose_the_school_i_want_to_add
+      when_i_click_add_school
+
+      then_i_see_a_confirmation_message
+      and_only_the_provider_school_row_is_created
+    end
+
     scenario "i can select a school using the autocomplete", :js do
       given_i_visit_the_support_provider_schools_index_page
       and_i_click_add_school
@@ -94,6 +107,11 @@ RSpec.describe "Adding school to provider as an admin" do
     @provider = create(:provider, provider_name: "School of Cats", provider_code: "V01")
   end
 
+  def and_there_is_a_provider_after_the_schools_remodel_cycle
+    recruitment_cycle = create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
+    @provider = create(:provider, provider_name: "School of Cats", provider_code: "V02", recruitment_cycle:)
+  end
+
   def and_there_is_a_gias_school
     @gias_school = create(:gias_school, {
       urn: "123456",
@@ -105,11 +123,11 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def given_i_visit_the_support_provider_schools_index_page
-    support_provider_schools_index_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: @provider.id)
+    support_provider_schools_index_page.load(recruitment_cycle_year: @provider.recruitment_cycle_year, provider_id: @provider.id)
   end
 
   def then_i_am_on_the_school_search_page
-    expect(page).to have_current_path(search_support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: @provider.id))
+    expect(page).to have_current_path(search_support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: @provider.recruitment_cycle_year, provider_id: @provider.id))
   end
 
   def when_i_search_with_an_empty_query
@@ -208,5 +226,14 @@ RSpec.describe "Adding school to provider as an admin" do
     expect(provider_school).to be_present
     expect(provider_school.site_code).to eq(added_site.code)
     expect(provider_school.uuid).to eq(added_site.uuid)
+  end
+
+  def and_only_the_provider_school_row_is_created
+    expect(@provider.sites.find_by(urn: @gias_school.urn)).to be_nil
+
+    provider_school = @provider.schools.find_by(gias_school_id: @gias_school.id)
+    expect(provider_school).to be_present
+    expect(provider_school.site_code).to be_present
+    expect(provider_school.uuid).to be_present
   end
 end

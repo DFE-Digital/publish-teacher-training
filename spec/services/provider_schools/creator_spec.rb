@@ -38,6 +38,15 @@ describe ProviderSchools::Creator do
     expect(result.uuid).to eq(uuid)
   end
 
+  it "uses the supplied site_code and uuid together when a legacy site was created first" do
+    uuid = SecureRandom.uuid
+
+    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "Z", uuid:)
+
+    expect(result.site_code).to eq("Z")
+    expect(result.uuid).to eq(uuid)
+  end
+
   it "returns the created row" do
     result = described_class.call(provider:, gias_school_id: gias_school.id)
 
