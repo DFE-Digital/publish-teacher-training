@@ -69,12 +69,8 @@ module ProviderSchools
     end
 
     def destroy_records!
-      if after_schools_remodel_cycle?
-        provider_school.destroy!
-      else
-        provider_school.destroy!
-        site.destroy!
-      end
+      provider_school.destroy!
+      site.destroy! if after_schools_remodel_cycle?
     end
 
     def provider_school_course_schools_empty?

@@ -10,23 +10,19 @@ module ProviderSchools
       @provider = provider
     end
 
-    def school_scope
-      after_schools_remodel_cycle? ? provider.schools.includes(:gias_school) : provider.sites
-    end
-
     def ordered_school_scope
-      return provider.sites.order(:location_name) unless after_schools_remodel_cycle?
-
-      provider.schools.joins(:gias_school).includes(:gias_school).order("gias_school.name")
+      if after_schools_remodel_cycle?
+        provider.schools.joins(:gias_school).includes(:gias_school).order("gias_school.name")
+      else
+        provider.sites.order(:location_name)
+      end
     end
 
     def school_for(uuid:)
       after_schools_remodel_cycle? ? provider.schools.find_by!(uuid:) : provider.sites.find_by!(uuid:)
     end
 
-    def provider_school_for(site: nil, uuid: nil)
-      return provider.schools.find_by!(uuid:) if uuid.present?
-
+    def provider_school_for(site:)
       provider
         .schools
         .joins(:gias_school)
