@@ -2,12 +2,16 @@ module Courses
   class ActiveFilter
     attr_reader :id, :raw_value, :value, :formatted_value, :remove_params
 
-    def initialize(id:, raw_value:, value:, remove_params:)
+    # formatted_value lets a caller supply the chip label directly, for filters
+    # whose label cannot be a fixed translation key — a start month, say. Left
+    # out, the label is translated from the id and raw value as before, and a
+    # missing translation still rejects the filter.
+    def initialize(id:, raw_value:, value:, remove_params:, formatted_value: nil)
       @id = id
       @raw_value = raw_value
       @value = value
       @remove_params = remove_params
-      @formatted_value = translate
+      @formatted_value = formatted_value.presence || translate
     end
 
     def translate
