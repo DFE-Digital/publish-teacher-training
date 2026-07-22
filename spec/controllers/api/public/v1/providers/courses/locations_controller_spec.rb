@@ -124,6 +124,10 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
       it "returns the provider's schools as locations" do
         expect(json_response["data"].size).to be(2)
       end
+
+      it "flags in the meta that the locations are not the course's own schools" do
+        expect(json_response["meta"]).to eq("has_course_schools" => false)
+      end
     end
 
     context "when a course has its own schools and is exempt from needing them" do
@@ -142,6 +146,10 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
 
       it "returns only the course's own schools, not the provider fallback" do
         expect(json_response["data"].size).to be(1)
+      end
+
+      it "flags in the meta that the locations are the course's own schools" do
+        expect(json_response["meta"]).to eq("has_course_schools" => true)
       end
     end
 

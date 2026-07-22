@@ -198,6 +198,13 @@ components:
               - $ref: "#/components/schemas/ProviderResource"
               - $ref: "#/components/schemas/LocationStatusResource"
               - $ref: "#/components/schemas/CourseResource"
+        meta:
+          type: object
+          properties:
+            has_course_schools:
+              type: boolean
+              description: "Whether the returned locations are the course's own attached schools (true), or the provider's schools returned as a fallback because the course is permitted to publish without schools and has none of its own (false)."
+              example: true
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     LocationStatusResource:
