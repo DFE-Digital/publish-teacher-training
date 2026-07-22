@@ -140,6 +140,10 @@ module Publish
       # A status unreachable in this cycle contributes no predicate; if that
       # leaves none, no course matches — asking for Scheduled courses mid-cycle
       # must return nothing rather than everything.
+      # content_status is a CASE over the enrichment aggregate, so there is no
+      # column to hand to +where+ and some raw SQL is unavoidable. Arel keeps
+      # that to the CONTENT_STATUS_SQL constant and binds every value compared
+      # against it, so no filter value is ever interpolated into SQL.
       def status_scope
         return @scope if params[:status].blank?
 
@@ -147,28 +151,35 @@ module Publish
         predicates = Array(params[:status]).filter_map { |status| status_predicate(status) }
         return @scope.none if predicates.empty?
 
-        @scope.where(predicates.map { |predicate| "(#{predicate})" }.join(" OR "))
+        @scope.where(predicates.map { |predicate| Arel::Nodes::Grouping.new(predicate) }.reduce(:or))
       end
 
       def status_predicate(status)
         case status
         when "draft", "rolled_over", "withdrawn"
-          sanitize("#{CONTENT_STATUS_SQL} = :status", status:)
+          content_status.eq(status)
         when "open"
-          published_predicate(::Course.application_statuses[:open]) if current_or_previous_cycle?
+          published_predicate(:open) if current_or_previous_cycle?
         when "closed"
-          published_predicate(::Course.application_statuses[:closed]) if current_or_previous_cycle?
+          published_predicate(:closed) if current_or_previous_cycle?
         when "scheduled"
-          published_states_sql unless current_or_previous_cycle?
+          published_predicate unless current_or_previous_cycle?
         end
       end
 
-      def published_predicate(application_status)
-        sanitize("#{published_states_sql} AND course.application_status = :application_status", application_status:)
+      def published_predicate(application_status = nil)
+        predicate = content_status.in(PUBLISHED_CONTENT_STATUSES)
+        return predicate if application_status.nil?
+
+        predicate.and(courses[:application_status].eq(::Course.application_statuses.fetch(application_status)))
       end
 
-      def published_states_sql
-        sanitize("#{CONTENT_STATUS_SQL} IN (:states)", states: PUBLISHED_CONTENT_STATUSES)
+      def content_status
+        Arel.sql(CONTENT_STATUS_SQL)
+      end
+
+      def courses
+        ::Course.arel_table
       end
 
       def current_or_previous_cycle?
@@ -186,11 +197,17 @@ module Publish
         months = Array(params[:start_date]).filter_map { |month| parse_month(month) }
         return @scope.none if months.empty?
 
-        condition = Array.new(months.size, "(course.start_date >= ? AND course.start_date < ?)").join(" OR ")
-        @scope.where(condition, *months.flat_map { |month| [month, month.next_month] })
+        @scope.merge(months.map { |month| ::Course.where(start_date: month...month.next_month) }.reduce(:or))
       end
 
+      # Date.strptime is happy to parse a prefix and ignore whatever follows, so
+      # "2026-09 and anything at all" would otherwise be accepted as September.
+      # Require the whole value to be a month.
+      MONTH_FORMAT = /\A\d{4}-\d{2}\z/
+
       def parse_month(month)
+        return nil unless month.to_s.match?(MONTH_FORMAT)
+
         parsed = Date.strptime(month.to_s, "%Y-%m")
         Time.zone.local(parsed.year, parsed.month, 1)
       rescue ArgumentError, TypeError
