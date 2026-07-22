@@ -5,6 +5,10 @@ weight: 2
 
 # Release Notes
 
+## 22 July 2026
+
+- Add `has_course_schools` to the `meta` of the course locations response (`CourseLocationListResponse`). This boolean is `true` when the returned locations are the course's own attached schools, and `false` when they are the provider's schools returned as a fallback because the course is permitted to publish without schools and has none of its own.
+
 ## 19 September 2024
 
 - Add `training_route` field to `CourseAttributes`. This is a string, corresponding to the courses training route, based on the funding and degree type.

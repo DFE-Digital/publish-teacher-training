@@ -10,10 +10,21 @@ module API
               render jsonapi: locations,
                      include: include_param,
                      expose: exposures,
+                     meta:,
                      class: API::Public::V1::SerializerService.call
             end
 
           private
+
+            # has_course_schools tells API consumers whether the returned
+            # locations are the course's own attached schools (true) or the
+            # provider's schools we fell back to because the course is exempt
+            # from needing schools and has none of its own (false).
+            def meta
+              return unless schools_remodelled
+
+              { has_course_schools: course&.schools.present? }
+            end
 
             def locations
               @locations ||= if schools_remodelled
