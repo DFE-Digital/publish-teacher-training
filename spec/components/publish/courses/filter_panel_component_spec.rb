@@ -31,6 +31,17 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
     it "offers a way to apply the filters without JavaScript" do
       expect(rendered.css("button[type='submit']").text).to include("Apply filters")
     end
+
+    it "lets JavaScript apply the filters as soon as a checkbox changes" do
+      form = rendered.css("form").first
+
+      expect(form["data-controller"]).to eq("course-filters")
+      expect(form["data-action"]).to eq("change->course-filters#apply")
+    end
+
+    it "marks the submit button so JavaScript can hide it once it takes over" do
+      expect(rendered.css("button[type='submit']").first["data-course-filters-target"]).to eq("applyFiltersButton")
+    end
   end
 
   describe "the filter groups" do

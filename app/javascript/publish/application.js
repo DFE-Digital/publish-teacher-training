@@ -9,6 +9,7 @@ import InputPreviewController from './courses/input_preview_controller'
 import SelectAllCheckboxesController from './controllers/select_all_checkboxes_controller'
 import ShowAllSchoolsController from './controllers/show_all_schools_controller'
 import CopyLinkController from './controllers/copy_link_controller'
+import CourseFiltersController from './controllers/course_filters_controller'
 import RemoteAutocompleteController from '../shared/remote_autocomplete_controller'
 
 window.jQuery = jQuery
@@ -22,4 +23,5 @@ Stimulus.register('input-preview', InputPreviewController)
 Stimulus.register('select-all-checkboxes', SelectAllCheckboxesController)
 Stimulus.register('show-all-schools', ShowAllSchoolsController)
 Stimulus.register('copy-link', CopyLinkController)
+Stimulus.register('course-filters', CourseFiltersController)
 Stimulus.register('remote-autocomplete', RemoteAutocompleteController)
