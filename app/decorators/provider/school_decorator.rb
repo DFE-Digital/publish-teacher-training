@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+class Provider::SchoolDecorator < Draper::Decorator
+  include MarkdownHelper
+  delegate_all
+
+  def full_address_on_seperate_lines
+    smart_quotes(object.full_address("\n"))
+  end
+
+  def location_name
+    smart_quotes(object.location_name)
+  end
+end

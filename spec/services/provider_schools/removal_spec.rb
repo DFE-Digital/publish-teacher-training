@@ -25,6 +25,37 @@ RSpec.describe ProviderSchools::Removal do
         expect(Site.where(id: site.id)).to be_empty
         expect(Provider::School.where(id: provider_school.id)).to be_empty
       end
+
+      it "does not remove either record when the site is attached to a legacy course site" do
+        course = create(:course, provider:)
+        course.sites << site
+
+        expect {
+          described_class.new(provider:, uuid: site.uuid).call
+        }.to raise_error(described_class::CannotRemoveSchoolError)
+
+        expect(Site.where(id: site.id)).to contain_exactly(site)
+        expect(Provider::School.where(id: provider_school.id)).to contain_exactly(provider_school)
+      end
+
+      it "does not remove either record when the provider school is attached to a course school" do
+        create(:course_school, course: create(:course, provider:), provider_school:, gias_school:)
+
+        expect {
+          described_class.new(provider:, uuid: site.uuid).call
+        }.to raise_error(described_class::CannotRemoveSchoolError)
+
+        expect(Site.where(id: site.id)).to contain_exactly(site)
+        expect(Provider::School.where(id: provider_school.id)).to contain_exactly(provider_school)
+      end
+
+      it "removes the legacy site when a matching provider school does not exist" do
+        provider_school.destroy!
+
+        described_class.new(provider:, uuid: site.uuid).call
+
+        expect(Site.where(id: site.id)).to be_empty
+      end
     end
 
     context "when the provider is after the schools remodel cycle" do
@@ -40,6 +71,14 @@ RSpec.describe ProviderSchools::Removal do
         expect(Provider::School.where(id: provider_school.id)).to be_empty
       end
 
+      it "removes a provider school without requiring a legacy site" do
+        provider_school_without_site = create(:provider_school, provider:)
+
+        described_class.new(provider:, uuid: provider_school_without_site.uuid).call
+
+        expect(Provider::School.where(id: provider_school_without_site.id)).to be_empty
+      end
+
       it "does not remove provider schools that are attached to courses" do
         create(:course_school, course: create(:course, provider:), provider_school:, gias_school:)
 
@@ -49,6 +88,16 @@ RSpec.describe ProviderSchools::Removal do
 
         expect(Site.where(id: site.id)).to contain_exactly(site)
         expect(Provider::School.where(id: provider_school.id)).to contain_exactly(provider_school)
+      end
+
+      it "does not remove a provider school belonging to another provider" do
+        other_provider_school = create(:provider_school, uuid: "33333333-3333-4333-8333-333333333333")
+
+        expect {
+          described_class.new(provider:, uuid: other_provider_school.uuid).call
+        }.to raise_error(ActiveRecord::RecordNotFound)
+
+        expect(Provider::School.where(id: other_provider_school.id)).to contain_exactly(other_provider_school)
       end
     end
   end

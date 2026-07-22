@@ -11,7 +11,7 @@ module Support
       PER_PAGE = 20
 
       def index
-        @pagy, @sites = pagy(ProviderSchools::Identity.visible_sites(provider:).order(:location_name), limit: PER_PAGE)
+        @pagy, @sites = pagy(ProviderSchools::Identity.ordered_school_scope(provider:), limit: PER_PAGE)
       end
 
       def show; end
@@ -30,12 +30,10 @@ module Support
       end
 
       def destroy
-        if school_removal.removable?
-          school_removal.call
-          redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
-        else
-          render :delete, status: :unprocessable_entity
-        end
+        school_removal.call
+        redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
+      rescue ProviderSchools::Removal::CannotRemoveSchoolError
+        render :delete, status: :unprocessable_entity
       end
 
     private
@@ -62,7 +60,7 @@ module Support
       end
 
       def site
-        @site ||= school_removal.site
+        @site ||= school_removal.school
       end
 
       def reset_urn_form

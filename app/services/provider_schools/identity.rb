@@ -2,41 +2,34 @@
 
 module ProviderSchools
   class Identity
-    def self.uuid_for(site:)
-      new(provider: site.provider).uuid_for(site:)
+    def self.uuid_for(school:)
+      new(provider: school.provider).uuid_for(school:)
     end
 
-    def self.visible_sites(provider:)
-      new(provider:).visible_sites
+    def self.ordered_school_scope(provider:)
+      new(provider:).ordered_school_scope
     end
 
     def initialize(provider:)
       @provider = provider
     end
 
-    def uuid_for(site:)
-      schools_remodel_cycle? ? provider_school_for(site:).uuid : site.uuid
+    def uuid_for(school:)
+      school.uuid
     end
 
-    def visible_sites
-      return provider.sites unless schools_remodel_cycle?
-
-      provider
-        .sites
-        .joins("INNER JOIN gias_school ON gias_school.urn = site.urn")
-        .joins(
-          "INNER JOIN provider_school ON provider_school.provider_id = site.provider_id " \
-          "AND provider_school.gias_school_id = gias_school.id " \
-          "AND provider_school.site_code = site.code",
-        )
+    def school_scope
+      after_schools_remodel_cycle? ? provider.schools.includes(:gias_school) : provider.sites
     end
 
-    def site_for(uuid:)
-      if schools_remodel_cycle?
-        site_for_provider_school(provider_school: provider_school_for(uuid:))
-      else
-        provider.sites.find_by!(uuid:)
-      end
+    def ordered_school_scope
+      return provider.sites.order(:location_name) unless after_schools_remodel_cycle?
+
+      provider.schools.joins(:gias_school).includes(:gias_school).order("gias_school.name")
+    end
+
+    def school_for(uuid:)
+      after_schools_remodel_cycle? ? provider.schools.find_by!(uuid:) : provider.sites.find_by!(uuid:)
     end
 
     def provider_school_for(site: nil, uuid: nil)
@@ -48,16 +41,12 @@ module ProviderSchools
         .find_by!(gias_school: { urn: site.urn }, site_code: site.code)
     end
 
-    def schools_remodel_cycle?
+    def after_schools_remodel_cycle?
       provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
     end
 
   private
 
     attr_reader :provider
-
-    def site_for_provider_school(provider_school:)
-      provider.sites.find_by!(urn: provider_school.gias_school.urn, code: provider_school.site_code)
-    end
   end
 end
