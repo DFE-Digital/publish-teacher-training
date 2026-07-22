@@ -9,6 +9,10 @@ en:
     courses:
       index:
         ratifying_provider: Accredited provider
+        no_courses_found: No courses found
+        course_count:
+          one: 1 course
+          other: "%{count} courses"
       training_with_disabilities:
         show:
           heading: Training with disabilities and other needs at %{provider_name}

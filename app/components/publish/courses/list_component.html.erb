@@ -1,16 +1,24 @@
-<% course_list.groups.each do |group| %>
-  <section class="app-table--courses__section">
-    <% unless group.self_accredited? %>
-      <h2 class="govuk-heading-m">
-        <span class="govuk-caption-m"><%= t("publish.courses.index.ratifying_provider") %></span>
-        <%= group.heading %>
-      </h2>
-    <% end %>
+<% if course_list.any? %>
+  <% course_list.groups.each do |group| %>
+    <section class="app-table--courses__section">
+      <% unless group.self_accredited? %>
+        <h2 class="govuk-heading-m">
+          <span class="govuk-caption-m"><%= t("publish.courses.index.ratifying_provider") %></span>
+          <%= group.heading %>
+        </h2>
+      <% end %>
 
-    <%= render Publish::Courses::TableComponent.new(
-          courses: group.courses,
-          provider:,
-          course_information_fields: course_list.visible_course_information_fields,
-        ) %>
-  </section>
+      <p class="govuk-body-s app-table--courses__count">
+        <%= t("publish.courses.index.course_count", count: group.courses.size) %>
+      </p>
+
+      <%= render Publish::Courses::TableComponent.new(
+            courses: group.courses,
+            provider:,
+            course_information_fields: course_list.visible_course_information_fields,
+          ) %>
+    </section>
+  <% end %>
+<% else %>
+  <p class="govuk-body app-table--courses__empty"><%= t("publish.courses.index.no_courses_found") %></p>
 <% end %>
