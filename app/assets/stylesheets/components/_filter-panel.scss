@@ -4,7 +4,10 @@
   margin-bottom: 0;
 }
 
-.app-c-filter-panel__action--clear[hidden] {
+// The design system gives these a display of its own, which would otherwise
+// win over the hidden attribute.
+.app-c-filter-panel__action--clear[hidden],
+.app-c-filter-panel__action--submit[hidden] {
   display: none !important;
 }
 

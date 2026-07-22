@@ -13,6 +13,9 @@ export default class extends Controller {
 
   connect () {
     if (this.hasApplyFiltersButtonTarget) {
+      // Hidden rather than removed, so it comes back if this controller ever
+      // fails to connect. The stylesheet makes the attribute stick over the
+      // display the design system gives buttons.
       this.applyFiltersButtonWrapper().hidden = true
     }
   }
