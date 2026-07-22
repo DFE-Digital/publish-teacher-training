@@ -1,6 +1,88 @@
 require "rails_helper"
 
 RSpec.describe Banner, type: :model do
+  describe "validations" do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_length_of(:name).is_at_least(2).is_at_most(255) }
+    it { is_expected.to validate_numericality_of(:title_heading_level).only_integer.is_greater_than(1).is_less_than_or_equal_to(6).allow_nil }
+
+    describe "expired_at" do
+      it "is valid when expired_at is after published_at" do
+        banner = build(:banner, published_at: 1.day.ago, expired_at: 1.day.from_now)
+        expect(banner).to be_valid
+      end
+
+      it "is valid when expired_at equals published_at" do
+        now = Time.current
+        banner = build(:banner, published_at: now, expired_at: now)
+        expect(banner).to be_valid
+      end
+
+      it "is invalid when expired_at is before published_at" do
+        banner = build(:banner, published_at: 1.day.from_now, expired_at: 1.day.ago)
+        expect(banner).not_to be_valid
+        expect(banner.errors[:expired_at]).to be_present
+      end
+
+      it "is valid when expired_at is nil" do
+        banner = build(:banner, published_at: 1.day.ago, expired_at: nil)
+        expect(banner).to be_valid
+      end
+    end
+  end
+
+  describe ".display_on_find" do
+    it "returns only banners with display_on_find set to true" do
+      find_banner = create(:banner, display_on_find: true)
+      create(:banner, display_on_find: false)
+      create(:banner, display_on_find: nil)
+
+      expect(described_class.display_on_find).to contain_exactly(find_banner)
+    end
+  end
+
+  describe ".display_on_publish" do
+    it "returns only banners with display_on_publish set to true" do
+      publish_banner = create(:banner, display_on_publish: true)
+      create(:banner, display_on_publish: false)
+      create(:banner, display_on_publish: nil)
+
+      expect(described_class.display_on_publish).to contain_exactly(publish_banner)
+    end
+  end
+
+  describe ".display_on_support" do
+    it "returns only banners with display_on_support set to true" do
+      support_banner = create(:banner, display_on_support: true)
+      create(:banner, display_on_support: false)
+      create(:banner, display_on_support: nil)
+
+      expect(described_class.display_on_support).to contain_exactly(support_banner)
+    end
+  end
+
+  describe "#displayed_on" do
+    it "returns all interfaces when all are enabled" do
+      banner = build(:banner, display_on_find: true, display_on_publish: true, display_on_support: true)
+      expect(banner.displayed_on).to eq(%i[find publish support])
+    end
+
+    it "returns only enabled interfaces" do
+      banner = build(:banner, display_on_find: true, display_on_publish: false, display_on_support: true)
+      expect(banner.displayed_on).to eq(%i[find support])
+    end
+
+    it "returns an empty array when none are enabled" do
+      banner = build(:banner, display_on_find: false, display_on_publish: false, display_on_support: false)
+      expect(banner.displayed_on).to eq([])
+    end
+
+    it "returns an empty array when all are nil" do
+      banner = build(:banner, display_on_find: nil, display_on_publish: nil, display_on_support: nil)
+      expect(banner.displayed_on).to eq([])
+    end
+  end
+
   describe ".active" do
     it "returns the correct banners when checking active in the present" do
       timings = {
