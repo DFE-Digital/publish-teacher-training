@@ -15,6 +15,7 @@ class Provider::School < ApplicationRecord
   has_many :course_schools, class_name: "Course::School", inverse_of: :provider_school, dependent: :destroy
 
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
+  delegate :urn, :address1, :address2, :address3, :town, :postcode, to: :gias_school
 
   validates :site_code, presence: true
   validates :gias_school_id, uniqueness: { scope: %i[provider_id site_code] }
@@ -25,4 +26,23 @@ class Provider::School < ApplicationRecord
               message: :only_one_main_site_per_provider,
             },
             if: -> { site_code == MAIN_SITE_CODE }
+
+  def location_name
+    gias_school.name
+  end
+
+  def code
+    site_code
+  end
+
+  def full_address(join_on_separator = ", ")
+    [
+      gias_school.address1,
+      gias_school.address2,
+      gias_school.address3,
+      gias_school.town,
+      gias_school.county,
+      gias_school.postcode,
+    ].compact_blank.join(join_on_separator)
+  end
 end

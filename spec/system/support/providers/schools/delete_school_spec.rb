@@ -21,6 +21,30 @@ RSpec.describe "Delete school under provider as an admin" do
       then_i_am_on_the_index_page
       and_the_school_is_deleted
     end
+
+    scenario "after the schools remodel cycle without a legacy site" do
+      recruitment_cycle = create(:recruitment_cycle, year: 2027)
+      provider = create(:provider, provider_name: "Future Provider", recruitment_cycle:)
+      gias_school = create(:gias_school, name: "Future School", urn: "654321")
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "F")
+
+      support_provider_schools_index_page.load(recruitment_cycle_year: recruitment_cycle.year, provider_id: provider.id)
+
+      expect(page).to have_link(
+        "Future School",
+        href: support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid),
+      )
+
+      click_link_or_button "Future School"
+      expect(support_provider_school_show_page).to be_displayed
+      expect(page).to have_content("Future School")
+
+      click_link_or_button "Remove school"
+      click_link_or_button "Remove school"
+
+      expect(support_provider_schools_index_page).to be_displayed
+      expect(Provider::School.where(id: provider_school.id)).to be_empty
+    end
   end
 
   def and_the_school_is_deleted

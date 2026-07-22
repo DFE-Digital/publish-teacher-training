@@ -9,7 +9,7 @@ module Publish
       PER_PAGE = 20
 
       def index
-        @pagy, @schools = pagy(ProviderSchools::Identity.visible_sites(provider:).order(:location_name), limit: PER_PAGE)
+        @pagy, @schools = pagy(ProviderSchools::Identity.ordered_school_scope(provider:), limit: PER_PAGE)
       end
 
       def show; end
@@ -27,13 +27,11 @@ module Publish
       def delete; end
 
       def destroy
-        if school_removal.removable?
-          school_removal.call
-          flash[:success] = "School removed"
-          redirect_to publish_provider_recruitment_cycle_schools_path
-        else
-          render :delete, status: :unprocessable_entity
-        end
+        school_removal.call
+        flash[:success] = "School removed"
+        redirect_to publish_provider_recruitment_cycle_schools_path
+      rescue ProviderSchools::Removal::CannotRemoveSchoolError
+        render :delete, status: :unprocessable_entity
       end
 
     private
@@ -44,7 +42,7 @@ module Publish
       helper_method :school_removal
 
       def site
-        @site ||= school_removal.site
+        @site ||= school_removal.school
       end
 
       def site_params(param_form_key)

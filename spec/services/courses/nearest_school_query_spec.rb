@@ -90,6 +90,13 @@ RSpec.describe Courses::NearestSchoolQuery do
     expect(result.provider_school_uuid).to eq(london_provider.schools.find_by!(gias_school: london_gias_school).uuid)
   end
 
+  it "returns a nil provider school uuid when there is no matching provider school" do
+    result = results.find { |course| course.id == manchester_course.id }
+
+    expect(result.site_uuid).to eq(manchester_school.uuid)
+    expect(result.provider_school_uuid).to be_nil
+  end
+
   it "orders results by distance from search location" do
     distances = results.map(&:distance_to_search_location)
     expect(distances).to eq(distances.sort)

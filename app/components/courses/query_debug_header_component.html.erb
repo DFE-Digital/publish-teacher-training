@@ -41,16 +41,20 @@
               <td class="govuk-table__cell"><%= result.name_and_code %></td>
               <td class="govuk-table__cell"><%= result.provider.name_and_code %></td>
               <td class="govuk-table__cell">
-                <%= govuk_link_to(
-                  result.location_name,
-                  "#{Settings.base_url}#{publish_provider_recruitment_cycle_school_path(
-                    result.provider.provider_code,
-                    result.provider.recruitment_cycle_year,
-                    school_uuid(result),
-                  )}",
-                  host: Settings.base_url,
-                  target: "_blank",
-                ) %>
+                <% if school_uuid(result).present? %>
+                  <%= govuk_link_to(
+                    result.location_name,
+                    "#{Settings.base_url}#{publish_provider_recruitment_cycle_school_path(
+                      result.provider.provider_code,
+                      result.provider.recruitment_cycle_year,
+                      school_uuid(result),
+                    )}",
+                    host: Settings.base_url,
+                    target: "_blank",
+                  ) %>
+                <% else %>
+                  <%= result.location_name %>
+                <% end %>
               </td>
               <td class="govuk-table__cell"><%= result.latitude %></td>
               <td class="govuk-table__cell"><%= result.longitude %></td>

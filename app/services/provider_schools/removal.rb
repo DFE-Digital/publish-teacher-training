@@ -4,7 +4,7 @@ module ProviderSchools
   class Removal
     class CannotRemoveSchoolError < StandardError; end
 
-    delegate :schools_remodel_cycle?, to: :identity
+    delegate :after_schools_remodel_cycle?, to: :identity
 
     def initialize(provider:, uuid:)
       @provider = provider
@@ -13,41 +13,48 @@ module ProviderSchools
     end
 
     def call
-      raise CannotRemoveSchoolError unless removable?
-
       ActiveRecord::Base.transaction do
-        if schools_remodel_cycle?
-          provider_school.destroy!
+        if provider_school.present?
+          provider_school.with_lock do
+            raise CannotRemoveSchoolError unless removable?
+
+            destroy_records!
+          end
         else
-          provider_school&.destroy!
+          raise CannotRemoveSchoolError unless removable?
+
           site.destroy!
         end
       end
     end
 
     def site
-      @site ||= identity.site_for(uuid:)
+      @site ||= school if school.is_a?(Site)
+    end
+
+    def school
+      @school ||= identity.school_for(uuid:)
     end
 
     def provider_school
-      @provider_school ||= if schools_remodel_cycle?
-                             identity.provider_school_for(uuid:)
+      @provider_school ||= if after_schools_remodel_cycle?
+                             school
                            else
                              identity.provider_school_for(site:)
                            end
     rescue ActiveRecord::RecordNotFound
-      raise if schools_remodel_cycle?
+      raise if after_schools_remodel_cycle?
 
       nil
     end
 
     def uuid_for_path
-      schools_remodel_cycle? ? provider_school.uuid : identity.uuid_for(site:)
+      identity.uuid_for(school:)
     end
 
     def removable?
-      if schools_remodel_cycle?
-        provider_school.course_schools.none?
+      if after_schools_remodel_cycle?
+        !provider_school.course_schools.exists?
       else
         site.has_no_course? && provider_school_course_schools_empty?
       end
@@ -57,8 +64,17 @@ module ProviderSchools
 
     attr_reader :provider, :uuid, :identity
 
+    def destroy_records!
+      if after_schools_remodel_cycle?
+        provider_school.destroy!
+      else
+        provider_school.destroy!
+        site.destroy!
+      end
+    end
+
     def provider_school_course_schools_empty?
-      provider_school.nil? || provider_school.course_schools.none?
+      provider_school.nil? || !provider_school.course_schools.exists?
     end
   end
 end
