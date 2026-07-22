@@ -96,6 +96,43 @@ RSpec.describe Courses::ActiveFilter do
     end
   end
 
+  describe "a caller-supplied formatted value" do
+    it "is used instead of looking up a translation" do
+      active_filter = described_class.new(
+        id: :start_date,
+        raw_value: "2026-09",
+        value: "September 2026",
+        formatted_value: "September 2026",
+        remove_params: {},
+      )
+
+      expect(active_filter.formatted_value).to eq("September 2026")
+    end
+
+    it "does not change how filters without one are translated" do
+      active_filter = described_class.new(
+        id: :funding,
+        raw_value: "fee",
+        value: "fee",
+        remove_params: {},
+      )
+
+      expect(active_filter.formatted_value).to eq("Fee-paying courses")
+    end
+
+    it "is ignored when blank, so an unknown filter is still rejected" do
+      active_filter = described_class.new(
+        id: :unknown_filter,
+        raw_value: "unknown",
+        value: "unknown",
+        formatted_value: nil,
+        remove_params: {},
+      )
+
+      expect(active_filter.formatted_value).to be_nil
+    end
+  end
+
   describe "attributes" do
     it "exposes id, raw_value, value and remove_params" do
       active_filter = described_class.new(
