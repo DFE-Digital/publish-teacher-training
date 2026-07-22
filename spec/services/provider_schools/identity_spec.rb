@@ -12,32 +12,6 @@ RSpec.describe ProviderSchools::Identity do
     allow(Settings).to receive(:schools_remodel_cycle_year).and_return(remodel_cycle_year)
   end
 
-  describe ".uuid_for" do
-    context "when the provider is in the schools remodel cycle" do
-      let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year) }
-      let(:provider) { create(:provider, recruitment_cycle:) }
-      let(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: site_uuid) }
-
-      before do
-        create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: provider_school_uuid)
-      end
-
-      it "uses the legacy site uuid" do
-        expect(described_class.uuid_for(school: site)).to eq(site_uuid)
-      end
-    end
-
-    context "when the provider is after the schools remodel cycle" do
-      let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year + 1) }
-      let(:provider) { create(:provider, recruitment_cycle:) }
-      let(:provider_school) { create(:provider_school, provider:, gias_school:, uuid: provider_school_uuid) }
-
-      it "uses the provider school uuid" do
-        expect(described_class.uuid_for(school: provider_school)).to eq(provider_school_uuid)
-      end
-    end
-  end
-
   describe ".ordered_school_scope" do
     let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year + 1) }
     let(:provider) { create(:provider, recruitment_cycle:) }

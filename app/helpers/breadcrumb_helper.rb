@@ -61,7 +61,7 @@ module BreadcrumbHelper
     path = publish_provider_recruitment_cycle_school_path(
       @provider.provider_code,
       @recruitment_cycle.year,
-      ProviderSchools::Identity.uuid_for(school: @site),
+      @site.uuid,
     )
     sites_breadcrumb.merge({ @site.location_name.dup => path })
   end

@@ -45,6 +45,31 @@ RSpec.describe "Delete a provider's schools" do
     and_the_school_is_deleted
   end
 
+  scenario "after the schools remodel cycle without a legacy site" do
+    recruitment_cycle = create(:recruitment_cycle, year: 2027)
+    future_provider = create(:provider, recruitment_cycle:)
+    gias_school = create(:gias_school, name: "Future School", urn: "654321")
+    provider_school = create(:provider_school, provider: future_provider, gias_school:, site_code: "F")
+    given_i_am_authenticated(user: create(:user, providers: [future_provider]))
+
+    visit publish_provider_recruitment_cycle_schools_path(future_provider.provider_code, recruitment_cycle.year)
+
+    expect(page).to have_link(
+      "Future School",
+      href: publish_provider_recruitment_cycle_school_path(future_provider.provider_code, recruitment_cycle.year, provider_school.uuid),
+    )
+
+    click_link_or_button "Future School"
+    expect(publish_school_show_page).to be_displayed
+    expect(page).to have_content("Future School")
+
+    click_link_or_button "Remove school"
+    click_link_or_button "Remove school"
+
+    expect(publish_schools_index_page).to be_displayed
+    expect(Provider::School.where(id: provider_school.id)).to be_empty
+  end
+
   def when_i_visit_the_publish_school_show_page
     publish_school_show_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, school_id: site.uuid)
   end
