@@ -3,6 +3,9 @@
 module Publish
   # Presentation facade over Publish::Courses::Query for the publish course list
   # page. Chunks the pre-ordered query rows into accredited-provider groups.
+  #
+  # Filters are passed straight through to the query, so a group whose courses
+  # are all filtered out simply does not appear.
   class CourseList
     include Enumerable
 
@@ -30,8 +33,9 @@ module Publish
 
     delegate :any?, to: :groups
 
-    def initialize(provider:)
+    def initialize(provider:, params: {})
       @provider = provider
+      @params = params
     end
 
     # Course-information fields whose value varies across the whole list (all
@@ -54,14 +58,14 @@ module Publish
 
   private
 
-    attr_reader :provider
+    attr_reader :provider, :params
 
     def all_courses
       @all_courses ||= groups.flat_map(&:courses)
     end
 
     def courses
-      @courses ||= Publish::Courses::Query.call(provider:).to_a
+      @courses ||= Publish::Courses::Query.call(provider:, params:).to_a
     end
   end
 end
