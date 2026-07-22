@@ -35,6 +35,10 @@ module Publish
         END
       SQL
 
+      # The content statuses that render as Open, Closed or Scheduled depending
+      # on the application status and the cycle.
+      PUBLISHED_CONTENT_STATUSES = %w[published published_with_unpublished_changes].freeze
+
       # Filter option -> Course enum keys. Both mirror Courses::Query (the Find
       # search query), except that selecting several options here unions them
       # rather than falling through to "no filter".
@@ -71,6 +75,7 @@ module Publish
         @scope = qualification_scope
         @scope = study_mode_scope
         @scope = start_date_scope
+        @scope = status_scope
         @scope = status_columns_select
         @scope = ordering_scope
         @scope
@@ -125,6 +130,49 @@ module Publish
 
         @applied_scopes[:funding] = params[:funding]
         @scope.where(funding: ::Course.fundings.values_at(*Array(params[:funding])).compact)
+      end
+
+      # The status a provider sees is the tag StatusTagComponent renders, which
+      # combines content_status, the application status and the cycle branch.
+      # The cycle is fixed for the whole page, so Open/Closed and Scheduled are
+      # decided here in Ruby and only the per-course part reaches SQL.
+      #
+      # A status unreachable in this cycle contributes no predicate; if that
+      # leaves none, no course matches — asking for Scheduled courses mid-cycle
+      # must return nothing rather than everything.
+      def status_scope
+        return @scope if params[:status].blank?
+
+        @applied_scopes[:status] = params[:status]
+        predicates = Array(params[:status]).filter_map { |status| status_predicate(status) }
+        return @scope.none if predicates.empty?
+
+        @scope.where(predicates.map { |predicate| "(#{predicate})" }.join(" OR "))
+      end
+
+      def status_predicate(status)
+        case status
+        when "draft", "rolled_over", "withdrawn"
+          sanitize("#{CONTENT_STATUS_SQL} = :status", status:)
+        when "open"
+          published_predicate(::Course.application_statuses[:open]) if current_or_previous_cycle?
+        when "closed"
+          published_predicate(::Course.application_statuses[:closed]) if current_or_previous_cycle?
+        when "scheduled"
+          published_states_sql unless current_or_previous_cycle?
+        end
+      end
+
+      def published_predicate(application_status)
+        sanitize("#{published_states_sql} AND course.application_status = :application_status", application_status:)
+      end
+
+      def published_states_sql
+        sanitize("#{CONTENT_STATUS_SQL} IN (:states)", states: PUBLISHED_CONTENT_STATUSES)
+      end
+
+      def current_or_previous_cycle?
+        CycleBranch.current_or_previous?(provider.recruitment_cycle_year)
       end
 
       # Months arrive as "YYYY-MM". Compared as half-open ranges rather than by

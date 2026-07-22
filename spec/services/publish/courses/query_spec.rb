@@ -346,6 +346,200 @@ RSpec.describe Publish::Courses::Query do
     end
   end
 
+  describe "status filter" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    def published_with_changes
+      [build(:course_enrichment, :published), build(:course_enrichment, :initial_draft)]
+    end
+
+    context "in the current recruitment cycle" do
+      let(:provider) { create(:provider, :accredited_provider) }
+      let!(:closed_published) { create(:course, :published, provider:, application_status: :closed, name: "Closed published") }
+      let!(:draft_enrichment) { create(:course, :draft_enrichment, provider:, application_status: :open, name: "Draft enrichment") }
+      let!(:draft_no_enrichment) { create(:course, provider:, application_status: :open, name: "Draft none") }
+      let!(:open_published) { create(:course, :published, provider:, application_status: :open, name: "Open published") }
+      let!(:open_with_changes) { create(:course, provider:, application_status: :open, name: "Open with changes", enrichments: published_with_changes) }
+      let!(:rolled_over) { create(:course, provider:, application_status: :open, name: "Rolled over", enrichments: [build(:course_enrichment, :rolled_over)]) }
+      let!(:withdrawn) { create(:course, :withdrawn, provider:, application_status: :open, name: "Withdrawn") }
+
+      context "when open is given" do
+        let(:params) { { status: %w[open] } }
+
+        it "returns published courses accepting applications, including those with unpublished changes" do
+          expect(rows).to match_collection([open_published, open_with_changes], attribute_names: %w[name])
+        end
+      end
+
+      context "when closed is given" do
+        let(:params) { { status: %w[closed] } }
+
+        it "returns published courses not accepting applications" do
+          expect(rows).to match_collection([closed_published], attribute_names: %w[name])
+        end
+      end
+
+      context "when draft is given" do
+        let(:params) { { status: %w[draft] } }
+
+        it "returns courses with no enrichment and courses with only a draft" do
+          expect(rows).to match_collection([draft_enrichment, draft_no_enrichment], attribute_names: %w[name])
+        end
+      end
+
+      context "when rolled over is given" do
+        let(:params) { { status: %w[rolled_over] } }
+
+        it "returns only rolled over courses" do
+          expect(rows).to match_collection([rolled_over], attribute_names: %w[name])
+        end
+      end
+
+      context "when withdrawn is given" do
+        let(:params) { { status: %w[withdrawn] } }
+
+        it "returns only withdrawn courses" do
+          expect(rows).to match_collection([withdrawn], attribute_names: %w[name])
+        end
+      end
+
+      context "when scheduled is given" do
+        let(:params) { { status: %w[scheduled] } }
+
+        it "returns no courses, because nothing in this cycle is scheduled" do
+          expect(rows).to be_empty
+        end
+      end
+
+      context "when several statuses are given" do
+        let(:params) { { status: %w[draft withdrawn] } }
+
+        it "returns courses matching any of them" do
+          expect(rows).to match_collection([draft_enrichment, draft_no_enrichment, withdrawn], attribute_names: %w[name])
+        end
+      end
+
+      context "when a reachable status is combined with an unreachable one" do
+        let(:params) { { status: %w[open scheduled] } }
+
+        it "returns the courses matching the reachable status" do
+          expect(rows).to match_collection([open_published, open_with_changes], attribute_names: %w[name])
+        end
+      end
+
+      context "when the status is not a recognised value" do
+        let(:params) { { status: %w[bogus] } }
+
+        it "returns no courses" do
+          expect(rows).to be_empty
+        end
+      end
+
+      context "when no status is given" do
+        let(:params) { {} }
+
+        it "returns every course" do
+          expect(rows.size).to eq(7)
+        end
+      end
+    end
+
+    context "in a future recruitment cycle" do
+      let(:provider) { create(:provider, :accredited_provider, :next_recruitment_cycle) }
+      let!(:published) { create(:course, :published, provider:, application_status: :open, name: "Alpha") }
+      let!(:with_changes) { create(:course, provider:, application_status: :closed, name: "Bravo", enrichments: published_with_changes) }
+      let!(:draft) { create(:course, :draft_enrichment, provider:, application_status: :open, name: "Charlie") }
+
+      context "when scheduled is given" do
+        let(:params) { { status: %w[scheduled] } }
+
+        it "returns published courses regardless of their application status" do
+          expect(rows).to match_collection([published, with_changes], attribute_names: %w[name])
+        end
+      end
+
+      context "when open is given" do
+        let(:params) { { status: %w[open] } }
+
+        it "returns no courses, because nothing in a future cycle is open yet" do
+          expect(rows).to be_empty
+        end
+      end
+
+      context "when closed is given" do
+        let(:params) { { status: %w[closed] } }
+
+        it "returns no courses" do
+          expect(rows).to be_empty
+        end
+      end
+
+      context "when draft is given" do
+        let(:params) { { status: %w[draft] } }
+
+        it "still returns draft courses, which are cycle independent" do
+          expect(rows).to match_collection([draft], attribute_names: %w[name])
+        end
+      end
+    end
+
+    context "when combined with another filter" do
+      let(:provider) { create(:provider, :accredited_provider) }
+      let(:params) { { status: %w[draft], funding: %w[salary] } }
+      let!(:wanted) { create(:course, :draft_enrichment, :salary, provider:, name: "Alpha") }
+
+      before do
+        create(:course, :draft_enrichment, :fee, provider:, name: "Bravo")
+        create(:course, :published, :salary, provider:, name: "Charlie")
+      end
+
+      it "narrows on both" do
+        expect(rows).to match_collection([wanted], attribute_names: %w[name])
+      end
+    end
+  end
+
+  # Drift guard: a course is returned by a status filter exactly when the list
+  # renders it with that status tag. Rendering is the source of truth, so the
+  # two cannot disagree about what "Open" or "Scheduled" means.
+  describe "status filter agrees with the rendered status tag", type: :component do
+    let(:provider) { create(:provider, :accredited_provider) }
+
+    def tag_text(row)
+      render_inline(
+        Publish::Courses::StatusTagComponent.new(course: row, recruitment_cycle_year: row.recruitment_cycle.year),
+      ).css(".govuk-tag").text.strip
+    end
+
+    before do
+      create(:course, :published, provider:, application_status: :open, name: "Alpha")
+      create(:course, :published, provider:, application_status: :closed, name: "Bravo")
+      create(:course, provider:, application_status: :open, name: "Charlie")
+      create(:course, :draft_enrichment, provider:, application_status: :closed, name: "Delta")
+      create(:course, provider:, application_status: :open, name: "Echo", enrichments: [build(:course_enrichment, :rolled_over)])
+      create(:course, :withdrawn, provider:, application_status: :open, name: "Foxtrot")
+      create(:course, provider:, application_status: :closed, name: "Golf",
+                      enrichments: [build(:course_enrichment, :published), build(:course_enrichment, :initial_draft)])
+    end
+
+    {
+      "open" => "Open",
+      "closed" => "Closed",
+      "draft" => "Draft",
+      "rolled_over" => "Rolled over",
+      "withdrawn" => "Withdrawn",
+    }.each do |token, label|
+      it "returns exactly the courses tagged #{label.inspect} for status=#{token}" do
+        all_rows = described_class.call(provider: provider.reload)
+        expected = all_rows.select { |row| tag_text(row).delete_suffix(" *") == label }
+        filtered = described_class.call(provider: provider.reload, params: { status: [token] })
+
+        expect(expected).to be_present
+        expect(filtered.map(&:id)).to match_array(expected.map(&:id))
+      end
+    end
+  end
+
   describe "combining filters" do
     subject(:rows) { described_class.call(provider: provider.reload, params:) }
 
