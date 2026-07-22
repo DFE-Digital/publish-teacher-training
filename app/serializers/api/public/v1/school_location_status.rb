@@ -8,14 +8,20 @@ module API
           @course_school = course_school
         end
 
+        # All SchoolLocationStatus are running and published.
+        # These values are included to maintain consistency with the Site and
+        # SiteStatus models until we can deprecate these in the API
+        COURSE_RUNNING_STATUS = "running"
+        COURSE_PUBLISHED_STATUS = "published"
+
         delegate :id, to: :@course_school
 
         def status
-          "running"
+          COURSE_RUNNING_STATUS
         end
 
         def publish
-          "published"
+          COURSE_PUBLISHED_STATUS
         end
 
         def vac_status
