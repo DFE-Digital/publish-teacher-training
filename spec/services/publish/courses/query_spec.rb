@@ -623,15 +623,41 @@ RSpec.describe Publish::Courses::Query do
       count
     end
 
-    def materialise(course_count)
+    def materialise(course_count, params = {})
       provider = create(:provider)
       accredited = create(:accredited_provider)
       create_list(:course, course_count, :published, provider:, accrediting_provider: accredited)
-      count_queries { described_class.call(provider: provider.reload).to_a }
+      count_queries { described_class.call(provider: provider.reload, params:).to_a }
     end
 
     it "loads the list in a constant number of queries regardless of course count" do
       expect(materialise(12)).to eq(materialise(3))
+    end
+
+    # The status filter needs the provider's cycle year, which costs one
+    # association load — but that is per request, not per course, so a filtered
+    # list must still be constant in the number of courses.
+    it "loads a filtered list in a constant number of queries regardless of course count" do
+      filters = { level: %w[primary], funding: %w[fee], qualification: %w[qts], study_mode: %w[full_time], status: %w[closed] }
+
+      expect(materialise(12, filters)).to eq(materialise(3, filters))
+    end
+
+    it "adds no more than the cycle lookup when filtering" do
+      provider = create(:provider)
+      create_list(
+        :course, 12, :published, :primary, :fee, :resulting_in_qts,
+        provider:, accrediting_provider: create(:accredited_provider), study_mode: :full_time
+      )
+      filters = { level: %w[primary], funding: %w[fee], qualification: %w[qts], study_mode: %w[full_time], status: %w[closed] }
+
+      unfiltered = count_queries { described_class.call(provider: provider.reload).to_a }
+      filtered = count_queries { described_class.call(provider: provider.reload, params: filters).to_a }
+
+      # Guard against passing because the filters matched nothing, which would
+      # skip the preload the unfiltered list performs.
+      expect(described_class.call(provider: provider.reload, params: filters).size).to eq(12)
+      expect(filtered).to eq(unfiltered + 1)
     end
   end
 end

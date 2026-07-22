@@ -18,6 +18,40 @@ RSpec.describe Publish::CourseList do
     end
   end
 
+  describe "filtering" do
+    let(:provider) { create(:provider, :accredited_provider) }
+
+    before do
+      create(:course, :primary, provider:, name: "Primary course")
+      create(:course, :secondary, provider:, name: "Secondary course")
+    end
+
+    it "lists every course when no filters are given" do
+      expect(course_list.groups.flat_map(&:courses).map(&:name)).to contain_exactly("Primary course", "Secondary course")
+    end
+
+    it "passes the filters on to the query" do
+      filtered = described_class.new(provider: provider.reload, params: { level: %w[secondary] })
+
+      expect(filtered.groups.flat_map(&:courses).map(&:name)).to eq(["Secondary course"])
+    end
+
+    it "drops a group entirely when none of its courses match" do
+      other = create(:accredited_provider, provider_name: "Other University")
+      create(:course, :primary, provider:, accrediting_provider: other, name: "Ratified primary")
+
+      filtered = described_class.new(provider: provider.reload, params: { level: %w[secondary] })
+
+      expect(filtered.groups.map(&:heading)).to eq([nil])
+    end
+
+    it "reports whether anything matched" do
+      filtered = described_class.new(provider: provider.reload, params: { level: %w[further_education] })
+
+      expect(filtered.any?).to be(false)
+    end
+  end
+
   describe "#visible_course_information_fields" do
     let(:provider) { create(:provider, :accredited_provider) }
 
