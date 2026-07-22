@@ -5,7 +5,7 @@
 
   <%= govuk_button_link_to t(".add_banner"), new_support_banner_path %>
 
-  <%= tag.div() do %>
+  <%= tag.div do %>
     <% tabs = [
       { status: :draft, path_to: drafts_support_banners_path },
       { status: :active, path_to: active_support_banners_path },
@@ -29,7 +29,7 @@
         <% row.with_cell text: Banner.human_attribute_name(:expired_at) %>
         <% row.with_cell text: Banner.human_attribute_name(:displayed_on) %>
         <% row.with_cell text: Banner.human_attribute_name(:status) %>
-        <% row.with_cell text: t('support.banners.index.table.headings.actions') %>
+        <% row.with_cell text: t("support.banners.index.table.headings.actions") %>
       <% end %>
     <% end %>
 
@@ -37,19 +37,19 @@
       <% @banners.each do |banner| %>
         <% body.with_row do |row| %>
           <% row.with_cell text: govuk_link_to(banner.name, support_banner_path(banner)) %>
-          <% row.with_cell text: banner.published_at.present? ? banner.published_at.to_fs(:govuk_date_and_time) : t('.missing_published_at') %>
-          <% row.with_cell text: banner.expired_at.present? ? banner.expired_at.to_fs(:govuk_date_and_time) : t('.missing_expired_at') %>
+          <% row.with_cell text: banner.published_at.present? ? banner.published_at.to_fs(:govuk_date_and_time) : t(".missing_published_at") %>
+          <% row.with_cell text: banner.expired_at.present? ? banner.expired_at.to_fs(:govuk_date_and_time) : t(".missing_expired_at") %>
           <% row.with_cell text: displayed_on_text(banner) %>
           <% row.with_cell do %>
             <%= banner_status_tag(banner) %>
           <% end %>
           <% row.with_cell do %>
-            <%= govuk_link_to(t('support.banners.index.table.actions.edit'), edit_support_banner_path(banner), class: 'govuk-link') %>
+            <%= govuk_link_to(t("support.banners.index.table.actions.edit"), edit_support_banner_path(banner), class: "govuk-link") %>
             <% if banner.active? %>
-              <%= button_to(t('support.banners.index.table.actions.expire'), support_banner_expiration_path(banner), class: 'govuk-button govuk-button--warning govuk-!-margin-bottom-0 govuk-!-margin-top-1') %>
+              <%= button_to(t("support.banners.index.table.actions.expire"), support_banner_expiration_path(banner), class: "govuk-button govuk-button--warning govuk-!-margin-bottom-0 govuk-!-margin-top-1") %>
             <% end %>
             <% if banner.scheduled? %>
-              <%= button_to(t('support.banners.index.table.actions.publish'), support_banner_publication_path(banner), class: 'govuk-button govuk-!-margin-bottom-0 govuk-!-margin-top-1') %>
+              <%= button_to(t("support.banners.index.table.actions.publish"), support_banner_publication_path(banner), class: "govuk-button govuk-!-margin-bottom-0 govuk-!-margin-top-1") %>
             <% end %>
           <% end %>
         <% end %>

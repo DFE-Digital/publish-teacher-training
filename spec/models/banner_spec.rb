@@ -91,7 +91,7 @@ RSpec.describe Banner, type: :model do
         future: Time.zone.local(2026, 7, 1, 13, 0, 0),
       }
 
-      banner_setups = [
+      [
         { published: nil, expired: nil, name: :published_nil_and_expired_nil },
         { published: :past, expired: nil, name: :published_past_and_expired_nil },
         { published: :past, expired: :past, name: :published_past_and_expired_past },
@@ -175,7 +175,7 @@ RSpec.describe Banner, type: :model do
         future: Time.zone.local(2026, 7, 1, 13, 0, 0),
       }
 
-      banner_setups = [
+      [
         { published: nil, expired: nil, name: :published_nil_and_expired_nil },
         { published: :past, expired: nil, name: :published_past_and_expired_nil },
         { published: :past, expired: :past, name: :published_past_and_expired_past },
@@ -243,7 +243,7 @@ RSpec.describe Banner, type: :model do
         future: Time.zone.local(2026, 7, 1, 13, 0, 0),
       }
 
-      banner_setups = [
+      [
         { published: nil, expired: nil, name: :published_nil_and_expired_nil },
         { published: :past, expired: nil, name: :published_past_and_expired_nil },
         { published: :past, expired: :past, name: :published_past_and_expired_past },
@@ -322,7 +322,7 @@ RSpec.describe Banner, type: :model do
         future: Time.zone.local(2026, 7, 1, 13, 0, 0),
       }
 
-      banner_setups = [
+      [
         { published: nil, expired: nil, name: :published_nil_and_expired_nil },
         { published: :past, expired: nil, name: :published_past_and_expired_nil },
         { published: :past, expired: :past, name: :published_past_and_expired_past },
