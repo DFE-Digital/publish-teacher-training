@@ -70,6 +70,7 @@ module Publish
         @scope = funding_scope
         @scope = qualification_scope
         @scope = study_mode_scope
+        @scope = start_date_scope
         @scope = status_columns_select
         @scope = ordering_scope
         @scope
@@ -124,6 +125,28 @@ module Publish
 
         @applied_scopes[:funding] = params[:funding]
         @scope.where(funding: ::Course.fundings.values_at(*Array(params[:funding])).compact)
+      end
+
+      # Months arrive as "YYYY-MM". Compared as half-open ranges rather than by
+      # truncating the column, so the index on start_date stays usable, and the
+      # bounds are built in the app's zone so a course matches the month it is
+      # displayed under (which Time#to_date also resolves in the app's zone).
+      def start_date_scope
+        return @scope if params[:start_date].blank?
+
+        @applied_scopes[:start_date] = params[:start_date]
+        months = Array(params[:start_date]).filter_map { |month| parse_month(month) }
+        return @scope.none if months.empty?
+
+        condition = Array.new(months.size, "(course.start_date >= ? AND course.start_date < ?)").join(" OR ")
+        @scope.where(condition, *months.flat_map { |month| [month, month.next_month] })
+      end
+
+      def parse_month(month)
+        parsed = Date.strptime(month.to_s, "%Y-%m")
+        Time.zone.local(parsed.year, parsed.month, 1)
+      rescue ArgumentError, TypeError
+        nil
       end
 
       # Joins the accredited provider (for the heading) and a per-course aggregate

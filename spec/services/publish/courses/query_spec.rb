@@ -272,6 +272,80 @@ RSpec.describe Publish::Courses::Query do
     end
   end
 
+  describe "start date filter" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    let(:provider) { create(:provider, :accredited_provider) }
+    let!(:september) { create(:course, provider:, name: "Alpha", start_date: Time.zone.local(2026, 9, 1)) }
+    let!(:january) { create(:course, provider:, name: "Bravo", start_date: Time.zone.local(2027, 1, 15)) }
+
+    # A course with no start date must never match a month.
+    before { create(:course, :without_validation, provider:, name: "Charlie", start_date: nil) }
+
+    context "when one month is given" do
+      let(:params) { { start_date: %w[2026-09] } }
+
+      it "returns only courses starting in that month" do
+        expect(rows).to match_collection([september], attribute_names: %w[name start_date])
+      end
+    end
+
+    context "when several months are given" do
+      let(:params) { { start_date: %w[2026-09 2027-01] } }
+
+      it "returns courses starting in any of them" do
+        expect(rows).to match_collection([september, january], attribute_names: %w[name start_date])
+      end
+    end
+
+    context "when a month has no courses" do
+      let(:params) { { start_date: %w[2026-12] } }
+
+      it "returns no courses" do
+        expect(rows).to be_empty
+      end
+    end
+
+    context "at the boundaries of the selected month" do
+      let(:params) { { start_date: %w[2026-09] } }
+      let!(:last_moment) { create(:course, provider:, name: "Delta", start_date: Time.zone.local(2026, 9, 30, 23, 59, 59)) }
+
+      before { create(:course, provider:, name: "Echo", start_date: Time.zone.local(2026, 10, 1, 0, 0, 0)) }
+
+      it "includes the last moment of the month and excludes the first of the next" do
+        expect(rows).to match_collection([september, last_moment], attribute_names: %w[name start_date])
+      end
+    end
+
+    context "when a course starts in the British Summer Time hour before UTC midnight" do
+      # Stored as 2026-08-31 23:30 UTC, but the list displays it — and the
+      # provider thinks of it — as September, so September must match it.
+      let(:params) { { start_date: %w[2026-09] } }
+      let!(:just_after_midnight) { create(:course, provider:, name: "Delta", start_date: Time.zone.local(2026, 9, 1, 0, 30)) }
+
+      it "matches the month the course displays under" do
+        expect(just_after_midnight.start_date.utc.day).to eq(31)
+        expect(rows).to match_collection([september, just_after_midnight], attribute_names: %w[name start_date])
+      end
+    end
+
+    context "when the month cannot be parsed" do
+      let(:params) { { start_date: %w[bogus] } }
+
+      it "returns no courses" do
+        expect(rows).to be_empty
+      end
+    end
+
+    context "when a parseable month is mixed with an unparseable one" do
+      let(:params) { { start_date: %w[2026-09 bogus] } }
+
+      it "ignores the unparseable value" do
+        expect(rows).to match_collection([september], attribute_names: %w[name start_date])
+      end
+    end
+  end
+
   describe "combining filters" do
     subject(:rows) { described_class.call(provider: provider.reload, params:) }
 
@@ -294,13 +368,15 @@ RSpec.describe Publish::Courses::Query do
     let(:query) { described_class.new(provider: provider.reload, params:) }
 
     context "when filters are given" do
-      let(:params) { { level: %w[primary], funding: %w[fee], qualification: %w[qts], study_mode: %w[part_time] } }
+      let(:params) do
+        { level: %w[primary], funding: %w[fee], qualification: %w[qts], study_mode: %w[part_time], start_date: %w[2026-09] }
+      end
 
       it "records each applied filter" do
         query.call
 
         expect(query.applied_scopes).to eq(
-          level: %w[primary], funding: %w[fee], qualification: %w[qts], study_mode: %w[part_time],
+          level: %w[primary], funding: %w[fee], qualification: %w[qts], study_mode: %w[part_time], start_date: %w[2026-09],
         )
       end
     end
