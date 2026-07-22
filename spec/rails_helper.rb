@@ -73,7 +73,11 @@ RSpec.configure do |config|
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+    # spatial_ref_sys belongs to the postgis extension, not to us. Truncating it
+    # empties the extension's own data, which the guard below then "repairs" with
+    # DROP EXTENSION ... CASCADE — taking every dependent object with it,
+    # including gias_school.geo_location and its GiST index.
+    DatabaseCleaner.clean_with(:truncation, except: %w[spatial_ref_sys])
     DatabaseCleaner.strategy = :transaction
 
     postgis_table_count = ActiveRecord::Base.connection.execute(
