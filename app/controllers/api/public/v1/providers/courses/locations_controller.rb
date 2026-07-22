@@ -17,10 +17,22 @@ module API
 
             def locations
               @locations ||= if schools_remodelled
-                               course&.schools
+                               remodelled_locations
                              else
                                course&.sites
                              end
+            end
+
+            # A course that support has approved to publish without schools
+            # attached falls back to its provider's schools when it has none of
+            # its own; every other course only ever serves its own attached
+            # schools.
+            def remodelled_locations
+              return unless course
+
+              return course.schools unless ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
+
+              course.schools.presence || provider.schools.includes(:gias_school)
             end
 
             # On the schools path each Course::School serializes its own

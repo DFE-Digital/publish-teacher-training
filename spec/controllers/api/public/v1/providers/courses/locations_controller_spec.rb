@@ -108,6 +108,61 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
       end
     end
 
+    context "when a course has no schools but is exempt from needing them" do
+      let(:course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
+
+      before do
+        create_list(:provider_school, 2, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          course_code: course.course_code,
+        }
+      end
+
+      it "returns the provider's schools as locations" do
+        expect(json_response["data"].size).to be(2)
+      end
+    end
+
+    context "when a course has its own schools and is exempt from needing them" do
+      let(:course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
+
+      before do
+        create(:course_school, course:)
+        create_list(:provider_school, 3, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          course_code: course.course_code,
+        }
+      end
+
+      it "returns only the course's own schools, not the provider fallback" do
+        expect(json_response["data"].size).to be(1)
+      end
+    end
+
+    context "when a fee-paying course has no schools and is not exempt" do
+      let(:course) { create(:course, :fee, provider:, publish_without_schools_allowed: true) }
+
+      before do
+        create_list(:provider_school, 2, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          course_code: course.course_code,
+        }
+      end
+
+      it "does not fall back to the provider's schools" do
+        expect(json_response["data"]).to eql([])
+      end
+    end
+
     context "when a course has schools" do
       let(:course) { create(:course, study_mode: "full_time", provider:) }
       let(:school) { create(:course_school, course:, site_code: "-") }
