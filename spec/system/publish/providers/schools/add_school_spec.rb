@@ -37,6 +37,20 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
     and_the_provider_school_row_is_created
   end
 
+  scenario "with new school after the schools remodel cycle" do
+    given_i_am_authenticated_as_a_provider_user_after_the_schools_remodel_cycle
+    when_i_visit_the_schools_page
+    when_i_click_add_a_school
+    then_i_am_on_the_school_search_page
+
+    when_i_search_with_an_partial_query
+    when_i_choose_the_school_i_want_to_add
+    when_i_click_add_school
+
+    then_i_see_a_confirmation_message
+    and_only_the_provider_school_row_is_created
+  end
+
   scenario "attempting to add a school with duplicate URN" do
     given_the_provider_already_has_a_school_with_the_same_urn
 
@@ -62,6 +76,12 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
     })
   end
 
+  def given_i_am_authenticated_as_a_provider_user_after_the_schools_remodel_cycle
+    recruitment_cycle = create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
+    future_provider = create(:provider, recruitment_cycle:)
+    given_i_am_authenticated(user: create(:user, providers: [future_provider]))
+  end
+
   def given_i_see_the_schools_guidance_text
     expect(page).to have_text("We automatically upload all schools you are working with. These are schools that are on Register trainee teachers.", normalize_ws: true)
     expect(page).to have_link("Register trainee teachers", href: "https://www.register-trainee-teachers.service.gov.uk/")
@@ -81,7 +101,7 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
   end
 
   def then_i_am_on_the_school_search_page
-    expect(page).to have_current_path(search_publish_provider_recruitment_cycle_schools_path(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_code: provider.provider_code))
+    expect(page).to have_current_path(search_publish_provider_recruitment_cycle_schools_path(recruitment_cycle_year: provider.recruitment_cycle_year, provider_code: provider.provider_code))
   end
 
   def when_i_search_with_an_empty_query
@@ -178,12 +198,22 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
 
   def and_the_provider_school_row_is_created
     added_site = provider.sites.find_by(urn: @gias_school.urn)
-    provider_school = provider.schools.find_by(gias_school_id: @gias_school.id)
+    provider_school = provider.schools.find_by(gias_school_id: @gias_school.id, site_code: added_site.code)
     expect(provider_school).to be_present
     expect(provider_school.site_code).to eq(added_site.code)
+    expect(provider_school.uuid).to eq(added_site.uuid)
   end
 
   def and_no_provider_school_row_is_created
     expect(provider.schools.where(gias_school_id: @gias_school.id)).to be_empty
+  end
+
+  def and_only_the_provider_school_row_is_created
+    expect(provider.sites.find_by(urn: @gias_school.urn)).to be_nil
+
+    provider_school = provider.schools.find_by(gias_school_id: @gias_school.id)
+    expect(provider_school).to be_present
+    expect(provider_school.site_code).to be_present
+    expect(provider_school.uuid).to be_present
   end
 end

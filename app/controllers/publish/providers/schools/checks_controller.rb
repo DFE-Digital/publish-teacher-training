@@ -10,25 +10,48 @@ module Publish
         def show; end
 
         def update
-          ActiveRecord::Base.transaction do
-            provider_school = ::ProviderSchools::Creator.call(provider: @provider, gias_school_id: school_id)
+          provider_school = nil
 
-            @site.code = provider_school.site_code
-            ::ProviderSchools::LegacySiteCreator.call(site: @site)
+          ActiveRecord::Base.transaction do
+            provider_school = create_provider_school
           end
 
-          redirect_to publish_provider_recruitment_cycle_schools_path, flash: { success_with_body: { title: t(".added"), body: @site.location_name } }
+          redirect_to publish_provider_recruitment_cycle_schools_path,
+                      flash: { success_with_body: { title: t(".added"), body: provider_school.gias_school.name } }
         rescue ActiveRecord::RecordInvalid
           render :show
         end
 
       private
 
-        def site
-          @site ||= begin
-            gias_school = GiasSchool.find(school_id)
-            @provider.sites.school.build(gias_school.school_attributes)
+        def create_provider_school
+          if provider_school_identity.after_schools_remodel_cycle?
+            return ::ProviderSchools::Creator.call(provider: @provider, gias_school_id: school_id)
           end
+
+          # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+          # TODO School data remodel removal - remove this legacy Site write when publish creates Provider::School directly.
+          ::ProviderSchools::LegacySiteCreator.call(site: @site)
+          # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+
+          ::ProviderSchools::Creator.call(
+            provider: @provider,
+            gias_school_id: school_id,
+            site_code: @site.code,
+            uuid: @site.uuid,
+          )
+        end
+
+        def provider_school_identity
+          @provider_school_identity ||= ::ProviderSchools::Identity.new(provider: @provider)
+        end
+
+        def site
+          @site ||= @provider.sites.school.build(gias_school.school_attributes)
+        end
+
+        def gias_school
+          @gias_school ||= GiasSchool.find(school_id)
         end
 
         def school_id

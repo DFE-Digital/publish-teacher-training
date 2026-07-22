@@ -10,19 +10,15 @@ module Publish
         def show; end
 
         def update
-          saved_sites = []
+          saved_schools = []
 
           gias_schools.each do |gias_school|
             ActiveRecord::Base.transaction do
-              provider_school = ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
-
-              site = provider.sites.build(gias_school.school_attributes.merge(code: provider_school.site_code))
-              ::ProviderSchools::LegacySiteCreator.call(site:)
-              saved_sites << site
+              saved_schools << create_provider_school(gias_school:)
             end
           end
 
-          schools_added_message(saved_sites)
+          schools_added_message(saved_schools)
 
           redirect_to publish_provider_recruitment_cycle_schools_path
         end
@@ -57,6 +53,29 @@ module Publish
 
         def provider
           @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
+        end
+
+        def create_provider_school(gias_school:)
+          if provider_school_identity.after_schools_remodel_cycle?
+            return ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
+          end
+
+          # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+          # TODO School data remodel removal - remove this legacy Site write when publish creates Provider::School directly.
+          legacy_site = provider.sites.build(gias_school.school_attributes)
+          ::ProviderSchools::LegacySiteCreator.call(site: legacy_site)
+          # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+
+          ::ProviderSchools::Creator.call(
+            provider:,
+            gias_school_id: gias_school.id,
+            site_code: legacy_site.code,
+            uuid: legacy_site.uuid,
+          )
+        end
+
+        def provider_school_identity
+          @provider_school_identity ||= ::ProviderSchools::Identity.new(provider:)
         end
 
         def urn_form
