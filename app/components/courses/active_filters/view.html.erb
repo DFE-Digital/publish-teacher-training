@@ -2,7 +2,7 @@
   <div class="app-active-filters__header">
     <h3 class="govuk-heading-s app-active-filters__heading">Active filters</h3>
     <p class="govuk-body">
-      <%= render Find::Courses::ClearAllFilters::View.new(active_filters:, position: :top) %>
+      <%= govuk_link_to(clear_all_text, clear_all_path, class: "app-c-filter-summary__clear-filters govuk-link--no-visited-state") %>
     </p>
   </div>
   <ul class="app-active-filters__remove-filters">
@@ -13,7 +13,7 @@
               concat content_tag(:span, "Remove filter", class: "govuk-visually-hidden")
               concat filter.formatted_value
             end,
-            find_results_path(search_params.merge(filter.remove_params)),
+            remove_path(filter),
             class: "app-active-filters__remove-filter",
           ) %>
       </li>
