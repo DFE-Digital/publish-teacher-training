@@ -540,6 +540,47 @@ RSpec.describe Publish::Courses::Query do
     end
   end
 
+  # The filter values reach SQL, so prove hostile input is inert rather than
+  # merely allowed through by the form that normally sits in front of the query.
+  describe "hostile filter values" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    let(:provider) { create(:provider, :accredited_provider) }
+
+    before { create_list(:course, 2, provider:) }
+
+    injection = "x' OR 1=1 --"
+    drop_table = "2026-09'); DROP TABLE course; --"
+
+    {
+      "level" => { level: [injection] },
+      "funding" => { funding: [injection] },
+      "qualification" => { qualification: [injection] },
+      "study_mode" => { study_mode: [injection] },
+      "status" => { status: [injection] },
+      "start_date" => { start_date: [injection] },
+      "start_date with a statement terminator" => { start_date: [drop_table] },
+    }.each do |description, hostile_params|
+      context "when #{description} carries SQL" do
+        let(:params) { hostile_params }
+
+        it "matches nothing and leaves the database intact" do
+          expect(rows).to be_empty
+          expect(::Course.count).to eq(2)
+        end
+      end
+    end
+
+    context "when a hostile value is mixed with a real one" do
+      let(:params) { { level: ["primary", injection] } }
+
+      it "applies only the real one" do
+        expect(rows.size).to eq(2)
+        expect(::Course.count).to eq(2)
+      end
+    end
+  end
+
   describe "combining filters" do
     subject(:rows) { described_class.call(provider: provider.reload, params:) }
 

@@ -101,6 +101,17 @@ describe "Publish::CoursesController#index" do
       expect(response.parsed_body.css(".app-active-filters")).to be_empty
     end
 
+    it "does not reflect a hostile filter value back into the page" do
+      payload = "<script>alert(1)</script>"
+
+      get_courses(level: [payload], status: ["' OR 1=1 --"])
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include(payload)
+      expect(response.parsed_body.css(".app-active-filters")).to be_empty
+      expect(course_names).to include("Primary course", "Secondary course")
+    end
+
     it "ignores params that are not filters" do
       get_courses(order: "something", page: "2")
 
