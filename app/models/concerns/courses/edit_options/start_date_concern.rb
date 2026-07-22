@@ -8,8 +8,7 @@ module Courses
       included do
         def start_date_options
           cycle_year = provider.recruitment_cycle.year.to_i
-          options = (1..12).map { |m| "#{Date::MONTHNAMES[m]} #{cycle_year}" } +
-            (1..7).map { |m| "#{Date::MONTHNAMES[m]} #{cycle_year + 1}" }
+          options = Courses::CycleStartMonths.labels_for(cycle_year)
 
           return options if persisted?
 
