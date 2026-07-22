@@ -30,9 +30,11 @@ module Support
         end
 
         def create_provider_school
-          return create_provider_school_without_legacy_site if provider_school_identity.after_schools_remodel_cycle?
-
-          create_provider_school_with_legacy_site
+          if provider_school_identity.after_schools_remodel_cycle?
+            create_provider_school_without_legacy_site
+          else
+            create_provider_school_with_legacy_site
+          end
         end
 
         def create_provider_school_with_legacy_site

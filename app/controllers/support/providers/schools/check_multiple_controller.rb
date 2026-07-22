@@ -52,11 +52,19 @@ module Support
 
         def create_provider_school(gias_school:)
           if provider_school_identity.after_schools_remodel_cycle?
-            return ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
+            create_only_provider_school(gias_school:)
+          else
+            create_provider_school_and_legacy_site(gias_school:)
           end
+        end
 
-          # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-          # TODO School data remodel removal - remove this legacy Site write when support creates Provider::School directly.
+        def create_only_provider_school(gias_school:)
+          ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
+        end
+
+        # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+        # TODO School data remodel removal - remove this legacy Site write when support creates Provider::School directly.
+        def create_provider_school_and_legacy_site(gias_school:)
           legacy_site = provider.sites.build(gias_school.school_attributes)
           ::ProviderSchools::LegacySiteCreator.call(site: legacy_site)
           # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
