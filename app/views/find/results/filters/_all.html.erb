@@ -1,4 +1,9 @@
-<%= render Find::Courses::ActiveFilters::View.new(active_filters: form.object.active_filters, search_params: form.object.search_params) %>
+<%= render Courses::ActiveFilters::View.new(
+  active_filters: form.object.active_filters,
+  search_params: form.object.search_params,
+  path_builder: ->(params) { find_results_path(params) },
+  clear_all_path: find_results_path(utm_source: "results", utm_medium: "clear_all_filters_top"),
+) %>
 
 <div data-controller="details-component" class="app-c-filter-panel__top">
   <% if show_email_alert_link? %>
