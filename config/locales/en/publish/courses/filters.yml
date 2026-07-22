@@ -1,0 +1,37 @@
+en:
+  publish:
+    courses:
+      filters:
+        heading: Filter courses
+        apply_filters: Apply filters
+        clear_all_filters: Clear all filters
+        selected: selected
+        groups:
+          status: Status
+          level: Education phase
+          funding: Fee or salary
+          qualification: Qualification
+          study_mode: Full time or part time
+          start_date: Start date
+        options:
+          status:
+            open: Open
+            closed: Closed
+            draft: Draft
+            rolled_over: Rolled over
+            scheduled: Scheduled
+            withdrawn: Withdrawn
+          level:
+            primary: Primary
+            secondary: Secondary
+            further_education: Further education
+          funding:
+            fee: Fee-paying
+            salary: Salary
+            apprenticeship: Apprenticeship
+          qualification:
+            qts: QTS only
+            qts_with_pgce_or_pgde: QTS with PGCE or PGDE
+          study_mode:
+            full_time: Full time
+            part_time: Part time
