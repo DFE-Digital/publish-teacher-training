@@ -4,8 +4,7 @@
 
 <%# The builder is named here rather than inherited, so the panel renders the same wherever it is used. %>
 <%= form_with model: filter_form, scope: "", url: courses_path, method: :get,
-              builder: GOVUKDesignSystemFormBuilder::FormBuilder,
-              data: { controller: "course-filters", action: "change->course-filters#apply" } do |f| %>
+              builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
   <% visible_groups.each do |group| %>
     <details class="app-c-filter-section" <%= "open" if selected_count(group) %>>
       <summary class="app-c-filter-section__summary">
@@ -30,7 +29,5 @@
     </details>
   <% end %>
 
-  <%= f.govuk_submit t("publish.courses.filters.apply_filters"),
-        class: "govuk-!-margin-top-4 app-c-filter-panel__action--submit",
-        data: { course_filters_target: "applyFiltersButton" } %>
+  <%= f.govuk_submit t("publish.courses.filters.apply_filters"), class: "govuk-!-margin-top-4" %>
 <% end %>
