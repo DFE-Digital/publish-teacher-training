@@ -27,9 +27,9 @@ module Publish
         @course_school_form = Publish::CourseSchoolForm.new(@course, params: school_params)
 
         if @course_school_form.valid?
-          Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
+          update_course_schools
 
-          flash[:success] = if Array(@course_school_form.site_ids).size > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
+          flash[:success] = if selected_school_uuids_count > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
                               I18n.t("success.enqueued_schools")
                             else
                               I18n.t("success.saved", value: section_key)
@@ -70,9 +70,9 @@ module Publish
       end
 
       def school_params
-        return { site_ids: nil } if params[:publish_course_school_form][:site_ids].all?(&:empty?)
+        return { school_uuids: nil } if params[:publish_course_school_form][:school_uuids].all?(&:empty?)
 
-        params.expect(publish_course_school_form: [:schools_validated, { site_ids: [] }])
+        params.expect(publish_course_school_form: [:schools_validated, { school_uuids: [] }])
       end
 
       def build_course
@@ -80,7 +80,23 @@ module Publish
       end
 
       def section_key
-        "School".pluralize(Array(school_params[:site_ids]).compact_blank.count)
+        "School".pluralize(selected_school_uuids_count)
+      end
+
+      # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+      # TODO School data remodel removal - remove the UpdateCourseSchoolsService call when SiteStatus is no longer dual-written.
+      def update_course_schools
+        if selected_school_uuids_count > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
+          UpdateCourseSchoolsJob.perform_async(@course.id, school_params.to_h)
+        else
+          Publish::Schools::UpdateCourseSchoolsService.new(course: @course, params: school_params).call
+          Publish::Schools::UpdateCourseProviderSchoolsService.call(course: @course, params: school_params)
+        end
+      end
+      # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+
+      def selected_school_uuids_count
+        Array(school_params[:school_uuids]).compact_blank.count
       end
     end
   end

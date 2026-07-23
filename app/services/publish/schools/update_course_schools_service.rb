@@ -1,21 +1,25 @@
 module Publish
   module Schools
+    # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+    # TODO School data remodel removal - remove this legacy SiteStatus sync service when school associations
+    # are written only through Provider::School and Course::School.
     class UpdateCourseSchoolsService
       ENQUEUE_THRESHOLD = 30
 
       def self.call_or_enqueue(course:, params:)
-        site_ids_count = Array(params[:site_ids]).size
+        school_uuids_count = Array(params[:school_uuids]).size
 
-        if site_ids_count > ENQUEUE_THRESHOLD
+        if school_uuids_count > ENQUEUE_THRESHOLD
           UpdateCourseSchoolsJob.perform_async(course.id, params.to_h)
         else
           new(course:, params:).call
+          UpdateCourseProviderSchoolsService.call(course:, params:)
         end
       end
 
       def initialize(course:, params:)
         @course = course
-        @params = { site_ids: course.site_ids }.merge(params.to_h.deep_symbolize_keys)
+        @params = { school_uuids: current_school_uuids }.merge(params.to_h.deep_symbolize_keys)
         @previous_site_names = course.sites.map(&:location_name)
       end
 
@@ -35,71 +39,58 @@ module Publish
       attr_reader :course, :params, :previous_site_names
 
       def assign_attributes_to_course
-        course.assign_attributes(params.except(:site_ids))
+        course.assign_attributes(params.except(:school_uuids))
       end
 
       def sync_schools
-        return if sites_to_attach_ids.empty? && sites_to_remove_ids.empty?
+        return if sites_to_attach_uuids.empty? && sites_to_remove_uuids.empty?
 
-        sites_to_attach_ids.each { |id| attach_school(sites_by_id[id]) }
-        sites_to_remove_ids.each { |id| detach_school(sites_by_id[id]) }
+        sites_to_attach_uuids.each { |uuid| attach_school(sites_by_uuid[uuid]) }
+        sites_to_remove_uuids.each { |uuid| detach_school(sites_by_uuid[uuid]) }
 
         course.sites.reload
       end
 
-      def submitted_site_ids
-        @submitted_site_ids ||= Array(params[:site_ids]).compact_blank.map(&:to_i)
+      def submitted_school_uuids
+        @submitted_school_uuids ||= Array(params[:school_uuids]).compact_blank.map(&:to_s)
       end
 
-      def current_site_ids
-        @current_site_ids ||= course.site_ids
+      def current_school_uuids
+        @current_school_uuids ||= course.sites.map { |site| site.uuid.to_s }
       end
 
-      def sites_to_attach_ids
-        @sites_to_attach_ids ||= submitted_site_ids - current_site_ids
+      # TODO School data remodel removal - remove once course school updates no longer diff legacy Site UUIDs.
+      def sites_to_attach_uuids
+        @sites_to_attach_uuids ||= submitted_school_uuids - current_school_uuids
       end
 
-      def sites_to_remove_ids
-        @sites_to_remove_ids ||= current_site_ids - submitted_site_ids
+      # TODO School data remodel removal - remove once course school updates no longer diff legacy Site UUIDs.
+      def sites_to_remove_uuids
+        @sites_to_remove_uuids ||= current_school_uuids - submitted_school_uuids
       end
 
-      def sites_by_id
-        @sites_by_id ||= Site.where(id: sites_to_attach_ids + sites_to_remove_ids).index_by(&:id)
+      # TODO School data remodel removal - remove once submitted school identifiers point directly at Provider::School.
+      def sites_by_uuid
+        @sites_by_uuid ||= course.provider.sites
+          .where(uuid: sites_to_attach_uuids + sites_to_remove_uuids)
+          .index_by { |site| site.uuid.to_s }
       end
 
-      def gias_schools_by_urn
-        @gias_schools_by_urn ||= GiasSchool
-          .where(urn: sites_by_id.values.map(&:urn).compact_blank)
-          .index_by(&:urn)
-      end
-
+      # TODO School data remodel removal - remove with the legacy SiteStatus write path.
       def attach_school(site)
+        return if site.blank?
+
         ::CourseSchools::LegacySiteStatusCreator.call(course:, site:)
-
-        gias_school = gias_schools_by_urn[site.urn]
-        return unless gias_school
-
-        ::CourseSchools::Creator.call(course:, gias_school_id: gias_school.id)
-      rescue ActiveRecord::RecordNotFound
-        # No matching Provider::School yet — environment hasn't been fully
-        # backfilled or the provider's site predates the dual-write. Skip
-        # the new-model write rather than 404'ing the request; the schools
-        # backfill (or the next provider-side dual-write) reconciles later.
-        Rails.logger.warn(
-          "[CourseSchools] skipped course_school write — no provider_school for " \
-          "course=#{course.id} provider=#{course.provider_id} gias_school=#{gias_school.id}",
-        )
       end
 
+      # TODO School data remodel removal - remove with the legacy SiteStatus write path.
       def detach_school(site)
+        return if site.blank?
+
         ::CourseSchools::LegacySiteStatusRemover.call(course:, site:)
-
-        gias_school = gias_schools_by_urn[site.urn]
-        return unless gias_school
-
-        ::CourseSchools::Remover.call(course:, gias_school_id: gias_school.id)
       end
 
+      # TODO School data remodel removal - remove when publish status no longer has to be mirrored to SiteStatus.
       def apply_publish_status_to_site_statuses
         # Reload + scope to new_or_running so we never touch site_statuses
         # that sync_schools just suspended or destroyed. Iterating the
@@ -116,6 +107,7 @@ module Publish
 
         { publish: :unpublished, status: :new_status }
       end
+      # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
       def send_notifications
         updated_site_names = course.sites.map(&:location_name)
