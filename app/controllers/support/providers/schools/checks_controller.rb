@@ -30,7 +30,8 @@ module Support
         end
 
         def create_provider_school
-          if provider_school_identity.after_schools_remodel_cycle?
+          # We stop creating legacy sites in 2027, this if statement takes care of this
+          if provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
             create_provider_school_without_legacy_site
           else
             create_provider_school_with_legacy_site
@@ -58,10 +59,6 @@ module Support
         def create_provider_school_without_legacy_site
           ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
           true
-        end
-
-        def provider_school_identity
-          @provider_school_identity ||= ::ProviderSchools::Identity.new(provider:)
         end
 
         # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
