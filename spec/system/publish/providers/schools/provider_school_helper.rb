@@ -3,8 +3,11 @@
 module ProviderSchoolHelper
   def given_i_am_authenticated_as_a_provider_user
     gias_school = create(:gias_school)
+    site = build(:site, **gias_school.school_attributes)
+    provider = create(:provider, sites: [site])
+    @provider_school = create(:provider_school, provider:, gias_school:, site_code: site.code)
     given_i_am_authenticated(
-      user: create(:user, providers: [create(:provider, sites: [build(:site, **gias_school.school_attributes)])]),
+      user: create(:user, providers: [provider]),
     )
   end
 
@@ -36,6 +39,10 @@ module ProviderSchoolHelper
 
   def site
     @site ||= provider.sites.first
+  end
+
+  def provider_school
+    @provider_school ||= provider.schools.first
   end
 
   def then_i_am_on_the_school_show_page

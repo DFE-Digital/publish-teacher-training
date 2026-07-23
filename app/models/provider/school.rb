@@ -23,4 +23,12 @@ class Provider::School < ApplicationRecord
               message: :only_one_main_site_per_provider,
             },
             if: -> { site_code == MAIN_SITE_CODE }
+
+  def main_site?
+    site_code == MAIN_SITE_CODE
+  end
+
+  def has_no_course?
+    Course.kept.joins(:schools).where(course_school: { provider_school_id: id }).none?
+  end
 end

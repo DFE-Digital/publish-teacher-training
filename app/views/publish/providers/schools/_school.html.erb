@@ -1,16 +1,34 @@
 <tr class="govuk-table__row school-row">
+  <% provider_school = provider_school_ui_uses_new_model? ? provider_school_for_site(school)&.decorate : nil %>
   <th class="govuk-table__header name" scope="row">
-    <%= govuk_link_to school.location_name, publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.id) %>
+    <% if provider_school_ui_uses_new_model? %>
+      <% if provider_school %>
+        <%= govuk_link_to provider_school.location_name, publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, provider_school.id) %>
+      <% else %>
+        <%= school.location_name %>
+        <span class="govuk-body-s govuk-!-display-block">No new school model data</span>
+      <% end %>
+    <% else %>
+      <%= govuk_link_to school.location_name, publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.id) %>
+    <% end %>
 
     <%= render Publish::Schools::NewlyAddedTagComponent.new(school:) %>
   </th>
 
   <td class="govuk-table__cell code">
-    <%= school.code %> <%= school.code == "-" ? "(dash)" : "" %>
+    <% if provider_school %>
+      <%= provider_school.site_code %>
+    <% else %>
+      <%= school.code %> <%= school.code == "-" ? "(dash)" : "" %>
+    <% end %>
   </td>
   <% if urn_required?(@recruitment_cycle.year.to_i) %>
     <td class="govuk-table__cell urn">
-      <%= value_provided?(school.urn) %>
+      <% if provider_school %>
+        <%= value_provided?(provider_school.urn) %>
+      <% else %>
+        <%= value_provided?(school.urn) %>
+      <% end %>
     </td>
   <% end %>
 </tr>

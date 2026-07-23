@@ -151,6 +151,28 @@ describe Provider::School do
     end
   end
 
+  describe "#has_no_course?" do
+    let(:provider_school) { create(:provider_school) }
+
+    context "with no course" do
+      it "is true" do
+        expect(provider_school.has_no_course?).to be true
+      end
+    end
+
+    context "with an associated course" do
+      let(:course) { create(:course, provider: provider_school.provider) }
+
+      before do
+        create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)
+      end
+
+      it "is false" do
+        expect(provider_school.has_no_course?).to be false
+      end
+    end
+  end
+
   describe "database constraints" do
     let(:provider) { create(:provider) }
     let(:gias_school) { create(:gias_school) }
