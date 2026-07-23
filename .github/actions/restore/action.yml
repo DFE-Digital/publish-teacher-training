@@ -84,4 +84,4 @@ runs:
     - name: Restore backup to aks env database
       shell: bash
       run: |
-        bin/konduit.sh -n ${NAMESPACE} -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 ${{ env.app_name }} -- psql
+        bin/konduit.sh -n ${NAMESPACE} -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 -x ${{ env.app_name }} -- psql
