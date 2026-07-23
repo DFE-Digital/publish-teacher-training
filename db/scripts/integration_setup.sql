@@ -27,16 +27,14 @@ INSERT INTO "user" (email,
 INSERT INTO "provider" (provider_code,
                         provider_name,
                         recruitment_cycle_id,
-                        scheme_member,
                         provider_type,
-                        accrediting_provider)
+                        accredited)
             VALUES ('B1T',
                     'bat 1',
                     (SELECT id FROM "recruitment_cycle"
                                ORDER BY year DESC limit 1),
-                    'N',
                     'O',
-                    'Y')
+                    true)
             ON CONFLICT (provider_code, recruitment_cycle_id) DO nothing;
 
 INSERT INTO "organisation"
