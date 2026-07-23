@@ -153,7 +153,11 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::Integration setup"
-          psql -d ${DATABASE_NAME} -f db/scripts/integration_setup.sql
+          psql -d ${DATABASE_NAME} -v ON_ERROR_STOP=1 -f db/scripts/integration_setup.sql
+            if [ $? -ne 0 ]; then
+              echo "db/scripts/integration_setup.sql failed" >&2
+              exit 1
+            fi
           echo "::endgroup::"
 
           echo "::debug::Remove ${{ env.BACKUP_FILE }}.sql.gz"
