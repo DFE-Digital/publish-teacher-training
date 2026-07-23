@@ -28,7 +28,7 @@ RSpec.describe CourseSchools::Identity do
 
       expect(identity.available_schools).to contain_exactly(site)
       expect(identity.current_school_uuids).to eq([site_uuid])
-      expect(identity.school_records_for(school_identifiers: [site_uuid])).to eq([site])
+      expect(identity.school_records_for(school_uuids: [site_uuid])).to eq([site])
     end
   end
 
@@ -47,20 +47,14 @@ RSpec.describe CourseSchools::Identity do
 
       expect(identity.available_schools).to contain_exactly(site)
       expect(identity.current_school_uuids).to eq([site_uuid])
-      expect(identity.school_records_for(school_identifiers: [site_uuid])).to eq([site])
-    end
-
-    it "still resolves legacy site IDs for old add-course paths" do
-      identity = described_class.new(provider:, course:)
-
-      expect(identity.school_records_for(school_identifiers: [site.id])).to eq([site])
+      expect(identity.school_records_for(school_uuids: [site_uuid])).to eq([site])
     end
 
     it "rejects an unknown legacy site UUID" do
       identity = described_class.new(provider:, course:)
 
-      expect { identity.school_records_for(school_identifiers: [unknown_school_uuid]) }
-        .to raise_error(ArgumentError, /Could not resolve school identifiers/)
+      expect { identity.school_records_for(school_uuids: [unknown_school_uuid]) }
+        .to raise_error(ArgumentError, /Could not resolve school UUIDs/)
     end
 
     it "rejects a legacy site belonging to another provider" do
@@ -68,28 +62,28 @@ RSpec.describe CourseSchools::Identity do
       other_site = create(:site, provider: other_provider, uuid: unknown_school_uuid)
       identity = described_class.new(provider:, course:)
 
-      expect { identity.school_records_for(school_identifiers: [other_site.uuid]) }
-        .to raise_error(ArgumentError, /Could not resolve school identifiers/)
+      expect { identity.school_records_for(school_uuids: [other_site.uuid]) }
+        .to raise_error(ArgumentError, /Could not resolve school UUIDs/)
     end
 
-    it "rejects a mixture of valid and invalid identifiers" do
+    it "rejects a mixture of valid and unknown UUIDs" do
       identity = described_class.new(provider:, course:)
 
-      expect { identity.school_records_for(school_identifiers: [site_uuid, unknown_school_uuid]) }
-        .to raise_error(ArgumentError, /Could not resolve school identifiers/)
+      expect { identity.school_records_for(school_uuids: [site_uuid, unknown_school_uuid]) }
+        .to raise_error(ArgumentError, /Could not resolve school UUIDs/)
     end
 
-    it "rejects mixed legacy site IDs and UUIDs" do
+    it "rejects legacy site IDs" do
       identity = described_class.new(provider:, course:)
 
-      expect { identity.school_records_for(school_identifiers: [site.id, site_uuid]) }
-        .to raise_error(ArgumentError, /must not mix legacy Site IDs and UUIDs/)
+      expect { identity.school_records_for(school_uuids: [site.id]) }
+        .to raise_error(ArgumentError, /School UUIDs must be valid UUIDs/)
     end
 
-    it "deduplicates duplicate identifiers" do
+    it "deduplicates duplicate UUIDs" do
       identity = described_class.new(provider:, course:)
 
-      expect(identity.school_records_for(school_identifiers: [site_uuid, site_uuid])).to eq([site])
+      expect(identity.school_records_for(school_uuids: [site_uuid, site_uuid])).to eq([site])
     end
   end
 
@@ -111,14 +105,14 @@ RSpec.describe CourseSchools::Identity do
 
       expect(identity.available_schools).to contain_exactly(provider_school)
       expect(identity.current_school_uuids).to eq([provider_school_uuid])
-      expect(identity.school_records_for(school_identifiers: [provider_school_uuid])).to eq([provider_school])
+      expect(identity.school_records_for(school_uuids: [provider_school_uuid])).to eq([provider_school])
     end
 
     it "rejects an unknown provider school UUID" do
       identity = described_class.new(provider:, course:)
 
-      expect { identity.school_records_for(school_identifiers: [unknown_school_uuid]) }
-        .to raise_error(ArgumentError, /Could not resolve school identifiers/)
+      expect { identity.school_records_for(school_uuids: [unknown_school_uuid]) }
+        .to raise_error(ArgumentError, /Could not resolve school UUIDs/)
     end
 
     it "rejects a provider school belonging to another provider" do
@@ -126,28 +120,28 @@ RSpec.describe CourseSchools::Identity do
       other_provider_school = create(:provider_school, provider: other_provider, uuid: unknown_school_uuid)
       identity = described_class.new(provider:, course:)
 
-      expect { identity.school_records_for(school_identifiers: [other_provider_school.uuid]) }
-        .to raise_error(ArgumentError, /Could not resolve school identifiers/)
+      expect { identity.school_records_for(school_uuids: [other_provider_school.uuid]) }
+        .to raise_error(ArgumentError, /Could not resolve school UUIDs/)
     end
 
     it "does not resolve a diverged legacy site UUID" do
       identity = described_class.new(provider:, course:)
 
-      expect { identity.school_records_for(school_identifiers: [site_uuid]) }
-        .to raise_error(ArgumentError, /Could not resolve school identifiers/)
+      expect { identity.school_records_for(school_uuids: [site_uuid]) }
+        .to raise_error(ArgumentError, /Could not resolve school UUIDs/)
     end
 
     it "rejects legacy site IDs" do
       identity = described_class.new(provider:, course:)
 
-      expect { identity.school_records_for(school_identifiers: [legacy_site.id]) }
-        .to raise_error(ArgumentError, /must be Provider::School UUIDs/)
+      expect { identity.school_records_for(school_uuids: [legacy_site.id]) }
+        .to raise_error(ArgumentError, /School UUIDs must be valid UUIDs/)
     end
 
-    it "deduplicates duplicate identifiers" do
+    it "deduplicates duplicate UUIDs" do
       identity = described_class.new(provider:, course:)
 
-      expect(identity.school_records_for(school_identifiers: [provider_school_uuid, provider_school_uuid])).to eq([provider_school])
+      expect(identity.school_records_for(school_uuids: [provider_school_uuid, provider_school_uuid])).to eq([provider_school])
     end
   end
 
