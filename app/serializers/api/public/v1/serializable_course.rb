@@ -4,6 +4,8 @@ module API
   module Public
     module V1
       class SerializableCourse < JSONAPI::Serializable::Resource
+        extend JSONAPI::Serializable::Resource::ConditionalFields
+
         COURSE_STATE_MAPPING = {
           published_with_unpublished_changes: :published,
         }.freeze
@@ -55,9 +57,15 @@ module API
                    :campaign_name,
                    :application_status,
                    :training_route,
-                   :degree_type,
-                   :school_experience_required,
-                   :school_experience_required_content
+                   :degree_type
+
+        attribute :school_experience_required, if: -> { @object.recruitment_cycle_after?(2026) } do
+          @object.school_experience_required
+        end
+
+        attribute :school_experience_required_content, if: -> { @object.recruitment_cycle_after?(2026) } do
+          @object.school_experience_required_content
+        end
 
         attribute :bursary_amount do
           course_incentive.bursary_amount
