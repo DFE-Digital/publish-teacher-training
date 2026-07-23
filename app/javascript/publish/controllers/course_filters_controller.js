@@ -5,9 +5,8 @@ import { Controller } from '@hotwired/stimulus'
 // The form works without JavaScript through its "Apply filters" button, so that
 // button is only hidden once this controller has connected and taken over.
 //
-// Submitting reloads the page, which would otherwise drop the reader back at
-// the top with focus lost. Carrying the changed checkbox's id as the URL
-// fragment asks the browser to return to it.
+// Submitting reloads the page, which lands at the top like any GET form — the
+// reload deliberately does not scroll or focus the filter that was changed.
 export default class extends Controller {
   static targets = ['applyFiltersButton']
 
@@ -21,13 +20,7 @@ export default class extends Controller {
   }
 
   apply (event) {
-    const changed = event.target
-
-    if (!changed.matches('input[type="checkbox"]')) return
-
-    if (changed.id) {
-      this.element.action = `${this.element.action.split('#')[0]}#${changed.id}`
-    }
+    if (!event.target.matches('input[type="checkbox"]')) return
 
     this.element.requestSubmit()
   }
