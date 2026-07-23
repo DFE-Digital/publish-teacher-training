@@ -3,16 +3,52 @@
 module Publish
   module Providers
     class SchoolsController < ApplicationController
-      before_action :site, only: %i[show delete]
+      before_action :site, only: %i[show delete edit update]
       before_action :reset_urn_form, only: %i[index]
 
       PER_PAGE = 20
 
       def index
-        @pagy, @schools = pagy(provider.sites.order(:location_name), limit: PER_PAGE)
+        schools = provider.sites.order(:location_name)
+        Rails.logger.debug(schools.to_sql)
+
+        # Filter by search query if present
+        if params[:query].present?
+          q = params[:query].downcase
+
+          schools = schools.where(
+            "LOWER(location_name) LIKE :q OR LOWER(address1) LIKE :q OR CAST(urn AS TEXT) LIKE :q",
+            q: "%#{q}%",
+          )
+        end
+
+        schools = schools
+          .left_joins(site_statuses: :course)
+          .group("site.id")
+          .select(
+            <<~SQL,
+              site.*,
+              COUNT(DISTINCT course.id) AS courses_count
+            SQL
+          )
+
+        @pagy, @schools = pagy(schools, limit: PER_PAGE)
       end
 
-      def show; end
+      def show
+        @courses = Publish::Courses::Query.call(provider:)
+          .joins(:site_statuses)
+          .where(site_statuses: { site_id: @site.id })
+          .to_a
+          .uniq(&:id)
+      end
+
+      def edit
+        @site = Site.find(params[:id])
+
+        @courses = Publish::Courses::Query.call(provider: @site.provider)
+          .to_a
+      end
 
       def create
         @site = provider.sites.build
@@ -24,18 +60,38 @@ module Publish
         end
       end
 
+      # update action to redirect to show page with a success banner
+      def update
+        flash[:success] = "Courses updated for #{@site.location_name}"
+
+        redirect_to publish_provider_recruitment_cycle_school_path(
+          provider_code: provider.provider_code,
+          recruitment_cycle_year: provider.recruitment_cycle_year,
+          id: @site.id,
+        )
+      end
+
       def delete; end
 
       def destroy
         site.destroy!
-        flash[:success] = "School removed"
+        flash[:success] = "#{@site.location_name} has been removed from your account"
         redirect_to publish_provider_recruitment_cycle_schools_path
+      end
+
+      def remove
+        @site = Site.find(params[:id])
+        @from_school_show = params[:from] == "show"
       end
 
     private
 
+      # Load associated courses with the site to prevent multiple database queries in the view (this will show courses that are connected to the school)
       def site
-        @site ||= provider.sites.find(params[:id])
+        @site ||= provider
+          .sites
+          .includes(site_statuses: :course)
+          .find(params[:id])
       end
 
       def site_params(param_form_key)

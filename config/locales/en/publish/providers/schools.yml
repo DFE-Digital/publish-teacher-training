@@ -14,4 +14,4 @@ en:
           code: School code
           urn: URN
           address: Address
-          remove: Remove school
+          remove: Remove %{location_name} from your account

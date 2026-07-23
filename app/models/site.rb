@@ -19,6 +19,7 @@ class Site < ApplicationRecord
 
   has_many :site_statuses, dependent: :destroy
   has_many :study_site_placements, dependent: :destroy
+  has_many :courses, through: :site_statuses
 
   belongs_to :provider
 
@@ -93,6 +94,12 @@ class Site < ApplicationRecord
 
   def address
     [address1, address2, address3, town, address4, postcode]
+  end
+
+  def address_without_name
+    [address1, address2, address3, town, address4, postcode]
+      .compact_blank
+      .join(", ")
   end
 
   def address_changed?

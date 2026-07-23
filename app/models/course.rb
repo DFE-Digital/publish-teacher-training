@@ -821,6 +821,12 @@ class Course < ApplicationRecord
     age_range_in_years.split("_").last.to_i
   end
 
+  def age_range_label
+    return if age_range_in_years.blank?
+
+    "Ages #{age_minimum} to #{age_maximum}"
+  end
+
   def validate_degree_requirements_publishable
     return true if recruitment_cycle.year.to_i < STRUCTURED_REQUIREMENTS_REQUIRED_FROM || degree_grade.present?
 
