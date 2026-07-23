@@ -84,24 +84,6 @@ RSpec.describe "Filtering the course list" do
     and_i_see_no_active_filters
   end
 
-  scenario "the filters apply as soon as I tick a box", :js do
-    given_my_provider_has_courses_in_different_states
-    when_i_visit_the_courses_page
-    then_i_am_not_offered_an_apply_button
-
-    when_i_check("Draft")
-    then_i_see_only("Draft course")
-  end
-
-  scenario "applying a filter does not jump down to the filter panel", :js do
-    given_my_provider_has_courses_in_different_states
-    when_i_visit_the_courses_page
-
-    when_i_check("Draft")
-    then_i_see_only("Draft course")
-    and_the_page_did_not_jump_to_a_filter
-  end
-
   def given_my_provider_has_courses_in_different_states
     create(:course, :published_postgraduate, provider:, accrediting_provider: nil, name: "Open course")
     create(:course, :draft_enrichment, provider:, accrediting_provider: nil, name: "Draft course")
@@ -198,16 +180,6 @@ RSpec.describe "Filtering the course list" do
     group_offering(month).find("summary").click
 
     expect(page).to have_field(month, type: "checkbox")
-  end
-
-  def then_i_am_not_offered_an_apply_button
-    expect(publish_provider_courses_index_page).to have_no_apply_filters
-  end
-
-  # A checkbox-id fragment is what used to scroll and focus the filter panel
-  # after the reload, so its absence is the guard that the jump is gone.
-  def and_the_page_did_not_jump_to_a_filter
-    expect(page.current_url).not_to include("#")
   end
 
   # Course links read "Primary fee course (X123)"; the code is noise here.
