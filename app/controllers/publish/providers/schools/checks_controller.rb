@@ -23,7 +23,8 @@ module Publish
       private
 
         def create_provider_school
-          if provider_school_identity.after_schools_remodel_cycle?
+          # We stop creating legacy sites in 2027, this if statement takes care of this
+          if provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
             create_only_provider_school
           else
             create_provider_school_and_legacy_site
@@ -46,10 +47,6 @@ module Publish
             site_code: @site.code,
             uuid: @site.uuid,
           )
-        end
-
-        def provider_school_identity
-          @provider_school_identity ||= ::ProviderSchools::Identity.new(provider: @provider)
         end
 
         def site
