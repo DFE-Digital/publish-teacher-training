@@ -6,7 +6,6 @@ module CourseSchools
   # use Provider::School records because Site and Provider::School UUIDs diverge
   # after rollover.
   class Identity
-    LEGACY_SITE_ID_PATTERN = /\A\d+\z/
     UUID_PATTERN = /\A[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/i
 
     delegate :after_schools_remodel_cycle?, to: :provider_identity
@@ -32,34 +31,24 @@ module CourseSchools
       end
     end
 
-    def school_records_for(school_identifiers:)
-      school_identifiers = normalize_school_identifiers(school_identifiers)
-      records_by_identifier = school_records_by_identifier(school_identifiers)
+    def school_records_for(school_uuids:)
+      school_uuids = normalize_school_uuids(school_uuids)
+      validate_uuid_values!(school_uuids)
 
-      validate_all_identifiers_resolved!(school_identifiers, records_by_identifier)
-      ordered_records_for(school_identifiers, records_by_identifier)
+      records_by_uuid = school_records_by_uuid(school_uuids)
+      validate_all_uuids_resolved!(school_uuids, records_by_uuid)
+      ordered_records_for(school_uuids, records_by_uuid)
     end
 
   private
 
     attr_reader :provider, :course, :provider_identity
 
-    def school_records_by_identifier(school_identifiers)
+    def school_records_by_uuid(school_uuids)
       if after_schools_remodel_cycle?
-        validate_uuid_identifiers!(school_identifiers)
-        provider_schools_by_uuid(school_identifiers)
+        provider_schools_by_uuid(provider_school_uuids: school_uuids)
       else
-        legacy_sites_by_identifier(school_identifiers)
-      end
-    end
-
-    def legacy_sites_by_identifier(school_identifiers)
-      if uuid_identifiers?(school_identifiers)
-        sites_by_uuid(site_uuids: school_identifiers)
-      elsif legacy_site_id_identifiers?(school_identifiers)
-        sites_by_id(site_ids: school_identifiers)
-      else
-        raise ArgumentError, "School identifiers must not mix legacy Site IDs and UUIDs"
+        sites_by_uuid(site_uuids: school_uuids)
       end
     end
 
@@ -67,28 +56,16 @@ module CourseSchools
       provider.sites.where(uuid: site_uuids).index_by { |site| site.uuid.to_s }
     end
 
-    def sites_by_id(site_ids:)
-      provider.sites.where(id: site_ids).index_by { |site| site.id.to_s }
-    end
-
-    def provider_schools_by_uuid(provider_school_uuids)
+    def provider_schools_by_uuid(provider_school_uuids:)
       provider.schools.where(uuid: provider_school_uuids).index_by { |school| school.uuid.to_s }
     end
 
-    def uuid_identifiers?(school_identifiers)
-      school_identifiers.all? { |identifier| uuid?(identifier) }
+    def ordered_records_for(school_uuids, records_by_uuid)
+      school_uuids.map { |uuid| records_by_uuid.fetch(uuid) }
     end
 
-    def legacy_site_id_identifiers?(school_identifiers)
-      school_identifiers.all? { |identifier| legacy_site_id?(identifier) }
-    end
-
-    def ordered_records_for(school_identifiers, records_by_identifier)
-      school_identifiers.map { |identifier| records_by_identifier.fetch(identifier) }
-    end
-
-    def normalize_school_identifiers(school_identifiers)
-      Array(school_identifiers).compact_blank.map(&:to_s).uniq
+    def normalize_school_uuids(school_uuids)
+      Array(school_uuids).compact_blank.map(&:to_s).uniq
     end
 
     def require_course!
@@ -97,26 +74,22 @@ module CourseSchools
       raise ArgumentError, "CourseSchools::Identity requires a course for current_school_uuids"
     end
 
-    def validate_uuid_identifiers!(school_identifiers)
-      invalid_identifiers = school_identifiers.reject { |identifier| uuid?(identifier) }
-      return if invalid_identifiers.empty?
+    def validate_uuid_values!(school_uuids)
+      invalid_uuids = school_uuids.reject { |uuid| uuid?(uuid) }
+      return if invalid_uuids.empty?
 
-      raise ArgumentError, "School identifiers must be Provider::School UUIDs after the schools remodel cycle"
+      raise ArgumentError, "School UUIDs must be valid UUIDs"
     end
 
-    def validate_all_identifiers_resolved!(school_identifiers, records_by_identifier)
-      unresolved_identifiers = school_identifiers - records_by_identifier.keys
-      return if unresolved_identifiers.empty?
+    def validate_all_uuids_resolved!(school_uuids, records_by_uuid)
+      unresolved_uuids = school_uuids - records_by_uuid.keys
+      return if unresolved_uuids.empty?
 
-      raise ArgumentError, "Could not resolve school identifiers for provider #{provider.id}: #{unresolved_identifiers.join(', ')}"
+      raise ArgumentError, "Could not resolve school UUIDs for provider #{provider.id}: #{unresolved_uuids.join(', ')}"
     end
 
-    def uuid?(identifier)
-      identifier.to_s.match?(UUID_PATTERN)
-    end
-
-    def legacy_site_id?(identifier)
-      identifier.to_s.match?(LEGACY_SITE_ID_PATTERN)
+    def uuid?(uuid)
+      uuid.to_s.match?(UUID_PATTERN)
     end
   end
 end
