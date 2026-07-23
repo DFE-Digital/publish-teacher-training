@@ -298,13 +298,13 @@ properties:
   school_experience_required:
     type: boolean
     nullable: true
-    description: "Whether school experience is required or strongly recommended for this course."
+    description: "Whether school experience is required or strongly recommended for this course. Only included from the 2027 recruitment cycle onwards."
     example: true
   school_experience_required_content:
     type: string
     nullable: true
     format: markdown
-    description: "Details of the school experience expected for this course."
+    description: "Details of the school experience expected for this course. Only included from the 2027 recruitment cycle onwards."
     example: "At least 2 weeks observing lessons in a UK secondary school."
   scholarship_amount:
     type: integer
