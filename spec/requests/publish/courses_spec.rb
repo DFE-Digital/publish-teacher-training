@@ -156,4 +156,31 @@ describe "Publish::CoursesController#index" do
       expect(response.parsed_body.css(".app-table--courses__count").text.strip).to eq("1 course")
     end
   end
+
+  describe "the course information column under filtering" do
+    def course_information
+      response.parsed_body.css(".app-table--courses__course-information").text
+    end
+
+    it "keeps a field that varies across the whole list when the list is filtered to one value" do
+      create(:course, :fee, provider:, accrediting_provider: nil, name: "Fee course")
+      create(:course, :apprenticeship, provider:, accrediting_provider: nil, name: "Apprenticeship course")
+
+      get_courses(funding: %w[fee])
+
+      expect(course_names).to include("Fee course")
+      expect(course_names).not_to include("Apprenticeship course")
+      expect(course_information).to include("Fee-paying")
+    end
+
+    it "keeps a field hidden that is uniform across the whole list" do
+      create(:course, :primary, :fee, provider:, accrediting_provider: nil, name: "Primary course")
+      create(:course, :secondary, :fee, provider:, accrediting_provider: nil, name: "Secondary course")
+
+      get_courses(level: %w[primary])
+
+      expect(course_names).to include("Primary course")
+      expect(course_information).not_to include("Fee-paying")
+    end
+  end
 end

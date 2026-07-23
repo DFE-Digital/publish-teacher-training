@@ -38,12 +38,14 @@ module Publish
       @params = params
     end
 
-    # Course-information fields whose value varies across the whole list (all
-    # groups). A field that is identical for every course carries no information
-    # worth showing, so it is omitted from the column.
+    # Course-information fields whose value varies across the provider's whole
+    # course list. A field that is identical for every course carries no
+    # information worth showing, so it is omitted from the column. This is a
+    # property of the whole list, measured on the unfiltered set, so filtering
+    # never adds or removes a column.
     def visible_course_information_fields
       @visible_course_information_fields ||=
-        FIELDS.keys.select { |key| all_courses.map(&FIELDS.fetch(key)).uniq.size > 1 }
+        FIELDS.keys.select { |key| unfiltered_courses.map(&FIELDS.fetch(key)).uniq.size > 1 }
     end
 
     def groups
@@ -60,12 +62,14 @@ module Publish
 
     attr_reader :provider, :params
 
-    def all_courses
-      @all_courses ||= groups.flat_map(&:courses)
-    end
-
     def courses
       @courses ||= Publish::Courses::Query.call(provider:, params:).to_a
+    end
+
+    # The whole list, ignoring filters. Reuses the already-run filtered rows when
+    # nothing is filtered, so the common first load runs no extra query.
+    def unfiltered_courses
+      @unfiltered_courses ||= params.blank? ? courses : Publish::Courses::Query.call(provider:).to_a
     end
   end
 end

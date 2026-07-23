@@ -112,6 +112,37 @@ RSpec.describe Publish::CourseList do
         expect(course_list.visible_course_information_fields).to eq([:start_date])
       end
     end
+
+    # The column decision is a property of the whole list, so filtering must not
+    # change it: a field that varies across every course stays shown even once
+    # the list is narrowed to a single value, and a uniform field stays hidden.
+    context "when the list is filtered" do
+      before do
+        create(:course, :without_validation, provider:, funding: "fee")
+        create(:course, :without_validation, provider:, funding: "salary")
+      end
+
+      it "keeps a field that varies across the whole list when filtered to one value" do
+        filtered = described_class.new(provider: provider.reload, params: { funding: %w[fee] })
+
+        expect(filtered.groups.flat_map(&:courses).size).to eq(1)
+        expect(filtered.visible_course_information_fields).to include(:funding)
+      end
+    end
+
+    context "when a field is uniform across the whole list but the list is filtered" do
+      before do
+        create(:course, :primary, :without_validation, provider:, funding: "fee")
+        create(:course, :secondary, :without_validation, provider:, funding: "fee")
+      end
+
+      it "keeps the uniform field hidden" do
+        filtered = described_class.new(provider: provider.reload, params: { level: %w[primary] })
+
+        expect(filtered.groups.flat_map(&:courses).size).to eq(1)
+        expect(filtered.visible_course_information_fields).not_to include(:funding)
+      end
+    end
   end
 
   describe "enumerable facade" do
