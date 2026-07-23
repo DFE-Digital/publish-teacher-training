@@ -8,14 +8,16 @@ module Publish
       # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
       # TODO School data remodel removal - remove when add-course school selection stops posting legacy sites_ids.
       def continue
+        @schools = schools_identity.available_schools
         params[:course][:sites_ids].compact_blank!
         super
       end
 
       def new
         authorize(@provider, :edit?)
+        @schools = schools_identity.available_schools
         # TODO School data remodel removal - replace with Provider::School count when schools no longer use Site.
-        return unless @provider.sites.count == 1
+        return unless schools_identity.available_schools_count == 1
 
         set_default_school
         redirect_to next_step
@@ -51,7 +53,7 @@ module Publish
       def back
         authorize(@provider, :edit?)
         # TODO School data remodel removal - replace with Provider::School count when schools no longer use Site.
-        if @provider.sites.count > 1
+        if schools_identity.available_schools_count > 1
           redirect_to new_publish_provider_recruitment_cycle_courses_schools_path(path_params)
         else
           redirect_to @back_link_path
@@ -71,7 +73,7 @@ module Publish
       # TODO School data remodel removal - remove when the wizard default is based on Provider::School rather than Site.
       def set_default_school
         params["course"] ||= {}
-        params["course"]["sites_ids"] = [@provider.sites.first.uuid]
+        params["course"]["sites_ids"] = [schools_identity.available_schools.first.uuid]
       end
 
       def school_params
@@ -100,6 +102,10 @@ module Publish
 
       def selected_school_uuids_count
         Array(school_params[:school_uuids]).compact_blank.count
+      end
+
+      def schools_identity
+        @schools_identity ||= ::CourseSchools::Identity.new(provider: @provider)
       end
       # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
     end

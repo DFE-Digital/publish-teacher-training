@@ -11,12 +11,12 @@ module Publish
     # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
     # TODO School data remodel removal - replace course.sites with course.schools/provider_schools when Site is retired for schools.
     def compute_fields
-      { school_uuids: course.sites.map(&:uuid) }.merge(new_attributes)
+      { school_uuids: schools_identity.current_school_uuids }.merge(new_attributes)
     end
 
     # Every school the provider could attach, in the order they are listed.
     def sites
-      @sites ||= course.provider.sites.sort_by(&:location_name)
+      @sites ||= schools_identity.available_schools
     end
 
     def schools_collapse_threshold
@@ -35,11 +35,15 @@ module Publish
       return if ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
       if course.recruitment_cycle_rollover_period_2026?
-        errors.add(:school_uuids, :check_schools) if course.sites.school.present?
-        errors.add(:school_uuids, :enter_schools) if course.sites.school.blank?
+        errors.add(:school_uuids, :check_schools) if schools_identity.current_school_uuids.present?
+        errors.add(:school_uuids, :enter_schools) if schools_identity.current_school_uuids.blank?
       else
         errors.add(:school_uuids, :no_schools)
       end
+    end
+
+    def schools_identity
+      @schools_identity ||= ::CourseSchools::Identity.new(provider: course.provider, course:)
     end
     # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
   end

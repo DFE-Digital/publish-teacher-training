@@ -9,6 +9,7 @@ module Publish
         @provider = provider
         @school_uuids = Array(school_uuids).compact_blank.map(&:to_s)
         @gias_school_scope = gias_school_scope
+        @provider_identity = ProviderSchools::Identity.new(provider:)
       end
 
       def call
@@ -17,10 +18,12 @@ module Publish
 
     private
 
-      attr_reader :provider, :school_uuids, :gias_school_scope
+      attr_reader :provider, :school_uuids, :gias_school_scope, :provider_identity
 
       # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
       def provider_school_for(uuid)
+        return provider_schools_by_uuid[uuid] if provider_identity.after_schools_remodel_cycle?
+
         provider_schools_by_uuid[uuid] || provider_school_from_legacy_site(uuid)
       end
 

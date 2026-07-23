@@ -23,7 +23,7 @@ class CourseWizard
       # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
       # TODO School data remodel removal - replace with Provider::School records when the wizard no longer reads provider.sites.
       def sites
-        @sites ||= provider_sites.sort_by(&:location_name)
+        @sites ||= schools_identity.available_schools
       end
 
       def schools_collapse_threshold
@@ -61,7 +61,7 @@ class CourseWizard
 
       # TODO School data remodel removal - replace with provider schools when school selection no longer uses Site.
       def provider_sites
-        wizard.provider.sites
+        schools_identity.available_schools
       end
 
       def funding_type
@@ -71,6 +71,10 @@ class CourseWizard
 
       def qualification
         wizard.state_store.qualification
+      end
+
+      def schools_identity
+        @schools_identity ||= ::CourseSchools::Identity.new(provider: wizard.provider)
       end
     end
   end

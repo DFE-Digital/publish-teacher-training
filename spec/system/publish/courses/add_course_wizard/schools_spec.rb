@@ -132,7 +132,7 @@ private
   end
 
   def and_i_choose_a_site_from_the_list
-    check provider.sites.first.location_name
+    check schools.first.location_name
   end
 
   def then_i_have_errors_on_the_schools_step
@@ -165,26 +165,28 @@ private
   end
 
   def given_i_am_authenticated_as_a_provider_user_with_multiple_schools
+    provider = create(
+      :provider,
+      :accredited_provider,
+      sites: [build(:site), build(:site), build(:site, :study_site)],
+    )
+    mirror_provider_schools_from_sites(provider)
+
     @user = create(
       :user,
-      providers: [
-        create(
-          :provider,
-          :accredited_provider,
-          sites: [build(:site), build(:site), build(:site, :study_site)],
-        ),
-      ],
+      providers: [provider],
     )
 
     given_i_am_authenticated(user: @user)
   end
 
   def given_i_am_authenticated_as_a_provider_user_with_a_school
+    provider = create(:provider, :accredited_provider, sites: [build(:site), build(:site, :study_site)])
+    mirror_provider_schools_from_sites(provider)
+
     @user = create(
       :user,
-      providers: [
-        create(:provider, :accredited_provider, sites: [build(:site), build(:site, :study_site)]),
-      ],
+      providers: [provider],
     )
 
     given_i_am_authenticated(user: @user)
@@ -198,42 +200,44 @@ private
   # (schools -> study sites). It does not show up in the schools list, since
   # Provider#sites is scoped to school-type sites.
   def given_i_am_authenticated_as_a_provider_user_with_25_schools
+    provider = create(
+      :provider,
+      :accredited_provider,
+      sites: (1..25).map { |n| build(:site, location_name: sprintf("School %02d", n)) } + [build(:site, :study_site)],
+    )
+    mirror_provider_schools_from_sites(provider)
+
     @user = create(
       :user,
-      providers: [
-        create(
-          :provider,
-          :accredited_provider,
-          sites: (1..25).map { |n| build(:site, location_name: sprintf("School %02d", n)) } + [build(:site, :study_site)],
-        ),
-      ],
+      providers: [provider],
     )
 
     given_i_am_authenticated(user: @user)
   end
 
   def given_i_am_authenticated_as_a_provider_user_with_a_named_school
+    provider = create(
+      :provider,
+      :accredited_provider,
+      sites: [
+        build(
+          :site,
+          location_name: "Belvidere School",
+          address1: "Belvidere Lane",
+          address2: "",
+          address3: "",
+          town: "Shrewsbury",
+          address4: "Shropshire",
+          postcode: "SY2 5RJ",
+        ),
+        build(:site),
+      ],
+    )
+    mirror_provider_schools_from_sites(provider)
+
     @user = create(
       :user,
-      providers: [
-        create(
-          :provider,
-          :accredited_provider,
-          sites: [
-            build(
-              :site,
-              location_name: "Belvidere School",
-              address1: "Belvidere Lane",
-              address2: "",
-              address3: "",
-              town: "Shrewsbury",
-              address4: "Shropshire",
-              postcode: "SY2 5RJ",
-            ),
-            build(:site),
-          ],
-        ),
-      ],
+      providers: [provider],
     )
 
     given_i_am_authenticated(user: @user)
@@ -253,7 +257,7 @@ private
   end
 
   def last_school
-    @last_school ||= provider.sites.max_by(&:location_name)
+    @last_school ||= schools.max_by(&:location_name)
   end
 
   def then_only_the_first_20_schools_are_shown
@@ -278,11 +282,11 @@ private
   end
 
   def and_the_last_school_is_stored_in_the_wizard_state
-    expect(stored_site_ids).to contain_exactly(last_school.id.to_s)
+    expect(stored_site_ids).to contain_exactly(last_school.uuid)
   end
 
   def given_the_last_school_is_already_selected_in_the_wizard_state
-    wizard_state_store.write(site_ids: [last_school.id.to_s])
+    wizard_state_store.write(site_ids: [last_school.uuid])
   end
 
   # A collapsed school keeps its checked state in the DOM even though its row is
@@ -305,6 +309,37 @@ private
 
   def provider
     @provider ||= @user.providers.first
+  end
+
+  def schools
+    @schools ||= CourseSchools::Identity.new(provider:).available_schools
+  end
+
+  def mirror_provider_schools_from_sites(provider)
+    provider.sites.school.each do |site|
+      create(
+        :provider_school,
+        provider:,
+        gias_school: create_gias_school_from_site(site),
+        site_code: site.code,
+      )
+    end
+
+    provider.reload
+  end
+
+  def create_gias_school_from_site(site)
+    create(
+      :gias_school,
+      urn: site.urn,
+      name: site.location_name,
+      address1: site.address1,
+      address2: site.address2,
+      address3: site.address3,
+      town: site.town,
+      county: site.address4,
+      postcode: site.postcode,
+    )
   end
 
   def wizard_state_key

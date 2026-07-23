@@ -42,11 +42,12 @@
 
                 <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
-                <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
+                <% @schools.each_with_index do |site, index| %>
                   <%= form.govuk_check_box :sites_ids,
                         site.uuid,
                         label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
                         hint: { text: site.full_address },
+                        include_hidden: false,
                         link_errors: index.zero? %>
                 <% end %>
               <% end %>

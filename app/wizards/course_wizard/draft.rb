@@ -97,7 +97,7 @@ class CourseWizard
 
     # TODO School data remodel removal - replace ordered Site records with Provider::School-backed school records.
     def schools
-      @schools ||= ordered_site_records(school_ids)
+      @schools ||= schools_identity.school_records_for(school_uuids: school_ids)
     end
     # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
@@ -186,6 +186,10 @@ class CourseWizard
 
     def uuid?(identifier)
       identifier.to_s.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/i)
+    end
+
+    def schools_identity
+      @schools_identity ||= ::CourseSchools::Identity.new(provider: wizard.provider)
     end
   end
 end

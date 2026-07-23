@@ -77,15 +77,7 @@ module Courses
     # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
     # TODO School data remodel removal - remove when add-course school selection uses Provider::School instead of Site.
     def sites
-      @sites ||= begin
-        identifiers = site_ids.compact_blank
-
-        if identifiers.all? { |identifier| uuid?(identifier) }
-          provider.sites.where(uuid: identifiers)
-        else
-          provider.sites.find(identifiers)
-        end
-      end
+      @sites ||= selected_school_records.select { |school| school.is_a?(Site) }
     end
 
     def study_sites
@@ -130,9 +122,10 @@ module Courses
     def update_sites(course)
       return if site_ids.nil?
 
-      course.sites = sites if site_ids.any?
-
       course.errors.add(:sites, message: "Select at least one school") if site_ids.empty?
+      return if schools_identity.after_schools_remodel_cycle?
+
+      course.sites = sites if site_ids.any?
     end
 
     # Dual-writes the selected schools to the new Course::School model,
@@ -147,7 +140,7 @@ module Courses
       return if site_ids.compact_blank.empty?
 
       provider_schools_for_selected_sites.each do |provider_school|
-        course_school = course.schools.build(
+        course.schools.build(
           gias_school_id: provider_school.gias_school_id,
           provider_school:,
         )
@@ -155,22 +148,18 @@ module Courses
     end
 
     # TODO School data remodel removal - remove when Course::School creation no longer maps through selected Site rows.
-    def school_sites
-      @school_sites ||= sites.select(&:school?)
+    def selected_school_records
+      @selected_school_records ||= schools_identity.school_records_for(school_uuids: site_ids)
     end
 
     # TODO School data remodel removal - remove the legacy Site UUID resolver path when the wizard posts Provider::School IDs or UUIDs.
     def provider_schools_for_selected_sites
-      @provider_schools_for_selected_sites ||= Publish::Schools::ProviderSchoolResolver.call(
-        provider:,
-        school_uuids: school_sites.map(&:uuid),
-        gias_school_scope: GiasSchool.available,
-      )
+      @provider_schools_for_selected_sites ||= schools_identity.provider_schools_for(school_uuids: site_ids)
     end
     # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
-    def uuid?(identifier)
-      identifier.to_s.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/i)
+    def schools_identity
+      @schools_identity ||= ::CourseSchools::Identity.new(provider:)
     end
 
     def update_study_sites(course)

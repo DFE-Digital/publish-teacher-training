@@ -269,6 +269,34 @@ private
 
   def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
     @provider = create(:provider, :next_recruitment_cycle, :accredited_provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
+    mirror_provider_schools_from_sites(@provider)
     given_i_am_authenticated(user: create(:user, providers: [@provider]))
+  end
+
+  def mirror_provider_schools_from_sites(provider)
+    provider.sites.school.each do |site|
+      create(
+        :provider_school,
+        provider:,
+        gias_school: create_gias_school_from_site(site),
+        site_code: site.code,
+      )
+    end
+
+    provider.reload
+  end
+
+  def create_gias_school_from_site(site)
+    create(
+      :gias_school,
+      urn: site.urn,
+      name: site.location_name,
+      address1: site.address1,
+      address2: site.address2,
+      address3: site.address3,
+      town: site.town,
+      county: site.address4,
+      postcode: site.postcode,
+    )
   end
 end

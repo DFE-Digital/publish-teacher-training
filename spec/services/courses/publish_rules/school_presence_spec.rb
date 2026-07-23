@@ -60,6 +60,25 @@ describe Courses::PublishRules::SchoolPresence do
         expect(described_class.any?(course)).to be(false)
       end
     end
+
+    context "when the course is after the schools remodel cycle and the flag is off" do
+      let(:recruitment_cycle) { create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1) }
+      let(:provider) { create(:provider, recruitment_cycle:) }
+
+      before { allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false) }
+
+      it "returns true when the course has a Course::School row" do
+        attach_new_course_school(create(:gias_school))
+
+        expect(described_class.any?(course)).to be(true)
+      end
+
+      it "ignores legacy Sites" do
+        attach_legacy_site(create(:site, provider:, site_type: :school))
+
+        expect(described_class.any?(course)).to be(false)
+      end
+    end
   end
 
   describe ".none?" do

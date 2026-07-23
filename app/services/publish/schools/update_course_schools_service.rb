@@ -19,11 +19,14 @@ module Publish
 
       def initialize(course:, params:)
         @course = course
-        @params = { school_uuids: course.sites.map(&:uuid) }.merge(params.to_h.deep_symbolize_keys)
+        @schools_identity = ::CourseSchools::Identity.new(provider: course.provider, course:)
+        @params = { school_uuids: schools_identity.current_school_uuids }.merge(params.to_h.deep_symbolize_keys)
         @previous_site_names = course.sites.map(&:location_name)
       end
 
       def call
+        return save_course_attributes if schools_identity.after_schools_remodel_cycle?
+
         ActiveRecord::Base.transaction do
           assign_attributes_to_course
           sync_schools
@@ -36,10 +39,17 @@ module Publish
 
     private
 
-      attr_reader :course, :params, :previous_site_names
+      attr_reader :course, :params, :previous_site_names, :schools_identity
 
       def assign_attributes_to_course
         course.assign_attributes(params.except(:school_uuids))
+      end
+
+      def save_course_attributes
+        ActiveRecord::Base.transaction do
+          assign_attributes_to_course
+          course.save!
+        end
       end
 
       def sync_schools

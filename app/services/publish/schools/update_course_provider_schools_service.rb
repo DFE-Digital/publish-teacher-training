@@ -7,6 +7,7 @@ module Publish
 
       def initialize(course:, params:)
         @course = course
+        @schools_identity = ::CourseSchools::Identity.new(provider: course.provider, course:)
         @params = { school_uuids: current_school_uuids }.merge(params.to_h.deep_symbolize_keys)
       end
 
@@ -22,7 +23,7 @@ module Publish
 
     private
 
-      attr_reader :course, :params
+      attr_reader :course, :params, :schools_identity
 
       def attach_provider_school(provider_school)
         ::CourseSchools::Creator.call(course:, provider_school:)
@@ -33,14 +34,11 @@ module Publish
       end
 
       def current_school_uuids
-        course.schools.includes(:provider_school).map { |course_school| course_school.provider_school.uuid }
+        schools_identity.current_school_uuids
       end
 
       def submitted_provider_schools
-        @submitted_provider_schools ||= ProviderSchoolResolver.call(
-          provider: course.provider,
-          school_uuids: submitted_school_uuids,
-        )
+        @submitted_provider_schools ||= schools_identity.provider_schools_for(school_uuids: submitted_school_uuids)
       end
 
       def submitted_provider_school_ids
