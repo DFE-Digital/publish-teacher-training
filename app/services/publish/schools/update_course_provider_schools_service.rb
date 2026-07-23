@@ -41,9 +41,23 @@ module Publish
       end
 
       def submitted_provider_schools
-        @submitted_provider_schools ||= ProviderSchoolResolver.call(
-          provider: course.provider,
-          school_uuids: submitted_school_uuids,
+        @submitted_provider_schools ||= begin
+          provider_schools_by_uuid = course.provider.schools
+            .where(uuid: submitted_school_uuids)
+            .index_by { |school| school.uuid.to_s }
+          log_missing_provider_school_uuids(provider_schools_by_uuid.keys)
+
+          submitted_school_uuids.filter_map { |uuid| provider_schools_by_uuid[uuid] }.uniq(&:id)
+        end
+      end
+
+      def log_missing_provider_school_uuids(resolved_uuids)
+        missing_uuids = submitted_school_uuids - resolved_uuids
+        return if missing_uuids.empty?
+
+        Rails.logger.warn(
+          "[CourseSchools] skipped course_school write - no provider_school for " \
+          "provider=#{course.provider.id} school_uuids=#{missing_uuids.join(',')}",
         )
       end
 

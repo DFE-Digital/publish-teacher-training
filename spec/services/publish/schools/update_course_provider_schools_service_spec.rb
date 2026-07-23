@@ -33,20 +33,6 @@ module Publish
           end
         end
 
-        context "when a provider school row predates copied UUIDs" do
-          let(:params) { { school_uuids: [site_two.uuid] } }
-
-          before do
-            provider_school_two.update!(uuid: SecureRandom.uuid)
-          end
-
-          it "falls back through the legacy site UUID and still creates the Course::School row" do
-            expect { service_call }.to change { course.schools.count }.by(1)
-
-            expect(course.schools.find_by(provider_school: provider_school_two)).to be_present
-          end
-        end
-
         context "when a provider school is detached" do
           let(:params) { { school_uuids: [] } }
 
