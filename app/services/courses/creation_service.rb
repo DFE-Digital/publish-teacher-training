@@ -128,7 +128,7 @@ module Courses
     # course on save and are visible to CoursePublishableSchoolsPresence-
     # Validator's :new-context read (which the new-school-model flag routes
     # to course.schools). Mirrors the site→gias_school→provider_school
-    # mapping used by Publish::Schools::UpdateCourseSchoolsService.
+    # mapping used by Publish::Schools::UpdateCourseSiteStatusesService.
     def update_schools(course)
       return if site_ids.nil?
       # Nothing selected — update_sites already records the "Select at least
@@ -145,7 +145,7 @@ module Courses
           # No matching Provider::School yet — provider not fully backfilled
           # (or its site predates the dual-write). Skip the new-model build;
           # the schools backfill (or the next provider-side write) reconciles
-          # later. Same rationale as UpdateCourseSchoolsService#attach_school.
+          # later. Same rationale as UpdateCourseSiteStatusesService#attach_school.
           Rails.logger.warn(
             "[CourseSchools] skipped course_school build — no provider_school for " \
             "provider=#{provider.id} gias_school=#{gias_school.id}",

@@ -479,7 +479,7 @@ describe Courses::CreationService do
 
     # A GIAS school + provider_school that mirror the legacy `site` selected in
     # the wizard, joined to the legacy site by matching URN (same mapping the
-    # edit flow uses in Publish::Schools::UpdateCourseSchoolsService).
+    # edit flow uses in Publish::Schools::UpdateCourseSiteStatusesService).
     let(:gias_school) { create(:gias_school, urn: site.urn) }
     let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
 

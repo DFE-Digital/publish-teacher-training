@@ -5,9 +5,12 @@ module Publish
     class UpdateCourseProviderSchoolsService
       include ServicePattern
 
-      def initialize(course:, params:)
+      class UnresolvedProviderSchoolsError < StandardError; end
+
+      def initialize(course:, params:, raise_on_missing_provider_schools: false)
         @course = course
         @params = { school_uuids: current_school_uuids }.merge(params.to_h.deep_symbolize_keys)
+        @raise_on_missing_provider_schools = raise_on_missing_provider_schools
       end
 
       def call
@@ -37,7 +40,11 @@ module Publish
       end
 
       def current_school_uuids
-        course.sites.map { |site| site.uuid.to_s }
+        if after_schools_remodel_cycle?
+          course.schools.includes(:provider_school).map { |course_school| course_school.provider_school.uuid.to_s }
+        else
+          course.sites.map { |site| site.uuid.to_s }
+        end
       end
 
       def submitted_provider_schools
@@ -55,10 +62,16 @@ module Publish
         missing_uuids = submitted_school_uuids - resolved_uuids
         return if missing_uuids.empty?
 
+        message = "no provider_school for provider=#{course.provider.id} school_uuids=#{missing_uuids.join(',')}"
+        raise UnresolvedProviderSchoolsError, message if raise_on_missing_provider_schools?
+
         Rails.logger.warn(
-          "[CourseSchools] skipped course_school write - no provider_school for " \
-          "provider=#{course.provider.id} school_uuids=#{missing_uuids.join(',')}",
+          "[CourseSchools] skipped course_school write - #{message}",
         )
+      end
+
+      def raise_on_missing_provider_schools?
+        @raise_on_missing_provider_schools
       end
 
       def submitted_provider_school_ids
@@ -81,6 +94,10 @@ module Publish
         @provider_schools_to_attach ||= submitted_provider_schools.select do |provider_school|
           provider_school.id.in?(provider_school_ids_to_attach)
         end
+      end
+
+      def after_schools_remodel_cycle?
+        course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
       end
     end
   end

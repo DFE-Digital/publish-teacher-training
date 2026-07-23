@@ -69,6 +69,16 @@ module Publish
 
             service_call
           end
+
+          context "when missing provider schools must fail the write" do
+            subject(:service_call) do
+              described_class.call(course:, params:, raise_on_missing_provider_schools: true)
+            end
+
+            it "raises" do
+              expect { service_call }.to raise_error(described_class::UnresolvedProviderSchoolsError, /no provider_school/)
+            end
+          end
         end
       end
     end

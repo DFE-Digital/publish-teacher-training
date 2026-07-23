@@ -125,7 +125,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   def and_provider_schools_mirror_the_sites
     provider.sites.each do |site|
       gias_school = create(:gias_school, urn: site.urn)
-      create(:provider_school, provider:, gias_school:, site_code: site.code)
+      create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
     end
   end
 

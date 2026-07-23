@@ -84,14 +84,9 @@ module Publish
       end
 
       # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-      # TODO School data remodel removal - remove the UpdateCourseSchoolsService call when SiteStatus is no longer dual-written.
+      # TODO School data remodel removal - remove legacy SiteStatus dual-write orchestration from school updates.
       def update_course_schools
-        if selected_school_uuids_count > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
-          UpdateCourseSchoolsJob.perform_async(@course.id, school_params.to_h)
-        else
-          Publish::Schools::UpdateCourseSchoolsService.new(course: @course, params: school_params).call
-          Publish::Schools::UpdateCourseProviderSchoolsService.call(course: @course, params: school_params)
-        end
+        Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
       end
       # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
