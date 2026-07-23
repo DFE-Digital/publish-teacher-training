@@ -29,7 +29,7 @@ en:
         title: Title
         title_description: The title of the banner, displayed to users.
         title_heading_level: Title heading level
-        title_heading_level_description: The heading level for the title, used for accessibility. Between 1-6.
+        title_heading_level_description: The heading level for the title, used for accessibility. Between 2-6.
   support:
     banners:
       index:

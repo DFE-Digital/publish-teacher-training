@@ -52,6 +52,13 @@ RSpec.describe "Banner management support" do
     then_the_banner_is_created
   end
 
+  scenario "creating a banner with invalid data shows errors" do
+    when_i_visit_the_banners_page(:drafts)
+    and_i_click_add_banner
+    and_i_submit_the_form
+    then_i_see_validation_errors
+  end
+
   scenario "creating a banner with all fields" do
     when_i_visit_the_banners_page(:drafts)
     and_i_click_add_banner
@@ -71,6 +78,16 @@ RSpec.describe "Banner management support" do
     when_i_update_the_banner_name
     and_i_submit_the_form
     then_the_banner_name_is_updated
+  end
+
+  scenario "editing a banner with invalid data shows errors" do
+    given_there_is_an_active_banner
+    when_i_visit_the_banners_page(:active)
+    and_i_click_edit_on_the_banner
+
+    when_i_clear_the_banner_name
+    and_i_submit_the_form
+    then_i_see_validation_errors
   end
 
   scenario "expiring an active banner" do
@@ -218,7 +235,7 @@ private
   end
 
   def then_the_banner_is_created
-    expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
+    expect(page).to have_current_path(drafts_support_banners_path, ignore_query: true)
 
     banner = Banner.last
     expect(banner.name).to eq("Important maintenance notice")
@@ -268,7 +285,7 @@ private
   end
 
   def then_the_full_banner_is_created
-    expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
+    expect(page).to have_current_path(expired_support_banners_path, ignore_query: true)
 
     banner = Banner.last
     expect(banner.name).to eq("Full banner")
@@ -311,11 +328,12 @@ private
   end
 
   def then_the_banner_is_expired
-    expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
+    expect(page).to have_current_path(expired_support_banners_path, ignore_query: true)
     expect(@active_banner.reload.expired_at).to be_present
   end
 
   def and_the_banner_is_no_longer_on_the_active_tab
+    visit active_support_banners_path
     expect(page).to have_no_content(@active_banner.name)
   end
 
@@ -357,5 +375,13 @@ private
 
   def then_i_do_not_see_the_publish_action
     expect(page).to have_no_button("Publish")
+  end
+
+  def when_i_clear_the_banner_name
+    fill_in "Name", with: ""
+  end
+
+  def then_i_see_validation_errors
+    expect(page).to have_css(".govuk-error-summary")
   end
 end

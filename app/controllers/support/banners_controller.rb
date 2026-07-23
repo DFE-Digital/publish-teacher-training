@@ -22,7 +22,7 @@ module Support
     def create
       @banner = Banner.new(banner_params)
       if @banner.save
-        redirect_to active_support_banners_path, flash: { success: "Banner was successfully created." }
+        redirect_to banner_status_path(@banner), flash: { success: "Banner was successfully created." }
       else
         render :new, status: :unprocessable_entity
       end
@@ -35,13 +35,22 @@ module Support
     def update
       @banner = Banner.find(params[:id])
       if @banner.update(banner_params)
-        redirect_to active_support_banners_path, flash: { success: "Banner was successfully updated." }
+        redirect_to banner_status_path(@banner), flash: { success: "Banner was successfully updated." }
       else
         render :edit, status: :unprocessable_entity
       end
     end
 
   private
+
+    def banner_status_path(banner)
+      {
+        draft: drafts_support_banners_path,
+        active: active_support_banners_path,
+        scheduled: scheduled_support_banners_path,
+        expired: expired_support_banners_path,
+      }.fetch(banner.status, active_support_banners_path)
+    end
 
     def banner_params
       params.expect(banner: %i[
