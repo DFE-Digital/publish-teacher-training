@@ -73,6 +73,16 @@ module Publish
 
         expect(form.collapse_schools?).to be(true)
       end
+
+      it "does not load all schools to count whether the list should collapse" do
+        provider = create(:provider, sites: build_list(:site, 21))
+        form = described_class.new(create(:course, provider:), params: {})
+        schools = form.schools
+
+        expect(schools).not_to be_loaded
+        expect(form.collapse_schools?).to be(true)
+        expect(schools).not_to be_loaded
+      end
     end
 
     describe "validations", travel: Find::CycleTimetable.mid_cycle(2026) do

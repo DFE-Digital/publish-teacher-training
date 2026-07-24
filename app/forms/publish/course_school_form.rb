@@ -15,7 +15,7 @@ module Publish
 
     # Every school the provider could attach, in the order they are listed.
     def schools
-      @schools ||= ProviderSchools::Identity.ordered_school_scope(provider: course.provider).to_a
+      @schools ||= ProviderSchools::Identity.ordered_school_scope(provider: course.provider)
     end
 
     def schools_collapse_threshold
