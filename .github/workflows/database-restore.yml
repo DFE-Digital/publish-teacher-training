@@ -56,7 +56,7 @@ jobs:
       BACKUP_FILE: ${{ inputs.backup-file || 'schedule'  }}
     services:
       postgres:
-        image: postgres:14.7
+        image: postgis/postgis:17-3.6-alpine
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
