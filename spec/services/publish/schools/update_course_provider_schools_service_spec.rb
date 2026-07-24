@@ -19,10 +19,10 @@ module Publish
       end
 
       describe "#call" do
-        subject(:service_call) { described_class.call(course:, params:) }
+        subject(:service_call) { described_class.call(course:, school_uuids:) }
 
         context "when a provider school is newly attached" do
-          let(:params) { { school_uuids: [site_two.uuid] } }
+          let(:school_uuids) { [site_two.uuid] }
 
           it "creates a Course::School row for the submitted provider school" do
             expect { service_call }.to change { course.schools.count }.by(1)
@@ -33,8 +33,17 @@ module Publish
           end
         end
 
+        context "when a provider school UUID is submitted more than once" do
+          let(:school_uuids) { [site_two.uuid, site_two.uuid] }
+
+          it "creates one Course::School row for the submitted provider school" do
+            expect { service_call }.to change { course.schools.count }.by(1)
+            expect(course.schools.where(provider_school: provider_school_two).count).to eq(1)
+          end
+        end
+
         context "when a provider school is detached" do
-          let(:params) { { school_uuids: [] } }
+          let(:school_uuids) { [] }
 
           before do
             create(:course_school, course:, gias_school: gias_school_one, provider_school: provider_school_one)
@@ -48,7 +57,7 @@ module Publish
         end
 
         context "when the prerequisite provider_school is missing" do
-          let(:params) { { school_uuids: [site_two.uuid] } }
+          let(:school_uuids) { [site_two.uuid] }
 
           before do
             provider_school_two.destroy!
@@ -72,7 +81,7 @@ module Publish
 
           context "when missing provider schools must fail the write" do
             subject(:service_call) do
-              described_class.call(course:, params:, raise_on_missing_provider_schools: true)
+              described_class.call(course:, school_uuids:, raise_on_missing_provider_schools: true)
             end
 
             it "raises" do
@@ -83,7 +92,7 @@ module Publish
 
         context "when a partially resolved submission would remove an existing Course::School row" do
           let(:missing_school_uuid) { SecureRandom.uuid }
-          let(:params) { { school_uuids: [provider_school_two.uuid, missing_school_uuid] } }
+          let(:school_uuids) { [provider_school_two.uuid, missing_school_uuid] }
 
           before do
             create(:course_school, course:, gias_school: gias_school_one, provider_school: provider_school_one)

@@ -30,9 +30,9 @@ module Publish
 
     def current_school_uuids
       if after_schools_remodel_cycle?
-        course.schools.includes(:provider_school).map { |course_school| course_school.provider_school.uuid.to_s }
+        course.schools.includes(:provider_school).map { |course_school| course_school.provider_school.uuid }
       else
-        course.sites.map { |site| site.uuid.to_s }
+        course.sites.map(&:uuid)
       end
     end
 
@@ -49,10 +49,10 @@ module Publish
     end
 
     def school_uuids_belong_to_provider
-      school_uuids = Array(params[:school_uuids]).compact_blank.map(&:to_s)
+      school_uuids = Array(params[:school_uuids]).compact_blank.uniq
       return if school_uuids.empty?
 
-      known_school_uuids = school_scope.where(uuid: school_uuids).pluck(:uuid).map(&:to_s)
+      known_school_uuids = school_scope.where(uuid: school_uuids).pluck(:uuid)
       return if (school_uuids - known_school_uuids).empty?
 
       errors.add(:school_uuids, :school_uuids_invalid)

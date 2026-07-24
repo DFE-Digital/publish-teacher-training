@@ -27,7 +27,7 @@ module Publish
         @course_school_form = Publish::CourseSchoolForm.new(@course, params: school_params)
 
         if @course_school_form.valid?
-          update_course_schools
+          Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
 
           flash[:success] = if selected_school_uuids_count > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
                               I18n.t("success.enqueued_schools")
@@ -86,13 +86,6 @@ module Publish
       def section_key
         "School".pluralize(selected_school_uuids_count)
       end
-
-      # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-      # TODO School data remodel removal - remove legacy SiteStatus dual-write orchestration from school updates.
-      def update_course_schools
-        Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
-      end
-      # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
       def selected_school_uuids_count
         Array(school_params[:school_uuids]).compact_blank.count

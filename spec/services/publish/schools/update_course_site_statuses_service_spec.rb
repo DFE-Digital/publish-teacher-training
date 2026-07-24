@@ -11,7 +11,7 @@ module Publish
       let(:previous_site_names) { course.sites.map(&:location_name) }
 
       describe "#call" do
-        subject(:service_call) { described_class.new(course:, params:).call }
+        subject(:service_call) { described_class.call(course:, params:) }
 
         context "when school_uuids are different from course school UUIDs" do
           let(:params) { { school_uuids: provider.sites.map(&:uuid) } }
@@ -70,7 +70,15 @@ module Publish
             FeatureFlag.activate(:course_sites_updated_email_notification)
 
             expect(NotificationService::CourseSitesUpdated).not_to receive(:call)
-            described_class.new(course:, params:, send_notifications: false).call
+            described_class.call(course:, params:, send_notifications: false)
+          end
+        end
+
+        context "when school_uuids are omitted" do
+          let(:params) { {} }
+
+          it "raises a clear error" do
+            expect { service_call }.to raise_error(ArgumentError, "school_uuids must be provided")
           end
         end
 
@@ -101,19 +109,19 @@ module Publish
             let(:params) { { school_uuids: [site_two.uuid] } }
 
             it "destroys the unticked site_status" do
-              described_class.new(course:, params:).call
+              described_class.call(course:, params:)
 
               expect(course.reload.site_statuses.where(site: site_one)).to be_empty
             end
 
             it "removes the unticked school from course.sites" do
-              described_class.new(course:, params:).call
+              described_class.call(course:, params:)
 
               expect(course.reload.sites.map(&:id)).to contain_exactly(site_two.id)
             end
 
             it "leaves the kept site_status as :running and :published" do
-              described_class.new(course:, params:).call
+              described_class.call(course:, params:)
 
               site_status = course.reload.site_statuses.find_by!(site: site_two)
               expect(site_status).to be_status_running
@@ -136,14 +144,14 @@ module Publish
             let(:params) { { school_uuids: [site_one.uuid] } }
 
             it "does not flip the suspended site_status back to running" do
-              described_class.new(course:, params:).call
+              described_class.call(course:, params:)
 
               site_status = course.reload.site_statuses.find_by!(site: site_two)
               expect(site_status).to be_status_suspended
             end
 
             it "does not flip the suspended site_status back to published" do
-              described_class.new(course:, params:).call
+              described_class.call(course:, params:)
 
               site_status = course.reload.site_statuses.find_by!(site: site_two)
               expect(site_status).to be_unpublished_on_ucas
@@ -165,7 +173,7 @@ module Publish
             let(:params) { { school_uuids: [site_one.uuid] } }
 
             it "does not touch the discontinued site_status" do
-              described_class.new(course:, params:).call
+              described_class.call(course:, params:)
 
               site_status = course.reload.site_statuses.find_by!(site: site_two)
               expect(site_status).to be_status_discontinued
@@ -178,7 +186,7 @@ module Publish
             let(:params) { { school_uuids: [site_one.uuid] } }
 
             it "the newly attached site_status is :new_status :unpublished" do
-              described_class.new(course:, params:).call
+              described_class.call(course:, params:)
 
               site_status = course.reload.site_statuses.find_by!(site: site_one)
               expect(site_status).to be_status_new_status

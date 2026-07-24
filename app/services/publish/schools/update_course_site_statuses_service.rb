@@ -4,11 +4,13 @@ module Publish
     # TODO School data remodel removal - remove this legacy SiteStatus sync service when school associations
     # are written only through Provider::School and Course::School.
     class UpdateCourseSiteStatusesService
-      ENQUEUE_THRESHOLD = 30
+      include ServicePattern
 
       def initialize(course:, params:, send_notifications: true)
         @course = course
-        @params = { school_uuids: current_school_uuids }.merge(params.to_h.deep_symbolize_keys)
+        @params = params.to_h.deep_symbolize_keys
+        raise ArgumentError, "school_uuids must be provided" unless @params.key?(:school_uuids)
+
         @previous_site_names = course.sites.map(&:location_name)
         @send_notifications = send_notifications
       end
@@ -46,11 +48,11 @@ module Publish
       end
 
       def submitted_school_uuids
-        @submitted_school_uuids ||= Array(params[:school_uuids]).compact_blank.map(&:to_s)
+        @submitted_school_uuids ||= Array(params[:school_uuids]).compact_blank.uniq
       end
 
       def current_school_uuids
-        @current_school_uuids ||= course.sites.map { |site| site.uuid.to_s }
+        @current_school_uuids ||= course.sites.map(&:uuid)
       end
 
       # TODO School data remodel removal - remove once course school updates no longer diff legacy Site UUIDs.
@@ -67,7 +69,7 @@ module Publish
       def sites_by_uuid
         @sites_by_uuid ||= course.provider.sites
           .where(uuid: sites_to_attach_uuids + sites_to_remove_uuids)
-          .index_by { |site| site.uuid.to_s }
+          .index_by(&:uuid)
       end
 
       # TODO School data remodel removal - remove with the legacy SiteStatus write path.

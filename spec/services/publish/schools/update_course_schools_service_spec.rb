@@ -142,6 +142,21 @@ module Publish
             end
           end
 
+          context "when school_uuids is omitted" do
+            let(:params) { { schools_validated: "true" } }
+
+            before do
+              create(:course_school, course:, gias_school: gias_school_one, provider_school: provider_school_one)
+            end
+
+            it "keeps the current Course::School rows and persists course attributes" do
+              expect { service_call }
+                .not_to(change { course.schools.reload.pluck(:provider_school_id) })
+
+              expect(course.reload.schools_validated).to be(true)
+            end
+          end
+
           context "when course site update notifications are enabled" do
             before do
               FeatureFlag.activate(:course_sites_updated_email_notification)

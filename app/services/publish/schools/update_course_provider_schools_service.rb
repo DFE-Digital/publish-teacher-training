@@ -7,9 +7,9 @@ module Publish
 
       class UnresolvedProviderSchoolsError < StandardError; end
 
-      def initialize(course:, params:, raise_on_missing_provider_schools: false)
+      def initialize(course:, school_uuids:, raise_on_missing_provider_schools: false)
         @course = course
-        @params = { school_uuids: current_school_uuids }.merge(params.to_h.deep_symbolize_keys)
+        @submitted_school_uuids = Array(school_uuids).compact_blank.uniq
         @raise_on_missing_provider_schools = raise_on_missing_provider_schools
       end
 
@@ -26,38 +26,20 @@ module Publish
 
     private
 
-      attr_reader :course, :params
+      attr_reader :course, :submitted_school_uuids
 
       def attach_provider_school(provider_school)
-        course.schools.find_or_create_by!(provider_school:) do |course_school|
-          course_school.gias_school = provider_school.gias_school
-        end
-      rescue ActiveRecord::RecordNotUnique
-        course.schools.find_by!(provider_school:)
+        course.schools.create!(
+          provider_school:,
+          gias_school: provider_school.gias_school,
+        )
       end
 
-      def submitted_school_uuids
-        @submitted_school_uuids ||= Array(params[:school_uuids]).compact_blank.map(&:to_s)
-      end
-
-      def current_school_uuids
-        if after_schools_remodel_cycle?
-          course.schools.includes(:provider_school).map { |course_school| course_school.provider_school.uuid.to_s }
-        else
-          course.sites.map { |site| site.uuid.to_s }
-        end
-      end
-
-      def submitted_provider_schools
-        @submitted_provider_schools ||= submitted_school_uuids
-          .filter_map { |uuid| provider_schools_by_uuid[uuid] }
-          .uniq(&:id)
-      end
-
-      def provider_schools_by_uuid
-        @provider_schools_by_uuid ||= course.provider.schools
+      def provider_school_ids_by_uuid
+        @provider_school_ids_by_uuid ||= course.provider.schools
           .where(uuid: submitted_school_uuids)
-          .index_by { |school| school.uuid.to_s }
+          .pluck(:uuid, :id)
+          .to_h
       end
 
       def all_submitted_provider_schools_resolved?
@@ -79,7 +61,7 @@ module Publish
       end
 
       def missing_provider_school_uuids
-        @missing_provider_school_uuids ||= submitted_school_uuids - provider_schools_by_uuid.keys
+        @missing_provider_school_uuids ||= submitted_school_uuids - provider_school_ids_by_uuid.keys
       end
 
       def raise_on_missing_provider_schools?
@@ -87,7 +69,7 @@ module Publish
       end
 
       def submitted_provider_school_ids
-        @submitted_provider_school_ids ||= submitted_provider_schools.map(&:id)
+        @submitted_provider_school_ids ||= provider_school_ids_by_uuid.values
       end
 
       def current_provider_school_ids
@@ -103,13 +85,9 @@ module Publish
       end
 
       def provider_schools_to_attach
-        @provider_schools_to_attach ||= submitted_provider_schools.select do |provider_school|
-          provider_school.id.in?(provider_school_ids_to_attach)
-        end
-      end
-
-      def after_schools_remodel_cycle?
-        course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+        @provider_schools_to_attach ||= course.provider.schools
+          .includes(:gias_school)
+          .where(id: provider_school_ids_to_attach)
       end
     end
   end
