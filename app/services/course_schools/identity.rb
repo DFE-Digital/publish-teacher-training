@@ -18,7 +18,7 @@ module CourseSchools
     end
 
     def available_schools
-      provider_identity.ordered_school_scope.to_a
+      provider_identity.ordered_school_scope
     end
 
     def current_school_uuids

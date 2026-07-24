@@ -30,6 +30,16 @@ RSpec.describe CourseSchools::Identity do
       expect(identity.current_school_uuids).to eq([site_uuid])
       expect(identity.school_records_for(school_uuids: [site_uuid])).to eq([site])
     end
+
+    it "does not load all available schools before they are needed" do
+      identity = described_class.new(provider:, course:)
+      available_schools = identity.available_schools
+
+      expect(available_schools).to be_a(ActiveRecord::Relation)
+      expect(available_schools).not_to be_loaded
+      expect(identity.available_schools_count).to eq(1)
+      expect(available_schools).not_to be_loaded
+    end
   end
 
   context "when the provider is in the schools remodel cycle" do
@@ -153,7 +163,7 @@ RSpec.describe CourseSchools::Identity do
     it "supports provider-only school lists" do
       identity = described_class.new(provider:)
 
-      expect(identity.available_schools).to eq([site])
+      expect(identity.available_schools).to contain_exactly(site)
     end
 
     it "raises a descriptive error for course-specific school UUIDs" do
