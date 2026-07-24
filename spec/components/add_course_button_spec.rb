@@ -5,7 +5,7 @@ require "rails_helper"
 describe AddCourseButton do
   include Rails.application.routes.url_helpers
 
-  let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
+  let(:recruitment_cycle) { build(:recruitment_cycle, year: Settings.schools_remodel_cycle_year) }
   let(:provider) { build(:provider, recruitment_cycle:) }
 
   before do
@@ -217,6 +217,38 @@ describe AddCourseButton do
           provider.recruitment_cycle.year,
         ),
       )
+    end
+  end
+
+  context "when the provider is after the school remodel cycle" do
+    let(:recruitment_cycle) { build(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1) }
+
+    context "and has a provider school" do
+      let(:provider) { build(:provider, :accredited_provider, schools: [build(:provider_school)], recruitment_cycle:) }
+
+      it "does not render a schools link" do
+        expect(rendered_content).to have_no_link(
+          "add a school",
+          href: publish_provider_recruitment_cycle_schools_path(
+            provider.provider_code,
+            provider.recruitment_cycle.year,
+          ),
+        )
+      end
+    end
+
+    context "and only has a legacy site" do
+      let(:provider) { build(:provider, :accredited_provider, sites: [build(:site)], recruitment_cycle:) }
+
+      it "renders a schools link" do
+        expect(rendered_content).to have_link(
+          "add a school",
+          href: publish_provider_recruitment_cycle_schools_path(
+            provider.provider_code,
+            provider.recruitment_cycle.year,
+          ),
+        )
+      end
     end
   end
 end

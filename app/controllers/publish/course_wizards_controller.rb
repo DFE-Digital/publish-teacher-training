@@ -16,7 +16,7 @@ module Publish
     end
 
     def new
-      return render_schools_messages unless provider.sites.any?
+      return render_schools_messages unless CourseSchools::Identity.new(provider:).available_schools.exists?
 
       redirect_to publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: params[:provider_code],

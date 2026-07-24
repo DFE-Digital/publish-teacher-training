@@ -27,7 +27,7 @@ module Courses
         "qualification" => draft.qualification,
         "funding" => draft.funding,
         "study_mode" => draft.study_modes,
-        "sites_ids" => draft.school_ids,
+        "school_uuids" => draft.school_uuids,
         "study_sites_ids" => draft.study_site_ids,
         "accredited_provider_code" => draft.accredited_provider_code,
         "start_date" => draft.start_date,

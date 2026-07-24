@@ -190,12 +190,21 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       expect(draft.subjects.map(&:id)).to eq([first.id, second.id])
     end
 
-    it "returns school ids and ordered school records" do
+    it "returns school UUIDs and ordered school records" do
+      site_one = provider.sites.first || create(:site, provider:)
+      site_two = create(:site, provider:)
+      state_store.write(school_uuids: [site_two.uuid.to_s, site_one.uuid.to_s])
+
+      expect(draft.school_uuids).to eq([site_two.uuid.to_s, site_one.uuid.to_s])
+      expect(draft.schools.map(&:id)).to eq([site_two.id, site_one.id])
+    end
+
+    it "converts legacy site ids to school UUIDs for in-progress wizard state" do
       site_one = provider.sites.first || create(:site, provider:)
       site_two = create(:site, provider:)
       state_store.write(site_ids: [site_two.id.to_s, site_one.id.to_s])
 
-      expect(draft.school_ids).to eq([site_two.id.to_s, site_one.id.to_s])
+      expect(draft.school_uuids).to eq([site_two.uuid.to_s, site_one.uuid.to_s])
       expect(draft.schools.map(&:id)).to eq([site_two.id, site_one.id])
     end
 

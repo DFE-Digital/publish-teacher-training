@@ -368,7 +368,7 @@ private
       primary_master_subject_id: primary_subject.id.to_s,
       age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -393,7 +393,7 @@ private
       primary_master_subject_id: primary_subject.id.to_s,
       age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [@placement_site.id.to_s],
+      school_uuids: [@placement_site.uuid.to_s],
       study_sites_ids: [],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -420,7 +420,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [@placement_site.id.to_s],
+      school_uuids: [@placement_site.uuid.to_s],
       study_sites_ids: [],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -520,7 +520,7 @@ private
   def and_the_selected_school_is_mapped_to_the_new_model
     @selected_site = provider.sites.first
     @gias_school = create(:gias_school, urn: @selected_site.urn)
-    create(:provider_school, provider:, gias_school: @gias_school, site_code: @selected_site.code)
+    create(:provider_school, provider:, gias_school: @gias_school, site_code: @selected_site.code, uuid: @selected_site.uuid)
   end
 
   def then_the_created_course_has_the_new_course_school
@@ -588,7 +588,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
       accredited_provider_code: partner_provider_code,
       can_sponsor_student_visa: true,
@@ -622,7 +622,7 @@ private
       qualification: "qts",
       funding_type: "salary",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
       accredited_provider_code: partner_provider_code,
       can_sponsor_skilled_worker_visa: true,
@@ -658,7 +658,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
       can_sponsor_student_visa: false,
       visa_sponsorship_application_deadline_required: false,
@@ -685,7 +685,7 @@ private
       qualification: "pgde",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -715,7 +715,7 @@ private
       primary_master_subject_id: primary_subject.id.to_s,
       age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -746,7 +746,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
       can_sponsor_student_visa: true,
       visa_sponsorship_application_deadline_required: false,
@@ -777,7 +777,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
       accredited_provider_code: partner_provider_code,
       can_sponsor_student_visa: true,

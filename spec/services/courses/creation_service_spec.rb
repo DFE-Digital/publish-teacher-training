@@ -478,10 +478,9 @@ describe Courses::CreationService do
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
 
     # A GIAS school + provider_school that mirror the legacy `site` selected in
-    # the wizard, joined to the legacy site by matching URN (same mapping the
-    # edit flow uses in Publish::Schools::UpdateCourseSchoolsService).
+    # the wizard, joined to the legacy site by matching UUID.
     let(:gias_school) { create(:gias_school, urn: site.urn) }
-    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
+    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid) }
 
     let(:valid_course_params) do
       {
@@ -493,7 +492,7 @@ describe Courses::CreationService do
         "qualification" => "qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time],
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid.to_s],
         "study_sites_ids" => [study_site.id],
         "master_subject_id" => primary_subject.id,
         "subjects_ids" => [primary_subject.id],
@@ -530,7 +529,7 @@ describe Courses::CreationService do
 
       it "builds the new Course::School and passes :new validation" do
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.schools.first.site_code).to eq("-")
+        expect(created_course.schools.first.site_code).to eq(site.code)
         expect(created_course.schools.first.provider_school).to eq(provider_school)
         expect(created_course.errors).to be_empty
       end
@@ -540,6 +539,42 @@ describe Courses::CreationService do
 
         expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
           .to eq([[gias_school.id, provider_school.id]])
+      end
+    end
+
+    context "when the provider is after the school remodel cycle" do
+      let(:future_recruitment_cycle) { create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1) }
+      let(:provider) do
+        create(:provider, sites: [site], study_sites: [study_site], recruitment_cycle: future_recruitment_cycle)
+      end
+      let!(:provider_school) { create(:provider_school, provider:, gias_school:) }
+
+      let(:valid_course_params) do
+        {
+          "age_range_in_years" => "3_to_7",
+          "applications_open_from" => future_recruitment_cycle.application_start_date,
+          "funding" => "fee",
+          "is_send" => "1",
+          "level" => "primary",
+          "qualification" => "qts",
+          "start_date" => "September #{future_recruitment_cycle.year}",
+          "study_mode" => %w[full_time],
+          "school_uuids" => [provider_school.uuid.to_s],
+          "study_sites_ids" => [study_site.id],
+          "master_subject_id" => primary_subject.id,
+          "subjects_ids" => [primary_subject.id],
+        }
+      end
+
+      before do
+        allow(FeatureFlag).to receive(:active?).and_call_original
+        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
+      end
+
+      it "writes the new Course::School without attaching a legacy site" do
+        expect(created_course.schools.map(&:provider_school)).to eq([provider_school])
+        expect(created_course.sites).to be_empty
+        expect(created_course.errors).to be_empty
       end
     end
 
@@ -559,6 +594,26 @@ describe Courses::CreationService do
 
         expect(created_course.schools).to be_empty
         expect(created_course.sites.map(&:id)).to eq([site.id])
+      end
+    end
+
+    context "when a submitted school UUID cannot be resolved" do
+      let(:unknown_school_uuid) { SecureRandom.uuid }
+
+      let(:valid_course_params) do
+        {
+          "level" => "primary",
+          "qualification" => "qts",
+          "funding" => "fee",
+          "school_uuids" => [unknown_school_uuid],
+        }
+      end
+
+      it "logs the error and adds the existing school selection error" do
+        expect(Rails.logger).to receive(:warn).with(/invalid school UUIDs/)
+
+        expect(created_course.errors[:sites]).to include("Select at least one school")
+        expect(created_course.schools).to be_empty
       end
     end
 
@@ -586,7 +641,7 @@ describe Courses::CreationService do
           "level" => "primary",
           "qualification" => "qts",
           "funding" => "fee",
-          "sites_ids" => [],
+          "school_uuids" => [],
         }
       end
 
@@ -607,7 +662,7 @@ describe Courses::CreationService do
           "level" => "primary",
           "qualification" => "qts",
           "funding" => "fee",
-          "sites_ids" => [],
+          "school_uuids" => [],
         }
       end
 

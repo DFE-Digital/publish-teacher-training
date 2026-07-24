@@ -235,7 +235,7 @@ private
       primary_master_subject_id: primary_subject.id.to_s,
       age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
     )
   end

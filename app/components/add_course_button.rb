@@ -63,6 +63,14 @@ private
   end
 
   def school_present?
-    provider.sites.any?
+    school_collection.any?
+  end
+
+  def school_collection
+    if provider.recruitment_cycle_year.to_i > Settings.schools_remodel_cycle_year
+      provider.schools
+    else
+      provider.sites
+    end
   end
 end

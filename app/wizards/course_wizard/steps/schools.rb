@@ -7,9 +7,10 @@ class CourseWizard
       FUNDING_TYPES_WITH_SALARY = %w[salary apprenticeship].freeze
       QUALIFICATIONS_WITH_SALARY = %w[undergraduate_degree_with_qts].freeze
 
-      attribute :site_ids
+      attribute :school_uuids
 
-      validate :site_ids_selected
+      validate :school_uuids_selected
+      validate :school_uuids_resolve
 
       review do |r|
         r.row(
@@ -20,8 +21,8 @@ class CourseWizard
         )
       end
 
-      def sites
-        @sites ||= provider_sites.sort_by(&:location_name)
+      def schools
+        @schools ||= course_school_identity.available_schools
       end
 
       def schools_collapse_threshold
@@ -29,7 +30,7 @@ class CourseWizard
       end
 
       def collapse_schools?
-        sites.size > schools_collapse_threshold
+        schools.size > schools_collapse_threshold
       end
 
       def salaried?
@@ -37,27 +38,38 @@ class CourseWizard
       end
 
       def self.permitted_params
-        [{ site_ids: [] }]
+        [{ school_uuids: [] }]
       end
 
     private
 
-      def site_ids_selected
-        if selected_site_ids.empty? && provider_sites.one?
-          self.site_ids = [provider_sites.first.id.to_s]
+      def school_uuids_selected
+        if selected_school_uuids.empty? && course_school_identity.available_schools_count == 1
+          self.school_uuids = [course_school_identity.available_schools.first.uuid.to_s]
         end
 
-        return if selected_site_ids.any?
+        return if selected_school_uuids.any?
 
-        errors.add(:site_ids, I18n.t("course_wizard.steps.schools.errors.site_ids.blank"))
+        errors.add(:school_uuids, I18n.t("course_wizard.steps.schools.errors.school_uuids.blank"))
       end
 
-      def selected_site_ids
-        Array(site_ids).compact_blank
+      def school_uuids_resolve
+        return if selected_school_uuids.empty?
+
+        course_school_identity.school_records_for(school_uuids: selected_school_uuids)
+      rescue ArgumentError => e
+        Rails.logger.warn(
+          "[CourseWizard::Schools] invalid school UUIDs for provider=#{wizard.provider.id}: #{e.message}",
+        )
+        errors.add(:school_uuids, I18n.t("course_wizard.steps.schools.errors.school_uuids.blank"))
       end
 
-      def provider_sites
-        wizard.provider.sites
+      def selected_school_uuids
+        Array(school_uuids).compact_blank
+      end
+
+      def course_school_identity
+        @course_school_identity ||= CourseSchools::Identity.new(provider: wizard.provider)
       end
 
       def funding_type

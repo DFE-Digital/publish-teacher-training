@@ -89,12 +89,19 @@ class CourseWizard
       @subjects ||= ordered_subject_records(subject_ids)
     end
 
-    def school_ids
-      Array(state_store.site_ids).compact_blank
+    def school_uuids
+      return Array(state_store.school_uuids).compact_blank unless state_store.school_uuids.nil?
+
+      # TODO School data remodel removal - remove site_ids fallback # rubocop:disable Style/CommentAnnotation
+      # when cached add-course wizard states no longer need it.
+      ordered_site_records(legacy_site_ids).map { |site| site.uuid.to_s }
     end
 
     def schools
-      @schools ||= ordered_site_records(school_ids)
+      @schools ||= course_school_identity.school_records_for(school_uuids:)
+    rescue ArgumentError => e
+      Rails.logger.warn("[CourseWizard::Draft] invalid school UUIDs for provider=#{wizard.provider.id}: #{e.message}")
+      []
     end
 
     def study_site_ids
@@ -173,6 +180,16 @@ class CourseWizard
 
       records_by_id = Site.where(id: ids).index_by { |site| site.id.to_s }
       ids.filter_map { |id| records_by_id[id.to_s] }
+    end
+
+    def legacy_site_ids
+      state = state_store.read
+
+      Array(state[:site_ids] || state["site_ids"]).compact_blank
+    end
+
+    def course_school_identity
+      @course_school_identity ||= CourseSchools::Identity.new(provider: wizard.provider)
     end
   end
 end
