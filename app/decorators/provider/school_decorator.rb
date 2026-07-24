@@ -11,4 +11,8 @@ class Provider::SchoolDecorator < Draper::Decorator
   def location_name
     smart_quotes(object.location_name)
   end
+
+  delegate :code, to: :object
+
+  delegate :urn, to: :object
 end

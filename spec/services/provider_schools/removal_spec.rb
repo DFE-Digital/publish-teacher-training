@@ -13,11 +13,32 @@ RSpec.describe ProviderSchools::Removal do
   end
 
   describe "#call" do
+    context "when the provider is before the schools remodel cycle" do
+      let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year - 1) }
+      let(:provider) { create(:provider, recruitment_cycle:) }
+      let!(:site) { create(:site, provider:, uuid: site_uuid) }
+
+      it "removes the legacy site" do
+        expect(described_class.new(provider:, uuid: site.uuid).call).to be(true)
+
+        expect(Site.where(id: site.id)).to be_empty
+      end
+
+      it "does not remove the site when it is attached to a legacy course site" do
+        course = create(:course, provider:)
+        course.sites << site
+
+        expect(described_class.new(provider:, uuid: site.uuid).call).to be(false)
+
+        expect(Site.where(id: site.id)).to contain_exactly(site)
+      end
+    end
+
     context "when the provider is in the schools remodel cycle" do
       let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year) }
       let(:provider) { create(:provider, recruitment_cycle:) }
       let!(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: site_uuid) }
-      let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code) }
+      let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site_uuid) }
 
       it "removes both the legacy site and provider school" do
         expect(described_class.new(provider:, uuid: site.uuid).call).to be(true)

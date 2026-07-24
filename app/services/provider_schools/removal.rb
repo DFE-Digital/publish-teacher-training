@@ -12,7 +12,11 @@ module ProviderSchools
 
     def call
       ActiveRecord::Base.transaction do
-        if provider_school.present?
+        if after_schools_remodel_cycle?
+          school.with_lock do
+            destroy_records_if_removable!
+          end
+        elsif provider_school.present?
           provider_school.with_lock do
             destroy_records_if_removable!
           end
@@ -23,30 +27,26 @@ module ProviderSchools
     end
 
     def site
-      @site ||= school if school.is_a?(Site)
+      @site ||= provider.sites.find_by(uuid:) unless after_schools_remodel_cycle?
     end
 
     def school
       @school ||= identity.school_for(uuid:)
-    end
-
-    def provider_school
-      @provider_school ||= if after_schools_remodel_cycle?
-                             school
-                           else
-                             identity.provider_school_for(site:)
-                           end
     rescue ActiveRecord::RecordNotFound
       raise if after_schools_remodel_cycle?
 
       nil
     end
 
+    def provider_school
+      @provider_school ||= provider.schools.find_by(uuid:)
+    end
+
     def removable?
       if after_schools_remodel_cycle?
-        !provider_school.course_schools.exists?
+        !school.course_schools.exists?
       else
-        site.has_no_course? && provider_school_course_schools_empty?
+        site&.has_no_course? && provider_school_course_schools_empty?
       end
     end
 
@@ -70,7 +70,7 @@ module ProviderSchools
 
     def destroy_records!
       provider_school.destroy!
-      site.destroy! unless after_schools_remodel_cycle?
+      site&.destroy!
     end
 
     def provider_school_course_schools_empty?

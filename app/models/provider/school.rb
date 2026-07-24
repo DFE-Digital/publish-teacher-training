@@ -28,9 +28,13 @@ class Provider::School < ApplicationRecord
             if: -> { site_code == MAIN_SITE_CODE }
 
   def location_name
-    return "#{gias_school.name} (Main site)" if site_code == MAIN_SITE_CODE
+    return "#{gias_school.name} (Main Site)" if main_site?
 
     gias_school.name
+  end
+
+  def main_site?
+    site_code == MAIN_SITE_CODE
   end
 
   def code

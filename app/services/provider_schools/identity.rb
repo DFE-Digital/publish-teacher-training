@@ -23,22 +23,19 @@ module ProviderSchools
     end
 
     def school_for(uuid:)
-      if after_schools_remodel_cycle?
+      if uses_provider_schools?
         provider.schools.find_by!(uuid:)
       else
         provider.sites.find_by!(uuid:)
       end
     end
 
-    def provider_school_for(site:)
-      provider
-        .schools
-        .joins(:gias_school)
-        .find_by!(gias_school: { urn: site.urn }, site_code: site.code)
-    end
-
     def after_schools_remodel_cycle?
       provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+    end
+
+    def uses_provider_schools?
+      provider.recruitment_cycle.year.to_i >= Settings.schools_remodel_cycle_year.to_i
     end
 
   private

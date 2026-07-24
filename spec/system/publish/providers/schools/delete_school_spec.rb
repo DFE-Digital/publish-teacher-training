@@ -105,7 +105,7 @@ RSpec.describe "Delete a provider's schools" do
 
   def then_i_see_the_provider_school_details
     expect(publish_school_show_page).to be_displayed
-    expect(page).to have_content("Future School (Main site)")
+    expect(page).to have_content("Future School (Main Site)")
     expect(page).to have_content("School code-", normalize_ws: true)
     expect(page).to have_content("URN654321", normalize_ws: true)
     expect(page).to have_content("Address 1 Future Road Future Building Future Quarter Future Town Future County FT1 1AA", normalize_ws: true)
