@@ -14,7 +14,7 @@
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>
 
-<div class="govuk-grid-row">
+<div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-one-third">
     <%= render Publish::Courses::FilterPanelComponent.new(filter_form: @filter_form, provider: @provider) %>
   </div>
