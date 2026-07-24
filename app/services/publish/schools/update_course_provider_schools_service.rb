@@ -14,6 +14,7 @@ module Publish
       end
 
       def call
+        return unless all_submitted_provider_schools_resolved?
         return if provider_school_ids_to_attach.empty? && provider_school_ids_to_remove.empty?
 
         ActiveRecord::Base.transaction do
@@ -48,26 +49,37 @@ module Publish
       end
 
       def submitted_provider_schools
-        @submitted_provider_schools ||= begin
-          provider_schools_by_uuid = course.provider.schools
-            .where(uuid: submitted_school_uuids)
-            .index_by { |school| school.uuid.to_s }
-          log_missing_provider_school_uuids(provider_schools_by_uuid.keys)
-
-          submitted_school_uuids.filter_map { |uuid| provider_schools_by_uuid[uuid] }.uniq(&:id)
-        end
+        @submitted_provider_schools ||= submitted_school_uuids
+          .filter_map { |uuid| provider_schools_by_uuid[uuid] }
+          .uniq(&:id)
       end
 
-      def log_missing_provider_school_uuids(resolved_uuids)
-        missing_uuids = submitted_school_uuids - resolved_uuids
-        return if missing_uuids.empty?
+      def provider_schools_by_uuid
+        @provider_schools_by_uuid ||= course.provider.schools
+          .where(uuid: submitted_school_uuids)
+          .index_by { |school| school.uuid.to_s }
+      end
 
-        message = "no provider_school for provider=#{course.provider.id} school_uuids=#{missing_uuids.join(',')}"
+      def all_submitted_provider_schools_resolved?
+        return true if missing_provider_school_uuids.empty?
+
+        message = "no provider_school for provider=#{course.provider.id} " \
+          "school_uuids=#{missing_provider_school_uuids.join(',')}"
         raise UnresolvedProviderSchoolsError, message if raise_on_missing_provider_schools?
 
+        # During the dual-write cycle the new school tables may not be fully
+        # backfilled. If any submitted UUID is missing we skip the whole
+        # Course::School sync so a partial resolution cannot remove existing
+        # new-model rows.
         Rails.logger.warn(
-          "[CourseSchools] skipped course_school write - #{message}",
+          "[CourseSchools] skipped course_school sync - #{message}",
         )
+
+        false
+      end
+
+      def missing_provider_school_uuids
+        @missing_provider_school_uuids ||= submitted_school_uuids - provider_schools_by_uuid.keys
       end
 
       def raise_on_missing_provider_schools?

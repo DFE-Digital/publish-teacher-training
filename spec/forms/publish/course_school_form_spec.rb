@@ -92,6 +92,33 @@ module Publish
         expect(subject.errors[:school_uuids]).to include(I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.no_schools"))
       end
 
+      context "when the provider is in the schools remodel cycle" do
+        it "rejects a Site UUID that does not belong to the provider" do
+          form = described_class.new(course, params: { school_uuids: [SecureRandom.uuid] })
+
+          expect(form).not_to be_valid
+          expect(form.errors[:school_uuids]).to include(
+            I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.school_uuids_invalid"),
+          )
+        end
+
+        it "rejects a Site UUID belonging to another provider" do
+          other_site = create(:site)
+          form = described_class.new(course, params: { school_uuids: [other_site.uuid] })
+
+          expect(form).not_to be_valid
+          expect(form.errors[:school_uuids]).to include(
+            I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.school_uuids_invalid"),
+          )
+        end
+
+        it "accepts a Site UUID that belongs to the provider" do
+          form = described_class.new(course, params: { school_uuids: [site2.uuid] })
+
+          expect(form).to be_valid
+        end
+      end
+
       context "when the course is exempt from needing a school (publish without schools allowed)" do
         let(:course) do
           create(:course, :with_salary, provider:, site_statuses: [site_status], publish_without_schools_allowed: true)
@@ -130,7 +157,7 @@ module Publish
 
           expect(form).not_to be_valid
           expect(form.errors[:school_uuids]).to include(
-            I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.invalid"),
+            I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.school_uuids_invalid"),
           )
         end
 
@@ -140,7 +167,7 @@ module Publish
 
           expect(form).not_to be_valid
           expect(form.errors[:school_uuids]).to include(
-            I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.invalid"),
+            I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.school_uuids_invalid"),
           )
         end
 

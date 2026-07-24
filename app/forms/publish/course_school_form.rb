@@ -7,7 +7,7 @@ module Publish
     attr_accessor(*FIELDS)
 
     validate :no_schools_selected
-    validate :school_uuids_belong_to_provider, if: :after_schools_remodel_cycle?
+    validate :school_uuids_belong_to_provider
 
     def compute_fields
       { school_uuids: current_school_uuids }.merge(new_attributes)
@@ -52,10 +52,18 @@ module Publish
       school_uuids = Array(params[:school_uuids]).compact_blank.map(&:to_s)
       return if school_uuids.empty?
 
-      known_school_uuids = course.provider.schools.where(uuid: school_uuids).pluck(:uuid).map(&:to_s)
+      known_school_uuids = school_scope.where(uuid: school_uuids).pluck(:uuid).map(&:to_s)
       return if (school_uuids - known_school_uuids).empty?
 
-      errors.add(:school_uuids, :invalid)
+      errors.add(:school_uuids, :school_uuids_invalid)
+    end
+
+    def school_scope
+      if after_schools_remodel_cycle?
+        course.provider.schools
+      else
+        course.provider.sites
+      end
     end
 
     def after_schools_remodel_cycle?

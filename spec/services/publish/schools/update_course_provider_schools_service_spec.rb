@@ -80,6 +80,23 @@ module Publish
             end
           end
         end
+
+        context "when a partially resolved submission would remove an existing Course::School row" do
+          let(:missing_school_uuid) { SecureRandom.uuid }
+          let(:params) { { school_uuids: [provider_school_two.uuid, missing_school_uuid] } }
+
+          before do
+            create(:course_school, course:, gias_school: gias_school_one, provider_school: provider_school_one)
+          end
+
+          it "skips the whole Course::School sync" do
+            expect(Rails.logger).to receive(:warn).with(/skipped course_school sync/)
+
+            expect { service_call }
+              .not_to(change { course.schools.reload.order(:provider_school_id).pluck(:provider_school_id) })
+            expect(course.schools.find_by(provider_school: provider_school_two)).to be_nil
+          end
+        end
       end
     end
   end

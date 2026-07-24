@@ -65,6 +65,15 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     then_i_should_see_an_error_message
   end
 
+  scenario "i see an error when a selected school no longer belongs to the provider" do
+    then_i_should_see_a_list_of_schools
+    given_site_one_is_removed_after_the_page_load
+    when_i_update_the_course_schools
+    and_i_submit
+    then_i_should_see_the_school_selection_error
+    and_no_school_is_attached_to_the_course
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
       user: create(
@@ -122,6 +131,13 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     )
   end
 
+  def then_i_should_see_the_school_selection_error
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content(
+      I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.school_uuids_invalid"),
+    )
+  end
+
   def and_provider_schools_mirror_the_sites
     provider.sites.each do |site|
       gias_school = create(:gias_school, urn: site.urn)
@@ -135,6 +151,15 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     course_school = course.reload.schools.find_by(gias_school:)
     expect(course_school).to be_present
     expect(course_school.provider_school.site_code).to eq(site.code)
+  end
+
+  def given_site_one_is_removed_after_the_page_load
+    Site.find_by!(provider:, location_name: "Site 1").discard!
+  end
+
+  def and_no_school_is_attached_to_the_course
+    expect(course.reload.sites).to be_empty
+    expect(course.schools).to be_empty
   end
 
   def given_the_course_already_has_both_sites

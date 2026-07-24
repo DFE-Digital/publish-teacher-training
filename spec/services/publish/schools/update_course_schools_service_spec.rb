@@ -63,6 +63,15 @@ module Publish
             expect(course.schools.find_by(provider_school: provider_school_two)).to be_present
           end
 
+          context "when schools_validated is submitted" do
+            let(:params) { { school_uuids: [site_two.uuid], schools_validated: "true" } }
+
+            it "persists schools_validated" do
+              expect { service_call }
+                .to change { course.reload.schools_validated }.to(true)
+            end
+          end
+
           context "when the course already has both schools" do
             before do
               course.site_statuses.create!(site: site_one, status: :new_status, publish: :unpublished)
@@ -115,6 +124,72 @@ module Publish
 
             expect(course.site_statuses.count).to eq(1)
             expect(course.schools.find_by(provider_school: provider_school_two)).to be_present
+          end
+
+          context "when schools_validated is submitted" do
+            let(:params) { { school_uuids: [provider_school_two.uuid], schools_validated: "true" } }
+
+            it "persists schools_validated" do
+              expect { service_call }
+                .to change { course.reload.schools_validated }.to(true)
+            end
+
+            it "touches the provider so Apply can detect the change" do
+              provider.update_columns(changed_at: 2.days.ago)
+
+              expect { service_call }
+                .to(change { provider.reload.changed_at })
+            end
+          end
+
+          context "when course site update notifications are enabled" do
+            before do
+              FeatureFlag.activate(:course_sites_updated_email_notification)
+              create(:course_school, course:, gias_school: gias_school_one, provider_school: provider_school_one)
+            end
+
+            after do
+              FeatureFlag.deactivate(:course_sites_updated_email_notification)
+            end
+
+            it "sends notifications using provider school names" do
+              expect(NotificationService::CourseSitesUpdated).to receive(:call).with(
+                course:,
+                previous_site_names: [provider_school_one.location_name],
+                updated_site_names: [provider_school_two.location_name],
+              )
+
+              service_call
+            end
+          end
+
+          context "when the course is published" do
+            let(:course) { create(:course, :published, provider:) }
+
+            before do
+              provider.update_columns(changed_at: 2.days.ago)
+              course.update_columns(changed_at: 2.days.ago)
+            end
+
+            it "touches the provider when a school is added" do
+              expect { service_call }
+                .to(change { provider.reload.changed_at })
+            end
+
+            context "when removing a Course::School" do
+              let(:params) { { school_uuids: [] } }
+
+              before do
+                create(:course_school, course:, gias_school: gias_school_one, provider_school: provider_school_one)
+                provider.update_columns(changed_at: 2.days.ago)
+                course.update_columns(changed_at: 2.days.ago)
+              end
+
+              it "touches the provider" do
+                expect { service_call }
+                  .to(change { provider.reload.changed_at })
+              end
+            end
           end
 
           context "when a Course::School exists" do
