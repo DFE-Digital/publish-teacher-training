@@ -28,6 +28,30 @@ RSpec.describe "Publish provider school show page", service: :publish do
     login_user(create(:user, providers: [provider]))
   end
 
+  describe "GET /publish/organisations/:provider_code/:recruitment_cycle_year/schools" do
+    context "when the provider is in the schools remodel cycle" do
+      let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: remodel_cycle_year) }
+      let(:provider) { create(:provider, recruitment_cycle:) }
+      let!(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: SecureRandom.uuid) }
+      let!(:provider_school) do
+        create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
+      end
+
+      before { login_provider_user(provider) }
+
+      it "lists provider schools resolved from the new model" do
+        get publish_provider_recruitment_cycle_schools_path(provider.provider_code, recruitment_cycle.year)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("St Joseph")
+        expect(response.body).to include("Catholic Primary School")
+        expect(response.body).to include("A")
+        expect(response.body).to include("112992")
+        expect(response.body).to include(publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid))
+      end
+    end
+  end
+
   describe "GET /publish/organisations/:provider_code/:recruitment_cycle_year/schools/:uuid" do
     context "when the provider is in the schools remodel cycle" do
       let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: remodel_cycle_year) }
