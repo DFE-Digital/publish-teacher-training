@@ -47,15 +47,16 @@ RSpec.describe CourseSchools::Identity do
     let(:provider) { create(:provider, recruitment_cycle:) }
     let(:course) { create(:course, provider:) }
     let!(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: site_uuid) }
+    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site_uuid) }
 
     before do
       create(:site_status, course:, site:)
     end
 
-    it "uses legacy site records and site UUIDs" do
+    it "lists provider schools but still uses legacy site records for course UUIDs" do
       identity = described_class.new(provider:, course:)
 
-      expect(identity.available_schools).to contain_exactly(site)
+      expect(identity.available_schools).to contain_exactly(provider_school)
       expect(identity.current_school_uuids).to eq([site_uuid])
       expect(identity.school_records_for(school_uuids: [site_uuid])).to eq([site])
     end
@@ -159,11 +160,12 @@ RSpec.describe CourseSchools::Identity do
     let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year) }
     let(:provider) { create(:provider, recruitment_cycle:) }
     let!(:site) { create(:site, provider:) }
+    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid) }
 
     it "supports provider-only school lists" do
       identity = described_class.new(provider:)
 
-      expect(identity.available_schools).to contain_exactly(site)
+      expect(identity.available_schools).to contain_exactly(provider_school)
     end
 
     it "raises a descriptive error for course-specific school UUIDs" do

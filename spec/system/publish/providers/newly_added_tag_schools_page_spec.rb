@@ -7,14 +7,22 @@ RSpec.describe "Publish - Schools: 'Newly added' tag for register import sites",
 
   let(:provider) { create(:provider, provider_name: "Tag Provider", recruitment_cycle:) }
 
+  let(:register_import_gias_school) { create(:gias_school, name: "Register Import School", urn: "111111") }
+  let(:ui_added_gias_school) { create(:gias_school, name: "UI Added School", urn: "222222") }
+
   let!(:site_one) do
     create(
       :site,
       provider: provider,
       added_via: :register_import,
       location_name: "Register Import School",
+      urn: register_import_gias_school.urn,
       address1: "1 Import Road",
     )
+  end
+
+  let!(:provider_school_one) do
+    create(:provider_school, provider:, gias_school: register_import_gias_school, site_code: site_one.code, uuid: site_one.uuid)
   end
 
   let!(:site_two) do
@@ -23,8 +31,13 @@ RSpec.describe "Publish - Schools: 'Newly added' tag for register import sites",
       provider: provider,
       added_via: :publish_interface,
       location_name: "UI Added School",
+      urn: ui_added_gias_school.urn,
       address1: "2 Publish Street",
     )
+  end
+
+  let!(:provider_school_two) do
+    create(:provider_school, provider:, gias_school: ui_added_gias_school, site_code: site_two.code, uuid: site_two.uuid)
   end
 
   let(:user) { create(:user, providers: [provider]) }
