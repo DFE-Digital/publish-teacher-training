@@ -34,6 +34,13 @@
     }
   }
 
+  // Hairline under each group's course count.
+  &__count {
+    padding-bottom: govuk-spacing(2);
+
+    border-bottom: 1px solid #cecece;
+  }
+
   // Sparse rows (0 or 1 course-information line) get more vertical breathing
   // room across every column so the row stays balanced rather than the
   // course-information cell looking cramped against multi-line rows.
