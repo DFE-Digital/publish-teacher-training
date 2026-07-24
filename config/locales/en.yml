@@ -1229,8 +1229,6 @@ en:
               enter_schools: "Enter schools for this course"
               check_schools: "Review the schools for this course"
               school_uuids_invalid: "The schools you submitted couldn’t be validated. Please try again. If the problem persists, please contact support."
-              invalid: "Select schools that belong to this provider"
-
         publish/course_study_site_form:
           attributes:
             study_site_ids:
