@@ -89,35 +89,35 @@ jobs:
           fi
           echo "BACKUP_FILE=${BACKUP_FILE}" >> $GITHUB_ENV
 
-      - name: Azure Login
-        if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
-        uses: azure/login@v3
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # - name: Azure Login
+      #   if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
+      #   uses: azure/login@v3
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Set Connection String
-        if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
-        shell: bash
-        run: |
-          STORAGE_CONN_STR=$(az storage account show-connection-string -g ${{ env.RESOURCE_GROUP_NAME }} -n ${{ env.STORAGE_ACCOUNT_NAME }} --query 'connectionString')
-          echo "::add-mask::$STORAGE_CONN_STR"
-          echo "AZURE_STORAGE_CONNECTION_STRING=$STORAGE_CONN_STR" >> $GITHUB_ENV
+      # - name: Set Connection String
+      #   if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
+      #   shell: bash
+      #   run: |
+      #     STORAGE_CONN_STR=$(az storage account show-connection-string -g ${{ env.RESOURCE_GROUP_NAME }} -n ${{ env.STORAGE_ACCOUNT_NAME }} --query 'connectionString')
+      #     echo "::add-mask::$STORAGE_CONN_STR"
+      #     echo "AZURE_STORAGE_CONNECTION_STRING=$STORAGE_CONN_STR" >> $GITHUB_ENV
 
-      - name: Download existing backup from Azure Storage
-        if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
-        shell: bash
-        run: |
-          az storage blob download \
-            --connection-string "$AZURE_STORAGE_CONNECTION_STRING" \
-            --container-name database-backup \
-            --name "${{ env.BACKUP_FILE }}.sql.gz" \
-            --file "${{ env.BACKUP_FILE }}.sql.gz" \
-            --output none
+      # - name: Download existing backup from Azure Storage
+      #   if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
+      #   shell: bash
+      #   run: |
+      #     az storage blob download \
+      #       --connection-string "$AZURE_STORAGE_CONNECTION_STRING" \
+      #       --container-name database-backup \
+      #       --name "${{ env.BACKUP_FILE }}.sql.gz" \
+      #       --file "${{ env.BACKUP_FILE }}.sql.gz" \
+      #       --output none
 
       - name: Backup ${{ env.DEPLOY_ENV }} postgres
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP != 'true')
+        #if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP != 'true')
         uses: DFE-Digital/github-actions/backup-postgres@master
         with:
           storage-account: ${{ env.STORAGE_ACCOUNT_NAME }}
@@ -134,11 +134,11 @@ jobs:
           service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
 
       - name: Set env variable
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
+        #if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
         run: echo "SANITISED_FILE_NAME=publish_sanitised_$(date +"%F")" >> $GITHUB_ENV
 
       - name: Sanitise the Database backup
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
+        #if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
         run: |
           echo "::group::Restore backup to intermediate database"
           createdb ${DATABASE_NAME} && gzip -d --to-stdout ${{ env.BACKUP_FILE }}.sql.gz | psql -d ${DATABASE_NAME}
@@ -174,7 +174,7 @@ jobs:
           PGPORT: 5432
 
       - name: Upload Backup to Azure Storage
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
+        #if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true')
         run: |
           az storage blob upload --container-name database-backup \
           --file ${SANITISED_FILE_NAME}.sql.gz --name ${SANITISED_FILE_NAME}.sql.gz --overwrite \
@@ -194,11 +194,11 @@ jobs:
         environment: [qa, staging]
     steps:
       - name: Checkout
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true') && env.SKIP_RESTORE == 'false'
+        #if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true') && env.SKIP_RESTORE == 'false'
         uses: actions/checkout@v6
 
       - name: Restore database
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true') && env.SKIP_RESTORE == 'false'
+        #if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true') && env.SKIP_RESTORE == 'false'
         id: restore
         uses: ./.github/actions/restore/
         with:
