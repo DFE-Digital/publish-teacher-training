@@ -13,13 +13,26 @@ RSpec.describe ProviderSchools::Identity do
   end
 
   describe ".ordered_school_scope" do
-    let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year + 1) }
-    let(:provider) { create(:provider, recruitment_cycle:) }
-    let!(:legacy_site) { create(:site, provider:, urn: "654321", code: "B") }
-    let!(:provider_school) { create(:provider_school, provider:, gias_school:) }
+    context "when the provider is in the schools remodel cycle" do
+      let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: remodel_cycle_year) }
+      let(:provider) { create(:provider, recruitment_cycle:) }
+      let!(:legacy_site) { create(:site, provider:, urn: gias_school.urn, code: "A") }
+      let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: legacy_site.code, uuid: legacy_site.uuid) }
 
-    it "returns provider schools after the remodel cycle and does not require a matching site" do
-      expect(described_class.ordered_school_scope(provider:)).to contain_exactly(provider_school)
+      it "returns provider schools and not legacy sites" do
+        expect(described_class.ordered_school_scope(provider:)).to contain_exactly(provider_school)
+      end
+    end
+
+    context "when the provider is after the schools remodel cycle" do
+      let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year + 1) }
+      let(:provider) { create(:provider, recruitment_cycle:) }
+      let!(:legacy_site) { create(:site, provider:, urn: "654321", code: "B") }
+      let!(:provider_school) { create(:provider_school, provider:, gias_school:) }
+
+      it "returns provider schools and does not require a matching site" do
+        expect(described_class.ordered_school_scope(provider:)).to contain_exactly(provider_school)
+      end
     end
   end
 

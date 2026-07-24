@@ -15,7 +15,7 @@ module ProviderSchools
     end
 
     def ordered_school_scope
-      if after_schools_remodel_cycle?
+      if uses_provider_schools?
         provider.schools.joins(:gias_school).includes(:gias_school).order("gias_school.name")
       else
         provider.sites.order(:location_name)
