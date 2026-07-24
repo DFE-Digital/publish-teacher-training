@@ -96,14 +96,8 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
       expect(funding.css(".app-c-filter-section__count")).to be_empty
     end
 
-    it "opens the groups that have a selection so the filter is visible" do
-      open_headings = rendered.css("details[open] .app-c-filter-section__summary-heading").map { |h| h.text.strip }
-
-      expect(open_headings).to contain_exactly("Status", "Education phase")
-    end
-
-    it "leaves the other groups collapsed" do
-      expect(rendered.css("details:not([open]) .app-c-filter-section__summary-heading").size).to eq(4)
+    it "keeps every group collapsed, even those with a selection" do
+      expect(rendered.css("details[open]")).to be_empty
     end
   end
 
