@@ -71,7 +71,7 @@ RSpec.describe "Delete school under provider as an admin" do
 
   def then_i_see_the_provider_school_details
     expect(support_provider_school_show_page).to be_displayed
-    expect(page).to have_content("Future School (Main site)")
+    expect(page).to have_content("Future School (Main Site)")
     expect(page).to have_content("School code-", normalize_ws: true)
     expect(page).to have_content("URN654321", normalize_ws: true)
     expect(page).to have_content("Address 1 Future Road Future Building Future Quarter Future Town Future County FT1 1AA", normalize_ws: true)
@@ -146,11 +146,12 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def and_i_visit_the_support_provider_school_show_page
-    support_provider_school_show_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: @provider.id, id: @site.uuid)
+    support_provider_school_show_page.load(recruitment_cycle_year: @provider.recruitment_cycle.year, provider_id: @provider.id, id: @site.uuid)
   end
 
   def and_there_is_a_provider_site
-    @provider = create(:provider, provider_name: "School of Cats")
+    recruitment_cycle = create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year - 1)
+    @provider = create(:provider, provider_name: "School of Cats", recruitment_cycle:)
     @site = create(:site, provider: @provider)
   end
 

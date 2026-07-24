@@ -3,7 +3,7 @@
 module Publish
   module Providers
     class SchoolsController < ApplicationController
-      before_action :site, only: %i[show delete destroy]
+      before_action :school, only: %i[show delete destroy]
       before_action :reset_urn_form, only: %i[index]
 
       PER_PAGE = 20
@@ -31,7 +31,7 @@ module Publish
           flash[:success] = "School removed"
           redirect_to publish_provider_recruitment_cycle_schools_path
         else
-          redirect_to delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.uuid),
+          redirect_to delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.uuid),
                       flash: { warning: t(".cannot_remove_school") }
         end
       end
@@ -43,9 +43,10 @@ module Publish
       end
       helper_method :school_removal
 
-      def site
-        @site ||= school_removal.school
+      def school
+        @school ||= ProviderSchools::Identity.new(provider:).school_for(uuid: params[:uuid]).decorate
       end
+      helper_method :school
 
       def site_params(param_form_key)
         params.expect(param_form_key => SchoolForm::FIELDS)

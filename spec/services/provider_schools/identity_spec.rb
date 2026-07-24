@@ -25,12 +25,21 @@ RSpec.describe ProviderSchools::Identity do
 
   describe "#school_for" do
     context "when the provider is in the schools remodel cycle" do
-      let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year) }
+      let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: remodel_cycle_year) }
       let(:provider) { create(:provider, recruitment_cycle:) }
       let!(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: site_uuid) }
+      let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site_uuid) }
 
-      it "finds the site by site uuid" do
-        expect(described_class.new(provider:).school_for(uuid: site_uuid)).to eq(site)
+      it "finds the provider school via the legacy site uuid" do
+        expect(described_class.new(provider:).school_for(uuid: site_uuid)).to eq(provider_school)
+      end
+
+      it "finds the correct provider school when the same GIAS school is linked twice" do
+        main_site = create(:site, :main_site, provider:, uuid: Faker::Internet.uuid)
+        main_provider_school = create(:provider_school, provider:, gias_school:, site_code: "-", uuid: main_site.uuid)
+
+        expect(described_class.new(provider:).school_for(uuid: main_site.uuid)).to eq(main_provider_school)
+        expect(described_class.new(provider:).school_for(uuid: site_uuid)).to eq(provider_school)
       end
     end
 
