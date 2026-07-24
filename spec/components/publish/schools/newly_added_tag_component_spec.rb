@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Publish::Schools::NewlyAddedTagComponent, type: :component do
+RSpec.describe Publish::Schools::NewlyAddedTagComponent, travel: 1.hour.before(find_closes(2025)), type: :component do
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
   let(:provider) { create(:provider, recruitment_cycle:) }
 
