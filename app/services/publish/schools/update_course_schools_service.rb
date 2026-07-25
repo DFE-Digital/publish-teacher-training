@@ -2,6 +2,10 @@
 
 module Publish
   module Schools
+    # Coordinates course school updates from Publish.
+    # During the remodel cycle it dual-writes to legacy SiteStatus and new Course::School rows;
+    # after the remodel cycle it writes only to the new school model.
+    # This service also updates the course and provider so that apply syncs the courses
     class UpdateCourseSchoolsService
       include ServicePattern
 

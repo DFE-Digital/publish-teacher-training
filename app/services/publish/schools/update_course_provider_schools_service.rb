@@ -2,6 +2,7 @@
 
 module Publish
   module Schools
+    # Creates and/or removed Course:School from a course
     class UpdateCourseProviderSchoolsService
       include ServicePattern
 
