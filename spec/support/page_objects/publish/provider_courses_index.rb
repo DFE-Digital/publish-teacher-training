@@ -38,6 +38,11 @@ module PageObjects
         elements :chips, ".app-active-filters__remove-filter"
         element :clear_all, ".app-c-filter-summary__clear-filters"
       end
+
+      # The filter group headings currently shown, in order.
+      def filter_group_headings
+        filter_groups.map { |group| group.heading.text.strip }
+      end
     end
   end
 end
