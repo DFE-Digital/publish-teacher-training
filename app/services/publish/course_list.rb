@@ -31,6 +31,17 @@ module Publish
       start_date: ->(course) { course.start_date.presence&.to_date },
     }.freeze
 
+    # The value each filter group varies on, in panel order. A group whose value
+    # is identical across the whole list offers no useful choice, so it is hidden.
+    # Start date is compared by month because the filter groups by month.
+    FILTER_FACETS = {
+      level: ->(course) { course.level },
+      funding: FIELDS[:funding],
+      qualification: FIELDS[:qualification],
+      study_mode: FIELDS[:study_mode],
+      start_date: ->(course) { course.start_date.presence&.to_date&.beginning_of_month },
+    }.freeze
+
     delegate :any?, to: :groups
 
     def initialize(provider:, params: {})
@@ -46,6 +57,14 @@ module Publish
     def visible_course_information_fields
       @visible_course_information_fields ||=
         FIELDS.keys.select { |key| unfiltered_courses.map(&FIELDS.fetch(key)).uniq.size > 1 }
+    end
+
+    # The filter groups worth showing: those whose value varies across the whole
+    # (unfiltered) list. Measured on the unfiltered set so filtering never adds
+    # or removes a filter.
+    def visible_filter_groups
+      @visible_filter_groups ||=
+        FILTER_FACETS.keys.select { |group| unfiltered_courses.map(&FILTER_FACETS.fetch(group)).uniq.size > 1 }
     end
 
     def groups

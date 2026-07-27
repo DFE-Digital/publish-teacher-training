@@ -145,6 +145,69 @@ RSpec.describe Publish::CourseList do
     end
   end
 
+  describe "#visible_filter_groups" do
+    let(:provider) { create(:provider, :accredited_provider) }
+
+    # Shared defaults keep every non-target facet uniform, so each test isolates
+    # the one facet it varies. A single course means every facet is uniform.
+    def create_course(**attrs)
+      create(:course, :without_validation, provider:, funding: "fee", qualification: :qts, study_mode: :full_time,
+                                           level: :primary, start_date: Time.zone.local(2026, 9, 1), **attrs)
+    end
+
+    context "when the provider has one course" do
+      before { create_course }
+
+      it "shows no filter groups" do
+        expect(course_list.visible_filter_groups).to eq([])
+      end
+    end
+
+    context "when courses differ by education phase" do
+      before do
+        create_course(level: :primary)
+        create_course(level: :secondary)
+      end
+
+      it "shows the level filter" do
+        expect(course_list.visible_filter_groups).to eq([:level])
+      end
+    end
+
+    context "when courses differ by funding, qualification and study mode" do
+      before do
+        create_course(funding: "fee", qualification: :qts, study_mode: :full_time)
+        create_course(funding: "salary", qualification: :pgce_with_qts, study_mode: :part_time)
+      end
+
+      it "shows those filters in panel order" do
+        expect(course_list.visible_filter_groups).to eq(%i[funding qualification study_mode])
+      end
+    end
+
+    context "when courses start in different months" do
+      before do
+        create_course(start_date: Time.zone.local(2026, 9, 1))
+        create_course(start_date: Time.zone.local(2027, 1, 1))
+      end
+
+      it "shows the start date filter" do
+        expect(course_list.visible_filter_groups).to eq([:start_date])
+      end
+    end
+
+    context "when courses start on different days of the same month" do
+      before do
+        create_course(start_date: Time.zone.local(2026, 9, 1))
+        create_course(start_date: Time.zone.local(2026, 9, 20))
+      end
+
+      it "does not show the start date filter, which groups by month" do
+        expect(course_list.visible_filter_groups).not_to include(:start_date)
+      end
+    end
+  end
+
   describe "enumerable facade" do
     let(:provider) { create(:provider, :accredited_provider) }
 
