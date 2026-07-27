@@ -16,7 +16,11 @@
 
 <div class="govuk-grid-row govuk-!-margin-top-4">
   <div class="govuk-grid-column-one-third">
-    <%= render Publish::Courses::FilterPanelComponent.new(filter_form: @filter_form, provider: @provider) %>
+    <%= render Publish::Courses::FilterPanelComponent.new(
+          filter_form: @filter_form,
+          provider: @provider,
+          visible_groups: @course_list.visible_filter_groups,
+        ) %>
   </div>
 
   <div class="govuk-grid-column-two-thirds">

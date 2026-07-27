@@ -35,16 +35,39 @@ describe "Publish::CoursesController#index" do
       expect(course_names).to include("Primary course", "Secondary course")
     end
 
-    it "shows the filter panel" do
-      get_courses
-
-      expect(response.parsed_body.css(".app-c-filter-section").size).to eq(6)
-    end
-
     it "shows no active filters" do
       get_courses
 
       expect(response.parsed_body.css(".app-active-filters")).to be_empty
+    end
+  end
+
+  describe "which filter groups are shown" do
+    def filter_headings
+      response.parsed_body.css(".app-c-filter-section__summary-heading").map { |heading| heading.text.strip }
+    end
+
+    it "shows every group when the courses vary on all of them" do
+      create(:course, :published, :primary, :fee, provider:, application_status: :open, study_mode: :full_time,
+                                                  qualification: :qts, start_date: Time.zone.local(2026, 9, 1), name: "A")
+      create(:course, :draft_enrichment, :secondary, :salary, provider:, study_mode: :part_time,
+                                                              qualification: :pgce_with_qts, start_date: Time.zone.local(2027, 1, 1), name: "B")
+
+      get_courses
+
+      expect(filter_headings).to eq(
+        ["Status", "Education phase", "Fee or salary", "Qualification", "Full time or part time", "Start date"],
+      )
+    end
+
+    it "hides the groups the courses do not vary on" do
+      # Same status, funding, qualification, study mode and start date; only phase differs.
+      create(:course, :without_validation, :primary, provider:, funding: "fee", qualification: :qts, study_mode: :full_time, start_date: Time.zone.local(2026, 9, 1))
+      create(:course, :without_validation, :secondary, provider:, funding: "fee", qualification: :qts, study_mode: :full_time, start_date: Time.zone.local(2026, 9, 1))
+
+      get_courses
+
+      expect(filter_headings).to eq(["Education phase"])
     end
   end
 
