@@ -33,8 +33,10 @@ module Publish
 
     # The value each filter group varies on, in panel order. A group whose value
     # is identical across the whole list offers no useful choice, so it is hidden.
-    # Start date is compared by month because the filter groups by month.
+    # Start date is compared by month because the filter groups by month; status
+    # by the token the filter selects on rather than the rendered label.
     FILTER_FACETS = {
+      status: ->(course) { Publish::Courses::StatusTag.token(course) },
       level: ->(course) { course.level },
       funding: FIELDS[:funding],
       qualification: FIELDS[:qualification],
@@ -60,11 +62,13 @@ module Publish
     end
 
     # The filter groups worth showing: those whose value varies across the whole
-    # (unfiltered) list. Measured on the unfiltered set so filtering never adds
-    # or removes a filter.
+    # (unfiltered) list, plus any group with a filter already applied so an active
+    # filter is never hidden from its panel. Measured on the unfiltered set so
+    # filtering never removes a filter mid-use.
     def visible_filter_groups
-      @visible_filter_groups ||=
-        FILTER_FACETS.keys.select { |group| unfiltered_courses.map(&FILTER_FACETS.fetch(group)).uniq.size > 1 }
+      @visible_filter_groups ||= FILTER_FACETS.keys.select do |group|
+        params.key?(group) || unfiltered_courses.map(&FILTER_FACETS.fetch(group)).uniq.size > 1
+      end
     end
 
     def groups
