@@ -114,10 +114,12 @@ RSpec.describe "Delete school under provider as an admin" do
 
   def and_the_school_is_deleted
     expect(@provider.sites.count).to eq 0
+    expect(Provider::School.where(id: @provider_school.id)).to be_empty
   end
 
   def and_the_school_is_not_deleted
     expect(@provider.sites.count).to eq 1
+    expect(Provider::School.where(id: @provider_school.id)).to contain_exactly(@provider_school)
   end
 
   def then_i_am_on_the_index_page
@@ -146,13 +148,14 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def and_i_visit_the_support_provider_school_show_page
-    support_provider_school_show_page.load(recruitment_cycle_year: @provider.recruitment_cycle.year, provider_id: @provider.id, id: @site.uuid)
+    support_provider_school_show_page.load(recruitment_cycle_year: @provider.recruitment_cycle.year, provider_id: @provider.id, id: @provider_school.uuid)
   end
 
   def and_there_is_a_provider_site
-    recruitment_cycle = create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year - 1)
-    @provider = create(:provider, provider_name: "School of Cats", recruitment_cycle:)
-    @site = create(:site, provider: @provider)
+    gias_school = create(:gias_school)
+    @provider = create(:provider, provider_name: "School of Cats")
+    @site = create(:site, provider: @provider, **gias_school.school_attributes)
+    @provider_school = create(:provider_school, provider: @provider, gias_school:, site_code: @site.code, uuid: @site.uuid)
   end
 
   def given_there_is_an_associated_course

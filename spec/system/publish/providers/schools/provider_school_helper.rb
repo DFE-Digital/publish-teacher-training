@@ -19,9 +19,10 @@ module ProviderSchoolHelper
   def then_i_see_a_list_of_schools
     expect(publish_schools_index_page.schools.size).to eq(1)
 
-    expect(publish_schools_index_page.schools.first.name).to have_text(site.location_name)
-    expect(publish_schools_index_page.schools.first.code).to have_text(site.code)
-    expect(publish_schools_index_page.schools.first.urn).to have_text(site.urn)
+    provider_school = provider.schools.first
+    expect(publish_schools_index_page.schools.first.name).to have_text(provider_school.location_name)
+    expect(publish_schools_index_page.schools.first.code).to have_text(provider_school.code)
+    expect(publish_schools_index_page.schools.first.urn).to have_text(provider_school.urn)
   end
 
   def then_i_am_on_the_index_page
