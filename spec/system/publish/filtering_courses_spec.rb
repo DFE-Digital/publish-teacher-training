@@ -84,6 +84,12 @@ RSpec.describe "Filtering the course list" do
     and_i_see_no_active_filters
   end
 
+  scenario "I only see the filters my courses actually vary on" do
+    given_my_courses_vary_only_by_status_phase_and_funding
+    when_i_visit_the_courses_page
+    then_only_these_filters_are_shown("Status", "Education phase", "Fee or salary")
+  end
+
   def given_my_provider_has_courses_in_different_states
     create(:course, :published_postgraduate, provider:, accrediting_provider: nil, name: "Open course")
     create(:course, :draft_enrichment, provider:, accrediting_provider: nil, name: "Draft course")
@@ -99,6 +105,16 @@ RSpec.describe "Filtering the course list" do
   def given_my_provider_has_courses_starting_in_different_months
     create(:course, provider:, accrediting_provider: nil, name: "September course", start_date: Time.zone.local(provider.recruitment_cycle_year.to_i, 9, 1))
     create(:course, provider:, accrediting_provider: nil, name: "January course", start_date: Time.zone.local(provider.recruitment_cycle_year.to_i + 1, 1, 1))
+  end
+
+  # Status, education phase and funding vary; qualification, study mode and start
+  # date are identical across the two courses.
+  def given_my_courses_vary_only_by_status_phase_and_funding
+    start_date = Time.zone.local(provider.recruitment_cycle_year.to_i, 9, 1)
+    create(:course, :published, :primary, :fee, provider:, accrediting_provider: nil, application_status: :open,
+                                                qualification: :qts, study_mode: :full_time, start_date:, name: "Open primary fee course")
+    create(:course, :draft_enrichment, :secondary, :salary, provider:, accrediting_provider: nil,
+                                                            qualification: :qts, study_mode: :full_time, start_date:, name: "Draft secondary salary course")
   end
 
   def when_i_visit_the_courses_page(query = {})
@@ -163,6 +179,10 @@ RSpec.describe "Filtering the course list" do
     expect(publish_provider_courses_index_page).to have_no_active_filters
   end
   alias_method :and_i_see_no_active_filters, :then_i_see_no_active_filters
+
+  def then_only_these_filters_are_shown(*headings)
+    expect(publish_provider_courses_index_page.filter_group_headings).to eq(headings)
+  end
 
   def then_the_group_shows_the_selected_count(heading, text)
     group = filter_group(heading)
