@@ -4,7 +4,6 @@ en:
       filters:
         heading: Filter courses
         apply_filters: Apply filters
-        clear_all_filters: Clear all filters
         selected: selected
         groups:
           status: Status
