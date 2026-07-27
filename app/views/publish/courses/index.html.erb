@@ -15,13 +15,16 @@
 <%= render AddCourseButton.new(provider: @provider) %>
 
 <div class="govuk-grid-row govuk-!-margin-top-4">
-  <div class="govuk-grid-column-one-third">
-    <%= render Publish::Courses::FilterPanelComponent.new(
-          filter_form: @filter_form,
-          provider: @provider,
-          visible_groups: @course_list.visible_filter_groups,
-        ) %>
-  </div>
+  <%# With no filters worth showing, drop the sidebar; the list keeps its width and sits on the left. %>
+  <% if @course_list.visible_filter_groups.any? %>
+    <div class="govuk-grid-column-one-third">
+      <%= render Publish::Courses::FilterPanelComponent.new(
+            filter_form: @filter_form,
+            provider: @provider,
+            visible_groups: @course_list.visible_filter_groups,
+          ) %>
+    </div>
+  <% end %>
 
   <div class="govuk-grid-column-two-thirds">
     <%= render Publish::Courses::ListComponent.new(course_list: @course_list, provider: @provider) %>
