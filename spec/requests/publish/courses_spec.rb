@@ -69,6 +69,25 @@ describe "Publish::CoursesController#index" do
 
       expect(filter_headings).to eq(["Education phase"])
     end
+
+    context "when the courses vary on nothing" do
+      before { create(:course, :without_validation, provider:, name: "Only course") }
+
+      it "does not render the filter sidebar" do
+        get_courses
+
+        expect(response.parsed_body.css(".app-c-filter-section")).to be_empty
+        expect(response.parsed_body.text).not_to include("Filter courses")
+      end
+
+      it "shifts the course list to the left at its usual width, without a sidebar column" do
+        get_courses
+
+        expect(response.parsed_body.css(".govuk-grid-column-one-third")).to be_empty
+        expect(response.parsed_body.css(".govuk-grid-column-two-thirds")).to be_present
+        expect(course_names).to include("Only course")
+      end
+    end
   end
 
   describe "filtering" do
