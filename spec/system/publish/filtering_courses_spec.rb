@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-# Not tagged :js, so these run on rack_test and prove the filters work with
-# JavaScript disabled. The one :js scenario at the end covers the enhancement.
+# These run on rack_test (no :js), proving the filters work without JavaScript:
+# the "Apply filters" button submits a GET and the server renders the result.
 RSpec.describe "Filtering the course list" do
   let(:provider) { create(:provider, :accredited_provider) }
 
