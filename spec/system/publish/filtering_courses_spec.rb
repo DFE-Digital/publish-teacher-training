@@ -90,6 +90,13 @@ RSpec.describe "Filtering the course list" do
     then_only_these_filters_are_shown("Status", "Education phase", "Fee or salary")
   end
 
+  scenario "I see no filters at all when my courses are identical" do
+    given_all_my_courses_are_identical
+    when_i_visit_the_courses_page
+    then_i_see_no_filter_sidebar
+    and_i_still_see_my_courses
+  end
+
   def given_my_provider_has_courses_in_different_states
     create(:course, :published_postgraduate, provider:, accrediting_provider: nil, name: "Open course")
     create(:course, :draft_enrichment, provider:, accrediting_provider: nil, name: "Draft course")
@@ -105,6 +112,12 @@ RSpec.describe "Filtering the course list" do
   def given_my_provider_has_courses_starting_in_different_months
     create(:course, provider:, accrediting_provider: nil, name: "September course", start_date: Time.zone.local(provider.recruitment_cycle_year.to_i, 9, 1))
     create(:course, provider:, accrediting_provider: nil, name: "January course", start_date: Time.zone.local(provider.recruitment_cycle_year.to_i + 1, 1, 1))
+  end
+
+  def given_all_my_courses_are_identical
+    start_date = Time.zone.local(provider.recruitment_cycle_year.to_i, 9, 1)
+    create_list(:course, 3, :without_validation, :primary, :fee, provider:, accrediting_provider: nil,
+                                                                 qualification: :qts, study_mode: :full_time, start_date:)
   end
 
   # Status, education phase and funding vary; qualification, study mode and start
@@ -182,6 +195,15 @@ RSpec.describe "Filtering the course list" do
 
   def then_only_these_filters_are_shown(*headings)
     expect(publish_provider_courses_index_page.filter_group_headings).to eq(headings)
+  end
+
+  def then_i_see_no_filter_sidebar
+    expect(publish_provider_courses_index_page).to have_no_filter_heading
+    expect(publish_provider_courses_index_page).to have_no_filter_groups
+  end
+
+  def and_i_still_see_my_courses
+    expect(course_names.size).to eq(3)
   end
 
   def then_the_group_shows_the_selected_count(heading, text)
