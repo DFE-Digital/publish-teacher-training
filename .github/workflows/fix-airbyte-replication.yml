@@ -18,6 +18,9 @@ on:
         options:
           - 'true'
           - 'false'
+  push:
+    branches:
+      - 2825-fix-replication-wf-test
   schedule: # hourly every Sunday midnight until 9am
     - cron: '0 0-9 * * 0'
 
@@ -27,7 +30,7 @@ permissions:
 env:
   SERVICE_NAME: publish
   SERVICE_SHORT: ptt
-  TF_VARS_PATH: terraform/aks/workspace-variables
+  TF_VARS_PATH: terraform/aks/workspace_variables
 
 jobs:
   fix-replication:
@@ -37,7 +40,7 @@ jobs:
       name: 'production'
     env:
       DEPLOY_ENV: 'production'
-      DRY_RUN: 'false'
+      DRY_RUN: 'true'
 
     steps:
     - name: Checkout
