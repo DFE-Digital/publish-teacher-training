@@ -119,7 +119,7 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
       it "offers a way to clear them all" do
         clear_all = rendered.css(".app-c-filter-summary__clear-filters").first
 
-        expect(clear_all.text.strip).to eq("Clear all filters")
+        expect(clear_all.text.strip).to eq("Clear all")
         expect(clear_all[:href]).to eq(
           "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses",
         )
