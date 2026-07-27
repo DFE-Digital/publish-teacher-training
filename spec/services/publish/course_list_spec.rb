@@ -206,6 +206,36 @@ RSpec.describe Publish::CourseList do
         expect(course_list.visible_filter_groups).not_to include(:start_date)
       end
     end
+
+    context "when courses display different statuses" do
+      before do
+        create(:course, :without_validation, provider:, name: "Draft course")
+        create(:course, :withdrawn, provider:, name: "Withdrawn course")
+      end
+
+      it "shows the status filter first" do
+        expect(course_list.visible_filter_groups).to include(:status)
+        expect(course_list.visible_filter_groups.first).to eq(:status)
+      end
+    end
+
+    context "when every course displays the same status" do
+      before { create_list(:course, 2, :without_validation, provider:) }
+
+      it "does not show the status filter" do
+        expect(course_list.visible_filter_groups).not_to include(:status)
+      end
+    end
+
+    context "when a uniform facet has an applied filter" do
+      subject(:course_list) { described_class.new(provider: provider.reload, params: { study_mode: %w[full_time] }) }
+
+      before { create_list(:course, 2, :without_validation, provider:, study_mode: :full_time) }
+
+      it "keeps that group visible so the active filter can be seen" do
+        expect(course_list.visible_filter_groups).to include(:study_mode)
+      end
+    end
   end
 
   describe "enumerable facade" do
