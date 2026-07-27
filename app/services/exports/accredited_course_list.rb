@@ -13,6 +13,7 @@ module Exports
 
     CSV_HEADERS = [
       "Provider",
+      "Provider code",
       "Course name",
       "Course code",
       "Status",
@@ -30,6 +31,7 @@ module Exports
       # "What you will study",
       # "Interview process",
       "View on Find",
+      "Campus codes",
     ].freeze
 
     def initialize(courses:)
@@ -62,6 +64,7 @@ module Exports
 
         [
           decorated_course.provider.provider_name,
+          decorated_course.provider.provider_code,
           decorated_course.name,
           decorated_course.course_code,
           status(course),
@@ -106,6 +109,7 @@ module Exports
           # ),
 
           decorated_course.find_url,
+          decorated_course.sites&.map(&:code)&.join(" "),
         ]
       end
     end
