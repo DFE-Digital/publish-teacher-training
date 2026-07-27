@@ -72,7 +72,7 @@ RSpec.describe "Filtering the course list" do
   end
 
   scenario "I can filter by any month the cycle allows" do
-    given_my_provider_has_primary_and_secondary_courses
+    given_my_provider_has_courses_starting_in_different_months
     when_i_visit_the_courses_page
     then_i_can_choose_a_start_month
   end
@@ -94,6 +94,11 @@ RSpec.describe "Filtering the course list" do
     create(:course, :primary, :fee, provider:, accrediting_provider: nil, name: "Primary fee course")
     create(:course, :secondary, :fee, provider:, accrediting_provider: nil, name: "Secondary fee course")
     create(:course, :primary, :salary, provider:, accrediting_provider: nil, name: "Primary salary course")
+  end
+
+  def given_my_provider_has_courses_starting_in_different_months
+    create(:course, provider:, accrediting_provider: nil, name: "September course", start_date: Time.zone.local(provider.recruitment_cycle_year.to_i, 9, 1))
+    create(:course, provider:, accrediting_provider: nil, name: "January course", start_date: Time.zone.local(provider.recruitment_cycle_year.to_i + 1, 1, 1))
   end
 
   def when_i_visit_the_courses_page(query = {})
