@@ -136,10 +136,9 @@ en:
         postcode: "Postcode"
       schools: # file
         index:
-          add_school_to_account: If needed, you can add new schools to your account.
-          update_all_schools_html: >-
-            We automatically upload all schools you are working with. These are schools that are on <a class="govuk-link" href="%{register_url}">Register trainee teachers</a>.
-          register_url: https://www.register-trainee-teachers.service.gov.uk/
+          gias_school_text_html: You can only add schools that are on %{link}.
+          gias_link_text: Get Information About Schools (GIAS)
+          gias_url: https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments
       study_site_search:
         new:
           caption: Add study site

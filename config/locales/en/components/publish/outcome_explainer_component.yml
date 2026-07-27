@@ -3,6 +3,7 @@ en:
     providers:
       school_placements:
         outcome_explainer_component:
+          placement_school_heading: "Attaching schools to courses"
           gias_school_text_html: You can only add schools that are on %{link}.
           gias_link_text: Get Information About Schools (GIAS)
           gias_url: https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments
