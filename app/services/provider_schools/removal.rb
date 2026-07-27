@@ -32,10 +32,6 @@ module ProviderSchools
 
     def school
       @school ||= identity.school_for(uuid:)
-    rescue ActiveRecord::RecordNotFound
-      raise if after_schools_remodel_cycle?
-
-      nil
     end
 
     def provider_school

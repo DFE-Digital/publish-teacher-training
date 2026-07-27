@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 module CourseSchools
-  # Chooses the school model for a provider's recruitment cycle.
-  # Current and rollover cycles use legacy Site records; cycles after the remodel
-  # use Provider::School records because Site and Provider::School UUIDs diverge
-  # after rollover.
+  # Resolves available schools for listing via ProviderSchools::Identity (Provider::School).
+  # Course association UUID resolution still uses legacy Site records until after the
+  # remodel cycle, because Site and Provider::School UUIDs diverge after rollover.
   class Identity
     UUID_PATTERN = /\A[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/i
 
