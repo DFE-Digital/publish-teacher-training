@@ -1,5 +1,5 @@
 <%= render Shared::AdviceComponent::View.new(
-  title: t(".placement_school_heading")
+  title: t(".placement_school_heading"),
 ) do %>
   <p class="govuk-body govuk-!-font-weight-bold">
     <%= t(".location_searches_text_html") %>
@@ -11,9 +11,9 @@
         t(".courses_link_text"),
         publish_provider_recruitment_cycle_courses_path(
           @provider.provider_code,
-          @recruitment_cycle.year
-        )
-      )
+          @recruitment_cycle.year,
+        ),
+      ),
     ) %>
   </p>
   <p class="govuk-body">
@@ -23,15 +23,15 @@
         "Organisation details",
         details_publish_provider_recruitment_cycle_path(
           provider_code: @provider.provider_code,
-          year: @recruitment_cycle.year
-        )
-      )
+          year: @recruitment_cycle.year,
+        ),
+      ),
     ) %>
   </p>
   <p class="govuk-body">
     <%= govuk_link_to(
       t(".find_out_more"),
-      t("links.how_to.add_school_placements")
+      t("links.how_to.add_school_placements"),
     ) %>
   </p>
 <% end %>
