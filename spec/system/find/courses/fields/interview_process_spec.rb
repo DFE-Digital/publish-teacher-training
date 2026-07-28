@@ -22,6 +22,17 @@ RSpec.describe "Viewing long form course content for the interview process", ser
     then_i_see_the_long_form_content_for_interview_location_online
   end
 
+  scenario "A user cannot see the interview process section when the interview location is IN PERSON and no interview process content is provided" do
+    given_a_published_course_exists(
+      interview_location: "in person",
+      interview_process: nil,
+    )
+
+    when_i_visit_a_course
+
+    expect(page).not_to have_selector("h2", text: "Interview process")
+  end
+
   def when_i_visit_a_course
     visit find_results_path
     click_on_first_course
@@ -59,7 +70,10 @@ RSpec.describe "Viewing long form course content for the interview process", ser
     expect(page).to have_content(enrichment.interview_process)
   end
 
-  def given_a_published_course_exists(interview_location: "both")
+  def given_a_published_course_exists(
+    interview_location: "both",
+    interview_process: "The interview process is a 72 stage process"
+  )
     @course = create(
       :course,
       :with_full_time_sites,
@@ -71,8 +85,8 @@ RSpec.describe "Viewing long form course content for the interview process", ser
         build(
           :course_enrichment,
           :published,
-          interview_process: "The interview process is a 72 stage process",
-          interview_location:,
+          interview_process: interview_process,
+          interview_location: interview_location,
         ),
       ],
       name: "Art and design (SEND)",
