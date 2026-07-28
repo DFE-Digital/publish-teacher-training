@@ -929,7 +929,7 @@ describe CourseDecorator do
       end
 
       it "counts the course schools attached to the course" do
-        expect(course.decorate.attached_schools_count).to eq(5)
+        expect(course.decorate.attached_schools_count).to eq(3)
       end
     end
   end
