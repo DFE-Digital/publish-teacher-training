@@ -30,7 +30,7 @@ module Publish
 
       def active_filters_component
         # clear_all_text is left to the shared component's "Clear all" default.
-        ::Courses::ActiveFilters::View.new(
+        ::Courses::ActiveFiltersComponent.new(
           active_filters: filter_form.active_filters,
           search_params: filter_form.filter_params,
           path_builder: ->(params) { courses_path(params) },

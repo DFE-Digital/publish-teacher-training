@@ -1,4 +1,4 @@
-<%= render Courses::ActiveFilters::View.new(
+<%= render Courses::ActiveFiltersComponent.new(
   active_filters: form.object.active_filters,
   search_params: form.object.search_params,
   path_builder: ->(params) { find_results_path(params) },
