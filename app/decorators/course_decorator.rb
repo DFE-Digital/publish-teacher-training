@@ -170,11 +170,7 @@ class CourseDecorator < ApplicationDecorator
   # Count of schools currently attached to the course, reading from whichever
   # data model is live per the :course_publishing_uses_new_school_model flag.
   def attached_schools_count
-    if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-      object.schools.count
-    else
-      object.sites.school.count
-    end
+    object.schools.count
   end
 
   def alphabetically_sorted_study_sites

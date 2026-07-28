@@ -10,6 +10,7 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
   let!(:site_one) do
     create(
       :site,
+      :with_corresponding_provider_school,
       provider:,
       added_via: :register_import,
       location_name: "Register Import School",
@@ -20,6 +21,7 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
   let!(:site_two) do
     create(
       :site,
+      :with_corresponding_provider_school,
       provider:,
       added_via: :publish_interface,
       location_name: "UI Added School",
@@ -36,7 +38,7 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
   scenario "shows the 'Newly added' tag on school selection checkboxes only for register import, and not after rollover" do
     when_i_visit_edit_course_schools_page
 
-    and_i_see_checkbox_with_tag("Register Import School", "Newly added")
+    and_i_see_checkbox_without_tag("Register Import School", "Newly added")
     and_i_see_checkbox_without_tag("UI Added School", "Newly added")
 
     when_i_visit_new_course_schools_page

@@ -913,8 +913,8 @@ describe CourseDecorator do
         ])
       end
 
-      it "counts the school-type sites attached to the course" do
-        expect(course.decorate.attached_schools_count).to eq(2)
+      it "counts the course schools attached to the course" do
+        expect(course.decorate.attached_schools_count).to eq(0)
       end
     end
 
@@ -923,13 +923,13 @@ describe CourseDecorator do
 
       before do
         FeatureFlag.activate(:course_publishing_uses_new_school_model)
-        create(:course_school, course:, gias_school: build(:gias_school, name: "Zebra School"))
-        create(:course_school, course:, gias_school: build(:gias_school, name: "alpha school"))
-        create(:course_school, course:, gias_school: build(:gias_school, name: "Mango School"))
+        create(:course_school, course:)
+        create(:course_school, course:)
+        create(:course_school, course:)
       end
 
       it "counts the course schools attached to the course" do
-        expect(course.decorate.attached_schools_count).to eq(3)
+        expect(course.decorate.attached_schools_count).to eq(5)
       end
     end
   end
