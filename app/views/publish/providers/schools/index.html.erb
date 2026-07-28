@@ -32,7 +32,7 @@
             </p>
             <label class="govuk-label" for="school-search">
               Enter the name of a school, university or college.
-              You can also enter a postcode or URN.
+              You can also enter a city, town, postcode or URN.
             </label>
             <%= form_with url: publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
                           method: :get,
@@ -41,8 +41,7 @@
                 <%= text_field_tag :query,
                     params[:query],
                     id: "school-search",
-                    class: "govuk-input",
-                    placeholder: "Enter school name, postcode or URN" %>
+                    class: "govuk-input" %>
                 <div class="govuk-button-group">
                   <%= submit_tag "Search", class: "govuk-button gap-left-2" %>
                   <!-- Clear search -->
