@@ -42,7 +42,7 @@ module Publish
             "Age range" => course.age_range_in_years&.humanize,
           }
 
-          row["Funding"] = course.funding.titleize if @include_funding_column
+          row["Fee or salary"] = course.funding.titleize if @include_funding_column
 
           row["Qualification"] = qualification(course) if @include_qualification_column
 
@@ -57,7 +57,7 @@ module Publish
           # row["Entry requirements"] = entry_requirements(course)
 
           if @include_international_fee_column
-            row["International fee"] = international_fee(course)
+            row["Non-UK fee"] = international_fee(course)
           end
 
           if @include_visa_deadline_column
