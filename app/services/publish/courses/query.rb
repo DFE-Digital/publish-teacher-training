@@ -202,13 +202,15 @@ module Publish
 
       # Date.strptime is happy to parse a prefix and ignore whatever follows, so
       # "2026-09 and anything at all" would otherwise be accepted as September.
-      # Require the whole value to be a month.
+      # Require the whole value to be a month. Kept in step by hand with
+      # DATE_FORMATS[:year_and_month] — a regex cannot be derived from a
+      # strftime string.
       MONTH_FORMAT = /\A\d{4}-\d{2}\z/
 
       def parse_month(month)
         return nil unless month.to_s.match?(MONTH_FORMAT)
 
-        parsed = Date.strptime(month.to_s, "%Y-%m")
+        parsed = Date.strptime(month.to_s, Date::DATE_FORMATS[:year_and_month])
         Time.zone.local(parsed.year, parsed.month, 1)
       rescue ArgumentError, TypeError
         nil
