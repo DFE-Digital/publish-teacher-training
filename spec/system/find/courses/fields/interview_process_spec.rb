@@ -31,6 +31,9 @@ RSpec.describe "Viewing long form course content for the interview process", ser
     when_i_visit_a_course
 
     expect(page).not_to have_selector("h2", text: "Interview process")
+    within(".course-contents") do
+      expect(page).not_to have_link("Interview process")
+    end
   end
 
   def when_i_visit_a_course
