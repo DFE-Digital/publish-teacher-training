@@ -38,7 +38,7 @@
   &__count {
     padding-bottom: govuk-spacing(2);
 
-    border-bottom: 1px solid #cecece;
+    border-bottom: 1px solid $govuk-border-colour;
   }
 
   // Sparse rows (0 or 1 course-information line) get more vertical breathing
