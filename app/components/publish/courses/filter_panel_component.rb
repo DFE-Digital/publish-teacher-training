@@ -9,7 +9,7 @@ module Publish
     # courses do not vary on an attribute can be shown a shorter panel without
     # this component knowing anything about their courses.
     class FilterPanelComponent < ApplicationComponent
-      def initialize(filter_form:, provider:, visible_groups: ::Publish::CourseFilterForm::GROUPS, classes: [], html_attributes: {})
+      def initialize(filter_form:, provider:, visible_groups: ::Publish::Courses::FilterForm::GROUPS, classes: [], html_attributes: {})
         super(classes:, html_attributes:)
         @filter_form = filter_form
         @provider = provider
