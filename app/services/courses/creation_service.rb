@@ -127,8 +127,7 @@ module Courses
     # building the records in memory so they persist atomically with the
     # course on save and are visible to CoursePublishableSchoolsPresence-
     # Validator's :new-context read (which the new-school-model flag routes
-    # to course.schools). Mirrors the site→gias_school→provider_school
-    # mapping used by Publish::Schools::UpdateCourseSiteStatusesService.
+    # to course.schools).
     def update_schools(course)
       return if site_ids.nil?
       # Nothing selected — update_sites already records the "Select at least
@@ -142,10 +141,8 @@ module Courses
         provider_school = provider_schools_by_gias_id[gias_school.id]
 
         unless provider_school
-          # No matching Provider::School yet — provider not fully backfilled
-          # (or its site predates the dual-write). Skip the new-model build;
-          # the schools backfill (or the next provider-side write) reconciles
-          # later. Same rationale as UpdateCourseSiteStatusesService#attach_school.
+          # The school may have been removed after the wizard was submitted.
+          # Skip it so the remaining selection can still be created.
           Rails.logger.warn(
             "[CourseSchools] skipped course_school build — no provider_school for " \
             "provider=#{provider.id} gias_school=#{gias_school.id}",
