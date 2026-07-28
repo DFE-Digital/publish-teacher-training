@@ -9,7 +9,7 @@ module Publish
     def index
       authorize :provider, :index?
 
-      @filter_form = ::Publish::CourseFilterForm.new(provider:, **course_filter_params)
+      @filter_form = ::Publish::Courses::FilterForm.new(provider:, **course_filter_params)
       @course_list = ::Publish::CourseList.new(provider:, params: @filter_form.filter_params)
     end
 
@@ -150,7 +150,7 @@ module Publish
     end
 
     def course_filter_params
-      ::Publish::CourseFilterParams.permit(params).to_h.symbolize_keys
+      ::Publish::Courses::FilterParams.permit(params).to_h.symbolize_keys
     end
 
     def format_publish_error_messages

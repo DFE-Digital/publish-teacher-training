@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Publish::CourseFilterParams do
+RSpec.describe Publish::Courses::FilterParams do
   describe ".permit" do
     def permit(hash)
       described_class.permit(ActionController::Parameters.new(hash))

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Publish::CourseFilterForm do
+RSpec.describe Publish::Courses::FilterForm do
   subject(:form) { described_class.new(provider:, **attributes) }
 
   let(:provider) { create(:provider) }

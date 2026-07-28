@@ -8,7 +8,7 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
   let(:provider) { create(:provider) }
   let(:attributes) { {} }
   let(:options) { {} }
-  let(:filter_form) { Publish::CourseFilterForm.new(provider:, **attributes) }
+  let(:filter_form) { Publish::Courses::FilterForm.new(provider:, **attributes) }
 
   def group_headings
     rendered.css(".app-c-filter-section__summary-heading").map { |heading| heading.text.strip }
