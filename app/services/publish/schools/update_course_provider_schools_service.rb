@@ -4,7 +4,7 @@ module Publish
   module Schools
     # Syncs Course::School rows for submitted Provider::School UUIDs.
     # The orchestrator decides whether unresolved UUIDs fail the update or are
-    # logged and skipped for a best-effort queued update.
+    # logged and skipped when a queued update contains a school removed since submission.
     class UpdateCourseProviderSchoolsService
       include ServicePattern
 
@@ -54,7 +54,7 @@ module Publish
           "school_uuids=#{missing_provider_school_uuids.join(',')}"
         raise UnresolvedProviderSchoolsError, message if raise_on_missing_provider_schools?
 
-        Rails.logger.warn("[CourseSchools] skipped unresolved provider_school UUIDs - #{message}")
+        Rails.logger.warn("[CourseSchools] skipped stale provider_school UUIDs - #{message}")
       end
 
       def missing_provider_school_uuids

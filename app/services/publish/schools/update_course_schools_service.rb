@@ -2,9 +2,8 @@
 
 module Publish
   module Schools
-    # Coordinates course school updates from Publish.
-    # During the remodel cycle it dual-writes to legacy SiteStatus and new Course::School rows;
-    # after the remodel cycle it writes only to the new school model.
+    # Coordinates course school updates from Publish by writing Course::School
+    # and legacy SiteStatus rows from the same Provider::School UUIDs.
     # This service also updates the course and provider so that Apply syncs course changes.
     class UpdateCourseSchoolsService
       include ServicePattern
@@ -12,61 +11,45 @@ module Publish
       ENQUEUE_THRESHOLD = 30
 
       def self.call_or_enqueue(course:, params:)
-        if Array(params[:school_uuids]).size > ENQUEUE_THRESHOLD
-          UpdateCourseSchoolsJob.perform_async(course.id, params.to_h, "transactional" => false)
+        if Array(params[:school_uuids]).compact_blank.uniq.size > ENQUEUE_THRESHOLD
+          UpdateCourseSchoolsJob.perform_async(course.id, params.to_h)
         else
           call(course:, params:)
         end
       end
 
+      # @param transactional [Boolean] inline updates are atomic and strict;
+      #   queued updates pass false so valid writes survive stale school UUIDs
       def initialize(course:, params:, transactional: true)
         @course = course
         @params = params.to_h.deep_symbolize_keys
+        @school_uuids = Array(@params.fetch(:school_uuids)).compact_blank.uniq
         @transactional = transactional
       end
 
       def call
         previous_school_names = school_names_for_notification
 
-        if after_schools_remodel_cycle?
-          update_course_and_provider_schools
-        else
-          update_legacy_and_provider_schools
+        within_transaction do
+          course.assign_attributes(course_attributes)
+          update_site_statuses
+          update_provider_schools
+
+          # This persists schools_validated and deliberately touches the course
+          # and provider. Apply watches provider.changed_at to decide whether it
+          # needs to sync the provider's courses.
+          course.save!
         end
 
         send_notifications(
           previous_school_names:,
-          updated_school_names: school_names_for_notification(reload: true),
+          updated_school_names: school_names_for_notification,
         )
       end
 
     private
 
-      attr_reader :course, :params
-
-      def update_legacy_and_provider_schools
-        within_transaction do
-          UpdateCourseSiteStatusesService.call(
-            course:,
-            params: site_status_params,
-            send_notifications: false,
-            transactional: false,
-          )
-          update_provider_schools
-        end
-      end
-
-      def update_course_and_provider_schools
-        within_transaction do
-          # Saving the course here is intentionally not just about persisting
-          # schools_validated. Course saves update course.changed_at and then
-          # TouchProvider updates provider.changed_at; Apply watches
-          # provider.changed_at to decide whether to sync provider data.
-          course.assign_attributes(course_attributes)
-          update_provider_schools
-          course.save! if course.has_changes_to_save?
-        end
-      end
+      attr_reader :course, :params, :school_uuids
 
       def course_attributes
         params.except(:school_uuids)
@@ -75,47 +58,22 @@ module Publish
       def update_provider_schools
         UpdateCourseProviderSchoolsService.call(
           course:,
-          school_uuids: school_uuids_for_provider_school_sync,
-          raise_on_missing_provider_schools:,
+          school_uuids:,
+          raise_on_missing_provider_schools: transactional?,
         )
+      end
+
+      # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+      # TODO School data remodel removal - remove this legacy write once all school reads use Course::School.
+      # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+      def update_site_statuses
+        UpdateCourseSiteStatusesService.call(course:, school_uuids:)
       end
 
       def within_transaction(&block)
         return yield unless transactional?
 
         ActiveRecord::Base.transaction(&block)
-      end
-
-      def site_status_params
-        params_with_school_uuids(default_school_uuids: current_site_uuids)
-      end
-
-      def school_uuids_for_provider_school_sync
-        submitted_school_uuids(default_school_uuids: current_provider_update_uuids)
-      end
-
-      def current_provider_update_uuids
-        after_schools_remodel_cycle? ? current_provider_school_uuids : current_site_uuids
-      end
-
-      def params_with_school_uuids(default_school_uuids:)
-        params.merge(school_uuids: submitted_school_uuids(default_school_uuids:))
-      end
-
-      def submitted_school_uuids(default_school_uuids:)
-        # Missing school_uuids means "leave the current schools unchanged";
-        # an explicit nil or empty array means "remove all schools".
-        return default_school_uuids unless params.key?(:school_uuids)
-
-        Array(params[:school_uuids]).compact_blank.uniq
-      end
-
-      def raise_on_missing_provider_schools
-        # During the remodel cycle the form still submits legacy Site UUIDs and
-        # some Provider::School rows may not exist until backfill has run. After
-        # the remodel cycle, inline updates are strict but queued jobs are
-        # best-effort so one stale UUID does not retry the whole job forever.
-        after_schools_remodel_cycle? && transactional?
       end
 
       def send_notifications(previous_school_names:, updated_school_names:)
@@ -131,28 +89,10 @@ module Publish
         )
       end
 
-      def school_names_for_notification(reload: false)
-        if after_schools_remodel_cycle?
-          course.schools.reset if reload
-          course.schools.includes(:provider_school).map { |course_school| course_school.provider_school.location_name }
-        else
-          course.sites.reset if reload
-          course.sites.map(&:location_name)
-        end
-      end
-
-      def current_site_uuids
-        @current_site_uuids ||= course.sites.map(&:uuid)
-      end
-
-      def current_provider_school_uuids
-        @current_provider_school_uuids ||= course.schools.includes(:provider_school).map do |course_school|
-          course_school.provider_school.uuid
-        end
-      end
-
-      def after_schools_remodel_cycle?
-        course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+      def school_names_for_notification
+        course.schools.includes(:provider_school)
+          .map { |course_school| course_school.provider_school.location_name }
+          .sort
       end
 
       def transactional?

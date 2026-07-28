@@ -1,49 +1,28 @@
+# frozen_string_literal: true
+
 module Publish
   module Schools
     # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
     # TODO School data remodel removal - remove this legacy SiteStatus sync service when school associations
     # are written only through Provider::School and Course::School.
+    # Mirrors submitted Provider::School UUIDs to legacy SiteStatus rows while
+    # parts of Publish and the API still read the legacy school model.
     class UpdateCourseSiteStatusesService
       include ServicePattern
 
-      def initialize(course:, params:, send_notifications: true, transactional: true)
+      def initialize(course:, school_uuids:)
         @course = course
-        @params = params.to_h.deep_symbolize_keys
-        raise ArgumentError, "school_uuids must be provided" unless @params.key?(:school_uuids)
-
-        @previous_site_names = course.sites.map(&:location_name)
-        @send_notifications = send_notifications
-        @transactional = transactional
+        @submitted_school_uuids = Array(school_uuids).compact_blank.uniq
       end
 
       def call
-        within_transaction do
-          assign_attributes_to_course
-          sync_schools
-          apply_publish_status_to_site_statuses
-          course.save!
-        end
-
-        send_notifications if send_notifications?
+        sync_schools
+        apply_publish_status_to_site_statuses
       end
 
     private
 
-      attr_reader :course, :params, :previous_site_names
-
-      def send_notifications?
-        @send_notifications
-      end
-
-      def within_transaction(&block)
-        return yield unless transactional?
-
-        ActiveRecord::Base.transaction(&block)
-      end
-
-      def assign_attributes_to_course
-        course.assign_attributes(params.except(:school_uuids))
-      end
+      attr_reader :course, :submitted_school_uuids
 
       def sync_schools
         return if sites_to_attach_uuids.empty? && sites_to_remove_uuids.empty?
@@ -54,25 +33,21 @@ module Publish
         course.sites.reload
       end
 
-      def submitted_school_uuids
-        @submitted_school_uuids ||= Array(params[:school_uuids]).compact_blank.uniq
-      end
-
-      def current_school_uuids
-        @current_school_uuids ||= course.sites.map(&:uuid)
+      def current_site_uuids
+        @current_site_uuids ||= course.sites.map(&:uuid)
       end
 
       # TODO School data remodel removal - remove once course school updates no longer diff legacy Site UUIDs.
       def sites_to_attach_uuids
-        @sites_to_attach_uuids ||= submitted_school_uuids - current_school_uuids
+        @sites_to_attach_uuids ||= submitted_school_uuids - current_site_uuids
       end
 
       # TODO School data remodel removal - remove once course school updates no longer diff legacy Site UUIDs.
       def sites_to_remove_uuids
-        @sites_to_remove_uuids ||= current_school_uuids - submitted_school_uuids
+        @sites_to_remove_uuids ||= current_site_uuids - submitted_school_uuids
       end
 
-      # TODO School data remodel removal - remove once submitted school UUIDs point directly at Provider::School.
+      # TODO School data remodel removal - remove when Provider::School UUIDs no longer need mapping to legacy Sites.
       def sites_by_uuid
         @sites_by_uuid ||= course.provider.sites
           .where(uuid: sites_to_attach_uuids + sites_to_remove_uuids)
@@ -101,7 +76,7 @@ module Publish
         # running, leaving the unticked school still attached on the
         # rendered page.
         course.site_statuses.reload.new_or_running.each do |site_status|
-          site_status.assign_attributes(site_status_attributes)
+          site_status.update!(site_status_attributes)
         end
       end
 
@@ -111,23 +86,6 @@ module Publish
         { publish: :unpublished, status: :new_status }
       end
       # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-
-      def send_notifications
-        updated_site_names = course.sites.map(&:location_name)
-        return if previous_site_names == updated_site_names
-
-        if FeatureFlag.active?(:course_sites_updated_email_notification)
-          NotificationService::CourseSitesUpdated.call(
-            course: course,
-            previous_site_names: previous_site_names,
-            updated_site_names: updated_site_names,
-          )
-        end
-      end
-
-      def transactional?
-        @transactional
-      end
     end
   end
 end

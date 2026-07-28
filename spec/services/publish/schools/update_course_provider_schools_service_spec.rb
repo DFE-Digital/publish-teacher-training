@@ -78,8 +78,8 @@ module Publish
               expect(course.reload.schools.where(gias_school: gias_school_two)).to be_empty
             end
 
-            it "logs the skip so operators can spot environments needing a backfill" do
-              expect(Rails.logger).to receive(:warn).with(/skipped unresolved provider_school UUIDs/)
+            it "logs the stale UUID" do
+              expect(Rails.logger).to receive(:warn).with(/skipped stale provider_school UUIDs/)
 
               service_call
             end
@@ -103,7 +103,7 @@ module Publish
           end
 
           it "skips the missing provider school and syncs the resolved selection" do
-            expect(Rails.logger).to receive(:warn).with(/skipped unresolved provider_school UUIDs/)
+            expect(Rails.logger).to receive(:warn).with(/skipped stale provider_school UUIDs/)
 
             expect { service_call }
               .to change { course.schools.reload.pluck(:provider_school_id) }
