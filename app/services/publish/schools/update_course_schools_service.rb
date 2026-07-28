@@ -5,7 +5,7 @@ module Publish
     # Coordinates course school updates from Publish.
     # During the remodel cycle it dual-writes to legacy SiteStatus and new Course::School rows;
     # after the remodel cycle it writes only to the new school model.
-    # This service also updates the course and provider so that apply syncs the courses
+    # This service also updates the course and provider so that Apply syncs course changes.
     class UpdateCourseSchoolsService
       include ServicePattern
 
@@ -13,15 +13,16 @@ module Publish
 
       def self.call_or_enqueue(course:, params:)
         if Array(params[:school_uuids]).size > ENQUEUE_THRESHOLD
-          UpdateCourseSchoolsJob.perform_async(course.id, params.to_h)
+          UpdateCourseSchoolsJob.perform_async(course.id, params.to_h, "transactional" => false)
         else
           call(course:, params:)
         end
       end
 
-      def initialize(course:, params:)
+      def initialize(course:, params:, transactional: true)
         @course = course
         @params = params.to_h.deep_symbolize_keys
+        @transactional = transactional
       end
 
       def call
@@ -44,20 +45,25 @@ module Publish
       attr_reader :course, :params
 
       def update_legacy_and_provider_schools
-        ActiveRecord::Base.transaction do
-          UpdateCourseSiteStatusesService.call(course:, params: site_status_params, send_notifications: false)
-          update_provider_schools(raise_on_missing_provider_schools: false)
+        within_transaction do
+          UpdateCourseSiteStatusesService.call(
+            course:,
+            params: site_status_params,
+            send_notifications: false,
+            transactional: false,
+          )
+          update_provider_schools
         end
       end
 
       def update_course_and_provider_schools
-        ActiveRecord::Base.transaction do
+        within_transaction do
           # Saving the course here is intentionally not just about persisting
           # schools_validated. Course saves update course.changed_at and then
           # TouchProvider updates provider.changed_at; Apply watches
           # provider.changed_at to decide whether to sync provider data.
           course.assign_attributes(course_attributes)
-          update_provider_schools(raise_on_missing_provider_schools: true)
+          update_provider_schools
           course.save! if course.has_changes_to_save?
         end
       end
@@ -66,12 +72,18 @@ module Publish
         params.except(:school_uuids)
       end
 
-      def update_provider_schools(raise_on_missing_provider_schools:)
+      def update_provider_schools
         UpdateCourseProviderSchoolsService.call(
           course:,
           school_uuids: school_uuids_for_provider_school_sync,
           raise_on_missing_provider_schools:,
         )
+      end
+
+      def within_transaction(&block)
+        return yield unless transactional?
+
+        ActiveRecord::Base.transaction(&block)
       end
 
       def site_status_params
@@ -96,6 +108,14 @@ module Publish
         return default_school_uuids unless params.key?(:school_uuids)
 
         Array(params[:school_uuids]).compact_blank.uniq
+      end
+
+      def raise_on_missing_provider_schools
+        # During the remodel cycle the form still submits legacy Site UUIDs and
+        # some Provider::School rows may not exist until backfill has run. After
+        # the remodel cycle, inline updates are strict but queued jobs are
+        # best-effort so one stale UUID does not retry the whole job forever.
+        after_schools_remodel_cycle? && transactional?
       end
 
       def send_notifications(previous_school_names:, updated_school_names:)
@@ -133,6 +153,10 @@ module Publish
 
       def after_schools_remodel_cycle?
         course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+      end
+
+      def transactional?
+        @transactional
       end
     end
   end

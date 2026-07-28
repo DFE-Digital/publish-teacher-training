@@ -2,27 +2,32 @@
 
 module Publish
   module Schools
-    # Creates and/or removed Course:School from a course
+    # Syncs Course::School rows for submitted Provider::School UUIDs.
+    # The orchestrator decides whether unresolved UUIDs fail the update or are
+    # logged and skipped for a best-effort queued update.
     class UpdateCourseProviderSchoolsService
       include ServicePattern
 
       class UnresolvedProviderSchoolsError < StandardError; end
 
-      def initialize(course:, school_uuids:, raise_on_missing_provider_schools: false)
+      # @param course [Course] course whose Course::School rows should be synced
+      # @param school_uuids [Array<String>] submitted Provider::School UUIDs
+      # @param raise_on_missing_provider_schools [Boolean] when true, unresolved
+      #   UUIDs fail the update; when false, unresolved UUIDs are logged and the
+      #   service syncs any Provider::School rows it can still resolve
+      def initialize(course:, school_uuids:, raise_on_missing_provider_schools: true)
         @course = course
         @submitted_school_uuids = Array(school_uuids).compact_blank.uniq
         @raise_on_missing_provider_schools = raise_on_missing_provider_schools
       end
 
       def call
-        return unless all_submitted_provider_schools_resolved?
+        handle_missing_provider_schools
         return if provider_school_ids_to_attach.empty? && provider_school_ids_to_remove.empty?
 
-        ActiveRecord::Base.transaction do
-          provider_schools_to_attach.each { |provider_school| attach_provider_school(provider_school) }
-          course.schools.where(provider_school_id: provider_school_ids_to_remove).destroy_all
-          course.schools.reload
-        end
+        provider_schools_to_attach.each { |provider_school| attach_provider_school(provider_school) }
+        course.schools.where(provider_school_id: provider_school_ids_to_remove).destroy_all
+        course.schools.reload
       end
 
     private
@@ -30,10 +35,9 @@ module Publish
       attr_reader :course, :submitted_school_uuids
 
       def attach_provider_school(provider_school)
-        course.schools.create!(
-          provider_school:,
-          gias_school: provider_school.gias_school,
-        )
+        course.schools.create_or_find_by!(provider_school:) do |course_school|
+          course_school.gias_school = provider_school.gias_school
+        end
       end
 
       def provider_school_ids_by_uuid
@@ -43,30 +47,18 @@ module Publish
           .to_h
       end
 
-      def all_submitted_provider_schools_resolved?
-        return true if missing_provider_school_uuids.empty?
+      def handle_missing_provider_schools
+        return if missing_provider_school_uuids.empty?
 
         message = "no provider_school for provider=#{course.provider.id} " \
           "school_uuids=#{missing_provider_school_uuids.join(',')}"
         raise UnresolvedProviderSchoolsError, message if raise_on_missing_provider_schools?
 
-        # During the dual-write cycle the new school tables may not be fully
-        # backfilled. If any submitted UUID is missing we skip the whole
-        # Course::School sync so a partial resolution cannot remove existing
-        # new-model rows.
-        Rails.logger.warn(
-          "[CourseSchools] skipped course_school sync - #{message}",
-        )
-
-        false
+        Rails.logger.warn("[CourseSchools] skipped unresolved provider_school UUIDs - #{message}")
       end
 
       def missing_provider_school_uuids
         @missing_provider_school_uuids ||= submitted_school_uuids - provider_school_ids_by_uuid.keys
-      end
-
-      def raise_on_missing_provider_schools?
-        @raise_on_missing_provider_schools
       end
 
       def submitted_provider_school_ids
@@ -89,6 +81,10 @@ module Publish
         @provider_schools_to_attach ||= course.provider.schools
           .includes(:gias_school)
           .where(id: provider_school_ids_to_attach)
+      end
+
+      def raise_on_missing_provider_schools?
+        @raise_on_missing_provider_schools
       end
     end
   end

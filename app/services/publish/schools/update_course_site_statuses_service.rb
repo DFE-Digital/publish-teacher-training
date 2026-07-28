@@ -6,17 +6,18 @@ module Publish
     class UpdateCourseSiteStatusesService
       include ServicePattern
 
-      def initialize(course:, params:, send_notifications: true)
+      def initialize(course:, params:, send_notifications: true, transactional: true)
         @course = course
         @params = params.to_h.deep_symbolize_keys
         raise ArgumentError, "school_uuids must be provided" unless @params.key?(:school_uuids)
 
         @previous_site_names = course.sites.map(&:location_name)
         @send_notifications = send_notifications
+        @transactional = transactional
       end
 
       def call
-        ActiveRecord::Base.transaction do
+        within_transaction do
           assign_attributes_to_course
           sync_schools
           apply_publish_status_to_site_statuses
@@ -32,6 +33,12 @@ module Publish
 
       def send_notifications?
         @send_notifications
+      end
+
+      def within_transaction(&block)
+        return yield unless transactional?
+
+        ActiveRecord::Base.transaction(&block)
       end
 
       def assign_attributes_to_course
@@ -116,6 +123,10 @@ module Publish
             updated_site_names: updated_site_names,
           )
         end
+      end
+
+      def transactional?
+        @transactional
       end
     end
   end

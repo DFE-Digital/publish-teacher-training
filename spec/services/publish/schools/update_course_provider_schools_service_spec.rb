@@ -63,47 +63,52 @@ module Publish
             provider_school_two.destroy!
           end
 
-          it "does not raise" do
-            expect { service_call }.not_to raise_error
+          it "raises" do
+            expect { service_call }.to raise_error(described_class::UnresolvedProviderSchoolsError, /no provider_school/)
           end
 
-          it "skips the Course::School write for the missing provider_school" do
-            service_call
-
-            expect(course.reload.schools.where(gias_school: gias_school_two)).to be_empty
-          end
-
-          it "logs the skip so operators can spot environments needing a backfill" do
-            expect(Rails.logger).to receive(:warn).with(/no provider_school/)
-
-            service_call
-          end
-
-          context "when missing provider schools must fail the write" do
+          context "when missing provider schools should be skipped" do
             subject(:service_call) do
-              described_class.call(course:, school_uuids:, raise_on_missing_provider_schools: true)
+              described_class.call(course:, school_uuids:, raise_on_missing_provider_schools: false)
             end
 
-            it "raises" do
-              expect { service_call }.to raise_error(described_class::UnresolvedProviderSchoolsError, /no provider_school/)
+            it "skips the Course::School write for the missing provider_school" do
+              expect { service_call }.not_to raise_error
+
+              expect(course.reload.schools.where(gias_school: gias_school_two)).to be_empty
+            end
+
+            it "logs the skip so operators can spot environments needing a backfill" do
+              expect(Rails.logger).to receive(:warn).with(/skipped unresolved provider_school UUIDs/)
+
+              service_call
             end
           end
         end
 
-        context "when a partially resolved submission would remove an existing Course::School row" do
+        context "when a partially resolved submission should sync the remaining Course::School rows" do
           let(:missing_school_uuid) { SecureRandom.uuid }
           let(:school_uuids) { [provider_school_two.uuid, missing_school_uuid] }
+
+          subject(:service_call) do
+            described_class.call(
+              course:,
+              school_uuids:,
+              raise_on_missing_provider_schools: false,
+            )
+          end
 
           before do
             create(:course_school, course:, gias_school: gias_school_one, provider_school: provider_school_one)
           end
 
-          it "skips the whole Course::School sync" do
-            expect(Rails.logger).to receive(:warn).with(/skipped course_school sync/)
+          it "skips the missing provider school and syncs the resolved selection" do
+            expect(Rails.logger).to receive(:warn).with(/skipped unresolved provider_school UUIDs/)
 
             expect { service_call }
-              .not_to(change { course.schools.reload.order(:provider_school_id).pluck(:provider_school_id) })
-            expect(course.schools.find_by(provider_school: provider_school_two)).to be_nil
+              .to change { course.schools.reload.pluck(:provider_school_id) }
+              .from([provider_school_one.id])
+              .to([provider_school_two.id])
           end
         end
       end

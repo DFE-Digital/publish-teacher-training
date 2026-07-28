@@ -4,15 +4,15 @@ RSpec.describe UpdateCourseSchoolsJob, type: :job do
   let(:course) { create(:course) }
   let(:params) { { school_uuids: [SecureRandom.uuid] } }
 
-  it "calls the course school associations service with the correct arguments" do
+  it "calls the course school update service without wrapping the job in one transaction" do
     allow(Course).to receive(:find).and_return(course)
     allow(Publish::Schools::UpdateCourseSchoolsService).to receive(:call)
 
-    described_class.new.perform(course.id, params)
+    described_class.new.perform(course.id, params, "transactional" => false)
 
     expect(Course).to have_received(:find).with(course.id)
     expect(Publish::Schools::UpdateCourseSchoolsService)
       .to have_received(:call)
-      .with(course: course, params: params)
+      .with(course: course, params: params, transactional: false)
   end
 end

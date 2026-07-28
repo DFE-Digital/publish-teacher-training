@@ -29,7 +29,7 @@ module Publish
           let(:params) { { school_uuids: Array.new(31) { SecureRandom.uuid } } }
 
           it "enqueues the job" do
-            expect(UpdateCourseSchoolsJob).to receive(:perform_async).with(course.id, params.to_h)
+            expect(UpdateCourseSchoolsJob).to receive(:perform_async).with(course.id, params.to_h, "transactional" => false)
 
             described_class.call_or_enqueue(course:, params:)
           end
@@ -69,6 +69,22 @@ module Publish
             it "persists schools_validated" do
               expect { service_call }
                 .to change { course.reload.schools_validated }.to(true)
+            end
+          end
+
+          context "when the matching Provider::School has not been backfilled yet" do
+            before do
+              provider_school_two.destroy!
+            end
+
+            it "updates the legacy SiteStatus and skips the new-model row" do
+              expect(Rails.logger).to receive(:warn).with(/skipped unresolved provider_school UUIDs/)
+
+              expect { service_call }
+                .to change { course.site_statuses.count }.by(1)
+                .and(not_change { course.schools.count })
+
+              expect(course.reload.sites).to contain_exactly(site_two)
             end
           end
 
@@ -226,6 +242,26 @@ module Publish
           it "raises when a submitted Provider::School UUID cannot be resolved" do
             expect { described_class.call(course:, params: { school_uuids: [SecureRandom.uuid] }) }
               .to raise_error(UpdateCourseProviderSchoolsService::UnresolvedProviderSchoolsError)
+          end
+
+          context "when the update is run from the queued job" do
+            subject(:service_call) { described_class.call(course:, params:, transactional: false) }
+
+            let(:missing_school_uuid) { SecureRandom.uuid }
+            let(:params) { { school_uuids: [provider_school_two.uuid, missing_school_uuid] } }
+
+            before do
+              create(:course_school, course:, gias_school: gias_school_one, provider_school: provider_school_one)
+            end
+
+            it "skips stale Provider::School UUIDs and applies the rest of the update" do
+              expect(Rails.logger).to receive(:warn).with(/skipped unresolved provider_school UUIDs/)
+
+              expect { service_call }
+                .to change { course.schools.reload.pluck(:provider_school_id) }
+                .from([provider_school_one.id])
+                .to([provider_school_two.id])
+            end
           end
         end
       end
