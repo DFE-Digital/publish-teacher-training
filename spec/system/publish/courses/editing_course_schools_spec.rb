@@ -67,11 +67,19 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   scenario "i see an error when a selected school no longer belongs to the provider" do
     then_i_should_see_a_list_of_schools
-    given_site_one_is_removed_after_the_page_load
+    given_provider_school_one_is_removed_after_the_page_load
     when_i_update_the_course_schools
     and_i_submit
     then_i_should_see_the_school_selection_error
     and_no_school_is_attached_to_the_course
+  end
+
+  scenario "i see an error when a selected school is removed after validation" do
+    given_the_course_school_update_fails_after_validation
+    when_i_update_the_course_schools
+    and_i_submit
+    then_i_should_see_the_school_selection_error
+    and_the_error_is_reported_to_sentry
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -140,7 +148,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   def and_provider_schools_mirror_the_sites
     provider.sites.each do |site|
-      gias_school = create(:gias_school, urn: site.urn)
+      gias_school = create(:gias_school, name: site.location_name, urn: site.urn)
       create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
     end
   end
@@ -153,8 +161,22 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     expect(course_school.provider_school.site_code).to eq(site.code)
   end
 
-  def given_site_one_is_removed_after_the_page_load
-    Site.find_by!(provider:, location_name: "Site 1").discard!
+  def given_provider_school_one_is_removed_after_the_page_load
+    provider.schools.joins(:gias_school).find_by!(gias_school: { name: "Site 1" }).destroy!
+  end
+
+  def given_the_course_school_update_fails_after_validation
+    allow(Publish::Schools::UpdateCourseSchoolsService).to receive(:call_or_enqueue).and_raise(unresolved_provider_school_error)
+    allow(Sentry).to receive(:capture_exception)
+  end
+
+  def and_the_error_is_reported_to_sentry
+    expect(Sentry).to have_received(:capture_exception).with(unresolved_provider_school_error)
+  end
+
+  def unresolved_provider_school_error
+    @unresolved_provider_school_error ||=
+      Publish::Schools::UpdateCourseProviderSchoolsService::UnresolvedProviderSchoolsError.new("no provider_school")
   end
 
   def and_no_school_is_attached_to_the_course
@@ -224,8 +246,8 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     provider.sites << build(:site, location_name: "Site 3")
     provider.save!
     site = provider.sites.find_by(location_name: "Site 3")
-    gias_school = create(:gias_school, urn: site.urn)
-    create(:provider_school, provider:, gias_school:, site_code: site.code)
+    gias_school = create(:gias_school, name: site.location_name, urn: site.urn)
+    create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
   end
 
   def given_the_course_is_published_with_all_three_sites_running

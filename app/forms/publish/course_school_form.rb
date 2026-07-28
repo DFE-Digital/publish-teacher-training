@@ -15,7 +15,10 @@ module Publish
 
     # Every school the provider could attach, in the order they are listed.
     def schools
-      @schools ||= ProviderSchools::Identity.ordered_school_scope(provider: course.provider)
+      @schools ||= course.provider.schools
+        .joins(:gias_school)
+        .includes(:gias_school)
+        .order("gias_school.name")
     end
 
     def schools_collapse_threshold
@@ -29,11 +32,7 @@ module Publish
   private
 
     def current_school_uuids
-      if after_schools_remodel_cycle?
-        course.schools.includes(:provider_school).map { |course_school| course_school.provider_school.uuid }
-      else
-        course.sites.map(&:uuid)
-      end
+      course.schools.joins(:provider_school).pluck("provider_school.uuid")
     end
 
     def no_schools_selected
@@ -41,8 +40,8 @@ module Publish
       return if ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
       if course.recruitment_cycle_rollover_period_2026?
-        errors.add(:school_uuids, :check_schools) if course.sites.school.present?
-        errors.add(:school_uuids, :enter_schools) if course.sites.school.blank?
+        error = course.schools.exists? ? :check_schools : :enter_schools
+        errors.add(:school_uuids, error)
       else
         errors.add(:school_uuids, :no_schools)
       end
@@ -52,22 +51,10 @@ module Publish
       school_uuids = Array(params[:school_uuids]).compact_blank.uniq
       return if school_uuids.empty?
 
-      known_school_uuids = school_scope.where(uuid: school_uuids).pluck(:uuid)
+      known_school_uuids = course.provider.schools.where(uuid: school_uuids).pluck(:uuid)
       return if (school_uuids - known_school_uuids).empty?
 
       errors.add(:school_uuids, :school_uuids_invalid)
-    end
-
-    def school_scope
-      if after_schools_remodel_cycle?
-        course.provider.schools
-      else
-        course.provider.sites
-      end
-    end
-
-    def after_schools_remodel_cycle?
-      course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
     end
   end
 end

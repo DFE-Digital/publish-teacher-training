@@ -9,7 +9,11 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
   let!(:site_one) { create(:site, provider:, location_name: "School A") }
   let!(:site_two) { create(:site, provider:, location_name: "School B") }
   let!(:course)   { create(:course, :publishable, provider:, course_code: "XYZ", sites: [site_one, site_two], accrediting_provider: accredited_provider, enrichments: [build(:course_enrichment, :rolled_over)]) }
-  let(:user)      { create(:user, providers: [provider]) }
+  let!(:provider_school_one) { create_provider_school_for(site_one) }
+  let!(:provider_school_two) { create_provider_school_for(site_two) }
+  let!(:course_school_one) { create_course_school_for(provider_school_one) }
+  let!(:course_school_two) { create_course_school_for(provider_school_two) }
+  let(:user) { create(:user, providers: [provider]) }
 
   before do
     sign_in_system_test(user:)
@@ -133,5 +137,24 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
   def then_course_is_published
     expect(page).to have_content("Your course has been scheduled.")
     expect(course.reload.is_published?).to be(true)
+  end
+
+  def create_provider_school_for(site)
+    create(
+      :provider_school,
+      provider:,
+      gias_school: create(:gias_school, name: site.location_name, urn: site.urn),
+      site_code: site.code,
+      uuid: site.uuid,
+    )
+  end
+
+  def create_course_school_for(provider_school)
+    create(
+      :course_school,
+      course:,
+      provider_school:,
+      gias_school: provider_school.gias_school,
+    )
   end
 end
