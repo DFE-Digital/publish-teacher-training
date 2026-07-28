@@ -89,7 +89,7 @@ module Publish
 
       def start_date_options
         @start_date_options ||= ::Courses::CycleStartMonths.for(provider.recruitment_cycle_year).map do |month|
-          Option.new(value: month.strftime("%Y-%m"), label: I18n.l(month, format: :short))
+          Option.new(value: month.to_fs(:year_and_month), label: I18n.l(month, format: :short))
         end
       end
 

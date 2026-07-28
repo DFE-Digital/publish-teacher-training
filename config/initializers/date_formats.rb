@@ -15,6 +15,11 @@ Date::DATE_FORMATS[:short_month_and_year] = "%b %Y"
 Time::DATE_FORMATS[:day_and_month] = "%-d %B"
 Date::DATE_FORMATS[:day_and_month] = "%-d %B"
 
+# Machine format for month-valued query string params, not for display. Both
+# registrations are used: the producer formats a Time, the consumer parses a Date.
+Time::DATE_FORMATS[:year_and_month] = "%Y-%m"
+Date::DATE_FORMATS[:year_and_month] = "%Y-%m"
+
 Time::DATE_FORMATS[:govuk_date_and_time] = lambda do |time|
   format = if time.min.zero?
              "%l%P on %e %B %Y"
