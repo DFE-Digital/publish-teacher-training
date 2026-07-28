@@ -183,7 +183,7 @@ module Publish
       end
 
       def current_or_previous_cycle?
-        CycleBranch.current_or_previous?(provider.recruitment_cycle_year)
+        Find::CycleTimetable.current_or_previous_year?(provider.recruitment_cycle_year)
       end
 
       # Months arrive as "YYYY-MM". Compared as half-open ranges rather than by
