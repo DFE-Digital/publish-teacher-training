@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Courses::ActiveFilters::View, type: :component do
+RSpec.describe Courses::ActiveFiltersComponent, type: :component do
   subject(:result) { rendered.text.gsub(/\r?\n/, " ").squeeze(" ").strip }
 
   # The Find results page, whose URLs this component used to build itself.
