@@ -103,6 +103,13 @@ module Find
       current_year - 1
     end
 
+    # Whether a cycle year is the current one or the one before it, as opposed
+    # to a future cycle. Callers use this to branch on how a cycle behaves —
+    # Publish, for one, picks its course status vocabulary from it.
+    def self.current_or_previous_year?(year)
+      [current_year, previous_year].include?(year.to_i)
+    end
+
     def self.find_closes(year = current_year)
       date(:find_closes, year)
     end

@@ -252,5 +252,27 @@ module Find
         end
       end
     end
+
+    describe ".current_or_previous_year?" do
+      it "is true for the current cycle year" do
+        expect(described_class.current_or_previous_year?(described_class.current_year)).to be(true)
+      end
+
+      it "is true for the previous cycle year" do
+        expect(described_class.current_or_previous_year?(described_class.previous_year)).to be(true)
+      end
+
+      it "is false for the next cycle year" do
+        expect(described_class.current_or_previous_year?(described_class.next_year)).to be(false)
+      end
+
+      it "is false for a year before the previous cycle" do
+        expect(described_class.current_or_previous_year?(described_class.previous_year - 1)).to be(false)
+      end
+
+      it "accepts the year as a string" do
+        expect(described_class.current_or_previous_year?(described_class.current_year.to_s)).to be(true)
+      end
+    end
   end
 end

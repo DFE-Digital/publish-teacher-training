@@ -59,7 +59,7 @@ module Publish
       end
 
       def current_or_previous_cycle?
-        CycleBranch.current_or_previous?(recruitment_cycle_year)
+        Find::CycleTimetable.current_or_previous_year?(recruitment_cycle_year)
       end
 
       def content_status
