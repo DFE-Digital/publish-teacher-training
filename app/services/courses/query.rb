@@ -551,14 +551,12 @@ module Courses
       published_course_sql
     end
 
-    # SQL mirror of Course#is_published? (content_status in published /
-    # published_with_unpublished_changes). A course counts as published when it
+    # SQL mirror of Course#is_published?. A course counts as published when it
     # has a published enrichment AND its latest enrichment has not since been
     # rolled over or withdrawn. The published row + "latest not rolled_over /
-    # withdrawn" pair is what keeps a draft-on-top-of-published course findable
-    # (unpublished changes, like fee courses) while excluding draft-only,
-    # rolled-over and withdrawn courses. The created_at/id ordering matches
-    # CourseEnrichment.most_recent.
+    # withdrawn" pair keeps courses findable when a legacy subsequent draft is
+    # still present, while excluding draft-only, rolled-over and withdrawn
+    # courses. The created_at/id ordering matches CourseEnrichment.most_recent.
     def published_course_sql
       <<~SQL
         EXISTS (

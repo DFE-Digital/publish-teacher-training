@@ -9,20 +9,20 @@ module Publish
     #
     # The query returns each course pre-ordered for grouping (self-accredited
     # first, then accredited provider name, then course name/code) and decorated
-    # with three computed columns so the list needs no enrichment or site rows:
+    # with two computed columns so the list needs no enrichment or site rows:
     #
-    # - +group_name+               the accredited provider heading (NULL = self-accredited)
-    # - +content_status+           draft / published / withdrawn / rolled_over /
-    #                              published_with_unpublished_changes
-    # - +has_unpublished_changes+  boolean
+    # - +group_name+      the accredited provider heading (NULL = self-accredited)
+    # - +content_status+  draft / published / withdrawn / rolled_over
     #
-    # content_status and has_unpublished_changes are a SQL port of
-    # +Courses::ContentStatusService+ and +Course#has_unpublished_changes?+; the
-    # Ruby remains the source of truth and a cross-check spec asserts agreement.
+    # content_status is a SQL port of +Courses::ContentStatusService+; the Ruby
+    # remains the source of truth and a cross-check spec asserts agreement.
     class Query
       # Ports Courses::ContentStatusService#execute. Held as a constant because
       # Postgres cannot reference a SELECT alias from WHERE, so the status filter
       # has to repeat the expression rather than reuse the +content_status+ column.
+      # Subsequent drafts (published before, then edited) used to map to
+      # published_with_unpublished_changes; treat them as published until the
+      # data migration deletes those drafts.
       CONTENT_STATUS_SQL = <<~SQL.squish
         CASE
           WHEN enrichment_stats.latest_status = 2 THEN 'rolled_over'
@@ -30,14 +30,14 @@ module Publish
           WHEN enrichment_stats.latest_status = 3 THEN 'withdrawn'
           WHEN enrichment_stats.latest_status IS NULL THEN 'draft'
           WHEN enrichment_stats.latest_published_at IS NOT NULL OR enrichment_stats.total > 1
-            THEN 'published_with_unpublished_changes'
+            THEN 'published'
           ELSE 'draft'
         END
       SQL
 
       # The content statuses that render as Open, Closed or Scheduled depending
       # on the application status and the cycle.
-      PUBLISHED_CONTENT_STATUSES = %w[published published_with_unpublished_changes].freeze
+      PUBLISHED_CONTENT_STATUSES = %w[published].freeze
 
       # Filter option -> Course enum keys. Both mirror Courses::Query (the Find
       # search query), except that selecting several options here unions them
@@ -231,11 +231,6 @@ module Publish
           LEFT JOIN LATERAL (
             SELECT
               COUNT(*) AS total,
-              COUNT(*) FILTER (WHERE status = 1) AS published_count,
-              COUNT(*) FILTER (WHERE status = 0) AS draft_count,
-              COUNT(*) FILTER (WHERE status = 3) AS withdrawn_count,
-              COUNT(*) FILTER (WHERE status IN (0, 2)) AS draft_or_rolled_count,
-              MAX(last_published_timestamp_utc) AS max_published_at,
               (ARRAY_AGG(status ORDER BY created_at DESC, id DESC))[1] AS latest_status,
               (ARRAY_AGG(last_published_timestamp_utc ORDER BY created_at DESC, id DESC))[1] AS latest_published_at
             FROM course_enrichment
@@ -258,21 +253,7 @@ module Publish
           END AS group_name
         SQL
 
-        # Ports Course#has_unpublished_changes? (false when all enrichments are published).
-        has_unpublished_changes = <<~SQL.squish
-          (
-            NOT (
-              (enrichment_stats.total = 1 AND enrichment_stats.published_count >= 1)
-              OR (enrichment_stats.draft_count = 0 AND enrichment_stats.withdrawn_count = 0)
-            )
-            AND (
-              (enrichment_stats.published_count >= 1 AND enrichment_stats.draft_or_rolled_count >= 1)
-              OR (enrichment_stats.max_published_at IS NOT NULL AND COALESCE(enrichment_stats.latest_status, -1) <> 3)
-            )
-          ) AS has_unpublished_changes
-        SQL
-
-        @scope.select("course.*", group_name, "#{CONTENT_STATUS_SQL} AS content_status", has_unpublished_changes)
+        @scope.select("course.*", group_name, "#{CONTENT_STATUS_SQL} AS content_status")
       end
 
       # Self-accredited group first, then case-insensitive by accredited provider
