@@ -45,6 +45,13 @@ class Provider::School < ApplicationRecord
             },
             if: -> { site_code == MAIN_SITE_CODE }
 
+  # Driven from provider_school (tens of rows per provider) through the
+  # gias_school primary key. Deliberately not a subquery on GiasSchool, which
+  # would scan every school in the country per page render.
+  scope :for_course_level, lambda { |level|
+    joins(:gias_school).merge(GiasSchool.for_course_level(level))
+  }
+
   def location_name
     return "#{gias_school.name} (Main Site)" if main_site?
 

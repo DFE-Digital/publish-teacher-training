@@ -151,6 +151,42 @@ describe Provider::School do
     end
   end
 
+  describe ".for_course_level" do
+    let(:provider) { create(:provider) }
+
+    def provider_school(phase_code:, site_code:)
+      create(:provider_school, provider:, site_code:, gias_school: create(:gias_school, phase_code:))
+    end
+
+    it "keeps schools whose GIAS phase matches the course level" do
+      primary = provider_school(phase_code: :primary, site_code: "A")
+      provider_school(phase_code: :secondary, site_code: "B")
+
+      expect(described_class.for_course_level("primary")).to contain_exactly(primary)
+    end
+
+    it "keeps all-through schools on both primary and secondary" do
+      all_through = provider_school(phase_code: :all_through, site_code: "A")
+
+      expect(described_class.for_course_level("primary")).to include(all_through)
+      expect(described_class.for_course_level("secondary")).to include(all_through)
+    end
+
+    it "composes with other conditions on the relation" do
+      primary = provider_school(phase_code: :primary, site_code: "A")
+      other_provider_primary = create(
+        :provider_school,
+        site_code: "A",
+        gias_school: create(:gias_school, phase_code: :primary),
+      )
+
+      result = described_class.for_course_level("primary").where(provider:)
+
+      expect(result).to contain_exactly(primary)
+      expect(result).not_to include(other_provider_primary)
+    end
+  end
+
   # Transitional: legacy_site and register_import? go once the pickers no
   # longer surface rollover cues that only Site records.
   describe "#legacy_site" do

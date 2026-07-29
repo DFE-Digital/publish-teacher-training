@@ -18,6 +18,66 @@ class GiasSchool < ApplicationRecord
                     },
                   }
 
+  # Which GIAS education phases belong to each course level. Providers were
+  # being offered every school in their account regardless of the course, so a
+  # secondary course listed primary schools.
+  PHASE_CODES_FOR_COURSE_LEVEL = {
+    "primary" => %w[nursery primary middle_deemed_primary all_through],
+    "secondary" => %w[secondary middle_deemed_secondary all_through],
+    "further_education" => %w[sixteen_plus],
+  }.freeze
+
+  # StatutoryLowAge/StatutoryHighAge arrive as free text: "3", "11", "", nil,
+  # and occasionally something non-numeric. Strip every non-digit then NULLIF,
+  # so a value with no digits becomes NULL rather than raising on ::int.
+  #
+  # Deliberately not a CASE guard — Postgres does not promise that a CASE
+  # condition is evaluated before the cast in its branch, so a guarded cast can
+  # still raise 22P02. regexp_replace + NULLIF cannot.
+  MINIMUM_AGE_SQL = "NULLIF(regexp_replace(COALESCE(gias_school.minimum_age, ''), '[^0-9]', '', 'g'), '')::int"
+  MAXIMUM_AGE_SQL = "NULLIF(regexp_replace(COALESCE(gias_school.maximum_age, ''), '[^0-9]', '', 'g'), '')::int"
+
+  # "Not applicable" is the largest phase in GIAS, so it is segmented by age
+  # range instead. More than one of these can be true for the same school.
+  NOT_APPLICABLE_AGE_PREDICATES = {
+    "primary" => "#{MINIMUM_AGE_SQL} <= 8",
+    "secondary" => "(#{MINIMUM_AGE_SQL} BETWEEN 9 AND 14) " \
+                   "OR (#{MINIMUM_AGE_SQL} <= 9 AND #{MAXIMUM_AGE_SQL} >= 15)",
+    "further_education" => "#{MINIMUM_AGE_SQL} >= 15",
+  }.freeze
+
+  # Schools relevant to a course of this level. Fails open: a school we cannot
+  # classify — no phase code, a code this enum does not know, or "not
+  # applicable" with no usable age range — shows on every level, so a provider
+  # never loses access to a school because of a GIAS data gap.
+  scope :for_course_level, lambda { |level|
+    phase_codes_for_level = PHASE_CODES_FOR_COURSE_LEVEL[level.to_s]
+    next all if phase_codes_for_level.nil?
+
+    # The outer parentheses are load-bearing: Rails ANDs raw-SQL fragments onto
+    # a relation without wrapping them, so an unparenthesised disjunction here
+    # would swallow every other condition.
+    where(
+      <<~SQL.squish,
+        (
+          gias_school.phase_code IN (:in_phase)
+          OR gias_school.phase_code IS NULL
+          OR gias_school.phase_code NOT IN (:known_phases)
+          OR (
+            gias_school.phase_code = :not_applicable
+            AND (
+              #{MINIMUM_AGE_SQL} IS NULL
+              OR (#{NOT_APPLICABLE_AGE_PREDICATES.fetch(level.to_s)})
+            )
+          )
+        )
+      SQL
+      in_phase: phase_codes.values_at(*phase_codes_for_level),
+      known_phases: phase_codes.values,
+      not_applicable: phase_codes[:not_applicable],
+    )
+  }
+
   scope :available, lambda {
     where(status_code: [
       GiasSchool.status_codes[:open],
