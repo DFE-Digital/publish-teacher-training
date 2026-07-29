@@ -20,6 +20,7 @@ class Provider::School < ApplicationRecord
 
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :urn, :address1, :address2, :address3, :town, :postcode, to: :gias_school
+  delegate :closed?, to: :gias_school, prefix: :gias_school
 
   validates :site_code, presence: true
   validates :gias_school_id, uniqueness: { scope: %i[provider_id site_code] }

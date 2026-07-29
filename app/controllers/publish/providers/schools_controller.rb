@@ -10,6 +10,7 @@ module Publish
 
       def index
         @pagy, @schools = pagy(ProviderSchools::Identity.ordered_school_scope(provider:), limit: PER_PAGE)
+        @closed_urns = closed_urns_for(@schools)
       end
 
       def show; end
@@ -64,6 +65,15 @@ module Publish
 
       def reset_urn_form
         URNForm.new(provider).clear_stash
+      end
+
+      # Resolve which of the listed schools point at a closed GIAS record in a
+      # single query, keyed by URN (shared by Site and Provider::School rows).
+      def closed_urns_for(schools)
+        urns = schools.map(&:urn).compact_blank
+        return Set.new if urns.empty?
+
+        GiasSchool.closed.where(urn: urns).pluck(:urn).to_set
       end
     end
   end

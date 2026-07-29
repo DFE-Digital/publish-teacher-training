@@ -36,6 +36,28 @@ describe Site do
     end
   end
 
+  describe "#gias_school_closed?" do
+    it "is true when a closed GIAS school matches the urn" do
+      create(:gias_school, :closed, urn: "654321")
+
+      expect(build(:site, urn: "654321")).to be_gias_school_closed
+    end
+
+    it "is false when the matching GIAS school is open" do
+      create(:gias_school, :open, urn: "123456")
+
+      expect(build(:site, urn: "123456")).not_to be_gias_school_closed
+    end
+
+    it "is false when the urn matches no GIAS school" do
+      expect(build(:site, urn: "999999")).not_to be_gias_school_closed
+    end
+
+    it "is false when the site has no urn" do
+      expect(build(:site, urn: nil)).not_to be_gias_school_closed
+    end
+  end
+
   describe "school" do
     it { is_expected.to validate_presence_of(:location_name) }
     it { is_expected.to validate_presence_of(:address1) }

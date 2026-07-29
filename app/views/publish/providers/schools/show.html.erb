@@ -7,7 +7,10 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= school.location_name %></h1>
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3">
+          <%= @site.location_name %>
+          <%= render ClosedSchoolTagComponent.new(closed: school.closed?) %>
+        </h1>
       </legend>
       <%= render GovukComponent::SummaryListComponent.new do |component|
             component.with_row do |row|

@@ -20,6 +20,16 @@ describe Provider::School do
     end
   end
 
+  describe "#gias_school_closed?" do
+    it "is true when the GIAS school is closed" do
+      expect(build(:provider_school, gias_school: build(:gias_school, :closed))).to be_gias_school_closed
+    end
+
+    it "is false when the GIAS school is open" do
+      expect(build(:provider_school, gias_school: build(:gias_school, :open))).not_to be_gias_school_closed
+    end
+  end
+
   describe "validations" do
     it { is_expected.to validate_presence_of(:site_code) }
 
