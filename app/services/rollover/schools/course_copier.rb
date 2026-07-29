@@ -7,7 +7,7 @@ module Rollover
         lookup = new_provider_schools(new_provider)
         existing = new_course.schools.index_by(&:provider_school_id)
 
-        course.schools.includes(:provider_school).find_each do |course_school|
+        course.schools.with_available_gias_school.includes(:provider_school).find_each do |course_school|
           old_provider_school = course_school.provider_school
           new_provider_school = lookup[[old_provider_school.gias_school_id, old_provider_school.site_code]]
 

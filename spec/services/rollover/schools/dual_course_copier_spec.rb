@@ -60,4 +60,22 @@ RSpec.describe Rollover::Schools::DualCourseCopier do
       gias_school_id: course_school.gias_school_id,
     )
   end
+
+  it "copies neither the SiteStatus nor the Course::School when the GIAS record has closed" do
+    closed_gias_school = create(:gias_school, :closed)
+
+    closed_site = create(:site, provider:, code: "Z", urn: closed_gias_school.urn)
+    create(:site_status, course:, site: closed_site, status: :running)
+    # A matching new site exists, so exclusion must come from the availability
+    # filter rather than merely a missing destination site.
+    create(:site, provider: new_provider, code: "Z", urn: closed_gias_school.urn)
+
+    closed_provider_school = create(:provider_school, provider:, gias_school: closed_gias_school, site_code: "Y")
+    create(:course_school, course:, provider_school: closed_provider_school, gias_school: closed_gias_school, site_code: "Y")
+
+    copy_schools
+
+    expect(new_course.site_statuses.map { |site_status| site_status.site.code }).not_to include("Z")
+    expect(new_course.schools.pluck(:gias_school_id)).not_to include(closed_gias_school.id)
+  end
 end
