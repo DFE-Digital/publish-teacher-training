@@ -6,10 +6,6 @@ module API
       class SerializableCourse < JSONAPI::Serializable::Resource
         extend JSONAPI::Serializable::Resource::ConditionalFields
 
-        COURSE_STATE_MAPPING = {
-          published_with_unpublished_changes: :published,
-        }.freeze
-
         class << self
           # Attributes that should be nullified when the enrichment is version 2
           NULLIFY_ENRICHMENT_ATTRIBUTES = %i[about_course fee_details how_school_placements_work].freeze
@@ -152,7 +148,7 @@ module API
         end
 
         attribute :state do
-          COURSE_STATE_MAPPING[@object.content_status] || @object.content_status
+          @object.content_status
         end
 
         attribute :summary do

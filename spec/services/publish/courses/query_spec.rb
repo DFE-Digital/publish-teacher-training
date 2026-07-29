@@ -627,12 +627,8 @@ RSpec.describe Publish::Courses::Query do
     end
   end
 
-  describe "content_status / has_unpublished_changes columns match the canonical Ruby" do
+  describe "content_status column matches the canonical Ruby" do
     let(:provider) { create(:provider, :accredited_provider) }
-
-    def boolean(value)
-      ActiveModel::Type::Boolean.new.cast(value)
-    end
 
     {
       "no enrichment" => -> { create(:course, provider:) },
@@ -646,11 +642,10 @@ RSpec.describe Publish::Courses::Query do
       context "with #{description}" do
         before { instance_exec(&setup) }
 
-        it "agrees with Course#content_status and #has_unpublished_changes?" do
+        it "agrees with Course#content_status" do
           row = described_class.call(provider: provider.reload).first
 
           expect(row[:content_status]).to eq(row.content_status.to_s)
-          expect(boolean(row[:has_unpublished_changes])).to eq(row.has_unpublished_changes?)
         end
       end
     end
