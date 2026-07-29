@@ -3,9 +3,9 @@
 module Publish
   module Courses
     # Renders a course's status tag from the read-model columns produced by
-    # Publish::Courses::Query (content_status + has_unpublished_changes), the
-    # course's application_status, and the recruitment-cycle branch — so the list
-    # needs no enrichment or site rows.
+    # Publish::Courses::Query (content_status), the course's application_status,
+    # and the recruitment-cycle branch — so the list needs no enrichment or
+    # site rows.
     #
     # The text/colour mapping mirrors ApplicationDecorator#status_tags*; a
     # cross-check spec asserts this component renders identically to
@@ -16,18 +16,15 @@ module Publish
         withdrawn: { text: "Withdrawn", colour: "red" },
         empty: { text: "Draft", colour: "grey" },
         draft: { text: "Draft", colour: "grey" },
-        published_with_unpublished_changes: { text: "Open *", colour: "teal" },
         rolled_over: { text: "Rolled over", colour: "yellow" },
       }.freeze
 
       CLOSED_APPLICATION_STATUS_TAGS = OPEN_APPLICATION_STATUS_TAGS.merge(
         published: { text: "Closed", colour: "purple" },
-        published_with_unpublished_changes: { text: "Closed *", colour: "purple" },
       ).freeze
 
       SCHEDULED_STATUS_TAGS = OPEN_APPLICATION_STATUS_TAGS.merge(
         published: { text: "Scheduled", colour: "blue" },
-        published_with_unpublished_changes: { text: "Scheduled *", colour: "blue" },
       ).freeze
 
       def initialize(course:, recruitment_cycle_year:, classes: [], html_attributes: {})
@@ -37,9 +34,7 @@ module Publish
       end
 
       def call
-        rendered = helpers.govuk_tag(text: status[:text], colour: status[:colour])
-        rendered += unpublished_hint if has_unpublished_changes?
-        rendered
+        helpers.govuk_tag(text: status[:text], colour: status[:colour])
       end
 
     private
@@ -64,17 +59,6 @@ module Publish
 
       def content_status
         course.read_attribute(:content_status)
-      end
-
-      def has_unpublished_changes?
-        ActiveModel::Type::Boolean.new.cast(course.read_attribute(:has_unpublished_changes))
-      end
-
-      def unpublished_hint
-        helpers.tag.span(
-          "* Unpublished changes",
-          class: "govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0 govuk-!-margin-top-1",
-        )
       end
     end
   end

@@ -25,16 +25,22 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     and_the_course_is_open
   end
 
-  scenario "i can re-publish a course" do
+  scenario "changes to an open published course go live immediately" do
     and_i_have_previously_published_a_course
     when_i_make_some_new_changes
-    then_i_should_see_the_unpublished_changes_message
-    and_i_visit_the_course_page
-    and_i_do_not_see_the_unpublished_content_on_find
-    when_i_return_to_publish
-    and_i_should_see_the_publish_button
-    and_i_click_the_publish_link
+    then_i_see_the_changes_are_now_live_message
+    and_i_do_not_see_the_publish_button
     then_i_see_the_content_on_find
+    and_the_course_is_open
+  end
+
+  scenario "changes to a closed published course go live without opening the course" do
+    and_i_have_previously_published_a_closed_course
+    when_i_make_some_new_changes
+    then_i_see_the_changes_are_now_live_message
+    and_i_do_not_see_the_publish_button
+    then_i_see_the_content_on_find
+    and_the_course_is_closed
   end
 
   scenario "attempting to publish with errors" do
@@ -63,6 +69,11 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     and_i_click_the_publish_link
     then_i_should_see_a_success_message
     and_the_course_is_published
+  end
+
+  def and_i_have_previously_published_a_closed_course
+    and_i_have_previously_published_a_course
+    course.update!(application_status: :closed)
   end
 
   def and_there_is_a_draft_course_i_want_to_publish
@@ -125,6 +136,10 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     expect(course.reload).to be_application_status_open
   end
 
+  def and_the_course_is_closed
+    expect(course.reload).to be_application_status_closed
+  end
+
   def when_i_make_some_new_changes
     # Interview process and location
     visit fields_interview_process_publish_provider_recruitment_cycle_course_path(
@@ -182,34 +197,20 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     click_on "Update fees and financial support"
   end
 
-  def then_i_should_see_the_unpublished_changes_message
-    expect(page).to have_content("* Unpublished changes")
+  def then_i_see_the_changes_are_now_live_message
+    within(".govuk-notification-banner--success") do
+      expect(page).to have_content("These changes are now live.")
+      expect(page).to have_no_content("* Unpublished changes")
+    end
+  end
+
+  def and_i_do_not_see_the_publish_button
+    when_i_return_to_publish
+    expect(publish_provider_courses_show_page.course_button_panel).to have_no_publish_button
   end
 
   def and_i_visit_the_course_page
     visit find_course_url(provider.provider_code, course.course_code)
-  end
-
-  def and_i_do_not_see_the_unpublished_content_on_find
-    expect(page).to have_no_content("some new interview process content")
-    expect(page).to have_no_content("Online interviews are available for this course")
-
-    expect(page).to have_no_content("some new theoretical training content")
-    expect(page).to have_no_content("some new assessment methods content")
-
-    expect(page).to have_no_content("some new what will trainees do on placements content")
-    expect(page).to have_no_content("some new how will they be supported and mentored content")
-
-    expect(page).to have_no_content("some new how do you decide which schools to place trainees in content")
-    expect(page).to have_no_content("some new how much time will they spend in each school content")
-    expect(page).to have_no_content("some new where will theoretical training take place content")
-    expect(page).to have_no_content("some new how much time will they spend in theoretical training content")
-
-    expect(page).to have_no_content("£10,000")
-    expect(page).to have_no_content("£9,000")
-    expect(page).to have_no_content("some new when are the fees due content")
-    expect(page).to have_no_content("some new additional fees or costs content")
-    expect(page).to have_no_content("some new financial support content")
   end
 
   def then_i_see_the_content_on_find
@@ -240,10 +241,6 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     publish_provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
-  end
-
-  def and_i_should_see_the_publish_button
-    expect(publish_provider_courses_show_page.course_button_panel.publish_button).to be_visible
   end
 
   def then_i_should_see_an_error_message_for_the_gcses

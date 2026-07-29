@@ -59,13 +59,13 @@ RSpec.describe "Course show" do
     end
   end
 
-  describe "with a published with unpublished changes course" do
-    scenario "i can view the unpublished partial" do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_unpublished_changes], funding_type: "salary"))
+  describe "with a published course that has a legacy subsequent draft" do
+    scenario "i can view the published partial" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [build(:course_enrichment, :published), course_enrichment_unpublished_changes], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_unpublished_changes_course
       and_i_should_see_the_course_button_panel
-      and_i_should_see_the_unpublished_with_changes_partial
+      and_i_should_see_the_published_partial
       and_i_should_not_see_the_rollover_button
     end
   end
@@ -207,14 +207,6 @@ private
 
   alias_method :then_i_should_see_the_course_button_panel, :and_i_should_see_the_course_button_panel
 
-  def and_i_should_see_the_unpublished_with_changes_partial
-    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
-      expect(course_button_panel).to have_publish_button
-      expect(course_button_panel).to have_withdraw_link
-      expect(course_button_panel).to have_last_publish_date
-    end
-  end
-
   def and_i_should_see_the_unpublished_partial
     publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_publish_button
@@ -229,6 +221,7 @@ private
       expect(course_button_panel).to have_withdraw_link
       expect(course_button_panel).to have_last_publish_date
       expect(course_button_panel).not_to have_delete_link
+      expect(course_button_panel).not_to have_publish_button
     end
   end
 

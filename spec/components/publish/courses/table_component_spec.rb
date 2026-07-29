@@ -6,8 +6,8 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
   subject(:render_component) { render_inline(described_class.new(courses:, provider:)) }
 
   let(:provider) { create(:provider) }
-  # Rows carry the read-model columns (content_status, has_unpublished_changes), so
-  # source them through the query exactly as the page does.
+  # Rows carry the read-model column (content_status), so source them through
+  # the query exactly as the page does.
   let(:courses) { Publish::Courses::Query.call(provider: provider.reload).map(&:decorate) }
 
   it "renders the Course, Course information and Status column headers" do

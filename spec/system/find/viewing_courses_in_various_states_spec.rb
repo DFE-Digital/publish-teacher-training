@@ -9,8 +9,8 @@ RSpec.describe "viewing courses in various states" do
     then_i_should_see_the_course
   end
 
-  scenario "viewing a published with unpublished changes course" do
-    given_there_is_a_published_with_unpublished_changes_course
+  scenario "viewing a published course with a legacy subsequent draft" do
+    given_there_is_a_published_course_with_a_legacy_subsequent_draft
     when_i_visit_the_course_page
     then_i_should_see_the_course
   end
@@ -85,7 +85,7 @@ RSpec.describe "viewing courses in various states" do
     )
   end
 
-  def given_there_is_a_published_with_unpublished_changes_course
+  def given_there_is_a_published_course_with_a_legacy_subsequent_draft
     @course ||= create(
       :course,
       enrichments: [
