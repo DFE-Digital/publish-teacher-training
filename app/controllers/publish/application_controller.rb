@@ -4,6 +4,7 @@ module Publish
   class ApplicationController < ::ApplicationController
     include Authentication
     include SuccessMessage
+    include ConfirmLiveChanges
 
     before_action :check_interrupt_redirects
     before_action :clear_previous_cycle_year_in_session, unless: -> { RecruitmentCycle.upcoming_cycles_open_to_publish? }

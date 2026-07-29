@@ -1,0 +1,32 @@
+<% content_for :page_title, @confirm_live_changes.page_title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(@confirm_live_changes.back_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with url: @confirm_live_changes.update_path, method: @confirm_live_changes.method, local: true do |f| %>
+      <% @confirm_live_changes.each_hidden_field do |name, value| %>
+        <%= hidden_field_tag name, value %>
+      <% end %>
+
+      <%= hidden_field_tag :confirm_publish, Publish::ConfirmLiveChanges::CONFIRM_PUBLISH_PARAM %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @confirm_live_changes.course_name_and_code %></span>
+        <%= @confirm_live_changes.heading %>
+      </h1>
+
+      <p class="govuk-body">
+        <%= @confirm_live_changes.body %>
+      </p>
+
+      <%= f.govuk_submit @confirm_live_changes.continue_label %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to t("cancel"), @confirm_live_changes.cancel_path %>
+    </p>
+  </div>
+</div>
