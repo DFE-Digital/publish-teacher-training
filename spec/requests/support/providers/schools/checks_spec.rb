@@ -15,6 +15,20 @@ RSpec.describe "Support provider school checks" do
     login_user(admin)
   end
 
+  it "does not add an unavailable GIAS school" do
+    closed_school = create(:gias_school, :closed)
+
+    expect {
+      put support_recruitment_cycle_provider_schools_check_path(
+        recruitment_cycle.year,
+        provider,
+        school_id: closed_school.id,
+      )
+    }.not_to(change { provider.schools.count })
+
+    expect(response).to have_http_status(:not_found)
+  end
+
   it "rolls back the legacy Site when Provider::School creation fails" do
     allow(ProviderSchools::Creator).to receive(:call).and_raise(StandardError, "provider school failed")
 

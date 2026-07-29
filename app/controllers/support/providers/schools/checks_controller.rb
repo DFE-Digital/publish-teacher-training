@@ -69,7 +69,7 @@ module Support
         # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
         def gias_school
-          @gias_school ||= GiasSchool.find(params[:school_id])
+          @gias_school ||= GiasSchool.available.find(params[:school_id])
         end
 
         def provider
