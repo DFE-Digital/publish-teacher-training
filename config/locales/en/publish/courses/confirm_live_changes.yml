@@ -1,0 +1,8 @@
+en:
+  publish:
+    courses:
+      confirm_live_changes:
+        page_title: Are you sure you want to publish your changes to '%{section}'?
+        heading: Are you sure you want to publish your changes to '%{section}'?
+        body: Your changes will go live immediately.
+        continue: Continue and publish changes
