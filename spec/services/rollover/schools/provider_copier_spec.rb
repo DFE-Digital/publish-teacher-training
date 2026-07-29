@@ -28,4 +28,12 @@ RSpec.describe Rollover::Schools::ProviderCopier do
 
     expect(new_provider.schools.count).to eq(2)
   end
+
+  it "does not copy a provider school whose GIAS record has closed" do
+    create(:provider_school, provider:, gias_school: create(:gias_school, :closed), site_code: "C")
+
+    copy_schools
+
+    expect(new_provider.schools.pluck(:site_code)).not_to include("C")
+  end
 end

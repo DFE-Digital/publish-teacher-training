@@ -14,6 +14,10 @@ class Provider::School < ApplicationRecord
 
   has_many :course_schools, class_name: "Course::School", inverse_of: :provider_school, dependent: :destroy
 
+  # Provider schools whose GIAS record is still available (i.e. not closed).
+  # Used to keep closed schools out of the add-course picker and the rollover.
+  scope :with_available_gias_school, -> { joins(:gias_school).merge(GiasSchool.available) }
+
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :urn, :address1, :address2, :address3, :town, :postcode, to: :gias_school
 

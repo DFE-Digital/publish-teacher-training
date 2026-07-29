@@ -11,6 +11,15 @@ describe Provider::School do
     it { is_expected.to have_many(:course_schools).class_name("Course::School").dependent(:destroy) }
   end
 
+  describe ".with_available_gias_school" do
+    it "excludes provider schools whose GIAS record is closed" do
+      available = create(:provider_school, gias_school: create(:gias_school, :open))
+      create(:provider_school, gias_school: create(:gias_school, :closed))
+
+      expect(described_class.with_available_gias_school).to contain_exactly(available)
+    end
+  end
+
   describe "validations" do
     it { is_expected.to validate_presence_of(:site_code) }
 

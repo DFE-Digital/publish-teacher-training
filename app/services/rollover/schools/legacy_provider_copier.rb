@@ -10,7 +10,7 @@ module Rollover
       def execute(provider:, new_provider:)
         result = { copied: 0, skipped: [] }
 
-        provider.sites.each do |site|
+        provider.sites.with_available_gias_school.each do |site|
           site_result = site_copier.execute(site:, new_provider:)
 
           if site_result.success?
