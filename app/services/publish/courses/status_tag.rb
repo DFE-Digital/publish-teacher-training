@@ -19,7 +19,7 @@ module Publish
         when "rolled_over" then :rolled_over
         when "withdrawn" then :withdrawn
         else # published / published_with_unpublished_changes
-          if CycleBranch.current_or_previous?(course.recruitment_cycle.year)
+          if Find::CycleTimetable.current_or_previous_year?(course.recruitment_cycle.year)
             course.application_status_open? ? :open : :closed
           else
             :scheduled
