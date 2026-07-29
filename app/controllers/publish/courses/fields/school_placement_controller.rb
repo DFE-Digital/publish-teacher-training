@@ -25,13 +25,20 @@ module Publish
             course_enrichment,
             params: school_placement_params,
           )
+          section_name = CourseEnrichment.human_attribute_name("what-trainee-do-in-school-success")
 
-          if @school_placement_form.save!
-            course_updated_message CourseEnrichment.human_attribute_name("what-trainee-do-in-school-success")
-            redirect_after_edit
-          else
+          if @school_placement_form.invalid?
             fetch_course_list_to_copy_from
             render :edit
+          elsif confirm_live_changes_if_required!(
+            section_name:,
+            form: @school_placement_form,
+            form_param_key: :publish_courses_fields_school_placement_form,
+          )
+            # rendered interstitial
+          elsif @school_placement_form.save!
+            course_updated_message section_name
+            redirect_after_edit
           end
         end
 

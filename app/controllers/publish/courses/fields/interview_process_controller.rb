@@ -19,14 +19,20 @@ module Publish
 
         def update
           @interview_process_form = Publish::Fields::InterviewProcessForm.new(course_enrichment, params: interview_process_params)
+          section_name = I18n.t("publish.courses.fields.interview_process.edit.interview_process_success")
 
-          if @interview_process_form.save!
-            course_updated_message I18n.t("publish.courses.fields.interview_process.edit.interview_process_success")
-
-            redirect_after_edit
-          else
+          if @interview_process_form.invalid?
             fetch_course_list_to_copy_from
             render :edit
+          elsif confirm_live_changes_if_required!(
+            section_name:,
+            form: @interview_process_form,
+            form_param_key: :publish_fields_interview_process_form,
+          )
+            # rendered interstitial
+          elsif @interview_process_form.save!
+            course_updated_message section_name
+            redirect_after_edit
           end
         end
 

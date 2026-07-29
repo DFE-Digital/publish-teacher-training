@@ -44,7 +44,21 @@ module Publish
           return
         end
 
-        if course_subjects_form.save!
+        if confirm_live_changes_if_required!(
+          section_name: "Subjects",
+          form: modern_languages_confirmation_form,
+          form_param_key: :course,
+          fields: %i[subjects_ids language_ids],
+          back_path: modern_languages_publish_provider_recruitment_cycle_course_path(
+            @course.provider_code, @course.recruitment_cycle_year, @course.course_code,
+            course: { subjects_ids: params.dig(:course, :subjects_ids) }
+          ),
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(
+            @course.provider_code, @course.recruitment_cycle_year, @course.course_code
+          ),
+        )
+          # rendered interstitial
+        elsif course_subjects_form.save!
           course_updated_message("Subjects")
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
@@ -84,6 +98,13 @@ module Publish
 
       def course_subjects_form
         @course_subjects_form ||= CourseSubjectsForm.new(@course, params: sorted_subject_ids)
+      end
+
+      def modern_languages_confirmation_form
+        Struct.new(:subjects_ids, :language_ids).new(
+          Array(params.dig(:course, :subjects_ids)),
+          Array(params.dig(:course, :language_ids)),
+        )
       end
 
       def error_keys

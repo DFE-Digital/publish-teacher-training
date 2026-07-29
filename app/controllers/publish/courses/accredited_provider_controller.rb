@@ -34,7 +34,20 @@ module Publish
           return render :edit if @errors.present?
         end
 
-        if @course.update(update_params)
+        if code.blank?
+          @errors = { accredited_provider_code: ["Select an accredited provider"] }
+          render :edit
+        elsif confirm_live_changes_if_required!(
+          section_name: "Accredited provider",
+          form: Struct.new(:accredited_provider_code).new(code),
+          form_param_key: :course,
+          fields: %i[accredited_provider_code],
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(
+            @course.provider_code, @course.recruitment_cycle_year, @course.course_code
+          ),
+        )
+          # rendered interstitial
+        elsif @course.update(update_params)
           course_updated_message("Accredited provider")
           redirect_to_update_successful
         else

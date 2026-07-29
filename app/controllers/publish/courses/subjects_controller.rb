@@ -12,7 +12,17 @@ module Publish
 
       def update
         if validate_subject_ids
-          if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s
+          if confirm_live_changes_if_required!(
+            section_name: section_key,
+            form: subjects_confirmation_form,
+            form_param_key: :course,
+            fields: %i[master_subject_id subordinate_subject_id],
+            cancel_path: details_publish_provider_recruitment_cycle_course_path(
+              @course.provider_code, @course.recruitment_cycle_year, @course.course_code
+            ),
+          )
+            # rendered interstitial
+          elsif params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s
             course.update(master_subject_id: params[:course][:master_subject_id])
             redirect_to(
               engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
@@ -84,6 +94,13 @@ module Publish
 
       def course_subjects_form
         @course_subjects_form ||= CourseSubjectsForm.new(@course, params: [selected_master, selected_subordinate])
+      end
+
+      def subjects_confirmation_form
+        Struct.new(:master_subject_id, :subordinate_subject_id).new(
+          selected_master,
+          selected_subordinate,
+        )
       end
 
       def modern_languages_subject_id

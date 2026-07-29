@@ -37,7 +37,17 @@ module Publish
         @current_qualification = @course.qualification
         @updated_qualification = params.dig(:course, :qualification)
 
-        if @course.update(course_params)
+        if confirm_live_changes_if_required!(
+          section_name: "Qualification",
+          form: Struct.new(:qualification).new(@updated_qualification),
+          form_param_key: :course,
+          fields: %i[qualification],
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(
+            @course.provider_code, @course.recruitment_cycle_year, @course.course_code
+          ),
+        )
+          # rendered interstitial
+        elsif @course.update(course_params)
           handle_qualification_update
         else
           handle_update_failure

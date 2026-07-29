@@ -10,17 +10,24 @@ module Publish
 
       def update
         @course_salary_form = CourseSalaryForm.new(course_enrichment, params: formatted_params)
+        section_name = I18n.t("publish.providers.course_salary.edit.course_salary")
 
-        if @course_salary_form.save!
-          course_updated_message I18n.t("publish.providers.course_salary.edit.course_salary")
+        if @course_salary_form.invalid?
+          render :edit
+        elsif confirm_live_changes_if_required!(
+          section_name:,
+          form: @course_salary_form,
+          form_param_key: funding_type,
+        )
+          # rendered interstitial
+        elsif @course_salary_form.save!
+          course_updated_message section_name
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
             course.course_code,
           )
-        else
-          render :edit
         end
       end
 

@@ -1,10 +1,12 @@
-# app/controllers/publish/courses/fields/what_you_will_study_controller.rb
+# frozen_string_literal: true
+
 module Publish
   module Courses
     module Fields
       class WhatYouWillStudyController < BaseController
         include CopyCourseContent
         before_action :authorise_user
+
         def edit
           @what_you_will_study_form = Publish::Fields::WhatYouWillStudyForm.new(
             course_enrichment,
@@ -20,13 +22,20 @@ module Publish
             course_enrichment,
             params: what_you_will_study_params,
           )
-          if @what_you_will_study_form.save!
-            course_updated_message CourseEnrichment.human_attribute_name("what_you_will_study")
+          section_name = CourseEnrichment.human_attribute_name("what_you_will_study")
 
-            redirect_after_edit
-          else
+          if @what_you_will_study_form.invalid?
             fetch_course_list_to_copy_from
             render :edit
+          elsif confirm_live_changes_if_required!(
+            section_name:,
+            form: @what_you_will_study_form,
+            form_param_key: :publish_fields_what_you_will_study_form,
+          )
+            # rendered interstitial
+          elsif @what_you_will_study_form.save!
+            course_updated_message section_name
+            redirect_after_edit
           end
         end
 

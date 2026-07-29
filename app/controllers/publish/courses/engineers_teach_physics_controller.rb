@@ -23,55 +23,39 @@ module Publish
 
       def update
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course, params: form_params)
+
         if form_params[:skip_languages_goto_confirmation].present?
-
-          if @engineers_teach_physics_form.save!
-            course_updated_message(section_key)
-
-            course.update(name: course.generate_name)
+          update_with_confirmation { save_and_redirect_to_details }
+        elsif form_params[:subjects_ids]&.include?(modern_languages_id)
+          if confirm_live_changes_if_required!(**engineers_live_changes_confirmation_args)
+            # rendered interstitial
+          else
+            course.update(campaign_name: form_params[:campaign_name])
             redirect_to(
-              details_publish_provider_recruitment_cycle_course_path(
-                provider.provider_code,
-                recruitment_cycle.year,
-                course.course_code,
+              modern_languages_publish_provider_recruitment_cycle_course_path(
+                @course.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+                course: { subjects_ids: form_params[:subjects_ids] },
               ),
             )
-          else
-            render :edit
           end
-
-        elsif form_params[:subjects_ids]&.include?(modern_languages_id)
-          course.update(campaign_name: form_params[:campaign_name])
-          redirect_to(
-            modern_languages_publish_provider_recruitment_cycle_course_path(
-              @course.provider_code,
-              @course.recruitment_cycle_year,
-              @course.course_code,
-              course: { subjects_ids: form_params[:subjects_ids] },
-            ),
-          )
         elsif form_params[:subjects_ids]&.include?(design_technology_id)
-          course.update(campaign_name: form_params[:campaign_name])
-          redirect_to(
-            design_technology_publish_provider_recruitment_cycle_course_path(
-              @course.provider_code,
-              @course.recruitment_cycle_year,
-              @course.course_code,
-              course: { subjects_ids: form_params[:subjects_ids] },
-            ),
-          )
-        elsif @engineers_teach_physics_form.save!
-          course_updated_message(section_key)
-          course.update(name: course.generate_name)
-
-          redirect_to details_publish_provider_recruitment_cycle_course_path(
-            provider.provider_code,
-            recruitment_cycle.year,
-            course.course_code,
-          )
+          if confirm_live_changes_if_required!(**engineers_live_changes_confirmation_args)
+            # rendered interstitial
+          else
+            course.update(campaign_name: form_params[:campaign_name])
+            redirect_to(
+              design_technology_publish_provider_recruitment_cycle_course_path(
+                @course.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+                course: { subjects_ids: form_params[:subjects_ids] },
+              ),
+            )
+          end
         else
-          @errors = @engineers_teach_physics_form.errors.messages
-          render :edit
+          update_with_confirmation { save_and_redirect_to_details }
         end
       end
 
@@ -100,6 +84,43 @@ module Publish
       end
 
     private
+
+      def update_with_confirmation
+        if @engineers_teach_physics_form.invalid?
+          @errors = @engineers_teach_physics_form.errors.messages
+          render :edit
+        elsif confirm_live_changes_if_required!(**engineers_live_changes_confirmation_args)
+          # rendered interstitial
+        elsif @engineers_teach_physics_form.save!
+          yield
+        else
+          @errors = @engineers_teach_physics_form.errors.messages
+          render :edit
+        end
+      end
+
+      def save_and_redirect_to_details
+        course_updated_message(section_key)
+        course.update(name: course.generate_name)
+        redirect_to(
+          details_publish_provider_recruitment_cycle_course_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            course.course_code,
+          ),
+        )
+      end
+
+      def engineers_live_changes_confirmation_args
+        {
+          section_name: section_key,
+          form: @engineers_teach_physics_form,
+          form_param_key: :publish_engineers_teach_physics_form,
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(
+            provider.provider_code, recruitment_cycle.year, course.course_code
+          ),
+        }
+      end
 
       def modern_languages_present?
         params[:course][:subjects_ids]&.include?(modern_languages_id)

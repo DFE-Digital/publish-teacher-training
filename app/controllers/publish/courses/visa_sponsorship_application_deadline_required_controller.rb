@@ -27,12 +27,23 @@ module Publish
         @deadline_required_form = VisaSponsorshipApplicationDeadlineRequiredForm.new(
           date_required_params.merge(course:, starting_step:),
         )
-        if @deadline_required_form.valid?
-          @deadline_required_form.update!
-          redirect_to_after_update
-        else
+        if @deadline_required_form.invalid?
           set_back_link
           render :edit
+        elsif confirm_live_changes_if_required!(
+          section_name: "Visa sponsorship deadline",
+          form: @deadline_required_form,
+          form_param_key: :course,
+          fields: %i[visa_sponsorship_application_deadline_required],
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(*course_nav_params),
+          extra_hidden_fields: {
+            "course[starting_step]" => @deadline_required_form.starting_step,
+          },
+        )
+          # rendered interstitial
+        else
+          @deadline_required_form.update!
+          redirect_to_after_update
         end
       end
 

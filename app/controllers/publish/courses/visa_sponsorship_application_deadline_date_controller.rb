@@ -35,13 +35,27 @@ module Publish
           course:,
         )
 
-        if @deadline_form.valid?
+        if @deadline_form.invalid?
+          set_back_link
+          render :edit
+        elsif confirm_live_changes_if_required!(
+          section_name: "Visa sponsorship deadline",
+          form: @deadline_form,
+          form_param_key: :course,
+          fields: [],
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(*course_nav_params),
+          extra_hidden_fields: {
+            "course[visa_sponsorship_application_deadline_at(1i)]" => @deadline_form.year,
+            "course[visa_sponsorship_application_deadline_at(2i)]" => @deadline_form.month,
+            "course[visa_sponsorship_application_deadline_at(3i)]" => @deadline_form.day,
+            "course[starting_step]" => @deadline_form.starting_step,
+          },
+        )
+          # rendered interstitial
+        else
           @deadline_form.update!
           flash[:success] = t(".success.#{@deadline_form.starting_step}")
           redirect_to(details_publish_provider_recruitment_cycle_course_path(*course_nav_params))
-        else
-          set_back_link
-          render :edit
         end
       end
 

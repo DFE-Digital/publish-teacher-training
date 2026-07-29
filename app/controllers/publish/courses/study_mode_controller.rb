@@ -22,10 +22,20 @@ module Publish
       def update
         @course_study_mode_form = CourseStudyModeForm.new(@course, params: study_mode_params)
 
-        if @course_study_mode_form.save!
-          handle_redirect
-        else
+        if @course_study_mode_form.invalid?
           render :edit
+        elsif !previous_tda_course? && confirm_live_changes_if_required!(
+          section_name: I18n.t("publish.providers.study_mode.form.study_pattern"),
+          form: study_mode_confirmation_form,
+          form_param_key: :publish_course_study_mode_form,
+          fields: %i[study_mode previous_tda_course],
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(
+            provider.provider_code, recruitment_cycle.year, course.course_code
+          ),
+        )
+          # rendered interstitial
+        elsif @course_study_mode_form.save!
+          handle_redirect
         end
       end
 
@@ -35,6 +45,13 @@ module Publish
         return { study_mode: nil } if params[:publish_course_study_mode_form].blank?
 
         params.expect(publish_course_study_mode_form: [:previous_tda_course, { study_mode: [] }])
+      end
+
+      def study_mode_confirmation_form
+        Struct.new(:study_mode, :previous_tda_course).new(
+          Array(params.dig(:publish_course_study_mode_form, :study_mode)).compact_blank,
+          params.dig(:publish_course_study_mode_form, :previous_tda_course),
+        )
       end
 
       def handle_redirect
