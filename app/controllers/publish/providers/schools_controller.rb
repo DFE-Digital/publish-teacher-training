@@ -44,7 +44,7 @@ module Publish
       helper_method :school_removal
 
       def school
-        @school ||= ProviderSchools::Identity.new(provider:).school_for(uuid: params[:uuid]).decorate
+        @school ||= provider.schools.find_by!(uuid: params[:uuid]).decorate
       end
       helper_method :school
 
