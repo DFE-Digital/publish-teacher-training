@@ -14,6 +14,7 @@ module Publish
 
         def update
           authorize(provider)
+          course
 
           @grade_form = DegreeGradeForm.new(grade: grade_params)
 

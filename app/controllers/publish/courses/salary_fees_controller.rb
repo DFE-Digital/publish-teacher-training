@@ -25,7 +25,7 @@ module Publish
         elsif confirm_live_changes_if_required!(
           section_name:,
           form: @course_salary_fees_form,
-          form_param_key:,
+          form_param_key: param_form_key,
         )
           # rendered interstitial
         elsif @course_salary_fees_form.save!
