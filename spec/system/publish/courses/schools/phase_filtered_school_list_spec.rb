@@ -52,6 +52,35 @@ RSpec.describe "Publish - Placement schools filtered by education phase", type: 
     then_the_course_is_attached_to("Primary School", "Secondary School")
   end
 
+  describe "the callout explaining the filter" do
+    scenario "names the course level and offers both things the provider can act on" do
+      given_a_course_at_level(:primary)
+      when_i_visit_the_publish_course_school_edit_page
+
+      then_i_see_the_callout("This is a primary course, so only primary schools are shown")
+      and_the_callout_links_to_my_schools_and_to_gias
+    end
+
+    scenario "softens the wording when an out-of-phase school is still listed" do
+      given_a_course_at_level(:secondary)
+      and_the_course_is_attached_to("Primary School")
+      when_i_visit_the_publish_course_school_edit_page
+
+      then_i_see_the_callout("along with any school already attached to it")
+    end
+  end
+
+  def then_i_see_the_callout(text)
+    expect(page.find(".app-inset-text--attention")).to have_text(text)
+  end
+
+  def and_the_callout_links_to_my_schools_and_to_gias
+    callout = page.find(".app-inset-text--attention")
+
+    expect(callout).to have_link("check that the school is in your account")
+    expect(callout).to have_link("check the school’s details are correct on GIAS")
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     @provider = create(:provider)
     @user = create(:user, providers: [@provider])

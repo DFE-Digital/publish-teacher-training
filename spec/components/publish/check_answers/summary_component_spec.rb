@@ -96,19 +96,19 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
   end
 
   it "renders school and study-site rows with selected values and change links" do
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_school = create_paired_school(provider:, name: "Placement School", site_code: "PS").last
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     state_store.write(
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school.uuid.to_s],
       study_sites_ids: [study_site.id.to_s],
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
     allow(wizard).to receive(:saved?).with(:study_sites).and_return(true)
 
     expect(rendered_component).to have_text("Employing school")
-    expect(rendered_component).to have_text(placement_site.location_name)
+    expect(rendered_component).to have_text(placement_school.location_name)
     expect(rendered_component).to have_link("Change", href: /return_to_review=schools/)
     expect(rendered_component).to have_text("Study site")
     expect(rendered_component).to have_text(study_site.location_name)

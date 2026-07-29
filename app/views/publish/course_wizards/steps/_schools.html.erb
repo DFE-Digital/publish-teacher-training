@@ -50,3 +50,8 @@
 <% end %>
 
 <%= form.govuk_submit t("course_wizard.steps.schools.submit") %>
+
+<%= render ::Publish::Schools::PhaseFilterCalloutComponent.new(
+  provider: current_step.provider,
+  level: current_step.level,
+) %>

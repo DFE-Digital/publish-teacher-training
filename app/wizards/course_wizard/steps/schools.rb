@@ -24,6 +24,15 @@ class CourseWizard
         @schools ||= identity.available_schools.to_a
       end
 
+      delegate :provider, to: :wizard
+
+      # No course record exists yet, so the level comes from the wizard state.
+      # The graph roots at :level, so it is always set by the time this step
+      # renders.
+      def level
+        wizard.state_store.level
+      end
+
       def schools_collapse_threshold
         SchoolsList::COLLAPSE_AFTER
       end
@@ -43,7 +52,7 @@ class CourseWizard
     private
 
       def identity
-        @identity ||= ::CourseSchools::Identity.new(provider: wizard.provider, level: wizard.state_store.level)
+        @identity ||= ::CourseSchools::Identity.new(provider:, level:)
       end
 
       def school_uuids_selected

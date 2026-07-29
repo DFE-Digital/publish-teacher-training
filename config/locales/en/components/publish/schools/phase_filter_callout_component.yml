@@ -1,0 +1,17 @@
+en:
+  publish:
+    schools:
+      phase_filter_callout_component:
+        heading:
+          primary: This is a primary course, so only primary schools are shown
+          secondary: This is a secondary course, so only secondary schools are shown
+          further_education: This is a further education course, so only schools that offer further education are shown
+        heading_with_exceptions:
+          primary: This is a primary course, so primary schools are shown along with any school already attached to it
+          secondary: This is a secondary course, so secondary schools are shown along with any school already attached to it
+          further_education: This is a further education course, so schools that offer further education are shown along with any school already attached to it
+        body: "If you cannot find a school you’re looking for, you can:"
+        in_your_account_link: check that the school is in your account
+        in_your_account_html: "%{link} and add it if not"
+        on_gias_link: check the school’s details are correct on GIAS
+        on_gias_html: "%{link}. If they are not, you can contact the school and ask them to update their information on GIAS"

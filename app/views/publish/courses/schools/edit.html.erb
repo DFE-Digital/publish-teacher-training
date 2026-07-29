@@ -82,5 +82,11 @@
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
     </p>
+
+    <%= render ::Publish::Schools::PhaseFilterCalloutComponent.new(
+      provider: @provider,
+      level: course.level,
+      out_of_phase_schools: @course_school_form.out_of_phase_schools?,
+    ) %>
   </div>
 </div>
