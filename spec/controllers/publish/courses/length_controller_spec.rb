@@ -30,8 +30,8 @@ RSpec.describe Publish::Courses::LengthController, type: :controller do
         patch :update, params: params
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include(I18n.t("publish.courses.confirm_live_changes.body"))
-        expect(response.body).to include(I18n.t("publish.courses.confirm_live_changes.continue"))
+        expect(response.body).to include("Your changes will go live immediately.")
+        expect(response.body).to include("Continue and publish changes")
         expect(course.reload.enrichments.find_or_initialize_draft.course_length).not_to eq("TwoYears")
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe Publish::Courses::LengthController, type: :controller do
         )
         expect(course.reload.enrichments.find_or_initialize_draft.course_length).to eq("TwoYears")
         expect(flash[:success_with_body]).to include(
-          "body" => I18n.t("success.changes_now_live"),
+          "body" => "These changes are now live.",
         )
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe Publish::Courses::LengthController, type: :controller do
             course.course_code,
           ),
         )
-        expect(response.body).not_to include(I18n.t("publish.courses.confirm_live_changes.body"))
+        expect(response.body).not_to include("Your changes will go live immediately.")
         expect(course.reload.enrichments.find_or_initialize_draft.course_length).to eq("TwoYears")
       end
     end
