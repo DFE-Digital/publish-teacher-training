@@ -60,7 +60,7 @@ describe "#enrichments" do
     context "for a course with published enrichments and a draft one" do
       let(:enrichments) { [build(:course_enrichment, :published), build(:course_enrichment, :subsequent_draft)] }
 
-      its(:content_status) { is_expected.to eq(:published_with_unpublished_changes) }
+      its(:content_status) { is_expected.to eq(:published) }
     end
   end
 

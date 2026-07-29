@@ -184,27 +184,26 @@ class Course < ApplicationRecord
       # will return a new instance of a CourseEnrichment object which is different
       # to the ones in the cached `enrichments` association. This makes checking
       # for validations later down non-trivial.
+      #
+      # Prefer an existing draft/rolled_over enrichment (never-published or
+      # rolled-over courses). For already-published courses, edit the published
+      # enrichment in place so changes go live immediately without creating
+      # unpublished changes.
       latest_draft_enrichment = select(&:draft?).last&.tap { |d| d.version = 2 }
+      return latest_draft_enrichment if latest_draft_enrichment
 
-      latest_draft_enrichment || new(new_draft_attributes)
+      latest_published_enrichment = select(&:published?).last
+      return latest_published_enrichment if latest_published_enrichment
+
+      new(new_draft_attributes)
     end
 
     def new_draft_attributes
-      latest_published_enrichment = most_recent.published.first
-
-      new_enrichment_attributes = if latest_published_enrichment.present?
-                                    latest_published_enrichment
-                                      .dup
-                                      .attributes
-                                      .with_indifferent_access
-                                      .except(:json_data)
-                                  else
-                                    {}
-                                  end
-
-      new_enrichment_attributes.merge(
-        { status: :draft, last_published_timestamp_utc: nil, version: 2 },
-      )
+      {
+        status: :draft,
+        last_published_timestamp_utc: nil,
+        version: 2,
+      }
     end
   end
 
@@ -736,13 +735,11 @@ class Course < ApplicationRecord
   end
 
   def is_published?
-    %i[published published_with_unpublished_changes].include? content_status
+    content_status == :published
   end
 
   def has_unpublished_changes?
-    return false if all_enrichments_are_published?
-
-    (published? && draft_enrichment.present?) || (last_published_at.present? && enrichment_not_withdrawn?)
+    false
   end
 
   def draft_enrichment

@@ -194,15 +194,15 @@ describe Course do
         expect(custom_course.enrichments.find_or_initialize_draft.version).to eq(2)
       end
 
-      it "has a published enrichment with version 1 and creates v2 draft" do
+      it "returns the published enrichment for in-place edit" do
         enrichment = create(:course_enrichment, version: 1, status: "published")
         custom_course = create(:course, course_code: "CUST1", enrichments: [enrichment])
         expect(enrichment.version).to eq(1)
 
-        expect(
-          custom_course.enrichments.find_or_initialize_draft.attributes.except("id", "created_at", "updated_at", "version", "status", "json_data"),
-        ).to eq(enrichment.attributes.except("id", "created_at", "updated_at", "version", "status", "json_data"))
-        expect(custom_course.enrichments.find_or_initialize_draft.version).to eq(2)
+        editable = custom_course.enrichments.find_or_initialize_draft
+        expect(editable).to eq(enrichment)
+        expect(editable).to be_published
+        expect(editable.version).to eq(1)
       end
     end
   end
@@ -1453,7 +1453,7 @@ describe Course do
     let(:course) { create(:course, enrichments: [enrichment1, enrichment2]) }
     let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.zone.now) }
     let(:enrichment2) {  build(:course_enrichment, :published, created_at: 1.minute.ago) }
-    let(:service_spy) { spy(execute: :published_with_unpublished_changes) }
+    let(:service_spy) { spy(execute: :published) }
     let(:content_status) { course.content_status }
 
     it "Delegate the method to the service" do
@@ -1727,13 +1727,13 @@ describe Course do
         let(:enrichments) { [published_enrichment] }
         let(:expected_enrichment_attributes) { published_enrichment.attributes.slice(*copyable_enrichment_attributes) }
 
-        it "has all the same attributes as the published enrichment" do
+        it "returns the published enrichment for in-place edit" do
           expect(actual_enrichment_attributes).to eq expected_enrichment_attributes
         end
 
-        its(:id) { is_expected.to be_nil }
-        its(:last_published_timestamp_utc) { is_expected.to be_nil }
-        its(:status) { is_expected.to eq "draft" }
+        its(:id) { is_expected.to eq published_enrichment.id }
+        its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of published_enrichment.last_published_timestamp_utc }
+        its(:status) { is_expected.to eq "published" }
       end
 
       context "with a draft and published enrichment" do
@@ -2046,12 +2046,12 @@ describe Course do
       end
     end
 
-    context "course is published with unpublished changes" do
+    context "course is published with a legacy subsequent draft" do
       let(:enrichment) { create(:course_enrichment, :subsequent_draft) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
       it "returns true" do
-        expect(course.content_status).to eq(:published_with_unpublished_changes)
+        expect(course.content_status).to eq(:published)
         expect(course.is_published?).to be(true)
       end
     end
@@ -2250,7 +2250,7 @@ describe Course do
       it { is_expected.to be(true) }
     end
 
-    context "course is published with unpublished changes" do
+    context "course is published with a legacy subsequent draft" do
       let(:enrichment) { create(:course_enrichment, :subsequent_draft) }
 
       it { is_expected.to be(true) }
