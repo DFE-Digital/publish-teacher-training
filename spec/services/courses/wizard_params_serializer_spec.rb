@@ -26,7 +26,7 @@ RSpec.describe Courses::WizardParamsSerializer do
       undergraduate_degree_with_qts?: false,
       funding_type: "salary",
       study_pattern: %w[full_time part_time],
-      site_ids: %w[1 2],
+      school_uuids: %w[3f1a5b2c-1111-4111-8111-111111111111 3f1a5b2c-2222-4222-8222-222222222222],
       study_sites_ids: %w[3],
       accredited_provider_code: "A0A",
       start_date: "July 2027",
@@ -48,7 +48,7 @@ RSpec.describe Courses::WizardParamsSerializer do
   describe "key translations" do
     it "maps the canonical wizard keys to creation-service keys" do
       expect(params["master_subject_id"]).to eq("100")
-      expect(params["sites_ids"]).to eq(%w[1 2])
+      expect(params["school_uuids"]).to eq(%w[3f1a5b2c-1111-4111-8111-111111111111 3f1a5b2c-2222-4222-8222-222222222222])
       expect(params["study_mode"]).to eq(%w[full_time part_time])
       expect(params["funding"]).to eq("salary")
       expect(params["subordinate_subject_id"]).to eq("200")
@@ -220,10 +220,10 @@ RSpec.describe Courses::WizardParamsSerializer do
 
   describe "site/study-site permutations" do
     context "when ids include blanks" do
-      let(:state_overrides) { { site_ids: ["1", ""], study_sites_ids: ["3", ""] } }
+      let(:state_overrides) { { school_uuids: ["3f1a5b2c-1111-4111-8111-111111111111", ""], study_sites_ids: ["3", ""] } }
 
       it "compacts blank ids" do
-        expect(params["sites_ids"]).to eq(%w[1])
+        expect(params["school_uuids"]).to eq(%w[3f1a5b2c-1111-4111-8111-111111111111])
         expect(params["study_sites_ids"]).to eq(%w[3])
       end
     end

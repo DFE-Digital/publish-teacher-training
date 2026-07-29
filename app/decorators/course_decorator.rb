@@ -8,8 +8,10 @@ class CourseDecorator < ApplicationDecorator
 
   LANGUAGE_SUBJECT_CODES = %w[Q3 A0 15 16 17 18 19 20 21 22].freeze
 
-  def sites_ids
-    object.site_ids.compact_blank
+  # Round-tripped through the hidden fields that carry the in-progress course
+  # across the legacy add-course steps.
+  def school_uuids
+    ::CourseSchools::Identity.new(provider: object.provider, course: object).current_school_uuids
   end
 
   def study_sites_ids

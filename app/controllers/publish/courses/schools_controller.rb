@@ -5,14 +5,18 @@ module Publish
     class SchoolsController < ApplicationController
       include CourseBasicDetailConcern
 
+      # The error path re-renders :new from #continue, so the view reads this
+      # rather than an ivar only #new would set.
+      helper_method :schools
+
       def continue
-        params[:course][:sites_ids].compact_blank!
+        params[:course][:school_uuids].compact_blank!
         super
       end
 
       def new
         authorize(@provider, :edit?)
-        return unless @provider.sites.count == 1
+        return unless schools.one?
 
         set_default_school
         redirect_to next_step
@@ -47,7 +51,7 @@ module Publish
 
       def back
         authorize(@provider, :edit?)
-        if @provider.sites.count > 1
+        if schools.many?
           redirect_to new_publish_provider_recruitment_cycle_courses_schools_path(path_params)
         else
           redirect_to @back_link_path
@@ -55,6 +59,11 @@ module Publish
       end
 
     private
+
+      # Every school the provider could attach, ordered by GIAS school name.
+      def schools
+        @schools ||= ::CourseSchools::Identity.new(provider: @provider).available_schools.to_a
+      end
 
       def current_step
         :school
@@ -66,7 +75,7 @@ module Publish
 
       def set_default_school
         params["course"] ||= {}
-        params["course"]["sites_ids"] = [@provider.sites.first.id]
+        params["course"]["school_uuids"] = [schools.first.uuid]
       end
 
       def school_params

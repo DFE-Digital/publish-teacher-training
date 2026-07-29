@@ -14,7 +14,7 @@
     <%= form_for course,
       url: continue_publish_provider_recruitment_cycle_courses_schools_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
       method: :get do |form| %>
-      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:sites_ids] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:school_uuids] do |fields| %>
         <%= render "publish/shared/error_wrapper", error_keys: [:sites], data_qa: "course__sites" do %>
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -37,16 +37,16 @@
             </div>
             <%= render "publish/shared/error_messages", error_keys: [:sites] %>
             <div class="govuk-form-group govuk-!-margin-top-2">
-              <%= form.govuk_check_boxes_fieldset :sites_ids,
+              <%= form.govuk_check_boxes_fieldset :school_uuids,
                 legend: nil do %>
 
                 <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
-                <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
-                  <%= form.govuk_check_box :sites_ids,
-                        site.id,
-                        label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
-                        hint: { text: site.full_address },
+                <% schools.each_with_index do |school, index| %>
+                  <%= form.govuk_check_box :school_uuids,
+                        school.uuid,
+                        label: { text: [school.decorate.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school:))].compact_blank.join(" ").html_safe },
+                        hint: { text: school.decorate.full_address },
                         link_errors: index.zero? %>
                 <% end %>
               <% end %>
