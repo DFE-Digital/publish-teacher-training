@@ -73,31 +73,50 @@ module Publish
           .index_by(&:urn)
       end
 
+      def provider_schools_by_gias_id
+        @provider_schools_by_gias_id ||= course.provider.schools
+          .where(gias_school_id: gias_schools_by_urn.values.map(&:id))
+          .index_by(&:gias_school_id)
+      end
+
+      # site → urn → gias_school → provider_school. The uuid reverse map
+      # replaces this hop when the pickers move to Provider::School.
+      def provider_school_for(site)
+        gias_school = gias_schools_by_urn[site.urn]
+        return if gias_school.nil?
+
+        provider_school = provider_schools_by_gias_id[gias_school.id]
+
+        if provider_school.nil?
+          # Environment hasn't been fully backfilled or the provider's site
+          # predates the dual-write. Skip the new-model write rather than
+          # 404'ing the request; the schools backfill (or the next
+          # provider-side dual-write) reconciles later.
+          Rails.logger.warn(
+            "[CourseSchools] skipped course_school write — no provider_school for " \
+            "course=#{course.id} provider=#{course.provider_id} gias_school=#{gias_school.id}",
+          )
+        end
+
+        provider_school
+      end
+
       def attach_school(site)
         ::CourseSchools::LegacySiteStatusCreator.call(course:, site:)
 
-        gias_school = gias_schools_by_urn[site.urn]
-        return unless gias_school
+        provider_school = provider_school_for(site)
+        return unless provider_school
 
-        ::CourseSchools::Creator.call(course:, gias_school_id: gias_school.id)
-      rescue ActiveRecord::RecordNotFound
-        # No matching Provider::School yet — environment hasn't been fully
-        # backfilled or the provider's site predates the dual-write. Skip
-        # the new-model write rather than 404'ing the request; the schools
-        # backfill (or the next provider-side dual-write) reconciles later.
-        Rails.logger.warn(
-          "[CourseSchools] skipped course_school write — no provider_school for " \
-          "course=#{course.id} provider=#{course.provider_id} gias_school=#{gias_school.id}",
-        )
+        ::CourseSchools::Creator.call(course:, provider_school:)
       end
 
       def detach_school(site)
         ::CourseSchools::LegacySiteStatusRemover.call(course:, site:)
 
-        gias_school = gias_schools_by_urn[site.urn]
-        return unless gias_school
+        provider_school = provider_school_for(site)
+        return unless provider_school
 
-        ::CourseSchools::Remover.call(course:, gias_school_id: gias_school.id)
+        ::CourseSchools::Remover.call(course:, provider_school:)
       end
 
       def apply_publish_status_to_site_statuses
