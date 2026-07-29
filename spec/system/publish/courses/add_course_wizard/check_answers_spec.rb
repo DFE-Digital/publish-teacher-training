@@ -332,6 +332,7 @@ private
     create(:provider_partnership, training_provider: school_provider, accredited_provider: second_partner)
 
     @user = create(:user, providers: [school_provider])
+    pair_provider_schools_with_sites(school_provider)
     given_i_am_authenticated(user: @user)
   end
 
@@ -343,9 +344,14 @@ private
     @wizard_state_key ||= SecureRandom.uuid
   end
 
+  def placement_school_uuid(site)
+    provider.schools.find_by!(uuid: site.uuid).uuid.to_s
+  end
+
   def given_the_provider_has_no_study_sites
     provider.study_sites.destroy_all
     @placement_site = provider.sites.first || create(:site, provider:)
+    pair_provider_schools_with_sites(provider)
     expect(provider.reload.study_sites).to be_empty
   end
 
@@ -353,6 +359,7 @@ private
     primary_subject = find_or_create(:primary_subject, :primary)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+    pair_provider_schools_with_sites(provider)
 
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
@@ -368,7 +375,7 @@ private
       primary_master_subject_id: primary_subject.id.to_s,
       age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(placement_site)],
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -393,7 +400,7 @@ private
       primary_master_subject_id: primary_subject.id.to_s,
       age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [@placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(@placement_site)],
       study_sites_ids: [],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -420,7 +427,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [@placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(@placement_site)],
       study_sites_ids: [],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -518,9 +525,9 @@ private
   # on uuid: production copies site.uuid onto provider_school.uuid in both the
   # dual-write and the schools backfill, and the flow resolves through it.
   def and_the_selected_school_is_mapped_to_the_new_model
+    pair_provider_schools_with_sites(provider)
     @selected_site = provider.sites.first
-    @provider_school = pair_provider_schools_with_sites(provider)
-      .find { |provider_school| provider_school.uuid == @selected_site.uuid }
+    @provider_school = provider.schools.find_by!(uuid: @selected_site.uuid)
     @gias_school = @provider_school.gias_school
   end
 
@@ -570,6 +577,7 @@ private
     business = find_or_create(:secondary_subject, :business_studies)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+    pair_provider_schools_with_sites(provider)
 
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
@@ -589,7 +597,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(placement_site)],
       study_sites_ids: [study_site.id.to_s],
       accredited_provider_code: partner_provider_code,
       can_sponsor_student_visa: true,
@@ -604,6 +612,7 @@ private
     business = find_or_create(:secondary_subject, :business_studies)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+    pair_provider_schools_with_sites(provider)
 
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
@@ -623,7 +632,7 @@ private
       qualification: "qts",
       funding_type: "salary",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(placement_site)],
       study_sites_ids: [study_site.id.to_s],
       accredited_provider_code: partner_provider_code,
       can_sponsor_skilled_worker_visa: true,
@@ -640,6 +649,7 @@ private
     @design_technology_specialism = find_or_create(:design_technology_subject, :engineering)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+    pair_provider_schools_with_sites(provider)
 
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
@@ -659,7 +669,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(placement_site)],
       study_sites_ids: [study_site.id.to_s],
       can_sponsor_student_visa: false,
       visa_sponsorship_application_deadline_required: false,
@@ -671,6 +681,7 @@ private
     further_education_subject = find_or_create(:further_education_subject)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+    pair_provider_schools_with_sites(provider)
 
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
@@ -686,7 +697,7 @@ private
       qualification: "pgde",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(placement_site)],
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -702,6 +713,7 @@ private
     primary_subject = find_or_create(:primary_subject, :primary)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+    pair_provider_schools_with_sites(provider)
 
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
@@ -716,7 +728,7 @@ private
       primary_master_subject_id: primary_subject.id.to_s,
       age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(placement_site)],
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
@@ -730,6 +742,7 @@ private
     business = find_or_create(:secondary_subject, :business_studies)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+    pair_provider_schools_with_sites(provider)
 
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
@@ -747,7 +760,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(placement_site)],
       study_sites_ids: [study_site.id.to_s],
       can_sponsor_student_visa: true,
       visa_sponsorship_application_deadline_required: false,
@@ -760,6 +773,7 @@ private
     business = find_or_create(:secondary_subject, :business_studies)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+    pair_provider_schools_with_sites(provider)
 
     repository = CourseWizard::Repositories::Course.new(
       provider_code: provider.provider_code,
@@ -778,7 +792,7 @@ private
       qualification: "qts",
       funding_type: "fee",
       study_pattern: %w[full_time],
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_school_uuid(placement_site)],
       study_sites_ids: [study_site.id.to_s],
       accredited_provider_code: partner_provider_code,
       can_sponsor_student_visa: true,
@@ -800,6 +814,7 @@ private
     create(:provider_partnership, training_provider: school_provider, accredited_provider: single_partner)
 
     @user = create(:user, providers: [school_provider])
+    pair_provider_schools_with_sites(school_provider)
     given_i_am_authenticated(user: @user)
   end
 

@@ -176,6 +176,7 @@ private
       ],
     )
 
+    pair_provider_schools_with_sites(@user.providers.first)
     given_i_am_authenticated(user: @user)
   end
 
@@ -187,6 +188,7 @@ private
       ],
     )
 
+    pair_provider_schools_with_sites(@user.providers.first)
     given_i_am_authenticated(user: @user)
   end
 
@@ -209,6 +211,7 @@ private
       ],
     )
 
+    pair_provider_schools_with_sites(@user.providers.first)
     given_i_am_authenticated(user: @user)
   end
 
@@ -219,28 +222,31 @@ private
         create(
           :provider,
           :accredited_provider,
-          sites: [
-            build(
-              :site,
-              location_name: "Belvidere School",
-              address1: "Belvidere Lane",
-              address2: "",
-              address3: "",
-              town: "Shrewsbury",
-              address4: "Shropshire",
-              postcode: "SY2 5RJ",
-            ),
-            build(:site),
-          ],
+          sites: [build(:site)],
         ),
       ],
+    )
+
+    provider = @user.providers.first
+    pair_provider_schools_with_sites(provider)
+    create_paired_school(
+      provider:,
+      name: "Belvidere School",
+      site_code: "BV",
+    ).last.gias_school.update!(
+      address1: "Belvidere Lane",
+      address2: nil,
+      address3: nil,
+      town: "Shrewsbury",
+      county: "Shropshire",
+      postcode: "SY2 5RJ",
     )
 
     given_i_am_authenticated(user: @user)
   end
 
   def school_checkbox_selector
-    "input[name='schools[site_ids][]']"
+    "input[name='schools[school_uuids][]']"
   end
 
   # Counts the visible checkbox rows holding a school checkbox. We check the
@@ -278,11 +284,11 @@ private
   end
 
   def and_the_last_school_is_stored_in_the_wizard_state
-    expect(stored_site_ids).to contain_exactly(last_school.id.to_s)
+    expect(stored_school_uuids).to contain_exactly(last_school_uuid)
   end
 
   def given_the_last_school_is_already_selected_in_the_wizard_state
-    wizard_state_store.write(site_ids: [last_school.id.to_s])
+    wizard_state_store.write(school_uuids: [last_school_uuid])
   end
 
   # A collapsed school keeps its checked state in the DOM even though its row is
@@ -336,9 +342,13 @@ private
 
   # Read straight off the repository: the state store only exposes step attributes
   # through a wizard, which we do not have here.
-  def stored_site_ids
+  def stored_school_uuids
     state = wizard_state_repository.read
 
-    Array(state[:site_ids] || state["site_ids"]).compact_blank
+    Array(state[:school_uuids] || state["school_uuids"]).compact_blank
+  end
+
+  def last_school_uuid
+    provider.schools.find_by!(uuid: last_school.uuid).uuid.to_s
   end
 end

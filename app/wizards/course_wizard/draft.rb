@@ -89,12 +89,19 @@ class CourseWizard
       @subjects ||= ordered_subject_records(subject_ids)
     end
 
-    def school_ids
-      Array(state_store.site_ids).compact_blank
+    # Sessions started before the pickers moved to Provider::School hold
+    # integer site ids in the state store, and querying uuid = '123' raises
+    # PG::InvalidTextRepresentation. Anything that is not a uuid is dropped so
+    # a stale session re-asks the question instead of erroring.
+    def school_uuids
+      Array(state_store.school_uuids)
+        .compact_blank
+        .map(&:to_s)
+        .select { |value| value.match?(::CourseSchools::Identity::UUID_PATTERN) }
     end
 
     def schools
-      @schools ||= ordered_site_records(school_ids)
+      @schools ||= ordered_school_records(school_uuids)
     end
 
     def study_site_ids
@@ -173,6 +180,17 @@ class CourseWizard
 
       records_by_id = Site.where(id: ids).index_by { |site| site.id.to_s }
       ids.filter_map { |id| records_by_id[id.to_s] }
+    end
+
+    def ordered_school_records(uuids)
+      return [] if uuids.blank?
+
+      records_by_uuid = wizard.provider.schools
+        .includes(:gias_school)
+        .where(uuid: uuids)
+        .index_by { |school| school.uuid.to_s }
+
+      uuids.filter_map { |uuid| records_by_uuid[uuid] }
     end
   end
 end
