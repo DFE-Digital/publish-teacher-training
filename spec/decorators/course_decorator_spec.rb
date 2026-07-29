@@ -904,33 +904,45 @@ describe CourseDecorator do
     end
   end
 
+  # This number sits above the checkbox list on the schools page, so it has to
+  # agree with what CourseSchools::Identity renders there rather than with
+  # either raw model.
   describe "#attached_schools_count" do
-    context "when the new school model flag is off (legacy sites)" do
-      let(:course) do
-        create(:course, sites: [
-          build(:site, location_name: "Zebra School"),
-          build(:site, location_name: "alpha school"),
-        ])
-      end
+    let(:provider) { create(:provider) }
+    let(:course) { create(:course, provider:) }
 
-      it "counts the school-type sites attached to the course" do
-        expect(course.decorate.attached_schools_count).to eq(2)
-      end
+    it "counts the schools attached through the new model" do
+      _, provider_school = create_paired_school(provider:, name: "Zebra School", site_code: "A")
+      create(:course_school, course:, gias_school: provider_school.gias_school, provider_school:)
+
+      expect(course.decorate.attached_schools_count).to eq(1)
     end
 
-    context "when the new school model flag is on (Course::School / GiasSchool)" do
-      let(:course) { create(:course) }
+    it "counts an attachment that exists only as a site_status" do
+      site, = create_paired_school(provider:, name: "Zebra School", site_code: "A")
+      create(:site_status, :running, course:, site:)
 
-      before do
-        FeatureFlag.activate(:course_publishing_uses_new_school_model)
-        create(:course_school, course:, gias_school: build(:gias_school, name: "Zebra School"))
-        create(:course_school, course:, gias_school: build(:gias_school, name: "alpha school"))
-        create(:course_school, course:, gias_school: build(:gias_school, name: "Mango School"))
-      end
+      expect(course.decorate.attached_schools_count).to eq(1)
+    end
 
-      it "counts the course schools attached to the course" do
-        expect(course.decorate.attached_schools_count).to eq(3)
-      end
+    it "does not double-count a school attached under both models" do
+      site, provider_school = create_paired_school(provider:, name: "Zebra School", site_code: "A")
+      create(:site_status, :running, course:, site:)
+      create(:course_school, course:, gias_school: provider_school.gias_school, provider_school:)
+
+      expect(course.decorate.attached_schools_count).to eq(1)
+    end
+
+    # The picker cannot render it, so counting it would contradict the list.
+    it "ignores an attachment with no Provider::School" do
+      site = create(:site, provider:, code: "Z", urn: create(:gias_school).urn)
+      create(:site_status, :running, course:, site:)
+
+      expect(course.decorate.attached_schools_count).to eq(0)
+    end
+
+    it "is zero for a course with no schools" do
+      expect(course.decorate.attached_schools_count).to eq(0)
     end
   end
 end

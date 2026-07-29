@@ -167,14 +167,12 @@ class CourseDecorator < ApplicationDecorator
     names.sort_by(&:downcase)
   end
 
-  # Count of schools currently attached to the course, reading from whichever
-  # data model is live per the :course_publishing_uses_new_school_model flag.
+  # Count of schools currently attached to the course. Rendered above the
+  # checkbox list on the schools page, so it reads through the same identity
+  # that builds the list — counting either raw model would let the number
+  # disagree with the boxes underneath it.
   def attached_schools_count
-    if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-      object.schools.count
-    else
-      object.sites.school.count
-    end
+    ::CourseSchools::Identity.new(provider: object.provider, course: object).current_school_uuids.count
   end
 
   def alphabetically_sorted_study_sites

@@ -36,8 +36,14 @@ module Publish
       return if ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
       if course.recruitment_cycle_rollover_period_2026?
-        errors.add(:school_uuids, :check_schools) if course.sites.school.present?
-        errors.add(:school_uuids, :enter_schools) if course.sites.school.blank?
+        # Which variant to show depends on whether the provider is being asked
+        # to confirm schools they can see or to add their first, so it reads
+        # the same list the page rendered.
+        if identity.current_school_uuids.any?
+          errors.add(:school_uuids, :check_schools)
+        else
+          errors.add(:school_uuids, :enter_schools)
+        end
       else
         errors.add(:school_uuids, :no_schools)
       end
