@@ -61,7 +61,15 @@ RSpec.describe "Course show" do
 
   describe "with a published course that has a legacy subsequent draft" do
     scenario "i can view the published partial" do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [build(:course_enrichment, :published), course_enrichment_unpublished_changes], funding_type: "salary"))
+      given_i_am_authenticated_as_a_provider_user(
+        course: build(
+          :course,
+          :salary,
+          enrichments: [build(:course_enrichment, :published), course_enrichment_unpublished_changes],
+          application_status: "open",
+          site_statuses: [build(:site_status, :findable)],
+        ),
+      )
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_unpublished_changes_course
       and_i_should_see_the_course_button_panel
