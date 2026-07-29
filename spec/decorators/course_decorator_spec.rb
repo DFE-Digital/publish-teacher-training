@@ -905,32 +905,14 @@ describe CourseDecorator do
   end
 
   describe "#attached_schools_count" do
-    context "when the new school model flag is off (legacy sites)" do
-      let(:course) do
-        create(:course, sites: [
-          build(:site, location_name: "Zebra School"),
-          build(:site, location_name: "alpha school"),
-        ])
-      end
+    let(:course) { create(:course) }
 
-      it "counts the course schools attached to the course" do
-        expect(course.decorate.attached_schools_count).to eq(0)
-      end
+    before do
+      create_list(:course_school, 3, course:)
     end
 
-    context "when the new school model flag is on (Course::School / GiasSchool)" do
-      let(:course) { create(:course) }
-
-      before do
-        FeatureFlag.activate(:course_publishing_uses_new_school_model)
-        create(:course_school, course:)
-        create(:course_school, course:)
-        create(:course_school, course:)
-      end
-
-      it "counts the course schools attached to the course" do
-        expect(course.decorate.attached_schools_count).to eq(3)
-      end
+    it "counts the course schools attached to the course" do
+      expect(course.decorate.attached_schools_count).to eq(3)
     end
   end
 end
