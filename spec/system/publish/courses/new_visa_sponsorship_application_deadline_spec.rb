@@ -269,6 +269,7 @@ private
 
   def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
     @provider = create(:provider, :next_recruitment_cycle, :accredited_provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
+    pair_provider_schools_with_sites(@provider)
     given_i_am_authenticated(user: create(:user, providers: [@provider]))
   end
 end

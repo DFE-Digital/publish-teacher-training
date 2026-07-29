@@ -514,13 +514,14 @@ private
     expect(provider.courses.count).to eq(1)
   end
 
-  # Mirror the selected legacy school into the new data model: a GIAS school
-  # matched by URN plus a Provider::School carrying the site_code. This is the
-  # backfilled state the add-course flow maps through when writing Course::School.
+  # Mirror the selected legacy school into the new data model. The pairing is
+  # on uuid: production copies site.uuid onto provider_school.uuid in both the
+  # dual-write and the schools backfill, and the flow resolves through it.
   def and_the_selected_school_is_mapped_to_the_new_model
     @selected_site = provider.sites.first
-    @gias_school = create(:gias_school, urn: @selected_site.urn)
-    create(:provider_school, provider:, gias_school: @gias_school, site_code: @selected_site.code)
+    @provider_school = pair_provider_schools_with_sites(provider)
+      .find { |provider_school| provider_school.uuid == @selected_site.uuid }
+    @gias_school = @provider_school.gias_school
   end
 
   def then_the_created_course_has_the_new_course_school

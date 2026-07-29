@@ -19,6 +19,10 @@ describe Courses::CreationService do
 
   let(:next_available_course_code) { false }
 
+  # Course schools are selected as Provider::School records now, so the
+  # provider needs the rows production always has alongside its sites.
+  before { pair_provider_schools_with_sites(provider) }
+
   context "visa sponsorship is duplicated in params" do
     context "when funding is fee" do
       let(:valid_course_params) do
@@ -470,20 +474,15 @@ describe Courses::CreationService do
     end
   end
 
-  describe "writing schools to the new school data model" do
+  describe "writing the selected schools" do
     subject(:created_course) do
       described_class.call(course_params: valid_course_params, provider:, next_available_course_code: true)
     end
 
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
+    let(:provider_school) { provider.schools.find_by!(uuid: site.uuid) }
 
-    # A GIAS school + provider_school that mirror the legacy `site` selected in
-    # the wizard, joined to the legacy site by matching URN (same mapping the
-    # edit flow uses in Publish::Schools::UpdateCourseSchoolsService).
-    let(:gias_school) { create(:gias_school, urn: site.urn) }
-    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
-
-    let(:valid_course_params) do
+    let(:base_params) do
       {
         "age_range_in_years" => "3_to_7",
         "applications_open_from" => recruitment_cycle.application_start_date,
@@ -493,132 +492,86 @@ describe Courses::CreationService do
         "qualification" => "qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time],
-        "sites_ids" => [site.id],
         "study_sites_ids" => [study_site.id],
         "master_subject_id" => primary_subject.id,
         "subjects_ids" => [primary_subject.id],
       }
     end
 
-    context "when the flag is off" do
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
+    context "when the caller posts school_uuids" do
+      let(:valid_course_params) { base_params.merge("school_uuids" => [provider_school.uuid]) }
+
+      it "builds the Course::School" do
+        expect(created_course.schools.map(&:provider_school)).to eq([provider_school])
+        expect(created_course.errors).to be_empty
       end
 
-      it "dual-writes: builds both the legacy site_status and the new Course::School" do
+      it "builds the legacy site_status alongside it" do
         expect(created_course.sites.map(&:id)).to eq([site.id])
-        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.schools.first.provider_school).to eq(provider_school)
-        expect(created_course.errors).to be_empty
       end
 
       it "persists both models on save" do
         created_course.save!
 
         expect(created_course.reload.sites.map(&:id)).to eq([site.id])
-        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
-          .to eq([[gias_school.id, provider_school.id]])
+        expect(Course::School.where(course: created_course).pluck(:provider_school_id))
+          .to eq([provider_school.id])
+      end
+
+      it "ignores a uuid belonging to another provider" do
+        other = create_paired_school(provider: create(:provider), name: "Other", site_code: "A").last
+        params = base_params.merge("school_uuids" => [other.uuid])
+
+        course = described_class.call(course_params: params, provider:, next_available_course_code: true)
+
+        expect(course.schools).to be_empty
       end
     end
 
-    context "when the flag is on" do
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
+    # Accepted until every caller posts uuids; translated through the shared
+    # site/provider_school uuid.
+    context "when the caller posts legacy sites_ids" do
+      let(:valid_course_params) { base_params.merge("sites_ids" => [site.id]) }
+
+      it "builds the Course::School for the paired provider school" do
+        expect(created_course.schools.map(&:provider_school)).to eq([provider_school])
       end
 
-      it "builds the new Course::School and passes :new validation" do
-        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.schools.first.site_code).to eq("-")
-        expect(created_course.schools.first.provider_school).to eq(provider_school)
-        expect(created_course.errors).to be_empty
-      end
-
-      it "persists the Course::School on save" do
-        created_course.save!
-
-        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
-          .to eq([[gias_school.id, provider_school.id]])
-      end
-    end
-
-    context "when there is no matching provider_school (not backfilled)" do
-      # GIAS school exists (matched by URN) but the provider has not been
-      # backfilled, so no Provider::School exists for the pair.
-      let!(:gias_school) { create(:gias_school, urn: site.urn) }
-      let!(:provider_school) { nil }
-
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
-      end
-
-      it "skips the new-model write, logs a warning, and still builds the legacy site_status" do
-        expect(Rails.logger).to receive(:warn).with(/course_school/)
-
-        expect(created_course.schools).to be_empty
+      it "builds the legacy site_status" do
         expect(created_course.sites.map(&:id)).to eq([site.id])
       end
     end
 
-    context "when the selected site's GIAS school is closed" do
-      # A site can still point at a school the GIAS import later flipped to
-      # closed. We must not build a Course::School for it, but the legacy site
-      # is still attached.
-      let!(:gias_school) { create(:gias_school, :closed, urn: site.urn) }
-      let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
+    context "when the selected site has no Provider::School" do
+      let(:unpaired_site) { create(:site, provider:, code: "ZZ", urn: create(:gias_school).urn) }
+      let(:valid_course_params) { base_params.merge("sites_ids" => [unpaired_site.id]) }
 
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
-      end
-
-      it "builds no Course::School but still attaches the legacy site" do
+      # Nothing can represent it, so it is not selectable at all — neither
+      # model gets a row, rather than the legacy row being written alone.
+      it "attaches nothing" do
         expect(created_course.schools).to be_empty
-        expect(created_course.sites.map(&:id)).to eq([site.id])
+        expect(created_course.sites).to be_empty
       end
     end
 
     context "when no schools are selected" do
-      let(:valid_course_params) do
-        {
-          "level" => "primary",
-          "qualification" => "qts",
-          "funding" => "fee",
-          "sites_ids" => [],
-        }
-      end
+      let(:valid_course_params) { base_params.merge("school_uuids" => []) }
 
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
-      end
-
-      it "adds the existing error and builds no Course::School" do
+      it "adds the error and builds no schools" do
         expect(created_course.errors[:sites]).to include("Select at least one school")
         expect(created_course.schools).to be_empty
       end
     end
 
-    context "when no schools are selected and the flag is on" do
-      let(:valid_course_params) do
-        {
-          "level" => "primary",
-          "qualification" => "qts",
-          "funding" => "fee",
-          "sites_ids" => [],
-        }
-      end
+    # Distinct from an empty list: nothing was submitted, so there is nothing
+    # to apply. (The :new-context validator still objects to a course with no
+    # schools, which is a separate rule.)
+    context "when the schools key is absent entirely" do
+      let(:valid_course_params) { base_params }
 
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
-      end
-
-      it "adds the existing error and builds no Course::School" do
-        expect(created_course.errors[:sites]).to include("Select at least one school")
+      it "builds no schools and does not raise" do
         expect(created_course.schools).to be_empty
+        expect(created_course.sites).to be_empty
       end
     end
   end

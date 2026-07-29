@@ -74,8 +74,30 @@ module Courses
       @permitted_new_course_attributes ||= CoursePolicy.new(nil, new_course).permitted_new_course_attributes
     end
 
-    def sites
-      @sites ||= provider.sites.find(site_ids.compact_blank)
+    # Schools the caller selected, in submitted order. school_uuids is the
+    # current form; sites_ids is accepted until every caller has moved over,
+    # and is translated through the shared site/provider_school uuid.
+    def selected_school_uuids
+      return @selected_school_uuids if defined?(@selected_school_uuids)
+
+      @selected_school_uuids =
+        if !school_uuids.nil?
+          Array(school_uuids).compact_blank.map(&:to_s)
+        elsif !site_ids.nil?
+          provider.sites.where(id: Array(site_ids).compact_blank).pluck(:uuid).map(&:to_s)
+        end
+    end
+
+    def selected_provider_schools
+      @selected_provider_schools ||= begin
+        uuids = Array(selected_school_uuids)
+        by_uuid = provider.schools
+          .includes(:gias_school, :legacy_site)
+          .where(uuid: uuids)
+          .index_by { |provider_school| provider_school.uuid.to_s }
+
+        uuids.filter_map { |uuid| by_uuid[uuid] }
+      end
     end
 
     def study_sites
@@ -88,6 +110,10 @@ module Courses
 
     def site_ids
       @site_ids ||= course_params["sites_ids"]
+    end
+
+    def school_uuids
+      @school_uuids ||= course_params["school_uuids"]
     end
 
     def study_mode
@@ -116,66 +142,30 @@ module Courses
     end
 
     def update_sites(course)
-      return if site_ids.nil?
+      return if selected_school_uuids.nil?
 
-      course.sites = sites if site_ids.any?
-
-      course.errors.add(:sites, message: "Select at least one school") if site_ids.empty?
-    end
-
-    # Dual-writes the selected schools to the new Course::School model,
-    # building the records in memory so they persist atomically with the
-    # course on save and are visible to CoursePublishableSchoolsPresence-
-    # Validator's :new-context read (which the new-school-model flag routes
-    # to course.schools). Mirrors the site→gias_school→provider_school
-    # mapping used by Publish::Schools::UpdateCourseSchoolsService.
-    def update_schools(course)
-      return if site_ids.nil?
-      # Nothing selected — update_sites already records the "Select at least
-      # one school" error; skip before touching `sites` (find([]) would raise).
-      return if site_ids.compact_blank.empty?
-
-      school_sites.each do |site|
-        gias_school = gias_schools_by_urn[site.urn]
-        next unless gias_school
-
-        provider_school = provider_schools_by_gias_id[gias_school.id]
-
-        unless provider_school
-          # No matching Provider::School yet — provider not fully backfilled
-          # (or its site predates the dual-write). Skip the new-model build;
-          # the schools backfill (or the next provider-side write) reconciles
-          # later. Same rationale as UpdateCourseSchoolsService#attach_school.
-          Rails.logger.warn(
-            "[CourseSchools] skipped course_school build — no provider_school for " \
-            "provider=#{provider.id} gias_school=#{gias_school.id}",
-          )
-          next
-        end
-
-        course.schools.build(gias_school_id: gias_school.id, provider_school:)
+      if selected_school_uuids.empty?
+        course.errors.add(:sites, message: "Select at least one school")
+        return
       end
+
+      # Unconditional, unlike the edit path: site_status is still the only home
+      # for vacancy and study-mode data, and Courses::PublishRules::SchoolPresence
+      # reads course.sites whenever :course_publishing_uses_new_school_model is
+      # off, in every cycle. course is unpersisted here, so Course#sites= falls
+      # through to the has_many :through writer and builds them in memory.
+      course.sites = selected_provider_schools.filter_map(&:legacy_site)
     end
 
-    def school_sites
-      @school_sites ||= sites.select(&:school?)
-    end
+    # Builds the Course::School rows in memory so they persist atomically with
+    # the course and are visible to CoursePublishableSchoolsPresenceValidator's
+    # :new-context read.
+    def update_schools(course)
+      return if selected_school_uuids.blank?
 
-    # Only map selectable (non-closed) GIAS schools into the new model. A site
-    # can still point at a school the GIAS import later flipped to closed; we
-    # intentionally leave that school out of course.schools (the legacy
-    # course.sites write above still keeps the site) so the new model never
-    # gains a closed school. `available` excludes only `closed`.
-    def gias_schools_by_urn
-      @gias_schools_by_urn ||= GiasSchool.available
-        .where(urn: school_sites.map(&:urn).compact_blank)
-        .index_by(&:urn)
-    end
-
-    def provider_schools_by_gias_id
-      @provider_schools_by_gias_id ||= provider.schools
-        .where(gias_school_id: gias_schools_by_urn.values.map(&:id))
-        .index_by(&:gias_school_id)
+      selected_provider_schools.each do |provider_school|
+        course.schools.build(gias_school_id: provider_school.gias_school_id, provider_school:)
+      end
     end
 
     def update_study_sites(course)

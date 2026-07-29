@@ -29,6 +29,7 @@ private
 
   def and_that_sites_exist
     provider.sites << create_list(:site, 3)
+    pair_provider_schools_with_sites(provider)
   end
 
   def when_i_visit_the_publish_courses_new_schools_page
