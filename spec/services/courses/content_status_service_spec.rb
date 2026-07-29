@@ -43,8 +43,8 @@ describe Courses::ContentStatusService do
   context "when the enrichment has been been published previously" do
     let(:enrichment) { build(:course_enrichment, :subsequent_draft) }
 
-    it "returns published_with_unpublished_changes" do
-      expect(execute_service).to eq :published_with_unpublished_changes
+    it "returns published" do
+      expect(execute_service).to eq :published
     end
   end
 
