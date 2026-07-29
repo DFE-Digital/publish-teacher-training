@@ -54,7 +54,7 @@ module Publish
         end
 
         def gias_school
-          @gias_school ||= GiasSchool.find(school_id)
+          @gias_school ||= GiasSchool.available.find(school_id)
         end
 
         def school_id
