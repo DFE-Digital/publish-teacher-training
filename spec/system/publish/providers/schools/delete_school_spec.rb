@@ -177,7 +177,13 @@ RSpec.describe "Delete a provider's schools" do
 
   def given_there_is_an_associated_course
     @course = create(:course, provider:)
-    @course.sites << site
+    create(
+      :course_school,
+      course: @course,
+      provider_school: provider.schools.first,
+      gias_school: provider.schools.first.gias_school,
+      site_code: provider.schools.first.site_code,
+    )
   end
 
   def and_i_cannot_delete_the_school
