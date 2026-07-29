@@ -21,15 +21,37 @@ module CourseSchools
       def all_resolved? = unresolved_uuids.empty?
     end
 
-    def initialize(provider:, course: nil)
+    def initialize(provider:, course: nil, level: nil)
       @provider = provider
       @course = course
+      # The wizard has no course record yet, so it passes the level in. An
+      # explicit level wins, which lets a caller preview another level.
+      @level = (level || course&.level).presence&.to_s
     end
 
+    # Schools relevant to the course's education phase, plus any already
+    # attached to it.
+    #
+    # The union matters for rolled over courses: they keep schools the filter
+    # would now hide, and detaching those is a separate ticket. Leaving them
+    # visible and ticked means the provider removes them deliberately rather
+    # than the next save doing it silently.
+    #
     # legacy_site is preloaded for the "newly added" rollover tag, which reads
     # added_via off the paired Site. One extra query beats one per checkbox.
     def available_schools
-      provider.schools.joins(:gias_school).includes(:gias_school, :legacy_site).order("gias_school.name")
+      scope = provider.schools.joins(:gias_school)
+      scope = phase_matched_or_attached(scope)
+      scope.includes(:gias_school, :legacy_site).order("gias_school.name")
+    end
+
+    # Whether the list contains a school the phase filter would otherwise have
+    # hidden. The callout copy says only schools of one phase are shown, which
+    # stops being true the moment a rolled over attachment surfaces.
+    def out_of_phase_schools?
+      return false if level.blank?
+
+      attached_provider_school_ids.any? && (attached_provider_school_ids - phase_matched_ids).any?
     end
 
     def current_school_uuids
@@ -57,7 +79,25 @@ module CourseSchools
 
   private
 
-    attr_reader :provider, :course
+    attr_reader :provider, :course, :level
+
+    def phase_matched_or_attached(scope)
+      return scope if level.blank?
+
+      phase_matched = scope.merge(GiasSchool.for_course_level(level))
+      return phase_matched if attached_provider_school_ids.empty?
+
+      # Both sides share the same joins and ordering, so #or accepts them.
+      phase_matched.or(scope.where(id: attached_provider_school_ids))
+    end
+
+    def phase_matched_ids
+      @phase_matched_ids ||= provider.schools.for_course_level(level).ids
+    end
+
+    def attached_provider_school_ids
+      @attached_provider_school_ids ||= course.present? ? attached_provider_schools.map(&:id) : []
+    end
 
     # Two sources, deliberately unioned:
     #

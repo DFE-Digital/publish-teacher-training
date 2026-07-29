@@ -62,7 +62,13 @@ module Publish
 
       # Every school the provider could attach, ordered by GIAS school name.
       def schools
-        @schools ||= ::CourseSchools::Identity.new(provider: @provider).available_schools.to_a
+        @schools ||= school_identity.available_schools.to_a
+      end
+
+      # @course is built from the in-progress params by CourseBasicDetailConcern,
+      # so its level is set by the time the schools step renders.
+      def school_identity
+        @school_identity ||= ::CourseSchools::Identity.new(provider: @provider, level: @course&.level)
       end
 
       def current_step

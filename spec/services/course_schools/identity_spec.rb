@@ -229,6 +229,129 @@ RSpec.describe CourseSchools::Identity do
     end
   end
 
+  describe "filtering by course level" do
+    let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year) }
+    let(:provider) { create(:provider, recruitment_cycle:) }
+
+    def paired_school_with_phase(phase_code:, site_code:, name: "School #{site_code}")
+      uuid = Faker::Internet.uuid
+      school = create(:gias_school, phase_code:, name:)
+      site = create(:site, provider:, urn: school.urn, code: site_code, uuid:)
+      provider_school = create(:provider_school, provider:, gias_school: school, site_code:, uuid:)
+      [site, provider_school]
+    end
+
+    it "shows only the schools relevant to the course level" do
+      _, primary = paired_school_with_phase(phase_code: :primary, site_code: "A")
+      paired_school_with_phase(phase_code: :secondary, site_code: "B")
+
+      course = create(:course, :primary, provider:)
+
+      expect(described_class.new(provider:, course:).available_schools).to contain_exactly(primary)
+    end
+
+    it "takes the level from the course by default" do
+      paired_school_with_phase(phase_code: :primary, site_code: "A")
+      _, secondary = paired_school_with_phase(phase_code: :secondary, site_code: "B")
+
+      course = create(:course, :secondary, provider:)
+
+      expect(described_class.new(provider:, course:).available_schools).to contain_exactly(secondary)
+    end
+
+    # The wizard has no course record yet, so it passes the level explicitly.
+    it "accepts an explicit level with no course" do
+      _, primary = paired_school_with_phase(phase_code: :primary, site_code: "A")
+      paired_school_with_phase(phase_code: :secondary, site_code: "B")
+
+      expect(described_class.new(provider:, level: "primary").available_schools).to contain_exactly(primary)
+    end
+
+    it "prefers an explicit level over the course's" do
+      paired_school_with_phase(phase_code: :primary, site_code: "A")
+      _, secondary = paired_school_with_phase(phase_code: :secondary, site_code: "B")
+
+      course = create(:course, :primary, provider:)
+
+      expect(described_class.new(provider:, course:, level: "secondary").available_schools)
+        .to contain_exactly(secondary)
+    end
+
+    it "does not filter when there is no level to filter on" do
+      _, primary = paired_school_with_phase(phase_code: :primary, site_code: "A")
+      _, secondary = paired_school_with_phase(phase_code: :secondary, site_code: "B")
+
+      expect(described_class.new(provider:).available_schools).to contain_exactly(primary, secondary)
+    end
+
+    # Rolled over courses keep schools that the filter would now hide.
+    # Removing them is a separate ticket, so they stay visible and ticked —
+    # otherwise the next save would silently detach them.
+    describe "schools already attached to the course" do
+      it "keeps an out-of-phase school that is attached" do
+        _, in_phase = paired_school_with_phase(phase_code: :secondary, site_code: "A")
+        _, attached_primary = paired_school_with_phase(phase_code: :primary, site_code: "B")
+
+        course = create(:course, :secondary, provider:)
+        create(:course_school, course:, gias_school: attached_primary.gias_school, provider_school: attached_primary)
+
+        identity = described_class.new(provider:, course:)
+
+        expect(identity.available_schools).to contain_exactly(in_phase, attached_primary)
+        expect(identity.current_school_uuids).to contain_exactly(attached_primary.uuid)
+      end
+
+      it "keeps an out-of-phase school attached only as a site_status" do
+        paired_school_with_phase(phase_code: :secondary, site_code: "A")
+        attached_site, attached_primary = paired_school_with_phase(phase_code: :primary, site_code: "B")
+
+        course = create(:course, :secondary, provider:)
+        create(:site_status, :running, course:, site: attached_site)
+
+        expect(described_class.new(provider:, course:).available_schools).to include(attached_primary)
+      end
+
+      it "still excludes an out-of-phase school that is not attached" do
+        paired_school_with_phase(phase_code: :secondary, site_code: "A")
+        _, unattached_primary = paired_school_with_phase(phase_code: :primary, site_code: "B")
+
+        course = create(:course, :secondary, provider:)
+
+        expect(described_class.new(provider:, course:).available_schools).not_to include(unattached_primary)
+      end
+
+      it "orders the union by GIAS school name" do
+        _, zebra = paired_school_with_phase(phase_code: :secondary, site_code: "A", name: "Zebra School")
+        _, apple = paired_school_with_phase(phase_code: :primary, site_code: "B", name: "Apple School")
+
+        course = create(:course, :secondary, provider:)
+        create(:course_school, course:, gias_school: apple.gias_school, provider_school: apple)
+
+        expect(described_class.new(provider:, course:).available_schools.to_a).to eq([apple, zebra])
+      end
+    end
+
+    describe "#out_of_phase_school?" do
+      it "is true when the list contains a school the filter would have hidden" do
+        paired_school_with_phase(phase_code: :secondary, site_code: "A")
+        _, attached_primary = paired_school_with_phase(phase_code: :primary, site_code: "B")
+
+        course = create(:course, :secondary, provider:)
+        create(:course_school, course:, gias_school: attached_primary.gias_school, provider_school: attached_primary)
+
+        expect(described_class.new(provider:, course:)).to be_out_of_phase_schools
+      end
+
+      it "is false when every listed school matches the level" do
+        paired_school_with_phase(phase_code: :secondary, site_code: "A")
+
+        course = create(:course, :secondary, provider:)
+
+        expect(described_class.new(provider:, course:)).not_to be_out_of_phase_schools
+      end
+    end
+  end
+
   context "when initialized without a course" do
     let(:recruitment_cycle) { create(:recruitment_cycle, year: remodel_cycle_year) }
     let(:provider) { create(:provider, recruitment_cycle:) }

@@ -43,7 +43,7 @@ class CourseWizard
     private
 
       def identity
-        @identity ||= ::CourseSchools::Identity.new(provider: wizard.provider)
+        @identity ||= ::CourseSchools::Identity.new(provider: wizard.provider, level: wizard.state_store.level)
       end
 
       def school_uuids_selected

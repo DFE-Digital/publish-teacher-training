@@ -25,6 +25,10 @@ module Publish
       schools.size > schools_collapse_threshold
     end
 
+    # Whether the list still contains a school the phase filter would have
+    # hidden, which the callout copy has to account for.
+    delegate :out_of_phase_schools?, to: :identity
+
   private
 
     def identity
