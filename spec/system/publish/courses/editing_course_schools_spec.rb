@@ -118,7 +118,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   def then_i_should_see_an_error_message
     expect(publish_course_school_edit_page).to have_content(
-      I18n.t("activemodel.errors.models.publish/course_school_form.attributes.site_ids.no_schools"),
+      I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.no_schools"),
     )
   end
 

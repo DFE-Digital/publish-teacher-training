@@ -71,18 +71,22 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
     count.times { create(:course_school, course: @course) }
   end
 
+  # The picker reads names and addresses off gias_school now, so the paired
+  # Provider::School is what carries them.
   def given_the_provider_has_a_named_school
-    @school = create(
-      :site,
-      provider: @provider,
-      location_name: "Belvidere School",
+    gias_school = create(
+      :gias_school,
+      name: "Belvidere School",
       address1: "Belvidere Lane",
-      address2: "",
-      address3: "",
+      address2: nil,
+      address3: nil,
       town: "Shrewsbury",
-      address4: "Shropshire",
+      county: "Shropshire",
       postcode: "SY2 5RJ",
     )
+    uuid = SecureRandom.uuid
+    create(:site, provider: @provider, uuid:, code: "BV", urn: gias_school.urn)
+    @school = create(:provider_school, provider: @provider, gias_school:, site_code: "BV", uuid:)
   end
 
   def when_i_visit_the_publish_course_school_edit_page

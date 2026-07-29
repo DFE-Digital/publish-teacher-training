@@ -29,7 +29,7 @@ module Publish
         if @course_school_form.valid?
           Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
 
-          flash[:success] = if Array(@course_school_form.site_ids).size > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
+          flash[:success] = if Array(@course_school_form.school_uuids).size > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
                               I18n.t("success.enqueued_schools")
                             else
                               I18n.t("success.saved", value: section_key)
@@ -70,9 +70,9 @@ module Publish
       end
 
       def school_params
-        return { site_ids: nil } if params[:publish_course_school_form][:site_ids].all?(&:empty?)
+        return { school_uuids: nil } if params[:publish_course_school_form][:school_uuids].all?(&:empty?)
 
-        params.expect(publish_course_school_form: [:schools_validated, { site_ids: [] }])
+        params.expect(publish_course_school_form: [:schools_validated, { school_uuids: [] }])
       end
 
       def build_course
@@ -80,7 +80,7 @@ module Publish
       end
 
       def section_key
-        "School".pluralize(Array(school_params[:site_ids]).compact_blank.count)
+        "School".pluralize(Array(school_params[:school_uuids]).compact_blank.count)
       end
     end
   end
