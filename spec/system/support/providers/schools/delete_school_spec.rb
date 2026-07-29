@@ -159,8 +159,13 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def given_there_is_an_associated_course
-    course = create(:course, provider: @provider)
-    course.sites << @site
+    create(
+      :course_school,
+      course: create(:course, provider: @provider),
+      provider_school: @provider_school,
+      gias_school: @provider_school.gias_school,
+      site_code: @provider_school.site_code,
+    )
   end
 
   def given_i_am_authenticated_as_an_admin_user

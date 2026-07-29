@@ -39,7 +39,7 @@ module ProviderSchools
     end
 
     def removable?
-      !school.course_schools.exists?
+      !school.course_schools.joins(:course).merge(Course.kept).exists?
     end
 
   private
@@ -54,8 +54,6 @@ module ProviderSchools
     end
 
     def destroy_site_if_removable!
-      return false unless removable?
-
       site.destroy!
       true
     end
@@ -63,10 +61,6 @@ module ProviderSchools
     def destroy_records!
       provider_school.destroy!
       site&.destroy!
-    end
-
-    def provider_school_course_schools_empty?
-      provider_school.nil? || !provider_school.course_schools.exists?
     end
   end
 end

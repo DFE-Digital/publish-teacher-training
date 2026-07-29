@@ -23,15 +23,6 @@ RSpec.describe ProviderSchools::Removal do
 
         expect(Site.where(id: site.id)).to be_empty
       end
-
-      it "does not remove the site when it is attached to a legacy course site" do
-        course = create(:course, provider:)
-        course.sites << site
-
-        expect(described_class.new(provider:, uuid: site.uuid).call).to be(false)
-
-        expect(Site.where(id: site.id)).to contain_exactly(site)
-      end
     end
 
     context "when the provider is in the schools remodel cycle" do
@@ -45,16 +36,6 @@ RSpec.describe ProviderSchools::Removal do
 
         expect(Site.where(id: site.id)).to be_empty
         expect(Provider::School.where(id: provider_school.id)).to be_empty
-      end
-
-      it "does not remove either record when the site is attached to a legacy course site" do
-        course = create(:course, provider:)
-        course.sites << site
-
-        expect(described_class.new(provider:, uuid: site.uuid).call).to be(false)
-
-        expect(Site.where(id: site.id)).to contain_exactly(site)
-        expect(Provider::School.where(id: provider_school.id)).to contain_exactly(provider_school)
       end
 
       it "does not remove either record when the provider school is attached to a course school" do
