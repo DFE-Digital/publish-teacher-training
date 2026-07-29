@@ -13,6 +13,7 @@ RSpec.describe "Editing funding type" do
       when_i_visit_the_fees_and_financial_support_page
       and_i_update_the_fee
       and_i_submit_fees_and_financial_support
+      and_i_confirm_publishing_live_changes
       then_i_should_see_the_correct_success_message("Fees and financial support updated")
       and_the_course_fee_is_updated
     end
@@ -32,6 +33,7 @@ RSpec.describe "Editing funding type" do
       when_i_visit_the_course_salary_page
       and_i_update_the_salary_details
       and_i_submit_the(publish_course_salary_edit_page)
+      and_i_confirm_publishing_live_changes
       then_i_should_see_the_correct_success_message("Course salary updated")
       and_the_course_salary_is_updated
     end

@@ -11,6 +11,7 @@ RSpec.describe "Editing interview process section" do
 
     when_i_enter_information_into_the_interview_process_field
     and_i_submit_the_form
+    and_i_confirm_publishing_live_changes
     then_interview_process_data_has_changed
 
     when_i_visit_the_interview_process_edit_page
