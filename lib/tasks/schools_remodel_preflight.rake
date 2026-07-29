@@ -21,6 +21,13 @@ namespace :schools_remodel_preflight do
     puts "\nLive attachments with no course_school row (rely on the picker's union rule):"
     report.unmapped_attachments.each { |row| pp row }
 
+    report.empty_pickers.each do |level, rows|
+      next if rows.empty?
+
+      puts "\nProviders who would see no selectable schools on a #{level.humanize.downcase} course:"
+      rows.each { |row| pp row }
+    end
+
     abort("\nPre-flight failed: fix the orphan provider_schools before migrating the pickers.") if report.blocking?
   end
 end

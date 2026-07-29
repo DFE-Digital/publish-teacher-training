@@ -28,6 +28,7 @@ module DataHub
         :orphan_provider_schools,
         :unmapped_sites,
         :unmapped_attachments,
+        :empty_pickers,
         keyword_init: true,
       ) do
         # Only orphaned provider_schools resurrect a removed school in the
@@ -39,6 +40,7 @@ module DataHub
             orphan_provider_schools: orphan_provider_schools.length,
             unmapped_sites: unmapped_sites.length,
             unmapped_attachments: unmapped_attachments.length,
+            empty_pickers: empty_pickers.transform_values(&:length),
           }
         end
       end
@@ -60,12 +62,47 @@ module DataHub
           orphan_provider_schools: query(orphan_provider_schools_sql),
           unmapped_sites: query(unmapped_sites_sql),
           unmapped_attachments: query(unmapped_attachments_sql),
+          empty_pickers: empty_pickers,
         )
       end
 
     private
 
       attr_reader :recruitment_cycle_year
+
+      # Providers who would see no selectable schools at all on a course of a
+      # given level. Built from the same scope the picker uses, so the two
+      # cannot drift apart.
+      #
+      # Further education is the exposed case: only the sixteen_plus phase code
+      # matches it outright, so a school-based provider whose schools are all
+      # secondary has no way forward but the GIAS link in the callout.
+      def empty_pickers
+        GiasSchool::PHASE_CODES_FOR_COURSE_LEVEL.keys.index_with do |level|
+          providers_with_no_selectable_schools(level)
+        end
+      end
+
+      def providers_with_no_selectable_schools(level)
+        selectable = Provider::School.for_course_level(level).select(:provider_id)
+
+        providers = Provider
+          .joins(:recruitment_cycle)
+          .where(recruitment_cycle: { year: recruitment_cycle_year })
+          .where(id: Provider::School.select(:provider_id))
+          .where.not(id: selectable)
+          .order(:provider_code)
+
+        school_counts = Provider::School.where(provider: providers).group(:provider_id).count
+
+        providers.map do |provider|
+          {
+            "provider_code" => provider.provider_code,
+            "provider_name" => provider.provider_name,
+            "total_schools" => school_counts.fetch(provider.id, 0),
+          }
+        end
+      end
 
       def query(sql)
         ActiveRecord::Base.connection.exec_query(

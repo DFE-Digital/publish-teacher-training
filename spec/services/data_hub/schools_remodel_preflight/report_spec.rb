@@ -135,11 +135,81 @@ describe DataHub::SchoolsRemodelPreflight::Report do
     end
   end
 
+  # Answers the open product question: further education only matches the
+  # sixteen_plus phase code, so a school-based provider whose schools are all
+  # secondary sees an empty picker and no way forward.
+  describe "empty pickers by level (PF6)" do
+    def paired_school_with_phase(phase_code:, site_code:, minimum_age: nil)
+      uuid = SecureRandom.uuid
+      school = create(:gias_school, phase_code:, minimum_age:)
+      create(:site, provider:, uuid:, code: site_code, urn: school.urn)
+      create(:provider_school, provider:, gias_school: school, site_code:, uuid:)
+    end
+
+    it "reports a provider with only secondary schools as empty for further education" do
+      paired_school_with_phase(phase_code: :secondary, site_code: "A")
+
+      expect(report.empty_pickers.fetch("further_education").map { |row| row["provider_code"] })
+        .to contain_exactly(provider.provider_code)
+    end
+
+    it "does not report that provider as empty for secondary" do
+      paired_school_with_phase(phase_code: :secondary, site_code: "A")
+
+      expect(report.empty_pickers.fetch("secondary")).to be_empty
+    end
+
+    it "reports the school count so the size of the problem is visible" do
+      paired_school_with_phase(phase_code: :secondary, site_code: "A")
+      paired_school_with_phase(phase_code: :middle_deemed_secondary, site_code: "B")
+
+      row = report.empty_pickers.fetch("primary").first
+      expect(row["total_schools"]).to eq(2)
+    end
+
+    it "does not report a provider whose unclassifiable schools show everywhere" do
+      paired_school_with_phase(phase_code: :not_applicable, site_code: "A")
+
+      expect(report.empty_pickers.values.flatten).to be_empty
+    end
+
+    it "ignores providers with no schools at all" do
+      create(:provider, recruitment_cycle: cycle)
+
+      expect(report.empty_pickers.values.flatten).to be_empty
+    end
+
+    it "ignores providers in other recruitment cycles" do
+      other_provider = create(:provider, recruitment_cycle: create(:recruitment_cycle, year: "2025"))
+      create(:provider_school, provider: other_provider, gias_school: create(:gias_school, phase_code: :secondary))
+
+      expect(report.empty_pickers.values.flatten.map { |row| row["provider_code"] })
+        .not_to include(other_provider.provider_code)
+    end
+
+    # A provider seeing an empty list is a content problem, not a data
+    # integrity one, so it does not stop the migration.
+    it "does not block" do
+      paired_school_with_phase(phase_code: :secondary, site_code: "A")
+
+      expect(report).not_to be_blocking
+    end
+  end
+
   describe "#counts" do
     it "summarises each check" do
       create(:provider_school, provider:, gias_school:, site_code: "Z")
 
       expect(report.counts).to include(orphan_provider_schools: 1, unmapped_sites: 0)
+    end
+
+    it "counts empty pickers per level" do
+      uuid = SecureRandom.uuid
+      secondary = create(:gias_school, phase_code: :secondary)
+      create(:site, provider:, uuid:, code: "A", urn: secondary.urn)
+      create(:provider_school, provider:, gias_school: secondary, site_code: "A", uuid:)
+
+      expect(report.counts).to include(empty_pickers: { "primary" => 1, "secondary" => 0, "further_education" => 1 })
     end
   end
 end
