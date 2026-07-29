@@ -14,6 +14,24 @@ class Provider::School < ApplicationRecord
 
   has_many :course_schools, class_name: "Course::School", inverse_of: :provider_school, dependent: :destroy
 
+  # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+  # TODO School data remodel removal - drop legacy_site and register_import?
+  # once the pickers no longer surface rollover cues that only Site records.
+  #
+  # provider_school.uuid is a copy of site.uuid while legacy sites are still
+  # written, by both the dual-write in
+  # Publish::Providers::Schools::ChecksController and the schools backfill. The
+  # pairing breaks after rollover, when ProviderCopier mints fresh uuids, and
+  # this association correctly returns nil from then on.
+  has_one :legacy_site,
+          -> { kept.where(site_type: :school) },
+          class_name: "::Site",
+          primary_key: :uuid,
+          foreign_key: :uuid,
+          inverse_of: false,
+          dependent: nil
+  # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :urn, :address1, :address2, :address3, :town, :postcode, to: :gias_school
 
@@ -39,6 +57,12 @@ class Provider::School < ApplicationRecord
 
   def code
     site_code
+  end
+
+  # Whether the school arrived through the register import, which the pickers
+  # tag during the 2026 rollover. Only the legacy site records this.
+  def register_import?
+    legacy_site&.register_import? || false
   end
 
   def full_address(join_on_separator = ", ")

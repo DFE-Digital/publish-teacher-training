@@ -9,21 +9,11 @@ module Publish
       end
 
       def render?
-        register_import? && @recruitment_cycle.rollover_period_2026?
-      end
-
-    private
-
-      def register_import?
-        if @school.is_a?(Site)
-          @school.register_import?
-        else
-          legacy_site&.register_import?
-        end
-      end
-
-      def legacy_site
-        @legacy_site ||= @school.provider.sites.find_by(uuid: @school.uuid)
+        # Both models answer register_import?: Site from its own enum,
+        # Provider::School through its paired legacy site. Keeping the branch
+        # out of here lets the course pickers preload the association rather
+        # than issuing a query per checkbox.
+        @school.register_import? && @recruitment_cycle.rollover_period_2026?
       end
     end
   end

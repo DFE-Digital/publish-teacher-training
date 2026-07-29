@@ -151,6 +151,67 @@ describe Provider::School do
     end
   end
 
+  # Transitional: legacy_site and register_import? go once the pickers no
+  # longer surface rollover cues that only Site records.
+  describe "#legacy_site" do
+    let(:provider) { create(:provider) }
+    let(:gias_school) { create(:gias_school) }
+    let(:uuid) { SecureRandom.uuid }
+
+    it "finds the paired site by uuid" do
+      site = create(:site, provider:, uuid:, code: "A", urn: gias_school.urn)
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "A", uuid:)
+
+      expect(provider_school.legacy_site).to eq(site)
+    end
+
+    it "is nil when no site shares the uuid" do
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "A")
+
+      expect(provider_school.legacy_site).to be_nil
+    end
+
+    it "ignores a discarded site" do
+      create(:site, provider:, uuid:, code: "A", urn: gias_school.urn).discard!
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "A", uuid:)
+
+      expect(provider_school.legacy_site).to be_nil
+    end
+
+    it "ignores a study site" do
+      create(:site, :study_site, provider:, uuid:, code: "A")
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "A", uuid:)
+
+      expect(provider_school.legacy_site).to be_nil
+    end
+  end
+
+  describe "#register_import?" do
+    let(:provider) { create(:provider) }
+    let(:gias_school) { create(:gias_school) }
+    let(:uuid) { SecureRandom.uuid }
+
+    it "is true when the paired site came from the register import" do
+      create(:site, provider:, uuid:, code: "A", urn: gias_school.urn, added_via: :register_import)
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "A", uuid:)
+
+      expect(provider_school).to be_register_import
+    end
+
+    it "is false when the paired site was added through publish" do
+      create(:site, provider:, uuid:, code: "A", urn: gias_school.urn, added_via: :publish_interface)
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "A", uuid:)
+
+      expect(provider_school).not_to be_register_import
+    end
+
+    it "is false when there is no paired site" do
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "A")
+
+      expect(provider_school).not_to be_register_import
+    end
+  end
+
   describe "database constraints" do
     let(:provider) { create(:provider) }
     let(:gias_school) { create(:gias_school) }

@@ -4,8 +4,14 @@ class Provider::SchoolDecorator < Draper::Decorator
   include MarkdownHelper
   delegate_all
 
+  # Mirrors SiteDecorator#full_address so the pickers render both models
+  # identically while either can appear.
+  def full_address(join_on_separator = ", ")
+    smart_quotes(object.full_address(join_on_separator))
+  end
+
   def full_address_on_seperate_lines
-    smart_quotes(object.full_address("\n"))
+    full_address("\n")
   end
 
   def location_name

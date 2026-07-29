@@ -26,8 +26,10 @@ module CourseSchools
       @course = course
     end
 
+    # legacy_site is preloaded for the "newly added" rollover tag, which reads
+    # added_via off the paired Site. One extra query beats one per checkbox.
     def available_schools
-      provider.schools.joins(:gias_school).includes(:gias_school).order("gias_school.name")
+      provider.schools.joins(:gias_school).includes(:gias_school, :legacy_site).order("gias_school.name")
     end
 
     def current_school_uuids
