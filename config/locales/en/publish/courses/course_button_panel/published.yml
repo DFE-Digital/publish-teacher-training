@@ -4,8 +4,7 @@ en:
       course_button_panel:
         published:
           withdraw_course: Withdraw course
-          last_published_on: Last published on %{date}
-          publish_course: Publish course
+          last_updated_on: Last updated on %{date}
           preview_course: Preview course
           view_live_course: View live course
           hidden_text: teacher training courses

@@ -60,7 +60,7 @@ RSpec.describe Publish::Courses::StatusTagComponent, type: :component do
       expect_match(build_course(provider:, application_status: :open, traits: %i[published]))
     end
 
-    it "matches the decorator for a published course with unpublished changes" do
+    it "matches the decorator for a published course with a legacy subsequent draft" do
       course = build_course(provider:, application_status: :open, enrichments: -> { [build(:course_enrichment, :published), build(:course_enrichment, :initial_draft)] })
       expect_match(course)
     end

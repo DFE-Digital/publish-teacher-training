@@ -44,7 +44,7 @@ module Publish
       end
     end
 
-    describe "unpublished changes course" do
+    describe "legacy subsequent draft course" do
       let(:course) { create(:course, enrichments: [unpublished_changes_enrichment]) }
 
       it "is invalid" do
