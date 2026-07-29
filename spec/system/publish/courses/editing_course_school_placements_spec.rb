@@ -11,6 +11,7 @@ RSpec.describe "Editing how placements work" do
 
     when_i_enter_school_placements_information
     and_i_submit
+    and_i_confirm_publishing_live_changes
     then_i_see_a_success_message
     and_the_course_information_is_updated
   end

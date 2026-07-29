@@ -19,13 +19,14 @@ RSpec.describe "Editing course length" do
 
     when_i_update_the_length_to_2_years
     and_i_submit_the_form
+    and_i_confirm_publishing_live_changes
     then_i_see_a_success_message
     and_the_course_length_is_two_years
 
     when_i_visit_the_course_length_edit_page
     then_i_see_two_years_selected
 
-    when_i_view_the_published_course_it_is_not_updated_yet
+    when_i_view_the_published_course_it_is_updated
   end
 
   scenario "I update the course length with a custom length" do
@@ -36,6 +37,7 @@ RSpec.describe "Editing course length" do
 
     when_i_update_the_length_to_a_custom_length
     and_i_submit_the_form
+    and_i_confirm_publishing_live_changes
     then_i_see_a_success_message
     and_the_course_length_is_the_custom_length
 
@@ -118,13 +120,13 @@ private
     expect(find_field("Course length", visible: false).value).to eq "Three years"
   end
 
-  def when_i_view_the_published_course_it_is_not_updated_yet
+  def when_i_view_the_published_course_it_is_updated
     open_new_window
 
     window = Capybara::Window.new(page, page.driver.window_handles.last)
     within_window(window) do
       visit find_course_url(provider_code: provider.provider_code, course_code: course.course_code)
-      expect(page).to have_content("1 year - full time")
+      expect(page).to have_content("Up to 2 years - full time")
     end
   end
 
@@ -138,6 +140,7 @@ private
 
   def then_i_see_a_success_message
     expect(page).to have_content("Course length updated")
+    expect(page).to have_content(I18n.t("success.changes_now_live"))
   end
 
   def and_the_course_length_is_two_years
