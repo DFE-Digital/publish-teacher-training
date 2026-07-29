@@ -60,6 +60,13 @@ class Site < ApplicationRecord
 
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil) }
 
+  # Filter out sites we can identify as closed: those whose URN matches an
+  # unavailable GIAS school. Sites with no URN, or a URN matching no GIAS
+  # school, are kept.
+  scope :with_available_gias_school, lambda {
+    where.not(urn: GiasSchool.unavailable.select(:urn)).or(where(urn: nil))
+  }
+
   attr_accessor :skip_geocoding
 
   after_commit :geocode_site, unless: :skip_geocoding

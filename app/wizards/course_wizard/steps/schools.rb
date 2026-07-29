@@ -57,7 +57,7 @@ class CourseWizard
       end
 
       def provider_sites
-        wizard.provider.sites
+        wizard.provider.sites.with_available_gias_school
       end
 
       def funding_type

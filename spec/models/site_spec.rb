@@ -13,6 +13,29 @@ describe Site do
     it { is_expected.to be_audited.associated_with(:provider) }
   end
 
+  describe ".with_available_gias_school" do
+    it "excludes a site whose GIAS school has closed" do
+      create(:gias_school, :closed, urn: "654321")
+      closed_site = create(:site, provider:, urn: "654321")
+      available_site = create(:site, provider:, urn: create(:gias_school, :open).urn)
+
+      expect(described_class.with_available_gias_school).to include(available_site)
+      expect(described_class.with_available_gias_school).not_to include(closed_site)
+    end
+
+    it "keeps a site whose URN matches no GIAS school" do
+      unmatched_site = create(:site, provider:, urn: "999999")
+
+      expect(described_class.with_available_gias_school).to include(unmatched_site)
+    end
+
+    it "keeps a site with no URN" do
+      main_site = create(:site, :main_site, provider:)
+
+      expect(described_class.with_available_gias_school).to include(main_site)
+    end
+  end
+
   describe "school" do
     it { is_expected.to validate_presence_of(:location_name) }
     it { is_expected.to validate_presence_of(:address1) }

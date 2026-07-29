@@ -26,6 +26,8 @@ class GiasSchool < ApplicationRecord
     ])
   }
 
+  scope :unavailable, -> { where.not(id: available) }
+
   enum :status_code, {
     open: "1",
     closed: "2",

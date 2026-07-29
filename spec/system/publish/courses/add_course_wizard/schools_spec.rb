@@ -60,6 +60,14 @@ RSpec.describe "Add course wizard schools step", type: :system do
     and_the_address_is_shown_without_the_school_name
   end
 
+  scenario "a school whose GIAS record has closed is not offered" do
+    given_i_am_authenticated_as_a_provider_user_with_an_open_and_a_closed_school
+    and_i_have_wizard_state_for_schools(funding_type: "fee")
+    when_i_visit_the_wizard_schools_page
+    then_i_see_the_available_school
+    and_i_do_not_see_the_closed_school
+  end
+
   context "when the provider has more than 20 schools", :js do
     before do
       given_i_am_authenticated_as_a_provider_user_with_25_schools
@@ -237,6 +245,33 @@ private
     )
 
     given_i_am_authenticated(user: @user)
+  end
+
+  def given_i_am_authenticated_as_a_provider_user_with_an_open_and_a_closed_school
+    closed_gias_school = create(:gias_school, :closed, urn: "654321")
+    @user = create(
+      :user,
+      providers: [
+        create(
+          :provider,
+          :accredited_provider,
+          sites: [
+            build(:site, location_name: "Available School", urn: "123456"),
+            build(:site, location_name: "Closed School", urn: closed_gias_school.urn),
+          ],
+        ),
+      ],
+    )
+
+    given_i_am_authenticated(user: @user)
+  end
+
+  def then_i_see_the_available_school
+    expect(page).to have_css(".govuk-checkboxes__label", text: "Available School")
+  end
+
+  def and_i_do_not_see_the_closed_school
+    expect(page).to have_no_css(".govuk-checkboxes__label", text: "Closed School")
   end
 
   def school_checkbox_selector

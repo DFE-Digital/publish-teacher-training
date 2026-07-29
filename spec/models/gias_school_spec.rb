@@ -25,6 +25,20 @@ describe GiasSchool do
         expect(result).not_to contain_exactly(closed.id)
       end
     end
+
+    describe ".unavailable" do
+      it "returns only closed schools, the complement of .available" do
+        open = create(:gias_school, :open)
+        proposed_close = create(:gias_school, status_code: :proposed_to_close)
+        proposed_open = create(:gias_school, status_code: :proposed_to_open)
+        closed = create(:gias_school, :closed)
+
+        result = described_class.unavailable.ids
+
+        expect(result).to contain_exactly(closed.id)
+        expect(result).not_to include(open.id, proposed_close.id, proposed_open.id)
+      end
+    end
   end
 
   context "callbacks" do
