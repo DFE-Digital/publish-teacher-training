@@ -13,22 +13,23 @@ module Publish
       end
 
       def update
-        if form_object.valid?
+        if form_object.invalid?
+          render :edit, locals: { form_object: }
+        elsif confirm_live_changes_if_required!(
+          section_name: "Age range",
+          form: form_object,
+          form_param_key: :course,
+          cancel_path: details_path_for_live_changes,
+        )
+          # rendered interstitial
+        else
           course_updated_message("Age range")
 
           update_age_range_param
 
           if @course.update(course_params)
-            redirect_to(
-              details_publish_provider_recruitment_cycle_course_path(
-                @course.provider_code,
-                @course.recruitment_cycle_year,
-                @course.course_code,
-              ),
-            )
+            redirect_to details_path_for_live_changes
           end
-        else
-          render :edit, locals: { form_object: }
         end
       end
 
@@ -85,6 +86,14 @@ module Publish
       def build_course
         super
         authorize @course
+      end
+
+      def details_path_for_live_changes
+        details_publish_provider_recruitment_cycle_course_path(
+          @course.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        )
       end
     end
   end

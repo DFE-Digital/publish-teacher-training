@@ -13,13 +13,19 @@ module Publish
 
       def update
         @course_length_form = CourseLengthForm.new(course_enrichment, params: length_params)
+        section_name = I18n.t("publish.providers.course_length.edit.course_length")
 
-        if @course_length_form.save!
-          course_updated_message I18n.t("publish.providers.course_length.edit.course_length")
-
-          redirect_to redirect_path
-        else
+        if @course_length_form.invalid?
           render :edit
+        elsif confirm_live_changes_if_required!(
+          section_name:,
+          form: @course_length_form,
+          form_param_key: :publish_course_length_form,
+        )
+          # rendered interstitial
+        elsif @course_length_form.save!
+          course_updated_message section_name
+          redirect_to redirect_path
         end
       end
 

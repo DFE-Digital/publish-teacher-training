@@ -23,18 +23,25 @@ module Publish
 
           @subject_requirements_form = SubjectRequirementForm.new(subject_requirements_params)
 
-          if @subject_requirements_form.valid? && !goto_preview?
-            @subject_requirements_form.save(@course)
-            course_updated_message("Degree requirements")
-            redirect_to publish_provider_recruitment_cycle_course_path
-          elsif @subject_requirements_form.valid? && goto_preview?
-            @subject_requirements_form.save(@course)
-            redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
-          else
+          if @subject_requirements_form.invalid?
             set_backlink
             fetch_course_list_to_copy_from
             @errors = @subject_requirements_form.errors.messages
             render :edit
+          elsif confirm_live_changes_if_required!(
+            section_name: "Degree requirements",
+            form: @subject_requirements_form,
+            form_param_key: param_form_key,
+            fields: %i[additional_degree_subject_requirements degree_subject_requirements],
+          )
+            # rendered interstitial
+          elsif goto_preview?
+            @subject_requirements_form.save(@course)
+            redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
+          else
+            @subject_requirements_form.save(@course)
+            course_updated_message("Degree requirements")
+            redirect_to publish_provider_recruitment_cycle_course_path
           end
         end
 

@@ -22,15 +22,21 @@ module Publish
             course_enrichment,
             params: fees_and_financial_support_params,
           )
+          section_name = "Fees and financial support"
 
-          if @fees_and_financial_support_form.save!
-            course_updated_message "Fees and financial support"
-
-            redirect_after_edit
-          else
+          if @fees_and_financial_support_form.invalid?
             @v1_enrichment = course.enrichments.find_by(version: 1)
             fetch_course_list_to_copy_from
             render :edit
+          elsif confirm_live_changes_if_required!(
+            section_name:,
+            form: @fees_and_financial_support_form,
+            form_param_key: :publish_fields_fees_and_financial_support_form,
+          )
+            # rendered interstitial
+          elsif @fees_and_financial_support_form.save!
+            course_updated_message section_name
+            redirect_after_edit
           end
         end
 

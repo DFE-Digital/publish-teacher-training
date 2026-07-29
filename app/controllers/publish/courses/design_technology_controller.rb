@@ -34,7 +34,21 @@ module Publish
       def update
         authorize(provider)
 
-        if course_subjects_form.save!
+        if confirm_live_changes_if_required!(
+          section_name: "Design and technology",
+          form: design_technology_confirmation_form,
+          form_param_key: :course,
+          fields: %i[subjects_ids design_technology_ids],
+          back_path: design_technology_publish_provider_recruitment_cycle_course_path(
+            @course.provider_code, @course.recruitment_cycle_year, @course.course_code,
+            course: { subjects_ids: params.dig(:course, :subjects_ids) }
+          ),
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(
+            @course.provider_code, @course.recruitment_cycle_year, @course.course_code
+          ),
+        )
+          # rendered interstitial
+        elsif course_subjects_form.save!
           course_updated_message("Design and technology")
 
           course.update(name: course.generate_name)
@@ -77,6 +91,13 @@ module Publish
 
       def course_subjects_form
         @course_subjects_form ||= CourseSubjectsForm.new(@course, params: sorted_subject_ids)
+      end
+
+      def design_technology_confirmation_form
+        Struct.new(:subjects_ids, :design_technology_ids).new(
+          Array(params.dig(:course, :subjects_ids)),
+          Array(params.dig(:course, :design_technology_ids)),
+        )
       end
 
       def error_keys

@@ -8,6 +8,15 @@ module Publish
 
       decorates_assigned :source_course
 
+      GCSE_FORM_FIELDS = %i[
+        accept_pending_gcse
+        accept_gcse_equivalency
+        accept_english_gcse_equivalency
+        accept_maths_gcse_equivalency
+        accept_science_gcse_equivalency
+        additional_gcse_equivalencies
+      ].freeze
+
       def edit
         @gcse_requirements_form = GcseRequirementsForm.build_from_course(course)
         copy_boolean_check(::Courses::Copy::GCSE_FIELDS)
@@ -18,17 +27,24 @@ module Publish
         gcse_requirements_form_params[:level] = course.level
         @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params)
 
-        if @gcse_requirements_form.valid? && goto_preview?
-          @gcse_requirements_form.save(course)
-          redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
-        elsif @gcse_requirements_form.valid? && !goto_preview?
-          course_updated_message("GCSE requirements")
-          @gcse_requirements_form.save(course)
-          redirect_to publish_provider_recruitment_cycle_course_path
-        else
+        if @gcse_requirements_form.invalid?
           fetch_course_list_to_copy_from
           @errors = @gcse_requirements_form.errors.messages
           render :edit
+        elsif confirm_live_changes_if_required!(
+          section_name: "GCSE requirements",
+          form: @gcse_requirements_form,
+          form_param_key: param_form_key,
+          fields: GCSE_FORM_FIELDS,
+        )
+          # rendered interstitial
+        elsif goto_preview?
+          @gcse_requirements_form.save(course)
+          redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
+        else
+          course_updated_message("GCSE requirements")
+          @gcse_requirements_form.save(course)
+          redirect_to publish_provider_recruitment_cycle_course_path
         end
       end
 

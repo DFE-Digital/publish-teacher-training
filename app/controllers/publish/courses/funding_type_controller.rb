@@ -26,10 +26,20 @@ module Publish
 
         @course_funding_form = CourseFundingForm.new(@course, params: funding_type_params)
 
-        if @course_funding_form.valid?
-          handle_valid_form
-        else
+        if @course_funding_form.invalid?
           handle_invalid_form
+        elsif !previous_tda_course? && confirm_live_changes_if_required!(
+          section_name: "Funding type",
+          form: @course_funding_form,
+          form_param_key: :publish_course_funding_form,
+          fields: %i[funding previous_tda_course],
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(
+            course.provider_code, course.recruitment_cycle_year, course.course_code
+          ),
+        )
+          # rendered interstitial
+        else
+          handle_valid_form
         end
       end
 
@@ -55,7 +65,7 @@ module Publish
       end
 
       def previous_tda_course?
-        params[:publish_course_funding_form][:previous_tda_course] == "true"
+        params.dig(:publish_course_funding_form, :previous_tda_course) == "true"
       end
 
       def process_previous_tda_course

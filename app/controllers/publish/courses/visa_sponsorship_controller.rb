@@ -14,7 +14,19 @@ module Publish
       end
 
       def update
-        if visa_sponsorship_form.save!
+        if visa_sponsorship_form.invalid?
+          render :edit
+        elsif confirm_live_changes_if_required!(
+          section_name: "Visa sponsorship",
+          form: visa_sponsorship_form,
+          form_param_key: :publish_course_funding_form,
+          fields: CourseFundingForm::FIELDS,
+          cancel_path: details_publish_provider_recruitment_cycle_course_path(
+            provider.provider_code, recruitment_cycle.year, course.course_code
+          ),
+        )
+          # rendered interstitial
+        elsif visa_sponsorship_form.save!
           redirect_to_after_update
         else
           render :edit

@@ -17,14 +17,20 @@ module Publish
             course_enrichment,
             params: where_you_will_train_params,
           )
+          section_name = "Where you will train"
 
-          if @where_you_will_train_form.save!
-            course_updated_message "Where you will train"
-
-            redirect_after_edit
-          else
+          if @where_you_will_train_form.invalid?
             fetch_course_list_to_copy_from
             render :edit
+          elsif confirm_live_changes_if_required!(
+            section_name:,
+            form: @where_you_will_train_form,
+            form_param_key: :publish_fields_where_you_will_train_form,
+          )
+            # rendered interstitial
+          elsif @where_you_will_train_form.save!
+            course_updated_message section_name
+            redirect_after_edit
           end
         end
 

@@ -17,9 +17,19 @@ module Publish
 
       def update
         @course_salary_fees_form = ::Publish::CourseSalaryFeesForm.new(course_enrichment, params: form_params)
+        section_name = t(".course_salary_fee")
 
-        if @course_salary_fees_form.save!
-          course_updated_message t(".course_salary_fee")
+        if @course_salary_fees_form.invalid?
+          fetch_course_list_to_copy_from
+          render :edit
+        elsif confirm_live_changes_if_required!(
+          section_name:,
+          form: @course_salary_fees_form,
+          form_param_key:,
+        )
+          # rendered interstitial
+        elsif @course_salary_fees_form.save!
+          course_updated_message section_name
 
           if goto_preview?
             redirect_to preview_publish_provider_recruitment_cycle_course_path(
@@ -34,9 +44,6 @@ module Publish
               course.course_code,
             )
           end
-        else
-          fetch_course_list_to_copy_from
-          render :edit
         end
       end
 
