@@ -11,6 +11,7 @@ RSpec.describe "Editing fees and financial support section" do
 
     when_i_enter_information_into_the_fees_and_financial_support_field
     and_i_submit_the_form
+    and_i_confirm_publishing_live_changes
     then_fees_and_financial_support_data_has_changed
 
     when_i_visit_the_fees_and_financial_support_edit_page

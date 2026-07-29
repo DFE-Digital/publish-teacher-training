@@ -150,6 +150,7 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     fill_in "What is the interview process? (optional)", with: "some new interview process content"
     choose "Online"
     click_on "Update interview process"
+    and_i_confirm_publishing_live_changes
 
     # What you will study
     visit fields_what_you_will_study_publish_provider_recruitment_cycle_course_path(
@@ -160,6 +161,7 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     fill_in "What will trainees do during their theoretical training?", with: "some new theoretical training content"
     fill_in "How will they be assessed? (optional)", with: "some new assessment methods content"
     click_on "Update what you will study"
+    and_i_confirm_publishing_live_changes
 
     # What you will do on school placements
     visit fields_school_placement_publish_provider_recruitment_cycle_course_path(
@@ -170,6 +172,7 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     fill_in "What will trainees do while in their placement schools?", with: "some new what will trainees do on placements content"
     fill_in "How will they be supported and mentored? (optional)", with: "some new how will they be supported and mentored content"
     click_on "Update what you will do on school placements"
+    and_i_confirm_publishing_live_changes
 
     # Where you will train
     visit fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(
@@ -182,6 +185,7 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     fill_in "Where will theoretical training take place? (optional)", with: "some new where will theoretical training take place content"
     fill_in "How much time will they spend in theoretical training? (optional)", with: "some new how much time will they spend in theoretical training content"
     click_on "Update where you will train"
+    and_i_confirm_publishing_live_changes
 
     # Fees and financial support
     visit fields_fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
@@ -195,6 +199,7 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
     fill_in "Are there any additional fees or costs? (optional)", with: "some new additional fees or costs content"
     fill_in "Does your organisation offer any financial support? (optional)", with: "some new financial support content"
     click_on "Update fees and financial support"
+    and_i_confirm_publishing_live_changes
   end
 
   def then_i_see_the_changes_are_now_live_message
