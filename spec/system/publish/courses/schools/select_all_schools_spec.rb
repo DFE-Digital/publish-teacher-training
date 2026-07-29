@@ -89,16 +89,19 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
     )
     given_i_am_authenticated(user: @user)
     @provider.reload
+    pair_provider_schools_with_sites(@provider)
   end
 
   def given_there_are_many_schools
     @schools = create_list(:site, 30, provider: @provider)
+    pair_provider_schools_with_sites(@provider)
   end
 
   def given_the_provider_has_25_schools
     # the provider already has 3 sites from authentication setup
     create_list(:site, 22, provider: @provider)
     @provider.reload
+    pair_provider_schools_with_sites(@provider)
   end
 
   def and_there_is_a_course_i_want_to_edit

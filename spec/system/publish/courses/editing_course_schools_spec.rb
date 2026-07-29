@@ -123,10 +123,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   end
 
   def and_provider_schools_mirror_the_sites
-    provider.sites.each do |site|
-      gias_school = create(:gias_school, urn: site.urn)
-      create(:provider_school, provider:, gias_school:, site_code: site.code)
-    end
+    pair_provider_schools_with_sites(provider)
   end
 
   def and_the_new_model_course_school_row_exists
@@ -198,9 +195,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   def given_the_provider_has_three_sites
     provider.sites << build(:site, location_name: "Site 3")
     provider.save!
-    site = provider.sites.find_by(location_name: "Site 3")
-    gias_school = create(:gias_school, urn: site.urn)
-    create(:provider_school, provider:, gias_school:, site_code: site.code)
+    pair_provider_schools_with_sites(provider)
   end
 
   def given_the_course_is_published_with_all_three_sites_running
