@@ -39,11 +39,7 @@ module ProviderSchools
     end
 
     def removable?
-      if after_schools_remodel_cycle?
-        !school.course_schools.exists?
-      else
-        site&.has_no_course? && provider_school_course_schools_empty?
-      end
+      !school.course_schools.exists?
     end
 
   private
