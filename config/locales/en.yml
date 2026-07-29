@@ -1309,6 +1309,7 @@ en:
     saved: "%{value} updated"
     added: "%{items_added} added"
     changes_ttl: "Changes will appear on Find teacher training courses within 15 minutes."
+    changes_now_live: "These changes are now live."
     visa_partner_warning: "Changing your answer will not change visa information for courses you or your training partners have already created."
     visa_warning: "Changing your answer will not change visa information for courses you have already created."
     visa_changes: "Visa sponsorship updated"
