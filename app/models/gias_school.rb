@@ -46,18 +46,18 @@ class GiasSchool < ApplicationRecord
     "further_education" => "#{MINIMUM_AGE_SQL} >= 15",
   }.freeze
 
-  # Schools relevant to a course of this level. Fails open: a school we cannot
-  # classify — no phase code, a code this enum does not know, or "not
-  # applicable" with no usable age range — shows on every level, so a provider
-  # never loses access to a school because of a GIAS data gap.
-  scope :for_course_level, lambda { |level|
-    phase_codes_for_level = PHASE_CODES_FOR_COURSE_LEVEL[level.to_s]
-    next all if phase_codes_for_level.nil?
-
-    # The outer parentheses are load-bearing: Rails ANDs raw-SQL fragments onto
-    # a relation without wrapping them, so an unparenthesised disjunction here
-    # would swallow every other condition.
-    where(
+  # One finished predicate per course level, assembled at load time from the
+  # constants above. Building them here rather than inside the scope keeps the
+  # query call site free of string interpolation, so it is evident — to a
+  # reader and to Brakeman — that no caller input reaches the SQL. The only
+  # thing a caller chooses is which of these three frozen strings to use.
+  #
+  # The outer parentheses are load-bearing: Rails ANDs raw-SQL fragments onto a
+  # relation without wrapping them, so an unparenthesised disjunction here
+  # would swallow every other condition.
+  FOR_COURSE_LEVEL_SQL = NOT_APPLICABLE_AGE_PREDICATES.to_h { |level, age_predicate|
+    [
+      level,
       <<~SQL.squish,
         (
           gias_school.phase_code IN (:in_phase)
@@ -67,12 +67,25 @@ class GiasSchool < ApplicationRecord
             gias_school.phase_code = :not_applicable
             AND (
               #{MINIMUM_AGE_SQL} IS NULL
-              OR (#{NOT_APPLICABLE_AGE_PREDICATES.fetch(level.to_s)})
+              OR (#{age_predicate})
             )
           )
         )
       SQL
-      in_phase: phase_codes.values_at(*phase_codes_for_level),
+    ]
+  }.freeze
+
+  # Schools relevant to a course of this level. Fails open: a school we cannot
+  # classify — no phase code, a code this enum does not know, or "not
+  # applicable" with no usable age range — shows on every level, so a provider
+  # never loses access to a school because of a GIAS data gap.
+  scope :for_course_level, lambda { |level|
+    condition = FOR_COURSE_LEVEL_SQL[level.to_s]
+    next all if condition.nil?
+
+    where(
+      condition,
+      in_phase: phase_codes.values_at(*PHASE_CODES_FOR_COURSE_LEVEL.fetch(level.to_s)),
       known_phases: phase_codes.values,
       not_applicable: phase_codes[:not_applicable],
     )
