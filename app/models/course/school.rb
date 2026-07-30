@@ -11,6 +11,10 @@ class Course::School < ApplicationRecord
   belongs_to :gias_school
   belongs_to :provider_school, class_name: "Provider::School", inverse_of: :course_schools
 
+  # Course schools whose GIAS record is still available (i.e. not closed).
+  # Used to keep closed schools out of the rollover copy path.
+  scope :with_available_gias_school, -> { joins(:gias_school).merge(GiasSchool.available) }
+
   delegate :provider, :recruitment_cycle, to: :course, allow_nil: true
 
   validates :provider_school_id, uniqueness: { scope: :course_id }

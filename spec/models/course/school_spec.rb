@@ -11,6 +11,15 @@ describe Course::School do
     it { is_expected.to belong_to(:provider_school).class_name("Provider::School").required }
   end
 
+  describe ".with_available_gias_school" do
+    it "excludes course schools whose GIAS record is closed" do
+      available = create(:course_school, gias_school: create(:gias_school, :open))
+      create(:course_school, gias_school: create(:gias_school, :closed))
+
+      expect(described_class.with_available_gias_school).to contain_exactly(available)
+    end
+  end
+
   describe "validations" do
     it "creates a valid record" do
       expect(course_school).to be_valid

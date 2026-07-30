@@ -22,6 +22,15 @@ FactoryBot.define do
       age { nil }
     end
 
+    # Only needed by specs exercising Site.with_available_gias_school, i.e. the
+    # legacy rollover copiers. An existing row for the urn is never replaced, so
+    # a spec wanting a closed school creates it first.
+    trait :with_gias_school do
+      after(:build) do |site|
+        create(:gias_school, :open, urn: site.urn) unless GiasSchool.exists?(urn: site.urn)
+      end
+    end
+
     trait :study_site do
       site_type { "study_site" }
     end

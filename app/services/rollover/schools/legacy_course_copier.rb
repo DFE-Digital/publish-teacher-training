@@ -10,7 +10,7 @@ module Rollover
       def call(course:, new_provider:, new_course:)
         lookup = new_provider_sites(new_provider)
 
-        course.sites.each do |site|
+        course.sites.with_available_gias_school.each do |site|
           new_site = lookup[site.code]
           site_copier.call(new_site:, new_course:) if new_site.present?
         end

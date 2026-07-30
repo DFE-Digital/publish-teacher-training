@@ -5,8 +5,9 @@ module Rollover
     class ProviderCopier
       def execute(provider:, new_provider:)
         existing = new_provider.schools.index_by { |school| [school.gias_school_id, school.site_code] }
+        schools = provider.schools.with_available_gias_school
 
-        provider.schools.each do |provider_school|
+        schools.each do |provider_school|
           key = [provider_school.gias_school_id, provider_school.site_code]
           next if existing.key?(key)
 
@@ -16,7 +17,7 @@ module Rollover
           )
         end
 
-        { copied: provider.schools.size, skipped: [] }
+        { copied: schools.size, skipped: [] }
       end
     end
   end
