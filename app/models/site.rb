@@ -83,12 +83,6 @@ class Site < ApplicationRecord
     Course.kept.includes(:sites).where(sites: { id: }).none?
   end
 
-  # A Site has no foreign key to gias_school, so match on urn (which is unique
-  # in the gias_school table). Blank-urn sites are never treated as closed.
-  def gias_school_closed?
-    urn.present? && GiasSchool.closed.exists?(urn:)
-  end
-
   def geocode_site
     GeocodeJob.perform_later("Site", id) if needs_geolocation?
   end
