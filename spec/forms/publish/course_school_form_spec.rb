@@ -16,23 +16,72 @@ module Publish
 
     describe "#sites" do
       it "returns the provider's schools sorted by location name" do
-        provider = create(:provider, sites: [build(:site, location_name: "B School"), build(:site, location_name: "A School")])
+        provider = create(:provider, sites: [build(:site, :with_gias_school, location_name: "B School"), build(:site, :with_gias_school, location_name: "A School")])
         form = described_class.new(create(:course, provider:), params: {})
 
         expect(form.sites.map(&:location_name)).to eq(["A School", "B School"])
+      end
+
+      it "excludes a school whose GIAS record has closed" do
+        closed_gias_school = create(:gias_school, :closed, urn: "654321")
+        provider = create(
+          :provider,
+          sites: [
+            build(:site, :with_gias_school, location_name: "Available School", urn: "123456"),
+            build(:site, location_name: "Closed School", urn: closed_gias_school.urn),
+          ],
+        )
+        form = described_class.new(create(:course, provider:), params: {})
+
+        expect(form.sites.map(&:location_name)).to eq(["Available School"])
+      end
+
+      it "keeps a closed school that is already attached to the course" do
+        closed_gias_school = create(:gias_school, :closed, urn: "654321")
+        attached_site = build(:site, location_name: "Closed School", urn: closed_gias_school.urn)
+        provider = create(
+          :provider,
+          sites: [build(:site, :with_gias_school, location_name: "Available School", urn: "123456"), attached_site],
+        )
+        course = create(:course, provider:, site_statuses: [build(:site_status, site: attached_site)])
+        form = described_class.new(course, params: {})
+
+        expect(form.sites.map(&:location_name)).to contain_exactly("Available School", "Closed School")
+      end
+    end
+
+    describe "#closed_school?" do
+      let(:closed_gias_school) { create(:gias_school, :closed, urn: "654321") }
+      let(:closed_site) { build(:site, location_name: "Closed School", urn: closed_gias_school.urn) }
+      let(:available_site) { build(:site, :with_gias_school, location_name: "Available School", urn: "123456") }
+      let(:provider) { create(:provider, sites: [available_site, closed_site]) }
+      let(:course) { create(:course, provider:, site_statuses: [build(:site_status, site: closed_site)]) }
+
+      subject(:form) { described_class.new(course, params: {}) }
+
+      it "is true for a site whose GIAS record has closed" do
+        expect(form.closed_school?(closed_site)).to be(true)
+      end
+
+      it "is false for a site whose GIAS record is available" do
+        expect(form.closed_school?(available_site)).to be(false)
+      end
+
+      it "is false for a site with no urn" do
+        expect(form.closed_school?(build(:site, :main_site))).to be(false)
       end
     end
 
     describe "#collapse_schools?" do
       it "is false when the provider has 20 schools or fewer" do
-        provider = create(:provider, sites: build_list(:site, 20))
+        provider = create(:provider, sites: build_list(:site, 20, :with_gias_school))
         form = described_class.new(create(:course, provider:), params: {})
 
         expect(form.collapse_schools?).to be(false)
       end
 
       it "is true when the provider has more than 20 schools" do
-        provider = create(:provider, sites: build_list(:site, 21))
+        provider = create(:provider, sites: build_list(:site, 21, :with_gias_school))
         form = described_class.new(create(:course, provider:), params: {})
 
         expect(form.collapse_schools?).to be(true)

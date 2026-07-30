@@ -78,9 +78,9 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
     @provider = build(
       :provider,
       sites: [
-        build(:site, location_name: "Site 1"),
-        build(:site, location_name: "Site 2"),
-        build(:site, location_name: "Site 3"),
+        build(:site, :with_gias_school, location_name: "Site 1"),
+        build(:site, :with_gias_school, location_name: "Site 2"),
+        build(:site, :with_gias_school, location_name: "Site 3"),
       ],
     )
     @user = create(
@@ -92,12 +92,12 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   end
 
   def given_there_are_many_schools
-    @schools = create_list(:site, 30, provider: @provider)
+    @schools = create_list(:site, 30, :with_gias_school, provider: @provider)
   end
 
   def given_the_provider_has_25_schools
     # the provider already has 3 sites from authentication setup
-    create_list(:site, 22, provider: @provider)
+    create_list(:site, 22, :with_gias_school, provider: @provider)
     @provider.reload
   end
 

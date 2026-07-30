@@ -10,6 +10,7 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
   let!(:site_one) do
     create(
       :site,
+      :with_gias_school,
       provider:,
       added_via: :register_import,
       location_name: "Register Import School",
@@ -20,6 +21,7 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
   let!(:site_two) do
     create(
       :site,
+      :with_gias_school,
       provider:,
       added_via: :publish_interface,
       location_name: "UI Added School",

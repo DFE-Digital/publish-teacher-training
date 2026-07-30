@@ -74,6 +74,7 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
   def given_the_provider_has_a_named_school
     @school = create(
       :site,
+      :with_gias_school,
       provider: @provider,
       location_name: "Belvidere School",
       address1: "Belvidere Lane",
