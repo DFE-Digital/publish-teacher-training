@@ -1,1 +1,14 @@
-<option value="<%= other_course.course_code %>"><%= other_course.name %> (<%= other_course.course_code %>)</option>
+<% age_range =
+     other_course.primary_course? ?
+     "Ages #{other_course.age_range}" :
+     nil %>
+<option value="<%= other_course.course_code %>">
+  <%= [
+    other_course.name_and_code,
+    age_range,
+    I18n.t("publish.courses.course_table.funding.#{other_course.funding}"),
+    other_course.qualifications_summary,
+    other_course.study_mode_description.capitalize,
+    I18n.l(other_course.start_date.to_date, format: :short)
+  ].compact.join(", ") %>
+</option>
