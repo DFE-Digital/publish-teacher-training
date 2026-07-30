@@ -77,17 +77,18 @@ module Publish
         end
       end
 
-      context "when a submitted legacy Site was deleted before the queued update" do
+      context "when a submitted UUID has no legacy Site" do
         let(:school_uuids) { [site_one.uuid, site_two.uuid] }
 
         before do
-          course.site_statuses.create!(site: site_one, status: :new_status, publish: :unpublished)
           site_two.discard!
         end
 
-        it "skips the deleted Site without failing" do
-          expect { service_call }.not_to raise_error
-          expect(course.reload.sites).to contain_exactly(site_one)
+        it "raises before changing SiteStatus rows" do
+          expect { service_call }
+            .to raise_error(described_class::UnresolvedSitesError, /school_uuids=#{site_two.uuid}/)
+
+          expect(course.reload.site_statuses).to be_empty
         end
       end
     end

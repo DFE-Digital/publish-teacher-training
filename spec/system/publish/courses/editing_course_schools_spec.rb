@@ -82,6 +82,14 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     and_the_error_is_reported_to_sentry
   end
 
+  scenario "i see an error when the legacy Site mapping is missing after validation" do
+    given_the_legacy_site_update_fails_after_validation
+    when_i_update_the_course_schools
+    and_i_submit
+    then_i_should_see_the_school_selection_error
+    and_the_error_is_reported_to_sentry
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
       user: create(
@@ -166,17 +174,24 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   end
 
   def given_the_course_school_update_fails_after_validation
-    allow(Publish::Schools::UpdateCourseSchoolsService).to receive(:call_or_enqueue).and_raise(unresolved_provider_school_error)
-    allow(Sentry).to receive(:capture_exception)
+    @course_school_update_error =
+      Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError.new("no provider_school")
+    stub_course_school_update_failure
+  end
+
+  def given_the_legacy_site_update_fails_after_validation
+    @course_school_update_error =
+      Publish::Schools::UpdateCourseSiteStatusesService::UnresolvedSitesError.new("no legacy site")
+    stub_course_school_update_failure
   end
 
   def and_the_error_is_reported_to_sentry
-    expect(Sentry).to have_received(:capture_exception).with(unresolved_provider_school_error)
+    expect(Sentry).to have_received(:capture_exception).with(@course_school_update_error)
   end
 
-  def unresolved_provider_school_error
-    @unresolved_provider_school_error ||=
-      Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError.new("no provider_school")
+  def stub_course_school_update_failure
+    allow(Publish::Schools::UpdateCourseSchoolsService).to receive(:call_or_enqueue).and_raise(@course_school_update_error)
+    allow(Sentry).to receive(:capture_exception)
   end
 
   def and_no_school_is_attached_to_the_course

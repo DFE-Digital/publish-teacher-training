@@ -304,6 +304,29 @@ module Publish
           end
         end
 
+        context "when a Provider::School has no matching legacy Site" do
+          subject(:service_call) do
+            described_class.call(
+              course:,
+              params:,
+              raise_on_missing_provider_schools: false,
+            )
+          end
+
+          let(:provider_school_without_site) do
+            create(:provider_school, provider:, gias_school: create(:gias_school))
+          end
+          let(:params) { { school_uuids: [provider_school_without_site.uuid] } }
+
+          it "raises from a queued update and writes neither relationship" do
+            expect { service_call }
+              .to raise_error(UpdateCourseSiteStatusesService::UnresolvedSitesError)
+
+            expect(course.reload.schools).to be_empty
+            expect(course.site_statuses).to be_empty
+          end
+        end
+
         context "when the course belongs to a cycle after the remodel cycle" do
           let(:recruitment_cycle) do
             find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)

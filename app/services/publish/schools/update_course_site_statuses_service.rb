@@ -10,6 +10,8 @@ module Publish
     class UpdateCourseSiteStatusesService
       include ServicePattern
 
+      class UnresolvedSitesError < StandardError; end
+
       def initialize(course:, school_uuids:)
         @course = course
         @submitted_school_uuids = Array(school_uuids).compact_blank.uniq
@@ -27,14 +29,20 @@ module Publish
       def sync_schools
         return if sites_to_attach_uuids.empty? && sites_to_remove_uuids.empty?
 
-        sites_to_attach_uuids.each { |uuid| attach_school(sites_by_uuid[uuid]) }
-        sites_to_remove_uuids.each { |uuid| detach_school(sites_by_uuid[uuid]) }
+        validate_sites_to_attach!
+
+        sites_to_attach_uuids.each { |uuid| attach_school(sites_to_attach_by_uuid.fetch(uuid)) }
+        sites_to_remove_uuids.each { |uuid| detach_school(current_sites_by_uuid.fetch(uuid)) }
 
         course.sites.reload
       end
 
       def current_site_uuids
-        @current_site_uuids ||= course.sites.map(&:uuid)
+        current_sites_by_uuid.keys
+      end
+
+      def current_sites_by_uuid
+        @current_sites_by_uuid ||= course.sites.index_by(&:uuid)
       end
 
       # TODO School data remodel removal - remove once course school updates no longer diff legacy Site UUIDs.
@@ -48,23 +56,28 @@ module Publish
       end
 
       # TODO School data remodel removal - remove when Provider::School UUIDs no longer need mapping to legacy Sites.
-      def sites_by_uuid
-        @sites_by_uuid ||= course.provider.sites
-          .where(uuid: sites_to_attach_uuids + sites_to_remove_uuids)
+      def sites_to_attach_by_uuid
+        @sites_to_attach_by_uuid ||= course.provider.sites
+          .where(uuid: sites_to_attach_uuids)
           .index_by(&:uuid)
+      end
+
+      def validate_sites_to_attach!
+        missing_site_uuids = sites_to_attach_uuids - sites_to_attach_by_uuid.keys
+        return if missing_site_uuids.empty?
+
+        raise UnresolvedSitesError,
+              "no legacy site for provider=#{course.provider.id} " \
+              "course=#{course.id} school_uuids=#{missing_site_uuids.join(',')}"
       end
 
       # TODO School data remodel removal - remove with the legacy SiteStatus write path.
       def attach_school(site)
-        return if site.blank?
-
         ::CourseSchools::LegacySiteStatusCreator.call(course:, site:)
       end
 
       # TODO School data remodel removal - remove with the legacy SiteStatus write path.
       def detach_school(site)
-        return if site.blank?
-
         ::CourseSchools::LegacySiteStatusRemover.call(course:, site:)
       end
 

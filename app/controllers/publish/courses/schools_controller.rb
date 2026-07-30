@@ -43,7 +43,8 @@ module Publish
         else
           render :edit
         end
-      rescue Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError => e
+      rescue Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError,
+             Publish::Schools::UpdateCourseSiteStatusesService::UnresolvedSitesError => e
         Sentry.capture_exception(e)
         @course_school_form.errors.add(:school_uuids, :school_uuids_invalid)
         render :edit, status: :unprocessable_entity
