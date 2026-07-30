@@ -40,4 +40,20 @@ RSpec.describe Rollover::Schools::CourseCopier do
   it "does not create legacy site statuses" do
     expect { copy_schools }.not_to change(new_course.site_statuses, :count)
   end
+
+  context "when a course school's GIAS record has closed" do
+    let(:closed_gias_school) { create(:gias_school, :closed) }
+    let!(:closed_course_school) do
+      closed_provider_school = create(:provider_school, provider:, gias_school: closed_gias_school, site_code: "Z")
+      create(:course_school, course:, provider_school: closed_provider_school, gias_school: closed_gias_school, site_code: "Z")
+    end
+    # Deliberately no matching Provider::School on new_provider: the closed school
+    # is not rolled over, so CourseCopier must skip it rather than raise.
+
+    it "does not copy it and does not raise" do
+      expect { copy_schools }.not_to raise_error
+
+      expect(new_course.schools.pluck(:gias_school_id)).not_to include(closed_gias_school.id)
+    end
+  end
 end
