@@ -564,8 +564,8 @@ describe Courses::CreationService do
 
     context "when the selected site's GIAS school is closed" do
       # A site can still point at a school the GIAS import later flipped to
-      # closed. We must not build a Course::School for it, but the legacy site
-      # is still attached.
+      # closed. Both models have to record it, or the course would lose the
+      # school the moment the new-school-model flag is switched on.
       let!(:gias_school) { create(:gias_school, :closed, urn: site.urn) }
       let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
 
@@ -574,8 +574,8 @@ describe Courses::CreationService do
         allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
       end
 
-      it "builds no Course::School but still attaches the legacy site" do
-        expect(created_course.schools).to be_empty
+      it "builds the Course::School alongside the legacy site" do
+        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
         expect(created_course.sites.map(&:id)).to eq([site.id])
       end
     end

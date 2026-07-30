@@ -161,13 +161,8 @@ module Courses
       @school_sites ||= sites.select(&:school?)
     end
 
-    # Only map selectable (non-closed) GIAS schools into the new model. A site
-    # can still point at a school the GIAS import later flipped to closed; we
-    # intentionally leave that school out of course.schools (the legacy
-    # course.sites write above still keeps the site) so the new model never
-    # gains a closed school. `available` excludes only `closed`.
     def gias_schools_by_urn
-      @gias_schools_by_urn ||= GiasSchool.available
+      @gias_schools_by_urn ||= GiasSchool
         .where(urn: school_sites.map(&:urn).compact_blank)
         .index_by(&:urn)
     end
