@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe Providers::CopyToRecruitmentCycleService do
   describe "#execute" do
-    let(:site) { build(:site, :school) }
+    let(:site) { build(:site, :school, :with_gias_school) }
     let(:study_site) { build(:site, :study_site) }
     let(:published_course_enrichment) { build(:course_enrichment, :published) }
     let(:course_enrichments) { [published_course_enrichment] }

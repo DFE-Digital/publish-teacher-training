@@ -116,8 +116,8 @@ private
           :provider,
           :accredited_provider,
           sites: [
-            build(:site),
-            build(:site),
+            build(:site, :with_gias_school),
+            build(:site, :with_gias_school),
             build(:site, :study_site),
             build(:site, :study_site),
           ],
@@ -135,7 +135,7 @@ private
         create(
           :provider,
           provider_type: :lead_school,
-          sites: [build(:site), build(:site)],
+          sites: [build(:site, :with_gias_school), build(:site, :with_gias_school)],
         ),
       ],
     )

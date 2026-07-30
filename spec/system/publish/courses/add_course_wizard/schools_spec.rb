@@ -179,7 +179,7 @@ private
         create(
           :provider,
           :accredited_provider,
-          sites: [build(:site), build(:site), build(:site, :study_site)],
+          sites: [build(:site, :with_gias_school), build(:site, :with_gias_school), build(:site, :study_site)],
         ),
       ],
     )
@@ -191,7 +191,7 @@ private
     @user = create(
       :user,
       providers: [
-        create(:provider, :accredited_provider, sites: [build(:site), build(:site, :study_site)]),
+        create(:provider, :accredited_provider, sites: [build(:site, :with_gias_school), build(:site, :study_site)]),
       ],
     )
 
@@ -212,7 +212,7 @@ private
         create(
           :provider,
           :accredited_provider,
-          sites: (1..25).map { |n| build(:site, location_name: sprintf("School %02d", n)) } + [build(:site, :study_site)],
+          sites: (1..25).map { |n| build(:site, :with_gias_school, location_name: sprintf("School %02d", n)) } + [build(:site, :study_site)],
         ),
       ],
     )
@@ -230,6 +230,7 @@ private
           sites: [
             build(
               :site,
+              :with_gias_school,
               location_name: "Belvidere School",
               address1: "Belvidere Lane",
               address2: "",
@@ -238,7 +239,7 @@ private
               address4: "Shropshire",
               postcode: "SY2 5RJ",
             ),
-            build(:site),
+            build(:site, :with_gias_school),
           ],
         ),
       ],
@@ -256,7 +257,7 @@ private
           :provider,
           :accredited_provider,
           sites: [
-            build(:site, location_name: "Available School", urn: "123456"),
+            build(:site, :with_gias_school, location_name: "Available School", urn: "123456"),
             build(:site, location_name: "Closed School", urn: closed_gias_school.urn),
           ],
         ),

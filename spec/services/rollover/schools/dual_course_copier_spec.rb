@@ -12,7 +12,7 @@ RSpec.describe Rollover::Schools::DualCourseCopier do
 
   let(:provider) { create(:provider) }
   let(:new_provider) { create(:provider, recruitment_cycle: create(:recruitment_cycle, :next)) }
-  let!(:legacy_site) { create(:site, provider:, code: "S") }
+  let!(:legacy_site) { create(:site, :with_gias_school, provider:, code: "S") }
   let!(:provider_school) { create(:provider_school, provider:, site_code: "B") }
   let(:course) { create(:course, provider:) }
   let!(:site_status) { create(:site_status, course:, site: legacy_site, status: :running) }

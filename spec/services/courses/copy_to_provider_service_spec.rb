@@ -271,7 +271,7 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context "the original course has schools" do
-    let(:site) { create(:site, :school, provider:) }
+    let(:site) { create(:site, :school, :with_gias_school, provider:) }
     let!(:new_site) { create(:site, :school, provider: new_provider, code: site.code) }
     let!(:site_status) do
       create(:site_status,

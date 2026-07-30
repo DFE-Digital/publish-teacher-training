@@ -11,8 +11,8 @@ RSpec.describe CourseWizard::Steps::Schools do
   let(:site_ids) { nil }
 
   let(:provider) { create(:provider, :accredited_provider, recruitment_cycle: find_or_create(:recruitment_cycle)) }
-  let!(:site_a) { create(:site, provider:, location_name: "B School") }
-  let!(:site_b) { create(:site, provider:, location_name: "A School") }
+  let!(:site_a) { create(:site, :with_gias_school, provider:, location_name: "B School") }
+  let!(:site_b) { create(:site, :with_gias_school, provider:, location_name: "A School") }
 
   describe "#valid?" do
     subject(:wizard_step) { wizard.current_step }
@@ -63,7 +63,7 @@ RSpec.describe CourseWizard::Steps::Schools do
     end
 
     context "when the provider has more than 20 schools" do
-      before { create_list(:site, 19, provider:) }
+      before { create_list(:site, 19, :with_gias_school, provider:) }
 
       it "is true" do
         expect(wizard_step.collapse_schools?).to be(true)

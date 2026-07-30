@@ -12,7 +12,7 @@ RSpec.describe Rollover::Schools::DualProviderCopier do
 
   let(:provider) { create(:provider) }
   let(:new_provider) { create(:provider, recruitment_cycle: create(:recruitment_cycle, :next)) }
-  let!(:legacy_site) { create(:site, provider:, code: "S") }
+  let!(:legacy_site) { create(:site, :with_gias_school, provider:, code: "S") }
   let!(:provider_school) { create(:provider_school, provider:, site_code: "B") }
 
   it "copies both legacy Site and new Provider::School records" do

@@ -31,6 +31,12 @@ RSpec.describe "Support::CopyCourses" do
     end
 
     context "with schools" do
+      # The copier only carries over sites backed by an available GIAS school,
+      # and the course factory's sites use a urn sequence that matches none.
+      before do
+        source_provider.courses.flat_map(&:sites).each { |site| create(:gias_school, :open, urn: site.urn) }
+      end
+
       it "copies the courses with schools" do
         login_user(user)
         post "/support/#{year}/providers/#{target_provider.id}/copy_courses", params: { "course[autocompleted_provider_code]" => source_provider.provider_code, schools: "1" }

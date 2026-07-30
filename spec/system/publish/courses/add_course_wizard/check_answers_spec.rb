@@ -345,13 +345,13 @@ private
 
   def given_the_provider_has_no_study_sites
     provider.study_sites.destroy_all
-    @placement_site = provider.sites.first || create(:site, provider:)
+    @placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     expect(provider.reload.study_sites).to be_empty
   end
 
   def given_i_have_completed_tda_wizard_state
     primary_subject = find_or_create(:primary_subject, :primary)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -567,7 +567,7 @@ private
   def given_i_have_completed_secondary_fee_wizard_state
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -601,7 +601,7 @@ private
   def given_i_have_completed_secondary_salary_wizard_state
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -637,7 +637,7 @@ private
     @design_technology = SecondarySubject.design_technology
     @language_specialism = find_or_create(:secondary_subject, :french)
     @design_technology_specialism = find_or_create(:design_technology_subject, :engineering)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -668,7 +668,7 @@ private
 
   def given_i_have_completed_further_education_wizard_state
     further_education_subject = find_or_create(:further_education_subject)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -699,7 +699,7 @@ private
 
   def given_i_have_completed_tda_wizard_state_with_send_yes
     primary_subject = find_or_create(:primary_subject, :primary)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -727,7 +727,7 @@ private
     given_i_am_authenticated_as_school_provider_with_single_partner(cycle_year: Find::CycleTimetable.current_year)
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -757,7 +757,7 @@ private
   def given_i_have_completed_secondary_fee_wizard_state_with_no_visa_deadline
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_gias_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(

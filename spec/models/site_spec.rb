@@ -23,13 +23,13 @@ describe Site do
       expect(described_class.with_available_gias_school).not_to include(closed_site)
     end
 
-    it "keeps a site whose URN matches no GIAS school" do
+    it "excludes a site whose URN matches no GIAS school" do
       unmatched_site = create(:site, provider:, urn: "999999")
 
-      expect(described_class.with_available_gias_school).to include(unmatched_site)
+      expect(described_class.with_available_gias_school).not_to include(unmatched_site)
     end
 
-    it "keeps a site with no URN" do
+    it "keeps a main site, which is legitimately urn-less" do
       main_site = create(:site, :main_site, provider:)
 
       expect(described_class.with_available_gias_school).to include(main_site)

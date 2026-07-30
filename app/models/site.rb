@@ -60,11 +60,16 @@ class Site < ApplicationRecord
 
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil) }
 
-  # Filter out sites we can identify as closed: those whose URN matches an
-  # unavailable GIAS school. Sites with no URN, or a URN matching no GIAS
-  # school, are kept.
+  # Sites backed by an available GIAS school. Effectively a join on urn (Site
+  # has no foreign key to gias_school) without selecting the GIAS columns, so a
+  # urn matching no GIAS row is excluded rather than passed through - from 2026
+  # every school site's urn matches a GIAS record, and an earlier cycle's
+  # unmatched urn is uncleansed data, not a school we can vouch for.
+  #
+  # Main sites are the one exemption: they are legitimately urn-less
+  # (see the urn presence validation above), so they are always kept.
   scope :with_available_gias_school, lambda {
-    where.not(urn: GiasSchool.unavailable.select(:urn)).or(where(urn: nil))
+    where(urn: nil).or(where(urn: GiasSchool.available.select(:urn)))
   }
 
   attr_accessor :skip_geocoding
