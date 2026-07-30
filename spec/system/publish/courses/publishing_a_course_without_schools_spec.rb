@@ -35,10 +35,7 @@ RSpec.describe "Publishing a course that is allowed to have no schools", travel:
   end
 
   def and_provider_schools_mirror_the_sites
-    provider.sites.each do |site|
-      gias_school = create(:gias_school, urn: site.urn)
-      create(:provider_school, provider:, gias_school:, site_code: site.code)
-    end
+    pair_provider_schools_with_sites(provider)
   end
 
   def and_there_is_an_exempt_salaried_course_with_one_school

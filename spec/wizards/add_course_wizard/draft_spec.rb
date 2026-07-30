@@ -190,13 +190,30 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       expect(draft.subjects.map(&:id)).to eq([first.id, second.id])
     end
 
-    it "returns school ids and ordered school records" do
-      site_one = provider.sites.first || create(:site, provider:)
-      site_two = create(:site, provider:)
-      state_store.write(site_ids: [site_two.id.to_s, site_one.id.to_s])
+    it "returns school uuids and ordered school records" do
+      school_one = create_paired_school(provider:, name: "One", site_code: "P1").last
+      school_two = create_paired_school(provider:, name: "Two", site_code: "P2").last
+      state_store.write(school_uuids: [school_two.uuid.to_s, school_one.uuid.to_s])
 
-      expect(draft.school_ids).to eq([site_two.id.to_s, site_one.id.to_s])
-      expect(draft.schools.map(&:id)).to eq([site_two.id, site_one.id])
+      expect(draft.school_uuids).to eq([school_two.uuid.to_s, school_one.uuid.to_s])
+      expect(draft.schools.map(&:id)).to eq([school_two.id, school_one.id])
+    end
+
+    # Sessions started before the pickers moved to Provider::School still hold
+    # integer site ids; querying uuid = '123' would raise.
+    it "drops stale integer site ids rather than raising" do
+      site = create(:site, provider:)
+      state_store.write(school_uuids: [site.id.to_s])
+
+      expect(draft.school_uuids).to be_empty
+      expect(draft.schools).to be_empty
+    end
+
+    it "ignores a school uuid belonging to another provider" do
+      other_school = create_paired_school(provider: create(:provider), name: "Other", site_code: "P1").last
+      state_store.write(school_uuids: [other_school.uuid.to_s])
+
+      expect(draft.schools).to be_empty
     end
 
     it "returns study site ids and ordered study sites" do

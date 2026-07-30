@@ -7,21 +7,30 @@ class CourseWizard
       FUNDING_TYPES_WITH_SALARY = %w[salary apprenticeship].freeze
       QUALIFICATIONS_WITH_SALARY = %w[undergraduate_degree_with_qts].freeze
 
-      attribute :site_ids
+      attribute :school_uuids
 
-      validate :site_ids_selected
+      validate :school_uuids_selected
 
       review do |r|
         r.row(
           label: :schools,
           label_options: ->(draft) { { count: draft.schools.count, employment_based: draft.employment_based? } },
-          value: ->(draft) { draft.schools.map(&:location_name) },
+          value: ->(draft) { draft.schools.map { |school| school.decorate.location_name } },
           format: Publish::CheckAnswers::Formatters::List.new(separator: :br),
         )
       end
 
-      def sites
-        @sites ||= provider_sites.sort_by(&:location_name)
+      def schools
+        @schools ||= identity.available_schools.to_a
+      end
+
+      delegate :provider, to: :wizard
+
+      # No course record exists yet, so the level comes from the wizard state.
+      # The graph roots at :level, so it is always set by the time this step
+      # renders.
+      def level
+        wizard.state_store.level
       end
 
       def schools_collapse_threshold
@@ -29,7 +38,7 @@ class CourseWizard
       end
 
       def collapse_schools?
-        sites.size > schools_collapse_threshold
+        schools.size > schools_collapse_threshold
       end
 
       def salaried?
@@ -37,27 +46,27 @@ class CourseWizard
       end
 
       def self.permitted_params
-        [{ site_ids: [] }]
+        [{ school_uuids: [] }]
       end
 
     private
 
-      def site_ids_selected
-        if selected_site_ids.empty? && provider_sites.one?
-          self.site_ids = [provider_sites.first.id.to_s]
+      def identity
+        @identity ||= ::CourseSchools::Identity.new(provider:, level:)
+      end
+
+      def school_uuids_selected
+        if selected_school_uuids.empty? && schools.one?
+          self.school_uuids = [schools.first.uuid.to_s]
         end
 
-        return if selected_site_ids.any?
+        return if selected_school_uuids.any?
 
-        errors.add(:site_ids, I18n.t("course_wizard.steps.schools.errors.site_ids.blank"))
+        errors.add(:school_uuids, I18n.t("course_wizard.steps.schools.errors.school_uuids.blank"))
       end
 
-      def selected_site_ids
-        Array(site_ids).compact_blank
-      end
-
-      def provider_sites
-        wizard.provider.sites
+      def selected_school_uuids
+        Array(school_uuids).compact_blank
       end
 
       def funding_type

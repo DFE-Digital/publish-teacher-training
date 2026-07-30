@@ -25,14 +25,14 @@
   <%= t("course_wizard.steps.schools.hint") %>
 </p>
 
-<%= form.govuk_check_boxes_fieldset :site_ids,
+<%= form.govuk_check_boxes_fieldset :school_uuids,
       legend: { hidden: true, text: heading },
       form_group: { data: { controller: "show-all-schools", show_all_schools_visible_value: current_step.schools_collapse_threshold } } do %>
-  <% current_step.sites.each_with_index do |site, index| %>
-    <%= form.govuk_check_box :site_ids,
-          site.id.to_s,
-          label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
-          hint: { text: site.decorate.full_address, class: "govuk-!-font-size-16" },
+  <% current_step.schools.each_with_index do |school, index| %>
+    <%= form.govuk_check_box :school_uuids,
+          school.uuid.to_s,
+          label: { text: [school.decorate.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school:))].compact_blank.join(" ").html_safe },
+          hint: { text: school.decorate.full_address, class: "govuk-!-font-size-16" },
           include_hidden: false,
           link_errors: index.zero?,
           data: { show_all_schools_target: "school" } %>
@@ -50,3 +50,8 @@
 <% end %>
 
 <%= form.govuk_submit t("course_wizard.steps.schools.submit") %>
+
+<%= render ::Publish::Schools::PhaseFilterCalloutComponent.new(
+  provider: current_step.provider,
+  level: current_step.level,
+) %>

@@ -209,6 +209,7 @@ RSpec.describe "Adding a teacher degree apprenticeship course" do
 
   def given_i_am_authenticated_as_a_school_direct_provider_user
     @user = create(:user, providers: [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
+    pair_provider_schools_with_sites(@user.providers.first)
     @provider = @user.providers.first
     create(:accredited_provider, provider_code: "1BJ")
     @accredited_provider = create(:accredited_provider, provider_code: "1BK")
@@ -224,6 +225,7 @@ RSpec.describe "Adding a teacher degree apprenticeship course" do
         create(:accredited_provider, :scitt, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)]),
       ],
     )
+    pair_provider_schools_with_sites(@user.providers.first)
     given_i_am_authenticated(
       user: @user,
     )

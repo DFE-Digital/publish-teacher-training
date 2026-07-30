@@ -30,6 +30,9 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
   let(:user) { create(:user, providers: [provider]) }
 
   before do
+    # The picker lists Provider::School records, and register_import is only
+    # recorded on the paired site, so both rows have to exist.
+    pair_provider_schools_with_sites(provider)
     sign_in_system_test(user:)
   end
 

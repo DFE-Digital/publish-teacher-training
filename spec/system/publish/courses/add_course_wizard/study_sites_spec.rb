@@ -141,6 +141,7 @@ private
     )
 
     school_provider = @user.providers.first
+    pair_provider_schools_with_sites(school_provider)
     create(
       :provider_partnership,
       training_provider: school_provider,

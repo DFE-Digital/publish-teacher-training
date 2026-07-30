@@ -19,6 +19,12 @@
   }
 }
 
+// Draws the eye to an explanation of why a list is shorter than expected,
+// without the alarm of --error or the "action needed" of --important.
+.app-inset-text--attention {
+  border-color: govuk-colour("orange");
+}
+
 .app-inset-text--error {
   border-color: $govuk-error-colour;
   border-left-width: $govuk-border-width;

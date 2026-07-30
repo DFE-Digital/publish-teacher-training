@@ -97,6 +97,7 @@ private
                                   sites: [build(:site), build(:site)],
                                   study_sites: [build(:site, :study_site)])]
     @next_cycle_user = create(:user, providers: next_cycle_providers)
+    pair_provider_schools_with_sites(@next_cycle_user.providers.first)
     given_i_am_authenticated(user: @next_cycle_user)
   end
 
@@ -167,6 +168,7 @@ private
 
     @user = create(:user, providers:)
     @user.providers.first.courses << create(:course, :with_accrediting_provider)
+    pair_provider_schools_with_sites(@user.providers.first)
     given_i_am_authenticated(user: @user)
   end
 

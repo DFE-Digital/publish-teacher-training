@@ -2,41 +2,69 @@
 
 require "rails_helper"
 
-RSpec.describe Provider::SchoolDecorator do
-  subject(:decorated_school) { provider_school.decorate }
+describe Provider::SchoolDecorator do
+  subject(:decorated) { provider_school.decorate }
 
   let(:gias_school) do
     create(
       :gias_school,
-      name: "Example School",
+      name: "St John's School",
       urn: "123456",
-      address1: "1 Example Road",
-      town: "Example Town",
-      postcode: "EX1 1AA",
+      address1: "1 King's Road",
+      address2: nil,
+      address3: nil,
+      town: "Enfield",
+      county: "Middlesex",
+      postcode: "EN2 7RE",
     )
   end
-  let(:provider_school) { create(:provider_school, gias_school:, site_code:) }
-  let(:site_code) { "A" }
+  let(:provider_school) { create(:provider_school, gias_school:, site_code: "A") }
 
-  describe "#location_name" do
-    context "when the school is a main site" do
-      let(:site_code) { Provider::School::MAIN_SITE_CODE }
-
-      it "includes the main site suffix" do
-        expect(decorated_school.location_name).to eq("Example School (Main Site)")
-      end
+  describe "#full_address" do
+    it "joins the populated address parts" do
+      expect(decorated.full_address).to eq("1 King’s Road, Enfield, Middlesex, EN2 7RE")
     end
 
-    context "when the school is not a main site" do
-      it "returns the GIAS school name" do
-        expect(decorated_school.location_name).to eq("Example School")
-      end
+    # Matches SiteDecorator#full_address so both models render identically
+    # while the pickers can still show either.
+    it "applies smart quotes" do
+      expect(decorated.full_address).to include("King’s")
+    end
+
+    it "accepts a separator" do
+      expect(decorated.full_address("\n")).to eq("1 King’s Road\nEnfield\nMiddlesex\nEN2 7RE")
     end
   end
 
   describe "#full_address_on_seperate_lines" do
-    it "returns the GIAS address on separate lines" do
-      expect(decorated_school.full_address_on_seperate_lines).to eq("1 Example Road\nExample Town\nEX1 1AA")
+    it "joins on newlines" do
+      expect(decorated.full_address_on_seperate_lines).to eq(decorated.full_address("\n"))
+    end
+  end
+
+  describe "#location_name" do
+    it "applies smart quotes" do
+      expect(decorated.location_name).to eq("St John’s School")
+    end
+
+    context "when the school is a main site" do
+      let(:provider_school) do
+        create(:provider_school, gias_school:, site_code: Provider::School::MAIN_SITE_CODE)
+      end
+
+      it "includes the main site suffix" do
+        expect(decorated.location_name).to eq("St John’s School (Main Site)")
+      end
+    end
+  end
+
+  describe "delegated attributes" do
+    it "exposes the site code" do
+      expect(decorated.code).to eq("A")
+    end
+
+    it "exposes the URN" do
+      expect(decorated.urn).to eq("123456")
     end
   end
 end

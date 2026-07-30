@@ -8,50 +8,52 @@ RSpec.describe CourseWizard::Steps::Schools do
   let(:current_step) { :schools }
   let(:provider_code) { provider.provider_code }
   let(:recruitment_cycle_year) { provider.recruitment_cycle_year }
-  let(:site_ids) { nil }
+  let(:school_uuids) { nil }
 
   let(:provider) { create(:provider, :accredited_provider, recruitment_cycle: find_or_create(:recruitment_cycle)) }
-  let!(:site_a) { create(:site, provider:, location_name: "B School") }
-  let!(:site_b) { create(:site, provider:, location_name: "A School") }
+  let!(:school_a) { create_paired_school(provider:, name: "B School", site_code: "A").last }
+  let!(:school_b) { create_paired_school(provider:, name: "A School", site_code: "B").last }
 
   describe "#valid?" do
     subject(:wizard_step) { wizard.current_step }
 
-    it "is valid when at least one site is selected" do
-      wizard_step.site_ids = [site_a.id.to_s]
+    it "is valid when at least one school is selected" do
+      wizard_step.school_uuids = [school_a.uuid.to_s]
 
       expect(wizard_step).to be_valid
     end
 
-    it "is not valid when no sites are selected and provider has multiple sites" do
-      wizard_step.site_ids = nil
+    it "is not valid when no schools are selected and the provider has several" do
+      wizard_step.school_uuids = nil
 
       expect(wizard_step).not_to be_valid
-      expect(wizard_step.errors.messages_for(:site_ids)).to contain_exactly("Select at least one school")
+      expect(wizard_step.errors.messages_for(:school_uuids)).to contain_exactly("Select at least one school")
     end
 
-    context "when provider has only one site" do
-      let!(:site_b) { nil }
+    context "when the provider has only one school" do
+      let!(:school_b) { nil }
 
-      it "auto-selects the only site and is valid when no site is submitted" do
-        wizard_step.site_ids = nil
+      it "auto-selects it and is valid when nothing is submitted" do
+        wizard_step.school_uuids = nil
 
         expect(wizard_step).to be_valid
-        expect(wizard_step.site_ids).to eq([site_a.id.to_s])
+        expect(wizard_step.school_uuids).to eq([school_a.uuid.to_s])
       end
     end
   end
 
-  describe "#sites" do
+  describe "#schools" do
     subject(:wizard_step) { wizard.current_step }
 
-    it "returns provider sites sorted by location name" do
-      expect(wizard_step.sites).to eq(
-        [
-          site_b,
-          site_a,
-        ],
-      )
+    it "returns the provider's schools ordered by GIAS school name" do
+      expect(wizard_step.schools).to eq([school_b, school_a])
+    end
+
+    # The picker posts uuids, so an unpaired site cannot be rendered.
+    it "omits a legacy site with no Provider::School" do
+      create(:site, provider:, code: "Z", location_name: "Unpaired School", urn: create(:gias_school).urn)
+
+      expect(wizard_step.schools).to eq([school_b, school_a])
     end
   end
 
@@ -63,7 +65,9 @@ RSpec.describe CourseWizard::Steps::Schools do
     end
 
     context "when the provider has more than 20 schools" do
-      before { create_list(:site, 19, provider:) }
+      before do
+        19.times { |index| create_paired_school(provider:, name: "School #{index}", site_code: "S#{index}") }
+      end
 
       it "is true" do
         expect(wizard_step.collapse_schools?).to be(true)
@@ -73,7 +77,7 @@ RSpec.describe CourseWizard::Steps::Schools do
 
   describe ".permitted_params" do
     it "returns the correct permitted params" do
-      expect(described_class.permitted_params).to eq([{ site_ids: [] }])
+      expect(described_class.permitted_params).to eq([{ school_uuids: [] }])
     end
   end
 

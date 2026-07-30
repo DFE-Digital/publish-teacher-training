@@ -1,0 +1,10 @@
+<div class="govuk-inset-text app-inset-prompt app-inset-text--attention govuk-!-margin-top-6">
+  <h2 class="govuk-heading-m"><%= heading %></h2>
+
+  <p class="govuk-body"><%= t(".body") %></p>
+
+  <ul class="govuk-list govuk-list--bullet">
+    <li><%= t(".in_your_account_html", link: govuk_link_to(t(".in_your_account_link"), schools_path)) %></li>
+    <li><%= t(".on_gias_html", link: govuk_link_to(t(".on_gias_link"), gias_url)) %></li>
+  </ul>
+</div>

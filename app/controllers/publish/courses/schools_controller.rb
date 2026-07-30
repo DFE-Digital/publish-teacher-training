@@ -5,14 +5,18 @@ module Publish
     class SchoolsController < ApplicationController
       include CourseBasicDetailConcern
 
+      # The error path re-renders :new from #continue, so the view reads this
+      # rather than an ivar only #new would set.
+      helper_method :schools
+
       def continue
-        params[:course][:sites_ids].compact_blank!
+        params[:course][:school_uuids].compact_blank!
         super
       end
 
       def new
         authorize(@provider, :edit?)
-        return unless @provider.sites.count == 1
+        return unless schools.one?
 
         set_default_school
         redirect_to next_step
@@ -29,7 +33,7 @@ module Publish
         if @course_school_form.valid?
           Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
 
-          flash[:success] = if Array(@course_school_form.site_ids).size > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
+          flash[:success] = if Array(@course_school_form.school_uuids).size > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
                               I18n.t("success.enqueued_schools")
                             else
                               I18n.t("success.saved", value: section_key)
@@ -47,7 +51,7 @@ module Publish
 
       def back
         authorize(@provider, :edit?)
-        if @provider.sites.count > 1
+        if schools.many?
           redirect_to new_publish_provider_recruitment_cycle_courses_schools_path(path_params)
         else
           redirect_to @back_link_path
@@ -55,6 +59,17 @@ module Publish
       end
 
     private
+
+      # Every school the provider could attach, ordered by GIAS school name.
+      def schools
+        @schools ||= school_identity.available_schools.to_a
+      end
+
+      # @course is built from the in-progress params by CourseBasicDetailConcern,
+      # so its level is set by the time the schools step renders.
+      def school_identity
+        @school_identity ||= ::CourseSchools::Identity.new(provider: @provider, level: @course&.level)
+      end
 
       def current_step
         :school
@@ -66,13 +81,13 @@ module Publish
 
       def set_default_school
         params["course"] ||= {}
-        params["course"]["sites_ids"] = [@provider.sites.first.id]
+        params["course"]["school_uuids"] = [schools.first.uuid]
       end
 
       def school_params
-        return { site_ids: nil } if params[:publish_course_school_form][:site_ids].all?(&:empty?)
+        return { school_uuids: nil } if params[:publish_course_school_form][:school_uuids].all?(&:empty?)
 
-        params.expect(publish_course_school_form: [:schools_validated, { site_ids: [] }])
+        params.expect(publish_course_school_form: [:schools_validated, { school_uuids: [] }])
       end
 
       def build_course
@@ -80,7 +95,7 @@ module Publish
       end
 
       def section_key
-        "School".pluralize(Array(school_params[:site_ids]).compact_blank.count)
+        "School".pluralize(Array(school_params[:school_uuids]).compact_blank.count)
       end
     end
   end

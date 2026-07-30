@@ -44,6 +44,8 @@ private
         ],
       ),
     )
+
+    pair_provider_schools_with_sites(provider)
   end
 
   def when_i_visit_the_courses_page
@@ -66,6 +68,12 @@ private
 
   def sites
     @sites ||= provider.sites.sort_by(&:location_name)
+  end
+
+  # The schools picker lists Provider::School records, so the provider needs
+  # the rows production always has alongside its sites.
+  def schools
+    @schools ||= ::CourseSchools::Identity.new(provider:).available_schools.to_a
   end
 
   def study_sites
@@ -248,10 +256,10 @@ private
   end
 
   def select_school(course_creation_params, next_page:)
-    course_creation_params[:sites_ids] = [sites.first.id.to_s, sites.second.id.to_s]
+    course_creation_params[:school_uuids] = [schools.first.uuid.to_s, schools.second.uuid.to_s]
 
-    publish_courses_new_schools_page.check(sites.first.location_name)
-    publish_courses_new_schools_page.check(sites.second.location_name)
+    publish_courses_new_schools_page.check(schools.first.location_name)
+    publish_courses_new_schools_page.check(schools.second.location_name)
 
     publish_courses_new_schools_page.continue.click
 

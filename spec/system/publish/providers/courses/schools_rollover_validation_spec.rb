@@ -12,6 +12,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
   let(:user)      { create(:user, providers: [provider]) }
 
   before do
+    pair_provider_schools_with_sites(provider)
     sign_in_system_test(user:)
   end
 
@@ -123,7 +124,7 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
     error_links = all("a", text: "Review the schools for this course")
     expect(error_links).not_to be_empty
 
-    expect(error_links.first[:href]).to eq("#publish-course-school-form-site-ids-field-error")
+    expect(error_links.first[:href]).to eq("#publish-course-school-form-school-uuids-field-error")
   end
 
   def when_i_click_update_schools

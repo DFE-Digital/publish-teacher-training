@@ -11,6 +11,123 @@ describe GiasSchool do
   it { is_expected.to validate_uniqueness_of(:urn).case_insensitive }
 
   context "scopes" do
+    describe ".for_course_level" do
+      def school(phase_code:, minimum_age: nil, maximum_age: nil)
+        create(:gias_school, phase_code:, minimum_age:, maximum_age:)
+      end
+
+      def levels_showing(record)
+        %w[primary secondary further_education].select do |level|
+          described_class.for_course_level(level).exists?(id: record.id)
+        end
+      end
+
+      # Phase codes that belong to a level outright.
+      {
+        nursery: %w[primary],
+        primary: %w[primary],
+        middle_deemed_primary: %w[primary],
+        secondary: %w[secondary],
+        middle_deemed_secondary: %w[secondary],
+        all_through: %w[primary secondary],
+        sixteen_plus: %w[further_education],
+      }.each do |phase_code, expected_levels|
+        it "shows a #{phase_code} school on #{expected_levels.join(' and ')} courses" do
+          expect(levels_showing(school(phase_code:))).to eq(expected_levels)
+        end
+      end
+
+      # "Not applicable" is the largest phase in GIAS, segmented by age range.
+      describe "not applicable schools" do
+        {
+          # minimum, maximum => levels
+          [nil, nil] => %w[primary secondary further_education],
+          ["", ""] => %w[primary secondary further_education],
+          %w[3 7] => %w[primary],
+          %w[3 18] => %w[primary secondary],
+          ["8", nil] => %w[primary],
+          # Primary needs min <= 8, so 9 is secondary only even though the
+          # secondary rule's second clause allows min <= 9.
+          ["9", nil] => %w[secondary],
+          %w[9 16] => %w[secondary],
+          ["10", nil] => %w[secondary],
+          ["14", nil] => %w[secondary],
+          ["15", nil] => %w[further_education],
+          %w[16 19] => %w[further_education],
+        }.each do |(minimum_age, maximum_age), expected_levels|
+          it "shows min #{minimum_age.inspect} max #{maximum_age.inspect} on #{expected_levels.join(', ')}" do
+            record = school(phase_code: :not_applicable, minimum_age:, maximum_age:)
+
+            expect(levels_showing(record)).to eq(expected_levels)
+          end
+        end
+      end
+
+      # Fail open: never hide a school because its GIAS data is unusable.
+      describe "unclassifiable schools" do
+        it "shows a school with no phase code on every level" do
+          record = create(:gias_school)
+          record.update_column(:phase_code, nil)
+
+          expect(levels_showing(record)).to eq(%w[primary secondary further_education])
+        end
+
+        it "shows a school with a blank phase code on every level" do
+          record = create(:gias_school)
+          record.update_column(:phase_code, "")
+
+          expect(levels_showing(record)).to eq(%w[primary secondary further_education])
+        end
+
+        it "shows a school with a phase code this enum does not know on every level" do
+          record = create(:gias_school)
+          record.update_column(:phase_code, "99")
+
+          expect(levels_showing(record)).to eq(%w[primary secondary further_education])
+        end
+      end
+
+      # minimum_age/maximum_age are free text straight from the GIAS export.
+      describe "junk age data" do
+        it "does not raise on a non-numeric age" do
+          record = school(phase_code: :not_applicable, minimum_age: "n/a", maximum_age: "unknown")
+
+          expect { levels_showing(record) }.not_to raise_error
+        end
+
+        it "treats a non-numeric minimum age as unclassifiable" do
+          record = school(phase_code: :not_applicable, minimum_age: "n/a")
+
+          expect(levels_showing(record)).to eq(%w[primary secondary further_education])
+        end
+
+        it "reads a padded age" do
+          record = school(phase_code: :not_applicable, minimum_age: " 11 ")
+
+          expect(levels_showing(record)).to eq(%w[secondary])
+        end
+      end
+
+      it "does not filter when the level is not one we segment on" do
+        record = school(phase_code: :secondary)
+
+        expect(described_class.for_course_level(nil)).to include(record)
+        expect(described_class.for_course_level("something_else")).to include(record)
+      end
+
+      # The predicate is one disjunction in a raw SQL fragment, and Rails ANDs
+      # those without wrapping them. Without the outer parentheses it would
+      # swallow every other condition on the relation.
+      it "keeps its disjunction parenthesised when chained" do
+        primary = school(phase_code: :primary)
+        secondary = school(phase_code: :secondary)
+
+        result = described_class.for_course_level("primary").where(id: [primary.id, secondary.id])
+
+        expect(result).to contain_exactly(primary)
+      end
+    end
+
     describe ".available" do
       it "returns open and proposed_to_open, not closed or proposed_to_close" do
         open = create(:gias_school, :open)

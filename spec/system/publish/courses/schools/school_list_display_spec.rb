@@ -7,37 +7,39 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
     given_i_am_authenticated_as_a_provider_user
   end
 
+  # The count has to agree with the ticked boxes underneath it, so both come
+  # from CourseSchools::Identity.
   describe "the count of attached schools" do
-    context "with the legacy site data model" do
-      scenario "shows the number of school sites attached" do
-        given_a_course_with_attached_sites(count: 3)
-        when_i_visit_the_publish_course_school_edit_page
-        then_i_see_the_attached_count("You currently have 3 schools attached to this course")
-      end
-
-      scenario "uses the singular for a single attached school" do
-        given_a_course_with_attached_sites(count: 1)
-        when_i_visit_the_publish_course_school_edit_page
-        then_i_see_the_attached_count("You currently have 1 school attached to this course")
-      end
-
-      scenario "handles a course with no attached schools" do
-        given_a_course_with_attached_sites(count: 0)
-        when_i_visit_the_publish_course_school_edit_page
-        then_i_see_the_attached_count("You do not have any schools attached to this course")
-      end
+    scenario "shows the number of schools attached" do
+      given_a_course_with_attached_sites(count: 3)
+      when_i_visit_the_publish_course_school_edit_page
+      then_i_see_the_attached_count("You currently have 3 schools attached to this course")
     end
 
-    context "with the new school data model" do
-      before do
-        FeatureFlag.activate(:course_publishing_uses_new_school_model)
-      end
+    scenario "uses the singular for a single attached school" do
+      given_a_course_with_attached_sites(count: 1)
+      when_i_visit_the_publish_course_school_edit_page
+      then_i_see_the_attached_count("You currently have 1 school attached to this course")
+    end
 
-      scenario "shows the number of course schools attached" do
-        given_a_course_with_attached_course_schools(count: 2)
-        when_i_visit_the_publish_course_school_edit_page
-        then_i_see_the_attached_count("You currently have 2 schools attached to this course")
-      end
+    scenario "handles a course with no attached schools" do
+      given_a_course_with_attached_sites(count: 0)
+      when_i_visit_the_publish_course_school_edit_page
+      then_i_see_the_attached_count("You do not have any schools attached to this course")
+    end
+
+    scenario "counts schools attached through the new model" do
+      given_a_course_with_attached_course_schools(count: 2)
+      when_i_visit_the_publish_course_school_edit_page
+      then_i_see_the_attached_count("You currently have 2 schools attached to this course")
+    end
+
+    # It cannot be rendered as a checkbox, so counting it would contradict the
+    # list. DataHub::SchoolsRemodelPreflight::Report counts these.
+    scenario "ignores a site that has no Provider::School" do
+      given_a_course_attached_to_an_unpaired_site
+      when_i_visit_the_publish_course_school_edit_page
+      then_i_see_the_attached_count("You do not have any schools attached to this course")
     end
   end
 
@@ -57,6 +59,13 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
     @user = create(:user, providers: [@provider])
     given_i_am_authenticated(user: @user)
     @provider.reload
+    pair_provider_schools_with_sites(@provider)
+  end
+
+  def given_a_course_attached_to_an_unpaired_site
+    @course = create(:course, provider: @provider, sites: [])
+    unpaired_site = create(:site, provider: @provider, code: "ZZ", urn: create(:gias_school).urn)
+    @course.site_statuses.create!(site: unpaired_site, status: :new_status, publish: :unpublished)
   end
 
   def given_a_course_with_attached_sites(count:)
@@ -68,21 +77,27 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
 
   def given_a_course_with_attached_course_schools(count:)
     @course = create(:course, provider: @provider, sites: [])
-    count.times { create(:course_school, course: @course) }
+    @provider.schools.first(count).each do |provider_school|
+      create(:course_school, course: @course, gias_school: provider_school.gias_school, provider_school:)
+    end
   end
 
+  # The picker reads names and addresses off gias_school now, so the paired
+  # Provider::School is what carries them.
   def given_the_provider_has_a_named_school
-    @school = create(
-      :site,
-      provider: @provider,
-      location_name: "Belvidere School",
+    gias_school = create(
+      :gias_school,
+      name: "Belvidere School",
       address1: "Belvidere Lane",
-      address2: "",
-      address3: "",
+      address2: nil,
+      address3: nil,
       town: "Shrewsbury",
-      address4: "Shropshire",
+      county: "Shropshire",
       postcode: "SY2 5RJ",
     )
+    uuid = SecureRandom.uuid
+    create(:site, provider: @provider, uuid:, code: "BV", urn: gias_school.urn)
+    @school = create(:provider_school, provider: @provider, gias_school:, site_code: "BV", uuid:)
   end
 
   def when_i_visit_the_publish_course_school_edit_page

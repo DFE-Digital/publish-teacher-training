@@ -2,19 +2,19 @@
 
 module Publish
   class CourseSchoolForm < BaseCourseForm
-    FIELDS = %i[site_ids schools_validated].freeze
+    FIELDS = %i[school_uuids schools_validated].freeze
 
     attr_accessor(*FIELDS)
 
     validate :no_schools_selected
 
     def compute_fields
-      { site_ids: course.site_ids }.merge(new_attributes)
+      { school_uuids: identity.current_school_uuids }.merge(new_attributes)
     end
 
-    # Every school the provider could attach, in the order they are listed.
-    def sites
-      @sites ||= course.provider.sites.sort_by(&:location_name)
+    # Every school the provider could attach, ordered by GIAS school name.
+    def schools
+      @schools ||= identity.available_schools.to_a
     end
 
     def schools_collapse_threshold
@@ -22,20 +22,34 @@ module Publish
     end
 
     def collapse_schools?
-      sites.size > schools_collapse_threshold
+      schools.size > schools_collapse_threshold
     end
+
+    # Whether the list still contains a school the phase filter would have
+    # hidden, which the callout copy has to account for.
+    delegate :out_of_phase_schools?, to: :identity
 
   private
 
+    def identity
+      @identity ||= ::CourseSchools::Identity.new(provider: course.provider, course:)
+    end
+
     def no_schools_selected
-      return if params[:site_ids].present?
+      return if params[:school_uuids].present?
       return if ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
       if course.recruitment_cycle_rollover_period_2026?
-        errors.add(:site_ids, :check_schools) if course.sites.school.present?
-        errors.add(:site_ids, :enter_schools) if course.sites.school.blank?
+        # Which variant to show depends on whether the provider is being asked
+        # to confirm schools they can see or to add their first, so it reads
+        # the same list the page rendered.
+        if identity.current_school_uuids.any?
+          errors.add(:school_uuids, :check_schools)
+        else
+          errors.add(:school_uuids, :enter_schools)
+        end
       else
-        errors.add(:site_ids, :no_schools)
+        errors.add(:school_uuids, :no_schools)
       end
     end
   end
