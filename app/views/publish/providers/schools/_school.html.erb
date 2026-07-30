@@ -3,7 +3,7 @@
     <%= govuk_link_to school.location_name, publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.uuid) %>
 
     <%= render Publish::Schools::NewlyAddedTagComponent.new(school:) %>
-    <%= render ClosedSchoolTagComponent.new(closed: @closed_urns.include?(school.urn)) %>
+    <%= render ClosedSchoolTagComponent.new(closed: school.gias_school_closed?) %>
   </th>
 
   <td class="govuk-table__cell code">

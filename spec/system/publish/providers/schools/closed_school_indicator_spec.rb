@@ -11,15 +11,9 @@ RSpec.describe "Provider schools index closed indicator" do
   end
 
   def given_i_am_signed_in_with_an_open_and_a_closed_school
-    closed_gias_school = create(:gias_school, :closed, urn: "654321")
-    open_gias_school = create(:gias_school, :open, urn: "123456")
-    @provider = create(
-      :provider,
-      sites: [
-        build(:site, location_name: "Millbrook School", urn: closed_gias_school.urn),
-        build(:site, location_name: "Riverside School", urn: open_gias_school.urn),
-      ],
-    )
+    @provider = create(:provider)
+    create(:provider_school, provider: @provider, gias_school: create(:gias_school, :closed, name: "Millbrook School"))
+    create(:provider_school, provider: @provider, gias_school: create(:gias_school, :open, name: "Riverside School"))
 
     given_i_am_authenticated(user: create(:user, providers: [@provider]))
   end

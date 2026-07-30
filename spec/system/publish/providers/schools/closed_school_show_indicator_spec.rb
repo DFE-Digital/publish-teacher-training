@@ -17,13 +17,13 @@ RSpec.describe "Provider school show page closed indicator" do
 
   def given_i_am_signed_in_viewing_a_school_backed_by(gias_school)
     @provider = create(:provider)
-    @site = create(:site, provider: @provider, urn: gias_school.urn)
+    @school = create(:provider_school, provider: @provider, gias_school:)
 
     given_i_am_authenticated(user: create(:user, providers: [@provider]))
   end
 
   def when_i_visit_the_school_show_page
-    visit publish_provider_recruitment_cycle_school_path(@provider.provider_code, @provider.recruitment_cycle_year, @site.uuid)
+    visit publish_provider_recruitment_cycle_school_path(@provider.provider_code, @provider.recruitment_cycle_year, @school.uuid)
   end
 
   def then_i_see_it_flagged_as_closed
