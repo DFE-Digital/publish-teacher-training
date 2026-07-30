@@ -29,8 +29,8 @@ module Publish
           end
         end
 
-        context "when the number of school UUIDs is within ENQUEUE_THRESHOLD" do
-          let(:params) { { school_uuids: [provider_school_one.uuid] } }
+        context "when the number of school UUIDs equals ENQUEUE_THRESHOLD" do
+          let(:params) { { school_uuids: Array.new(30) { SecureRandom.uuid } } }
 
           it "runs the update inline" do
             allow(described_class).to receive(:call)
@@ -40,6 +40,7 @@ module Publish
             expect(described_class).to have_received(:call).with(course:, params:)
           end
         end
+
       end
 
       describe "#call" do
@@ -145,18 +146,17 @@ module Publish
           end
         end
 
-        context "when the inline new-model update fails" do
+        context "when the Course::School write fails" do
           before do
             allow(UpdateCourseProviderSchoolsService).to receive(:call)
-              .and_raise(UpdateCourseProviderSchoolsService::UnresolvedProviderSchoolsError)
+              .and_raise(ActiveRecord::RecordInvalid)
           end
 
           it "rolls back the legacy write and does not notify" do
             FeatureFlag.activate(:course_sites_updated_email_notification)
             expect(NotificationService::CourseSitesUpdated).not_to receive(:call)
 
-            expect { service_call }
-              .to raise_error(UpdateCourseProviderSchoolsService::UnresolvedProviderSchoolsError)
+            expect { service_call }.to raise_error(ActiveRecord::RecordInvalid)
 
             expect(course.site_statuses.count).to eq(0)
           ensure
@@ -166,7 +166,7 @@ module Publish
 
         it "raises inline when a Provider::School UUID cannot be resolved" do
           expect { described_class.call(course:, params: { school_uuids: [SecureRandom.uuid] }) }
-            .to raise_error(UpdateCourseProviderSchoolsService::UnresolvedProviderSchoolsError)
+            .to raise_error(described_class::UnresolvedProviderSchoolsError)
         end
 
         it "requires the caller to provide school_uuids" do
@@ -175,7 +175,13 @@ module Publish
         end
 
         context "when the update is run by the queued job" do
-          subject(:service_call) { described_class.call(course:, params:, transactional: false) }
+          subject(:service_call) do
+            described_class.call(
+              course:,
+              params:,
+              raise_on_missing_provider_schools: false,
+            )
+          end
 
           let(:site_three) { create(:site, provider:, location_name: "Site 3") }
           let(:provider_school_three) do
@@ -192,7 +198,6 @@ module Publish
           before do
             attach_school(site_one, provider_school_one)
             provider_school_three.destroy!
-            site_three.discard!
           end
 
           it "skips a school deleted since submission and saves the remaining selection" do
@@ -200,6 +205,115 @@ module Publish
 
             expect { service_call }.not_to raise_error
             expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_two.id])
+            expect(course.sites).to contain_exactly(site_two)
+          end
+
+          it "notifies using only the schools that still exist" do
+            FeatureFlag.activate(:course_sites_updated_email_notification)
+            allow(Rails.logger).to receive(:warn)
+
+            expect(NotificationService::CourseSitesUpdated).to receive(:call).with(
+              course:,
+              previous_site_names: [provider_school_one.location_name],
+              updated_site_names: [provider_school_two.location_name],
+            )
+
+            service_call
+          ensure
+            FeatureFlag.deactivate(:course_sites_updated_email_notification)
+          end
+        end
+
+        context "when a stale queued school was attached before it was removed" do
+          subject(:service_call) do
+            described_class.call(
+              course:,
+              params:,
+              raise_on_missing_provider_schools: false,
+            )
+          end
+
+          let(:site_three) { create(:site, provider:, location_name: "Site 3") }
+          let(:provider_school_three) do
+            create(
+              :provider_school,
+              provider:,
+              gias_school: create(:gias_school, name: "Site 3", urn: site_three.urn),
+              site_code: site_three.code,
+              uuid: site_three.uuid,
+            )
+          end
+          let(:params) { { school_uuids: [provider_school_two.uuid, provider_school_three.uuid] } }
+
+          before do
+            attach_school(site_three, provider_school_three)
+            provider_school_three.destroy!
+          end
+
+          it "removes the stale legacy relationship and applies the remaining selection" do
+            allow(Rails.logger).to receive(:warn)
+
+            service_call
+
+            expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_two.id])
+            expect(course.sites).to contain_exactly(site_two)
+          end
+        end
+
+        context "when a queued write fails" do
+          subject(:service_call) do
+            described_class.call(
+              course:,
+              params:,
+              raise_on_missing_provider_schools: false,
+            )
+          end
+
+          before do
+            attach_school(site_one, provider_school_one)
+            allow(UpdateCourseProviderSchoolsService).to receive(:call)
+              .and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "still rolls back the dual write" do
+            expect { service_call }.to raise_error(ActiveRecord::RecordInvalid)
+
+            expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_one.id])
+            expect(course.sites).to contain_exactly(site_one)
+          end
+        end
+
+        context "when the course save fails after both relationship writes" do
+          subject(:service_call) do
+            described_class.call(
+              course:,
+              params:,
+              raise_on_missing_provider_schools: false,
+            )
+          end
+
+          before do
+            allow(course).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "rolls back both queued relationship writes" do
+            expect { service_call }.to raise_error(ActiveRecord::RecordInvalid)
+
+            expect(course.reload.schools).to be_empty
+            expect(course.sites).to be_empty
+          end
+        end
+
+        context "when the course belongs to a cycle after the remodel cycle" do
+          let(:recruitment_cycle) do
+            find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
+          end
+          let(:provider) { create(:provider, recruitment_cycle:, sites: [site_one, site_two]) }
+
+          it "continues to write both school models" do
+            service_call
+
+            expect(course.reload.schools.find_by(provider_school: provider_school_two)).to be_present
             expect(course.sites).to contain_exactly(site_two)
           end
         end

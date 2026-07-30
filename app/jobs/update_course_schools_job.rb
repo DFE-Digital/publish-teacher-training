@@ -4,6 +4,10 @@ class UpdateCourseSchoolsJob
   def perform(course_id, params)
     course = Course.find(course_id)
 
-    Publish::Schools::UpdateCourseSchoolsService.call(course:, params:, transactional: false)
+    Publish::Schools::UpdateCourseSchoolsService.call(
+      course:,
+      params:,
+      raise_on_missing_provider_schools: false,
+    )
   end
 end

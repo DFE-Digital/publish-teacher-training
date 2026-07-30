@@ -10,6 +10,8 @@ module Publish
 
       ENQUEUE_THRESHOLD = 30
 
+      class UnresolvedProviderSchoolsError < StandardError; end
+
       def self.call_or_enqueue(course:, params:)
         if Array(params[:school_uuids]).compact_blank.uniq.size > ENQUEUE_THRESHOLD
           UpdateCourseSchoolsJob.perform_async(course.id, params.to_h)
@@ -18,22 +20,28 @@ module Publish
         end
       end
 
-      # @param transactional [Boolean] inline updates are atomic and strict;
-      #   queued updates pass false so valid writes survive stale school UUIDs
-      def initialize(course:, params:, transactional: true)
+      # @param course [Course] course whose school selection should be updated
+      # @param params [Hash, ActionController::Parameters] course attributes and
+      #   submitted Provider::School UUIDs
+      # @param raise_on_missing_provider_schools [Boolean] inline requests pass
+      #   true; queued requests pass false because a school may be removed while
+      #   the job is waiting to run
+      def initialize(course:, params:, raise_on_missing_provider_schools: true)
         @course = course
         @params = params.to_h.deep_symbolize_keys
-        @school_uuids = Array(@params.fetch(:school_uuids)).compact_blank.uniq
-        @transactional = transactional
+        @submitted_school_uuids = Array(@params.fetch(:school_uuids)).compact_blank.uniq
+        @raise_on_missing_provider_schools = raise_on_missing_provider_schools
       end
 
       def call
         previous_school_names = school_names_for_notification
 
-        within_transaction do
+        ActiveRecord::Base.transaction do
+          provider_schools = resolve_provider_schools
+
           course.assign_attributes(course_attributes)
-          update_site_statuses
-          update_provider_schools
+          update_site_statuses(provider_schools)
+          update_provider_schools(provider_schools)
 
           # This persists schools_validated and deliberately touches the course
           # and provider. Apply watches provider.changed_at to decide whether it
@@ -49,31 +57,52 @@ module Publish
 
     private
 
-      attr_reader :course, :params, :school_uuids
+      attr_reader :course, :params, :submitted_school_uuids
 
       def course_attributes
         params.except(:school_uuids)
       end
 
-      def update_provider_schools
+      def resolve_provider_schools
+        # Prevent a concurrent removal from deleting a school after resolution
+        # but before both relationship writers have completed.
+        provider_schools_by_uuid = course.provider.schools
+          .includes(:gias_school)
+          .where(uuid: submitted_school_uuids)
+          .lock
+          .index_by(&:uuid)
+
+        missing_school_uuids = submitted_school_uuids - provider_schools_by_uuid.keys
+        handle_missing_provider_schools(missing_school_uuids)
+
+        submitted_school_uuids.filter_map { |uuid| provider_schools_by_uuid[uuid] }
+      end
+
+      def handle_missing_provider_schools(missing_school_uuids)
+        return if missing_school_uuids.empty?
+
+        message = "no provider_school for provider=#{course.provider.id} " \
+          "school_uuids=#{missing_school_uuids.join(',')}"
+        raise UnresolvedProviderSchoolsError, message if raise_on_missing_provider_schools?
+
+        Rails.logger.warn("[CourseSchools] skipped stale provider_school UUIDs - #{message}")
+      end
+
+      def update_provider_schools(provider_schools)
         UpdateCourseProviderSchoolsService.call(
           course:,
-          school_uuids:,
-          raise_on_missing_provider_schools: transactional?,
+          provider_schools:,
         )
       end
 
       # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
       # TODO School data remodel removal - remove this legacy write once all school reads use Course::School.
       # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-      def update_site_statuses
-        UpdateCourseSiteStatusesService.call(course:, school_uuids:)
-      end
-
-      def within_transaction(&block)
-        return yield unless transactional?
-
-        ActiveRecord::Base.transaction(&block)
+      def update_site_statuses(provider_schools)
+        UpdateCourseSiteStatusesService.call(
+          course:,
+          school_uuids: provider_schools.map(&:uuid),
+        )
       end
 
       def send_notifications(previous_school_names:, updated_school_names:)
@@ -95,8 +124,8 @@ module Publish
           .sort
       end
 
-      def transactional?
-        @transactional
+      def raise_on_missing_provider_schools?
+        @raise_on_missing_provider_schools
       end
     end
   end

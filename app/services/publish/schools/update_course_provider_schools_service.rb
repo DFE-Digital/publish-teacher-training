@@ -2,27 +2,19 @@
 
 module Publish
   module Schools
-    # Syncs Course::School rows for submitted Provider::School UUIDs.
-    # The orchestrator decides whether unresolved UUIDs fail the update or are
-    # logged and skipped when a queued update contains a school removed since submission.
+    # Syncs Course::School rows to an already-resolved Provider::School selection.
+    # UUID resolution and queued-update policy belong to UpdateCourseSchoolsService.
     class UpdateCourseProviderSchoolsService
       include ServicePattern
 
-      class UnresolvedProviderSchoolsError < StandardError; end
-
       # @param course [Course] course whose Course::School rows should be synced
-      # @param school_uuids [Array<String>] submitted Provider::School UUIDs
-      # @param raise_on_missing_provider_schools [Boolean] when true, unresolved
-      #   UUIDs fail the update; when false, unresolved UUIDs are logged and the
-      #   service syncs any Provider::School rows it can still resolve
-      def initialize(course:, school_uuids:, raise_on_missing_provider_schools: true)
+      # @param provider_schools [Array<Provider::School>] complete desired selection
+      def initialize(course:, provider_schools:)
         @course = course
-        @submitted_school_uuids = Array(school_uuids).compact_blank.uniq
-        @raise_on_missing_provider_schools = raise_on_missing_provider_schools
+        @provider_schools = provider_schools
       end
 
       def call
-        handle_missing_provider_schools
         return if provider_school_ids_to_attach.empty? && provider_school_ids_to_remove.empty?
 
         provider_schools_to_attach.each { |provider_school| attach_provider_school(provider_school) }
@@ -32,7 +24,7 @@ module Publish
 
     private
 
-      attr_reader :course, :submitted_school_uuids
+      attr_reader :course, :provider_schools
 
       def attach_provider_school(provider_school)
         course.schools.create_or_find_by!(provider_school:) do |course_school|
@@ -40,29 +32,8 @@ module Publish
         end
       end
 
-      def provider_school_ids_by_uuid
-        @provider_school_ids_by_uuid ||= course.provider.schools
-          .where(uuid: submitted_school_uuids)
-          .pluck(:uuid, :id)
-          .to_h
-      end
-
-      def handle_missing_provider_schools
-        return if missing_provider_school_uuids.empty?
-
-        message = "no provider_school for provider=#{course.provider.id} " \
-          "school_uuids=#{missing_provider_school_uuids.join(',')}"
-        raise UnresolvedProviderSchoolsError, message if raise_on_missing_provider_schools?
-
-        Rails.logger.warn("[CourseSchools] skipped stale provider_school UUIDs - #{message}")
-      end
-
-      def missing_provider_school_uuids
-        @missing_provider_school_uuids ||= submitted_school_uuids - provider_school_ids_by_uuid.keys
-      end
-
       def submitted_provider_school_ids
-        @submitted_provider_school_ids ||= provider_school_ids_by_uuid.values
+        @submitted_provider_school_ids ||= provider_schools.map(&:id)
       end
 
       def current_provider_school_ids
@@ -78,13 +49,8 @@ module Publish
       end
 
       def provider_schools_to_attach
-        @provider_schools_to_attach ||= course.provider.schools
-          .includes(:gias_school)
-          .where(id: provider_school_ids_to_attach)
-      end
-
-      def raise_on_missing_provider_schools?
-        @raise_on_missing_provider_schools
+        schools_by_id = provider_schools.index_by(&:id)
+        provider_school_ids_to_attach.map { |id| schools_by_id.fetch(id) }
       end
     end
   end

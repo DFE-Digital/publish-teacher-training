@@ -176,7 +176,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   def unresolved_provider_school_error
     @unresolved_provider_school_error ||=
-      Publish::Schools::UpdateCourseProviderSchoolsService::UnresolvedProviderSchoolsError.new("no provider_school")
+      Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError.new("no provider_school")
   end
 
   def and_no_school_is_attached_to_the_course
