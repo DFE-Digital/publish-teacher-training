@@ -30,7 +30,7 @@ module Publish
         end
 
         context "when the number of school UUIDs equals ENQUEUE_THRESHOLD" do
-          let(:params) { { school_uuids: Array.new(30) { SecureRandom.uuid } } }
+          let(:params) { { school_uuids: Array.new(30) { SecureRandom.uuid } + [""] } }
 
           it "runs the update inline" do
             allow(described_class).to receive(:call)
@@ -41,6 +41,29 @@ module Publish
           end
         end
 
+        context "when duplicate and blank UUIDs take the submitted count over ENQUEUE_THRESHOLD" do
+          let(:params) { { school_uuids: Array.new(31, provider_school_one.uuid) + [""] } }
+
+          it "counts unique non-blank UUIDs and runs the update inline" do
+            allow(described_class).to receive(:call)
+
+            described_class.call_or_enqueue(course:, params:)
+
+            expect(described_class).to have_received(:call).with(course:, params:)
+          end
+        end
+
+        context "when school UUIDs are nil" do
+          let(:params) { { school_uuids: nil } }
+
+          it "runs the update inline" do
+            allow(described_class).to receive(:call)
+
+            described_class.call_or_enqueue(course:, params:)
+
+            expect(described_class).to have_received(:call).with(course:, params:)
+          end
+        end
       end
 
       describe "#call" do

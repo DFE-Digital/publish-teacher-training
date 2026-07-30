@@ -89,7 +89,7 @@ module Publish
       end
 
       def selected_school_uuids_count
-        Array(school_params[:school_uuids]).compact_blank.count
+        Array(school_params[:school_uuids]).compact_blank.uniq.count
       end
     end
   end

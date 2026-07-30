@@ -15,8 +15,7 @@ module Publish
 
     # Every school the provider could attach, in the order they are listed.
     def schools
-      @schools ||= course.provider.schools
-        .joins(:gias_school)
+      @schools ||= available_schools
         .includes(:gias_school)
         .order("gias_school.name")
     end
@@ -51,10 +50,18 @@ module Publish
       school_uuids = Array(params[:school_uuids]).compact_blank.uniq
       return if school_uuids.empty?
 
-      known_school_uuids = course.provider.schools.where(uuid: school_uuids).pluck(:uuid)
+      known_school_uuids = available_schools
+        .where(uuid: school_uuids)
+        .pluck("provider_school.uuid")
       return if (school_uuids - known_school_uuids).empty?
 
       errors.add(:school_uuids, :school_uuids_invalid)
+    end
+
+    def available_schools
+      course.provider.schools
+        .joins(:gias_school)
+        .merge(GiasSchool.available)
     end
   end
 end

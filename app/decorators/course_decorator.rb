@@ -167,8 +167,7 @@ class CourseDecorator < ApplicationDecorator
     names.sort_by(&:downcase)
   end
 
-  # Count of schools currently attached to the course, reading from whichever
-  # data model is live per the :course_publishing_uses_new_school_model flag.
+  # Count of Course::School records currently attached to the course.
   def attached_schools_count
     object.schools.count
   end
