@@ -10,7 +10,9 @@ class UniqueCourseValidator < ActiveModel::Validator
 private
 
   def course_is_unique?(new_course)
-    existing_courses = new_course.provider.courses
+    existing_courses = new_course&.provider&.courses
+    return true if existing_courses.blank?
+
     new_course_attributes = new_course.attributes.slice(*attributes_to_compare)
     existing_courses.none? do |existing_course|
       existing_course_attributes = existing_course.attributes.slice(*attributes_to_compare)

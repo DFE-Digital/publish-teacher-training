@@ -31,6 +31,12 @@ describe Course do
     end
   end
 
+  describe "new course is invalid for new validations" do
+    subject { described_class.new }
+
+    it { is_expected.to be_invalid(:new) }
+  end
+
   describe "#campaign_name" do
     it "assigns the campaign" do
       course.engineers_teach_physics!
