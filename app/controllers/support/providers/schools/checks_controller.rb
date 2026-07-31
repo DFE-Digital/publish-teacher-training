@@ -12,7 +12,7 @@ module Support
           saved = false
 
           ActiveRecord::Base.transaction do
-            saved = create_provider_school
+            saved = create_provider_school_with_legacy_site
           end
 
           if saved
@@ -27,15 +27,6 @@ module Support
 
         def new_form
           @school_form = SchoolForm.new(provider, site, params: { gias_school_id: params[:school_id] })
-        end
-
-        def create_provider_school
-          # We stop creating legacy sites in 2027, this if statement takes care of this
-          if provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
-            create_provider_school_without_legacy_site
-          else
-            create_provider_school_with_legacy_site
-          end
         end
 
         def create_provider_school_with_legacy_site
@@ -54,11 +45,6 @@ module Support
           end
 
           saved
-        end
-
-        def create_provider_school_without_legacy_site
-          ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
-          true
         end
 
         # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
