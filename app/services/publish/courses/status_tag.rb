@@ -13,18 +13,22 @@ module Publish
     # "Open" and "Open *" (unpublished changes) share the token :open — the token
     # is the filterable status, not the rendered label.
     module StatusTag
+      # Content statuses that are their own token. Anything else is published in
+      # some form, and its token depends on the cycle and application status.
+      SELF_EVIDENT_TOKENS = %w[draft rolled_over withdrawn].freeze
+
       def self.token(course)
-        case course.read_attribute(:content_status).to_s
-        when "draft" then :draft
-        when "rolled_over" then :rolled_over
-        when "withdrawn" then :withdrawn
-        else # published / published_with_unpublished_changes
-          if Find::CycleTimetable.current_or_previous_year?(course.recruitment_cycle.year)
-            course.application_status_open? ? :open : :closed
-          else
-            :scheduled
-          end
-        end
+        content_status = course.read_attribute(:content_status).to_s
+        return content_status.to_sym if SELF_EVIDENT_TOKENS.include?(content_status)
+
+        published_token(course)
+      end
+
+      # published / published_with_unpublished_changes
+      def self.published_token(course)
+        return :scheduled unless Find::CycleTimetable.current_or_previous_year?(course.recruitment_cycle.year)
+
+        course.application_status_open? ? :open : :closed
       end
     end
   end
