@@ -11,7 +11,7 @@ module Publish
 
         def update
           provider_school = ActiveRecord::Base.transaction do
-            create_provider_school
+            create_provider_school_and_legacy_site
           end
 
           redirect_to publish_provider_recruitment_cycle_schools_path,
@@ -21,19 +21,6 @@ module Publish
         end
 
       private
-
-        def create_provider_school
-          # We stop creating legacy sites in 2027, this if statement takes care of this
-          if provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
-            create_only_provider_school
-          else
-            create_provider_school_and_legacy_site
-          end
-        end
-
-        def create_only_provider_school
-          ::ProviderSchools::Creator.call(provider: @provider, gias_school_id: school_id)
-        end
 
         # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
         # TODO School data remodel removal - remove this legacy Site write when publish creates Provider::School directly.
