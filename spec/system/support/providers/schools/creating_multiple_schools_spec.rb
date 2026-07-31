@@ -30,19 +30,6 @@ RSpec.describe "Multiple schools" do
     and_i_see_the_success_message
   end
 
-  scenario "when adding schools after the schools remodel cycle" do
-    given_the_provider_is_after_the_schools_remodel_cycle
-
-    when_i_visit_the_multiple_schools_new_page
-    and_i_fill_in_the_urns_with_a_mixture_of_new_lines_and_comma
-    and_i_click_continue
-    when_i_click_add_schools
-
-    then_i_am_redirected_to_the_school_index
-    and_only_provider_school_rows_are_created_for_each
-    and_i_see_the_success_message
-  end
-
   scenario "when there are over 50 urns" do
     when_i_visit_the_multiple_schools_new_page
     and_i_enter_51_urns
@@ -117,11 +104,6 @@ RSpec.describe "Multiple schools" do
     @gias_schools = create_list(:gias_school, 3)
   end
 
-  def given_the_provider_is_after_the_schools_remodel_cycle
-    recruitment_cycle = create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
-    @provider = create(:provider, recruitment_cycle:)
-  end
-
   def and_i_fill_in_the_urns_with_a_mixture_of_new_lines_and_comma
     urns = @gias_schools.map(&:urn)
     input = "  #{urns[0]},#{urns[1]}\n\n#{urns[2]}"
@@ -145,17 +127,6 @@ RSpec.describe "Multiple schools" do
       expect(provider_school).to be_present
       expect(provider_school.site_code).to eq(site.code)
       expect(provider_school.uuid).to eq(site.uuid)
-    end
-  end
-
-  def and_only_provider_school_rows_are_created_for_each
-    @gias_schools.each do |gias_school|
-      expect(@provider.sites.find_by(urn: gias_school.urn)).to be_nil
-
-      provider_school = @provider.schools.find_by(gias_school_id: gias_school.id)
-      expect(provider_school).to be_present
-      expect(provider_school.site_code).to be_present
-      expect(provider_school.uuid).to be_present
     end
   end
 

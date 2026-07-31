@@ -43,24 +43,11 @@ module Support
 
           gias_schools.each do |gias_school|
             ActiveRecord::Base.transaction do
-              saved_schools << create_provider_school(gias_school:)
+              saved_schools << create_provider_school_and_legacy_site(gias_school:)
             end
           end
 
           schools_added_message(saved_schools)
-        end
-
-        def create_provider_school(gias_school:)
-          # We stop creating legacy sites in 2027, this if statement takes care of this
-          if provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
-            create_only_provider_school(gias_school:)
-          else
-            create_provider_school_and_legacy_site(gias_school:)
-          end
-        end
-
-        def create_only_provider_school(gias_school:)
-          ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
         end
 
         # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
