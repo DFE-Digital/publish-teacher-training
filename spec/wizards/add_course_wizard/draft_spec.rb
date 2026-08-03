@@ -190,13 +190,55 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       expect(draft.subjects.map(&:id)).to eq([first.id, second.id])
     end
 
-    it "returns school ids and ordered school records" do
+    it "keeps every stored uuid but resolves only the provider's own schools" do
       site_one = provider.sites.first || create(:site, provider:)
       site_two = create(:site, provider:)
-      state_store.write(site_ids: [site_two.id.to_s, site_one.id.to_s])
+      site_three = create(:site, provider: create(:provider))
+      state_store.write(school_uuids: [site_two.uuid, site_one.uuid, site_three.uuid])
 
-      expect(draft.school_ids).to eq([site_two.id.to_s, site_one.id.to_s])
+      expect(draft.school_uuids).to eq([site_two.uuid, site_one.uuid, site_three.uuid])
       expect(draft.schools.map(&:id)).to eq([site_two.id, site_one.id])
+    end
+
+    it "returns school UUIDs and ordered school records" do
+      site_one = provider.sites.first || create(:site, provider:)
+      site_two = create(:site, provider:)
+      state_store.write(school_uuids: [site_two.uuid, site_one.uuid])
+
+      expect(draft.school_uuids).to eq([site_two.uuid, site_one.uuid])
+      expect(draft.schools.map(&:id)).to eq([site_two.id, site_one.id])
+    end
+
+    it "logs the unrecognised uuids rather than dropping them silently" do
+      site = provider.sites.first || create(:site, provider:)
+      unrecognised_uuid = SecureRandom.uuid
+      state_store.write(school_uuids: [site.uuid, unrecognised_uuid])
+
+      expect(Rails.logger).to receive(:warn).with(/#{unrecognised_uuid}/)
+
+      expect(draft.schools.map(&:id)).to eq([site.id])
+    end
+
+    # The review page reads both, so they can disagree: state still holds the
+    # selection while nothing resolves behind it.
+    it "still reports the stored uuid when no school resolves behind it" do
+      allow(Rails.logger).to receive(:warn)
+      unrecognised_uuid = SecureRandom.uuid
+      state_store.write(school_uuids: [unrecognised_uuid])
+
+      expect(draft.school_uuids).to eq([unrecognised_uuid])
+      expect(draft.schools).to eq([])
+    end
+
+    it "drops a school discarded after it was chosen" do
+      allow(Rails.logger).to receive(:warn)
+      site = create(:site, provider:)
+      state_store.write(school_uuids: [site.uuid])
+
+      site.discard
+
+      expect(draft.school_uuids).to eq([site.uuid])
+      expect(draft.schools).to eq([])
     end
 
     it "returns study site ids and ordered study sites" do

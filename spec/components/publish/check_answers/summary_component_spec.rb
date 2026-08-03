@@ -101,7 +101,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
 
     state_store.write(
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid],
       study_sites_ids: [study_site.id.to_s],
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
@@ -121,7 +121,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
 
     state_store.write(
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid],
       study_sites_ids: [],
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
@@ -137,7 +137,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
 
     state_store.write(
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: [placement_site.uuid],
       study_sites_ids: [],
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
