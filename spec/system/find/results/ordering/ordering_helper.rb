@@ -27,6 +27,8 @@ module OrderingHelper
   end
 
   def result_titles
-    page.all(".govuk-summary-card__title", minimum: 1).map { |element| element.text.split("\n").join(" ") }
+    # Use the course link only so status tags (e.g. "Not accepting applications")
+    # in the title area do not affect ordering assertions.
+    page.all(".govuk-summary-card__title a.govuk-link", minimum: 1).map { |element| element.text.split("\n").join(" ") }
   end
 end

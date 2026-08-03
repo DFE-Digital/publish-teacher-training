@@ -1,6 +1,8 @@
 en:
   courses:
     active_filters:
+      applications_open:
+        true: Courses open for applications
       can_sponsor_visa:
         true: Courses with visa sponsorship
       engineers_teach_physics:

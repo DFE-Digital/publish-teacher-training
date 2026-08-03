@@ -4,7 +4,6 @@ module Courses
   module ActiveFilters
     class HashExtractor
       SKIP_KEYS = %w[
-        applications_open
         radius
         location
         formatted_address
@@ -32,6 +31,7 @@ module Courses
         minimum_degree_required
         can_sponsor_visa
         interview_location
+        applications_open
         start_date
         order
       ].freeze

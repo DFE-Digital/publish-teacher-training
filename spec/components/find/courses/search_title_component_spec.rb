@@ -112,7 +112,7 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
   end
 
   context "with a provider name and default keys" do
-    let(:search_attributes) { { "provider_name" => "Manchester Metropolitan University (M40)", "applications_open" => "true", "order" => "course_name_ascending" } }
+    let(:search_attributes) { { "provider_name" => "Manchester Metropolitan University (M40)", "order" => "course_name_ascending" } }
 
     it { expect(rendered.text).to eq("courses across England") }
   end
@@ -199,9 +199,15 @@ RSpec.describe Find::Courses::SearchTitleComponent, type: :component do
   end
 
   context "with only default filter values" do
-    let(:search_attributes) { { "applications_open" => "true", "minimum_degree_required" => "show_all_courses", "order" => "course_name_ascending" } }
+    let(:search_attributes) { { "minimum_degree_required" => "show_all_courses", "order" => "course_name_ascending" } }
 
     it { expect(rendered.text).to eq("courses across England") }
+  end
+
+  context "with applications_open selected" do
+    let(:search_attributes) { { "applications_open" => "true", "order" => "course_name_ascending" } }
+
+    it { expect(rendered.text).to eq("courses across England (1 filter applied)") }
   end
 
   context "with non-default minimum_degree_required" do

@@ -16,6 +16,7 @@ RSpec.describe "when filtering by applications open", :js, service: :find do
     then_i_see_only_open_courses
     and_the_applications_open_filter_is_checked
     and_i_see_the_applications_open_filter_count
+    and_i_see_the_applications_open_active_filter_chip
   end
 
   scenario "unchecking applications open shows closed courses with status tag" do
@@ -62,6 +63,10 @@ RSpec.describe "when filtering by applications open", :js, service: :find do
     within("details", text: "Applications open") do
       expect(page).to have_content("1 selected")
     end
+  end
+
+  def and_i_see_the_applications_open_active_filter_chip
+    expect(page).to have_css(".app-active-filters", text: "Courses open for applications")
   end
 
   def and_i_see_the_not_accepting_applications_tag_for_the_closed_course
