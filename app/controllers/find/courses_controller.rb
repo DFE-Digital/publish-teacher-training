@@ -6,6 +6,8 @@ module Find
     include GetIntoTeachingRedirect
     include ProviderWebsiteRedirect
 
+    helper_method :show_interview_process?
+
     before_action -> { render_not_found if provider.nil? }
 
     before_action :render_feedback_component, only: :show
@@ -63,6 +65,13 @@ module Find
         subjects: [:financial_incentive],
         site_statuses: [:site],
       ).find_by!(course_code: params[:course_code]&.upcase).decorate
+    end
+
+    def show_interview_process?
+      return false if @enrichment.blank?
+
+      @enrichment.interview_process.present? ||
+        @enrichment.interview_location.in?(%w[online both])
     end
   end
 end
