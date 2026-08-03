@@ -30,6 +30,11 @@ module Courses
         ])
       end
 
+      status_tag = course.decorate.saved_status_tag
+      status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
+
+      title_content = safe_join([course_link, status_block].compact)
+
       classes = [
         ("govuk-grid-column-one-half" if save_toggle_button),
         ("govuk-!-padding-left-2" unless save_toggle_button),
@@ -37,7 +42,7 @@ module Courses
 
       content_tag(:div, class: "govuk-grid-row") do
         safe_join([
-          content_tag(:div, course_link, class: classes),
+          content_tag(:div, title_content, class: classes),
           content_tag(:div, save_toggle_button || "", class: "govuk-grid-column-one-half govuk-!-padding-top-2 govuk-!-padding-right-0"),
         ])
       end

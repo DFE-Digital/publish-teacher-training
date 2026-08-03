@@ -45,6 +45,13 @@ RSpec.describe "Filter counts on search results", :js, service: :find do
     then_i_see_the_visa_filter_count
   end
 
+  scenario "when I filter by applications open, the count is shown" do
+    given_there_are_courses
+    when_i_visit_the_find_results_page
+    and_i_filter_by_applications_open
+    then_i_see_the_applications_open_filter_count
+  end
+
   scenario "when I filter by degree requirement, the count is shown" do
     given_there_are_courses
     when_i_visit_the_find_results_page
@@ -123,6 +130,12 @@ RSpec.describe "Filter counts on search results", :js, service: :find do
     and_i_apply_the_filters
   end
 
+  def and_i_filter_by_applications_open
+    page.find("h3", text: "Filter by\nApplications open").click
+    check "Only show courses open for applications", visible: :all
+    and_i_apply_the_filters
+  end
+
   def and_i_filter_by_degree_requirement
     page.find("h3", text: "Filter by\nDegree grade").click
     choose "2:1 or First", visible: :all
@@ -175,6 +188,12 @@ RSpec.describe "Filter counts on search results", :js, service: :find do
 
   def then_i_see_the_visa_filter_count
     within("details", text: "Visa sponsorship") do
+      expect(page).to have_content("1 selected")
+    end
+  end
+
+  def then_i_see_the_applications_open_filter_count
+    within("details", text: "Applications open") do
       expect(page).to have_content("1 selected")
     end
   end

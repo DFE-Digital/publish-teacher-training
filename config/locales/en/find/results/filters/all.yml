@@ -24,6 +24,7 @@ en:
           filter_title_degree: Degree grade
           filter_title_visa: Visa sponsorship
           filter_title_interviews: Online interviews
+          filter_title_applications_open: Applications open
           filter_title_start_date: Start date
           filter_title_provider: Training provider
           set_up_email_alert: Email me courses like this

@@ -358,6 +358,30 @@
       </div>
     </details>
 
+    <%# Applications open %>
+    <details class="app-c-filter-section">
+      <summary class="app-c-filter-section__summary">
+        <h3 class="app-c-filter-section__summary-heading">
+          <span class="govuk-visually-hidden"><%= t(".filter_by") %></span>
+          <%= t(".filter_title_applications_open") %>
+        </h3>
+        <% if @filter_counts[:applications_open].present? %>
+          <span class="app-c-filter-section__count govuk-hint">
+            <%= @filter_counts[:applications_open] %> selected
+          </span>
+        <% end %>
+      </summary>
+      <div class="app-c-filter-section__content">
+        <%= form.govuk_check_boxes_fieldset :applications_open,
+        multiple: false,
+        legend: { text: t(".applications_open_html"), hidden: true },
+        class: "govuk-checkboxes--small",
+        hidden: false do %>
+          <%= form.govuk_check_box :applications_open, "true", multiple: false, label: { text: t(".applications_open") }, form: form_id %>
+        <% end %>
+      </div>
+    </details>
+
     <%# Start date %>
     <details class="app-c-filter-section">
       <summary class="app-c-filter-section__summary">

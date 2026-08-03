@@ -501,6 +501,7 @@ RSpec.describe Courses::SearchForm do
 
       it "returns nil for all counts" do
         expect(form.filter_counts).to eq({
+          applications_open: nil,
           degree: nil,
           funding: nil,
           interview: nil,
@@ -696,6 +697,14 @@ RSpec.describe Courses::SearchForm do
 
       it "returns the count of start dates" do
         expect(form.filter_counts[:start_date]).to eq(2)
+      end
+    end
+
+    context "with applications_open selected" do
+      let(:form) { described_class.new(applications_open: true) }
+
+      it "returns 1 for applications_open" do
+        expect(form.filter_counts[:applications_open]).to eq(1)
       end
     end
 
