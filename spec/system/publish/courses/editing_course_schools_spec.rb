@@ -65,6 +65,31 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     then_i_should_see_an_error_message
   end
 
+  scenario "i see an error when a selected school no longer belongs to the provider" do
+    then_i_should_see_a_list_of_schools
+    given_provider_school_one_is_removed_after_the_page_load
+    when_i_update_the_course_schools
+    and_i_submit
+    then_i_should_see_the_school_selection_error
+    and_no_school_is_attached_to_the_course
+  end
+
+  scenario "i see an error when a selected school is removed after validation" do
+    given_the_course_school_update_fails_after_validation
+    when_i_update_the_course_schools
+    and_i_submit
+    then_i_should_see_the_school_selection_error
+    and_the_error_is_reported_to_sentry
+  end
+
+  scenario "i see an error when the legacy Site mapping is missing after validation" do
+    given_the_legacy_site_update_fails_after_validation
+    when_i_update_the_course_schools
+    and_i_submit
+    then_i_should_see_the_school_selection_error
+    and_the_error_is_reported_to_sentry
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
       user: create(
@@ -118,14 +143,21 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   def then_i_should_see_an_error_message
     expect(publish_course_school_edit_page).to have_content(
-      I18n.t("activemodel.errors.models.publish/course_school_form.attributes.site_ids.no_schools"),
+      I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.no_schools"),
+    )
+  end
+
+  def then_i_should_see_the_school_selection_error
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content(
+      I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.school_uuids_invalid"),
     )
   end
 
   def and_provider_schools_mirror_the_sites
     provider.sites.each do |site|
-      gias_school = create(:gias_school, urn: site.urn)
-      create(:provider_school, provider:, gias_school:, site_code: site.code)
+      gias_school = create(:gias_school, name: site.location_name, urn: site.urn)
+      create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
     end
   end
 
@@ -134,7 +166,37 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     gias_school = GiasSchool.find_by!(urn: site.urn)
     course_school = course.reload.schools.find_by(gias_school:)
     expect(course_school).to be_present
-    expect(course_school.site_code).to eq(site.code)
+    expect(course_school.provider_school.site_code).to eq(site.code)
+  end
+
+  def given_provider_school_one_is_removed_after_the_page_load
+    provider.schools.joins(:gias_school).find_by!(gias_school: { name: "Site 1" }).destroy!
+  end
+
+  def given_the_course_school_update_fails_after_validation
+    @course_school_update_error =
+      Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError.new("no provider_school")
+    stub_course_school_update_failure
+  end
+
+  def given_the_legacy_site_update_fails_after_validation
+    @course_school_update_error =
+      Publish::Schools::UpdateCourseSiteStatusesService::UnresolvedSitesError.new("no legacy site")
+    stub_course_school_update_failure
+  end
+
+  def and_the_error_is_reported_to_sentry
+    expect(Sentry).to have_received(:capture_exception).with(@course_school_update_error)
+  end
+
+  def stub_course_school_update_failure
+    allow(Publish::Schools::UpdateCourseSchoolsService).to receive(:call_or_enqueue).and_raise(@course_school_update_error)
+    allow(Sentry).to receive(:capture_exception)
+  end
+
+  def and_no_school_is_attached_to_the_course
+    expect(course.reload.sites).to be_empty
+    expect(course.schools).to be_empty
   end
 
   def given_the_course_already_has_both_sites
@@ -199,8 +261,8 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     provider.sites << build(:site, location_name: "Site 3")
     provider.save!
     site = provider.sites.find_by(location_name: "Site 3")
-    gias_school = create(:gias_school, urn: site.urn)
-    create(:provider_school, provider:, gias_school:, site_code: site.code)
+    gias_school = create(:gias_school, name: site.location_name, urn: site.urn)
+    create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
   end
 
   def given_the_course_is_published_with_all_three_sites_running

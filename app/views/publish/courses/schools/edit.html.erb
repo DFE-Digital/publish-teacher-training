@@ -24,57 +24,57 @@
         provider: @provider,
       ) %>
 
-    <%= f.govuk_check_boxes_fieldset :site_ids,
-        legend:
-        {
-          text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe,
-          tag: "h1",
-          size: "l",
-        },
-        form_group: { data: { controller: "select-all-checkboxes show-all-schools", show_all_schools_visible_value: @course_school_form.schools_collapse_threshold } } do %>
+      <%= f.govuk_check_boxes_fieldset :school_uuids,
+          legend:
+          {
+            text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe,
+            tag: "h1",
+            size: "l",
+          },
+          form_group: { data: { controller: "select-all-checkboxes show-all-schools", show_all_schools_visible_value: @course_school_form.schools_collapse_threshold } } do %>
 
-          <p class="govuk-body">
-            <%= t("publish.courses.schools.attached_count", count: course.attached_schools_count) %>
-          </p>
+            <p class="govuk-body">
+              <%= t("publish.courses.schools.attached_count", count: course.attached_schools_count) %>
+            </p>
 
-          <div class="govuk-checkboxes__item">
-            <input type="checkbox"
-                   class="govuk-checkboxes__input"
-                   id="select-all-schools"
-                   data-select-all-checkboxes-target="selectAll"
-                   data-action="select-all-checkboxes#toggleAll">
+            <div class="govuk-checkboxes__item">
+              <input type="checkbox"
+                     class="govuk-checkboxes__input"
+                     id="select-all-schools"
+                     data-select-all-checkboxes-target="selectAll"
+                     data-action="select-all-checkboxes#toggleAll">
 
-            <label class="govuk-label govuk-checkboxes__label" for="select-all-schools">
-              <%= t("publish.courses.schools.select_all") %>
-            </label>
-          </div>
+              <label class="govuk-label govuk-checkboxes__label" for="select-all-schools">
+                <%= t("publish.courses.schools.select_all") %>
+              </label>
+            </div>
 
-          <div class="govuk-body govuk-!-margin-left-2">or</div>
-          <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
+            <div class="govuk-body govuk-!-margin-left-2">or</div>
+            <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
-          <% @course_school_form.sites.each_with_index do |site, index| %>
-            <%= f.govuk_check_box :site_ids,
-                site.id,
-                label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
-                hint: { text: site.decorate.full_address, class: "govuk-!-font-size-16" },
-                link_errors: index.zero?,
-                data: {
-                  select_all_checkboxes_target: "checkbox",
-                  show_all_schools_target: "school",
-                  action: "select-all-checkboxes#updateSelectAll",
-                } %>
-         <% end %>
+            <% @course_school_form.schools.each_with_index do |school, index| %>
+              <%= f.govuk_check_box :school_uuids,
+                  school.uuid,
+                  label: { text: [school.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: school))].compact_blank.join(" ").html_safe },
+                  hint: { text: school.decorate.full_address, class: "govuk-!-font-size-16" },
+                  link_errors: index.zero?,
+                  data: {
+                    select_all_checkboxes_target: "checkbox",
+                    show_all_schools_target: "school",
+                    action: "select-all-checkboxes#updateSelectAll",
+                  } %>
+           <% end %>
 
-          <% if @course_school_form.collapse_schools? %>
-            <button type="button"
-                    class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
-                    hidden
-                    data-show-all-schools-target="showAll"
-                    data-action="show-all-schools#showAll">
-              <%= t("publish.courses.schools.show_all") %>
-            </button>
-          <% end %>
-      <% end %>
+            <% if @course_school_form.collapse_schools? %>
+              <button type="button"
+                      class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
+                      hidden
+                      data-show-all-schools-target="showAll"
+                      data-action="show-all-schools#showAll">
+                <%= t("publish.courses.schools.show_all") %>
+              </button>
+            <% end %>
+        <% end %>
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>

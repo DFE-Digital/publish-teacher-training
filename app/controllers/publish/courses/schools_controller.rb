@@ -29,7 +29,7 @@ module Publish
         if @course_school_form.valid?
           Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
 
-          flash[:success] = if Array(@course_school_form.site_ids).size > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
+          flash[:success] = if selected_school_uuids_count > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
                               I18n.t("success.enqueued_schools")
                             else
                               I18n.t("success.saved", value: section_key)
@@ -43,6 +43,11 @@ module Publish
         else
           render :edit
         end
+      rescue Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError,
+             Publish::Schools::UpdateCourseSiteStatusesService::UnresolvedSitesError => e
+        Sentry.capture_exception(e)
+        @course_school_form.errors.add(:school_uuids, :school_uuids_invalid)
+        render :edit, status: :unprocessable_entity
       end
 
       def back
@@ -70,9 +75,9 @@ module Publish
       end
 
       def school_params
-        return { site_ids: nil } if params[:publish_course_school_form][:site_ids].all?(&:empty?)
+        return { school_uuids: nil } if params[:publish_course_school_form][:school_uuids].all?(&:empty?)
 
-        params.expect(publish_course_school_form: [:schools_validated, { site_ids: [] }])
+        params.expect(publish_course_school_form: [:schools_validated, { school_uuids: [] }])
       end
 
       def build_course
@@ -80,7 +85,11 @@ module Publish
       end
 
       def section_key
-        "School".pluralize(Array(school_params[:site_ids]).compact_blank.count)
+        "School".pluralize(selected_school_uuids_count)
+      end
+
+      def selected_school_uuids_count
+        Array(school_params[:school_uuids]).compact_blank.uniq.count
       end
     end
   end

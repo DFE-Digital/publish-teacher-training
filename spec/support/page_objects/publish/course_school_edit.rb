@@ -7,7 +7,7 @@ module PageObjects
     class CourseSchoolEdit < PageObjects::Base
       set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/schools"
 
-      SCHOOL_CHECKBOX = "input[name='publish_course_school_form[site_ids][]']"
+      SCHOOL_CHECKBOX = "input[name='publish_course_school_form[school_uuids][]']"
 
       sections :vacancies, Sections::Vacancy, ".govuk-checkboxes__item"
 
