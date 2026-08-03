@@ -23,10 +23,14 @@ module Publish
       # @param course [Course] course whose school selection should be updated
       # @param params [Hash, ActionController::Parameters] course attributes and
       #   submitted Provider::School UUIDs
-      def initialize(course:, params:)
+      # @param raise_on_missing_provider_schools [Boolean] inline requests pass
+      #   true; queued requests pass false because a school may be removed while
+      #   the job is waiting to run
+      def initialize(course:, params:, raise_on_missing_provider_schools: true)
         @course = course
         @params = params.to_h.deep_symbolize_keys
         @submitted_school_uuids = Array(@params.fetch(:school_uuids)).compact_blank.uniq
+        @raise_on_missing_provider_schools = raise_on_missing_provider_schools
       end
 
       def call
@@ -91,7 +95,9 @@ module Publish
 
         message = "no provider_school for provider=#{course.provider.id} " \
           "school_uuids=#{missing_school_uuids.join(',')}"
-        raise UnresolvedProviderSchoolsError, message
+        raise UnresolvedProviderSchoolsError, message if raise_on_missing_provider_schools?
+
+        Rails.logger.warn("[CourseSchools] skipped stale provider_school UUIDs - #{message}")
       end
 
       def update_provider_schools(provider_schools)
@@ -134,6 +140,9 @@ module Publish
         course.schools.pluck(:provider_school_id).sort
       end
 
+      def raise_on_missing_provider_schools?
+        @raise_on_missing_provider_schools
+      end
     end
   end
 end
