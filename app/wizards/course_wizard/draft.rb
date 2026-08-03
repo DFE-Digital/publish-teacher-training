@@ -89,12 +89,12 @@ class CourseWizard
       @subjects ||= ordered_subject_records(subject_ids)
     end
 
-    def school_ids
-      Array(state_store.site_ids).compact_blank
+    def school_uuids
+      Array(state_store.school_uuids).compact_blank
     end
 
     def schools
-      @schools ||= ordered_site_records(school_ids)
+      @schools ||= ordered_school_records(school_uuids)
     end
 
     def study_site_ids
@@ -108,7 +108,7 @@ class CourseWizard
     end
 
     def study_sites
-      @study_sites ||= ordered_site_records(selected_study_site_ids)
+      @study_sites ||= ordered_study_site_records(selected_study_site_ids)
     end
 
     delegate :accrediting_provider, to: :wizard
@@ -168,11 +168,21 @@ class CourseWizard
       ids.filter_map { |id| records_by_id[id.to_s] }
     end
 
-    def ordered_site_records(ids)
+    def ordered_study_site_records(ids)
       return [] if ids.blank?
 
-      records_by_id = Site.where(id: ids).index_by { |site| site.id.to_s }
+      records_by_id = wizard.provider.study_sites.where(id: ids).index_by { |site| site.id.to_s }
       ids.filter_map { |id| records_by_id[id.to_s] }
+    end
+
+    # A school UUID that no longer resolves is logged and left out, rather than
+    # blanking the whole review row.
+    def ordered_school_records(uuids)
+      ::Schools::UuidResolver.call(
+        provider: wizard.provider,
+        uuids:,
+        log_tag: "CourseWizard::Draft",
+      ).schools
     end
   end
 end
