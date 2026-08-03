@@ -413,7 +413,6 @@ RSpec.describe Courses::SearchForm do
       search_form = described_class.new(
         level: "all",
         minimum_degree_required: "show_all_courses",
-        applications_open: true,
         location: "London",
         formatted_address: "London, UK",
         postal_code: "SW1A 1AA",
