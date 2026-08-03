@@ -10,51 +10,49 @@ RSpec.describe CourseWizard::Operations::CreateCourse, type: :wizard do
   let(:operation) { described_class.new(repository: state_store, step:) }
   let(:serialized_params) { ActionController::Parameters.new(level: "primary").permit! }
 
+  # The operation re-runs valid?(:new) before saving, which clears the course's
+  # errors, so the courses here have to be genuinely valid or genuinely invalid -
+  # errors stubbed onto them would not survive to be reported.
+  before do
+    allow(Courses::WizardParamsSerializer).to receive(:call).with(wizard:).and_return(serialized_params)
+    allow(Courses::CreationService).to receive(:call).with(
+      course_params: serialized_params,
+      provider: wizard.provider,
+      next_available_course_code: true,
+    ).and_return(course)
+  end
+
   describe "#execute" do
-    before do
-      allow(Courses::WizardParamsSerializer).to receive(:call).with(wizard:).and_return(serialized_params)
+    context "when the created course is valid" do
+      let(:course) { build(:course, provider:, sites: [provider.sites.first]) }
+
+      it "saves the course and returns success" do
+        expect { expect(operation.execute).to eq(success: true) }
+          .to change(Course, :count).by(1)
+      end
     end
 
-    it "returns success when the course saves" do
-      course = build(:course)
-      allow(course).to receive(:save).and_return(true)
-      allow(Courses::CreationService).to receive(:call).with(
-        course_params: serialized_params,
-        provider: wizard.provider,
-        next_available_course_code: true,
-      ).and_return(course)
+    context "when the created course has no school" do
+      let(:course) { build(:course, provider:, sites: []) }
 
-      expect(operation.execute).to eq(success: true)
-    end
+      it "reports the course's own validation errors and saves nothing" do
+        result = nil
 
-    it "adds errors to the step and returns failure when save fails" do
-      invalid_course = build(:course)
-      invalid_course.errors.add(:base, "Could not create course")
-      allow(invalid_course).to receive(:save).and_return(false)
-      allow(Courses::CreationService).to receive(:call).with(
-        course_params: serialized_params,
-        provider: wizard.provider,
-        next_available_course_code: true,
-      ).and_return(invalid_course)
+        expect { result = operation.execute }.not_to change(Course, :count)
 
-      result = operation.execute
-
-      expect(result[:success]).to be(false)
-      expect(result[:errors]).to eq(step.errors)
-      expect(step.errors[:base]).to include("Could not create course")
+        expect(result[:success]).to be(false)
+        expect(result[:errors]).to eq(step.errors)
+        expect(step.errors[:base]).to include("Select at least one school")
+      end
     end
   end
 
   describe "wizard integration" do
-    it "causes save_current_step to return false when the created course is invalid" do
-      invalid_course = build(:course)
-      invalid_course.errors.add(:base, "Could not create course")
-      allow(invalid_course).to receive(:save).and_return(false)
-      allow(Courses::WizardParamsSerializer).to receive(:call).with(wizard:).and_return(serialized_params)
-      allow(Courses::CreationService).to receive(:call).and_return(invalid_course)
+    let(:course) { build(:course, provider:, sites: []) }
 
+    it "causes save_current_step to return false when the created course is invalid" do
       expect(wizard.save_current_step).to be(false)
-      expect(wizard.current_step.errors[:base]).to include("Could not create course")
+      expect(wizard.current_step.errors[:base]).to include("Select at least one school")
     end
   end
 end

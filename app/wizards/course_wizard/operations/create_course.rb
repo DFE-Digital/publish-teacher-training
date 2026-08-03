@@ -19,7 +19,7 @@ class CourseWizard
           next_available_course_code: true,
         )
 
-        if course.save
+        if course.valid?(:new) && course.save
           { success: true }
         else
           course.errors.full_messages.each { |message| @step.errors.add(:base, message) }

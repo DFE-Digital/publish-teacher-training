@@ -30,6 +30,12 @@ RSpec.describe "Add course wizard level step", type: :system do
     then_i_have_errors_on_the_level_step
   end
 
+  scenario "provider after the school remodel cycle cannot start with a site school" do
+    given_i_am_authenticated_as_a_provider_user_without_a_site_school
+    when_i_visit_the_wizard_level_page
+    then_i_see_the_no_school_error
+  end
+
 private
 
   def given_i_am_authenticated_as_a_provider_user_with_a_school
@@ -39,6 +45,16 @@ private
         create(:provider, :accredited_provider, sites: [build(:site)]),
       ],
     )
+
+    given_i_am_authenticated(user: @user)
+  end
+
+  def given_i_am_authenticated_as_a_provider_user_without_a_site_school
+    recruitment_cycle = find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
+    provider = create(:provider, :accredited_provider, recruitment_cycle:)
+    create(:provider_school, provider:)
+
+    @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)
   end
@@ -95,6 +111,10 @@ private
     expect(page).to have_content("There is a problem")
     expect(page).to have_content("Select a subject level")
     expect(page).to have_content("Select if this course has a special educational needs and disability (SEND) specialism")
+  end
+
+  def then_i_see_the_no_school_error
+    expect(page).to have_content("You need to create at least one school before creating a course")
   end
 
   def provider
