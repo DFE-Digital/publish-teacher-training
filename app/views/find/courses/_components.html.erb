@@ -18,8 +18,7 @@
   <% end %>
   <%# Interview process %>
   <% if preview?(params) ||
-      course.published_interview_process.present? ||
-      course.published_interview_location.in?(%w[online both]) %>
+      show_interview_process? %>
   <li><%= govuk_link_to t("find.courses.show.interview_process"), "#section-interviews" %></li>
 <% end %>
 <%# Fees and financial support %>

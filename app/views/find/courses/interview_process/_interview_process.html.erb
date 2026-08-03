@@ -1,16 +1,7 @@
-<!-- Show the interview section heading in preview mode, or when there is interview process content or an online interview option is selected (online or both) -->
-<!-- if the provider selects "In person" but leaves "What is the interview process?" blank, the "Interview process" heading is hidden so candidates do not see an empty section -->
-<% show_interview_section =
-     preview?(params) ||
-     (
-       enrichment.present? &&
-       (
-         enrichment.interview_process.present? ||
-         enrichment.interview_location.in?(%w[online both])
-       )
-     ) %>
+<%# Show the interview section heading in preview mode, or when there is interview process content or an online interview option is selected (online or both) %>
+<%# if the provider selects "In person" but leaves "What is the interview process?" blank, the "Interview process" heading is hidden so candidates do not see an empty section %>
 <div class="govuk-!-margin-bottom-8">
-  <% if show_interview_section %>
+  <% if preview?(params) || show_interview_process? %>
     <h2 class="govuk-heading-l" id="section-interviews"><%= t(".page_title") %></h2>
   <% end %>
   <div data-qa="course__interview_process">
