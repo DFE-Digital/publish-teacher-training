@@ -37,7 +37,7 @@ class AddCourseButton < ViewComponent::Base
 private
 
   def wizard_add_course_flow?
-    FeatureFlag.active?(:wizard_add_course_flow)
+    true
   end
 
   def wizard_state_key
