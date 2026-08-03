@@ -80,6 +80,17 @@ module Publish
           expect(course.sites).to contain_exactly(site_two)
         end
 
+        context "when the Provider::School GIAS school is closed" do
+          let(:gias_school_two) { create(:gias_school, :closed, name: "Site 2", urn: site_two.urn) }
+
+          it "still creates both school relationships" do
+            service_call
+
+            expect(course.reload.schools.find_by(provider_school: provider_school_two)).to be_present
+            expect(course.sites).to contain_exactly(site_two)
+          end
+        end
+
         it "persists course attributes and touches the provider for Apply" do
           params[:schools_validated] = "true"
           provider.update_columns(changed_at: 2.days.ago)

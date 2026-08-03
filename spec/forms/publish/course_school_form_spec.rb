@@ -24,14 +24,14 @@ module Publish
         expect(form.schools).to eq([provider_school_two, provider_school_one])
       end
 
-      it "does not return schools that GIAS marks as closed" do
+      it "returns a closed GIAS school when its Provider::School exists" do
         closed_provider_school = create(
           :provider_school,
           provider:,
           gias_school: create(:gias_school, :closed),
         )
 
-        expect(form.schools).not_to include(closed_provider_school)
+        expect(form.schools).to include(closed_provider_school)
       end
     end
 
@@ -108,18 +108,15 @@ module Publish
         expect(valid_form).to be_valid
       end
 
-      it "rejects a Provider::School whose GIAS school is closed" do
+      it "accepts a closed GIAS school when its Provider::School belongs to the provider" do
         closed_provider_school = create(
           :provider_school,
           provider:,
           gias_school: create(:gias_school, :closed),
         )
-        invalid_form = described_class.new(course, params: { school_uuids: [closed_provider_school.uuid] })
+        valid_form = described_class.new(course, params: { school_uuids: [closed_provider_school.uuid] })
 
-        expect(invalid_form).not_to be_valid
-        expect(invalid_form.errors[:school_uuids]).to include(
-          I18n.t("activemodel.errors.models.publish/course_school_form.attributes.school_uuids.school_uuids_invalid"),
-        )
+        expect(valid_form).to be_valid
       end
 
       context "when the course is exempt from needing a school" do

@@ -15,7 +15,7 @@ module Publish
 
     # Every school the provider could attach, in the order they are listed.
     def schools
-      @schools ||= available_schools
+      @schools ||= provider_schools
         .includes(:gias_school)
         .order("gias_school.name")
     end
@@ -50,7 +50,7 @@ module Publish
       school_uuids = Array(params[:school_uuids]).compact_blank.uniq
       return if school_uuids.empty?
 
-      known_school_uuids = available_schools
+      known_school_uuids = provider_schools
         .where(uuid: school_uuids)
         .pluck("provider_school.uuid")
       return if (school_uuids - known_school_uuids).empty?
@@ -58,10 +58,10 @@ module Publish
       errors.add(:school_uuids, :school_uuids_invalid)
     end
 
-    def available_schools
-      course.provider.schools
-        .joins(:gias_school)
-        .merge(GiasSchool.available)
+    # Rollover controls which schools exist for the cycle. Once a
+    # Provider::School exists, it can be attached regardless of GIAS status.
+    def provider_schools
+      course.provider.schools.joins(:gias_school)
     end
   end
 end
