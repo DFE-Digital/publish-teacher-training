@@ -62,6 +62,7 @@ module Courses
 
     def filter_counts
       {
+        applications_open: boolean_filter_count(applications_open),
         degree: degree_filter_count,
         funding: funding&.count,
         interview: boolean_filter_count(interview_location),

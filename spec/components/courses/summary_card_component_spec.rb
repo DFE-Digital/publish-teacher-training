@@ -43,6 +43,22 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     it "renders the course name and code with the correct class" do
       expect(summary_card).to have_css(".app-search-result__course-name", text: "Mathematics (37CP)")
     end
+
+    context "when the course is closed" do
+      let(:course) { create(:course, :closed, name: "Mathematics", course_code: "37CP") }
+
+      it "renders the not accepting applications status tag" do
+        expect(summary_card).to have_css(".app-saved-course__status-tag", text: "Not accepting applications")
+      end
+    end
+
+    context "when the course is not yet open", travel: 1.day.after(find_opens) do
+      let(:course) { create(:course, :open, name: "Mathematics", course_code: "37CP") }
+
+      it "renders the not yet open status tag" do
+        expect(summary_card).to have_css(".app-saved-course__status-tag", text: "Not yet open")
+      end
+    end
   end
 
   shared_examples "school location row" do |funding_type, expected_output|
