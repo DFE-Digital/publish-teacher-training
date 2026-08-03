@@ -10,13 +10,13 @@
           <option value="" selected="selected">Pick a course</option>
           <% if @self_accredited_courses %>
             <%= render partial: "publish/courses/course_select_option", collection: @self_accredited_courses, as: :other_course, locals: {
-              visible_course_information_fields: @visible_course_information_fields
+              visible_course_information_fields: @visible_course_information_fields,
               } %>
           <% end %>
           <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
             <optgroup label="<%= accrediting_provider %>">
               <%= render partial: "publish/courses/course_select_option", collection: courses, as: :other_course, locals: {
-                visible_course_information_fields: @visible_course_information_fields
+                visible_course_information_fields: @visible_course_information_fields,
               } %>
             </optgroup>
           <% end %>

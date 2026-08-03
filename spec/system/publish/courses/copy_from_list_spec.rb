@@ -40,6 +40,61 @@ RSpec.describe "Copying course information" do
     end
   end
 
+  context "when courses differ by funding and study mode" do
+    before do
+      given_i_am_authenticated_as_a_provider_user
+      # The current course is excluded from the copy list.
+      # The two copyable courses share qualification and start date,
+      # so only funding and study mode should be displayed.
+      given_a_course_exists(
+        funding: :fee,
+        qualification: "qts",
+        study_mode: :full_time,
+        start_date: Date.new(2026, 9, 1),
+        enrichments: [build(:course_enrichment, :published)],
+      )
+
+      create(
+        :course,
+        provider: provider,
+        name: "Biology",
+        funding: :fee,
+        study_mode: :full_time,
+        qualification: "pgce_with_qts",
+        start_date: Date.new(2026, 9, 1),
+        enrichments: [build(:course_enrichment)],
+      )
+
+      create(
+        :course,
+        provider: provider,
+        name: "Biology",
+        funding: :salary,
+        study_mode: :part_time,
+        qualification: "pgce_with_qts",
+        start_date: Date.new(2026, 9, 1),
+        enrichments: [build(:course_enrichment)],
+      )
+    end
+
+    scenario "shows only course information that differs between copyable courses" do
+      when_i_visit_the_how_school_placements_work_page
+
+      list_options = publish_course_information_edit_page.copy_content.copy_options
+
+      dropdown_text = list_options.join(" ")
+
+      expect(dropdown_text).to include("Fee-paying")
+      expect(dropdown_text).to include("Salaried")
+
+      expect(dropdown_text).to include("Full time")
+      expect(dropdown_text).to include("Part time")
+
+      expect(dropdown_text).not_to include("QTS with PGCE")
+      expect(dropdown_text).not_to include("September 2026")
+    end
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
@@ -74,10 +129,17 @@ RSpec.describe "Copying course information" do
 
   def then_the_correct_courses_are_available_to_select
     list_options = publish_course_information_edit_page.copy_content.copy_options
+
     expect(Course.count).to eq 3
     expect(list_options.size).to eq 3
     expect(list_options.shift).to eq("Pick a course")
     expect(list_options.any? { |x| x[@course.name] }).to be_falsey
+
+    # remaining options should always contain a course code
+    expect(list_options).to all(match(/\([A-Z0-9]+\)/))
+
+    # primary courses should show age range
+    expect(list_options.join(" ")).to include("Ages")
   end
 
   def when_i_select_a_course_to_copy
@@ -91,8 +153,14 @@ RSpec.describe "Copying course information" do
   end
 
   def then_i_see_an_alert_that_the_changes_are_not_saved_yet
+    copied_course_code = @course_to_copy.match(/\((.*?)\)/)[1]
+    copied_course = Course.find_by(course_code: copied_course_code)
+
     expect(page).to have_content "Your changes are not yet saved"
-    expect(page).to have_content "We have copied these fields from #{@course_to_copy}"
+
+    expect(page).to have_content(
+      "We have copied these fields from #{copied_course.name} (#{copied_course.course_code})",
+    )
   end
 
   def and_i_can_see_the_new_content
