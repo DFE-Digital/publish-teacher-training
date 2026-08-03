@@ -1,94 +1,146 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 module Publish
   module Schools
     RSpec.describe UpdateCourseSchoolsService do
-      let(:site_one) { build(:site, location_name: "location 1") }
-      let(:site_two) { build(:site, location_name: "location 2") }
-      let(:site_status) { build(:site_status, :new_status, :unpublished, site: site_one) }
-      let(:provider) { build(:provider, sites: [site_one, site_two]) }
-      let(:course) { create(:course, provider:, site_statuses: [site_status]) }
-      let(:previous_site_names) { course.sites.map(&:location_name) }
+      let(:site_one) { build(:site, location_name: "Site 1", code: "A") }
+      let(:site_two) { build(:site, location_name: "Site 2", code: "B") }
+      let(:provider) { create(:provider, sites: [site_one, site_two]) }
+      let(:course) { create(:course, provider:) }
+      let(:gias_school_one) { create(:gias_school, name: "Site 1", urn: site_one.urn) }
+      let(:gias_school_two) { create(:gias_school, name: "Site 2", urn: site_two.urn) }
+      let!(:provider_school_one) do
+        create(:provider_school, provider:, gias_school: gias_school_one, site_code: site_one.code, uuid: site_one.uuid)
+      end
+      let!(:provider_school_two) do
+        create(:provider_school, provider:, gias_school: gias_school_two, site_code: site_two.code, uuid: site_two.uuid)
+      end
 
       describe ".call_or_enqueue" do
-        context "when site_ids count exceeds ENQUEUE_THRESHOLD" do
-          let(:params) { { site_ids: Array.new(31) { SecureRandom.uuid } } }
+        context "when the number of school UUIDs exceeds ENQUEUE_THRESHOLD" do
+          let(:params) { { school_uuids: Array.new(31) { SecureRandom.uuid } } }
 
-          it "enqueues the job" do
+          it "enqueues the update" do
             expect(UpdateCourseSchoolsJob).to receive(:perform_async).with(course.id, params.to_h)
-            described_class.call_or_enqueue(course: course, params: params)
+
+            described_class.call_or_enqueue(course:, params:)
           end
         end
 
-        context "when site_ids count is below or equal to ENQUEUE_THRESHOLD" do
-          let(:params) { { site_ids: provider.site_ids } }
+        context "when the number of school UUIDs equals ENQUEUE_THRESHOLD" do
+          let(:params) { { school_uuids: Array.new(30) { SecureRandom.uuid } } }
 
-          it "runs the service inline" do
-            service_instance = instance_double(described_class)
+          it "runs the update inline" do
+            allow(described_class).to receive(:call)
 
-            allow(described_class)
-              .to receive(:new)
-              .with(course: course, params: params)
-              .and_return(service_instance)
+            described_class.call_or_enqueue(course:, params:)
 
-            allow(service_instance).to receive(:call)
-
-            described_class.call_or_enqueue(course: course, params: params)
-
-            expect(described_class)
-              .to have_received(:new)
-              .with(course: course, params: params)
-
-            expect(service_instance).to have_received(:call)
+            expect(described_class).to have_received(:call).with(course:, params:)
           end
         end
+
       end
 
       describe "#call" do
-        subject(:service_call) { described_class.new(course:, params:).call }
+        subject(:service_call) { described_class.call(course:, params:) }
 
-        context "when site_ids are different from course.site_ids" do
-          let(:params) { { site_ids: provider.site_ids } }
-          let(:updated_site_names) { provider.sites.order(:location_name).map(&:location_name) }
+        let(:params) { { school_uuids: [provider_school_two.uuid] } }
 
-          context "when feature flag is enabled" do
-            before { FeatureFlag.activate(:course_sites_updated_email_notification) }
+        it "creates both Course::School and legacy SiteStatus relationships" do
+          expect { service_call }
+            .to change { course.schools.count }.by(1)
+            .and change { course.site_statuses.count }.by(1)
 
-            it "calls the CourseSitesUpdated notification service" do
-              expect(NotificationService::CourseSitesUpdated).to receive(:call)
-                .with(course: course, previous_site_names: previous_site_names, updated_site_names: updated_site_names)
-              service_call
-            end
+          expect(course.reload.schools.find_by(provider_school: provider_school_two)).to be_present
+          expect(course.sites).to contain_exactly(site_two)
+        end
+
+        context "when the Provider::School GIAS school is closed" do
+          let(:gias_school_two) { create(:gias_school, :closed, name: "Site 2", urn: site_two.urn) }
+
+          it "still creates both school relationships" do
+            service_call
+
+            expect(course.reload.schools.find_by(provider_school: provider_school_two)).to be_present
+            expect(course.sites).to contain_exactly(site_two)
+          end
+        end
+
+        it "persists course attributes and touches the provider for Apply" do
+          params[:schools_validated] = "true"
+          provider.update_columns(changed_at: 2.days.ago)
+          previous_provider_changed_at = provider.changed_at
+
+          service_call
+
+          expect(course.reload.schools_validated).to be(true)
+          expect(provider.reload.changed_at).to be > previous_provider_changed_at
+        end
+
+        context "when both school relationships already exist" do
+          before do
+            attach_school(site_one, provider_school_one)
+            attach_school(site_two, provider_school_two)
           end
 
-          context "when feature flag is disabled" do
-            before { FeatureFlag.deactivate(:course_sites_updated_email_notification) }
+          it "removes the unselected school from both models" do
+            expect { service_call }
+              .to change { course.schools.reload.count }.by(-1)
+              .and change { course.site_statuses.reload.count }.by(-1)
 
-            it "does not call the notification service" do
-              expect(NotificationService::CourseSitesUpdated).not_to receive(:call)
-              service_call
-            end
+            expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_two.id])
+            expect(course.sites).to contain_exactly(site_two)
+          end
+        end
+
+        context "when an empty selection is allowed" do
+          let(:params) { { school_uuids: [] } }
+
+          before do
+            attach_school(site_one, provider_school_one)
           end
 
-          context "when course is not published" do
-            it "sets all site_statuses to new_status" do
-              service_call
-              expect(course.reload.site_statuses.pluck(:status)).to match(%w[new_status new_status])
-            end
+          it "removes every school from both models" do
+            expect { service_call }
+              .to change { course.schools.reload.count }.from(1).to(0)
+              .and change { course.site_statuses.reload.count }.from(1).to(0)
+          end
+        end
+
+        context "when the course is published" do
+          let(:course) { create(:course, :published, provider:) }
+          let(:previous_timestamp) { 1.day.ago.change(usec: 0) }
+
+          before do
+            provider.update_columns(changed_at: 2.days.ago)
+            course.update_columns(changed_at: 2.days.ago)
+            course.enrichments.published.update_all(last_published_timestamp_utc: previous_timestamp)
           end
 
-          context "when course is published" do
-            let(:course) { create(:course, :published, provider:, site_statuses: [site_status]) }
-            let(:site_status) { build(:site_status, :running, :published, site: site_one) }
-            let(:previous_timestamp) { 1.day.ago.change(usec: 0) }
+          it "touches the provider when a school is added" do
+            expect { service_call }.to(change { provider.reload.changed_at })
+          end
+
+          it "refreshes last_published_at when a school is added" do
+            service_call
+
+            expect(course.reload.last_published_at).to be_within(5.seconds).of(Time.zone.now)
+            expect(course.last_published_at).to be > previous_timestamp
+          end
+
+          context "when a school is removed" do
+            let(:params) { { school_uuids: [] } }
 
             before do
-              course.enrichments.published.update_all(last_published_timestamp_utc: previous_timestamp)
+              attach_school(site_one, provider_school_one, status: :running, publish: :published)
+              provider.update_columns(changed_at: 2.days.ago)
+              course.update_columns(changed_at: 2.days.ago)
             end
 
-            it "sets all site_statuses to running" do
-              service_call
-              expect(course.reload.site_statuses.pluck(:status)).to match(%w[running running])
+            it "touches the provider" do
+              expect { service_call }.to(change { provider.reload.changed_at })
             end
 
             it "refreshes last_published_at" do
@@ -100,199 +152,106 @@ module Publish
           end
         end
 
-        context "when site_ids are the same as course.site_ids" do
-          let(:params) { { site_ids: course.site_ids } }
+        context "when notifications are enabled" do
+          before do
+            FeatureFlag.activate(:course_sites_updated_email_notification)
+            attach_school(site_one, provider_school_one)
+          end
 
-          it "does not call the notification service" do
-            expect(NotificationService::CourseSitesUpdated).not_to receive(:call)
+          after do
+            FeatureFlag.deactivate(:course_sites_updated_email_notification)
+          end
+
+          it "sends the new-model school names through the legacy notification interface" do
+            expect(NotificationService::CourseSitesUpdated).to receive(:call).with(
+              course:,
+              previous_site_names: [provider_school_one.location_name],
+              updated_site_names: [provider_school_two.location_name],
+            )
+
             service_call
           end
         end
 
-        # Regression coverage for the QA-reported bug: when a school is
-        # unticked, sync_schools suspends (or destroys) its site_status,
-        # then apply_publish_status_to_site_statuses runs over the remaining
-        # site_statuses. These tests pin down that:
-        #   1. Site_statuses suspended/destroyed during sync stay that way.
-        #   2. Site_statuses still attached after sync get the right
-        #      publish/status applied.
-        describe "site_status state after the apply step" do
-          let(:provider) { create(:provider, sites: [site_one, site_two]) }
-          let(:site_one) { build(:site, location_name: "Site 1") }
-          let(:site_two) { build(:site, location_name: "Site 2") }
-
-          context "when unticking a school on a published course" do
-            let(:course) do
-              create(
-                :course,
-                :published,
-                provider:,
-                site_statuses: [
-                  build(:site_status, :running, :published, site: site_one),
-                  build(:site_status, :running, :published, site: site_two),
-                ],
-              )
-            end
-            let(:params) { { site_ids: [site_two.id] } }
-
-            it "destroys the unticked site_status" do
-              described_class.new(course:, params:).call
-
-              expect(course.reload.site_statuses.where(site: site_one)).to be_empty
-            end
-
-            it "removes the unticked school from course.sites" do
-              described_class.new(course:, params:).call
-
-              expect(course.reload.sites.map(&:id)).to contain_exactly(site_two.id)
-            end
-
-            it "leaves the kept site_status as :running and :published" do
-              described_class.new(course:, params:).call
-
-              site_status = course.reload.site_statuses.find_by!(site: site_two)
-              expect(site_status).to be_status_running
-              expect(site_status).to be_published_on_ucas
-            end
-          end
-
-          context "when an existing suspended site_status is on the course" do
-            let(:course) do
-              create(
-                :course,
-                :published,
-                provider:,
-                site_statuses: [
-                  build(:site_status, :running, :published, site: site_one),
-                  build(:site_status, :suspended, :unpublished, site: site_two),
-                ],
-              )
-            end
-            let(:params) { { site_ids: [site_one.id] } }
-
-            it "does not flip the suspended site_status back to running" do
-              described_class.new(course:, params:).call
-
-              site_status = course.reload.site_statuses.find_by!(site: site_two)
-              expect(site_status).to be_status_suspended
-            end
-
-            it "does not flip the suspended site_status back to published" do
-              described_class.new(course:, params:).call
-
-              site_status = course.reload.site_statuses.find_by!(site: site_two)
-              expect(site_status).to be_unpublished_on_ucas
-            end
-          end
-
-          context "when an existing discontinued site_status is on the course" do
-            let(:course) do
-              create(
-                :course,
-                :published,
-                provider:,
-                site_statuses: [
-                  build(:site_status, :running, :published, site: site_one),
-                  build(:site_status, :discontinued, :unpublished, site: site_two),
-                ],
-              )
-            end
-            let(:params) { { site_ids: [site_one.id] } }
-
-            it "does not touch the discontinued site_status" do
-              described_class.new(course:, params:).call
-
-              site_status = course.reload.site_statuses.find_by!(site: site_two)
-              expect(site_status).to be_status_discontinued
-              expect(site_status).to be_unpublished_on_ucas
-            end
-          end
-
-          context "when adding a school to a draft (unpublished) course" do
-            let(:course) { create(:course, provider:, site_statuses: []) }
-            let(:params) { { site_ids: [site_one.id] } }
-
-            it "the newly attached site_status is :new_status :unpublished" do
-              described_class.new(course:, params:).call
-
-              site_status = course.reload.site_statuses.find_by!(site: site_one)
-              expect(site_status).to be_status_new_status
-              expect(site_status).to be_unpublished_on_ucas
-            end
-          end
-        end
-
-        context "dual-write to Course::School" do
-          let(:gias_school_one) { create(:gias_school, urn: site_one.urn) }
-          let(:gias_school_two) { create(:gias_school, urn: site_two.urn) }
-
+        context "when the Course::School write fails" do
           before do
-            # Persist sites so they have IDs / URNs present in the DB
-            provider.save!
-            create(:provider_school, provider:, gias_school: gias_school_one, site_code: "X")
-            create(:provider_school, provider:, gias_school: gias_school_two, site_code: "Y")
+            allow(UpdateCourseProviderSchoolsService).to receive(:call)
+              .and_raise(ActiveRecord::RecordInvalid)
           end
 
-          context "when a site is newly attached" do
-            let(:params) { { site_ids: [site_one.id, site_two.id] } }
+          it "rolls back the legacy write and does not notify" do
+            FeatureFlag.activate(:course_sites_updated_email_notification)
+            expect(NotificationService::CourseSitesUpdated).not_to receive(:call)
 
-            it "creates a Course::School row for the newly attached site" do
-              expect {
-                described_class.new(course:, params:).call
-              }.to change { course.schools.count }.by(1)
+            expect { service_call }.to raise_error(ActiveRecord::RecordInvalid)
 
-              added = course.schools.find_by(gias_school: gias_school_two)
-              expect(added).to be_present
-              expect(added.site_code).to eq("Y")
-            end
-          end
-
-          context "when a site is detached" do
-            let(:params) { { site_ids: [] } }
-
-            before do
-              create(:course_school, course:, gias_school: gias_school_one, site_code: "X")
-            end
-
-            it "destroys the Course::School row for the detached site" do
-              expect {
-                described_class.new(course:, params:).call
-              }.to change { course.schools.count }.by(-1)
-
-              expect(course.schools.where(gias_school: gias_school_one)).to be_empty
-            end
-          end
-
-          context "when the prerequisite provider_school is missing" do
-            let(:params) { { site_ids: [site_one.id, site_two.id] } }
-
-            before do
-              # Simulate an env where the schools backfill has not yet run
-              # for this provider's existing sites.
-              Provider::School.where(provider:, gias_school: gias_school_two).destroy_all
-            end
-
-            it "still attaches the legacy SiteStatus and does not raise" do
-              expect {
-                described_class.new(course:, params:).call
-              }.not_to raise_error
-
-              expect(course.reload.sites.map(&:id)).to include(site_two.id)
-            end
-
-            it "skips the Course::School write for the missing provider_school" do
-              described_class.new(course:, params:).call
-
-              expect(course.reload.schools.where(gias_school: gias_school_two)).to be_empty
-            end
-
-            it "logs the skip so operators can spot environments needing a backfill" do
-              expect(Rails.logger).to receive(:warn).with(/no provider_school for course=/)
-
-              described_class.new(course:, params:).call
-            end
+            expect(course.site_statuses.count).to eq(0)
+          ensure
+            FeatureFlag.deactivate(:course_sites_updated_email_notification)
           end
         end
+
+        it "raises inline when a Provider::School UUID cannot be resolved" do
+          expect { described_class.call(course:, params: { school_uuids: [SecureRandom.uuid] }) }
+            .to raise_error(described_class::UnresolvedProviderSchoolsError)
+        end
+
+        it "requires the caller to provide school_uuids" do
+          expect { described_class.call(course:, params: { schools_validated: "true" }) }
+            .to raise_error(KeyError, /school_uuids/)
+        end
+
+        context "when the course save fails after both relationship writes" do
+          before do
+            allow(course).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "rolls back both relationship writes" do
+            expect { service_call }.to raise_error(ActiveRecord::RecordInvalid)
+
+            expect(course.reload.schools).to be_empty
+            expect(course.sites).to be_empty
+          end
+        end
+
+        context "when a Provider::School has no matching legacy Site" do
+          let(:provider_school_without_site) do
+            create(:provider_school, provider:, gias_school: create(:gias_school))
+          end
+          let(:params) { { school_uuids: [provider_school_without_site.uuid] } }
+
+          it "raises and writes neither relationship" do
+            expect { service_call }
+              .to raise_error(UpdateCourseSiteStatusesService::UnresolvedSitesError)
+
+            expect(course.reload.schools).to be_empty
+            expect(course.site_statuses).to be_empty
+          end
+        end
+
+        context "when the course belongs to a cycle after the remodel cycle" do
+          let(:recruitment_cycle) do
+            find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
+          end
+          let(:provider) { create(:provider, recruitment_cycle:, sites: [site_one, site_two]) }
+
+          it "continues to write both school models" do
+            service_call
+
+            expect(course.reload.schools.find_by(provider_school: provider_school_two)).to be_present
+            expect(course.sites).to contain_exactly(site_two)
+          end
+        end
+      end
+
+      def attach_school(site, provider_school, status: :new_status, publish: :unpublished)
+        course.site_statuses.create!(site:, status:, publish:)
+        create(
+          :course_school,
+          course:,
+          provider_school:,
+          gias_school: provider_school.gias_school,
+        )
       end
     end
   end

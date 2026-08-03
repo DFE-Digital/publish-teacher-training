@@ -75,14 +75,10 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   end
 
   def given_i_am_authenticated_as_a_provider_user
-    @provider = build(
-      :provider,
-      sites: [
-        build(:site, location_name: "Site 1"),
-        build(:site, location_name: "Site 2"),
-        build(:site, location_name: "Site 3"),
-      ],
-    )
+    @provider = create(:provider)
+    create(:site, :with_provider_school, provider: @provider, location_name: "Site 1")
+    create(:site, :with_provider_school, provider: @provider, location_name: "Site 2")
+    create(:site, :with_provider_school, provider: @provider, location_name: "Site 3")
     @user = create(
       :user,
       providers: [provider],
@@ -92,12 +88,12 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   end
 
   def given_there_are_many_schools
-    @schools = create_list(:site, 30, provider: @provider)
+    @schools = create_list(:site, 30, :with_provider_school, provider: @provider)
   end
 
   def given_the_provider_has_25_schools
     # the provider already has 3 sites from authentication setup
-    create_list(:site, 22, provider: @provider)
+    create_list(:site, 22, :with_provider_school, provider: @provider)
     @provider.reload
   end
 
@@ -132,10 +128,14 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   def and_all_schools_should_be_assigned_to_the_course
     expect(course.reload.sites.map(&:location_name))
       .to contain_exactly("Site 1", "Site 2", "Site 3")
+    expect(course.schools.map { |course_school| course_school.provider_school.location_name })
+      .to contain_exactly("Site 1", "Site 2", "Site 3")
   end
 
   def and_many_schools_should_be_attached_to_courses
     expect(course.reload.sites.map(&:location_name))
+      .to match_array(["Site 1", "Site 2", "Site 3", @schools.map(&:location_name)].flatten)
+    expect(course.schools.map { |course_school| course_school.provider_school.location_name })
       .to match_array(["Site 1", "Site 2", "Site 3", @schools.map(&:location_name)].flatten)
   end
 
@@ -175,6 +175,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
 
   def and_all_25_schools_should_be_attached
     expect(course.reload.sites.count).to eq(25)
+    expect(course.schools.count).to eq(25)
   end
 
   # "Site 3" sorts last of the 25 (the other 22 are "Main Site..."), so it renders
@@ -185,6 +186,9 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
 
   def given_the_last_school_is_already_attached_to_the_course
     course.site_statuses.create!(site: last_school, status: :new_status, publish: :unpublished)
+
+    provider_school = provider.schools.find_by!(uuid: last_school.uuid)
+    create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)
   end
 
   # A collapsed school keeps its checked state in the DOM even though its row is
@@ -201,6 +205,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
 
   def and_the_last_school_is_still_attached
     expect(course.reload.sites).to include(last_school)
+    expect(course.schools.map(&:provider_school)).to include(provider.schools.find_by!(uuid: last_school.uuid))
   end
 
   def given_a_course_exists(sites: [])

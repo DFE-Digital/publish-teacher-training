@@ -1229,10 +1229,11 @@ en:
               too_long: "Reduce the word count for salary details"
         publish/course_school_form:
           attributes:
-            site_ids:
+            school_uuids:
               no_schools: "Select at least one school"
               enter_schools: "Enter schools for this course"
               check_schools: "Review the schools for this course"
+              school_uuids_invalid: "The schools you submitted couldn’t be validated. Please try again. If the problem persists, please contact support."
         publish/course_study_site_form:
           attributes:
             study_site_ids:

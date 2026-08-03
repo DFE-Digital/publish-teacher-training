@@ -36,8 +36,8 @@ RSpec.describe "Publishing a course that is allowed to have no schools", travel:
 
   def and_provider_schools_mirror_the_sites
     provider.sites.each do |site|
-      gias_school = create(:gias_school, urn: site.urn)
-      create(:provider_school, provider:, gias_school:, site_code: site.code)
+      gias_school = create(:gias_school, name: site.location_name, urn: site.urn)
+      create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
     end
   end
 
@@ -82,6 +82,7 @@ RSpec.describe "Publishing a course that is allowed to have no schools", travel:
   end
 
   def and_the_course_has_no_schools
+    expect(course.reload.sites).to be_empty
     expect(course.reload.schools).to be_empty
   end
 

@@ -53,7 +53,7 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
 
   def given_i_am_authenticated_as_a_provider_user
     @provider = create(:provider)
-    @sites = create_list(:site, 3, provider: @provider)
+    @sites = create_list(:provider_school, 3, provider: @provider)
     @user = create(:user, providers: [@provider])
     given_i_am_authenticated(user: @user)
     @provider.reload
@@ -61,8 +61,8 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
 
   def given_a_course_with_attached_sites(count:)
     @course = create(:course, provider: @provider, sites: [])
-    @provider.sites.first(count).each do |site|
-      @course.site_statuses.create!(site:, status: :new_status, publish: :unpublished)
+    @provider.schools.first(count).each do |site|
+      @course.schools.create!(gias_school_id: site.gias_school_id, provider_school_id: site.id)
     end
   end
 
@@ -73,15 +73,8 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
 
   def given_the_provider_has_a_named_school
     @school = create(
-      :site,
+      :provider_school,
       provider: @provider,
-      location_name: "Belvidere School",
-      address1: "Belvidere Lane",
-      address2: "",
-      address3: "",
-      town: "Shrewsbury",
-      address4: "Shropshire",
-      postcode: "SY2 5RJ",
     )
   end
 
@@ -98,12 +91,12 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
   end
 
   def then_the_school_label_shows_the_name
-    expect(page).to have_css(".govuk-checkboxes__label", text: "Belvidere School")
+    expect(page).to have_css(".govuk-checkboxes__label", text: @school.location_name)
   end
 
   def and_the_hint_shows_the_address_without_the_name
-    hint = page.find(".govuk-hint", text: "Belvidere Lane")
-    expect(hint.text).to eq("Belvidere Lane, Shrewsbury, Shropshire, SY2 5RJ")
-    expect(hint.text).not_to include("Belvidere School")
+    hint = page.find(".govuk-hint", text: @school.address1)
+    expect(hint.text).to eq(@school.full_address)
+    expect(hint.text).not_to include(@school.location_name)
   end
 end

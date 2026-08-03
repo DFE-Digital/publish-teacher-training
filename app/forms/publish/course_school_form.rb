@@ -2,19 +2,22 @@
 
 module Publish
   class CourseSchoolForm < BaseCourseForm
-    FIELDS = %i[site_ids schools_validated].freeze
+    FIELDS = %i[school_uuids schools_validated].freeze
 
     attr_accessor(*FIELDS)
 
     validate :no_schools_selected
+    validate :school_uuids_belong_to_provider
 
     def compute_fields
-      { site_ids: course.site_ids }.merge(new_attributes)
+      { school_uuids: current_school_uuids }.merge(new_attributes)
     end
 
     # Every school the provider could attach, in the order they are listed.
-    def sites
-      @sites ||= course.provider.sites.sort_by(&:location_name)
+    def schools
+      @schools ||= provider_schools
+        .includes(:gias_school)
+        .order("gias_school.name")
     end
 
     def schools_collapse_threshold
@@ -22,21 +25,43 @@ module Publish
     end
 
     def collapse_schools?
-      sites.size > schools_collapse_threshold
+      schools.size > schools_collapse_threshold
     end
 
   private
 
+    def current_school_uuids
+      course.schools.joins(:provider_school).pluck("provider_school.uuid")
+    end
+
     def no_schools_selected
-      return if params[:site_ids].present?
+      return if params[:school_uuids].present?
       return if ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
       if course.recruitment_cycle_rollover_period_2026?
-        errors.add(:site_ids, :check_schools) if course.sites.school.present?
-        errors.add(:site_ids, :enter_schools) if course.sites.school.blank?
+        error = course.schools.exists? ? :check_schools : :enter_schools
+        errors.add(:school_uuids, error)
       else
-        errors.add(:site_ids, :no_schools)
+        errors.add(:school_uuids, :no_schools)
       end
+    end
+
+    def school_uuids_belong_to_provider
+      school_uuids = Array(params[:school_uuids]).compact_blank.uniq
+      return if school_uuids.empty?
+
+      known_school_uuids = provider_schools
+        .where(uuid: school_uuids)
+        .pluck("provider_school.uuid")
+      return if (school_uuids - known_school_uuids).empty?
+
+      errors.add(:school_uuids, :school_uuids_invalid)
+    end
+
+    # Rollover controls which schools exist for the cycle. Once a
+    # Provider::School exists, it can be attached regardless of GIAS status.
+    def provider_schools
+      course.provider.schools.joins(:gias_school)
     end
   end
 end

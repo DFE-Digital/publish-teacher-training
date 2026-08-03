@@ -1,141 +1,139 @@
+# frozen_string_literal: true
+
 module Publish
   module Schools
+    # Coordinates course school updates from Publish by writing Course::School
+    # and legacy SiteStatus rows from the same Provider::School UUIDs.
+    # This service also updates the course and provider so that Apply syncs course changes.
     class UpdateCourseSchoolsService
+      include ServicePattern
+
       ENQUEUE_THRESHOLD = 30
 
-      def self.call_or_enqueue(course:, params:)
-        site_ids_count = Array(params[:site_ids]).size
+      class UnresolvedProviderSchoolsError < StandardError; end
 
-        if site_ids_count > ENQUEUE_THRESHOLD
+      def self.call_or_enqueue(course:, params:)
+        if Array(params[:school_uuids]).compact_blank.uniq.size > ENQUEUE_THRESHOLD
           UpdateCourseSchoolsJob.perform_async(course.id, params.to_h)
         else
-          new(course:, params:).call
+          call(course:, params:)
         end
       end
 
+      # @param course [Course] course whose school selection should be updated
+      # @param params [Hash, ActionController::Parameters] course attributes and
+      #   submitted Provider::School UUIDs
       def initialize(course:, params:)
         @course = course
-        @params = { site_ids: course.site_ids }.merge(params.to_h.deep_symbolize_keys)
-        @previous_site_names = course.sites.map(&:location_name)
+        @params = params.to_h.deep_symbolize_keys
+        @submitted_school_uuids = Array(@params.fetch(:school_uuids)).compact_blank.uniq
       end
 
       def call
+        previous_school_names = school_names_for_notification
+        previous_provider_school_ids = provider_school_ids
+
         ActiveRecord::Base.transaction do
-          assign_attributes_to_course
-          sync_schools
-          apply_publish_status_to_site_statuses
+          provider_schools = resolve_provider_schools
+
+          course.assign_attributes(course_attributes)
+          update_site_statuses(provider_schools)
+          update_provider_schools(provider_schools)
+
+          # This persists schools_validated and deliberately touches the course
+          # and provider. Apply watches provider.changed_at to decide whether it
+          # needs to sync the provider's courses.
           course.save!
         end
 
-        refresh_last_published_at_if_sites_changed
-        send_notifications
+        updated_school_names = school_names_for_notification
+        refresh_last_published_at_if_schools_changed(
+          previous_provider_school_ids:,
+          updated_provider_school_ids: provider_school_ids,
+        )
+        send_notifications(
+          previous_school_names:,
+          updated_school_names:,
+        )
       end
 
     private
 
-      attr_reader :course, :params, :previous_site_names
+      attr_reader :course, :params, :submitted_school_uuids
 
-      def assign_attributes_to_course
-        course.assign_attributes(params.except(:site_ids))
+      def course_attributes
+        params.except(:school_uuids)
       end
 
-      def sync_schools
-        return if sites_to_attach_ids.empty? && sites_to_remove_ids.empty?
+      def resolve_provider_schools
+        # Prevent a concurrent removal from deleting a school after resolution
+        # but before both relationship writers have completed.
+        provider_schools_by_uuid = course.provider.schools
+          .includes(:gias_school)
+          .where(uuid: submitted_school_uuids)
+          .lock
+          .index_by(&:uuid)
 
-        sites_to_attach_ids.each { |id| attach_school(sites_by_id[id]) }
-        sites_to_remove_ids.each { |id| detach_school(sites_by_id[id]) }
+        missing_school_uuids = submitted_school_uuids - provider_schools_by_uuid.keys
+        handle_missing_provider_schools(missing_school_uuids)
 
-        course.sites.reload
+        submitted_school_uuids.filter_map { |uuid| provider_schools_by_uuid[uuid] }
       end
 
-      def refresh_last_published_at_if_sites_changed
-        return if sites_to_attach_ids.empty? && sites_to_remove_ids.empty?
+      def refresh_last_published_at_if_schools_changed(previous_provider_school_ids:, updated_provider_school_ids:)
+        return if previous_provider_school_ids == updated_provider_school_ids
 
         course.refresh_last_published_at!
       end
 
-      def submitted_site_ids
-        @submitted_site_ids ||= Array(params[:site_ids]).compact_blank.map(&:to_i)
+      def handle_missing_provider_schools(missing_school_uuids)
+        return if missing_school_uuids.empty?
+
+        message = "no provider_school for provider=#{course.provider.id} " \
+          "school_uuids=#{missing_school_uuids.join(',')}"
+        raise UnresolvedProviderSchoolsError, message
       end
 
-      def current_site_ids
-        @current_site_ids ||= course.site_ids
-      end
-
-      def sites_to_attach_ids
-        @sites_to_attach_ids ||= submitted_site_ids - current_site_ids
-      end
-
-      def sites_to_remove_ids
-        @sites_to_remove_ids ||= current_site_ids - submitted_site_ids
-      end
-
-      def sites_by_id
-        @sites_by_id ||= Site.where(id: sites_to_attach_ids + sites_to_remove_ids).index_by(&:id)
-      end
-
-      def gias_schools_by_urn
-        @gias_schools_by_urn ||= GiasSchool
-          .where(urn: sites_by_id.values.map(&:urn).compact_blank)
-          .index_by(&:urn)
-      end
-
-      def attach_school(site)
-        ::CourseSchools::LegacySiteStatusCreator.call(course:, site:)
-
-        gias_school = gias_schools_by_urn[site.urn]
-        return unless gias_school
-
-        ::CourseSchools::Creator.call(course:, gias_school_id: gias_school.id)
-      rescue ActiveRecord::RecordNotFound
-        # No matching Provider::School yet — environment hasn't been fully
-        # backfilled or the provider's site predates the dual-write. Skip
-        # the new-model write rather than 404'ing the request; the schools
-        # backfill (or the next provider-side dual-write) reconciles later.
-        Rails.logger.warn(
-          "[CourseSchools] skipped course_school write — no provider_school for " \
-          "course=#{course.id} provider=#{course.provider_id} gias_school=#{gias_school.id}",
+      def update_provider_schools(provider_schools)
+        UpdateCourseProviderSchoolsService.call(
+          course:,
+          provider_schools:,
         )
       end
 
-      def detach_school(site)
-        ::CourseSchools::LegacySiteStatusRemover.call(course:, site:)
-
-        gias_school = gias_schools_by_urn[site.urn]
-        return unless gias_school
-
-        ::CourseSchools::Remover.call(course:, gias_school_id: gias_school.id)
+      # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+      # TODO School data remodel removal - remove this legacy write once all school reads use Course::School.
+      # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
+      def update_site_statuses(provider_schools)
+        UpdateCourseSiteStatusesService.call(
+          course:,
+          school_uuids: provider_schools.map(&:uuid),
+        )
       end
 
-      def apply_publish_status_to_site_statuses
-        # Reload + scope to new_or_running so we never touch site_statuses
-        # that sync_schools just suspended or destroyed. Iterating the
-        # cached collection used to flip a freshly-suspended row back to
-        # running, leaving the unticked school still attached on the
-        # rendered page.
-        course.site_statuses.reload.new_or_running.each do |site_status|
-          site_status.assign_attributes(site_status_attributes)
-        end
+      def send_notifications(previous_school_names:, updated_school_names:)
+        return if previous_school_names == updated_school_names
+        return unless FeatureFlag.active?(:course_sites_updated_email_notification)
+
+        # The notification service still uses legacy "site" argument names.
+        # Keep that contract here until the notification API is renamed.
+        NotificationService::CourseSitesUpdated.call(
+          course:,
+          previous_site_names: previous_school_names,
+          updated_site_names: updated_school_names,
+        )
       end
 
-      def site_status_attributes
-        return { publish: :published, status: :running } if course.findable?
-
-        { publish: :unpublished, status: :new_status }
+      def school_names_for_notification
+        course.schools.includes(:provider_school)
+          .map { |course_school| course_school.provider_school.location_name }
+          .sort
       end
 
-      def send_notifications
-        updated_site_names = course.sites.map(&:location_name)
-        return if previous_site_names == updated_site_names
-
-        if FeatureFlag.active?(:course_sites_updated_email_notification)
-          NotificationService::CourseSitesUpdated.call(
-            course: course,
-            previous_site_names: previous_site_names,
-            updated_site_names: updated_site_names,
-          )
-        end
+      def provider_school_ids
+        course.schools.pluck(:provider_school_id).sort
       end
+
     end
   end
 end
