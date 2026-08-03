@@ -5,6 +5,9 @@ require "rails_helper"
 RSpec.describe CourseWizard::Repositories::Course do
   let(:cache) { ActiveSupport::Cache::MemoryStore.new }
   let(:visa_deadline_payload) { { year: "2026", month: "9", day: "1" } }
+  let(:school_uuids) do
+    %w[11111111-1111-4111-8111-111111111111 22222222-2222-4222-8222-222222222222]
+  end
   let(:repository) do
     described_class.new(
       provider_code: "PROV",
@@ -26,7 +29,7 @@ RSpec.describe CourseWizard::Repositories::Course do
       repository.write({ "qualification" => "qts" })
       repository.write({ "funding_type" => "fee" })
       repository.write({ "study_pattern" => %w[full_time part_time] })
-      repository.write({ "site_ids" => %w[1 2] })
+      repository.write({ "school_uuids" => school_uuids })
       repository.write({ "study_sites_ids" => %w[3 4] })
       repository.write({ "start_date" => "January 2026" })
       repository.write({ "accredited_provider_code" => "123" })
@@ -50,7 +53,7 @@ RSpec.describe CourseWizard::Repositories::Course do
       expect(data[:qualification]).to eq("qts")
       expect(data[:funding_type]).to eq("fee")
       expect(data[:study_pattern]).to eq(%w[full_time part_time])
-      expect(data[:site_ids]).to eq(%w[1 2])
+      expect(data[:school_uuids]).to eq(school_uuids)
       expect(data[:study_sites_ids]).to eq(%w[3 4])
       expect(data[:start_date]).to eq("January 2026")
       expect(data[:accredited_provider_code]).to eq("123")
