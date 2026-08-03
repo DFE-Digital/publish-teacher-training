@@ -43,5 +43,21 @@ private
 
     @courses_by_accrediting_provider&.transform_values! { |v| v.reject { |x| x.id == course.id } }
     @self_accredited_courses = @self_accredited_courses&.reject { |c| c.id == course.id }
+
+    set_visible_course_information_fields
+  end
+
+  def set_visible_course_information_fields
+    courses =
+      Array(@self_accredited_courses) +
+      @courses_by_accrediting_provider.values.flatten
+
+    @visible_course_information_fields =
+      Publish::CourseList::FIELDS.keys.select do |key|
+        courses
+          .map(&Publish::CourseList::FIELDS.fetch(key))
+          .uniq
+          .size > 1
+      end
   end
 end
