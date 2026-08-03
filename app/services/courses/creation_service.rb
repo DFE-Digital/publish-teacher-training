@@ -33,11 +33,6 @@ module Courses
       end
 
       update_study_mode(course)
-      # Legacy site_status write always runs (it is the only home for vacancy
-      # and study-mode data). To move to strict "flag-on ⇒ new-model only"
-      # once vacancies migrate off site_status, guard this call with
-      # `unless FeatureFlag.active?(:course_publishing_uses_new_school_model)`.
-      update_sites(course)
       update_schools(course)
       update_study_sites(course)
 
@@ -52,6 +47,7 @@ module Courses
       clean_up_visa_properties(course)
       Courses::AssignVisaSponsorshipApplicationDeadlineService.execute(course_params, course)
       course.valid?(:new) if course.errors.blank?
+      course.send(:set_applications_open_from)
 
       course.remove_carat_from_error_messages
 
@@ -74,10 +70,6 @@ module Courses
       @permitted_new_course_attributes ||= CoursePolicy.new(nil, new_course).permitted_new_course_attributes
     end
 
-    def sites
-      @sites ||= provider.sites.find(site_ids.compact_blank)
-    end
-
     def study_sites
       @study_sites ||= provider.study_sites.find(study_site_ids.compact_blank)
     end
@@ -86,15 +78,15 @@ module Courses
       @subject_ids ||= course_params["subjects_ids"]
     end
 
-    def site_ids
-      @site_ids ||= course_params["sites_ids"]
+    def school_uuids
+      @school_uuids ||= Array(course_params["school_uuids"]).compact_blank
     end
 
     def study_mode
       @study_mode ||= if course_params["study_mode"].nil?
                         nil
                       else
-                        Array(course_params["study_mode"])&.flatten&.compact&.uniq
+                        Array(course_params["study_mode"])&.flatten&.compact
                       end
     end
 
@@ -115,62 +107,79 @@ module Courses
       end
     end
 
-    def update_sites(course)
-      return if site_ids.nil?
-
-      course.sites = sites if site_ids.any?
-
-      course.errors.add(:sites, message: "Select at least one school") if site_ids.empty?
-    end
-
-    # Dual-writes the selected schools to the new Course::School model,
-    # building the records in memory so they persist atomically with the
-    # course on save and are visible to CoursePublishableSchoolsPresence-
-    # Validator's :new-context read (which the new-school-model flag routes
-    # to course.schools). Mirrors the site→gias_school→provider_school
-    # mapping used by Publish::Schools::UpdateCourseSchoolsService.
     def update_schools(course)
-      return if site_ids.nil?
-      # Nothing selected — update_sites already records the "Select at least
-      # one school" error; skip before touching `sites` (find([]) would raise).
-      return if site_ids.compact_blank.empty?
+      return unless school_selection_submitted?
 
-      school_sites.each do |site|
-        gias_school = gias_schools_by_urn[site.urn]
-        next unless gias_school
+      if unrecognised_school_uuids.any?
+        course.errors.add(
+          :schools,
+          message: I18n.t("course_schools.errors.unrecognised_school_uuids", support_email: Settings.support_email),
+        )
+        return
+      end
 
-        provider_school = provider_schools_by_gias_id[gias_school.id]
+      if selected_sites.empty?
+        course.errors.add(:schools, :blank)
+        return
+      end
 
-        unless provider_school
-          # No matching Provider::School yet — provider not fully backfilled
-          # (or its site predates the dual-write). Skip the new-model build;
-          # the schools backfill (or the next provider-side write) reconciles
-          # later. Same rationale as UpdateCourseSchoolsService#attach_school.
-          Rails.logger.warn(
-            "[CourseSchools] skipped course_school build — no provider_school for " \
-            "provider=#{provider.id} gias_school=#{gias_school.id}",
-          )
-          next
-        end
+      # TODO School data remodel removal - remove the site writes # rubocop:disable Style/CommentAnnotation
+      # once add-course creation only writes Course::School.
+      course.sites = selected_sites
 
-        course.schools.build(gias_school_id: gias_school.id, provider_school:)
+      selected_sites.each do |site|
+        provider_school = provider_school_for(site)
+        next unless provider_school
+
+        course.schools.build(gias_school: provider_school.gias_school, provider_school:)
       end
     end
 
-    def school_sites
-      @school_sites ||= sites.select(&:school?)
+    def school_selection_submitted?
+      course_params.key?("school_uuids")
     end
 
-    def gias_schools_by_urn
-      @gias_schools_by_urn ||= GiasSchool
-        .where(urn: school_sites.map(&:urn).compact_blank)
-        .index_by(&:urn)
+    def selected_sites
+      resolve_sites
+      @selected_sites
     end
 
-    def provider_schools_by_gias_id
-      @provider_schools_by_gias_id ||= provider.schools
-        .where(gias_school_id: gias_schools_by_urn.values.map(&:id))
-        .index_by(&:gias_school_id)
+    def unrecognised_school_uuids
+      resolve_sites
+      @unrecognised_school_uuids
+    end
+
+    # Schools are picked by UUID. One that does not belong to the provider is
+    # reported back rather than silently dropped, so a stale form cannot quietly
+    # create a course with fewer schools than were selected.
+    def resolve_sites
+      return if defined?(@selected_sites)
+
+      resolution = ::Schools::UuidResolver.call(
+        provider:,
+        uuids: school_uuids,
+        log_tag: "CourseSchools",
+      )
+
+      @selected_sites = resolution.schools
+      @unrecognised_school_uuids = resolution.unrecognised_uuids
+    end
+
+    def provider_school_for(site)
+      provider_school = provider_schools_by_uuid[site.uuid]
+      return provider_school if provider_school
+
+      Rails.logger.warn(
+        "[CourseSchools] skipped course_school build - no provider_school for " \
+        "provider=#{provider.id} site_uuid=#{site.uuid} urn=#{site.urn.inspect}",
+      )
+      nil
+    end
+
+    def provider_schools_by_uuid
+      @provider_schools_by_uuid ||= provider.schools
+        .where(uuid: selected_sites.map(&:uuid))
+        .index_by(&:uuid)
     end
 
     def update_study_sites(course)

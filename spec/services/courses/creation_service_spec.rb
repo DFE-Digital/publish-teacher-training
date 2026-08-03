@@ -107,7 +107,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -138,7 +138,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -161,7 +161,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -203,7 +203,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -235,7 +235,7 @@ describe Courses::CreationService do
         "qualification" => "qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time],
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
         "master_subject_id" => primary_subject.id,
         "subjects_ids" => [primary_subject.id],
@@ -244,7 +244,7 @@ describe Courses::CreationService do
     end
 
     it "create the primary course" do
-      valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
+      valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
         expect(subject.public_send(key)).to eq(value)
       end
 
@@ -265,7 +265,7 @@ describe Courses::CreationService do
       end
 
       it "create the primary course" do
-        valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
+        valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
           expect(subject.public_send(key)).to eq(value)
         end
 
@@ -296,7 +296,7 @@ describe Courses::CreationService do
         "qualification" => "pgce_with_qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[part_time],
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
         "subjects_ids" => [secondary_subject.id],
         "master_subject_id" => secondary_subject.id,
@@ -305,7 +305,7 @@ describe Courses::CreationService do
     end
 
     it "create the secondary course" do
-      valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
+      valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
         expect(subject.send(key)).to eq(value)
       end
 
@@ -326,7 +326,7 @@ describe Courses::CreationService do
       end
 
       it "create the secondary course" do
-        valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
+        valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
           expect(subject.public_send(key)).to eq(value)
         end
 
@@ -354,7 +354,7 @@ describe Courses::CreationService do
           "qualification" => "pgce_with_qts",
           "start_date" => "September #{recruitment_cycle.year}",
           "study_mode" => "part_time",
-          "sites_ids" => [site.id],
+          "school_uuids" => [site.uuid],
           "study_sites_ids" => [study_site.id],
           "subjects_ids" => [secondary_subject.id],
           "master_subject_id" => secondary_subject.id,
@@ -388,7 +388,7 @@ describe Courses::CreationService do
         "qualification" => "pgde",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time part_time],
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -415,7 +415,7 @@ describe Courses::CreationService do
       end
 
       it "create the further_education course" do
-        valid_course_params.except("start_date", "is_send", "sites_ids", "study_sites_ids", "course_code", "study_mode").each do |key, value|
+        valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "course_code", "study_mode").each do |key, value|
           expect(subject.send(key)).to eq(value)
         end
 
@@ -478,10 +478,9 @@ describe Courses::CreationService do
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
 
     # A GIAS school + provider_school that mirror the legacy `site` selected in
-    # the wizard, joined to the legacy site by matching URN (same mapping the
-    # edit flow uses in Publish::Schools::UpdateCourseSchoolsService).
+    # the wizard, joined to the legacy site by matching UUID.
     let(:gias_school) { create(:gias_school, urn: site.urn) }
-    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
+    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid) }
 
     let(:valid_course_params) do
       {
@@ -493,7 +492,7 @@ describe Courses::CreationService do
         "qualification" => "qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time],
-        "sites_ids" => [site.id],
+        "school_uuids" => [site.uuid],
         "study_sites_ids" => [study_site.id],
         "master_subject_id" => primary_subject.id,
         "subjects_ids" => [primary_subject.id],
@@ -530,7 +529,7 @@ describe Courses::CreationService do
 
       it "builds the new Course::School and passes :new validation" do
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.schools.first.site_code).to eq("-")
+        expect(created_course.schools.first.site_code).to eq(site.code)
         expect(created_course.schools.first.provider_school).to eq(provider_school)
         expect(created_course.errors).to be_empty
       end
@@ -562,21 +561,110 @@ describe Courses::CreationService do
       end
     end
 
-    context "when the selected site's GIAS school is closed" do
-      # A site can still point at a school the GIAS import later flipped to
-      # closed. Both models have to record it, or the course would lose the
-      # school the moment the new-school-model flag is switched on.
-      let!(:gias_school) { create(:gias_school, :closed, urn: site.urn) }
-      let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "-") }
+    context "when several schools are selected" do
+      let(:site_two) { create(:site, provider:) }
+      let(:gias_school_two) { create(:gias_school, urn: site_two.urn) }
+      let!(:provider_school_two) do
+        create(:provider_school, provider:, gias_school: gias_school_two, site_code: site_two.code, uuid: site_two.uuid)
+      end
+
+      let(:valid_course_params) { super().merge("school_uuids" => [site_two.uuid, site.uuid]) }
+
+      it "assigns every selected school, in the order they were submitted" do
+        expect(created_course.sites.map(&:id)).to eq([site_two.id, site.id])
+        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school_two.id, gias_school.id])
+        expect(created_course.errors).to be_empty
+      end
+
+      it "persists a Course::School for each selected school" do
+        created_course.save!
+
+        expect(Course::School.where(course: created_course).pluck(:provider_school_id))
+          .to contain_exactly(provider_school.id, provider_school_two.id)
+      end
+    end
+
+    # The legacy site write and the new-model write can disagree: a school with no
+    # Provider::School is still attached as a site but produces no Course::School,
+    # so under the flag the course runs at one fewer school than was selected.
+    context "when only some of the selected schools have been backfilled" do
+      let(:site_two) { create(:site, provider:) }
+
+      let(:valid_course_params) { super().merge("school_uuids" => [site.uuid, site_two.uuid]) }
 
       before do
         allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
+        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
       end
 
-      it "builds the Course::School alongside the legacy site" do
+      it "keeps both sites but builds a Course::School only for the backfilled school" do
+        expect(Rails.logger).to receive(:warn).with(/site_uuid=#{site_two.uuid}/)
+
+        expect(created_course.sites.map(&:id)).to eq([site.id, site_two.id])
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.sites.map(&:id)).to eq([site.id])
+        expect(created_course.errors).to be_empty
+      end
+
+      it "saves without surfacing the divergence to the provider" do
+        allow(Rails.logger).to receive(:warn)
+
+        created_course.save!
+
+        expect(created_course.reload.sites.count).to eq(2)
+        expect(Course::School.where(course: created_course).count).to eq(1)
+      end
+    end
+
+    context "when a submitted school UUID cannot be resolved" do
+      let(:unknown_school_uuid) { SecureRandom.uuid }
+
+      let(:valid_course_params) do
+        {
+          "level" => "primary",
+          "qualification" => "qts",
+          "funding" => "fee",
+          "school_uuids" => [unknown_school_uuid],
+        }
+      end
+
+      it "logs the error and adds an unrecognised schools error" do
+        expect(Rails.logger).to receive(:warn).with(/unrecognised school UUIDs/)
+
+        expect(created_course.errors[:schools]).to include(
+          "Some of the schools you selected were not recognised. Try again or get in touch with support at becomingateacher@digital.education.gov.uk",
+        )
+        expect(created_course.errors[:schools]).not_to include("Select at least one school")
+        expect(created_course.schools).to be_empty
+      end
+    end
+
+    context "when only some of the submitted school UUIDs can be resolved" do
+      let(:valid_course_params) { super().merge("school_uuids" => [site.uuid, SecureRandom.uuid]) }
+
+      it "assigns nothing rather than quietly creating the course with fewer schools" do
+        allow(Rails.logger).to receive(:warn)
+
+        expect(created_course.errors[:schools]).to include(
+          "Some of the schools you selected were not recognised. Try again or get in touch with support at becomingateacher@digital.education.gov.uk",
+        )
+        expect(created_course.sites).to be_empty
+        expect(created_course.schools).to be_empty
+      end
+    end
+
+    context "when a submitted school UUID belongs to another provider" do
+      let(:other_provider_site) { create(:site, provider: create(:provider)) }
+
+      let(:valid_course_params) { super().merge("school_uuids" => [other_provider_site.uuid]) }
+
+      it "treats it as unrecognised rather than attaching another provider's school" do
+        allow(Rails.logger).to receive(:warn)
+
+        expect(created_course.errors[:schools]).to include(
+          "Some of the schools you selected were not recognised. Try again or get in touch with support at becomingateacher@digital.education.gov.uk",
+        )
+        expect(created_course.sites).to be_empty
+        expect(created_course.schools).to be_empty
       end
     end
 
@@ -586,7 +674,7 @@ describe Courses::CreationService do
           "level" => "primary",
           "qualification" => "qts",
           "funding" => "fee",
-          "sites_ids" => [],
+          "school_uuids" => [],
         }
       end
 
@@ -596,7 +684,7 @@ describe Courses::CreationService do
       end
 
       it "adds the existing error and builds no Course::School" do
-        expect(created_course.errors[:sites]).to include("Select at least one school")
+        expect(created_course.errors[:schools]).to include("Select at least one school")
         expect(created_course.schools).to be_empty
       end
     end
@@ -607,7 +695,7 @@ describe Courses::CreationService do
           "level" => "primary",
           "qualification" => "qts",
           "funding" => "fee",
-          "sites_ids" => [],
+          "school_uuids" => [],
         }
       end
 
@@ -617,7 +705,29 @@ describe Courses::CreationService do
       end
 
       it "adds the existing error and builds no Course::School" do
+        expect(created_course.errors[:schools]).to include("Select at least one school")
+        expect(created_course.schools).to be_empty
+      end
+    end
+
+    # A checkbox group posts a hidden blank value when nothing is ticked, so this
+    # is the shape the form actually submits - not the empty array above.
+    context "when the school checkboxes are submitted with nothing ticked" do
+      let(:valid_course_params) { super().merge("school_uuids" => [""]) }
+
+      it "adds the blank schools error and builds no Course::School" do
+        expect(created_course.errors[:schools]).to include("Select at least one school")
+        expect(created_course.sites).to be_empty
+        expect(created_course.schools).to be_empty
+      end
+    end
+
+    context "when no school selection is submitted at all" do
+      let(:valid_course_params) { super().except("school_uuids") }
+
+      it "reports the missing schools on :sites, not :schools" do
         expect(created_course.errors[:sites]).to include("Select at least one school")
+        expect(created_course.errors[:schools]).to be_empty
         expect(created_course.schools).to be_empty
       end
     end

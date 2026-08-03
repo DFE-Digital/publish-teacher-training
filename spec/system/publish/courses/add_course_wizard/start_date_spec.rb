@@ -20,19 +20,16 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
   end
 
   scenario "failed course creation rerenders check answers with the error summary" do
-    and_i_have_wizard_state_for_start_date
+    and_i_have_wizard_state_for_start_date(with_school: false)
     when_i_visit_the_wizard_start_date_page
     and_i_choose_a_start_date(current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year))
     and_i_click_continue
     then_i_am_taken_to_the_check_answers_page
 
-    invalid_course = build(:course)
-    invalid_course.errors.add(:base, "Could not create course")
-    allow(invalid_course).to receive(:save).and_return(false)
-    allow(Courses::CreationService).to receive(:call).and_return(invalid_course)
-
     and_i_click_add_course
+
     then_i_see_the_error_summary_on_check_answers
+    then_no_course_is_created
     then_the_response_status_is_unprocessable_entity
   end
 
@@ -121,6 +118,10 @@ private
     expect(provider.courses.count).to eq(1)
   end
 
+  def then_no_course_is_created
+    expect(provider.courses.count).to eq(0)
+  end
+
   def then_i_am_taken_to_the_courses_index_page
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_courses_path(
@@ -147,7 +148,7 @@ private
       ignore_query: true,
     )
     expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Could not create course")
+    expect(page).to have_content("Select at least one school")
   end
 
   def then_the_response_status_is_unprocessable_entity
@@ -216,7 +217,11 @@ private
     "July #{cycle_year + 1}"
   end
 
-  def and_i_have_wizard_state_for_start_date
+  # with_school: false leaves the schools selection empty so course creation
+  # fails on a real validation rather than a stubbed error - the operation
+  # re-runs valid?(:new) before saving, which clears anything stubbed onto the
+  # course, so only genuine invalidity reaches the error summary.
+  def and_i_have_wizard_state_for_start_date(with_school: true)
     primary_subject = find_or_create(:primary_subject, :primary)
     placement_site = provider.sites.first || create(:site, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
@@ -235,7 +240,7 @@ private
       primary_master_subject_id: primary_subject.id.to_s,
       age_range_in_years: "3_to_7",
       qualification: "undergraduate_degree_with_qts",
-      site_ids: [placement_site.id.to_s],
+      school_uuids: with_school ? [placement_site.uuid] : [],
       study_sites_ids: [study_site.id.to_s],
     )
   end

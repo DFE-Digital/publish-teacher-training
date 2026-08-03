@@ -680,6 +680,9 @@ en:
         expect_to_achieve_before_training_begins: "Taking the GCSE"
         equivalence_test: "Equivalency test"
         not_required: "Not required"
+  course_schools:
+    errors:
+      unrecognised_school_uuids: "Some of the schools you selected were not recognised. Try again or get in touch with support at %{support_email}"
   provider_suggestion:
     errors:
       bad_request: "Unknown provider code or name, please check the query string."
@@ -777,6 +780,8 @@ en:
               blank: "^Select at least one school"
               enter_schools: "Enter schools for this course"
               check_schools: "Review the schools for this course"
+            schools:
+              blank: "Select at least one school"
             study_sites:
               blank: "Add at least one study site"
             age_range_in_years:
