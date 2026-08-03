@@ -26,7 +26,6 @@ module Find
 
     def defaults
       {
-        "applications_open" => "true",
         "minimum_degree_required" => "show_all_courses",
         "order" => proc { |params|
           ::Courses::OrderingStrategy.default_for(::Courses::SearchLocation.from_params(params))

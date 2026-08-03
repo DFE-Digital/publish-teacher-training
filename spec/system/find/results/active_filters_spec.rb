@@ -141,6 +141,11 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
         then_send_courses_filter_is_displayed
       end
 
+      scenario "applications_open filter is shown when true" do
+        given_the_user_enables_applications_open_filter
+        then_applications_open_filter_is_displayed
+      end
+
       scenario "engineers_teach_physics filter is shown when true" do
         given_the_user_enables_engineers_teach_physics_filter
         then_the_active_filters_are_visible("Engineers teach physics")
@@ -151,6 +156,9 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
         then_no_active_filters_are_displayed
 
         given_the_user_visits_results_without_send_courses
+        then_no_active_filters_are_displayed
+
+        given_the_user_visits_results_without_applications_open
         then_no_active_filters_are_displayed
 
         given_the_user_visits_results_without_engineers_teach_physics
@@ -313,6 +321,14 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
 
   def given_the_user_visits_results_without_send_courses
     visit find_results_path(send_courses: "false")
+  end
+
+  def given_the_user_enables_applications_open_filter
+    visit find_results_path(applications_open: "true")
+  end
+
+  def given_the_user_visits_results_without_applications_open
+    visit find_results_path(applications_open: "false")
   end
 
   def given_the_user_enables_engineers_teach_physics_filter
@@ -504,6 +520,10 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
 
   def then_send_courses_filter_is_displayed
     expect(active_filters).to include("Courses with a SEND specialism")
+  end
+
+  def then_applications_open_filter_is_displayed
+    expect(active_filters).to include("Courses open for applications")
   end
 
   def then_further_education_level_filter_is_displayed

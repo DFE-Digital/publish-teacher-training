@@ -60,6 +60,14 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
       end
     end
 
+    context "with applications_open" do
+      let(:attrs) { { "applications_open" => "true" } }
+
+      it "translates via active_filters.yml" do
+        expect(formatted_values).to eq(["Courses open for applications"])
+      end
+    end
+
     context "with funding" do
       let(:attrs) { { "funding" => %w[salary] } }
 
@@ -142,7 +150,7 @@ RSpec.describe Courses::ActiveFilters::HashExtractor do
     end
 
     context "with skipped keys" do
-      let(:attrs) { { "applications_open" => "true", "radius" => "15", "subject_code" => "C1" } }
+      let(:attrs) { { "radius" => "15", "subject_code" => "C1" } }
 
       it "ignores all skipped keys" do
         expect(filters).to be_empty

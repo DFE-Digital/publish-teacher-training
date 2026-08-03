@@ -18,6 +18,7 @@ module Courses
         minimum_degree_required
         can_sponsor_visa
         interview_location
+        applications_open
         start_date
       ].freeze
 

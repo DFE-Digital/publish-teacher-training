@@ -226,20 +226,6 @@ RSpec.describe Courses::ActiveFilters::Extractor do
 
         expect(active_filters).to eq([])
       end
-
-      it "skips default applications_open" do
-        search_form = Courses::SearchForm.new(applications_open: true)
-        search_params = search_form.search_params
-
-        extractor = described_class.new(
-          search_params:,
-          search_form:,
-        )
-
-        active_filters = extractor.call
-
-        expect(active_filters).to eq([])
-      end
     end
 
     context "when params have non-default values" do
@@ -284,10 +270,33 @@ RSpec.describe Courses::ActiveFilters::Extractor do
 
         expect(active_filters).to eq([expected_filter])
       end
+    end
 
-      it "returns nil for applications_open false" do
-        search_form = Courses::SearchForm.new(applications_open: false)
+    context "with applications_open" do
+      it "returns a filter when applications_open is true" do
+        search_form = Courses::SearchForm.new(applications_open: true)
         search_params = search_form.search_params
+
+        extractor = described_class.new(
+          search_params:,
+          search_form:,
+        )
+
+        active_filters = extractor.call
+
+        expected_filter = Courses::ActiveFilter.new(
+          id: :applications_open,
+          raw_value: true,
+          value: true,
+          remove_params: { applications_open: nil },
+        )
+
+        expect(active_filters).to eq([expected_filter])
+      end
+
+      it "skips applications_open when false" do
+        search_form = Courses::SearchForm.new
+        search_params = { applications_open: false }
 
         extractor = described_class.new(
           search_params:,

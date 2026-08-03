@@ -30,7 +30,7 @@ module Courses
         ])
       end
 
-      status_tag = course.decorate.saved_status_tag
+      status_tag = application_status_tag
       status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
 
       title_content = safe_join([course_link, status_block].compact)
@@ -53,6 +53,15 @@ module Courses
 
       saved_course = @candidate&.saved_courses&.find_by(course_id: course.id)
       render("find/saved_courses/save_toggle", course: course, saved_course: saved_course)
+    end
+
+    # Find result cards only show closed / after-deadline status. The grey
+    # "Not yet open" cycle-phase tag is kept on Saved courses only.
+    def application_status_tag
+      text, colour = course.decorate.saved_status_text_and_colour
+      return if text.blank? || colour == "grey"
+
+      helpers.govuk_tag(text:, colour:)
     end
 
     def candidate_accounts_enabled?

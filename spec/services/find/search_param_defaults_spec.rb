@@ -4,14 +4,9 @@ require "rails_helper"
 
 RSpec.describe Find::SearchParamDefaults do
   describe "#default_value?" do
-    it "returns true for applications_open=true" do
+    it "returns false for applications_open=true (not a silent default)" do
       defaults = described_class.new(applications_open: "true")
-      expect(defaults.default_value?("applications_open", "true")).to be true
-    end
-
-    it "returns false for applications_open=false" do
-      defaults = described_class.new(applications_open: "false")
-      expect(defaults.default_value?("applications_open", "false")).to be false
+      expect(defaults.default_value?("applications_open", "true")).to be false
     end
 
     it "returns true for minimum_degree_required=show_all_courses" do
