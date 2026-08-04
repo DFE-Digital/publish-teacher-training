@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 7 * * *"
   workflow_dispatch:
+  push:
+    branches:
+      - 2917-validate-infra-gcp-auth
 
 jobs:
   validate:
