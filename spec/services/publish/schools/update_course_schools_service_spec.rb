@@ -80,10 +80,22 @@ module Publish
           context "when course is published" do
             let(:course) { create(:course, :published, provider:, site_statuses: [site_status]) }
             let(:site_status) { build(:site_status, :running, :published, site: site_one) }
+            let(:previous_timestamp) { 1.day.ago.change(usec: 0) }
+
+            before do
+              course.enrichments.published.update_all(last_published_timestamp_utc: previous_timestamp)
+            end
 
             it "sets all site_statuses to running" do
               service_call
               expect(course.reload.site_statuses.pluck(:status)).to match(%w[running running])
+            end
+
+            it "refreshes last_published_at" do
+              service_call
+
+              expect(course.reload.last_published_at).to be_within(5.seconds).of(Time.zone.now)
+              expect(course.last_published_at).to be > previous_timestamp
             end
           end
         end

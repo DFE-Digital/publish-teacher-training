@@ -149,6 +149,40 @@ RSpec.describe CourseEnrichment do
   #
   # Existing specs we already had
   #
+  describe "live edits to published enrichments" do
+    subject(:record) do
+      create(
+        :course_enrichment,
+        :published,
+        last_published_timestamp_utc: 1.day.ago,
+        theoretical_training_activities: "Old content",
+      )
+    end
+
+    it "refreshes last_published_timestamp_utc when content changes" do
+      record.update!(theoretical_training_activities: "Updated content")
+
+      expect(record.reload.last_published_timestamp_utc).to be_within(5.seconds).of(Time.zone.now)
+    end
+
+    it "does not refresh last_published_timestamp_utc when only metadata changes" do
+      previous_timestamp = record.last_published_timestamp_utc
+
+      record.update!(updated_by_user_id: create(:user).id)
+
+      expect(record.reload.last_published_timestamp_utc).to be_within(1.second).of(previous_timestamp)
+    end
+
+    it "does not refresh last_published_timestamp_utc when reassigned to another course" do
+      previous_timestamp = record.last_published_timestamp_utc
+      other_course = create(:course)
+
+      record.update!(course: other_course)
+
+      expect(record.reload.last_published_timestamp_utc).to be_within(1.second).of(previous_timestamp)
+    end
+  end
+
   describe "#publish" do
     let(:user) { create(:user) }
 

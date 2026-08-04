@@ -104,6 +104,16 @@ class Course < ApplicationRecord
   before_save :set_applications_open_from
 
   before_save :update_program_type!, if: :will_save_change_to_funding?
+  after_update :refresh_last_published_at!, if: :bump_last_published_at_on_live_edit?
+
+  # System/metadata attributes that should not, on their own, refresh the
+  # "Last updated" timestamp shown for published courses.
+  LIVE_EDIT_IGNORED_ATTRIBUTES = %w[
+    updated_at
+    changed_at
+    created_at
+    first_published_at
+  ].freeze
 
   belongs_to :provider
 
@@ -629,6 +639,22 @@ class Course < ApplicationRecord
     return enrichments.select(&:last_published_timestamp_utc).max_by(&:last_published_timestamp_utc)&.last_published_timestamp_utc if enrichments.loaded?
 
     enrichments.maximum(:last_published_timestamp_utc)
+  end
+
+  def bump_last_published_at_on_live_edit?
+    published? && (previous_changes.keys - LIVE_EDIT_IGNORED_ATTRIBUTES).any?
+  end
+
+  # Schools/study sites update join tables rather than course attributes, so
+  # callers that change those associations should invoke this directly.
+  def refresh_last_published_at!
+    enrichment = current_published_enrichment
+    return if enrichment.blank?
+
+    enrichment.update_columns(
+      last_published_timestamp_utc: Time.zone.now,
+      updated_at: Time.zone.now,
+    )
   end
 
   def withdrawn_at
