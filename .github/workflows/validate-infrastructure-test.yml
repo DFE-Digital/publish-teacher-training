@@ -1,4 +1,4 @@
-name: Validate Infra
+name: Validate Infra Test
 
 on:
   schedule:
