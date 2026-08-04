@@ -1,12 +1,10 @@
 <%= content_for :page_title, title_with_error_prefix(t(".page_title"), flash[:error].present?) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
       <%= t(".page_title") %>
     </h1>
   </div>
-
   <% if @saved_courses.empty? %>
     <div class="govuk-grid-column-full">
       <div class="app-card app-card--dashed">
@@ -21,7 +19,6 @@
       <div class="app-saved-courses-search">
         <h2 class="govuk-heading-m"><%= t(".search_heading") %></h2>
         <p class="govuk-body govuk-!-font-size-19"><%= t(".search_description") %></p>
-
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full app-saved-course-location">
             <div class="govuk-form-group app-saved-course-location-input">
@@ -42,12 +39,10 @@
           </div>
         </div>
       </div>
-
       <% sort_options = [["newest_first", t(".sort_options.newest_first")]] %>
       <% sort_options << ["distance", t(".sort_options.distance")] if @location.present? %>
       <% sort_options << ["fee_uk_ascending", t(".sort_options.fee_uk_ascending")] %>
       <% sort_options << ["fee_intl_ascending", t(".sort_options.fee_intl_ascending")] %>
-
       <div class="app-saved-courses-sort--inline">
         <p class="govuk-body">
           <%= t(".sort_by") %>
@@ -63,7 +58,6 @@
           <% end %>
         </p>
       </div>
-
       <div class="app-saved-courses-sort--list">
         <p class="govuk-body"><%= t(".sort_by") %></p>
         <ul class="govuk-list app-list--dash course-contents">
@@ -78,7 +72,6 @@
           <% end %>
         </ul>
       </div>
-
       <% @saved_courses.each do |saved_course| %>
         <%= render SavedCourses::SummaryCardComponent.new(
           saved_course: saved_course,
@@ -87,18 +80,20 @@
           order: @order,
         ) %>
       <% end %>
-
       <%= govuk_pagination(pagy: @pagy) %>
     </div>
   <% end %>
-
   <div class="govuk-grid-column-full">
     <%= govuk_inset_text classes: "app-callout app-callout--blue" do %>
       <h2><%= t(".applications_heading") %></h2>
-      <%= t(
+      <p>
+        <%= t(
         ".applications_body_html",
         link: govuk_link_to(t(".applications_link_text"), t(".applications_url")),
-      ) %>
+      ) %></p>
+      <p><%= t(
+        ".applications_closing_information",
+      ) %></p>
     <% end %>
   </div>
 </div>
