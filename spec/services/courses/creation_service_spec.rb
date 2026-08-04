@@ -10,10 +10,13 @@ describe Courses::CreationService do
     )
   end
 
-  let(:provider) { create(:provider, sites: [site], study_sites: [study_site]) }
+  let(:provider) { create(:provider, study_sites: [study_site]) }
 
-  let(:site) { build(:site) }
+  let!(:site) { create(:site, :with_provider_school, provider:) }
   let(:study_site) { build(:site, :study_site) }
+
+  let(:provider_school) { provider.schools.find_by(uuid: site.uuid) }
+  let(:gias_school) { provider_school.gias_school }
 
   let(:recruitment_cycle) { provider.recruitment_cycle }
 
@@ -193,7 +196,6 @@ describe Courses::CreationService do
       create(
         :provider,
         accredited: false,
-        sites: [site],
         study_sites: [study_site],
       )
     end
@@ -477,11 +479,6 @@ describe Courses::CreationService do
 
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
 
-    # A GIAS school + provider_school that mirror the legacy `site` selected in
-    # the wizard, joined to the legacy site by matching UUID.
-    let(:gias_school) { create(:gias_school, urn: site.urn) }
-    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid) }
-
     let(:valid_course_params) do
       {
         "age_range_in_years" => "3_to_7",
@@ -545,28 +542,33 @@ describe Courses::CreationService do
     context "when there is no matching provider_school (not backfilled)" do
       # GIAS school exists (matched by URN) but the provider has not been
       # backfilled, so no Provider::School exists for the pair.
-      let!(:gias_school) { create(:gias_school, urn: site.urn) }
-      let!(:provider_school) { nil }
+      let!(:site) { create(:site, :with_gias_school, provider:) }
 
       before do
         allow(FeatureFlag).to receive(:active?).and_call_original
         allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
       end
 
-      it "skips the new-model write, logs a warning, and still builds the legacy site_status" do
+      it "writes the legacy site, skips the new-model write, and logs a warning" do
         expect(Rails.logger).to receive(:warn).with(/course_school/)
 
-        expect(created_course.schools).to be_empty
         expect(created_course.sites.map(&:id)).to eq([site.id])
+        expect(created_course.schools).to be_empty
+      end
+
+      it "leaves the course invalid on :new so the divergence cannot be saved" do
+        allow(Rails.logger).to receive(:warn)
+
+        expect(created_course.valid?(:new)).to be(false)
+        expect(created_course.errors.full_messages_for(:schools))
+          .to include(/Some of the schools you selected were not recognised/)
       end
     end
 
     context "when several schools are selected" do
-      let(:site_two) { create(:site, provider:) }
-      let(:gias_school_two) { create(:gias_school, urn: site_two.urn) }
-      let!(:provider_school_two) do
-        create(:provider_school, provider:, gias_school: gias_school_two, site_code: site_two.code, uuid: site_two.uuid)
-      end
+      let!(:site_two) { create(:site, :with_provider_school, provider:) }
+      let(:provider_school_two) { provider.schools.find_by(uuid: site_two.uuid) }
+      let(:gias_school_two) { provider_school_two.gias_school }
 
       let(:valid_course_params) { super().merge("school_uuids" => [site_two.uuid, site.uuid]) }
 
@@ -584,9 +586,10 @@ describe Courses::CreationService do
       end
     end
 
-    # The legacy site write and the new-model write can disagree: a school with no
-    # Provider::School is still attached as a site but produces no Course::School,
-    # so under the flag the course runs at one fewer school than was selected.
+    # The two writes must not be allowed to disagree: a school with no
+    # Provider::School would otherwise be attached as a site while producing no
+    # Course::School, leaving the course running at fewer schools than were
+    # selected once the flag flips the reads over.
     context "when only some of the selected schools have been backfilled" do
       let(:site_two) { create(:site, provider:) }
 
@@ -602,16 +605,14 @@ describe Courses::CreationService do
 
         expect(created_course.sites.map(&:id)).to eq([site.id, site_two.id])
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.errors).to be_empty
       end
 
-      it "saves without surfacing the divergence to the provider" do
+      it "leaves the course invalid on :new so the divergence cannot be saved" do
         allow(Rails.logger).to receive(:warn)
 
-        created_course.save!
-
-        expect(created_course.reload.sites.count).to eq(2)
-        expect(Course::School.where(course: created_course).count).to eq(1)
+        expect(created_course.valid?(:new)).to be(false)
+        expect(created_course.errors.full_messages_for(:schools))
+          .to include(/Some of the schools you selected were not recognised/)
       end
     end
 
@@ -641,14 +642,13 @@ describe Courses::CreationService do
     context "when only some of the submitted school UUIDs can be resolved" do
       let(:valid_course_params) { super().merge("school_uuids" => [site.uuid, SecureRandom.uuid]) }
 
-      it "assigns nothing rather than quietly creating the course with fewer schools" do
+      it "writes what resolved but reports the shortfall rather than creating quietly" do
         allow(Rails.logger).to receive(:warn)
 
         expect(created_course.errors[:schools]).to include(
           "Some of the schools you selected were not recognised. Try again or get in touch with support at becomingateacher@digital.education.gov.uk",
         )
-        expect(created_course.sites).to be_empty
-        expect(created_course.schools).to be_empty
+        expect(created_course.sites.map(&:id)).to eq([site.id])
       end
     end
 
@@ -683,8 +683,9 @@ describe Courses::CreationService do
         allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
       end
 
-      it "adds the existing error and builds no Course::School" do
-        expect(created_course.errors[:schools]).to include("Select at least one school")
+      it "reports the empty selection on :sites and builds no Course::School" do
+        expect(created_course.errors[:sites]).to include("Select at least one school")
+        expect(created_course.errors[:schools]).to be_empty
         expect(created_course.schools).to be_empty
       end
     end
@@ -704,8 +705,9 @@ describe Courses::CreationService do
         allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
       end
 
-      it "adds the existing error and builds no Course::School" do
-        expect(created_course.errors[:schools]).to include("Select at least one school")
+      it "reports the empty selection on :sites and builds no Course::School" do
+        expect(created_course.errors[:sites]).to include("Select at least one school")
+        expect(created_course.errors[:schools]).to be_empty
         expect(created_course.schools).to be_empty
       end
     end
@@ -715,8 +717,9 @@ describe Courses::CreationService do
     context "when the school checkboxes are submitted with nothing ticked" do
       let(:valid_course_params) { super().merge("school_uuids" => [""]) }
 
-      it "adds the blank schools error and builds no Course::School" do
-        expect(created_course.errors[:schools]).to include("Select at least one school")
+      it "reports the empty selection on :sites and builds no Course::School" do
+        expect(created_course.errors[:sites]).to include("Select at least one school")
+        expect(created_course.errors[:schools]).to be_empty
         expect(created_course.sites).to be_empty
         expect(created_course.schools).to be_empty
       end

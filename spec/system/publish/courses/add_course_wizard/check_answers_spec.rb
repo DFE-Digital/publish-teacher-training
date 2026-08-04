@@ -324,8 +324,13 @@ private
       :provider,
       provider_type: :lead_school,
       recruitment_cycle:,
-      sites: [build(:site), build(:site, :study_site)],
     )
+    # Created against the saved provider rather than assigned through `sites:`:
+    # the trait's after(:create) hook only fires for a site the factory creates,
+    # and an assigned collection stays cached on the provider instance, so
+    # `provider.sites.first` would keep serving the assigned record.
+    create(:site, :with_provider_school, provider: school_provider)
+    create(:site, :study_site, provider: school_provider)
     first_partner = create(:accredited_provider, recruitment_cycle:)
     second_partner = create(:accredited_provider, recruitment_cycle:)
     create(:provider_partnership, training_provider: school_provider, accredited_provider: first_partner)
@@ -345,13 +350,13 @@ private
 
   def given_the_provider_has_no_study_sites
     provider.study_sites.destroy_all
-    @placement_site = provider.sites.first || create(:site, provider:)
+    @placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     expect(provider.reload.study_sites).to be_empty
   end
 
   def given_i_have_completed_tda_wizard_state
     primary_subject = find_or_create(:primary_subject, :primary)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -517,10 +522,11 @@ private
   # Mirror the selected legacy school into the new data model: a GIAS school
   # matched by URN plus a Provider::School carrying the site_code. This is the
   # backfilled state the add-course flow maps through when writing Course::School.
+  # The mapping itself comes from the site factory's :with_provider_school trait;
+  # this just captures it for the assertions below.
   def and_the_selected_school_is_mapped_to_the_new_model
     @selected_site = provider.sites.first
-    @gias_school = create(:gias_school, urn: @selected_site.urn)
-    create(:provider_school, provider:, gias_school: @gias_school, site_code: @selected_site.code, uuid: @selected_site.uuid)
+    @gias_school = provider.schools.find_by!(uuid: @selected_site.uuid).gias_school
   end
 
   def then_the_created_course_has_the_new_course_school
@@ -567,7 +573,7 @@ private
   def given_i_have_completed_secondary_fee_wizard_state
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -601,7 +607,7 @@ private
   def given_i_have_completed_secondary_salary_wizard_state
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -637,7 +643,7 @@ private
     @design_technology = SecondarySubject.design_technology
     @language_specialism = find_or_create(:secondary_subject, :french)
     @design_technology_specialism = find_or_create(:design_technology_subject, :engineering)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -668,7 +674,7 @@ private
 
   def given_i_have_completed_further_education_wizard_state
     further_education_subject = find_or_create(:further_education_subject)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -699,7 +705,7 @@ private
 
   def given_i_have_completed_tda_wizard_state_with_send_yes
     primary_subject = find_or_create(:primary_subject, :primary)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -727,7 +733,7 @@ private
     given_i_am_authenticated_as_school_provider_with_single_partner(cycle_year: Find::CycleTimetable.current_year)
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -757,7 +763,7 @@ private
   def given_i_have_completed_secondary_fee_wizard_state_with_no_visa_deadline
     physics = find_or_create(:secondary_subject, :physics)
     business = find_or_create(:secondary_subject, :business_studies)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(
@@ -793,8 +799,13 @@ private
       :provider,
       provider_type: :lead_school,
       recruitment_cycle:,
-      sites: [build(:site), build(:site, :study_site)],
     )
+    # Created against the saved provider rather than assigned through `sites:`:
+    # the trait's after(:create) hook only fires for a site the factory creates,
+    # and an assigned collection stays cached on the provider instance, so
+    # `provider.sites.first` would keep serving the assigned record.
+    create(:site, :with_provider_school, provider: school_provider)
+    create(:site, :study_site, provider: school_provider)
     single_partner = create(:accredited_provider, recruitment_cycle:)
     create(:provider_partnership, training_provider: school_provider, accredited_provider: single_partner)
 

@@ -110,18 +110,9 @@ module Courses
     def update_schools(course)
       return unless school_selection_submitted?
 
-      if unrecognised_school_uuids.any?
-        course.errors.add(
-          :schools,
-          message: I18n.t("course_schools.errors.unrecognised_school_uuids", support_email: Settings.support_email),
-        )
-        return
-      end
-
-      if selected_sites.empty?
-        course.errors.add(:schools, :blank)
-        return
-      end
+      # Make sure the uuids are stored on the model so re-validating can be
+      # done without wiping the errors
+      course.submitted_school_uuids = school_uuids
 
       # TODO School data remodel removal - remove the site writes # rubocop:disable Style/CommentAnnotation
       # once add-course creation only writes Course::School.
@@ -144,25 +135,16 @@ module Courses
       @selected_sites
     end
 
-    def unrecognised_school_uuids
-      resolve_sites
-      @unrecognised_school_uuids
-    end
-
-    # Schools are picked by UUID. One that does not belong to the provider is
-    # reported back rather than silently dropped, so a stale form cannot quietly
-    # create a course with fewer schools than were selected.
+    # Schools are picked by UUID. The resolver logs any that do not belong to the
+    # provider; the validator is what stops the course being saved without them.
     def resolve_sites
       return if defined?(@selected_sites)
 
-      resolution = ::Schools::UuidResolver.call(
+      @selected_sites = ::Schools::UuidResolver.call(
         provider:,
         uuids: school_uuids,
         log_tag: "CourseSchools",
-      )
-
-      @selected_sites = resolution.schools
-      @unrecognised_school_uuids = resolution.unrecognised_uuids
+      ).schools
     end
 
     def provider_school_for(site)
