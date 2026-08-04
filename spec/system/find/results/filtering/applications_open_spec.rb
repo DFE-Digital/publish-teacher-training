@@ -39,17 +39,13 @@ RSpec.describe "when filtering by applications open", :js, service: :find do
   end
 
   def then_i_see_only_open_courses
-    with_retry do
-      expect(results).to have_content("Biology (S872)")
-      expect(results).to have_no_content("Chemistry (K592)")
-    end
+    expect(results).to have_content("Biology (S872)")
+    expect(results).to have_no_content("Chemistry (K592)")
   end
 
   def then_i_see_open_and_closed_courses
-    with_retry do
-      expect(results).to have_content("Biology (S872)")
-      expect(results).to have_content("Chemistry (K592)")
-    end
+    expect(results).to have_content("Biology (S872)")
+    expect(results).to have_content("Chemistry (K592)")
   end
 
   def and_the_applications_open_filter_is_checked
