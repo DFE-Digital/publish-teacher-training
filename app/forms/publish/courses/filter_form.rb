@@ -9,6 +9,10 @@ module Publish
     # Every group is a multi-select list of checkboxes, and each reader allows only
     # the values that group offers. That single choke point means an unrecognised
     # value in the query string reaches neither the SQL nor an active filter chip.
+    #
+    # Every group but start date offers a fixed list of options. Start date offers
+    # the months the provider's courses start in, so narrowing that list narrows
+    # the checkboxes, the allowed values and the chip labels together.
     class FilterForm < ApplicationForm
       Option = Data.define(:value, :label)
 
@@ -87,8 +91,10 @@ module Publish
         end
       end
 
+      # Only the months the provider's courses actually start in, so the panel
+      # never offers a month that would narrow the list to nothing.
       def start_date_options
-        @start_date_options ||= ::Courses::CycleStartMonths.for(provider.recruitment_cycle_year).map do |month|
+        @start_date_options ||= ::Publish::Courses::AvailableStartMonths.for(provider).map do |month|
           Option.new(value: month.to_fs(:year_and_month), label: I18n.l(month, format: :short))
         end
       end
