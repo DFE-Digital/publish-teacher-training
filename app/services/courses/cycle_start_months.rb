@@ -4,9 +4,10 @@ module Courses
   # The months a course in a given recruitment cycle can start in: the whole
   # cycle year plus January to July of the next.
   #
-  # Shared by the course wizard and the edit options (which offer the months
-  # when setting a start date) and by the publish course list filter (which
-  # offers them as checkboxes), so the three cannot drift apart.
+  # Shared by the course wizard and the edit options, which both offer these
+  # months when setting a start date, so the two cannot drift apart. The publish
+  # course list filter offers the months its courses actually start in instead —
+  # see Publish::Courses::AvailableStartMonths.
   module CycleStartMonths
     MONTHS_INTO_FOLLOWING_YEAR = 7
 

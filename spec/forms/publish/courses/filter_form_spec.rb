@@ -48,11 +48,23 @@ RSpec.describe Publish::Courses::FilterForm do
       end
     end
 
-    context "when a start date month is not in the cycle window" do
-      let(:attributes) { { start_date: ["#{cycle_year + 5}-09", "#{cycle_year}-09"] } }
+    context "when no course starts in that month" do
+      let(:attributes) { { start_date: ["#{cycle_year}-10", "#{cycle_year}-09"] } }
 
-      it "drops it" do
+      before { create(:course, provider:, start_date: Time.zone.local(cycle_year, 9, 1)) }
+
+      it "drops it, even though the cycle allows it" do
         expect(form.start_date).to eq(["#{cycle_year}-09"])
+      end
+    end
+
+    context "when a course starts in a month outside the cycle window" do
+      let(:attributes) { { start_date: ["#{cycle_year + 5}-03"] } }
+
+      before { create(:course, :without_validation, provider:, start_date: Time.zone.local(cycle_year + 5, 3, 1)) }
+
+      it "keeps it, so a start date on the list can always be filtered on" do
+        expect(form.start_date).to eq(["#{cycle_year + 5}-03"])
       end
     end
   end
@@ -138,19 +150,35 @@ RSpec.describe Publish::Courses::FilterForm do
   describe "start date options" do
     subject(:options) { form.options_for(:start_date) }
 
-    it "covers the whole cycle window" do
-      expect(options.size).to eq(19)
+    it "is empty when the provider has no courses" do
+      expect(options).to be_empty
     end
 
-    it "starts in January of the cycle year" do
-      expect(options.first).to have_attributes(value: "#{cycle_year}-01", label: "January #{cycle_year}")
+    context "with courses starting in September and the following January" do
+      before do
+        create(:course, provider:, start_date: Time.zone.local(cycle_year + 1, 1, 1))
+        create(:course, provider:, start_date: Time.zone.local(cycle_year, 9, 1))
+      end
+
+      it "offers only the months its courses start in" do
+        expect(options.map(&:value)).to eq(["#{cycle_year}-09", "#{cycle_year + 1}-01"])
+      end
+
+      it "labels each month as the provider reads it on the list" do
+        expect(options.first).to have_attributes(value: "#{cycle_year}-09", label: "September #{cycle_year}")
+      end
     end
 
-    it "ends in July of the following year" do
-      expect(options.last).to have_attributes(value: "#{cycle_year + 1}-07", label: "July #{cycle_year + 1}")
+    it "ignores courses with no start date" do
+      create(:course, :without_validation, provider:, start_date: nil)
+      create(:course, provider:, start_date: Time.zone.local(cycle_year, 9, 1))
+
+      expect(options.map(&:value)).to eq(["#{cycle_year}-09"])
     end
 
     it "does not drop months that have already passed" do
+      create(:course, provider:, start_date: Time.zone.local(cycle_year, 1, 1))
+
       travel_to(Time.zone.local(cycle_year, 6, 15)) do
         expect(described_class.new(provider:).options_for(:start_date).first.label).to eq("January #{cycle_year}")
       end
@@ -182,6 +210,8 @@ RSpec.describe Publish::Courses::FilterForm do
 
     context "with a start date selected" do
       let(:attributes) { { start_date: ["#{cycle_year}-09"] } }
+
+      before { create(:course, provider:, start_date: Time.zone.local(cycle_year, 9, 1)) }
 
       it "labels the chip with the month" do
         expect(form.active_filters.map(&:formatted_value)).to eq(["September #{cycle_year}"])

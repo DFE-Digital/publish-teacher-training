@@ -6,9 +6,17 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
   subject(:rendered) { render_inline(described_class.new(filter_form:, provider:, **options)) }
 
   let(:provider) { create(:provider) }
+  let(:cycle_year) { provider.recruitment_cycle_year.to_i }
   let(:attributes) { {} }
   let(:options) { {} }
   let(:filter_form) { Publish::Courses::FilterForm.new(provider:, **attributes) }
+
+  # The start date group offers the months the provider's courses start in, so
+  # the panel needs courses before it has any start date checkboxes to render.
+  before do
+    create(:course, provider:, start_date: Time.zone.local(cycle_year, 9, 1))
+    create(:course, provider:, start_date: Time.zone.local(cycle_year + 1, 1, 1))
+  end
 
   def group_headings
     rendered.css(".app-c-filter-section__summary-heading").map { |heading| heading.text.strip }
@@ -59,8 +67,12 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
       expect(labels).to eq(["Open", "Closed", "Draft", "Rolled over", "Scheduled", "Withdrawn"])
     end
 
-    it "offers every month in the cycle window as a start date" do
-      expect(rendered.css("input[name='start_date[]']").size).to eq(19)
+    it "offers only the months the provider's courses start in" do
+      inputs = rendered.css("input[name='start_date[]']")
+
+      expect(inputs.map { |input| input[:value] }).to eq(["#{cycle_year}-09", "#{cycle_year + 1}-01"])
+      expect(inputs.map { |input| rendered.css("label[for='#{input[:id]}']").text.strip })
+        .to eq(["September #{cycle_year}", "January #{cycle_year + 1}"])
     end
 
     context "when only some groups are visible" do
