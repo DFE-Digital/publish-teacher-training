@@ -24,6 +24,21 @@ RSpec.describe Find::RecentSearchRecorder do
         expect(candidate.recent_searches.count).to eq(0)
       end
 
+      it "does not record a search with empty subjects and location" do
+        result = described_class.call(
+          candidate:,
+          search_params: {
+            order: "course_name_ascending",
+            minimum_degree_required: "show_all_courses",
+            subjects: [],
+            location: "",
+          },
+        )
+
+        expect(result).to be_nil
+        expect(candidate.recent_searches.count).to eq(0)
+      end
+
       it "records a search when applications_open is selected" do
         result = described_class.call(
           candidate:,
