@@ -504,7 +504,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
       it "renders the school experience row" do
         expect(result.text).to include("School experience")
-        expect(result.text).to include("Yes, school experience is required or strongly recommended")
+        expect(result.text).to include("Previous school experience is required or strongly recommended")
         expect(result.text).to include("You must complete two weeks in a school.")
       end
     end

@@ -46,11 +46,11 @@ RSpec.describe "Viewing school experience on a course", service: :find do
 
   def then_i_see_the_school_experience_row
     expect(page).to have_content("School experience")
-    expect(page).to have_content("Yes, school experience is required or strongly recommended")
+    expect(page).to have_content("Previous school experience is required or strongly recommended")
   end
 
   def then_i_do_not_see_the_school_experience_row
-    expect(page).to have_no_content("Yes, school experience is required or strongly recommended")
+    expect(page).to have_no_content("Previous school experience is required or strongly recommended")
   end
 
   def then_i_see(content)
