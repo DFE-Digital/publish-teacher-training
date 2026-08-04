@@ -1,17 +1,13 @@
-<%# Build the copy-content dropdown option text. Course name/code and primary age range are always shown. Other course information is only shown when it differs across the available courses. %>
-<%
-  option_text = [other_course.name_and_code]
-
-  option_text << "Ages #{other_course.age_range}" if other_course.primary_course?
-
-  option_text << I18n.t("publish.courses.course_table.funding.#{other_course.funding}") if visible_course_information_fields.include?(:funding)
-
-  option_text << other_course.qualifications_summary if visible_course_information_fields.include?(:qualification)
-
-  option_text << other_course.study_mode_description.capitalize if visible_course_information_fields.include?(:study_mode)
-
-  option_text << I18n.l(other_course.start_date.to_date, format: :short) if visible_course_information_fields.include?(:start_date)
-%>
+<%# Course name/code and primary age range are always shown.
+    Other course information is only shown when it differs across
+    the courses available for copying. %>
 <option value="<%= other_course.course_code %>">
-  <%= option_text.join(", ") %>
+  <%= [
+    other_course.name_and_code,
+    (other_course.primary_course? ? "Ages #{other_course.age_range}" : nil),
+    (I18n.t("publish.courses.course_table.funding.#{other_course.funding}") if visible_course_information_fields.include?(:funding)),
+    (other_course.qualifications_summary if visible_course_information_fields.include?(:qualification)),
+    (other_course.study_mode_description.capitalize if visible_course_information_fields.include?(:study_mode)),
+    (I18n.l(other_course.start_date.to_date, format: :short) if visible_course_information_fields.include?(:start_date)),
+  ].compact.join(", ") %>
 </option>
