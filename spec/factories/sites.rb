@@ -31,6 +31,27 @@ FactoryBot.define do
       end
     end
 
+    # The Provider::School half of the dual-write that accompanies a real site
+    # creation, joined to the legacy site by the uuid the two share. Course
+    # creation rejects any selected school whose paired row is missing, so
+    # anything that creates a course from school_uuids needs this.
+    #
+    # after(:create), not after(:build): a site handed to `create(:provider,
+    # sites: [...])` is built against the factory's own throwaway provider and
+    # only reassigned when the provider saves it, so a build hook would pair the
+    # school to the wrong provider.
+    trait :with_provider_school do
+      after(:create) do |site|
+        create(
+          :provider_school,
+          provider: site.provider,
+          gias_school: GiasSchool.find_by(urn: site.urn) || create(:gias_school, urn: site.urn),
+          site_code: site.code,
+          uuid: site.uuid,
+        )
+      end
+    end
+
     trait :study_site do
       site_type { "study_site" }
     end
