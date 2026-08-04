@@ -223,7 +223,7 @@ private
   # course, so only genuine invalidity reaches the error summary.
   def and_i_have_wizard_state_for_start_date(with_school: true)
     primary_subject = find_or_create(:primary_subject, :primary)
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_site = provider.sites.first || create(:site, :with_provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     repository = CourseWizard::Repositories::Course.new(

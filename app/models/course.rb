@@ -26,6 +26,12 @@ class Course < ApplicationRecord
 
   attribute :subordinate_subject_id, :integer
 
+  # Virtual attribute that allows us to maintain the UUIDs submitted through
+  # the creation service and use #valid? while revalidating
+  # specifically for CourseSchoolSelectionValidator
+  # TODO School data remodel removal - delete alongside CourseSchoolSelectionValidator.
+  attr_accessor :submitted_school_uuids
+
   validates :course_code,
             uniqueness: { scope: :provider_id },
             presence: true,
@@ -367,6 +373,7 @@ class Course < ApplicationRecord
   }
 
   validates_with CoursePublishableSchoolsPresenceValidator, on: %i[publish new]
+  validates_with CourseSchoolSelectionValidator, on: :new
   validates :subjects, presence: true, on: :publish
   validates_with CoursePublishableSchoolsRolloverValidator,
                  on: :publish,

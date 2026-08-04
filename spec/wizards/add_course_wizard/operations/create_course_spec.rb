@@ -24,7 +24,16 @@ RSpec.describe CourseWizard::Operations::CreateCourse, type: :wizard do
 
   describe "#execute" do
     context "when the created course is valid" do
-      let(:course) { build(:course, provider:, sites: [provider.sites.first]) }
+      # Sites and their Course::Schools have to line up, or
+      # CourseSchoolsMatchSitesValidator rejects the course on :new.
+      let(:course) do
+        site = create(:site, :with_provider_school, provider:)
+        provider_school = provider.schools.find_by(uuid: site.uuid)
+
+        build(:course, provider:, sites: [site]).tap do |course|
+          course.schools.build(gias_school: provider_school.gias_school, provider_school:)
+        end
+      end
 
       it "saves the course and returns success" do
         expect { expect(operation.execute).to eq(success: true) }
@@ -43,6 +52,24 @@ RSpec.describe CourseWizard::Operations::CreateCourse, type: :wizard do
         expect(result[:success]).to be(false)
         expect(result[:errors]).to eq(step.errors)
         expect(step.errors[:base]).to include("Select at least one school")
+      end
+    end
+
+    context "when a submitted school UUID resolved to nothing" do
+      let(:course) do
+        build(:course, provider:, sites: []).tap do |course|
+          course.submitted_school_uuids = [SecureRandom.uuid]
+        end
+      end
+
+      it "reports the unresolved selection rather than an empty one" do
+        result = nil
+
+        expect { result = operation.execute }.not_to change(Course, :count)
+
+        expect(result[:success]).to be(false)
+        expect(step.errors[:base]).to include(/Some of the schools you selected were not recognised/)
+        expect(step.errors[:base]).not_to include("Select at least one school")
       end
     end
   end
