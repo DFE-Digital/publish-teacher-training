@@ -522,14 +522,13 @@ module ResultsHelper
   def and_i_am_on_the_results_page_with_cornwall_location_as_parameter
     and_i_am_on_the_results_page
 
-    expect(search_params).to eq(applications_open: "true", subject_name: "", subject_code: "", location: "Cornwall", provider_name: "", provider_code: "")
+    expect(search_params).to eq(subject_name: "", subject_code: "", location: "Cornwall", provider_name: "", provider_code: "")
   end
 
   def and_i_am_on_the_results_page_with_mathematics_subject_and_cornwall_location_and_sponsor_visa_as_parameter
     and_i_am_on_the_results_page
 
     expect(search_params).to eq(
-      applications_open: "true",
       subject_name: "Mathematics",
       subject_code: "G1",
       location: "Cornwall",
