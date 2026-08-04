@@ -90,6 +90,38 @@ describe "Publish::CoursesController#index" do
     end
   end
 
+  describe "filtering by start month" do
+    let(:cycle_year) { provider.recruitment_cycle_year.to_i }
+
+    before do
+      create(:course, provider:, accrediting_provider: nil, name: "September course", start_date: Time.zone.local(cycle_year, 9, 1))
+      create(:course, provider:, accrediting_provider: nil, name: "January course", start_date: Time.zone.local(cycle_year + 1, 1, 1))
+    end
+
+    it "offers only the months the courses start in" do
+      get_courses
+
+      expect(response.parsed_body.css("input[name='start_date[]']").map { |input| input[:value] })
+        .to eq(["#{cycle_year}-09", "#{cycle_year + 1}-01"])
+    end
+
+    it "narrows the list by start month" do
+      get_courses(start_date: ["#{cycle_year}-09"])
+
+      expect(course_names).to include("September course")
+      expect(course_names).not_to include("January course")
+    end
+
+    # No course starts then, so the month is not an option and the value is
+    # dropped like any other unrecognised one, rather than emptying the list.
+    it "ignores a start month no course starts in" do
+      get_courses(start_date: ["#{cycle_year}-12"])
+
+      expect(course_names).to include("September course", "January course")
+      expect(response.parsed_body.css(".app-active-filters")).to be_empty
+    end
+  end
+
   describe "filtering" do
     before do
       create(:course, :primary, :fee, provider:, name: "Primary course")
