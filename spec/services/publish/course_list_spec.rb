@@ -196,6 +196,20 @@ RSpec.describe Publish::CourseList do
       end
     end
 
+    # The filter offers only the months courses start in, so this group shows a
+    # single checkbox — which still narrows the list to the courses that have a
+    # start date at all, so it is worth showing.
+    context "when some courses have no start date and the rest share a month" do
+      before do
+        create_course(start_date: Time.zone.local(2026, 9, 1))
+        create_course(start_date: nil)
+      end
+
+      it "shows the start date filter" do
+        expect(course_list.visible_filter_groups).to eq([:start_date])
+      end
+    end
+
     context "when courses start on different days of the same month" do
       before do
         create_course(start_date: Time.zone.local(2026, 9, 1))
