@@ -6,6 +6,7 @@ require "rails_helper"
 # the "Apply filters" button submits a GET and the server renders the result.
 RSpec.describe "Filtering the course list" do
   let(:provider) { create(:provider, :accredited_provider) }
+  let(:cycle_year) { provider.recruitment_cycle_year.to_i }
 
   before do
     given_i_am_authenticated(user: create(:user, providers: [provider]))
@@ -71,10 +72,25 @@ RSpec.describe "Filtering the course list" do
     then_i_am_told_no_courses_were_found
   end
 
-  scenario "I can filter by any month the cycle allows" do
+  scenario "I only see the start dates my courses use" do
     given_my_provider_has_courses_starting_in_different_months
     when_i_visit_the_courses_page
-    then_i_can_choose_a_start_month
+    then_the_start_date_group_offers("September #{cycle_year}", "January #{cycle_year + 1}")
+  end
+
+  scenario "I narrow the list to one start month" do
+    given_my_provider_has_courses_starting_in_different_months
+    when_i_visit_the_courses_page
+    when_i_filter_by("September #{cycle_year}")
+    then_i_see_only("September course")
+    and_the_course_count_reads("1 course")
+  end
+
+  scenario "a bookmarked start month no course starts in is ignored" do
+    given_my_provider_has_courses_starting_in_different_months
+    when_i_visit_the_courses_page_with(start_date: ["#{cycle_year}-12"])
+    then_i_see_only("September course", "January course")
+    and_i_see_no_active_filters
   end
 
   scenario "an unrecognised filter in the address bar is ignored" do
@@ -110,8 +126,8 @@ RSpec.describe "Filtering the course list" do
   end
 
   def given_my_provider_has_courses_starting_in_different_months
-    create(:course, provider:, accrediting_provider: nil, name: "September course", start_date: Time.zone.local(provider.recruitment_cycle_year.to_i, 9, 1))
-    create(:course, provider:, accrediting_provider: nil, name: "January course", start_date: Time.zone.local(provider.recruitment_cycle_year.to_i + 1, 1, 1))
+    create(:course, provider:, accrediting_provider: nil, name: "September course", start_date: Time.zone.local(cycle_year, 9, 1))
+    create(:course, provider:, accrediting_provider: nil, name: "January course", start_date: Time.zone.local(cycle_year + 1, 1, 1))
   end
 
   def given_all_my_courses_are_identical
@@ -149,11 +165,8 @@ RSpec.describe "Filtering the course list" do
     check(label)
   end
 
-  # A collapsed group's labels read as empty text, so ask for the hidden text too.
   def group_offering(label)
-    publish_provider_courses_index_page.filter_groups.map(&:root_element).find do |group|
-      group.all("label", visible: :all).any? { |option| option.text(:all).strip == label }
-    end
+    publish_provider_courses_index_page.filter_groups.find { |group| group.option_labels.include?(label) }&.root_element
   end
 
   def when_i_remove_the_active_filter(label)
@@ -222,11 +235,8 @@ RSpec.describe "Filtering the course list" do
     expect(publish_provider_courses_index_page.empty_message.text).to eq("No courses found")
   end
 
-  def then_i_can_choose_a_start_month
-    month = "September #{provider.recruitment_cycle_year}"
-    group_offering(month).find("summary").click
-
-    expect(page).to have_field(month, type: "checkbox")
+  def then_the_start_date_group_offers(*labels)
+    expect(filter_group("Start date").option_labels).to eq(labels)
   end
 
   # Course links read "Primary fee course (X123)"; the code is noise here.
