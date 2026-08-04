@@ -88,7 +88,7 @@ module Courses
       @study_mode ||= if course_params["study_mode"].nil?
                         nil
                       else
-                        Array(course_params["study_mode"])&.flatten&.compact
+                        Array(course_params["study_mode"])&.flatten&.compact&.uniq
                       end
     end
 
