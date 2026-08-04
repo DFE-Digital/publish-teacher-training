@@ -46,8 +46,10 @@ module Courses
       Courses::AssignProgramTypeService.new.execute(course.funding, course)
       clean_up_visa_properties(course)
       Courses::AssignVisaSponsorshipApplicationDeadlineService.execute(course_params, course)
-      course.valid?(:new) if course.errors.blank?
+      # course.valid?(:new) will error on a blank `applications_open_from` attribute
+      # to get around this, we set the attribute before the validation can be called
       course.send(:set_applications_open_from)
+      course.valid?(:new) if course.errors.blank?
 
       course.remove_carat_from_error_messages
 
