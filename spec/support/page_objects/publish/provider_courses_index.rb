@@ -32,6 +32,12 @@ module PageObjects
       sections :filter_groups, "details.app-c-filter-section" do
         element :heading, ".app-c-filter-section__summary-heading"
         element :selected_count, ".app-c-filter-section__count"
+
+        # The options this group offers, in order. A collapsed group hides its
+        # labels, so ask for the hidden text too.
+        def option_labels
+          all("label", visible: :all).map { |label| label.text(:all).strip }
+        end
       end
 
       section :active_filters, ".app-active-filters" do
