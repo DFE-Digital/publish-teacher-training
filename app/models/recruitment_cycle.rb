@@ -7,6 +7,9 @@ class RecruitmentCycle < ApplicationRecord
   # a site to a new recruitment_cycle
   has_many :courses, through: :providers
   has_many :sites, through: :providers
+  has_many :provider_schools, through: :providers, source: :schools
+  has_many :course_schools, through: :courses, source: :schools
+  has_many :gias_schools, -> { distinct }, through: :provider_schools
   has_many :study_sites, through: :providers
   validates :year, presence: true
 
