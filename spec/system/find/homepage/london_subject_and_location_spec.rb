@@ -74,14 +74,13 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   def and_i_am_on_the_results_page_with_london_location_as_parameter
     and_i_am_on_the_results_page
 
-    expect(search_params).to eq(applications_open: "true", subject_name: "", subject_code: "", location: "London", provider_name: "", provider_code: "")
+    expect(search_params).to eq(subject_name: "", subject_code: "", location: "London", provider_name: "", provider_code: "")
   end
 
   def and_i_am_on_the_results_page_with_mathematics_subject_and_london_location_and_sponsor_visa_as_parameter
     and_i_am_on_the_results_page
 
     expect(search_params).to eq(
-      applications_open: "true",
       subject_name: "Mathematics",
       subject_code: "G1",
       location: "London",

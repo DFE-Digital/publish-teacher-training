@@ -151,7 +151,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 7,
           page: 1,
-          search_params: hash_including(applications_open: true),
+          search_params: hash_including(order: "course_name_ascending"),
           track_params: hash_including(utm_source: "home", utm_medium: "main_search"),
           results: array_including(
             have_attributes(course_code: "F314", provider_code: "RO1"),
@@ -189,7 +189,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 2,
           page: 1,
-          search_params: hash_including(applications_open: true, subjects: %w[00]),
+          search_params: hash_including(subjects: %w[00]),
           track_params: hash_including(utm_source: "home", utm_medium: "primary_courses"),
           results: array_including(
             have_attributes(course_code: "Y565", provider_code: "1UR"),
@@ -218,7 +218,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 1,
           page: 1,
-          search_params: hash_including(applications_open: true, subjects: %w[W1]),
+          search_params: hash_including(subjects: %w[W1]),
           track_params: hash_including(utm_source: "home", utm_medium: "secondary_courses"),
           results: array_including(
             have_attributes(course_code: "F314", provider_code: "RO1"),
@@ -243,7 +243,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 1,
           page: 1,
-          search_params: hash_including(applications_open: true, minimum_degree_required: "show_all_courses", funding: %w[apprenticeship]),
+          search_params: hash_including(minimum_degree_required: "show_all_courses", funding: %w[apprenticeship]),
           track_params: hash_including(utm_source: "home", utm_medium: "all_apprenticeship_courses"),
           results: array_including(
             have_attributes(course_code: "TDA1", provider_code: "23T"),
@@ -278,7 +278,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 1,
           page: 1,
-          search_params: hash_including(applications_open: true, send_courses: true, subjects: Subject.primary_subject_codes),
+          search_params: hash_including(send_courses: true, subjects: Subject.primary_subject_codes),
           track_params: hash_including(utm_source: "home", utm_medium: "send_primary_courses"),
           results: array_including(
             have_attributes(course_code: "P123", provider_code: "PO1"),
@@ -294,7 +294,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 1,
           page: 1,
-          search_params: hash_including(applications_open: true, send_courses: true, subjects: Subject.secondary_subject_codes_with_incentives),
+          search_params: hash_including(send_courses: true, subjects: Subject.secondary_subject_codes_with_incentives),
           track_params: hash_including(utm_source: "home", utm_medium: "send_secondary_courses"),
           results: array_including(
             have_attributes(course_code: "F314", provider_code: "RO1"),
@@ -315,7 +315,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 1,
           page: 1,
-          search_params: hash_including(applications_open: true, level: "further_education"),
+          search_params: hash_including(level: "further_education"),
           track_params: hash_including(utm_source: "home", utm_medium: "further_education_courses"),
           results: array_including(
             have_attributes(course_code: "F3D", provider_code: "JL1"),
