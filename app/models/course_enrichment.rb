@@ -46,6 +46,7 @@ class CourseEnrichment < ApplicationRecord
   delegate :value_proposition=, to: :provider, prefix: true
 
   before_validation :apply_publish_changes, on: :publish
+  before_update :bump_last_published_timestamp_on_live_edit, if: :bump_last_published_timestamp_on_live_edit?
 
   belongs_to :course
   has_one :provider, through: :course
@@ -169,5 +170,16 @@ class CourseEnrichment < ApplicationRecord
 
   def standard_course_length?
     course_length.in?(%w[OneYear TwoYears ThreeYears FourYears])
+  end
+
+private
+
+  def bump_last_published_timestamp_on_live_edit?
+    # Content lives in json_data; ignore association/metadata updates (e.g. course_id).
+    published? && will_save_change_to_json_data?
+  end
+
+  def bump_last_published_timestamp_on_live_edit
+    self.last_published_timestamp_utc = Time.zone.now
   end
 end

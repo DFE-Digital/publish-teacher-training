@@ -2616,6 +2616,29 @@ describe Course do
     end
   end
 
+  describe "live edits to published courses" do
+    let(:course) { create(:course, :published, age_range_in_years: "3_to_7") }
+    let(:previous_timestamp) { 1.day.ago.change(usec: 0) }
+
+    before do
+      course.enrichments.published.update_all(last_published_timestamp_utc: previous_timestamp)
+      course.enrichments.reload
+    end
+
+    it "refreshes last_published_at when basic details change" do
+      course.update!(age_range_in_years: "5_to_11")
+
+      expect(course.reload.last_published_at).to be_within(5.seconds).of(Time.zone.now)
+      expect(course.last_published_at).to be > previous_timestamp
+    end
+
+    it "does not refresh last_published_at when only changed_at is updated" do
+      course.update_columns(changed_at: Time.zone.now)
+
+      expect(course.reload.last_published_at).to eq(previous_timestamp)
+    end
+  end
+
   describe "funding_type and program_type" do
     context "setting the funding to apprenticeship" do
       it "sets the funding to apprenticeship and program_type to pg_teaching_apprenticeship" do

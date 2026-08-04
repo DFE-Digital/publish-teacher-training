@@ -27,6 +27,7 @@ module Publish
           course.save!
         end
 
+        refresh_last_published_at_if_sites_changed
         send_notifications
       end
 
@@ -45,6 +46,12 @@ module Publish
         sites_to_remove_ids.each { |id| detach_school(sites_by_id[id]) }
 
         course.sites.reload
+      end
+
+      def refresh_last_published_at_if_sites_changed
+        return if sites_to_attach_ids.empty? && sites_to_remove_ids.empty?
+
+        course.refresh_last_published_at!
       end
 
       def submitted_site_ids

@@ -9,6 +9,7 @@ RSpec.describe "Confirming live changes before publishing course edits" do
 
   scenario "published course shows interstitial for what you will study, then saves on confirm" do
     given_a_published_course
+    and_the_course_was_last_published_yesterday
     when_i_edit_what_you_will_study
     then_i_see_the_live_changes_interstitial(section: "What you will study")
     and_the_what_you_will_study_content_is_not_saved_yet
@@ -16,6 +17,7 @@ RSpec.describe "Confirming live changes before publishing course edits" do
     when_i_confirm_publishing_live_changes
     then_i_see_the_live_changes_success_message(section: "What you will study")
     and_the_what_you_will_study_content_is_saved
+    and_the_last_updated_timestamp_is_refreshed
   end
 
   scenario "draft course skips the interstitial for what you will study" do
@@ -28,6 +30,7 @@ RSpec.describe "Confirming live changes before publishing course edits" do
 
   scenario "published course shows interstitial for age range, then saves on confirm" do
     given_a_published_course
+    and_the_course_was_last_published_yesterday
     when_i_edit_age_range
     then_i_see_the_live_changes_interstitial(section: "Age range")
     and_the_age_range_is_not_saved_yet
@@ -35,19 +38,27 @@ RSpec.describe "Confirming live changes before publishing course edits" do
     when_i_confirm_publishing_live_changes
     then_i_see_the_live_changes_success_message(section: "Age range")
     and_the_age_range_is_saved
+    and_the_last_updated_timestamp_is_refreshed
   end
 
   scenario "schools update on a published course does not show the interstitial" do
     given_a_published_course_with_schools
+    and_the_course_was_last_published_yesterday
     when_i_update_course_schools
     then_i_should_not_see_the_live_changes_interstitial
     expect(page).to have_content("Schools updated")
+    and_the_last_updated_timestamp_is_refreshed
   end
 
 private
 
   def given_a_published_course
     given_a_course_exists(:published)
+  end
+
+  def and_the_course_was_last_published_yesterday
+    @previous_last_published_at = 1.day.ago.change(usec: 0)
+    course.enrichments.published.update_all(last_published_timestamp_utc: @previous_last_published_at)
   end
 
   def given_a_draft_course
@@ -131,6 +142,11 @@ private
 
   def and_the_age_range_is_saved
     expect(course.reload.age_range_in_years).to eq("5_to_11")
+  end
+
+  def and_the_last_updated_timestamp_is_refreshed
+    expect(course.reload.last_published_at).to be_within(5.seconds).of(Time.zone.now)
+    expect(course.last_published_at).to be > @previous_last_published_at
   end
 
   def provider
