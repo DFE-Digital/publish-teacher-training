@@ -43,3 +43,5 @@ jobs:
           validation-plan: ${{ matrix.validation_plan }}
           service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL_INFRA }}
+          gcp-project-id: rugged-abacus-218110
+          gcp-wip: projects/712009772377/locations/global/workloadIdentityPools/publish-teacher-training/providers/publish-teacher-training
