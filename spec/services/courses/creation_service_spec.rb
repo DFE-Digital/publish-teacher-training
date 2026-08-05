@@ -226,7 +226,6 @@ describe Courses::CreationService do
 
   context "primary course" do
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
-
     let(:valid_course_params) do
       {
         "age_range_in_years" => "3_to_7",
@@ -287,7 +286,6 @@ describe Courses::CreationService do
 
   context "secondary course" do
     let(:secondary_subject) { find_or_create(:secondary_subject, :biology) }
-
     let(:valid_course_params) do
       {
         "age_range_in_years" => "12_to_17",
@@ -380,7 +378,6 @@ describe Courses::CreationService do
 
   context "further_education course" do
     let(:further_education_subject) { find_or_create(:further_education_subject) }
-
     let(:valid_course_params) do
       {
         "applications_open_from" => recruitment_cycle.application_start_date,
@@ -472,7 +469,7 @@ describe Courses::CreationService do
     end
   end
 
-  describe "writing schools to the new school data model" do
+  describe "writing selected schools during course creation" do
     subject(:created_course) do
       described_class.call(course_params: valid_course_params, provider:, next_available_course_code: true)
     end
@@ -496,15 +493,11 @@ describe Courses::CreationService do
       }
     end
 
-    context "when the flag is off" do
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
-      end
-
-      it "dual-writes: builds both the legacy site_status and the new Course::School" do
+    context "when a matching provider school exists" do
+      it "builds both the legacy site_status and the Course::School" do
         expect(created_course.sites.map(&:id)).to eq([site.id])
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
+        expect(created_course.schools.first.site_code).to eq(site.code)
         expect(created_course.schools.first.provider_school).to eq(provider_school)
         expect(created_course.errors).to be_empty
       end
@@ -518,38 +511,12 @@ describe Courses::CreationService do
       end
     end
 
-    context "when the flag is on" do
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
-      end
-
-      it "builds the new Course::School and passes :new validation" do
-        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.schools.first.site_code).to eq(site.code)
-        expect(created_course.schools.first.provider_school).to eq(provider_school)
-        expect(created_course.errors).to be_empty
-      end
-
-      it "persists the Course::School on save" do
-        created_course.save!
-
-        expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
-          .to eq([[gias_school.id, provider_school.id]])
-      end
-    end
-
     context "when there is no matching provider_school (not backfilled)" do
       # GIAS school exists (matched by URN) but the provider has not been
       # backfilled, so no Provider::School exists for the pair. Resolution is
       # keyed on Provider::School, so the UUID comes back unrecognised even
       # though the legacy site is sitting right there.
       let!(:site) { create(:site, :with_gias_school, provider:) }
-
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
-      end
 
       it "writes the legacy site, skips the new-model write, and logs a warning" do
         expect(Rails.logger).to receive(:warn).with(/unrecognised school UUIDs for provider=#{provider.id}: #{site.uuid}/)
@@ -591,16 +558,11 @@ describe Courses::CreationService do
     # The two writes must not be allowed to disagree: a school with no
     # Provider::School would otherwise be attached as a site while producing no
     # Course::School, leaving the course running at fewer schools than were
-    # selected once the flag flips the reads over.
+    # selected.
     context "when only some of the selected schools have been backfilled" do
       let(:site_two) { create(:site, provider:) }
 
       let(:valid_course_params) { super().merge("school_uuids" => [site.uuid, site_two.uuid]) }
-
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
-      end
 
       it "keeps both sites but builds a Course::School only for the backfilled school" do
         expect(Rails.logger).to receive(:warn).with(/unrecognised school UUIDs for provider=#{provider.id}: #{site_two.uuid}/)
@@ -670,6 +632,19 @@ describe Courses::CreationService do
       end
     end
 
+    context "when the selected site's GIAS school is closed" do
+      # A site can still point at a school the GIAS import later flipped to
+      # closed. Both models have to record it, or the course would lose the
+      # school when publish-side reads use Course::School.
+      let(:gias_school) { create(:gias_school, :closed) }
+      let!(:site) { create(:site, :with_provider_school, provider:, urn: gias_school.urn) }
+
+      it "builds the Course::School alongside the legacy site" do
+        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
+        expect(created_course.sites.map(&:id)).to eq([site.id])
+      end
+    end
+
     context "when no schools are selected" do
       let(:valid_course_params) do
         {
@@ -680,34 +655,7 @@ describe Courses::CreationService do
         }
       end
 
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(false)
-      end
-
-      it "reports the empty selection on :sites and builds no Course::School" do
-        expect(created_course.errors[:sites]).to include("Select at least one school")
-        expect(created_course.errors[:schools]).to be_empty
-        expect(created_course.schools).to be_empty
-      end
-    end
-
-    context "when no schools are selected and the flag is on" do
-      let(:valid_course_params) do
-        {
-          "level" => "primary",
-          "qualification" => "qts",
-          "funding" => "fee",
-          "school_uuids" => [],
-        }
-      end
-
-      before do
-        allow(FeatureFlag).to receive(:active?).and_call_original
-        allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
-      end
-
-      it "reports the empty selection on :sites and builds no Course::School" do
+      it "adds the empty-selection error and builds no Course::School" do
         expect(created_course.errors[:sites]).to include("Select at least one school")
         expect(created_course.errors[:schools]).to be_empty
         expect(created_course.schools).to be_empty
@@ -719,7 +667,7 @@ describe Courses::CreationService do
     context "when the school checkboxes are submitted with nothing ticked" do
       let(:valid_course_params) { super().merge("school_uuids" => [""]) }
 
-      it "reports the empty selection on :sites and builds no Course::School" do
+      it "reports the empty checkbox selection on :sites and builds no Course::School" do
         expect(created_course.errors[:sites]).to include("Select at least one school")
         expect(created_course.errors[:schools]).to be_empty
         expect(created_course.sites).to be_empty
