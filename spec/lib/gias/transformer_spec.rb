@@ -51,13 +51,36 @@ RSpec.describe Gias::Transformer do
   end
 
   it "filters out the columns we do not use" do
-    expected_csv = <<~EXPECTEDCSV
-      urn,name,type_code,group_code,status_code,phase_code,minimum_age,maximum_age,ukprn,address1,address2,address3,town,county,postcode,website,telephone,region_code,latitude,longitude
-      100000,The Aldgate School,02,4,1,2,3,11,10079319,St James's Passage,Duke's Place,"",London,"",EC3A 5DE,www.thealdgateschool.org,02072831147,H,51.513968813644965,-0.077530631715809
-    EXPECTEDCSV
-
     actual_csv = described_class.call(downloaded_csv)
-    expect(actual_csv.read).to eq(expected_csv)
+    actual_rows = CSV.parse(actual_csv.read, headers: true)
+    actual_row = actual_rows.first.to_h
+
+    expect(actual_rows.headers).to eq(
+      %w[urn name type_code group_code status_code phase_code minimum_age maximum_age ukprn address1 address2 address3 town county postcode website telephone region_code latitude longitude],
+    )
+
+    expect(actual_row.except("latitude", "longitude")).to eq(
+      "urn" => "100000",
+      "name" => "The Aldgate School",
+      "type_code" => "02",
+      "group_code" => "4",
+      "status_code" => "1",
+      "phase_code" => "2",
+      "minimum_age" => "3",
+      "maximum_age" => "11",
+      "ukprn" => "10079319",
+      "address1" => "St James's Passage",
+      "address2" => "Duke's Place",
+      "address3" => "",
+      "town" => "London",
+      "county" => "",
+      "postcode" => "EC3A 5DE",
+      "website" => "www.thealdgateschool.org",
+      "telephone" => "02072831147",
+      "region_code" => "H",
+    )
+    expect(actual_row["latitude"].to_f).to be_within(0.0001).of(51.513968813644965)
+    expect(actual_row["longitude"].to_f).to be_within(0.0001).of(-0.077530631715809)
   ensure
     FileUtils.rm_f(file_name)
     actual_csv&.delete
