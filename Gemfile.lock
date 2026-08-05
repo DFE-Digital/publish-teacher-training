@@ -174,9 +174,8 @@ GEM
     bindata (2.5.1)
     binding_of_caller (2.0.0)
       debug_inspector (>= 1.2.0)
-    blazer (3.4.0)
+    blazer (3.5.1)
       activerecord (>= 7.2)
-      chartkick (>= 5)
       csv
       railties (>= 7.2)
       safely_block (>= 1)
@@ -205,7 +204,6 @@ GEM
       playwright-ruby-client (>= 1.16.0)
     case_transform (0.2)
       activesupport
-    chartkick (5.2.1)
     childprocess (5.1.0)
       logger (~> 1.5)
     choice (0.2.0)
@@ -225,7 +223,7 @@ GEM
       unicode (>= 0.4.4.5)
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
-    csv (3.3.5)
+    csv (3.3.6)
     data_migrate (11.3.1)
       activerecord (>= 6.1)
       railties (>= 6.1)
