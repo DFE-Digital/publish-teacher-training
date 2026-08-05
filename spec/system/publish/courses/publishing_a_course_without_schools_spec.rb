@@ -4,7 +4,6 @@ require "rails_helper"
 
 RSpec.describe "Publishing a course that is allowed to have no schools", travel: mid_cycle(2026) do
   before do
-    FeatureFlag.activate(:course_publishing_uses_new_school_model)
     given_i_am_authenticated_as_a_provider_user
     and_provider_schools_mirror_the_sites
     and_there_is_an_exempt_salaried_course_with_one_school

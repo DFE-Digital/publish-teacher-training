@@ -113,8 +113,6 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
   end
 
   context "when the course is published without an employing school" do
-    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-
     let(:course) { create(:course, funding:, publish_without_schools_allowed: true) }
 
     context "when funding is 'salary'" do

@@ -91,8 +91,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
   end
 
   describe "when published without an employing school" do
-    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-
     let(:course) do
       create(:course, funding:, publish_without_schools_allowed: true)
     end

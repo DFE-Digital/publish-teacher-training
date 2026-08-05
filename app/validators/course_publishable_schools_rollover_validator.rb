@@ -6,15 +6,13 @@
 # do, publishing is blocked with one of two error keys depending on
 # whether any school is currently attached.
 #
-# Reads the "course has at least one school" decision through
-# Courses::PublishRules::SchoolPresence so flag-on reads from the
-# Course::School model instead of the legacy Site association.
+# School presence is read from the Course::School association.
 class CoursePublishableSchoolsRolloverValidator < ActiveModel::Validator
   def validate(course)
     return if course.schools_validated?
     return unless course.latest_enrichment&.rolled_over?
 
-    if Courses::PublishRules::SchoolPresence.any?(course)
+    if course.schools.any?
       course.errors.add(:sites, :check_schools)
     elsif !Courses::PublishRules::SchoolPresenceExemption.applies?(course)
       course.errors.add(:sites, :enter_schools)

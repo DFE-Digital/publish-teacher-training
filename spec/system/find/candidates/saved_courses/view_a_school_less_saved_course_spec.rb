@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe "Viewing a saved course published without an employing school", service: :find do
   before do
     FeatureFlag.activate(:candidate_accounts)
-    FeatureFlag.activate(:course_publishing_uses_new_school_model)
     CandidateAuthHelper.mock_auth
     given_a_school_less_salaried_course_exists
   end

@@ -959,7 +959,7 @@ class Course < ApplicationRecord
   # candidates to look for an employing school that will never be listed.
   def without_employing_school?
     Courses::PublishRules::SchoolPresenceExemption.applies?(self) &&
-      Courses::PublishRules::SchoolPresence.none?(self)
+      schools.none?
   end
 
   def show_school_experience?

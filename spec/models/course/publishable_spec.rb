@@ -46,6 +46,8 @@ describe "#publishable?" do
       create(:course, :with_gcse_equivalency, :with_accrediting_provider, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status], study_sites: [study_site])
     end
 
+    before { create(:course_school, course:) }
+
     its(:publishable?) { is_expected.to be_truthy }
   end
 
@@ -84,13 +86,9 @@ describe "#publishable?" do
     end
   end
 
-  context "when the new-school-model flag is on" do
+  context "when checking school presence using the new school model" do
     let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
     let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
-
-    before do
-      allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true)
-    end
 
     context "with no Course::School rows" do
       let(:course) do
@@ -100,12 +98,12 @@ describe "#publishable?" do
           :with_accrediting_provider,
           subjects: [primary_with_mathematics],
           enrichments: [enrichment],
-          site_statuses: [site_status], # legacy sites present but flag ignores them
+          site_statuses: [site_status],
           study_sites: [study_site],
         )
       end
 
-      it "is not publishable and reports the sites :blank error" do
+      it "ignores legacy sites and reports the sites :blank error" do
         expect(course).not_to be_publishable
         expect(course.errors.details[:sites]).to include(error: :blank)
       end
@@ -120,7 +118,7 @@ describe "#publishable?" do
           :with_accrediting_provider,
           subjects: [primary_with_mathematics],
           enrichments: [enrichment],
-          site_statuses: [], # legacy empty but flag reads the new model
+          site_statuses: [],
           study_sites: [study_site],
         )
       end

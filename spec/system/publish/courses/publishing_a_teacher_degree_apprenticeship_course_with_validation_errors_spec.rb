@@ -100,6 +100,7 @@ RSpec.describe "Publishing courses errors" do
       accept_a_level_equivalency: nil,
     )
     @course.sites << build_list(:site, 1, provider: @provider)
+    attach_course_schools_for_sites(@course.sites, course: @course)
   end
 
   def given_there_is_an_published_tda_course
@@ -116,6 +117,7 @@ RSpec.describe "Publishing courses errors" do
       accept_a_level_equivalency: nil,
     )
     @course.sites << build_list(:site, 1, provider: @provider)
+    attach_course_schools_for_sites(@course.sites, course: @course)
   end
 
   def given_there_is_an_published_qts_course
@@ -128,6 +130,7 @@ RSpec.describe "Publishing courses errors" do
       accrediting_provider: @accredited_provider,
     )
     @course.sites << build_list(:site, 1, provider: @provider)
+    attach_course_schools_for_sites(@course.sites, course: @course)
   end
 
   def when_i_visit_the_course_page

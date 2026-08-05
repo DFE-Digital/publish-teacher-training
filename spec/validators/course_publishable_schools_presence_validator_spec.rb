@@ -10,16 +10,16 @@ describe CoursePublishableSchoolsPresenceValidator do
     described_class.new.validate(course)
   end
 
-  it "does not add an error when SchoolPresence reports schools attached" do
-    allow(Courses::PublishRules::SchoolPresence).to receive(:any?).with(course).and_return(true)
+  it "does not add an error when a course school is attached" do
+    allow(course.schools).to receive(:any?).and_return(true)
 
     run_validator
 
     expect(course.errors[:sites]).to be_empty
   end
 
-  it "adds a :blank error on :sites when SchoolPresence reports no schools" do
-    allow(Courses::PublishRules::SchoolPresence).to receive(:any?).with(course).and_return(false)
+  it "adds a :blank error on :sites when no course schools are attached" do
+    allow(course.schools).to receive(:any?).and_return(false)
     allow(Courses::PublishRules::SchoolPresenceExemption).to receive(:applies?).with(course).and_return(false)
 
     run_validator
@@ -28,7 +28,7 @@ describe CoursePublishableSchoolsPresenceValidator do
   end
 
   it "does not add an error when no schools are attached but the exemption applies" do
-    allow(Courses::PublishRules::SchoolPresence).to receive(:any?).with(course).and_return(false)
+    allow(course.schools).to receive(:any?).and_return(false)
     allow(Courses::PublishRules::SchoolPresenceExemption).to receive(:applies?).with(course).and_return(true)
 
     run_validator
@@ -36,18 +36,15 @@ describe CoursePublishableSchoolsPresenceValidator do
     expect(course.errors[:sites]).to be_empty
   end
 
-  # Integration of the validator with the real SchoolPresence and
-  # SchoolPresenceExemption rules and real Course::School records, covering the
-  # ticket's publish matrix under the new school model.
-  describe "validation matrix (new school model)" do
+  # Integration of the validator with the real exemption rule and real
+  # Course::School records.
+  describe "validation matrix" do
     let(:provider) { create(:provider) }
     let(:course) { create(:course, funding, provider:, publish_without_schools_allowed: exemption) }
 
     def attach_school
       create(:course_school, course:, gias_school: create(:gias_school))
     end
-
-    before { allow(FeatureFlag).to receive(:active?).with(:course_publishing_uses_new_school_model).and_return(true) }
 
     {
       [:salary,         true,  true] => :no_error,
