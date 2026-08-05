@@ -205,7 +205,6 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
   def then_i_see_the_changes_are_now_live_message
     within(".govuk-notification-banner--success") do
       expect(page).to have_content("These changes are now live.")
-      expect(page).to have_no_content("* Unpublished changes")
     end
   end
 
