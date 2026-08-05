@@ -81,12 +81,8 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
       end
     end
 
-    context "when the new school model feature flag is active" do
+    context "when selecting locations by recruitment cycle" do
       let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)) }
-
-      before do
-        FeatureFlag.activate(:course_publishing_uses_new_school_model)
-      end
 
       context "when the recruitment cycle is not after the remodel cutover year" do
         let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)) }

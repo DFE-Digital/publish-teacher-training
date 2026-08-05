@@ -199,12 +199,8 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
     end
 
-    describe "when the new school model feature flag is active" do
+    describe "when the recruitment cycle is after the remodel cutover year" do
       let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)) }
-
-      before do
-        FeatureFlag.activate(:course_publishing_uses_new_school_model)
-      end
 
       it "searches using the schools course search service" do
         expected_filter = ActionController::Parameters.new(funding_type: "salary")
