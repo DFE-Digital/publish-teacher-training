@@ -1,0 +1,50 @@
+<div class="app-callout" hidden data-qa="school-search-panel" data-schools-list-target="panel">
+  <div class="govuk-form-group govuk-!-margin-bottom-3" data-schools-list-target="autocomplete">
+    <label class="govuk-label govuk-label--m" for="<%= Publish::Schools::SearchPanelComponent::SELECT_ID %>">
+      <%= t(".label") %>
+    </label>
+
+    <div class="govuk-hint" id="school-search-hint"><%= t(".hint") %></div>
+
+    <%= select_tag(
+          nil,
+          options_for_select(autocomplete_options),
+          id: Publish::Schools::SearchPanelComponent::SELECT_ID,
+          name: nil,
+          class: "govuk-select",
+          aria: { describedby: "school-search-hint" },
+          data: { qa: "school-search-select" },
+        ) %>
+  </div>
+
+  <button type="button"
+          class="govuk-button govuk-!-margin-bottom-2"
+          data-qa="school-search-button"
+          data-action="schools-list#search">
+    <%= t(".button") %>
+  </button>
+
+  <p class="govuk-body govuk-!-margin-bottom-0">
+    <button type="button"
+            class="app-button-link govuk-!-font-size-19"
+            data-qa="school-search-clear"
+            data-action="schools-list#clearSearch">
+      <%= t(".clear") %>
+    </button>
+  </p>
+</div>
+
+<div class="govuk-visually-hidden" role="status" aria-live="polite" data-schools-list-target="status"></div>
+
+<div hidden data-qa="school-search-no-results" data-schools-list-target="noResults">
+  <p class="govuk-body"><%= t(".no_results") %></p>
+
+  <p class="govuk-body">
+    <button type="button"
+            class="app-button-link govuk-!-font-size-19"
+            data-qa="school-search-show-all"
+            data-action="schools-list#restoreAll">
+      <%= t("publish.courses.schools.show_all") %>
+    </button>
+  </p>
+</div>
