@@ -65,7 +65,7 @@ private
   end
 
   def and_i_choose_a_school_from_the_list
-    check provider.sites.first.location_name
+    check provider.schools.min_by(&:location_name).location_name
   end
 
   def and_i_click_continue
@@ -129,18 +129,13 @@ private
   end
 
   def given_i_am_authenticated_as_a_school_based_provider_user_with_no_study_sites_and_multiple_accredited_partners
-    @user = create(
-      :user,
-      providers: [
-        create(
-          :provider,
-          provider_type: :lead_school,
-          sites: [build(:site), build(:site)],
-        ),
-      ],
-    )
+    school_provider = create(:provider, provider_type: :lead_school)
+    ["Alpha Academy", "Beta Academy"].each do |name|
+      create(:provider_school, provider: school_provider, gias_school: create(:gias_school, name:))
+    end
 
-    school_provider = @user.providers.first
+    @user = create(:user, providers: [school_provider])
+
     create(
       :provider_partnership,
       training_provider: school_provider,
