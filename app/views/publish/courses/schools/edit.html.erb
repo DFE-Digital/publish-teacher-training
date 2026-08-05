@@ -27,7 +27,7 @@
             tag: "h1",
             size: "l",
           },
-          form_group: { data: { controller: "select-all-checkboxes show-all-schools", show_all_schools_visible_value: @course_school_form.schools_collapse_threshold } } do %>
+          form_group: { data: { controller: "select-all-checkboxes schools-list", schools_list_visible_value: @course_school_form.schools_collapse_threshold } } do %>
 
             <p class="govuk-body">
               <%= t("publish.courses.schools.attached_count", count: course.attached_schools_count) %>
@@ -56,7 +56,7 @@
                   link_errors: index.zero?,
                   data: {
                     select_all_checkboxes_target: "checkbox",
-                    show_all_schools_target: "school",
+                    schools_list_target: "school",
                     action: "select-all-checkboxes#updateSelectAll",
                   } %>
            <% end %>
@@ -65,8 +65,8 @@
               <button type="button"
                       class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
                       hidden
-                      data-show-all-schools-target="showAll"
-                      data-action="show-all-schools#showAll">
+                      data-schools-list-target="showAll"
+                      data-action="schools-list#showAll">
                 <%= t("publish.courses.schools.show_all") %>
               </button>
             <% end %>
