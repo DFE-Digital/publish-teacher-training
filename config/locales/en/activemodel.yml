@@ -33,7 +33,9 @@ en:
             application_start_date:
               blank: Enter the date that candidates will be able to start applying for courses
               application_end_date_after_start_date: Start date must be before the application end date
+              does_not_match_cycle_timetable: Application start date must match the Find cycle timetable. Update the timetable first if this date has changed.
               invalid_date: Enter a valid date
+              missing_cycle_timetable: Add the recruitment cycle to the Find cycle timetable before setting the application start date
             application_end_date:
               blank: Enter the date that applications close
               application_end_date_after_start_date: End date must be after the application start date

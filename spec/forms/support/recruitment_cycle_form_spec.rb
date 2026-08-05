@@ -75,6 +75,57 @@ RSpec.describe Support::RecruitmentCycleForm do
     context "when dates are valid" do
       let(:params) do
         {
+          "year" => "2027",
+          "application_start_date(1i)" => "2026",
+          "application_start_date(2i)" => "10",
+          "application_start_date(3i)" => "06",
+          "application_end_date(1i)" => "2027",
+          "application_end_date(2i)" => "03",
+          "application_end_date(3i)" => "10",
+          "available_in_publish_from(1i)" => "2026",
+          "available_in_publish_from(2i)" => "09",
+          "available_in_publish_from(3i)" => "01",
+          "available_for_support_users_from(1i)" => "2026",
+          "available_for_support_users_from(2i)" => "08",
+          "available_for_support_users_from(3i)" => "01",
+        }
+      end
+
+      it "is valid" do
+        expect(form).to be_valid
+      end
+    end
+
+    context "when application start date does not match the Find cycle timetable" do
+      let(:params) do
+        {
+          "year" => "2027",
+          "application_start_date(1i)" => "2026",
+          "application_start_date(2i)" => "10",
+          "application_start_date(3i)" => "07",
+          "application_end_date(1i)" => "2027",
+          "application_end_date(2i)" => "03",
+          "application_end_date(3i)" => "10",
+          "available_in_publish_from(1i)" => "2026",
+          "available_in_publish_from(2i)" => "09",
+          "available_in_publish_from(3i)" => "01",
+          "available_for_support_users_from(1i)" => "2026",
+          "available_for_support_users_from(2i)" => "08",
+          "available_for_support_users_from(3i)" => "01",
+        }
+      end
+
+      it "is invalid" do
+        expect(form).not_to be_valid
+        expect(form.errors[:application_start_date]).to include(
+          "Application start date must match the Find cycle timetable. Update the timetable first if this date has changed.",
+        )
+      end
+    end
+
+    context "when the year is not in the Find cycle timetable" do
+      let(:params) do
+        {
           "year" => "2051",
           "application_start_date(1i)" => "2050",
           "application_start_date(2i)" => "10",
@@ -91,8 +142,11 @@ RSpec.describe Support::RecruitmentCycleForm do
         }
       end
 
-      it "is valid" do
-        expect(form).to be_valid
+      it "is invalid" do
+        expect(form).not_to be_valid
+        expect(form.errors[:application_start_date]).to include(
+          "Add the recruitment cycle to the Find cycle timetable before setting the application start date",
+        )
       end
     end
 
