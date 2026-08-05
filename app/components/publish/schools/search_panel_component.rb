@@ -52,10 +52,14 @@ module Publish
         [school.urn, school.postcode, school.postcode&.delete(" ")].compact_blank.uniq
       end
 
+      # Plain text, not markup: dfe-autocomplete escapes an option's appended
+      # text before rendering it, so a <strong> here would reach the dropdown as
+      # its own source. (The gem's own Ruby helper still wraps this in a tag,
+      # which its renderer no longer honours.)
       def append_for(school)
         context = [school.town, school.postcode].compact_blank.join(", ")
 
-        tag.strong("(#{context})") if context.present?
+        "(#{context})" if context.present?
       end
     end
   end
