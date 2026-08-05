@@ -172,7 +172,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(created_course.visa_sponsorship_application_deadline_at.to_date).to eq(visa_deadline)
   end
 
-  scenario "writes the selected school to the new Course::School model when the flag is off" do
+  scenario "writes the selected school to the new Course::School model" do
     given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
     and_the_selected_school_is_mapped_to_the_new_model
     given_i_have_completed_secondary_fee_wizard_state
@@ -184,20 +184,6 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
 
     then_the_created_course_has_the_new_course_school
     and_the_created_course_still_has_the_legacy_site
-  end
-
-  scenario "writes the selected school to the new Course::School model when the flag is on" do
-    FeatureFlag.activate(:course_publishing_uses_new_school_model)
-    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
-    and_the_selected_school_is_mapped_to_the_new_model
-    given_i_have_completed_secondary_fee_wizard_state
-    when_i_visit_check_answers_page
-    then_i_am_taken_to_the_check_answers_page
-
-    and_i_click_add_course
-    then_a_course_is_created
-
-    then_the_created_course_has_the_new_course_school
   end
 
   scenario "further education flow renders expected rows and creates successfully" do
