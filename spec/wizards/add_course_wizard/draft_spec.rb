@@ -191,32 +191,32 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
     end
 
     it "keeps every stored uuid but resolves only the provider's own schools" do
-      site_one = provider.sites.first || create(:site, provider:)
-      site_two = create(:site, provider:)
-      site_three = create(:site, provider: create(:provider))
-      state_store.write(school_uuids: [site_two.uuid, site_one.uuid, site_three.uuid])
+      school_one = create(:site, :with_provider_school, provider:)
+      school_two = create(:site, :with_provider_school, provider:)
+      other_providers_school = create(:site, :with_provider_school, provider: create(:provider))
+      state_store.write(school_uuids: [school_two.uuid, school_one.uuid, other_providers_school.uuid])
 
-      expect(draft.school_uuids).to eq([site_two.uuid, site_one.uuid, site_three.uuid])
-      expect(draft.schools.map(&:id)).to eq([site_two.id, site_one.id])
+      expect(draft.school_uuids).to eq([school_two.uuid, school_one.uuid, other_providers_school.uuid])
+      expect(draft.schools.map(&:uuid)).to eq([school_two.uuid, school_one.uuid])
     end
 
     it "returns school UUIDs and ordered school records" do
-      site_one = provider.sites.first || create(:site, provider:)
-      site_two = create(:site, provider:)
-      state_store.write(school_uuids: [site_two.uuid, site_one.uuid])
+      school_one = create(:site, :with_provider_school, provider:)
+      school_two = create(:site, :with_provider_school, provider:)
+      state_store.write(school_uuids: [school_two.uuid, school_one.uuid])
 
-      expect(draft.school_uuids).to eq([site_two.uuid, site_one.uuid])
-      expect(draft.schools.map(&:id)).to eq([site_two.id, site_one.id])
+      expect(draft.school_uuids).to eq([school_two.uuid, school_one.uuid])
+      expect(draft.schools.map(&:uuid)).to eq([school_two.uuid, school_one.uuid])
     end
 
     it "logs the unrecognised uuids rather than dropping them silently" do
-      site = provider.sites.first || create(:site, provider:)
+      school = create(:site, :with_provider_school, provider:)
       unrecognised_uuid = SecureRandom.uuid
-      state_store.write(school_uuids: [site.uuid, unrecognised_uuid])
+      state_store.write(school_uuids: [school.uuid, unrecognised_uuid])
 
       expect(Rails.logger).to receive(:warn).with(/#{unrecognised_uuid}/)
 
-      expect(draft.schools.map(&:id)).to eq([site.id])
+      expect(draft.schools.map(&:uuid)).to eq([school.uuid])
     end
 
     # The review page reads both, so they can disagree: state still holds the
@@ -230,14 +230,16 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       expect(draft.schools).to eq([])
     end
 
-    it "drops a school discarded after it was chosen" do
+    # Removing a school destroys its Provider::School rather than discarding it,
+    # so that is what the draft has to survive between choosing and reviewing.
+    it "drops a school removed after it was chosen" do
       allow(Rails.logger).to receive(:warn)
-      site = create(:site, provider:)
-      state_store.write(school_uuids: [site.uuid])
+      school = create(:site, :with_provider_school, provider:)
+      state_store.write(school_uuids: [school.uuid])
 
-      site.discard
+      provider.schools.find_by(uuid: school.uuid).destroy!
 
-      expect(draft.school_uuids).to eq([site.uuid])
+      expect(draft.school_uuids).to eq([school.uuid])
       expect(draft.schools).to eq([])
     end
 
