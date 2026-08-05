@@ -1,0 +1,19 @@
+// The school search box and its Search button sit on one line, so the
+// suggestions menu - which floats over whatever follows the input - never
+// covers the button.
+.app-school-search__row {
+  display: flex;
+
+  gap: govuk-spacing(2);
+  align-items: flex-start;
+
+  .autocomplete__wrapper {
+    flex: 1 1 auto;
+  }
+
+  .govuk-button {
+    flex: 0 0 auto;
+
+    margin-bottom: 0;
+  }
+}
