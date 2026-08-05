@@ -35,10 +35,6 @@ module Publish
         END
       SQL
 
-      # The content statuses that render as Open, Closed or Scheduled depending
-      # on the application status and the cycle.
-      PUBLISHED_CONTENT_STATUSES = %w[published].freeze
-
       # Filter option -> Course enum keys. Both mirror Courses::Query (the Find
       # search query), except that selecting several options here unions them
       # rather than falling through to "no filter".
@@ -168,7 +164,7 @@ module Publish
       end
 
       def published_predicate(application_status = nil)
-        predicate = content_status.in(PUBLISHED_CONTENT_STATUSES)
+        predicate = content_status.eq("published")
         return predicate if application_status.nil?
 
         predicate.and(courses[:application_status].eq(::Course.application_statuses.fetch(application_status)))
