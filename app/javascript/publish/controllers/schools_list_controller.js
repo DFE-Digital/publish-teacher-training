@@ -24,7 +24,7 @@ const MAX_SUGGESTIONS = 5
 // The search half only wakes up on pages that render a search panel. Without
 // one this is still just the collapsing list.
 export default class extends Controller {
-  static targets = ['school', 'showAll', 'panel', 'autocomplete', 'status', 'noResults']
+  static targets = ['school', 'showAll', 'panel', 'autocomplete', 'status', 'noResults', 'bulkSelect']
   static values = { visible: { type: Number, default: 20 } }
 
   connect () {
@@ -152,6 +152,12 @@ export default class extends Controller {
       this.noResultsTarget.hidden = !(this.searching() && matching.length === 0)
     }
 
+    // Select all takes in every school, including the ones a search has filtered
+    // out of view, so hide it while searching rather than leave it offering to
+    // do something wider than what is on screen. It stays in the DOM, so it goes
+    // on tracking the boxes ticked while filtered and is right when it returns.
+    this.bulkSelectTargets.forEach(element => this.setHidden(element, this.searching()))
+
     this.matchCount = matching.length
   }
 
@@ -188,10 +194,12 @@ export default class extends Controller {
   }
 
   setRowHidden (checkbox, hidden) {
-    const row = this.row(checkbox)
+    this.setHidden(this.row(checkbox), hidden)
+  }
 
-    row.classList.toggle(HIDDEN_CLASS, hidden)
-    row.hidden = hidden
+  setHidden (element, hidden) {
+    element.classList.toggle(HIDDEN_CLASS, hidden)
+    element.hidden = hidden
   }
 
   row (checkbox) {

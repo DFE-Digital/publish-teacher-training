@@ -84,10 +84,33 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     then_the_course_has_these_schools("Belvidere School")
   end
 
-  scenario "selecting all schools while a search is active still attaches every school" do
+  # Select all attaches every school, including the ones a search has filtered
+  # out of view, so it is hidden while a search is active rather than left
+  # offering to do something wider than what is on screen.
+  scenario "select all is hidden while a search is active" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    then_i_can_select_all_schools
+    when_i_search_for("belvidere")
+    then_i_cannot_select_all_schools
+    when_i_clear_the_search
+    then_i_can_select_all_schools
+  end
+
+  scenario "select all is back after choosing Show all schools from the no results message" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_search_for("zzzz")
+    then_i_cannot_select_all_schools
+    when_i_choose_show_all_schools_from_the_no_results_message
+    then_i_can_select_all_schools
+  end
+
+  scenario "select all still attaches every school once the search is cleared" do
     given_a_course_i_want_to_edit
     when_i_visit_the_publish_course_school_edit_page
     when_i_search_for("belvidere")
+    when_i_clear_the_search
     when_i_tick("Select all schools")
     when_i_save
     then_the_course_has_these_schools("Belvidere School", "Bridgnorth Endowed School", "Charlton School")
@@ -232,6 +255,19 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
 
   def and_there_is_no_show_all_schools_button
     expect(publish_course_school_edit_page).to have_no_show_all_schools
+  end
+
+  # GOV.UK visually hides the real checkbox, so the label is what tells us
+  # whether the control is on screen.
+  def then_i_can_select_all_schools
+    expect(page).to have_css(".govuk-checkboxes__label", text: "Select all schools")
+    expect(page).to have_css(".govuk-body", exact_text: "or")
+  end
+
+  def then_i_cannot_select_all_schools
+    expect(page).to have_no_css(".govuk-checkboxes__label", text: "Select all schools")
+    # The "or" that joins select all to the individual checkboxes goes with it.
+    expect(page).to have_no_css(".govuk-body", exact_text: "or")
   end
 
   def then_i_see_the_no_results_message
