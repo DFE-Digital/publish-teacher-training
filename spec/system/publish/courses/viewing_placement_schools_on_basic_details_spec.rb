@@ -29,6 +29,7 @@ RSpec.describe "Viewing placement schools on the basic details tab", travel: mid
   def given_a_course_with_school_count(count)
     sites = Array.new(count) { |i| build(:site, provider:, location_name: sprintf("School %02d", i + 1)) }
     @course = create(:course, provider:, sites:)
+    attach_course_schools_for_sites(sites, course: @course)
   end
 
   def when_i_visit_the_course_basic_details_page

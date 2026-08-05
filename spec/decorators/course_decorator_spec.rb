@@ -874,45 +874,68 @@ describe CourseDecorator do
   end
 
   describe "#sorted_school_names" do
-    context "when the new school model flag is off (legacy sites)" do
-      let(:course) do
-        create(:course, sites: [
-          build(:site, location_name: "Zebra School"),
-          build(:site, location_name: "alpha school"),
-          build(:site, location_name: "Mango School"),
-        ])
-      end
-
-      it "returns site location names sorted case-insensitively" do
-        expect(course.decorate.sorted_school_names).to eq(["alpha school", "Mango School", "Zebra School"])
-      end
-    end
-
-    context "when the new school model flag is on (Course::School / GiasSchool)" do
+    context "when viewing a saved course" do
       let(:course) { create(:course) }
 
       before do
-        FeatureFlag.activate(:course_publishing_uses_new_school_model)
         create(:course_school, course:, gias_school: build(:gias_school, name: "Zebra School"))
         create(:course_school, course:, gias_school: build(:gias_school, name: "alpha school"))
         create(:course_school, course:, gias_school: build(:gias_school, name: "Mango School"))
       end
 
-      it "returns gias school names sorted case-insensitively" do
+      it "returns GIAS school names sorted case-insensitively" do
+        expect(course.decorate.sorted_school_names).to eq(["alpha school", "Mango School", "Zebra School"])
+      end
+    end
+
+    context "when rendering add-course confirmation before the course is saved" do
+      let(:course) { build(:course, provider: create(:provider)) }
+
+      before do
+        ["Zebra School", "alpha school", "Mango School"].each do |name|
+          gias_school = create(:gias_school, name:)
+          provider_school = create(:provider_school, provider: course.provider, gias_school:)
+
+          course.schools.build(gias_school:, provider_school:)
+        end
+      end
+
+      it "returns GIAS school names sorted case-insensitively" do
         expect(course.decorate.sorted_school_names).to eq(["alpha school", "Mango School", "Zebra School"])
       end
     end
   end
 
   describe "#attached_schools_count" do
-    let(:course) { create(:course) }
+    context "when viewing a saved course" do
+      let(:course) { create(:course) }
 
-    before do
-      create_list(:course_school, 3, course:)
+      before do
+        create(:course_school, course:, gias_school: build(:gias_school, name: "Zebra School"))
+        create(:course_school, course:, gias_school: build(:gias_school, name: "alpha school"))
+        create(:course_school, course:, gias_school: build(:gias_school, name: "Mango School"))
+      end
+
+      it "counts course schools" do
+        expect(course.decorate.attached_schools_count).to eq(3)
+      end
     end
 
-    it "counts the course schools attached to the course" do
-      expect(course.decorate.attached_schools_count).to eq(3)
+    context "when rendering add-course confirmation before the course is saved" do
+      let(:course) { build(:course, provider: create(:provider)) }
+
+      before do
+        3.times do
+          gias_school = create(:gias_school)
+          provider_school = create(:provider_school, provider: course.provider, gias_school:)
+
+          course.schools.build(gias_school:, provider_school:)
+        end
+      end
+
+      it "counts course schools" do
+        expect(course.decorate.attached_schools_count).to eq(3)
+      end
     end
   end
 end
