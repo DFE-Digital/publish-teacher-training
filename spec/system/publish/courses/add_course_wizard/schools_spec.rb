@@ -12,7 +12,7 @@ RSpec.describe "Add course wizard schools step", type: :system do
     and_i_have_wizard_state_for_schools(funding_type: "salary")
     when_i_visit_the_wizard_schools_page
     and_the_title_and_description_are_displayed_for_a_salaried_school
-    and_i_choose_a_site_from_the_list
+    and_i_choose_a_school_from_the_list
     and_i_click_continue
     then_i_am_taken_to_the_study_sites_page
   end
@@ -21,7 +21,7 @@ RSpec.describe "Add course wizard schools step", type: :system do
     and_i_have_wizard_state_for_schools(funding_type: "fee")
     when_i_visit_the_wizard_schools_page
     and_the_title_and_description_are_displayed_for_a_non_salaried_school
-    and_i_choose_a_site_from_the_list
+    and_i_choose_a_school_from_the_list
     and_i_click_continue
     then_i_am_taken_to_the_study_sites_page
   end
@@ -47,7 +47,7 @@ RSpec.describe "Add course wizard schools step", type: :system do
     and_i_click_continue
     then_i_am_taken_to_the_schools_page
     and_the_title_and_description_are_displayed_for_a_salaried_school
-    and_i_choose_a_site_from_the_list
+    and_i_choose_a_school_from_the_list
     and_i_click_continue
     then_i_am_taken_to_the_study_sites_page
   end
@@ -131,8 +131,8 @@ private
     choose qualification
   end
 
-  def and_i_choose_a_site_from_the_list
-    check provider.sites.first.location_name
+  def and_i_choose_a_school_from_the_list
+    check first_school.location_name
   end
 
   def then_i_have_errors_on_the_schools_step
@@ -164,77 +164,70 @@ private
     )
   end
 
-  def given_i_am_authenticated_as_a_provider_user_with_multiple_schools
-    @user = create(
-      :user,
-      providers: [
-        create(
-          :provider,
-          :accredited_provider,
-          sites: [build(:site), build(:site), build(:site, :study_site)],
-        ),
-      ],
+  # The schools step lists Provider::School, so the checkbox label and hint come
+  # from the joined GIAS record rather than the legacy site.
+  #
+  # Names are given explicitly rather than left to the factory's
+  # Faker::University.name: Capybara's `check` matches label text on a substring,
+  # so random names can collide or prefix each other.
+  def create_school(provider, name, **gias_school_attributes)
+    create(
+      :provider_school,
+      provider:,
+      gias_school: create(:gias_school, name:, **gias_school_attributes),
     )
+  end
+
+  def given_i_am_authenticated_as_a_provider_user_with_multiple_schools
+    provider = create(:provider, :accredited_provider, sites: [build(:site, :study_site)])
+    create_school(provider, "Alpha Academy")
+    create_school(provider, "Beta Academy")
+
+    @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)
   end
 
   def given_i_am_authenticated_as_a_provider_user_with_a_school
-    @user = create(
-      :user,
-      providers: [
-        create(:provider, :accredited_provider, sites: [build(:site), build(:site, :study_site)]),
-      ],
-    )
+    provider = create(:provider, :accredited_provider, sites: [build(:site, :study_site)])
+    create_school(provider, "Alpha Academy")
+
+    @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)
   end
 
-  # Deterministic, non-ambiguous names: the site factory's default is
-  # "Main Site#{rand(1_000_000)}", and Capybara's `check` matches label text on a
-  # substring, so random names can collide or prefix each other.
-  #
   # The study site keeps this provider on the same route as the other scenarios
-  # (schools -> study sites). It does not show up in the schools list, since
-  # Provider#sites is scoped to school-type sites.
+  # (schools -> study sites). It does not show up in the schools list, which
+  # reads Provider#schools.
+  #
+  # Created in reverse so row order is the opposite of name order: the step sorts
+  # on the GIAS name, and which schools fall inside the first 20 would not
+  # otherwise prove that sort is applied.
   def given_i_am_authenticated_as_a_provider_user_with_25_schools
-    @user = create(
-      :user,
-      providers: [
-        create(
-          :provider,
-          :accredited_provider,
-          sites: (1..25).map { |n| build(:site, location_name: sprintf("School %02d", n)) } + [build(:site, :study_site)],
-        ),
-      ],
-    )
+    provider = create(:provider, :accredited_provider, sites: [build(:site, :study_site)])
+    25.downto(1) { |n| create_school(provider, sprintf("School %02d", n)) }
+
+    @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)
   end
 
   def given_i_am_authenticated_as_a_provider_user_with_a_named_school
-    @user = create(
-      :user,
-      providers: [
-        create(
-          :provider,
-          :accredited_provider,
-          sites: [
-            build(
-              :site,
-              location_name: "Belvidere School",
-              address1: "Belvidere Lane",
-              address2: "",
-              address3: "",
-              town: "Shrewsbury",
-              address4: "Shropshire",
-              postcode: "SY2 5RJ",
-            ),
-            build(:site),
-          ],
-        ),
-      ],
+    provider = create(:provider, :accredited_provider)
+    create_school(
+      provider,
+      "Belvidere School",
+      address1: "Belvidere Lane",
+      address2: "",
+      address3: "",
+      town: "Shrewsbury",
+      county: "Shropshire",
+      postcode: "SY2 5RJ",
     )
+    create_school(provider, "Alpha Academy")
+
+    @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)
   end
@@ -252,8 +245,12 @@ private
     end
   end
 
+  def first_school
+    @first_school ||= provider.schools.min_by(&:location_name)
+  end
+
   def last_school
-    @last_school ||= provider.sites.max_by(&:location_name)
+    @last_school ||= provider.schools.max_by(&:location_name)
   end
 
   def then_only_the_first_20_schools_are_shown
