@@ -86,6 +86,7 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
       sites: [build(:site, location_name: "location 1")],
       study_sites: [build(:site, :study_site)],
     )
+    attach_course_schools_for_sites
   end
 
   def and_there_is_a_rolled_over_course_i_want_to_publish
@@ -94,10 +95,12 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
       :with_accrediting_provider,
       :closed,
       accrediting_provider:,
+      schools_validated: true,
       enrichments: [create(:course_enrichment, :rolled_over)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
+    attach_course_schools_for_sites
   end
 
   def and_there_is_a_draft_course
@@ -108,6 +111,7 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
+    attach_course_schools_for_sites
   end
 
   def and_there_is_a_published_course

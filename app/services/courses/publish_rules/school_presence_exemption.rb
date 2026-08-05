@@ -6,11 +6,7 @@
 # their placement arranged) via the `publish_without_schools_allowed` flag.
 #
 # This is a support/business decision per course, so it is independent of the
-# :course_publishing_uses_new_school_model data-model rollout flag — if support
-# has approved a course to publish without schools, that holds whether or not
-# the new school model is switched on. (Where "does this course have a school"
-# is *read from* — legacy Site vs Course::School — still flips on that flag in
-# Courses::PublishRules::SchoolPresence.) Never applies to fee-paying courses.
+# school data model. Never applies to fee-paying courses.
 module Courses
   module PublishRules
     class SchoolPresenceExemption

@@ -7,7 +7,6 @@ RSpec.describe "Searching for and viewing a salaried course published without an
 
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    FeatureFlag.activate(:course_publishing_uses_new_school_model)
     given_there_is_a_findable_school_less_salaried_course
   end
 

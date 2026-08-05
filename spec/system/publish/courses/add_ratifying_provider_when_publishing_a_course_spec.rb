@@ -74,6 +74,7 @@ RSpec.describe "Publishing a course when course ratifying provider is invalid", 
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
+    attach_course_schools_for_sites
   end
 
   def and_there_is_a_draft_course_with_an_unaccredited_ratifying_provider
@@ -84,6 +85,7 @@ RSpec.describe "Publishing a course when course ratifying provider is invalid", 
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
+    attach_course_schools_for_sites
   end
 
   def when_i_visit_the_course_page

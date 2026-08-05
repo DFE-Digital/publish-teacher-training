@@ -59,8 +59,6 @@ describe Find::Courses::TrainingLocations::View, type: :component do
     end
 
     context "for salaried/apprenticeship courses published without an employing school" do
-      before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-
       let(:course) do
         create(:course, :with_salary, publish_without_schools_allowed: true, study_sites: [build(:site, :study_site)])
       end

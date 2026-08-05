@@ -197,6 +197,7 @@ RSpec.describe "Publishing courses errors" do
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
     )
+    attach_course_schools_for_sites
   end
 
   def when_i_visit_the_course_page

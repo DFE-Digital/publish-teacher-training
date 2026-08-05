@@ -388,7 +388,7 @@ describe Course do
 
         before do
           travel_to(recruitment_cycle.application_start_date + 1.day)
-          course.sites << site
+          create(:course_school, course:, gias_school: create(:gias_school, urn: site.urn))
         end
 
         after { travel_back }
@@ -404,7 +404,7 @@ describe Course do
 
         it "does not add errors for sites on :publish" do
           course = create(:course, provider: build(:provider, recruitment_cycle: past_cycle))
-          course.sites << build(:site, provider: course.provider)
+          create(:course_school, course:)
           course.valid?(:publish)
           expect(course.errors[:sites]).to be_empty
         end
@@ -852,6 +852,8 @@ describe Course do
           )
         end
 
+        before { create(:course_school, course:) }
+
         it "is publishable" do
           subject.valid?(:publish)
 
@@ -861,6 +863,8 @@ describe Course do
 
       describe "training provider must have partnership with accrediting provider" do
         let(:course) { create(:course, :publishable, accredited: false) }
+
+        before { create(:course_school, course:) }
 
         it "is invalid to publish when accrediting provider has no relationship with training provider" do
           expect(subject).to be_publishable
@@ -2889,56 +2893,42 @@ describe Course do
   end
 
   describe "#without_employing_school?" do
-    context "when the new school model flag is active" do
-      before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
+    it "is true for an exempt salaried course with no school attached" do
+      course = create(:course, :with_salary, publish_without_schools_allowed: true)
 
-      it "is true for an exempt salaried course with no school attached" do
-        course = create(:course, :with_salary, publish_without_schools_allowed: true)
-
-        expect(course.without_employing_school?).to be(true)
-      end
-
-      it "is true for an exempt apprenticeship course with no school attached" do
-        course = create(:course, :with_apprenticeship, publish_without_schools_allowed: true)
-
-        expect(course.without_employing_school?).to be(true)
-      end
-
-      it "is false when a school is attached" do
-        course = create(:course, :with_salary, publish_without_schools_allowed: true)
-        create(:course_school, course:)
-
-        expect(course.reload.without_employing_school?).to be(false)
-      end
-
-      it "is false when publish_without_schools_allowed is false" do
-        course = create(:course, :with_salary, publish_without_schools_allowed: false)
-
-        expect(course.without_employing_school?).to be(false)
-      end
-
-      it "is false for fee courses" do
-        course = create(:course, :fee, publish_without_schools_allowed: true)
-
-        expect(course.without_employing_school?).to be(false)
-      end
+      expect(course.without_employing_school?).to be(true)
     end
 
-    context "when the new school model flag is inactive" do
-      # The exemption is flag-independent; only the school-presence read falls
-      # back to legacy Site data when the flag is off.
-      it "is true for an exempt salaried course with no school site attached" do
-        course = create(:course, :with_salary, publish_without_schools_allowed: true)
+    it "is true for an exempt apprenticeship course with no school attached" do
+      course = create(:course, :with_apprenticeship, publish_without_schools_allowed: true)
 
-        expect(course.without_employing_school?).to be(true)
-      end
+      expect(course.without_employing_school?).to be(true)
+    end
 
-      it "is false when a school-type site is attached" do
-        course = create(:course, :with_salary, publish_without_schools_allowed: true)
-        create(:site_status, course:, site: build(:site))
+    it "is false when a school is attached" do
+      course = create(:course, :with_salary, publish_without_schools_allowed: true)
+      create(:course_school, course:)
 
-        expect(course.reload.without_employing_school?).to be(false)
-      end
+      expect(course.reload.without_employing_school?).to be(false)
+    end
+
+    it "is false when publish_without_schools_allowed is false" do
+      course = create(:course, :with_salary, publish_without_schools_allowed: false)
+
+      expect(course.without_employing_school?).to be(false)
+    end
+
+    it "is false for fee courses" do
+      course = create(:course, :fee, publish_without_schools_allowed: true)
+
+      expect(course.without_employing_school?).to be(false)
+    end
+
+    it "does not count legacy school sites as employing schools" do
+      course = create(:course, :with_salary, publish_without_schools_allowed: true)
+      create(:site_status, course:, site: build(:site))
+
+      expect(course.reload.without_employing_school?).to be(true)
     end
   end
 

@@ -15,6 +15,7 @@ describe "publish_give_course" do
   Rails.application.load_tasks if Rake::Task.tasks.empty?
 
   it "calls Courses::PublishService service" do
+    create(:course_school, course:)
     service = Courses::PublishService.new(course:, user:)
     allow(Courses::PublishService).to receive(:new).and_return(service)
     allow(service).to receive(:call).and_call_original

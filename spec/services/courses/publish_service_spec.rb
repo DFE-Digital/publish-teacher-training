@@ -18,7 +18,13 @@ RSpec.describe Courses::PublishService do
   let(:unpublished_discontinued_site) { create(:site_status, :unpublished, :discontinued) }
   let(:unpublished_suspended_site)    { create(:site_status, :unpublished, :suspended) }
 
+  def attach_course_school(course)
+    create(:course_school, course:)
+  end
+
   describe "publishable course" do
+    before { attach_course_school(course) }
+
     it "gets published" do
       subject.call
       expect(course.reload).to be_published
@@ -49,6 +55,7 @@ RSpec.describe Courses::PublishService do
     before do
       v1_enrichment
       v2_enrichment
+      attach_course_school(course)
     end
 
     it "publishes the draft enrichment" do
@@ -68,6 +75,7 @@ RSpec.describe Courses::PublishService do
       let(:course) { create(:course, :publishable, site_statuses: [published_new_site], age: 5.days.ago) }
 
       before do
+        attach_course_school(course)
         subject.call
       end
 
@@ -91,6 +99,7 @@ RSpec.describe Courses::PublishService do
       end
 
       before do
+        attach_course_school(course)
         subject.call
       end
 
@@ -134,6 +143,7 @@ RSpec.describe Courses::PublishService do
     let(:course) { create(:course, :publishable, uuid:, discarded_at: 1.minute.ago) }
 
     it "undiscards and publishes the course" do
+      attach_course_school(course)
       allow(Course).to receive(:find_by).with({ uuid: uuid }).and_return(course)
       subject.call
       expect(course.reload).to be_published

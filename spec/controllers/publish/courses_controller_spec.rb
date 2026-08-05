@@ -25,6 +25,8 @@ module Publish
     end
 
     describe "#Publish" do
+      before { create(:course_school, course:) }
+
       it "calls NotificationService::CoursePublished when successful" do
         expect(NotificationService::CoursePublished).to receive(:call).with(course:)
 
