@@ -156,17 +156,19 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   def and_provider_schools_mirror_the_sites
     provider.sites.each do |site|
-      gias_school = create(:gias_school, name: site.location_name, urn: site.urn)
-      create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
+      create(:provider_school, :for_site, site:)
     end
   end
 
   def and_the_new_model_course_school_row_exists
     site = provider.sites.find_by(location_name: "Site 1")
-    gias_school = GiasSchool.find_by!(urn: site.urn)
-    course_school = course.reload.schools.find_by(gias_school:)
+    provider_school = provider.schools.find_by!(uuid: site.uuid)
+    course_school = course.reload.schools.find_by(provider_school:)
+
     expect(course_school).to be_present
     expect(course_school.provider_school.site_code).to eq(site.code)
+    expect(course_school.gias_school).to eq(provider_school.gias_school)
+    expect(course_school.site_code).to eq(site.code)
   end
 
   def given_provider_school_one_is_removed_after_the_page_load
@@ -201,9 +203,8 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   def given_the_course_already_has_both_sites
     provider.sites.each do |site|
-      gias_school = GiasSchool.find_by!(urn: site.urn)
       course.site_statuses.create!(site:, status: :new_status, publish: :unpublished)
-      create(:course_school, course:, gias_school:, site_code: site.code)
+      create(:course_school, :for_site, course:, site:)
     end
     visit current_path
   end
@@ -226,9 +227,8 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   def given_the_course_is_published_with_both_sites_running
     provider.sites.each do |site|
-      gias_school = GiasSchool.find_by!(urn: site.urn)
       course.site_statuses.create!(site:, status: :running, publish: :published)
-      create(:course_school, course:, gias_school:, site_code: site.code)
+      create(:course_school, :for_site, course:, site:)
     end
     course.update!(first_published_at: 1.day.ago) if course.respond_to?(:first_published_at)
   end
@@ -258,18 +258,13 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   end
 
   def given_the_provider_has_three_sites
-    provider.sites << build(:site, location_name: "Site 3")
-    provider.save!
-    site = provider.sites.find_by(location_name: "Site 3")
-    gias_school = create(:gias_school, name: site.location_name, urn: site.urn)
-    create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
+    create(:site, :with_provider_school, provider:, location_name: "Site 3")
   end
 
   def given_the_course_is_published_with_all_three_sites_running
     provider.sites.each do |site|
-      gias_school = GiasSchool.find_by!(urn: site.urn)
       course.site_statuses.create!(site:, status: :running, publish: :published)
-      create(:course_school, course:, gias_school:, site_code: site.code)
+      create(:course_school, :for_site, course:, site:)
     end
     course.update!(first_published_at: 1.day.ago) if course.respond_to?(:first_published_at)
   end
