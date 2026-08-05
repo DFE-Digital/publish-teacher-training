@@ -178,7 +178,7 @@ class CourseWizard
     # A school UUID that no longer resolves is logged and left out, rather than
     # blanking the whole review row.
     def ordered_school_records(uuids)
-      ::Schools::UuidResolver.call(
+      ::Schools::UuidResolver.new(
         provider: wizard.provider,
         uuids:,
         log_tag: "CourseWizard::Draft",
