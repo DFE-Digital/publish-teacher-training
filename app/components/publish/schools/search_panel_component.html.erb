@@ -34,7 +34,14 @@
   </p>
 </div>
 
-<div class="govuk-visually-hidden" role="status" aria-live="polite" data-schools-list-target="status"></div>
+<%# {count} is substituted by the schools-list controller, so it is not I18n interpolation. %>
+<div class="govuk-visually-hidden"
+     role="status"
+     aria-live="polite"
+     data-schools-list-target="status"
+     data-results-one="<%= t(".results_one") %>"
+     data-results-other="<%= t(".results_other") %>"
+     data-results-none="<%= t(".no_results") %>"></div>
 
 <div hidden data-qa="school-search-no-results" data-schools-list-target="noResults">
   <p class="govuk-body"><%= t(".no_results") %></p>
