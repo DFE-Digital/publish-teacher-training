@@ -7,8 +7,19 @@
   gap: govuk-spacing(2);
   align-items: flex-start;
 
-  .autocomplete__wrapper {
+  // accessible-autocomplete inserts an unclassed div around its wrapper, so the
+  // flex item to grow is that div - the row's only other children are the
+  // hidden select it enhanced and the Search button.
+  > div {
     flex: 1 1 auto;
+
+    min-width: 0;
+  }
+
+  // accessible-autocomplete leaves the enhanced input transparent, which reads
+  // as white on a white page but shows the grey of the panel we sit in.
+  .autocomplete__input {
+    background-color: govuk-colour("white");
   }
 
   .govuk-button {

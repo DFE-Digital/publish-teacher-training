@@ -43,7 +43,7 @@ RSpec.describe Publish::Schools::SearchPanelComponent, type: :component do
     end
 
     it "shows the town and postcode as context in the dropdown" do
-      expect(option_for(site)["data-append"]).to eq("<strong>(Shrewsbury, SY2 5RJ)</strong>")
+      expect(option_for(site)["data-append"]).to eq("(Shrewsbury, SY2 5RJ)")
     end
 
     it "renders a blank first option for the enhanced select" do

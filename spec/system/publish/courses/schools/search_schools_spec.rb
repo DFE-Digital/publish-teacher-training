@@ -13,6 +13,18 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     then_i_see_the_search_panel
   end
 
+  scenario "the search box is white, not the grey of the panel behind it" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    then_the_search_box_is_white
+  end
+
+  scenario "the search box fills the panel, with the button beside it" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    then_the_search_box_fills_the_panel
+  end
+
   scenario "searching by school name" do
     given_a_course_i_want_to_edit
     when_i_visit_the_publish_course_school_edit_page
@@ -124,6 +136,14 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
       then_i_see_the_suggestion("Belvidere School")
     end
 
+    scenario "shows the town and postcode as plain text, not markup" do
+      given_a_course_i_want_to_edit
+      when_i_visit_the_publish_course_school_edit_page
+      when_i_type("bel")
+      then_i_see_the_suggestion("Belvidere School (Shrewsbury, SY2 5RJ)")
+      and_the_suggestion_shows_no_markup
+    end
+
     scenario "shows no more than five suggestions" do
       given_the_provider_has_many_schools_sharing_a_name
       given_a_course_i_want_to_edit
@@ -233,6 +253,16 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     expect(page).to have_button("Clear search")
   end
 
+  # accessible-autocomplete leaves the enhanced input transparent, which shows
+  # the panel's grey through it unless we paint it white.
+  def then_the_search_box_is_white
+    background = page.evaluate_script(
+      "getComputedStyle(document.getElementById('school-search')).backgroundColor",
+    )
+
+    expect(background).to eq("rgb(255, 255, 255)")
+  end
+
   def then_only_these_schools_are_shown(*names)
     expect(publish_course_school_edit_page.visible_school_names).to match_array(names)
   end
@@ -295,6 +325,26 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
 
   def then_i_see_the_suggestion(name)
     expect(page).to have_css(".autocomplete__option", text: name)
+  end
+
+  # dfe-autocomplete escapes an option's appended text before rendering it, so
+  # any markup we send arrives on screen as its own source.
+  def and_the_suggestion_shows_no_markup
+    expect(page).to have_no_css(".autocomplete__option", text: "<")
+  end
+
+  def then_the_search_box_fills_the_panel
+    widths = page.evaluate_script(<<~JS)
+      JSON.stringify({
+        row: document.querySelector('.app-school-search__row').getBoundingClientRect().width,
+        input: document.getElementById('school-search').getBoundingClientRect().width
+      })
+    JS
+    row, input = JSON.parse(widths).values_at("row", "input")
+
+    # The Search button and the gap take the rest; anything much narrower means
+    # the input has collapsed to its content width instead of filling the row.
+    expect(input).to be > (row * 0.8)
   end
 
   def then_i_see_at_most_five_suggestions
