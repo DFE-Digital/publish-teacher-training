@@ -541,7 +541,9 @@ describe Courses::CreationService do
 
     context "when there is no matching provider_school (not backfilled)" do
       # GIAS school exists (matched by URN) but the provider has not been
-      # backfilled, so no Provider::School exists for the pair.
+      # backfilled, so no Provider::School exists for the pair. Resolution is
+      # keyed on Provider::School, so the UUID comes back unrecognised even
+      # though the legacy site is sitting right there.
       let!(:site) { create(:site, :with_gias_school, provider:) }
 
       before do
@@ -550,7 +552,7 @@ describe Courses::CreationService do
       end
 
       it "writes the legacy site, skips the new-model write, and logs a warning" do
-        expect(Rails.logger).to receive(:warn).with(/course_school/)
+        expect(Rails.logger).to receive(:warn).with(/unrecognised school UUIDs for provider=#{provider.id}: #{site.uuid}/)
 
         expect(created_course.sites.map(&:id)).to eq([site.id])
         expect(created_course.schools).to be_empty
@@ -601,7 +603,7 @@ describe Courses::CreationService do
       end
 
       it "keeps both sites but builds a Course::School only for the backfilled school" do
-        expect(Rails.logger).to receive(:warn).with(/site_uuid=#{site_two.uuid}/)
+        expect(Rails.logger).to receive(:warn).with(/unrecognised school UUIDs for provider=#{provider.id}: #{site_two.uuid}/)
 
         expect(created_course.sites.map(&:id)).to eq([site.id, site_two.id])
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
