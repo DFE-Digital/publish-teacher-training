@@ -137,6 +137,7 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
 
       before do
         study_site = provider.study_sites.first || create(:site, :study_site, provider:)
+        school = create(:provider_school, provider:)
 
         state_store.write(
           is_send: "false",
@@ -146,7 +147,7 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
           qualification: "pgce_with_qts",
           funding_type: "fee",
           study_pattern: %w[full_time],
-          school_uuids: [provider.sites.first.uuid],
+          school_uuids: [school.uuid],
           study_sites_ids: [study_site.id.to_s],
           can_sponsor_student_visa: false,
           start_date: "July 2027",

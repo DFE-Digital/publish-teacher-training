@@ -96,19 +96,19 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
   end
 
   it "renders school and study-site rows with selected values and change links" do
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_school = create(:provider_school, provider:)
     study_site = provider.study_sites.first || create(:site, :study_site, provider:)
 
     state_store.write(
       qualification: "undergraduate_degree_with_qts",
-      school_uuids: [placement_site.uuid],
+      school_uuids: [placement_school.uuid],
       study_sites_ids: [study_site.id.to_s],
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
     allow(wizard).to receive(:saved?).with(:study_sites).and_return(true)
 
     expect(rendered_component).to have_text("Employing school")
-    expect(rendered_component).to have_text(placement_site.location_name)
+    expect(rendered_component).to have_text(placement_school.location_name)
     expect(rendered_component).to have_link("Change", href: /return_to_review=schools/)
     expect(rendered_component).to have_text("Study site")
     expect(rendered_component).to have_text(study_site.location_name)
@@ -116,12 +116,12 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
   end
 
   it "renders select study site CTA when none is selected but study sites exist" do
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_school = create(:provider_school, provider:)
     provider.study_sites.first || create(:site, :study_site, provider:)
 
     state_store.write(
       qualification: "undergraduate_degree_with_qts",
-      school_uuids: [placement_site.uuid],
+      school_uuids: [placement_school.uuid],
       study_sites_ids: [],
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
@@ -132,12 +132,12 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
   end
 
   it "renders add study site CTA when provider has no study sites" do
-    placement_site = provider.sites.first || create(:site, provider:)
+    placement_school = create(:provider_school, provider:)
     provider.study_sites.destroy_all
 
     state_store.write(
       qualification: "undergraduate_degree_with_qts",
-      school_uuids: [placement_site.uuid],
+      school_uuids: [placement_school.uuid],
       study_sites_ids: [],
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
