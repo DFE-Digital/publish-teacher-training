@@ -42,25 +42,7 @@ FactoryBot.define do
     # school to the wrong provider.
     trait :with_provider_school do
       after(:create) do |site|
-        gias_school = GiasSchool.find_or_create_by!(urn: site.urn) do |school|
-          school.name = site.location_name
-          school.address1 = site.address1
-          school.address2 = site.address2
-          school.address3 = site.address3
-          school.town = site.town
-          school.county = site.address4
-          school.postcode = site.postcode
-          school.region_code = site.region_code
-          school.status_code = GiasSchool.status_codes["open"]
-        end
-
-        Provider::School.find_or_create_by!(
-          provider: site.provider,
-          gias_school:,
-          site_code: site.code,
-        ) do |provider_school|
-          provider_school.uuid = site.uuid
-        end
+        create(:provider_school, :for_site, site:)
       end
     end
 
