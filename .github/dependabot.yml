@@ -16,7 +16,7 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
     labels:
       - deploy
       - dependencies
@@ -25,11 +25,11 @@ updates:
     directory: "/docs"
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
     labels:
       - github_actions
