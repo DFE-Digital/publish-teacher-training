@@ -75,10 +75,6 @@ module API
             def include_param
               params.fetch(:include, "")
             end
-
-            def schools_remodelled
-              FeatureFlag.active?(:course_publishing_uses_new_school_model) && recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
-            end
           end
         end
       end

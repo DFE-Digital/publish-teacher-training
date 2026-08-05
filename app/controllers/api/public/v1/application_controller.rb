@@ -16,6 +16,10 @@ module API
           year = params[:recruitment_cycle_year]
           @recruitment_cycle ||= RecruitmentCycle.find_by(year:) || RecruitmentCycle.current_recruitment_cycle!
         end
+
+        def schools_remodelled
+          recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+        end
       end
     end
   end
