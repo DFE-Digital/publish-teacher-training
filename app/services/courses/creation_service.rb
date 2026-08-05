@@ -120,10 +120,7 @@ module Courses
       # once add-course creation only writes Course::School.
       course.sites = selected_sites
 
-      selected_sites.each do |site|
-        provider_school = provider_school_for(site)
-        next unless provider_school
-
+      selected_schools.each do |provider_school|
         course.schools.build(gias_school: provider_school.gias_school, provider_school:)
       end
     end
@@ -133,37 +130,21 @@ module Courses
     end
 
     def selected_sites
-      resolve_sites
-      @selected_sites
+      schools_resolver.sites
+    end
+
+    def selected_schools
+      schools_resolver.schools
     end
 
     # Schools are picked by UUID. The resolver logs any that do not belong to the
     # provider; the validator is what stops the course being saved without them.
-    def resolve_sites
-      return if defined?(@selected_sites)
-
-      @selected_sites = ::Schools::UuidResolver.call(
+    def schools_resolver
+      @schools_resolver ||= ::Schools::UuidResolver.new(
         provider:,
         uuids: school_uuids,
         log_tag: "CourseSchools",
-      ).schools
-    end
-
-    def provider_school_for(site)
-      provider_school = provider_schools_by_uuid[site.uuid]
-      return provider_school if provider_school
-
-      Rails.logger.warn(
-        "[CourseSchools] skipped course_school build - no provider_school for " \
-        "provider=#{provider.id} site_uuid=#{site.uuid} urn=#{site.urn.inspect}",
       )
-      nil
-    end
-
-    def provider_schools_by_uuid
-      @provider_schools_by_uuid ||= provider.schools
-        .where(uuid: selected_sites.map(&:uuid))
-        .index_by(&:uuid)
     end
 
     def update_study_sites(course)
