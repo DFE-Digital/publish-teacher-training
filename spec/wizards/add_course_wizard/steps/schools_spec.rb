@@ -12,14 +12,20 @@ RSpec.describe CourseWizard::Steps::Schools do
 
   let(:provider) { create(:provider, :accredited_provider, recruitment_cycle:) }
 
-  let!(:site_a) { create(:site, provider:, location_name: "B School") }
-  let!(:site_b) { create(:site, provider:, location_name: "A School") }
+  # The step lists Provider::School and sorts on the GIAS name, so the name that
+  # orders the list lives on the GIAS record rather than the legacy site.
+  let!(:school_a) { create_school("B School") }
+  let!(:school_b) { create_school("A School") }
+
+  def create_school(name)
+    create(:provider_school, provider:, gias_school: create(:gias_school, name:))
+  end
 
   describe "#valid?" do
     subject(:wizard_step) { wizard.current_step }
 
     it "is valid when at least one school UUID is selected" do
-      wizard_step.school_uuids = [site_a.uuid]
+      wizard_step.school_uuids = [school_a.uuid]
 
       expect(wizard_step).to be_valid
     end
@@ -43,7 +49,7 @@ RSpec.describe CourseWizard::Steps::Schools do
     end
 
     it "is not valid when a school UUID is not a UUID" do
-      wizard_step.school_uuids = [site_a.id.to_s]
+      wizard_step.school_uuids = [school_a.id.to_s]
 
       expect(Rails.logger).to receive(:warn).with(/unrecognised school UUIDs/)
 
@@ -53,14 +59,14 @@ RSpec.describe CourseWizard::Steps::Schools do
       )
     end
 
-    context "when provider has only one site" do
-      let!(:site_b) { nil }
+    context "when provider has only one school" do
+      let!(:school_b) { nil }
 
-      it "auto-selects the only site and is valid when no site is submitted" do
+      it "auto-selects the only school and is valid when no school is submitted" do
         wizard_step.school_uuids = nil
 
         expect(wizard_step).to be_valid
-        expect(wizard_step.school_uuids).to eq([site_a.uuid])
+        expect(wizard_step.school_uuids).to eq([school_a.uuid])
       end
     end
   end
@@ -68,11 +74,11 @@ RSpec.describe CourseWizard::Steps::Schools do
   describe "#schools" do
     subject(:wizard_step) { wizard.current_step }
 
-    it "returns provider sites sorted by location name" do
+    it "returns the provider's schools sorted by GIAS name" do
       expect(wizard_step.schools).to eq(
         [
-          site_b,
-          site_a,
+          school_b,
+          school_a,
         ],
       )
     end
@@ -86,7 +92,7 @@ RSpec.describe CourseWizard::Steps::Schools do
     end
 
     context "when the provider has more than 20 schools" do
-      before { create_list(:site, 19, provider:) }
+      before { 19.times { |n| create_school(sprintf("School %02d", n)) } }
 
       it "is true" do
         expect(wizard_step.collapse_schools?).to be(true)

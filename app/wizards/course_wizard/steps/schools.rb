@@ -23,7 +23,7 @@ class CourseWizard
       end
 
       def schools
-        @schools ||= provider.sites.order(:location_name)
+        @schools ||= provider.schools.includes(:gias_school).order("gias_school.name")
       end
 
       def schools_collapse_threshold
@@ -58,7 +58,7 @@ class CourseWizard
       def school_uuids_resolve
         return if selected_school_uuids.empty?
 
-        resolution = ::Schools::UuidResolver.call(
+        resolution = ::Schools::UuidResolver.new(
           provider:,
           uuids: selected_school_uuids,
           log_tag: "CourseWizard::Schools",
