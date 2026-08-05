@@ -86,7 +86,14 @@ RSpec.describe Publish::Schools::SearchPanelComponent, type: :component do
     end
 
     it "renders a live region for announcing the number of results" do
-      expect(rendered.css("[data-schools-list-target='status']").first["aria-live"]).to eq("polite")
+      expect(rendered.at_css("[data-schools-list-target='status']")["aria-live"]).to eq("polite")
+    end
+
+    it "carries the announcement wording for the controller to fill in" do
+      status = rendered.at_css("[data-schools-list-target='status']")
+
+      expect(status["data-results-one"]).to eq("1 school found")
+      expect(status["data-results-other"]).to eq("{count} schools found")
     end
   end
 

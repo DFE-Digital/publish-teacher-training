@@ -7,3 +7,5 @@ en:
         button: Search
         clear: Clear search
         no_results: No results found. Clear your search and try again.
+        results_one: 1 school found
+        results_other: "{count} schools found"
