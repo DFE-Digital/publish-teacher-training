@@ -8,36 +8,22 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
   end
 
   describe "the count of attached schools" do
-    context "with the legacy site data model" do
-      scenario "shows the number of school sites attached" do
-        given_a_course_with_attached_sites(count: 3)
-        when_i_visit_the_publish_course_school_edit_page
-        then_i_see_the_attached_count("You currently have 3 schools attached to this course")
-      end
-
-      scenario "uses the singular for a single attached school" do
-        given_a_course_with_attached_sites(count: 1)
-        when_i_visit_the_publish_course_school_edit_page
-        then_i_see_the_attached_count("You currently have 1 school attached to this course")
-      end
-
-      scenario "handles a course with no attached schools" do
-        given_a_course_with_attached_sites(count: 0)
-        when_i_visit_the_publish_course_school_edit_page
-        then_i_see_the_attached_count("You do not have any schools attached to this course")
-      end
+    scenario "shows the plural count for attached schools" do
+      given_a_course_with_attached_course_schools(count: 3)
+      when_i_visit_the_publish_course_school_edit_page
+      then_i_see_the_attached_count("You currently have 3 schools attached to this course")
     end
 
-    context "with the new school data model" do
-      before do
-        FeatureFlag.activate(:course_publishing_uses_new_school_model)
-      end
+    scenario "uses the singular for a single attached school" do
+      given_a_course_with_attached_course_schools(count: 1)
+      when_i_visit_the_publish_course_school_edit_page
+      then_i_see_the_attached_count("You currently have 1 school attached to this course")
+    end
 
-      scenario "shows the number of course schools attached" do
-        given_a_course_with_attached_course_schools(count: 2)
-        when_i_visit_the_publish_course_school_edit_page
-        then_i_see_the_attached_count("You currently have 2 schools attached to this course")
-      end
+    scenario "handles a course with no attached schools" do
+      given_a_course_with_attached_course_schools(count: 0)
+      when_i_visit_the_publish_course_school_edit_page
+      then_i_see_the_attached_count("You do not have any schools attached to this course")
     end
   end
 
