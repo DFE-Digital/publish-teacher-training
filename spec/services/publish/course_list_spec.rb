@@ -201,7 +201,7 @@ RSpec.describe Publish::CourseList do
     # start date at all, so it is worth showing.
     context "when some courses have no start date and the rest share a month" do
       before do
-        create_course(start_date: Time.zone.local(2026, 9, 1))
+        create_course
         create_course(start_date: nil)
       end
 
