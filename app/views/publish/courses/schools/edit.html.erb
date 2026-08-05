@@ -38,7 +38,7 @@
             legend: { text: page_title, hidden: true },
             form_group: { data: { controller: "select-all-checkboxes" } } do %>
 
-            <div class="govuk-checkboxes__item">
+            <div class="govuk-checkboxes__item" data-schools-list-target="bulkSelect">
               <input type="checkbox"
                      class="govuk-checkboxes__input"
                      id="select-all-schools"
@@ -50,7 +50,7 @@
               </label>
             </div>
 
-            <div class="govuk-body govuk-!-margin-left-2">or</div>
+            <div class="govuk-body govuk-!-margin-left-2" data-schools-list-target="bulkSelect">or</div>
             <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
             <% @course_school_form.schools.each_with_index do |school, index| %>
