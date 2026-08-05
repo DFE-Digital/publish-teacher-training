@@ -46,7 +46,7 @@ RSpec.describe "Confirming live changes before publishing course edits" do
     and_the_course_was_last_published_yesterday
     when_i_update_course_schools
     then_i_should_not_see_the_live_changes_interstitial
-    expect(page).to have_content("Schools updated")
+    expect(page).to have_content("School updated")
     and_the_last_updated_timestamp_is_refreshed
   end
 
@@ -66,9 +66,9 @@ private
   end
 
   def given_a_published_course_with_schools
-    site = create(:site, location_name: "Site 1", provider:)
+    site = create(:site, :with_provider_school, location_name: "Site 1", provider:)
     given_a_course_exists(:published, sites: [site])
-    create(:site, location_name: "Site 2", provider:)
+    create(:site, :with_provider_school, location_name: "Site 2", provider:)
   end
 
   def when_i_edit_what_you_will_study
