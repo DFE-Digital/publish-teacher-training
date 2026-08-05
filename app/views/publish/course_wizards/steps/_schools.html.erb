@@ -25,9 +25,13 @@
   <%= t("course_wizard.steps.schools.hint") %>
 </p>
 
+<%# The panel and the list share a controller: searching decides which rows the
+    collapse threshold then applies to. %>
+<div data-controller="schools-list" data-schools-list-visible-value="<%= current_step.schools_collapse_threshold %>">
+  <%= render ::Publish::Schools::SearchPanelComponent.new(schools: current_step.schools, value: :uuid) %>
+
 <%= form.govuk_check_boxes_fieldset :school_uuids,
-      legend: { hidden: true, text: heading },
-      form_group: { data: { controller: "schools-list", schools_list_visible_value: current_step.schools_collapse_threshold } } do %>
+      legend: { hidden: true, text: heading } do %>
   <% current_step.schools.each_with_index do |school, index| %>
     <%= form.govuk_check_box :school_uuids,
           school.uuid,
@@ -42,11 +46,13 @@
     <button type="button"
             class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
             hidden
+            data-qa="schools-collapse-show-all"
             data-schools-list-target="showAll"
             data-action="schools-list#showAll">
       <%= t("publish.courses.schools.show_all") %>
     </button>
   <% end %>
 <% end %>
+</div>
 
 <%= form.govuk_submit t("course_wizard.steps.schools.submit") %>

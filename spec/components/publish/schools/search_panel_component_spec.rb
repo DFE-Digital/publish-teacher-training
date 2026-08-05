@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Publish::Schools::SearchPanelComponent, type: :component do
-  subject(:rendered) { render_inline(described_class.new(sites:)) }
+  subject(:rendered) { render_inline(described_class.new(schools:)) }
 
-  let(:sites) { [site] }
+  let(:schools) { [site] }
   let(:site) do
     build_stubbed(
       :site,
@@ -63,6 +63,14 @@ RSpec.describe Publish::Schools::SearchPanelComponent, type: :component do
 
       it "renders the option without blank synonyms" do
         expect(synonyms_for(site)).to be_empty
+      end
+    end
+
+    context "when the checkboxes are keyed by something other than the id" do
+      subject(:rendered) { render_inline(described_class.new(schools:, value: :uuid)) }
+
+      it "keys the options by that attribute instead" do
+        expect(rendered.at_css("option[value='#{site.uuid}']").text).to eq("Belvidere School")
       end
     end
   end

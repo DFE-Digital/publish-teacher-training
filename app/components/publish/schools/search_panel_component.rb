@@ -10,8 +10,12 @@ module Publish
     class SearchPanelComponent < ViewComponent::Base
       SELECT_ID = "school-search".freeze
 
-      def initialize(sites:)
-        @sites = sites
+      # `value` names the attribute the checkboxes are keyed by, so each
+      # suggestion can be paired with its row: the course schools page keys on
+      # the site id, the add course wizard on the school uuid.
+      def initialize(schools:, value: :id)
+        @schools = schools
+        @value = value
 
         super()
       end
@@ -26,13 +30,13 @@ module Publish
       # box only promises name, postcode and URN - so it appears in `data-append`
       # instead, which is context for the dropdown and is never matched.
       def autocomplete_options
-        options = sites.map do |site|
+        options = schools.map do |school|
           [
-            site.location_name,
-            site.id,
+            school.location_name,
+            school.public_send(value),
             {
-              "data-synonyms" => synonyms_for(site).join("|"),
-              "data-append" => append_for(site),
+              "data-synonyms" => synonyms_for(school).join("|"),
+              "data-append" => append_for(school),
             }.compact,
           ]
         end
@@ -42,14 +46,14 @@ module Publish
 
     private
 
-      attr_reader :sites
+      attr_reader :schools, :value
 
-      def synonyms_for(site)
-        [site.urn, site.postcode, site.postcode&.delete(" ")].compact_blank.uniq
+      def synonyms_for(school)
+        [school.urn, school.postcode, school.postcode&.delete(" ")].compact_blank.uniq
       end
 
-      def append_for(site)
-        context = [site.town, site.postcode].compact_blank.join(", ")
+      def append_for(school)
+        context = [school.town, school.postcode].compact_blank.join(", ")
 
         tag.strong("(#{context})") if context.present?
       end
