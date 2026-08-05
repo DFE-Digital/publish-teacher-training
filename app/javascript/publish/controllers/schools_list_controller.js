@@ -45,12 +45,21 @@ export default class extends Controller {
 
     this.selectEl = this.autocompleteTarget.querySelector('select')
     this.options = optionsFromSelect(this.selectEl)
+    // The enhanced input inherits the select's id, which is how we tell it apart
+    // from the hint input accessible-autocomplete renders alongside it. That one
+    // comes first in the DOM and holds the autocompleted preview, so reaching for
+    // the input by position - as the library's own getValue does - reads back
+    // text the provider never typed.
+    this.inputId = this.selectEl.id
 
     this.instance = dfeAutocompleteField(this.autocompleteTarget, {
       minLength: MIN_QUERY_LENGTH,
       maxResults: MAX_SUGGESTIONS,
       highlightMatches: true,
-      confirmOnBlur: false
+      confirmOnBlur: false,
+      // Float the suggestions over the page: an inline menu pushes the Search
+      // button down as you type, out from under the pointer.
+      displayMenu: 'overlay'
     })
 
     // dfe-autocomplete emits the confirmed school's name before it marks the
@@ -71,12 +80,16 @@ export default class extends Controller {
   }
 
   search () {
-    this.filter(this.instance?.getValue())
+    this.filter(this.input()?.value)
   }
 
   clearSearch () {
     this.reset()
-    this.autocompleteTarget.querySelector('input')?.focus()
+    this.input()?.focus()
+  }
+
+  input () {
+    return this.inputId ? document.getElementById(this.inputId) : null
   }
 
   // "Show all schools" from the no results message: the same reset as clearing
@@ -108,7 +121,13 @@ export default class extends Controller {
   }
 
   reset () {
-    this.instance?.setValue('')
+    const input = this.input()
+    if (input) {
+      input.value = ''
+      // The autocomplete keeps its own copy of the query and re-renders from it,
+      // so tell it the field changed rather than only clearing the DOM node.
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+    }
     if (this.selectEl) this.selectEl.value = ''
 
     this.query = ''
