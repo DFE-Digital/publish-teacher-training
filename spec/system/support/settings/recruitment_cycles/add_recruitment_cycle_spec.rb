@@ -52,7 +52,7 @@ RSpec.describe "Adding a new recruitment cycle", service: :publish, travel: mid_
 
   def when_i_fill_in_valid_recruitment_cycle_details
     fill_in "Recruitment cycle year", with: "2026"
-    fill_in "support_recruitment_cycle_form[application_start_date(3i)]", with: "04"
+    fill_in "support_recruitment_cycle_form[application_start_date(3i)]", with: "07"
     fill_in "support_recruitment_cycle_form[application_start_date(2i)]", with: "10"
     fill_in "support_recruitment_cycle_form[application_start_date(1i)]", with: "2025"
     fill_in "support_recruitment_cycle_form[application_end_date(3i)]", with: "04"
@@ -80,7 +80,7 @@ RSpec.describe "Adding a new recruitment cycle", service: :publish, travel: mid_
     recruitment_cycle = RecruitmentCycle.find_by(year: "2026")
     expect(recruitment_cycle).to be_present
 
-    expect(recruitment_cycle.application_start_date).to eq(Date.new(2025, 10, 4))
+    expect(recruitment_cycle.application_start_date).to eq(Date.new(2025, 10, 7))
     expect(recruitment_cycle.application_end_date).to eq(Date.new(2026, 10, 4))
     expect(recruitment_cycle.available_in_publish_from).to eq(Date.new(2025, 9, 4))
     expect(recruitment_cycle.available_for_support_users_from).to eq(Date.new(2025, 9, 1))

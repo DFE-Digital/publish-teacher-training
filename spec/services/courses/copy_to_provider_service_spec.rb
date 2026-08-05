@@ -119,7 +119,7 @@ RSpec.describe Courses::CopyToProviderService do
       expect(new_course.applications_open_from).to eq course.applications_open_from + 1.year
     end
 
-    context "when the original course's date is before the next cycle's start date" do
+    context "when the original course's date is before the target cycle's start date" do
       before do
         course.applications_open_from = Date.new(provider.recruitment_cycle.year.to_i - 1, 10, 1)
       end
@@ -127,12 +127,12 @@ RSpec.describe Courses::CopyToProviderService do
       it "sets the new course's applications open from date correctly", travel: mid_cycle do
         service.execute(course:, new_provider:)
 
-        expect(new_course.applications_open_from).to eq(Find::CycleTimetable.apply_reopens.to_date)
+        expect(new_course.applications_open_from).to eq(new_recruitment_cycle.application_start_date)
       end
     end
 
     context "when the original course's date is at the beginning of the cycle" do
-      let(:new_recruitment_cycle) { create(:recruitment_cycle, :next, application_start_date: "2023-09-01") }
+      let(:new_recruitment_cycle) { create(:recruitment_cycle, :next, application_start_date: Date.new(Find::CycleTimetable.next_year - 1, 10, 7)) }
 
       before do
         course.applications_open_from = provider.recruitment_cycle.application_start_date
@@ -141,7 +141,61 @@ RSpec.describe Courses::CopyToProviderService do
       it "sets the new course's applications open from date correctly" do
         service.execute(course:, new_provider:)
 
-        expect(new_course.applications_open_from).to eq(Find::CycleTimetable.apply_reopens.to_date)
+        expect(new_course.applications_open_from).to eq(new_recruitment_cycle.application_start_date)
+      end
+    end
+
+    context "when the adjusted date is after the target cycle's application end date" do
+      let(:new_recruitment_cycle) do
+        create(:recruitment_cycle,
+               :next,
+               application_end_date: Date.new(Find::CycleTimetable.next_year, 9, 1))
+      end
+
+      before do
+        course.applications_open_from = recruitment_cycle.application_end_date
+      end
+
+      it "sets the new course's applications open from date to the target cycle's application end date" do
+        service.execute(course:, new_provider:)
+
+        expect(new_course.applications_open_from).to eq(new_recruitment_cycle.application_end_date)
+      end
+    end
+
+    context "when the source course's applications open from date is outside its recruitment cycle" do
+      before do
+        course.applications_open_from = provider.recruitment_cycle.application_end_date + 1.week
+      end
+
+      it "sets the new course's applications open from date to the target cycle's application start date" do
+        service.execute(course:, new_provider:)
+
+        expect(new_course.applications_open_from).to eq(new_recruitment_cycle.application_start_date)
+      end
+    end
+
+    context "when rollover is run before providers can access the target cycle" do
+      let(:new_recruitment_cycle) do
+        create(:recruitment_cycle,
+               :next,
+               application_start_date: Date.new(2026, 10, 7),
+               application_end_date: Date.new(2027, 9, 23),
+               available_for_support_users_from: Date.new(2026, 8, 3),
+               available_in_publish_from: Date.new(2026, 8, 4))
+      end
+
+      before do
+        course.applications_open_from = recruitment_cycle.application_start_date
+      end
+
+      it "uses the target recruitment cycle's application start date" do
+        Timecop.travel(Time.zone.local(2026, 8, 3, 12)) do
+          service.execute(course:, new_provider:)
+        end
+
+        expect(new_course.applications_open_from).to eq(Date.new(2026, 10, 7))
+        expect(new_recruitment_cycle.application_start_date..new_recruitment_cycle.application_end_date).to cover(new_course.applications_open_from)
       end
     end
   end

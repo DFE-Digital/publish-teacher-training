@@ -15,6 +15,7 @@ module Support
               :available_in_publish_from,
               multiple_parameters_date: true
     validate :application_end_date_must_be_after_start_date
+    validate :application_start_date_must_match_cycle_timetable
     validate :available_for_support_users_from_must_be_before_available_in_publish_from
     validate :year_must_be_unique, if: -> { validation_context != :update }
 
@@ -39,6 +40,20 @@ module Support
       return if year.blank?
 
       errors.add(:year, :taken) if RecruitmentCycle.exists?(year:)
+    end
+
+    def application_start_date_must_match_cycle_timetable
+      return if year.blank? || application_start_date.blank?
+      return unless year.to_s.match?(/\A\d+\z/)
+      return if errors[:application_start_date].present?
+
+      expected_application_start_date = Find::CycleTimetable.real_schedule_for(year.to_i)&.fetch(:apply_opens, nil)&.to_date
+
+      if expected_application_start_date.blank?
+        errors.add(:application_start_date, :missing_cycle_timetable)
+      elsif application_start_date != expected_application_start_date
+        errors.add(:application_start_date, :does_not_match_cycle_timetable)
+      end
     end
 
     def available_for_support_users_from_must_be_before_available_in_publish_from

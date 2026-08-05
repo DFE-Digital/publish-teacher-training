@@ -26,7 +26,7 @@ module Courses
         new_course.application_status                       = "closed"
         new_course.provider                                 = new_provider
         year_differential                                   = new_course.recruitment_cycle.year.to_i - course.recruitment_cycle.year.to_i
-        new_course.applications_open_from                   = adjusted_applications_open_from_date(course, year_differential)
+        new_course.applications_open_from                   = adjusted_applications_open_from_date(course:, new_provider:, year_differential:)
         new_course.start_date                               = course.start_date + year_differential.year
         course.course_subjects.each do |cs|
           new_course.course_subjects.build(subject_id: cs.subject_id, position: cs.position)
@@ -66,24 +66,26 @@ module Courses
       @enrichments_copy_to_course.execute(enrichment: latest_enrichment, new_course:)
     end
 
-    def adjusted_applications_open_from_date(course, year_differential)
-      return current_cycle.application_start_date if course.applications_open_from.blank? && next_cycle.blank?
+    def adjusted_applications_open_from_date(course:, new_provider:, year_differential:)
+      source_recruitment_cycle = course.recruitment_cycle
+      target_recruitment_cycle = new_provider.recruitment_cycle
 
-      return course.applications_open_from if next_cycle.blank?
+      return target_recruitment_cycle.application_start_date if course.applications_open_from.blank?
 
-      if course_start_is_same_as_current_cycle_start?(course)
-        Find::CycleTimetable.apply_reopens.to_date
-      else
-        [course.applications_open_from + year_differential.year, next_cycle.application_start_date].max
-      end
+      source_date_range = source_recruitment_cycle.application_start_date..source_recruitment_cycle.application_end_date
+      return target_recruitment_cycle.application_start_date unless source_date_range.cover?(course.applications_open_from)
+
+      adjusted_date = if course.applications_open_from == source_recruitment_cycle.application_start_date
+                        target_recruitment_cycle.application_start_date
+                      else
+                        course.applications_open_from + year_differential.year
+                      end
+
+      adjusted_date.clamp(target_recruitment_cycle.application_start_date, target_recruitment_cycle.application_end_date)
     end
 
     def copy_schools(course:, new_provider:, new_course:)
       schools_copy_to_course.call(course:, new_provider:, new_course:)
-    end
-
-    def course_start_is_same_as_current_cycle_start?(course)
-      course.applications_open_from == current_cycle.application_start_date
     end
 
     def copy_study_sites(course:, new_provider:, new_course:)
@@ -101,14 +103,6 @@ module Courses
     def new_provider_study_sites(new_provider)
       @new_provider_study_sites ||= {}
       @new_provider_study_sites[new_provider.id] ||= new_provider.study_sites.index_by(&:code)
-    end
-
-    def next_cycle
-      @next_cycle ||= RecruitmentCycle.next_recruitment_cycle
-    end
-
-    def current_cycle
-      @current_cycle ||= RecruitmentCycle.current_recruitment_cycle
     end
   end
 end

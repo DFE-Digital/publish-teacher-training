@@ -28,7 +28,6 @@ RSpec.describe "Editing a recruitment cycle", service: :publish, travel: mid_cyc
     then_i_can_edit_the_cycle
 
     when_i_click_change
-    and_i_change_the_application_start_date
     and_i_change_the_application_end_date
     and_i_change_the_available_in_publish_from_date
     and_i_click_continue
@@ -78,13 +77,6 @@ RSpec.describe "Editing a recruitment cycle", service: :publish, travel: mid_cyc
     click_link_or_button "Change", match: :first
   end
 
-  def and_i_change_the_application_start_date
-    within_fieldset "Application start date" do
-      fill_in "Day", with: "27"
-      fill_in "Month", with: "09"
-    end
-  end
-
   def and_i_change_the_application_end_date
     within_fieldset "Application end date" do
       fill_in "Day", with: "05"
@@ -107,8 +99,7 @@ RSpec.describe "Editing a recruitment cycle", service: :publish, travel: mid_cyc
     expect(page).to have_content("Recruitment cycle updated")
 
     @upcoming_cycle.reload
-    expect(@upcoming_cycle.application_start_date.day).to eq(27)
-    expect(@upcoming_cycle.application_start_date.month).to eq(9)
+    expect(@upcoming_cycle.application_start_date).to eq(Find::CycleTimetable.apply_opens(@upcoming_cycle.year).to_date)
     expect(@upcoming_cycle.application_end_date.day).to eq(5)
     expect(@upcoming_cycle.application_end_date.month).to eq(10)
     expect(@upcoming_cycle.available_in_publish_from.day).to eq(RecruitmentCycle.current.available_for_support_users_from.succ.day)
