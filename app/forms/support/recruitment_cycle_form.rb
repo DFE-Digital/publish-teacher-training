@@ -52,7 +52,11 @@ module Support
       if expected_application_start_date.blank?
         errors.add(:application_start_date, :missing_cycle_timetable)
       elsif application_start_date != expected_application_start_date
-        errors.add(:application_start_date, :does_not_match_cycle_timetable)
+        errors.add(
+          :application_start_date,
+          :does_not_match_cycle_timetable,
+          date: expected_application_start_date.to_fs(:govuk_date),
+        )
       end
     end
 

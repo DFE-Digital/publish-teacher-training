@@ -118,7 +118,7 @@ RSpec.describe Support::RecruitmentCycleForm do
       it "is invalid" do
         expect(form).not_to be_valid
         expect(form.errors[:application_start_date]).to include(
-          "Application start date must match the Find cycle timetable. Update the timetable first if this date has changed.",
+          "Application start date must be 6 October 2026, which is the date in the Find cycle timetable. Update the timetable first if this date has changed.",
         )
       end
     end
