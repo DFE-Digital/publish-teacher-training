@@ -152,13 +152,25 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
       then_i_see_at_most_five_suggestions
     end
 
-    scenario "choosing a suggestion filters the list without ticking anything" do
+    # The dropdown is a typing aid, not an action: choosing from it fills the
+    # box and nothing more, so the list only ever changes when Search is pressed.
+    scenario "choosing a suggestion fills the search box and leaves the list alone" do
       given_a_course_i_want_to_edit
       when_i_visit_the_publish_course_school_edit_page
       when_i_type("bel")
       and_i_choose_the_first_suggestion
-      then_only_these_schools_are_shown("Belvidere School")
+      then_the_search_box_holds("Belvidere School")
+      and_all_three_schools_are_still_shown
       and_nothing_is_ticked
+    end
+
+    scenario "searching after choosing a suggestion filters to that school" do
+      given_a_course_i_want_to_edit
+      when_i_visit_the_publish_course_school_edit_page
+      when_i_type("bel")
+      and_i_choose_the_first_suggestion
+      and_i_click_search
+      then_only_these_schools_are_shown("Belvidere School")
     end
   end
 
@@ -215,9 +227,13 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     fill_in "Search for a school in the list", with: query
   end
 
+  def and_i_click_search
+    click_button "Search"
+  end
+
   def when_i_search_for(query)
     when_i_type(query)
-    click_button "Search"
+    and_i_click_search
   end
   alias_method :and_i_search_for, :when_i_search_for
 
@@ -269,6 +285,11 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
 
   def then_all_three_schools_are_shown
     then_only_these_schools_are_shown("Belvidere School", "Bridgnorth Endowed School", "Charlton School")
+  end
+  alias_method :and_all_three_schools_are_still_shown, :then_all_three_schools_are_shown
+
+  def then_the_search_box_holds(query)
+    expect(page).to have_field("Search for a school in the list", with: query)
   end
 
   def then_the_number_of_schools_shown_is(count)
