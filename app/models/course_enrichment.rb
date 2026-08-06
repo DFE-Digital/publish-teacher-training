@@ -88,8 +88,8 @@ class CourseEnrichment < ApplicationRecord
             if: -> { is_fee_based? && version == 2 }
 
   # Course length and salary
-  validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
-  validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
+  validates :salary_details, presence: true, on: :publish, unless: ->(record) { record.is_fee_based? || (record.course && record.course.recruitment_cycle.after?(2026)) }
+  validates :salary_details, words_count: { maximum: 250 }, unless: ->(record) { record.is_fee_based? || (record.course && record.course.recruitment_cycle.after?(2026)) }
 
   validates :salary_fee_details, words_count: { maximum: 100 }
   # Requirements and qualifications
