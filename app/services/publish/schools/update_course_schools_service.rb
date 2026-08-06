@@ -131,7 +131,7 @@ module Publish
       end
 
       def school_names_for_notification
-        course.schools.includes(:provider_school)
+        course.schools.includes(provider_school: :gias_school)
           .map { |course_school| course_school.provider_school.location_name }
           .sort
       end
