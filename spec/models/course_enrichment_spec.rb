@@ -147,6 +147,21 @@ RSpec.describe CourseEnrichment do
   end
 
   #
+  # Salary details (jsonb accessor, no validation yet)
+  #
+  describe "salary_details" do
+    subject(:enrichment) { build(:course_enrichment, :with_salary_based_course, salary_details: nil) }
+
+    context "before 2027 recruitment cycle", travel: mid_cycle(2026) do
+      it { is_expected.not_to be_valid(:publish) }
+    end
+
+    context "after 2026 recruitment cycle", travel: mid_cycle(2027) do
+      it { is_expected.to be_valid(:publish) }
+    end
+  end
+
+  #
   # Existing specs we already had
   #
   describe "live edits to published enrichments" do
