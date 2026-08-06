@@ -40,7 +40,9 @@ module Publish
         ActiveRecord::Base.transaction do
           provider_schools = resolve_provider_schools
 
-          course.assign_attributes(course_attributes)
+          # TODO: We need to remove the school validated work from last cycle
+          course.assign_attributes(schools_validated: true)
+
           update_site_statuses(provider_schools)
           update_provider_schools(provider_schools)
 
