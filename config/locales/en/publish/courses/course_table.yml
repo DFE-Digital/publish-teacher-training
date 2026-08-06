@@ -9,3 +9,5 @@ en:
           fee: Fee-paying
           salary: Salaried
           apprenticeship: Apprenticeship
+        primary_age_range: "Ages %{age_range}"
+        
