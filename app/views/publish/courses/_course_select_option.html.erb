@@ -4,7 +4,7 @@
 <option value="<%= other_course.course_code %>">
   <%= [
     other_course.name_and_code,
-    (other_course.primary_course? ? "Ages #{other_course.age_range}" : nil),
+    (other_course.primary_course? ? I18n.t("publish.courses.course_table.primary_age_range", age_range: other_course.age_range) : nil),
     (I18n.t("publish.courses.course_table.funding.#{other_course.funding}") if visible_course_information_fields.include?(:funding)),
     (other_course.qualifications_summary if visible_course_information_fields.include?(:qualification)),
     (other_course.study_mode_description.capitalize if visible_course_information_fields.include?(:study_mode)),
