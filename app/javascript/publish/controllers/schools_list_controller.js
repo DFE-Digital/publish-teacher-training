@@ -62,18 +62,21 @@ export default class extends Controller {
       displayMenu: 'overlay'
     })
 
-    // dfe-autocomplete emits the confirmed school's name before it marks the
-    // option selected, so filter on the emitted name rather than reading the
-    // select back.
-    this.instance.on('select', ({ value }) => this.filter(value))
+    // Choosing a suggestion only fills the box: the list changes when the
+    // provider asks for it, not while they are still deciding what to search
+    // for. So nothing is bound to the autocomplete's select event.
 
-    // The panel sits inside the form that saves the schools, so Enter has to be
-    // caught here or it would submit that form.
+    // The panel sits inside the form that saves the schools, so Enter always
+    // has to be caught here or it would submit that form. With the menu open it
+    // belongs to the autocomplete, which has already confirmed the highlighted
+    // suggestion by the time this fires; otherwise it searches, as it would in
+    // any other search box.
     this.autocompleteTarget.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter') return
 
       event.preventDefault()
-      this.search()
+
+      if (this.input()?.getAttribute('aria-expanded') !== 'true') this.search()
     })
 
     if (this.hasPanelTarget) this.panelTarget.hidden = false
