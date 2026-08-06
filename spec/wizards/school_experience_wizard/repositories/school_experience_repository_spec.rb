@@ -73,5 +73,16 @@ RSpec.describe SchoolExperienceWizard::Repositories::SchoolExperienceRepository 
       expect(course.reload.school_experience_required).to be(false)
       expect(course.school_experience_required_content).to be_nil
     end
+
+    it "persists school experience when an unrelated course field is invalid" do
+      course.update_column(:start_date, Time.zone.local(Find::CycleTimetable.next_year, 9, 1))
+      expect(course.valid?(:update)).to be(false)
+      expect(course.errors[:start_date]).to be_present
+
+      repository.write(experience_details: "Spend time in a school")
+
+      expect(course.reload.school_experience_required).to be(true)
+      expect(course.school_experience_required_content).to eq("Spend time in a school")
+    end
   end
 end
