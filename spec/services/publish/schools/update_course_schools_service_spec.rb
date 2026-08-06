@@ -20,56 +20,62 @@ module Publish
 
       describe ".call_or_enqueue" do
         context "when the number of school UUIDs exceeds ENQUEUE_THRESHOLD" do
-          let(:params) { { school_uuids: Array.new(31) { SecureRandom.uuid } } }
+          let(:school_uuids) { Array.new(31) { SecureRandom.uuid } }
 
           it "enqueues the update" do
-            expect(UpdateCourseSchoolsJob).to receive(:perform_async).with(course.id, params.to_h)
+            expect(UpdateCourseSchoolsJob).to receive(:perform_async).with(course.id, school_uuids)
 
-            described_class.call_or_enqueue(course:, params:)
+            described_class.call_or_enqueue(course:, school_uuids:)
           end
         end
 
         context "when the number of school UUIDs equals ENQUEUE_THRESHOLD" do
-          let(:params) { { school_uuids: Array.new(30) { SecureRandom.uuid } + [""] } }
+          let(:school_uuids) { Array.new(30) { SecureRandom.uuid } + [""] }
 
           it "runs the update inline" do
             allow(described_class).to receive(:call)
 
-            described_class.call_or_enqueue(course:, params:)
+            described_class.call_or_enqueue(course:, school_uuids:)
 
-            expect(described_class).to have_received(:call).with(course:, params:)
+            expect(described_class).to have_received(:call).with(
+              course:,
+              school_uuids: school_uuids.compact_blank,
+            )
           end
         end
 
         context "when duplicate and blank UUIDs take the submitted count over ENQUEUE_THRESHOLD" do
-          let(:params) { { school_uuids: Array.new(31, provider_school_one.uuid) + [""] } }
+          let(:school_uuids) { Array.new(31, provider_school_one.uuid) + [""] }
 
           it "counts unique non-blank UUIDs and runs the update inline" do
             allow(described_class).to receive(:call)
 
-            described_class.call_or_enqueue(course:, params:)
+            described_class.call_or_enqueue(course:, school_uuids:)
 
-            expect(described_class).to have_received(:call).with(course:, params:)
+            expect(described_class).to have_received(:call).with(
+              course:,
+              school_uuids: [provider_school_one.uuid],
+            )
           end
         end
 
         context "when school UUIDs are nil" do
-          let(:params) { { school_uuids: nil } }
+          let(:school_uuids) { nil }
 
           it "runs the update inline" do
             allow(described_class).to receive(:call)
 
-            described_class.call_or_enqueue(course:, params:)
+            described_class.call_or_enqueue(course:, school_uuids:)
 
-            expect(described_class).to have_received(:call).with(course:, params:)
+            expect(described_class).to have_received(:call).with(course:, school_uuids: [])
           end
         end
       end
 
       describe "#call" do
-        subject(:service_call) { described_class.call(course:, params:) }
+        subject(:service_call) { described_class.call(course:, school_uuids:) }
 
-        let(:params) { { school_uuids: [provider_school_two.uuid] } }
+        let(:school_uuids) { [provider_school_two.uuid] }
 
         it "creates both Course::School and legacy SiteStatus relationships" do
           expect { service_call }
@@ -91,8 +97,7 @@ module Publish
           end
         end
 
-        it "persists course attributes and touches the provider for Apply" do
-          params[:schools_validated] = "true"
+        it "marks the schools as validated and touches the provider for Apply" do
           provider.update_columns(changed_at: 2.days.ago)
           previous_provider_changed_at = provider.changed_at
 
@@ -119,7 +124,7 @@ module Publish
         end
 
         context "when an empty selection is allowed" do
-          let(:params) { { school_uuids: [] } }
+          let(:school_uuids) { [] }
 
           before do
             attach_school(site_one, provider_school_one)
@@ -154,7 +159,7 @@ module Publish
           end
 
           context "when a school is removed" do
-            let(:params) { { school_uuids: [] } }
+            let(:school_uuids) { [] }
 
             before do
               attach_school(site_one, provider_school_one, status: :running, publish: :published)
@@ -215,20 +220,20 @@ module Publish
         end
 
         it "raises inline when a Provider::School UUID cannot be resolved" do
-          expect { described_class.call(course:, params: { school_uuids: [SecureRandom.uuid] }) }
+          expect { described_class.call(course:, school_uuids: [SecureRandom.uuid]) }
             .to raise_error(described_class::UnresolvedProviderSchoolsError)
         end
 
         it "requires the caller to provide school_uuids" do
-          expect { described_class.call(course:, params: { schools_validated: "true" }) }
-            .to raise_error(KeyError, /school_uuids/)
+          expect { described_class.call(course:) }
+            .to raise_error(ArgumentError, /school_uuids/)
         end
 
         context "when the update is run by the queued job" do
           subject(:service_call) do
             described_class.call(
               course:,
-              params:,
+              school_uuids:,
               raise_on_missing_provider_schools: false,
             )
           end
@@ -243,7 +248,7 @@ module Publish
               uuid: site_three.uuid,
             )
           end
-          let(:params) { { school_uuids: [provider_school_two.uuid, provider_school_three.uuid] } }
+          let(:school_uuids) { [provider_school_two.uuid, provider_school_three.uuid] }
 
           before do
             attach_school(site_one, provider_school_one)
@@ -278,7 +283,7 @@ module Publish
           subject(:service_call) do
             described_class.call(
               course:,
-              params:,
+              school_uuids:,
               raise_on_missing_provider_schools: false,
             )
           end
@@ -293,7 +298,7 @@ module Publish
               uuid: site_three.uuid,
             )
           end
-          let(:params) { { school_uuids: [provider_school_two.uuid, provider_school_three.uuid] } }
+          let(:school_uuids) { [provider_school_two.uuid, provider_school_three.uuid] }
 
           before do
             attach_school(site_three, provider_school_three)
@@ -314,7 +319,7 @@ module Publish
           subject(:service_call) do
             described_class.call(
               course:,
-              params:,
+              school_uuids:,
               raise_on_missing_provider_schools: false,
             )
           end
@@ -337,7 +342,7 @@ module Publish
           subject(:service_call) do
             described_class.call(
               course:,
-              params:,
+              school_uuids:,
               raise_on_missing_provider_schools: false,
             )
           end
@@ -358,7 +363,7 @@ module Publish
           subject(:service_call) do
             described_class.call(
               course:,
-              params:,
+              school_uuids:,
               raise_on_missing_provider_schools: false,
             )
           end
@@ -366,7 +371,7 @@ module Publish
           let(:provider_school_without_site) do
             create(:provider_school, provider:, gias_school: create(:gias_school))
           end
-          let(:params) { { school_uuids: [provider_school_without_site.uuid] } }
+          let(:school_uuids) { [provider_school_without_site.uuid] }
 
           it "raises from a queued update and writes neither relationship" do
             expect { service_call }
