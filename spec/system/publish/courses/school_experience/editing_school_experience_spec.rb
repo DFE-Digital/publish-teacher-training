@@ -39,6 +39,20 @@ RSpec.describe "Editing school experience requirements", travel: mid_cycle, type
     and_i_see_that_experience_is_not_required
   end
 
+  scenario "provider must enter school experience details" do
+    given_i_am_authenticated_as_a_provider_user
+    and_i_have_a_salaried_course
+
+    when_i_visit_the_course_description_tab
+    when_i_click_to_change_school_experience
+    when_i_choose_that_experience_is_required
+    and_i_click_continue
+    and_i_click_update
+
+    then_i_am_on_the_experience_details_page
+    and_i_see_the_missing_details_error
+  end
+
   scenario "provider chooses yes then cancels on the details step without leaving orphaned data" do
     given_i_am_authenticated_as_a_provider_user
     and_i_have_a_salaried_course
@@ -126,6 +140,10 @@ private
 
   def and_i_click_update
     click_on "Update school experience"
+  end
+
+  def and_i_see_the_missing_details_error
+    expect(page).to have_content("Enter the school experience you are looking for")
   end
 
   def then_i_am_back_on_the_course_description_tab
