@@ -12,24 +12,24 @@ module Publish
 
       class UnresolvedProviderSchoolsError < StandardError; end
 
-      def self.call_or_enqueue(course:, params:)
-        if Array(params[:school_uuids]).compact_blank.uniq.size > ENQUEUE_THRESHOLD
-          UpdateCourseSchoolsJob.perform_async(course.id, params.to_h)
+      def self.call_or_enqueue(course:, school_uuids:)
+        school_uuids = Array(school_uuids).compact_blank.uniq
+
+        if school_uuids.size > ENQUEUE_THRESHOLD
+          UpdateCourseSchoolsJob.perform_async(course.id, school_uuids)
         else
-          call(course:, params:)
+          call(course:, school_uuids:)
         end
       end
 
       # @param course [Course] course whose school selection should be updated
-      # @param params [Hash, ActionController::Parameters] course attributes and
-      #   submitted Provider::School UUIDs
+      # @param school_uuids [Array<String>] submitted Provider::School UUIDs
       # @param raise_on_missing_provider_schools [Boolean] inline requests pass
       #   true; queued requests pass false because a school may be removed while
       #   the job is waiting to run
-      def initialize(course:, params:, raise_on_missing_provider_schools: true)
+      def initialize(course:, school_uuids:, raise_on_missing_provider_schools: true)
         @course = course
-        @params = params.to_h.deep_symbolize_keys
-        @submitted_school_uuids = Array(@params.fetch(:school_uuids)).compact_blank.uniq
+        @submitted_school_uuids = Array(school_uuids).compact_blank.uniq
         @raise_on_missing_provider_schools = raise_on_missing_provider_schools
       end
 
@@ -40,15 +40,15 @@ module Publish
         ActiveRecord::Base.transaction do
           provider_schools = resolve_provider_schools
 
-          # TODO: We need to remove the school validated work from last cycle
-          course.assign_attributes(schools_validated: true)
+          # TODO: Schools validated is from a depricated feature, we'll have to remove this
+          course.schools_validated = true
 
           update_site_statuses(provider_schools)
-          update_provider_schools(provider_schools)
+          sync_course_schools(provider_schools)
 
-          # This persists schools_validated and deliberately touches the course
-          # and provider. Apply watches provider.changed_at to decide whether it
-          # needs to sync the provider's courses.
+          # TouchCourse uses update_columns, which bypasses TouchProvider. Saving
+          # here persists schools_validated and updates provider.changed_at so
+          # Apply knows that it needs to sync the provider's courses.
           course.save!
         end
 
@@ -65,11 +65,7 @@ module Publish
 
     private
 
-      attr_reader :course, :params, :submitted_school_uuids
-
-      def course_attributes
-        params.except(:school_uuids)
-      end
+      attr_reader :course, :submitted_school_uuids
 
       def resolve_provider_schools
         # Prevent a concurrent removal from deleting a school after resolution
@@ -102,7 +98,7 @@ module Publish
         Rails.logger.warn("[CourseSchools] skipped stale provider_school UUIDs - #{message}")
       end
 
-      def update_provider_schools(provider_schools)
+      def sync_course_schools(provider_schools)
         UpdateCourseProviderSchoolsService.call(
           course:,
           provider_schools:,

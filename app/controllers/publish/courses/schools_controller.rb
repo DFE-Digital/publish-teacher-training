@@ -27,9 +27,12 @@ module Publish
         @course_school_form = Publish::CourseSchoolForm.new(@course, params: school_params)
 
         if @course_school_form.valid?
-          Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(course: @course, params: school_params)
+          Publish::Schools::UpdateCourseSchoolsService.call_or_enqueue(
+            course: @course,
+            school_uuids: selected_school_uuids,
+          )
 
-          flash[:success] = if selected_school_uuids_count > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
+          flash[:success] = if selected_school_uuids.size > Publish::Schools::UpdateCourseSchoolsService::ENQUEUE_THRESHOLD
                               I18n.t("success.enqueued_schools")
                             else
                               I18n.t("success.saved", value: section_key)
@@ -75,9 +78,15 @@ module Publish
       end
 
       def school_params
-        return { school_uuids: nil } if params[:publish_course_school_form][:school_uuids].all?(&:empty?)
+        @school_params ||= params
+          .expect(publish_course_school_form: [{ school_uuids: [] }])
+          .tap do |permitted_params|
+            permitted_params[:school_uuids] = nil if permitted_params[:school_uuids].all?(&:empty?)
+          end
+      end
 
-        params.expect(publish_course_school_form: [:schools_validated, { school_uuids: [] }])
+      def selected_school_uuids
+        @selected_school_uuids ||= Array(school_params[:school_uuids]).compact_blank.uniq
       end
 
       def build_course
@@ -85,11 +94,7 @@ module Publish
       end
 
       def section_key
-        "School".pluralize(selected_school_uuids_count)
-      end
-
-      def selected_school_uuids_count
-        Array(school_params[:school_uuids]).compact_blank.uniq.count
+        "School".pluralize(selected_school_uuids.size)
       end
     end
   end
