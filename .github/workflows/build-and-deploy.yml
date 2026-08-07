@@ -47,7 +47,7 @@ jobs:
         with:
           node-version: '24.x'
           cache: yarn
-      - run: yarn install --frozen-lockfile
+      - run: yarn install --immutable
 
       - name: ${{ matrix.tests.name }}
         run: ${{ env.COMMAND }}
@@ -77,7 +77,7 @@ jobs:
         with:
           node-version: '24.x'
           cache: yarn
-      - run: yarn install --frozen-lockfile
+      - run: yarn install --immutable
 
       - name: yarn test
         run: yarn run test --run
@@ -190,7 +190,7 @@ jobs:
         with:
           node-version: '24.x'
           cache: yarn
-      - run: yarn install --frozen-lockfile
+      - run: yarn install --immutable
 
       - name: Install Playwright
         if: ${{ startsWith(matrix.tests.name, 'System') }}

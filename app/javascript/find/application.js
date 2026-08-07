@@ -8,7 +8,7 @@ document.body.className +=
     : '')
 
 import { initAll } from 'govuk-frontend'
-import { initCrossServiceHeader } from 'govuk-one-login/service-header'
+import { initCrossServiceHeader } from 'govuk-one-login-service-header'
 
 import { Application } from '@hotwired/stimulus'
 import FilterSearchController from './controllers/filter_search_controller'
