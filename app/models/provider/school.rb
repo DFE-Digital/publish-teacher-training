@@ -18,6 +18,8 @@ class Provider::School < ApplicationRecord
   # Used to keep closed schools out of the rollover.
   scope :with_available_gias_school, -> { joins(:gias_school).merge(GiasSchool.available) }
 
+  scope :ordered_by_name, -> { joins(:gias_school).includes(:gias_school).order("gias_school.name") }
+
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :urn, :address1, :address2, :address3, :town, :postcode, to: :gias_school
 

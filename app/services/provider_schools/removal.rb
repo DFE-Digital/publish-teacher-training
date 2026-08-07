@@ -2,40 +2,29 @@
 
 module ProviderSchools
   class Removal
-    delegate :after_schools_remodel_cycle?, to: :identity
-
     def initialize(provider:, uuid:)
       @provider = provider
       @uuid = uuid
-      @identity = Identity.new(provider:)
     end
 
     def call
       ActiveRecord::Base.transaction do
-        if after_schools_remodel_cycle?
-          school.with_lock do
-            destroy_records_if_removable!
-          end
-        elsif provider_school.present?
-          provider_school.with_lock do
-            destroy_records_if_removable!
-          end
-        else
-          destroy_site_if_removable!
+        school.with_lock do
+          destroy_records_if_removable!
         end
       end
     end
 
-    def site
-      @site ||= provider.sites.find_by(uuid:) unless after_schools_remodel_cycle?
-    end
-
+    # Removal is only ever reached by choosing one of the provider's schools,
+    # so a uuid that matches no provider school is not a school we can remove.
     def school
-      @school ||= identity.school_for(uuid:)
+      @school ||= provider.schools.find_by!(uuid:)
     end
 
-    def provider_school
-      @provider_school ||= provider.schools.find_by(uuid:)
+    # The legacy site dual-written alongside the provider school, destroyed as
+    # a by-product of removing it. Absent for schools added after the remodel.
+    def site
+      @site ||= provider.sites.find_by(uuid:)
     end
 
     def removable?
@@ -44,7 +33,7 @@ module ProviderSchools
 
   private
 
-    attr_reader :provider, :uuid, :identity
+    attr_reader :provider, :uuid
 
     def destroy_records_if_removable!
       return false unless removable?
@@ -53,13 +42,8 @@ module ProviderSchools
       true
     end
 
-    def destroy_site_if_removable!
-      site.destroy!
-      true
-    end
-
     def destroy_records!
-      provider_school.destroy!
+      school.destroy!
       site&.destroy!
     end
   end
