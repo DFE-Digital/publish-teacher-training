@@ -17,7 +17,6 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
 
   before do
     sign_in_system_test(user:)
-    attach_course_schools_for_sites(course.sites, course:)
   end
 
   scenario "Publishing from course page shows rollover school validation errors" do
