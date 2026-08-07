@@ -88,7 +88,7 @@ private
     @user = create(
       :user,
       providers: [
-        create(:provider, :accredited_provider, sites: [build(:site)]),
+        create(:provider, :accredited_provider, schools: [build(:provider_school)]),
       ],
     )
 
