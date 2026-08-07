@@ -5,6 +5,7 @@ module Publish
     module Schools
       class CheckMultipleController < ApplicationController
         include SuccessMessage
+        include TouchNoSchoolCourses
         before_action :set_urns_and_schools, only: %i[show]
 
         def show; end
@@ -70,15 +71,6 @@ module Publish
             site_code: legacy_site.code,
             uuid: legacy_site.uuid,
           )
-        end
-
-        def touch_all_no_school_courses
-          # `changed_at` has a UNIQUE index, so every row needs
-          # its own timestamp. update_columns skips the provider touch, which
-          # the provider school write has already done.
-          provider.courses.publishable_without_schools.find_each do |course|
-            course.update_columns(changed_at: Time.zone.now)
-          end
         end
 
         def urn_form

@@ -4,6 +4,8 @@ module Publish
   module Providers
     module Schools
       class ChecksController < ApplicationController
+        include TouchNoSchoolCourses
+
         helper_method :school_id
         before_action :site
 
@@ -40,15 +42,6 @@ module Publish
 
         def site
           @site ||= @provider.sites.school.build(gias_school.school_attributes)
-        end
-
-        def touch_all_no_school_courses
-          # `changed_at` has a UNIQUE index, so every row needs
-          # its own timestamp. update_columns skips the provider touch, which
-          # the provider school write has already done.
-          @provider.courses.publishable_without_schools.find_each do |course|
-            course.update_columns(changed_at: Time.zone.now)
-          end
         end
 
         def gias_school
