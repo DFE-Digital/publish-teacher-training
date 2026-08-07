@@ -4,8 +4,6 @@ module Publish
   module Providers
     module Schools
       class ChecksController < ApplicationController
-        include TouchNoSchoolCourses
-
         helper_method :school_id
         before_action :site
 
@@ -13,9 +11,7 @@ module Publish
 
         def update
           provider_school = ActiveRecord::Base.transaction do
-            created = create_provider_school_and_legacy_site
-            touch_all_no_school_courses
-            created
+            create_provider_school_and_legacy_site
           end
 
           redirect_to publish_provider_recruitment_cycle_schools_path,

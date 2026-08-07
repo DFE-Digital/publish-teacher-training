@@ -5,7 +5,6 @@ module Publish
     module Schools
       class CheckMultipleController < ApplicationController
         include SuccessMessage
-        include TouchNoSchoolCourses
         before_action :set_urns_and_schools, only: %i[show]
 
         def show; end
@@ -13,13 +12,17 @@ module Publish
         def update
           saved_schools = []
 
-          gias_schools.each do |gias_school|
-            ActiveRecord::Base.transaction do
-              saved_schools << create_provider_school_and_legacy_site(gias_school:)
+          # Each school would otherwise touch the provider and sweep its
+          # no-school courses on save. Suppress that and stamp them once.
+          TouchSuppression.suppress do
+            gias_schools.each do |gias_school|
+              ActiveRecord::Base.transaction do
+                saved_schools << create_provider_school_and_legacy_site(gias_school:)
+              end
             end
           end
 
-          touch_all_no_school_courses if saved_schools.any?
+          ::ProviderSchools::TouchParents.call(provider:) if saved_schools.any?
 
           schools_added_message(saved_schools)
 

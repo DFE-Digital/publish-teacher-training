@@ -46,6 +46,14 @@ RSpec.describe "Support provider multiple school checks" do
       expect { add_schools }.to(change { [exempt_course.reload.changed_at, second_exempt_course.reload.changed_at] })
     end
 
+    it "sweeps the courses once, not once per school added" do
+      allow(Provider::School).to receive(:touch_no_school_courses_for).and_call_original
+
+      add_schools
+
+      expect(Provider::School).to have_received(:touch_no_school_courses_for).once
+    end
+
     it "does not touch courses that have their own schools" do
       school_course = create(:course, :with_2_schools, provider:)
 

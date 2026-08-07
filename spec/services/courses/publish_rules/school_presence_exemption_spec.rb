@@ -40,4 +40,39 @@ describe Courses::PublishRules::SchoolPresenceExemption do
       end
     end
   end
+
+  describe ".falling_back_to_provider_schools" do
+    let(:provider) { create(:provider) }
+
+    it "returns exempt courses with no schools of their own" do
+      salaried = create(:course, :with_salary, provider:, publish_without_schools_allowed: true)
+      apprenticeship = create(:course, :with_apprenticeship, provider:, publish_without_schools_allowed: true)
+
+      expect(described_class.falling_back_to_provider_schools(provider)).to contain_exactly(salaried, apprenticeship)
+    end
+
+    it "excludes an exempt course that has its own schools" do
+      create(:course, :with_salary, :with_2_schools, provider:, publish_without_schools_allowed: true)
+
+      expect(described_class.falling_back_to_provider_schools(provider)).to be_empty
+    end
+
+    it "excludes a course support has not allowed to publish without schools" do
+      create(:course, :with_salary, provider:, publish_without_schools_allowed: false)
+
+      expect(described_class.falling_back_to_provider_schools(provider)).to be_empty
+    end
+
+    it "excludes a fee-paying course, even when allowed" do
+      create(:course, :fee, provider:, publish_without_schools_allowed: true)
+
+      expect(described_class.falling_back_to_provider_schools(provider)).to be_empty
+    end
+
+    it "excludes another provider's courses" do
+      create(:course, :with_salary, publish_without_schools_allowed: true)
+
+      expect(described_class.falling_back_to_provider_schools(provider)).to be_empty
+    end
+  end
 end

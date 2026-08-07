@@ -4,8 +4,6 @@ module Support
   module Providers
     module Schools
       class ChecksController < ApplicationController
-        include TouchNoSchoolCourses
-
         before_action :new_form
 
         def show; end
@@ -15,7 +13,6 @@ module Support
 
           ActiveRecord::Base.transaction do
             saved = create_provider_school_with_legacy_site
-            touch_all_no_school_courses if saved
           end
 
           if saved
