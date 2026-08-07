@@ -2,12 +2,9 @@
 
 module ProviderSchools
   class Removal
-    delegate :after_schools_remodel_cycle?, to: :identity
-
     def initialize(provider:, uuid:)
       @provider = provider
       @uuid = uuid
-      @identity = Identity.new(provider:)
     end
 
     def call
@@ -31,7 +28,7 @@ module ProviderSchools
     end
 
     def school
-      @school ||= identity.school_for(uuid:)
+      @school ||= provider.schools.find_by!(uuid:)
     end
 
     def provider_school
@@ -44,7 +41,11 @@ module ProviderSchools
 
   private
 
-    attr_reader :provider, :uuid, :identity
+    attr_reader :provider, :uuid
+
+    def after_schools_remodel_cycle?
+      provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+    end
 
     def destroy_records_if_removable!
       return false unless removable?
