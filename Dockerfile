@@ -43,7 +43,7 @@ ADD .ruby-version $APP_HOME/.ruby-version
 
 RUN apk add --update --no-cache --virtual build-dependencies \
   build-base && \
-  apk add --update --no-cache libpq nodejs yarn && \
+  apk add --update --no-cache libpq nodejs npm && \
   bundle config set without test development && \
   RAILS_ENV=production bundle install --jobs=4 && \
   rm -rf /usr/local/bundle/cache && \
@@ -51,9 +51,11 @@ RUN apk add --update --no-cache --virtual build-dependencies \
 
 ENV LD_PRELOAD="/usr/lib/libjemalloc.so.2"
 
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile && \
-  yarn cache clean
+COPY package.json yarn.lock .yarnrc.yml ./
+RUN npm install -g corepack@0.35.0  \
+    && corepack enable  \
+    && yarn install --immutable \
+    && yarn cache clean
 
 ADD . $APP_HOME/
 
