@@ -340,20 +340,11 @@ private
   end
 
   def given_i_am_authenticated_as_a_provider_user_with_searchable_schools
-    @user = create(
-      :user,
-      providers: [
-        create(
-          :provider,
-          :accredited_provider,
-          sites: [
-            build(:site, location_name: "Belvidere School", town: "Shrewsbury", postcode: "SY2 5RJ", urn: "123456"),
-            build(:site, location_name: "Charlton School", town: "Telford", postcode: "TF1 3FA", urn: "345678"),
-            build(:site, :study_site),
-          ],
-        ),
-      ],
-    )
+    provider = create(:provider, :accredited_provider, sites: [build(:site, :study_site)])
+    create_school(provider, "Belvidere School", town: "Shrewsbury", postcode: "SY2 5RJ", urn: "123456")
+    create_school(provider, "Charlton School", town: "Telford", postcode: "TF1 3FA", urn: "345678")
+
+    @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)
   end
@@ -402,7 +393,7 @@ private
   end
 
   def and_belvidere_is_stored_in_the_wizard_state
-    belvidere = provider.sites.find_by(location_name: "Belvidere School")
+    belvidere = provider.schools.find { |school| school.location_name == "Belvidere School" }
 
     expect(stored_school_uuids).to contain_exactly(belvidere.uuid)
   end
