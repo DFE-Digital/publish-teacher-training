@@ -10,9 +10,20 @@
 module Courses
   module PublishRules
     class SchoolPresenceExemption
+      EXEMPT_FUNDINGS = %w[salary apprenticeship].freeze
+
       def self.applies?(course)
         course.publish_without_schools_allowed? &&
-          (course.salary? || course.apprenticeship?)
+          EXEMPT_FUNDINGS.include?(course.funding)
+      end
+
+      # Courses whose API locations fall back to the provider's schools
+      # (LocationsController#remodelled_locations) — so a provider school
+      # write changes their payload.
+      def self.falling_back_to_provider_schools(provider)
+        provider.courses
+                .where(publish_without_schools_allowed: true, funding: EXEMPT_FUNDINGS)
+                .where.missing(:schools)
       end
     end
   end
