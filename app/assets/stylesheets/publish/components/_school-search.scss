@@ -1,3 +1,22 @@
+// A plain grey panel - deliberately not .app-callout, which is inset text and
+// so comes with a grey rule down its left edge.
+.app-school-search {
+  padding: govuk-spacing(3);
+
+  background-color: govuk-colour("light-grey");
+
+  @include govuk-responsive-margin(6, "top");
+  @include govuk-responsive-margin(6, "bottom");
+
+  @include govuk-media-query($from: tablet) {
+    padding: govuk-spacing(4);
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
 // The school search box and its Search button sit on one line, so the
 // suggestions menu - which floats over whatever follows the input - never
 // covers the button.

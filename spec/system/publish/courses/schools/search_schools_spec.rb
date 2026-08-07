@@ -19,6 +19,12 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     then_the_search_box_is_white
   end
 
+  scenario "the panel is a plain grey box, with no rule down its edge" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    then_the_panel_is_grey_with_no_border
+  end
+
   scenario "the search box fills the panel, with the button beside it" do
     given_a_course_i_want_to_edit
     when_i_visit_the_publish_course_school_edit_page
@@ -352,6 +358,20 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
   # any markup we send arrives on screen as its own source.
   def and_the_suggestion_shows_no_markup
     expect(page).to have_no_css(".autocomplete__option", text: "<")
+  end
+
+  # The background is asserted alongside the border because on its own the
+  # border assertion would also pass if the panel lost its styling entirely.
+  def then_the_panel_is_grey_with_no_border
+    style = page.evaluate_script(<<~JS)
+      (() => {
+        const style = getComputedStyle(document.querySelector("[data-qa='school-search-panel']"))
+        return JSON.stringify({ border: style.borderLeftWidth, background: style.backgroundColor })
+      })()
+    JS
+
+    # rgb(243, 242, 241) is govuk-colour("light-grey").
+    expect(JSON.parse(style)).to eq("border" => "0px", "background" => "rgb(243, 242, 241)")
   end
 
   def then_the_search_box_fills_the_panel
