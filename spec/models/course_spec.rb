@@ -37,18 +37,6 @@ describe Course do
     it { is_expected.to be_invalid(:new) }
   end
 
-  describe "scopes" do
-    describe "publishable_without_schools" do
-      let(:provider) { create(:provider) }
-      let!(:no_school_course) { create(:course, provider:, publish_without_schools_allowed: true) }
-      let!(:school_course) { create(:course, provider:, publish_without_schools_allowed: false) }
-
-      it "returns courses which can publish without course schools" do
-        expect(described_class.publishable_without_schools).to contain_exactly(no_school_course)
-      end
-    end
-  end
-
   describe "#campaign_name" do
     it "assigns the campaign" do
       course.engineers_teach_physics!

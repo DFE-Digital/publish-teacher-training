@@ -2,6 +2,8 @@
 
 class Provider::School < ApplicationRecord
   include TouchProvider
+  # Included after TouchProvider so the provider is touched first.
+  include TouchNoSchoolCourses
 
   self.table_name = "provider_school"
 
