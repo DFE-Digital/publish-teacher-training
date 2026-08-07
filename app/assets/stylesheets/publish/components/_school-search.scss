@@ -1,0 +1,49 @@
+// A plain grey panel - deliberately not .app-callout, which is inset text and
+// so comes with a grey rule down its left edge.
+.app-school-search {
+  padding: govuk-spacing(3);
+
+  background-color: govuk-colour("light-grey");
+
+  @include govuk-responsive-margin(6, "top");
+  @include govuk-responsive-margin(6, "bottom");
+
+  @include govuk-media-query($from: tablet) {
+    padding: govuk-spacing(4);
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+// The school search box and its Search button sit on one line, so the
+// suggestions menu - which floats over whatever follows the input - never
+// covers the button.
+.app-school-search__row {
+  display: flex;
+
+  gap: govuk-spacing(2);
+  align-items: flex-start;
+
+  // accessible-autocomplete inserts an unclassed div around its wrapper, so the
+  // flex item to grow is that div - the row's only other children are the
+  // hidden select it enhanced and the Search button.
+  > div {
+    flex: 1 1 auto;
+
+    min-width: 0;
+  }
+
+  // accessible-autocomplete leaves the enhanced input transparent, which reads
+  // as white on a white page but shows the grey of the panel we sit in.
+  .autocomplete__input {
+    background-color: govuk-colour("white");
+  }
+
+  .govuk-button {
+    flex: 0 0 auto;
+
+    margin-bottom: 0;
+  }
+}

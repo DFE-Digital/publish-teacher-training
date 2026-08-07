@@ -12,7 +12,11 @@ module PageObjects
       sections :vacancies, Sections::Vacancy, ".govuk-checkboxes__item"
 
       element :submit, 'button.govuk-button[type="submit"]'
-      element :show_all_schools, ".app-button-link", text: "Show all schools"
+      # Two controls say "Show all schools" - the one under a collapsed list and
+      # the one in the no results message - so both are found by their own hook.
+      element :show_all_schools, "[data-qa='schools-collapse-show-all']"
+      element :search_show_all_schools, "[data-qa='school-search-show-all']"
+      element :search_panel, "[data-qa='school-search-panel']"
 
       def vacancy_names
         vacancies.map { |el| el.find(".govuk-label").text }.reject { |name| name == "Select all schools" }
@@ -20,6 +24,12 @@ module PageObjects
 
       def vacancy_checked_values
         vacancies.map(&:checked?)
+      end
+
+      def visible_school_names
+        all(".govuk-checkboxes__item", visible: true).filter_map do |item|
+          item.find(".govuk-label").text if item.has_css?(SCHOOL_CHECKBOX, visible: :all)
+        end
       end
 
       def visible_school_checkbox_count

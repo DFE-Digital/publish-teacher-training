@@ -20,20 +20,25 @@
         provider: @provider,
       ) %>
 
-      <%= f.govuk_check_boxes_fieldset :school_uuids,
-          legend:
-          {
-            text: "#{render CaptionText.new(text: course.name_and_code)} #{school_label_for(course)}".html_safe,
-            tag: "h1",
-            size: "l",
-          },
-          form_group: { data: { controller: "select-all-checkboxes show-all-schools", show_all_schools_visible_value: @course_school_form.schools_collapse_threshold } } do %>
+      <h1 class="govuk-heading-l">
+        <%= render CaptionText.new(text: course.name_and_code) %>
+        <%= page_title %>
+      </h1>
 
-            <p class="govuk-body">
-              <%= t("publish.courses.schools.attached_count", count: course.attached_schools_count) %>
-            </p>
+      <p class="govuk-body">
+        <%= t("publish.courses.schools.attached_count", count: course.attached_schools_count) %>
+      </p>
 
-            <div class="govuk-checkboxes__item">
+      <%# The panel and the list share a controller: searching decides which rows
+          the collapse threshold then applies to. %>
+      <div data-controller="schools-list" data-schools-list-visible-value="<%= @course_school_form.schools_collapse_threshold %>">
+        <%= render ::Publish::Schools::SearchPanelComponent.new(schools: @course_school_form.schools, value: :uuid) %>
+
+        <%= f.govuk_check_boxes_fieldset :school_uuids,
+            legend: { text: page_title, hidden: true },
+            form_group: { data: { controller: "select-all-checkboxes" } } do %>
+
+            <div class="govuk-checkboxes__item" data-schools-list-target="bulkSelect">
               <input type="checkbox"
                      class="govuk-checkboxes__input"
                      id="select-all-schools"
@@ -45,7 +50,7 @@
               </label>
             </div>
 
-            <div class="govuk-body govuk-!-margin-left-2">or</div>
+            <div class="govuk-body govuk-!-margin-left-2" data-schools-list-target="bulkSelect">or</div>
             <div class="govuk-hint"><%= t("publish.courses.schools.new.selection") %></div>
 
             <% @course_school_form.schools.each_with_index do |school, index| %>
@@ -56,7 +61,7 @@
                   link_errors: index.zero?,
                   data: {
                     select_all_checkboxes_target: "checkbox",
-                    show_all_schools_target: "school",
+                    schools_list_target: "school",
                     action: "select-all-checkboxes#updateSelectAll",
                   } %>
            <% end %>
@@ -65,12 +70,14 @@
               <button type="button"
                       class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
                       hidden
-                      data-show-all-schools-target="showAll"
-                      data-action="show-all-schools#showAll">
+                      data-qa="schools-collapse-show-all"
+                      data-schools-list-target="showAll"
+                      data-action="schools-list#showAll">
                 <%= t("publish.courses.schools.show_all") %>
               </button>
             <% end %>
         <% end %>
+      </div>
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>

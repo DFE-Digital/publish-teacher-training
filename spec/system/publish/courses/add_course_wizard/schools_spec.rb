@@ -91,6 +91,67 @@ RSpec.describe "Add course wizard schools step", type: :system do
       then_i_am_taken_to_the_study_sites_page
       and_the_last_school_is_stored_in_the_wizard_state
     end
+
+    scenario "every match is shown, however many there are" do
+      then_only_the_first_20_schools_are_shown
+      when_i_search_for("school")
+      then_the_number_of_schools_shown_is(25)
+      and_there_is_no_show_all_schools_button
+    end
+  end
+
+  context "when searching the list of schools", :js do
+    before do
+      given_i_am_authenticated_as_a_provider_user_with_searchable_schools
+      and_i_have_wizard_state_for_schools(funding_type: "fee")
+      when_i_visit_the_wizard_schools_page
+    end
+
+    scenario "the search panel is available" do
+      then_i_see_the_search_panel
+    end
+
+    scenario "searching by school name" do
+      when_i_search_for("belvidere")
+      then_only_these_schools_are_shown("Belvidere School")
+    end
+
+    scenario "searching by postcode" do
+      when_i_search_for("SY2 5RJ")
+      then_only_these_schools_are_shown("Belvidere School")
+    end
+
+    scenario "searching by URN" do
+      when_i_search_for("123456")
+      then_only_these_schools_are_shown("Belvidere School")
+    end
+
+    scenario "searching for something that matches no school" do
+      when_i_search_for("zzzz")
+      then_i_see_the_no_results_message
+      when_i_choose_show_all_schools_from_the_no_results_message
+      then_all_the_searchable_schools_are_shown
+    end
+
+    scenario "clearing the search returns to the full list" do
+      when_i_search_for("belvidere")
+      then_only_these_schools_are_shown("Belvidere School")
+      when_i_clear_the_search
+      then_all_the_searchable_schools_are_shown
+    end
+
+    scenario "a school chosen before searching is still selected on continuing" do
+      when_i_choose("Belvidere School")
+      and_i_search_for("charlton")
+      then_only_these_schools_are_shown("Charlton School")
+      and_i_click_continue
+      then_i_am_taken_to_the_study_sites_page
+      and_belvidere_is_stored_in_the_wizard_state
+    end
+
+    scenario "the step has no select all control" do
+      expect(page).to have_no_field("Select all schools")
+    end
   end
 
 private
@@ -268,6 +329,73 @@ private
   def then_all_the_schools_are_shown
     expect(page).to have_no_button("Show all schools")
     expect(visible_school_checkbox_count).to eq(25)
+  end
+
+  def then_the_number_of_schools_shown_is(count)
+    expect(visible_school_checkbox_count).to eq(count)
+  end
+
+  def and_there_is_no_show_all_schools_button
+    expect(page).to have_no_button("Show all schools")
+  end
+
+  def given_i_am_authenticated_as_a_provider_user_with_searchable_schools
+    provider = create(:provider, :accredited_provider, sites: [build(:site, :study_site)])
+    create_school(provider, "Belvidere School", town: "Shrewsbury", postcode: "SY2 5RJ", urn: "123456")
+    create_school(provider, "Charlton School", town: "Telford", postcode: "TF1 3FA", urn: "345678")
+
+    @user = create(:user, providers: [provider])
+
+    given_i_am_authenticated(user: @user)
+  end
+
+  def when_i_search_for(query)
+    fill_in "Search for a school in the list", with: query
+    click_button "Search"
+  end
+  alias_method :and_i_search_for, :when_i_search_for
+
+  def when_i_clear_the_search
+    click_button "Clear search"
+  end
+
+  def when_i_choose_show_all_schools_from_the_no_results_message
+    page.find("[data-qa='school-search-show-all']").click
+  end
+
+  def when_i_choose(name)
+    check name
+  end
+
+  def then_i_see_the_search_panel
+    expect(page).to have_field("Search for a school in the list")
+    expect(page).to have_content("You can also enter a postcode or URN")
+    expect(page).to have_button("Search")
+    expect(page).to have_button("Clear search")
+  end
+
+  def then_i_see_the_no_results_message
+    expect(page).to have_content("No results found. Clear your search and try again.")
+  end
+
+  def visible_school_names
+    page.all(".govuk-checkboxes__item", visible: true).filter_map do |item|
+      item.find(".govuk-label").text if item.has_css?(school_checkbox_selector, visible: :all)
+    end
+  end
+
+  def then_only_these_schools_are_shown(*names)
+    expect(visible_school_names).to match_array(names)
+  end
+
+  def then_all_the_searchable_schools_are_shown
+    then_only_these_schools_are_shown("Belvidere School", "Charlton School")
+  end
+
+  def and_belvidere_is_stored_in_the_wizard_state
+    belvidere = provider.schools.find { |school| school.location_name == "Belvidere School" }
+
+    expect(stored_school_uuids).to contain_exactly(belvidere.uuid)
   end
 
   def and_i_choose_the_last_school_in_the_list
