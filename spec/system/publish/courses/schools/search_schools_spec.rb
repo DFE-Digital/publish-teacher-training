@@ -202,18 +202,22 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     end
   end
 
+  # :with_provider_school copies the site's name, town, postcode and URN onto a
+  # matching GIAS school, which is what the list and the search read from.
   def given_i_am_authenticated_as_a_provider_user
     @provider = create(:provider)
-    create(:site, provider: @provider, location_name: "Belvidere School", town: "Shrewsbury", postcode: "SY2 5RJ", urn: "123456")
-    create(:site, provider: @provider, location_name: "Bridgnorth Endowed School", town: "Bridgnorth", postcode: "WV16 4ER", urn: "234567")
-    create(:site, provider: @provider, location_name: "Charlton School", town: "Telford", postcode: "TF1 3FA", urn: "345678")
+    create(:site, :with_provider_school, provider: @provider, location_name: "Belvidere School", town: "Shrewsbury", postcode: "SY2 5RJ", urn: "123456")
+    create(:site, :with_provider_school, provider: @provider, location_name: "Bridgnorth Endowed School", town: "Bridgnorth", postcode: "WV16 4ER", urn: "234567")
+    create(:site, :with_provider_school, provider: @provider, location_name: "Charlton School", town: "Telford", postcode: "TF1 3FA", urn: "345678")
     @user = create(:user, providers: [@provider])
     given_i_am_authenticated(user: @user)
     @provider.reload
   end
 
   def given_the_provider_has_many_schools_sharing_a_name
-    22.times { |index| create(:site, provider: @provider, location_name: "Shared School #{sprintf('%02d', index)}") }
+    22.times do |index|
+      create(:site, :with_provider_school, provider: @provider, location_name: "Shared School #{sprintf('%02d', index)}")
+    end
     @provider.reload
   end
 
@@ -394,6 +398,7 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
   end
 
   def then_the_course_has_these_schools(*names)
-    expect(@course.reload.sites.map(&:location_name)).to match_array(names)
+    expect(@course.reload.schools.map { |course_school| course_school.provider_school.location_name })
+      .to match_array(names)
   end
 end
