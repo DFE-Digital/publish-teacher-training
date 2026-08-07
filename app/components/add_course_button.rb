@@ -63,6 +63,6 @@ private
   end
 
   def school_present?
-    provider.sites.any?
+    provider.schools.any?
   end
 end
