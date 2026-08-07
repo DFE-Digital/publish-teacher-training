@@ -3,6 +3,8 @@
 module Publish
   module Providers
     class SchoolsController < ApplicationController
+      include TouchNoSchoolCourses
+
       before_action :school, only: %i[show delete destroy]
       before_action :reset_urn_form, only: %i[index]
 
@@ -28,6 +30,7 @@ module Publish
 
       def destroy
         if school_removal.call
+          touch_all_no_school_courses
           flash[:success] = "School removed"
           redirect_to publish_provider_recruitment_cycle_schools_path
         else

@@ -3,6 +3,8 @@
 module Support
   module Providers
     class SchoolsController < ApplicationController
+      include TouchNoSchoolCourses
+
       before_action :build_site, only: %i[index create]
       before_action :new_form, only: %i[index]
       before_action :reset_urn_form, only: %i[index]
@@ -31,6 +33,7 @@ module Support
 
       def destroy
         if school_removal.call
+          touch_all_no_school_courses
           redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
         else
           redirect_to delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site.uuid),
