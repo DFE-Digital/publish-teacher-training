@@ -13,7 +13,7 @@ describe AddCourseButton do
   end
 
   context "when the wizard add course flow is active" do
-    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], sites: [build(:site)], recruitment_cycle:) }
+    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
 
     it "renders a course wizard link" do
       component = described_class.new(provider:)
@@ -33,7 +33,7 @@ describe AddCourseButton do
   end
 
   context "when the wizard add course flow is not active" do
-    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], sites: [build(:site)], recruitment_cycle:) }
+    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
 
     it "renders a course link" do
       component = described_class.new(provider:)
@@ -129,7 +129,7 @@ describe AddCourseButton do
   end
 
   context "when the provider has only added a site" do
-    let(:provider) { build(:provider, sites: [create(:site)], recruitment_cycle:) }
+    let(:provider) { build(:provider, schools: [create(:provider_school)], recruitment_cycle:) }
 
     it "renders an accredited provider link" do
       expect(rendered_content).to have_link(
@@ -153,7 +153,7 @@ describe AddCourseButton do
   end
 
   context "when the provider has added a site and a study site" do
-    let(:provider) { build(:provider, study_sites: [build(:site, :study_site)], sites: [build(:site)], recruitment_cycle:) }
+    let(:provider) { build(:provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
 
     it "renders a study sites link" do
       expect(rendered_content).to have_no_link(
@@ -187,7 +187,7 @@ describe AddCourseButton do
   end
 
   context "when the provider has added all required organisation details" do
-    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], sites: [build(:site)], recruitment_cycle:) }
+    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
 
     it "renders a study sites link" do
       expect(rendered_content).to have_no_link(
