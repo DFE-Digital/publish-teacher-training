@@ -31,7 +31,7 @@ RSpec.describe "Add course wizard level step", type: :system do
   end
 
   scenario "provider after the school remodel cycle cannot start with a site school" do
-    given_i_am_authenticated_as_a_provider_user_without_a_site_school
+    given_i_am_authenticated_as_a_provider_user_without_a_provider_school
     when_i_visit_the_wizard_level_page
     then_i_see_the_no_school_error
   end
@@ -42,17 +42,17 @@ private
     @user = create(
       :user,
       providers: [
-        create(:provider, :accredited_provider, sites: [build(:site)]),
+        create(:provider, :accredited_provider, schools: [build(:provider_school)]),
       ],
     )
 
     given_i_am_authenticated(user: @user)
   end
 
-  def given_i_am_authenticated_as_a_provider_user_without_a_site_school
+  def given_i_am_authenticated_as_a_provider_user_without_a_provider_school
     recruitment_cycle = find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
     provider = create(:provider, :accredited_provider, recruitment_cycle:)
-    create(:provider_school, provider:)
+    create(:site, provider:)
 
     @user = create(:user, providers: [provider])
 

@@ -32,7 +32,7 @@ RSpec.describe "Add course button" do
       user: create(
         :user,
         providers: [
-          create(:provider, :accredited_provider, sites: [build(:site)], courses: [build(:course)]),
+          create(:provider, :accredited_provider, schools: [build(:provider_school)], courses: [build(:course)]),
         ],
       ),
     )
@@ -43,7 +43,7 @@ RSpec.describe "Add course button" do
       user: create(
         :user,
         providers: [
-          create(:provider, :accredited_provider, sites: [build(:site)], study_sites: [build(:site, :study_site)], courses: [build(:course)]),
+          create(:provider, :accredited_provider, schools: [build(:provider_school)], study_sites: [build(:site, :study_site)], courses: [build(:course)]),
         ],
       ),
     )
