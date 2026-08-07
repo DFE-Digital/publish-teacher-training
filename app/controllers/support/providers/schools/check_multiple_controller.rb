@@ -5,6 +5,7 @@ module Support
     module Schools
       class CheckMultipleController < ApplicationController
         include SuccessMessage
+        include TouchNoSchoolCourses
 
         def show
           schools
@@ -46,6 +47,8 @@ module Support
               saved_schools << create_provider_school_and_legacy_site(gias_school:)
             end
           end
+
+          touch_all_no_school_courses if saved_schools.any?
 
           schools_added_message(saved_schools)
         end
