@@ -11,7 +11,9 @@ module Publish
 
         def update
           provider_school = ActiveRecord::Base.transaction do
-            create_provider_school_and_legacy_site
+            created = create_provider_school_and_legacy_site
+            touch_all_no_school_courses
+            created
           end
 
           redirect_to publish_provider_recruitment_cycle_schools_path,
@@ -38,6 +40,15 @@ module Publish
 
         def site
           @site ||= @provider.sites.school.build(gias_school.school_attributes)
+        end
+
+        def touch_all_no_school_courses
+          # `changed_at` has a UNIQUE index, so every row needs
+          # its own timestamp. update_columns skips the provider touch, which
+          # the provider school write has already done.
+          @provider.courses.publishable_without_schools.find_each do |course|
+            course.update_columns(changed_at: Time.zone.now)
+          end
         end
 
         def gias_school

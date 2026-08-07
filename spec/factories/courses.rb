@@ -305,6 +305,29 @@ FactoryBot.define do
       end
     end
 
+    trait :with_schools do
+      transient do
+        schools_count { 1 }
+      end
+
+      after(:build) do |course, evaluator|
+        evaluator.schools_count.times do
+          gias_school = build(:gias_school)
+          provider_school = build(:provider_school, provider: course.provider, gias_school:)
+
+          course.schools << build(:course_school, course:, gias_school:, provider_school:)
+        end
+      end
+    end
+
+    trait :with_2_schools do
+      with_schools
+
+      transient do
+        schools_count { 2 }
+      end
+    end
+
     trait :draft_enrichment do
       enrichments { [build(:course_enrichment, :initial_draft, course: nil)] }
     end
