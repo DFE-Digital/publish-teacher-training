@@ -44,7 +44,11 @@ module Publish
       start_date: ->(course) { course.start_date.presence&.to_date&.beginning_of_month },
     }.freeze
 
-    delegate :any?, to: :groups
+    # Asks whether any course survived the filters rather than whether any group
+    # did, so a group that keeps its place with nothing in it is not a list.
+    def any?
+      groups.any? { |group| group.courses.any? }
+    end
 
     def initialize(provider:, params: {})
       @provider = provider
