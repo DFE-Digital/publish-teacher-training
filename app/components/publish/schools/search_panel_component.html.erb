@@ -1,55 +1,57 @@
-<div class="app-school-search" hidden data-schools-list-target="panel">
-  <div class="govuk-form-group govuk-!-margin-bottom-3" data-schools-list-target="autocomplete">
-    <label class="govuk-label govuk-label--m" for="<%= Publish::Schools::SearchPanelComponent::SELECT_ID %>">
-      <%= t(".label") %>
-    </label>
+<div data-controller="schools-search">
+  <div class="app-school-search" hidden data-schools-search-target="panel">
+    <div class="govuk-form-group govuk-!-margin-bottom-3" data-schools-search-target="autocomplete">
+      <label class="govuk-label govuk-label--m" for="<%= Publish::Schools::SearchPanelComponent::SELECT_ID %>">
+        <%= t(".label") %>
+      </label>
 
-    <div class="govuk-hint" id="school-search-hint"><%= t(".hint") %></div>
+      <div class="govuk-hint" id="school-search-hint"><%= t(".hint") %></div>
 
-    <div class="app-school-search__row">
-      <%= select_tag(
-            nil,
-            options_for_select(autocomplete_options),
-            id: Publish::Schools::SearchPanelComponent::SELECT_ID,
-            name: nil,
-            class: "govuk-select",
-            aria: { describedby: "school-search-hint" },
-          ) %>
+      <div class="app-school-search__row">
+        <%= select_tag(
+              nil,
+              options_for_select(autocomplete_options),
+              id: Publish::Schools::SearchPanelComponent::SELECT_ID,
+              name: nil,
+              class: "govuk-select",
+              aria: { describedby: "school-search-hint" },
+            ) %>
 
-      <button type="button"
-              class="govuk-button"
-              data-action="schools-list#search">
-        <%= t(".button") %>
-      </button>
+        <button type="button"
+                class="govuk-button"
+                data-action="schools-search#search">
+          <%= t(".button") %>
+        </button>
+      </div>
     </div>
+
+    <p class="govuk-body govuk-!-margin-bottom-0">
+      <button type="button"
+              class="app-button-link govuk-!-font-size-19"
+              data-action="schools-search#clearSearch">
+        <%= t(".clear") %>
+      </button>
+    </p>
   </div>
 
-  <p class="govuk-body govuk-!-margin-bottom-0">
-    <button type="button"
-            class="app-button-link govuk-!-font-size-19"
-            data-action="schools-list#clearSearch">
-      <%= t(".clear") %>
-    </button>
-  </p>
-</div>
+  <%# {count} is substituted by the schools-search controller, so it is not I18n interpolation. %>
+  <div class="govuk-visually-hidden"
+       role="status"
+       aria-live="polite"
+       data-schools-search-target="status"
+       data-results-one="<%= t(".results_one") %>"
+       data-results-other="<%= t(".results_other") %>"
+       data-results-none="<%= t(".no_results") %>"></div>
 
-<%# {count} is substituted by the schools-list controller, so it is not I18n interpolation. %>
-<div class="govuk-visually-hidden"
-     role="status"
-     aria-live="polite"
-     data-schools-list-target="status"
-     data-results-one="<%= t(".results_one") %>"
-     data-results-other="<%= t(".results_other") %>"
-     data-results-none="<%= t(".no_results") %>"></div>
+  <div class="app-school-search__no-results" hidden data-schools-search-target="noResults">
+    <p class="govuk-body"><%= t(".no_results") %></p>
 
-<div class="app-school-search__no-results" hidden data-schools-list-target="noResults">
-  <p class="govuk-body"><%= t(".no_results") %></p>
-
-  <p class="govuk-body">
-    <button type="button"
-            class="app-button-link govuk-!-font-size-19"
-            data-action="schools-list#restoreAll">
-      <%= t("publish.courses.schools.show_all") %>
-    </button>
-  </p>
+    <p class="govuk-body">
+      <button type="button"
+              class="app-button-link govuk-!-font-size-19"
+              data-action="schools-search#showAllSchools">
+        <%= t("publish.courses.schools.show_all") %>
+      </button>
+    </p>
+  </div>
 </div>
