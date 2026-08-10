@@ -31,6 +31,11 @@ describe Sites::CopyToCourseService do
 
       it { is_expected.to be_status_new_status }
     end
+
+    it "does not add the site to the course twice" do
+      expect { described_class.call(new_site: site, new_course: course) }
+        .not_to change(course.site_statuses.reload, :count)
+    end
   end
 
   context "site is a study site" do
@@ -43,6 +48,11 @@ describe Sites::CopyToCourseService do
     it "has the same code as the original site" do
       new_study_site = course.study_sites.last
       expect(new_study_site.code).to eq(site.code)
+    end
+
+    it "does not add the study site to the course twice" do
+      expect { described_class.call(new_site: site, new_course: course) }
+        .not_to change(course.study_site_placements.reload, :count)
     end
   end
 end

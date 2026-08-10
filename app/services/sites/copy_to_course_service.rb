@@ -20,14 +20,13 @@ module Sites
     attr_reader :new_site, :new_course
 
     def copy_school
-      new_course.site_statuses.create(
-        site: new_site,
-        status: :new_status,
-      )
+      new_course.site_statuses.find_or_create_by(site: new_site) do |site_status|
+        site_status.status = :new_status
+      end
     end
 
     def copy_study_site
-      new_course.study_site_placements.create(site: new_site)
+      new_course.study_site_placements.find_or_create_by(site: new_site)
     end
   end
 end

@@ -231,7 +231,9 @@ describe Providers::CopyToRecruitmentCycleService do
       expect(output).to include(
         providers: 1,
         sites: 1,
+        sites_already_present: 0,
         study_sites: 1,
+        study_sites_already_present: 0,
         courses: 1,
         partnerships: 1,
         courses_failed: [],
@@ -285,6 +287,54 @@ describe Providers::CopyToRecruitmentCycleService do
           new_provider: new_provider,
           assigned_code: "DUP1",
         )
+      end
+    end
+
+    # The site copier is a double everywhere else in this file, which cannot
+    # write rows and so hides a repeat run entirely. This context wires up the
+    # real one.
+    context "when the provider has already been rolled over" do
+      let(:mocked_copy_site_service) { Sites::CopyToProviderService.new }
+
+      before do
+        allow(mocked_copy_site_service).to receive(:execute).and_call_original
+
+        service.execute(provider:, new_recruitment_cycle:)
+      end
+
+      it "does not copy the school sites again" do
+        expect { service.execute(provider:, new_recruitment_cycle:) }
+          .not_to change(new_provider.sites, :count).from(1)
+      end
+
+      it "does not copy the study sites again" do
+        expect { service.execute(provider:, new_recruitment_cycle:) }
+          .not_to change(new_provider.study_sites, :count).from(1)
+      end
+
+      it "reports them as already present rather than copied" do
+        result = service.execute(provider:, new_recruitment_cycle:)
+
+        expect(result).to include(
+          sites: 0,
+          sites_already_present: 1,
+          sites_skipped: [],
+          study_sites: 0,
+          study_sites_already_present: 1,
+          study_sites_skipped: [],
+        )
+      end
+
+      # Pins the filtering to *before* the orchestrator: it hands out study site
+      # codes from a finite pool, so letting it see sites we are about to skip
+      # would burn codes and change how it assigns them on every re-run.
+      it "does not ask the orchestrator to assign codes to sites it will skip" do
+        allow(DataHub::Rollover::StudySiteCodeOrchestrator).to receive(:new).and_call_original
+
+        service.execute(provider:, new_recruitment_cycle:)
+
+        expect(DataHub::Rollover::StudySiteCodeOrchestrator)
+          .to have_received(:new).with(target_provider: new_provider, sites_to_copy: [])
       end
     end
 
