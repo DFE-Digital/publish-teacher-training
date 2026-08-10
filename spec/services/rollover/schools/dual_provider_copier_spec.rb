@@ -27,7 +27,7 @@ RSpec.describe Rollover::Schools::DualProviderCopier do
   end
 
   it "returns the legacy result used by rollover reporting" do
-    expect(copy_schools).to eq(copied: 1, skipped: [])
+    expect(copy_schools).to eq(copied: 1, skipped: [], already_present: [])
   end
 
   it "copies neither the legacy Site nor the Provider::School when the GIAS record has closed" do
