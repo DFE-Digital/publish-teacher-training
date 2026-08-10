@@ -2,10 +2,12 @@
 
 module Publish
   # Presentation facade over Publish::Courses::Query for the publish course list
-  # page. Chunks the pre-ordered query rows into accredited-provider groups.
+  # page. Splits the pre-ordered query rows into accredited-provider groups.
   #
-  # Filters are passed straight through to the query, so a group whose courses
-  # are all filtered out simply does not appear.
+  # The groups are those of the whole (unfiltered) list, so a group whose courses
+  # are all filtered out keeps its place and reports no courses rather than
+  # disappearing — a heading that vanishes mid-filter reads as though the
+  # accredited provider itself has gone.
   class CourseList
     include Enumerable
 
@@ -76,9 +78,9 @@ module Publish
     end
 
     def groups
-      @groups ||= courses
-        .chunk_while { |a, b| a[:group_name] == b[:group_name] }
-        .map { |chunk| Group.new(accredited_provider_name: chunk.first[:group_name], courses: chunk.map(&:decorate)) }
+      @groups ||= group_names.map do |name|
+        Group.new(accredited_provider_name: name, courses: filtered_courses_by_group.fetch(name, []).map(&:decorate))
+      end
     end
 
     def each(&)
@@ -88,6 +90,16 @@ module Publish
   private
 
     attr_reader :provider, :params
+
+    # Every group the whole list has, in the order the query already put the rows
+    # in: self-accredited first, then by accredited provider name.
+    def group_names
+      @group_names ||= unfiltered_courses.map { |course| course[:group_name] }.uniq
+    end
+
+    def filtered_courses_by_group
+      @filtered_courses_by_group ||= courses.group_by { |course| course[:group_name] }
+    end
 
     def courses
       @courses ||= Publish::Courses::Query.call(provider:, params:).to_a

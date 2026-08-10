@@ -36,13 +36,26 @@ RSpec.describe Publish::CourseList do
       expect(filtered.groups.flat_map(&:courses).map(&:name)).to eq(["Secondary course"])
     end
 
-    it "drops a group entirely when none of its courses match" do
+    # A heading that vanishes mid-filter reads as though the accredited provider
+    # has gone away, so the group stays in place and reports nothing to show.
+    it "keeps a group, in its place, when none of its courses match" do
       other = create(:accredited_provider, provider_name: "Other University")
       create(:course, :primary, provider:, accrediting_provider: other, name: "Ratified primary")
 
       filtered = described_class.new(provider: provider.reload, params: { level: %w[secondary] })
 
-      expect(filtered.groups.map(&:heading)).to eq([nil])
+      expect(filtered.groups.map(&:heading)).to eq([nil, "Other University"])
+      expect(filtered.groups.map { |group| group.courses.size }).to eq([1, 0])
+    end
+
+    it "keeps the self-accredited group when only a ratified course matches" do
+      other = create(:accredited_provider, provider_name: "Other University")
+      create(:course, :primary, provider:, accrediting_provider: other, study_mode: :part_time, name: "Ratified part time")
+
+      filtered = described_class.new(provider: provider.reload, params: { study_mode: %w[part_time] })
+
+      expect(filtered.groups.map(&:heading)).to eq([nil, "Other University"])
+      expect(filtered.groups.map { |group| group.courses.size }).to eq([0, 1])
     end
 
     it "reports whether anything matched" do
