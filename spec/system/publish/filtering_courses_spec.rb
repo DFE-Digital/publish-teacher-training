@@ -83,6 +83,14 @@ RSpec.describe "Filtering the course list" do
     and_the_course_counts_read("0 courses", "1 course")
   end
 
+  scenario "no accredited provider has courses matching my filters" do
+    given_my_courses_are_ratified_by_two_accredited_providers
+    when_i_visit_the_courses_page
+    when_i_filter_by("Further education")
+    then_i_am_told_no_courses_were_found
+    and_i_see_no_accredited_provider_headings
+  end
+
   scenario "I only see the start dates my courses use" do
     given_my_provider_has_courses_starting_in_different_months
     when_i_visit_the_courses_page
@@ -226,6 +234,10 @@ RSpec.describe "Filtering the course list" do
     end
 
     expect(headings).to eq(names)
+  end
+
+  def and_i_see_no_accredited_provider_headings
+    expect(publish_provider_courses_index_page).to have_no_courses
   end
 
   # Each chip carries a visually hidden "Remove filter" for screen readers.
