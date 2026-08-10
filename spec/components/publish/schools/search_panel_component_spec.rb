@@ -77,7 +77,7 @@ RSpec.describe Publish::Schools::SearchPanelComponent, type: :component do
 
   describe "the panel" do
     it "is hidden until the Stimulus controller reveals it" do
-      expect(rendered.at_css("[data-qa='school-search-panel']").attributes).to have_key("hidden")
+      expect(rendered.at_css(".app-school-search").attributes).to have_key("hidden")
     end
 
     it "gives the select no name, so it is never submitted with the surrounding form" do
@@ -107,16 +107,17 @@ RSpec.describe Publish::Schools::SearchPanelComponent, type: :component do
 
   describe "the no results message" do
     it "is hidden until a search returns nothing" do
-      expect(rendered.at_css("[data-qa='school-search-no-results']").attributes).to have_key("hidden")
+      expect(rendered.at_css(".app-school-search__no-results").attributes).to have_key("hidden")
     end
 
     it "tells the provider how to recover" do
-      expect(rendered.css("[data-qa='school-search-no-results']").text)
+      expect(rendered.css(".app-school-search__no-results").text)
         .to include("No results found. Clear your search and try again.")
     end
 
     it "offers a way back to the full list" do
-      expect(rendered.css("[data-qa='school-search-show-all']").text).to include("Show all schools")
+      expect(rendered.css(".app-school-search__no-results .app-button-link").text)
+        .to include("Show all schools")
     end
   end
 end

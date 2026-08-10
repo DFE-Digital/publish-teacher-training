@@ -360,7 +360,7 @@ private
   end
 
   def when_i_choose_show_all_schools_from_the_no_results_message
-    page.find("[data-qa='school-search-show-all']").click
+    click_on "Show all schools"
   end
 
   def when_i_choose(name)
