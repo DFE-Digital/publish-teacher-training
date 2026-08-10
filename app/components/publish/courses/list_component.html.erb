@@ -12,11 +12,14 @@
         <%= t("publish.courses.index.course_count", count: group.courses.size) %>
       </p>
 
-      <%= render Publish::Courses::TableComponent.new(
-            courses: group.courses,
-            provider:,
-            course_information_fields: course_list.visible_course_information_fields,
-          ) %>
+      <%# A group the filters emptied keeps its heading and count, but has no table to show. %>
+      <% if group.courses.any? %>
+        <%= render Publish::Courses::TableComponent.new(
+              courses: group.courses,
+              provider:,
+              course_information_fields: course_list.visible_course_information_fields,
+            ) %>
+      <% end %>
     </section>
   <% end %>
 <% else %>

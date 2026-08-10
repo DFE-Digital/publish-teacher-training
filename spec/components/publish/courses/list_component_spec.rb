@@ -4,8 +4,10 @@ require "rails_helper"
 
 RSpec.describe Publish::Courses::ListComponent, type: :component do
   subject(:render_component) do
-    render_inline(described_class.new(course_list: Publish::CourseList.new(provider: provider.reload), provider:))
+    render_inline(described_class.new(course_list: Publish::CourseList.new(provider: provider.reload, params:), provider:))
   end
+
+  let(:params) { {} }
 
   context "when the provider has self-accredited and ratified courses" do
     let(:provider) { create(:provider, :accredited_provider, provider_name: "Mid Provider") }
@@ -31,6 +33,35 @@ RSpec.describe Publish::Courses::ListComponent, type: :component do
       first_section = page.all("section.app-table--courses__section").first
       expect(first_section).to have_no_css("h2")
       expect(first_section).to have_css("table.app-table--courses")
+    end
+  end
+
+  context "when the filters leave a group with no courses" do
+    let(:provider) { create(:provider, :accredited_provider, provider_name: "Mid Provider") }
+    let(:params) { { level: %w[secondary] } }
+
+    before do
+      create(:course, :published_postgraduate, :primary, provider:,
+                                                         accrediting_provider: create(:accredited_provider, provider_name: "Aardvark University"))
+      create(:course, :published_postgraduate, :secondary, provider:,
+                                                           accrediting_provider: create(:accredited_provider, provider_name: "Zoo College"))
+    end
+
+    it "keeps the heading and reports no courses, without a table" do
+      render_component
+
+      emptied = page.all("section.app-table--courses__section").first
+      expect(emptied.find("h2").text.squish).to eq("Accredited provider Aardvark University")
+      expect(emptied.find(".app-table--courses__count").text.squish).to eq("0 courses")
+      expect(emptied).to have_no_css("table.app-table--courses")
+    end
+
+    it "still renders the groups that do have courses" do
+      render_component
+
+      matched = page.all("section.app-table--courses__section").last
+      expect(matched.find(".app-table--courses__count").text.squish).to eq("1 course")
+      expect(matched).to have_css("table.app-table--courses")
     end
   end
 
