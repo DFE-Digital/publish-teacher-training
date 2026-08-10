@@ -22,13 +22,8 @@ module Publish
 
       # One <option> per school, in the shape options_for_select expects:
       # [label, value, html_attributes]. This mirrors the dfe-autocomplete gem's
-      # own helper, which we cannot call directly because a Site is named by
-      # `location_name` and we want the space-stripped postcode as well.
-      #
-      # The postcode and URN ride along as synonyms, which dfe-autocomplete
-      # matches but never displays. The town is deliberately not a synonym - the
-      # box only promises name, postcode and URN - so it appears in `data-append`
-      # instead, which is context for the dropdown and is never matched.
+      # own helper, which we cannot call directly because a school here is named
+      # by `location_name` rather than `name`.
       def autocomplete_options
         options = schools.map do |school|
           [
@@ -48,6 +43,16 @@ module Publish
 
       attr_reader :schools, :value
 
+      # What a school can be found by besides its name. dfe-autocomplete matches
+      # synonyms but never shows them, so the postcode and URN are searchable
+      # without appearing in the label. The town is deliberately absent: the box
+      # only promises name, postcode and URN.
+      #
+      # The postcode goes in twice because the matching is on word prefixes, not
+      # substrings, so "SY2 5RJ" is only ever found by "sy2" or "5rj" - someone
+      # typing "sy25rj" would match neither. The spaceless form covers them, and
+      # `uniq` drops it again for a postcode that never had a space.
+      # GiasSchool#searchable_vector_value does the same thing server-side.
       def synonyms_for(school)
         [school.urn, school.postcode, school.postcode&.delete(" ")].compact_blank.uniq
       end
