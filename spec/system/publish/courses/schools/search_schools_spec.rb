@@ -252,7 +252,7 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
   end
 
   def when_i_choose_show_all_schools_from_the_no_results_message
-    publish_course_school_edit_page.search_show_all_schools.click
+    publish_course_school_edit_page.show_all_schools.click
   end
 
   def when_i_expand_the_list
@@ -369,7 +369,7 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
   def then_the_panel_is_grey_with_no_border
     style = page.evaluate_script(<<~JS)
       (() => {
-        const style = getComputedStyle(document.querySelector("[data-qa='school-search-panel']"))
+        const style = getComputedStyle(document.querySelector('.app-school-search'))
         return JSON.stringify({ border: style.borderLeftWidth, background: style.backgroundColor })
       })()
     JS
