@@ -6,8 +6,13 @@ RSpec.describe "Support::CopyCourses" do
   include DfESignInUserHelper
   let(:user) { create(:user, :admin) }
   let(:source_provider) { create(:provider, courses: create_list(:course, 3, :with_full_time_sites)) }
-  let!(:target_provider) { create(:provider, sites: source_provider.courses.flat_map(&:sites)) }
+  let!(:target_provider) { create(:provider) }
   let!(:year) { find_or_create(:recruitment_cycle).year }
+
+  def link_school(provider, gias_school, site_code)
+    site = create(:site, provider:, urn: gias_school.urn, code: site_code)
+    create(:provider_school, provider:, gias_school:, site_code:, uuid: site.uuid)
+  end
 
   before { host! URI(Settings.base_url).host }
 
@@ -31,46 +36,49 @@ RSpec.describe "Support::CopyCourses" do
     end
 
     context "with schools" do
-      # The copier only carries over sites backed by an available GIAS school,
-      # and the course factory's sites use a urn sequence that matches none.
+      let(:source_course) { source_provider.courses.first }
+      let(:shared_gias_school) { create(:gias_school, :open) }
+      let(:unlinked_gias_school) { create(:gias_school, :open) }
+      # The target provider keeps its own site code for the shared school.
+      let!(:target_school) { link_school(target_provider, shared_gias_school, "Z") }
+
       before do
-        source_provider.courses.flat_map(&:sites).each { |site| create(:gias_school, :open, urn: site.urn) }
+        [shared_gias_school, unlinked_gias_school].each_with_index do |gias_school, index|
+          provider_school = link_school(source_provider, gias_school, ("A".."Z").to_a[index])
+          create(:course_school, course: source_course, provider_school:, gias_school:)
+        end
       end
 
-      it "copies the courses with schools" do
+      it "copies the placement schools the target provider already has" do
         login_user(user)
-        post "/support/#{year}/providers/#{target_provider.id}/copy_courses", params: { "course[autocompleted_provider_code]" => source_provider.provider_code, schools: "1" }
+        post "/support/#{year}/providers/#{target_provider.id}/copy_courses", params: { "course[autocompleted_provider_code]" => source_provider.provider_code, "support_copy_courses_form" => { "schools" => "true" } }
+
         expect(target_provider.reload.courses.length).to eq(3)
-        courses = target_provider.reload.courses
-        expect(courses.flat_map(&:sites).length).to eq(3)
+
+        copied_course = target_provider.courses.find_by!(course_code: source_course.course_code)
+        expect(copied_course.schools.pluck(:provider_school_id)).to eq([target_school.id])
+        expect(copied_course.sites.pluck(:uuid)).to eq([target_school.uuid])
+
         expect(response).to redirect_to(support_recruitment_cycle_provider_courses_path(year, target_provider.id))
         follow_redirect!
         expect(response.parsed_body.css(".govuk-notification-banner--success").text).to match(sprintf("Courses copied: %s", source_provider.courses.map(&:course_code).sort.to_sentence))
       end
 
-      it "copies course-school relationships when the source course uses the new model" do
-        source_course = source_provider.courses.first
-        provider_school = create(:provider_school, provider: source_provider, site_code: "S")
-        create(
-          :course_school,
-          course: source_course,
-          provider_school:,
-          gias_school: provider_school.gias_school,
-          site_code: provider_school.site_code,
-        )
-
+      it "does not copy placement schools the target provider does not have" do
         login_user(user)
-        post "/support/#{year}/providers/#{target_provider.id}/copy_courses",
-             params: { "course[autocompleted_provider_code]" => source_provider.provider_code, schools: "1" }
+        post "/support/#{year}/providers/#{target_provider.id}/copy_courses", params: { "course[autocompleted_provider_code]" => source_provider.provider_code, "support_copy_courses_form" => { "schools" => "true" } }
+
+        expect(target_provider.reload.schools.pluck(:gias_school_id)).to eq([shared_gias_school.id])
+        expect(target_provider.sites.pluck(:uuid)).to eq([target_school.uuid])
+      end
+
+      it "copies no placement schools when the box is left unticked" do
+        login_user(user)
+        post "/support/#{year}/providers/#{target_provider.id}/copy_courses", params: { "course[autocompleted_provider_code]" => source_provider.provider_code }
 
         copied_course = target_provider.reload.courses.find_by!(course_code: source_course.course_code)
-        expect(copied_course.schools.first).to have_attributes(
-          provider_school_id: target_provider.schools.find_by!(
-            gias_school_id: provider_school.gias_school_id,
-            site_code: provider_school.site_code,
-          ).id,
-          gias_school_id: provider_school.gias_school_id,
-        )
+        expect(copied_course.schools).to be_empty
+        expect(copied_course.sites).to be_empty
       end
     end
 
