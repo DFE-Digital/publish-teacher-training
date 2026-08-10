@@ -72,6 +72,17 @@ RSpec.describe "Filtering the course list" do
     then_i_am_told_no_courses_were_found
   end
 
+  # An accredited provider whose heading disappeared mid-filter read as though it
+  # had gone away, so the heading stays and reports no courses.
+  scenario "an accredited provider has no courses matching my filters" do
+    given_my_courses_are_ratified_by_two_accredited_providers
+    when_i_visit_the_courses_page
+    when_i_filter_by("QTS only")
+    then_i_see_only("Chichester QTS course")
+    and_i_see_the_accredited_provider_headings("University of Brighton", "University of Chichester")
+    and_the_course_counts_read("0 courses", "1 course")
+  end
+
   scenario "I only see the start dates my courses use" do
     given_my_provider_has_courses_starting_in_different_months
     when_i_visit_the_courses_page
@@ -123,6 +134,16 @@ RSpec.describe "Filtering the course list" do
     create(:course, :primary, :fee, provider:, accrediting_provider: nil, name: "Primary fee course")
     create(:course, :secondary, :fee, provider:, accrediting_provider: nil, name: "Secondary fee course")
     create(:course, :primary, :salary, provider:, accrediting_provider: nil, name: "Primary salary course")
+  end
+
+  # Brighton ratifies only QTS with PGCE courses, Chichester only QTS ones, so
+  # filtering by qualification empties one group and leaves the other.
+  def given_my_courses_are_ratified_by_two_accredited_providers
+    brighton = create(:accredited_provider, provider_name: "University of Brighton")
+    chichester = create(:accredited_provider, provider_name: "University of Chichester")
+
+    create(:course, :primary, :resulting_in_pgce_with_qts, provider:, accrediting_provider: brighton, name: "Brighton PGCE course")
+    create(:course, :secondary, :resulting_in_qts, provider:, accrediting_provider: chichester, name: "Chichester QTS course")
   end
 
   def given_my_provider_has_courses_starting_in_different_months
@@ -192,6 +213,19 @@ RSpec.describe "Filtering the course list" do
 
   def and_the_course_count_reads(text)
     expect(publish_provider_courses_index_page.course_counts.map(&:text)).to eq([text])
+  end
+
+  # One count per group, in the order the groups are listed.
+  def and_the_course_counts_read(*texts)
+    expect(publish_provider_courses_index_page.course_counts.map { |count| count.text.squish }).to eq(texts)
+  end
+
+  def and_i_see_the_accredited_provider_headings(*names)
+    headings = publish_provider_courses_index_page.courses.map do |section|
+      section.subheading.text.squish.delete_prefix("Accredited provider ")
+    end
+
+    expect(headings).to eq(names)
   end
 
   # Each chip carries a visually hidden "Remove filter" for screen readers.
