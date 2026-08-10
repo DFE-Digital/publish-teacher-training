@@ -29,9 +29,11 @@
         <%= t("publish.courses.schools.attached_count", count: course.attached_schools_count) %>
       </p>
 
-      <%# The panel and the list share a controller: searching decides which rows
-          the collapse threshold then applies to. %>
-      <div data-controller="schools-list" data-schools-list-visible-value="<%= @course_school_form.schools_collapse_threshold %>">
+      <%# The panel says which schools a search allows; the list decides how many
+          of those the collapse threshold lets on screen. %>
+      <div data-controller="schools-list"
+           data-schools-list-visible-value="<%= @course_school_form.schools_collapse_threshold %>"
+           data-action="schools-search:filter->schools-list#filter schools-search:restore->schools-list#restore">
         <%= render ::Publish::Schools::SearchPanelComponent.new(schools: @course_school_form.schools, value: :uuid) %>
 
         <%= f.govuk_check_boxes_fieldset :school_uuids,
