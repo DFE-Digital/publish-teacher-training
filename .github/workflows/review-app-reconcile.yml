@@ -22,8 +22,8 @@ env:
   TERRAFORM_BASE: terraform/aks
   TF_FILE: providers.tf
   SERVICE_NAME: publish
-  RESOURCE_GROUP_NAME: s189d01-ptt-rv-rg
-  STORAGE_ACCOUNT_NAME: s189d01ptttfstatervsa
+  RESOURCE_GROUP_NAME: s189t01-ptt-rv-rg
+  STORAGE_ACCOUNT_NAME: s189t01ptttfstatervsa
   CONTAINER_NAME: ptt-tfstate
 
 jobs:
