@@ -7,86 +7,68 @@ const HIDDEN_CLASS = 'govuk-!-display-none'
 
 // Owns which schools in a checkbox list are on screen.
 //
-// Two rules decide that. A search says which schools are allowed at all - it
-// arrives as `allowed`, a set of uuids, or null when nothing is being searched
-// for. The collapse threshold then decides how many of those to show. They
-// interact, since a search suspends the collapse so every match is visible, so
-// neither writes to the rows itself: both feed `render`, the only place
-// visibility is set.
+// Two rules decide that. A search narrows the list to the schools it found, and
+// the collapse threshold then decides how many of those to show. They interact,
+// since a search suspends the collapse so every match is visible, so neither
+// writes to the rows itself: both feed `render`, the only place visibility is
+// set.
+//
+// Whether a search is running and what it found are held apart, in `searching`
+// and `searchMatches`, because they answer different questions: a search that
+// found nothing still hides select all and suspends the collapse.
 //
 // Rows are only ever hidden, never removed, so a school that is ticked and then
 // filtered or collapsed out of view is still submitted.
 //
-// Pages without a search panel simply never send `allowed`, and this stays what
-// it has always been: the collapsing list.
+// Pages without a search panel never send any of these events, and this stays
+// what it has always been: the collapsing list.
 export default class extends Controller {
-  static targets = ['school', 'showAll', 'bulkSelect']
-  static values = { visible: { type: Number, default: 20 } }
+  static targets = ['schoolCheckbox', 'showAll', 'bulkSelect']
+  static values = { collapseAfter: { type: Number, default: 20 } }
 
   connect () {
-    this.allowed = null
+    this.clear()
+  }
+
+  // No search: every school is back, and a list long enough to collapse does so
+  // again. Also the state to start in, which is why connect asks for it.
+  clear () {
+    this.searching = false
+    this.searchMatches = new Set()
     this.expanded = false
 
     this.render()
-  }
-
-  filter ({ detail }) {
-    this.allowed = detail?.allowed ? new Set(detail.allowed) : null
-    this.expanded = false
-
-    this.render()
-  }
-
-  // A search was cleared by a control that is about to hide itself, so focus
-  // would otherwise fall to the document root.
-  restore (event) {
-    this.filter(event)
-    this.schoolTargets.find(checkbox => !this.row(checkbox).hidden)?.focus()
-  }
-
-  // "Show all schools" under a collapsed list.
-  showAll () {
-    const firstCollapsed = this.matchingSchools()[this.visibleValue]
-
-    this.expanded = true
-    this.render()
-
-    // The button we just hid held focus, which would otherwise fall back to the
-    // document root. Move focus to the first school we revealed instead.
-    firstCollapsed?.focus()
   }
 
   render () {
-    const matching = this.matchingSchools()
-    const shown = new Set(this.collapsing() ? matching.slice(0, this.visibleValue) : matching)
+    const matchingSearch = this.schoolsMatchingSearch()
+    const shown = new Set(this.collapsing() ? matchingSearch.slice(0, this.collapseAfterValue) : matchingSearch)
 
-    this.schoolTargets.forEach(checkbox => this.setRowHidden(checkbox, !shown.has(checkbox)))
+    this.schoolCheckboxTargets.forEach(checkbox => this.setRowHidden(checkbox, !shown.has(checkbox)))
 
     if (this.hasShowAllTarget) {
-      this.showAllTarget.hidden = !(this.collapsing() && matching.length > this.visibleValue)
+      this.showAllTarget.hidden = !(this.collapsing() && matchingSearch.length > this.collapseAfterValue)
     }
 
     // Select all takes in every school, including the ones a search has filtered
     // out of view, so hide it while searching rather than leave it offering to
     // do something wider than what is on screen. It stays in the DOM, so it goes
     // on tracking the boxes ticked while filtered and is right when it returns.
-    this.bulkSelectTargets.forEach(element => this.setHidden(element, this.searching()))
+    this.bulkSelectTargets.forEach(element => this.setHidden(element, this.searching))
   }
 
-  matchingSchools () {
-    if (!this.searching()) return this.schoolTargets
+  // Every school when no search is running: with nothing asked for, nothing is
+  // ruled out.
+  schoolsMatchingSearch () {
+    if (!this.searching) return this.schoolCheckboxTargets
 
-    return this.schoolTargets.filter(checkbox => this.allowed.has(checkbox.value))
-  }
-
-  searching () {
-    return this.allowed !== null
+    return this.schoolCheckboxTargets.filter(checkbox => this.searchMatches.has(checkbox.value))
   }
 
   // A search is never collapsed: the point of searching a long list is to see
   // every match.
   collapsing () {
-    return !this.searching() && !this.expanded
+    return !this.searching && !this.expanded
   }
 
   setRowHidden (checkbox, hidden) {
@@ -100,5 +82,32 @@ export default class extends Controller {
 
   row (checkbox) {
     return checkbox.closest('.govuk-checkboxes__item')
+  }
+
+  filter ({ detail }) {
+    this.searching = true
+    this.searchMatches = new Set(detail.matches)
+    this.expanded = false
+
+    this.render()
+  }
+
+  // A search was cleared by a control that is about to hide itself, so focus
+  // would otherwise fall to the document root.
+  restore () {
+    this.clear()
+    this.schoolCheckboxTargets.find(checkbox => !this.row(checkbox).hidden)?.focus()
+  }
+
+  // "Show all schools" under a collapsed list.
+  showAll () {
+    const firstCollapsed = this.schoolsMatchingSearch()[this.collapseAfterValue]
+
+    this.expanded = true
+    this.render()
+
+    // The button we just hid held focus, which would otherwise fall back to the
+    // document root. Move focus to the first school we revealed instead.
+    firstCollapsed?.focus()
   }
 }

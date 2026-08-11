@@ -32,8 +32,10 @@
       <%# The panel says which schools a search allows; the list decides how many
           of those the collapse threshold lets on screen. %>
       <div data-controller="schools-list"
-           data-schools-list-visible-value="<%= @course_school_form.schools_collapse_threshold %>"
-           data-action="schools-search:filter->schools-list#filter schools-search:restore->schools-list#restore">
+           data-schools-list-collapse-after-value="<%= @course_school_form.schools_collapse_threshold %>"
+           data-action="schools-search:filter->schools-list#filter
+                        schools-search:clear->schools-list#clear
+                        schools-search:restore->schools-list#restore">
         <%= render ::Publish::Schools::SearchPanelComponent.new(schools: @course_school_form.schools, value: :uuid) %>
 
         <%= f.govuk_check_boxes_fieldset :school_uuids,
@@ -63,7 +65,7 @@
                   link_errors: index.zero?,
                   data: {
                     select_all_checkboxes_target: "checkbox",
-                    schools_list_target: "school",
+                    schools_list_target: "schoolCheckbox",
                     action: "select-all-checkboxes#updateSelectAll",
                   } %>
            <% end %>

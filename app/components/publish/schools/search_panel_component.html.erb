@@ -1,20 +1,20 @@
 <div data-controller="schools-search" data-action="keydown->schools-search#keydown">
   <div class="app-school-search" hidden data-schools-search-target="panel">
     <div class="govuk-form-group govuk-!-margin-bottom-3" data-schools-search-target="autocomplete">
-      <label class="govuk-label govuk-label--m" for="<%= Publish::Schools::SearchPanelComponent::SELECT_ID %>">
+      <label class="govuk-label govuk-label--m" for="<%= select_id %>">
         <%= t(".label") %>
       </label>
 
-      <div class="govuk-hint" id="school-search-hint"><%= t(".hint") %></div>
+      <div class="govuk-hint" id="<%= hint_id %>"><%= t(".hint") %></div>
 
       <div class="app-school-search__row">
         <%= select_tag(
               nil,
               options_for_select(autocomplete_options),
-              id: Publish::Schools::SearchPanelComponent::SELECT_ID,
+              id: select_id,
               name: nil,
               class: "govuk-select",
-              aria: { describedby: "school-search-hint" },
+              aria: { describedby: hint_id },
             ) %>
 
         <button type="button"

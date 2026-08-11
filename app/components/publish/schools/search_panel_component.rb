@@ -3,13 +3,11 @@ module Publish
     # The search box above a list of school checkboxes, shared by the course
     # schools edit page and the add course wizard's schools step.
     #
-    # Everything here is inert until the schools-list Stimulus controller
+    # Everything here is inert until the schools-search Stimulus controller
     # connects: the panel is hidden, the select carries no name and both actions
     # are plain buttons, so a provider without JavaScript sees - and submits -
     # exactly what they did before.
     class SearchPanelComponent < ViewComponent::Base
-      SELECT_ID = "school-search".freeze
-
       # `value` names the attribute the checkboxes are keyed by, so each
       # suggestion can be paired with its row: the course schools page keys on
       # the site id, the add course wizard on the school uuid.
@@ -42,6 +40,16 @@ module Publish
     private
 
       attr_reader :schools, :value
+
+      # accessible-autocomplete gives the input it renders the select's id, so
+      # this is also what the schools-search controller looks the box up by.
+      def select_id
+        "school-search"
+      end
+
+      def hint_id
+        "#{select_id}-hint"
+      end
 
       # What a school can be found by besides its name. dfe-autocomplete matches
       # synonyms but never shows them, so the postcode and URN are searchable
