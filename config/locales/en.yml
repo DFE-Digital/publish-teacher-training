@@ -782,8 +782,6 @@ en:
               check_schools: "Review the schools for this course"
             schools:
               blank: "Select at least one school"
-            study_sites:
-              blank: "Add at least one study site"
             age_range_in_years:
               blank: "^Select an age range"
             program_type:
@@ -1234,10 +1232,6 @@ en:
               enter_schools: "Enter schools for this course"
               check_schools: "Review the schools for this course"
               school_uuids_invalid: "The schools you submitted couldn’t be validated. Please try again. If the problem persists, please contact support."
-        publish/course_study_site_form:
-          attributes:
-            study_site_ids:
-              blank: "Add at least one study site"
         publish/course_study_mode_form:
           attributes:
             study_mode:

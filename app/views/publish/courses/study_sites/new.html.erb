@@ -1,16 +1,14 @@
-<% content_for :page_title, title_with_error_prefix("Study sites", @errors && @errors.any?) %>
+<% content_for :page_title, "Study sites" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(@back_link_path) %>
 <% end %>
 
-<%= render "publish/shared/errors" %>
-
 <%= form_for course,
   url: continue_publish_provider_recruitment_cycle_courses_study_sites_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
   method: :get do |form| %>
   <%= render "publish/courses/new_fields_holder", form:, except_keys: [:study_sites_ids] do |fields| %>
-    <%= render "publish/shared/error_wrapper", error_keys: [:study_sites], data_qa: "course__sites" do %>
+    <div class="govuk-form-group" data-qa="course__sites">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading" data-qa="page-heading">
@@ -18,7 +16,6 @@
             Study sites
           </h1>
         </legend>
-        <%= render "publish/shared/error_messages", error_keys: [:study_sites] %>
 
         <div class="govuk-form-group govuk-!-margin-top-2">
           <div class="govuk-hint">Select all that apply</div>
@@ -35,7 +32,7 @@
 
         </div>
       </fieldset>
-    <% end %>
+    </div>
   <% end %>
 <% end %>
 
