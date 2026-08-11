@@ -115,7 +115,9 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_link("Change", href: /return_to_review=study_sites/)
   end
 
-  it "renders select study site CTA when none is selected but study sites exist" do
+  # Picking no study site is a valid answer, so the row stays empty and keeps an
+  # ordinary Change link rather than demanding one.
+  it "renders an empty study site row with a change link when none is selected" do
     placement_school = create(:provider_school, provider:)
     provider.study_sites.first || create(:site, :study_site, provider:)
 
@@ -126,9 +128,9 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     )
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
 
-    expect(rendered_component).to have_text("Study sites")
-    expect(rendered_component).to have_link("Select a study site", href: /return_to_review=study_sites/)
-    expect(rendered_component).to have_no_selector("a[href*='return_to_review=study_sites']", text: "Change")
+    expect(rendered_component).to have_text("Study sites (optional)")
+    expect(rendered_component).to have_no_link("Select a study site")
+    expect(rendered_component).to have_selector("a[href*='return_to_review=study_sites']", text: "Change")
   end
 
   it "renders add study site CTA when provider has no study sites" do

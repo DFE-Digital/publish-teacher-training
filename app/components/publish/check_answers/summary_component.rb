@@ -74,21 +74,14 @@ module Publish
 
     public
 
-      def study_sites_call_to_action_link
-        if wizard.provider.study_sites.any?
-          govuk_link_to(
-            t("course_wizard.steps.check_answers.answers.select_study_site"),
-            change_path_for(:study_sites),
-          )
-        else
-          govuk_link_to(
-            t("course_wizard.steps.check_answers.answers.add_a_study_site"),
-            helpers.publish_provider_recruitment_cycle_study_sites_path(
-              wizard.provider_code,
-              wizard.recruitment_cycle_year,
-            ),
-          )
-        end
+      def add_a_study_site_link
+        govuk_link_to(
+          t("course_wizard.steps.check_answers.answers.add_a_study_site"),
+          helpers.publish_provider_recruitment_cycle_study_sites_path(
+            wizard.provider_code,
+            wizard.recruitment_cycle_year,
+          ),
+        )
       end
 
     private
