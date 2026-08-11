@@ -133,7 +133,7 @@
              course.alphabetically_sorted_study_sites.map { |study_site| content_tag(:li, study_site.location_name) }.join.html_safe
            end
          else
-           value_none
+           value_provided?(nil)
          end
        end
 
