@@ -1,10 +1,8 @@
-<% content_for :page_title, title_with_error_prefix("Study sites – #{course.name_and_code}", @course_study_site_form.errors.present?) %>
+<% content_for :page_title, "Study sites – #{course.name_and_code}" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
 <% end %>
-
-<%= render "publish/shared/errors" %>
 
 <%= form_with(
   model: @course_study_site_form,
@@ -16,8 +14,6 @@
   method: :put,
   local: true,
 ) do |f| %>
-
-  <%= f.govuk_error_summary %>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

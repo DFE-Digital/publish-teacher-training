@@ -32,10 +32,6 @@ RSpec.describe "updating study sites on a course" do
     expect(page).to have_link("Add a study site")
   end
 
-  def then_i_see_the_error_message_add_one_study_site
-    expect(page).to have_link("Add at least one study site")
-  end
-
   def and_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
       user: create(
@@ -107,22 +103,6 @@ RSpec.describe "updating study sites on a course" do
 
   def and_the_study_site_checkbox_is_not_checked
     expect(page).to have_no_field(checked: true)
-  end
-
-  def given_i_click_cancel
-    click_link_or_button "Cancel"
-  end
-
-  def given_i_publish_the_course
-    click_link_or_button "Publish course"
-  end
-
-  def when_i_click_add_at_lease_one_study_site
-    click_link_or_button "Add at least one study site"
-  end
-
-  def then_i_should_be_on_the_study_sites_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{course.recruitment_cycle_year}/study-sites")
   end
 
   alias_method :and_there_is_a_course_i_want_to_edit, :given_a_course_exists
