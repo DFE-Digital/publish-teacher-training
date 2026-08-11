@@ -10,8 +10,9 @@ const MAX_SUGGESTIONS = 5
 // It never touches a row. It works out which schools the provider asked for and
 // says so, leaving the list to decide what that means on screen:
 //
-//   schools-search:filter   detail.allowed - the uuids to show, or null for all
-//   schools-search:restore  no filter, and put focus back in the list
+//   schools-search:filter   detail.matches - the values of the schools it found
+//   schools-search:clear    no search; every school is back
+//   schools-search:restore  no search, and put focus back in the list
 //
 // Everything else here - the autocomplete, the Enter key, the announcement, the
 // no results message - belongs to this half alone.
@@ -74,16 +75,16 @@ export default class extends Controller {
     // still counting as a search, suspending the collapse and hiding select all.
     if (query === '') return this.clearSearch()
 
-    const allowed = matchingValues(query, this.options)
+    const matches = matchingValues(query, this.options)
 
-    this.noResultsTarget.hidden = allowed.length > 0
-    this.dispatch('filter', { detail: { allowed } })
-    this.announce(allowed.length)
+    this.noResultsTarget.hidden = matches.length > 0
+    this.dispatch('filter', { detail: { matches } })
+    this.announce(matches.length)
   }
 
   clearSearch () {
     this.reset()
-    this.dispatch('filter', { detail: { allowed: null } })
+    this.dispatch('clear')
     this.input()?.focus()
   }
 

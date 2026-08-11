@@ -1,5 +1,10 @@
-// A plain grey panel - deliberately not .app-callout, which is inset text and
-// so comes with a grey rule down its left edge.
+// A plain grey panel. It shares six declarations with .app-callout - padding at
+// both breakpoints, the light-grey background, the responsive top and bottom
+// margins and the last-child reset - but not the rest of it: .app-callout
+// extends .govuk-inset-text, whose left rule is the whole point of inset text
+// and the wrong thing entirely on a search box. Borrowing it and turning the
+// rule off would leave a callout with its defining feature removed, and would
+// bring govuk-font(19), the text colour and `clear: both` along with it.
 .app-school-search {
   padding: govuk-spacing(3);
 
