@@ -12,8 +12,9 @@ RSpec.describe Rollover::Schools::DualProviderCopier do
 
   let(:provider) { create(:provider) }
   let(:new_provider) { create(:provider, recruitment_cycle: create(:recruitment_cycle, :next)) }
-  let!(:legacy_site) { create(:site, :with_gias_school, provider:, code: "S") }
-  let!(:provider_school) { create(:provider_school, provider:, site_code: "B") }
+  let(:gias_school) { create(:gias_school, :open) }
+  let!(:legacy_site) { create(:site, provider:, code: "S", urn: gias_school.urn) }
+  let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: legacy_site.code) }
 
   it "copies both legacy Site and new Provider::School records" do
     expect { copy_schools }
@@ -24,6 +25,15 @@ RSpec.describe Rollover::Schools::DualProviderCopier do
     expect(new_provider.schools.pluck(:gias_school_id, :site_code)).to contain_exactly(
       [provider_school.gias_school_id, provider_school.site_code],
     )
+  end
+
+  it "syncs the copied Provider::School UUID to the copied legacy Site UUID" do
+    copy_schools
+
+    copied_site = new_provider.sites.find_by!(code: legacy_site.code)
+    copied_provider_school = new_provider.schools.find_by!(gias_school:, site_code: legacy_site.code)
+
+    expect(copied_provider_school.uuid).to eq(copied_site.uuid)
   end
 
   it "returns the legacy result used by rollover reporting" do
