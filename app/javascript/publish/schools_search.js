@@ -18,7 +18,8 @@ export function optionsFromSelect (selectEl) {
 }
 
 // The values of every option matching the query, most relevant first. A blank
-// query matches everything, which is what "clear the search" relies on.
+// query matches everything, though the search box never asks: an empty box means
+// no search rather than a search for all of them.
 export function matchingValues (query, options) {
   if (!/\S/.test(query)) return options.map(option => option.value)
 

@@ -82,6 +82,70 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     and_the_search_box_is_empty
   end
 
+  # Emptying the box and pressing Search says the same thing as Clear search, so
+  # it has to be answered the same way.
+  scenario "searching with an empty box returns to the full list" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_search_for("belvidere")
+    then_only_these_schools_are_shown("Belvidere School")
+    when_i_search_for("")
+    then_all_three_schools_are_shown
+    and_i_can_select_all_schools
+  end
+
+  scenario "searching with an empty box takes back the no results message" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_search_for("zzzz")
+    then_i_see_the_no_results_message
+    when_i_search_for("")
+    then_i_see_no_no_results_message
+    and_all_three_schools_are_still_shown
+  end
+
+  # The box sits inside the form that saves the schools, so Enter has to be
+  # caught: it searches, and never submits. "be" is below the three characters
+  # that open the suggestions, so the menu is closed and the key is ours.
+  scenario "pressing Enter in the search box searches instead of saving" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_type("be")
+    and_i_press_enter_in_the_search_box
+    then_only_these_schools_are_shown("Belvidere School")
+    and_i_can_still_save_my_changes
+  end
+
+  scenario "pressing Enter in an empty search box returns to the full list" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_search_for("belvidere")
+    then_only_these_schools_are_shown("Belvidere School")
+    when_i_type("")
+    and_i_press_enter_in_the_search_box
+    then_all_three_schools_are_shown
+  end
+
+  # Enter on a button in the panel belongs to that button. The search box's own
+  # Enter handler has to leave them alone.
+  scenario "Clear search can be pressed with the keyboard" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_search_for("belvidere")
+    and_i_press_enter_on("Clear search")
+    then_all_three_schools_are_shown
+    and_the_search_box_is_empty
+  end
+
+  scenario "Show all schools can be pressed with the keyboard" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_search_for("zzzz")
+    then_i_see_the_no_results_message
+    and_i_press_enter_on("Show all schools")
+    then_all_three_schools_are_shown
+  end
+
   scenario "choosing Show all schools from the no results message returns to the full list" do
     given_a_course_i_want_to_edit
     when_i_visit_the_publish_course_school_edit_page
@@ -247,6 +311,16 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
   end
   alias_method :and_i_search_for, :when_i_search_for
 
+  def and_i_press_enter_in_the_search_box
+    page.find_field("Search for a school in the list").send_keys(:enter)
+  end
+
+  # Playwright focuses the element before pressing, so this is the keyboard
+  # route to a button rather than a click dressed up as one.
+  def and_i_press_enter_on(label)
+    page.find_button(label).send_keys(:enter)
+  end
+
   def when_i_clear_the_search
     click_button "Clear search"
   end
@@ -324,6 +398,7 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     expect(page).to have_css(".govuk-checkboxes__label", text: "Select all schools")
     expect(page).to have_css(".govuk-body", exact_text: "or")
   end
+  alias_method :and_i_can_select_all_schools, :then_i_can_select_all_schools
 
   def then_i_cannot_select_all_schools
     expect(page).to have_no_css(".govuk-checkboxes__label", text: "Select all schools")
@@ -333,6 +408,12 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
 
   def then_i_see_the_no_results_message
     expect(page).to have_content("No results found. Clear your search and try again.")
+  end
+
+  # Asserted by its container, not its words: the visually hidden live region
+  # announces a failed search with the same string.
+  def then_i_see_no_no_results_message
+    expect(page).to have_no_css(".app-school-search__no-results")
   end
 
   def and_no_schools_are_shown
