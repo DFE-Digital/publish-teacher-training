@@ -34,7 +34,7 @@ RSpec.describe "updating study sites on a course" do
   def then_the_study_site_row_reads_as_optional_and_unanswered
     row = page.find(".govuk-summary-list__row", text: "Study site (optional)")
 
-    expect(row).to have_text("None")
+    expect(row).to have_text("Not entered")
     expect(row).to have_no_css(".app-inset-text--important")
   end
 
