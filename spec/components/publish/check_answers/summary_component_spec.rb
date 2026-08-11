@@ -129,6 +129,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
 
     expect(rendered_component).to have_text("Study sites (optional)")
+    expect(rendered_component).to have_text("None")
     expect(rendered_component).to have_no_link("Select a study site")
     expect(rendered_component).to have_selector("a[href*='return_to_review=study_sites']", text: "Change")
   end

@@ -13,5 +13,11 @@ module Publish
         expect(value_provided?("")).to eq('<span class="govuk-hint">Not entered</span>')
       end
     end
+
+    describe "#value_none" do
+      it "reads the same as a course with no placement schools" do
+        expect(value_none).to eq('<span class="app-!-colour-muted">None</span>')
+      end
+    end
   end
 end
