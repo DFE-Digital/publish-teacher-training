@@ -198,4 +198,61 @@ describe Provider::School do
       }.to raise_error(ActiveRecord::InvalidForeignKey)
     end
   end
+
+  # A course that publishes without schools serves its provider's schools as
+  # its API locations, so a provider school write changes its payload.
+  describe "touching courses that fall back to the provider's schools" do
+    let(:provider) { create(:provider) }
+    let!(:exempt_course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
+
+    it "touches them when a school is added" do
+      expect { create(:provider_school, provider:) }.to(change { exempt_course.reload.changed_at })
+    end
+
+    it "touches them when a school is removed" do
+      provider_school = create(:provider_school, provider:)
+
+      expect { provider_school.destroy! }.to(change { exempt_course.reload.changed_at })
+    end
+
+    it "touches them when a school is updated" do
+      provider_school = create(:provider_school, provider:)
+
+      expect { provider_school.update!(site_code: "Z") }.to(change { exempt_course.reload.changed_at })
+    end
+
+    # `after_commit on: :update` fires even when Rails issued no UPDATE, and a
+    # bare touch only moves updated_at — neither changes what the API serves.
+    it "leaves them alone when a school is saved with no changes" do
+      provider_school = create(:provider_school, provider:)
+
+      expect { provider_school.save! }.not_to(change { exempt_course.reload.changed_at })
+    end
+
+    it "leaves them alone when only a school's timestamps move" do
+      provider_school = create(:provider_school, provider:)
+
+      expect { provider_school.touch }.not_to(change { exempt_course.reload.changed_at })
+    end
+
+    it "leaves courses with their own schools alone" do
+      school_course = create(:course, :with_2_schools, provider:)
+
+      expect { create(:provider_school, provider:) }.not_to(change { school_course.reload.changed_at })
+    end
+
+    it "leaves another provider's courses alone" do
+      other_course = create(:course, :with_salary, publish_without_schools_allowed: true)
+
+      expect { create(:provider_school, provider:) }.not_to(change { other_course.reload.changed_at })
+    end
+
+    # Bulk writers such as rollover suppress the per-row touch and stamp the
+    # parents once at the end instead.
+    it "does not touch them while touches are suppressed" do
+      expect {
+        TouchSuppression.suppress { create(:provider_school, provider:) }
+      }.not_to(change { exempt_course.reload.changed_at })
+    end
+  end
 end

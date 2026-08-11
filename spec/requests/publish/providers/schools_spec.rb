@@ -183,4 +183,49 @@ RSpec.describe "Publish provider school show page", service: :publish do
       expect(response.body).to include("Catholic Primary School")
     end
   end
+
+  describe "DELETE /publish/organisations/:provider_code/:recruitment_cycle_year/schools/:uuid" do
+    let(:provider) { create(:provider) }
+    let!(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: SecureRandom.uuid) }
+    let!(:provider_school) do
+      create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
+    end
+    let!(:exempt_course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
+
+    before { login_provider_user(provider) }
+
+    def remove_school
+      delete publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle.year, provider_school.uuid)
+    end
+
+    it "removes the school" do
+      expect { remove_school }.to change { provider.schools.count }.by(-1)
+
+      expect(response).to redirect_to(publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle.year))
+    end
+
+    # A course that is allowed to publish without schools is served by the API
+    # with all of its provider's schools as locations, so removing one changes
+    # that course's payload.
+    it "touches every course that is publishable without schools" do
+      second_exempt_course = create(:course, :with_salary, provider:, publish_without_schools_allowed: true)
+
+      expect { remove_school }.to(change { [exempt_course.reload.changed_at, second_exempt_course.reload.changed_at] })
+    end
+
+    it "does not touch another provider's courses" do
+      other_exempt_course = create(:course, :with_salary, publish_without_schools_allowed: true)
+
+      expect { remove_school }.not_to(change { other_exempt_course.reload.changed_at })
+    end
+
+    it "does not touch courses when the school cannot be removed" do
+      course = create(:course, provider:)
+      create(:course_school, course:, gias_school:, provider_school:)
+
+      expect { remove_school }.not_to(change { exempt_course.reload.changed_at })
+
+      expect(provider.schools.count).to eq(1)
+    end
+  end
 end
