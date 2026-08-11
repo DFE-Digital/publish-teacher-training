@@ -254,7 +254,9 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           expect(ids).not_to include(far_course.id.to_s)
         end
 
-        context "when the findable filter is requested for 2027" do
+        context "when the findable filter is requested for after the remodel cutover year" do
+          let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)) }
+
           before do
             get :index, params: {
               recruitment_cycle_year: provider.recruitment_cycle.year,
