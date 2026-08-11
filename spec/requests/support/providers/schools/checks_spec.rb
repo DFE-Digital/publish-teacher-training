@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe "Support provider school checks" do
   include DfESignInUserHelper
 
-  let(:recruitment_cycle) { create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year) }
-  let(:provider) { create(:provider, recruitment_cycle:) }
+  let(:provider) { create(:provider) }
+  let(:recruitment_cycle) { provider.recruitment_cycle }
   let(:gias_school) { create(:gias_school) }
   let(:admin) { create(:user, :admin) }
 
