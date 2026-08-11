@@ -72,8 +72,14 @@ module Courses
       @permitted_new_course_attributes ||= CoursePolicy.new(nil, new_course).permitted_new_course_attributes
     end
 
+    # `find` raises on an empty array, and ticking nothing is a legitimate
+    # answer now that a study site is optional. It is kept for the ids that are
+    # there so one belonging to another provider is still refused.
     def study_sites
-      @study_sites ||= provider.study_sites.find(study_site_ids.compact_blank)
+      @study_sites ||= begin
+        ids = study_site_ids.compact_blank
+        ids.any? ? provider.study_sites.find(ids) : []
+      end
     end
 
     def subject_ids
@@ -147,12 +153,13 @@ module Courses
       )
     end
 
+    # A study site is optional. Nothing validates it at publish time and the
+    # edit form lets a provider clear every one off a live course, so adding a
+    # course must not be the one place that insists on it.
     def update_study_sites(course)
       return if study_site_ids.nil?
 
-      course.study_sites = study_sites if study_site_ids.any?
-
-      course.errors.add(:study_sites, message: "Select at least one study site") if study_site_ids.empty?
+      course.study_sites = study_sites
     end
 
     def assign_accrediting_provider_by_single_partner?(course)
