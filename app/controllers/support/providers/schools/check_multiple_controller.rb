@@ -41,11 +41,17 @@ module Support
         def save
           saved_schools = []
 
-          gias_schools.each do |gias_school|
-            ActiveRecord::Base.transaction do
-              saved_schools << create_provider_school_and_legacy_site(gias_school:)
+          # Each school would otherwise touch the provider and sweep its
+          # no-school courses on save. Suppress that and stamp them once.
+          TouchSuppression.suppress do
+            gias_schools.each do |gias_school|
+              ActiveRecord::Base.transaction do
+                saved_schools << create_provider_school_and_legacy_site(gias_school:)
+              end
             end
           end
+
+          ::ProviderSchools::TouchParents.call(provider:) if saved_schools.any?
 
           schools_added_message(saved_schools)
         end
