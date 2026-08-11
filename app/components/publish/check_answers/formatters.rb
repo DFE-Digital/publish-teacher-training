@@ -93,7 +93,7 @@ module Publish
       class StudySites
         def call(value, draft, view)
           return value.join(", ") if value.present?
-          return if draft.wizard.provider.study_sites.any?
+          return view.helpers.value_none if draft.wizard.provider.study_sites.any?
 
           view.add_a_study_site_link
         end
