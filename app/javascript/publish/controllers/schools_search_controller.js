@@ -42,19 +42,6 @@ export default class extends Controller {
     // provider asks for it, not while they are still deciding what to search
     // for. So nothing is bound to the autocomplete's select event.
 
-    // The panel sits inside the form that saves the schools, so Enter always
-    // has to be caught here or it would submit that form. With the menu open it
-    // belongs to the autocomplete, which has already confirmed the highlighted
-    // suggestion by the time this fires; otherwise it searches, as it would in
-    // any other search box.
-    this.element.addEventListener('keydown', (event) => {
-      if (event.key !== 'Enter') return
-
-      event.preventDefault()
-
-      if (this.input()?.getAttribute('aria-expanded') !== 'true') this.search()
-    })
-
     this.panelTarget.hidden = false
   }
 
@@ -62,10 +49,30 @@ export default class extends Controller {
     this.instance?.destroy()
   }
 
+  // The box sits inside the form that saves the schools, so Enter in it has to
+  // be caught here or it would submit that form. With the menu open the key
+  // belongs to the autocomplete, which has already confirmed the highlighted
+  // suggestion by the time this fires; otherwise it searches, as it would in any
+  // other search box.
+  //
+  // Only Enter in the box. The panel's own buttons are inside this element too,
+  // and preventing their default is what stops a keydown becoming a click, so an
+  // unscoped handler would leave them unusable from the keyboard.
+  keydown (event) {
+    if (event.key !== 'Enter' || event.target !== this.input()) return
+
+    event.preventDefault()
+
+    if (event.target.getAttribute('aria-expanded') !== 'true') this.search()
+  }
+
   search () {
     const query = (this.input()?.value || '').trim()
 
-    if (query === '') return this.clear()
+    // An empty box is no search at all, which is the state clearing it leaves
+    // behind. Matching on the empty query instead would allow every school while
+    // still counting as a search, suspending the collapse and hiding select all.
+    if (query === '') return this.clearSearch()
 
     const allowed = matchingValues(query, this.options)
 
@@ -108,7 +115,7 @@ export default class extends Controller {
 
     this.statusTarget.textContent = count === 0
       ? resultsNone
-      : (count === 1 ? resultsOne : resultsOther.replace('{count}', count))
+      : (count === 1 ? resultsOne : resultsOther.replaceAll('{count}', count))
   }
 
   input () {

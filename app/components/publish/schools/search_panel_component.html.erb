@@ -1,4 +1,4 @@
-<div data-controller="schools-search">
+<div data-controller="schools-search" data-action="keydown->schools-search#keydown">
   <div class="app-school-search" hidden data-schools-search-target="panel">
     <div class="govuk-form-group govuk-!-margin-bottom-3" data-schools-search-target="autocomplete">
       <label class="govuk-label govuk-label--m" for="<%= Publish::Schools::SearchPanelComponent::SELECT_ID %>">
