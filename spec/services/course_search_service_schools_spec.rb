@@ -349,11 +349,10 @@ RSpec.describe CourseSearchServiceSchools do
     describe "filter[findable]" do
       context "when true" do
         let(:filter) { { findable: true } }
-        let(:expected_scope) { double }
 
-        it "adds the findable scope" do
-          expect(scope).to receive(:findable).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+        it "does not apply the legacy site status scope" do
+          expect(scope).not_to receive(:findable)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
