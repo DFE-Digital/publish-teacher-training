@@ -27,7 +27,7 @@
 
         <% if FeatureFlag.active?(:candidate_accounts) %>
           <div class="govuk-grid-column-two-thirds-from-desktop">
-            <%= render partial: "find/courses/save_button", locals: { course:, preview: true } %>
+            <%= render partial: "find/courses/save_button", locals: { course: } %>
           </div>
         <% end %>
       </div>

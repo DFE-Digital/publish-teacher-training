@@ -1,6 +1,4 @@
-<% preview = local_assigns.fetch(:preview, false) %>
-
-<% if preview %>
+<% if preview?(params) %>
   <%# Preview only: the provider previewing the course is not a candidate, so show the
       prompt candidates will see without making it interactive. Branching on preview first
       also keeps the Find-only authenticated? helper out of the Publish render path. %>
