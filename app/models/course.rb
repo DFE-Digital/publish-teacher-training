@@ -953,10 +953,10 @@ class Course < ApplicationRecord
     !no_visa_sponsorship?
   end
 
-  # A salaried/apprenticeship course that support has approved to publish without
-  # an employing school (candidates already have a placement arranged) and which
-  # has no school attached. Find presents these differently so it does not prompt
-  # candidates to look for an employing school that will never be listed.
+  # Any course that support has approved to publish without an employing school
+  # (candidates already have a placement arranged) and which has no school
+  # attached. Find presents these differently so it does not prompt candidates
+  # to look for an employing school that will never be listed.
   def without_employing_school?
     Courses::PublishRules::SchoolPresenceExemption.applies?(self) &&
       schools.none?
