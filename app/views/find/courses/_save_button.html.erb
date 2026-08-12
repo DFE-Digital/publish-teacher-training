@@ -5,29 +5,11 @@
     <%= hidden_field_tag :course_id, course.id %>
 
     <button type="submit" class="unstyled-button">
-      <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
-        <%= image_tag "icon-save.svg",
-                      alt: t(".save_this_course"),
-                      width: 24,
-                      height: 24,
-                      class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
-        <span class="govuk-heading-s govuk-!-margin-0 save-course-button__text">
-          <%= t(".save_this_course") %>
-        </span>
-      </div>
+      <%= render "find/courses/save_button_content", text: t(".save_this_course") %>
     </button>
   <% end %>
 <% else %>
   <%= link_to sign_in_find_candidate_saved_courses_path(course_id: course.id), class: "unstyled-button" do %>
-    <div class="save-course-button__button govuk-!-margin-0 govuk-!-padding-top-2">
-      <%= image_tag "icon-save.svg",
-                    alt: t(".sign_in_to_save_this_course"),
-                    width: 24,
-                    height: 24,
-                    class: "govuk-!-margin-right-2 govuk-!-padding-top-0" %>
-      <span class="govuk-heading-s govuk-!-margin-0 save-course-button__text">
-        <%= t(".sign_in_to_save_this_course") %>
-      </span>
-    </div>
+    <%= render "find/courses/save_button_content", text: t(".sign_in_to_save_this_course") %>
   <% end %>
 <% end %>
