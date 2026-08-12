@@ -17,11 +17,19 @@ export function optionsFromSelect (selectEl) {
     .map(option => ({ ...enhanceOption(option), value: option.value }))
 }
 
+// dfe-autocomplete matches a word prefix by building `new RegExp('\\b' + query)`
+// without escaping the query, and its own clean() blanks most punctuation but
+// leaves these. Typing one of them therefore either throws a SyntaxError out of
+// the sort - taking the whole search with it - or silently turns the query into
+// an operator, as a pipe does when it reads as alternation and widens the
+// search. Blank them the way clean() blanks the rest of the punctuation.
+const REGEXP_PUNCTUATION = /[[\]\\|?+]/g
+
 // The values of every option matching the query, most relevant first. A blank
 // query matches everything, though the search box never asks: an empty box means
 // no search rather than a search for all of them.
 export function searchResults (query, options) {
   if (!/\S/.test(query)) return options.map(option => option.value)
 
-  return defaultSort(query, options).map(option => option.value)
+  return defaultSort(query.replace(REGEXP_PUNCTUATION, ' '), options).map(option => option.value)
 }
