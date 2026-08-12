@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { dfeAutocompleteField } from 'dfe-autocomplete/src/wrapper'
-import { matchingValues, optionsFromSelect } from '../schools_search'
+import { optionsFromSelect, searchResults } from '../schools_search'
 
 const MIN_QUERY_LENGTH = 3
 const MAX_SUGGESTIONS = 5
@@ -10,7 +10,7 @@ const MAX_SUGGESTIONS = 5
 // It never touches a row. It works out which schools the provider asked for and
 // says so, leaving the list to decide what that means on screen:
 //
-//   schools-search:filter   detail.matches - the values of the schools it found
+//   schools-search:filter   detail.results - the values of the schools it found
 //   schools-search:clear    no search; every school is back
 //   schools-search:restore  no search, and put focus back in the list
 //
@@ -75,11 +75,11 @@ export default class extends Controller {
     // still counting as a search, suspending the collapse and hiding select all.
     if (query === '') return this.clearSearch()
 
-    const matches = matchingValues(query, this.options)
+    const results = searchResults(query, this.options)
 
-    this.noResultsTarget.hidden = matches.length > 0
-    this.dispatch('filter', { detail: { matches } })
-    this.announce(matches.length)
+    this.noResultsTarget.hidden = results.length > 0
+    this.dispatch('filter', { detail: { results } })
+    this.announce(results.length)
   }
 
   clearSearch () {
