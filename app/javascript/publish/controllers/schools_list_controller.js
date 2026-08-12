@@ -9,12 +9,12 @@ const HIDDEN_CLASS = 'govuk-!-display-none'
 //
 // Two rules decide that. A search narrows the list to the schools it found, and
 // the collapse threshold then decides how many of those to show. They interact,
-// since a search suspends the collapse so every match is visible, so neither
+// since a search suspends the collapse so every result is visible, so neither
 // writes to the rows itself: both feed `render`, the only place visibility is
 // set.
 //
 // Whether a search is running and what it found are held apart, in `searching`
-// and `searchMatches`, because they answer different questions: a search that
+// and `searchResults`, because they answer different questions: a search that
 // found nothing still hides select all and suspends the collapse.
 //
 // Rows are only ever hidden, never removed, so a school that is ticked and then
@@ -34,20 +34,20 @@ export default class extends Controller {
   // again. Also the state to start in, which is why connect asks for it.
   clear () {
     this.searching = false
-    this.searchMatches = new Set()
+    this.searchResults = new Set()
     this.expanded = false
 
     this.render()
   }
 
   render () {
-    const matchingSearch = this.schoolsMatchingSearch()
-    const shown = new Set(this.collapsing() ? matchingSearch.slice(0, this.collapseAfterValue) : matchingSearch)
+    const schools = this.schoolsMatchingSearch()
+    const shown = new Set(this.collapsed() ? schools.slice(0, this.collapseAfterValue) : schools)
 
-    this.schoolCheckboxTargets.forEach(checkbox => this.setRowHidden(checkbox, !shown.has(checkbox)))
+    this.schoolCheckboxTargets.forEach(checkbox => this.setHidden(this.row(checkbox), !shown.has(checkbox)))
 
     if (this.hasShowAllTarget) {
-      this.showAllTarget.hidden = !(this.collapsing() && matchingSearch.length > this.collapseAfterValue)
+      this.showAllTarget.hidden = !(this.collapsed() && schools.length > this.collapseAfterValue)
     }
 
     // Select all takes in every school, including the ones a search has filtered
@@ -62,17 +62,13 @@ export default class extends Controller {
   schoolsMatchingSearch () {
     if (!this.searching) return this.schoolCheckboxTargets
 
-    return this.schoolCheckboxTargets.filter(checkbox => this.searchMatches.has(checkbox.value))
+    return this.schoolCheckboxTargets.filter(checkbox => this.searchResults.has(checkbox.value))
   }
 
   // A search is never collapsed: the point of searching a long list is to see
-  // every match.
-  collapsing () {
+  // every result.
+  collapsed () {
     return !this.searching && !this.expanded
-  }
-
-  setRowHidden (checkbox, hidden) {
-    this.setHidden(this.row(checkbox), hidden)
   }
 
   setHidden (element, hidden) {
@@ -86,7 +82,7 @@ export default class extends Controller {
 
   filter ({ detail }) {
     this.searching = true
-    this.searchMatches = new Set(detail.matches)
+    this.searchResults = new Set(detail.results)
     this.expanded = false
 
     this.render()

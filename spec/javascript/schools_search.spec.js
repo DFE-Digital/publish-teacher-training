@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { matchingValues } from '../../app/javascript/publish/schools_search'
+import { searchResults } from '../../app/javascript/publish/schools_search'
 
 // The shape optionsFromSelect builds out of the search panel's <select>:
 // the school name, and its URN and postcodes as dfe-autocomplete synonyms.
@@ -11,9 +11,9 @@ const ST_MARYS = school('3', "St Mary's C of E", ['111222', 'WV16 4ER', 'WV164ER
 
 const SCHOOLS = [BELVIDERE, BISHOP, ST_MARYS]
 
-const matches = (query) => matchingValues(query, SCHOOLS)
+const matches = (query) => searchResults(query, SCHOOLS)
 
-describe('matchingValues', () => {
+describe('searchResults', () => {
   it('returns every school when the query is blank', () => {
     expect(matches('')).toEqual(['1', '2', '3'])
     expect(matches('   ')).toEqual(['1', '2', '3'])
