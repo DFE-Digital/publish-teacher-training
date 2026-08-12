@@ -36,13 +36,13 @@ RSpec.describe "Support::Courses publish_without_schools_allowed", travel: mid_c
       expect(course.reload.publish_without_schools_allowed).to be(true)
     end
 
-    it "ignores the flag for a fee course" do
-      course = create(:course, funding: "fee", provider:)
+    it "allows a fee course to be published without schools" do
+      course = create(:course, :fee, provider:)
       login_user(admin)
 
       update_course(course)
 
-      expect(course.reload.publish_without_schools_allowed).to be(false)
+      expect(course.reload.publish_without_schools_allowed).to be(true)
     end
   end
 

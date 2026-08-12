@@ -53,7 +53,7 @@ describe CoursePublishableSchoolsPresenceValidator do
       [:salary,         false, false] => :blank,
       [:apprenticeship, false, true] => :no_error,
       [:apprenticeship, false, false] => :blank,
-      [:fee,            false, true] => :blank,
+      [:fee,            false, true] => :no_error,
       [:fee,            true,  true] => :no_error,
       [:fee,            false, false] => :blank,
     }.each do |(funding, has_school, exemption), expected|

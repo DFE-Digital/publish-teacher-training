@@ -19,6 +19,17 @@ RSpec.describe "Editing publish without schools as support", travel: mid_cycle d
     end
   end
 
+  context "when the course details are invalid" do
+    scenario "my ticked publish without schools checkbox survives the error" do
+      when_i_visit_the_edit_page_for(salaried_course)
+      when_i_tick_the_publish_without_schools_checkbox
+      and_i_enter_an_invalid_start_date
+      and_i_click_the_update_button
+      then_i_see_a_start_date_error
+      and_the_publish_without_schools_checkbox_is_still_ticked
+    end
+  end
+
   context "with an apprenticeship course" do
     scenario "I see the publish without schools checkbox" do
       when_i_visit_the_edit_page_for(apprenticeship_course)
@@ -27,9 +38,9 @@ RSpec.describe "Editing publish without schools as support", travel: mid_cycle d
   end
 
   context "with a fee course" do
-    scenario "the publish without schools checkbox is not available" do
+    scenario "I see the publish without schools checkbox" do
       when_i_visit_the_edit_page_for(fee_course)
-      then_i_do_not_see_the_publish_without_schools_checkbox
+      then_i_see_the_publish_without_schools_checkbox
     end
   end
 
@@ -71,11 +82,6 @@ private
     expect(support_provider_course_edit_page).to have_text("Allow this course to be published without schools attached")
   end
 
-  def then_i_do_not_see_the_publish_without_schools_checkbox
-    expect(support_provider_course_edit_page).to have_no_publish_without_schools_allowed_checkbox
-    expect(support_provider_course_edit_page).to have_no_text("Publishing this course without schools")
-  end
-
   def when_i_tick_the_publish_without_schools_checkbox
     support_provider_course_edit_page.publish_without_schools_allowed_checkbox.check
   end
@@ -84,11 +90,25 @@ private
     support_provider_course_edit_page.continue.click
   end
 
+  def and_i_enter_an_invalid_start_date
+    support_provider_course_edit_page.start_date_month.set("13")
+  end
+
+  def then_i_see_a_start_date_error
+    expect(page).to have_content("Start date format is invalid", wait: 0)
+  end
+
   def then_the_course_is_allowed_to_publish_without_schools(course)
     expect(course.reload.publish_without_schools_allowed).to be(true)
   end
 
   def then_the_publish_without_schools_checkbox_is_ticked
     expect(support_provider_course_edit_page.publish_without_schools_allowed_checkbox).to be_checked
+  end
+
+  # have_checked_field returns false rather than raising, so a missing or
+  # unticked checkbox fails here immediately instead of waiting on Capybara.
+  def and_the_publish_without_schools_checkbox_is_still_ticked
+    expect(page).to have_checked_field("Allow this course to be published without schools attached", wait: 0)
   end
 end
