@@ -68,4 +68,34 @@ describe('searchResults', () => {
     expect(matches('school')).toEqual(['1', '2'])
     expect(matches('bishop school')).toEqual(['2'])
   })
+
+  // dfe-autocomplete builds a RegExp out of the query without escaping it, so
+  // anything it leaves in that means something to a regex either throws or
+  // quietly changes what the search means.
+  describe('a query containing regular expression punctuation', () => {
+    it('searches for a school name typed with a bracket', () => {
+      expect(matches('belv[')).toEqual(['1'])
+      expect(matches('belv]')).toEqual(['1'])
+    })
+
+    it('searches for a school name typed with a trailing backslash', () => {
+      expect(matches('belv\\')).toEqual(['1'])
+    })
+
+    it('searches for a school name typed with a leading quantifier', () => {
+      expect(matches('?belv')).toEqual(['1'])
+      expect(matches('+belv')).toEqual(['1'])
+    })
+
+    it('does not read a pipe as alternation', () => {
+      expect(matches('belvidere|bishop')).toEqual([])
+    })
+
+    // Blanking is what clean() already does to a full stop, and a query left
+    // blank matches everything. The point here is only that a bracket now lands
+    // in the same place a full stop always has, rather than throwing.
+    it('treats punctuation on its own the way it treats a full stop', () => {
+      expect(matches('[')).toEqual(matches('.'))
+    })
+  })
 })

@@ -56,6 +56,15 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
     then_only_these_schools_are_shown("Belvidere School")
   end
 
+  # The matching builds a regular expression out of the query, so a stray
+  # bracket used to throw and leave the Search button doing nothing at all.
+  scenario "searching with a bracket in the query" do
+    given_a_course_i_want_to_edit
+    when_i_visit_the_publish_course_school_edit_page
+    when_i_search_for("belv[")
+    then_only_these_schools_are_shown("Belvidere School")
+  end
+
   scenario "searching for something that matches no school" do
     given_a_course_i_want_to_edit
     when_i_visit_the_publish_course_school_edit_page
