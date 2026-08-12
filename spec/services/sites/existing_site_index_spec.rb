@@ -11,12 +11,20 @@ RSpec.describe Sites::ExistingSiteIndex do
 
     let!(:site) { create(:site, provider:, urn: "123456", code: "A") }
 
-    it "recognises a site with the same URN" do
-      expect(index).to be_already_copied(build(:site, urn: " 123456 ", code: "Z"))
+    it "recognises a site with the same URN and code" do
+      expect(index).to be_already_copied(build(:site, urn: " 123456 ", code: "A"))
     end
 
     it "does not recognise a site with a different URN" do
       expect(index).not_to be_already_copied(build(:site, urn: "654321", code: "A"))
+    end
+
+    # A provider can hold one URN twice - a main site and an ordinary school
+    # site, since the backfill matches main sites to GIAS by postcode. They are
+    # separate entries, and the copiers resolve a source site to its copy by
+    # code, so conflating them would strand a course's site placement.
+    it "does not recognise a site with the same URN at a different code" do
+      expect(index).not_to be_already_copied(build(:site, urn: "123456", code: "Z"))
     end
 
     it "does not recognise a site belonging to another provider" do
@@ -38,18 +46,21 @@ RSpec.describe Sites::ExistingSiteIndex do
     context "when the site has no URN" do
       let!(:site) { create(:site, :main_site, provider:) }
 
-      it "falls back to the site code" do
+      it "matches it on its code" do
         expect(index).to be_already_copied(build(:site, :main_site))
       end
 
       it "does not recognise a URN-less site with a different code" do
         expect(index).not_to be_already_copied(build(:site, urn: nil, code: "Q"))
       end
+
+      # Main sites carry both in the real data, and Site.with_available_gias_school
+      # is the only place that tells them apart.
+      it "treats a blank URN the same as a missing one" do
+        expect(index).to be_already_copied(build(:site, :main_site, urn: " "))
+      end
     end
 
-    # A school site created in the target cycle always has a URN, so it never
-    # registers a code key. Without that asymmetry a main site would be skipped
-    # whenever an unrelated site happened to hold its code.
     it "does not let a site with a URN mask a URN-less site sharing its code" do
       expect(index).not_to be_already_copied(build(:site, urn: nil, code: site.code))
     end

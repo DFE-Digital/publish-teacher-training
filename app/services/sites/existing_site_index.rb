@@ -7,12 +7,16 @@ module Sites
   #
   # Identity follows those same rules:
   #
-  # * school sites are identified by URN, which Site validates as unique per
-  #   provider, falling back to the site code for the URN-less sites the URN
-  #   presence validation exempts — in practice, main sites
+  # * school sites are identified by URN and code together. URN alone is not
+  #   identity: a provider can hold one URN twice, on a main site and on an
+  #   ordinary site, since main sites are matched to GIAS by postcode. A copy
+  #   keeps its source's code, so the pair is stable across runs, and the URN-less
+  #   sites the presence validation exempts simply key on their code alone
   # * study sites are identified by location name, which Site validates as unique
   #   per provider and site type, and by URN when they have one — the two checks
-  #   Publish::StudySiteForm makes before letting anyone add a study site
+  #   Publish::StudySiteForm makes before letting anyone add a study site. Code is
+  #   deliberately absent here: StudySiteCodeOrchestrator reassigns study site
+  #   codes as it copies them, so a code is not stable across runs
   #
   # The index is a snapshot of what the target provider had before the copy
   # started, and is deliberately never updated with the sites being copied.
@@ -35,10 +39,8 @@ module Sites
           [:study_site, :location_name, normalize(site.location_name)],
           ([:study_site, :urn, normalize(site.urn)] if site.urn.present?),
         ].compact
-      elsif site.urn.present?
-        [[:school, :urn, normalize(site.urn)]]
       else
-        [[:school, :code, site.code]]
+        [[:school, normalize(site.urn), site.code]]
       end
     end
 
