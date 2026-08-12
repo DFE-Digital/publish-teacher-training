@@ -122,8 +122,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     context "when funding is 'fee'" do
       let(:funding) { :fee }
 
-      it "does not show 'No employing schools listed' (fee courses are never exempt)" do
-        expect(summary_card_content).not_to include("No employing schools listed")
+      it "shows 'No employing schools listed' as the value" do
+        expect(summary_card_content).to include("No employing schools listed")
       end
     end
 

@@ -2905,6 +2905,12 @@ describe Course do
       expect(course.without_employing_school?).to be(true)
     end
 
+    it "is true for an exempt fee course with no school attached" do
+      course = create(:course, :fee, publish_without_schools_allowed: true)
+
+      expect(course.without_employing_school?).to be(true)
+    end
+
     it "is false when a school is attached" do
       course = create(:course, :with_salary, publish_without_schools_allowed: true)
       create(:course_school, course:)
@@ -2914,12 +2920,6 @@ describe Course do
 
     it "is false when publish_without_schools_allowed is false" do
       course = create(:course, :with_salary, publish_without_schools_allowed: false)
-
-      expect(course.without_employing_school?).to be(false)
-    end
-
-    it "is false for fee courses" do
-      course = create(:course, :fee, publish_without_schools_allowed: true)
 
       expect(course.without_employing_school?).to be(false)
     end
