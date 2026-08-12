@@ -43,10 +43,14 @@ RSpec.describe Rollover::Schools::LegacyProviderCopier do
       expect(result).to eq(copied: 0, skipped: [], already_present: [site.code])
     end
 
-    it "matches on URN rather than site code" do
+    # A copy always keeps its source's code, so a same-URN site under a
+    # different code is a different entry - a main site and an ordinary site
+    # can share a URN. LegacyCourseCopier resolves a source site to its copy by
+    # code, so skipping this one would leave the course with no site to link to.
+    it "copies a source site whose URN is on the new provider under another code" do
       create(:site, provider: new_provider, urn: site.urn, code: "X")
 
-      expect { copy_sites }.not_to change(new_provider.sites, :count)
+      expect { copy_sites }.to change(new_provider.sites, :count).by(1)
     end
 
     it "copies a source site whose URN is not yet on the new provider" do

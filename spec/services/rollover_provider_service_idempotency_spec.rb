@@ -57,6 +57,26 @@ RSpec.describe RolloverProviderService do
     end
   end
 
+  # The guard this fix replaces matched on code alone and read school and study
+  # site codes as one namespace, so a study site sharing a school site's code was
+  # dropped and never rolled over at all. Removing that guard is what let repeat
+  # runs duplicate. Both halves have to hold at once.
+  context "when a study site shares a school site's code" do
+    let!(:study_sites) do
+      [
+        create(:site, :study_site, provider:, code: school_sites.first.code),
+        create(:site, :study_site, provider:),
+      ]
+    end
+
+    it "copies it exactly once across repeated rollovers" do
+      courses.each { roll_over(it) }
+
+      expect(new_provider.study_sites.count).to eq(2)
+      expect(new_provider.study_sites.pluck(:location_name)).to match_array(study_sites.map(&:location_name))
+    end
+  end
+
   it "reports the sites it left alone rather than counting them as copied" do
     roll_over(courses.first)
 

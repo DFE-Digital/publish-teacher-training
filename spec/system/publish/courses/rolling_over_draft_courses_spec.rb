@@ -6,13 +6,12 @@ require "rails_helper"
 # provider with several draft courses gets rolled over once per course. The
 # reported bug was a provider whose study sites appeared three times in the new
 # cycle after its three courses were rolled over one at a time.
-RSpec.describe "Rolling over draft courses one at a time" do
-  around do |example|
-    Timecop.travel(Find::CycleTimetable.apply_deadline(2025) - 1.hour) do
-      example.run
-    end
-  end
-
+#
+# Nothing here turns on which moment of the cycle it is, only on there being a
+# cycle to roll over into. The year is pinned rather than left to the real date
+# because Find::CycleTimetable::CYCLE_DATES is a hardcoded hash that ends at
+# 2027, so an unpinned cycle eventually asks it for a year it does not hold.
+RSpec.describe "Rolling over draft courses one at a time", travel: mid_cycle(2025) do
   scenario "the provider's sites are not duplicated" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_rollable_next_recruitment_cycle
@@ -34,7 +33,7 @@ RSpec.describe "Rolling over draft courses one at a time" do
   end
 
   def and_there_is_a_rollable_next_recruitment_cycle
-    find_or_create(:recruitment_cycle, year: RecruitmentCycle.current.year.to_i + 1)
+    find_or_create(:recruitment_cycle, :next)
     RecruitmentCycle.next.update(available_in_publish_from: 1.hour.ago)
   end
 
