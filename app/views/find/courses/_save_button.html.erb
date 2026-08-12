@@ -1,4 +1,11 @@
-<% if authenticated? %>
+<% preview = local_assigns.fetch(:preview, false) %>
+
+<% if preview %>
+  <%# Preview only: the provider previewing the course is not a candidate, so show the
+      prompt candidates will see without making it interactive. Branching on preview first
+      also keeps the Find-only authenticated? helper out of the Publish render path. %>
+  <%= render "find/courses/save_button_content", text: t(".sign_in_to_save_this_course") %>
+<% elsif authenticated? %>
   <%= form_with url: find_candidate_saved_courses_path,
                 method: :post do %>
 
