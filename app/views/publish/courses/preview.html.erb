@@ -17,11 +17,23 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <!--The Apply component is rendered twice, above and below the course content, to match the live Find course page.-->
+
+    <% if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="<%= @apply_action_column_class %>">
+          <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) %>
+        </div>
+
+        <% if FeatureFlag.active?(:candidate_accounts) %>
+          <div class="govuk-grid-column-two-thirds-from-desktop">
+            <%= render partial: "find/courses/save_button", locals: { course:, preview: true } %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
     <%= render Find::Courses::SummaryComponent::View.new(course, @enrichment) %>
-
-    <!--The reason for the Apply component duplication here is because we want to keep the warning text at the top but Keep the Apply button and end of cycle text at the bottom-->
-
-    <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course:) %>
 
