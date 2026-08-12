@@ -18,7 +18,7 @@ module ProviderSchools
         legacy_site_uuid = legacy_site_uuid_for(provider_school)
         next if provider_school.uuid == legacy_site_uuid
 
-        provider_school.update!(uuid: legacy_site_uuid)
+        provider_school.update_columns(uuid: legacy_site_uuid)
       end
     end
 
