@@ -102,11 +102,8 @@ module Support
       ActiveModel::Type::Boolean.new.cast(is_send)
     end
 
-    # Only salaried and apprenticeship courses can be exempted from needing
-    # schools attached at publish time, so refuse to set the flag on any other
-    # funding type even if a value is submitted.
     def publish_without_schools_allowed?
-      course.decorate.salaried? && ActiveModel::Type::Boolean.new.cast(publish_without_schools_allowed)
+      ActiveModel::Type::Boolean.new.cast(publish_without_schools_allowed)
     end
 
     def validate_start_date_format
