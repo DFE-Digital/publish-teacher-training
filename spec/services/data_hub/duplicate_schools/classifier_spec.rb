@@ -2,11 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe DuplicateSchoolsReport do
+RSpec.describe DataHub::DuplicateSchools::Classifier do
   let(:provider) { create(:provider) }
   let(:year) { provider.recruitment_cycle.year }
-  let(:output) { StringIO.new }
-  let(:report) { described_class.new(years: [year], io: output) }
+  let(:classifier) { described_class.new(years: [year]) }
 
   # Site validates urn uniqueness per provider, so the real duplicates only
   # exist because something bypassed it (rollover copies with save!(validate:
@@ -21,14 +20,14 @@ RSpec.describe DuplicateSchoolsReport do
   end
 
   def group_for(urn)
-    report.groups.find { |group| group.urn == urn }
+    classifier.call.find { |group| group.urn == urn }
   end
 
   def kind_of(urn)
     group_for(urn).kind
   end
 
-  describe "#groups" do
+  describe "#call" do
     it "groups kept school sites sharing a provider and urn" do
       site = school(urn: "100001", code: "A")
       twin = duplicate_of(site, code: "B")
@@ -64,7 +63,7 @@ RSpec.describe DuplicateSchoolsReport do
       create(:site, provider:, code: "-", urn: nil, location_name: "Main Site")
       school(urn: "100007", code: "Z", location_name: "Other Site").update_column(:urn, nil)
 
-      expect(report.groups).to be_empty
+      expect(classifier.call).to be_empty
     end
 
     it "ignores other recruitment cycles" do
@@ -81,6 +80,18 @@ RSpec.describe DuplicateSchoolsReport do
 
       expect(group_for("100006").codes).to include("-")
     end
+
+    it "carries the GIAS school and the provider_school rows the sites became" do
+      gias_school = create(:gias_school, :open, urn: "100008", name: "Lampton Academy")
+      site = school(urn: "100008", code: "E", location_name: "Lampton Academy")
+      duplicate_of(site, code: "F")
+      provider_school = create(:provider_school, provider:, gias_school:, site_code: "E")
+
+      group = group_for("100008")
+
+      expect(group.gias_school).to eq(gias_school)
+      expect(group.provider_schools).to contain_exactly(provider_school)
+    end
   end
 
   describe "classification" do
@@ -88,7 +99,7 @@ RSpec.describe DuplicateSchoolsReport do
       site = school(urn: "200001", code: "A", location_name: "Hopwood Hall College")
       duplicate_of(site, code: "A")
 
-      expect(kind_of("200001")).to be_a(described_class::Kind::Clone)
+      expect(kind_of("200001")).to be_a(DataHub::DuplicateSchools::Kind::Clone)
       expect(kind_of("200001").label).to eq("clone")
     end
 
@@ -96,28 +107,28 @@ RSpec.describe DuplicateSchoolsReport do
       site = school(urn: "200002", code: "DK", location_name: "Hilltop Infant School")
       duplicate_of(site, code: "DN")
 
-      expect(kind_of("200002")).to be_a(described_class::Kind::SplitCodeTwin)
+      expect(kind_of("200002")).to be_a(DataHub::DuplicateSchools::Kind::SplitCodeTwin)
     end
 
     it "calls a group holding the main site a main site collision" do
       main = school(urn: "200003", code: "-", location_name: "Main Site")
       duplicate_of(main, code: "E", location_name: "Lampton Academy")
 
-      expect(kind_of("200003")).to be_a(described_class::Kind::MainSiteCollision)
+      expect(kind_of("200003")).to be_a(DataHub::DuplicateSchools::Kind::MainSiteCollision)
     end
 
     it "prefers the main site collision over the clone shape" do
       main = school(urn: "200004", code: "-", location_name: "Main Site")
       duplicate_of(main, code: "-")
 
-      expect(kind_of("200004")).to be_a(described_class::Kind::MainSiteCollision)
+      expect(kind_of("200004")).to be_a(DataHub::DuplicateSchools::Kind::MainSiteCollision)
     end
 
     it "calls two codes under two names a divergent name twin" do
       site = school(urn: "200005", code: "DM", location_name: "George Abbot School")
       duplicate_of(site, code: "EE", location_name: "Main site Secondary- one of our partner schools")
 
-      expect(kind_of("200005")).to be_a(described_class::Kind::DivergentNameTwin)
+      expect(kind_of("200005")).to be_a(DataHub::DuplicateSchools::Kind::DivergentNameTwin)
     end
   end
 
@@ -169,32 +180,6 @@ RSpec.describe DuplicateSchoolsReport do
       duplicate_of(site, code: "O", location_name: "Oakthorpe Primary School")
 
       expect(kind_of("300006").flags).to include(provider_authored_name: false)
-    end
-  end
-
-  describe "#call" do
-    before do
-      create(:gias_school, :open, urn: "400001", name: "Hilltop Infant School")
-      site = school(urn: "400001", code: "DK", location_name: "Hilltop Infant School")
-      duplicate_of(site, code: "DN")
-    end
-
-    it "counts the groups by kind" do
-      report.call
-
-      expect(output.string).to include("split_code_twin", "groups")
-    end
-
-    it "prints a CSV row per site, carrying its kind" do
-      report.call
-
-      csv_rows = output.string.lines.grep(/^#{year},/)
-      expect(csv_rows.count).to eq(2)
-      expect(csv_rows).to all(include("split_code_twin", "400001"))
-    end
-
-    it "changes nothing" do
-      expect { report.call }.not_to(change { Site.kept.pluck(:id, :code, :location_name, :urn, :discarded_at) })
     end
   end
 end

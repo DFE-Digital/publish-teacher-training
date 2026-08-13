@@ -57,6 +57,13 @@
   - skipped_with_courses
   - kept_present
   - kept_missing
+  - years
+  - groups_processed
+  - surplus_sites
+  - surplus_provider_schools
+  - kinds
+  - flags
+  - duplicate_groups
   - discarded_total_count
   - discarded_lack_urn
   - discarded_invalid_gias_urn
