@@ -5,7 +5,9 @@ FactoryBot.define do
     provider_name { "ACME SCITT#{rand(1_000_000)}" }
 
     sequence(:provider_code) do |n|
-      ProviderCodeGenerator.new(n).call
+      # Avoid generating "I30" code by chance This code has specific
+      # and unique GCSE grade requirements that can cause flaky tests
+      ProviderCodeGenerator.new(n).call(avoid: %w[I30])
     end
 
     trait :with_anonymised_data do
@@ -81,6 +83,10 @@ FactoryBot.define do
 
     trait :previous_recruitment_cycle do
       recruitment_cycle { find_or_create :recruitment_cycle, :previous }
+    end
+
+    trait :gcse_grade_5 do
+      provider_code { "I30" }
     end
 
     trait :published_scitt do
