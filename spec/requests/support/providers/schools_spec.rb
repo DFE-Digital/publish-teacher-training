@@ -20,6 +20,7 @@ RSpec.describe "Support provider schools" do
     let!(:provider_school) do
       create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
     end
+    let!(:other_provider_school) { create(:provider_school, provider:) }
     let!(:exempt_course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
 
     def remove_school
@@ -53,7 +54,15 @@ RSpec.describe "Support provider schools" do
 
       expect { remove_school }.not_to(change { exempt_course.reload.changed_at })
 
-      expect(provider.schools.count).to eq(1)
+      expect(provider.schools).to contain_exactly(provider_school, other_provider_school)
+    end
+
+    it "does not remove the provider's last school" do
+      other_provider_school.destroy!
+
+      expect { remove_school }.not_to(change { provider.schools.count })
+
+      expect(response).to redirect_to(delete_support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid))
     end
   end
 end

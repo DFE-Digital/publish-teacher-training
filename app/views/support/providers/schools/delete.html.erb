@@ -14,6 +14,13 @@
           delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site.uuid),
           method: :delete,
           class: "govuk-button--warning" %>
+    <% elsif school_removal.only_school? %>
+      <p class="govuk-body">
+        <%= "#{@site.location_name} is the only school for #{@provider.provider_name}." %>
+      </p>
+      <p class="govuk-body">
+        To remove it, you must first add another school.
+      </p>
     <% else %>
       <p class="govuk-body">
         <%= "#{@site.location_name} is a school for courses run by #{@provider.provider_name}." %>

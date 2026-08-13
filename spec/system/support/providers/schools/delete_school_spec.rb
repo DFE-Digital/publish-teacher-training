@@ -7,6 +7,7 @@ RSpec.describe "Delete school under provider as an admin" do
     scenario do
       given_i_am_authenticated_as_an_admin_user
       and_there_is_a_provider_site
+      and_the_provider_has_a_second_school
       and_i_visit_the_support_provider_school_show_page
       when_i_click_remove_school_link
       then_i_am_on_the_school_delete_page
@@ -22,6 +23,7 @@ RSpec.describe "Delete school under provider as an admin" do
     scenario "when the school becomes associated with a course before removal" do
       given_i_am_authenticated_as_an_admin_user
       and_there_is_a_provider_site
+      and_the_provider_has_a_second_school
       and_i_visit_the_support_provider_school_show_page
       when_i_click_remove_school_link
       then_i_am_on_the_school_delete_page
@@ -32,9 +34,19 @@ RSpec.describe "Delete school under provider as an admin" do
       and_the_school_is_not_deleted
     end
 
+    scenario "when it is the provider's only school" do
+      given_i_am_authenticated_as_an_admin_user
+      and_there_is_a_provider_site
+      and_i_visit_the_support_provider_school_show_page
+      when_i_click_remove_school_link
+      then_i_am_on_the_school_delete_page
+      and_i_am_told_it_is_the_only_school
+    end
+
     scenario "after the schools remodel cycle without a legacy site" do
       given_i_am_authenticated_as_an_admin_user
       and_there_is_a_provider_school_after_the_schools_remodel_cycle_without_a_legacy_site
+      and_the_future_provider_has_a_second_school
       when_i_visit_the_support_provider_schools_index_page_after_the_schools_remodel_cycle
       then_i_see_the_provider_school_listed_with_its_uuid
 
@@ -49,6 +61,20 @@ RSpec.describe "Delete school under provider as an admin" do
 
   def and_there_is_a_provider_school_after_the_schools_remodel_cycle_without_a_legacy_site
     expect(Site.find_by_uuid(future_provider_school.uuid)).to be_nil
+  end
+
+  def and_the_provider_has_a_second_school
+    create(:provider_school, provider: @provider, gias_school: create(:gias_school, name: "Second School"), site_code: "Z")
+  end
+
+  def and_the_future_provider_has_a_second_school
+    create(:provider_school, provider: future_provider, gias_school: create(:gias_school, name: "Second Future School"), site_code: "Z")
+  end
+
+  def and_i_am_told_it_is_the_only_school
+    expect(page).to have_content("#{@provider_school.location_name} is the only school for School of Cats.")
+    expect(page).to have_content("To remove it, you must first add another school.")
+    expect(support_provider_school_delete_page).not_to have_remove_school_button
   end
 
   def when_i_visit_the_support_provider_schools_index_page_after_the_schools_remodel_cycle
