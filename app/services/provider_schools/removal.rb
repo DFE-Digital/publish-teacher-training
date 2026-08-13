@@ -27,7 +27,15 @@ module ProviderSchools
       @site ||= provider.sites.find_by(uuid:)
     end
 
+    # A provider is never left without any schools, so its last one cannot be
+    # removed. Surfaced so the delete page can explain which reason applies.
+    def only_school?
+      provider.schools.one?
+    end
+
     def removable?
+      return false if only_school?
+
       !school.course_schools.joins(:course).merge(Course.kept).exists?
     end
 
