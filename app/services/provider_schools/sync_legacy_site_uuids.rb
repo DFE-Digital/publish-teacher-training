@@ -32,13 +32,14 @@ module ProviderSchools
 
     def legacy_site_uuid_for(provider_school)
       legacy_site_uuids = legacy_site_uuids_by_identity.fetch(identity_for(provider_school), [])
-      return legacy_site_uuids.first if legacy_site_uuids.one?
+      return legacy_site_uuids.first if legacy_site_uuids.any?
 
       raise LegacySiteMismatchError, mismatch_message(provider_school, legacy_site_uuids)
     end
 
     def legacy_site_uuids_by_identity
       @legacy_site_uuids_by_identity ||= Site.school.kept.where(provider:)
+        .order(:id)
         .pluck(:urn, :code, :uuid)
         .each_with_object({}) do |(urn, code, uuid), index|
           (index[[urn, code]] ||= []) << uuid
@@ -51,7 +52,7 @@ module ProviderSchools
 
     def mismatch_message(provider_school, legacy_site_uuids)
       count = legacy_site_uuids.size
-      "expected one legacy site for provider=#{provider.id} " \
+      "expected at least one legacy site for provider=#{provider.id} " \
         "provider_school=#{provider_school.id} " \
         "site_code=#{provider_school.site_code} " \
         "urn=#{provider_school.gias_school.urn.inspect}, found #{count}"

@@ -40,6 +40,20 @@ RSpec.describe ProviderSchools::SyncLegacySiteUuids do
     expect(provider_school.reload.uuid).to eq(legacy_site.uuid)
   end
 
+  context "when duplicate legacy sites match" do
+    let!(:duplicate_site) do
+      build(:site, provider:, code: legacy_site.code, urn: gias_school.urn).tap do |site|
+        site.save!(validate: false)
+      end
+    end
+
+    it "uses one of the matching legacy site UUIDs" do
+      sync_uuids
+
+      expect([legacy_site.uuid, duplicate_site.uuid]).to include(provider_school.reload.uuid)
+    end
+  end
+
   context "when no matching legacy site exists" do
     before { legacy_site.destroy! }
 
@@ -47,7 +61,7 @@ RSpec.describe ProviderSchools::SyncLegacySiteUuids do
       expect { sync_uuids }
         .to raise_error(
           described_class::LegacySiteMismatchError,
-          /expected one legacy site for provider=#{provider.id}/,
+          /expected at least one legacy site for provider=#{provider.id}/,
         )
     end
   end
