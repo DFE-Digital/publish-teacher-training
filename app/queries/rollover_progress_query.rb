@@ -24,6 +24,10 @@ class RolloverProgressQuery
 
   delegate :count, to: :rolled_over_study_sites, prefix: true
 
+  delegate :count, to: :eligible_schools, prefix: true
+
+  delegate :count, to: :rolled_over_schools, prefix: true
+
   delegate :count, to: :rolled_over_courses, prefix: true
 
   delegate :count, to: :eligible_partnerships, prefix: true
@@ -87,6 +91,16 @@ class RolloverProgressQuery
 
   def rolled_over_study_sites
     @rolled_over_study_sites ||= @target_cycle.study_sites
+  end
+
+  def eligible_schools
+    @eligible_schools ||= @previous_target_cycle.provider_schools
+      .with_available_gias_school
+      .where(provider_id: eligible_providers.select(:id))
+  end
+
+  def rolled_over_schools
+    @rolled_over_schools ||= @target_cycle.provider_schools.with_available_gias_school
   end
 
   def rolled_over_partnerships
