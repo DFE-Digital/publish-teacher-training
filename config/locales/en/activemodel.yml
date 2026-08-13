@@ -16,6 +16,7 @@ en:
         providers_summary: Rolled over providers
         courses_summary: Rolled over courses
         study_sites_summary: Rolled over study sites
+        schools_summary: Rolled over schools
         remaining_to_rollover: Remaining to rollover
         providers_without_published_courses: Providers without published courses (not rolled over)
     errors:
