@@ -17,7 +17,11 @@ module SavedCourses
     def title
       provider_span = content_tag(:span, course.provider_name)
       course_span = content_tag(:span, course.name_and_code)
-      status_tag = course.decorate.saved_status_tag
+      status_tag = if course_from_previous_year?
+                     helpers.govuk_tag(text: t(".course_from_previous_year"), colour: "red")
+                   else
+                     course.decorate.saved_status_tag
+                   end
       status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
 
       title_inner = safe_join(
@@ -29,11 +33,14 @@ module SavedCourses
         ].compact,
       )
 
-      course_info =
-        govuk_link_to(
-          find_course_path(provider_code: course.provider_code, course_code: course.course_code),
-          class: "govuk-link",
-        ) { title_inner }
+      course_info = if course_from_previous_year?
+                      title_inner
+                    else
+                      govuk_link_to(
+                        find_course_path(provider_code: course.provider_code, course_code: course.course_code),
+                        class: "govuk-link",
+                      ) { title_inner }
+                    end
 
       content_tag(:div, class: "app-saved-course__card-title") do
         safe_join(
@@ -62,6 +69,10 @@ module SavedCourses
       @location.present? &&
         saved_course.respond_to?(:minimum_distance_to_search_location) &&
         saved_course.minimum_distance_to_search_location.present?
+    end
+
+    def course_from_previous_year?
+      course.recruitment_cycle.year.to_i < Find::CycleTimetable.current_year
     end
   end
 end
