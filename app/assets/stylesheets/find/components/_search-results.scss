@@ -124,6 +124,6 @@
   }
 
   @include govuk-media-query($from: "desktop") {
-    padding: govuk-spacing(6);
+    padding: govuk-spacing(4);
   }
 }
