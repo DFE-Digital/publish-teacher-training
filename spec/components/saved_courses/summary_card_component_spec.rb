@@ -50,6 +50,27 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
     )
   end
 
+  context "when the course is from a previous recruitment cycle" do
+    before do
+      course.provider.update!(
+        recruitment_cycle: find_or_create(:recruitment_cycle, :previous),
+      )
+    end
+
+    it "renders the course title without a link" do
+      expect(rendered).to have_text("Best Practice Network")
+      expect(rendered).to have_text("Physics (S252)")
+      expect(rendered).not_to have_link(
+        "Best Practice Network",
+        href: find_course_path(provider_code: "RO1", course_code: "S252"),
+      )
+    end
+
+    it "renders a previous-year tag" do
+      expect(rendered).to have_css(".govuk-tag", text: "Course from a previous year")
+    end
+  end
+
   it "renders a delete button that submits to the destroy route" do
     expect(rendered).to have_button("Delete")
     expect(rendered).to have_css("form[action='#{find_candidate_saved_course_path(saved_course)}']")

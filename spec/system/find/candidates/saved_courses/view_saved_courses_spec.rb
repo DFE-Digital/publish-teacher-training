@@ -18,6 +18,28 @@ RSpec.describe "Viewing my saved courses", service: :find do
     then_the_back_link_takes_me_back_to_the_saved_courses_page
   end
 
+  scenario "A candidate sees an unlinked course from a previous year" do
+    when_i_log_in_as_a_candidate
+    and_i_have_saved_courses
+    @course.provider.update!(
+      recruitment_cycle: find_or_create(:recruitment_cycle, :previous),
+    )
+
+    then_i_visit_my_saved_courses
+
+    within_first_saved_course_row do
+      expect(page).to have_content("Course from a previous year")
+      expect(page).to have_content(@course.name_and_code)
+      expect(page).not_to have_link(
+        @course.provider_name,
+        href: find_course_path(
+          provider_code: @course.provider_code,
+          course_code: @course.course_code,
+        ),
+      )
+    end
+  end
+
   scenario "A candidate can view the saved courses page with no saved courses" do
     when_i_log_in_as_a_candidate
     then_i_visit_my_saved_courses
