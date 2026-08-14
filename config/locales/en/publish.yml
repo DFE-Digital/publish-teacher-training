@@ -13,6 +13,10 @@ en:
         course_count:
           one: 1 course
           other: "%{count} courses"
+        downloads:
+          heading: Download course information
+          course_information: Download basic course information (CSV)
+          schools: Download the schools attached to each course (CSV)
       training_with_disabilities:
         show:
           heading: Training with disabilities and other needs at %{provider_name}

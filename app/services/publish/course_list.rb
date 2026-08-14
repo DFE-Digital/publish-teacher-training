@@ -52,6 +52,12 @@ module Publish
       groups.any? { |group| group.courses.any? }
     end
 
+    # The whole list, ignoring filters. Reuses the already-run filtered rows when
+    # nothing is filtered, so the common first load runs no extra query.
+    def unfiltered_courses
+      @unfiltered_courses ||= params.blank? ? courses : Publish::Courses::Query.call(provider:).to_a
+    end
+
     def initialize(provider:, params: {})
       @provider = provider
       @params = params
@@ -103,12 +109,6 @@ module Publish
 
     def courses
       @courses ||= Publish::Courses::Query.call(provider:, params:).to_a
-    end
-
-    # The whole list, ignoring filters. Reuses the already-run filtered rows when
-    # nothing is filtered, so the common first load runs no extra query.
-    def unfiltered_courses
-      @unfiltered_courses ||= params.blank? ? courses : Publish::Courses::Query.call(provider:).to_a
     end
   end
 end

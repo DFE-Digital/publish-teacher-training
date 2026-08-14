@@ -175,6 +175,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
       patch "course_wizard/:state_key/:step", to: "course_wizards#update"
 
       resources :courses, param: :code, only: %i[index new create show] do
+        get "/download-course-information", on: :collection, to: "courses/exports#course_information", as: :download_course_information
+        get "/download-course-schools", on: :collection, to: "courses/exports#schools", as: :download_course_schools
+
         get "/apply", on: :member, to: "courses#apply", as: :apply
         get "/details", on: :member, to: "courses#details"
 
