@@ -80,10 +80,10 @@ describe "Publish::CoursesController#index" do
         expect(response.parsed_body.text).not_to include("Filter courses")
       end
 
-      it "shifts the course list to the left at its usual width, without a sidebar column" do
+      it "keeps the sidebar column, which still carries the downloads" do
         get_courses
 
-        expect(response.parsed_body.css(".govuk-grid-column-one-third")).to be_empty
+        expect(response.parsed_body.css(".govuk-grid-column-one-third")).to be_present
         expect(response.parsed_body.css(".govuk-grid-column-two-thirds")).to be_present
         expect(course_names).to include("Only course")
       end

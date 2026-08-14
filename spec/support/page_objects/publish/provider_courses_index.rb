@@ -40,6 +40,11 @@ module PageObjects
         end
       end
 
+      section :downloads, ".app-status-box" do
+        element :heading, "h2"
+        elements :links, "a"
+      end
+
       section :active_filters, ".app-active-filters" do
         elements :chips, ".app-active-filters__remove-filter"
         element :clear_all, ".app-c-filter-summary__clear-filters"

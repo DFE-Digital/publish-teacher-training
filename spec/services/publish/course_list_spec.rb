@@ -65,6 +65,22 @@ RSpec.describe Publish::CourseList do
     end
   end
 
+  describe "#unfiltered_courses" do
+    let(:provider) { create(:provider, :accredited_provider) }
+
+    it "is empty for a provider with no courses" do
+      expect(course_list.unfiltered_courses).to be_empty
+    end
+
+    it "keeps the courses the filters have excluded" do
+      course = create(:course, :primary, provider:)
+      filtered = described_class.new(provider: provider.reload, params: { level: %w[further_education] })
+
+      expect(filtered.any?).to be(false)
+      expect(filtered.unfiltered_courses.map(&:id)).to eq([course.id])
+    end
+  end
+
   describe "#visible_course_information_fields" do
     let(:provider) { create(:provider, :accredited_provider) }
 
