@@ -34,22 +34,6 @@
         <%= form.hidden_field :previous_location_category, value: @search_courses_form.location_category %>
 
         <div class="app-find-search">
-          <div class="govuk-form-group" data-controller="dfe-autocomplete" data-dfe-autocomplete-name-value="subject_name" data-dfe-autocomplete-min-length-value="2">
-            <%= render DfE::Autocomplete::View.new(
-              form,
-              attribute_name: :subject_code,
-              form_field: form.govuk_select(
-                :subject_code,
-                options_for_select(
-                  dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code match_synonyms]),
-                  form.object.subject_code,
-                ),
-                label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" },
-                form: "find-search-form",
-              ),
-            ) %>
-          </div>
-
           <%= form.govuk_text_field :location,
             label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
             form_group: {
