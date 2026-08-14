@@ -58,6 +58,18 @@
     </div>
 
     <div class="govuk-grid-column-two-thirds">
+
+    <% if show_salary_subject_message?(params) %>
+      <div class="govuk-inset-text app-card app-card--inset--salaried">
+          <h3 class="govuk-heading-s">
+            Is a salaried course right for me?
+          </h3>
+          <p class="govuk-body">
+            Fee paying courses are less competitive, and you could receive more money if you're eligible for <a href="https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries" class="govuk-link govuk-link--no-visited-state">bursaries or scholarships</a>.
+         </p>
+      </div>
+    <% end %>
+
       <% if @results.present? %>
         <ul class="app-search-results">
           <% @results.each do |course| %>
