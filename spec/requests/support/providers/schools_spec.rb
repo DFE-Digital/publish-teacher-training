@@ -55,6 +55,7 @@ RSpec.describe "Support provider schools" do
       expect { remove_school }.not_to(change { exempt_course.reload.changed_at })
 
       expect(provider.schools).to contain_exactly(provider_school, other_provider_school)
+      expect(flash[:warning]).to eq("This school could not be removed because it is used by a course")
     end
 
     it "does not remove the provider's last school" do
@@ -63,6 +64,7 @@ RSpec.describe "Support provider schools" do
       expect { remove_school }.not_to(change { provider.schools.count })
 
       expect(response).to redirect_to(delete_support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid))
+      expect(flash[:warning]).to eq("This school could not be removed because it is the provider’s only school")
     end
   end
 end

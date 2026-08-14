@@ -241,6 +241,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
       expect { remove_school }.not_to(change { exempt_course.reload.changed_at })
 
       expect(provider.schools).to contain_exactly(provider_school, other_provider_school)
+      expect(flash[:warning]).to eq("This school could not be removed because it is used by a course")
     end
 
     it "does not remove the provider's last school" do
@@ -249,6 +250,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
       expect { remove_school }.not_to(change { provider.schools.count })
 
       expect(response).to redirect_to(delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle.year, provider_school.uuid))
+      expect(flash[:warning]).to eq("This school could not be removed because it is your only school")
     end
   end
 end
