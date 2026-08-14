@@ -20,37 +20,37 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= render partial: "find/results/courses_guidance/show" %>
-  </div>
 
-  <div class="govuk-grid-column-full">
-    <div class="app-search__controls">
       <h1 class="govuk-heading-l">
         <%= render(Find::Courses::ResultsPageTitle::View.new(courses_count: @courses_count, address: @address, subjects: @search_courses_form.subjects, radius: @search_courses_form.radius)) %>
       </h1>
 
-      <%= form_with model: @search_courses_form, scope: "", id: "find-search-form", url: find_results_path, method: :get do |form_object| %>
-        <% form = form_object %>
-        <%= form.hidden_field :utm_source, value: "results" %>
-        <%= form.hidden_field :previous_location_category, value: @search_courses_form.location_category %>
-
-        <div class="app-find-search">
-          <%= form.govuk_text_field :location,
-            label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
-            form_group: {
-              class: "suggestions",
-              data: remote_autocomplete_data(path: find_geolocation_suggestions_path),
-            },
-            autocomplete: "off", value: @address.short_address %>
-
-            <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), name: "utm_medium", value: "search" %>
-          </div>
-        <% end %>
-      </div>
     </div>
   </div>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
+
+      <div class="app-search-location__controls">
+        <%= form_with model: @search_courses_form, scope: "", id: "find-search-form", url: find_results_path, method: :get do |form_object| %>
+          <% form = form_object %>
+          <%= form.hidden_field :utm_source, value: "results" %>
+          <%= form.hidden_field :previous_location_category, value: @search_courses_form.location_category %>
+
+          <div class="app-find-search">
+            <%= form.govuk_text_field :location,
+              label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
+              form_group: {
+                class: "suggestions",
+                data: remote_autocomplete_data(path: find_geolocation_suggestions_path),
+              },
+              autocomplete: "off", value: @address.short_address %>
+
+              <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), name: "utm_medium", value: "search" %>
+            </div>
+          <% end %>
+        </div>
+
       <div class="app-filter">
         <h2 class="app-filter__heading govuk-heading-m"><%= t(".filter_results") %></h2>
         <%= render "find/results/filters/all", form_id: "find-search-form", form: %>
