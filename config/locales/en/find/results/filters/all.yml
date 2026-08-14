@@ -14,8 +14,8 @@ en:
           filter_title_sort_by: Sort by
           filter_title_search_radius: Location search radius
           filter_title_engineers_physics: Engineers teach physics
-          filter_title_primary_html: Primary<br aria-hidden="true">(ages 3 to 11)
-          filter_title_secondary_html: Secondary<br aria-hidden="true">(ages 11 to 18)
+          filter_title_primary_html: Primary subjects<br aria-hidden="true">(ages 3 to 11)
+          filter_title_secondary_html: Secondary subjects<br aria-hidden="true">(ages 11 to 18)
           filter_title_further_html: Further education<br aria-hidden="true">(ages 16 and over)
           filter_title_send_html: Special educational needs<br aria-hidden="true">(SEND)
           filter_title_fee: Fee or salary
