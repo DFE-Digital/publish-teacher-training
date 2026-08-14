@@ -34,11 +34,17 @@ module Support
           redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
         else
           redirect_to delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site.uuid),
-                      flash: { warning: t(".cannot_remove_school") }
+                      flash: { warning: cannot_remove_school_message }
         end
       end
 
     private
+
+      def cannot_remove_school_message
+        return t(".cannot_remove_only_school") if school_removal.only_school?
+
+        t(".cannot_remove_school")
+      end
 
       def provider
         @provider ||= recruitment_cycle.providers.find(params[:provider_id])

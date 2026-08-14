@@ -14,6 +14,7 @@ en:
         search: # file
         destroy:
           cannot_remove_school: This school could not be removed because it is used by a course
+          cannot_remove_only_school: This school could not be removed because it is the provider’s only school
       users:
         first_name: "First name"
         last_name: "Last name"

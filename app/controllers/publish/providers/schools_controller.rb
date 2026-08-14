@@ -32,11 +32,17 @@ module Publish
           redirect_to publish_provider_recruitment_cycle_schools_path
         else
           redirect_to delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.uuid),
-                      flash: { warning: t(".cannot_remove_school") }
+                      flash: { warning: cannot_remove_school_message }
         end
       end
 
     private
+
+      def cannot_remove_school_message
+        return t(".cannot_remove_only_school") if school_removal.only_school?
+
+        t(".cannot_remove_school")
+      end
 
       def school_removal
         @school_removal ||= ProviderSchools::Removal.new(provider:, uuid: params[:uuid])
