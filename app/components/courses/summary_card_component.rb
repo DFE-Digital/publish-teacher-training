@@ -2,50 +2,70 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
-    attr_reader :course, :location, :visa_sponsorship, :short_address
+    attr_reader :course, :location, :visa_sponsorship, :short_address, :locality, :administrative_area_level_2, :postal_code
 
-    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil)
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil, locality: nil, administrative_area_level_2: nil, postal_code: nil, location_category: nil)
       @course = course
       @candidate = candidate
       @location = location
       @visa_sponsorship = visa_sponsorship
       @short_address = short_address
       @show_start_date = show_start_date
+      @locality = locality
+      @administrative_area_level_2 = administrative_area_level_2
+      @postal_code = postal_code
+      @location_category = location_category
 
       super()
     end
 
     def title
-      url = find_course_path(
+      find_course_path(
         provider_code: course.provider_code,
         course_code: course.course_code,
         location: @location,
         distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
       )
 
-      course_link = govuk_link_to(url, class: "govuk-link govuk-!-font-size-24") do
-        safe_join([
-          content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
-          content_tag(:span, course.name_and_code, class: "app-search-result__course-name"),
-        ])
-      end
+      title_parts = [
+        content_tag(
+          :div,
+          course.provider_name,
+          class: "app-search-result__provider-name",
+        ),
+      ]
 
-      status_tag = application_status_tag
-      status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
+      title_parts << content_tag(
+        :div,
+        "",
+        class: "govuk-body-s govuk-!-margin-bottom-0",
+      )
 
-      title_content = safe_join([course_link, status_block].compact)
+      title_parts << content_tag(
+        :div,
+        search_by_location? ? nearest_placement_school_text : "",
+        class: "govuk-body-s govuk-!-margin-bottom-0",
+      )
 
-      classes = [
-        ("govuk-grid-column-one-half" if save_toggle_button),
-        ("govuk-!-padding-left-2" unless save_toggle_button),
-      ].compact.join(" ")
+      safe_join(title_parts)
+    end
 
-      content_tag(:div, class: "govuk-grid-row") do
-        safe_join([
-          content_tag(:div, title_content, class: classes),
-          content_tag(:div, save_toggle_button || "", class: "govuk-grid-column-one-half govuk-!-padding-top-2 govuk-!-padding-right-0"),
-        ])
-      end
+    def nearest_placement_school_text
+      return unless search_by_location?
+
+      from_text = centre_location? ? " from the centre of " : " from "
+
+      safe_join([
+        content_tag(
+          :strong,
+          pluralize(course.minimum_distance_to_search_location.ceil, "mile"),
+        ),
+        from_text,
+        content_tag(
+          :strong,
+          @short_address.presence || @location,
+        ),
+      ])
     end
 
     def save_toggle_button
@@ -72,14 +92,37 @@ module Courses
       course.without_employing_school?
     end
 
+    def centre_location?
+      postal_code.blank? &&
+        (
+          locality.present? ||
+          administrative_area_level_2.present?
+        )
+    end
+
     def location_value
       return unless search_by_location?
 
+      translation_key =
+        if centre_location?
+          ".location_value.distance_from_centre"
+        else
+          ".location_value.distance"
+        end
+
       t(
-        ".location_value.distance",
+        translation_key,
         school_term:,
-        distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
-        location: content_tag(:span, sanitize(@short_address.presence || @location), class: "govuk-!-font-weight-bold"),
+        distance: content_tag(
+          :span,
+          pluralize(course.minimum_distance_to_search_location.ceil, "mile"),
+          class: "govuk-!-font-weight-bold",
+        ),
+        location: content_tag(
+          :span,
+          sanitize(@short_address.presence || @location),
+          class: "govuk-!-font-weight-bold",
+        ),
       ).html_safe
     end
 
@@ -137,6 +180,14 @@ module Courses
 
     def qualification_value
       t(".qualification_value.#{course.qualification}_html")
+    end
+
+    def study_mode_value
+      t(".study_mode_value.#{course.study_mode}")
+    end
+
+    def funding_value
+      t(".funding_value.#{course.funding}")
     end
 
     def degree_requirements_key

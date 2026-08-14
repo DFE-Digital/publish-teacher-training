@@ -124,6 +124,11 @@ module Find
       )
     end
 
+    def group
+      index
+      render :group
+    end
+
     def meaningful_for_recent_search?
       params.keys.intersect?(%w[subjects
                                 location
