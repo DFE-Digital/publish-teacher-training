@@ -151,8 +151,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
 
-  <%= govuk_link_to "Applications", find_applications_path %>
-
     <%= govuk_inset_text classes: "app-callout app-callout--pink app-callout--min-height govuk-!-margin-top-0" do %>
       <h3><%= t("find.search.become_a_teacher") %></h3>
       <%= t("find.search.become_a_teacher_html", link: govuk_link_to(t("find.search.become_a_teacher_link_text"), find_track_click_path(utm_content: "become_a_teacher", url: t("get_into_teaching.url_become_a_teacher")))) %>
