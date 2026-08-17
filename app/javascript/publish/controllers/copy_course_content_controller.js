@@ -1,5 +1,13 @@
 import { Controller } from '@hotwired/stimulus'
 
+const COURSE_INFORMATION_FIELDS = [
+  'age',
+  'funding',
+  'qualification',
+  'studyMode',
+  'startDate'
+]
+
 export default class extends Controller {
   static targets = [
     'details',
@@ -14,23 +22,21 @@ export default class extends Controller {
   update (event) {
     const selected = event.target.selectedOptions[0]
 
-    if (!selected || !selected.value) {
+    if (!selected?.value) {
       this.detailsTarget.hidden = true
       return
     }
 
     this.titleTarget.textContent = `${selected.dataset.name} (${selected.dataset.code})`
 
-    this.ageTarget.textContent = selected.dataset.age || ''
-
-    this.fundingTarget.textContent = selected.dataset.funding || ''
-
-    this.qualificationTarget.textContent = selected.dataset.qualification || ''
-
-    this.studyModeTarget.textContent = selected.dataset.studyMode || ''
-
-    this.startDateTarget.textContent = selected.dataset.startDate || ''
+    this.updateCourseInformation(selected)
 
     this.detailsTarget.hidden = false
+  }
+
+  updateCourseInformation (selected) {
+    COURSE_INFORMATION_FIELDS.forEach((field) => {
+      this[`${field}Target`].textContent = selected.dataset[field] || ''
+    })
   }
 }
