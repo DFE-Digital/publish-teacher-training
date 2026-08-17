@@ -745,7 +745,7 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 4.0)
       multi_json (~> 1.10)
-    simplecov (1.1.0)
+    simplecov (1.1.1)
     site_prism (6.0.1)
       addressable (~> 2.8, >= 2.8.4)
       base64 (~> 0.3.0)
