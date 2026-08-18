@@ -2,15 +2,19 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
-    attr_reader :course, :location, :visa_sponsorship, :short_address
+    attr_reader :course, :location, :visa_sponsorship, :short_address, :locality, :administrative_area_level_2, :postal_code
 
-    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil)
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil, locality: nil, administrative_area_level_2: nil, postal_code: nil, location_category: nil)
       @course = course
       @candidate = candidate
       @location = location
       @visa_sponsorship = visa_sponsorship
       @short_address = short_address
       @show_start_date = show_start_date
+      @locality = locality
+      @administrative_area_level_2 = administrative_area_level_2
+      @postal_code = postal_code
+      @location_category = location_category
 
       super()
     end
@@ -72,14 +76,37 @@ module Courses
       course.without_employing_school?
     end
 
+    def centre_location?
+      postal_code.blank? &&
+        (
+          locality.present? ||
+          administrative_area_level_2.present?
+        )
+    end
+
     def location_value
       return unless search_by_location?
 
+      translation_key =
+        if centre_location?
+          ".location_value.distance_from_centre"
+        else
+          ".location_value.distance"
+        end
+
       t(
-        ".location_value.distance",
+        translation_key,
         school_term:,
-        distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
-        location: content_tag(:span, sanitize(@short_address.presence || @location), class: "govuk-!-font-weight-bold"),
+        distance: content_tag(
+          :span,
+          pluralize(course.minimum_distance_to_search_location.ceil, "mile"),
+          class: "govuk-!-font-weight-bold",
+        ),
+        location: content_tag(
+          :span,
+          sanitize(@short_address.presence || @location),
+          class: "govuk-!-font-weight-bold",
+        ),
       ).html_safe
     end
 
