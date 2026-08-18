@@ -57,6 +57,16 @@ RSpec.describe "Publish - Playing back the schools being changed", :js, type: :s
     and_i_am_not_told_i_am_adding_anything
   end
 
+  # The list only hides the schools a search rules out, so their ticks are still
+  # in the DOM and still submitted. The play-back has to agree with what will be
+  # saved, not with what happens to be on screen.
+  scenario "schools hidden by a search still count" do
+    when_i_search_for("Cedar")
+    and_i_check("Cedar School")
+    and_i_am_told_i_am_adding("Cedar School")
+    and_i_am_not_told_i_am_removing_anything
+  end
+
 private
 
   def attached_schools
@@ -106,6 +116,19 @@ private
   end
   alias_method :and_i_uncheck, :when_i_uncheck
 
+  def when_i_select_all_schools
+    check "Select all schools"
+  end
+
+  def and_i_unselect_all_schools
+    uncheck "Select all schools"
+  end
+
+  def when_i_search_for(query)
+    fill_in "Search for a school in the list", with: query
+    click_button "Search"
+  end
+
   def then_i_see_the_summary
     expect(publish_course_school_edit_page).to have_changes_summary
     expect(publish_course_school_edit_page.changes_summary).to have_content("You are updating these schools")
@@ -129,24 +152,16 @@ private
     expect(publish_course_school_edit_page.removed_school_names).to eq(school_names)
   end
 
-  def when_i_select_all_schools
-    check "Select all schools"
-  end
-
   def and_i_am_told_i_am_adding_all_schools
     expect(publish_course_school_edit_page.added).to have_content("You are adding all schools in your list")
   end
 
-  def and_i_am_not_told_i_am_removing_anything
-    expect(publish_course_school_edit_page.changes_summary).to have_no_content("You are removing")
-  end
-
-  def and_i_unselect_all_schools
-    uncheck "Select all schools"
-  end
-
   def and_i_am_told_i_am_removing_all_schools
     expect(publish_course_school_edit_page.removed).to have_content("You are removing all schools in your list")
+  end
+
+  def and_i_am_not_told_i_am_removing_anything
+    expect(publish_course_school_edit_page.changes_summary).to have_no_content("You are removing")
   end
 
   def and_i_am_not_told_i_am_adding_anything
