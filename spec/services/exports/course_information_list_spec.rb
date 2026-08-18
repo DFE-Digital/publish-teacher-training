@@ -9,7 +9,7 @@ module Exports
     let(:provider) { create(:provider) }
 
     def rows
-      CSV.parse(export.data, headers: true)
+      CSV.parse(export.data.delete_prefix(Exports::CourseColumns::BYTE_ORDER_MARK), headers: true)
     end
 
     describe "#data" do

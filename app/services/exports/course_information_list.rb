@@ -27,7 +27,7 @@ module Exports
     end
 
     def data
-      CSV.generate(headers: CSV_HEADERS, write_headers: true) do |csv|
+      BYTE_ORDER_MARK + CSV.generate(headers: CSV_HEADERS, write_headers: true) do |csv|
         courses.each do |course|
           enrichment = course.latest_enrichment
 

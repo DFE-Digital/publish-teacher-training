@@ -97,7 +97,7 @@ RSpec.describe "Downloading the course list as CSV" do
   end
 
   def and_it_lists(*names)
-    rows = CSV.parse(page.body, headers: true)
+    rows = CSV.parse(page.body.delete_prefix(Exports::CourseColumns::BYTE_ORDER_MARK), headers: true)
 
     expect(rows.map { |row| row["Course name"] } + rows.map { |row| row["Placement schools"] }).to include(*names)
   end
