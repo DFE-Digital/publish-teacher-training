@@ -1,0 +1,23 @@
+<div data-controller="schools-changes"
+     data-schools-changes-attached-value="<%= attached_value %>"
+     data-action="change->schools-changes#update">
+  <%= content %>
+
+  <div class="app-schools-changes govuk-!-margin-top-6"
+       hidden
+       data-schools-changes-target="summary">
+    <h2 class="govuk-heading-m"><%= t(".heading") %></h2>
+
+    <div class="app-schools-changes__added"
+         data-schools-changes-target="added"
+         data-all="<%= t(".adding_all") %>"
+         data-one="<%= t(".adding_one") %>"
+         data-other="<%= t(".adding_other") %>"></div>
+
+    <div class="app-schools-changes__removed"
+         data-schools-changes-target="removed"
+         data-all="<%= t(".removing_all") %>"
+         data-one="<%= t(".removing_one") %>"
+         data-other="<%= t(".removing_other") %>"></div>
+  </div>
+</div>

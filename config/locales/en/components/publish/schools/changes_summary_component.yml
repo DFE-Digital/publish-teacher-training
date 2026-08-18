@@ -1,0 +1,11 @@
+en:
+  publish:
+    schools:
+      changes_summary_component:
+        heading: You are updating these schools
+        adding_all: You are adding all schools in your list
+        adding_one: "You are adding 1 school:"
+        adding_other: "You are adding {count} schools:"
+        removing_all: You are removing all schools in your list
+        removing_one: "You are removing 1 school:"
+        removing_other: "You are removing {count} schools:"
