@@ -37,17 +37,17 @@ export default class extends Controller {
 
     this.summaryTarget.hidden = added.length === 0 && removed.length === 0
 
-    // Every school ticked is better said than listed - and it is the end state
-    // that decides, not which control got them there.
+    // Every school ticked, or none left ticked, is better said than listed - and
+    // it is the end state that decides, not which control got them there.
     this.fill(this.addedTarget, added, checked.length === schools.length)
-    this.fill(this.removedTarget, removed)
+    this.fill(this.removedTarget, removed, checked.length === 0)
   }
 
   schools () {
     return Array.from(this.element.querySelectorAll('input[type=checkbox][data-school-name]'))
   }
 
-  fill (section, schools, all = false) {
+  fill (section, schools, all) {
     section.replaceChildren()
 
     if (schools.length === 0) return
