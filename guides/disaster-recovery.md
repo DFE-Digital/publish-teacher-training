@@ -34,7 +34,7 @@ Be sure to review the general documentation maintained by Teacher Services if th
     5. Merge to main
     6. You'll need to undo this later
 6. Test that maintenance mode is active and that the [temporary ingress URL](#temporary-ingress-urls) are accessible.
-    1. Main: https://www.find-postgraduate-teacher-training.service.gov.uk/
+    1. Main: https://find-teacher-training-courses.service.gov.uk/
     2. Ingress: https://find-temp.teacherservices.cloud/
 
 ## Database server is gone?
