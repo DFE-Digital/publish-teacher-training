@@ -58,7 +58,7 @@ runs:
           echo "app_name=publish-${{ env.app_environment }}" >> $GITHUB_ENV
         fi
 
-    - uses: azure/login@v2
+    - uses: azure/login@v3
       with:
         tenant-id: ${{ inputs.azure-tenant-id }}
         subscription-id: ${{ inputs.azure-subscription-id }}
