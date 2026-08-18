@@ -64,6 +64,13 @@ module Exports
           ],
         )
       end
+
+      it "falls back to the code when the accrediting provider has no row in the cycle" do
+        course = create(:course, provider:, accrediting_provider: nil, name: "Rolled over course")
+        course.update_columns(accredited_provider_code: "ZZZ9")
+
+        expect(rows.first.to_h).to include("Accredited provider" => "ZZZ9")
+      end
     end
 
     describe "#filename" do

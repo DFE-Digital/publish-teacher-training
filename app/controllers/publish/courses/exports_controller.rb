@@ -14,8 +14,6 @@ module Publish
     private
 
       def send_csv(export)
-        authorize :provider, :index?
-
         respond_to do |format|
           format.csv { send_data(export.data, filename: export.filename, disposition: :attachment) }
         end
