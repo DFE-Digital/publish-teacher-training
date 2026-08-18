@@ -12,14 +12,13 @@ module Exports
       CSV.parse(export.data, headers: true)
     end
 
-    def course_at(*school_names, **attributes)
-      create(
-        :course,
-        provider:,
-        accrediting_provider: nil,
-        site_statuses: school_names.map { |name| build(:site_status, :running, site: create(:site, provider:, location_name: name)) },
-        **attributes,
-      )
+    def course_at(*args, **attributes)
+      traits, school_names = args.partition { |arg| arg.is_a?(Symbol) }
+      course = create(:course, *traits, provider:, accrediting_provider: nil, **attributes)
+      school_names.each do |name|
+        create(:course_school, course:, gias_school: create(:gias_school, name:))
+      end
+      course
     end
 
     describe "#data" do
@@ -76,26 +75,35 @@ module Exports
         expect(rows.map { |row| row["Course code"] }).to eq(%w[2ZSC R225 S909])
       end
 
-      it "leaves out a placement that is not running or new" do
-        school = create(:site, provider:, location_name: "Admirals Academy")
-        create(:course, provider:, accrediting_provider: nil, name: "Suspended placement",
-                        site_statuses: [build(:site_status, :suspended, site: school)])
-
-        expect(rows).to be_empty
-      end
-
       it "lists a school once per course even when attached twice" do
-        school = create(:site, provider:, location_name: "Admirals Academy")
-        create(:course, provider:, accrediting_provider: nil, name: "Doubly attached",
-                        site_statuses: [build(:site_status, :running, site: school),
-                                        build(:site_status, :running, site: school)])
+        course = course_at(name: "Doubly attached")
+        school = create(:gias_school, name: "Admirals Academy")
+        create_list(:course_school, 2, course:, gias_school: school)
 
         expect(rows.map { |row| row["Placement schools"] }).to eq(["Admirals Academy"])
       end
 
+      it "keeps two different schools that share a name" do
+        course = course_at(name: "Same name twice")
+        create(:course_school, course:, gias_school: create(:gias_school, name: "Thameside Primary School", urn: "109800"))
+        create(:course_school, course:, gias_school: create(:gias_school, name: "Thameside Primary School", urn: "138581"))
+
+        expect(rows.map { |row| row["Placement schools"] }).to eq(["Thameside Primary School", "Thameside Primary School"])
+      end
+
+      it "names the school as GIAS does, not as the legacy site does" do
+        course = course_at(name: "Renamed school")
+        gias_school = create(:gias_school, name: "Orion Coopers")
+        site = create(:site, provider:, location_name: "Coopers School")
+        create(:course_school, course:, gias_school:)
+        create(:site_status, :running, course:, site:)
+
+        expect(rows.map { |row| row["Placement schools"] }).to eq(["Orion Coopers"])
+      end
+
       it "leaves out a course with no school attached" do
         course_at("Admirals Academy", name: "Attached course")
-        create(:course, provider:, accrediting_provider: nil, name: "Unattached course", site_statuses: [])
+        create(:course, provider:, accrediting_provider: nil, name: "Unattached course")
 
         expect(rows.map { |row| row["Course name"] }).to eq(["Attached course"])
       end

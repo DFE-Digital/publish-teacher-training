@@ -20,9 +20,9 @@ module Exports
 
     def data
       CSV.generate(headers: CSV_HEADERS, write_headers: true) do |csv|
-        rows.each do |site, course|
+        rows.each do |school_name, course|
           csv << [
-            site.location_name,
+            school_name,
             course.name,
             course.course_code,
             status(course),
@@ -42,19 +42,16 @@ module Exports
 
     def rows
       courses
-        .flat_map { |course| placement_sites(course).map { |site| [site, course] } }
-        .sort_by { |site, course| [site.location_name.to_s.downcase, course.name.to_s.downcase, course.course_code.to_s] }
+        .flat_map { |course| placement_schools(course).map { |name| [name, course] } }
+        .sort_by { |name, course| [name.downcase, course.name.to_s.downcase, course.course_code.to_s] }
     end
 
-    def placement_sites(course)
-      course.site_statuses
-        .select { |site_status| site_status.status_running? || site_status.status_new_status? }
-        .map(&:site)
-        .uniq # course_site has no unique index, and duplicate pairs exist
+    def placement_schools(course)
+      course.schools.filter_map(&:gias_school).uniq(&:id).map(&:name)
     end
 
     def courses
-      Publish::Courses::Query.call(provider:).preload(site_statuses: :site)
+      Publish::Courses::Query.call(provider:).preload(schools: :gias_school)
     end
   end
 end

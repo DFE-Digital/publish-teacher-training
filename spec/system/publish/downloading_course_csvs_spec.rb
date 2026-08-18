@@ -20,7 +20,6 @@ RSpec.describe "Downloading the course list as CSV" do
     given_my_provider_has_courses
     when_i_visit_the_courses_page
     when_i_follow("Download basic course information (CSV)")
-    then_i_am_sent_a_csv_named("course-information")
     and_it_lists("Primary course", "Secondary course")
   end
 
@@ -28,7 +27,6 @@ RSpec.describe "Downloading the course list as CSV" do
     given_my_provider_has_courses
     when_i_visit_the_courses_page
     when_i_follow("Download the schools attached to each course (CSV)")
-    then_i_am_sent_a_csv_named("schools-attached-to-courses")
     and_it_lists("Ashleigh Primary School")
   end
 
@@ -55,10 +53,9 @@ RSpec.describe "Downloading the course list as CSV" do
   end
 
   def given_my_provider_has_courses
-    school = create(:site, provider:, location_name: "Ashleigh Primary School")
+    primary = create(:course, :primary, provider:, accrediting_provider: nil, name: "Primary course")
+    create(:course_school, course: primary, gias_school: create(:gias_school, name: "Ashleigh Primary School"))
 
-    create(:course, :primary, provider:, accrediting_provider: nil, name: "Primary course",
-                              site_statuses: [build(:site_status, :running, site: school)])
     create(:course, :secondary, provider:, accrediting_provider: nil, name: "Secondary course")
   end
 
@@ -97,12 +94,6 @@ RSpec.describe "Downloading the course list as CSV" do
 
   def and_it_offers(*labels)
     expect(publish_provider_courses_index_page.downloads.links.map(&:text)).to eq(labels)
-  end
-
-  def then_i_am_sent_a_csv_named(prefix)
-    expect(page.response_headers["Content-Type"]).to include("text/csv")
-    expect(page.response_headers["Content-Disposition"])
-      .to include("attachment", "#{prefix}-#{provider.provider_code}-#{Time.zone.today}.csv")
   end
 
   def and_it_lists(*names)

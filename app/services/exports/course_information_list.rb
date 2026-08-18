@@ -62,7 +62,10 @@ module Exports
     end
 
     def accredited_provider(course)
-      course[:group_name] || provider.provider_name
+      code = course.accredited_provider_code
+      return provider.provider_name if code.blank? || code == provider.provider_code
+
+      course[:group_name] || code
     end
 
     def start_date(course)
