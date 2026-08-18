@@ -30,12 +30,16 @@ export default class extends Controller {
     const schools = this.schools()
     const attached = new Set(this.attachedValue)
 
-    const added = schools.filter(school => school.checked && !attached.has(school.value))
+    const checked = schools.filter(school => school.checked)
+
+    const added = checked.filter(school => !attached.has(school.value))
     const removed = schools.filter(school => !school.checked && attached.has(school.value))
 
     this.summaryTarget.hidden = added.length === 0 && removed.length === 0
 
-    this.fill(this.addedTarget, added)
+    // Every school ticked is better said than listed - and it is the end state
+    // that decides, not which control got them there.
+    this.fill(this.addedTarget, added, checked.length === schools.length)
     this.fill(this.removedTarget, removed)
   }
 
@@ -43,20 +47,27 @@ export default class extends Controller {
     return Array.from(this.element.querySelectorAll('input[type=checkbox][data-school-name]'))
   }
 
-  fill (section, schools) {
+  fill (section, schools, all = false) {
     section.replaceChildren()
 
     if (schools.length === 0) return
 
-    section.append(this.wording(section, schools.length))
-    section.append(this.list(schools))
+    section.append(this.wording(section, schools.length, all))
+
+    if (!all) section.append(this.list(schools))
   }
 
   // {count} is substituted here rather than by I18n, since the count is only
   // known once the provider has finished ticking.
-  wording (section, count) {
+  wording (section, count, all) {
     const paragraph = document.createElement('p')
     paragraph.className = 'govuk-body govuk-!-margin-bottom-1'
+
+    if (all) {
+      paragraph.textContent = section.dataset.all
+
+      return paragraph
+    }
 
     const strong = document.createElement('strong')
 

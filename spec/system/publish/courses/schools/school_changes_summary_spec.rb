@@ -42,6 +42,13 @@ RSpec.describe "Publish - Playing back the schools being changed", :js, type: :s
     then_i_see_no_summary
   end
 
+  scenario "selecting every school" do
+    when_i_select_all_schools
+    then_i_see_the_summary
+    and_i_am_told_i_am_adding_all_schools
+    and_i_am_not_told_i_am_removing_anything
+  end
+
 private
 
   def attached_schools
@@ -112,6 +119,18 @@ private
       "You are removing #{school_names.one? ? '1 school' : "#{school_names.size} schools"}:",
     )
     expect(publish_course_school_edit_page.removed_school_names).to eq(school_names)
+  end
+
+  def when_i_select_all_schools
+    check "Select all schools"
+  end
+
+  def and_i_am_told_i_am_adding_all_schools
+    expect(publish_course_school_edit_page.added).to have_content("You are adding all schools in your list")
+  end
+
+  def and_i_am_not_told_i_am_removing_anything
+    expect(publish_course_school_edit_page.changes_summary).to have_no_content("You are removing")
   end
 
   attr_reader :course, :provider
