@@ -22,6 +22,19 @@ RSpec.describe "Publish - Playing back the schools being changed", :js, type: :s
     and_i_am_told_i_am_adding("Cedar School", "Damson & Elm Primary School")
   end
 
+  scenario "removing schools" do
+    when_i_uncheck("Beech School")
+    then_i_see_the_summary
+    and_i_am_told_i_am_removing("Beech School")
+  end
+
+  scenario "adding and removing at the same time" do
+    when_i_check("Cedar School")
+    and_i_uncheck("Ash Academy")
+    and_i_am_told_i_am_adding("Cedar School")
+    and_i_am_told_i_am_removing("Ash Academy")
+  end
+
   scenario "undoing a change takes the summary away again" do
     when_i_check("Cedar School")
     then_i_see_the_summary
@@ -92,6 +105,13 @@ private
       "You are adding #{school_names.one? ? '1 school' : "#{school_names.size} schools"}:",
     )
     expect(publish_course_school_edit_page.added_school_names).to eq(school_names)
+  end
+
+  def and_i_am_told_i_am_removing(*school_names)
+    expect(publish_course_school_edit_page.removed).to have_content(
+      "You are removing #{school_names.one? ? '1 school' : "#{school_names.size} schools"}:",
+    )
+    expect(publish_course_school_edit_page.removed_school_names).to eq(school_names)
   end
 
   attr_reader :course, :provider

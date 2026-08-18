@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
 // The play-back under a list of school checkboxes: which schools the provider
-// is adding to the course, named as they tick.
+// is adding to the course, and which they are taking off it, named as they tick.
 //
 // It owns nothing but the summary. Which rows are on screen is schools-list's,
 // what the Select all checkbox does to them is select-all-checkboxes'; this only
@@ -16,7 +16,7 @@ import { Controller } from '@hotwired/stimulus'
 // sets the other boxes programmatically, which fires nothing on them, but its
 // own change bubbles too.
 export default class extends Controller {
-  static targets = ['summary', 'added']
+  static targets = ['summary', 'added', 'removed']
   // The schools attached when the page was served, which is what the ticks are
   // measured against. The server has to say: after a validation error the form
   // comes back holding what was submitted, so the boxes no longer remember it.
@@ -27,12 +27,16 @@ export default class extends Controller {
   }
 
   update () {
+    const schools = this.schools()
     const attached = new Set(this.attachedValue)
-    const added = this.schools().filter(school => school.checked && !attached.has(school.value))
 
-    this.summaryTarget.hidden = added.length === 0
+    const added = schools.filter(school => school.checked && !attached.has(school.value))
+    const removed = schools.filter(school => !school.checked && attached.has(school.value))
+
+    this.summaryTarget.hidden = added.length === 0 && removed.length === 0
 
     this.fill(this.addedTarget, added)
+    this.fill(this.removedTarget, removed)
   }
 
   schools () {
