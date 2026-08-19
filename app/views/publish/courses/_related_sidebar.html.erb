@@ -24,25 +24,24 @@
           </select>
           <div
   data-copy-course-content-target="details"
-  data-qa="selected-course-details"
   hidden
-  class="govuk-body govuk-!-margin-top-3">
+  class="govuk-body copy-course-content__details">
             <h4
-    class="govuk-heading-s govuk-!-margin-bottom-0"
+    class="govuk-heading-s copy-course-content__title"
     data-copy-course-content-target="title"></h4>
-            <p class="govuk-!-margin-0" data-copy-course-content-target="age">
+            <p class="copy-course-content__item" data-copy-course-content-target="age">
             </p>
-            <p class="govuk-!-margin-0" data-copy-course-content-target="funding">
+            <p class="copy-course-content__item" data-copy-course-content-target="funding">
             </p>
-            <p class="govuk-!-margin-0" data-copy-course-content-target="qualification">
+            <p class="copy-course-content__item" data-copy-course-content-target="qualification">
             </p>
-            <p class="govuk-!-margin-0" data-copy-course-content-target="studyMode">
+            <p class="copy-course-content__item" data-copy-course-content-target="studyMode">
             </p>
-            <p class="govuk-!-margin-0" data-copy-course-content-target="startDate"></p>
+            <p class="copy-course-content__item" data-copy-course-content-target="startDate"></p>
           </div>
         </div>
       </div>
-      <%= form.submit "Copy content", class: "govuk-button govuk-!-margin-bottom-0", name: nil, data: { qa: "course__copy" } %>
+      <%= form.submit "Copy content", class: "govuk-button copy-course-content__button", name: nil, data: { qa: "course__copy" } %>
     <% end %>
   <% else %>
     <h3 class="govuk-heading-m" data-qa="course__use_content">Use this content again</h3>
