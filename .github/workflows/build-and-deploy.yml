@@ -46,7 +46,6 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24.x'
-          cache: yarn
       - run: yarn install --immutable
 
       - name: ${{ matrix.tests.name }}
@@ -76,7 +75,6 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24.x'
-          cache: yarn
       - run: yarn install --immutable
 
       - name: yarn test
@@ -189,7 +187,6 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24.x'
-          cache: yarn
       - run: yarn install --immutable
 
       - name: Install Playwright
