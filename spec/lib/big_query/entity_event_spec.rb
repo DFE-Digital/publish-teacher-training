@@ -13,8 +13,8 @@ module BigQuery
         it {  is_expected.to include("environment" => "test") }
 
         it "contains Time.now in iso8601" do
-          Time.freeze do
-            expected_time = Time.zone.now.iso8601
+          freeze_time do
+            expected_time = Time.zone.now.iso8601(6)
             expect(subject).to include("occurred_at" => expected_time)
           end
         end
