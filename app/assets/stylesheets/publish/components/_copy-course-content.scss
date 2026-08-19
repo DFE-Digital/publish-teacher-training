@@ -1,0 +1,17 @@
+.copy-course-content {
+  &__details {
+    margin-top: govuk-spacing(3);
+  }
+
+  &__title {
+    margin-bottom: 0;
+  }
+
+  &__item {
+    margin: 0;
+  }
+
+  &__button {
+    margin-bottom: 0;
+  }
+}
