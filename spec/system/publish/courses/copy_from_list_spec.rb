@@ -119,10 +119,11 @@ RSpec.describe "Copying course information" do
 
     scenario "shows details for the selected primary course", :js do
       when_i_visit_the_how_school_placements_work_page
-
       select "Primary", from: "Copy from"
 
-      within "[data-qa='selected-course-details']" do
+      expect(page).to have_css("[data-copy-course-content-target='details']")
+
+      within "[data-copy-course-content-target='details']" do
         expect(page).to have_content("Primary (P123)")
         expect(page).to have_content("Ages 5 to 11")
         expect(page).to have_content("Fee-paying")
