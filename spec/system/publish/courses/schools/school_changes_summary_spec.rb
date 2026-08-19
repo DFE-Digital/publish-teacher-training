@@ -79,6 +79,24 @@ RSpec.describe "Publish - Playing back the schools being changed", :js, type: :s
     then_the_gap_above_the_button_is(20)
   end
 
+  # Each half heads a list of schools, so each half needs a real heading: with an
+  # h2 above and two lists below, a bold paragraph leaves a screen reader with two
+  # lists and nothing to tell them apart.
+  scenario "each half of the summary is headed" do
+    when_i_check("Cedar School")
+    and_i_uncheck("Ash Academy")
+
+    then_the_summary_headings_are("You are adding 1 school:", "You are removing 1 school:")
+  end
+
+  # Nothing follows it, so it is a sentence and not the heading of anything.
+  scenario "the all schools message is not a heading" do
+    when_i_select_all_schools
+    and_i_unselect_all_schools
+
+    then_the_summary_heads_nothing_further
+  end
+
 private
 
   def attached_schools
@@ -178,6 +196,16 @@ private
 
   def and_i_am_not_told_i_am_adding_anything
     expect(publish_course_school_edit_page.changes_summary).to have_no_content("You are adding")
+  end
+
+  def then_the_summary_headings_are(*texts)
+    expect(publish_course_school_edit_page.changes_summary.all("h3").map(&:text)).to eq(texts)
+  end
+
+  def then_the_summary_heads_nothing_further
+    expect(publish_course_school_edit_page.changes_summary).to have_no_css("h3")
+    expect(publish_course_school_edit_page.removed)
+      .to have_css("p", text: "You are removing all schools in your list")
   end
 
   def then_the_gap_above_the_button_is(pixels)
