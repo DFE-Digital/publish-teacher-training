@@ -34,22 +34,22 @@
   </thead>
 
   <tbody class="govuk-table__body">
-    <% if @sites.any? %>
-      <% @sites.each do |site| %>
+    <% if @schools.any? %>
+      <% @schools.each do |school| %>
         <tr class="govuk-table__row school-row">
           <td class="govuk-table__cell name">
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= govuk_link_to site.location_name, support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, site.uuid) %>
+              <%= govuk_link_to school.location_name, support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school.uuid) %>
             </span>
           </td>
           <td class="govuk-table__cell code">
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= site.code %> <%= site.code == "-" ? "(dash)" : "" %>
+              <%= school.code %> <%= school.code == "-" ? "(dash)" : "" %>
             </span>
           </td>
           <td class="govuk-table__cell urn">
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= value_provided?(site.urn) %>
+              <%= value_provided?(school.urn) %>
             </span>
           </td>
         </tr>
