@@ -52,3 +52,5 @@ jobs:
 
     - name: Disable maintenance app
       run: make ${{ inputs.environment }} disable-maintenance
+      env:
+        CONFIRM_PRODUCTION: ${{ inputs.confirm_production && 'yes' || '' }}
