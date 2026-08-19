@@ -11,17 +11,17 @@
         <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t(".check") %> </h1>
       </legend>
 
-      <% if @schools.present? %>
+      <% if @gias_schools.present? %>
         <%= govuk_inset_text do %>
           <span>
             <%= t(".inset_html", link: govuk_link_to(t(".gias_link_text"), t("links.get_information_schools_search"), target: "_blank")) %>
           </span>
         <% end %>
       <% end %>
-      <% @schools.each do |school| %>
-        <%= govuk_summary_card(title: school.location_name, actions: [govuk_link_to(t(".remove_school"), remove_school_support_recruitment_cycle_provider_schools_multiple_check_path(urn: school.urn))]) do |card|
-              card.with_summary_list(rows: [{ key: { text: t(".urn") }, value: { text: school.urn } },
-                                            { key: { text: t(".address") }, value: { text: simple_format(school.address.compact_blank.join("\n")) } }])
+      <% @gias_schools.each do |gias_school| %>
+        <%= govuk_summary_card(title: gias_school.name, actions: [govuk_link_to(t(".remove_school"), remove_school_support_recruitment_cycle_provider_schools_multiple_check_path(urn: gias_school.urn))]) do |card|
+              card.with_summary_list(rows: [{ key: { text: t(".urn") }, value: { text: gias_school.urn } },
+                                            { key: { text: t(".address") }, value: { text: simple_format(gias_school.address.compact_blank.join("\n")) } }])
             end %>
       <% end %>
 
@@ -51,7 +51,7 @@
     </div>
 
     <div class="govuk-grid-column-full">
-      <% if @schools.present? %>
+      <% if @gias_schools.present? %>
         <%= f.govuk_submit(t(".add_schools")) %>
       <% else %>
         <div class="govuk-body govuk-!-font-size-20 app-action-group">
