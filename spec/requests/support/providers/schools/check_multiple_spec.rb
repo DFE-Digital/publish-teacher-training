@@ -26,6 +26,50 @@ RSpec.describe "Support provider multiple school checks" do
     put support_recruitment_cycle_provider_schools_multiple_check_path(recruitment_cycle.year, provider)
   end
 
+  describe "GET /support/:recruitment_cycle_year/providers/:provider_id/schools/multiple/check" do
+    let(:gias_school) do
+      create(
+        :gias_school,
+        name: "St Joseph's Catholic Primary School",
+        urn: "112992",
+        address1: "1 School Lane",
+        address2: "Building A",
+        address3: "Quarter B",
+        town: "Leeds",
+        county: "West Yorkshire",
+        postcode: "LS1 1AA",
+      )
+    end
+
+    def check_schools(urns)
+      URNForm.new(provider, params: { values: urns }).stash
+
+      get support_recruitment_cycle_provider_schools_multiple_check_path(recruitment_cycle.year, provider)
+    end
+
+    it "previews each school being added" do
+      check_schools([gias_school.urn])
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("St Joseph")
+      expect(response.body).to include("Catholic Primary School")
+      expect(response.body).to include("112992")
+      expect(response.body).to include("1 School Lane")
+      expect(response.body).to include("Building A")
+      expect(response.body).to include("Quarter B")
+      expect(response.body).to include("Leeds")
+      expect(response.body).to include("West Yorkshire")
+      expect(response.body).to include("LS1 1AA")
+    end
+
+    it "warns about a urn that matches no school" do
+      check_schools(%w[999999])
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include("St Joseph")
+    end
+  end
+
   describe "PUT /support/:recruitment_cycle_year/providers/:provider_id/schools/multiple/check" do
     let!(:exempt_course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
 
