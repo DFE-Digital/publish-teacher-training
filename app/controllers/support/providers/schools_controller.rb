@@ -3,8 +3,6 @@
 module Support
   module Providers
     class SchoolsController < ApplicationController
-      before_action :build_site, only: %i[index]
-      before_action :new_form, only: %i[index]
       before_action :reset_urn_form, only: %i[index]
       before_action :school, only: %i[show delete destroy]
 
@@ -41,19 +39,6 @@ module Support
 
       def flash_resource
         @flash_resource ||= "School"
-      end
-
-      def site_params(param_form_key)
-        params.expect(param_form_key => SchoolForm::FIELDS)
-      end
-
-      def build_site
-        @site = provider.sites.build
-      end
-
-      def new_form
-        @school_form = SchoolForm.new(provider, @site)
-        @school_form.clear_stash
       end
 
       def school
