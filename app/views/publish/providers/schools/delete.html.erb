@@ -17,12 +17,21 @@
       <% else %>
         <%= t("components.page_titles.publish.providers.schools.no_delete") %>
       </h1>
-      <p class="govuk-body">
-        <%= "#{school.location_name} is a school for courses run by #{@provider.provider_name}." %>
-      </p>
-      <p class="govuk-body">
-        To remove <%= school.location_name %>, you must first remove the school from those courses.
-      </p>
+      <% if school_removal.only_school? %>
+        <p class="govuk-body">
+          <%= "#{school.location_name} is the only school for #{@provider.provider_name}." %>
+        </p>
+        <p class="govuk-body">
+          To remove it, you must first add another school.
+        </p>
+      <% else %>
+        <p class="govuk-body">
+          <%= "#{school.location_name} is a school for courses run by #{@provider.provider_name}." %>
+        </p>
+        <p class="govuk-body">
+          To remove <%= school.location_name %>, you must first remove the school from those courses.
+        </p>
+      <% end %>
     <% end %>
     <p class="govuk-body">
         <%= govuk_link_to("Cancel", publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.uuid)) %>

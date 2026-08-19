@@ -231,7 +231,7 @@ group :test do
   gem "mock_redis", "0.46.0"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 8.0"
-  gem "simplecov", "< 1.1", require: false
+  gem "simplecov", "< 1.2", require: false
 
   # Page objects
   gem "site_prism", "~> 6.0"

@@ -67,7 +67,9 @@ module DataHub
         {
           courses_count: result[:courses],
           sites_count: result[:sites],
+          sites_already_present_count: result[:sites_already_present],
           study_sites_count: result[:study_sites],
+          study_sites_already_present_count: result[:study_sites_already_present],
           partnerships_count: result[:partnerships],
           courses_failed: result[:courses_failed] || [],
           courses_skipped: result[:courses_skipped] || [],

@@ -259,7 +259,6 @@ en:
           cannot_sponsor: "No - cannot sponsor"
           salary_apprenticeship: "Salary (apprenticeship)"
           full_time_or_part_time: "Full time or part time"
-          select_study_site: "Select a study site"
           add_a_study_site: "Add a study site"
         labels:
           level: Subject level
@@ -279,8 +278,8 @@ en:
             salaried: Employing
             unsalaried: Placement
           study_site:
-            one: Study site
-            other: Study sites
+            one: Study site (optional)
+            other: Study sites (optional)
           accredited_provider: Accredited provider
           student_visas: Student visas
           skilled_worker_visas: Skilled Worker visas

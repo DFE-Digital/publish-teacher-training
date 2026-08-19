@@ -9,11 +9,10 @@ en:
           one: Subject
           other: Subjects
         study_site:
-          one: Study site
-          other: Study sites
+          one: Study site (optional)
+          other: Study sites (optional)
         study_sites: Study sites
-        select_study_site: Select a study site
-        add_a_study_site: Add a study site
+        add_study_site: Add
         student_visas: Student visas
         can_sponsor: Yes - can sponsor
         cannot_sponsor: No - cannot sponsor

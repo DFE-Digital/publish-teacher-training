@@ -73,6 +73,7 @@ module Publish
       @course = @course.decorate
 
       @enrichment = @course.latest_unpublished_enrichment || @course.enrichments.find_or_initialize_draft
+      @apply_action_column_class = apply_action_column_class
 
       authorize @course
     end
@@ -103,6 +104,18 @@ module Publish
     end
 
   private
+
+    # Mirrors Find::CoursesController#apply_action_column_class so the preview lays the
+    # apply/save row out exactly as the live Find course page does.
+    def apply_action_column_class
+      if FeatureFlag.active?(:candidate_accounts) && Find::CycleTimetable.apply_deadline_passed
+        "govuk-grid-column-full"
+      elsif FeatureFlag.active?(:candidate_accounts)
+        "govuk-grid-column-one-third-from-desktop"
+      else
+        "govuk-grid-column-one-half"
+      end
+    end
 
     def render_flash_message_content
       @course.scheduled? ? "Your course has been scheduled." : "Your course has been published."

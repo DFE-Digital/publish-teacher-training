@@ -20,6 +20,7 @@ $app-callout-light-blue-colour: #f3f8f6;
 @import "../components/summary-card";
 @import "../components/callout";
 @import "../components/stacked_summary_list";
+@import "../components/save-course-button";
 
 @import "./components/accordion";
 @import "./components/details-component";
@@ -27,7 +28,6 @@ $app-callout-light-blue-colour: #f3f8f6;
 @import "./components/filter-layout";
 @import "./components/filter-panel-overrides";
 @import "./components/quick-link-card";
-@import "./components/save-course-button";
 @import "./components/saved-course";
 @import "./components/search-results";
 @import "./components/homepage_search";

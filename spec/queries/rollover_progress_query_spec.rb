@@ -168,6 +168,42 @@ RSpec.describe RolloverProgressQuery, type: :model do
     end
   end
 
+  describe "#eligible_schools" do
+    let!(:eligible_school) { create(:provider_school, provider: provider_with_own_course) }
+    let!(:ineligible_school) { create(:provider_school, provider: provider_without_courses) }
+    let!(:closed_school) do
+      create(
+        :provider_school,
+        provider: provider_with_own_course,
+        gias_school: create(:gias_school, :closed),
+      )
+    end
+
+    before do
+      given_we_have_providers_and_courses_on_previous_target_cycle
+    end
+
+    it "includes available schools belonging to eligible providers" do
+      expect(rollover_progress.eligible_schools).to contain_exactly(eligible_school)
+    end
+
+    it "returns the correct count through delegation" do
+      expect(rollover_progress.eligible_schools_count).to eq(1)
+    end
+  end
+
+  describe "#rolled_over_schools" do
+    let!(:rolled_over_school) { create(:provider_school, provider: rolled_over_provider) }
+
+    it "includes available schools in the target cycle" do
+      expect(rollover_progress.rolled_over_schools).to contain_exactly(rolled_over_school)
+    end
+
+    it "returns the correct count through delegation" do
+      expect(rollover_progress.rolled_over_schools_count).to eq(1)
+    end
+  end
+
   describe "#eligible_partnerships" do
     let(:accredited_provider) { create(:provider, :accredited_provider) }
     let(:rollable_partnership_one) do

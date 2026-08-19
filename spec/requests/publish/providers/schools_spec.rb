@@ -171,6 +171,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
     let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: remodel_cycle_year + 1) }
     let(:provider) { create(:provider, recruitment_cycle:) }
     let!(:provider_school) { create(:provider_school, provider:, gias_school:) }
+    let!(:other_provider_school) { create(:provider_school, provider:) }
 
     before { login_provider_user(provider) }
 
@@ -181,6 +182,75 @@ RSpec.describe "Publish provider school show page", service: :publish do
       expect(response.body).to include("Remove school")
       expect(response.body).to include("St Joseph")
       expect(response.body).to include("Catholic Primary School")
+    end
+
+    context "when it is the provider's only school" do
+      let!(:other_provider_school) { nil }
+
+      it "explains that the provider would be left without a school" do
+        get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("You cannot remove this school")
+        expect(response.body).to include("is the only school for #{provider.provider_name}")
+        expect(response.body).to include("To remove it, you must first add another school.")
+      end
+    end
+  end
+
+  describe "DELETE /publish/organisations/:provider_code/:recruitment_cycle_year/schools/:uuid" do
+    let(:provider) { create(:provider) }
+    let!(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: SecureRandom.uuid) }
+    let!(:provider_school) do
+      create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
+    end
+    let!(:other_provider_school) { create(:provider_school, provider:) }
+    let!(:exempt_course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
+
+    before { login_provider_user(provider) }
+
+    def remove_school
+      delete publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle.year, provider_school.uuid)
+    end
+
+    it "removes the school" do
+      expect { remove_school }.to change { provider.schools.count }.by(-1)
+
+      expect(response).to redirect_to(publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle.year))
+    end
+
+    # A course that is allowed to publish without schools is served by the API
+    # with all of its provider's schools as locations, so removing one changes
+    # that course's payload.
+    it "touches every course that is publishable without schools" do
+      second_exempt_course = create(:course, :with_salary, provider:, publish_without_schools_allowed: true)
+
+      expect { remove_school }.to(change { [exempt_course.reload.changed_at, second_exempt_course.reload.changed_at] })
+    end
+
+    it "does not touch another provider's courses" do
+      other_exempt_course = create(:course, :with_salary, publish_without_schools_allowed: true)
+
+      expect { remove_school }.not_to(change { other_exempt_course.reload.changed_at })
+    end
+
+    it "does not touch courses when the school cannot be removed" do
+      course = create(:course, provider:)
+      create(:course_school, course:, gias_school:, provider_school:)
+
+      expect { remove_school }.not_to(change { exempt_course.reload.changed_at })
+
+      expect(provider.schools).to contain_exactly(provider_school, other_provider_school)
+      expect(flash[:warning]).to eq("This school could not be removed because it is used by a course")
+    end
+
+    it "does not remove the provider's last school" do
+      other_provider_school.destroy!
+
+      expect { remove_school }.not_to(change { provider.schools.count })
+
+      expect(response).to redirect_to(delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle.year, provider_school.uuid))
+      expect(flash[:warning]).to eq("This school could not be removed because it is your only school")
     end
   end
 end

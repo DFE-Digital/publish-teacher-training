@@ -59,7 +59,7 @@
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <%= render(FlashBanner.new(flash:)) %>
         <%= render Find::MaintenanceBannerComponent.new %>
-        <% if(FeatureFlag.active?(:publish_rollover_soon_banner)) %>
+        <% if(FeatureFlag.active?(:publish_rollover_banner)) %>
           <%= render "publish/rollover_notification_banner" %>
         <% end %>
 

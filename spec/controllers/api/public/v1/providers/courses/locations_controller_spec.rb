@@ -149,7 +149,30 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
       end
     end
 
-    context "when a fee-paying course has no schools and is not exempt" do
+    context "when a fee-paying course has one course school and is exempt from needing them" do
+      let(:course) { create(:course, :fee, provider:, publish_without_schools_allowed: true) }
+
+      before do
+        create(:course_school, course:)
+        create_list(:provider_school, 2, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: provider.provider_code,
+          course_code: course.course_code,
+        }
+      end
+
+      it "returns the course schools" do
+        expect(json_response["data"].size).to be(1)
+      end
+
+      it "flags in the meta that the locations are the course's own schools" do
+        expect(json_response["meta"]).to eq("has_course_schools" => true)
+      end
+    end
+
+    context "when a fee-paying course has no schools and is exempt from needing them" do
       let(:course) { create(:course, :fee, provider:, publish_without_schools_allowed: true) }
 
       before do
@@ -162,8 +185,12 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
         }
       end
 
-      it "does not fall back to the provider's schools" do
-        expect(json_response["data"]).to eql([])
+      it "returns the provider fallback" do
+        expect(json_response["data"].size).to be(2)
+      end
+
+      it "flags in the meta says that the locations are the providers schools" do
+        expect(json_response["meta"]).to eq("has_course_schools" => false)
       end
     end
 

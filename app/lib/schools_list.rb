@@ -7,7 +7,7 @@
 # lists collapse at the same point.
 module SchoolsList
   # Longer lists show only this many schools, behind a "Show all schools" link.
-  # Kept in step with the show-all-schools Stimulus controller's `visible` value,
-  # which both views pass explicitly.
+  # Kept in step with the schools-list Stimulus controller's `collapseAfter`
+  # value, which both views pass explicitly.
   COLLAPSE_AFTER = 20
 end

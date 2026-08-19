@@ -5,7 +5,7 @@ class FeatureFlags
     [
       [:maintenance_mode, "Puts Find into maintenance mode", "Find and Publish team"],
       [:maintenance_banner, "Displays the maintenance mode banner", "Find and Publish team"],
-      [:publish_rollover_soon_banner, "Displays the rollover soon banner in Publish", "Find and Publish team"],
+      [:publish_rollover_banner, "Displays the rollover banner in Publish", "Find and Publish team"],
       [:bursaries_and_scholarships_announced, "Display scholarship and bursary information", "Find and Publish team"],
       [:candidate_accounts, "Enable candidate accounts feature", "Find and Publish team"],
       [:email_alerts, "Enable email alerts for candidates", "Find and Publish team"],

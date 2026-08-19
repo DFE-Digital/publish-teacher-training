@@ -685,4 +685,68 @@ describe Courses::CreationService do
       end
     end
   end
+
+  # A study site is optional. Nothing validates it at publish time, and the edit
+  # form lets a provider clear every one off a live course, so adding a course
+  # must not be the one place that insists on it.
+  describe "writing selected study sites during course creation" do
+    subject(:created_course) do
+      described_class.call(course_params: valid_course_params, provider:, next_available_course_code: true)
+    end
+
+    let(:primary_subject) { find_or_create(:primary_subject, :primary) }
+
+    let(:valid_course_params) do
+      {
+        "age_range_in_years" => "3_to_7",
+        "applications_open_from" => recruitment_cycle.application_start_date,
+        "funding" => "fee",
+        "is_send" => "1",
+        "level" => "primary",
+        "qualification" => "qts",
+        "start_date" => "September #{recruitment_cycle.year}",
+        "study_mode" => %w[full_time],
+        "school_uuids" => [site.uuid],
+        "study_sites_ids" => [study_site.id],
+        "master_subject_id" => primary_subject.id,
+        "subjects_ids" => [primary_subject.id],
+      }
+    end
+
+    it "assigns the selected study sites" do
+      expect(created_course.study_sites.map(&:id)).to eq([study_site.id])
+      expect(created_course.errors).to be_empty
+    end
+
+    context "when nothing is ticked" do
+      let(:valid_course_params) { super().merge("study_sites_ids" => []) }
+
+      it "creates the course with no study sites and no error" do
+        expect(created_course.errors).to be_empty
+        expect(created_course.study_sites).to be_empty
+        expect(created_course.save).to be(true)
+      end
+    end
+
+    # A checkbox group posts a hidden blank value when nothing is ticked, so
+    # this is the shape the form actually submits.
+    context "when the checkboxes are submitted with nothing ticked" do
+      let(:valid_course_params) { super().merge("study_sites_ids" => [""]) }
+
+      it "creates the course with no study sites and no error" do
+        expect(created_course.errors).to be_empty
+        expect(created_course.study_sites).to be_empty
+        expect(created_course.save).to be(true)
+      end
+    end
+
+    context "when no study site selection is submitted at all" do
+      let(:valid_course_params) { super().except("study_sites_ids") }
+
+      it "leaves the study sites alone and adds no error" do
+        expect(created_course.errors).to be_empty
+        expect(created_course.study_sites).to be_empty
+      end
+    end
+  end
 end

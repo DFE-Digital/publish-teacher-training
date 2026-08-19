@@ -1,0 +1,11 @@
+en:
+  publish:
+    schools:
+      search_panel_component:
+        label: Search for a school in the list
+        hint: Enter the name of a school, university or college. You can also enter a postcode or URN.
+        button: Search
+        clear: Clear search
+        no_results: No results found. Clear your search and try again.
+        results_one: 1 school found
+        results_other: "{count} schools found"

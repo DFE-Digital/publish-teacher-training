@@ -86,11 +86,16 @@ module Publish
         end
       end
 
+      # Blank is a legitimate answer, so it renders as an empty row. The one
+      # prompt kept is for a provider with no study sites on their
+      # organisation at all, who has to add one there before they could pick it
+      # here.
       class StudySites
-        def call(value, _draft, view)
+        def call(value, draft, view)
           return value.join(", ") if value.present?
+          return view.helpers.value_none if draft.wizard.provider.study_sites.any?
 
-          view.study_sites_call_to_action_link
+          view.add_a_study_site_link
         end
       end
 

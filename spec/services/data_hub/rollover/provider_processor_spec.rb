@@ -24,7 +24,9 @@ RSpec.describe DataHub::Rollover::ProviderProcessor, type: :service do
           providers: 1,
           courses: 1,
           sites: 1,
+          sites_already_present: 2,
           study_sites: 1,
+          study_sites_already_present: 3,
           partnerships: 0,
           courses_failed: [],
           courses_skipped: [],
@@ -60,7 +62,9 @@ RSpec.describe DataHub::Rollover::ProviderProcessor, type: :service do
           "status" => "rolled_over",
           "courses_count" => 1,
           "sites_count" => 1,
+          "sites_already_present_count" => 2,
           "study_sites_count" => 1,
+          "study_sites_already_present_count" => 3,
           "duration_seconds" => 35.5,
         )
       end

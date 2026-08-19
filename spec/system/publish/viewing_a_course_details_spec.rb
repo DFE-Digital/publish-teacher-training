@@ -82,8 +82,9 @@ RSpec.describe "Course show" do
 
 private
 
+  # Optional fields with nothing entered yet offer "Add" rather than "Change".
   def and_there_are_change_links
-    expect(page.find_all(".govuk-summary-list__actions a").all? { |actions| actions.text.include?("Change ") }).to be(true)
+    expect(page.find_all(".govuk-summary-list__actions a").all? { |action| action.text.match?(/\A(Change|Add) /) }).to be(true)
   end
 
   def and_there_is_no_change_links
@@ -228,7 +229,7 @@ private
   end
 
   def then_i_see_the_correct_change_links
-    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly("subjects", "age range", "outcome", "if full or part time", "schools", "can sponsor skilled_worker visa")
+    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly("subjects", "age range", "outcome", "if full or part time", "schools", "study sites", "can sponsor skilled_worker visa")
   end
 
   def and_i_see_review_schools_link
@@ -243,6 +244,7 @@ private
                                                                                        "can sponsor skilled_worker visa",
                                                                                        "funding type",
                                                                                        "accredited provider",
+                                                                                       "study sites",
                                                                                        "date course starts")
   end
 
@@ -255,6 +257,7 @@ private
       "outcome",
       "if full or part time",
       "can sponsor skilled_worker visa",
+      "study sites",
       "date course starts",
     )
   end
@@ -270,6 +273,7 @@ private
       "can sponsor skilled_worker visa",
       "date course starts",
       "schools",
+      "study sites",
     )
   end
 

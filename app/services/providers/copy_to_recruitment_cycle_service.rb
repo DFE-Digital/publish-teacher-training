@@ -42,11 +42,18 @@ module Providers
                 :copy_partnership_to_provider_service,
                 :force
 
+    # `sites` and `study_sites` count what this run created. `*_already_present`
+    # counts what the destination provider already had, which is the normal
+    # outcome of a repeat run and not a problem. `*_skipped` is reserved for
+    # copies that were attempted and failed — rollover reporting surfaces those
+    # for support to act on, so nothing else belongs in them.
     def init_result_hash
       {
         providers: 0,
         sites: 0,
+        sites_already_present: 0,
         study_sites: 0,
+        study_sites_already_present: 0,
         courses: 0,
         partnerships: 0,
         courses_failed: [],
@@ -84,13 +91,22 @@ module Providers
     def copy_schools(provider, new_provider, result)
       school_result = copy_schools_to_provider_service.execute(provider:, new_provider:)
       result[:sites] += school_result[:copied]
+      result[:sites_already_present] += school_result.fetch(:already_present, []).size
       result[:sites_skipped].concat(school_result[:skipped])
     end
 
+    # Study sites already on the destination provider are filtered out before the
+    # orchestrator sees them: it hands out codes from a finite pool, and which
+    # branch it takes depends on the list it is given, so passing sites we are
+    # about to skip would burn codes and shift the codes it assigns to the rest.
     def copy_study_sites(provider, new_provider, result)
+      existing_sites = Sites::ExistingSiteIndex.for(provider: new_provider, site_type: :study_site)
+      sites_to_copy, already_present = provider.study_sites.partition { !existing_sites.already_copied?(it) }
+      result[:study_sites_already_present] += already_present.size
+
       assignments = DataHub::Rollover::StudySiteCodeOrchestrator.new(
         target_provider: new_provider,
-        sites_to_copy: provider.study_sites,
+        sites_to_copy:,
       ).call
 
       assignments.each do |assignment|

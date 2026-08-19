@@ -120,30 +120,32 @@
        end
      end
 
+     # A study site is optional, so an empty row gets the neutral treatment any
+     # other optional field gets. app-inset-text--important is reserved on this
+     # page for what stops a course publishing, and the row keeps an ordinary
+     # action so it can still be filled in.
      summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row|
-       row.with_key { "Study site" }
+       row.with_key { "Study site (optional)" }
 
-       if course.study_sites.any?
-         row.with_value do
+       row.with_value do
+         if course.study_sites.any?
            content_tag(:ul, class: "govuk-list") do
              course.alphabetically_sorted_study_sites.map { |study_site| content_tag(:li, study_site.location_name) }.join.html_safe
            end
-         end
-       elsif @provider.study_sites.any?
-         row.with_value do
-           "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select a study site', study_sites_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code))}</div>".html_safe
-         end
-       else
-         row.with_value do
-           "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add a study site', publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe
+         else
+           value_provided?(nil)
          end
        end
 
-       if course.study_sites.any?
+       if course.is_withdrawn?
+         row.with_action
+       elsif @provider.study_sites.any?
          row.with_action(href: study_sites_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
                          visually_hidden_text: "study sites")
        else
-         row.with_action
+         row.with_action(text: "Add",
+                         href: publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year),
+                         visually_hidden_text: "study sites")
        end
      end
 

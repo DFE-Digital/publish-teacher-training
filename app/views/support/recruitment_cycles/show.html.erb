@@ -119,6 +119,11 @@
             <% end %>
 
             <% summary_list.with_row do |row| %>
+              <% row.with_key(text: RolloverProgressQuery.human_attribute_name(:schools_summary)) %>
+              <% row.with_value(text: t(".rollover_status.summary", total_eligible_count: @rollover_progress_query.eligible_schools_count, rolled_over_count: @rollover_progress_query.rolled_over_schools_count)) %>
+            <% end %>
+
+            <% summary_list.with_row do |row| %>
               <% row.with_key(text: RolloverProgressQuery.human_attribute_name(:partnerships_summary)) %>
               <% row.with_value(text: t(".rollover_status.summary", total_eligible_count: @rollover_progress_query.eligible_partnerships_count, rolled_over_count: @rollover_progress_query.rolled_over_partnerships_count)) %>
             <% end %>

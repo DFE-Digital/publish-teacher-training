@@ -8,6 +8,11 @@ class CourseWizard
 
       attribute :study_sites_ids
 
+      # A study site is optional, so picking none leaves an ordinary empty row
+      # with a Change link rather than a call to action demanding an answer.
+      # The exception is a provider with no study sites at all: the step is
+      # skipped for them, so there is nowhere for Change to go and the prompt
+      # to set one up on the organisation is the useful thing to show.
       review do |r|
         r.row(
           label: :study_site,
@@ -15,7 +20,7 @@ class CourseWizard
           value: ->(draft) { draft.study_sites.map(&:location_name) },
           format: Publish::CheckAnswers::Formatters::StudySites.new,
           show_when_blank: true,
-          changeable: ->(draft) { draft.selected_study_site_ids.any? },
+          changeable: ->(draft) { draft.wizard.provider.study_sites.any? },
         )
       end
 
