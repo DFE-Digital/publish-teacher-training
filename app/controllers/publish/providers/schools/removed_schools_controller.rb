@@ -5,8 +5,6 @@ module Publish
         before_action :render_not_found, unless: :rollover_period_2026?
 
         def index
-          authorize(provider, :index?)
-
           @removed_schools = @provider
             .sites
             .school
