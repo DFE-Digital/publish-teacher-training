@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require "fileutils"
+require "json"
 
 APP_ROOT = File.expand_path("..", __dir__)
 
@@ -11,6 +12,14 @@ FileUtils.chdir APP_ROOT do
   # This script is a way to set up or update your development environment automatically.
   # This script is idempotent, so that you can run it at any time and get an expectable outcome.
   # Add necessary setup steps to this file.
+
+  puts "== Activating Corepack / Yarn =="
+  package_manager = JSON.parse(File.read("package.json"))["packageManager"]
+  if package_manager
+    # Uses the `packageManager` field from package.json (e.g. `yarn@4.18.0`)
+    system! "corepack enable"
+    system! "corepack prepare #{package_manager} --activate"
+  end
 
   puts "== Installing dependencies =="
   system("yarn install")
