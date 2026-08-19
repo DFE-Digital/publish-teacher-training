@@ -11,7 +11,7 @@ module Support
       PER_PAGE = 20
 
       def index
-        @pagy, @sites = pagy(provider.schools.ordered_by_name, limit: PER_PAGE)
+        @pagy, @schools = pagy(provider.schools.ordered_by_name, limit: PER_PAGE)
       end
 
       def show; end
