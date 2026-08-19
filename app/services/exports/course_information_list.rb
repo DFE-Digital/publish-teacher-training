@@ -29,7 +29,7 @@ module Exports
     def data
       BYTE_ORDER_MARK + CSV.generate(headers: CSV_HEADERS, write_headers: true) do |csv|
         courses.each do |course|
-          enrichment = course.latest_non_draft_enrichment
+          enrichment = reported_enrichment(course)
 
           csv << [
             course.name,
@@ -58,7 +58,13 @@ module Exports
     attr_reader :provider
 
     def courses
-      Publish::Courses::Query.call(provider:).preload(:latest_non_draft_enrichment)
+      Publish::Courses::Query.call(provider:).preload(:enrichments)
+    end
+
+    # Use status as CourseEnrichment#draft? also counts rolled_over
+    def reported_enrichment(course)
+      settled = course.enrichments.reject { |enrichment| enrichment.status == "draft" }
+      settled.max_by { |enrichment| [enrichment.created_at, enrichment.id] } || course.latest_enrichment
     end
 
     def accredited_provider(course)
