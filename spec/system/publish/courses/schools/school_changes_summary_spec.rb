@@ -67,6 +67,18 @@ RSpec.describe "Publish - Playing back the schools being changed", :js, type: :s
     and_i_am_not_told_i_am_removing_anything
   end
 
+  # The summary is the last thing before the button, and it wants the same gap
+  # above it whether it ends in a list of schools or in the one-line message.
+  scenario "the button is not crowded against the summary" do
+    when_i_check("Cedar School")
+    then_the_gap_above_the_button_is(20)
+
+    when_i_select_all_schools
+    and_i_unselect_all_schools
+    and_i_am_told_i_am_removing_all_schools
+    then_the_gap_above_the_button_is(20)
+  end
+
 private
 
   def attached_schools
@@ -166,6 +178,19 @@ private
 
   def and_i_am_not_told_i_am_adding_anything
     expect(publish_course_school_edit_page.changes_summary).to have_no_content("You are adding")
+  end
+
+  def then_the_gap_above_the_button_is(pixels)
+    gap = page.evaluate_script(<<~JS)
+      (() => {
+        const summary = document.querySelector('.app-schools-changes')
+        const button = document.querySelector('button.govuk-button[type="submit"]')
+
+        return button.getBoundingClientRect().top - summary.getBoundingClientRect().bottom
+      })()
+    JS
+
+    expect(gap).to eq(pixels)
   end
 
   attr_reader :course, :provider

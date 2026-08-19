@@ -61,13 +61,19 @@ export default class extends Controller {
   // known once the provider has finished ticking.
   wording (section, count, all) {
     const paragraph = document.createElement('p')
-    paragraph.className = 'govuk-body govuk-!-margin-bottom-1'
 
     if (all) {
+      // Standing on its own - an "all" of either kind rules the other section out,
+      // so this is always the last thing before the button and takes the ordinary
+      // spacing above it rather than the tight margin below.
+      paragraph.className = 'govuk-body'
       paragraph.textContent = section.dataset.all
 
       return paragraph
     }
+
+    // Tight, because its own list of schools follows it.
+    paragraph.className = 'govuk-body govuk-!-margin-bottom-1'
 
     const strong = document.createElement('strong')
 
