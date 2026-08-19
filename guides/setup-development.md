@@ -12,6 +12,20 @@ Run setup:
 ./bin/setup
 ```
 
+### Yarn 4 (Corepack) troubleshooting
+This repo uses Yarn 4 via Corepack (`packageManager: "yarn@4.18.0"`).
+
+If `yarn -v` still shows Yarn 1, run:
+
+```bash
+corepack enable
+corepack prepare yarn@4.18.0 --activate
+yarn -v
+yarn install --immutable
+```
+
+You generally do not need to delete `node_modules`; only do that if you’re trying to recover from a broken install.
+
 ## Install Playwright (for system tests)
 
 ```bash
