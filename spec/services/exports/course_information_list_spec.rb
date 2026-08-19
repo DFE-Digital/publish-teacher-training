@@ -61,6 +61,22 @@ module Exports
         expect(rows.first.to_h).to include("UK fee" => "£9,535", "Non-UK fee" => "£14,000")
       end
 
+      it "reports a rolled-over course's values, which the model counts as draft" do
+        create(:course, :fee, provider:, name: "Geography", enrichments: [
+          build(:course_enrichment, :rolled_over, fee_uk_eu: 9_000, course_length: "OneYear"),
+        ])
+
+        expect(rows.first.to_h).to include("Status" => "Rolled over", "UK fee" => "£9,000", "Course length" => "1 year")
+      end
+
+      it "falls back to the draft when a course has never been published" do
+        create(:course, :fee, provider:, name: "Biology", enrichments: [
+          build(:course_enrichment, :initial_draft, fee_uk_eu: 9_790),
+        ])
+
+        expect(rows.first.to_h).to include("Status" => "Draft", "UK fee" => "£9,790")
+      end
+
       it "keeps a withdrawn course's own values, since withdrawing leaves no published row" do
         create(:course, :fee, provider:, name: "Physics", enrichments: [
           build(:course_enrichment, :withdrawn, fee_uk_eu: 9_250),
