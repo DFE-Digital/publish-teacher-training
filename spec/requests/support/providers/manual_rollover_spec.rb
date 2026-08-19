@@ -15,6 +15,17 @@ RSpec.describe "Support manual provider rollover" do
   end
 
   describe "GET /support/:recruitment_cycle_year/providers/:provider_id/manual_rollover" do
+    # Schools are counted from Provider::School, so the summary is right for a
+    # provider whose schools were never mirrored into the legacy site table.
+    it "counts the schools the provider will roll over" do
+      create_list(:provider_school, 2, provider:)
+
+      get manual_rollover_support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider)
+
+      expect(response).to have_http_status(:ok)
+      expect(schools_summary_row).to have_text("2")
+    end
+
     it "counts the study sites, which are still only in the legacy site table" do
       create_list(:site, 3, :study_site, provider:)
 
@@ -22,6 +33,10 @@ RSpec.describe "Support manual provider rollover" do
 
       expect(response).to have_http_status(:ok)
       expect(study_sites_summary_row).to have_text("3")
+    end
+
+    def schools_summary_row
+      Capybara.string(response.body).find(".govuk-summary-list__row", text: "Number of schools")
     end
 
     def study_sites_summary_row
