@@ -59,31 +59,30 @@ export default class extends Controller {
 
   // {count} is substituted here rather than by I18n, since the count is only
   // known once the provider has finished ticking.
+  //
+  // A count heads the list of schools that follows it, so it is a heading - the
+  // page already has an h2 over both halves, and a bold paragraph would leave a
+  // screen reader with two lists and nothing to tell them apart. An "all" of
+  // either kind rules the other half out, so it heads nothing and stays a
+  // sentence.
   wording (section, count, all) {
-    const paragraph = document.createElement('p')
-
     if (all) {
-      // Standing on its own - an "all" of either kind rules the other section out,
-      // so this is always the last thing before the button and takes the ordinary
-      // spacing above it rather than the tight margin below.
+      const paragraph = document.createElement('p')
+
       paragraph.className = 'govuk-body'
       paragraph.textContent = section.dataset.all
 
       return paragraph
     }
 
-    // Tight, because its own list of schools follows it.
-    paragraph.className = 'govuk-body govuk-!-margin-bottom-1'
+    const heading = document.createElement('h3')
 
-    const strong = document.createElement('strong')
-
-    strong.textContent = count === 1
+    heading.className = 'govuk-heading-s'
+    heading.textContent = count === 1
       ? section.dataset.one
       : section.dataset.other.replaceAll('{count}', count)
 
-    paragraph.append(strong)
-
-    return paragraph
+    return heading
   }
 
   // Built as nodes rather than as markup, because a school name is text the
