@@ -52,6 +52,23 @@ module Exports
         )
       end
 
+      it "reports the published fees, not an unpublished edit sitting over them" do
+        create(:course, :fee, provider:, name: "Chemistry", enrichments: [
+          build(:course_enrichment, :published, fee_uk_eu: 9_535, fee_international: 14_000),
+          build(:course_enrichment, :initial_draft, fee_uk_eu: 9_790, fee_international: 15_000),
+        ])
+
+        expect(rows.first.to_h).to include("UK fee" => "£9,535", "Non-UK fee" => "£14,000")
+      end
+
+      it "keeps a withdrawn course's own values, since withdrawing leaves no published row" do
+        create(:course, :fee, provider:, name: "Physics", enrichments: [
+          build(:course_enrichment, :withdrawn, fee_uk_eu: 9_250),
+        ])
+
+        expect(rows.first.to_h).to include("Status" => "Withdrawn", "UK fee" => "£9,250")
+      end
+
       it "names the ratifying provider, in the order the course list page shows them" do
         other = create(:accredited_provider, provider_name: "University of Brighton")
         create(:course, provider:, accrediting_provider: other, name: "Ratified course")
