@@ -125,6 +125,10 @@ class GiasSchool < ApplicationRecord
     }
   end
 
+  def address
+    [address1, address2, address3, town, county, postcode]
+  end
+
   def full_address
     [name, address1, address2, address3, town, postcode].compact_blank.join(", ")
   end
