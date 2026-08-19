@@ -36,13 +36,13 @@ module Courses
 
       title_parts << content_tag(
         :div,
-        "Nearest placement school",
+        "",
         class: "govuk-body-s govuk-!-margin-bottom-0",
       )
 
       title_parts << content_tag(
         :div,
-        search_by_location? ? nearest_placement_school_text : location_hint,
+        search_by_location? ? nearest_placement_school_text : "",
         class: "govuk-body-s govuk-!-margin-bottom-0",
       )
 
@@ -68,12 +68,14 @@ module Courses
     def nearest_placement_school_text
       return unless search_by_location?
 
+      from_text = centre_location? ? " from the centre of " : " from "
+
       safe_join([
         content_tag(
           :strong,
           pluralize(course.minimum_distance_to_search_location.ceil, "mile"),
         ),
-        " from ",
+        from_text,
         content_tag(
           :strong,
           @short_address.presence || @location,
@@ -193,6 +195,14 @@ module Courses
 
     def qualification_value
       t(".qualification_value.#{course.qualification}_html")
+    end
+
+    def study_mode_value
+      t(".study_mode_value.#{course.study_mode}")
+    end
+
+    def funding_value
+      t(".funding_value.#{course.funding}")
     end
 
     def degree_requirements_key

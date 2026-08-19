@@ -330,12 +330,20 @@ en:
       experience_value: Required or strongly recommended
       qualification_key: Qualification awarded
       qualification_value:
-        qts_html: <abbr title='Qualified teacher status'>QTS</abbr> only
+        qts_html: <abbr title='Qualified teacher status'>QTS</abbr>
         pgce_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate certificate in education'>PGCE</abbr>
         pgde_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate diploma in education'>PGDE</abbr>
         pgce_html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         pgde_html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         undergraduate_degree_with_qts_html: Teacher degree apprenticeship with <abbr title='Qualified teacher status'>QTS</abbr>
+      study_mode_value:
+        full_time: full time
+        part_time: part time
+        full_time_or_part_time: full time or part time
+      funding_value:
+        salary: Salary
+        apprenticeship: Apprenticeship
+        fee: Fee-paying
       degree_requirements_key: Degree required
       degree_requirements_value:
         postgraduate:
