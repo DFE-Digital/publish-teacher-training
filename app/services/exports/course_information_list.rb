@@ -29,7 +29,7 @@ module Exports
     def data
       BYTE_ORDER_MARK + CSV.generate(headers: CSV_HEADERS, write_headers: true) do |csv|
         courses.each do |course|
-          enrichment = course.latest_enrichment
+          enrichment = course.latest_non_draft_enrichment
 
           csv << [
             course.name,
@@ -58,7 +58,7 @@ module Exports
     attr_reader :provider
 
     def courses
-      Publish::Courses::Query.call(provider:).preload(:latest_enrichment)
+      Publish::Courses::Query.call(provider:).preload(:latest_non_draft_enrichment)
     end
 
     def accredited_provider(course)
