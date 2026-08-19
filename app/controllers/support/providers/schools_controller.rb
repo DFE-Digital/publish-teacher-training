@@ -3,7 +3,7 @@
 module Support
   module Providers
     class SchoolsController < ApplicationController
-      before_action :build_site, only: %i[index create]
+      before_action :build_site, only: %i[index]
       before_action :new_form, only: %i[index]
       before_action :reset_urn_form, only: %i[index]
       before_action :school, only: %i[show delete destroy]
@@ -15,15 +15,6 @@ module Support
       end
 
       def show; end
-
-      def create
-        @school_form = SchoolForm.new(provider, @site, params: site_params(:support_school_form))
-        if @school_form.stash
-          redirect_to support_recruitment_cycle_provider_schools_check_path
-        else
-          render(:new)
-        end
-      end
 
       def delete; end
 
