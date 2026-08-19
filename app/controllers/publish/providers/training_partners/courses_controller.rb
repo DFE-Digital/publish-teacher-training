@@ -5,8 +5,6 @@ module Publish
     module TrainingPartners
       class CoursesController < ApplicationController
         def index
-          authorize(provider, :index?)
-
           @courses = fetch_courses
         end
 
