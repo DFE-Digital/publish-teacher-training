@@ -1,0 +1,95 @@
+<%# locals: (form:, page_caption:, page_title:) %>
+
+<%= form.govuk_error_summary %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l"><%= page_caption %></span>
+    <h1 class="govuk-heading-l"><%= page_title %></h1>
+
+    <div class="govuk-form-group">
+      <%= form.govuk_text_field :name,
+                                label: { text: Banner.human_attribute_name(:name), size: "s" },
+                                hint: { text: Banner.human_attribute_name(:name_description) } %>
+    </div>
+
+    <div class="govuk-form-group">
+      <%= form.govuk_text_field :title,
+                                label: { text: Banner.human_attribute_name(:title), size: "s" },
+                                hint: { text: Banner.human_attribute_name(:title_description) } %>
+    </div>
+
+    <div class="govuk-form-group">
+      <%= form.govuk_text_field :title_heading_level,
+                                inputmode: :numeric,
+                                class: "govuk-input--width-4",
+                                label: { text: Banner.human_attribute_name(:title_heading_level), size: "s" },
+                                hint: { text: Banner.human_attribute_name(:title_heading_level_description) } %>
+    </div>
+
+    <div class="govuk-form-group">
+      <%= form.govuk_check_box :success_styling,
+                               true,
+                               false,
+                               multiple: false,
+                               label: { text: Banner.human_attribute_name(:success_styling), size: "s" },
+                               hint: { text: Banner.human_attribute_name(:success_styling_description) } %>
+    </div>
+
+    <div class="govuk-form-group">
+      <%= form.govuk_text_field :heading,
+                                label: { text: Banner.human_attribute_name(:heading), size: "s" },
+                                hint: { text: Banner.human_attribute_name(:heading_description) } %>
+    </div>
+
+    <div class="govuk-form-group">
+      <%= form.govuk_text_area :body,
+                               label: { text: Banner.human_attribute_name(:body), size: "s" },
+                               hint: { text: Banner.human_attribute_name(:body_description) } %>
+    </div>
+
+    <div class="govuk-form-group">
+      <div class="govuk-grid-column-one-half">
+
+        <%= form.govuk_date_field :published_at,
+                                  legend: { text: Banner.human_attribute_name(:published_at_date), size: "s" },
+                                  hint: { text: Banner.human_attribute_name(:published_at_date_description) } %>
+      </div>
+
+      <div class="govuk-grid-column-one-half">
+
+        <%= form.govuk_time_field :published_at,
+                                  omit_second: true,
+                                  legend: { text: Banner.human_attribute_name(:published_at_time), size: "s" },
+                                  hint: { text: Banner.human_attribute_name(:published_at_time_description) } %>
+      </div>
+    </div>
+
+    <div class="govuk-form-group">
+      <div class="govuk-grid-column-one-half">
+      <%= form.govuk_date_field :expired_at,
+                                class: "govuk-input--width-20",
+                                legend: { text: Banner.human_attribute_name(:expired_at_date), size: "s" },
+                                hint: { text: Banner.human_attribute_name(:expired_at_date_description) } %>
+      </div>
+
+        <div class="govuk-grid-column-one-half">
+      <%= form.govuk_time_field :expired_at,
+                                omit_second: true,
+                                class: "govuk-input--width-20",
+                                legend: { text: Banner.human_attribute_name(:expired_at_time), size: "s" },
+                                hint: { text: Banner.human_attribute_name(:expired_at_time_description) } %>
+        </div>
+    </div>
+
+    <%= form.govuk_check_boxes_fieldset :display_on, legend: { text: Banner.human_attribute_name(:display_on_description) } do %>
+      <%= form.govuk_check_box :display_on_find, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_find) } %>
+      <%= form.govuk_check_box :display_on_publish, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_publish) } %>
+      <%= form.govuk_check_box :display_on_support, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_support) } %>
+    <% end %>
+
+    <%= form.govuk_submit t("continue") %>
+    <p class="govuk-body">
+      <%= govuk_link_to t("cancel"), active_support_banners_path, no_visited_state: true %>
+    </p>
+  </div>
+</div>

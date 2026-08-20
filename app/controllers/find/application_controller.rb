@@ -27,6 +27,8 @@ module Find
       candidate
     end
 
+    helper_method :active_banners
+
   private
 
     def candidate
@@ -43,6 +45,10 @@ module Find
 
     def redirect_to_cycle_has_ended_if_find_is_down
       redirect_to find_cycle_has_ended_path if CycleTimetable.find_down?
+    end
+
+    def active_banners
+      @active_banners ||= Banner.display_on_find.active.active_order
     end
   end
 end
