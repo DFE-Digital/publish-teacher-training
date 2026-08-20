@@ -8,6 +8,5 @@ RSpec.configure do |config|
     allow(Redis).to receive(:new).and_return(mock_redis)
 
     RedisClient.current.flushdb
-    RedisClient.cache.flushdb
   end
 end
