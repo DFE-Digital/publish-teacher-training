@@ -18,7 +18,7 @@ RSpec.describe "Support::Banners::PublicationsController" do
         post support_banner_publication_path(banner)
 
         expect(response).to redirect_to(support_banner_path(banner))
-        expect(flash[:warning]).to eq("Banner could not be published.")
+        expect(flash[:warning]).to eq("Banner could not be published")
       end
     end
   end

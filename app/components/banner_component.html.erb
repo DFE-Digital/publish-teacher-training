@@ -1,11 +1,10 @@
-<%# locals: (banner:) %>
-
 <%= govuk_notification_banner(
       title_text: banner.title,
-      title_heading_level: banner.title_heading_level || 1,
+      title_heading_level:,
       success: banner.success_styling,
+      disable_auto_focus: true,
     ) do |notification_banner| %>
   <% notification_banner.with_heading(text: banner.heading) %>
 
-  <%= markdown banner.body %>
+  <%= helpers.markdown(banner.body) %>
 <% end %>

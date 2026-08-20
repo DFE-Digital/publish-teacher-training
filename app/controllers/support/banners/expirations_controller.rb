@@ -7,9 +7,9 @@ module Support
         banner = Banner.find(params[:banner_id])
 
         if banner.expire
-          redirect_to expired_support_banners_path, flash: { success: "Banner was successfully expired." }
+          redirect_to expired_support_banners_path, flash: { success: t(".success") }
         else
-          redirect_back fallback_location: support_banner_path(banner), flash: { warning: "Banner could not be expired." }
+          redirect_back fallback_location: support_banner_path(banner), flash: { warning: t(".failure") }
         end
       end
     end

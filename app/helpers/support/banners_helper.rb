@@ -5,7 +5,6 @@ module Support::BannersHelper
       active: "green",
       scheduled: "yellow",
       expired: "red",
-      unknown: "grey",
     }
 
     govuk_tag(

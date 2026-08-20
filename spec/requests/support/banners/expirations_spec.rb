@@ -18,7 +18,7 @@ RSpec.describe "Support::Banners::ExpirationsController" do
         post support_banner_expiration_path(banner)
 
         expect(response).to redirect_to(support_banner_path(banner))
-        expect(flash[:warning]).to eq("Banner could not be expired.")
+        expect(flash[:warning]).to eq("Banner could not be expired")
       end
     end
   end

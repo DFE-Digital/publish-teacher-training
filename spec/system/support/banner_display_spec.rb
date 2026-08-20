@@ -60,7 +60,7 @@ private
   end
 
   def then_i_do_not_see_the_layout_banner
-    expect(page).to have_content("Banner was successfully expired.")
+    expect(page).to have_content("Banner successfully expired")
     expect(page).to have_no_content("Support notice")
   end
 end

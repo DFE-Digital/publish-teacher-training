@@ -11,8 +11,6 @@ module Support
       "support"
     end
 
-    helper_method :active_banners
-
   private
 
     def check_user_is_admin
@@ -21,10 +19,6 @@ module Support
 
     def recruitment_cycle
       @recruitment_cycle ||= Current.recruitment_cycle = RecruitmentCycle.find_by(year: params.fetch(:recruitment_cycle_year))
-    end
-
-    def active_banners
-      @active_banners ||= Banner.display_on_support.active.active_order
     end
   end
 end
