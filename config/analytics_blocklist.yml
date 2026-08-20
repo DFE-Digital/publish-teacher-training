@@ -1,5 +1,20 @@
 ---
 :shared:
+  :banner:
+    - id
+    - body
+    - created_at
+    - display_on_find
+    - display_on_publish
+    - display_on_support
+    - expired_at
+    - heading
+    - name
+    - published_at
+    - success_styling
+    - title
+    - title_heading_level
+    - updated_at
   :organisation_provider:
   - id
   - provider_id
