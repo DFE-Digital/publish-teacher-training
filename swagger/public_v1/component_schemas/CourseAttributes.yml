@@ -35,6 +35,12 @@ properties:
     minLength: 3
     nullable: true
     example: 2FR
+  additional_fees:
+    type: string
+    nullable: true
+    format: markdown
+    description: Further information about any additional course fees or costs.
+    example: "Trainees are responsible for travel costs to placement schools."
   age_minimum:
     type: integer
     description: >-
@@ -50,6 +56,12 @@ properties:
     format: date
     description: "Date from which applications can be submitted. This field is being deprecated after 2025 recruitment cycle."
     example: "2019-10-08"
+  assessment_methods:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about how trainees will be assessed.
+    example: "Trainees are assessed through observations, written assignments and portfolio evidence."
   bursary_amount:
     type: integer
     nullable: true
@@ -85,6 +97,12 @@ properties:
     format: date-time
     description: "Timestamp of when this course was created."
     example: "2019-06-13T10:44:31Z"
+  duration_per_school:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about how much time trainees will spend in each placement school.
+    example: "Trainees usually spend one term in their first school and two terms in their second school."
   fee_details:
     type: string
     nullable: true
@@ -101,6 +119,12 @@ properties:
     nullable: true
     description: "Fee in GBP for UK students."
     example: 9200
+  fee_schedule:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about when fees are due.
+    example: "Fees are paid in three instalments during the academic year."
   financial_support:
     type: string
     nullable: true
@@ -173,6 +197,15 @@ properties:
       and individual interviews with members of the programme team, and
       you may also be asked to undertake written or presentation tasks,
       depending on your subject.
+  interview_location:
+    type: string
+    nullable: true
+    description: Information about where interviews will take place.
+    example: both
+    enum:
+      - online
+      - in person
+      - both
   is_send:
     type: boolean
     description: "Does this course have a SEND specialism?"
@@ -216,6 +249,18 @@ properties:
     description: >-
       This field is being deprecated after 2024 recruitment cycle.
     example:
+  placement_school_activities:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about what trainees will do in their placement schools.
+    example: "Trainees observe lessons, plan teaching activities and gradually take on classroom responsibilities."
+  placement_selection_criteria:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about how placement schools are selected for trainees.
+    example: "We match trainees to schools based on subject, phase, location and training needs."
   program_type:
     type: string
     description: >-
@@ -295,6 +340,12 @@ properties:
       Successful applicants will be employed as unqualified teachers on
       at least Point 1 of the Unqualified Teachers' Pay Scale for the
       duration of the programme.
+  salary_fee_details:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about course fees for salaried courses.
+    example: "The employing school covers the course fee. Trainees do not pay tuition fees."
   school_experience_required:
     type: boolean
     nullable: true
@@ -345,6 +396,30 @@ properties:
     items:
       type: string
       example: "00"
+  support_and_mentorship:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about how trainees will be supported and mentored during school placements.
+    example: "Each trainee has a subject mentor, a professional mentor and regular reviews with the course team."
+  theoretical_training_activities:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about what trainees will do during theoretical training.
+    example: "Trainees attend seminars, subject workshops and independent study sessions."
+  theoretical_training_duration:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about how much time trainees will spend in theoretical training.
+    example: "Trainees spend one day a week in centre-based training."
+  theoretical_training_location:
+    type: string
+    nullable: true
+    format: markdown
+    description: Information about where theoretical training will take place.
+    example: "Theoretical training takes place at the provider's main campus and online."
   visa_sponsorship_application_deadline_at:
     type: string
     nullable: true

@@ -177,16 +177,28 @@ module API
         end
 
         enrichment_attribute :about_course
+        enrichment_attribute :additional_fees
+        enrichment_attribute :assessment_methods
         enrichment_attribute :course_length
+        enrichment_attribute :duration_per_school
         enrichment_attribute :fee_details
         enrichment_attribute :fee_international
         enrichment_attribute :fee_domestic, :fee_uk_eu
+        enrichment_attribute :fee_schedule
         enrichment_attribute :financial_support
         enrichment_attribute :how_school_placements_work
         enrichment_attribute :interview_process
+        enrichment_attribute :interview_location
         enrichment_attribute :other_requirements
         enrichment_attribute :personal_qualities
+        enrichment_attribute :placement_school_activities
+        enrichment_attribute :placement_selection_criteria
         enrichment_attribute :salary_details
+        enrichment_attribute :salary_fee_details
+        enrichment_attribute :support_and_mentorship
+        enrichment_attribute :theoretical_training_activities
+        enrichment_attribute :theoretical_training_duration
+        enrichment_attribute :theoretical_training_location
       end
     end
   end
