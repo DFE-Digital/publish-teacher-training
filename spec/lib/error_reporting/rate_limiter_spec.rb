@@ -14,7 +14,7 @@ RSpec.describe ErrorReporting::RateLimiter do
     expect(described_class.report?(key: "a", threshold: 10)).to be true
   end
 
-  it "uses a sliding window so old events age out" do
+  it "ages out counts from outside the window" do
     Timecop.freeze do
       10.times { described_class.report?(key: "x", threshold: 10, window: 1.hour) }
       expect(described_class.report?(key: "x", threshold: 10, window: 1.hour)).to be true
@@ -25,8 +25,14 @@ RSpec.describe ErrorReporting::RateLimiter do
     end
   end
 
-  it "fails open if Redis raises" do
-    allow(RedisClient.cache).to receive(:multi).and_raise(Redis::TimeoutError)
+  it "fails open if the cache raises" do
+    allow(Rails.cache).to receive(:increment).and_raise(StandardError)
+
+    expect(described_class.report?(key: "x", threshold: 10)).to be true
+  end
+
+  it "fails open if the cache returns nil" do
+    allow(Rails.cache).to receive(:increment).and_return(nil)
 
     expect(described_class.report?(key: "x", threshold: 10)).to be true
   end
