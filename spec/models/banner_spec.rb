@@ -6,6 +6,25 @@ RSpec.describe Banner, type: :model do
     it { is_expected.to validate_length_of(:name).is_at_least(2).is_at_most(255) }
     it { is_expected.to validate_numericality_of(:title_heading_level).only_integer.is_greater_than(1).is_less_than_or_equal_to(6).allow_nil }
 
+    it "tells a support user what to enter rather than repeating can't be blank" do
+      banner = described_class.new
+
+      banner.validate
+
+      expect(banner.errors[:name]).to include("Enter a name to identify this banner")
+      expect(banner.errors[:title]).to include("Enter a title, for example Important")
+      expect(banner.errors[:heading]).to include("Enter a heading")
+    end
+
+    describe "displayed_on" do
+      it "is invalid when no interface is selected" do
+        banner = build(:banner, display_on_find: false, display_on_publish: false, display_on_support: false)
+
+        expect(banner).not_to be_valid
+        expect(banner.errors[:displayed_on]).to contain_exactly("Select at least one interface to display the banner on")
+      end
+    end
+
     describe "expired_at" do
       it "is valid when expired_at is after published_at" do
         banner = build(:banner, published_at: 1.day.ago, expired_at: 1.day.from_now)
@@ -28,6 +47,14 @@ RSpec.describe Banner, type: :model do
         banner = build(:banner, published_at: 1.day.ago, expired_at: nil)
         expect(banner).to be_valid
       end
+
+      it "is invalid when expired_at is set without a published_at" do
+        banner = build(:banner, published_at: nil, expired_at: 1.day.from_now)
+
+        expect(banner).not_to be_valid
+        expect(banner.errors[:published_at]).to contain_exactly("Enter a published date for a banner that expires")
+        expect(banner.errors[:expired_at]).to be_empty
+      end
     end
   end
 
@@ -44,8 +71,8 @@ RSpec.describe Banner, type: :model do
   describe ".display_on_publish" do
     it "returns only banners with display_on_publish set to true" do
       publish_banner = create(:banner, display_on_publish: true)
-      create(:banner, display_on_publish: false)
-      create(:banner, display_on_publish: nil)
+      create(:banner, display_on_publish: false, display_on_find: true)
+      create(:banner, display_on_publish: nil, display_on_find: true)
 
       expect(described_class.display_on_publish).to contain_exactly(publish_banner)
     end
@@ -126,6 +153,13 @@ RSpec.describe Banner, type: :model do
       active_banners = described_class.active(now)
       inactive_banners = described_class.all.excluding(active_banners)
       expect(inactive_banners.map { |banner| banner.active?(now) }).to be_all false
+    end
+
+    it "ignores a banner whose expiry precedes its publication rather than failing the query" do
+      banner = create(:banner, published_at: 1.day.ago, expired_at: nil)
+      banner.update_columns(published_at: 2.days.from_now, expired_at: 1.day.ago)
+
+      expect(described_class.active).to be_empty
     end
   end
 
@@ -427,8 +461,8 @@ RSpec.describe Banner, type: :model do
 
   describe "#expire" do
     it "sets expired_at to the given time on an active banner" do
-      banner = create(:banner, published_at: 1.day.ago, expired_at: nil)
-      now = Time.current
+      now = Time.zone.local(2026, 7, 1, 12, 0, 0)
+      banner = create(:banner, published_at: now - 1.day, expired_at: nil)
 
       banner.expire(now)
 
@@ -436,8 +470,8 @@ RSpec.describe Banner, type: :model do
     end
 
     it "overwrites an existing future expired_at on an active banner" do
-      banner = create(:banner, published_at: 1.day.ago, expired_at: 1.day.from_now)
-      now = Time.current
+      now = Time.zone.local(2026, 7, 1, 12, 0, 0)
+      banner = create(:banner, published_at: now - 1.day, expired_at: now + 1.day)
 
       banner.expire(now)
 
@@ -459,8 +493,8 @@ RSpec.describe Banner, type: :model do
 
   describe "#publish" do
     it "sets published_at to the given time on a scheduled banner" do
-      banner = create(:banner, published_at: 1.day.from_now, expired_at: nil)
-      now = Time.current
+      now = Time.zone.local(2026, 7, 1, 12, 0, 0)
+      banner = create(:banner, published_at: now + 1.day, expired_at: nil)
 
       banner.publish(now)
 
@@ -468,8 +502,8 @@ RSpec.describe Banner, type: :model do
     end
 
     it "sets published_at to the given time on a scheduled banner with an expiry" do
-      banner = create(:banner, published_at: 1.day.from_now, expired_at: 2.days.from_now)
-      now = Time.current
+      now = Time.zone.local(2026, 7, 1, 12, 0, 0)
+      banner = create(:banner, published_at: now + 1.day, expired_at: now + 2.days)
 
       banner.publish(now)
 
@@ -477,8 +511,8 @@ RSpec.describe Banner, type: :model do
     end
 
     it "sets published_at on a draft banner" do
+      now = Time.zone.local(2026, 7, 1, 12, 0, 0)
       banner = create(:banner, published_at: nil, expired_at: nil)
-      now = Time.current
 
       banner.publish(now)
 

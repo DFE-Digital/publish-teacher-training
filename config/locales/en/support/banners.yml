@@ -1,5 +1,21 @@
 en:
   activerecord:
+    errors:
+      models:
+        banner:
+          attributes:
+            displayed_on:
+              blank: Select at least one interface to display the banner on
+            heading:
+              blank: Enter a heading
+            name:
+              blank: Enter a name to identify this banner
+              too_long: Banner name must be 255 characters or fewer
+              too_short: Banner name must be at least 2 characters
+            published_at:
+              blank: Enter a published date for a banner that expires
+            title:
+              blank: Enter a title, for example Important
     attributes:
       banner:
         body: Body
@@ -10,19 +26,19 @@ en:
         display_on_support: Support
         displayed_on: Displayed on
         expired_at: Expired
-        expired_at_date: Expired date
-        expired_at_date_description: The date when the banner expired.
-        expired_at_time: Expired time
-        expired_at_time_description: The time when the banner expired.
+        expired_at_date: Expiry date
+        expired_at_date_description: The date the banner stops being shown. Leave blank for no expiry.
+        expired_at_time: Expiry time
+        expired_at_time_description: The time on that date the banner stops being shown.
         heading: Heading
         heading_description: The heading of the banner, displayed to users.
         name: Name
         name_description: The name of the banner, used for internal reference only.
         published_at: Published
-        published_at_date: Published date
-        published_at_date_description: The date when the banner was published.
-        published_at_time: Published time
-        published_at_time_description: The time when the banner was published.
+        published_at_date: Publish date
+        published_at_date_description: The date the banner starts being shown. Leave blank to keep it as a draft.
+        published_at_time: Publish time
+        published_at_time_description: The time on that date the banner starts being shown.
         status: Status
         success_styling: Success styling
         success_styling_description: Will this banner be displayed with the success styling?
@@ -32,6 +48,14 @@ en:
         title_heading_level_description: The heading level for the title, used for accessibility. Between 2-6.
   support:
     banners:
+      expirations:
+        create:
+          failure: "Banner could not be expired"
+          success: "Banner successfully expired"
+      publications:
+        create:
+          failure: "Banner could not be published"
+          success: "Banner successfully published"
       index:
         page_title: "Banners"
         add_banner: "Add banner"
@@ -40,7 +64,6 @@ en:
           active: "Active"
           scheduled: "Scheduled"
           expired: "Expired"
-          unknown: "Unknown"
         missing_published_at: "Not published"
         missing_expired_at: "No expiry"
         displayed_on:

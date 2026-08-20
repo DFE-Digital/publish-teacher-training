@@ -55,7 +55,7 @@
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <div class="govuk-width-container">
-          <%= render partial: "shared/banners/banner", collection: active_banners, as: :banner unless flash.any? %>
+          <%= render ActiveBannersComponent.new(interface: :support, flash:) %>
         </div>
 
         <%= render(FlashBanner.new(flash:)) %>

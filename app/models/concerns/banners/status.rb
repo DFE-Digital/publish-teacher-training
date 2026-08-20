@@ -16,7 +16,8 @@ module Banners
 
       scope :active, lambda { |now = Time.current|
         not_drafts
-          .where("tsrange(published_at, COALESCE(expired_at, timestamp 'infinity')::timestamp, '[]') @> ?::timestamp", now)
+          .where(published_at: ..now)
+          .where("expired_at IS NULL OR expired_at >= ?", now)
       }
       scope :active_order, -> { order(published_at: :desc, expired_at: :asc) }
 
@@ -29,9 +30,8 @@ module Banners
         return :draft if draft?
         return :scheduled if scheduled?(now)
         return :active if active?(now)
-        return :expired if expired?(now)
 
-        :unknown
+        :expired
       end
 
       def draft? = !published_at
@@ -46,8 +46,7 @@ module Banners
         return false if draft?
 
         expiry = expired_at.presence || DateTime::Infinity.new
-        active_range = (published_at..expiry)
-        active_range.cover? now
+        (published_at..expiry).cover? now
       end
 
       def expired?(now = Time.current)
