@@ -47,23 +47,7 @@ module Courses
         class: "govuk-body-s govuk-!-margin-bottom-0",
       )
 
-      title_content = safe_join(title_parts)
-
-      classes = [
-        ("govuk-grid-column-one-half" if save_toggle_button),
-        ("govuk-!-padding-left-2" unless save_toggle_button),
-      ].compact.join(" ")
-
-      content_tag(:div, class: "govuk-grid-row") do
-        safe_join([
-          content_tag(:div, title_content, class: classes),
-          content_tag(
-            :div,
-            save_toggle_button || "",
-            class: "govuk-grid-column-one-half govuk-!-padding-top-2 govuk-!-padding-right-0",
-          ),
-        ])
-      end
+      safe_join(title_parts)
     end
 
     def nearest_placement_school_text
