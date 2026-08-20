@@ -98,9 +98,13 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:code).with_value(course.course_code) }
   it { is_expected.to have_attribute(:course_length).with_value(course.latest_published_enrichment.course_length) }
   it { is_expected.to have_attribute(:created_at).with_value(course.created_at.iso8601) }
+  it { is_expected.to have_attribute(:duration_per_school).with_value(course.latest_published_enrichment.duration_per_school) }
+  it { is_expected.to have_attribute(:additional_fees).with_value(course.latest_published_enrichment.additional_fees) }
+  it { is_expected.to have_attribute(:assessment_methods).with_value(course.latest_published_enrichment.assessment_methods) }
   it { is_expected.to have_attribute(:fee_details).with_value(nil) }
   it { is_expected.to have_attribute(:fee_international).with_value(course.latest_published_enrichment.fee_international) }
   it { is_expected.to have_attribute(:fee_domestic).with_value(course.latest_published_enrichment.fee_uk_eu) }
+  it { is_expected.to have_attribute(:fee_schedule).with_value(course.latest_published_enrichment.fee_schedule) }
   it { is_expected.to have_attribute(:findable).with_value(course.findable?) }
   it { is_expected.to have_attribute(:funding_type).with_value("apprenticeship") }
   it { is_expected.to have_attribute(:gcse_subjects_required).with_value(%w[maths english science]) }
@@ -110,6 +114,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:has_vacancies).with_value(course.has_vacancies?) }
   it { is_expected.to have_attribute(:how_school_placements_work).with_value(course.latest_published_enrichment.how_school_placements_work) }
   it { is_expected.to have_attribute(:interview_process).with_value(course.latest_published_enrichment.interview_process) }
+  it { is_expected.to have_attribute(:interview_location).with_value(course.latest_published_enrichment.interview_location) }
   it { is_expected.to have_attribute(:is_send).with_value(course.is_send?) }
   it { is_expected.to have_attribute(:last_published_at).with_value(course.last_published_at.iso8601) }
   it { is_expected.to have_attribute(:level).with_value(course.level) }
@@ -117,6 +122,8 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:open_for_applications).with_value(course.open_for_applications?) }
   it { is_expected.to have_attribute(:other_requirements).with_value(course.latest_published_enrichment.other_requirements) }
   it { is_expected.to have_attribute(:personal_qualities).with_value(course.latest_published_enrichment.personal_qualities) }
+  it { is_expected.to have_attribute(:placement_school_activities).with_value(course.latest_published_enrichment.placement_school_activities) }
+  it { is_expected.to have_attribute(:placement_selection_criteria).with_value(course.latest_published_enrichment.placement_selection_criteria) }
   it { is_expected.to have_attribute(:program_type).with_value(course.program_type) }
   it { is_expected.to have_attribute(:qualifications).with_value(%w[qts pgce]) }
   it { is_expected.to have_attribute(:required_qualifications).with_value(course.latest_published_enrichment.required_qualifications) }
@@ -125,7 +132,12 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:required_qualifications_science).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:running).with_value(course.findable?) }
   it { is_expected.to have_attribute(:salary_details).with_value(course.latest_published_enrichment.salary_details) }
+  it { is_expected.to have_attribute(:salary_fee_details).with_value(course.latest_published_enrichment.salary_fee_details) }
   it { is_expected.to have_attribute(:scholarship_amount).with_value(nil) }
+  it { is_expected.to have_attribute(:support_and_mentorship).with_value(course.latest_published_enrichment.support_and_mentorship) }
+  it { is_expected.to have_attribute(:theoretical_training_activities).with_value(course.latest_published_enrichment.theoretical_training_activities) }
+  it { is_expected.to have_attribute(:theoretical_training_duration).with_value(course.latest_published_enrichment.theoretical_training_duration) }
+  it { is_expected.to have_attribute(:theoretical_training_location).with_value(course.latest_published_enrichment.theoretical_training_location) }
   it { is_expected.to have_attribute(:can_sponsor_skilled_worker_visa) }
   it { is_expected.to have_attribute(:can_sponsor_student_visa) }
   it { is_expected.to have_attribute(:campaign_name) }

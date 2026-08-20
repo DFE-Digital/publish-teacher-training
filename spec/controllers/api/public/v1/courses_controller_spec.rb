@@ -486,16 +486,28 @@ RSpec.describe API::Public::V1::CoursesController do
                 subject_codes
                 required_qualifications
                 about_course
+                additional_fees
+                assessment_methods
                 course_length
+                duration_per_school
                 fee_details
                 fee_international
                 fee_domestic
+                fee_schedule
                 financial_support
                 how_school_placements_work
                 interview_process
+                interview_location
                 other_requirements
                 personal_qualities
+                placement_school_activities
+                placement_selection_criteria
                 salary_details
+                salary_fee_details
+                support_and_mentorship
+                theoretical_training_activities
+                theoretical_training_duration
+                theoretical_training_location
                 can_sponsor_skilled_worker_visa
                 can_sponsor_student_visa
                 campaign_name
