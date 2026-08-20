@@ -337,9 +337,9 @@ en:
         pgde_html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         undergraduate_degree_with_qts_html: Teacher degree apprenticeship with <abbr title='Qualified teacher status'>QTS</abbr>
       study_mode_value:
-        full_time: full time
-        part_time: part time
-        full_time_or_part_time: full time or part time
+        full_time: Full time
+        part_time: Part time
+        full_time_or_part_time: Full time or part time
       funding_value:
         salary: Salary
         apprenticeship: Apprenticeship

@@ -26,6 +26,7 @@ module Courses
         location: @location,
         distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
       )
+
       title_parts = [
         content_tag(
           :div,
