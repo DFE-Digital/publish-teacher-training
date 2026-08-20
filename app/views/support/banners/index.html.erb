@@ -29,7 +29,7 @@
         <% row.with_cell text: Banner.human_attribute_name(:expired_at) %>
         <% row.with_cell text: Banner.human_attribute_name(:displayed_on) %>
         <% row.with_cell text: Banner.human_attribute_name(:status) %>
-        <% row.with_cell text: t("support.banners.index.table.headings.actions") %>
+        <% row.with_cell text: t("support.banners.index.table.headings.actions"), classes: "app-table--banners__actions" %>
       <% end %>
     <% end %>
 
@@ -43,13 +43,23 @@
           <% row.with_cell do %>
             <%= banner_status_tag(banner) %>
           <% end %>
-          <% row.with_cell do %>
-            <%= govuk_link_to(t("support.banners.index.table.actions.edit"), edit_support_banner_path(banner), class: "govuk-link") %>
+          <% row.with_cell(classes: "app-table--banners__actions") do %>
+            <%= govuk_link_to(t("support.banners.index.table.actions.edit"), edit_support_banner_path(banner)) %>
             <% if banner.active? %>
-              <%= button_to(t("support.banners.index.table.actions.expire"), support_banner_expiration_path(banner), class: "govuk-button govuk-button--warning govuk-!-margin-bottom-0 govuk-!-margin-top-1") %>
+              <%= button_to(
+                t("support.banners.index.table.actions.expire"),
+                support_banner_expiration_path(banner),
+                class: "govuk-button govuk-button--warning govuk-!-margin-bottom-0",
+                form_class: "govuk-!-display-inline-block govuk-!-margin-left-2",
+              ) %>
             <% end %>
             <% if banner.scheduled? %>
-              <%= button_to(t("support.banners.index.table.actions.publish"), support_banner_publication_path(banner), class: "govuk-button govuk-!-margin-bottom-0 govuk-!-margin-top-1") %>
+              <%= button_to(
+                t("support.banners.index.table.actions.publish"),
+                support_banner_publication_path(banner),
+                class: "govuk-button govuk-!-margin-bottom-0",
+                form_class: "govuk-!-display-inline-block govuk-!-margin-left-2",
+              ) %>
             <% end %>
           <% end %>
         <% end %>

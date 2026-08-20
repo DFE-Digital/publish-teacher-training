@@ -48,40 +48,40 @@
     </div>
 
     <div class="govuk-form-group">
-      <div class="govuk-grid-column-one-half">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <%= form.govuk_date_field :published_at,
+                                    legend: { text: Banner.human_attribute_name(:published_at_date), size: "s" },
+                                    hint: { text: Banner.human_attribute_name(:published_at_date_description) } %>
+        </div>
 
-        <%= form.govuk_date_field :published_at,
-                                  legend: { text: Banner.human_attribute_name(:published_at_date), size: "s" },
-                                  hint: { text: Banner.human_attribute_name(:published_at_date_description) } %>
-      </div>
-
-      <div class="govuk-grid-column-one-half">
-
-        <%= form.govuk_time_field :published_at,
-                                  omit_second: true,
-                                  legend: { text: Banner.human_attribute_name(:published_at_time), size: "s" },
-                                  hint: { text: Banner.human_attribute_name(:published_at_time_description) } %>
+        <div class="govuk-grid-column-one-half">
+          <%= form.govuk_time_field :published_at,
+                                    omit_second: true,
+                                    legend: { text: Banner.human_attribute_name(:published_at_time), size: "s" },
+                                    hint: { text: Banner.human_attribute_name(:published_at_time_description) } %>
+        </div>
       </div>
     </div>
 
     <div class="govuk-form-group">
-      <div class="govuk-grid-column-one-half">
-      <%= form.govuk_date_field :expired_at,
-                                class: "govuk-input--width-20",
-                                legend: { text: Banner.human_attribute_name(:expired_at_date), size: "s" },
-                                hint: { text: Banner.human_attribute_name(:expired_at_date_description) } %>
-      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <%= form.govuk_date_field :expired_at,
+                                    legend: { text: Banner.human_attribute_name(:expired_at_date), size: "s" },
+                                    hint: { text: Banner.human_attribute_name(:expired_at_date_description) } %>
+        </div>
 
         <div class="govuk-grid-column-one-half">
-      <%= form.govuk_time_field :expired_at,
-                                omit_second: true,
-                                class: "govuk-input--width-20",
-                                legend: { text: Banner.human_attribute_name(:expired_at_time), size: "s" },
-                                hint: { text: Banner.human_attribute_name(:expired_at_time_description) } %>
+          <%= form.govuk_time_field :expired_at,
+                                    omit_second: true,
+                                    legend: { text: Banner.human_attribute_name(:expired_at_time), size: "s" },
+                                    hint: { text: Banner.human_attribute_name(:expired_at_time_description) } %>
         </div>
+      </div>
     </div>
 
-    <%= form.govuk_check_boxes_fieldset :display_on, legend: { text: Banner.human_attribute_name(:display_on_description) } do %>
+    <%= form.govuk_check_boxes_fieldset :displayed_on, legend: { text: Banner.human_attribute_name(:display_on_description) } do %>
       <%= form.govuk_check_box :display_on_find, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_find) } %>
       <%= form.govuk_check_box :display_on_publish, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_publish) } %>
       <%= form.govuk_check_box :display_on_support, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_support) } %>

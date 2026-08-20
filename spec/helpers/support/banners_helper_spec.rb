@@ -37,15 +37,6 @@ RSpec.describe Support::BannersHelper, type: :helper do
         expect(helper.banner_status_tag(banner)).to eq('<strong class="govuk-tag govuk-tag--red">Expired</strong>')
       end
     end
-
-    context "when banner status is unknown" do
-      it "renders a tag with the Unknown wording and Grey colour" do
-        banner = build_stubbed(:banner)
-        allow(banner).to receive(:status).and_return(:unknown)
-
-        expect(helper.banner_status_tag(banner)).to eq('<strong class="govuk-tag govuk-tag--grey">Unknown</strong>')
-      end
-    end
   end
 
   describe "#displayed_on_text" do

@@ -12,10 +12,10 @@
     </div>
   </div>
 
-  <%= render "shared/banners/banner", banner: @banner %>
+  <%= render BannerComponent.new(banner: @banner) %>
 
   <p class="govuk-body">
-    <span class="govuk-caption-m">Displayed on:</span>
+    <span class="govuk-caption-m"><%= Banner.human_attribute_name(:displayed_on) %>:</span>
     <%= displayed_on_text(@banner) %>
   </p>
 </div>
