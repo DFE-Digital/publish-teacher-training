@@ -62,14 +62,14 @@ RSpec.describe "Add course wizard schools step", type: :system do
 
   # Nothing is attached to a course that does not exist yet, so the wizard only
   # ever has schools to add.
-  context "when playing back the schools being added", :js do
+  context "when summarising the schools being added", :js do
     before do
       given_i_am_authenticated_as_a_provider_user_with_three_schools
       and_i_have_wizard_state_for_schools(funding_type: "fee")
       when_i_visit_the_wizard_schools_page
     end
 
-    scenario "nothing is played back until a school is chosen" do
+    scenario "nothing is summarised until a school is chosen" do
       then_i_see_no_summary
     end
 
@@ -101,11 +101,11 @@ RSpec.describe "Add course wizard schools step", type: :system do
       when_i_visit_the_wizard_schools_page
     end
 
-    scenario "nothing is played back until something changes" do
+    scenario "nothing is summarised until something changes" do
       then_i_see_no_summary
     end
 
-    scenario "only what changes from here is played back" do
+    scenario "only what changes from here is summarised" do
       when_i_check("Beta Academy")
 
       then_i_am_told_i_am_adding("Beta Academy")

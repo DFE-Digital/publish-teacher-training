@@ -29,9 +29,9 @@
         <%= t("publish.courses.schools.attached_count", count: course.attached_schools_count) %>
       </p>
 
-      <%# The summary plays back what the ticks add up to; it takes in the whole
-          list, so it wraps the search and the collapse rather than sitting inside
-          either of them. %>
+      <%# The summary says what the ticks add up to; it takes in the whole list, so
+          it wraps the search and the collapse rather than sitting inside either of
+          them. %>
       <%= render ::Publish::Schools::ChangesSummaryComponent.new(attached: @course_school_form.attached_school_uuids) do %>
         <%# The panel says which schools a search allows; the list decides how many
             of those the collapse threshold lets on screen. %>
@@ -63,7 +63,7 @@
 
               <% @course_school_form.schools.each_with_index do |school, index| %>
                 <%# The name travels as an attribute of its own: the label may also
-                    carry the newly added tag, which the play-back must not repeat. %>
+                    carry the newly added tag, which the summary must not repeat. %>
                 <%= f.govuk_check_box :school_uuids,
                     school.uuid,
                     label: { text: [school.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: school))].compact_blank.join(" ").html_safe },
