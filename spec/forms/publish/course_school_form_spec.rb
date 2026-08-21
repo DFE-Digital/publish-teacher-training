@@ -82,6 +82,28 @@ module Publish
 
         expect(submitted.attached_school_uuids).to eq([provider_school_one.uuid])
       end
+
+      # The page asks twice - once to tick the boxes, once to tell the browser what
+      # to measure against - and the answer cannot change in between.
+      it "asks the database once, however often the page needs them" do
+        create(
+          :course_school,
+          course:,
+          provider_school: provider_school_one,
+          gias_school: provider_school_one.gias_school,
+        )
+
+        form.attached_school_uuids
+
+        queries = 0
+        counter = ->(*, payload) { queries += 1 unless payload[:name] == "SCHEMA" }
+
+        ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+          form.attached_school_uuids
+        end
+
+        expect(queries).to eq(0)
+      end
     end
 
     describe "#collapse_schools?" do
