@@ -11,6 +11,7 @@ import SchoolsListController from './controllers/schools_list_controller'
 import SchoolsSearchController from './controllers/schools_search_controller'
 import CopyLinkController from './controllers/copy_link_controller'
 import RemoteAutocompleteController from '../shared/remote_autocomplete_controller'
+import CopyCourseContentController from './controllers/copy_course_content_controller'
 
 window.jQuery = jQuery
 window.$ = jQuery
@@ -25,3 +26,4 @@ Stimulus.register('schools-list', SchoolsListController)
 Stimulus.register('schools-search', SchoolsSearchController)
 Stimulus.register('copy-link', CopyLinkController)
 Stimulus.register('remote-autocomplete', RemoteAutocompleteController)
+Stimulus.register('copy-course-content', CopyCourseContentController)

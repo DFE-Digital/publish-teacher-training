@@ -95,6 +95,45 @@ RSpec.describe "Copying course information" do
     end
   end
 
+  context "when a course is selected to copy" do
+    before do
+      given_i_am_authenticated_as_a_provider_user
+
+      given_a_course_exists(
+        enrichments: [build(:course_enrichment, :published)],
+      )
+
+      create(
+        :course,
+        provider: provider,
+        name: "Primary",
+        course_code: "P123",
+        age_range_in_years: "5_to_11",
+        funding: :fee,
+        study_mode: :full_time,
+        qualification: "pgce_with_qts",
+        start_date: Date.new(2026, 9, 1),
+        enrichments: [build(:course_enrichment)],
+      )
+    end
+
+    scenario "shows details for the selected primary course", :js do
+      when_i_visit_the_how_school_placements_work_page
+      select "Primary", from: "Copy from"
+
+      expect(page).to have_css("[data-copy-course-content-target='details']")
+
+      within "[data-copy-course-content-target='details']" do
+        expect(page).to have_content("Primary (P123)")
+        expect(page).to have_content("Ages 5 to 11")
+        expect(page).to have_content("Fee-paying")
+        expect(page).to have_content("QTS with PGCE")
+        expect(page).to have_content("Full time")
+        expect(page).to have_content("September 2026")
+      end
+    end
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
