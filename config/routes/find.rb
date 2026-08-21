@@ -24,6 +24,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
   post "/primary", to: "primary_subjects#submit"
   get "/secondary", to: "secondary_subjects#index"
   post "/secondary", to: "secondary_subjects#submit"
+  get "/applications", to: "applications#index", as: :applications
 
   get "/cycle-has-ended", to: "pages#cycle_has_ended", as: "cycle_has_ended"
 

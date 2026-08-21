@@ -1,72 +1,37 @@
 <li class="app-search-results__item">
   <%= govuk_summary_card(classes: %w[course-summary-card], title:) do |card| %>
+
+    <% if save_toggle_button.present? %>
+      <% card.with_action do %>
+        <%= save_toggle_button %>
+      <% end %>
+    <% end %>
+
     <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
       <% summary_list.with_row do |row| %>
-        <% row.with_key(text: t(".location_key.#{course.funding}")) %>
         <% row.with_value do %>
-          <% if no_employing_schools? %>
-            <%= t(".location_value.no_employing_schools") %>
-          <% else %>
-            <%= location_value %>
-
-            <% if location_hint.present? %>
-              <div class="govuk-hint govuk-!-font-size-16"><%= location_hint %></div>
-            <% end %>
-          <% end %>
+          <strong>
+            <%= govuk_link_to course.name_and_code,
+            find_course_path(
+              provider_code: course.provider_code,
+              course_code: course.course_code,
+              location: @location
+            ) %>
+          </strong>
         <% end %>
       <% end %>
-
       <% summary_list.with_row do |row| %>
-        <% row.with_key(text: fee_key) %>
         <% row.with_value do %>
-          <%= fee_value %>
-          <div class="govuk-hint govuk-!-font-size-16"><%= incentive_hint %></div>
+          <div class="govuk-body">
+            <%= funding_value %>, <%= study_mode_value %>, <%= qualification_value.html_safe %>
+          </div>
+          <div class="govuk-hint govuk-!-font-size-16">
+            <%= incentive_hint %>
+          </div>
         <% end %>
       <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: length_key) %>
-        <% row.with_value(text: length_value) %>
-      <% end %>
-
-      <% if show_age_group_row? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: age_group_key) %>
-          <% row.with_value(text: age_group_value) %>
-        <% end %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: qualification_key) %>
-        <% row.with_value(text: qualification_value) %>
-      <% end %>
-
-      <% if course.show_school_experience? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: experience_key) %>
-          <% row.with_value(text: experience_value) %>
-        <% end %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: degree_requirements_key) %>
-        <% row.with_value do %>
-          <%= degree_requirements_value %>
-
-          <% if degree_requirements_hint.present? %>
-            <%= degree_requirements_hint %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: visa_sponsorship_key) %>
-        <% row.with_value(text: visa_sponsorship_value) %>
-      <% end %>
-
       <% if show_start_date? %>
         <% summary_list.with_row do |row| %>
-          <% row.with_key(text: t(".start_date")) %>
           <% row.with_value(text: course.start_date.to_fs(:month_and_year)) %>
         <% end %>
       <% end %>
