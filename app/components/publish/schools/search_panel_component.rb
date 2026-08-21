@@ -3,7 +3,7 @@ module Publish
     # The search box above a list of school checkboxes, shared by the course
     # schools edit page and the add course wizard's schools step.
     #
-    # Everything here is inert until the schools-search Stimulus controller
+    # Everything here is inert until the schools-list Stimulus controller
     # connects: the panel is hidden, the select carries no name and both actions
     # are plain buttons, so a provider without JavaScript sees - and submits -
     # exactly what they did before.
@@ -42,7 +42,7 @@ module Publish
       attr_reader :schools, :value
 
       # accessible-autocomplete gives the input it renders the select's id, so
-      # this is also what the schools-search controller looks the box up by.
+      # this is also what the schools-list controller looks the box up by.
       def select_id
         "school-search"
       end
