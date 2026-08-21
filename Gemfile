@@ -79,7 +79,7 @@ gem "sidekiq", "~> 6.5"
 gem "sidekiq-cron"
 
 # Semantic Logger makes logs pretty
-gem "rails_semantic_logger", "~> 4.20.0"
+gem "rails_semantic_logger", "~> 5.1.0"
 
 # Render nice markdown
 gem "redcarpet"
