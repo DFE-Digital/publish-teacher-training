@@ -1,6 +1,5 @@
-<div data-controller="schools-search" data-action="keydown->schools-search#keydown">
-  <div class="app-school-search" hidden data-schools-search-target="panel">
-    <div class="govuk-form-group govuk-!-margin-bottom-3" data-schools-search-target="autocomplete">
+  <div class="app-school-search" hidden data-schools-list-target="panel">
+    <div class="govuk-form-group govuk-!-margin-bottom-3" data-schools-list-target="autocomplete">
       <label class="govuk-label govuk-label--m" for="<%= select_id %>">
         <%= t(".label") %>
       </label>
@@ -19,7 +18,7 @@
 
         <button type="button"
                 class="govuk-button"
-                data-action="schools-search#search">
+                data-action="schools-list#search">
           <%= t(".button") %>
         </button>
       </div>
@@ -28,30 +27,29 @@
     <p class="govuk-body govuk-!-margin-bottom-0">
       <button type="button"
               class="app-button-link govuk-!-font-size-19"
-              data-action="schools-search#clearSearch">
+              data-action="schools-list#clearSearch">
         <%= t(".clear") %>
       </button>
     </p>
   </div>
 
-  <%# {count} is substituted by the schools-search controller, so it is not I18n interpolation. %>
+  <%# {count} is substituted by the schools-list controller, so it is not I18n interpolation. %>
   <div class="govuk-visually-hidden"
        role="status"
        aria-live="polite"
-       data-schools-search-target="status"
+       data-schools-list-target="status"
        data-results-one="<%= t(".results_one") %>"
        data-results-other="<%= t(".results_other") %>"
        data-results-none="<%= t(".no_results") %>"></div>
 
-  <div class="app-school-search__no-results" hidden data-schools-search-target="noResults">
+  <div class="app-school-search__no-results" hidden data-schools-list-target="noResults">
     <p class="govuk-body"><%= t(".no_results") %></p>
 
     <p class="govuk-body">
       <button type="button"
               class="app-button-link govuk-!-font-size-19"
-              data-action="schools-search#showAllSchools">
+              data-action="schools-list#showAllSchools">
         <%= t("publish.courses.schools.show_all") %>
       </button>
     </p>
   </div>
-</div>

@@ -17,6 +17,12 @@ module PageObjects
       # same time, so this finds whichever one the provider can actually see.
       element :show_all_schools, ".app-button-link", text: "Show all schools"
       element :search_panel, ".app-school-search"
+      element :changes_summary, ".app-schools-changes"
+      # Scoped by its target rather than role=status: the page carries several live
+      # regions, and this spec is only ever interested in the summary's.
+      element :announcement, "[data-schools-changes-target='status']", visible: :all
+      element :added, ".app-schools-changes__added"
+      element :removed, ".app-schools-changes__removed"
 
       def vacancy_names
         vacancies.map { |el| el.find(".govuk-label").text }.reject { |name| name == "Select all schools" }
@@ -30,6 +36,18 @@ module PageObjects
         all(".govuk-checkboxes__item", visible: true).filter_map do |item|
           item.find(".govuk-label").text if item.has_css?(SCHOOL_CHECKBOX, visible: :all)
         end
+      end
+
+      def school_checkboxes
+        all("[data-schools-changes-target='school']", visible: :all)
+      end
+
+      def added_school_names
+        added.all("li").map(&:text)
+      end
+
+      def removed_school_names
+        removed.all("li").map(&:text)
       end
 
       def visible_school_checkbox_count

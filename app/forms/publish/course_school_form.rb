@@ -10,7 +10,14 @@ module Publish
     validate :school_uuids_belong_to_provider
 
     def compute_fields
-      { school_uuids: current_school_uuids }.merge(new_attributes)
+      { school_uuids: attached_school_uuids }.merge(new_attributes)
+    end
+
+    # The schools on the course as it stands. It seeds the ticked boxes, and the
+    # page also hands it to the browser as what the provider's changes are
+    # measured against.
+    def attached_school_uuids
+      @attached_school_uuids ||= course.schools.joins(:provider_school).pluck("provider_school.uuid")
     end
 
     # Every school the provider could attach, in the order they are listed.
@@ -29,10 +36,6 @@ module Publish
     end
 
   private
-
-    def current_school_uuids
-      course.schools.joins(:provider_school).pluck("provider_school.uuid")
-    end
 
     def no_schools_selected
       return if params[:school_uuids].present?

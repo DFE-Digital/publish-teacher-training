@@ -50,6 +50,62 @@ module Publish
       end
     end
 
+    describe "#attached_school_uuids" do
+      it "is empty for a course with no schools" do
+        expect(form.attached_school_uuids).to be_empty
+      end
+
+      it "names the schools on the course, not every school the provider has" do
+        provider_school_two
+
+        create(
+          :course_school,
+          course:,
+          provider_school: provider_school_one,
+          gias_school: provider_school_one.gias_school,
+        )
+
+        expect(form.attached_school_uuids).to eq([provider_school_one.uuid])
+      end
+
+      # The form's own ticks follow the params once a provider has submitted, so
+      # this has to keep answering with what is on the course.
+      it "ignores the submitted selection" do
+        create(
+          :course_school,
+          course:,
+          provider_school: provider_school_one,
+          gias_school: provider_school_one.gias_school,
+        )
+
+        submitted = described_class.new(course, params: { school_uuids: [provider_school_two.uuid] })
+
+        expect(submitted.attached_school_uuids).to eq([provider_school_one.uuid])
+      end
+
+      # The page asks twice - once to tick the boxes, once to tell the browser what
+      # to measure against - and the answer cannot change in between.
+      it "asks the database once, however often the page needs them" do
+        create(
+          :course_school,
+          course:,
+          provider_school: provider_school_one,
+          gias_school: provider_school_one.gias_school,
+        )
+
+        form.attached_school_uuids
+
+        queries = 0
+        counter = ->(*, payload) { queries += 1 unless payload[:name] == "SCHEMA" }
+
+        ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+          form.attached_school_uuids
+        end
+
+        expect(queries).to eq(0)
+      end
+    end
+
     describe "#collapse_schools?" do
       let(:provider) { create(:provider) }
       let!(:provider_schools) { create_list(:provider_school, school_count, provider:) }

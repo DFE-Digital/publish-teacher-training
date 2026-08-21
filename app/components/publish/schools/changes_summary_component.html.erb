@@ -1,0 +1,54 @@
+<div data-controller="schools-changes"
+     data-schools-changes-attached-value="<%= attached_value %>">
+  <%= content %>
+
+  <%# Counts, never the names: the summary below is already on the page under its
+      own headings, and reading forty schools aloud on every tick would be
+      unusable. {count} is substituted by the controller, so it is not I18n
+      interpolation. %>
+  <div class="govuk-visually-hidden"
+       role="status"
+       aria-live="polite"
+       data-schools-changes-target="status"
+       data-adding-one="<%= t(".status_adding_one") %>"
+       data-adding-other="<%= t(".status_adding_other") %>"
+       data-adding-all="<%= t(".status_adding_all") %>"
+       data-removing-one="<%= t(".status_removing_one") %>"
+       data-removing-other="<%= t(".status_removing_other") %>"
+       data-removing-all="<%= t(".status_removing_all") %>"></div>
+
+  <div class="app-schools-changes govuk-!-margin-top-6"
+       hidden
+       data-schools-changes-target="summary">
+    <h2 class="govuk-heading-m"><%= t(".heading") %></h2>
+
+    <div class="app-schools-changes__added"
+         data-schools-changes-target="added"
+         data-all="<%= t(".adding_all") %>"
+         data-one="<%= t(".adding_one") %>"
+         data-other="<%= t(".adding_other") %>"></div>
+
+    <div class="app-schools-changes__removed"
+         data-schools-changes-target="removed"
+         data-all="<%= t(".removing_all") %>"
+         data-one="<%= t(".removing_one") %>"
+         data-other="<%= t(".removing_other") %>"></div>
+  </div>
+
+  <%# The shapes the controller fills in. They live here so that every GOV.UK
+      class is in the markup, alongside the rest of the page's. Only text ever
+      varies, so the controller clones one and sets textContent - which is also
+      what keeps a school name holding an & or an apostrophe intact. %>
+  <template data-schools-changes-target="countTemplate">
+    <h3 class="govuk-heading-s"></h3>
+    <ul class="govuk-list govuk-list--bullet"></ul>
+  </template>
+
+  <template data-schools-changes-target="itemTemplate">
+    <li></li>
+  </template>
+
+  <template data-schools-changes-target="messageTemplate">
+    <p class="govuk-body"></p>
+  </template>
+</div>

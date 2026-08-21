@@ -25,37 +25,48 @@
   <%= t("course_wizard.steps.schools.hint") %>
 </p>
 
-<%# The panel says which schools a search allows; the list decides how many of
-    those the collapse threshold lets on screen. %>
-<div data-controller="schools-list"
-     data-schools-list-collapse-after-value="<%= current_step.schools_collapse_threshold %>"
-     data-action="schools-search:filter->schools-list#filter
-                  schools-search:clear->schools-list#clear
-                  schools-search:restore->schools-list#restore">
-  <%= render ::Publish::Schools::SearchPanelComponent.new(schools: current_step.schools, value: :uuid) %>
+<%# The summary says what the ticks add up to; it takes in the whole list, so it
+    wraps the search and the collapse rather than sitting inside either of them.
+    The baseline is what the wizard has stored, which is empty on the way in and
+    the schools already chosen on the way back. %>
+<%= render ::Publish::Schools::ChangesSummaryComponent.new(attached: current_step.attached_school_uuids) do %>
+  <%# The panel says which schools a search allows; the list decides how many of
+      those the collapse threshold lets on screen. %>
+  <div data-controller="schools-list"
+       data-schools-list-collapse-after-value="<%= current_step.schools_collapse_threshold %>"
+       data-action="keydown->schools-list#keydown">
+    <%= render ::Publish::Schools::SearchPanelComponent.new(schools: current_step.schools, value: :uuid) %>
 
-<%= form.govuk_check_boxes_fieldset :school_uuids,
-      legend: { hidden: true, text: heading } do %>
-  <% current_step.schools.each_with_index do |school, index| %>
-    <%= form.govuk_check_box :school_uuids,
-          school.uuid,
-          label: { text: [school.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: school))].compact_blank.join(" ").html_safe },
-          hint: { text: school.decorate.full_address, class: "govuk-!-font-size-16" },
-          include_hidden: false,
-          link_errors: index.zero?,
-          data: { schools_list_target: "schoolCheckbox" } %>
-  <% end %>
+    <%= form.govuk_check_boxes_fieldset :school_uuids,
+          legend: { hidden: true, text: heading } do %>
+      <% current_step.schools.each_with_index do |school, index| %>
+        <%# The name travels as an attribute of its own: the label may also carry
+            the newly added tag, which the summary must not repeat. %>
+        <%= form.govuk_check_box :school_uuids,
+              school.uuid,
+              label: { text: [school.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: school))].compact_blank.join(" ").html_safe },
+              hint: { text: school.decorate.full_address, class: "govuk-!-font-size-16" },
+              include_hidden: false,
+              link_errors: index.zero?,
+              data: {
+                schools_list_target: "schoolCheckbox",
+                schools_changes_target: "school",
+                school_name: school.location_name,
+                action: "schools-changes#update",
+              } %>
+      <% end %>
 
-  <% if current_step.collapse_schools? %>
-    <button type="button"
-            class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
-            hidden
-            data-schools-list-target="showAll"
-            data-action="schools-list#showAll">
-      <%= t("publish.courses.schools.show_all") %>
-    </button>
-  <% end %>
+      <% if current_step.collapse_schools? %>
+        <button type="button"
+                class="app-button-link govuk-!-font-size-19 govuk-!-margin-top-4"
+                hidden
+                data-schools-list-target="showAll"
+                data-action="schools-list#showAll">
+          <%= t("publish.courses.schools.show_all") %>
+        </button>
+      <% end %>
+    <% end %>
+  </div>
 <% end %>
-</div>
 
 <%= form.govuk_submit t("course_wizard.steps.schools.submit") %>
