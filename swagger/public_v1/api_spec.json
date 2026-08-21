@@ -131,7 +131,7 @@
             "type": "string",
             "nullable": true,
             "format": "markdown",
-            "description": "Short factual summary of the course.",
+            "description": "Short factual summary of the course. Returns null for courses published or updated from the 2026 recruitment cycle onwards, where this information is instead split across `placement_school_activities`, `theoretical_training_activities`, `assessment_methods` and `support_and_mentorship`.",
             "example": "The Secondary PGCE consists of three core modules: two Master's-level modules, which are assessed through written assignments, and the Professional Practice module, which is assessed by the observation of practical teaching in placement schools."
           },
           "accredited_provider_code": {
@@ -222,7 +222,7 @@
             "type": "string",
             "nullable": true,
             "format": "markdown",
-            "description": "Further details about the fees for this course, if applicable.",
+            "description": "Further details about the fees for this course, if applicable. Returns null for courses published or updated from the 2026 recruitment cycle onwards, where this information is instead split across `additional_fees`, `fee_schedule` and `salary_fee_details`.",
             "example": "For those wishing to top up their qualification to the full PGCE, a further £1800 will be payable."
           },
           "fee_international": {
@@ -314,7 +314,7 @@
             "type": "string",
             "nullable": true,
             "format": "markdown",
-            "description": "Additional information about the schools applicants will be teaching in.",
+            "description": "Additional information about the schools applicants will be teaching in. Returns null for courses published or updated from the 2026 recruitment cycle onwards, where this information is instead split across `placement_selection_criteria`, `duration_per_school`, `theoretical_training_location` and `theoretical_training_duration`.",
             "example": "You will spend two-thirds of your time (120 days) in schools, working with art and design mentors who support you through your two school placements."
           },
           "interview_process": {
