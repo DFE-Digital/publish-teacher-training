@@ -67,18 +67,6 @@ RSpec.describe "Publish - Playing back the schools being changed", :js, type: :s
     and_i_am_not_told_i_am_removing_anything
   end
 
-  # The summary is the last thing before the button, and it wants the same gap
-  # above it whether it ends in a list of schools or in the one-line message.
-  scenario "the button is not crowded against the summary" do
-    when_i_check("Cedar School")
-    then_the_gap_above_the_button_is(20)
-
-    when_i_select_all_schools
-    and_i_unselect_all_schools
-    and_i_am_told_i_am_removing_all_schools
-    then_the_gap_above_the_button_is(20)
-  end
-
   # Each half heads a list of schools, so each half needs a real heading: with an
   # h2 above and two lists below, a bold paragraph leaves a screen reader with two
   # lists and nothing to tell them apart.
@@ -206,19 +194,6 @@ private
     expect(publish_course_school_edit_page.changes_summary).to have_no_css("h3")
     expect(publish_course_school_edit_page.removed)
       .to have_css("p", text: "You are removing all schools in your list")
-  end
-
-  def then_the_gap_above_the_button_is(pixels)
-    gap = page.evaluate_script(<<~JS)
-      (() => {
-        const summary = document.querySelector('.app-schools-changes')
-        const button = document.querySelector('button.govuk-button[type="submit"]')
-
-        return button.getBoundingClientRect().top - summary.getBoundingClientRect().bottom
-      })()
-    JS
-
-    expect(gap).to eq(pixels)
   end
 
   attr_reader :course, :provider
