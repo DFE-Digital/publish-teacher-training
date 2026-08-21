@@ -90,6 +90,39 @@ RSpec.describe "Add course wizard schools step", type: :system do
     end
   end
 
+  # Coming Back, or in by the Change link on check answers, re-renders the step with
+  # the boxes already ticked from the state store. Those schools are the baseline, not
+  # a change to it.
+  context "when returning to the step with schools already chosen", :js do
+    before do
+      given_i_am_authenticated_as_a_provider_user_with_three_schools
+      and_i_have_wizard_state_for_schools(funding_type: "fee")
+      and_i_have_already_chosen("Alpha Academy")
+      when_i_visit_the_wizard_schools_page
+    end
+
+    scenario "nothing is played back until something changes" do
+      then_i_see_no_summary
+    end
+
+    scenario "only what changes from here is played back" do
+      when_i_check("Beta Academy")
+
+      then_i_am_told_i_am_adding("Beta Academy")
+      and_i_am_not_told_i_am_removing_anything
+    end
+
+    # Two chosen, so that unticking one is a removal rather than clearing the list.
+    scenario "unchoosing one of them is a removal, not a fresh start" do
+      and_i_have_already_chosen("Alpha Academy", "Beta Academy")
+      when_i_visit_the_wizard_schools_page
+
+      when_i_uncheck("Alpha Academy")
+
+      then_i_am_told_i_am_removing("Alpha Academy")
+    end
+  end
+
   context "when the provider has more than 20 schools", :js do
     before do
       given_i_am_authenticated_as_a_provider_user_with_25_schools
@@ -289,6 +322,26 @@ private
     @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)
+  end
+
+  def and_i_have_already_chosen(*school_names)
+    uuids = school_names.map { |name| provider.schools.joins(:gias_school).find_by!(gias_school: { name: }).uuid }
+
+    # The fieldset's own hidden input means a real submit stores a leading blank.
+    wizard_state_store.write(school_uuids: [""] + uuids)
+  end
+
+  def when_i_uncheck(school_name)
+    uncheck school_name
+  end
+
+  def then_i_am_told_i_am_removing(*school_names)
+    within(".app-schools-changes__removed") do
+      expect(page).to have_content(
+        "You are removing #{school_names.one? ? '1 school' : "#{school_names.size} schools"}:",
+      )
+      expect(all("li").map(&:text)).to eq(school_names)
+    end
   end
 
   def when_i_check(school_name)

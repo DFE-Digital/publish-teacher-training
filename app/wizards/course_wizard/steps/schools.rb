@@ -26,6 +26,18 @@ class CourseWizard
         @schools ||= provider.schools.includes(:gias_school).order("gias_school.name")
       end
 
+      # The schools chosen so far, which is what a change is measured against. Back
+      # and the Change link on check answers both re-render this step with those
+      # boxes ticked, and they are the baseline rather than a change to it.
+      #
+      # Read from the store rather than off the step: a failed submit re-hydrates the
+      # step from the params, so its own attribute is what was just submitted - the
+      # thing being measured, not what to measure it against. Persist does not run
+      # when Validate fails, so the store still holds the answer.
+      def attached_school_uuids
+        Array(wizard.state_store.school_uuids).compact_blank
+      end
+
       def schools_collapse_threshold
         SchoolsList::COLLAPSE_AFTER
       end
