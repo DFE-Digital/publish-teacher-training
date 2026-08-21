@@ -2,7 +2,7 @@
 
 module Find
   class ResultsController < ApplicationController
-    before_action :require_authentication, if: :results_authentication_required?
+    before_action :require_results_authentication, only: :index, if: :results_authentication_required?
     after_action :store_result_fullpath_for_backlinks, :send_analytics_event, :record_recent_search, only: [:index]
 
     helper_method :show_email_alert_link?
@@ -26,14 +26,29 @@ module Find
       end
     end
 
+    def sign_in
+      if authenticated? || !results_authentication_required?
+        return redirect_to(return_to_after_authenticating || find_results_path)
+      end
+
+      @sign_in_url = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
+    end
+
   private
 
     def results_authentication_required?
       FeatureFlag.active?(:require_authentication_for_find_results)
     end
 
-    def reason_for_request
-      :search_results
+    def require_results_authentication
+      return if authenticated?
+
+      store_return_to_after_authenticating
+
+      respond_to do |format|
+        format.html { redirect_to find_results_sign_in_path }
+        format.json { render json: { redirect: find_results_sign_in_path }, status: :unauthorized }
+      end
     end
 
     def send_analytics_event
