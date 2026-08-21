@@ -37,9 +37,7 @@
             of those the collapse threshold lets on screen. %>
         <div data-controller="schools-list"
              data-schools-list-collapse-after-value="<%= @course_school_form.schools_collapse_threshold %>"
-             data-action="schools-search:filter->schools-list#filter
-                          schools-search:clear->schools-list#clear
-                          schools-search:restore->schools-list#restore">
+             data-action="keydown->schools-list#keydown">
           <%= render ::Publish::Schools::SearchPanelComponent.new(schools: @course_school_form.schools, value: :uuid) %>
 
           <%= f.govuk_check_boxes_fieldset :school_uuids,
