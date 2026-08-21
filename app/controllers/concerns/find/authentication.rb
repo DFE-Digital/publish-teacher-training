@@ -2,6 +2,10 @@ module Find
   module Authentication
     extend ActiveSupport::Concern
 
+    RETURN_TO_AFTER_AUTHENTICATING_SESSION_KEY = "return_to_after_authenticating".freeze
+    RETURN_TO_AFTER_AUTHENTICATING_MAX_AGE = 30.minutes
+    RETURN_TO_AFTER_AUTHENTICATING_MAX_BYTES = 2.kilobytes
+
     included do
       before_action :load_session
       helper_method :authenticated?
@@ -62,7 +66,7 @@ module Find
     end
 
     def request_authentication
-      session["return_to_after_authenticating"] = request.fullpath
+      store_return_to_after_authenticating
 
       respond_to do |format|
         format.html do
@@ -82,6 +86,13 @@ module Find
       end
     end
 
+    def return_to_after_authenticating
+      stored_value = session.delete(RETURN_TO_AFTER_AUTHENTICATING_SESSION_KEY)
+      path = return_to_path_from(stored_value)
+
+      url_from(path)
+    end
+
     def reason_for_request
       :general
     end
@@ -92,6 +103,32 @@ module Find
       else
         :general
       end
+    end
+
+    def store_return_to_after_authenticating
+      path = request.fullpath
+      path = request.path if path.bytesize > RETURN_TO_AFTER_AUTHENTICATING_MAX_BYTES
+
+      session[RETURN_TO_AFTER_AUTHENTICATING_SESSION_KEY] = {
+        "path" => path,
+        "stored_at" => Time.current.to_i,
+      }
+    end
+
+    def return_to_path_from(stored_value)
+      return stored_value if stored_value.is_a?(String)
+      return unless stored_value.is_a?(Hash)
+
+      stored_value = stored_value.with_indifferent_access
+      return unless return_to_after_authenticating_fresh?(stored_value[:stored_at])
+
+      stored_value[:path]
+    end
+
+    def return_to_after_authenticating_fresh?(stored_at)
+      return false if stored_at.blank?
+
+      stored_at.to_i >= RETURN_TO_AFTER_AUTHENTICATING_MAX_AGE.ago.to_i
     end
 
     # Destroy session

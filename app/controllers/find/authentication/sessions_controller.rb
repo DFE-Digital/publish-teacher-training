@@ -39,11 +39,13 @@ module Find
         candidate = Find::CandidateAuthenticator.new(oauth: omniauth).call
 
         if start_new_session_for candidate, omniauth
+          return_to = return_to_after_authenticating
+
           if session["save_course_id_after_authenticating"].present?
             redirect_to after_auth_find_candidate_saved_courses_path
           else
             flash[:success] = t(".sign_in")
-            redirect_to(request.env["omniauth.origin"] || session.delete("return_to_after_authenticating") || find_root_path, allow_other_host: false)
+            redirect_to(return_to || request.env["omniauth.origin"] || find_root_path, allow_other_host: false)
           end
         else
           redirect_to find_root_path, flash: { warning: t(".authentication_error") }
