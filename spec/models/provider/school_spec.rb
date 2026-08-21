@@ -102,7 +102,7 @@ describe Provider::School do
       provider.update_columns(changed_at: 1.hour.ago)
 
       Timecop.freeze do
-        provider_school.update!(site_code: "Z")
+        provider_school.update!(site_code: "#{provider_school.site_code}X")
         expect(provider.reload.changed_at).to be_within(1.second).of(Time.zone.now)
       end
     end
@@ -218,7 +218,7 @@ describe Provider::School do
     it "touches them when a school is updated" do
       provider_school = create(:provider_school, provider:)
 
-      expect { provider_school.update!(site_code: "Z") }.to(change { exempt_course.reload.changed_at })
+      expect { provider_school.update!(site_code: "#{provider_school.site_code}X") }.to(change { exempt_course.reload.changed_at })
     end
 
     # `after_commit on: :update` fires even when Rails issued no UPDATE, and a
