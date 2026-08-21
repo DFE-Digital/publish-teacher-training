@@ -337,7 +337,10 @@ properties:
   salary_details:
     type: string
     nullable: true
-    description: "Salary details about this course."
+    description: >-
+      Salary details about this course. This field is being deprecated after the
+      2026 recruitment cycle, and is not populated for 2027 recruitment cycle
+      courses onwards, where `salary_fee_details` is used instead.
     example: >-
       Successful applicants will be employed as unqualified teachers on
       at least Point 1 of the Unqualified Teachers' Pay Scale for the
@@ -346,7 +349,9 @@ properties:
     type: string
     nullable: true
     format: markdown
-    description: Information about course fees for salaried courses.
+    description: >-
+      Information about course fees for salaried courses. Populated for 2027
+      recruitment cycle courses onwards, where it replaces `salary_details`.
     example: "The employing school covers the course fee. Trainees do not pay tuition fees."
   school_experience_required:
     type: boolean
