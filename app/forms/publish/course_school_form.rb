@@ -17,7 +17,7 @@ module Publish
     # page also hands it to the browser as what the provider's changes are
     # measured against.
     def attached_school_uuids
-      course.schools.joins(:provider_school).pluck("provider_school.uuid")
+      @attached_school_uuids ||= course.schools.joins(:provider_school).pluck("provider_school.uuid")
     end
 
     # Every school the provider could attach, in the order they are listed.
