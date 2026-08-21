@@ -38,6 +38,35 @@ RSpec.describe Publish::Schools::ChangesSummaryComponent, type: :component do
     end
   end
 
+  describe "the announcement" do
+    def status
+      rendered.at_css("[role='status']")
+    end
+
+    it "is a live region, so a change is announced without moving focus" do
+      expect(status["aria-live"]).to eq("polite")
+    end
+
+    it "is hidden, since the summary itself is already on the page" do
+      expect(status[:class]).to include("govuk-visually-hidden")
+    end
+
+    it "starts empty, so only a change is ever announced" do
+      expect(status.text).to be_blank
+    end
+
+    # Counts, never the names: the list is already on the page under its own
+    # heading, and reading forty schools aloud on every tick would be unusable.
+    it "carries the wording for the controller to fill in" do
+      expect(status["data-adding-one"]).to eq("Adding 1 school")
+      expect(status["data-adding-other"]).to eq("Adding {count} schools")
+      expect(status["data-adding-all"]).to eq("Adding all schools")
+      expect(status["data-removing-one"]).to eq("Removing 1 school")
+      expect(status["data-removing-other"]).to eq("Removing {count} schools")
+      expect(status["data-removing-all"]).to eq("Removing all schools")
+    end
+  end
+
   describe "the summary" do
     it "is hidden until the provider changes something" do
       expect(summary.attributes).to have_key("hidden")

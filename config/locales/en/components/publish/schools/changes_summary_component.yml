@@ -9,3 +9,9 @@ en:
         removing_all: You are removing all schools in your list
         removing_one: "You are removing 1 school:"
         removing_other: "You are removing {count} schools:"
+        status_adding_one: Adding 1 school
+        status_adding_other: Adding {count} schools
+        status_adding_all: Adding all schools
+        status_removing_one: Removing 1 school
+        status_removing_other: Removing {count} schools
+        status_removing_all: Removing all schools
