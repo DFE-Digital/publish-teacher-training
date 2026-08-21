@@ -25,6 +25,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_21_100824) do
     t.string "ProductVersion", limit: 32, null: false
   end
 
+  create_table "airbyte_heartbeat", id: false, force: :cascade do |t|
+    t.integer "id"
+    t.timestamptz "last_heartbeat"
+  end
+
   create_table "audit", force: :cascade do |t|
     t.string "action"
     t.integer "associated_id"
@@ -56,6 +61,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_21_100824) do
     t.datetime "updated_at", null: false
     t.index ["authenticable_type", "authenticable_id"], name: "index_authentication_on_authenticable"
     t.index ["subject_key"], name: "index_authentication_on_subject_key"
+  end
+
+  create_table "banner", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.boolean "display_on_find"
+    t.boolean "display_on_publish"
+    t.boolean "display_on_support"
+    t.datetime "expired_at"
+    t.string "heading"
+    t.string "name", null: false
+    t.datetime "published_at"
+    t.boolean "success_styling"
+    t.string "title"
+    t.integer "title_heading_level"
+    t.datetime "updated_at", null: false
   end
 
   create_table "blazer_audits", force: :cascade do |t|
