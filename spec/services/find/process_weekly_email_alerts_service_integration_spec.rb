@@ -241,6 +241,15 @@ module Find
         job = ActiveJob::Base.queue_adapter.enqueued_jobs.last
         expect(job["arguments"].second).to contain_exactly(open_biology.id)
       end
+
+      it "sends no email when every recently published match is closed" do
+        create_findable_course(name: "Closed Biology", subjects: [biology], application_status: :closed)
+
+        create(:email_alert, candidate:, subjects: %w[C1])
+
+        expect { described_class.call(since: 1.week.ago) }
+          .not_to have_enqueued_job(EmailAlertMailerJob)
+      end
     end
 
     describe "edge cases" do
