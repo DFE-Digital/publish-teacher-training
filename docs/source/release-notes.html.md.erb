@@ -5,6 +5,23 @@ weight: 2
 
 # Release Notes
 
+## 21 August 2026
+
+We have introduced twelve new fields to the `CourseAttributes` schema which expose additional course information entered by providers. Each is a nullable string, and all except `interview_location` are markdown formatted.
+
+- Add `additional_fees` field to `CourseAttributes`. Further information about any additional course fees or costs.
+- Add `assessment_methods` field to `CourseAttributes`. Information about how trainees will be assessed.
+- Add `duration_per_school` field to `CourseAttributes`. Information about how much time trainees will spend in each placement school.
+- Add `fee_schedule` field to `CourseAttributes`. Information about when fees are due.
+- Add `interview_location` field to `CourseAttributes`. Information about where interviews will take place. One of `online`, `in person` or `both`.
+- Add `placement_school_activities` field to `CourseAttributes`. Information about what trainees will do in their placement schools.
+- Add `placement_selection_criteria` field to `CourseAttributes`. Information about how placement schools are selected for trainees.
+- Add `salary_fee_details` field to `CourseAttributes`. Information about course fees for salaried courses.
+- Add `support_and_mentorship` field to `CourseAttributes`. Information about how trainees will be supported and mentored during school placements.
+- Add `theoretical_training_activities` field to `CourseAttributes`. Information about what trainees will do during theoretical training.
+- Add `theoretical_training_duration` field to `CourseAttributes`. Information about how much time trainees will spend in theoretical training.
+- Add `theoretical_training_location` field to `CourseAttributes`. Information about where theoretical training will take place.
+
 ## 22 July 2026
 
 - Add `has_course_schools` to the `meta` of the course locations response (`CourseLocationListResponse`). This boolean is `true` when the returned locations are the course's own attached schools, and `false` when they are the provider's schools returned as a fallback because the course is permitted to publish without schools and has none of its own.
