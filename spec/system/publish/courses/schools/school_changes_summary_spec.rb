@@ -85,6 +85,25 @@ RSpec.describe "Publish - Summarising the schools being changed", :js, type: :sy
     then_the_summary_heads_nothing_further
   end
 
+  # The summary appears and rewrites itself with no focus change, so a screen
+  # reader is only told by the live region. It announces counts, not names, and
+  # deliberately not in the words used on screen - so a spec asserting on it
+  # cannot be satisfied by the visible copy.
+  scenario "the change is announced" do
+    when_i_check("Cedar School")
+    then_the_announcement_is("Adding 1 school")
+
+    and_i_uncheck("Ash Academy")
+    then_the_announcement_is("Adding 1 school. Removing 1 school")
+
+    when_i_select_all_schools
+    then_the_announcement_is("Adding all schools")
+  end
+
+  scenario "nothing is announced until something changes" do
+    then_nothing_is_announced
+  end
+
 private
 
   def attached_schools
@@ -194,6 +213,14 @@ private
     expect(publish_course_school_edit_page.changes_summary).to have_no_css("h3")
     expect(publish_course_school_edit_page.removed)
       .to have_css("p", text: "You are removing all schools in your list")
+  end
+
+  def then_the_announcement_is(text)
+    expect(publish_course_school_edit_page.announcement.text(:all)).to eq(text)
+  end
+
+  def then_nothing_is_announced
+    expect(publish_course_school_edit_page.announcement.text(:all)).to be_blank
   end
 
   attr_reader :course, :provider
