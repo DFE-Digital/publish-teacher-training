@@ -68,6 +68,27 @@ RSpec.describe Publish::Schools::ChangesSummaryComponent, type: :component do
     end
   end
 
+  # The shapes the controller fills in. They live here so that every GOV.UK class
+  # is in the markup, where the rest of the page's are.
+  describe "the templates" do
+    def template(name)
+      rendered.at_css("template[data-schools-changes-target='#{name}']")
+    end
+
+    it "gives a count its heading and its list" do
+      expect(template("countTemplate").at_css("h3")[:class]).to eq("govuk-heading-s")
+      expect(template("countTemplate").at_css("ul")[:class]).to eq("govuk-list govuk-list--bullet")
+    end
+
+    it "gives the all schools message a paragraph" do
+      expect(template("messageTemplate").at_css("p")[:class]).to eq("govuk-body")
+    end
+
+    it "gives a school its list item" do
+      expect(template("itemTemplate").at_css("li")).to be_present
+    end
+  end
+
   describe "the summary" do
     it "is hidden until the provider changes something" do
       expect(summary.attributes).to have_key("hidden")

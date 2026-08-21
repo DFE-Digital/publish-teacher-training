@@ -34,4 +34,21 @@
          data-one="<%= t(".removing_one") %>"
          data-other="<%= t(".removing_other") %>"></div>
   </div>
+
+  <%# The shapes the controller fills in. They live here so that every GOV.UK
+      class is in the markup, alongside the rest of the page's. Only text ever
+      varies, so the controller clones one and sets textContent - which is also
+      what keeps a school name holding an & or an apostrophe intact. %>
+  <template data-schools-changes-target="countTemplate">
+    <h3 class="govuk-heading-s"></h3>
+    <ul class="govuk-list govuk-list--bullet"></ul>
+  </template>
+
+  <template data-schools-changes-target="itemTemplate">
+    <li></li>
+  </template>
+
+  <template data-schools-changes-target="messageTemplate">
+    <p class="govuk-body"></p>
+  </template>
 </div>
