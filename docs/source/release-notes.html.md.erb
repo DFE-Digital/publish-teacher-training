@@ -7,9 +7,11 @@ weight: 2
 
 ## 21 August 2026
 
-We have introduced twelve new fields to the `CourseAttributes` schema. Together they carry the course content that `about_course`, `fee_details` and `how_school_placements_work` stopped returning for 2026 recruitment cycle courses (see the October 2025 entry below).
+We have introduced twelve new fields to the `CourseAttributes` schema, and are deprecating `salary_details`.
 
-Providers have been entering this content in Publish since the 2026 cycle opened in October 2025, so these fields are already populated for published 2026 cycle courses rather than filling up from today. Courses from earlier cycles return `null` for all twelve.
+Eleven of the new fields carry the course content that `about_course`, `fee_details` and `how_school_placements_work` stopped returning for 2026 recruitment cycle courses (see the October 2025 entry below). Providers have been entering that content in Publish since the 2026 cycle opened in October 2025, so those eleven are already populated for published 2026 cycle courses rather than filling up from today. Courses from earlier cycles return `null`.
+
+The twelfth, `salary_fee_details`, belongs to the 2027 recruitment cycle and is covered by the deprecation note at the end of this entry. It returns `null` for 2026 cycle courses and earlier.
 
 Each field is a nullable string. All are markdown formatted except `interview_location`, which returns one of `online`, `in person` or `both`.
 
@@ -25,6 +27,10 @@ Each field is a nullable string. All are markdown formatted except `interview_lo
 - Add `theoretical_training_activities` field to `CourseAttributes`. Information about what trainees will do during theoretical training.
 - Add `theoretical_training_duration` field to `CourseAttributes`. Information about how much time trainees will spend in theoretical training.
 - Add `theoretical_training_location` field to `CourseAttributes`. Information about where theoretical training will take place.
+
+Deprecation:
+
+- Deprecate `salary_details` in `CourseAttributes`. From the 2027 recruitment cycle, providers enter this information as `salary_fee_details` instead, so `salary_details` is not populated for salaried courses in the 2027 cycle onwards. The field is still returned, and courses in the 2026 cycle and earlier are unaffected and continue to return their existing values.
 
 ## 22 July 2026
 
