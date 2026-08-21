@@ -19,8 +19,6 @@ module Find
       case reason
       when :save_course
         t("find.concerns.authentication.unauthenticated_message_after_save_a_course")
-      when :search_results
-        t("find.concerns.authentication.unauthenticated_message_after_search_results")
       else
         t("find.concerns.authentication.unauthenticated_message_after_general")
       end

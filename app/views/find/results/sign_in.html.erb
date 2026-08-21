@@ -1,0 +1,12 @@
+<%= content_for :page_title, t(".page_title") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= t(".heading") %></h1>
+
+    <p class="govuk-body"><%= t(".body") %></p>
+    <p class="govuk-body"><%= t(".return_to_search") %></p>
+
+    <%= button_to t(".sign_in"), @sign_in_url, class: %w[govuk-button], method: :post %>
+  </div>
+</div>

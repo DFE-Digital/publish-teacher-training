@@ -20,6 +20,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
   get "/geolocation-suggestions", to: "geolocation_suggestions#index"
 
   get "/results", to: "results#index", as: "results"
+  get "/results/sign-in", to: "results#sign_in", as: "results_sign_in"
   get "/primary", to: "primary_subjects#index"
   post "/primary", to: "primary_subjects#submit"
   get "/secondary", to: "secondary_subjects#index"

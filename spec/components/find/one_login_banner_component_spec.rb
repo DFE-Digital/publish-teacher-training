@@ -52,13 +52,5 @@ describe Find::OneLoginBannerComponent do
         expect(component).to have_text(/You must\s*sign in\s*to visit that page\./)
       end
     end
-
-    context "when authentication is required to view search results" do
-      before { render_inline(described_class.new(reason: :search_results)) }
-
-      it "explains that the candidate will return to their search" do
-        expect(component).to have_text(/You must\s*sign in\s*to view search results\. After signing in, you’ll return to your search\./)
-      end
-    end
   end
 end
