@@ -1,0 +1,38 @@
+<%= form_with(url: index_path, method: :get, local: true) do |f| %>
+  <div class="app-school-search">
+    <div class="govuk-form-group govuk-!-margin-bottom-3">
+      <label class="govuk-label govuk-label--m" for="filter">
+        <%= t(".label") %>
+      </label>
+
+      <div class="govuk-hint" id="filter-hint"><%= t(".hint") %></div>
+
+      <div class="app-school-search__row">
+        <%# The controller wraps the field alone: it enhances the first
+            non-hidden input it finds, which must be the box and not the
+            Search button. %>
+        <div <%= tag.attributes(data: remote_autocomplete_data(path: suggestions_path, format: "school")) %>>
+          <%= text_field_tag :filter,
+                filter,
+                class: "govuk-input",
+                autocomplete: "off",
+                aria: { describedby: "filter-hint" } %>
+        </div>
+
+        <%= f.submit t(".button"), class: "govuk-button", data: { module: "govuk-button" } %>
+      </div>
+    </div>
+
+    <p class="govuk-body govuk-!-margin-bottom-0">
+      <%= govuk_link_to t(".clear"), index_path %>
+    </p>
+  </div>
+<% end %>
+
+<%# Below the panel rather than in it: the line describes the list that follows,
+    not the box that produced it. %>
+<% if showing_results? %>
+  <p class="govuk-body">
+    <%= t(".showing_results_html", filter:) %>
+  </p>
+<% end %>

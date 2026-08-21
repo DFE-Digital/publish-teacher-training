@@ -20,6 +20,35 @@ describe Provider::School do
     end
   end
 
+  describe ".filtered_by" do
+    it "matches on the GIAS school name" do
+      matching = create(:provider_school, gias_school: create(:gias_school, name: "Bramblewood Primary"))
+      create(:provider_school, gias_school: create(:gias_school, name: "Harborne Academy"))
+
+      expect(described_class.filtered_by("Bramblewood")).to contain_exactly(matching)
+    end
+
+    it "matches on the GIAS school postcode" do
+      matching = create(:provider_school, gias_school: create(:gias_school, postcode: "SY2 5RJ"))
+      create(:provider_school, gias_school: create(:gias_school, postcode: "B17 9NG"))
+
+      expect(described_class.filtered_by("SY2")).to contain_exactly(matching)
+    end
+
+    it "matches on the GIAS school URN" do
+      matching = create(:provider_school, gias_school: create(:gias_school, urn: "123456"))
+      create(:provider_school, gias_school: create(:gias_school, urn: "654321"))
+
+      expect(described_class.filtered_by("123456")).to contain_exactly(matching)
+    end
+
+    it "returns every school when the filter is blank" do
+      schools = create_list(:provider_school, 2)
+
+      expect(described_class.filtered_by("")).to match_array(schools)
+    end
+  end
+
   describe "validations" do
     it { is_expected.to validate_presence_of(:site_code) }
 
