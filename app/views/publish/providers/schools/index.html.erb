@@ -13,6 +13,13 @@
     <p class="govuk-body">
       <%= t(".gias_school_text_html", link: govuk_link_to(t(".gias_link_text"), t(".gias_url"))) %>
     </p>
+    <%= render Publish::Providers::Schools::FilterComponent.new(
+      provider: @provider,
+      recruitment_cycle: @recruitment_cycle,
+      results_count: @pagy.count,
+      filter: @filter,
+    ) %>
+
     <% if @schools.any? %>
       <table class="govuk-table app-table--vertical-align-middle app-table--no-collapse">
         <thead class="govuk-table__head">
@@ -37,6 +44,13 @@
       recruitment_cycle: @recruitment_cycle,
       provider: @provider,
     ) %>
+    <% elsif @filter.present? %>
+      <div class="app-school-search__no-results">
+        <p class="govuk-body">
+          <%= t(".no_results") %>
+          <%= govuk_link_to t(".view_all_schools"), publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year) %>
+        </p>
+      </div>
     <% end %>
   </div>
 </div>

@@ -145,6 +145,8 @@ en:
       schools: # file
         index:
           gias_school_text_html: You can only add schools that are on %{link}.
+          no_results: No schools found with that search.
+          view_all_schools: View all schools
           gias_link_text: Get Information About Schools (GIAS)
           gias_url: https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments
       study_site_search:
