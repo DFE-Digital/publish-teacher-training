@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
-// The play-back under a list of school checkboxes: which schools the provider
-// is adding to the course, and which they are taking off it, named as they tick.
+// The summary under a list of school checkboxes: which schools the provider is
+// adding to the course, and which they are taking off it, named as they tick.
 //
 // It owns nothing but the summary. Which rows are on screen is schools-list's,
 // what the Select all checkbox does to them is select-all-checkboxes'; this only
@@ -9,7 +9,7 @@ import { Controller } from '@hotwired/stimulus'
 //
 // It reads every school, including the ones a search or the collapse has hidden.
 // Those rows keep their ticks and are still submitted, so leaving them out would
-// play back something other than what is about to be saved.
+// show something other than what is about to be saved.
 //
 // One delegated action on the element covers both ways the selection moves.
 // Clicking a school's box fires a change that bubbles up to here; Select all

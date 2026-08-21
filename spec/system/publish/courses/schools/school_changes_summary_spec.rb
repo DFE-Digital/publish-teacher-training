@@ -2,14 +2,14 @@
 
 require "rails_helper"
 
-RSpec.describe "Publish - Playing back the schools being changed", :js, type: :system do
+RSpec.describe "Publish - Summarising the schools being changed", :js, type: :system do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_two_of_the_five_schools_are_attached_to_the_course
     when_i_visit_the_publish_course_school_edit_page
   end
 
-  scenario "nothing is played back until something changes" do
+  scenario "nothing is summarised until something changes" do
     then_i_see_no_summary
   end
 
@@ -58,7 +58,7 @@ RSpec.describe "Publish - Playing back the schools being changed", :js, type: :s
   end
 
   # The list only hides the schools a search rules out, so their ticks are still
-  # in the DOM and still submitted. The play-back has to agree with what will be
+  # in the DOM and still submitted. The summary has to agree with what will be
   # saved, not with what happens to be on screen.
   scenario "schools hidden by a search still count" do
     when_i_search_for("Cedar")

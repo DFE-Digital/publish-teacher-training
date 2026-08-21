@@ -43,7 +43,7 @@ RSpec.describe Publish::Schools::ChangesSummaryComponent, type: :component do
       expect(summary.attributes).to have_key("hidden")
     end
 
-    it "heads the play-back" do
+    it "heads the summary" do
       expect(summary.text).to include("You are updating these schools")
     end
 

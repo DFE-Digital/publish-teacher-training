@@ -1,8 +1,8 @@
 module Publish
   module Schools
-    # The play-back under a list of school checkboxes, shared by the course
-    # schools edit page and the add course wizard's schools step: which schools
-    # the provider is adding, and which they are removing, named as they tick.
+    # The summary under a list of school checkboxes, shared by the course schools
+    # edit page and the add course wizard's schools step: which schools the
+    # provider is adding, and which they are removing, named as they tick.
     #
     # Like the search panel above the list, everything here is inert markup. The
     # summary ships hidden and empty, and the schools-changes Stimulus
