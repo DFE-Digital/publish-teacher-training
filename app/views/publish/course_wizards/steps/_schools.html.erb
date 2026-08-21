@@ -50,7 +50,12 @@
               hint: { text: school.decorate.full_address, class: "govuk-!-font-size-16" },
               include_hidden: false,
               link_errors: index.zero?,
-              data: { schools_list_target: "schoolCheckbox", school_name: school.location_name } %>
+              data: {
+                schools_list_target: "schoolCheckbox",
+                schools_changes_target: "school",
+                school_name: school.location_name,
+                action: "schools-changes#update",
+              } %>
       <% end %>
 
       <% if current_step.collapse_schools? %>

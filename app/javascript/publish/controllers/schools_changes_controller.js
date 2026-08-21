@@ -11,12 +11,11 @@ import { Controller } from '@hotwired/stimulus'
 // Those rows keep their ticks and are still submitted, so leaving them out would
 // show something other than what is about to be saved.
 //
-// One delegated action on the element covers both ways the selection moves.
-// Clicking a school's box fires a change that bubbles up to here; Select all
-// sets the other boxes programmatically, which fires nothing on them, but its
-// own change bubbles too.
+// Every school declares itself, and says on its own row that it reports here, so
+// the wiring can be read off the ERB. Select all needs an action of its own: it
+// sets the other boxes programmatically, which fires no event on them.
 export default class extends Controller {
-  static targets = ['summary', 'added', 'removed', 'status']
+  static targets = ['summary', 'added', 'removed', 'status', 'school']
   // The schools attached when the page was served, which is what the ticks are
   // measured against. The server has to say: after a validation error the form
   // comes back holding what was submitted, so the boxes no longer remember it.
@@ -31,7 +30,7 @@ export default class extends Controller {
     // before its children exist - and the summary is the last of them.
     if (!this.hasSummaryTarget) return
 
-    const schools = this.schools()
+    const schools = this.schoolTargets
     const attached = new Set(this.attachedValue)
 
     const checked = schools.filter(school => school.checked)
@@ -80,10 +79,6 @@ export default class extends Controller {
     return schools.length === 1
       ? dataset[`${kind}One`]
       : dataset[`${kind}Other`].replaceAll('{count}', schools.length)
-  }
-
-  schools () {
-    return Array.from(this.element.querySelectorAll('input[type=checkbox][data-school-name]'))
   }
 
   fill (section, { schools, all }) {
