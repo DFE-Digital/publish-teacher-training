@@ -9,7 +9,8 @@ module Publish
       PER_PAGE = 20
 
       def index
-        @pagy, @schools = pagy(provider.schools.ordered_by_name, limit: PER_PAGE)
+        @filter = params[:filter]
+        @pagy, @schools = pagy(provider.schools.filtered_by(@filter).ordered_by_name, limit: PER_PAGE)
       end
 
       def show; end

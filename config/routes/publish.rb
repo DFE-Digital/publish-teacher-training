@@ -90,7 +90,6 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
 
     get "/request-access", on: :member, to: "providers/access_requests#new"
     post "/request-access", on: :member, to: "providers/access_requests#create"
-    get "schools"
 
     resources :recruitment_cycles, param: :year, constraints: CycleYearConstraint.new, path: "", only: [:show] do
       get "/about", on: :member, to: "providers#about"
@@ -357,6 +356,8 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
           end
 
           collection do
+            get "/filter", to: "schools/filter#index"
+
             get "/search", to: "schools/search#new"
             post "/search", to: "schools/search#create"
             put "/search", to: "schools/search#update"

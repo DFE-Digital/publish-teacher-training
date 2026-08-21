@@ -20,6 +20,18 @@ class Provider::School < ApplicationRecord
   # Used to keep closed schools out of the rollover.
   scope :with_available_gias_school, -> { joins(:gias_school).merge(GiasSchool.available) }
 
+  # Narrows the list to schools whose GIAS record matches the given text -
+  # name, town, postcode or URN, per GiasSchool's own search scope.
+  #
+  # The match runs as a subquery rather than a merge because pg_search builds
+  # its own SELECT and ORDER BY for ranking, which would fight `ordered_by_name`
+  # and pagy's count over the same relation.
+  scope :filtered_by, lambda { |filter|
+    next all if filter.blank?
+
+    where(gias_school_id: GiasSchool.search(filter).select(:id))
+  }
+
   scope :ordered_by_name, -> { joins(:gias_school).includes(:gias_school).order("gias_school.name") }
 
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
