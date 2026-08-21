@@ -35,15 +35,17 @@
   <body class="govuk-template__body">
     <%= govuk_skip_link %>
 
-    <% if FeatureFlag.active?(:candidate_accounts) %>
+    <% if FeatureFlag.candidate_authentication_active? %>
       <%= render Govuk::OneLoginHeaderComponent.new(current_user: Current.session&.sessionable) %>
       <%= govuk_service_navigation(service_name: t("service_name.find"), service_url: find_root_path) do |nav|
             if authenticated?
               nav.with_navigation_item(text: t(".primary_nav.courses_html"), href: find_root_path)
-              nav.with_navigation_item(text: t(".primary_nav.saved_courses_html"), href: find_candidate_saved_courses_path)
-              nav.with_navigation_item(text: t(".primary_nav.recent_searches_html"), href: find_candidate_recent_searches_path)
-              if FeatureFlag.active?(:email_alerts)
-                nav.with_navigation_item(text: t(".primary_nav.email_alerts_html"), href: find_candidate_email_alerts_path)
+              if FeatureFlag.active?(:candidate_accounts)
+                nav.with_navigation_item(text: t(".primary_nav.saved_courses_html"), href: find_candidate_saved_courses_path)
+                nav.with_navigation_item(text: t(".primary_nav.recent_searches_html"), href: find_candidate_recent_searches_path)
+                if FeatureFlag.active?(:email_alerts)
+                  nav.with_navigation_item(text: t(".primary_nav.email_alerts_html"), href: find_candidate_email_alerts_path)
+                end
               end
             end
           end %>

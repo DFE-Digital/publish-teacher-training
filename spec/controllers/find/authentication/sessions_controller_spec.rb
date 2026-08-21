@@ -127,6 +127,56 @@ module Find
                 session: { "return_to_after_authenticating" => "/results" }
             expect(response).to redirect_to("/results")
           end
+
+          it "prefers a fresh return_to_after_authenticating path over the OmniAuth origin" do
+            request.env["omniauth.origin"] = find_root_url
+            request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:"find-developer"]
+
+            get :callback,
+                params: { provider: "find-developer" },
+                session: {
+                  "return_to_after_authenticating" => {
+                    "path" => "/results?location=Manchester&order=distance",
+                    "stored_at" => Time.current.to_i,
+                  },
+                }
+
+            expect(response).to redirect_to("/results?location=Manchester&order=distance")
+            expect(session["return_to_after_authenticating"]).to be_nil
+          end
+
+          it "ignores an expired return_to_after_authenticating path" do
+            request.env["omniauth.origin"] = find_root_url
+            request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:"find-developer"]
+
+            get :callback,
+                params: { provider: "find-developer" },
+                session: {
+                  "return_to_after_authenticating" => {
+                    "path" => "/results?location=Manchester",
+                    "stored_at" => 31.minutes.ago.to_i,
+                  },
+                }
+
+            expect(response).to redirect_to(find_root_url)
+            expect(session["return_to_after_authenticating"]).to be_nil
+          end
+
+          it "ignores an external return_to_after_authenticating URL" do
+            request.env["omniauth.origin"] = find_root_url
+            request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:"find-developer"]
+
+            get :callback,
+                params: { provider: "find-developer" },
+                session: {
+                  "return_to_after_authenticating" => {
+                    "path" => "https://fake.com/results",
+                    "stored_at" => Time.current.to_i,
+                  },
+                }
+
+            expect(response).to redirect_to(find_root_url)
+          end
         end
 
         context "candidate without an existing authentication" do

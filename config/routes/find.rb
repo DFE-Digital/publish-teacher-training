@@ -20,6 +20,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
   get "/geolocation-suggestions", to: "geolocation_suggestions#index"
 
   get "/results", to: "results#index", as: "results"
+  get "/results/sign-in", to: "results#sign_in", as: "results_sign_in"
   get "/primary", to: "primary_subjects#index"
   post "/primary", to: "primary_subjects#submit"
   get "/secondary", to: "secondary_subjects#index"
@@ -33,7 +34,7 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
     get "/:provider_code/:course_code/training-with-disabilities", to: "training_with_disabilities#show", as: :training_with_disabilities
   end
 
-  constraints ->(_req) { FeatureFlag.active?(:candidate_accounts) } do
+  constraints ->(_req) { FeatureFlag.candidate_authentication_active? } do
     scope module: "authentication" do
       resource :sessions, path: "auth", only: %i[] do
         get ":provider/callback", action: :callback
@@ -43,7 +44,9 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
       end
       delete "/sign-out", to: "sessions#destroy"
     end
+  end
 
+  constraints ->(_req) { FeatureFlag.active?(:candidate_accounts) } do
     scope path: "candidate", module: "candidates", as: "candidate" do
       resources :saved_courses, only: %i[index create destroy], path: "saved-courses" do
         post :undo, on: :collection
