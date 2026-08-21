@@ -38,6 +38,10 @@ module PageObjects
         end
       end
 
+      def school_checkboxes
+        all("[data-schools-changes-target='school']", visible: :all)
+      end
+
       def added_school_names
         added.all("li").map(&:text)
       end

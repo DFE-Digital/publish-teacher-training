@@ -23,9 +23,10 @@ RSpec.describe Publish::Schools::ChangesSummaryComponent, type: :component do
         .to eq(%(["uuid-one","uuid-two"]))
     end
 
-    it "listens for any checkbox in the list changing" do
-      expect(rendered.at_css("[data-controller='schools-changes']")["data-action"])
-        .to eq("change->schools-changes#update")
+    # Each school says on its own row that it reports here, rather than the wrapper
+    # listening for anything that happens to change inside it.
+    it "does not listen on the wrapper" do
+      expect(rendered.at_css("[data-controller='schools-changes']")["data-action"]).to be_nil
     end
 
     context "when nothing is attached yet, as in the add course wizard" do

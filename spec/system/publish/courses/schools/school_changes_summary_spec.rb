@@ -104,6 +104,16 @@ RSpec.describe "Publish - Summarising the schools being changed", :js, type: :sy
     then_nothing_is_announced
   end
 
+  # Every controller that touches a row is declared on that row, so the wiring can
+  # be read off the ERB rather than inferred from a querySelectorAll.
+  scenario "each school declares itself to the summary" do
+    expect(publish_course_school_edit_page.school_checkboxes.size).to eq(5)
+
+    publish_course_school_edit_page.school_checkboxes.each do |checkbox|
+      expect(checkbox["data-action"]).to include("schools-changes#update")
+    end
+  end
+
 private
 
   def attached_schools

@@ -51,7 +51,9 @@
                        class="govuk-checkboxes__input"
                        id="select-all-schools"
                        data-select-all-checkboxes-target="selectAll"
-                       data-action="select-all-checkboxes#toggleAll">
+                       <%# Setting the boxes fires nothing on them, so the summary has
+                           to hear about it from this one. %>
+                       data-action="select-all-checkboxes#toggleAll schools-changes#update">
 
                 <label class="govuk-label govuk-checkboxes__label" for="select-all-schools">
                   <%= t("publish.courses.schools.select_all") %>
@@ -72,8 +74,9 @@
                     data: {
                       select_all_checkboxes_target: "checkbox",
                       schools_list_target: "schoolCheckbox",
+                      schools_changes_target: "school",
                       school_name: school.location_name,
-                      action: "select-all-checkboxes#updateSelectAll",
+                      action: "select-all-checkboxes#updateSelectAll schools-changes#update",
                     } %>
              <% end %>
 
