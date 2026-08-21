@@ -114,6 +114,29 @@ module Find
         expect(BatchDelivery).to have_received(:new)
           .with(relation: anything, stagger_over: 1.hour, batch_size: 100)
       end
+
+      it "does not enqueue a job when the only recently published course is closed for applications" do
+        course = create(:course, :published, :with_full_time_sites, :closed)
+        course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
+
+        create(:email_alert, candidate:, subjects: [])
+
+        expect { described_class.call(since: 1.week.ago) }
+          .not_to have_enqueued_job(EmailAlertMailerJob)
+      end
+
+      it "enqueues only the courses that are open for applications" do
+        open_course = create(:course, :published_postgraduate)
+        open_course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
+        closed_course = create(:course, :published, :with_full_time_sites, :closed)
+        closed_course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
+
+        alert = create(:email_alert, candidate:, subjects: [])
+
+        expect { described_class.call(since: 1.week.ago) }
+          .to have_enqueued_job(EmailAlertMailerJob)
+          .with(alert.id, [open_course.id])
+      end
     end
   end
 end
