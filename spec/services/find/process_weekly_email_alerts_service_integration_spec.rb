@@ -250,6 +250,21 @@ module Find
         expect { described_class.call(since: 1.week.ago) }
           .not_to have_enqueued_job(EmailAlertMailerJob)
       end
+
+      it "excludes closed courses even when the alert saved the applications open filter" do
+        open_biology = create_findable_course(name: "Open Biology", subjects: [biology])
+        create_findable_course(name: "Closed Biology", subjects: [biology], application_status: :closed)
+
+        create(:email_alert, candidate:,
+                             subjects: %w[C1],
+                             search_attributes: { "applications_open" => "true" })
+
+        expect { described_class.call(since: 1.week.ago) }
+          .to have_enqueued_job(EmailAlertMailerJob).once
+
+        job = ActiveJob::Base.queue_adapter.enqueued_jobs.last
+        expect(job["arguments"].second).to contain_exactly(open_biology.id)
+      end
     end
 
     describe "edge cases" do
