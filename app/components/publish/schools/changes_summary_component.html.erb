@@ -3,6 +3,21 @@
      data-action="change->schools-changes#update">
   <%= content %>
 
+  <%# Counts, never the names: the summary below is already on the page under its
+      own headings, and reading forty schools aloud on every tick would be
+      unusable. {count} is substituted by the controller, so it is not I18n
+      interpolation. %>
+  <div class="govuk-visually-hidden"
+       role="status"
+       aria-live="polite"
+       data-schools-changes-target="status"
+       data-adding-one="<%= t(".status_adding_one") %>"
+       data-adding-other="<%= t(".status_adding_other") %>"
+       data-adding-all="<%= t(".status_adding_all") %>"
+       data-removing-one="<%= t(".status_removing_one") %>"
+       data-removing-other="<%= t(".status_removing_other") %>"
+       data-removing-all="<%= t(".status_removing_all") %>"></div>
+
   <div class="app-schools-changes govuk-!-margin-top-6"
        hidden
        data-schools-changes-target="summary">
