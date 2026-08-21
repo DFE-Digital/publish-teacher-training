@@ -7,7 +7,7 @@ module Support
         include SuccessMessage
 
         def show
-          schools
+          gias_schools
           unfound_urns
           duplicate_urns
         end
@@ -24,7 +24,7 @@ module Support
             @urn_form = URNForm.new(provider, params: { values: updated_values })
             @urn_form.stash
           end
-          schools
+          gias_schools
           unfound_urns
           duplicate_urns
 
@@ -82,13 +82,6 @@ module Support
         def gias_schools
           @gias_schools ||= GiasSchool.where(urn: urn_service[:new_urns])
         end
-
-        # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-        # TODO School data remodel removal - remove when support multiple-school checks no longer preview unsaved Site rows.
-        def schools
-          @schools ||= gias_schools.map { |gias_school| provider.sites.build(gias_school.school_attributes) }
-        end
-        # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
 
         def unfound_urns
           @unfound_urns = urn_service[:unfound_urns]

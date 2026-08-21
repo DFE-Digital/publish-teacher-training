@@ -56,6 +56,28 @@ describe GiasSchool do
     end
   end
 
+  describe "#address" do
+    it "returns the address lines in order, county included" do
+      gias_school = build(
+        :gias_school,
+        address1: "5",
+        address2: "Long Lane",
+        address3: "Holbury",
+        town: "Southampton",
+        county: "Hampshire",
+        postcode: "SO45 2PA",
+      )
+
+      expect(gias_school.address).to eq(["5", "Long Lane", "Holbury", "Southampton", "Hampshire", "SO45 2PA"])
+    end
+
+    it "keeps the blanks so callers can decide how to compact them" do
+      gias_school = build(:gias_school, address2: nil, address3: nil, county: nil)
+
+      expect(gias_school.address).to include(nil)
+    end
+  end
+
   describe "#full_address" do
     it "includes location name in full address" do
       gias_school = build(

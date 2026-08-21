@@ -6,29 +6,29 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= @provider.decorate.name_and_code %> </span>
-        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= @site.location_name %></h1>
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= school.location_name %></h1>
       </legend>
       <%= render GovukComponent::SummaryListComponent.new do |component|
             component.with_row do |row|
               row.with_key { t(".code") }
-              row.with_value(text: @site.code)
+              row.with_value(text: school.code)
               row.with_action
             end
 
             component.with_row do |row|
               row.with_key { t(".urn") }
-              row.with_value(text: @site.urn)
+              row.with_value(text: school.urn)
             end
 
             component.with_row do |row|
               row.with_key { t(".address") }
-              row.with_value(text: simple_format(@site.decorate.full_address_on_seperate_lines, nil, wrapper_tag: "div"))
+              row.with_value(text: simple_format(school.full_address_on_seperate_lines, nil, wrapper_tag: "div"))
             end
           end %>
 
           <p class="govuk-body">
             <%= govuk_link_to t("support.actions.remove_school", resource: "location"),
-                delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site.uuid),
+                delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school.uuid),
                 class: "app-link--destructive" %>
           </p>
     </fieldset>

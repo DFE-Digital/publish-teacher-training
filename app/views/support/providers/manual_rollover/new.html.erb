@@ -23,7 +23,7 @@
       <% end %>
       <% summary_list.with_row do |row| %>
         <% row.with_key { t(".summary.schools") } %>
-        <% row.with_value(text: @provider.sites.count) %>
+        <% row.with_value(text: @provider.schools.count) %>
       <% end %>
       <% summary_list.with_row do |row| %>
         <% row.with_key { t(".summary.study_sites") } %>
