@@ -16,7 +16,7 @@ import { Controller } from '@hotwired/stimulus'
 // sets the other boxes programmatically, which fires nothing on them, but its
 // own change bubbles too.
 export default class extends Controller {
-  static targets = ['summary', 'added', 'removed']
+  static targets = ['summary', 'added', 'removed', 'status']
   // The schools attached when the page was served, which is what the ticks are
   // measured against. The server has to say: after a validation error the form
   // comes back holding what was submitted, so the boxes no longer remember it.
@@ -36,22 +36,57 @@ export default class extends Controller {
 
     const checked = schools.filter(school => school.checked)
 
-    const added = checked.filter(school => !attached.has(school.value))
-    const removed = schools.filter(school => !school.checked && attached.has(school.value))
-
-    this.summaryTarget.hidden = added.length === 0 && removed.length === 0
-
     // Every school ticked, or none left ticked, is better said than listed - and
     // it is the end state that decides, not which control got them there.
-    this.fill(this.addedTarget, added, checked.length === schools.length)
-    this.fill(this.removedTarget, removed, checked.length === 0)
+    const adding = {
+      schools: checked.filter(school => !attached.has(school.value)),
+      all: checked.length === schools.length
+    }
+
+    const removing = {
+      schools: schools.filter(school => !school.checked && attached.has(school.value)),
+      all: checked.length === 0
+    }
+
+    this.summaryTarget.hidden = adding.schools.length === 0 && removing.schools.length === 0
+
+    this.fill(this.addedTarget, adding)
+    this.fill(this.removedTarget, removing)
+    this.announce(adding, removing)
+  }
+
+  // The summary appears and rewrites itself without moving focus, so the live
+  // region is the only thing that tells a screen reader anything happened. It
+  // gets the counts alone: the names are already on the page under their own
+  // heading, and forty of them read out on every tick would be unusable.
+  announce (adding, removing) {
+    const said = [
+      this.count(adding, 'adding'),
+      this.count(removing, 'removing')
+    ].filter(Boolean)
+
+    // Full stops rather than commas, so each stands as its own statement and the
+    // screen reader pauses between them.
+    this.statusTarget.textContent = said.join('. ')
+  }
+
+  count ({ schools, all }, kind) {
+    if (schools.length === 0) return null
+
+    const { dataset } = this.statusTarget
+
+    if (all) return dataset[`${kind}All`]
+
+    return schools.length === 1
+      ? dataset[`${kind}One`]
+      : dataset[`${kind}Other`].replaceAll('{count}', schools.length)
   }
 
   schools () {
     return Array.from(this.element.querySelectorAll('input[type=checkbox][data-school-name]'))
   }
 
-  fill (section, schools, all) {
+  fill (section, { schools, all }) {
     section.replaceChildren()
 
     if (schools.length === 0) return
