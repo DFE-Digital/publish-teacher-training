@@ -7,6 +7,7 @@ en:
       add_note: Add a note
       edit_note: Edit
       delete_note: Delete
+      course_from_previous_year: Course from a previous year
       fee_value:
         salary: Salary
         apprenticeship: Salary (apprenticeship)
