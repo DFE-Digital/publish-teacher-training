@@ -1,0 +1,21 @@
+<% content_for :page_title, @banner.name %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_back_link(href: active_support_banners_path) %>
+<% end %>
+
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l"><%= t(".page_caption") %></span>
+      <h1 class="govuk-heading-l"><%= @banner.name %></h1>
+    </div>
+  </div>
+
+  <%= render "shared/banners/banner", banner: @banner %>
+
+  <p class="govuk-body">
+    <span class="govuk-caption-m">Displayed on:</span>
+    <%= displayed_on_text(@banner) %>
+  </p>
+</div>
