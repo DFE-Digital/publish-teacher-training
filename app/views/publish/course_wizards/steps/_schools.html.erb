@@ -25,11 +25,11 @@
   <%= t("course_wizard.steps.schools.hint") %>
 </p>
 
-<%# The summary plays back what the ticks add up to; it takes in the whole list,
-    so it wraps the search and the collapse rather than sitting inside either of
-    them. A course that does not exist yet has no schools attached, so it is only
-    ever told about schools being added. %>
-<%= render ::Publish::Schools::ChangesSummaryComponent.new do %>
+<%# The summary says what the ticks add up to; it takes in the whole list, so it
+    wraps the search and the collapse rather than sitting inside either of them.
+    The baseline is what the wizard has stored, which is empty on the way in and
+    the schools already chosen on the way back. %>
+<%= render ::Publish::Schools::ChangesSummaryComponent.new(attached: current_step.attached_school_uuids) do %>
   <%# The panel says which schools a search allows; the list decides how many of
       those the collapse threshold lets on screen. %>
   <div data-controller="schools-list"
