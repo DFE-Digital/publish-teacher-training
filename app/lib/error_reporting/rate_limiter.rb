@@ -1,30 +1,33 @@
 module ErrorReporting
-  # Use Redis to keep track of errors reported.
-  # If more than threshold of any error exists then report
-  # Always delete entries older than the window
+  # Count errors in Rails.cache using per-minute counters.
+  # Report when the total across the window reaches the threshold.
   #
-  # Return true if more than threshold entries exist withiing the window
+  # Returns true when the threshold has been reached within the window.
   class RateLimiter
+    BUCKET = 1.minute
+
     def self.report?(key:, threshold:, window: 1.hour)
-      redis = RedisClient.cache
-      now = Time.zone.now.utc.to_f
-      events_key = "error_reporting:events:#{key}"
+      now = Time.zone.now
+      bucket = now.to_i / BUCKET.to_i
+      expires_in = window.to_i + BUCKET.to_i
 
-      count = redis.multi { |r|
-        # Add one or more members to a sorted set
-        r.zadd(events_key, now, "#{now}-#{SecureRandom.hex(4)}")
-        # Remove all members in a sorted set within the given scores.
-        r.zremrangebyscore(events_key, "-inf", now - window.to_i)
-        # Set a key's time to live in seconds.
-        r.expire(events_key, window.to_i + 60)
-        # Get the number of members in a sorted set.
-        r.zcard(events_key)
-      }.last
+      current = Rails.cache.increment(cache_key(key, bucket), 1, expires_in: expires_in)
+      return true if current.nil?
 
-      count >= threshold
-    rescue Redis::BaseError => e
+      minutes = window.to_i / BUCKET.to_i
+      total = current + (1...minutes).sum do |offset|
+        Rails.cache.read_counter(cache_key(key, bucket - offset)).to_i
+      end
+
+      total >= threshold
+    rescue StandardError => e
       Rails.logger.tagged("ErrorReporting::RateLimiter") { |l| l.error(e.message) }
       true
     end
+
+    def self.cache_key(key, bucket)
+      "error_reporting:#{key}:#{bucket}"
+    end
+    private_class_method :cache_key
   end
 end
