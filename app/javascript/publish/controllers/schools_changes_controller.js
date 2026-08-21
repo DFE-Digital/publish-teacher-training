@@ -15,7 +15,11 @@ import { Controller } from '@hotwired/stimulus'
 // the wiring can be read off the ERB. Select all needs an action of its own: it
 // sets the other boxes programmatically, which fires no event on them.
 export default class extends Controller {
-  static targets = ['summary', 'added', 'removed', 'status', 'school']
+  static targets = [
+    'summary', 'added', 'removed', 'status', 'school',
+    'countTemplate', 'itemTemplate', 'messageTemplate'
+  ]
+
   // The schools attached when the page was served, which is what the ticks are
   // measured against. The server has to say: after a validation error the form
   // comes back holding what was submitted, so the boxes no longer remember it.
@@ -86,53 +90,46 @@ export default class extends Controller {
 
     if (schools.length === 0) return
 
-    section.append(this.wording(section, schools.length, all))
-
-    if (!all) section.append(this.list(schools))
+    section.append(all ? this.message(section) : this.counted(section, schools))
   }
 
-  // {count} is substituted here rather than by I18n, since the count is only
-  // known once the provider has finished ticking.
+  // An "all" of either kind rules the other half out, so it heads nothing and
+  // stays a sentence.
+  message (section) {
+    const message = this.clone(this.messageTemplateTarget)
+
+    message.querySelector('p').textContent = section.dataset.all
+
+    return message
+  }
+
+  // A count heads the list of schools that follows it, so the template gives it a
+  // heading - the page already has an h2 over both halves, and a bold paragraph
+  // would leave a screen reader with two lists and nothing to tell them apart.
   //
-  // A count heads the list of schools that follows it, so it is a heading - the
-  // page already has an h2 over both halves, and a bold paragraph would leave a
-  // screen reader with two lists and nothing to tell them apart. An "all" of
-  // either kind rules the other half out, so it heads nothing and stays a
-  // sentence.
-  wording (section, count, all) {
-    if (all) {
-      const paragraph = document.createElement('p')
+  // {count} is substituted here rather than by I18n, since the count is only known
+  // once the provider has finished ticking. Everything else is filled as text,
+  // never as markup: a school name is what the provider typed, and plenty of them
+  // hold an & or an apostrophe.
+  counted (section, schools) {
+    const counted = this.clone(this.countTemplateTarget)
+    const list = counted.querySelector('ul')
 
-      paragraph.className = 'govuk-body'
-      paragraph.textContent = section.dataset.all
-
-      return paragraph
-    }
-
-    const heading = document.createElement('h3')
-
-    heading.className = 'govuk-heading-s'
-    heading.textContent = count === 1
+    counted.querySelector('h3').textContent = schools.length === 1
       ? section.dataset.one
-      : section.dataset.other.replaceAll('{count}', count)
-
-    return heading
-  }
-
-  // Built as nodes rather than as markup, because a school name is text the
-  // provider entered and plenty of them hold an & or an apostrophe.
-  list (schools) {
-    const list = document.createElement('ul')
-
-    list.className = 'govuk-list govuk-list--bullet'
+      : section.dataset.other.replaceAll('{count}', schools.length)
 
     schools.forEach(school => {
-      const item = document.createElement('li')
+      const item = this.clone(this.itemTemplateTarget)
 
-      item.textContent = school.dataset.schoolName
+      item.querySelector('li').textContent = school.dataset.schoolName
       list.append(item)
     })
 
-    return list
+    return counted
+  }
+
+  clone (template) {
+    return template.content.cloneNode(true)
   }
 }
