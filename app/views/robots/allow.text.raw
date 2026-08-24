@@ -1,5 +1,6 @@
-# The search engines named below may index Find. Everything else,
-# including AI training crawlers, is blocked by the final group.
+# The crawlers named below may index Find: search engines, and the link
+# preview bots that fetch a page when someone shares a link. Everything
+# else, including AI training crawlers, is blocked by the final group.
 
 User-agent: Googlebot
 User-agent: Googlebot-Image
@@ -7,6 +8,12 @@ User-agent: bingbot
 User-agent: DuckDuckBot
 User-agent: Slurp
 User-agent: Applebot
+User-agent: Twitterbot
+User-agent: facebookexternalhit
+User-agent: LinkedInBot
+User-agent: Slackbot-LinkExpanding
+User-agent: Discordbot
+User-agent: WhatsApp
 Disallow: /auth/
 Disallow: /sign-out
 Disallow: /candidate/

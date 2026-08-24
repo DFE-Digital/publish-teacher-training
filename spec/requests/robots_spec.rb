@@ -39,6 +39,19 @@ describe "robots.txt" do
       expect(response.body).not_to include("User-agent: Applebot-Extended")
     end
 
+    it "welcomes link preview bots, so shared course links render a preview card" do
+      expect(response.body).to include("User-agent: Twitterbot")
+      expect(response.body).to include("User-agent: facebookexternalhit")
+      expect(response.body).to include("User-agent: LinkedInBot")
+      expect(response.body).to include("User-agent: Slackbot-LinkExpanding")
+      expect(response.body).to include("User-agent: Discordbot")
+      expect(response.body).to include("User-agent: WhatsApp")
+    end
+
+    it "does not welcome meta-externalagent, so Meta's training crawler falls to the block" do
+      expect(response.body).not_to include("User-agent: meta-externalagent")
+    end
+
     it "keeps candidate and authentication pages out of search results" do
       expect(response.body).to include("Disallow: /candidate/")
       expect(response.body).to include("Disallow: /auth/")
