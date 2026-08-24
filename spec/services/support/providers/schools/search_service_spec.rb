@@ -6,7 +6,7 @@ module Support
   module Providers
     module Schools
       describe SearchService do
-        let(:school) { create(:gias_school) }
+        let(:school) { create(:gias_school, town: "Bristol", postcode: "SW1A 1AA") }
 
         describe "#call" do
           it "can search by urn" do

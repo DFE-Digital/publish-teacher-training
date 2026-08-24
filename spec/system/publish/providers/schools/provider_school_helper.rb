@@ -2,7 +2,7 @@
 
 module ProviderSchoolHelper
   def given_i_am_authenticated_as_a_provider_user
-    gias_school = create(:gias_school)
+    gias_school = create(:gias_school, name: "St Mary's Academy")
     provider = create(:provider, sites: [build(:site, **gias_school.school_attributes)])
     site = provider.sites.first
     create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
