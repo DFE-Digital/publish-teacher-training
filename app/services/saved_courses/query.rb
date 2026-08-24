@@ -44,21 +44,24 @@ module SavedCourses
 
     # Distance annotation over the legacy course_site -> site model, used while
     # the :course_publishing_uses_new_school_model flag is off. Saved courses are
-    # annotated with distance but not filtered by radius.
+    # annotated with distance but not filtered by radius. Previous-cycle courses
+    # are retained when their old placement sites are no longer publishable.
     def sites_location_scope(latitude:, longitude:)
       @scope
         .joins(<<~SQL)
-          INNER JOIN course_site ON (
+          LEFT JOIN course_site ON (
             course_site.course_id = course.id
             AND course_site.status = 'R'
             AND course_site.publish = 'Y'
           )
-          INNER JOIN site ON (
+          LEFT JOIN site ON (
             site.id = course_site.site_id
             AND site.discarded_at IS NULL
+            AND site.longitude IS NOT NULL
+            AND site.latitude IS NOT NULL
           )
         SQL
-        .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
+        .where("site.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", RecruitmentCycle.current.id)
         .select(
           Course.sanitize_sql_array(
             [
@@ -80,12 +83,19 @@ module SavedCourses
     # Distance annotation over the canonical course_school -> gias_school model,
     # used while the :course_publishing_uses_new_school_model flag is on. As with
     # the legacy path, saved courses are annotated with distance but not filtered
-    # by radius.
+    # by radius. Previous-cycle courses are retained when they have no canonical
+    # school with coordinates.
     def schools_location_scope(latitude:, longitude:)
       @scope
-        .joins(course: { schools: :gias_school })
-        .where.not(gias_school: { latitude: nil })
-        .where.not(gias_school: { longitude: nil })
+        .joins(<<~SQL)
+          LEFT JOIN course_school ON course_school.course_id = course.id
+          LEFT JOIN gias_school ON (
+            gias_school.id = course_school.gias_school_id
+            AND gias_school.latitude IS NOT NULL
+            AND gias_school.longitude IS NOT NULL
+          )
+        SQL
+        .where("gias_school.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", RecruitmentCycle.current.id)
         .select(
           Course.sanitize_sql_array(
             [
@@ -140,7 +150,8 @@ module SavedCourses
 
       @scope
         .select("saved_course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeUkEu')::integer) as uk_fee")
-        .joins(latest_published_enrichment_join_sql)
+        .joins(latest_published_enrichment_left_join_sql)
+        .where("course_enrichment.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", RecruitmentCycle.current.id)
         .group("saved_course.id, course.id, provider.id, provider.provider_name")
         .order(
           {
@@ -160,7 +171,8 @@ module SavedCourses
 
       @scope
         .select("saved_course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeInternational')::integer) as intl_fee")
-        .joins(latest_published_enrichment_join_sql)
+        .joins(latest_published_enrichment_left_join_sql)
+        .where("course_enrichment.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", RecruitmentCycle.current.id)
         .group("saved_course.id, course.id, provider.id, provider.provider_name")
         .order(
           {
@@ -177,6 +189,10 @@ module SavedCourses
       @scope.preload(
         course: [:provider, :latest_published_enrichment, { subjects: [:financial_incentive] }],
       )
+    end
+
+    def latest_published_enrichment_left_join_sql
+      latest_published_enrichment_join_sql.sub("INNER JOIN LATERAL", "LEFT JOIN LATERAL")
     end
   end
 end

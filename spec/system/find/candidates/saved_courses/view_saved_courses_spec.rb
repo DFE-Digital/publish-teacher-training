@@ -173,6 +173,27 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
       then_i_see_courses_sorted_london_first
     end
+
+    scenario "a previous-year course remains visible with location and fee sorting" do
+      when_i_log_in_as_a_candidate
+      previous_year_course = create(
+        :course,
+        :fee,
+        name: "Previous Year Course",
+        provider: create(:provider, recruitment_cycle: create(:recruitment_cycle, :previous)),
+      )
+      create(:saved_course, candidate: Candidate.first, course: previous_year_course)
+
+      then_i_visit_my_saved_courses
+      and_i_search_for_london
+      expect(page).to have_content(previous_year_course.name_and_code)
+
+      and_i_click_sort_by_lowest_fee_uk
+      expect(page).to have_content(previous_year_course.name_and_code)
+
+      and_i_click_sort_by_lowest_fee_intl
+      expect(page).to have_content(previous_year_course.name_and_code)
+    end
   end
 
   def when_i_log_in_as_a_candidate

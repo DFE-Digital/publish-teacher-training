@@ -108,6 +108,20 @@ RSpec.describe SavedCourses::Query do
           attribute_names: %w[minimum_distance_to_search_location],
         )
       end
+
+      it "retains a previous-cycle course without a publishable placement site" do
+        previous_cycle_saved = create(
+          :saved_course,
+          candidate:,
+          course: create(
+            :course,
+            provider: create(:provider, recruitment_cycle: create(:recruitment_cycle, :previous)),
+          ),
+        )
+
+        expect(results).to include(previous_cycle_saved)
+        expect(results.find { it.id == previous_cycle_saved.id }.minimum_distance_to_search_location).to be_nil
+      end
     end
 
     context "when a placement school has been discarded" do
@@ -204,6 +218,20 @@ RSpec.describe SavedCourses::Query do
         attribute_names: %w[course_id],
       )
     end
+
+    it "retains a previous-cycle course without a published enrichment" do
+      previous_cycle_saved = create(
+        :saved_course,
+        candidate:,
+        course: create(
+          :course,
+          :fee,
+          provider: create(:provider, recruitment_cycle: create(:recruitment_cycle, :previous)),
+        ),
+      )
+
+      expect(results).to include(previous_cycle_saved)
+    end
   end
 
   context "when ordering by international fee ascending" do
@@ -244,6 +272,20 @@ RSpec.describe SavedCourses::Query do
         [cheap_saved, expensive_saved],
         attribute_names: %w[course_id],
       )
+    end
+
+    it "retains a previous-cycle course without a published enrichment" do
+      previous_cycle_saved = create(
+        :saved_course,
+        candidate:,
+        course: create(
+          :course,
+          :fee,
+          provider: create(:provider, recruitment_cycle: create(:recruitment_cycle, :previous)),
+        ),
+      )
+
+      expect(results).to include(previous_cycle_saved)
     end
   end
 

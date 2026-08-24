@@ -53,5 +53,19 @@ RSpec.describe SavedCourses::Query do
         attribute_names: %w[minimum_distance_to_search_location],
       )
     end
+
+    it "retains a previous-cycle course without a canonical school" do
+      previous_cycle_saved = create(
+        :saved_course,
+        candidate:,
+        course: create(
+          :course,
+          provider: create(:provider, recruitment_cycle: create(:recruitment_cycle, :previous)),
+        ),
+      )
+
+      expect(results).to include(previous_cycle_saved)
+      expect(results.find { it.id == previous_cycle_saved.id }.minimum_distance_to_search_location).to be_nil
+    end
   end
 end
