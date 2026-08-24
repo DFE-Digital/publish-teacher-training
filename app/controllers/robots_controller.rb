@@ -1,0 +1,15 @@
+# frozen_string_literal: true
+
+# Served from a route rather than public/, because a static file is host-blind:
+# Find, Publish, the API and the test environments share one public directory.
+#
+# Not ApplicationController: enforce_basic_auth returns 401 wherever basic auth
+# is enabled, and Google reads any 4xx on robots.txt as "no restrictions".
+# rubocop:disable Rails/ApplicationController
+class RobotsController < ActionController::Base
+  # rubocop:enable Rails/ApplicationController
+
+  def show
+    render template: "robots/disallow", formats: :text, layout: false, content_type: "text/plain"
+  end
+end
