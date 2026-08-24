@@ -24,6 +24,11 @@ describe "robots.txt" do
       expect(response.media_type).to eq("text/plain")
     end
 
+    it "may be cached by shared caches for a day" do
+      expect(response.headers["Cache-Control"]).to include("max-age=86400")
+      expect(response.headers["Cache-Control"]).to include("public")
+    end
+
     it "welcomes the search engines we have approved" do
       expect(response.body).to include("User-agent: Googlebot")
       expect(response.body).to include("User-agent: bingbot")

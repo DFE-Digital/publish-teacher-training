@@ -10,6 +10,8 @@ class RobotsController < ActionController::Base
   # rubocop:enable Rails/ApplicationController
 
   def show
+    expires_in 1.day, public: true
+
     render template: robots_template, formats: :text, layout: false, content_type: "text/plain"
   end
 
