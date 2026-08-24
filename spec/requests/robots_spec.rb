@@ -12,20 +12,63 @@ describe "robots.txt" do
     expect(response.body).not_to include("Googlebot")
   end
 
-  it "responds as plain text" do
-    host! URI.parse(Settings.find_url).host
-    get "/robots.txt"
+  context "on the canonical Find host in production" do
+    before do
+      stub_environment("production")
+      host! URI.parse(Settings.find_url).host
+      get "/robots.txt"
+    end
 
-    expect(response).to have_http_status(:ok)
-    expect(response.media_type).to eq("text/plain")
-  end
+    it "responds as plain text" do
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq("text/plain")
+    end
 
-  it "blocks everything on the Find host" do
-    stub_environment("production")
-    host! URI.parse(Settings.find_url).host
-    get "/robots.txt"
+    it "welcomes the search engines we have approved" do
+      expect(response.body).to include("User-agent: Googlebot")
+      expect(response.body).to include("User-agent: bingbot")
+      expect(response.body).to include("User-agent: DuckDuckBot")
+      expect(response.body).to include("User-agent: Applebot")
+    end
 
-    expect_everything_blocked
+    it "blocks every crawler it does not name, including AI crawlers" do
+      expect(response.body).to include("User-agent: *\nDisallow: /")
+    end
+
+    it "does not welcome Applebot-Extended, so Apple's training crawler falls to the block" do
+      expect(response.body).not_to include("User-agent: Applebot-Extended")
+    end
+
+    it "keeps candidate and authentication pages out of search results" do
+      expect(response.body).to include("Disallow: /candidate/")
+      expect(response.body).to include("Disallow: /auth/")
+      expect(response.body).to include("Disallow: /sign-out")
+    end
+
+    it "keeps unsubscribe links containing personal tokens out of search results" do
+      expect(response.body).to include("Disallow: /email-alerts/")
+    end
+
+    it "keeps tracking redirects and internal endpoints out of search results" do
+      expect(response.body).to include("Disallow: /track_click")
+      expect(response.body).to include("Disallow: /geolocation-suggestions")
+      expect(response.body).to include("Disallow: /cycles")
+    end
+
+    # A blank line would terminate the group, leaving approved crawlers with
+    # no rules at all.
+    it "keeps the approved group contiguous, with no blank line before its rules" do
+      group = response.body[/^User-agent: Googlebot$.*?^Allow: \/$/m]
+
+      expect(group).to be_present
+      expect(group.lines.map(&:chomp)).to all(be_present)
+    end
+
+    it "advertises the sitemap on the canonical domain" do
+      expect(response.body).to include(
+        "Sitemap: https://find-teacher-training-courses.service.gov.uk/sitemap.xml",
+      )
+    end
   end
 
   context "on a non-canonical Find host in production" do

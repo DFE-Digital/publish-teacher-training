@@ -10,6 +10,18 @@ class RobotsController < ActionController::Base
   # rubocop:enable Rails/ApplicationController
 
   def show
-    render template: "robots/disallow", formats: :text, layout: false, content_type: "text/plain"
+    render template: robots_template, formats: :text, layout: false, content_type: "text/plain"
+  end
+
+private
+
+  def robots_template
+    indexable? ? "robots/allow" : "robots/disallow"
+  end
+
+  # Not Rails.env: staging, sandbox, QA and review all run RAILS_ENV=production.
+  def indexable?
+    Settings.environment.name == "production" &&
+      request.host == URI.parse(Settings.find_url).host
   end
 end
