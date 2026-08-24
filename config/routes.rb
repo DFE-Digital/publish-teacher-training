@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
+  # Drawn outside the host constraints: the response varies by host, but the
+  # route must answer on every one of them.
+  get "/robots.txt", to: "robots#show", format: false
+
   constraints host: Settings.api_hosts do
     draw(:external_api)
   end
