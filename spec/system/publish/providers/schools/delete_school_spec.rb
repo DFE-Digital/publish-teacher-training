@@ -239,14 +239,14 @@ RSpec.describe "Delete a provider's schools" do
 
   def and_i_cannot_delete_the_school
     expect(publish_school_delete_page).to have_text("You cannot remove this school")
-    expect(page).to have_content("#{provider_school.location_name} is a school for courses run by #{provider.provider_name}.")
-    expect(page).to have_content("To remove #{provider_school.location_name}, you must first remove the school from those courses.")
+    expect(page).to have_content("#{provider_school.decorate.location_name} is a school for courses run by #{provider.provider_name}.")
+    expect(page).to have_content("To remove #{provider_school.decorate.location_name}, you must first remove the school from those courses.")
     expect(publish_school_delete_page).not_to have_remove_school_button
   end
 
   def and_i_am_told_it_is_the_only_school
     expect(publish_school_delete_page).to have_text("You cannot remove this school")
-    expect(page).to have_content("#{provider_school.location_name} is the only school for #{provider.provider_name}.")
+    expect(page).to have_content("#{provider_school.decorate.location_name} is the only school for #{provider.provider_name}.")
     expect(page).to have_content("To remove it, you must first add another school.")
     expect(publish_school_delete_page).not_to have_remove_school_button
   end
