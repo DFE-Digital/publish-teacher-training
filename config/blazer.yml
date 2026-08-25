@@ -2,3 +2,21 @@ override_csp: true
 data_sources:
   main:
     url: <%= Rails.configuration.x.read_only_database_url %>
+
+    # Statement timeout, in seconds. Without this a slow query against
+    # production runs unbounded.
+    timeout: 30
+
+    # Cache results of slow queries. Blazer.cache defaults to Rails.cache,
+    # which is Redis today, so this needs no extra infrastructure.
+    #
+    # Revisit when Rails.cache moves to SolidCache on Postgres: this writes
+    # whole result sets (which often contain personal data) into
+    # solid_cache_entries, where they persist unencrypted for expires_in and
+    # appear in backups. Consider encrypt: true on the cache store, a shorter
+    # expires_in, or setting Blazer.cache to a separate store in
+    # config/initializers/blazer.rb.
+    cache:
+      mode: slow # cache only queries slower than slow_threshold
+      expires_in: 60 # minutes
+      slow_threshold: 15 # seconds
