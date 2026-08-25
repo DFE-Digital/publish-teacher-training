@@ -46,6 +46,7 @@ module SavedCourses
     # the :course_publishing_uses_new_school_model flag is off. Saved courses are
     # annotated with distance but not filtered by radius. Previous-cycle courses
     # are retained when their old placement sites are no longer publishable.
+    # Both latitude and longitude are required to compute distance.
     def sites_location_scope(latitude:, longitude:)
       @scope
         .joins(<<~SQL)
@@ -61,7 +62,7 @@ module SavedCourses
             AND site.latitude IS NOT NULL
           )
         SQL
-        .where("site.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", RecruitmentCycle.current.id)
+        .where("site.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", current_recruitment_cycle_id)
         .select(
           Course.sanitize_sql_array(
             [
@@ -95,7 +96,7 @@ module SavedCourses
             AND gias_school.longitude IS NOT NULL
           )
         SQL
-        .where("gias_school.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", RecruitmentCycle.current.id)
+        .where("gias_school.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", current_recruitment_cycle_id)
         .select(
           Course.sanitize_sql_array(
             [
@@ -143,6 +144,10 @@ module SavedCourses
 
     # Override: select saved_course.* instead of course.* and adjust GROUP BY
     # so SavedCourse attributes (like course_id) are available on the result.
+    #
+    # LEFT JOIN keeps previous-cycle courses that have no published enrichment.
+    # Current-cycle courses still need one. When a previous-cycle course does
+    # have a published enrichment, the lateral join still uses it for sorting.
     def fee_uk_ascending_order_scope
       return @scope unless params[:order] == "fee_uk_ascending"
 
@@ -150,8 +155,8 @@ module SavedCourses
 
       @scope
         .select("saved_course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeUkEu')::integer) as uk_fee")
-        .joins(latest_published_enrichment_left_join_sql)
-        .where("course_enrichment.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", RecruitmentCycle.current.id)
+        .joins(latest_published_enrichment_join_sql(join_type: "LEFT"))
+        .where("course_enrichment.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", current_recruitment_cycle_id)
         .group("saved_course.id, course.id, provider.id, provider.provider_name")
         .order(
           {
@@ -171,8 +176,8 @@ module SavedCourses
 
       @scope
         .select("saved_course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeInternational')::integer) as intl_fee")
-        .joins(latest_published_enrichment_left_join_sql)
-        .where("course_enrichment.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", RecruitmentCycle.current.id)
+        .joins(latest_published_enrichment_join_sql(join_type: "LEFT"))
+        .where("course_enrichment.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", current_recruitment_cycle_id)
         .group("saved_course.id, course.id, provider.id, provider.provider_name")
         .order(
           {
@@ -187,12 +192,16 @@ module SavedCourses
 
     def preload_scope
       @scope.preload(
-        course: [:provider, :latest_published_enrichment, { subjects: [:financial_incentive] }],
+        course: [
+          :latest_published_enrichment,
+          { provider: :recruitment_cycle },
+          { subjects: [:financial_incentive] },
+        ],
       )
     end
 
-    def latest_published_enrichment_left_join_sql
-      latest_published_enrichment_join_sql.sub("INNER JOIN LATERAL", "LEFT JOIN LATERAL")
+    def current_recruitment_cycle_id
+      @current_recruitment_cycle_id ||= RecruitmentCycle.current_recruitment_cycle!.id
     end
   end
 end

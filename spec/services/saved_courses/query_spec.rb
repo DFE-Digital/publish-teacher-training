@@ -232,6 +232,27 @@ RSpec.describe SavedCourses::Query do
 
       expect(results).to include(previous_cycle_saved)
     end
+
+    it "sorts a previous-cycle course by fee when it has a published enrichment" do
+      previous_cycle_saved = create(
+        :saved_course,
+        candidate:,
+        course: create(
+          :course,
+          :with_full_time_sites,
+          :fee,
+          name: "Mid Course",
+          provider: create(
+            :provider,
+            provider_name: "Mid University",
+            recruitment_cycle: find_or_create(:recruitment_cycle, :previous),
+          ),
+          enrichments: [build(:course_enrichment, :published, fee_uk_eu: 7000)],
+        ),
+      )
+
+      expect(results.map(&:id)).to eq([cheap_saved.id, previous_cycle_saved.id, expensive_saved.id])
+    end
   end
 
   context "when ordering by international fee ascending" do
