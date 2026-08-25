@@ -502,33 +502,4 @@ RSpec.describe Banner, type: :model do
       expect(banner.expire).to be false
     end
   end
-
-  describe "#publish" do
-    it "sets published_at to the given time on a scheduled banner" do
-      now = Time.zone.local(2026, 7, 1, 12, 0, 0)
-      banner = create(:banner, published_at: now + 1.day, expired_at: nil)
-
-      banner.publish(now)
-
-      expect(banner.reload.published_at).to eq(now)
-    end
-
-    it "sets published_at to the given time on a scheduled banner with an expiry" do
-      now = Time.zone.local(2026, 7, 1, 12, 0, 0)
-      banner = create(:banner, published_at: now + 1.day, expired_at: now + 2.days)
-
-      banner.publish(now)
-
-      expect(banner.reload.published_at).to eq(now)
-    end
-
-    it "sets published_at on a draft banner" do
-      now = Time.zone.local(2026, 7, 1, 12, 0, 0)
-      banner = create(:banner, published_at: nil, expired_at: nil)
-
-      banner.publish(now)
-
-      expect(banner.reload.published_at).to eq(now)
-    end
-  end
 end

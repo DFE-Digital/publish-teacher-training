@@ -49,6 +49,14 @@ module Banners
         (published_at..expiry).cover? now
       end
 
+      def deletable?(now = Time.current)
+        draft? || scheduled?(now)
+      end
+
+      def editable?(now = Time.current)
+        !expired?(now)
+      end
+
       def expired?(now = Time.current)
         return false if draft?
         return false unless expired_at

@@ -43,4 +43,17 @@ describe ActiveBannersComponent, type: :component do
   it "refuses an interface it does not know" do
     expect { render_inline(described_class.new(interface: :nonsense, flash: {})) }.to raise_error(KeyError)
   end
+
+  it "labels each banner with its own title so several on a page stay distinguishable" do
+    create(:banner, heading: "First", published_at: 2.days.ago)
+    create(:banner, heading: "Second", published_at: 1.day.ago)
+
+    result = render_inline(described_class.new(interface: :publish, flash: {}))
+
+    labelled_by = result.css(".govuk-notification-banner").map { |banner| banner["aria-labelledby"] }
+    title_ids = result.css(".govuk-notification-banner__title").map { |title| title["id"] }
+
+    expect(title_ids.uniq.size).to eq(2)
+    expect(labelled_by).to eq(title_ids)
+  end
 end

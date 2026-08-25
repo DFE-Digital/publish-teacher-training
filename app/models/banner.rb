@@ -21,10 +21,6 @@ class Banner < ApplicationRecord
     update(expired_at: now)
   end
 
-  def publish(now = Time.current)
-    update(published_at: now)
-  end
-
   def displayed_on
     interfaces = []
     interfaces << :find if display_on_find

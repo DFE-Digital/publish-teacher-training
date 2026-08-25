@@ -10,11 +10,11 @@ RSpec.describe "Banner management support" do
     sign_in_system_test(user: support_user)
   end
 
-  scenario "viewing draft banners" do
+  scenario "banners with no publish date wait on the scheduled tab" do
     given_there_are_draft_banners
-    when_i_visit_the_banners_page(:drafts)
+    when_i_visit_the_banners_page(:scheduled)
     then_i_see_the_banners_page
-    and_the_draft_tab_is_selected
+    and_the_scheduled_tab_is_selected
     and_i_see_the_draft_banners
   end
 
@@ -43,7 +43,7 @@ RSpec.describe "Banner management support" do
   end
 
   scenario "creating a new banner" do
-    when_i_visit_the_banners_page(:drafts)
+    when_i_visit_the_banners_page(:active)
     and_i_click_add_banner
     then_i_see_the_new_banner_page
 
@@ -53,14 +53,14 @@ RSpec.describe "Banner management support" do
   end
 
   scenario "creating a banner with invalid data shows errors" do
-    when_i_visit_the_banners_page(:drafts)
+    when_i_visit_the_banners_page(:active)
     and_i_click_add_banner
     and_i_submit_the_form
     then_i_see_validation_errors
   end
 
   scenario "creating a banner with all fields" do
-    when_i_visit_the_banners_page(:drafts)
+    when_i_visit_the_banners_page(:active)
     and_i_click_add_banner
     then_i_see_the_new_banner_page
 
@@ -101,23 +101,28 @@ RSpec.describe "Banner management support" do
 
   scenario "expire action is only shown for active banners" do
     given_there_are_draft_banners
-    when_i_visit_the_banners_page(:drafts)
+    when_i_visit_the_banners_page(:scheduled)
     then_i_do_not_see_the_expire_action
   end
 
-  scenario "publishing a scheduled banner" do
-    given_there_is_a_scheduled_banner
+  scenario "deleting a banner nobody has seen" do
+    given_there_are_draft_banners
     when_i_visit_the_banners_page(:scheduled)
-    and_i_click_publish_on_the_banner
-    then_the_banner_is_published
-    and_the_banner_is_no_longer_on_the_scheduled_tab
-    and_the_banner_appears_on_the_active_tab
+    and_i_click_delete_on_the_first_banner
+    and_i_confirm_the_deletion
+    then_the_banner_is_deleted
   end
 
-  scenario "publish action is only shown for scheduled banners" do
+  scenario "delete is not offered once a banner has been published" do
     given_there_are_active_banners
     when_i_visit_the_banners_page(:active)
-    then_i_do_not_see_the_publish_action
+    then_i_do_not_see_the_delete_action
+  end
+
+  scenario "an expired banner offers preview instead of edit" do
+    given_there_are_expired_banners
+    when_i_visit_the_banners_page(:expired)
+    then_the_name_links_to_the_preview
   end
 
 private
@@ -163,10 +168,6 @@ private
 
   def then_i_see_the_banners_page
     expect(page).to have_content("Banners")
-  end
-
-  def and_the_draft_tab_is_selected
-    expect(page).to have_css(".govuk-tabs__list-item--selected", text: "Draft")
   end
 
   def and_the_active_tab_is_selected
@@ -235,7 +236,7 @@ private
   end
 
   def then_the_banner_is_created
-    expect(page).to have_current_path(drafts_support_banners_path, ignore_query: true)
+    expect(page).to have_current_path(scheduled_support_banners_path, ignore_query: true)
 
     banner = Banner.last
     expect(banner.name).to eq("Important maintenance notice")
@@ -251,7 +252,6 @@ private
     fill_in "Name", with: "Full banner"
     fill_in "Title", with: "Important notice"
     fill_in "Title heading level", with: "3"
-    check "Success styling"
     fill_in "Heading", with: "Service update"
     fill_in "Body", with: "Please be aware of upcoming changes."
 
@@ -291,7 +291,6 @@ private
     expect(banner.name).to eq("Full banner")
     expect(banner.title).to eq("Important notice")
     expect(banner.title_heading_level).to eq(3)
-    expect(banner.success_styling).to be(true)
     expect(banner.heading).to eq("Service update")
     expect(banner.body).to eq("Please be aware of upcoming changes.")
     expect(banner.published_at).to eq(Time.zone.local(2026, 6, 1, 9, 30))
@@ -303,7 +302,7 @@ private
 
   def and_i_click_edit_on_the_banner
     within("tr", text: @active_banner.name) do
-      click_link_or_button "Edit"
+      click_link_or_button @active_banner.name
     end
   end
 
@@ -347,34 +346,30 @@ private
     expect(page).to have_no_button("Expire")
   end
 
-  def given_there_is_a_scheduled_banner
-    @scheduled_banner = create(:banner, name: "Banner to publish", published_at: 1.day.from_now, expired_at: 2.days.from_now)
-  end
-
-  def and_i_click_publish_on_the_banner
-    within("tr", text: @scheduled_banner.name) do
-      click_link_or_button "Publish"
+  def and_i_click_delete_on_the_first_banner
+    within("tr", text: @draft_banners.first.name) do
+      click_link_or_button "Delete"
     end
   end
 
-  def then_the_banner_is_published
-    expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
-    expect(@scheduled_banner.reload.published_at).to be <= Time.current
+  def and_i_confirm_the_deletion
+    click_link_or_button "Delete banner"
   end
 
-  def and_the_banner_is_no_longer_on_the_scheduled_tab
-    visit scheduled_support_banners_path
-    expect(page).to have_no_content(@scheduled_banner.name)
+  def then_the_banner_is_deleted
+    expect(page).to have_current_path(scheduled_support_banners_path, ignore_query: true)
+    expect(Banner.where(id: @draft_banners.first.id)).to be_empty
   end
 
-  def and_the_banner_appears_on_the_active_tab
-    visit active_support_banners_path
-    expect(page).to have_content(@scheduled_banner.name)
-    expect(page).to have_css(".govuk-tag", text: "Active")
+  def then_i_do_not_see_the_delete_action
+    expect(page).to have_no_link("Delete")
   end
 
-  def then_i_do_not_see_the_publish_action
-    expect(page).to have_no_button("Publish")
+  def then_the_name_links_to_the_preview
+    banner = @expired_banners.first
+    within("tr", text: banner.name) do
+      expect(page).to have_link(banner.name, href: support_banner_path(banner))
+    end
   end
 
   def when_i_clear_the_banner_name
