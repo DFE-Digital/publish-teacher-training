@@ -20,9 +20,17 @@ module ProviderSchoolHelper
     expect(publish_schools_index_page.schools.size).to eq(1)
 
     provider_school = provider.schools.first
-    expect(publish_schools_index_page.schools.first.name).to have_text(provider_school.location_name)
-    expect(publish_schools_index_page.schools.first.code).to have_text(provider_school.code)
-    expect(publish_schools_index_page.schools.first.urn).to have_text(provider_school.urn)
+    row = publish_schools_index_page.schools.first
+    expect(row.name).to have_text(provider_school.location_name)
+    expect(row.address).to have_text(provider_school.full_address)
+    expect(row.courses_count).to have_text("0 courses")
+    expect(row.remove_link[:href]).to include(
+      delete_publish_provider_recruitment_cycle_school_path(
+        provider.provider_code,
+        provider.recruitment_cycle_year,
+        provider_school.uuid,
+      ),
+    )
   end
 
   def then_i_am_on_the_index_page

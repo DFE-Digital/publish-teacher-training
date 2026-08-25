@@ -10,7 +10,10 @@ module Publish
 
       def index
         @filter = params[:filter]
-        @pagy, @schools = pagy(provider.schools.filtered_by(@filter).ordered_by_name, limit: PER_PAGE)
+        @pagy, @schools = pagy(
+          provider.schools.filtered_by(@filter).ordered_by_name.includes(:kept_courses),
+          limit: PER_PAGE,
+        )
       end
 
       def show; end
@@ -32,7 +35,7 @@ module Publish
           flash[:success] = "School removed"
           redirect_to publish_provider_recruitment_cycle_schools_path
         else
-          redirect_to delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.uuid),
+          redirect_to school_delete_path_with_return,
                       flash: { warning: cannot_remove_school_message }
         end
       end
@@ -54,6 +57,45 @@ module Publish
         @school ||= provider.schools.find_by!(uuid: params[:uuid]).decorate
       end
       helper_method :school
+
+      def school_delete_return_path
+        if returning_to_schools_index?
+          publish_provider_recruitment_cycle_schools_path(
+            @provider.provider_code,
+            school.recruitment_cycle.year,
+            **schools_index_return_params,
+          )
+        else
+          publish_provider_recruitment_cycle_school_path(
+            @provider.provider_code,
+            school.recruitment_cycle.year,
+            school.uuid,
+          )
+        end
+      end
+      helper_method :school_delete_return_path
+
+      def school_delete_path_with_return
+        delete_publish_provider_recruitment_cycle_school_path(
+          @provider.provider_code,
+          school.recruitment_cycle.year,
+          school.uuid,
+          **school_delete_return_params,
+        )
+      end
+      helper_method :school_delete_path_with_return
+
+      def returning_to_schools_index?
+        params[:from] == "index"
+      end
+
+      def school_delete_return_params
+        params.permit(:from, :filter, :page).to_h.compact_blank.symbolize_keys
+      end
+
+      def schools_index_return_params
+        school_delete_return_params.except(:from)
+      end
 
       def site_params(param_form_key)
         params.expect(param_form_key => SchoolForm::FIELDS)
