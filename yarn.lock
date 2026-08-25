@@ -3824,13 +3824,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.18.1":
-  version: 4.18.1
-  resolution: "lodash@npm:4.18.1"
-  checksum: 10c0/757228fc68805c59789e82185135cf85f05d0b2d3d54631d680ca79ec21944ec8314d4533639a14b8bcfbd97a517e78960933041a5af17ecb693ec6eecb99a27
-  languageName: node
-  linkType: hard
-
 "loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
@@ -4508,7 +4501,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.24, postcss@npm:^8.4.32":
+"postcss@npm:^8.4.32":
   version: 8.5.6
   resolution: "postcss@npm:8.5.6"
   dependencies:
@@ -5463,16 +5456,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-selector-bem-pattern@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "stylelint-selector-bem-pattern@npm:4.0.1"
+"stylelint-selector-bem-pattern@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "stylelint-selector-bem-pattern@npm:5.0.0"
   dependencies:
-    lodash: "npm:>=4.17.21"
-    postcss: "npm:^8.4.24"
+    postcss: "npm:^8.5.6"
     postcss-bem-linter: "npm:^4.0.1"
   peerDependencies:
-    stylelint: ^16.2.1
-  checksum: 10c0/28ed29d9cb439ec714a8d84a7cf77b0ec2a987dd4a77ec6554a40d5ad8ae71bb6e192d577470404a2367e13d0362b8cf830738bcf9506df99bf8b439776c972f
+    stylelint: ^17.0.0
+  checksum: 10c0/3a38f49faedcacec993c738718b82dc0d2ad85542c5513a0b9ee156abf8ebfb180570cecf039ce8f450c0b9c2ed20d3cfe9f7046277d271c5a620c18d9c0b106
   languageName: node
   linkType: hard
 
@@ -5613,7 +5605,7 @@ __metadata:
     stylelint-config-recess-order: "npm:^6.1.0"
     stylelint-config-standard: "npm:^40.0.0"
     stylelint-config-standard-scss: "npm:^17.0.0"
-    stylelint-selector-bem-pattern: "npm:^4.0.1"
+    stylelint-selector-bem-pattern: "npm:^5.0.0"
     vitest: "npm:^4.1.11"
   languageName: unknown
   linkType: soft
