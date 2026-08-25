@@ -1,10 +1,9 @@
 <%= govuk_notification_banner(
       title_text: banner.title,
       title_heading_level:,
-      success: banner.success_styling,
-      disable_auto_focus: true,
+      title_id:,
     ) do |notification_banner| %>
   <% notification_banner.with_heading(text: banner.heading) %>
 
-  <%= helpers.markdown(banner.body) %>
+  <%= body %>
 <% end %>

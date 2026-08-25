@@ -47,8 +47,6 @@ en:
         published_at_time: Publish time
         published_at_time_description: The time on that date the banner starts being shown.
         status: Status
-        success_styling: Success styling
-        success_styling_description: Will this banner be displayed with the success styling?
         title: Title
         title_description: The title of the banner, displayed to users.
         title_heading_level: Title heading level
@@ -59,10 +57,6 @@ en:
         create:
           failure: "Banner could not be expired"
           success: "Banner successfully expired"
-      publications:
-        create:
-          failure: "Banner could not be published"
-          success: "Banner successfully published"
       index:
         page_title: "Banners"
         add_banner: "Add banner"
@@ -82,9 +76,17 @@ en:
           headings:
             actions: "Actions"
           actions:
-            edit: "Edit"
+            preview: "Preview"
+            delete: "Delete"
             expire: "Expire"
-            publish: "Publish"
+      warnings:
+        expired: "Expired banners cannot be edited"
+        published: "Banners that have been published cannot be deleted"
+      delete:
+        page_caption: "Delete banner"
+        page_title: "Are you sure you want to delete %{name}?"
+        explanation: "This banner has not been published, so deleting it removes it before anyone sees it."
+        confirm: "Delete banner"
       new:
         page_title: "Banner details"
         page_caption: "Add banner"

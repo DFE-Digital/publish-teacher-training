@@ -4,7 +4,6 @@ class CreateBanner < ActiveRecord::Migration[8.1]
       t.string :name, null: false
       t.string :title
       t.integer :title_heading_level
-      t.boolean :success_styling
       t.string :heading
       t.text :body
       t.datetime :published_at

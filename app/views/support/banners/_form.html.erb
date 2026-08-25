@@ -27,15 +27,6 @@
     </div>
 
     <div class="govuk-form-group">
-      <%= form.govuk_check_box :success_styling,
-                               true,
-                               false,
-                               multiple: false,
-                               label: { text: Banner.human_attribute_name(:success_styling), size: "s" },
-                               hint: { text: Banner.human_attribute_name(:success_styling_description) } %>
-    </div>
-
-    <div class="govuk-form-group">
       <%= form.govuk_text_field :heading,
                                 label: { text: Banner.human_attribute_name(:heading), size: "s" },
                                 hint: { text: Banner.human_attribute_name(:heading_description) } %>

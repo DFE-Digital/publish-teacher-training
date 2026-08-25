@@ -29,19 +29,11 @@ describe BannerComponent, type: :component do
     expect(result.css("h3.govuk-notification-banner__title")).to be_present
   end
 
-  it "does not take focus on load the way a flash answering an action does" do
-    banner = build(:banner, success_styling: true)
+  it "styles body links for the banner rather than the page" do
+    banner = build(:banner, body: "Read the [service status page](https://example.com/status).")
 
-    result = render_inline(described_class.new(banner:))
+    render_inline(described_class.new(banner:))
 
-    expect(result.css(".govuk-notification-banner").attr("data-disable-auto-focus").value).to eq("true")
-  end
-
-  it "uses success styling when the banner asks for it" do
-    banner = build(:banner, success_styling: true)
-
-    result = render_inline(described_class.new(banner:))
-
-    expect(result.css(".govuk-notification-banner--success")).to be_present
+    expect(page.find("a")[:class]).to eq("govuk-notification-banner__link")
   end
 end
