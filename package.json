@@ -58,7 +58,7 @@
     "stylelint-config-recess-order": "^6.1.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-config-standard-scss": "^17.0.0",
-    "stylelint-selector-bem-pattern": "^4.0.1",
+    "stylelint-selector-bem-pattern": "^5.0.0",
     "vitest": "^4.1.11"
   },
   "packageManager": "yarn@4.18.0"
