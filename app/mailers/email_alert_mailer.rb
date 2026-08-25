@@ -25,7 +25,7 @@ class EmailAlertMailer < GovukNotifyRails::Mailer
     @unsubscribe_url = unsubscribe_url(email_alert)
     @utm_params = UTM_PARAMS
 
-    search_params = email_alert.search_params
+    search_params = email_alert.search_params_for_matching
     search_params[:order] = "newest_course" if @remaining_count.positive?
     @search_url = find_results_url(search_params)
     @summary_rows = build_summary_rows(

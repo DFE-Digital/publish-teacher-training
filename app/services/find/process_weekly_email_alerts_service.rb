@@ -32,9 +32,7 @@ module Find
   private
 
     def find_matching_courses(alert, recently_published_ids)
-      params = alert.search_params.dup.merge(applications_open: true)
-
-      ::Courses::Query.call(params:).where(id: recently_published_ids)
+      ::Courses::Query.call(params: alert.search_params_for_matching).where(id: recently_published_ids)
     end
   end
 end
