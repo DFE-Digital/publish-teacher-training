@@ -71,6 +71,40 @@ RSpec.describe Candidate::EmailAlert, type: :model do
     end
   end
 
+  describe "#search_params_for_matching" do
+    it "forces the applications open filter on top of the saved criteria" do
+      email_alert = build(
+        :email_alert,
+        subjects: %w[C1],
+        search_attributes: { "funding" => "salary" },
+      )
+
+      result = email_alert.search_params_for_matching
+
+      expect(result).to eq(
+        funding: "salary",
+        subjects: %w[C1],
+        applications_open: true,
+      )
+    end
+
+    it "keeps the filter on when the alert already saved it" do
+      email_alert = build(:email_alert, subjects: [], search_attributes: { "applications_open" => "true" })
+
+      result = email_alert.search_params_for_matching
+
+      expect(result).to eq(applications_open: true)
+    end
+
+    it "leaves the saved criteria untouched" do
+      email_alert = build(:email_alert, subjects: [], search_attributes: { "level" => "primary" })
+
+      email_alert.search_params_for_matching
+
+      expect(email_alert.search_params).to eq(level: "primary")
+    end
+  end
+
   describe "subscription limit validation" do
     it "is valid when below the subscription limit" do
       candidate = create(:candidate)

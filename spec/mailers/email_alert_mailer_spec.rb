@@ -131,6 +131,33 @@ describe EmailAlertMailer do
       body = mail.govuk_notify_personalisation[:body]
       expect(body).not_to include("order=newest_course")
     end
+
+    it "filters the search URL to open courses so it cannot offer what the alert excluded" do
+      many_courses = create_list(:course, 4, :published, :with_accrediting_provider)
+      mail = described_class.weekly_digest(email_alert, many_courses)
+
+      body = mail.govuk_notify_personalisation[:body]
+      view_more_url = body[%r{\(\S*/results\?\S+\)}].delete("()")
+
+      expect(view_more_url).to include("applications_open=true")
+    end
+
+    context "when the alert saved criteria of its own" do
+      let(:email_alert) do
+        create(:email_alert, candidate:, subjects: %w[C1], search_attributes: { "funding" => "salary" })
+      end
+
+      it "keeps them alongside the forced open filter" do
+        many_courses = create_list(:course, 4, :published, :with_accrediting_provider)
+        mail = described_class.weekly_digest(email_alert, many_courses)
+
+        body = mail.govuk_notify_personalisation[:body]
+        view_more_url = body[%r{\(\S*/results\?\S+\)}].delete("()")
+
+        expect(view_more_url).to include("applications_open=true")
+        expect(view_more_url).to include("funding=salary")
+      end
+    end
   end
 
   describe "sanitisation of user-controlled input" do
