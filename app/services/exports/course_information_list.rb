@@ -61,29 +61,11 @@ module Exports
       Publish::Courses::Query.call(provider:).preload(:enrichments)
     end
 
-    # Use status as CourseEnrichment#draft? also counts rolled_over
-    def reported_enrichment(course)
-      settled = course.enrichments.reject { |enrichment| enrichment.status == "draft" }
-      settled.max_by { |enrichment| [enrichment.created_at, enrichment.id] } || course.latest_enrichment
-    end
-
     def accredited_provider(course)
       code = course.accredited_provider_code
       return provider.provider_name if code.blank? || code == provider.provider_code
 
       course[:group_name] || code
-    end
-
-    def start_date(course)
-      return if course.start_date.blank?
-
-      I18n.l(course.start_date.to_date, format: :short)
-    end
-
-    def course_length(value)
-      return if value.blank?
-
-      I18n.t("courses.summary_card_component.length_value.#{value}", default: value)
     end
   end
 end

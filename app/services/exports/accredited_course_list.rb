@@ -4,18 +4,25 @@ require "csv"
 
 module Exports
   class AccreditedCourseList
+    include ActionView::Helpers::NumberHelper
+    include CourseColumns
+
     CSV_HEADERS = [
-      "Provider code",
       "Provider",
+      "Provider code",
+      "Course name",
       "Course code",
-      "Course",
-      "Study mode",
-      "Programme type",
-      "Qualification",
       "Status",
+      "Age range",
+      "Fee or salary",
+      "Qualification",
+      "Full time or part time",
+      "Start date",
+      "Course length",
+      "UK fee",
+      "Non-UK fee",
       "View on Find",
-      "Applications open from",
-      "Campus Codes",
+      "Campus codes",
     ].freeze
 
     def initialize(courses:)
@@ -23,22 +30,27 @@ module Exports
     end
 
     def data
-      CSV.generate(headers: CSV_HEADERS, write_headers: true) do |csv|
+      BYTE_ORDER_MARK + CSV.generate(headers: CSV_HEADERS, write_headers: true) do |csv|
         courses.find_each do |course|
           decorated_course = course.decorate
+          enrichment = reported_enrichment(course)
 
           csv << [
-            decorated_course.provider.provider_code,
-            decorated_course.provider.provider_name,
-            decorated_course.course_code,
-            decorated_course.name,
-            decorated_course.study_mode&.humanize,
-            decorated_course.program_type&.humanize,
+            course.provider.provider_name,
+            course.provider.provider_code,
+            course.name,
+            course.course_code,
+            course.content_status&.to_s&.humanize,
+            age_range(course),
+            I18n.t("publish.courses.course_table.funding.#{course.funding}"),
             decorated_course.outcome,
-            decorated_course.content_status&.to_s&.humanize,
+            course.study_mode_description.capitalize,
+            start_date(course),
+            course_length(enrichment&.course_length),
+            number_to_currency(enrichment&.fee_uk_eu),
+            number_to_currency(enrichment&.fee_international),
             decorated_course.find_url,
-            I18n.l(decorated_course.applications_open_from&.to_date),
-            decorated_course.sites&.map(&:code)&.join(" "),
+            course.sites.map(&:code).sort.join(" "),
           ]
         end
       end
