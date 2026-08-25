@@ -471,9 +471,11 @@ module Courses
     # so that subclasses starting from a different model (e.g. SavedCourse) can
     # reuse the fee ordering scopes - .joins(string) works on any relation where
     # the course table is available, while model scopes are tied to one model.
-    def latest_published_enrichment_join_sql
+    #
+    # Pass join_type: "LEFT" to keep rows that have no published enrichment.
+    def latest_published_enrichment_join_sql(join_type: "INNER")
       <<~SQL.squish
-        INNER JOIN LATERAL (
+        #{join_type} JOIN LATERAL (
           SELECT *
           FROM course_enrichment
           WHERE course_enrichment.course_id = course.id

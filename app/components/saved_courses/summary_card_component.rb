@@ -72,7 +72,7 @@ module SavedCourses
     end
 
     def course_from_previous_year?
-      course.recruitment_cycle.year.to_i < Find::CycleTimetable.current_year
+      @course_from_previous_year ||= course.recruitment_cycle.year.to_i < Find::CycleTimetable.current_year
     end
   end
 end
