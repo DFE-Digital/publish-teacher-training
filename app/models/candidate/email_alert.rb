@@ -23,6 +23,12 @@ class Candidate
       params
     end
 
+    # Alerts only ever offer courses a candidate can still apply to, so both the
+    # matching and the "view more" link in the email have to agree on that.
+    def search_params_for_matching
+      search_params.merge(applications_open: true)
+    end
+
     def unsubscribe!
       update!(unsubscribed_at: Time.current)
     end
