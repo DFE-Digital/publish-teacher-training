@@ -13,10 +13,32 @@ RSpec.describe "Delete a provider's schools" do
     when_i_visit_the_publish_school_show_page
     and_i_click_remove_school_link
     then_i_am_on_the_school_delete_page
+    when_i_click_back
+    then_i_am_on_the_school_show_page
+
+    and_i_click_remove_school_link
     when_i_click_cancel
     then_i_am_on_the_school_show_page
 
     and_i_click_remove_school_link
+    and_i_click_remove_school_button
+    then_i_am_on_the_index_page
+    and_the_school_is_deleted
+  end
+
+  scenario "from the schools index page" do
+    given_i_am_authenticated_as_a_provider_user_with_two_schools
+    when_i_visit_the_schools_page
+    and_i_click_remove_school_from_the_index
+    then_i_am_on_the_school_delete_page
+    when_i_click_back
+    then_i_am_on_the_index_page
+
+    and_i_click_remove_school_from_the_index
+    when_i_click_cancel
+    then_i_am_on_the_index_page
+
+    and_i_click_remove_school_from_the_index
     and_i_click_remove_school_button
     then_i_am_on_the_index_page
     and_the_school_is_deleted
@@ -135,9 +157,10 @@ RSpec.describe "Delete a provider's schools" do
   def then_i_see_the_provider_school_listed_with_its_uuid
     row = school_row(future_gias_school.name)
 
-    expect(row.code).to have_text("- (dash)")
-    expect(row.urn).to have_text(future_gias_school.urn)
+    expect(row.address).to have_text(future_provider_school.full_address)
+    expect(row.courses_count).to have_text("0 courses")
     expect(row.edit_link[:href]).to include(future_provider_school.uuid)
+    expect(row.remove_link[:href]).to include(future_provider_school.uuid)
   end
 
   def when_i_click_the_provider_school
@@ -203,12 +226,20 @@ RSpec.describe "Delete a provider's schools" do
     click_link_or_button "Remove school"
   end
 
+  def and_i_click_remove_school_from_the_index
+    school_row(provider_school.location_name).remove_link.click
+  end
+
   def then_i_am_on_the_school_delete_page
     expect(publish_school_delete_page).to be_displayed
   end
 
   def when_i_click_cancel
     click_link_or_button "Cancel"
+  end
+
+  def when_i_click_back
+    click_link_or_button "Back"
   end
 
   def and_i_click_remove_school_button

@@ -9,6 +9,7 @@ describe Provider::School do
     it { is_expected.to belong_to(:provider) }
     it { is_expected.to belong_to(:gias_school) }
     it { is_expected.to have_many(:course_schools).class_name("Course::School").dependent(:destroy) }
+    it { is_expected.to have_many(:kept_courses).through(:course_schools).source(:course) }
   end
 
   describe ".with_available_gias_school" do
@@ -46,6 +47,23 @@ describe Provider::School do
       schools = create_list(:provider_school, 2)
 
       expect(described_class.filtered_by("")).to match_array(schools)
+    end
+  end
+
+  describe "#courses_count" do
+    it "counts kept courses attached to the school" do
+      provider_school = create(:provider_school)
+      kept_course = create(:course, provider: provider_school.provider)
+      discarded_course = create(:course, provider: provider_school.provider)
+      create(:course_school, course: kept_course, provider_school:, gias_school: provider_school.gias_school)
+      create(:course_school, course: discarded_course, provider_school:, gias_school: provider_school.gias_school)
+      discarded_course.discard
+
+      expect(provider_school.courses_count).to eq(1)
+    end
+
+    it "returns zero when a school has no courses" do
+      expect(create(:provider_school).courses_count).to eq(0)
     end
   end
 

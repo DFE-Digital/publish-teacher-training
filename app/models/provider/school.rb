@@ -15,6 +15,7 @@ class Provider::School < ApplicationRecord
   belongs_to :gias_school
 
   has_many :course_schools, class_name: "Course::School", inverse_of: :provider_school, dependent: :destroy
+  has_many :kept_courses, -> { kept }, through: :course_schools, source: :course
 
   # Provider schools whose GIAS record is still available (i.e. not closed).
   # Used to keep closed schools out of the rollover.
@@ -70,5 +71,9 @@ class Provider::School < ApplicationRecord
       gias_school.county,
       gias_school.postcode,
     ].compact_blank.join(join_on_separator)
+  end
+
+  def courses_count
+    kept_courses.size
   end
 end

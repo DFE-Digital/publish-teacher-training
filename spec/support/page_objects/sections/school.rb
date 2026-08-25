@@ -8,6 +8,9 @@ module PageObjects
       element :name, ".name"
       element :code, ".code"
       element :urn, ".urn"
+      element :address, ".address"
+      element :courses_count, ".courses-count"
+      element :remove_link, ".remove a"
       element :edit_link, ".name a"
     end
   end

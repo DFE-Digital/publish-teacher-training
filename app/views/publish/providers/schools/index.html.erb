@@ -25,14 +25,8 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col"><%= t(".name") %></th>
-            <th class="govuk-table__header" scope="col"><%= t(".code") %></th>
-            <% if urn_required?(@recruitment_cycle.year.to_i) %>
-              <th class="govuk-table__header" scope="col">
-                <abbr class="app-!-text-decoration-underline-dotted" title="<%= t(".urn_abbr") %>">
-                  <%= t(".urn") %>
-                </abbr>
-              </th>
-            <% end %>
+            <th class="govuk-table__header" scope="col"><%= t(".courses_attached") %></th>
+            <th class="govuk-table__header" scope="col"><%= t(".remove") %></th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">

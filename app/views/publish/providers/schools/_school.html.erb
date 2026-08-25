@@ -3,14 +3,22 @@
     <%= govuk_link_to school.location_name, publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.uuid) %>
 
     <%= render Publish::Schools::NewlyAddedTagComponent.new(school:) %>
+    <p class="govuk-body govuk-hint address"><%= school.full_address %></p>
   </th>
 
-  <td class="govuk-table__cell code">
-    <%= school.code %> <%= school.code == "-" ? "(dash)" : "" %>
+  <td class="govuk-table__cell courses-count">
+    <%= t("publish.providers.schools.index.courses_count", count: school.courses_count) %>
   </td>
-  <% if urn_required?(@recruitment_cycle.year.to_i) %>
-    <td class="govuk-table__cell urn">
-      <%= value_provided?(school.urn) %>
-    </td>
-  <% end %>
+  <td class="govuk-table__cell remove">
+    <%= govuk_link_to(
+      t("publish.providers.schools.index.remove"),
+      delete_publish_provider_recruitment_cycle_school_path(
+        @provider.provider_code,
+        school.recruitment_cycle.year,
+        school.uuid,
+        { from: :index, filter: @filter, page: params[:page] }.compact_blank,
+      ),
+      class: "app-link--destructive",
+    ) %>
+  </td>
 </tr>

@@ -6,10 +6,12 @@ en:
           title: Schools
           add_school: Add school
           add_multiple_school: Add multiple school
-          name: School name
-          code: School code
-          urn: URN
-          urn_abbr: Unique Reference Number
+          name: School
+          courses_attached: Number of courses attached
+          courses_count:
+            one: "%{count} course"
+            other: "%{count} courses"
+          remove: Remove school
         show:
           code: School code
           urn: URN

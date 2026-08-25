@@ -65,9 +65,27 @@ RSpec.describe "Publish provider school show page", service: :publish do
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("St Joseph")
         expect(response.body).to include("Catholic Primary School")
-        expect(response.body).to include("A")
-        expect(response.body).to include("112992")
+        expect(response.body).to include("1 School Lane")
+        expect(response.body).to include("0 courses")
+        expect(response.body).to include("Number of courses attached")
+        expect(response.body).to include("Remove school")
+        expect(response.body).not_to include("School code")
+        expect(response.body).not_to include("112992")
         expect(response.body).to include(publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid))
+        expect(response.body).to include(delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid))
+      end
+
+      it "shows how many kept courses are attached to each school" do
+        kept_course = create(:course, provider:)
+        discarded_course = create(:course, provider:)
+        create(:course_school, course: kept_course, provider_school:, gias_school:)
+        create(:course_school, course: discarded_course, provider_school:, gias_school:)
+        discarded_course.discard
+
+        get publish_provider_recruitment_cycle_schools_path(provider.provider_code, recruitment_cycle.year)
+
+        expect(response.body).to include("1 course")
+        expect(response.body).not_to include("2 courses")
       end
     end
   end
@@ -184,6 +202,32 @@ RSpec.describe "Publish provider school show page", service: :publish do
       expect(response.body).to include("Catholic Primary School")
     end
 
+    it "links back to the school page by default" do
+      get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
+
+      expect(response.body).to include(
+        publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid),
+      )
+    end
+
+    it "links back to the filtered schools list when opened from the index" do
+      get delete_publish_provider_recruitment_cycle_school_path(
+        provider.provider_code,
+        recruitment_cycle.year,
+        provider_school.uuid,
+        from: "index",
+        filter: "Bramblewood",
+      )
+
+      expect(response.body).to include(
+        publish_provider_recruitment_cycle_schools_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          filter: "Bramblewood",
+        ),
+      )
+    end
+
     context "when it is the provider's only school" do
       let!(:other_provider_school) { nil }
 
@@ -251,6 +295,29 @@ RSpec.describe "Publish provider school show page", service: :publish do
 
       expect(response).to redirect_to(delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle.year, provider_school.uuid))
       expect(flash[:warning]).to eq("This school could not be removed because it is your only school")
+    end
+
+    it "keeps the original return params when the school cannot be removed" do
+      course = create(:course, provider:)
+      create(:course_school, course:, gias_school:, provider_school:)
+
+      delete publish_provider_recruitment_cycle_school_path(
+        provider.provider_code,
+        provider.recruitment_cycle.year,
+        provider_school.uuid,
+        from: "index",
+        filter: "Bramblewood",
+      )
+
+      expect(response).to redirect_to(
+        delete_publish_provider_recruitment_cycle_school_path(
+          provider.provider_code,
+          provider.recruitment_cycle.year,
+          provider_school.uuid,
+          from: "index",
+          filter: "Bramblewood",
+        ),
+      )
     end
   end
 end
