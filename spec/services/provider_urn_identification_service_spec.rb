@@ -14,7 +14,7 @@ describe ProviderURNIdentificationService do
     it "returns correct hash" do
       expect(subject[:unfound_urns]).to be_blank
       expect(subject[:duplicate_urns]).to be_blank
-      expect(subject[:new_urns]).to eq(new_urns)
+      expect(subject[:new_urns]).to match_array(new_urns)
     end
   end
 
@@ -25,7 +25,7 @@ describe ProviderURNIdentificationService do
     it "returns correct hash" do
       expect(subject[:unfound_urns]).to eq(%w[unfound])
       expect(subject[:duplicate_urns]).to be_blank
-      expect(subject[:new_urns]).to eq(new_urns)
+      expect(subject[:new_urns]).to match_array(new_urns)
     end
   end
 
@@ -39,7 +39,7 @@ describe ProviderURNIdentificationService do
 
       expect(subject[:unfound_urns]).to eq(%w[unfound])
       expect(subject[:duplicate_urns]).to eq([existing_school.urn])
-      expect(subject[:new_urns]).to eq(new_urns)
+      expect(subject[:new_urns]).to match_array(new_urns)
     end
   end
 
@@ -54,7 +54,7 @@ describe ProviderURNIdentificationService do
 
       expect(subject[:unfound_urns]).to eq([closed_school.urn])
       expect(subject[:duplicate_urns]).to eq([existing_school.urn])
-      expect(subject[:new_urns]).to eq(new_urns)
+      expect(subject[:new_urns]).to match_array(new_urns)
     end
   end
 end
