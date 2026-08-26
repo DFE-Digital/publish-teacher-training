@@ -18,7 +18,7 @@ RSpec.describe "Banners on the Find interface", service: :find do
 private
 
   def given_there_is_an_active_find_banner
-    @banner = create(:banner, heading: "Find notice", body: "Maintenance this weekend.", published_at: 1.day.ago, display_on_find: true)
+    @banner = create(:banner, body: "Maintenance this weekend.", published_at: 1.day.ago, display_on_find: true)
   end
 
   def when_i_visit_the_find_homepage
@@ -33,7 +33,6 @@ private
   end
 
   def then_i_see_the_banner
-    expect(page).to have_content("Find notice")
     expect(page).to have_content("Maintenance this weekend.")
   end
 

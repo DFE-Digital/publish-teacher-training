@@ -70,7 +70,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_27_153000) do
     t.boolean "display_on_publish"
     t.boolean "display_on_support"
     t.datetime "expired_at"
-    t.string "heading"
     t.string "name", null: false
     t.datetime "published_at"
     t.datetime "updated_at", null: false

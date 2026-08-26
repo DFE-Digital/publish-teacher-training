@@ -20,7 +20,7 @@ RSpec.describe "Banners on the Publish interface" do
 private
 
   def given_there_is_an_active_publish_banner
-    @banner = create(:banner, heading: "Publish notice", body: "Planned downtime.", published_at: 1.day.ago, display_on_publish: true)
+    @banner = create(:banner, body: "Planned downtime.", published_at: 1.day.ago, display_on_publish: true)
   end
 
   def and_i_am_authenticated
@@ -46,7 +46,6 @@ private
   end
 
   def then_i_see_the_banner
-    expect(page).to have_content("Publish notice")
     expect(page).to have_content("Planned downtime.")
   end
 

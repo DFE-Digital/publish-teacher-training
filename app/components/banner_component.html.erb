@@ -1,8 +1,6 @@
 <%= govuk_notification_banner(
       title_text: t(".title"),
       title_id:,
-    ) do |notification_banner| %>
-  <% notification_banner.with_heading(text: banner.heading) %>
-
+    ) do %>
   <%= body %>
 <% end %>

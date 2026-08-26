@@ -194,7 +194,6 @@ private
 
   def when_i_fill_in_the_banner_form
     fill_in "Name", with: "Important maintenance notice"
-    fill_in "Heading", with: "Planned maintenance"
     fill_in "Body", with: "The service will be unavailable on Saturday."
 
     publish_on = 1.month.from_now
@@ -225,7 +224,6 @@ private
 
     banner = Banner.last
     expect(banner.name).to eq("Important maintenance notice")
-    expect(banner.heading).to eq("Planned maintenance")
     expect(banner.body).to eq("The service will be unavailable on Saturday.")
     expect(banner.display_on_find).to be(true)
     expect(banner.display_on_publish).to be(true)
@@ -234,7 +232,6 @@ private
 
   def when_i_fill_in_all_banner_fields
     fill_in "Name", with: "Full banner"
-    fill_in "Heading", with: "Service update"
     fill_in "Body", with: "Please be aware of upcoming changes."
 
     within_fieldset("Publish date") do
@@ -271,7 +268,6 @@ private
 
     banner = Banner.last
     expect(banner.name).to eq("Full banner")
-    expect(banner.heading).to eq("Service update")
     expect(banner.body).to eq("Please be aware of upcoming changes.")
     expect(banner.published_at).to eq(Time.zone.local(2026, 6, 1, 9, 30))
     expect(banner.expired_at).to eq(Time.zone.local(2026, 6, 30, 17, 0))
