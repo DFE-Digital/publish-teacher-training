@@ -58,8 +58,8 @@
       </div>
     </div>
 
-    <%= form.govuk_check_boxes_fieldset :displayed_on, legend: { text: Banner.human_attribute_name(:display_on_description) } do %>
-      <%= form.govuk_check_box :display_on_find, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_find) } %>
+    <%= form.govuk_check_boxes_fieldset :display_on_find, legend: { text: Banner.human_attribute_name(:display_on_description) } do %>
+      <%= form.govuk_check_box :display_on_find, true, false, multiple: false, link_errors: true, label: { text: Banner.human_attribute_name(:display_on_find) } %>
       <%= form.govuk_check_box :display_on_publish, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_publish) } %>
       <%= form.govuk_check_box :display_on_support, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_support) } %>
     <% end %>

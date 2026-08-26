@@ -25,6 +25,6 @@ class Banner < ApplicationRecord
 private
 
   def displayed_on_an_interface
-    errors.add(:displayed_on, :blank) if displayed_on.empty?
+    errors.add(:display_on_find, :blank) if displayed_on.empty?
   end
 end

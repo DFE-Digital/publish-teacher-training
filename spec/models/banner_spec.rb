@@ -20,7 +20,7 @@ RSpec.describe Banner, type: :model do
         banner = build(:banner, display_on_find: false, display_on_publish: false, display_on_support: false)
 
         expect(banner).not_to be_valid
-        expect(banner.errors[:displayed_on]).to contain_exactly("Select at least one interface to display the banner on")
+        expect(banner.errors[:display_on_find]).to contain_exactly("Select at least one interface to display the banner on")
       end
     end
 

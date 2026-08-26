@@ -4,7 +4,7 @@ en:
       models:
         banner:
           attributes:
-            displayed_on:
+            display_on_find:
               blank: Select at least one interface to display the banner on
             expired_at:
               greater_than_or_equal_to: Expiry date must be the same as or after the publish date
