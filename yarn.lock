@@ -2826,6 +2826,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"govuk-frontend@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "govuk-frontend@npm:6.4.0"
+  checksum: 10c0/0bbf3e9960e6759a9fc39a7b03d3730c35ea0fa612d83a335822b9813c725f05cab349e2ca23a3d188c2251db96a8ddb6b5b9499061fcda5cf3f8bb07dcb28b7
+  languageName: node
+  linkType: hard
+
 "govuk-one-login-service-header@https://github.com/govuk-one-login/service-header#v4.0.0":
   version: 3.1.1
   resolution: "govuk-one-login-service-header@https://github.com/govuk-one-login/service-header.git#commit=09a5439a1888a0aa82d52496fd2a67a705e5629e"
@@ -5559,7 +5566,7 @@ __metadata:
     "@ministryofjustice/frontend": "npm:2.0.0"
     dfe-autocomplete: "DFE-Digital/dfe-autocomplete#v1.0.0"
     esbuild: "npm:^0.25.8"
-    govuk-frontend: "npm:^5.11.1"
+    govuk-frontend: "npm:^6.4.0"
     govuk-one-login-service-header: "https://github.com/govuk-one-login/service-header#v4.0.0"
     jquery: "npm:^3.6.0"
     jsdom: "npm:^30.0.1"
