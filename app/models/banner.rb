@@ -3,7 +3,7 @@ class Banner < ApplicationRecord
   validates :name, presence: true
   validates :name, length: { maximum: 255, minimum: 2 }, allow_blank: true
 
-  validates :heading, presence: true
+  validates :body, presence: true
 
   validates :published_at, presence: true
   validates :expired_at, comparison: { greater_than_or_equal_to: :published_at }, if: -> { expired_at.present? && published_at.present? }

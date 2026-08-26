@@ -25,7 +25,7 @@ private
   end
 
   def given_there_is_an_active_support_banner
-    @banner = create(:banner, heading: "Support notice", body: "System update pending.", published_at: 1.day.ago, display_on_support: true)
+    @banner = create(:banner, body: "System update pending.", published_at: 1.day.ago, display_on_support: true)
   end
 
   def when_i_visit_the_support_root
@@ -33,7 +33,6 @@ private
   end
 
   def then_i_see_the_banner
-    expect(page).to have_content("Support notice")
     expect(page).to have_content("System update pending.")
   end
 end

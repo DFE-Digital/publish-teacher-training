@@ -8,8 +8,8 @@ en:
               blank: Select at least one interface to display the banner on
             expired_at:
               greater_than_or_equal_to: Expiry date must be the same as or after the publish date
-            heading:
-              blank: Enter a heading
+            body:
+              blank: Enter the text to show in the banner
             name:
               blank: Enter a name to identify this banner
               too_long: Banner name must be 255 characters or fewer
@@ -19,7 +19,7 @@ en:
     attributes:
       banner:
         body: Body
-        body_description: Extra detail below the message. Leave blank for a single-line notification.
+        body_description: The text shown to users. Use Markdown to add links or bullet points.
         display_on_description: Displayed on
         display_on_find: Find
         display_on_publish: Publish
@@ -30,8 +30,6 @@ en:
         expired_at_date_description: The date the banner stops being shown. Leave blank for no expiry.
         expired_at_time: Expiry time
         expired_at_time_description: The time on that date the banner stops being shown.
-        heading: Heading
-        heading_description: The main message, shown in bold at the top of the banner.
         name: Name
         name_description: The name of the banner, used for internal reference only.
         published_at: Published

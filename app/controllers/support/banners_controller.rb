@@ -79,7 +79,6 @@ module Support
         display_on_publish
         display_on_support
         expired_at
-        heading
         name
         published_at
       ])

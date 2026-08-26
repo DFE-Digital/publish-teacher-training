@@ -13,12 +13,6 @@
     </div>
 
     <div class="govuk-form-group">
-      <%= form.govuk_text_field :heading,
-                                label: { text: Banner.human_attribute_name(:heading), size: "s" },
-                                hint: { text: Banner.human_attribute_name(:heading_description) } %>
-    </div>
-
-    <div class="govuk-form-group">
       <%= form.govuk_text_area :body,
                                label: { text: Banner.human_attribute_name(:body), size: "s" },
                                hint: { text: Banner.human_attribute_name(:body_description) } %>
