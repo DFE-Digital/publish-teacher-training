@@ -40,18 +40,6 @@ RSpec.describe "Support provider schools" do
     end
   end
 
-  # Schools are added through search -> check. The page that posted here was
-  # deleted in 8ab6a3978, which left this action behind.
-  describe "POST /support/:recruitment_cycle_year/providers/:provider_id/schools" do
-    it "is not routed" do
-      declared = Rails.application.routes.routes.map do |route|
-        [route.verb, route.defaults[:controller], route.defaults[:action]]
-      end
-
-      expect(declared).not_to include(["POST", "support/providers/schools", "create"])
-    end
-  end
-
   describe "GET /support/:recruitment_cycle_year/providers/:provider_id/schools/:uuid" do
     let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "A") }
 
