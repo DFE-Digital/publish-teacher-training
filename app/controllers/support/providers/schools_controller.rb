@@ -4,7 +4,6 @@ module Support
   module Providers
     class SchoolsController < ApplicationController
       before_action :reset_urn_form, only: %i[index]
-      before_action :school, only: %i[show delete destroy]
 
       PER_PAGE = 20
 
@@ -12,9 +11,13 @@ module Support
         @pagy, @schools = pagy(provider.schools.ordered_by_name, limit: PER_PAGE)
       end
 
-      def show; end
+      def show
+        render locals: { school: }
+      end
 
-      def delete; end
+      def delete
+        render locals: { school:, school_removal: }
+      end
 
       def destroy
         if school_removal.call
@@ -44,7 +47,6 @@ module Support
       def school
         @school ||= school_removal.school.decorate
       end
-      helper_method :school
 
       def reset_urn_form
         URNForm.new(provider).clear_stash
@@ -53,7 +55,6 @@ module Support
       def school_removal
         @school_removal ||= ProviderSchools::Removal.new(provider:, uuid: params[:uuid])
       end
-      helper_method :school_removal
     end
   end
 end
