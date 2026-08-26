@@ -73,6 +73,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
         expect(response.body).not_to include("112992")
         expect(response.body).to include(publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid))
         expect(response.body).to include(delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid))
+        expect(response.parsed_body.at_css(".remove a").text.squish).to eq("Remove school St Joseph's Catholic Primary School")
       end
 
       it "shows how many kept courses are attached to each school" do
