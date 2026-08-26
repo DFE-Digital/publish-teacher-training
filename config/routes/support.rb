@@ -123,7 +123,6 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
     end
   end
   resources :banners, only: %i[show new create edit update destroy] do
-    resource :expiration, only: [:create], controller: "banners/expirations"
     member do
       get :delete
     end

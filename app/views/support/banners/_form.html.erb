@@ -13,20 +13,6 @@
     </div>
 
     <div class="govuk-form-group">
-      <%= form.govuk_text_field :title,
-                                label: { text: Banner.human_attribute_name(:title), size: "s" },
-                                hint: { text: Banner.human_attribute_name(:title_description) } %>
-    </div>
-
-    <div class="govuk-form-group">
-      <%= form.govuk_text_field :title_heading_level,
-                                inputmode: :numeric,
-                                class: "govuk-input--width-4",
-                                label: { text: Banner.human_attribute_name(:title_heading_level), size: "s" },
-                                hint: { text: Banner.human_attribute_name(:title_heading_level_description) } %>
-    </div>
-
-    <div class="govuk-form-group">
       <%= form.govuk_text_field :heading,
                                 label: { text: Banner.human_attribute_name(:heading), size: "s" },
                                 hint: { text: Banner.human_attribute_name(:heading_description) } %>

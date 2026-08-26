@@ -7,14 +7,14 @@
 
   <%= tag.div do %>
     <% tabs = [
-      { status: :active, path_to: active_support_banners_path },
       { status: :scheduled, path_to: scheduled_support_banners_path },
+      { status: :active, path_to: active_support_banners_path },
       { status: :expired, path_to: expired_support_banners_path },
     ] %>
     <ul class="govuk-tabs__list">
-      <% tabs.each.with_index do |tab, i| %>
+      <% tabs.each do |tab| %>
         <%= tag.li(class: class_names("govuk-tabs__list-item", "govuk-tabs__list-item--selected" => @scope_status == tab[:status])) do %>
-          <%= link_to(t("support.banners.index.statuses.#{tab[:status]}"), tab[:path_to], class: "govuk-tabs__tab") %>
+          <%= link_to(t(".statuses.#{tab[:status]}"), tab[:path_to], class: "govuk-tabs__tab") %>
         <% end %>
       <% end %>
     </ul>
@@ -24,11 +24,14 @@
     <% table.with_head do |head| %>
       <% head.with_row do |row| %>
         <% row.with_cell text: Banner.human_attribute_name(:name) %>
-        <% row.with_cell text: Banner.human_attribute_name(:published_at) %>
-        <% row.with_cell text: Banner.human_attribute_name(:expired_at) %>
+        <% row.with_cell text: t(".columns.#{@scope_status}.published_at") %>
+        <% row.with_cell text: t(".columns.#{@scope_status}.expired_at") %>
         <% row.with_cell text: Banner.human_attribute_name(:displayed_on) %>
         <% row.with_cell text: Banner.human_attribute_name(:status) %>
-        <% row.with_cell text: t("support.banners.index.table.headings.actions"), classes: "app-table--banners__actions" %>
+        <% row.with_cell text: t(".table.headings.preview") %>
+        <% if @scope_status == :scheduled %>
+          <% row.with_cell text: t(".table.headings.actions"), classes: "app-table--banners__actions" %>
+        <% end %>
       <% end %>
     <% end %>
 
@@ -36,24 +39,22 @@
       <% @banners.each do |banner| %>
         <% body.with_row do |row| %>
           <% row.with_cell text: govuk_link_to(banner.name, banner.editable? ? edit_support_banner_path(banner) : support_banner_path(banner)) %>
-          <% row.with_cell text: banner.published_at.present? ? banner.published_at.to_fs(:govuk_date_and_time) : t(".missing_published_at") %>
+          <% row.with_cell text: banner.published_at.to_fs(:govuk_date_and_time) %>
           <% row.with_cell text: banner.expired_at.present? ? banner.expired_at.to_fs(:govuk_date_and_time) : t(".missing_expired_at") %>
           <% row.with_cell text: displayed_on_text(banner) %>
           <% row.with_cell do %>
             <%= banner_status_tag(banner) %>
           <% end %>
-          <% row.with_cell(classes: "app-table--banners__actions") do %>
-            <%= govuk_link_to(t("support.banners.index.table.actions.preview"), support_banner_path(banner)) %>
-            <% if banner.deletable? %>
-              <%= govuk_link_to(t("support.banners.index.table.actions.delete"), delete_support_banner_path(banner), class: "govuk-!-margin-left-2") %>
-            <% end %>
-            <% if banner.active? %>
-              <%= button_to(
-                t("support.banners.index.table.actions.expire"),
-                support_banner_expiration_path(banner),
-                class: "govuk-button govuk-button--warning govuk-!-margin-bottom-0",
-                form_class: "govuk-!-display-inline-block govuk-!-margin-left-2",
-              ) %>
+          <% row.with_cell do %>
+            <%= govuk_link_to(t(".table.actions.preview"), support_banner_path(banner)) %>
+          <% end %>
+          <% if @scope_status == :scheduled %>
+            <% row.with_cell(classes: "app-table--banners__actions") do %>
+              <%= govuk_button_link_to(
+                    t(".table.actions.delete"),
+                    delete_support_banner_path(banner),
+                    class: "govuk-button--warning govuk-!-margin-bottom-0",
+                  ) %>
             <% end %>
           <% end %>
         <% end %>

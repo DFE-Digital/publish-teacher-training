@@ -32,7 +32,7 @@ RSpec.describe "Support::BannersController" do
     end
 
     it "deletes a banner nobody has seen" do
-      banner = create(:banner, published_at: nil)
+      banner = create(:banner, published_at: 1.day.from_now)
 
       expect { delete support_banner_path(banner) }.to change(Banner, :count).by(-1)
 

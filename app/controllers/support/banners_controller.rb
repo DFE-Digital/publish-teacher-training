@@ -6,8 +6,8 @@ module Support
 
     def index
       scopes = {
+        scheduled: Banner.scheduled.scheduled_order,
         active: Banner.active.active_order,
-        scheduled: Banner.drafts.or(Banner.scheduled).scheduled_order,
         expired: Banner.expired.expired_order,
       }
       @scope_status = params[:status]&.to_sym || :active
@@ -66,7 +66,6 @@ module Support
 
     def banner_status_path(banner)
       {
-        draft: scheduled_support_banners_path,
         active: active_support_banners_path,
         scheduled: scheduled_support_banners_path,
         expired: expired_support_banners_path,
@@ -83,8 +82,6 @@ module Support
         heading
         name
         published_at
-        title
-        title_heading_level
       ])
     end
   end

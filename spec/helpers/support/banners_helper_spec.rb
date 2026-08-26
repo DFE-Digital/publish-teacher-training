@@ -2,15 +2,6 @@ require "rails_helper"
 
 RSpec.describe Support::BannersHelper, type: :helper do
   describe "#banner_status_tag" do
-    context "when banner status is draft" do
-      it "renders a tag with the Draft wording and Grey colour" do
-        banner = build_stubbed(:banner)
-        allow(banner).to receive(:status).and_return(:draft)
-
-        expect(helper.banner_status_tag(banner)).to eq('<strong class="govuk-tag govuk-tag--grey">Draft</strong>')
-      end
-    end
-
     context "when banner status is scheduled" do
       it "renders a tag with the Schedule wording and Yellow colour" do
         banner = build_stubbed(:banner)

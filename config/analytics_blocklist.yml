@@ -11,8 +11,6 @@
     - heading
     - name
     - published_at
-    - title
-    - title_heading_level
     - updated_at
   :organisation_provider:
   - id
