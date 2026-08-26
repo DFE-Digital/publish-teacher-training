@@ -15,18 +15,11 @@ en:
               too_long: Banner name must be 255 characters or fewer
               too_short: Banner name must be at least 2 characters
             published_at:
-              blank: Enter a published date for a banner that expires
-            title:
-              blank: Enter a title, for example Important
-            title_heading_level:
-              greater_than: Title heading level must be a whole number between 2 and 6
-              less_than_or_equal_to: Title heading level must be a whole number between 2 and 6
-              not_a_number: Title heading level must be a whole number between 2 and 6
-              not_an_integer: Title heading level must be a whole number between 2 and 6
+              blank: Enter a publish date
     attributes:
       banner:
         body: Body
-        body_description: The body text of the banner, displayed to users.
+        body_description: Extra detail below the message. Leave blank for a single-line notification.
         display_on_description: Displayed on
         display_on_find: Find
         display_on_publish: Publish
@@ -38,34 +31,34 @@ en:
         expired_at_time: Expiry time
         expired_at_time_description: The time on that date the banner stops being shown.
         heading: Heading
-        heading_description: The heading of the banner, displayed to users.
+        heading_description: The main message, shown in bold at the top of the banner.
         name: Name
         name_description: The name of the banner, used for internal reference only.
         published_at: Published
         published_at_date: Publish date
-        published_at_date_description: The date the banner starts being shown. Leave blank to keep it as a draft.
+        published_at_date_description: The date the banner starts being shown.
         published_at_time: Publish time
         published_at_time_description: The time on that date the banner starts being shown.
         status: Status
-        title: Title
-        title_description: The title of the banner, displayed to users.
-        title_heading_level: Title heading level
-        title_heading_level_description: The heading level for the title, used for accessibility. Between 2-6.
   support:
     banners:
-      expirations:
-        create:
-          failure: "Banner could not be expired"
-          success: "Banner successfully expired"
       index:
         page_title: "Banners"
         add_banner: "Add banner"
         statuses:
-          draft: "Draft"
           active: "Active"
           scheduled: "Scheduled"
           expired: "Expired"
-        missing_published_at: "Not published"
+        columns:
+          scheduled:
+            published_at: "Due to be published"
+            expired_at: "Due to expire"
+          active:
+            published_at: "Published"
+            expired_at: "Due to expire"
+          expired:
+            published_at: "Published"
+            expired_at: "Expired"
         missing_expired_at: "No expiry"
         displayed_on:
           find: "Find"
@@ -74,11 +67,11 @@ en:
           none: "Not displayed"
         table:
           headings:
+            preview: "Preview banner"
             actions: "Actions"
           actions:
             preview: "Preview"
             delete: "Delete"
-            expire: "Expire"
       warnings:
         expired: "Expired banners cannot be edited"
         published: "Banners that have been published cannot be deleted"

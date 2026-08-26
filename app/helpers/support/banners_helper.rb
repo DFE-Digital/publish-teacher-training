@@ -1,7 +1,6 @@
 module Support::BannersHelper
   def banner_status_tag(banner)
     status_colours = {
-      draft: "grey",
       active: "green",
       scheduled: "yellow",
       expired: "red",
