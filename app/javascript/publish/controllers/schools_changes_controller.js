@@ -30,10 +30,6 @@ export default class extends Controller {
   }
 
   update () {
-    // Stimulus connects an element as soon as the parser reaches it, which can be
-    // before its children exist - and the summary is the last of them.
-    if (!this.hasSummaryTarget) return
-
     const schools = this.schoolTargets
     const attached = new Set(this.attachedValue)
 
