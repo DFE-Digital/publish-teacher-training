@@ -127,6 +127,17 @@ RSpec.describe "Publish - Summarising the schools being changed", :js, type: :sy
     and_i_am_told_i_am_removing_all_schools
   end
 
+  # Select all sets the other boxes in code, firing nothing on them, so the
+  # summary hears about it from Select all itself. It says it has finished
+  # rather than being listed after it, so the summary cannot read the boxes as
+  # they were before the toggle.
+  scenario "selecting every school summarises on the first click" do
+    when_i_select_all_schools
+
+    then_i_see_the_summary
+    and_i_am_told_i_am_adding_all_schools
+  end
+
 private
 
   def attached_schools

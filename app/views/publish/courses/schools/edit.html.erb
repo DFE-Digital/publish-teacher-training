@@ -49,9 +49,12 @@
                        class="govuk-checkboxes__input"
                        id="select-all-schools"
                        data-select-all-checkboxes-target="selectAll"
-                       <%# Setting the boxes fires nothing on them, so the summary has
-                           to hear about it from this one. %>
-                       data-action="select-all-checkboxes#toggleAll schools-changes#update">
+                       <%# Setting the boxes fires nothing on them, so the summary
+                           hears it from here. Listening for the event rather than
+                           being listed after it means the order of these two
+                           cannot matter. %>
+                       data-action="select-all-checkboxes#toggleAll
+                                    select-all-checkboxes:toggled->schools-changes#update">
 
                 <label class="govuk-label govuk-checkboxes__label" for="select-all-schools">
                   <%= t("publish.courses.schools.select_all") %>

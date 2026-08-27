@@ -11,6 +11,11 @@ export default class extends Controller {
     const checked = event.target.checked
     this.checkboxTargets.forEach(box => { box.checked = checked })
     this.selectAllTarget.indeterminate = false
+
+    // Setting .checked fires nothing on the boxes, so anything reading them has
+    // to be told. This says the ticking is done rather than asking for anything,
+    // so a page with nobody listening - support feedbacks - is unaffected.
+    this.dispatch('toggled', { target: this.selectAllTarget })
   }
 
   updateSelectAll () {
