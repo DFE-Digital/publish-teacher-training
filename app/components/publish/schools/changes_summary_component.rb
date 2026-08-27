@@ -13,9 +13,10 @@ module Publish
     # because the counts are only known in the browser. `{count}` is substituted
     # by the controller, not by I18n.
     class ChangesSummaryComponent < ViewComponent::Base
-      # The schools attached to the course when the page was served: the state
-      # the provider's changes are measured against. The wizard attaches schools
-      # to a course that does not exist yet, so it has none.
+      # The schools chosen when the page was served: the state the provider's
+      # changes are measured against. Empty on the way in, and on the edit page
+      # the schools already on the course. The wizard has none the first time
+      # through and the ones already chosen when Back or Change returns.
       def initialize(attached: [])
         @attached = attached
 
