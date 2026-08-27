@@ -1,11 +1,12 @@
 import { Controller } from '@hotwired/stimulus'
+import { schoolsFromCheckboxes, schoolChanges } from '../schools_changes'
 
 // The summary under a list of school checkboxes: which schools the provider is
 // adding to the course, and which they are taking off it, named as they tick.
 //
-// It owns nothing but the summary. Which rows are on screen is schools-list's,
-// what the Select all checkbox does to them is select-all-checkboxes'; this only
-// ever reads the ticks and says what they add up to.
+// What the ticks add up to is schools_changes.js; everything here is the page.
+// Which rows are on screen is schools-list's, what the Select all checkbox does
+// to them is select-all-checkboxes'.
 //
 // It reads every school, including the ones a search or the collapse has hidden.
 // Those rows keep their ticks and are still submitted, so leaving them out would
@@ -30,24 +31,12 @@ export default class extends Controller {
   }
 
   update () {
-    const schools = this.schoolTargets
-    const attached = new Set(this.attachedValue)
+    const { adding, removing, changed } = schoolChanges(
+      schoolsFromCheckboxes(this.schoolTargets),
+      this.attachedValue
+    )
 
-    const checked = schools.filter(school => school.checked)
-
-    // Every school ticked, or none left ticked, is better said than listed - and
-    // it is the end state that decides, not which control got them there.
-    const adding = {
-      schools: checked.filter(school => !attached.has(school.value)),
-      all: checked.length === schools.length
-    }
-
-    const removing = {
-      schools: schools.filter(school => !school.checked && attached.has(school.value)),
-      all: checked.length === 0
-    }
-
-    this.summaryTarget.hidden = adding.schools.length === 0 && removing.schools.length === 0
+    this.summaryTarget.hidden = !changed
 
     this.fill(this.addedTarget, adding)
     this.fill(this.removedTarget, removing)
@@ -69,24 +58,24 @@ export default class extends Controller {
     this.statusTarget.textContent = said.join('. ')
   }
 
-  count ({ schools, all }, kind) {
-    if (schools.length === 0) return null
+  count ({ names, all }, kind) {
+    if (names.length === 0) return null
 
     const { dataset } = this.statusTarget
 
     if (all) return dataset[`${kind}All`]
 
-    return schools.length === 1
+    return names.length === 1
       ? dataset[`${kind}One`]
-      : dataset[`${kind}Other`].replaceAll('{count}', schools.length)
+      : dataset[`${kind}Other`].replaceAll('{count}', names.length)
   }
 
-  fill (section, { schools, all }) {
+  fill (section, { names, all }) {
     section.replaceChildren()
 
-    if (schools.length === 0) return
+    if (names.length === 0) return
 
-    section.append(all ? this.message(section) : this.counted(section, schools))
+    section.append(all ? this.message(section) : this.counted(section, names))
   }
 
   // An "all" of either kind rules the other half out, so it heads nothing and
@@ -107,18 +96,18 @@ export default class extends Controller {
   // once the provider has finished ticking. Everything else is filled as text,
   // never as markup: a school name is what the provider typed, and plenty of them
   // hold an & or an apostrophe.
-  counted (section, schools) {
+  counted (section, names) {
     const counted = this.clone(this.countTemplateTarget)
     const list = counted.querySelector('ul')
 
-    counted.querySelector('h3').textContent = schools.length === 1
+    counted.querySelector('h3').textContent = names.length === 1
       ? section.dataset.one
-      : section.dataset.other.replaceAll('{count}', schools.length)
+      : section.dataset.other.replaceAll('{count}', names.length)
 
-    schools.forEach(school => {
+    names.forEach(name => {
       const item = this.clone(this.itemTemplateTarget)
 
-      item.querySelector('li').textContent = school.dataset.schoolName
+      item.querySelector('li').textContent = name
       list.append(item)
     })
 
