@@ -1,0 +1,6 @@
+en:
+  publish:
+    providers:
+      schools:
+        removal_courses_component:
+          opens_in_new_tab: "(opens in a new tab)"

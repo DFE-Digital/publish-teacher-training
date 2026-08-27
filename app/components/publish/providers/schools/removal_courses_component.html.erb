@@ -1,0 +1,14 @@
+<ul class="govuk-list govuk-list--bullet">
+  <% courses.each do |course| %>
+    <li>
+      <% if link_to_course? %>
+        <p class="govuk-link  govuk-!-margin-0 govuk-!-font-weight-bold">
+          <%= govuk_link_to course.name_and_code, course_path(course), new_tab: t(".opens_in_new_tab") %>
+        </p>
+      <% else %>
+        <p class="govuk-body govuk-!-margin-0 govuk-!-font-weight-bold"><%= course.name_and_code %></p>
+      <% end %>
+      <span class="govuk-hint govuk-!-font-size-16"><%= course_information(course) %></span>
+    </li>
+  <% end %>
+</ul>

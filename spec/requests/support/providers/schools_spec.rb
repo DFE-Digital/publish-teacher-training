@@ -76,7 +76,7 @@ RSpec.describe "Support provider schools" do
       expect(response.body).to include("Remove school")
     end
 
-    it "explains why a school in use cannot be removed" do
+    it "explains why a school that is the only placement school on a course cannot be removed" do
       course = create(:course, provider:)
       create(:course_school, course:, gias_school:, provider_school:)
 
@@ -84,6 +84,17 @@ RSpec.describe "Support provider schools" do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("is a school for courses run by #{provider.provider_name}")
+    end
+
+    it "offers to remove a school that is not the only school on its courses" do
+      course = create(:course, provider:)
+      create(:course_school, course:, gias_school:, provider_school:)
+      create(:course_school, course:, gias_school: other_provider_school.gias_school, provider_school: other_provider_school)
+
+      get delete_support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Remove school")
     end
   end
 
@@ -127,7 +138,17 @@ RSpec.describe "Support provider schools" do
       expect { remove_school }.not_to(change { exempt_course.reload.changed_at })
 
       expect(provider.schools).to contain_exactly(provider_school, other_provider_school)
-      expect(flash[:warning]).to eq("This school could not be removed because it is used by a course")
+      expect(flash[:warning]).to eq("This school could not be removed because it is the only placement school attached to a course")
+    end
+
+    it "removes a school that is not the only school on its courses" do
+      course = create(:course, provider:)
+      create(:course_school, course:, gias_school:, provider_school:)
+      create(:course_school, course:, gias_school: other_provider_school.gias_school, provider_school: other_provider_school)
+
+      expect { remove_school }.to change { provider.schools.count }.by(-1)
+
+      expect(course.schools.reload.map(&:provider_school)).to contain_exactly(other_provider_school)
     end
 
     it "does not remove the provider's last school" do

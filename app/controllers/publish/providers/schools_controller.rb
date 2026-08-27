@@ -33,8 +33,9 @@ module Publish
       def delete; end
 
       def destroy
+        school_name = school.location_name
         if school_removal.call
-          flash[:success] = "School removed"
+          flash[:success] = t(".removed", school_name:)
           redirect_to publish_provider_recruitment_cycle_schools_path
         else
           redirect_to school_delete_path_with_return,

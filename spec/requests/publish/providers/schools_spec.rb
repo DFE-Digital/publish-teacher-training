@@ -253,9 +253,12 @@ RSpec.describe "Publish provider school show page", service: :publish do
       get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Remove #{provider_school.decorate.location_name} from your account")
-      expect(response.body).to include("St Joseph")
-      expect(response.body).to include("Catholic Primary School")
+      expect(response.body).to include("Remove #{provider_school.decorate.location_name}")
+      expect(response.body).to include("Are you sure you want to remove this school from your account")
+      expect(response.body).to include("This school is not attached to any courses")
+      expect(response.body).to include(provider_school.full_address)
+      expect(response.body).to include("URN: #{provider_school.urn}")
+      expect(response.body).to include("Remove school from account")
     end
 
     it "links back to the school page by default" do
@@ -291,10 +294,60 @@ RSpec.describe "Publish provider school show page", service: :publish do
         get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include("You cannot remove this school")
+        expect(response.body).to include("You cannot remove #{provider_school.decorate.location_name} from your account")
         expect(response.body).to include("is the only school for #{provider.provider_name}")
         expect(response.body).to include("To remove it, you must first add another school.")
+        expect(response.body).not_to include("govuk-button--warning")
       end
+    end
+
+    it "explains when the school is the only placement school on a course" do
+      course = create(:course, provider:, name: "Primary", course_code: "X123")
+      create(:course_school, course:, provider_school:, gias_school:)
+
+      get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("You cannot remove #{provider_school.decorate.location_name} from your account")
+      expect(response.body).to include("only placement school attached to the following courses")
+      expect(response.body).to include("Primary (X123)")
+      expect(response.body).to include(
+        publish_provider_recruitment_cycle_course_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          course.course_code,
+        ),
+      )
+      expect(response.body).not_to include("govuk-button--warning")
+    end
+
+    it "lists courses that will be detached when the school is not the only school on them" do
+      course = create(:course, provider:, name: "Primary", course_code: "X123")
+      create(:course_school, course:, provider_school:, gias_school:)
+      create(:course_school, course:, provider_school: other_provider_school, gias_school: other_provider_school.gias_school)
+
+      get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Remove #{provider_school.decorate.location_name}")
+      expect(response.body).to include("detach it from 1 course")
+      expect(response.body).to include("govuk-warning-text")
+      expect(response.body).to include("Primary (X123)")
+      expect(response.body).to include("Remove school from account and detach from 1 course")
+    end
+
+    it "only lists courses where this school is the only placement school" do
+      sole_course = create(:course, provider:, name: "Sole Course", course_code: "S1")
+      shared_course = create(:course, provider:, name: "Shared Course", course_code: "S2")
+      create(:course_school, course: sole_course, provider_school:, gias_school:)
+      create(:course_school, course: shared_course, provider_school:, gias_school:)
+      create(:course_school, course: shared_course, provider_school: other_provider_school, gias_school: other_provider_school.gias_school)
+
+      get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
+
+      expect(response.body).to include("You cannot remove #{provider_school.decorate.location_name} from your account")
+      expect(response.body).to include("Sole Course (S1)")
+      expect(response.body).not_to include("Shared Course (S2)")
     end
   end
 
@@ -341,7 +394,18 @@ RSpec.describe "Publish provider school show page", service: :publish do
       expect { remove_school }.not_to(change { exempt_course.reload.changed_at })
 
       expect(provider.schools).to contain_exactly(provider_school, other_provider_school)
-      expect(flash[:warning]).to eq("This school could not be removed because it is used by a course")
+      expect(flash[:warning]).to eq("This school could not be removed because it is the only placement school attached to a course")
+    end
+
+    it "removes a school that is not the only school on its courses" do
+      course = create(:course, provider:)
+      create(:course_school, course:, gias_school:, provider_school:)
+      create(:course_school, course:, gias_school: other_provider_school.gias_school, provider_school: other_provider_school)
+
+      expect { remove_school }.to change { provider.schools.count }.by(-1)
+
+      expect(course.schools.reload.map(&:provider_school)).to contain_exactly(other_provider_school)
+      expect(flash[:success]).to eq("#{provider_school.decorate.location_name} has been removed from your account")
     end
 
     it "does not remove the provider's last school" do
