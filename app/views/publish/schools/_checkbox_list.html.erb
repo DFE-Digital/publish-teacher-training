@@ -1,0 +1,32 @@
+<%# One school per row, shared by the course schools edit page and the add course
+    wizard's schools step.
+
+    It is the one place all three controllers meet, so each row says for itself
+    which of them read it. select_all is false on the wizard, which has no bulk
+    tick. include_hidden is the caller's because it changes what is submitted:
+    the edit page needs the hidden field so that unticking everything sends an
+    empty list, and the wizard suppresses it. %>
+<% row_data = {
+     schools_list_target: "schoolCheckbox",
+     schools_changes_target: "school",
+     action: "schools-changes#update",
+   } %>
+
+<% if select_all %>
+  <% row_data = row_data.merge(
+       select_all_checkboxes_target: "checkbox",
+       action: "select-all-checkboxes#updateSelectAll #{row_data[:action]}",
+     ) %>
+<% end %>
+
+<% schools.each_with_index do |school, index| %>
+  <%# The name travels as an attribute of its own: the label may also carry the
+      newly added tag, which the summary must not repeat. %>
+  <%= form.govuk_check_box :school_uuids,
+        school.uuid,
+        label: { text: [school.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school:))].compact_blank.join(" ").html_safe },
+        hint: { text: school.decorate.full_address, class: "govuk-!-font-size-16" },
+        include_hidden:,
+        link_errors: index.zero?,
+        data: row_data.merge(school_name: school.location_name) %>
+<% end %>
