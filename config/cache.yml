@@ -1,0 +1,35 @@
+default: &default
+  store_options:
+    # Unused while Redis is the live cache_store. Cap matches Azure Redis C1 (1GB).
+    max_age: <%= 30.days.to_i %>
+    max_size: <%= 1.gigabytes %>
+    namespace: <%= Rails.env %>
+    expiry_method: :job
+    expiry_queue: low_priority
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+
+qa:
+  <<: *default
+
+review:
+  <<: *default
+
+staging:
+  <<: *default
+
+sandbox:
+  <<: *default
+
+loadtest:
+  <<: *default
+
+rollover:
+  <<: *default

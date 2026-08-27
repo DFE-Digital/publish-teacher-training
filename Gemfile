@@ -11,6 +11,9 @@ gem "rails", "8.1.3.1"
 # Use PostgreSQL as the database for Active Record
 gem "pg"
 
+# Database-backed Rails cache (schema prepared on deploy; Redis remains the live store)
+gem "solid_cache", "~> 1.0"
+
 # Authorisation
 gem "pundit"
 

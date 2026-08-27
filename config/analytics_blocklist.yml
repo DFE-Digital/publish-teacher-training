@@ -183,3 +183,10 @@
   - statement
   - data_source
   - created_at
+  :solid_cache_entries:
+  - id
+  - key
+  - value
+  - created_at
+  - key_hash
+  - byte_size

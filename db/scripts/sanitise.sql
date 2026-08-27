@@ -1,6 +1,16 @@
 DELETE FROM session;
 DELETE FROM audit;
 
+-- Solid Cache blobs are opaque (keys can include postcodes/addresses).
+-- Skip if the dump predates the solid_cache_entries migration.
+-- TRUNCATE rather than DELETE: after cutover this table can grow toward the 1GB cap.
+DO $$
+BEGIN
+  TRUNCATE solid_cache_entries;
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+END $$;
+
 UPDATE "user"
        SET email=concat('anonimized-user-',id,'@example.org'),
            first_name='anon',

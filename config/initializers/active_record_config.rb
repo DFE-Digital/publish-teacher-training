@@ -3,6 +3,7 @@
 require_dependency Rails.root.join("app/lib/multiple_parameters_date_type")
 
 ActiveRecord::SchemaDumper.ignore_tables |= %w[
+  airbyte_heartbeat
   geography_columns
   geometry_columns
   layer
