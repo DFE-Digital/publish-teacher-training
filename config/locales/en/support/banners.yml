@@ -30,6 +30,9 @@ en:
         expired_at_date_description: The date the banner stops being shown. Leave blank for no expiry.
         expired_at_time: Expiry time
         expired_at_time_description: The time on that date the banner stops being shown.
+        heading: Heading (optional)
+        heading_description: The heading of the banner, displayed to users. Avoid using headings
+          for single-line notifications that do not need them.
         name: Name
         name_description: The name of the banner, used for internal reference only.
         published_at: Published
@@ -37,7 +40,6 @@ en:
         published_at_date_description: The date the banner starts being shown.
         published_at_time: Publish time
         published_at_time_description: The time on that date the banner starts being shown.
-        status: Status
   support:
     banners:
       index:
