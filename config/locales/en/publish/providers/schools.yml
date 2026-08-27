@@ -17,7 +17,23 @@ en:
           no_courses: This school is not attached to any courses.
           remove: "Remove %{school_name} from your account"
         delete:
-          remove: "Remove %{school_name} from your account"
+          heading: "Remove %{school_name}"
+          cannot_remove_heading: "You cannot remove %{school_name} from your account"
+          urn: "URN: %{urn}"
+          are_you_sure: Are you sure you want to remove this school from your account?
+          not_attached: This school is not attached to any courses
+          detach_from_courses:
+            one: "Removing this school from your account will detach it from %{count} course:"
+            other: "Removing this school from your account will detach it from %{count} courses:"
+          only_school_on_courses: "%{school_name} is the only placement school attached to the following courses."
+          attach_another_school: "You must attach a different placement school to these courses before you can remove %{school_name} from your account."
+          only_school_for_provider: "%{school_name} is the only school for %{provider_name}."
+          add_another_school: To remove it, you must first add another school.
+          remove: Remove school from account
+          remove_and_detach:
+            one: Remove school from account and detach from %{count} course
+            other: Remove school from account and detach from %{count} courses
         destroy:
-          cannot_remove_school: This school could not be removed because it is used by a course
+          removed: "%{school_name} has been removed from your account"
+          cannot_remove_school: This school could not be removed because it is the only placement school attached to a course
           cannot_remove_only_school: This school could not be removed because it is your only school

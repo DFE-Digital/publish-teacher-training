@@ -200,6 +200,6 @@ RSpec.describe "Delete school under provider as an admin" do
 
   def then_i_see_the_school_could_not_be_removed
     expect(support_provider_school_delete_page).to be_displayed
-    expect(page).to have_content("This school could not be removed because it is used by a course")
+    expect(page).to have_content("This school could not be removed because it is the only placement school attached to a course")
   end
 end

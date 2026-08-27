@@ -6,7 +6,6 @@ module PageObjects
       set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/schools/{school_id}/delete"
 
       element :heading, "h1"
-      element :cancel_link, ".govuk-link", text: "Cancel"
       element :remove_school_button, ".govuk-button--warning"
     end
   end
