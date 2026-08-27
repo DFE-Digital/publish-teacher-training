@@ -13,16 +13,14 @@ RSpec.describe "Delete a provider's schools" do
     when_i_visit_the_publish_school_show_page
     and_i_click_remove_school_link
     then_i_am_on_the_school_delete_page
+    and_i_see_the_confirm_page_for_a_school_with_no_courses
     when_i_click_back
-    then_i_am_on_the_school_show_page
-
-    and_i_click_remove_school_link
-    when_i_click_cancel
     then_i_am_on_the_school_show_page
 
     and_i_click_remove_school_link
     and_i_click_remove_school_button
     then_i_am_on_the_index_page
+    and_i_see_that_the_school_has_been_removed
     and_the_school_is_deleted
   end
 
@@ -35,16 +33,13 @@ RSpec.describe "Delete a provider's schools" do
     then_i_am_on_the_index_page
 
     and_i_click_remove_school_from_the_index
-    when_i_click_cancel
-    then_i_am_on_the_index_page
-
-    and_i_click_remove_school_from_the_index
     and_i_click_remove_school_button
     then_i_am_on_the_index_page
+    and_i_see_that_the_school_has_been_removed
     and_the_school_is_deleted
   end
 
-  scenario "with associated course" do
+  scenario "when the school is the only school on a course" do
     given_i_am_authenticated_as_a_provider_user_with_two_schools
     when_i_visit_the_schools_page
     then_i_see_both_schools_listed
@@ -53,6 +48,27 @@ RSpec.describe "Delete a provider's schools" do
     and_i_click_remove_school_link
     then_i_am_on_the_school_delete_page
     and_i_cannot_delete_the_school
+
+    given_another_school_is_attached_to_the_course
+    when_i_refresh_the_delete_page
+    then_i_see_the_courses_that_will_be_detached
+    and_i_am_able_to_remove_the_school
+  end
+
+  scenario "when the school is an extra school on a course" do
+    given_i_am_authenticated_as_a_provider_user_with_two_schools
+    given_there_is_an_associated_course
+    given_another_school_is_attached_to_the_course
+    when_i_visit_the_publish_school_show_page
+    and_i_click_remove_school_link
+    then_i_am_on_the_school_delete_page
+    then_i_see_the_courses_that_will_be_detached
+
+    and_i_click_remove_school_button
+    then_i_am_on_the_index_page
+    and_i_see_that_the_school_has_been_removed
+    and_the_school_is_deleted
+    and_the_course_is_still_attached_to_the_other_school
   end
 
   scenario "when the school becomes associated with a course before removal" do
@@ -82,6 +98,7 @@ RSpec.describe "Delete a provider's schools" do
 
     when_i_click_remove_school_button
     then_i_am_on_the_index_page
+    and_i_see_that_the_school_has_been_removed
     and_the_school_is_deleted
   end
 
@@ -107,6 +124,7 @@ RSpec.describe "Delete a provider's schools" do
 
     when_i_remove_the_provider_school
     then_i_am_on_the_index_page
+    and_i_see_that_the_future_school_has_been_removed
     and_the_provider_school_is_deleted
   end
 
@@ -236,16 +254,12 @@ RSpec.describe "Delete a provider's schools" do
     expect(publish_school_delete_page).to be_displayed
   end
 
-  def when_i_click_cancel
-    click_link_or_button "Cancel"
-  end
-
   def when_i_click_back
     click_link_or_button "Back"
   end
 
   def and_i_click_remove_school_button
-    click_button "from your account"
+    publish_school_delete_page.remove_school_button.click
   end
   alias_method :when_i_click_remove_school_button, :and_i_click_remove_school_button
 
@@ -260,7 +274,7 @@ RSpec.describe "Delete a provider's schools" do
   end
 
   def given_there_is_an_associated_course
-    @course = create(:course, provider:)
+    @course = create(:course, provider:, name: "Primary", course_code: "X123")
     create(
       :course_school,
       course: @course,
@@ -270,16 +284,62 @@ RSpec.describe "Delete a provider's schools" do
     )
   end
 
+  def given_another_school_is_attached_to_the_course
+    create(
+      :course_school,
+      course: @course,
+      provider_school: second_school,
+      gias_school: second_school.gias_school,
+      site_code: second_school.site_code,
+    )
+  end
+
+  def when_i_refresh_the_delete_page
+    visit current_path
+  end
+
+  def and_i_see_the_confirm_page_for_a_school_with_no_courses
+    expect(publish_school_delete_page.heading).to have_text("Remove #{school_name}")
+    expect(page).to have_css("p.govuk-body.govuk-hint", text: provider_school.full_address)
+    expect(page).to have_css("p.govuk-body.govuk-hint", text: "URN: #{provider_school.urn}")
+    expect(page).to have_content("Are you sure you want to remove this school from your account?")
+    expect(page).to have_content("This school is not attached to any courses")
+    expect(publish_school_delete_page).to have_remove_school_button
+    expect(publish_school_delete_page.remove_school_button).to have_text("Remove school from account")
+    expect(page).to have_no_css(".govuk-warning-text")
+  end
+
   def and_i_cannot_delete_the_school
-    expect(publish_school_delete_page).to have_text("You cannot remove this school")
-    expect(page).to have_content("#{provider_school.decorate.location_name} is a school for courses run by #{provider.provider_name}.")
-    expect(page).to have_content("To remove #{provider_school.decorate.location_name}, you must first remove the school from those courses.")
+    expect(publish_school_delete_page.heading).to have_text("You cannot remove #{school_name} from your account")
+    expect(page).to have_content("#{school_name} is the only placement school attached to the following courses.")
+    expect(page).to have_content("You must attach a different placement school to these courses before you can remove #{school_name} from your account.")
+    expect(page).to have_link(
+      @course.name_and_code,
+      href: publish_provider_recruitment_cycle_course_path(
+        provider.provider_code,
+        @course.recruitment_cycle.year,
+        @course.course_code,
+      ),
+    )
+    expect(page.find_link(@course.name_and_code)[:target]).to eq("_blank")
+    expect(page).to have_content("(opens in a new tab)")
+    expect(page).to have_content(course_information_line)
     expect(publish_school_delete_page).not_to have_remove_school_button
   end
 
+  def then_i_see_the_courses_that_will_be_detached
+    expect(publish_school_delete_page.heading).to have_text("Remove #{school_name}")
+    expect(page).to have_css(".govuk-warning-text", text: "Removing this school from your account will detach it from 1 course:")
+    expect(page).to have_css("p[class~='govuk-!-font-weight-bold']", text: @course.name_and_code)
+    expect(page).to have_no_link(@course.name_and_code)
+    expect(page).to have_content(course_information_line)
+    expect(publish_school_delete_page).to have_remove_school_button
+    expect(publish_school_delete_page.remove_school_button).to have_text("Remove school from account and detach from 1 course")
+  end
+
   def and_i_am_told_it_is_the_only_school
-    expect(publish_school_delete_page).to have_text("You cannot remove this school")
-    expect(page).to have_content("#{provider_school.decorate.location_name} is the only school for #{provider.provider_name}.")
+    expect(publish_school_delete_page.heading).to have_text("You cannot remove #{school_name} from your account")
+    expect(page).to have_content("#{school_name} is the only school for #{provider.provider_name}.")
     expect(page).to have_content("To remove it, you must first add another school.")
     expect(publish_school_delete_page).not_to have_remove_school_button
   end
@@ -295,11 +355,36 @@ RSpec.describe "Delete a provider's schools" do
   end
 
   def and_i_am_able_to_remove_the_school
-    expect(page).to have_button("Remove #{provider_school.decorate.location_name} from your account")
+    expect(publish_school_delete_page).to have_remove_school_button
   end
 
   def then_i_see_the_school_could_not_be_removed
     expect(publish_school_delete_page).to be_displayed
-    expect(page).to have_content("This school could not be removed because it is used by a course")
+    expect(page).to have_content("This school could not be removed because it is the only placement school attached to a course")
+  end
+
+  def and_i_see_that_the_school_has_been_removed
+    expect(page).to have_content("#{school_name} has been removed from your account")
+  end
+
+  def and_i_see_that_the_future_school_has_been_removed
+    expect(page).to have_content("#{future_provider_school.decorate.location_name} has been removed from your account")
+  end
+
+  def and_the_course_is_still_attached_to_the_other_school
+    expect(@course.schools.reload.map(&:provider_school)).to contain_exactly(second_school)
+  end
+
+  def school_name
+    provider_school.decorate.location_name
+  end
+
+  def course_information_line
+    [
+      I18n.t("publish.courses.course_table.funding.#{@course.funding}"),
+      @course.qualifications_summary,
+      @course.study_mode_description.capitalize,
+      I18n.l(@course.start_date.to_date, format: :short),
+    ].join(", ")
   end
 end

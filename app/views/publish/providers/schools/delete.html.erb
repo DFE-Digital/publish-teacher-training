@@ -1,40 +1,59 @@
-<%= render PageTitle.new(title: "publish.providers.schools.delete") %>
+<% school_name = school.location_name %>
+<% cannot_remove = !school_removal.removable? %>
+<%= render PageTitle.new(title: t(cannot_remove ? ".cannot_remove_heading" : ".heading", school_name:)) %>
 <% content_for :before_content do %>
   <%= govuk_back_link_to(school_delete_return_path) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= school.location_name %></span>
-      <% if school_removal.removable? %>
-        <%= t("components.page_titles.publish.providers.schools.delete") %>
-        </h1>
-        <%= govuk_button_to t(".remove", school_name: school.location_name),
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+      <%= t(cannot_remove ? ".cannot_remove_heading" : ".heading", school_name:) %>
+    </h1>
+    <p class="govuk-body govuk-hint govuk-!-margin-bottom-6">
+      <%= school.full_address %><br>
+      <%= t(".urn", urn: school.urn) %>
+    </p>
+
+    <% if school_removal.only_school? %>
+      <p class="govuk-body">
+        <%= t(".only_school_for_provider", school_name:, provider_name: @provider.provider_name) %>
+      </p>
+      <p class="govuk-body">
+        <%= t(".add_another_school") %>
+      </p>
+    <% elsif school_removal.sole_school_on_a_course? %>
+      <p class="govuk-body">
+        <%= t(".only_school_on_courses", school_name:) %>
+      </p>
+      <p class="govuk-body">
+        <%= t(".attach_another_school", school_name:) %>
+      </p>
+      <%= render Publish::Providers::Schools::RemovalCoursesComponent.new(
+        courses: school_removal.sole_school_courses,
+        provider: @provider,
+        link_to_course: true,
+      ) %>
+    <% else %>
+      <h2 class="govuk-heading-m"><%= t(".are_you_sure") %></h2>
+      <% attached_courses = school_removal.attached_courses.load %>
+      <% if attached_courses.any? %>
+        <%= govuk_warning_text(text: t(".detach_from_courses", count: attached_courses.size)) %>
+        <%= render Publish::Providers::Schools::RemovalCoursesComponent.new(
+          courses: attached_courses,
+          provider: @provider,
+        ) %>
+        <%= govuk_button_to t(".remove_and_detach", count: attached_courses.size),
           school_delete_path_with_return,
           method: :delete,
-          class: "govuk-button--warning" %>
+          class: "govuk-button--warning govuk-!-margin-top-4" %>
       <% else %>
-        <%= t("components.page_titles.publish.providers.schools.no_delete") %>
-      </h1>
-      <% if school_removal.only_school? %>
-        <p class="govuk-body">
-          <%= "#{school.location_name} is the only school for #{@provider.provider_name}." %>
-        </p>
-        <p class="govuk-body">
-          To remove it, you must first add another school.
-        </p>
-      <% else %>
-        <p class="govuk-body">
-          <%= "#{school.location_name} is a school for courses run by #{@provider.provider_name}." %>
-        </p>
-        <p class="govuk-body">
-          To remove <%= school.location_name %>, you must first remove the school from those courses.
-        </p>
+        <p class="govuk-body"><%= t(".not_attached") %></p>
+        <%= govuk_button_to t(".remove"),
+          school_delete_path_with_return,
+          method: :delete,
+          class: "govuk-button--warning govuk-!-margin-top-4" %>
       <% end %>
     <% end %>
-    <p class="govuk-body">
-        <%= govuk_link_to("Cancel", school_delete_return_path) %>
-    </p>
   </div>
 </div>

@@ -24,13 +24,40 @@ RSpec.describe ProviderSchools::Removal do
       expect(Provider::School.where(id: provider_school.id)).to be_empty
     end
 
-    it "does not remove either record when the provider school is attached to a course school" do
+    it "does not remove either record when the school is the only school on a course" do
       create(:course_school, course: create(:course, provider:), provider_school:, gias_school: provider_school.gias_school)
 
       expect(removal.call).to be(false)
 
       expect(Site.where(id: site.id)).to contain_exactly(site)
       expect(Provider::School.where(id: provider_school.id)).to contain_exactly(provider_school)
+    end
+
+    it "removes the school and detaches it from courses that have another school" do
+      course = create(:course, provider:)
+      create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)
+      remaining_course_school = create(
+        :course_school,
+        course:,
+        provider_school: other_provider_school,
+        gias_school: other_provider_school.gias_school,
+      )
+
+      expect(removal.call).to be(true)
+
+      expect(Site.where(id: site.id)).to be_empty
+      expect(Provider::School.where(id: provider_school.id)).to be_empty
+      expect(course.schools.reload).to contain_exactly(remaining_course_school)
+    end
+
+    it "removes the school when the only attached course has been discarded" do
+      course = create(:course, provider:)
+      create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)
+      course.discard
+
+      expect(removal.call).to be(true)
+
+      expect(Provider::School.where(id: provider_school.id)).to be_empty
     end
 
     it "does not remove a legacy site that has no provider school" do
