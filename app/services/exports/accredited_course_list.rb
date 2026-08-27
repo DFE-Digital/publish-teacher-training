@@ -50,7 +50,7 @@ module Exports
             number_to_currency(enrichment&.fee_uk_eu),
             number_to_currency(enrichment&.fee_international),
             decorated_course.find_url,
-            course.sites.map(&:code).sort.join(" "),
+            campus_codes(course),
           ]
         end
       end
@@ -63,5 +63,12 @@ module Exports
   private
 
     attr_reader :courses
+
+    def campus_codes(course)
+      course.sites
+        .map(&:code)
+        .sort_by { |code| [code == Provider::School::MAIN_SITE_CODE ? 1 : 0, code] }
+        .join(" ")
+    end
   end
 end
