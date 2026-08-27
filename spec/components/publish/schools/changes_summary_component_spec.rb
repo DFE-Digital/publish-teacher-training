@@ -10,7 +10,7 @@ RSpec.describe Publish::Schools::ChangesSummaryComponent, type: :component do
   let(:attached) { %w[uuid-one uuid-two] }
 
   def summary
-    rendered.at_css(".app-schools-changes")
+    rendered.at_css("[data-schools-changes-target='summary']")
   end
 
   describe "the element the controller works on" do
