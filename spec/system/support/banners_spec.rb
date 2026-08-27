@@ -72,6 +72,16 @@ RSpec.describe "Banner management support" do
     then_the_banner_name_is_updated
   end
 
+  scenario "taking a banner off one of the interfaces it displays on" do
+    given_there_is_an_active_banner
+    when_i_visit_the_banners_page(:active)
+    and_i_click_edit_on_the_banner
+
+    when_i_uncheck_find
+    and_i_submit_the_form
+    then_the_banner_no_longer_displays_on_find
+  end
+
   scenario "editing a banner with invalid data shows errors" do
     given_there_is_an_active_banner
     when_i_visit_the_banners_page(:active)
@@ -159,9 +169,9 @@ private
     @active_banners.each do |banner|
       expect(page).to have_content(banner.name)
     end
-    expect(page).to have_css(".govuk-tag", text: "Active", count: @active_banners.size)
     expect(page).to have_css("thead th", text: "Published")
     expect(page).to have_css("thead th", text: "Due to expire")
+    expect(page).to have_no_css("thead th", text: "Status")
     expect(page).to have_no_css("thead th", text: "Actions")
   end
 
@@ -169,7 +179,6 @@ private
     @scheduled_banners.each do |banner|
       expect(page).to have_content(banner.name)
     end
-    expect(page).to have_css(".govuk-tag", text: "Scheduled", count: @scheduled_banners.size)
     expect(page).to have_css("thead th", text: "Due to be published")
     expect(page).to have_css("thead th", text: "Due to expire")
     expect(page).to have_css("thead th", text: "Preview banner")
@@ -179,7 +188,6 @@ private
     @expired_banners.each do |banner|
       expect(page).to have_content(banner.name)
     end
-    expect(page).to have_css(".govuk-tag", text: "Expired", count: @expired_banners.size)
     expect(page).to have_no_css("thead th", text: "Actions")
   end
 
@@ -232,6 +240,7 @@ private
 
   def when_i_fill_in_all_banner_fields
     fill_in "Name", with: "Full banner"
+    fill_in "Heading (optional)", with: "Service update"
     fill_in "Body", with: "Please be aware of upcoming changes."
 
     within_fieldset("Publish date") do
@@ -268,6 +277,7 @@ private
 
     banner = Banner.last
     expect(banner.name).to eq("Full banner")
+    expect(banner.heading).to eq("Service update")
     expect(banner.body).to eq("Please be aware of upcoming changes.")
     expect(banner.published_at).to eq(Time.zone.local(2026, 6, 1, 9, 30))
     expect(banner.expired_at).to eq(Time.zone.local(2026, 6, 30, 17, 0))
@@ -294,6 +304,17 @@ private
   def then_the_banner_name_is_updated
     expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
     expect(@active_banner.reload.name).to eq("Updated banner name")
+  end
+
+  def when_i_uncheck_find
+    within_fieldset("Displayed on") do
+      uncheck "Find"
+    end
+  end
+
+  def then_the_banner_no_longer_displays_on_find
+    expect(page).to have_current_path(active_support_banners_path, ignore_query: true)
+    expect(@active_banner.reload.display_on_find).to be(false)
   end
 
   def and_i_click_delete_on_the_first_banner

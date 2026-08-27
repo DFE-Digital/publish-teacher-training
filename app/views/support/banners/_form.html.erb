@@ -13,6 +13,12 @@
     </div>
 
     <div class="govuk-form-group">
+      <%= form.govuk_text_field :heading,
+                                label: { text: Banner.human_attribute_name(:heading), size: "s" },
+                                hint: { text: Banner.human_attribute_name(:heading_description) } %>
+    </div>
+
+    <div class="govuk-form-group">
       <%= form.govuk_text_area :body,
                                label: { text: Banner.human_attribute_name(:body), size: "s" },
                                hint: { text: Banner.human_attribute_name(:body_description) } %>
@@ -53,9 +59,9 @@
     </div>
 
     <%= form.govuk_check_boxes_fieldset :display_on_find, legend: { text: Banner.human_attribute_name(:display_on_description) } do %>
-      <%= form.govuk_check_box :display_on_find, true, false, multiple: false, link_errors: true, label: { text: Banner.human_attribute_name(:display_on_find) } %>
-      <%= form.govuk_check_box :display_on_publish, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_publish) } %>
-      <%= form.govuk_check_box :display_on_support, true, false, multiple: false, label: { text: Banner.human_attribute_name(:display_on_support) } %>
+      <%= form.govuk_check_box :display_on_find, true, "false", multiple: false, link_errors: true, label: { text: Banner.human_attribute_name(:display_on_find) } %>
+      <%= form.govuk_check_box :display_on_publish, true, "false", multiple: false, label: { text: Banner.human_attribute_name(:display_on_publish) } %>
+      <%= form.govuk_check_box :display_on_support, true, "false", multiple: false, label: { text: Banner.human_attribute_name(:display_on_support) } %>
     <% end %>
 
     <%= form.govuk_submit t("continue") %>

@@ -27,7 +27,6 @@
         <% row.with_cell text: t(".columns.#{@scope_status}.published_at") %>
         <% row.with_cell text: t(".columns.#{@scope_status}.expired_at") %>
         <% row.with_cell text: Banner.human_attribute_name(:displayed_on) %>
-        <% row.with_cell text: Banner.human_attribute_name(:status) %>
         <% row.with_cell text: t(".table.headings.preview") %>
         <% if @scope_status == :scheduled %>
           <% row.with_cell text: t(".table.headings.actions"), classes: "app-table--banners__actions" %>
@@ -42,9 +41,6 @@
           <% row.with_cell text: banner.published_at.to_fs(:govuk_date_and_time) %>
           <% row.with_cell text: banner.expired_at.present? ? banner.expired_at.to_fs(:govuk_date_and_time) : t(".missing_expired_at") %>
           <% row.with_cell text: displayed_on_text(banner) %>
-          <% row.with_cell do %>
-            <%= banner_status_tag(banner) %>
-          <% end %>
           <% row.with_cell do %>
             <%= govuk_link_to(t(".table.actions.preview"), support_banner_path(banner)) %>
           <% end %>

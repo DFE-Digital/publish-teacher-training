@@ -20,22 +20,21 @@ describe BannerComponent, type: :component do
     expect(result.css("h2.govuk-notification-banner__title")).to be_present
   end
 
-  it "leads with the first line styled as the banner's own heading" do
-    banner = build(:banner, body: "Applications close on Friday.\n\nCheck with the provider.")
+  it "renders the heading above the body when one is given" do
+    banner = build(:banner, heading: "Applications close on Friday", body: "Check with the provider.")
 
     result = render_inline(described_class.new(banner:))
 
-    expect(result.css("p.govuk-notification-banner__heading").text).to eq("Applications close on Friday.")
+    expect(result.css("p.govuk-notification-banner__heading").text).to eq("Applications close on Friday")
     expect(result.css("p.govuk-body").text).to eq("Check with the provider.")
   end
 
-  it "leaves a body that opens with a list alone rather than promoting a later paragraph" do
-    banner = build(:banner, body: "- first point\n- second point\n\nAfter the list.")
+  it "leaves out the heading element for a banner without one" do
+    banner = build(:banner, heading: nil, body: "Check with the provider.")
 
     result = render_inline(described_class.new(banner:))
 
     expect(result.css("p.govuk-notification-banner__heading")).to be_empty
-    expect(result.css("p.govuk-body").text).to eq("After the list.")
   end
 
   it "styles body links for the banner rather than the page" do
