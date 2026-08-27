@@ -336,7 +336,7 @@ private
   end
 
   def then_i_am_told_i_am_removing(*school_names)
-    within(".app-schools-changes__removed") do
+    within("[data-schools-changes-target='removed']") do
       expect(page).to have_content(
         "You are removing #{school_names.one? ? '1 school' : "#{school_names.size} schools"}:",
       )
@@ -350,11 +350,11 @@ private
   alias_method :and_i_check, :when_i_check
 
   def then_i_see_no_summary
-    expect(page).to have_no_css(".app-schools-changes")
+    expect(page).to have_no_css("[data-schools-changes-target='summary']")
   end
 
   def then_i_am_told_i_am_adding(*school_names)
-    within(".app-schools-changes__added") do
+    within("[data-schools-changes-target='added']") do
       expect(page).to have_content(
         "You are adding #{school_names.one? ? '1 school' : "#{school_names.size} schools"}:",
       )
@@ -367,7 +367,7 @@ private
   end
 
   def and_i_am_not_told_i_am_removing_anything
-    within(".app-schools-changes") do
+    within("[data-schools-changes-target='summary']") do
       expect(page).to have_no_content("You are removing")
     end
   end

@@ -17,12 +17,12 @@ module PageObjects
       # same time, so this finds whichever one the provider can actually see.
       element :show_all_schools, ".app-button-link", text: "Show all schools"
       element :search_panel, ".app-school-search"
-      element :changes_summary, ".app-schools-changes"
+      element :changes_summary, "[data-schools-changes-target='summary']"
       # Scoped by its target rather than role=status: the page carries several live
       # regions, and this spec is only ever interested in the summary's.
       element :announcement, "[data-schools-changes-target='status']", visible: :all
-      element :added, ".app-schools-changes__added"
-      element :removed, ".app-schools-changes__removed"
+      element :added, "[data-schools-changes-target='added']"
+      element :removed, "[data-schools-changes-target='removed']"
 
       def vacancy_names
         vacancies.map { |el| el.find(".govuk-label").text }.reject { |name| name == "Select all schools" }
