@@ -83,6 +83,15 @@ module Exports
         expect(rows.first["Campus codes"]).to eq("8 A M")
       end
 
+      it "lists the main site code last so Excel does not read the cell as a formula" do
+        create_partner_course(site_statuses: [
+          create(:site_status, :findable, site: create(:site, code: Provider::School::MAIN_SITE_CODE)),
+          create(:site_status, :findable, site: create(:site, code: "F")),
+        ])
+
+        expect(rows.first["Campus codes"]).to eq("F -")
+      end
+
       it "leaves the enrichment columns empty when there is no enrichment" do
         create_partner_course(:salary)
 
