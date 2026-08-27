@@ -114,6 +114,19 @@ RSpec.describe "Publish - Summarising the schools being changed", :js, type: :sy
     end
   end
 
+  # The reason the baseline is a server value rather than read off the boxes: the
+  # error page re-renders from the submitted params, so the boxes no longer hold
+  # what the course had. Without a click to prompt it, connect() has to get this
+  # right on arrival.
+  scenario "the summary survives a validation error" do
+    when_i_select_all_schools
+    and_i_unselect_all_schools
+    and_i_submit
+
+    then_i_see_the_no_schools_error
+    and_i_am_told_i_am_removing_all_schools
+  end
+
 private
 
   def attached_schools
@@ -223,6 +236,14 @@ private
     expect(publish_course_school_edit_page.changes_summary).to have_no_css("h3")
     expect(publish_course_school_edit_page.removed)
       .to have_css("p", text: "You are removing all schools in your list")
+  end
+
+  def and_i_submit
+    click_link_or_button "Update placement schools"
+  end
+
+  def then_i_see_the_no_schools_error
+    expect(page).to have_content("Select at least one school")
   end
 
   def then_the_announcement_is(text)
