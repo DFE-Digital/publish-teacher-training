@@ -17,6 +17,16 @@ RSpec.describe "db/scripts" do
     expect { run_script("sanitise") }.not_to raise_error
   end
 
+  it "wipes solid_cache_entries" do
+    store = ActiveSupport::Cache.lookup_store(:solid_cache_store)
+    store.write("sanitise-cache-probe", "secret")
+    expect(SolidCache::Entry.count).to be_positive
+
+    run_script("sanitise")
+
+    expect(SolidCache::Entry.count).to eq(0)
+  end
+
   it "integration_setup.sql runs cleanly against the current schema" do
     # The provider insert requires a recruitment cycle (recruitment_cycle_id is NOT NULL).
     create(:recruitment_cycle)

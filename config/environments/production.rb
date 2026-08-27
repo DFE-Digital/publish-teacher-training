@@ -69,6 +69,7 @@ Rails.application.configure do
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Use a different cache store in production.
+  # Redis remains the live store; solid_cache_entries lives on the primary DB for a later cutover.
   config.cache_store = :redis_cache_store, { url: ENV.fetch("REDIS_CACHE_URL", "") }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
