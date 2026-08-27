@@ -39,22 +39,11 @@
 
     <%= form.govuk_check_boxes_fieldset :school_uuids,
           legend: { hidden: true, text: heading } do %>
-      <% current_step.schools.each_with_index do |school, index| %>
-        <%# The name travels as an attribute of its own: the label may also carry
-            the newly added tag, which the summary must not repeat. %>
-        <%= form.govuk_check_box :school_uuids,
-              school.uuid,
-              label: { text: [school.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: school))].compact_blank.join(" ").html_safe },
-              hint: { text: school.decorate.full_address, class: "govuk-!-font-size-16" },
-              include_hidden: false,
-              link_errors: index.zero?,
-              data: {
-                schools_list_target: "schoolCheckbox",
-                schools_changes_target: "school",
-                school_name: school.location_name,
-                action: "schools-changes#update",
-              } %>
-      <% end %>
+      <%= render "publish/schools/checkbox_list",
+            form:,
+            schools: current_step.schools,
+            select_all: false,
+            include_hidden: false %>
 
       <% if current_step.collapse_schools? %>
         <button type="button"
