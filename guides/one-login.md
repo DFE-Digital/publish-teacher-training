@@ -50,7 +50,7 @@ Find service users One Login only to authenticate the user, not to prove their i
 The authentication flow is largely the same for both providers, but with different endpoints and configurations depending on the environment.
 
 1. **Sign In**:
-   - Every incoming request is checked to determine if it matches the authentication endpoint (`/auth/one-login` for One Login or `/auth/find_developer` for FindDeveloper).
+   - Every incoming request is checked to determine if it matches the authentication endpoint (`/auth/one-login` for One Login or `/auth/find-developer` for FindDeveloper).
    - If the request matches, it's processed through the OmniAuth middleware, which handles requests to the respective provider's endpoints:
      - **One Login**: `/authorize`, `/token`, `/userinfo`, `/logout`
      - **FindDeveloper**: Mimics the same flow, but using mock data for local development.
