@@ -1,0 +1,15 @@
+# Copy to `Caddyfile` (gitignored) before running `bin/dev`, which starts Caddy
+# from the Procfile. Routing is by host, so all three services share one Rails
+# process on port 3001.
+
+publish.localhost {
+	reverse_proxy localhost:3001
+}
+
+find.localhost {
+	reverse_proxy localhost:3001
+}
+
+api.localhost {
+	reverse_proxy localhost:3001
+}
