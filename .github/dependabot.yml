@@ -4,34 +4,54 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 8
     labels:
       - deploy
       - dependencies
       - ruby
+    groups:
+      dev-and-test:
+        dependency-type: development
     ignore:
       - dependency-name: audited
+      # Sidekiq 7+ requires Redis 7+. Azure Cache for Redis is on 6
+      # (terraform/aks/databases.tf), so anything in this chain is unmergeable
+      # until the infrastructure moves. See commit 9c1f006f.
       - dependency-name: sidekiq
+      - dependency-name: sidekiq-cron
+      - dependency-name: redis
+      - dependency-name: mock_redis
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: daily
-    open-pull-requests-limit: 15
+    open-pull-requests-limit: 8
     labels:
       - deploy
       - dependencies
       - javascript
+    groups:
+      dev-dependencies:
+        dependency-type: development
   - package-ecosystem: bundler
     directory: "/docs"
     schedule:
       interval: daily
-    open-pull-requests-limit: 15
+    open-pull-requests-limit: 8
+    groups:
+      docs:
+        patterns:
+          - "*"
   - package-ecosystem: github-actions
     directories:
       - "/"
       - "/.github/actions/*"
     schedule:
       interval: daily
-    open-pull-requests-limit: 15
+    open-pull-requests-limit: 8
     labels:
       - github_actions
+    groups:
+      actions:
+        patterns:
+          - "*"
