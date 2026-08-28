@@ -22,6 +22,8 @@
       <%= form.govuk_text_area :body,
                                label: { text: Banner.human_attribute_name(:body), size: "s" },
                                hint: { text: Banner.human_attribute_name(:body_description) } %>
+
+      <%= render partial: "publish/courses/markdown_formatting" %>
     </div>
 
     <div class="govuk-form-group">

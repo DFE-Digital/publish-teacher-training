@@ -25,11 +25,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_27_153000) do
     t.string "ProductVersion", limit: 32, null: false
   end
 
-  create_table "airbyte_heartbeat", id: false, force: :cascade do |t|
-    t.integer "id"
-    t.timestamptz "last_heartbeat"
-  end
-
   create_table "audit", force: :cascade do |t|
     t.string "action"
     t.integer "associated_id"

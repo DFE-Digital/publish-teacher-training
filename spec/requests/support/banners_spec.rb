@@ -21,6 +21,17 @@ RSpec.describe "Support::BannersController" do
     end
   end
 
+  describe "GET /support/banners/expired" do
+    it "splits a long list across pages" do
+      create_list(:banner, 51, published_at: 3.days.ago, expired_at: 1.day.ago)
+
+      get expired_support_banners_path
+
+      expect(response.body.scan("govuk-table__row").size).to eq(51)
+      expect(response.body).to include("govuk-pagination")
+    end
+  end
+
   describe "DELETE /support/banners/:id" do
     it "turns away a banner the public has already seen" do
       banner = create(:banner, published_at: 1.day.ago)
