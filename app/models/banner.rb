@@ -1,9 +1,13 @@
 class Banner < ApplicationRecord
   include Banners::Status
   validates :name, presence: true
-  validates :name, length: { maximum: 255, minimum: 2 }, allow_blank: true
+  validates :name, length: { minimum: 2 }, allow_blank: true
+  validates :name, words_count: { maximum: 20, message: :too_long }
+
+  validates :heading, words_count: { maximum: 30, message: :too_long }
 
   validates :body, presence: true
+  validates :body, words_count: { maximum: 200, message: :too_long }
 
   validates :published_at, presence: true
   validates :expired_at, comparison: { greater_than_or_equal_to: :published_at }, if: -> { expired_at.present? && published_at.present? }

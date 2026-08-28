@@ -3,7 +3,30 @@ require "rails_helper"
 RSpec.describe Banner, type: :model do
   describe "validations" do
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_length_of(:name).is_at_least(2).is_at_most(255) }
+    it { is_expected.to validate_length_of(:name).is_at_least(2) }
+
+    describe "word limits" do
+      it "rejects a name longer than 20 words" do
+        banner = build(:banner, name: "word " * 21)
+
+        expect(banner).not_to be_valid
+        expect(banner.errors[:name]).to include("Banner name must be 20 words or fewer")
+      end
+
+      it "rejects a heading longer than 30 words" do
+        banner = build(:banner, heading: "word " * 31)
+
+        expect(banner).not_to be_valid
+        expect(banner.errors[:heading]).to include("Banner heading must be 30 words or fewer")
+      end
+
+      it "rejects a body longer than 200 words" do
+        banner = build(:banner, body: "word " * 201)
+
+        expect(banner).not_to be_valid
+        expect(banner.errors[:body]).to include("The body of the banner must be 200 words or fewer")
+      end
+    end
 
     it "tells a support user what to enter rather than repeating can't be blank" do
       banner = described_class.new

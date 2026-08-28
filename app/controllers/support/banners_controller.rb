@@ -11,7 +11,7 @@ module Support
         expired: Banner.expired.expired_order,
       }
       @scope_status = params[:status]&.to_sym || :active
-      @banners = scopes.fetch(@scope_status, scopes.fetch(:active))
+      @pagy, @banners = pagy(scopes.fetch(@scope_status, scopes.fetch(:active)), limit: 50)
     end
 
     def show; end
