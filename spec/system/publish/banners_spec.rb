@@ -50,6 +50,6 @@ private
   end
 
   def then_i_do_not_see_the_banner
-    expect(page).to have_no_content("Publish notice")
+    expect(page).to have_no_content("Planned downtime.")
   end
 end

@@ -21,6 +21,26 @@ RSpec.describe "Support::BannersController" do
     end
   end
 
+  describe "POST /support/banners" do
+    it "reports a mistyped date instead of raising" do
+      expect {
+        post support_banners_path, params: { banner: {
+          name: "Test banner",
+          body: "text",
+          display_on_find: "1",
+          "published_at(1i)" => "2026",
+          "published_at(2i)" => "1",
+          "published_at(3i)" => "32",
+          "published_at(4i)" => "9",
+          "published_at(5i)" => "0",
+        } }
+      }.not_to change(Banner, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("Enter a valid publish date and time")
+    end
+  end
+
   describe "GET /support/banners/expired" do
     it "splits a long list across pages" do
       create_list(:banner, 51, published_at: 3.days.ago, expired_at: 1.day.ago)
