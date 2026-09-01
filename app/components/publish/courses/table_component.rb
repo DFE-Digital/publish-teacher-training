@@ -53,6 +53,15 @@ module Publish
         )
       end
 
+      # The path is built from this table's provider, which Publish looks up
+      # with provider.courses.find_by!(course_code:). Linking when that
+      # provider does not own the course 404s, or opens a different course
+      # that happens to share the code — as on the training-partners list,
+      # where @provider is the accredited provider.
+      def link_to_course?(course)
+        course.provider_id == provider.id
+      end
+
       def age_range(course)
         return if course.secondary_course?
         return if course.age_range_in_years.blank?

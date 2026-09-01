@@ -32,6 +32,21 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
       end
     end
 
+    context "when the table's provider does not own the course" do
+      subject(:render_component) { render_inline(described_class.new(courses:, provider: accredited_provider)) }
+
+      let(:accredited_provider) { create(:provider, :accredited_provider) }
+
+      it "renders the course name as text, not a link" do
+        render_component
+
+        within(".app-table--courses__course-name") do
+          expect(page).to have_text("Biology (B123)")
+          expect(page).to have_no_link("Biology (B123)")
+        end
+      end
+    end
+
     context "when the course is secondary" do
       before do
         create(:course, :secondary, :published_postgraduate, provider:, name: "Physics", course_code: "P456")

@@ -57,6 +57,7 @@ RSpec.describe "Viewing courses as an accredited provider" do
       "/publish/organisations/#{accrediting_provider.provider_code}/#{accrediting_provider.recruitment_cycle_year}/training-partners/#{training_provider.provider_code}/courses",
     )
     expect(page).to have_text(course.name_and_code)
+    expect(page).to have_no_link(course.name_and_code)
   end
 
   def accrediting_provider
