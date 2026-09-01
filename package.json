@@ -48,7 +48,7 @@
     "mustache": "^4.2.0"
   },
   "devDependencies": {
-    "esbuild": "^0.25.8",
+    "esbuild": "^0.28.2",
     "jsdom": "^30.0.1",
     "playwright": "^1.62.1",
     "sass": "^1.103.1",
