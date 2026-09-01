@@ -906,6 +906,51 @@ describe CourseDecorator do
     end
   end
 
+  describe "#preview_placement_schools" do
+    let(:course) { create(:course) }
+
+    it "returns the attached schools sorted case-insensitively by GIAS name" do
+      ["Zebra School", "alpha school", "Mango School"].each do |name|
+        create(:course_school, course:, gias_school: build(:gias_school, name:))
+      end
+
+      expect(course.decorate.preview_placement_schools.map { |school| school.gias_school.name })
+        .to eq(["alpha school", "Mango School", "Zebra School"])
+    end
+
+    it "returns Provider::School records, so the partial can render an address" do
+      create(:course_school, course:, gias_school: build(:gias_school, name: "Ashfield School"))
+
+      expect(course.decorate.preview_placement_schools).to all(be_a(Provider::School))
+    end
+
+    # course_school is unique on (course_id, provider_school_id), not on
+    # gias_school_id, so one GIAS school reached through two site codes would
+    # otherwise be listed twice.
+    it "lists a school once when the course reaches it through two provider schools" do
+      gias_school = create(:gias_school, name: "Ashfield School")
+      create(:course_school, course:, gias_school:, site_code: "A")
+      create(:course_school, course:, gias_school:, site_code: "B")
+
+      expect(course.decorate.preview_placement_schools.size).to eq(1)
+    end
+
+    # course_school has no status column, so unlike preview_site_statuses this
+    # cannot hide a school whose legacy SiteStatus was suspended.
+    it "lists every attached school, including one whose legacy site status is suspended" do
+      site = create(:site, provider: course.provider, location_name: "Suspended School")
+      create(:site_status, :suspended, course:, site:)
+      create(:course_school, :for_site, course:, site:)
+
+      expect(course.decorate.preview_placement_schools.size).to eq(1)
+      expect(course.decorate.preview_site_statuses).to be_empty
+    end
+
+    it "returns nothing when the course has no schools" do
+      expect(course.decorate.preview_placement_schools).to be_empty
+    end
+  end
+
   describe "#attached_schools_count" do
     context "when viewing a saved course" do
       let(:course) { create(:course) }
