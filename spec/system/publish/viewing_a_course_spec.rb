@@ -57,6 +57,16 @@ RSpec.describe "Course show" do
       when_i_visit_the_next_cycle_courses_page
       then_i_should_see_the_status_scheduled
     end
+
+    # Find serves the current cycle only, so a next-cycle course has nowhere
+    # live to link to however published and running it is.
+    scenario "a published, running course offers a preview rather than a link to Find" do
+      given_there_is_a_next_recruitment_cycle
+      given_i_am_authenticated_as_a_provider_user(course: build(:course))
+      and_there_is_a_published_running_course_in_the_next_cycle
+      when_i_visit_the_next_cycle_course_page
+      then_i_should_see_a_preview_link_rather_than_a_link_to_find
+    end
   end
 
   describe "with a published course that has a legacy subsequent draft" do
@@ -296,6 +306,33 @@ private
       ],
     )
     given_i_am_authenticated(user: @user)
+  end
+
+  def and_there_is_a_published_running_course_in_the_next_cycle
+    @next_cycle_course = build(:course, :published, site_statuses: [build(:site_status, :findable)])
+    @next_cycle_provider = create(
+      :provider,
+      recruitment_cycle: RecruitmentCycle.next,
+      provider_code: @user.providers.first.provider_code,
+      courses: [@next_cycle_course],
+    )
+
+    @user.providers << @next_cycle_provider
+  end
+
+  def when_i_visit_the_next_cycle_course_page
+    publish_provider_courses_show_page.load(
+      provider_code: next_cycle_provider.provider_code,
+      recruitment_cycle_year: next_recruitment_cycle_year,
+      course_code: @next_cycle_course.course_code,
+    )
+  end
+
+  def then_i_should_see_a_preview_link_rather_than_a_link_to_find
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_link("Preview course")
+      expect(course_button_panel).to have_no_link("View live course")
+    end
   end
 
   def and_there_is_the_provider_in_the_next_cycle
