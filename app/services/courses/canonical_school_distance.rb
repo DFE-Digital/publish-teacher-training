@@ -13,33 +13,48 @@ module Courses
     # index_gias_school_on_geo_location covers the guard.
     GEOCODED_SCHOOL = "gias_school.geo_location IS NOT NULL"
 
+    # The two DISTINCT ON keys the callers choose between. Constants rather than
+    # caller-built strings so nothing reaches the SELECT that is not written here.
+    NEAREST_PER_COURSE = "course.id"
+    EACH_SCHOOL_PER_COURSE = "course.id, gias_school.id"
+
   private
 
+    # The whole SELECT goes through sanitize_sql_array: the only values that come
+    # from outside are the search coordinates, bound as parameters rather than
+    # interpolated (and coerced with Float first, so a non-numeric raises here
+    # rather than reaching the database).
+    #
     # ST_Distance takes the trailing `false` to force sphere maths, matching the
     # legacy ST_DistanceSphere path and Courses::Query#schools_location_scope;
     # metres are converted with the same 1609.344 the results page uses, so a
     # course's distance reads the same on the results card and on its own page.
     #
     # The CASE reproduces Provider::School#location_name in SQL.
-    def school_columns_sql
-      <<~SQL.squish
-        course.id AS course_id,
-        course.*,
-        provider_school.uuid AS provider_school_uuid,
-        CASE
-          WHEN provider_school.site_code = #{Course.connection.quote(Provider::School::MAIN_SITE_CODE)}
-          THEN gias_school.name || ' (Main Site)'
-          ELSE gias_school.name
-        END AS location_name,
-        gias_school.latitude,
-        gias_school.longitude,
-        ST_Distance(gias_school.geo_location, #{search_point}, false) / 1609.344 AS distance_to_search_location
-      SQL
-    end
-
-    def search_point
+    def school_columns_sql(distinct_on)
       Course.sanitize_sql_array(
-        ["ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)::geography", Float(@longitude), Float(@latitude)],
+        [
+          <<~SQL.squish,
+            DISTINCT ON (#{distinct_on}) course.id AS course_id,
+            course.*,
+            provider_school.uuid AS provider_school_uuid,
+            CASE
+              WHEN provider_school.site_code = ?
+              THEN gias_school.name || ' (Main Site)'
+              ELSE gias_school.name
+            END AS location_name,
+            gias_school.latitude,
+            gias_school.longitude,
+            ST_Distance(
+              gias_school.geo_location,
+              ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)::geography,
+              false
+            ) / 1609.344 AS distance_to_search_location
+          SQL
+          Provider::School::MAIN_SITE_CODE,
+          Float(@longitude),
+          Float(@latitude),
+        ],
       )
     end
   end

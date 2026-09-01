@@ -51,7 +51,7 @@ module Courses
                  .joins(schools: %i[gias_school provider_school])
                  .where(id: @courses.map(&:id))
                  .where(GEOCODED_SCHOOL)
-                 .select("DISTINCT ON (course.id, gias_school.id) #{school_columns_sql}")
+                 .select(school_columns_sql(EACH_SCHOOL_PER_COURSE))
                  .order("course.id, gias_school.id, provider_school.site_code ASC")
 
       Course
