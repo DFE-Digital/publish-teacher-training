@@ -359,6 +359,14 @@ module Courses
     # ST_Distance/ST_DWithin take the trailing `false` to force sphere maths, so
     # results match the legacy ST_DistanceSphere path. Distance is returned in
     # miles, preserving the minimum_distance_to_search_location contract.
+    #
+    # The GROUP BY carries the same contract sites_location_scope has always had,
+    # and both of its jobs matter. It collapses the subjects_scope join, which
+    # otherwise repeats a course once per matching subject, and it keeps the
+    # distance column groupable for the orderings that add a GROUP BY of their own
+    # (newest_course, fee_uk_ascending, fee_intl_ascending) - without it those
+    # combinations raise PG::GroupingError. Grouping costs nothing here: the
+    # derived table already yields exactly one row per course.
     def schools_location_scope(latitude:, longitude:, radius_in_meters:)
       point = Course.sanitize_sql_array(
         ["ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)::geography", longitude, latitude],
