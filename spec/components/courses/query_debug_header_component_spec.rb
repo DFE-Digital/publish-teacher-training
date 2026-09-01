@@ -103,6 +103,8 @@ RSpec.describe Courses::QueryDebugHeaderComponent, type: :component do
 
   context "when rendering nearest school links" do
     let(:debug) { true }
+    let(:recruitment_cycle) { create(:recruitment_cycle, year: 2026) }
+    let(:provider) { create(:provider, recruitment_cycle:) }
     let(:environment_name) { "qa" }
     let(:latitude) { 51.5 }
     let(:longitude) { -0.1 }
@@ -126,34 +128,51 @@ RSpec.describe Courses::QueryDebugHeaderComponent, type: :component do
       create(:site_status, :findable, course:, site:)
     end
 
-    context "in the schools remodel cycle" do
-      let(:recruitment_cycle) { create(:recruitment_cycle, year: 2026) }
-      let(:provider) { create(:provider, recruitment_cycle:) }
+    # The link resolves against Provider::School#uuid in Publish, so that is the
+    # only uuid worth rendering - a legacy site uuid would 404 there.
+    it "links to the school using the provider school uuid" do
+      provider_school = create(:provider_school, provider:, gias_school:, site_code:)
+      render_inline(component)
 
-      it "links to the school using the legacy site uuid" do
-        render_inline(component)
-
-        expect(page.find_link("Debug School", visible: :all)[:href]).to include("/schools/#{site.uuid}")
-      end
+      expect(page.find_link("Debug School", visible: :all)[:href]).to include("/schools/#{provider_school.uuid}")
     end
 
-    context "after the schools remodel cycle" do
-      let(:recruitment_cycle) { create(:recruitment_cycle, year: 2027) }
-      let(:provider) { create(:provider, recruitment_cycle:) }
+    it "renders the school name without a school link when the provider school uuid is missing" do
+      render_inline(component)
 
-      it "links to the school using the provider school uuid" do
-        provider_school = create(:provider_school, provider:, gias_school:, site_code:)
-        render_inline(component)
+      expect(page).to have_content("Debug School")
+      expect(page).not_to have_link("Debug School", visible: :all)
+    end
+  end
 
-        expect(page.find_link("Debug School", visible: :all)[:href]).to include("/schools/#{provider_school.uuid}")
-      end
+  context "when the results only have canonical schools" do
+    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
+    after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
 
-      it "renders the school name without a school link when the provider school uuid is missing" do
-        render_inline(component)
+    let(:debug) { true }
+    let(:environment_name) { "qa" }
+    let(:latitude) { 51.5 }
+    let(:longitude) { -0.1 }
+    let(:results) { [course] }
+    let(:provider) { create(:provider) }
+    let(:course) { create(:course, provider:) }
+    let(:gias_school) { create(:gias_school, name: "Canonical School", latitude: 51.5045, longitude: -0.0243) }
+    let!(:course_school) { create(:course_school, course:, gias_school:) }
 
-        expect(page).to have_content("Debug School")
-        expect(page).not_to have_link("Debug School", visible: :all)
-      end
+    it "lists the nearest GIAS school with no Site or SiteStatus in play" do
+      render_inline(component)
+
+      expect(course.site_statuses).to be_empty
+      expect(page).to have_content("Canonical School")
+      expect(page.find_link("Canonical School", visible: :all)[:href]).to include(
+        "/schools/#{course_school.provider_school.uuid}",
+      )
+    end
+
+    it "renders the school's coordinates and distance" do
+      expect(query_debug_header_component_content).to include("51.5045")
+      expect(query_debug_header_component_content).to include("-0.0243")
+      expect(query_debug_header_component_content).to include("3.27 miles")
     end
   end
 end
