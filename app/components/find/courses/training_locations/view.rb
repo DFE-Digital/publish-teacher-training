@@ -36,7 +36,7 @@ module Find
         def potential_placements_text
           if no_employing_schools?
             I18n.t(".find.courses.training_locations.view.no_employing_schools")
-          elsif address
+          elsif address && distance_from_location.present?
             distance_text
           else
             content_tag(:span, I18n.t(".find.courses.training_locations.view.search_help_#{course.funding}"), class: "govuk-hint govuk-!-font-size-16")
