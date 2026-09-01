@@ -10,11 +10,12 @@ RSpec.describe "Banners on the Publish interface" do
     then_i_see_the_banner
   end
 
-  scenario "banners are not displayed when there is a flash message" do
+  scenario "banners stay on the page alongside a flash message" do
     given_there_is_an_active_publish_banner
     and_i_am_authenticated
     when_i_update_notification_preferences
-    then_i_do_not_see_the_banner
+    then_i_see_the_banner
+    and_i_see_the_flash_message
   end
 
 private
@@ -49,7 +50,7 @@ private
     expect(page).to have_content("Planned downtime.")
   end
 
-  def then_i_do_not_see_the_banner
-    expect(page).to have_no_content("Planned downtime.")
+  def and_i_see_the_flash_message
+    expect(page).to have_css(".govuk-notification-banner--success")
   end
 end

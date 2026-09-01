@@ -7,20 +7,19 @@ class ActiveBannersComponent < ViewComponent::Base
     support: :display_on_support,
   }.freeze
 
-  def initialize(interface:, flash:)
+  def initialize(interface:)
     super()
 
     @interface = interface
-    @flash = flash
   end
 
   def render?
-    flash.empty? && banners.any?
+    banners.any?
   end
 
 private
 
-  attr_reader :interface, :flash
+  attr_reader :interface
 
   def banners
     @banners ||= Banner.public_send(INTERFACE_SCOPES.fetch(interface.to_sym)).active.active_order

@@ -154,15 +154,15 @@ private
   end
 
   def and_the_active_tab_is_selected
-    expect(page).to have_css(".govuk-tabs__list-item--selected", text: "Active")
+    expect(page).to have_css(".app-tab-navigation__link[aria-current='page']", text: "Active")
   end
 
   def and_the_scheduled_tab_is_selected
-    expect(page).to have_css(".govuk-tabs__list-item--selected", text: "Scheduled")
+    expect(page).to have_css(".app-tab-navigation__link[aria-current='page']", text: "Scheduled")
   end
 
   def and_the_expired_tab_is_selected
-    expect(page).to have_css(".govuk-tabs__list-item--selected", text: "Expired")
+    expect(page).to have_css(".app-tab-navigation__link[aria-current='page']", text: "Expired")
   end
 
   def and_i_see_the_active_banners
