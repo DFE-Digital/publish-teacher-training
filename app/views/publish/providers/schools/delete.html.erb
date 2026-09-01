@@ -10,7 +10,7 @@
       <% if school_removal.removable? %>
         <%= t("components.page_titles.publish.providers.schools.delete") %>
         </h1>
-        <%= govuk_button_to "Remove school",
+        <%= govuk_button_to t(".remove", school_name: school.location_name),
           school_delete_path_with_return,
           method: :delete,
           class: "govuk-button--warning" %>

@@ -54,9 +54,10 @@ module Publish
 
       attr_reader :applied_scopes, :scope, :params
 
-      def initialize(provider:, params: {})
+      def initialize(provider:, params: {}, school: nil)
         @provider = provider
         @params = params
+        @school = school
         @applied_scopes = {}
         # Preload provider + cycle for the course link path and status cycle
         # branch; status/display fields come from columns (no enrichment/site loads).
@@ -64,6 +65,7 @@ module Publish
       end
 
       def call
+        @scope = school_scope
         @scope = accredited_provider_scope
         @scope = enrichment_join_scope
         @scope = level_scope
@@ -83,7 +85,16 @@ module Publish
 
     private
 
-      attr_reader :provider
+      attr_reader :provider, :school
+
+      # Restrict to kept courses attached to this provider school (the school
+      # show page). A subquery rather than a join so a course cannot appear twice.
+      def school_scope
+        return @scope if school.blank?
+
+        @applied_scopes[:school] = school.id
+        @scope.where(id: ::Course::School.where(provider_school_id: school.id).select(:course_id))
+      end
 
       # Filter: restrict to courses ratified by a given accredited provider
       # (used by the training-partners course list).

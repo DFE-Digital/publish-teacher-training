@@ -108,10 +108,13 @@ RSpec.describe "Publish provider school show page", service: :publish do
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("St Joseph")
         expect(response.body).to include("Catholic Primary School")
-        expect(response.body).to include("School code")
-        expect(response.body).to include("A")
-        expect(response.body).to include("112992")
-        expect(response.body).to include("1 School Lane")
+        expect(response.body).to include("1 School Lane, Building A, Quarter B, Leeds, West Yorkshire, LS1 1AA")
+        expect(response.body).to include("URN: 112992")
+        expect(response.body).to include("This school is not attached to any courses.")
+        expect(response.body).to include("Remove #{provider_school.decorate.location_name} from your account")
+        expect(response.body).not_to include("School code")
+        expect(response.body).not_to include("govuk-summary-list")
+        expect(response.body).not_to include("govuk-table")
       end
 
       it "returns not found when the provider school does not exist" do
@@ -144,7 +147,59 @@ RSpec.describe "Publish provider school show page", service: :publish do
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("St Joseph")
         expect(response.body).to include("Catholic Primary School")
-        expect(response.body).to include("B")
+        expect(response.body).to include("1 School Lane, Building A, Quarter B, Leeds, West Yorkshire, LS1 1AA")
+        expect(response.body).to include("URN: 112992")
+        expect(response.body).to include("This school is not attached to any courses.")
+        expect(response.body).to include("Remove #{provider_school.decorate.location_name} from your account")
+        expect(response.body).not_to include("School code")
+        expect(response.body).not_to include("govuk-table")
+      end
+
+      it "lists attached courses in the courses table" do
+        course = create(
+          :course,
+          :published_postgraduate,
+          provider:,
+          name: "Biology",
+          course_code: "B123",
+          start_date: Time.zone.local(2026, 9, 1),
+        )
+        create(:course_school, course:, provider_school:, gias_school:)
+        create(
+          :course,
+          :published_postgraduate,
+          provider:,
+          name: "History",
+          course_code: "H100",
+        )
+
+        get publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Biology (B123)")
+        expect(response.body).to include("Course information")
+        expect(response.body).to include("Fee-paying")
+        expect(response.body).to include("QTS with PGCE")
+        expect(response.body).to include("Full time")
+        expect(response.body).to include("September 2026")
+        expect(response.parsed_body.at_css(".govuk-tag")).to be_present
+        expect(response.body).to include(
+          publish_provider_recruitment_cycle_course_path(provider.provider_code, recruitment_cycle.year, "B123"),
+        )
+        expect(response.body).not_to include("History (H100)")
+        expect(response.body).not_to include("This school is not attached to any courses.")
+      end
+
+      it "does not list discarded courses attached to the school" do
+        course = create(:course, provider:, name: "Biology", course_code: "B123")
+        create(:course_school, course:, provider_school:, gias_school:)
+        course.discard
+
+        get publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
+
+        expect(response.body).to include("This school is not attached to any courses.")
+        expect(response.body).not_to include("Biology (B123)")
+        expect(response.body).not_to include("govuk-table")
       end
 
       it "returns not found for a school in another recruitment cycle" do
@@ -181,7 +236,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("(Main Site)")
-        expect(response.body).to include("-")
+        expect(response.body).not_to include("School code")
       end
     end
   end
@@ -198,7 +253,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
       get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Remove school")
+      expect(response.body).to include("Remove #{provider_school.decorate.location_name} from your account")
       expect(response.body).to include("St Joseph")
       expect(response.body).to include("Catholic Primary School")
     end

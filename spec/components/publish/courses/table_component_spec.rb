@@ -23,11 +23,11 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
       create(:course, :published_postgraduate, provider:, name: "Biology", course_code: "B123", start_date: Time.zone.local(2026, 9, 1))
     end
 
-    it "renders the course name and the age range hint" do
+    it "renders the course name as a link and the age range hint" do
       render_component
 
       within(".app-table--courses__course-name") do
-        expect(page).to have_text("Biology (B123)")
+        expect(page).to have_link("Biology (B123)")
         expect(page).to have_css(".govuk-hint", text: "Ages 3 to 7")
       end
     end
