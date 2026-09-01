@@ -379,6 +379,7 @@ module Courses
       @scope
         .joins(nearby_courses)
         .select("course.*, provider.provider_name, (nearby_courses.distance_m / 1609.344) AS minimum_distance_to_search_location")
+        .group("course.id, provider.id, provider.provider_name, nearby_courses.distance_m")
     end
 
     def default_ordering_scope
