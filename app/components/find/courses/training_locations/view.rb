@@ -45,7 +45,7 @@ module Find
 
         def guaranteed_text
           return if no_employing_schools?
-          return unless address
+          return unless address && distance_from_location.present?
 
           I18n.t(".find.courses.training_locations.view.guaranteed") if course.fee? || course.salary?
         end
