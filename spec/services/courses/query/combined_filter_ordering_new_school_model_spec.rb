@@ -125,6 +125,45 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     end
   end
 
+  context "when a course matches more than one of the searched subjects" do
+    let(:physics) { find_or_create(:secondary_subject, :physics) }
+    let(:biology) { find_or_create(:secondary_subject, :biology) }
+    let(:params) do
+      {
+        subjects: [physics.subject_code, biology.subject_code],
+        latitude: london.latitude,
+        longitude: london.longitude,
+        radius: 10,
+      }
+    end
+
+    let!(:physics_and_biology) do
+      teach_at(
+        create(:course, :published, :secondary, name: "Physics and Biology", provider: alpha_provider,
+                                                subjects: [physics, biology]),
+        london,
+      )
+    end
+
+    it "returns the course once" do
+      expect(results).to match_collection([physics_and_biology], attribute_names: %w[name])
+    end
+
+    it "returns as many courses as it counts" do
+      query = described_class.new(params: params.dup)
+
+      expect(query.call.to_a.size).to eq(query.count)
+    end
+
+    context "with newest_course ordering" do
+      let(:params) { super().merge(order: "newest_course") }
+
+      it "returns the course once" do
+        expect(results).to match_collection([physics_and_biology], attribute_names: %w[name])
+      end
+    end
+  end
+
   context "when a nearby course is taught at several schools and a fee ordering is applied" do
     let(:params) { { order: "fee_uk_ascending", latitude: london.latitude, longitude: london.longitude, radius: 10 } }
 
