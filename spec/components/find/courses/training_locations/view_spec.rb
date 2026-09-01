@@ -156,6 +156,13 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       it "does not render a distance" do
         expect(subject).to have_no_text("from Some Address")
       end
+
+      # Without a distance there is no school on show, so hedging about schools
+      # changing has nothing to attach to - the no-address case omits it too.
+      it "does not hedge about schools it is not showing" do
+        expect(component.guaranteed_text).to be_nil
+        expect(subject).to have_no_text("Schools can change and are not guaranteed")
+      end
     end
   end
 
