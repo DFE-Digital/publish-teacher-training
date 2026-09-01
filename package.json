@@ -54,7 +54,7 @@
     "sass": "^1.103.1",
     "standard": "^17.1.2",
     "stylelint": "^16.23.1",
-    "stylelint-config-gds": "^2.0.0",
+    "stylelint-config-gds": "^3.0.0",
     "stylelint-config-recess-order": "^6.1.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-config-standard-scss": "^17.0.0",
