@@ -22,7 +22,7 @@ module Courses
     end
 
     def schools
-      ::Courses::SchoolDistancesQuery.new(courses: [course], latitude:, longitude:).call
+      @schools ||= ::Courses::SchoolDistancesQuery.new(courses: [course], latitude:, longitude:).call
     end
 
     GOOGLE_MAPS_BASE_URL = "https://www.google.com/maps/dir/"
