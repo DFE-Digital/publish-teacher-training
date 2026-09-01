@@ -5,6 +5,9 @@ en:
         course: Course
         course_information: Course information
         status: Status
+        view_course: View course
+        view_live_course: View live course
+        view_live_course_hidden: for %{course}
         funding:
           fee: Fee-paying
           salary: Salaried

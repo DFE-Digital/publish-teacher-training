@@ -163,4 +163,70 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
       end
     end
   end
+
+  describe "the View course column" do
+    subject(:render_with) { render_inline(described_class.new(courses:, provider:, view_course_column: true)) }
+
+    it "is off by default, leaving the provider's own course list as it was" do
+      create(:course, :published_postgraduate, provider:)
+      render_component
+
+      expect(page.all(".govuk-table__header").map(&:text)).not_to include("View course")
+      expect(page).to have_no_css(".app-table--courses__view-course")
+    end
+
+    context "with a course that is live on Find" do
+      before { create(:course, :published_postgraduate, provider:, name: "Biology", course_code: "B123") }
+
+      it "heads the column and links to the course on Find" do
+        render_with
+
+        expect(page.all(".govuk-table__header").map(&:text)).to eq(["Course", "Course information", "Status", "View course"])
+        expect(page).to have_css("table.app-table--courses--view-course")
+        expect(page.find(".app-table--courses__view-course a")[:href])
+          .to include("find.localhost/course/#{provider.provider_code}/B123")
+      end
+
+      it "names the course in the link, since every row would otherwise read alike" do
+        render_with
+
+        within(".app-table--courses__view-course") do
+          expect(page).to have_css("a .govuk-visually-hidden", text: "for Biology (B123)")
+        end
+      end
+    end
+
+    context "with a mix of live and unpublished courses" do
+      before do
+        create(:course, :published_postgraduate, provider:, name: "Biology", course_code: "B123")
+        create(
+          :course, :with_full_time_sites, provider:, name: "Physics", course_code: "P456",
+                                          enrichments: [build(:course_enrichment, :initial_draft, course: nil)]
+        )
+      end
+
+      it "leaves the cell empty for the course with nowhere live to point at" do
+        render_with
+
+        cells = page.all(".app-table--courses__view-course").map { |cell| cell.text.strip }
+        expect(cells).to contain_exactly(a_string_including("View live course"), "")
+      end
+    end
+
+    context "when no course in the list is live on Find" do
+      before do
+        create(
+          :course, :with_full_time_sites, provider:,
+                                          enrichments: [build(:course_enrichment, :initial_draft, course: nil)]
+        )
+      end
+
+      it "drops the column rather than heading a set of empty cells" do
+        render_with
+
+        expect(page.all(".govuk-table__header").map(&:text)).not_to include("View course")
+        expect(page).to have_no_css(".app-table--courses__view-course")
+      end
+    end
+  end
 end
