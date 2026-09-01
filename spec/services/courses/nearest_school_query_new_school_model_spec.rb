@@ -114,5 +114,20 @@ RSpec.describe Courses::NearestSchoolQuery do
       expect(results.first.distance_to_search_location).to be_within(0.01).of(4.46)
     end
 
+    # Both rows tie on distance and on gias_school.id, so without a further
+    # tiebreaker Postgres is free to return either provider school - and the
+    # ?debug panel's link and "(Main Site)" label would flip between page loads.
+    it "always picks the same provider school of the two" do
+      gias_school = create(:gias_school, latitude: canary_wharf.latitude, longitude: canary_wharf.longitude)
+      main_site = create(:course_school, :main_site, course:, gias_school:).provider_school
+      create(:course_school, course:, gias_school:, site_code: "A")
+
+      5.times do
+        result = described_class.new(courses: [course], latitude: london.latitude, longitude: london.longitude).call.first
+
+        expect(result.provider_school_uuid).to eq(main_site.uuid)
+        expect(result.location_name).to eq("#{gias_school.name} (Main Site)")
+      end
+    end
   end
 end
