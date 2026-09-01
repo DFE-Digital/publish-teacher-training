@@ -12,12 +12,17 @@
 # Find serves the current cycle only (Find::ApplicationController#provider scopes
 # to RecruitmentCycle.current), and Publish holds the current and next cycle, so
 # "not next cycle" is the cycle test.
+#
+# The year comes off the course's already-loaded cycle and is compared against
+# the timetable rather than through Course#next_recruitment_cycle?, which looks
+# the current cycle up from the database on every call — once per row on a
+# course list.
 module Courses
   module PublishRules
     class LiveOnFind
       def self.applies?(course, content_status:)
         content_status.to_s == "published" &&
-          !course.next_recruitment_cycle? &&
+          course.recruitment_cycle_year.to_i <= Find::CycleTimetable.current_year &&
           (course.is_running? || course.without_employing_school?)
       end
     end
