@@ -21,7 +21,9 @@
     <div class="govuk-form-group">
       <%= form.govuk_text_area :body,
                                label: { text: Banner.human_attribute_name(:body), size: "s" },
-                               hint: { text: Banner.human_attribute_name(:body_description) } %>
+                               hint: { text: Banner.human_attribute_name(:body_description) },
+                               max_words: 200,
+                               threshold: 75 %>
 
       <%= render partial: "publish/courses/markdown_formatting" %>
     </div>
