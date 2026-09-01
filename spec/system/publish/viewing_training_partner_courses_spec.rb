@@ -73,15 +73,15 @@ RSpec.describe "Viewing a training partner's courses as an accredited provider" 
 
   def and_the_partner_has_a_live_course
     create(
-      :course, :published_postgraduate, provider: training_partner, accrediting_provider:,
-      name: "Biology", course_code: "B123"
+      :course, :published_postgraduate,
+      provider: training_partner, accrediting_provider:, name: "Biology", course_code: "B123"
     )
   end
 
   def and_the_partner_has_a_rolled_over_course
     create(
-      :course, :with_full_time_sites, provider: training_partner, accrediting_provider:,
-      name: "Physics", course_code: "P456",
+      :course, :with_full_time_sites,
+      provider: training_partner, accrediting_provider:, name: "Physics", course_code: "P456",
       enrichments: [build(:course_enrichment, :rolled_over, course: nil)]
     )
   end
@@ -90,18 +90,23 @@ RSpec.describe "Viewing a training partner's courses as an accredited provider" 
   # part time course composes the traits rather than using
   # :published_postgraduate, which brings full time sites with it.
   def and_the_partner_has_two_courses_differing_only_in_study_mode
-    create(:course, :published_postgraduate, provider: training_partner, accrediting_provider:,
-                                             name: "Biology", course_code: "B123", study_mode: :full_time)
-    create(:course, :open, :with_part_time_sites, :resulting_in_pgce_with_qts,
-           provider: training_partner, accrediting_provider:,
-           name: "Chemistry", course_code: "C789", study_mode: :part_time)
+    create(
+      :course, :published_postgraduate,
+      provider: training_partner, accrediting_provider:,
+      name: "Biology", course_code: "B123", study_mode: :full_time
+    )
+    create(
+      :course, :open, :with_part_time_sites, :resulting_in_pgce_with_qts,
+      provider: training_partner, accrediting_provider:,
+      name: "Chemistry", course_code: "C789", study_mode: :part_time
+    )
   end
 
   def and_the_partner_has_a_part_time_course_ratified_by_another_accredited_provider
     create(
-      :course, :published_postgraduate, provider: training_partner,
-      accrediting_provider: create(:accredited_provider), name: "Geography", course_code: "G321",
-      funding: "salary"
+      :course, :published_postgraduate,
+      provider: training_partner, accrediting_provider: create(:accredited_provider),
+      name: "Geography", course_code: "G321", funding: "salary"
     )
   end
 
@@ -117,9 +122,7 @@ RSpec.describe "Viewing a training partner's courses as an accredited provider" 
     expect(publish_training_partner_courses_page.column_headings.map(&:text)).to eq(headings)
   end
 
-  def rows
-    publish_training_partner_courses_page.rows
-  end
+  delegate :rows, to: :publish_training_partner_courses_page
 
   def course_row(name)
     rows.find { |row| row.name.text.include?(name) } ||
