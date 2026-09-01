@@ -2,18 +2,28 @@
   <span class="govuk-caption-xl">
     <%= t(".caption", provider_name: course.provider_name) %>
     </span>
-  <%= t(".heading", course_name_and_code: @course.name_and_code) %>
+  <%= t(".heading", course_name_and_code: course.name_and_code) %>
 </h1>
 
 <p class="govuk-body"><%= t(".schools_to_be_placed") %></p>
 <p class="govuk-body"><%= t(".schools_you_can_choose") %></p>
 
 <ul class="govuk-list govuk-list--spaced" id="course_school_placements">
-  <% course.preview_site_statuses.each do |site_status| %>
-    <li>
-      <strong><%= site_status.site.location_name %></strong>
-      <br>
-      <%= site_status.site.decorate.full_address %>
-    </li>
+  <% if FeatureFlag.active?(:course_publishing_uses_new_school_model) %>
+    <% course.preview_placement_schools.each do |school| %>
+      <li>
+        <strong><%= school.gias_school.name %></strong>
+        <br>
+        <%= school.decorate.full_address %>
+      </li>
+    <% end %>
+  <% else %>
+    <% course.preview_site_statuses.each do |site_status| %>
+      <li>
+        <strong><%= site_status.site.location_name %></strong>
+        <br>
+        <%= site_status.site.decorate.full_address %>
+      </li>
+    <% end %>
   <% end %>
 </ul>
