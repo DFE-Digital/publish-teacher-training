@@ -175,6 +175,26 @@ class CourseDecorator < ApplicationDecorator
     object.site_statuses.new_or_running.sort_by { |status| status.site.location_name }
   end
 
+  # Placement schools for the shared placements partial, over the canonical
+  # course_school -> provider_school -> gias_school chain.
+  #
+  # course_school has no status column, so unlike preview_site_statuses this
+  # cannot filter to new_or_running - every attached school is listed.
+  #
+  # uniq on gias_school_id because course_school is unique on
+  # (course_id, provider_school_id), so a course can reach one GIAS school
+  # through two provider schools with different site codes.
+  #
+  # This reads the loaded association in Ruby rather than adding a scope, so the
+  # controller's includes survives instead of being thrown away by a re-query.
+  def preview_placement_schools
+    object
+      .schools
+      .map(&:provider_school)
+      .uniq(&:gias_school_id)
+      .sort_by { |school| school.gias_school.name.downcase }
+  end
+
   def has_site?(site)
     !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
   end
