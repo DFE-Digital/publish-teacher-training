@@ -90,6 +90,39 @@ RSpec.describe Publish::Courses::Query do
     end
   end
 
+  describe "school filter" do
+    subject(:rows) { described_class.call(provider: provider.reload, school:) }
+
+    let(:provider) { create(:provider) }
+    let(:school) { create(:provider_school, provider:) }
+    let!(:attached) { create(:course, provider:, name: "Biology", course_code: "B123") }
+    let!(:unattached) { create(:course, provider:, name: "History", course_code: "H100") }
+
+    before { create(:course_school, course: attached, provider_school: school, gias_school: school.gias_school) }
+
+    it "returns only courses attached to that school" do
+      expect(rows.map(&:course_code)).to eq(%w[B123])
+    end
+
+    context "when the school has no attached courses" do
+      subject(:rows) { described_class.call(provider: provider.reload, school: empty_school) }
+
+      let(:empty_school) { create(:provider_school, provider:) }
+
+      it "returns no courses" do
+        expect(rows).to be_empty
+      end
+    end
+
+    context "when an attached course has been discarded" do
+      before { attached.discard }
+
+      it "does not return it" do
+        expect(rows).to be_empty
+      end
+    end
+  end
+
   describe "accredited_provider filter" do
     subject(:rows) { described_class.call(provider: provider.reload, params: { accredited_provider: wanted.provider_code }) }
 

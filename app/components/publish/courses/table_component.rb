@@ -53,15 +53,6 @@ module Publish
         )
       end
 
-      def on_courses_index_page?(course)
-        helpers.current_page?(
-          helpers.publish_provider_recruitment_cycle_courses_path(
-            provider.provider_code,
-            course.recruitment_cycle.year,
-          ),
-        )
-      end
-
       def age_range(course)
         return if course.secondary_course?
         return if course.age_range_in_years.blank?

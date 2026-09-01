@@ -16,7 +16,9 @@ module Publish
         )
       end
 
-      def show; end
+      def show
+        @school_courses = Publish::Courses::Query.call(provider:, school:).map(&:decorate)
+      end
 
       def create
         @site = provider.sites.build

@@ -13,10 +13,11 @@ en:
             other: "%{count} courses"
           remove: Remove school
         show:
-          code: School code
-          urn: URN
-          address: Address
-          remove: Remove school
+          urn: "URN: %{urn}"
+          no_courses: This school is not attached to any courses.
+          remove: "Remove %{school_name} from your account"
+        delete:
+          remove: "Remove %{school_name} from your account"
         destroy:
           cannot_remove_school: This school could not be removed because it is used by a course
           cannot_remove_only_school: This school could not be removed because it is your only school

@@ -7,7 +7,7 @@ module PageObjects
 
       element :heading, "h1"
       element :cancel_link, ".govuk-link", text: "Cancel"
-      element :remove_school_button, ".govuk-button", text: "Remove school"
+      element :remove_school_button, ".govuk-button--warning"
     end
   end
 end

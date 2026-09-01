@@ -174,9 +174,11 @@ RSpec.describe "Delete a provider's schools" do
   def then_i_see_the_provider_school_details
     expect(publish_school_show_page).to be_displayed
     expect(page).to have_content("Future School (Main Site)")
-    expect(page).to have_content("School code-", normalize_ws: true)
-    expect(page).to have_content("URN654321", normalize_ws: true)
-    expect(page).to have_content("Address 1 Future Road Future Building Future Quarter Future Town Future County FT1 1AA", normalize_ws: true)
+    expect(page).to have_content("1 Future Road, Future Building, Future Quarter, Future Town, Future County, FT1 1AA")
+    expect(page).to have_content("URN: 654321")
+    expect(page).to have_content("This school is not attached to any courses.")
+    expect(page).to have_link("Remove Future School (Main Site) from your account")
+    expect(page).not_to have_content("School code")
   end
 
   def when_i_remove_the_provider_school
@@ -223,7 +225,7 @@ RSpec.describe "Delete a provider's schools" do
   end
 
   def and_i_click_remove_school_link
-    click_link_or_button "Remove school"
+    click_link "from your account"
   end
 
   def and_i_click_remove_school_from_the_index
@@ -243,7 +245,7 @@ RSpec.describe "Delete a provider's schools" do
   end
 
   def and_i_click_remove_school_button
-    click_link_or_button "Remove school"
+    click_button "from your account"
   end
   alias_method :when_i_click_remove_school_button, :and_i_click_remove_school_button
 
@@ -293,7 +295,7 @@ RSpec.describe "Delete a provider's schools" do
   end
 
   def and_i_am_able_to_remove_the_school
-    expect(page).to have_content("Remove school")
+    expect(page).to have_button("Remove #{provider_school.decorate.location_name} from your account")
   end
 
   def then_i_see_the_school_could_not_be_removed
