@@ -40,11 +40,14 @@ module Find
       @address = Geolocation::Address.query(location_params)
       return unless @address.coordinates?
 
+      # A course can have no school to measure from: none attached, or none of
+      # them geocoded. That is not an error - the page falls back to the funding
+      # hint instead of a distance.
       @distance_from_location ||= ::Courses::NearestSchoolQuery.new(
         courses: [@course],
         latitude: @address.latitude,
         longitude: @address.longitude,
-      ).call.first.distance_to_search_location.ceil
+      ).call.first&.distance_to_search_location&.ceil
     end
 
   private
@@ -63,8 +66,18 @@ module Find
       @course = provider.courses.includes(
         :enrichments,
         subjects: [:financial_incentive],
-        site_statuses: [:site],
+        **school_preloads,
       ).find_by!(course_code: params[:course_code]&.upcase).decorate
+    end
+
+    # Study sites still have no canonical model, so study_site_placements keeps
+    # its own legacy preload elsewhere - only the placement schools move.
+    def school_preloads
+      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
+        { schools: %i[gias_school provider_school] }
+      else
+        { site_statuses: [:site] }
+      end
     end
 
     def show_interview_process?

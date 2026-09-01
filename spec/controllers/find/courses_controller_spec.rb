@@ -98,6 +98,57 @@ module Find
           }.not_to raise_error
         end
       end
+
+      context "when the course only has canonical schools" do
+        render_views
+
+        let(:london) { build(:location, :london) }
+        let(:canary_wharf) { build(:location, :canary_wharf) }
+
+        let(:published_course) do
+          create(:course, enrichments: [build(:course_enrichment, :published)], provider:)
+        end
+
+        before do
+          FeatureFlag.activate(:course_publishing_uses_new_school_model)
+          allow(Geolocation::Address).to receive(:query).and_return(
+            Geolocation::Address.new(latitude: london.latitude, longitude: london.longitude, formatted_address: "London"),
+          )
+        end
+
+        after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
+
+        def get_show_from_london
+          get :show, params: {
+            provider_code: provider.provider_code,
+            course_code: published_course.course_code,
+            location: "London",
+          }
+        end
+
+        it "measures the distance from the nearest GIAS school, with no Site or SiteStatus in play" do
+          create(
+            :course_school,
+            course: published_course,
+            gias_school: create(:gias_school, latitude: canary_wharf.latitude, longitude: canary_wharf.longitude),
+          )
+
+          get_show_from_london
+
+          expect(published_course.site_statuses).to be_empty
+          expect(response).to have_http_status(:ok)
+          expect(controller.view_assigns["distance_from_location"]).to eq(5)
+        end
+
+        it "renders without a distance when the course has no geocoded school" do
+          create(:course_school, course: published_course, gias_school: create(:gias_school))
+
+          get_show_from_london
+
+          expect(response).to have_http_status(:ok)
+          expect(controller.view_assigns["distance_from_location"]).to be_nil
+        end
+      end
     end
   end
 end
