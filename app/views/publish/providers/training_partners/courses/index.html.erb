@@ -7,5 +7,10 @@
 </h1>
 
 <section>
-  <%= render Publish::Courses::TableComponent.new(courses: @courses, provider: @provider) %>
+  <%= render Publish::Courses::TableComponent.new(
+        courses: @courses,
+        provider: @provider,
+        course_information_fields: @visible_course_information_fields,
+        view_course_column: true,
+      ) %>
 </section>
