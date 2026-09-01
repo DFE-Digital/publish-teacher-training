@@ -137,6 +137,20 @@ RSpec.describe "Course show", travel: mid_cycle(2025) do
     then_i_should_be_back_on_the_preview_page
   end
 
+  # Find and Publish preview render the same shared/courses/_placements partial,
+  # so this is the Publish half of the pair covered for Find in
+  # spec/controllers/find/placements_controller_spec.rb.
+  scenario "user sees canonical school placements", travel: find_opens(2026) do
+    FeatureFlag.activate(:course_publishing_uses_new_school_model)
+    given_i_am_authenticated(user: user_with_fee_based_course)
+    and_the_course_is_taught_at_a_canonical_school
+    when_i_visit_the_publish_course_preview_page
+    and_i_click_link_or_button("View list of school placements")
+    then_i_see_the_canonical_school_placement
+  ensure
+    FeatureFlag.deactivate(:course_publishing_uses_new_school_model)
+  end
+
   scenario "user views provider and accredited_provider", travel: mid_cycle do
     given_i_am_authenticated(user: user_with_fee_based_course)
     when_i_visit_the_publish_course_preview_page
@@ -436,6 +450,23 @@ private
 
   def then_i_should_be_on_the_school_placements_page
     expect(publish_course_preview_page).to have_school_placements_table
+  end
+
+  def and_the_course_is_taught_at_a_canonical_school
+    @gias_school = create(
+      :gias_school,
+      name: "Ashfield School",
+      address1: "12 Mill Lane",
+      town: "Barnsley",
+      postcode: "S70 2AB",
+    )
+    create(:course_school, course:, gias_school: @gias_school)
+  end
+
+  def then_i_see_the_canonical_school_placement
+    expect(publish_course_preview_page).to have_school_placements_table
+    expect(publish_course_preview_page.school_placements_table).to have_content("Ashfield School")
+    expect(publish_course_preview_page.school_placements_table).to have_content("12 Mill Lane, Barnsley, S70 2AB")
   end
 
   def then_i_should_be_on_the_provider_page
