@@ -16,7 +16,8 @@ export default class extends Controller {
     'funding',
     'qualification',
     'studyMode',
-    'startDate'
+    'startDate',
+    'announcement'
   ]
 
   update (event) {
@@ -24,14 +25,21 @@ export default class extends Controller {
 
     if (!selected?.value) {
       this.detailsTarget.hidden = true
+      this.announcementTarget.textContent = ''
       return
     }
+    this.detailsTarget.hidden = false
 
     this.titleTarget.textContent = `${selected.dataset.name} (${selected.dataset.code})`
 
     this.updateCourseInformation(selected)
 
-    this.detailsTarget.hidden = false
+    this.announcementTarget.textContent = ''
+
+    // VoiceOver does not reliably announce live region updates immediately after a select change, so delay the announcement slightly to ensure the updated display is announced.
+    setTimeout(() => {
+      this.announcementTarget.textContent = `Additional course details displayed for ${selected.dataset.name} (${selected.dataset.code}).`
+    }, 100)
   }
 
   updateCourseInformation (selected) {

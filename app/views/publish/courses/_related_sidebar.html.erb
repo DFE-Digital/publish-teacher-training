@@ -39,6 +39,11 @@
             </p>
             <p class="copy-course-content__item" data-copy-course-content-target="startDate"></p>
           </div>
+          <div
+  class="govuk-visually-hidden"
+  aria-live="polite"
+  data-copy-course-content-target="announcement">
+          </div>
         </div>
       </div>
       <%= form.submit "Copy content", class: "govuk-button copy-course-content__button", name: nil, data: { qa: "course__copy" } %>
