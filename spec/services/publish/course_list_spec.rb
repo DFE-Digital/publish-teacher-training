@@ -81,6 +81,36 @@ RSpec.describe Publish::CourseList do
     end
   end
 
+  # The rule itself, independent of a provider's list: callers that already hold
+  # the courses to compare (the training partner course list, the copy-content
+  # sidebar) use this rather than restating it.
+  describe ".visible_course_information_fields" do
+    let(:provider) { create(:provider) }
+
+    it "returns no fields when every course shares the same values" do
+      courses = build_list(:course, 2, provider:, funding: "fee", study_mode: :full_time)
+
+      expect(described_class.visible_course_information_fields(courses)).to eq([])
+    end
+
+    it "returns the varying fields in display order" do
+      courses = [
+        build(:course, provider:, funding: "fee", study_mode: :full_time),
+        build(:course, provider:, funding: "salary", study_mode: :part_time),
+      ]
+
+      expect(described_class.visible_course_information_fields(courses)).to eq(%i[funding study_mode])
+    end
+
+    it "returns no fields for a single course, which has nothing to vary against" do
+      expect(described_class.visible_course_information_fields([build(:course, provider:)])).to eq([])
+    end
+
+    it "returns no fields for an empty list" do
+      expect(described_class.visible_course_information_fields([])).to eq([])
+    end
+  end
+
   describe "#visible_course_information_fields" do
     let(:provider) { create(:provider, :accredited_provider) }
 

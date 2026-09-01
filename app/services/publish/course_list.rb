@@ -46,6 +46,13 @@ module Publish
       start_date: ->(course) { course.start_date.presence&.to_date&.beginning_of_month },
     }.freeze
 
+    # The rule on its own: the fields whose value is not the same for every
+    # course given. Callers that already hold the courses to compare use this
+    # directly rather than restating the comparison.
+    def self.visible_course_information_fields(courses)
+      FIELDS.keys.select { |key| courses.map(&FIELDS.fetch(key)).uniq.size > 1 }
+    end
+
     # Asks whether any course survived the filters rather than whether any group
     # did, so a group that keeps its place with nothing in it is not a list.
     def any?
@@ -70,7 +77,7 @@ module Publish
     # never adds or removes a column.
     def visible_course_information_fields
       @visible_course_information_fields ||=
-        FIELDS.keys.select { |key| unfiltered_courses.map(&FIELDS.fetch(key)).uniq.size > 1 }
+        self.class.visible_course_information_fields(unfiltered_courses)
     end
 
     # The filter groups worth showing: those whose value varies across the whole
