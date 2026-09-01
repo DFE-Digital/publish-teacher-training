@@ -20,6 +20,8 @@ module Courses
   # Then you can access the distance through #distance_to_search_location
   #
   class SchoolDistancesQuery
+    include CanonicalSchoolDistance
+
     def initialize(courses:, latitude:, longitude:)
       @courses = courses
       @latitude = latitude
@@ -48,8 +50,8 @@ module Courses
       subquery = Course
                  .joins(schools: %i[gias_school provider_school])
                  .where(id: @courses.map(&:id))
-                 .where("gias_school.geo_location IS NOT NULL")
-                 .select(schools_select_sql)
+                 .where(GEOCODED_SCHOOL)
+                 .select("DISTINCT ON (course.id, gias_school.id) #{school_columns_sql}")
                  .order("course.id, gias_school.id, provider_school.site_code ASC")
 
       Course
@@ -65,35 +67,6 @@ module Courses
         .select(select_sql)
         .order("course.id, distance_to_search_location ASC")
         .group("course.id, site.id")
-    end
-
-    # geo_location is a stored generated column, so it is NULL whenever either
-    # coordinate is missing - one guard covers both. ST_Distance takes the
-    # trailing `false` to force sphere maths, matching the legacy
-    # ST_DistanceSphere path and Courses::Query#schools_location_scope, and
-    # metres are converted with the same 1609.344 the results page uses.
-    #
-    # The CASE reproduces Provider::School#location_name in SQL.
-    def schools_select_sql
-      <<~SQL.squish
-        DISTINCT ON (course.id, gias_school.id) course.id AS course_id,
-        course.*,
-        provider_school.uuid AS provider_school_uuid,
-        CASE
-          WHEN provider_school.site_code = #{Course.connection.quote(Provider::School::MAIN_SITE_CODE)}
-          THEN gias_school.name || ' (Main Site)'
-          ELSE gias_school.name
-        END AS location_name,
-        gias_school.latitude,
-        gias_school.longitude,
-        ST_Distance(gias_school.geo_location, #{search_point}, false) / 1609.344 AS distance_to_search_location
-      SQL
-    end
-
-    def search_point
-      Course.sanitize_sql_array(
-        ["ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)::geography", Float(@longitude), Float(@latitude)],
-      )
     end
 
     def select_sql
