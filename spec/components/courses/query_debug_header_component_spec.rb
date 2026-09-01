@@ -143,6 +143,11 @@ RSpec.describe Courses::QueryDebugHeaderComponent, type: :component do
       expect(page).to have_content("Debug School")
       expect(page).not_to have_link("Debug School", visible: :all)
     end
+
+    it "labels the column as a school rather than a site" do
+      expect(query_debug_header_component_content).to include("Nearest School")
+      expect(query_debug_header_component_content).not_to include("Nearest Site")
+    end
   end
 
   context "when the results only have canonical schools" do
