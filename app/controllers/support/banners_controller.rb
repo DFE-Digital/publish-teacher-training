@@ -21,10 +21,13 @@ module Support
     end
 
     def create
-      @banner = Banner.new(banner_params)
-      if @banner.save
+      form = BannerForm.new(banner_params)
+      @banner = Banner.new(form.banner_attributes)
+
+      if form.valid? && @banner.save
         redirect_to banner_status_path(@banner), flash: { success: t("support.flash.created", resource: Banner.name) }
       else
+        merge_date_errors(form)
         render :new, status: :unprocessable_entity
       end
     end
@@ -32,9 +35,13 @@ module Support
     def edit; end
 
     def update
-      if @banner.update(banner_params)
+      form = BannerForm.new(banner_params)
+      @banner.assign_attributes(form.banner_attributes)
+
+      if form.valid? && @banner.save
         redirect_to banner_status_path(@banner), flash: { success: t("support.flash.updated", resource: Banner.name) }
       else
+        merge_date_errors(form)
         render :edit, status: :unprocessable_entity
       end
     end
@@ -50,6 +57,15 @@ module Support
 
     def set_banner
       @banner = Banner.find(params[:id])
+    end
+
+    def merge_date_errors(form)
+      @banner.validate
+
+      form.errors.each do |error|
+        @banner.errors.delete(error.attribute)
+        @banner.errors.import(error)
+      end
     end
 
     def reject_expired

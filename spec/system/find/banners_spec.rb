@@ -38,6 +38,6 @@ private
 
   def then_i_do_not_see_the_banner
     expect(page).to have_current_path(find_root_path)
-    expect(page).to have_no_content("Find notice")
+    expect(page).to have_no_content("Maintenance this weekend.")
   end
 end

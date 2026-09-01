@@ -25,6 +25,12 @@ en:
           blank: "Select at least one type of secondary course"
         find/subjects/primary_form:
           blank: "Select at least one type of primary course"
+        support/banner_form:
+          attributes:
+            published_at:
+              invalid_date: Enter a valid publish date and time
+            expired_at:
+              invalid_date: Enter a valid expiry date and time
         support/recruitment_cycle_form:
           attributes:
             year:
