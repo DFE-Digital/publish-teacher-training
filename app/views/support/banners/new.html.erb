@@ -4,8 +4,6 @@
   <%= govuk_back_link(href: active_support_banners_path) %>
 <% end %>
 
-<div class="govuk-width-container">
-  <%= form_with(model: @banner, url: support_banners_path) do |form| %>
-    <%= render "form", form: form, page_caption: t(".page_caption"), page_title: t(".page_title") %>
-  <% end %>
-</div>
+<%= form_with(model: @banner, url: support_banners_path) do |form| %>
+  <%= render "form", form: form, page_caption: t(".page_caption"), page_title: t(".page_title") %>
+<% end %>

@@ -59,15 +59,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_27_153000) do
   end
 
   create_table "banner", force: :cascade do |t|
-    t.text "body"
+    t.text "body", null: false
     t.datetime "created_at", null: false
-    t.boolean "display_on_find"
-    t.boolean "display_on_publish"
-    t.boolean "display_on_support"
+    t.boolean "display_on_find", default: false, null: false
+    t.boolean "display_on_publish", default: false, null: false
+    t.boolean "display_on_support", default: false, null: false
     t.datetime "expired_at"
     t.string "heading"
     t.string "name", null: false
-    t.datetime "published_at"
+    t.datetime "published_at", null: false
     t.datetime "updated_at", null: false
   end
 

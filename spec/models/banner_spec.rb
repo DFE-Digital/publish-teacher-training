@@ -76,7 +76,6 @@ RSpec.describe Banner, type: :model do
     it "returns only banners with display_on_find set to true" do
       find_banner = create(:banner, display_on_find: true)
       create(:banner, display_on_find: false)
-      create(:banner, display_on_find: nil)
 
       expect(described_class.display_on_find).to contain_exactly(find_banner)
     end
@@ -86,7 +85,6 @@ RSpec.describe Banner, type: :model do
     it "returns only banners with display_on_publish set to true" do
       publish_banner = create(:banner, display_on_publish: true)
       create(:banner, display_on_publish: false, display_on_find: true)
-      create(:banner, display_on_publish: nil, display_on_find: true)
 
       expect(described_class.display_on_publish).to contain_exactly(publish_banner)
     end
@@ -96,7 +94,6 @@ RSpec.describe Banner, type: :model do
     it "returns only banners with display_on_support set to true" do
       support_banner = create(:banner, display_on_support: true)
       create(:banner, display_on_support: false)
-      create(:banner, display_on_support: nil)
 
       expect(described_class.display_on_support).to contain_exactly(support_banner)
     end

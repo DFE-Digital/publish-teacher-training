@@ -4,25 +4,23 @@
   <%= govuk_back_link(href: scheduled_support_banners_path) %>
 <% end %>
 
-<div class="govuk-width-container">
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-l"><%= t(".page_caption") %></span>
-      <h1 class="govuk-heading-l"><%= t(".page_title", name: @banner.name) %></h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l"><%= t(".page_caption") %></span>
+    <h1 class="govuk-heading-l"><%= t(".page_title", name: @banner.name) %></h1>
 
-      <p class="govuk-body"><%= t(".explanation") %></p>
-    </div>
+    <p class="govuk-body"><%= t(".explanation") %></p>
   </div>
+</div>
 
-  <%= render BannerComponent.new(banner: @banner) %>
+<%= render BannerComponent.new(banner: @banner) %>
 
-  <div class="govuk-button-group govuk-!-margin-top-6">
-    <%= button_to(
-      t(".confirm"),
-      support_banner_path(@banner),
-      method: :delete,
-      class: "govuk-button govuk-button--warning",
-    ) %>
-    <%= govuk_link_to t("cancel"), scheduled_support_banners_path, no_visited_state: true %>
-  </div>
+<div class="govuk-button-group govuk-!-margin-top-6">
+  <%= button_to(
+    t(".confirm"),
+    support_banner_path(@banner),
+    method: :delete,
+    class: "govuk-button govuk-button--warning",
+  ) %>
+  <%= govuk_link_to t("cancel"), scheduled_support_banners_path, no_visited_state: true %>
 </div>
