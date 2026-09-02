@@ -3,6 +3,8 @@ module Find
     extend ActiveSupport::Concern
 
     RETURN_TO_AFTER_AUTHENTICATING_SESSION_KEY = "return_to_after_authenticating".freeze
+    # This intent is stored in the anonymous Rails cookie session before a
+    # database-backed candidate Session exists, so it needs its own expiry.
     RETURN_TO_AFTER_AUTHENTICATING_MAX_AGE = 30.minutes
     RETURN_TO_AFTER_AUTHENTICATING_MAX_BYTES = 2.kilobytes
 

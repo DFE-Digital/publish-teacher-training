@@ -9,6 +9,15 @@ RSpec.describe "View pages" do
     expect(page).to have_css(".govuk-tag.govuk-tag--grey.govuk-phase-banner__content__tag", text: Settings.environment.label)
   end
 
+  scenario "Phase banner remains visible when results authentication is required" do
+    FeatureFlag.deactivate(:candidate_accounts)
+    FeatureFlag.activate(:require_authentication_for_find_results)
+
+    visit "/cookies"
+
+    expect(page).to have_css(".govuk-phase-banner", count: 1, text: "This is a new service")
+  end
+
   scenario "Navigate to /cookies" do
     visit "/cookies"
     expect(page).to have_css("h1", text: "Cookies")
