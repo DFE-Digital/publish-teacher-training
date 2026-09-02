@@ -206,13 +206,10 @@ private
 
     publish_on = 1.month.from_now
 
-    within_fieldset("Publish date") do
+    within_fieldset("Publish date and time") do
       fill_in "Day", with: publish_on.day
       fill_in "Month", with: publish_on.month
       fill_in "Year", with: publish_on.year
-    end
-
-    within_fieldset("Publish time") do
       fill_in "Hour", with: "9"
       fill_in "Minute", with: "0"
     end
@@ -243,24 +240,18 @@ private
     fill_in "Heading (optional)", with: "Service update"
     fill_in "Body", with: "Please be aware of upcoming changes."
 
-    within_fieldset("Publish date") do
+    within_fieldset("Publish date and time") do
       fill_in "Day", with: "1"
       fill_in "Month", with: "6"
       fill_in "Year", with: "2026"
-    end
-
-    within_fieldset("Publish time") do
       fill_in "Hour", with: "9"
       fill_in "Minute", with: "30"
     end
 
-    within_fieldset("Expiry date") do
+    within_fieldset("Expiry date and time") do
       fill_in "Day", with: "30"
       fill_in "Month", with: "6"
       fill_in "Year", with: "2026"
-    end
-
-    within_fieldset("Expiry time") do
       fill_in "Hour", with: "17"
       fill_in "Minute", with: "0"
     end

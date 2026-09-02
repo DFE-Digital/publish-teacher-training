@@ -1,0 +1,24 @@
+<%# locals: (form:, attribute:) %>
+
+<% Support::BannersHelper::TIME_SEGMENTS.each do |segment, index| %>
+  <div class="govuk-date-input__item">
+    <div class="govuk-form-group">
+      <%= label_tag(
+            "#{form.object_name}_#{attribute}_#{index}i",
+            t("support.banners.form.segments.#{segment}"),
+            class: "govuk-label govuk-date-input__label",
+          ) %>
+      <%= text_field_tag(
+            "#{form.object_name}[#{attribute}(#{index}i)]",
+            banner_time_part(form.object, attribute, index),
+            id: "#{form.object_name}_#{attribute}_#{index}i",
+            class: class_names(
+              "govuk-input govuk-date-input__input govuk-input--width-2",
+              "govuk-input--error" => form.object.errors[attribute].any?,
+            ),
+            inputmode: "numeric",
+            autocomplete: "off",
+          ) %>
+    </div>
+  </div>
+<% end %>

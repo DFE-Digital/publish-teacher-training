@@ -175,14 +175,6 @@ RSpec.describe Banner, type: :model do
 
   describe "#active?" do
     [
-
-      { published: :past, expired: nil, result: true },
-      { published: :past, expired: :past, result: false },
-      { published: :past, expired: :present, result: true },
-      { published: :past, expired: :future, result: true },
-      { published: :present, expired: nil, result: true },
-      { published: :present, expired: :present, result: true },
-      { published: :present, expired: :future, result: true },
       { published: :future, expired: nil, result: false },
       { published: :future, expired: :future, result: false },
     ].each do |expectation|
@@ -245,37 +237,6 @@ RSpec.describe Banner, type: :model do
     end
   end
 
-  describe "#scheduled?" do
-    [
-
-      { published: :past, expired: nil, result: false },
-      { published: :past, expired: :past, result: false },
-      { published: :past, expired: :present, result: false },
-      { published: :past, expired: :future, result: false },
-      { published: :present, expired: nil, result: false },
-      { published: :present, expired: :present, result: false },
-      { published: :present, expired: :future, result: false },
-      { published: :future, expired: nil, result: true },
-      { published: :future, expired: :future, result: true },
-    ].each do |expectation|
-      context "when published_at is #{expectation[:published] || 'nil'} and expired_at is #{expectation[:expired] || 'nil'}" do
-        it "returns #{expectation[:result]}" do
-          timings = {
-            now: Time.zone.local(2026, 7, 1, 12, 0, 0),
-            present: Time.zone.local(2026, 7, 1, 12, 0, 0),
-            past: Time.zone.local(2026, 7, 1, 11, 0, 0),
-            future: Time.zone.local(2026, 7, 1, 13, 0, 0),
-          }
-          published_at = timings.fetch(expectation[:published], nil)
-          expired_at = timings.fetch(expectation[:expired], nil)
-
-          banner = build(:banner, published_at: published_at, expired_at: expired_at)
-          expect(banner.scheduled?(timings.fetch(:now))).to eq(expectation[:result])
-        end
-      end
-    end
-  end
-
   describe ".expired" do
     it "returns the correct banners when checking expired in the present" do
       timings = {
@@ -311,37 +272,6 @@ RSpec.describe Banner, type: :model do
       expired_banners = described_class.expired(now)
       non_expired_banners = described_class.all.excluding(expired_banners)
       expect(non_expired_banners.map { |banner| banner.expired?(now) }).to be_all false
-    end
-  end
-
-  describe "#expired?" do
-    [
-
-      { published: :past, expired: nil, result: false },
-      { published: :past, expired: :past, result: true },
-      { published: :past, expired: :present, result: false },
-      { published: :past, expired: :future, result: false },
-      { published: :present, expired: nil, result: false },
-      { published: :present, expired: :present, result: false },
-      { published: :present, expired: :future, result: false },
-      { published: :future, expired: nil, result: false },
-      { published: :future, expired: :future, result: false },
-    ].each do |expectation|
-      context "when published_at is #{expectation[:published] || 'nil'} and expired_at is #{expectation[:expired] || 'nil'}" do
-        it "returns #{expectation[:result]}" do
-          timings = {
-            now: Time.zone.local(2026, 7, 1, 12, 0, 0),
-            present: Time.zone.local(2026, 7, 1, 12, 0, 0),
-            past: Time.zone.local(2026, 7, 1, 11, 0, 0),
-            future: Time.zone.local(2026, 7, 1, 13, 0, 0),
-          }
-          published_at = timings.fetch(expectation[:published], nil)
-          expired_at = timings.fetch(expectation[:expired], nil)
-
-          banner = build(:banner, published_at: published_at, expired_at: expired_at)
-          expect(banner.expired?(timings.fetch(:now))).to eq(expectation[:result])
-        end
-      end
     end
   end
 

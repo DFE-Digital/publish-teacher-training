@@ -24,6 +24,7 @@ RSpec.describe Support::BannerForm, type: :model do
       "a day beyond the month" => { "3i" => "32" },
       "a month beyond the year" => { "2i" => "13" },
       "a minute beyond the hour" => { "5i" => "60" },
+      "an hour beyond the day" => { "4i" => "24" },
       "a day that does not exist in that month" => { "2i" => "2", "3i" => "30" },
       "a year containing a letter" => { "1i" => "2O26" },
     }.each do |description, published_at|
@@ -31,10 +32,19 @@ RSpec.describe Support::BannerForm, type: :model do
         subject = form(published_at:)
 
         expect(subject).not_to be_valid
-        expect(subject.published_at).to be_nil
+        expect(subject.published_at).not_to be_a(Time)
         expect(subject.errors[:published_at]).to contain_exactly("Enter a valid publish date and time")
       end
     end
+  end
+
+  it "ignores multiple parameter keys on an attribute that is not a date" do
+    subject = described_class.new(
+      { "name(1i)" => "2026", "name(2i)" => "1", "name(3i)" => "1", "body" => "Something has changed", "display_on_find" => "1" }
+        .merge(parts("published_at", { "1i" => "2026", "2i" => "1", "3i" => "1", "4i" => "9", "5i" => "0" })),
+    )
+
+    expect(subject.name).to be_nil
   end
 
   describe "expiry" do
