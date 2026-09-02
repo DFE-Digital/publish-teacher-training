@@ -35,7 +35,7 @@ RSpec.describe Banner, type: :model do
 
       expect(banner.errors[:name]).to include("Enter a name to identify this banner")
       expect(banner.errors[:body]).to include("Enter the text to show in the banner")
-      expect(banner.errors[:published_at]).to include("Enter a publish date")
+      expect(banner.errors[:published_at]).to include("Enter a publish date and time")
     end
 
     describe "displayed_on" do

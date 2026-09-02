@@ -18,7 +18,7 @@ en:
               too_long: Banner name must be 20 words or fewer
               too_short: Banner name must be at least 2 characters
             published_at:
-              blank: Enter a publish date
+              blank: Enter a publish date and time
     attributes:
       banner:
         body: Body
