@@ -315,8 +315,8 @@ private
     # the trait's after(:create) hook only fires for a site the factory creates,
     # and an assigned collection stays cached on the provider instance, so
     # `provider.sites.first` would keep serving the assigned record.
-    create(:site, :with_provider_school, provider: school_provider)
-    create(:site, :study_site, provider: school_provider)
+    create(:site, :with_provider_school, provider: school_provider, location_name: "Placement School")
+    create(:site, :study_site, provider: school_provider, location_name: "Study Site")
     first_partner = create(:accredited_provider, recruitment_cycle:)
     second_partner = create(:accredited_provider, recruitment_cycle:)
     create(:provider_partnership, training_provider: school_provider, accredited_provider: first_partner)
@@ -790,8 +790,8 @@ private
     # the trait's after(:create) hook only fires for a site the factory creates,
     # and an assigned collection stays cached on the provider instance, so
     # `provider.sites.first` would keep serving the assigned record.
-    create(:site, :with_provider_school, provider: school_provider)
-    create(:site, :study_site, provider: school_provider)
+    create(:site, :with_provider_school, provider: school_provider, location_name: "Placement School")
+    create(:site, :study_site, provider: school_provider, location_name: "Study Site")
     single_partner = create(:accredited_provider, recruitment_cycle:)
     create(:provider_partnership, training_provider: school_provider, accredited_provider: single_partner)
 
