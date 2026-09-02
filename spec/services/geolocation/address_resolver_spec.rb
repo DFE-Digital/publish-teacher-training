@@ -114,10 +114,16 @@ RSpec.describe Geolocation::AddressResolver do
 
       before do
         cache.write(address_resolver.cache_key, cached_hash, expires_in: cache_expiration)
+        allow(client).to receive(:geocode)
       end
 
       it "returns address from cached hash" do
         expect(address_resolver.call).to eq(cached_hash)
+      end
+
+      it "does not call the Google client" do
+        address_resolver.call
+        expect(client).not_to have_received(:geocode)
       end
 
       it "logs a cache hit" do

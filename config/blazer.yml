@@ -14,14 +14,12 @@ data_sources:
     timeout: 30
 
     # Cache results of slow queries. Blazer.cache defaults to Rails.cache,
-    # which is Redis today, so this needs no extra infrastructure.
+    # which uses Solid Cache on the primary database in production.
     #
-    # Revisit when Rails.cache moves to SolidCache on Postgres: this writes
-    # whole result sets (which often contain personal data) into
-    # solid_cache_entries, where they persist unencrypted for expires_in and
-    # appear in backups. Consider encrypt: true on the cache store, a shorter
-    # expires_in, or setting Blazer.cache to a separate store in
-    # config/initializers/blazer.rb.
+    # Cached results can contain personal data. solid_cache_entries is excluded
+    # from analytics and truncated by db/scripts/sanitise.sql before restored
+    # production dumps are used outside production. Production databases and
+    # backups remain subject to the usual controls for personal data.
     cache:
       mode: slow # cache only queries slower than slow_threshold
       expires_in: 60 # minutes
