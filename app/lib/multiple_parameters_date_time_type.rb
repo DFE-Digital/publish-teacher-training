@@ -1,28 +1,25 @@
 # frozen_string_literal: true
 
 class MultipleParametersDateTimeType < ActiveModel::Type::Value
-  def self.process(params)
-    params.keys
-          .select { |key| key.to_s.match?(/\(\d+i\)\z/) }
-          .map { |key| key.to_s.split("(").first }
-          .uniq
-          .each do |attribute_name|
-            parts = (1..5).map { |index| params.delete("#{attribute_name}(#{index}i)") }
-            params.delete("#{attribute_name}(6i)")
+  MULTIPLE_PARAMETER_KEY = /\(\d+i\)\z/
 
-            next if parts.all?(&:blank?)
+  def self.process(params, attribute_names)
+    attribute_names.each do |attribute_name|
+      parts = (1..5).map { |index| params.delete("#{attribute_name}(#{index}i)") }
 
-            params[attribute_name] = PotentialDateTime.new(
-              year: parts[0], month: parts[1], day: parts[2], hour: parts[3], minute: parts[4],
-            )
-          end
+      next if parts.all?(&:blank?)
 
-    params
+      params[attribute_name] = PotentialDateTime.new(
+        year: parts[0], month: parts[1], day: parts[2], hour: parts[3], minute: parts[4],
+      )
+    end
+
+    params.except(*params.keys.grep(MULTIPLE_PARAMETER_KEY))
   end
 
   def cast(value)
     if value.is_a?(PotentialDateTime)
-      value.to_time
+      value.to_time || value
     else
       super
     end

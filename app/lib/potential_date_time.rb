@@ -3,16 +3,12 @@
 class PotentialDateTime
   include ActiveModel::Model
 
-  PARTS = %i[year month day hour minute].freeze
+  SEGMENTS = { 1 => :year, 2 => :month, 3 => :day, 4 => :hour, 5 => :minute }.freeze
 
-  attr_accessor(*PARTS)
+  attr_accessor(*SEGMENTS.values)
 
-  def parts
-    PARTS.map { |part| public_send(part) }
-  end
-
-  def blank?
-    parts.all?(&:blank?)
+  def fetch(segment)
+    public_send(SEGMENTS[segment]) if SEGMENTS.key?(segment)
   end
 
   def to_time

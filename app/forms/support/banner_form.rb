@@ -13,8 +13,12 @@ module Support
 
     validates :published_at, :expired_at, multiple_parameters_date_time: true
 
+    def self.date_time_attribute_names
+      attribute_types.select { |_, type| type.is_a?(MultipleParametersDateTimeType) }.keys
+    end
+
     def initialize(params = {})
-      super(MultipleParametersDateTimeType.process(params.to_h))
+      super(MultipleParametersDateTimeType.process(params.to_h, self.class.date_time_attribute_names))
     end
 
     def banner_attributes

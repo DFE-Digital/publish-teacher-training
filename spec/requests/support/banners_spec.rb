@@ -39,6 +39,65 @@ RSpec.describe "Support::BannersController" do
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response.body).to include("Enter a valid publish date and time")
     end
+
+    it "reports only the mistyped date when the other one is valid" do
+      post support_banners_path, params: { banner: {
+        name: "Test banner",
+        body: "text",
+        display_on_find: "1",
+        "published_at(1i)" => "2026",
+        "published_at(2i)" => "2",
+        "published_at(3i)" => "30",
+        "published_at(4i)" => "9",
+        "published_at(5i)" => "0",
+        "expired_at(1i)" => "2026",
+        "expired_at(2i)" => "12",
+        "expired_at(3i)" => "1",
+        "expired_at(4i)" => "17",
+        "expired_at(5i)" => "0",
+      } }
+
+      summary = Nokogiri::HTML(response.body).css(".govuk-error-summary__list li").map { |item| item.text.strip }
+
+      expect(summary).to contain_exactly("Enter a valid publish date and time")
+    end
+
+    it "gives back the date parts the support user typed correctly" do
+      post support_banners_path, params: { banner: {
+        name: "Test banner",
+        body: "text",
+        display_on_find: "1",
+        "published_at(1i)" => "2027",
+        "published_at(2i)" => "3",
+        "published_at(3i)" => "32",
+        "published_at(4i)" => "14",
+        "published_at(5i)" => "45",
+      } }
+
+      typed = Nokogiri::HTML(response.body)
+        .css("input[name^='banner[published_at(']")
+        .to_h { |input| [input["name"][/\((\d+i)\)/, 1], input["value"]] }
+
+      expect(typed).to include("1i" => "2027", "2i" => "3", "3i" => "32", "4i" => "14", "5i" => "45")
+    end
+
+    it "gives every element on a rejected form a unique id" do
+      post support_banners_path, params: { banner: {
+        name: "Test banner",
+        body: "text",
+        display_on_find: "1",
+        "published_at(1i)" => "2027",
+        "published_at(2i)" => "3",
+        "published_at(3i)" => "32",
+        "published_at(4i)" => "14",
+        "published_at(5i)" => "45",
+      } }
+
+      ids = Nokogiri::HTML(response.body).css("[id]").map { |element| element["id"] }
+
+      expect(ids.tally.select { |_, count| count > 1 }).to be_empty
+      expect(response.body.scan("Enter a valid publish date and time").size).to eq(2)
+    end
   end
 
   describe "GET /support/banners/expired" do

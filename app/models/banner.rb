@@ -10,7 +10,7 @@ class Banner < ApplicationRecord
   validates :body, words_count: { maximum: 200, message: :too_long }
 
   validates :published_at, presence: true
-  validates :expired_at, comparison: { greater_than_or_equal_to: :published_at }, if: -> { expired_at.present? && published_at.present? }
+  validates :expired_at, comparison: { greater_than_or_equal_to: :published_at }, if: -> { expired_at.is_a?(Time) && published_at.is_a?(Time) }
 
   validate :displayed_on_an_interface
 

@@ -22,6 +22,6 @@ private
   attr_reader :interface
 
   def banners
-    @banners ||= Banner.public_send(INTERFACE_SCOPES.fetch(interface.to_sym)).active.active_order
+    @banners ||= Banner.public_send(INTERFACE_SCOPES.fetch(interface.to_sym)).active.active_order.to_a
   end
 end

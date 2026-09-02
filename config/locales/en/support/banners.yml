@@ -28,23 +28,21 @@ en:
         display_on_publish: Publish
         display_on_support: Support
         displayed_on: Displayed on
-        expired_at: Expired
-        expired_at_date: Expiry date
-        expired_at_date_description: The date the banner stops being shown. Leave blank for no expiry.
-        expired_at_time: Expiry time
-        expired_at_time_description: The time on that date the banner stops being shown.
+        expired_at: Expiry date and time
+        expired_at_description: When the banner stops being shown. Leave blank for no expiry.
         heading: Heading (optional)
         heading_description: The heading of the banner, displayed to users. Avoid using headings
           for single-line notifications that do not need them.
         name: Name
         name_description: The name of the banner, used for internal reference only.
-        published_at: Published
-        published_at_date: Publish date
-        published_at_date_description: The date the banner starts being shown.
-        published_at_time: Publish time
-        published_at_time_description: The time on that date the banner starts being shown.
+        published_at: Publish date and time
+        published_at_description: When the banner starts being shown.
   support:
     banners:
+      form:
+        segments:
+          hour: "Hour"
+          minute: "Minute"
       index:
         page_title: "Banners"
         add_banner: "Add banner"
