@@ -1,0 +1,939 @@
+<% content_for :page_title, "Grouped course results" %>
+
+<% form = nil %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= render partial: "find/results/courses_guidance/show" %>
+    <h1 class="govuk-heading-l">
+     20 courses found
+    </h1>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third">
+    <div class="app-search-location__controls">
+      <div class="app-find-search">
+        <label class="govuk-label govuk-label--s">
+          City, town or postcode
+        </label>
+        <input class="govuk-input" value="Birmingham">
+        <br><br>
+        <button class="govuk-button">
+          Search
+        </button>
+      </div>
+    </div>
+
+<h2 class="app-filter__heading govuk-heading-m">
+    Filter results
+  </h2>
+
+      <!--HARDCODED ACTIVE FILTERS-->
+    <div class="app-active-filters">
+      <div class="app-active-filters__header">
+        <h3 class="govuk-heading-s app-active-filters__heading">Active filters</h3>
+        <p class="govuk-body">
+          <a class="govuk-link app-c-filter-summary__clear-filters govuk-link--no-visited-state" href="/results?utm_medium=clear_all_filters_top&amp;utm_source=results">Clear all</a>
+        </p>
+      </div>
+      <ul class="app-active-filters__remove-filters">
+          <li>
+            <a class="govuk-link app-active-filters__remove-filter" href="/results?minimum_degree_required=show_all_courses&amp;order=course_name_ascending"><span class="app-active-filters__remove-filter-text"><span class="govuk-visually-hidden">Remove filter</span>Mathematics</span></a>
+          </li>
+      </ul>
+    </div>
+    <!--END HARDCODED ACTIVE FILTERS-->
+
+        <div data-controller="details-component" class="app-c-filter-panel__top">
+
+     <div class="app-c-filter-section app-c-filter-section__summary"
+       data-action="click->details-component#toggle">
+
+    <div class="app-c-filter-panel__header">
+
+      <button
+        id="filter-and-sort"
+        data-details-component-target="button"
+        type="button"
+        class="app-c-filter-panel__button govuk-link app-c-filter-panel__button-inner"
+        aria-expanded="true"
+        aria-controls="details-component-content">
+
+        <h2 class="app-c-filter-section__summary-heading">
+          Filter and Sort
+        </h2>
+
+      </button>
+
+      <span class="govuk-hint app-results-indicator">
+        20 results
+      </span>
+
+    </div>
+
+  </div>
+
+  <section
+    aria-labelledby="filter-and-sort"
+    data-details-component-target="content"
+    id="details-component-content">
+
+    <!--HARDCODED FILTERS-->
+<div class="app-filter">
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Sort by
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+      <div class="govuk-radios govuk-radios--small">
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="sort-course" name="sort" type="radio" checked>
+          <label class="govuk-label govuk-radios__label" for="sort-course">
+            Course name (a to z)
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="sort-provider" name="sort" type="radio">
+          <label class="govuk-label govuk-radios__label" for="sort-provider">
+            Training provider (a to z)
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="sort-newest" name="sort" type="radio">
+          <label class="govuk-label govuk-radios__label" for="sort-newest">
+            Newest course
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="sort-soonest" name="sort" type="radio">
+          <label class="govuk-label govuk-radios__label" for="sort-soonest">
+            Soonest start date
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="sort-uk" name="sort" type="radio">
+          <label class="govuk-label govuk-radios__label" for="sort-uk">
+            Lowest fee for UK citizens
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="sort-nonuk" name="sort" type="radio">
+          <label class="govuk-label govuk-radios__label" for="sort-nonuk">
+            Lowest fee for non-UK citizens
+          </label>
+        </div>
+
+      </div>
+    </div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Primary<br>
+        (ages 3 to 11)
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+      <div class="govuk-checkboxes govuk-checkboxes--small">
+
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="primary" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="primary">
+            Primary
+          </label>
+        </div>
+
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="primary-english" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="primary-english">
+            Primary with English
+          </label>
+        </div>
+
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="primary-geography" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="primary-geography">
+            Primary with geography and history
+          </label>
+        </div>
+
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="primary-maths" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="primary-maths">
+            Primary with mathematics
+          </label>
+        </div>
+
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="primary-languages" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="primary-languages">
+            Primary with modern languages
+          </label>
+        </div>
+
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="primary-pe" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="primary-pe">
+            Primary with physical education
+          </label>
+        </div>
+
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="primary-science" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="primary-science">
+            Primary with science
+          </label>
+        </div>
+
+      </div>
+    </div>
+  </details>
+
+  <details class="app-c-filter-section">
+  <summary class="app-c-filter-section__summary">
+    <h3 class="app-c-filter-section__summary-heading">
+      Secondary<br>
+      (ages 11 to 18)
+    </h3>
+  </summary>
+
+  <div class="app-c-filter-section__content">
+    <div class="govuk-checkboxes govuk-checkboxes--small">
+
+  <% [
+    "Ancient Greek",
+    "Ancient Hebrew",
+    "Art and design",
+    "Biology",
+    "Business studies",
+    "Chemistry",
+    "Citizenship",
+    "Classics",
+    "Communication and media studies",
+    "Computing",
+    "Dance",
+    "Design and technology",
+    "Drama",
+    "Economics",
+    "English",
+    "French",
+    "Geography",
+    "German",
+    "Health and social care",
+    "History",
+    "Italian",
+    "Japanese",
+    "Latin",
+    "Mandarin",
+    "Mathematics",
+    "Modern languages (other)",
+    "Music",
+    "Philosophy",
+    "Physical education",
+    "Physical education with an EBacc subject",
+    "Physics",
+    "Psychology",
+    "Religious education",
+    "Russian",
+    "Science",
+    "Social sciences",
+    "Spanish"
+  ].each_with_index do |subject, index| %>
+
+    <div class="govuk-checkboxes__item">
+      <input
+        class="govuk-checkboxes__input"
+        id="secondary-subject-<%= index %>"
+        type="checkbox"
+        <%= "checked" if subject == "Mathematics" %>>
+
+      <label
+        class="govuk-label govuk-checkboxes__label"
+        for="secondary-subject-<%= index %>">
+        <%= subject %>
+      </label>
+    </div>
+
+  <% end %>
+
+    </div>
+  </div>
+</details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Further education<br>
+        (ages 16 and over)
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+      <div class="govuk-checkboxes govuk-checkboxes--small">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="fe-tbc" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="fe-tbc">
+            Further education courses
+          </label>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Special educational needs<br>
+        (SEND)
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+      <div class="govuk-checkboxes govuk-checkboxes--small">
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="send-tbc" type="checkbox">
+          <label class="govuk-label govuk-checkboxes__label" for="send-tbc">
+            Only show courses with a SEND specialism
+          </label>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Fee or salary
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+  <div class="govuk-checkboxes govuk-checkboxes--small">
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="fee-no-salary" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="fee-no-salary">
+        Fee - no salary
+      </label>
+    </div>
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="salary" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="salary">
+        Salary
+      </label>
+    </div>
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="teaching-apprenticeship" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="teaching-apprenticeship">
+        Teaching apprenticeship - with salary
+      </label>
+    </div>
+
+  </div>
+</div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Full time or part time
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+  <div class="govuk-checkboxes govuk-checkboxes--small">
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="full-time" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="full-time">
+        Full time (12 months)
+      </label>
+    </div>
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="part-time" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="part-time">
+        Part time (18 to 24 months)
+      </label>
+    </div>
+
+  </div>
+</div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Qualification
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+  <div class="govuk-checkboxes govuk-checkboxes--small">
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="qts-only" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="qts-only">
+        QTS only
+      </label>
+    </div>
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="qts-pgce" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="qts-pgce">
+        QTS with PGCE or PGDE
+      </label>
+    </div>
+
+  </div>
+</div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Degree grade
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+
+      <p class="govuk-hint">
+        Select your degree (or expected grade)
+      </p>
+
+      <div class="govuk-radios govuk-radios--small">
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="degree-first" name="degree-grade" type="radio">
+          <label class="govuk-label govuk-radios__label" for="degree-first">
+            2:1 or First
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="degree-22" name="degree-grade" type="radio">
+          <label class="govuk-label govuk-radios__label" for="degree-22">
+            2:2
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="degree-third" name="degree-grade" type="radio">
+          <label class="govuk-label govuk-radios__label" for="degree-third">
+            Third
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="degree-pass" name="degree-grade" type="radio">
+          <label class="govuk-label govuk-radios__label" for="degree-pass">
+            Pass
+          </label>
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="degree-none" name="degree-grade" type="radio">
+          <label class="govuk-label govuk-radios__label" for="degree-none">
+            No degree
+          </label>
+        </div>
+
+        <div class="govuk-radios__divider">
+          or
+        </div>
+
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="degree-all" name="degree-grade" type="radio" checked>
+          <label class="govuk-label govuk-radios__label" for="degree-all">
+            Show all courses
+          </label>
+        </div>
+
+      </div>
+
+    </div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Visa sponsorship
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+      <div class="govuk-checkboxes__item govuk-checkboxes--small">
+        <input class="govuk-checkboxes__input" id="visa-tbc" type="checkbox">
+        <label class="govuk-label govuk-checkboxes__label" for="visa-tbc">
+          Only show courses with visa sponsorship
+        </label>
+      </div>
+    </div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Online interviews
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+      <div class="govuk-checkboxes__item govuk-checkboxes--small">
+        <input class="govuk-checkboxes__input" id="interviews-tbc" type="checkbox">
+        <label class="govuk-label govuk-checkboxes__label" for="interviews-tbc">
+          Only show courses that offer online interviews
+        </label>
+      </div>
+    </div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Applications open
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+      <div class="govuk-checkboxes__item govuk-checkboxes--small">
+        <input class="govuk-checkboxes__input" id="applications-tbc" type="checkbox">
+        <label class="govuk-label govuk-checkboxes__label" for="applications-tbc">
+          Only show courses open for applications
+        </label>
+      </div>
+    </div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Start date
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+  <div class="govuk-checkboxes govuk-checkboxes--small">
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="jan-aug-2026" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="jan-aug-2026">
+        January to August 2026
+      </label>
+    </div>
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="sept-2026" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="sept-2026">
+        September 2026 only
+      </label>
+    </div>
+
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="oct-2026-july-2027" type="checkbox">
+      <label class="govuk-label govuk-checkboxes__label" for="oct-2026-july-2027">
+        October 2026 to July 2027
+      </label>
+    </div>
+
+  </div>
+</div>
+  </details>
+
+  <details class="app-c-filter-section">
+    <summary class="app-c-filter-section__summary">
+      <h3 class="app-c-filter-section__summary-heading">
+        Training provider
+      </h3>
+    </summary>
+
+    <div class="app-c-filter-section__content">
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="provider-name">
+          Provider name
+        </label>
+
+        <input
+          class="govuk-input"
+          id="provider-name"
+          type="text">
+      </div>
+    </div>
+  </details>
+  <br>
+  <button class="govuk-button">
+    Apply filters
+  </button>
+</div>
+<!--END HARDCODED FILTERS-->
+
+  </section>
+
+</div>
+
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+    <% if show_salary_subject_message?(params) %>
+      <div class="govuk-inset-text app-card app-card--inset--salaried">
+        <h3 class="govuk-heading-s">
+          Is a salaried course right for me?
+        </h3>
+        <p class="govuk-body">
+          Fee paying courses are less competitive, and you could receive more money if you're eligible for <a href="https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries" class="govuk-link govuk-link--no-visited-state">bursaries or scholarships</a>.
+        </p>
+      </div>
+    <% end %>
+      <ul class="app-search-results">
+
+      <!--HARDCODED SEARCH RESULTS ITEM-->
+       <li class="app-search-results__item">
+        <div class="govuk-summary-card course-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+          Birmingham City University
+        </h2>
+        </div>
+          <div class="govuk-summary-card__content">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (3CGN)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS with PGCE
+                    <br>
+                    Full time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </li>
+      <!--END HARDCODED SEARCH RESULTS ITEM-->
+
+      <!--HARDCODED SEARCH RESULTS ITEM-->
+       <li class="app-search-results__item">
+        <div class="govuk-summary-card course-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+          University of Worcester
+        </h2>
+        </div>
+          <div class="govuk-summary-card__content">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (GX11)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS with PGCE
+                    <br>
+                    Full time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </li>
+      <!--END HARDCODED SEARCH RESULTS ITEM-->
+
+      <!--HARDCODED SEARCH RESULTS ITEM-->
+       <li class="app-search-results__item">
+        <div class="govuk-summary-card course-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+          Best Practice Network
+        </h2>
+        </div>
+          <div class="govuk-summary-card__content">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (Q349)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS
+                    <br>
+                    Part time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (A303)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS
+                    <br>
+                    Full time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </li>
+      <!--END HARDCODED SEARCH RESULTS ITEM-->
+
+     <!--HARDCODED SEARCH RESULTS ITEM-->
+       <li class="app-search-results__item">
+        <div class="govuk-summary-card course-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+          Teach Central, formerly RSA Academies’
+        </h2>
+        </div>
+          <div class="govuk-summary-card__content">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (GX11)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS with PGCE
+                    <br>
+                    Full time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </li>
+      <!--END HARDCODED SEARCH RESULTS ITEM-->
+
+<!--HARDCODED SEARCH RESULTS ITEM-->
+       <li class="app-search-results__item">
+        <div class="govuk-summary-card course-summary-card">
+        <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+          Bishop Challoner Training School
+        </h2>
+        </div>
+          <div class="govuk-summary-card__content">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (L937)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS
+                    <br>
+                    Full time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (U543)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS
+                    <br>
+                    Part time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (S522)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS with PGCE
+                    <br>
+                    Full time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+            <dl class="govuk-summary-list govuk-summary-list--no-border">
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <strong>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state"> Mathematics (SEND) (M287)
+                    </a>
+                  </strong>
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dd class="govuk-summary-list__value">
+                  <div class="govuk-body">
+                    Fee-paying
+                    <br>
+                    <span class="govuk-hint govuk-!-font-size-16">
+                      Bursaries are available for UK citizens
+                    </span>
+                    <br>
+                    QTS with PGCE
+                    <br>
+                    Full time
+                    <br><br>
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">♡ Sign in to save this course
+                    </a>
+                  </div>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </li>
+      <!--END HARDCODED SEARCH RESULTS ITEM-->
+
+
+
+
+
+
+
+
+      </ul>
+  </div>
+</div>
+</div>
