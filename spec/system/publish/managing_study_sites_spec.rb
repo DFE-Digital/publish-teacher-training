@@ -191,7 +191,7 @@ RSpec.describe "Managing a provider's study_sites" do
 
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
-      user: create(:user, providers: [create(:provider, sites: [build(:site, :study_site)])]),
+      user: create(:user, providers: [create(:provider, sites: [build(:site, :study_site, location_name: "Existing Study Site")])]),
     )
   end
 

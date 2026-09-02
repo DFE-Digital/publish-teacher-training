@@ -44,8 +44,8 @@ private
 
   def and_there_are_providers_with_courses
     @course = create(:course)
-    @provider_one = create(:provider, courses: [@course])
-    @provider_two = create(:provider)
+    @provider_one = create(:provider, provider_name: "Alpha SCITT", courses: [@course])
+    @provider_two = create(:provider, provider_name: "Beta SCITT")
   end
 
   def when_i_visit_the_providers_index_page

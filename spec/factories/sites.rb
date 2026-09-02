@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :site do
-    location_name { "Main Site#{rand(1_000_000)}" }
+    # Padded so "Main Site1" is not a Capybara substring of "Main Site10".
+    sequence(:location_name) { |n| sprintf("Main Site%06d", n) }
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.community }
     address3 { Faker::Address.street_name }
