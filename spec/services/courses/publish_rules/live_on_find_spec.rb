@@ -21,30 +21,38 @@ describe Courses::PublishRules::LiveOnFind do
     [build(:course_enrichment, *traits, course: nil)]
   end
 
+  def provider_in(cycle_trait)
+    create(:provider, recruitment_cycle: create(:recruitment_cycle, cycle_trait))
+  end
+
   describe ".applies?" do
     context "with a published course in the current cycle" do
       it "applies when the course is running" do
         expect(applies?(running_course)).to be(true)
       end
 
-      it "applies when the course has no schools but support allowed it to publish without them" do
-        course = create(:course, :published, publish_without_schools_allowed: true)
+      # Find's show action only asks whether the course is published, so it
+      # serves a course whose sites are not on UCAS just the same. Publish must
+      # not be stricter than Find, or it withholds a link to a page that is
+      # there.
+      it "applies when no site is published, which Find serves anyway" do
+        course = running_course(site_statuses: [build(:site_status, status: :new_status, publish: "N")])
 
+        expect(course.is_running?).to be(false)
         expect(applies?(course)).to be(true)
-      end
-
-      it "does not apply when the course is neither running nor exempt" do
-        course = create(:course, :published, publish_without_schools_allowed: false)
-
-        expect(applies?(course)).to be(false)
       end
     end
 
-    context "with a published, running course in the next cycle" do
-      it "does not apply, because Find only serves the current cycle" do
-        provider = create(:provider, recruitment_cycle: create(:recruitment_cycle, :next))
+    context "with a published, running course outside the current cycle" do
+      it "does not apply to the next cycle, which Find does not serve" do
+        expect(applies?(running_course(provider: provider_in(:next)))).to be(false)
+      end
 
-        expect(applies?(running_course(provider:))).to be(false)
+      # Find looks the course up by code under RecruitmentCycle.current, so a
+      # link built from an earlier cycle's row resolves to whichever course
+      # holds that code today — a different course, silently.
+      it "does not apply to a previous cycle, whose code would resolve to another course" do
+        expect(applies?(running_course(provider: provider_in(:previous)))).to be(false)
       end
     end
 
@@ -73,16 +81,17 @@ describe Courses::PublishRules::LiveOnFind do
   # this pins the row and the model together.
   describe "agreement between the model and the read-model row" do
     {
-      "a published, running course" => -> { running_course(provider:) },
-      "a published course exempt from needing schools" => -> { create(:course, :published, provider:, publish_without_schools_allowed: true) },
-      "a published course that is not running" => -> { create(:course, :published, provider:) },
+      "a published course" => -> { running_course(provider:) },
       "a draft course" => -> { running_course(provider:, enrichments: enrichment(:initial_draft)) },
       "a withdrawn course" => -> { running_course(provider:, enrichments: enrichment(:withdrawn)) },
       "a rolled over course" => -> { running_course(provider:, enrichments: enrichment(:rolled_over)) },
       "a course with no enrichment" => -> { running_course(provider:, enrichments: []) },
+      "a published course in the next cycle" => -> { running_course(provider:) },
     }.each do |description, setup|
       context "with #{description}" do
-        let(:provider) { create(:provider) }
+        let(:provider) do
+          description.include?("next cycle") ? provider_in(:next) : create(:provider)
+        end
 
         it "agrees with the verdict taken from Course#content_status" do
           course = instance_exec(&setup)
