@@ -29,14 +29,16 @@ en:
         display_on_support: Support
         displayed_on: Displayed on
         expired_at: Expiry date and time
-        expired_at_description: When the banner stops being shown. Leave blank for no expiry.
+        expired_at_description: When the banner stops being shown. Leave blank for no expiry,
+          or leave the time blank to stop at the end of that day.
         heading: Heading (optional)
         heading_description: The heading of the banner, displayed to users. Avoid using headings
           for single-line notifications that do not need them.
         name: Name
         name_description: The name of the banner, used for internal reference only.
         published_at: Publish date and time
-        published_at_description: When the banner starts being shown.
+        published_at_description: When the banner starts being shown. Leave the time blank
+          to start at the beginning of that day.
   support:
     banners:
       form:
