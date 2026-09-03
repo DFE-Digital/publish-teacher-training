@@ -12,9 +12,9 @@
 
 .app-table--courses {
   width: 100%;
-  // Fixed layout keeps the Course, Course information and Status columns at an
-  // equal third each, so long course names wrap inside their column instead of
-  // pushing the others out. Adding or dropping a column switches to auto below.
+  // Fixed layout with no widths declared divides the table equally between
+  // whatever columns are present — thirds for three, quarters for four — so long
+  // course names wrap inside their column instead of pushing the others out.
   table-layout: fixed;
 
   // Bottom-align the headers so a wrapped "Course information" header lines up
@@ -51,12 +51,12 @@
   }
 }
 
-// Once the column count is no longer three, equal thirds stop making sense:
-// let the Course column take the remaining width and shrink the narrow columns
-// to their content. This covers the course information column being dropped and
-// the View course column being added, together or separately.
-.app-table--courses--no-information,
-.app-table--courses--view-course {
+// Down to two columns, an equal half is far more room than a status tag needs,
+// so this one case drops out of fixed layout: the Course column takes the width
+// and Status shrinks to its content. Every other combination keeps equal
+// columns, which is what the design asks for and what stops a link wrapping
+// inside a column squeezed to its narrowest word.
+.app-table--courses--no-information:not(.app-table--courses--view-course) {
   table-layout: auto;
 
   .app-table--courses__status {
@@ -64,10 +64,4 @@
 
     white-space: nowrap;
   }
-}
-
-// No nowrap here: "View live course" is long enough that it should be allowed
-// to wrap on a narrow viewport rather than force the table wider.
-.app-table--courses--view-course .app-table--courses__view-course {
-  width: 1%;
 }
