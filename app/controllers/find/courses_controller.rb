@@ -3,6 +3,7 @@
 module Find
   class CoursesController < ApplicationController
     include ApplyRedirect
+    include CourseSchoolPreloads
     include GetIntoTeachingRedirect
     include ProviderWebsiteRedirect
 
@@ -68,16 +69,6 @@ module Find
         subjects: [:financial_incentive],
         **school_preloads,
       ).find_by!(course_code: params[:course_code]&.upcase).decorate
-    end
-
-    # Study sites still have no canonical model, so study_site_placements keeps
-    # its own legacy preload elsewhere - only the placement schools move.
-    def school_preloads
-      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-        { schools: %i[gias_school provider_school] }
-      else
-        { site_statuses: [:site] }
-      end
     end
 
     def show_interview_process?
