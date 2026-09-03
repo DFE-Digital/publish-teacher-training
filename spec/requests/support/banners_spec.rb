@@ -62,6 +62,28 @@ RSpec.describe "Support::BannersController" do
       expect(summary).to contain_exactly("Enter a valid publish date and time")
     end
 
+    it "lists errors in the order the questions are asked" do
+      post support_banners_path, params: { banner: {
+        name: "Test banner",
+        body: "text",
+        display_on_find: "false",
+        display_on_publish: "false",
+        display_on_support: "false",
+        "published_at(1i)" => "2O26",
+        "published_at(2i)" => "1",
+        "published_at(3i)" => "1",
+        "published_at(4i)" => "9",
+        "published_at(5i)" => "0",
+      } }
+
+      summary = Nokogiri::HTML(response.body).css(".govuk-error-summary__list li").map { |item| item.text.strip }
+
+      expect(summary).to eq([
+        "Enter a valid publish date and time",
+        "Select at least one interface to display the banner on",
+      ])
+    end
+
     it "gives back the date parts the support user typed correctly" do
       post support_banners_path, params: { banner: {
         name: "Test banner",

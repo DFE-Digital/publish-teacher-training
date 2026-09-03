@@ -27,6 +27,8 @@ RSpec.describe Support::BannerForm, type: :model do
       "an hour beyond the day" => { "4i" => "24" },
       "a day that does not exist in that month" => { "2i" => "2", "3i" => "30" },
       "a year containing a letter" => { "1i" => "2O26" },
+      "a two-digit year" => { "1i" => "26" },
+      "a five-digit year" => { "1i" => "12345" },
     }.each do |description, published_at|
       it "rejects #{description} rather than raising or coercing" do
         subject = form(published_at:)
@@ -45,6 +47,20 @@ RSpec.describe Support::BannerForm, type: :model do
     )
 
     expect(subject.name).to be_nil
+  end
+
+  describe "a date entered without a time" do
+    it "starts the banner at the beginning of that day" do
+      subject = form(published_at: { "4i" => "", "5i" => "" })
+
+      expect(subject.published_at).to eq(Time.zone.local(2026, 1, 1))
+    end
+
+    it "expires the banner at the end of that day" do
+      subject = form(expired_at: { "1i" => "2026", "2i" => "9", "3i" => "5", "4i" => "", "5i" => "" })
+
+      expect(subject.expired_at).to eq(Time.zone.local(2026, 9, 5).end_of_day)
+    end
   end
 
   describe "expiry" do

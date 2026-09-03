@@ -1,6 +1,6 @@
 <%# locals: (form:, page_caption:, page_title:) %>
 
-<%= form.govuk_error_summary %>
+<%= form.govuk_error_summary(order: %i[name heading body published_at expired_at display_on_find]) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l"><%= page_caption %></span>
