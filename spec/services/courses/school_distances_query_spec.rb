@@ -33,13 +33,17 @@ RSpec.describe Courses::SchoolDistancesQuery do
     ])
   end
 
+  # Exact rather than rounded, so a change to the distance maths has to be
+  # deliberate. The values are metres from PostGIS divided by
+  # Geolocation::METRES_PER_MILE; they last moved when this path stopped using a
+  # truncated 1609.34.
   it "includes the distance to the search location in miles for each school" do
     expect(query_result.map(&:distance_to_search_location)).to eq(
       [
-        1.3003659425292355,
-        3.2706425036474585,
-        163.8616343199448,
-        49.64250415094387,
+        1.3003627104894913,
+        3.2706343745153306,
+        163.86122704434848,
+        49.64238076525591,
       ],
     )
   end
