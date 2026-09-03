@@ -69,6 +69,18 @@ RSpec.describe "Course show" do
     end
   end
 
+  describe "in an earlier cycle" do
+    # Find resolves a course by code within the current cycle, so linking an
+    # earlier cycle's course would land on whichever course holds that code
+    # today rather than the one being looked at.
+    scenario "a published, running course offers a preview rather than a link to Find" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course))
+      and_there_is_a_published_running_course_in_the_previous_cycle
+      when_i_visit_the_previous_cycle_course_page
+      then_i_should_see_a_preview_link_rather_than_a_link_to_find
+    end
+  end
+
   describe "with a published course that has a legacy subsequent draft" do
     scenario "i can view the published partial" do
       given_i_am_authenticated_as_a_provider_user(
@@ -318,6 +330,26 @@ private
     )
 
     @user.providers << @next_cycle_provider
+  end
+
+  def and_there_is_a_published_running_course_in_the_previous_cycle
+    @previous_cycle_course = build(:course, :published, site_statuses: [build(:site_status, :findable)])
+    @previous_cycle_provider = create(
+      :provider,
+      recruitment_cycle: find_or_create(:recruitment_cycle, year: RecruitmentCycle.current.year.to_i - 1),
+      provider_code: @user.providers.first.provider_code,
+      courses: [@previous_cycle_course],
+    )
+
+    @user.providers << @previous_cycle_provider
+  end
+
+  def when_i_visit_the_previous_cycle_course_page
+    publish_provider_courses_show_page.load(
+      provider_code: @previous_cycle_provider.provider_code,
+      recruitment_cycle_year: @previous_cycle_provider.recruitment_cycle_year,
+      course_code: @previous_cycle_course.course_code,
+    )
   end
 
   def when_i_visit_the_next_cycle_course_page
