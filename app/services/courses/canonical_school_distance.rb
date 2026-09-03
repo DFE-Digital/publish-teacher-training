@@ -27,8 +27,8 @@ module Courses
     #
     # ST_Distance takes the trailing `false` to force sphere maths, matching the
     # legacy ST_DistanceSphere path and Courses::Query#schools_location_scope;
-    # metres are converted with the same 1609.344 the results page uses, so a
-    # course's distance reads the same on the results card and on its own page.
+    # metres are converted with the same Geolocation::METRES_PER_MILE the results
+    # page uses, so a course's distance reads the same on the card and its own page.
     #
     # The CASE reproduces Provider::School#location_name in SQL.
     def school_columns_sql(distinct_on)
@@ -49,11 +49,12 @@ module Courses
               gias_school.geo_location,
               ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)::geography,
               false
-            ) / 1609.344 AS distance_to_search_location
+            ) / ? AS distance_to_search_location
           SQL
           Provider::School::MAIN_SITE_CODE,
           Float(@longitude),
           Float(@latitude),
+          Geolocation::METRES_PER_MILE,
         ],
       )
     end

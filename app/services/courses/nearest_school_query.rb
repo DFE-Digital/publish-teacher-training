@@ -70,7 +70,7 @@ module Courses
         ST_DistanceSphere(
           ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
           ST_SetSRID(ST_MakePoint(#{Float(@longitude)}, #{Float(@latitude)}), 4326)
-        ) / 1609.34 AS distance_to_search_location
+        ) / #{Geolocation::METRES_PER_MILE} AS distance_to_search_location
       SQL
     end
 

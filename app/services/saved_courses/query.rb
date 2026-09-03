@@ -71,10 +71,11 @@ module SavedCourses
                 MIN(ST_DistanceSphere(
                   ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
                   ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-                ) / 1609.344) AS minimum_distance_to_search_location
+                ) / ?) AS minimum_distance_to_search_location
               SQL
               longitude,
               latitude,
+              Geolocation::METRES_PER_MILE,
             ],
           ),
         )
@@ -105,10 +106,11 @@ module SavedCourses
                 MIN(ST_DistanceSphere(
                   ST_SetSRID(ST_MakePoint(gias_school.longitude::float, gias_school.latitude::float), 4326),
                   ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-                ) / 1609.344) AS minimum_distance_to_search_location
+                ) / ?) AS minimum_distance_to_search_location
               SQL
               longitude,
               latitude,
+              Geolocation::METRES_PER_MILE,
             ],
           ),
         )
