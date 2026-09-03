@@ -24,16 +24,17 @@ Candidates cannot access Publish or the Support Console.
 Provider users manage courses on Publish. They authenticate via [DfE Sign-in](https://services.signin.education.gov.uk).
 
 Access is controlled by the `user_permission` table (`app/models/user_permission.rb`). This is a join between `user` and
-`provider`. There are no granular permission flags. If a user has a `UserPermission` record for a provider, they have
-full access to that provider's resources.
+`provider`. A user can have `UserPermission` records for multiple providers. There are no granular permission flags. If
+a
+`UserPermission` record exists for a provider, the user has full access to that provider's resources.
 
 A provider user can:
 
-- View, create, edit, publish, and withdraw courses for their provider
-- Manage schools and training sites for their provider
-- Add and remove other users for their provider
+- View, create, edit, publish, and withdraw courses for each of their associated providers
+- Manage schools and training sites for each of their associated providers
+- Add and remove other users for each of their associated providers
 
-A provider user cannot access other providers or the Support Console.
+A provider user cannot access providers they are not associated with, or the Support Console.
 
 ### Support users (DfE staff)
 
@@ -57,21 +58,21 @@ A support user can:
 
 ## Permission matrix
 
-| Action                                   | Candidate | Provider user | Support (admin)            |
-|------------------------------------------|-----------|---------------|----------------------------|
-| Browse and search courses (Find)         | Yes       | —             | —                          |
-| Save courses and email alerts            | Yes       | —             | —                          |
-| View own provider's courses              | —         | Yes           | Yes (all)                  |
-| Create, edit, publish, withdraw courses  | —         | Own provider  | All providers              |
-| Manage schools and training sites        | —         | Own provider  | All providers              |
-| Add and remove users for a provider      | —         | Own provider  | All providers              |
-| Create new providers                     | —         | No            | Yes                        |
-| Manage subjects and financial incentives | —         | No            | Yes                        |
-| Feature flags and rollover               | —         | No            | Yes                        |
-| Revert course withdrawals                | —         | No            | Yes                        |
-| Delete candidates                        | —         | No            | Yes                        |
-| Sidekiq dashboard                        | —         | No            | Yes                        |
-| Blazer analytics                         | —         | No            | Yes (with `blazer_access`) |
+| Action                                   | Candidate | Provider user        | Support (admin)            |
+|------------------------------------------|-----------|----------------------|----------------------------|
+| Browse and search courses (Find)         | Yes       | —                    | —                          |
+| Save courses and email alerts            | Yes       | —                    | —                          |
+| View courses for associated providers    | —         | Yes                  | Yes (all)                  |
+| Create, edit, publish, withdraw courses  | —         | Associated providers | All providers              |
+| Manage schools and training sites        | —         | Associated providers | All providers              |
+| Add and remove users for a provider      | —         | Associated providers | All providers              |
+| Create new providers                     | —         | No                   | Yes                        |
+| Manage subjects and financial incentives | —         | No                   | Yes                        |
+| Feature flags and rollover               | —         | No                   | Yes                        |
+| Revert course withdrawals                | —         | No                   | Yes                        |
+| Delete candidates                        | —         | No                   | Yes                        |
+| Sidekiq dashboard                        | —         | No                   | Yes                        |
+| Blazer analytics                         | —         | No                   | Yes (with `blazer_access`) |
 
 ## Authentication methods
 
