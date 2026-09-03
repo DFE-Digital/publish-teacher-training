@@ -32,6 +32,16 @@ RSpec.describe "Viewing a training partner's courses as an accredited provider" 
 
       then_i_should_see_the_column_headings("Course", "Status")
     end
+
+    # Find resolves a course by code within the current cycle, so linking an
+    # earlier cycle's course would land on whichever course holds that code
+    # today rather than the one in the row.
+    scenario "the column is dropped on an earlier cycle, whose codes resolve elsewhere on Find" do
+      and_an_earlier_cycle_has_the_same_partnership_with_a_published_course
+      when_i_visit_the_earlier_cycle_training_partner_courses_page
+
+      then_i_should_see_the_column_headings("Course", "Status")
+    end
   end
 
   describe "the Course information column" do
@@ -107,6 +117,37 @@ RSpec.describe "Viewing a training partner's courses as an accredited provider" 
       :course, :published_postgraduate,
       provider: training_partner, accrediting_provider: create(:accredited_provider),
       name: "Geography", course_code: "G321", funding: "salary"
+    )
+  end
+
+  def and_an_earlier_cycle_has_the_same_partnership_with_a_published_course
+    cycle = find_or_create(:recruitment_cycle, year: RecruitmentCycle.current.year.to_i - 1)
+    @earlier_accredited_provider = create(
+      :provider, :accredited_provider,
+      recruitment_cycle: cycle, provider_code: accrediting_provider.provider_code
+    )
+    @earlier_training_partner = create(
+      :provider,
+      recruitment_cycle: cycle, provider_code: training_partner.provider_code,
+    )
+    create(
+      :provider_partnership,
+      training_provider: @earlier_training_partner, accredited_provider: @earlier_accredited_provider,
+    )
+    create(
+      :course, :published_postgraduate,
+      provider: @earlier_training_partner, accrediting_provider: @earlier_accredited_provider,
+      name: "Biology", course_code: "B123"
+    )
+
+    @current_user.providers << @earlier_accredited_provider
+  end
+
+  def when_i_visit_the_earlier_cycle_training_partner_courses_page
+    publish_training_partner_courses_page.load(
+      provider_code: @earlier_accredited_provider.provider_code,
+      recruitment_cycle_year: @earlier_accredited_provider.recruitment_cycle_year,
+      training_partner_code: @earlier_training_partner.provider_code,
     )
   end
 

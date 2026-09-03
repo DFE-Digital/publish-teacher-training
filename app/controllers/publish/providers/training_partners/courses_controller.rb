@@ -19,17 +19,14 @@ module Publish
         # uniformity rule compares across: the partner's courses this accredited
         # provider ratifies, and no one else's.
         #
-        # The View course column asks each row whether it is running, which reads
-        # site statuses, and whether it may publish without schools, which reads
-        # schools for the few courses support has exempted. The provider's own
-        # course list never asks, so the preload belongs here rather than in the
-        # query. preload rather than includes: the relation carries a custom
-        # SELECT and a lateral join that eager_load would have to fold into.
+        # The View course column needs nothing beyond what the row already
+        # carries — the content_status column and the cycle the query preloads
+        # with the provider — so there is nothing extra to load here.
         def fetch_courses
           Publish::Courses::Query.call(
             provider: training_partner,
             params: { accredited_provider: provider.provider_code },
-          ).preload(:site_statuses, :schools).map(&:decorate)
+          ).map(&:decorate)
         end
       end
     end

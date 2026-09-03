@@ -25,9 +25,9 @@ describe "Publish::Providers::TrainingPartners::CoursesController#index" do
     end
   end
 
-  # The View course column asks every row whether it is running, which reads site
-  # statuses. Bullet does not raise in test, so this is what stops that becoming
-  # a query per course.
+  # The View course column must stay answerable from the row's own columns.
+  # Bullet does not raise in test, so this is what catches a change that starts
+  # reaching for an association and turns the column into a query per course.
   it "renders the list in a constant number of queries regardless of course count" do
     many = render_list_of(9)
     few = render_list_of(3)
