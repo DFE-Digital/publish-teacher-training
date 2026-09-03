@@ -71,6 +71,20 @@ describe CourseDecorator do
     expect(decorated_course.length).to eq("1 year")
   end
 
+  describe "#find_url" do
+    it "returns the current-cycle Find URL" do
+      expect(decorated_course.find_url).to include("/course/#{provider.provider_code}/#{course.course_code}")
+      expect(decorated_course.find_url).not_to include("/cycle/")
+    end
+
+    it "returns the cycle-specific Find URL for an eligible previous-cycle course" do
+      allow(Find::PreviousCycleCourse).to receive(:visible?).and_return(true)
+      allow(course).to receive(:recruitment_cycle_year).and_return("2026")
+
+      expect(decorated_course.find_url).to include("/course/#{provider.provider_code}/#{course.course_code}/cycle/2026")
+    end
+  end
+
   context "recruitment cycles", travel: mid_cycle(2022) do
     context "for a course in the current cycle" do
       it "knows which cycle it’s in" do
