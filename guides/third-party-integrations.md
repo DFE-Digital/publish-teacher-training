@@ -19,11 +19,16 @@ team. SLAs and renewal dates are managed centrally by DfE.
 
 ## Data and Analytics
 
-| Service                                | Purpose                          | Integration             |
-|----------------------------------------|----------------------------------|-------------------------|
-| Google BigQuery                        | Web analytics                    | Via `dfe-analytics` gem |
-| [Airbyte](../terraform/aks/airbyte.tf) | Database replication to BigQuery | Configured in Terraform |
-| [Google Geocoding API](geolocation.md) | Location search on Find          | REST API                |
+| Service                                | Purpose                          | Integration                               |
+|----------------------------------------|----------------------------------|-------------------------------------------|
+| Google BigQuery                        | Web analytics                    | Via `dfe-analytics` gem                   |
+| [Airbyte](../terraform/aks/airbyte.tf) | Database replication to BigQuery | Configured in Terraform                   |
+| [Google Geocoding API](geolocation.md) | Location search on Find          | REST API                                  |
+| GIAS (Get Information About Schools)   | School data import               | Daily CSV download via `Gias::Downloader` |
+
+The GIAS import runs daily as a Sidekiq job (`GiasImportJob`). It downloads the full school dataset from the Edubase
+API, transforms it, and upserts records into the `gias_school` table. Provider schools and course location searches
+depend on this data. See `lib/gias/` for the download, transform, and import pipeline.
 
 ## Monitoring and Observability
 
@@ -36,6 +41,6 @@ team. SLAs and renewal dates are managed centrally by DfE.
 
 ## Code Quality
 
-| Service     | Purpose               | Integration        |
-|-------------|-----------------------|--------------------|
-| CodeClimate | Code quality analysis | GitHub integration |
+| Service     | Purpose               | Integration        | Status       |
+|-------------|-----------------------|--------------------|--------------|
+| CodeClimate | Code quality analysis | GitHub integration | **Inactive** |
