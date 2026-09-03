@@ -22,26 +22,30 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @course.application_status_closed? %>
+    <% if from_previous_cycle? %>
+      <%= render "find/courses/previous_cycle_banner" %>
+    <% elsif @course.application_status_closed? %>
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-    <% if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
-      <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        <div class="<%= @apply_action_column_class %>">
-          <%= render Find::Courses::ApplyComponent::View.new(
-                @course,
-                preview: preview?(params),
-                utm_content: "apply_course_button_top",
-              ) %>
-        </div>
-
-        <% if FeatureFlag.active?(:candidate_accounts) %>
-          <div class="govuk-grid-column-two-thirds-from-desktop">
-            <%= render "find/saved_courses/save_toggle" %>
+    <% unless from_previous_cycle? %>
+      <% if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+        <div class="govuk-grid-row govuk-!-margin-bottom-6">
+          <div class="<%= @apply_action_column_class %>">
+            <%= render Find::Courses::ApplyComponent::View.new(
+                  @course,
+                  preview: preview?(params),
+                  utm_content: "apply_course_button_top",
+                ) %>
           </div>
-        <% end %>
-      </div>
+
+          <% if FeatureFlag.active?(:candidate_accounts) %>
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+              <%= render "find/saved_courses/save_toggle" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
 
     <%= render Find::Courses::SummaryComponent::View.new(@course, @enrichment) %>
@@ -56,10 +60,12 @@
       <%= render partial: "find/courses/advice", locals: { course: @course } %>
     <% end %>
 
-    <% if @course.application_status_closed? %>
-      <%= render partial: "find/courses/course_closed" %>
-    <% end %>
+    <% unless from_previous_cycle? %>
+      <% if @course.application_status_closed? %>
+        <%= render partial: "find/courses/course_closed" %>
+      <% end %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <% end %>
   </div>
 </div>

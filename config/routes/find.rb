@@ -9,6 +9,10 @@ namespace :find, path: "/", defaults: { host: URI.parse(Settings.find_url).host 
   get "/accessibility", to: "pages#accessibility", as: :accessibility
   get "/privacy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
+  get "/course/:provider_code/:course_code/cycle/:cycle_year",
+      to: "courses#show",
+      as: "course_cycle",
+      constraints: { cycle_year: /\d{4}/ }
   get "/course/:provider_code/:course_code", to: "courses#show", as: "course"
   get "/course/:provider_code/:course_code/placements", to: "placements#index", as: :placements
   get "/course/:provider_code/:course_code/apply", to: "courses#apply", as: :apply

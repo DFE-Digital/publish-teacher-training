@@ -136,6 +136,9 @@ en:
           other: "courses across England (%{count} filters applied)"
         fallback: courses across England
       show:
+        previous_cycle:
+          heading: This course is from a previous recruitment cycle
+          body: You cannot apply for this course on Find. It is shown for information only because it starts later than most courses from that recruitment cycle.
         back_to_search: Back to search results
         back_to_saved_courses: Back to saved courses
         contents_header: Contents

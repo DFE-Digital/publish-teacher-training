@@ -6,7 +6,7 @@ module Find
     include GetIntoTeachingRedirect
     include ProviderWebsiteRedirect
 
-    helper_method :show_interview_process?
+    helper_method :show_interview_process?, :from_previous_cycle?
 
     before_action -> { render_not_found if provider.nil? }
 
@@ -18,7 +18,7 @@ module Find
 
       @saved_course = @candidate&.saved_courses&.find_by(course_id: @course.id)
 
-      render_not_found unless @course.is_published?
+      render_not_found and return unless course_available_on_find?
 
       @apply_action_column_class = apply_action_column_class
 
@@ -48,6 +48,30 @@ module Find
     end
 
   private
+
+    def provider
+      @provider ||= recruitment_cycle&.providers&.find_by(provider_code: params[:provider_code]&.upcase)
+    end
+
+    def recruitment_cycle
+      @recruitment_cycle ||= if params[:cycle_year].present?
+                               RecruitmentCycle.find_by(year: params[:cycle_year])
+                             else
+                               RecruitmentCycle.current
+                             end
+    end
+
+    def from_previous_cycle?
+      params[:cycle_year].present?
+    end
+
+    def course_available_on_find?
+      if from_previous_cycle?
+        PreviousCycleCourse.visible?(@course)
+      else
+        @course.is_published?
+      end
+    end
 
     def apply_action_column_class
       if FeatureFlag.active?(:candidate_accounts) && CycleTimetable.apply_deadline_passed
