@@ -11,6 +11,10 @@ en:
     courses:
       schools:
         bulk_update:
+          expired: Your school selection has expired. Select the schools you want again.
+          heading: Updating %{schools}
+          courses_legend: What courses do you want to apply this change to?
+          continue: Continue to view the courses that will be updated
           scopes:
             only_this_course: Only this course - %{course}
             funding:
