@@ -1,4 +1,10 @@
 override_csp: true
+
+# Blazer renders a query's creator as `creator.try(Blazer.user_name)`. Its
+# default is :name, which User does not respond to, so the whole column read
+# blank for everyone except the person looking at it.
+user_name: full_name
+
 data_sources:
   main:
     url: <%= Rails.configuration.x.read_only_database_url %>
@@ -20,3 +26,43 @@ data_sources:
       mode: slow # cache only queries slower than slow_threshold
       expires_in: 60 # minutes
       slow_threshold: 15 # seconds
+
+    # Turn values in results into links. Only {value} is interpolated, so a
+    # column can be linked only when its own value identifies the resource.
+    # That rules out provider_id: the publish route is keyed by provider_code,
+    # and the id-keyed support route also needs a recruitment cycle year.
+    linked_columns:
+      provider_code: "/publish/organisations/{value}"
+      accredited_provider_code: "/publish/organisations/{value}"
+      urn: "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/{value}"
+
+    # Show a name next to a value, so queries stop joining purely to make their
+    # own output readable. Blazer adds the name as a second line in the cell and
+    # leaves the raw value in place, and runs these once per result set with
+    # {value} bound to the distinct values in that column.
+    #
+    # provider_code repeats per recruitment cycle, so the accredited lookup takes
+    # the name from the most recent cycle the code appears in.
+    smart_columns:
+      provider_id: "SELECT id, provider_name FROM provider WHERE id IN {value}"
+      accredited_provider_code: "SELECT DISTINCT ON (provider_code) provider_code, provider_name FROM provider WHERE provider_code IN {value} ORDER BY provider_code, recruitment_cycle_id DESC"
+      course_id: "SELECT id, name || ' (' || course_code || ')' FROM course WHERE id IN {value}"
+
+    # Back these variables with dropdowns. Inert until a query uses one, which
+    # none do yet: 89 of the 164 saved queries hardcode a cycle year instead,
+    # which is why the query list grows by about thirty every rollover.
+    smart_variables:
+      recruitment_cycle_year: "SELECT year, year FROM recruitment_cycle ORDER BY year DESC"
+      provider_code: "SELECT DISTINCT provider_code, provider_name FROM provider ORDER BY provider_name"
+
+    # Without a default Blazer refuses to run a parameterised query until you
+    # pick from the dropdown, which is a worse first experience than the
+    # hardcoded years these variables replace.
+    #
+    # This is the cycle the app is running, not the newest row in
+    # recruitment_cycle: that is next year's, and mostly empty. It has to be a
+    # literal, because Blazer reads this file once at boot and a query here
+    # would run during assets:precompile, which has no database. Update it at
+    # rollover; spec/config/blazer_spec.rb fails until you do.
+    variable_defaults:
+      recruitment_cycle_year: "2026"
