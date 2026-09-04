@@ -1,0 +1,32 @@
+<h2 class="govuk-heading-m"><%= t("publish.schools.changes.heading") %></h2>
+
+<% if changed? %>
+  <% halves.each do |half| %>
+    <% if half.all %>
+      <%# Nothing follows it, so it is a sentence and not the heading of
+          anything. %>
+      <p class="govuk-body"><%= message(half) %></p>
+    <% elsif collapse? %>
+      <%= govuk_details(summary_text: summary(half)) do %>
+        <ul class="govuk-list govuk-list--bullet">
+          <% half.names.each do |name| %>
+            <li><%= name %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% else %>
+      <%# Each half heads a list of its own, so each needs a real heading: with
+          an h2 above and two lists below, a bold paragraph leaves a screen
+          reader with two lists and nothing to tell them apart. %>
+      <h3 class="govuk-heading-s"><%= heading(half) %></h3>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <% half.names.each do |name| %>
+          <li><%= name %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+<% else %>
+  <p class="govuk-body"><%= t("publish.schools.changes.none") %></p>
+<% end %>
