@@ -77,5 +77,5 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
 
-  config.x.read_only_database_url = "postgres://localhost/#{ENV.fetch('DB_DATABASE', 'manage_courses_backend_test')}"
+  config.x.read_only_database_url = Rails.application.read_only_database_url
 end
