@@ -652,6 +652,26 @@ describe Course do
         end
       end
 
+      context "when the course is published" do
+        before do
+          find_or_create(:recruitment_cycle, :next).update(available_in_publish_from: 1.day.ago)
+        end
+
+        it "returns true" do
+          expect(create(:course, enrichments: [build(:course_enrichment, :published)])).to be_manually_rollable
+        end
+      end
+
+      context "when the course is withdrawn" do
+        before do
+          find_or_create(:recruitment_cycle, :next).update(available_in_publish_from: 1.day.ago)
+        end
+
+        it "returns true" do
+          expect(create(:course, enrichments: [build(:course_enrichment, :withdrawn)])).to be_manually_rollable
+        end
+      end
+
       context "when next cycle is available for publish users but course was already rolled over" do
         let(:course) { create(:course) }
 

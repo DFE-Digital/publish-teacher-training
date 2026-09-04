@@ -988,7 +988,7 @@ en:
         publish/course_rollover_form:
           attributes:
             course_is_rollable:
-              invalid: "Course must have draft, empty or rolled over status."
+              invalid: "This course cannot be rolled over into the next recruitment cycle."
         publish/course_funding_form:
           attributes:
             funding:
