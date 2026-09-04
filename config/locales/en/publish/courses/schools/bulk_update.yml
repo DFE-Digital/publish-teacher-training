@@ -1,4 +1,12 @@
 en:
+  activemodel:
+    errors:
+      models:
+        publish/courses/schools/bulk_update_scope_form:
+          attributes:
+            scope:
+              blank: Select what courses you want to apply this change to
+              inclusion: Select what courses you want to apply this change to
   publish:
     courses:
       schools:
