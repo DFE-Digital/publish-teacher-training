@@ -1,0 +1,14 @@
+en:
+  publish:
+    courses:
+      schools:
+        bulk_update:
+          scopes:
+            only_this_course: Only this course - %{course}
+            funding:
+              fee: All fee-paying courses
+              salary: All school direct salaried courses
+              apprenticeship: All apprenticeship courses
+            secondary: All secondary courses
+            subject: All %{subject} courses
+            all: All courses
