@@ -3,6 +3,16 @@
 require "rails_helper"
 
 describe Courses::PublishRules::SchoolPresenceExemption do
+  describe ".not_exempt" do
+    it "is the courses the rule does not apply to" do
+      exempt = create(:course, :salary, publish_without_schools_allowed: true)
+      needs_a_school = create(:course, :salary, publish_without_schools_allowed: false)
+
+      expect(described_class.not_exempt).to include(needs_a_school)
+      expect(described_class.not_exempt).not_to include(exempt)
+    end
+  end
+
   describe ".applies?" do
     def course_with(funding:, allowed:)
       build_stubbed(:course, funding, publish_without_schools_allowed: allowed)

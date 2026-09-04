@@ -65,6 +65,7 @@ module Publish
       end
 
       def call
+        @scope = ids_scope
         @scope = school_scope
         @scope = accredited_provider_scope
         @scope = enrichment_join_scope
@@ -86,6 +87,16 @@ module Publish
     private
 
       attr_reader :provider, :school
+
+      # A set of course ids worked out elsewhere - the courses a bulk update
+      # matched, say. Unlike the filters, an empty array is a set and not the
+      # absence of a filter: a scope that matched nothing must show nothing.
+      def ids_scope
+        return @scope if params[:ids].nil?
+
+        @applied_scopes[:ids] = params[:ids]
+        @scope.where(id: params[:ids])
+      end
 
       # Restrict to kept courses attached to this provider school (the school
       # show page). A subquery rather than a join so a course cannot appear twice.
