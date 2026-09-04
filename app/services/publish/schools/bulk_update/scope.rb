@@ -54,6 +54,18 @@ module Publish
           end
         end
 
+        # Only this course carries a hint, naming the course being changed the
+        # same way the review page's course information column does.
+        def hint
+          return unless token == "only_this_course"
+
+          [
+            I18n.t("publish.courses.course_table.funding.#{course.funding}"),
+            course.qualifications_summary,
+            course.study_mode_description,
+          ].compact_blank.join(", ")
+        end
+
         def relation
           case token
           when "only_this_course" then provider_courses.where(id: course.id)

@@ -62,6 +62,21 @@ describe Publish::Schools::BulkUpdate::Scope do
     end
   end
 
+  describe "#hint" do
+    it "describes the course under only this course" do
+      course = create(:course, :secondary, provider:, funding: :fee, study_mode: :full_time)
+
+      expect(described_class.find(course:, token: "only_this_course").hint)
+        .to eq("Fee-paying, #{course.qualifications_summary}, full time")
+    end
+
+    it "is absent from every other option" do
+      course = create(:course, :primary, provider:)
+
+      expect(described_class.available(course).drop(1).map(&:hint)).to all(be_nil)
+    end
+  end
+
   describe ".find" do
     let(:course) { create(:course, :primary, provider:) }
 

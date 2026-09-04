@@ -243,6 +243,9 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/schools", on: :member, to: "courses/schools#edit"
         put "/schools", on: :member, to: "courses/schools#update"
 
+        get "/schools/bulk-update/:state_key", on: :member, to: "courses/schools/bulk_updates#edit", as: :bulk_update_schools
+        put "/schools/bulk-update/:state_key", on: :member, to: "courses/schools/bulk_updates#update"
+
         get "/preview", on: :member, to: "courses#preview"
 
         get "/outcome", on: :member, to: "courses/outcome#edit"
