@@ -1,0 +1,30 @@
+en:
+  publish:
+    schools:
+      # Shared by ChangesSummaryComponent, which the browser fills in as the
+      # provider ticks, and ChangesListComponent, which the bulk update pages
+      # render from the server. The same change has to read the same way on
+      # both, so they read the same strings.
+      #
+      # %{count} is substituted by Ruby on one side and by the schools-changes
+      # Stimulus controller on the other, so the counted strings are handed to
+      # the browser uninterpolated.
+      changes:
+        heading: You are updating these schools
+        none: No placement schools added or removed
+        adding_all: You are adding all schools in your list
+        adding_one: "You are adding 1 school:"
+        adding_other: "You are adding %{count} schools:"
+        adding_summary_one: You are adding 1 school
+        adding_summary_other: You are adding %{count} schools
+        removing_all: You are removing all schools in your list
+        removing_one: "You are removing 1 school:"
+        removing_other: "You are removing %{count} schools:"
+        removing_summary_one: You are removing 1 school
+        removing_summary_other: You are removing %{count} schools
+        status_adding_one: Adding 1 school
+        status_adding_other: Adding %{count} schools
+        status_adding_all: Adding all schools
+        status_removing_one: Removing 1 school
+        status_removing_other: Removing %{count} schools
+        status_removing_all: Removing all schools
