@@ -60,10 +60,10 @@ RSpec.describe Publish::Schools::ChangesSummaryComponent, type: :component do
     # heading, and reading forty schools aloud on every tick would be unusable.
     it "carries the wording for the controller to fill in" do
       expect(status["data-adding-one"]).to eq("Adding 1 school")
-      expect(status["data-adding-other"]).to eq("Adding {count} schools")
+      expect(status["data-adding-other"]).to eq("Adding %{count} schools")
       expect(status["data-adding-all"]).to eq("Adding all schools")
       expect(status["data-removing-one"]).to eq("Removing 1 school")
-      expect(status["data-removing-other"]).to eq("Removing {count} schools")
+      expect(status["data-removing-other"]).to eq("Removing %{count} schools")
       expect(status["data-removing-all"]).to eq("Removing all schools")
     end
   end
@@ -108,7 +108,7 @@ RSpec.describe Publish::Schools::ChangesSummaryComponent, type: :component do
 
       expect(added["data-all"]).to eq("You are adding all schools in your list")
       expect(added["data-one"]).to eq("You are adding 1 school:")
-      expect(added["data-other"]).to eq("You are adding {count} schools:")
+      expect(added["data-other"]).to eq("You are adding %{count} schools:")
     end
 
     it "carries the wording for schools being removed" do
@@ -116,7 +116,7 @@ RSpec.describe Publish::Schools::ChangesSummaryComponent, type: :component do
 
       expect(removed["data-all"]).to eq("You are removing all schools in your list")
       expect(removed["data-one"]).to eq("You are removing 1 school:")
-      expect(removed["data-other"]).to eq("You are removing {count} schools:")
+      expect(removed["data-other"]).to eq("You are removing %{count} schools:")
     end
   end
 end
