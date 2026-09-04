@@ -1,0 +1,93 @@
+en:
+  activerecord:
+    errors:
+      models:
+        banner:
+          attributes:
+            display_on_find:
+              blank: Select at least one service to display the banner on
+            expired_at:
+              greater_than_or_equal_to: Expiry date must be the same as or after the publish date
+            body:
+              blank: Enter the body of the banner
+              too_long: The body of the banner must be 200 words or fewer
+            heading:
+              too_long: Banner heading must be 30 words or fewer
+            name:
+              blank: Enter a name for the banner
+              too_long: Banner name must be 20 words or fewer
+              too_short: Banner name must be at least 2 characters
+            published_at:
+              blank: Enter a publish date and time
+    attributes:
+      banner:
+        body: Body
+        body_description: The text shown to users. Use Markdown to add links or bullet points.
+        display_on_description: Displayed on
+        display_on_find: Find
+        display_on_publish: Publish
+        display_on_support: Support
+        displayed_on: Displayed on
+        expired_at: Expiry date and time
+        expired_at_description: When the banner stops being shown. Leave blank for no expiry,
+          or leave the time blank to stop at the end of that day.
+        heading: Heading (optional)
+        heading_description: The heading of the banner, displayed to users. Avoid using headings
+          for single-line notifications that do not need them.
+        name: Name
+        name_description: The name of the banner, used for internal reference only.
+        published_at: Publish date and time
+        published_at_description: When the banner starts being shown. Leave the time blank
+          to start at the beginning of that day.
+  support:
+    banners:
+      form:
+        segments:
+          hour: "Hour"
+          minute: "Minute"
+      index:
+        page_title: "Banners"
+        add_banner: "Add banner"
+        statuses:
+          active: "Active"
+          scheduled: "Scheduled"
+          expired: "Expired"
+        columns:
+          scheduled:
+            published_at: "Due to be published"
+            expired_at: "Due to expire"
+          active:
+            published_at: "Published"
+            expired_at: "Due to expire"
+          expired:
+            published_at: "Published"
+            expired_at: "Expired"
+        missing_expired_at: "No expiry"
+        displayed_on:
+          find: "Find"
+          publish: "Publish"
+          support: "Support"
+          none: "Not displayed"
+        table:
+          headings:
+            preview: "Preview banner"
+            actions: "Actions"
+          actions:
+            preview: "Preview"
+            delete: "Delete"
+      warnings:
+        expired: "Expired banners cannot be edited"
+        published: "Banners that have been published cannot be deleted"
+      delete:
+        page_caption: "Delete banner"
+        page_title: "Are you sure you want to delete %{name}?"
+        explanation: "This banner has not been published, so deleting it removes it before anyone sees it."
+        confirm: "Delete banner"
+      new:
+        page_title: "Banner details"
+        page_caption: "Add banner"
+      edit:
+        page_caption: "Edit banner"
+        page_title: "Banner details"
+      show:
+        page_caption: "Banner"

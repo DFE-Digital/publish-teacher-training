@@ -1,0 +1,9 @@
+<% content_for :page_title, t(".page_title") %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_back_link(href: active_support_banners_path) %>
+<% end %>
+
+<%= form_with(model: @banner, url: support_banners_path) do |form| %>
+  <%= render "form", form: form, page_caption: t(".page_caption"), page_title: t(".page_title") %>
+<% end %>

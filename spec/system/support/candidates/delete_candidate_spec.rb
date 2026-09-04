@@ -15,7 +15,7 @@ RSpec.describe "Support console deleting a candidate" do
     click_link_or_button "Remove candidate"
 
     expect(page).to have_current_path(support_candidates_path)
-    expect(page).to have_content("Candidate successfully deleted")
+    expect(page).to have_content("Candidate deleted")
 
     expect(Candidate.exists?(candidate.id)).to be(false)
     expect(SavedCourse.where(candidate_id: candidate.id)).to be_empty
@@ -31,7 +31,7 @@ RSpec.describe "Support console deleting a candidate" do
     click_link_or_button "Remove candidate"
 
     expect(page).to have_current_path(support_candidates_path)
-    expect(page).to have_content("Candidate successfully deleted")
+    expect(page).to have_content("Candidate deleted")
 
     expect(Candidate.exists?(candidate.id)).to be(false)
     expect(RecentSearch.where(find_candidate_id: candidate.id)).to be_empty

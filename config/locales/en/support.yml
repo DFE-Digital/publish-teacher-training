@@ -31,9 +31,9 @@ en:
         scitt: "School centred initial teacher training (SCITT)"
         university: "Higher education institution (HEI)"
     flash:
-      created: "%{resource} successfully created"
-      updated: "%{resource} successfully updated"
-      deleted: "%{resource} successfully deleted"
+      created: "%{resource} created"
+      updated: "%{resource} updated"
+      deleted: "%{resource} deleted"
     actions:
       delete: "Delete this %{resource}"
       remove_school: "Remove school"

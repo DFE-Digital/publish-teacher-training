@@ -54,6 +54,7 @@
       <%= yield :before_content %>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
+        <%= render ActiveBannersComponent.new(interface: :support) %>
         <%= render(FlashBanner.new(flash:)) %>
 
         <%= yield %>

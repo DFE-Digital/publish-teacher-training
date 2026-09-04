@@ -121,7 +121,7 @@ RSpec.describe "Add match synonyms to subjects" do
   end
 
   def and_i_see_the_success_message
-    expect(page).to have_content("Subject successfully updated")
+    expect(page).to have_content("Subject updated")
   end
 
   def and_i_see_all_three_synonyms_listed
