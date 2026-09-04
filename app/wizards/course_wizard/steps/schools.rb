@@ -23,7 +23,7 @@ class CourseWizard
       end
 
       def schools
-        @schools ||= provider.schools.includes(:gias_school).order("gias_school.name")
+        @schools ||= SchoolsList.for(provider)
       end
 
       # The schools chosen so far, which is what a change is measured against. Back

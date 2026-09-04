@@ -22,9 +22,7 @@ module Publish
 
     # Every school the provider could attach, in the order they are listed.
     def schools
-      @schools ||= provider_schools
-        .includes(:gias_school)
-        .order("gias_school.name")
+      @schools ||= SchoolsList.for(course.provider)
     end
 
     def schools_collapse_threshold
