@@ -41,10 +41,14 @@ RSpec.describe "Confirming live changes before publishing course edits" do
     and_the_last_updated_timestamp_is_refreshed
   end
 
+  # The section asks which courses the change is for instead, and that page has
+  # a confirmation of its own.
   scenario "schools update on a published course does not show the interstitial" do
     given_a_published_course_with_schools
     and_the_course_was_last_published_yesterday
     when_i_update_course_schools
+    then_i_should_not_see_the_live_changes_interstitial
+    and_i_apply_the_change_to_this_course_only
     then_i_should_not_see_the_live_changes_interstitial
     expect(page).to have_content("School updated")
     and_the_last_updated_timestamp_is_refreshed

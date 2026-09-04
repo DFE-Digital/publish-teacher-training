@@ -250,7 +250,7 @@ private
   end
 
   def and_i_submit
-    click_link_or_button "Update placement schools"
+    click_link_or_button "Continue to choose which courses to apply this change to"
   end
 
   def then_i_see_the_no_schools_error
