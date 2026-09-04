@@ -446,9 +446,7 @@ class Course < ApplicationRecord
   end
 
   def manually_rollable?
-    rollover_conditions = !rolled_over? && RecruitmentCycle.upcoming_cycles_open_to_publish? && recruitment_cycle == RecruitmentCycle.current
-
-    rollover_conditions && %i[empty draft rolled_over].include?(content_status)
+    !rolled_over? && RecruitmentCycle.upcoming_cycles_open_to_publish? && recruitment_cycle == RecruitmentCycle.current
   end
 
   def rolled_over?

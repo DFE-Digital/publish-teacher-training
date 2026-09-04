@@ -3,7 +3,7 @@
 module Publish
   module Courses
     class DraftRolloverController < ApplicationController
-      before_action :redirect_to_courses, if: -> { course.is_published? }
+      before_action :redirect_to_courses, unless: -> { course.manually_rollable? }
 
       def edit
         @course_rollover_form = CourseRolloverForm.new(course)
