@@ -6,23 +6,47 @@
     <%= form_for course, url: page_path, data: { qa: "course__copy-content-form" }, method: :get do |form| %>
       <div class="govuk-form-group">
         <label class="govuk-label govuk-label--s" for="copy-from">Copy from</label>
-        <select id="copy-from" name="copy_from" class="govuk-select">
-          <option value="" selected="selected">Pick a course</option>
-          <% if @self_accredited_courses %>
-            <%= render partial: "publish/courses/course_select_option", collection: @self_accredited_courses, as: :other_course, locals: {
+        <div data-controller="copy-course-content">
+          <select id="copy-from" name="copy_from" class="govuk-select" data-action="change->copy-course-content#update">
+            <option value="" selected="selected">Pick a course</option>
+            <% if @self_accredited_courses %>
+              <%= render partial: "publish/courses/course_select_option", collection: @self_accredited_courses, as: :other_course, locals: {
               visible_course_information_fields: @visible_course_information_fields,
               } %>
-          <% end %>
-          <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
-            <optgroup label="<%= accrediting_provider %>">
-              <%= render partial: "publish/courses/course_select_option", collection: courses, as: :other_course, locals: {
+            <% end %>
+            <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
+              <optgroup label="<%= accrediting_provider %>">
+                <%= render partial: "publish/courses/course_select_option", collection: courses, as: :other_course, locals: {
                 visible_course_information_fields: @visible_course_information_fields,
               } %>
-            </optgroup>
-          <% end %>
-        </select>
+              </optgroup>
+            <% end %>
+          </select>
+          <div
+  data-copy-course-content-target="details"
+  hidden
+  class="govuk-body copy-course-content__details">
+            <h4
+    class="govuk-heading-s copy-course-content__title"
+    data-copy-course-content-target="title"></h4>
+            <p class="copy-course-content__item" data-copy-course-content-target="age">
+            </p>
+            <p class="copy-course-content__item" data-copy-course-content-target="funding">
+            </p>
+            <p class="copy-course-content__item" data-copy-course-content-target="qualification">
+            </p>
+            <p class="copy-course-content__item" data-copy-course-content-target="studyMode">
+            </p>
+            <p class="copy-course-content__item" data-copy-course-content-target="startDate"></p>
+          </div>
+          <div
+  class="govuk-visually-hidden"
+  aria-live="polite"
+  data-copy-course-content-target="announcement">
+          </div>
+        </div>
       </div>
-      <%= form.submit "Copy content", class: "govuk-button govuk-!-margin-bottom-0", name: nil, data: { qa: "course__copy" } %>
+      <%= form.submit "Copy content", class: "govuk-button copy-course-content__button", name: nil, data: { qa: "course__copy" } %>
     <% end %>
   <% else %>
     <h3 class="govuk-heading-m" data-qa="course__use_content">Use this content again</h3>
