@@ -83,5 +83,27 @@ module ManageCoursesBackend
 
     # Insert the middlware at the end of the stack
     config.middleware.use RequestLoggingTags
+
+    # Blazer opens its own connection pool from this URL, so it has to describe
+    # the database the app is already using. Deriving it from the resolved
+    # config follows database.yml, DATABASE_URL and TEST_ENV_NUMBER without
+    # restating any of them.
+    #
+    # This has to be assigned at config time. Blazer's engine reads
+    # config/blazer.yml while the initializers run, so an initializer is too
+    # late. An unconnectable URL fails far more than Blazer, and silently:
+    # spec/config/blazer_spec.rb guards it.
+    def read_only_database_url
+      db = ActiveRecord::DatabaseConfigurations.new(config.database_configuration)
+        .configs_for(env_name: Rails.env, name: "primary")
+        .configuration_hash
+      userinfo = [db[:username], db[:password]].compact_blank.map { |part| ERB::Util.url_encode(part) }.join(":")
+      authority = [
+        ("#{userinfo}@" if userinfo.present?),
+        db[:host].presence && [db[:host], db[:port].presence].compact.join(":"),
+      ].compact.join
+
+      "postgres://#{authority}/#{db[:database]}"
+    end
   end
 end
