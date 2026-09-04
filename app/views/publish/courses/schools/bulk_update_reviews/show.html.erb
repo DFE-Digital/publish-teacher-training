@@ -1,0 +1,61 @@
+<% page_title = t("publish.courses.schools.bulk_update.heading", schools: school_label_for(course).downcase) %>
+<% content_for :page_title, page_title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(bulk_update_schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, state_key: @draft.state_key)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= render CaptionText.new(text: course.name_and_code) %>
+      <%= page_title %>
+    </h1>
+
+    <h2 class="govuk-heading-m"><%= t("publish.courses.schools.bulk_update.courses_heading") %></h2>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li><%= scope.label %></li>
+    </ul>
+  </div>
+</div>
+
+<%= render Publish::Courses::TableComponent.new(
+      courses: @matched.updatable,
+      provider: @provider,
+      course_information_fields: %i[funding qualification study_mode],
+    ) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @matched.excluded.any? %>
+      <%= govuk_warning_text(text: t("publish.courses.schools.bulk_update.excluded.warning")) %>
+
+      <%= govuk_details(summary_text: t("publish.courses.schools.bulk_update.excluded.summary")) do %>
+        <p class="govuk-body"><%= t("publish.courses.schools.bulk_update.excluded.only_schools") %></p>
+        <p class="govuk-body"><%= t("publish.courses.schools.bulk_update.excluded.at_least_one") %></p>
+      <% end %>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <% @matched.excluded.each do |excluded_course| %>
+          <li><%= excluded_course.name_and_code %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <%= form_with(
+      url: bulk_update_schools_review_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, state_key: @draft.state_key),
+      method: :put,
+    ) do |f| %>
+      <%= f.govuk_submit t(
+            "publish.courses.schools.bulk_update.confirm",
+            count: @matched.count,
+            schools: school_label_for(course).downcase,
+          ) %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+    </p>
+  </div>
+</div>
