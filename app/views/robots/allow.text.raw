@@ -1,0 +1,38 @@
+# The crawlers named below may index Find: search engines, and the link
+# preview bots that fetch a page when someone shares a link. Everything
+# else, including AI training crawlers, is blocked by the final group.
+
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: bingbot
+User-agent: DuckDuckBot
+User-agent: Slurp
+User-agent: Applebot
+User-agent: Twitterbot
+User-agent: facebookexternalhit
+User-agent: LinkedInBot
+User-agent: Slackbot-LinkExpanding
+User-agent: Discordbot
+User-agent: WhatsApp
+Disallow: /auth/
+Disallow: /sign-out
+Disallow: /candidate/
+Disallow: /email-alerts/
+Disallow: /track_click
+Disallow: /track_apply_to_course_click
+Disallow: /geolocation-suggestions
+Disallow: /feedback
+Disallow: /cycles
+Disallow: /maintenance
+Disallow: /cycle-has-ended
+Disallow: /course/*/apply
+Disallow: /course/*/confirm-apply
+Disallow: /course/*/school-experience-interstitial
+Disallow: /course/*/git/
+Disallow: /course/*/provider/website
+Allow: /
+
+User-agent: *
+Disallow: /
+
+Sitemap: https://find-teacher-training-courses.service.gov.uk/sitemap.xml
