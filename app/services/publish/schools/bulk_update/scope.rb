@@ -87,27 +87,30 @@ module Publish
 
         # Primary and further education courses are named after their level
         # rather than a subject - "All primary courses" - so that is what they
-        # match on too. A secondary course matches its master subject by id: the
+        # match on too. A secondary course matches its subject by id: the
         # subject code is not unique across subject types, and joining subjects
         # would return a course once per subject it shares.
         def subject_relation
           return provider_courses.where(level: course.level) unless course.secondary_course?
 
           provider_courses.where(
-            id: CourseSubject.where(subject_id: course.master_subject_id).select(:course_id),
+            id: CourseSubject.where(subject_id: subject.id).select(:course_id),
           )
         end
 
         def subject_name
           @subject_name ||= if course.secondary_course?
-                              master_subject&.name&.downcase
+                              subject&.name&.downcase
                             else
                               ::Course.levels[course.level].downcase
                             end
         end
 
-        def master_subject
-          Subject.find_by(id: course.master_subject_id)
+        # The course's own subject: the master one it was assigned, falling back
+        # to the first it carries for courses old enough to have been given
+        # subjects before a master was recorded.
+        def subject
+          @subject ||= ::Subject.find_by(id: course.master_subject_id) || course.subjects.first
         end
 
         def t(key, **)

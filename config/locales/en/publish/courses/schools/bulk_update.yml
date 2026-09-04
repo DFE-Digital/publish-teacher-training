@@ -15,6 +15,9 @@ en:
           heading: Updating %{schools}
           courses_legend: What courses do you want to apply this change to?
           continue: Continue to view the courses that will be updated
+          updated:
+            one: Schools updated on 1 course
+            other: Schools updated on %{count} courses
           scopes:
             only_this_course: Only this course - %{course}
             funding:
