@@ -14,6 +14,12 @@ module Courses
         course.publish_without_schools_allowed?
       end
 
+      # The same rule as a relation, for callers deciding about many courses at
+      # once rather than loading each one to ask.
+      def self.not_exempt
+        ::Course.where(publish_without_schools_allowed: false)
+      end
+
       # Courses whose API locations fall back to the provider's schools
       # (LocationsController#remodelled_locations) — so a provider school
       # write changes their payload.
