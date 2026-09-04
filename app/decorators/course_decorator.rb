@@ -21,7 +21,11 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def find_url(provider = object.provider)
-    h.find_course_url(provider.provider_code, object.course_code)
+    if Find::PreviousCycleCourse.visible?(object)
+      h.find_course_cycle_url(provider.provider_code, object.course_code, object.recruitment_cycle_year)
+    else
+      h.find_course_url(provider.provider_code, object.course_code)
+    end
   end
 
   def description
