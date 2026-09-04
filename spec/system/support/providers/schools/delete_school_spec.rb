@@ -150,7 +150,7 @@ RSpec.describe "Delete school under provider as an admin" do
 
   def then_i_am_on_the_index_page
     expect(support_provider_schools_index_page).to be_displayed
-    expect(page).to have_text "School successfully deleted"
+    expect(page).to have_text "School deleted"
   end
 
   def and_i_click_remove_school_button

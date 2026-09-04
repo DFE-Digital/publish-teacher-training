@@ -4,6 +4,8 @@ module Support
     before_action :reject_expired, only: %i[edit update]
     before_action :reject_published, only: %i[delete destroy]
 
+    PER_PAGE = 20
+
     def index
       scopes = {
         scheduled: Banner.scheduled.scheduled_order,
@@ -11,7 +13,7 @@ module Support
         expired: Banner.expired.expired_order,
       }
       @scope_status = params[:status]&.to_sym || :active
-      @pagy, @banners = pagy(scopes.fetch(@scope_status, scopes.fetch(:active)), limit: 50)
+      @pagy, @banners = pagy(scopes.fetch(@scope_status, scopes.fetch(:active)), limit: PER_PAGE)
     end
 
     def show; end

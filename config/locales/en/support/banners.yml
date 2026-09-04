@@ -5,16 +5,16 @@ en:
         banner:
           attributes:
             display_on_find:
-              blank: Select at least one interface to display the banner on
+              blank: Select at least one service to display the banner on
             expired_at:
               greater_than_or_equal_to: Expiry date must be the same as or after the publish date
             body:
-              blank: Enter the text to show in the banner
+              blank: Enter the body of the banner
               too_long: The body of the banner must be 200 words or fewer
             heading:
               too_long: Banner heading must be 30 words or fewer
             name:
-              blank: Enter a name to identify this banner
+              blank: Enter a name for the banner
               too_long: Banner name must be 20 words or fewer
               too_short: Banner name must be at least 2 characters
             published_at:

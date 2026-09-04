@@ -27,7 +27,7 @@ RSpec.describe "Support::UpdateProviders", service: :publish do
       choose "No", disabled: false
     end
     click_on "Update organisation details"
-    expect(page).to have_content("Provider successfully updated")
+    expect(page).to have_content("Provider updated")
     expect(page).to have_content("Is the organisation an accredited provider?No")
     expect(page).to have_no_content("Accredited provider number")
   end

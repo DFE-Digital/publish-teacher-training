@@ -8,7 +8,7 @@ en:
         cancel_link: Cancel
         remove_candidate: Remove candidate
       destroy:
-        deleted_successfully: Candidate successfully deleted
+        deleted_successfully: Candidate deleted
         delete_failed: This candidate could not be deleted
       details:
         email_address: Email address

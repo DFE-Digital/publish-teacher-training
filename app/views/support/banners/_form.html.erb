@@ -21,11 +21,8 @@
     <div class="govuk-form-group">
       <%= form.govuk_text_area :body,
                                label: { text: Banner.human_attribute_name(:body), size: "s" },
-                               hint: { text: Banner.human_attribute_name(:body_description) },
-                               max_words: 200,
-                               threshold: 75 %>
-
-      <%= render partial: "publish/courses/markdown_formatting" %>
+                               hint: -> { safe_join([Banner.human_attribute_name(:body_description), render(partial: "publish/courses/markdown_formatting")]) },
+                               max_words: 200 %>
     </div>
 
     <%= form.govuk_date_field :published_at,
