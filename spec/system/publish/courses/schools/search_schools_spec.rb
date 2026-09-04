@@ -347,7 +347,8 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
   end
 
   def when_i_save
-    click_link_or_button "Update placement schools"
+    click_link_or_button "Continue to choose which courses to apply this change to"
+    and_i_apply_the_change_to_this_course_only
     expect(page).to have_content("updated")
   end
 
@@ -434,7 +435,7 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
   end
 
   def and_i_can_still_save_my_changes
-    expect(page).to have_button("Update placement schools")
+    expect(page).to have_button("Continue to choose which courses to apply this change to")
     expect(page).to have_link("Cancel")
   end
 

@@ -40,6 +40,7 @@ en:
         unsalaried: Placement
         select_all: Select all schools
         show_all: Show all schools
+        continue_to_bulk_update: Continue to choose which courses to apply this change to
         attached_count:
           zero: You do not have any schools attached to this course
           one: You currently have %{count} school attached to this course

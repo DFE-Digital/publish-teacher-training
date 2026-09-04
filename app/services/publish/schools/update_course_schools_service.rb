@@ -27,10 +27,14 @@ module Publish
       # @param raise_on_missing_provider_schools [Boolean] inline requests pass
       #   true; queued requests pass false because a school may be removed while
       #   the job is waiting to run
-      def initialize(course:, school_uuids:, raise_on_missing_provider_schools: true)
+      # @param notify [Boolean] whether to announce the change. A bulk update
+      #   passes false: the notification is per course, and one change across
+      #   hundreds of them would be hundreds of emails saying the same thing.
+      def initialize(course:, school_uuids:, raise_on_missing_provider_schools: true, notify: true)
         @course = course
         @submitted_school_uuids = Array(school_uuids).compact_blank.uniq
         @raise_on_missing_provider_schools = raise_on_missing_provider_schools
+        @notify = notify
       end
 
       def call
@@ -116,6 +120,7 @@ module Publish
       end
 
       def send_notifications(previous_school_names:, updated_school_names:)
+        return unless @notify
         return if previous_school_names == updated_school_names
         return unless FeatureFlag.active?(:course_sites_updated_email_notification)
 
