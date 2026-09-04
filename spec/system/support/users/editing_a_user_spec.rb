@@ -62,6 +62,6 @@ private
   end
 
   def with_a_success_message
-    expect(support_user_show_page).to have_content("User successfully updated")
+    expect(support_user_show_page).to have_content("User updated")
   end
 end

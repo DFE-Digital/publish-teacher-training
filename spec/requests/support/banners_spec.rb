@@ -80,7 +80,7 @@ RSpec.describe "Support::BannersController" do
 
       expect(summary).to eq([
         "Enter a valid publish date and time",
-        "Select at least one interface to display the banner on",
+        "Select at least one service to display the banner on",
       ])
     end
 
@@ -124,11 +124,12 @@ RSpec.describe "Support::BannersController" do
 
   describe "GET /support/banners/expired" do
     it "splits a long list across pages" do
-      create_list(:banner, 51, published_at: 3.days.ago, expired_at: 1.day.ago)
+      stub_const("Support::BannersController::PER_PAGE", 2)
+      create_list(:banner, 3, published_at: 3.days.ago, expired_at: 1.day.ago)
 
       get expired_support_banners_path
 
-      expect(response.body.scan("govuk-table__row").size).to eq(51)
+      expect(response.body.scan("govuk-table__row").size).to eq(3)
       expect(response.body).to include("govuk-pagination")
     end
   end

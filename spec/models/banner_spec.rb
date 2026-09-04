@@ -33,8 +33,8 @@ RSpec.describe Banner, type: :model do
 
       banner.validate
 
-      expect(banner.errors[:name]).to include("Enter a name to identify this banner")
-      expect(banner.errors[:body]).to include("Enter the text to show in the banner")
+      expect(banner.errors[:name]).to include("Enter a name for the banner")
+      expect(banner.errors[:body]).to include("Enter the body of the banner")
       expect(banner.errors[:published_at]).to include("Enter a publish date and time")
     end
 
@@ -43,7 +43,7 @@ RSpec.describe Banner, type: :model do
         banner = build(:banner, display_on_find: false, display_on_publish: false, display_on_support: false)
 
         expect(banner).not_to be_valid
-        expect(banner.errors[:display_on_find]).to contain_exactly("Select at least one interface to display the banner on")
+        expect(banner.errors[:display_on_find]).to contain_exactly("Select at least one service to display the banner on")
       end
     end
 

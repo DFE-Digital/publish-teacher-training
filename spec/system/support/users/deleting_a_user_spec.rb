@@ -35,7 +35,7 @@ private
   end
 
   def with_a_success_message
-    expect(support_users_index_page).to have_content("User successfully deleted")
+    expect(support_users_index_page).to have_content("User deleted")
   end
 
   def and_the_user_is_deleted

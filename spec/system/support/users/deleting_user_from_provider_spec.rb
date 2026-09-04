@@ -36,7 +36,7 @@ private
   end
 
   def with_a_success_message
-    expect(support_user_show_providers_page).to have_content("User permission successfully deleted")
+    expect(support_user_show_providers_page).to have_content("User permission deleted")
   end
 
   def and_the_user_provider_relationship_is_destroyed

@@ -26,7 +26,7 @@ RSpec.describe "Reverting a withdrawal" do
   end
 
   def and_i_see_the_success_message
-    expect(page).to have_css(".govuk-notification-banner__heading", text: "Course status successfully updated")
+    expect(page).to have_css(".govuk-notification-banner__heading", text: "Course status updated")
   end
 
   def and_i_confirm
