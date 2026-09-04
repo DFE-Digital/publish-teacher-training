@@ -33,10 +33,28 @@ module ProviderSchools
       provider.schools.one?
     end
 
+    # Kept courses this school is attached to. Discarded courses are omitted so
+    # they neither block removal nor appear on the delete page.
+    def attached_courses
+      @attached_courses ||= school.kept_courses.order(:name, :course_code)
+    end
+
+    # Attached kept courses that would be left with no placement school if this
+    # one were removed. The delete page lists these and blocks removal.
+    def sole_school_courses
+      @sole_school_courses ||= attached_courses.where(id: sole_school_course_ids)
+    end
+
+    def sole_school_on_a_course?
+      sole_school_course_ids.any?
+    end
+
+    # Removable unless this is the provider's last school or the only placement
+    # school on a kept course. Extra attachments are detached on destroy.
     def removable?
       return false if only_school?
 
-      !school.course_schools.joins(:course).merge(Course.kept).exists?
+      !sole_school_on_a_course?
     end
 
   private
@@ -53,6 +71,16 @@ module ProviderSchools
     def destroy_records!
       school.destroy!
       site&.destroy!
+    end
+
+    def sole_school_course_ids
+      @sole_school_course_ids ||= Course::School
+        .joins(:course)
+        .merge(Course.kept)
+        .where(course_id: school.course_schools.select(:course_id))
+        .group(:course_id)
+        .having("COUNT(*) = 1")
+        .pluck(:course_id)
     end
   end
 end
