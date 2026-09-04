@@ -1,0 +1,45 @@
+<% page_title = t("publish.courses.schools.bulk_update.heading", schools: school_label_for(course).downcase) %>
+<% content_for :page_title, title_with_error_prefix(page_title, @form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, state_key: @draft.state_key)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      scope: :bulk_update_scope_form,
+      url: bulk_update_schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, state_key: @draft.state_key),
+      method: :put,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= render CaptionText.new(text: course.name_and_code) %>
+        <%= page_title %>
+      </h1>
+
+      <%= f.govuk_radio_buttons_fieldset :scope,
+            legend: { text: t("publish.courses.schools.bulk_update.courses_legend"), size: "m", tag: "h2" } do %>
+        <% @form.scopes.each_with_index do |scope, index| %>
+          <%= f.govuk_radio_button :scope, scope.token,
+                label: { text: scope.label },
+                hint: scope.hint.present? ? { text: scope.hint } : nil,
+                link_errors: index.zero? %>
+
+          <%# The divider separates this course from every way of saying more
+              than one, so it follows the first radio rather than heading the
+              group. %>
+          <%= f.govuk_radio_divider if index.zero? %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit t("publish.courses.schools.bulk_update.continue") %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+    </p>
+  </div>
+</div>
