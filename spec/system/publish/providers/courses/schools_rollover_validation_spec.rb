@@ -130,8 +130,10 @@ RSpec.describe "Publish - Schools validation during 2026 rollover", service: :pu
     expect(error_links.first[:href]).to eq("#publish-course-school-form-school-uuids-field-error")
   end
 
+  # The selection is unchanged, so this saves and returns to the course rather
+  # than asking which other courses to apply it to.
   def when_i_click_update_schools
-    click_link_or_button "Update placement schools"
+    click_link_or_button "Continue to choose which courses to apply this change to"
   end
 
   def then_course_is_published

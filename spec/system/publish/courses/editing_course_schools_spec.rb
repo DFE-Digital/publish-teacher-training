@@ -14,6 +14,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     then_i_should_see_a_list_of_schools
     when_i_update_the_course_schools
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_should_see_a_success_message
     and_the_course_schools_are_updated
     and_the_new_model_course_school_row_exists
@@ -23,6 +24,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     given_the_course_already_has_both_sites
     when_i_untick_site_one
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_should_see_a_success_message
     and_only_site_two_is_attached
     and_no_course_school_row_exists_for_site_one
@@ -33,6 +35,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     when_i_visit_the_publish_course_school_edit_page
     when_i_untick_site_one
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_should_see_a_success_message
     and_only_site_two_is_attached
     and_site_one_site_status_is_destroyed
@@ -45,6 +48,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     when_i_visit_the_publish_course_school_edit_page
     when_i_untick_all_then_tick_only_site_two
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_should_see_a_success_message
     and_only_site_two_is_attached_among_the_three
     and_site_one_and_three_site_statuses_are_destroyed
@@ -56,6 +60,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     when_i_visit_the_publish_course_school_edit_page
     when_i_untick_site_one
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_should_see_a_success_message
     and_only_site_two_is_attached
   end
@@ -78,6 +83,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     given_the_course_school_update_fails_after_validation
     when_i_update_the_course_schools
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_should_see_the_school_selection_error
     and_the_error_is_reported_to_sentry
   end
@@ -86,6 +92,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     given_the_legacy_site_update_fails_after_validation
     when_i_update_the_course_schools
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_should_see_the_school_selection_error
     and_the_error_is_reported_to_sentry
   end
