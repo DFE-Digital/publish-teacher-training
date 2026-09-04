@@ -120,6 +120,36 @@ RSpec.describe "Course show" do
     end
   end
 
+  # A provider that publishes a course after the rollover has already run needs
+  # to be able to roll that course over itself, so the button is offered on
+  # published and withdrawn courses too for as long as they have not been rolled
+  # over already.
+  describe "with a published course and an open next cycle" do
+    scenario "i can roll the course over" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, :salary, enrichments: [course_enrichment], application_status: "open", site_statuses: [build(:site_status, :findable)]))
+      given_there_is_a_next_recruitment_cycle
+      and_the_cycle_is_rollable
+      when_i_visit_the_course_page
+      and_i_click_the_roll_over_course_button
+      then_i_see_the_rollover_confirmation_page
+      when_i_confirm_the_rollover
+      then_i_should_see_the_course_show_page_with_success_message
+    end
+  end
+
+  describe "with a withdrawn course and an open next cycle" do
+    scenario "i can roll the course over" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_withdrawn]))
+      given_there_is_a_next_recruitment_cycle
+      and_the_cycle_is_rollable
+      when_i_visit_the_course_page
+      and_i_click_the_roll_over_course_button
+      then_i_see_the_rollover_confirmation_page
+      when_i_confirm_the_rollover
+      then_i_should_see_the_course_show_page_with_success_message
+    end
+  end
+
   describe "rollover with an empty course" do
     scenario "i can see the success message and link" do
       given_i_am_authenticated_as_a_provider_user(course: create(:course, enrichments: [], funding_type: "salary"))
@@ -203,6 +233,18 @@ private
 
   def when_i_click_the_rollover_course_button
     rollover_form_page.rollover_course_button.click
+  end
+
+  def and_i_click_the_roll_over_course_button
+    click_link_or_button "Roll over course"
+  end
+
+  def then_i_see_the_rollover_confirmation_page
+    expect(page).to have_content "Are you sure you want to roll over the course into the next recruitment cycle?"
+  end
+
+  def when_i_confirm_the_rollover
+    click_link_or_button "Roll over course"
   end
 
   def then_i_should_see_the_rollover_form_page
