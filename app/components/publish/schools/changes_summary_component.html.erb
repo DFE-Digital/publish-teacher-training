@@ -4,33 +4,33 @@
 
   <%# Counts, never the names: the summary below is already on the page under its
       own headings, and reading forty schools aloud on every tick would be
-      unusable. {count} is substituted by the controller, so it is not I18n
+      unusable. %{count} is substituted by the controller, so it is not I18n
       interpolation. %>
   <div class="govuk-visually-hidden"
        role="status"
        aria-live="polite"
        data-schools-changes-target="status"
-       data-adding-one="<%= t(".status_adding_one") %>"
-       data-adding-other="<%= t(".status_adding_other") %>"
-       data-adding-all="<%= t(".status_adding_all") %>"
-       data-removing-one="<%= t(".status_removing_one") %>"
-       data-removing-other="<%= t(".status_removing_other") %>"
-       data-removing-all="<%= t(".status_removing_all") %>"></div>
+       data-adding-one="<%= t("publish.schools.changes.status_adding_one") %>"
+       data-adding-other="<%= t("publish.schools.changes.status_adding_other") %>"
+       data-adding-all="<%= t("publish.schools.changes.status_adding_all") %>"
+       data-removing-one="<%= t("publish.schools.changes.status_removing_one") %>"
+       data-removing-other="<%= t("publish.schools.changes.status_removing_other") %>"
+       data-removing-all="<%= t("publish.schools.changes.status_removing_all") %>"></div>
 
   <div class="govuk-!-margin-top-6"
        hidden
        data-schools-changes-target="summary">
-    <h2 class="govuk-heading-m"><%= t(".heading") %></h2>
+    <h2 class="govuk-heading-m"><%= t("publish.schools.changes.heading") %></h2>
 
     <div data-schools-changes-target="added"
-         data-all="<%= t(".adding_all") %>"
-         data-one="<%= t(".adding_one") %>"
-         data-other="<%= t(".adding_other") %>"></div>
+         data-all="<%= t("publish.schools.changes.adding_all") %>"
+         data-one="<%= t("publish.schools.changes.adding_one") %>"
+         data-other="<%= t("publish.schools.changes.adding_other") %>"></div>
 
     <div data-schools-changes-target="removed"
-         data-all="<%= t(".removing_all") %>"
-         data-one="<%= t(".removing_one") %>"
-         data-other="<%= t(".removing_other") %>"></div>
+         data-all="<%= t("publish.schools.changes.removing_all") %>"
+         data-one="<%= t("publish.schools.changes.removing_one") %>"
+         data-other="<%= t("publish.schools.changes.removing_other") %>"></div>
   </div>
 
   <%# The shapes the controller fills in. They live here so that every GOV.UK

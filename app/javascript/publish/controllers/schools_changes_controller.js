@@ -67,7 +67,7 @@ export default class extends Controller {
 
     return names.length === 1
       ? dataset[`${kind}One`]
-      : dataset[`${kind}Other`].replaceAll('{count}', names.length)
+      : dataset[`${kind}Other`].replaceAll('%{count}', names.length)
   }
 
   fill (section, { names, all }) {
@@ -92,7 +92,7 @@ export default class extends Controller {
   // heading - the page already has an h2 over both halves, and a bold paragraph
   // would leave a screen reader with two lists and nothing to tell them apart.
   //
-  // {count} is substituted here rather than by I18n, since the count is only known
+  // %{count} is substituted here rather than by I18n, since the count is only known
   // once the provider has finished ticking. Everything else is filled as text,
   // never as markup: a school name is what the provider typed, and plenty of them
   // hold an & or an apostrophe.
@@ -102,7 +102,7 @@ export default class extends Controller {
 
     counted.querySelector('h3').textContent = names.length === 1
       ? section.dataset.one
-      : section.dataset.other.replaceAll('{count}', names.length)
+      : section.dataset.other.replaceAll('%{count}', names.length)
 
     names.forEach(name => {
       const item = this.clone(this.itemTemplateTarget)
