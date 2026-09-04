@@ -13,6 +13,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   scenario "select all schools and update" do
     when_i_select_all_schools
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_should_see_the_success_message
     and_all_schools_should_be_assigned_to_the_course
   end
@@ -36,6 +37,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
       when_i_visit_the_publish_course_school_edit_page
       when_i_select_all_schools
       and_i_submit
+      and_i_apply_the_change_to_this_course_only
       then_i_should_see_the_enqueued_success_message
       and_many_schools_should_be_attached_to_courses
     end
@@ -59,6 +61,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
       then_only_the_first_20_schools_are_shown
       when_i_select_all_schools
       and_i_submit
+      and_i_apply_the_change_to_this_course_only
       then_i_should_see_the_success_message
       and_all_25_schools_should_be_attached
     end
@@ -118,7 +121,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   end
 
   def and_i_submit
-    click_link_or_button "Update placement schools"
+    click_link_or_button "Continue to choose which courses to apply this change to"
   end
 
   def then_i_should_see_the_success_message

@@ -54,11 +54,19 @@ describe Publish::Schools::BulkUpdate::Scope do
       expect(labels_for(course)).to include("Only this course - Primary (X123)", "All courses")
     end
 
-    it "omits the subject option when a secondary course has no subject to name" do
-      course = create(:course, :secondary, provider:)
+    it "falls back to the first subject when no master subject was recorded" do
+      course = create(:course, :secondary, provider:, subjects: [find_or_create(:secondary_subject, :biology)])
       course.update!(master_subject_id: nil)
 
-      expect(tokens_for(course)).not_to include("subject")
+      expect(labels_for(course)).to include("All biology courses")
+    end
+
+    it "omits the subject option when a course has no subject to name" do
+      course = create(:course, :secondary, provider:)
+      course.course_subjects.destroy_all
+      course.update_columns(master_subject_id: nil)
+
+      expect(tokens_for(course.reload)).not_to include("subject")
     end
   end
 
