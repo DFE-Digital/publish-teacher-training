@@ -48,14 +48,14 @@
     "mustache": "^4.2.0"
   },
   "devDependencies": {
-    "esbuild": "^0.25.8",
+    "esbuild": "^0.28.2",
     "jsdom": "^30.0.1",
     "playwright": "^1.62.1",
     "sass": "^1.103.1",
     "standard": "^17.1.2",
-    "stylelint": "^16.23.1",
-    "stylelint-config-gds": "^2.0.0",
-    "stylelint-config-recess-order": "^6.1.0",
+    "stylelint": "^17.14.1",
+    "stylelint-config-gds": "^3.0.0",
+    "stylelint-config-recess-order": "^7.8.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "stylelint-selector-bem-pattern": "^5.0.0",
