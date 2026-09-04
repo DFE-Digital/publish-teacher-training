@@ -15,6 +15,15 @@ en:
           heading: Updating %{schools}
           courses_legend: What courses do you want to apply this change to?
           continue: Continue to view the courses that will be updated
+          courses_heading: "You are updating these courses:"
+          confirm:
+            one: Update %{schools} on 1 course
+            other: Update %{schools} on %{count} courses
+          excluded:
+            warning: These courses will not be updated
+            summary: Why will these courses not be updated?
+            only_schools: The schools that you are removing are the only placement schools attached to these courses.
+            at_least_one: These courses must have at least one school attached.
           updated:
             one: Schools updated on 1 course
             other: Schools updated on %{count} courses

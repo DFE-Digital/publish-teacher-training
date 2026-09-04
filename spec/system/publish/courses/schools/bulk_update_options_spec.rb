@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "sidekiq/testing"
 
 RSpec.describe "Publish - Choosing which courses a placement school change applies to", type: :system do
   before do
@@ -91,22 +90,20 @@ RSpec.describe "Publish - Choosing which courses a placement school change appli
       and_the_other_course_still_has("Ash Academy")
     end
 
-    scenario "a bulk option changes every course it names" do
+    scenario "a bulk option goes on to review the courses it will update" do
       and_another_fee_paying_course_exists
       when_i_choose_which_courses_to_apply_the_change_to
       and_i_choose("All fee-paying courses")
-      and_i_continue_and_let_the_update_run
+      and_i_continue
 
-      then_i_am_on_the_basic_details_page
-      and_i_am_told_the_schools_were_updated_on(2)
-      and_the_course_has("Ash Academy", "Beech School", "Cedar School")
-      and_the_other_course_has("Ash Academy", "Cedar School")
+      then_i_see_the_courses_that_will_be_updated
+      and_nothing_has_been_written_yet
     end
 
     scenario "the selection cannot be applied twice" do
       when_i_choose_which_courses_to_apply_the_change_to
       options_page = page.current_path
-      and_i_choose("All courses")
+      and_i_choose("Only this course - #{course.name_and_code}")
       and_i_continue
       and_i_return_to(options_page)
 
@@ -164,11 +161,6 @@ private
     click_button "Continue to view the courses that will be updated"
   end
 
-  # The bulk write is queued, so the courses only change once the queue runs.
-  def and_i_continue_and_let_the_update_run
-    Sidekiq::Testing.inline! { and_i_continue }
-  end
-
   def and_i_return_to(path)
     visit path
   end
@@ -211,8 +203,13 @@ private
     )
   end
 
-  def and_i_am_told_the_schools_were_updated_on(count)
-    expect(page).to have_content("Schools updated on #{count} courses")
+  def then_i_see_the_courses_that_will_be_updated
+    expect(page).to have_content("You are updating these courses:")
+  end
+
+  def and_nothing_has_been_written_yet
+    expect(attached_names(course)).to contain_exactly("Ash Academy", "Beech School")
+    expect(attached_names(other_course)).to contain_exactly("Ash Academy")
   end
 
   def then_i_am_told_my_selection_has_expired

@@ -12,10 +12,7 @@ module Publish
       # else's - lands back on the attach page rather than on a page with
       # nothing behind it.
       class BulkUpdatesController < ApplicationController
-        decorates_assigned :course
-
-        before_action :build_course
-        before_action :load_draft
+        include Publish::Schools::BulkUpdateDraft
 
         def edit
           authorize(provider)
@@ -28,6 +25,8 @@ module Publish
 
           @form = BulkUpdateScopeForm.new(course: @course, **scope_params)
           return render(:edit, status: :unprocessable_entity) unless @form.valid?
+
+          @draft.update(scope: @form.scope)
 
           apply(@form.chosen_scope)
         rescue Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError,
@@ -43,23 +42,27 @@ module Publish
         end
 
         # Only this course is the change the attach page used to make, so it is
-        # written there and then. Anything wider is queued: a bulk update writes
-        # school relationships and their legacy site statuses for every course
-        # it matches, and the single course write is already queued above thirty
-        # schools.
-        def apply(scope)
-          if scope.token == "only_this_course"
-            update_this_course
-          else
-            update_courses(scope)
-          end
+        # written there and then. Anything wider goes on to the review page,
+        # which is where the provider sees what it will touch.
+        def apply(chosen)
+          return show_the_courses_it_will_update if chosen.token != "only_this_course"
 
+          update_this_course
           @draft.delete
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
+          )
+        end
+
+        def show_the_courses_it_will_update
+          redirect_to bulk_update_schools_review_publish_provider_recruitment_cycle_course_path(
+            provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+            state_key: @draft.state_key,
           )
         end
 
@@ -86,38 +89,6 @@ module Publish
                             else
                               t("success.saved", value: "School".pluralize(@draft.school_uuids.size))
                             end
-        end
-
-        def update_courses(scope)
-          course_ids = scope.relation.pluck(:id)
-
-          BulkUpdateCourseSchoolsJob.perform_async(
-            course_ids,
-            @draft.added_uuids,
-            @draft.removed_uuids,
-          )
-
-          flash[:success] = t(
-            "publish.courses.schools.bulk_update.updated",
-            count: course_ids.size,
-          )
-        end
-
-        def build_course
-          @course = provider.courses.find_by!(course_code: params[:code])
-        end
-
-        def load_draft
-          @draft = Publish::Schools::BulkUpdate::Draft.find(course: @course, state_key: params[:state_key])
-          return if @draft
-
-          authorize(provider)
-          flash[:warning] = t("publish.courses.schools.bulk_update.expired")
-          redirect_to schools_publish_provider_recruitment_cycle_course_path(
-            provider.provider_code,
-            @course.recruitment_cycle_year,
-            @course.course_code,
-          )
         end
       end
     end
