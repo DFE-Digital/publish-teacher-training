@@ -35,11 +35,17 @@ RSpec.describe Geolocation::Suggestions do
 
       before do
         cache.write(suggestions_query.send(:cache_key), cached_suggestions)
+        allow(client).to receive(:autocomplete)
       end
 
       it "returns the cached suggestions" do
         expect(suggestions).to eq(cached_suggestions)
         expect(cache.read(suggestions_query.send(:cache_key))).to eq(cached_suggestions)
+      end
+
+      it "does not call the Google client" do
+        suggestions
+        expect(client).not_to have_received(:autocomplete)
       end
 
       it "logs a cache hit" do

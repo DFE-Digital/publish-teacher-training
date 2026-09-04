@@ -69,8 +69,8 @@ Rails.application.configure do
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Use a different cache store in production.
-  # Redis remains the live store; solid_cache_entries lives on the primary DB for a later cutover.
-  config.cache_store = :redis_cache_store, { url: ENV.fetch("REDIS_CACHE_URL", "") }
+  # Solid Cache writes to solid_cache_entries on the primary DB. REDIS_CACHE_URL stays in Terraform until the Redis cache instance is removed.
+  config.cache_store = :solid_cache_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter = :resque
