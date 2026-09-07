@@ -12,6 +12,13 @@ class PotentialDateTime
     public_send(SEGMENTS[segment]) if SEGMENTS.key?(segment)
   end
 
+  def time_invalid?
+    return false if [hour, minute].all?(&:blank?)
+    return true unless [hour, minute].all? { |part| part.blank? || part.to_s.match?(/\A\d+\z/) }
+
+    !hour.to_i.between?(0, 23) || !minute.to_i.between?(0, 59)
+  end
+
   def to_time
     return unless [year, month, day].all? { |part| part.to_s.match?(/\A\d+\z/) }
     return unless [hour, minute].all? { |part| part.blank? || part.to_s.match?(/\A\d+\z/) }

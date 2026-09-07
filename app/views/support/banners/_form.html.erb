@@ -25,15 +25,23 @@
                                max_words: 200 %>
     </div>
 
-    <%= form.govuk_date_field :published_at,
-                              legend: { text: Banner.human_attribute_name(:published_at), size: "s" },
-                              hint: { text: Banner.human_attribute_name(:published_at_description) },
-                              after_inputs: -> { render "time_parts", form:, attribute: :published_at } %>
+    <% %i[published_at expired_at].each do |attribute| %>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <%= form.govuk_date_field attribute,
+                                    legend: { text: Banner.human_attribute_name(:"#{attribute}_date"), size: "s" },
+                                    hint: { text: Banner.human_attribute_name(:"#{attribute}_date_description") } %>
+        </div>
 
-    <%= form.govuk_date_field :expired_at,
-                              legend: { text: Banner.human_attribute_name(:expired_at), size: "s" },
-                              hint: { text: Banner.human_attribute_name(:expired_at_description) },
-                              after_inputs: -> { render "time_parts", form:, attribute: :expired_at } %>
+        <div class="govuk-grid-column-one-half">
+          <%= render "time_field",
+                     form:,
+                     attribute:,
+                     legend: Banner.human_attribute_name(:"#{attribute}_time"),
+                     hint: Banner.human_attribute_name(:"#{attribute}_time_description") %>
+        </div>
+      </div>
+    <% end %>
 
     <%= form.govuk_check_boxes_fieldset :display_on_find, legend: { text: Banner.human_attribute_name(:display_on_description) } do %>
       <%= form.govuk_check_box :display_on_find, true, "false", multiple: false, link_errors: true, label: { text: Banner.human_attribute_name(:display_on_find) } %>

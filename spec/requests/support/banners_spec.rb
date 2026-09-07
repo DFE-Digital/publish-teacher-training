@@ -120,6 +120,39 @@ RSpec.describe "Support::BannersController" do
       expect(ids.tally.select { |_, count| count > 1 }).to be_empty
       expect(response.body.scan("Enter a valid publish date and time").size).to eq(2)
     end
+
+    it "marks only the half of the question at fault" do
+      time_inputs_in_error = lambda do |body|
+        Nokogiri::HTML(body)
+          .css("input[name='banner[published_at(4i)]'], input[name='banner[published_at(5i)]']")
+          .count { |input| input["class"].to_s.include?("govuk-input--error") }
+      end
+
+      post support_banners_path, params: { banner: { name: "Test banner", body: "text", display_on_find: "1" } }
+      expect(time_inputs_in_error.call(response.body)).to eq(0)
+
+      post support_banners_path, params: { banner: {
+        name: "Test banner",
+        body: "text",
+        display_on_find: "1",
+        "published_at(1i)" => "2027",
+        "published_at(2i)" => "3",
+        "published_at(3i)" => "32",
+      } }
+      expect(time_inputs_in_error.call(response.body)).to eq(0)
+
+      post support_banners_path, params: { banner: {
+        name: "Test banner",
+        body: "text",
+        display_on_find: "1",
+        "published_at(1i)" => "2027",
+        "published_at(2i)" => "3",
+        "published_at(3i)" => "1",
+        "published_at(4i)" => "25",
+        "published_at(5i)" => "00",
+      } }
+      expect(time_inputs_in_error.call(response.body)).to eq(2)
+    end
   end
 
   describe "GET /support/banners/expired" do
