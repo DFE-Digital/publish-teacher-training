@@ -10,7 +10,7 @@ require "rails_helper"
 # A course row with no start date makes the copy fail for real:
 # Courses::CopyToProviderService adds a year to `start_date` before it saves the
 # new course, so the failure lands before any course row is written.
-RSpec.describe "Rolling over a course that fails to copy", travel: mid_cycle(2025) do
+RSpec.describe "Rolling over a course that fails to copy", travel: mid_cycle do
   scenario "the provider is told the course was not rolled over" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_rollable_next_recruitment_cycle
