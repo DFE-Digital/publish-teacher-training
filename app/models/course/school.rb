@@ -7,6 +7,8 @@ class Course::School < ApplicationRecord
 
   after_destroy :touch_course
 
+  audited associated_with: :course
+
   belongs_to :course, class_name: "::Course", inverse_of: :schools
   belongs_to :gias_school
   belongs_to :provider_school, class_name: "Provider::School", inverse_of: :course_schools

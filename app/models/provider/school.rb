@@ -11,6 +11,8 @@ class Provider::School < ApplicationRecord
 
   after_destroy :touch_provider
 
+  audited associated_with: :provider
+
   belongs_to :provider, class_name: "::Provider", inverse_of: :schools
   belongs_to :gias_school
 

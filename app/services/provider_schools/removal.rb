@@ -10,6 +10,7 @@ module ProviderSchools
     def call
       ActiveRecord::Base.transaction do
         school.with_lock do
+          lock_attached_courses!
           destroy_records_if_removable!
         end
       end
@@ -71,6 +72,22 @@ module ProviderSchools
     def destroy_records!
       school.destroy!
       site&.destroy!
+    end
+
+    # Lock kept courses this school is on, in id order, before the sole-school
+    # check. Two removals can otherwise each see two schools on the same course
+    # and both proceed, leaving it with none.
+    def lock_attached_courses!
+      course_ids = school.course_schools
+        .joins(:course)
+        .merge(Course.kept)
+        .pluck(:course_id)
+
+      Course.where(id: course_ids).order(:id).lock.load if course_ids.any?
+
+      @attached_courses = nil
+      @sole_school_courses = nil
+      @sole_school_course_ids = nil
     end
 
     def sole_school_course_ids
