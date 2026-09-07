@@ -1,5 +1,5 @@
 <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--orange" }) do %>
+  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--purple" }) do %>
     <div>
       <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
         <h4 class="govuk-heading-s"><%= t("find.financial_support.bursary_and_scholarships") %></h4>
@@ -17,7 +17,7 @@
 <% end %>
 
 <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.non_uk_citizens.title"), class: "govuk-heading-m")) do %>
+  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.non_uk_citizens.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--pink" }) do %>
     <div>
 
       <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
