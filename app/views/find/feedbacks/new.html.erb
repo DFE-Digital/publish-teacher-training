@@ -22,6 +22,7 @@
             hint: { text: t(".experience_hint") },
             rows: 5,
             max_chars: Feedback::MAX_EXPERIENCE_LENGTH %>
+      <%= invisible_captcha :subject, :feedback, nonce: true %>
       <%= f.govuk_submit t(".submit_feedback_button") %>
     <% end %>
   </div>

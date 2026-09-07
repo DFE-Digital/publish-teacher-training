@@ -145,6 +145,9 @@ gem "http"
 # For configuring domains and assets
 gem "rack-cors"
 
+# Honeypot spam protection for unauthenticated forms
+gem "invisible_captcha"
+
 # Rails console colours
 gem "colorize"
 
