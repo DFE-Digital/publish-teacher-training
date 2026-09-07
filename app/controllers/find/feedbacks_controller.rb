@@ -1,5 +1,10 @@
 module Find
   class FeedbacksController < ApplicationController
+    invisible_captcha only: :create,
+                      honeypot: :subject,
+                      scope: :feedback,
+                      on_spam: :discard_spam
+
     def new
       @feedback = Feedback.new
     end
@@ -18,6 +23,10 @@ module Find
     end
 
   private
+
+    def discard_spam
+      redirect_to find_root_path, flash: { success: t("find.feedbacks.create.success") }
+    end
 
     def feedback_form_params
       params.require(:feedback).permit(:ease_of_use, :experience)
