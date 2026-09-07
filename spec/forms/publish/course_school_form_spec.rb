@@ -95,14 +95,7 @@ module Publish
 
         form.attached_school_uuids
 
-        queries = 0
-        counter = ->(*, payload) { queries += 1 unless payload[:name] == "SCHEMA" }
-
-        ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
-          form.attached_school_uuids
-        end
-
-        expect(queries).to eq(0)
+        expect(count_queries { form.attached_school_uuids }).to eq(0)
       end
     end
 

@@ -78,13 +78,6 @@ module Find
           }
         end
 
-        def count_queries(&)
-          count = 0
-          counter = ->(_name, _start, _finish, _id, payload) { count += 1 unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
-          ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &)
-          count
-        end
-
         def render_placements_for(school_count)
           other_provider = create(:provider, selectable_school: true)
           other_course = create(:course, :published, provider: other_provider)
