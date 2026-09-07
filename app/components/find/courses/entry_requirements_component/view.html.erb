@@ -93,7 +93,7 @@
     <% end %>
 
     <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-      <%= accordion.with_section(heading_text: content_tag(:h3, t("find.get_into_teaching.qualifications_outside_uk"), class: "govuk-heading-m")) do %>
+      <%= accordion.with_section(heading_text: content_tag(:h3, t("find.get_into_teaching.qualifications_outside_uk"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--pink" }) do %>
         <p class="govuk-body"><%= t("find.get_into_teaching.qualifications_outside_uk_body") %> </p>
 
         <p class="govuk-body">

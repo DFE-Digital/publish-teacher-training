@@ -1,5 +1,5 @@
 <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.salaried_courses.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--orange" }) do %>
+  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.salaried_courses.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--purple" }) do %>
     <div class="course-salary-details">
       <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.competitive") %></p>
       <h4 class="govuk-heading-s"><%= t("find.financial_support.uk_citizens.salaried_courses.salary_heading") %></h4>
@@ -17,7 +17,7 @@
   <% end %>
 <% end %>
 <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.non_uk_citizens.salaried_courses.title"), class: "govuk-heading-m")) do %>
+  <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.non_uk_citizens.salaried_courses.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--pink" }) do %>
     <div class="course-salary-details-non-uk">
       <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.competitive") %></p>
       <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.entry_requirements") %></p>
