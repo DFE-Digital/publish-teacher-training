@@ -78,6 +78,26 @@ module Find
           }
         end
 
+        def count_queries(&)
+          count = 0
+          counter = ->(_name, _start, _finish, _id, payload) { count += 1 unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
+          ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &)
+          count
+        end
+
+        def render_placements_for(school_count)
+          other_provider = create(:provider, selectable_school: true)
+          other_course = create(:course, :published, provider: other_provider)
+          create_list(:course_school, school_count, course: other_course)
+
+          count_queries do
+            get :index, params: {
+              provider_code: other_provider.provider_code,
+              course_code: other_course.course_code,
+            }
+          end
+        end
+
         it "lists each school's name and address with no Site or SiteStatus in play" do
           create(
             :course_school,
@@ -100,6 +120,17 @@ module Find
           get_placements
 
           expect(response.body.scan("Ashfield School").size).to eq(1)
+        end
+
+        # The partial renders every school through Provider::School -> GiasSchool,
+        # so the preload has to cover that whole chain. Bullet does not raise in
+        # test, so this is what catches a preload that stops matching the reader.
+        it "renders the list in a constant number of queries regardless of school count" do
+          many = render_placements_for(5)
+          few = render_placements_for(2)
+
+          expect(response.parsed_body.css("#course_school_placements li").size).to eq(2)
+          expect(many).to eq(few)
         end
 
         it "still renders the not found page when the provider is not selectable" do
