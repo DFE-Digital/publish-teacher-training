@@ -12,8 +12,8 @@
   }
 }
 
-.app-card--inset {
-  border-left: govuk-spacing(1) solid govuk-colour("orange");
+.app-card--purple {
+  border-left: govuk-spacing(1) solid $git-brand-colour;
 }
 
 .app-card--blue {

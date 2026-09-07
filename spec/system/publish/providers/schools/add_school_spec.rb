@@ -65,7 +65,7 @@ RSpec.describe "Adding a provider's schools", travel: mid_cycle(2026) do
   def given_i_see_the_schools_guidance_text
     expect(page).to have_text("You can only add schools that are on Get Information About Schools (GIAS).", normalize_ws: true)
     expect(page).to have_link("Get Information About Schools (GIAS)", href: "https://get-information-schools.service.gov.uk/Search?SelectedTab=Establishments")
-    within(".app-callout.app-callout--orange") do
+    within(".app-callout.app-callout--purple") do
       expect(page).to have_css(
         ".app-callout__title",
         text: "Attaching schools to courses",
