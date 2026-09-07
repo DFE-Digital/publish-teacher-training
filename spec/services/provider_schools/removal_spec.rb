@@ -50,6 +50,62 @@ RSpec.describe ProviderSchools::Removal do
       expect(course.schools.reload).to contain_exactly(remaining_course_school)
     end
 
+    it "audits the destroyed provider school and detached course school" do
+      course = create(:course, provider:)
+      create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)
+      create(
+        :course_school,
+        course:,
+        provider_school: other_provider_school,
+        gias_school: other_provider_school.gias_school,
+      )
+
+      expect { removal.call }
+        .to change { Audited.audit_class.where(auditable_type: "Provider::School", action: "destroy").count }.by(1)
+        .and change { Audited.audit_class.where(auditable_type: "Course::School", action: "destroy").count }.by(1)
+    end
+
+    it "enqueues DfE Analytics delete events for the provider school and course school" do
+      allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
+
+      course = create(:course, provider:)
+      create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)
+      create(
+        :course_school,
+        course:,
+        provider_school: other_provider_school,
+        gias_school: other_provider_school.gias_school,
+      )
+
+      removal.call
+
+      expect(:delete_entity).to have_been_enqueued_as_analytics_events
+    end
+
+    it "does not remove the school if it becomes the only school on a course while locked" do
+      course = create(:course, provider:)
+      create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)
+      create(
+        :course_school,
+        course:,
+        provider_school: other_provider_school,
+        gias_school: other_provider_school.gias_school,
+      )
+
+      allow(Course).to receive(:where).and_wrap_original do |original, *args, **kwargs|
+        ids = kwargs[:id] || args.dig(0, :id)
+        if Array(ids).include?(course.id) && Provider::School.exists?(other_provider_school.id)
+          other_provider_school.destroy!
+        end
+        original.call(*args, **kwargs)
+      end
+
+      expect(removal.call).to be(false)
+
+      expect(Provider::School.where(id: provider_school.id)).to contain_exactly(provider_school)
+      expect(course.schools.reload.map(&:provider_school_id)).to contain_exactly(provider_school.id)
+    end
+
     it "removes the school when the only attached course has been discarded" do
       course = create(:course, provider:)
       create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)

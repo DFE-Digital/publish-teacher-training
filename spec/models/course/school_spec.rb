@@ -11,6 +11,10 @@ describe Course::School do
     it { is_expected.to belong_to(:provider_school).class_name("Provider::School").required }
   end
 
+  describe "auditing" do
+    it { is_expected.to be_audited.associated_with(:course) }
+  end
+
   describe ".with_available_gias_school" do
     it "excludes course schools whose GIAS record is closed" do
       available = create(:course_school, gias_school: create(:gias_school, :open))
