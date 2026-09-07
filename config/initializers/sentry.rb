@@ -35,6 +35,11 @@ Sentry.init do |config|
     event
   end
 
+  # sentry-rails 7 enables structured logging by default, which sends every SQL
+  # query and controller action to Sentry as a log event. Log events bypass
+  # `before_send`, so the filtering above does not apply to them.
+  config.rails.structured_logging.enabled = false
+
   config.release = ENV.fetch("COMMIT_SHA", nil)
 
   config.excluded_exceptions += %w[
