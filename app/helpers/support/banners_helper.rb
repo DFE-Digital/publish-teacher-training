@@ -7,6 +7,12 @@ module Support
       banner.displayed_on.map(&:to_s).map { |displayed_on| t("support.banners.index.displayed_on.#{displayed_on}") }.to_sentence.presence || t("support.banners.index.displayed_on.none")
     end
 
+    def banner_time_invalid?(banner, attribute)
+      value = banner.public_send(attribute)
+
+      value.is_a?(PotentialDateTime) && value.time_invalid?
+    end
+
     def banner_time_part(banner, attribute, index)
       value = banner.public_send(attribute)
 

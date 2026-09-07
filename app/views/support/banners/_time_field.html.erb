@@ -1,0 +1,14 @@
+<%# locals: (form:, attribute:, legend:, hint:) %>
+
+<% hint_id = "#{form.object_name}-#{attribute.to_s.dasherize}-time-hint" %>
+<% error_id = "#{form.object_name}-#{attribute.to_s.dasherize}-error" if banner_time_invalid?(form.object, attribute) %>
+
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" role="group" aria-describedby="<%= [error_id, hint_id].compact.join(" ") %>">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s"><%= legend %></legend>
+    <div class="govuk-hint" id="<%= hint_id %>"><%= hint %></div>
+    <div class="govuk-date-input">
+      <%= render "time_parts", form:, attribute: %>
+    </div>
+  </fieldset>
+</div>

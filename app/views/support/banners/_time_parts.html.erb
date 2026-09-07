@@ -14,7 +14,7 @@
             id: "#{form.object_name}_#{attribute}_#{index}i",
             class: class_names(
               "govuk-input govuk-date-input__input govuk-input--width-2",
-              "govuk-input--error" => form.object.errors[attribute].any?,
+              "govuk-input--error" => banner_time_invalid?(form.object, attribute),
             ),
             inputmode: "numeric",
             autocomplete: "off",
