@@ -27,7 +27,7 @@ body:not(.js-enabled) {
 
 .course-accordion .govuk-accordion__section {
   background-color: govuk-colour("light-grey");
-  border-left: govuk-spacing(1) solid govuk-colour("purple");
+  border-left: govuk-spacing(1) solid $git-non-uk-colour;
 }
 
 .course-accordion .govuk-accordion__section-header {
@@ -52,5 +52,5 @@ body:not(.js-enabled) {
 
 .course-accordion .govuk-accordion__section--orange {
   background-color: govuk-colour("light-grey");
-  border-left: govuk-spacing(1) solid govuk-colour("orange");
+  border-left: govuk-spacing(1) solid $git-brand-colour;
 }

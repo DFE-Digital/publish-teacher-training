@@ -7,7 +7,7 @@
   border-left-width: govuk-spacing(1);
 
   &.app-callout--pink {
-    border-color: govuk-colour("pink");
+    border-color: $git-support-colour;
   }
 
   &.app-callout--orange {
