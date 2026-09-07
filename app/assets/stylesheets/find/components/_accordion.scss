@@ -17,7 +17,7 @@ body:not(.js-enabled) {
     padding-bottom: govuk-spacing(1);
 
     background-color: govuk-colour("light-grey");
-    border-left: 5px solid govuk-colour("orange");
+    border-left: 5px solid $git-brand-colour;
   }
 
   .govuk-accordion__section-heading {
