@@ -11,16 +11,23 @@ module Publish
 
       def update
         @course_rollover_form = CourseRolloverForm.new(course)
-        if @course_rollover_form.valid?
-          RolloverProviderService.call(provider_code: params[:provider_code], course_codes: params[:code]&.split, force: true)
+        return render :edit unless @course_rollover_form.valid?
+
+        result = RolloverProviderService.call(provider_code: params[:provider_code], course_codes: params[:code]&.split, force: true)
+
+        # The service collects a failed course copy into `courses_failed` and
+        # commits the rest of the transaction, so the provider and its sites can
+        # be in the next cycle without the course.
+        if result[:courses_failed].any?
+          @course_rollover_form.errors.add(:base, :rollover_failed)
+          render :edit
+        else
           flash[:success] = "Course rolled over"
           redirect_to publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
           )
-        else
-          render :edit
         end
       end
 

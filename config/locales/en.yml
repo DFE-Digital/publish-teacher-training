@@ -987,6 +987,8 @@ en:
               too_long: "Reduce the word count for degree subject requirements"
         publish/course_rollover_form:
           attributes:
+            base:
+              rollover_failed: "This course could not be rolled over. Try again, or contact becomingateacher@digital.education.gov.uk for help."
             course_is_rollable:
               invalid: "This course cannot be rolled over into the next recruitment cycle."
         publish/course_funding_form:
