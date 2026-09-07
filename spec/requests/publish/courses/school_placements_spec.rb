@@ -8,13 +8,6 @@ describe "Publish::Courses::SchoolPlacementsController#index", service: :publish
   before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
   after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
 
-  def count_queries(&)
-    count = 0
-    counter = ->(_name, _start, _finish, _id, payload) { count += 1 unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
-    ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &)
-    count
-  end
-
   def render_placements_for(school_count)
     user = create(:user, :with_provider)
     provider = user.providers.first

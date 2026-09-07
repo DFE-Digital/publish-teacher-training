@@ -5,13 +5,6 @@ require "rails_helper"
 describe "Publish::Providers::TrainingPartners::CoursesController#index" do
   include DfESignInUserHelper
 
-  def count_queries(&)
-    count = 0
-    counter = ->(_name, _start, _finish, _id, payload) { count += 1 unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
-    ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &)
-    count
-  end
-
   def render_list_of(course_count)
     accredited_provider = create(:provider, :accredited_provider)
     user = create(:user, providers: [accredited_provider])
