@@ -2,6 +2,8 @@
 
 module Providers
   class CopyToRecruitmentCycleService
+    COURSE_NOT_ROLLABLE = "Course not rollable"
+
     def initialize(copy_course_to_provider_service:, copy_schools_to_provider_service:, copy_site_to_provider_service:, copy_partnership_to_provider_service:, force:)
       @copy_course_to_provider_service = copy_course_to_provider_service
       @copy_schools_to_provider_service = copy_schools_to_provider_service
@@ -42,7 +44,7 @@ module Providers
                 :copy_partnership_to_provider_service,
                 :force
 
-    # `sites` and `study_sites` count what this run created. `*_already_present`
+    # `courses`, `sites` and `study_sites` count what this run created. `*_already_present`
     # counts what the destination provider already had, which is the normal
     # outcome of a repeat run and not a problem. `*_skipped` is reserved for
     # copies that were attempted and failed — rollover reporting surfaces those
@@ -55,6 +57,7 @@ module Providers
         study_sites: 0,
         study_sites_already_present: 0,
         courses: 0,
+        courses_already_present: 0,
         partnerships: 0,
         courses_failed: [],
         courses_skipped: [],
@@ -142,9 +145,16 @@ module Providers
         raise msg
       end
 
+      existing_course_codes = new_provider.courses.with_discarded.pluck(:course_code).to_set
+
       eligible.each do |course|
-        copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
-        result[:courses] += 1
+        if existing_course_codes.include?(course.course_code)
+          result[:courses_already_present] += 1
+        elsif copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
+          result[:courses] += 1
+        else
+          result[:courses_skipped] << { course_code: course.course_code, reason: COURSE_NOT_ROLLABLE }
+        end
       rescue StandardError => e
         result[:courses_failed] << { course_code: course.course_code, error_message: e.message }
       end

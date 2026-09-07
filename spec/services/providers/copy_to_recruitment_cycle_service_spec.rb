@@ -100,6 +100,22 @@ describe Providers::CopyToRecruitmentCycleService do
       end
     end
 
+    # Courses::CopyToProviderService returns nil when it declines to copy a
+    # course, so a count taken without reading the return value counts courses
+    # that were never written.
+    context "the course copier declines to copy the course" do
+      it "reports it as skipped rather than copied" do
+        allow(mocked_copy_course_service).to receive(:execute).and_return(nil)
+
+        result = service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+        expect(result[:courses]).to eq(0)
+        expect(result[:courses_skipped]).to contain_exactly(
+          { course_code: course.course_code, reason: "Course not rollable" },
+        )
+      end
+    end
+
     context "the provider already exists in the new recruitment cycle" do
       let(:old_recruitment_cycle) { create(:recruitment_cycle, :previous) }
       let(:new_provider) do
@@ -235,6 +251,7 @@ describe Providers::CopyToRecruitmentCycleService do
         study_sites: 1,
         study_sites_already_present: 0,
         courses: 1,
+        courses_already_present: 0,
         partnerships: 1,
         courses_failed: [],
         courses_skipped: [],

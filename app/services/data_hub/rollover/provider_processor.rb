@@ -66,6 +66,7 @@ module DataHub
       def provider_details(result)
         {
           courses_count: result[:courses],
+          courses_already_present_count: result[:courses_already_present],
           sites_count: result[:sites],
           sites_already_present_count: result[:sites_already_present],
           study_sites_count: result[:study_sites],

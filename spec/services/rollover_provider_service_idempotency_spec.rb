@@ -55,6 +55,18 @@ RSpec.describe RolloverProviderService do
     it "copies every course" do
       expect(new_provider.courses.pluck(:course_code)).to match_array(courses.map(&:course_code))
     end
+
+    # Rolling the same course over twice is the shape of a stale rollover page,
+    # and of a provider whose bulk rollover has already run. The second run must
+    # not report the course as copied again.
+    it "reports a course that is already in the next cycle as already present" do
+      expect(roll_over(courses.first)).to include(
+        courses: 0,
+        courses_already_present: 1,
+        courses_failed: [],
+        courses_skipped: [],
+      )
+    end
   end
 
   # The guard this fix replaces matched on code alone and read school and study
