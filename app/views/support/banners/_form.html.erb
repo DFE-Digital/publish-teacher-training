@@ -9,13 +9,15 @@
     <div class="govuk-form-group">
       <%= form.govuk_text_field :name,
                                 label: { text: Banner.human_attribute_name(:name), size: "s" },
-                                hint: { text: Banner.human_attribute_name(:name_description) } %>
+                                hint: { text: Banner.human_attribute_name(:name_description) },
+                                **banner_word_count_options(form, :name, 20) %>
     </div>
 
     <div class="govuk-form-group">
       <%= form.govuk_text_field :heading,
                                 label: { text: Banner.human_attribute_name(:heading), size: "s" },
-                                hint: { text: Banner.human_attribute_name(:heading_description) } %>
+                                hint: { text: Banner.human_attribute_name(:heading_description) },
+                                **banner_word_count_options(form, :heading, 30) %>
     </div>
 
     <div class="govuk-form-group">
