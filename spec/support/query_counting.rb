@@ -10,10 +10,16 @@
 # under test.
 module QueryCounting
   def count_queries(&)
-    count = 0
-    counter = ->(_name, _start, _finish, _id, payload) { count += 1 unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
-    ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &)
-    count
+    queries(&).size
+  end
+
+  # The statements themselves, for the specs that care what a query says rather
+  # than how many there were - whether a subquery is bounded, say.
+  def queries(&block)
+    sql = []
+    counter = ->(_name, _start, _finish, _id, payload) { sql << payload[:sql] unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
+    ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &block)
+    sql
   end
 end
 
