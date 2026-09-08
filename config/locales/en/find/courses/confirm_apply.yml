@@ -25,3 +25,6 @@ en:
           adviser_callout_heading: Get free one-to-one support
           adviser_callout_body_html: Talk to a %{teacher_training_adviser_link} who can help you understand which courses you could be eligible for.
           adviser_callout_link_text: teacher training adviser
+          support_callout_heading: Support and advice
+          support_callout_body_html: You can %{contact_git_link} for free support
+          support_callout_link_text: contact Get Into Teaching
