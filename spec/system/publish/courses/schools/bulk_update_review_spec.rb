@@ -98,6 +98,23 @@ RSpec.describe "Publish - Reviewing the courses a placement school change will u
     then_the_chosen_option_is("All fee-paying courses")
   end
 
+  # The draft is the provider's ticking. If queueing the change fails, they get
+  # to press the button again rather than starting the whole list over.
+  scenario "a queue that is down does not throw the selection away" do
+    given_a_fee_paying_course_and_another_like_it
+    when_i_add_a_school
+    and_i_choose("All fee-paying courses")
+    and_i_continue
+    review_page = page.current_path
+    and_the_queue_is_down
+
+    expect { and_i_confirm }.to raise_error(Redis::CannotConnectError)
+
+    and_i_return_to(review_page)
+    then_i_still_see_the_courses_that_will_be_updated
+    and_the_course_has("Ash Academy", "Beech School")
+  end
+
   scenario "the change cannot be confirmed twice" do
     given_a_fee_paying_course_and_another_like_it
     when_i_add_a_school
@@ -246,6 +263,14 @@ private
 
   def and_i_return_to(path)
     visit path
+  end
+
+  def and_the_queue_is_down
+    allow(BulkUpdateCourseSchoolsJob).to receive(:perform_async).and_raise(Redis::CannotConnectError)
+  end
+
+  def then_i_still_see_the_courses_that_will_be_updated
+    expect(page).to have_content("You are updating these courses:")
   end
 
   def then_i_see_the_scope(label)

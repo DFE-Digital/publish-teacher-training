@@ -25,13 +25,14 @@ module Publish
           authorize(provider)
 
           matched = matched_courses
-          change = [matched.ids, @draft.added_uuids, @draft.removed_uuids]
 
-          # Taken out before the change is queued, so a second press of the
-          # button meets the expiry redirect rather than applying it again.
+          BulkUpdateCourseSchoolsJob.perform_async(matched.ids, @draft.added_uuids, @draft.removed_uuids)
+
+          # Only once the change is safely queued. Applying the same diff twice
+          # lands on the same schools, so a second press of the button costs
+          # nothing - where deleting first would throw away a list the provider
+          # may have spent a long time ticking, exactly when the queue is down.
           @draft.destroy
-
-          BulkUpdateCourseSchoolsJob.perform_async(*change)
 
           flash[:success] = t("publish.courses.schools.bulk_update.updated", count: matched.count)
 
