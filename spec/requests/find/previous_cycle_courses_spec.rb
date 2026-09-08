@@ -87,6 +87,63 @@ RSpec.describe "Previous-cycle course pages on Find", service: :find, type: :req
     end
   end
 
+  context "when the course exists only in the previous cycle", travel: find_opens(2027) + 1.day do
+    let(:previous_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
+    let(:previous_provider) { create(:provider, recruitment_cycle: previous_cycle, provider_code: "ABC") }
+    let!(:previous_course) do
+      published_course(
+        provider: previous_provider,
+        name: "History",
+        start_date: Time.zone.local(2026, 10, 1),
+      )
+    end
+
+    before { create(:provider, provider_code: "ABC") }
+
+    it "returns the course on the previous-cycle URL" do
+      get_cycle_course(previous_course)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("History")
+    end
+
+    it "returns 404 on the normal course URL" do
+      get find_course_path(previous_course.provider.provider_code, previous_course.course_code)
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
+  context "when the course exists only in the current cycle", travel: find_opens(2027) + 1.day do
+    let(:previous_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
+    let!(:previous_provider) { create(:provider, recruitment_cycle: previous_cycle, provider_code: "ABC") }
+    let(:current_provider) { create(:provider, provider_code: "ABC") }
+    let!(:current_course) do
+      published_course(
+        provider: current_provider,
+        name: "Geography",
+        start_date: Time.zone.local(2027, 9, 1),
+      )
+    end
+
+    it "returns the course on the normal URL" do
+      get find_course_path(current_course.provider.provider_code, current_course.course_code)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Geography")
+    end
+
+    it "returns 404 on the previous-cycle URL" do
+      get find_course_cycle_path(
+        current_course.provider.provider_code,
+        current_course.course_code,
+        previous_cycle.year,
+      )
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   context "when the 2026 cycle course start date has passed", travel: Time.zone.local(2026, 10, 2) do
     it "is not available" do
       previous_cycle = find_or_create(:recruitment_cycle, year: 2026)
