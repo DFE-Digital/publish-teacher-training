@@ -21,7 +21,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def find_url(provider = object.provider)
-    if Find::PreviousCycleCourse.visible?(object)
+    if previous_cycle_find_url?
       h.find_course_cycle_url(provider.provider_code, object.course_code, object.recruitment_cycle_year)
     else
       h.find_course_url(provider.provider_code, object.course_code)
@@ -521,6 +521,11 @@ class CourseDecorator < ApplicationDecorator
   end
 
 private
+
+  def previous_cycle_find_url?
+    object.recruitment_cycle_year.to_i == Find::CycleTimetable.previous_year &&
+      Find::PreviousCycleCourse.visible?(object)
+  end
 
   def number_of_subjects
     subjects.size
