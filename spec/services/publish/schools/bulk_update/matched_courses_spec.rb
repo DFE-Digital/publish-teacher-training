@@ -29,6 +29,17 @@ describe Publish::Schools::BulkUpdate::MatchedCourses do
     )
   end
 
+  def count_queries(&)
+    statements(&).size
+  end
+
+  def statements(&block)
+    sql = []
+    counter = ->(_name, _start, _finish, _id, payload) { sql << payload[:sql] unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
+    ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &block)
+    sql
+  end
+
   describe "the courses that will be updated" do
     it "is every course the scope matched" do
       course = course_with("Ash")
@@ -98,13 +109,6 @@ describe Publish::Schools::BulkUpdate::MatchedCourses do
   end
 
   describe "query count" do
-    def count_queries(&)
-      count = 0
-      counter = ->(_name, _start, _finish, _id, payload) { count += 1 unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
-      ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &)
-      count
-    end
-
     def materialise(course_count)
       course = course_with("Ash", "Beech")
       course_count.times { course_with("Ash") }
@@ -115,6 +119,58 @@ describe Publish::Schools::BulkUpdate::MatchedCourses do
 
     it "does not grow with the number of courses matched" do
       expect(materialise(10)).to eq(materialise(2))
+    end
+
+    # A count of queries cannot catch this: the number was always constant, it
+    # was the rows read inside them that grew. Unbounded, Postgres materialises
+    # every course_school row in the table and rescans it once per matched
+    # course - seconds, for a provider with a few hundred courses.
+    it "reads no more of course_school than the courses it matched" do
+      course = course_with("Ash", "Beech")
+      course_with("Ash")
+      result = matched(course.reload, removed: %w[Ash])
+
+      exclusion = statements { result.excluded }.grep(/NOT IN/).first
+
+      expect(exclusion).to be_present
+      exclusion.scan(/FROM "course_school"/).size.times do
+        expect(exclusion).to include(%(WHERE "course_school"."course_id" IN))
+      end
+      expect(exclusion.scan(/FROM "course_school"/).size)
+        .to eq(exclusion.scan(/"course_school"."course_id" IN/).size)
+    end
+  end
+
+  describe "the ids handed to the write" do
+    # The confirm action renders nothing, so it must not pay for the list. This
+    # holds only because the list query LEFT joins everything it joins - an
+    # inner join would drop a matched course here and it would never be written.
+    it "are the courses that will be updated, without building the list" do
+      course = course_with("Ash", "Beech")
+      last_school = course_with("Ash")
+      result = matched(course.reload, removed: %w[Ash])
+
+      expect(result.ids).to contain_exactly(course.id)
+      expect(result.ids).not_to include(last_school.id)
+      expect(result.count).to eq(result.ids.size)
+    end
+
+    it "cost less than rendering the list" do
+      course = course_with("Ash", "Beech")
+      course_with("Ash")
+
+      for_write = count_queries { matched(course.reload, removed: %w[Ash]).ids }
+      for_the_page = count_queries { matched(course.reload, removed: %w[Ash]).updatable }
+
+      expect(for_write).to be < for_the_page
+    end
+
+    it "agree with the courses the page lists" do
+      course = course_with("Ash", "Beech")
+      course_with("Beech")
+      result = matched(course.reload, added: %w[Cedar])
+
+      expect(result.ids).to match_array(result.updatable.map(&:id))
     end
   end
 end

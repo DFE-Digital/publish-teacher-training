@@ -29,11 +29,14 @@ module Publish
         end
 
         def count
-          updatable.size
+          ids.size
         end
 
+        # What the write needs, and all it needs. The confirm action renders
+        # nothing, so it never asks for the rows - which is the whole of the
+        # list query, enrichment aggregate and all, for a list of integers.
         def ids
-          updatable.map(&:id)
+          @ids ||= matched_ids - excluded_ids.to_a
         end
 
       private
@@ -60,16 +63,26 @@ module Publish
             .merge(::Courses::PublishRules::SchoolPresenceExemption.not_exempt)
             # A course with no schools to begin with is not losing its last one,
             # so the explanation would not be true of it.
-            .where(id: ::Course::School.select(:course_id))
+            .where(id: course_schools.select(:course_id))
             .where.not(id: keeping_a_school)
             .pluck(:id)
         end
 
         def keeping_a_school
-          ::Course::School
+          course_schools
             .joins(:provider_school)
             .where.not(provider_school: { uuid: removed_uuids })
             .select(:course_id)
+        end
+
+        # Bounded to the courses this update matched, and that bound is doing
+        # real work rather than tidying up. Both subqueries are correct without
+        # it, but Postgres answers an unbounded IN over course_school by
+        # materialising the whole table and rescanning it once per matched
+        # course: seconds for a provider with a few hundred courses, on a page
+        # they are only reading.
+        def course_schools
+          ::Course::School.where(course_id: matched_ids)
         end
 
         def provider
