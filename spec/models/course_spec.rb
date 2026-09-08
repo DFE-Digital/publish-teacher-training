@@ -128,6 +128,32 @@ describe Course do
     end
   end
 
+  describe "#in_next_cycle" do
+    let(:previous_cycle) { create(:recruitment_cycle, year: "2026") }
+    let(:current_cycle) { create(:recruitment_cycle, year: "2027") }
+    let(:previous_provider) { create(:provider, provider_code: "A1", recruitment_cycle: previous_cycle) }
+    let(:current_provider) { create(:provider, provider_code: "A1", recruitment_cycle: current_cycle) }
+    let(:course) { create(:course, course_code: "B123", provider: previous_provider) }
+
+    it "returns the same course in the next cycle" do
+      next_course = create(:course, course_code: "B123", provider: current_provider)
+
+      expect(course.in_next_cycle).to eq(next_course)
+    end
+
+    it "returns nil when there is no matching course in the next cycle" do
+      create(:course, course_code: "B123", provider: create(:provider, provider_code: "Z9", recruitment_cycle: current_cycle))
+
+      expect(course.in_next_cycle).to be_nil
+    end
+
+    it "returns nil when the next-cycle course is discarded" do
+      create(:course, course_code: "B123", provider: current_provider).discard!
+
+      expect(course.in_next_cycle).to be_nil
+    end
+  end
+
   describe "#show_school_experience?" do
     let(:cycle_year) { 2027 }
     let(:provider) { build_stubbed(:provider, recruitment_cycle: build_stubbed(:recruitment_cycle, year: cycle_year)) }

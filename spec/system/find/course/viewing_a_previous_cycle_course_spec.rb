@@ -5,14 +5,23 @@ require "rails_helper"
 RSpec.describe "Viewing a previous-cycle course on Find", service: :find do
   scenario "a 2026 cycle course is shown before the start date", travel: find_opens(2027) + 1.day do
     given_there_is_a_previous_cycle_course(year: 2026, start_date: Time.zone.local(2026, 10, 1), name: "History")
+
+    when_i_visit_the_previous_cycle_course_page
+
+    then_i_see_the_previous_cycle_course
+    and_i_see_the_previous_cycle_warning_without_a_current_course
+    and_i_cannot_apply
+  end
+
+  scenario "a 2026 cycle course links to this year's course when it exists", travel: find_opens(2027) + 1.day do
+    given_there_is_a_previous_cycle_course(year: 2026, start_date: Time.zone.local(2026, 10, 1), name: "History")
     and_there_is_a_current_cycle_course_with_the_same_codes
 
     when_i_visit_the_previous_cycle_course_page
 
     then_i_see_the_previous_cycle_course
-    and_i_see_the_previous_cycle_banner
+    and_i_see_the_previous_cycle_warning_with_a_link_to_this_years_course
     and_i_cannot_apply
-    and_i_do_not_see_the_current_cycle_course
   end
 
   scenario "a 2026 cycle course is not shown after the start date", travel: Time.zone.local(2026, 10, 2) do
@@ -45,7 +54,7 @@ RSpec.describe "Viewing a previous-cycle course on Find", service: :find do
     when_i_visit_the_current_cycle_course_page
 
     then_i_see_the_current_cycle_course
-    and_i_do_not_see_the_previous_cycle_banner
+    and_i_do_not_see_the_previous_cycle_warning
     and_i_can_apply
   end
 
@@ -91,13 +100,23 @@ RSpec.describe "Viewing a previous-cycle course on Find", service: :find do
     expect(page).to have_content("Geography")
   end
 
-  def and_i_see_the_previous_cycle_banner
-    expect(page).to have_content("This course is from a previous recruitment cycle")
-    expect(page).to have_content("You cannot apply for this course on Find")
+  def and_i_see_the_previous_cycle_warning_without_a_current_course
+    expect(page).to have_css(".govuk-warning-text")
+    expect(page).to have_content("This is a course from a previous year. You can contact the provider for more information.")
   end
 
-  def and_i_do_not_see_the_previous_cycle_banner
-    expect(page).to have_no_content("This course is from a previous recruitment cycle")
+  def and_i_see_the_previous_cycle_warning_with_a_link_to_this_years_course
+    expect(page).to have_css(".govuk-warning-text")
+    expect(page).to have_content("This is a course from a previous year.")
+    expect(page).to have_link(
+      "Geography (C1)",
+      href: find_course_path(@current_cycle_course.provider.provider_code, @current_cycle_course.course_code),
+    )
+    expect(page).to have_content("or contact the provider for more information.")
+  end
+
+  def and_i_do_not_see_the_previous_cycle_warning
+    expect(page).to have_no_content("This is a course from a previous year")
   end
 
   def and_i_cannot_apply
@@ -106,10 +125,6 @@ RSpec.describe "Viewing a previous-cycle course on Find", service: :find do
 
   def and_i_can_apply
     expect(page).to have_link("Apply for this course")
-  end
-
-  def and_i_do_not_see_the_current_cycle_course
-    expect(page).to have_no_content("Geography")
   end
 
   def then_i_see_page_not_found

@@ -1,4 +1,16 @@
-<%= govuk_notification_banner(title_text: t("important")) do |notification_banner| %>
-  <% notification_banner.with_heading(text: t("find.courses.show.previous_cycle.heading")) %>
-  <p class="govuk-body"><%= t("find.courses.show.previous_cycle.body") %></p>
+<% if @current_cycle_equivalent %>
+  <%= govuk_warning_text do %>
+    <%= t(
+          "find.courses.show.previous_cycle.with_current_course_html",
+          course_link: govuk_link_to(
+            @current_cycle_equivalent.name_and_code,
+            find_course_path(
+              @current_cycle_equivalent.provider.provider_code,
+              @current_cycle_equivalent.course_code,
+            ),
+          ),
+        ) %>
+  <% end %>
+<% else %>
+  <%= govuk_warning_text(text: t("find.courses.show.previous_cycle.without_current_course")) %>
 <% end %>

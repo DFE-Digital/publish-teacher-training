@@ -43,23 +43,28 @@ RSpec.describe "Previous-cycle course pages on Find", service: :find, type: :req
       )
     end
 
-    it "shows the previous-cycle course with a banner, notifying users it's from a previous cycle, and no apply action" do
+    it "shows the previous-cycle course with a warning and no apply action" do
       get_cycle_course(previous_course)
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("History")
-      expect(response.body).to include("This course is from a previous recruitment cycle")
-      expect(response.body).to include("You cannot apply for this course on Find")
+      expect(response.body).to include("govuk-warning-text")
+      expect(response.body).to include("This is a course from a previous year. You can contact the provider for more information.")
       expect(response.body).not_to include("Apply for this course")
     end
 
-    it "does not show the current-cycle version of the same course code" do
+    it "links to this year's course when the same course exists in the current cycle" do
       current_course
       get_cycle_course(previous_course)
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("History")
-      expect(response.body).not_to include("Geography")
+      expect(response.body).to include("govuk-warning-text")
+      expect(response.body).to include("This is a course from a previous year.")
+      expect(response.body).to include("Geography (C1)")
+      expect(response.body).to include(find_course_path(current_course.provider.provider_code, current_course.course_code))
+      expect(response.body).to include("or contact the provider for more information.")
+      expect(response.body).not_to include("Apply for this course")
     end
 
     it "leaves the current-cycle course page unchanged" do
@@ -67,7 +72,7 @@ RSpec.describe "Previous-cycle course pages on Find", service: :find, type: :req
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Geography")
-      expect(response.body).not_to include("This course is from a previous recruitment cycle")
+      expect(response.body).not_to include("This is a course from a previous year")
       expect(response.body).to include("Apply for this course")
     end
 

@@ -23,6 +23,7 @@ module Find
       @apply_action_column_class = apply_action_column_class
 
       @enrichment = @course.latest_published_enrichment
+      @current_cycle_equivalent = PreviousCycleCourse.current_cycle_equivalent(@course) if from_previous_cycle?
     end
 
     def confirm_apply; end
