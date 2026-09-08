@@ -2,7 +2,21 @@
   <h2 id="section-advice" class="app-callout__title"><%= t(".heading") %></h2>
 
   <span class="govuk-body">
-    <% if course.postgraduate_degree_type? %>
+    <% contact_git_link = govuk_link_to(
+         t(".contact_get_into_teaching_link_text"),
+         find_track_click_path(url: find_get_into_teaching_redirect_path(
+           @course.provider_code,
+           @course.course_code,
+           "help_and_support",
+         )),
+       ) %>
+
+    <% if course.primary_course? || !course.postgraduate_degree_type? %>
+      <%= t(
+            course.primary_course? ? ".primary.body_html" : ".undergraduate.body_html",
+            contact_git_link:,
+          ) %>
+    <% else %>
       <%= t(
             ".postgraduate.body_html",
             teacher_training_adviser_link: govuk_link_to(
@@ -13,28 +27,7 @@
                 "teacher_training_advisers",
               )),
             ),
-            contact_git_link:
-              govuk_link_to(
-                t(".contact_get_into_teaching_link_text"),
-                find_track_click_path(url: find_get_into_teaching_redirect_path(
-                  @course.provider_code,
-                  @course.course_code,
-                  "help_and_support",
-                )),
-              ),
-          ) %>
-    <% else %>
-      <%= t(
-            ".undergraduate.body_html",
-            contact_git_link:
-            govuk_link_to(
-              t(".contact_get_into_teaching_link_text"),
-              find_track_click_path(url: find_get_into_teaching_redirect_path(
-                @course.provider_code,
-                @course.course_code,
-                "help_and_support",
-              )),
-            ),
+            contact_git_link:,
           ) %>
     <% end %>
   </span>

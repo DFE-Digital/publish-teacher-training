@@ -79,19 +79,39 @@
     <% end %>
 
     <%= govuk_inset_text classes: "app-callout app-callout--purple govuk-!-margin-top-4" do %>
-      <h2 class="govuk-heading-m"><%= t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_heading") %></h2>
-      <p class="govuk-body govuk-!-margin-bottom-0">
-        <%= t(
-              "find.courses.confirm_apply.school_experience_interruption.adviser_callout_body_html",
-              teacher_training_adviser_link: govuk_link_to(
-                t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_link_text"),
-                find_track_click_path(
-                  url: t("find.get_into_teaching.url_training_adviser"),
-                  utm_content: "school_experience_interruption_teacher_training_adviser",
+      <% if @course.primary_course? %>
+        <h2 class="govuk-heading-m"><%= t("find.courses.confirm_apply.school_experience_interruption.support_callout_heading") %></h2>
+        <p class="govuk-body govuk-!-margin-bottom-0">
+          <%= t(
+                "find.courses.confirm_apply.school_experience_interruption.support_callout_body_html",
+                contact_git_link: govuk_link_to(
+                  t("find.courses.confirm_apply.school_experience_interruption.support_callout_link_text"),
+                  find_track_click_path(
+                    url: find_get_into_teaching_redirect_path(
+                      @course.provider_code,
+                      @course.course_code,
+                      "help_and_support",
+                    ),
+                    utm_content: "school_experience_interruption_contact_get_into_teaching",
+                  ),
                 ),
-              ),
-            ) %>
-      </p>
+              ) %>
+        </p>
+      <% else %>
+        <h2 class="govuk-heading-m"><%= t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_heading") %></h2>
+        <p class="govuk-body govuk-!-margin-bottom-0">
+          <%= t(
+                "find.courses.confirm_apply.school_experience_interruption.adviser_callout_body_html",
+                teacher_training_adviser_link: govuk_link_to(
+                  t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_link_text"),
+                  find_track_click_path(
+                    url: t("find.get_into_teaching.url_training_adviser"),
+                    utm_content: "school_experience_interruption_teacher_training_adviser",
+                  ),
+                ),
+              ) %>
+        </p>
+      <% end %>
     <% end %>
   </div>
 </div>

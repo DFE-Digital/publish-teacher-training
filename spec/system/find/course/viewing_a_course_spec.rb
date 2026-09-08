@@ -93,6 +93,15 @@ RSpec.describe "Viewing a findable course" do
     then_i_am_redirected_to_the_git_help_and_support_page
   end
 
+  scenario "primary course support and advice does not offer a teacher training adviser" do
+    given_there_is_a_findable_primary_course
+    when_i_visit_the_course_page
+
+    then_i_see_the_primary_support_and_advice_callout
+    and_i_click("contact Get Into Teaching")
+    then_i_am_redirected_to_the_git_help_and_support_page
+  end
+
   scenario "user visits the provider page" do
     given_there_is_a_findable_course
     when_i_visit_the_course_page
@@ -158,6 +167,18 @@ private
           bursary_amount: "4000",
         ),
       ],
+    )
+  end
+
+  def given_there_is_a_findable_primary_course
+    @course = create(
+      :course,
+      :primary,
+      :published,
+      :open,
+      :with_full_time_sites,
+      name: "Primary",
+      subjects: [find_or_create(:primary_subject, :primary_with_mathematics)],
     )
   end
 
@@ -391,6 +412,22 @@ private
   def then_i_should_be_on_the_course_page
     expect(page).to have_current_path(
       find_course_path(provider_code: @course.provider_code, course_code: @course.course_code),
+    )
+  end
+
+  def then_i_see_the_primary_support_and_advice_callout
+    expect(page).to have_css("#section-advice-and-support", text: "Support and advice")
+    expect(page).to have_content("You can contact Get Into Teaching for free support")
+    expect(page).to have_no_link("get a teacher training adviser")
+    expect(page).to have_link(
+      "contact Get Into Teaching",
+      href: find_track_click_path(
+        url: find_get_into_teaching_redirect_path(
+          @course.provider_code,
+          @course.course_code,
+          "help_and_support",
+        ),
+      ),
     )
   end
 

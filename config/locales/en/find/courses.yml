@@ -25,6 +25,8 @@ en:
         heading: Support and advice
         postgraduate:
           body_html: You can %{teacher_training_adviser_link} or %{contact_git_link} for free support
+        primary:
+          body_html: You can %{contact_git_link} for free support
         undergraduate:
           body_html: You can %{contact_git_link} for free support
 

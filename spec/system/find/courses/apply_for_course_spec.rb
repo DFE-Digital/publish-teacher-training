@@ -20,6 +20,15 @@ RSpec.describe "Saving a course", service: :find do
     when_i_visit_school_experience_interstitial_page
 
     then_i_see_the_school_experience_interruption_page
+    and_i_see_the_teacher_training_adviser_callout
+  end
+
+  scenario "A signed-in candidate sees support and advice instead of a teacher training adviser on primary courses", travel: mid_cycle(2027) do
+    given_a_primary_salaried_course_with_required_school_experience_exists
+    when_i_visit_school_experience_interstitial_page
+
+    then_i_see_the_school_experience_interruption_page
+    and_i_see_the_primary_support_and_advice_callout
   end
 
   scenario "A signed-in candidate sees the school experience interruption and then confirm apply page", travel: mid_cycle(2027) do
@@ -114,7 +123,6 @@ RSpec.describe "Saving a course", service: :find do
       ),
     )
     expect(page).to have_content("Is a salaried course right for me?")
-    expect(page).to have_content("Get free one-to-one support")
     expect(page).to have_link(
       "bursaries or scholarships",
       href: find_track_click_path(
@@ -136,6 +144,51 @@ RSpec.describe "Saving a course", service: :find do
       course_code: "F314",
       provider: build(:provider, provider_name: "York university", provider_code: "RO1"),
       subjects: [find_or_create(:secondary_subject, :art_and_design)],
+    )
+  end
+
+  def and_i_see_the_teacher_training_adviser_callout
+    expect(page).to have_content("Get free one-to-one support")
+    expect(page).to have_link(
+      "teacher training adviser",
+      href: find_track_click_path(
+        url: I18n.t("find.get_into_teaching.url_training_adviser"),
+        utm_content: "school_experience_interruption_teacher_training_adviser",
+      ),
+    )
+  end
+
+  def and_i_see_the_primary_support_and_advice_callout
+    expect(page).to have_content("Support and advice")
+    expect(page).to have_no_content("Get free one-to-one support")
+    expect(page).to have_no_link("teacher training adviser")
+    expect(page).to have_link(
+      "contact Get Into Teaching",
+      href: find_track_click_path(
+        url: find_get_into_teaching_redirect_path(
+          @course.provider_code,
+          @course.course_code,
+          "help_and_support",
+        ),
+        utm_content: "school_experience_interruption_contact_get_into_teaching",
+      ),
+    )
+  end
+
+  def given_a_primary_salaried_course_with_required_school_experience_exists
+    @course = create(
+      :course,
+      :with_full_time_sites,
+      :primary,
+      :salary,
+      :published,
+      :open,
+      name: "Primary with mathematics",
+      course_code: "P314",
+      school_experience_required: true,
+      school_experience_required_content: "You must have completed 10 days of school experience in the last 12 months.",
+      provider: create(:provider, provider_name: "York university"),
+      subjects: [find_or_create(:primary_subject, :primary_with_mathematics)],
     )
   end
 
