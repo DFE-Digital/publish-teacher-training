@@ -78,6 +78,7 @@ describe CourseDecorator do
     end
 
     it "returns the cycle-specific Find URL for an eligible previous-cycle course" do
+      allow(Find::CycleTimetable).to receive(:previous_year).and_return(2026)
       allow(Find::PreviousCycleCourse).to receive(:visible?).and_return(true)
       allow(course).to receive(:recruitment_cycle_year).and_return("2026")
 

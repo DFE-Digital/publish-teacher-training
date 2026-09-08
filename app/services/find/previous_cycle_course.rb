@@ -29,9 +29,9 @@ module Find
 
     def visible?
       return false if course.blank?
-      return false unless published?
       return false unless previous_cycle?
       return false unless supported_enrichment_cycle?
+      return false unless published?
       return false unless starts_after_september?
       return false unless start_date_in_future?
 
