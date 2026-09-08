@@ -61,10 +61,14 @@ describe Publish::Schools::BulkUpdate::Apply do
     expect(attached_names(course)).to contain_exactly("Ash", "Cedar")
   end
 
-  it "reports how many courses it updated" do
-    courses = Course.where(id: [course_with("Ash").id, course_with("Beech").id])
+  it "reports the courses it updated" do
+    one = course_with("Ash")
+    two = course_with("Beech")
 
-    expect(apply(courses:, added: %w[Cedar])).to eq(2)
+    result = apply(courses: Course.where(id: [one.id, two.id]), added: %w[Cedar])
+
+    expect(result.updated_ids).to contain_exactly(one.id, two.id)
+    expect(result.failed_ids).to be_empty
   end
 
   it "stamps the provider once however many courses it touched" do
@@ -83,18 +87,38 @@ describe Publish::Schools::BulkUpdate::Apply do
     expect(one.reload.changed_at).not_to eq(two.reload.changed_at)
   end
 
-  it "carries on when one course cannot be updated" do
-    good = course_with("Ash")
-    bad = course_with("Beech")
+  describe "when one course cannot be updated" do
+    let(:good) { course_with("Ash") }
+    let(:bad) { course_with("Beech") }
 
-    allow(Publish::Schools::UpdateCourseSchoolsService).to receive(:call).and_call_original
-    allow(Publish::Schools::UpdateCourseSchoolsService)
-      .to receive(:call).with(hash_including(course: bad)).and_raise(ActiveRecord::RecordInvalid)
-    allow(Sentry).to receive(:capture_exception)
+    before do
+      allow(Publish::Schools::UpdateCourseSchoolsService).to receive(:call).and_call_original
+      allow(Publish::Schools::UpdateCourseSchoolsService)
+        .to receive(:call).with(hash_including(course: bad)).and_raise(ActiveRecord::RecordInvalid)
+    end
 
-    expect(apply(courses: Course.where(id: [good.id, bad.id]), added: %w[Cedar])).to eq(1)
-    expect(attached_names(good)).to contain_exactly("Ash", "Cedar")
-    expect(Sentry).to have_received(:capture_exception)
+    it "carries on with the rest" do
+      apply(courses: Course.where(id: [good.id, bad.id]), added: %w[Cedar])
+
+      expect(attached_names(good)).to contain_exactly("Ash", "Cedar")
+    end
+
+    it "names it, so the caller can come back to it" do
+      result = apply(courses: Course.where(id: [good.id, bad.id]), added: %w[Cedar])
+
+      expect(result.updated_ids).to contain_exactly(good.id)
+      expect(result.failed_ids).to contain_exactly(bad.id)
+    end
+
+    # A batch that fails wholesale would otherwise report itself hundreds of
+    # times over. The job reports once, when it has stopped trying.
+    it "does not report each failure separately" do
+      allow(Sentry).to receive(:capture_exception)
+
+      apply(courses: Course.where(id: [good.id, bad.id]), added: %w[Cedar])
+
+      expect(Sentry).not_to have_received(:capture_exception)
+    end
   end
 
   it "does not announce a bulk change once per course" do
