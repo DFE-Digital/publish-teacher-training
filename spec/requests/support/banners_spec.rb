@@ -21,7 +21,21 @@ RSpec.describe "Support::BannersController" do
     end
   end
 
+  describe "GET /support/banners/new" do
+    it "counts the words in the name and the heading" do
+      get new_support_banner_path
+
+      expect(word_counts_in(response.body)).to eq({ "name" => "20", "heading" => "30" })
+    end
+  end
+
   describe "POST /support/banners" do
+    it "keeps counting words on a form it has rejected" do
+      post support_banners_path, params: { banner: { name: "", body: "text", display_on_find: "1" } }
+
+      expect(word_counts_in(response.body)).to eq({ "name" => "20", "heading" => "30" })
+    end
+
     it "reports a mistyped date instead of raising" do
       expect {
         post support_banners_path, params: { banner: {
@@ -152,6 +166,16 @@ RSpec.describe "Support::BannersController" do
         "published_at(5i)" => "00",
       } }
       expect(time_inputs_in_error.call(response.body)).to eq(2)
+    end
+  end
+
+  def word_counts_in(body)
+    document = Nokogiri::HTML(body)
+
+    document.css(".govuk-character-count input.govuk-js-character-count").to_h do |input|
+      count_message = document.at_css("##{input['id']}-info")
+
+      [input["name"][/banner\[(\w+)\]/, 1], count_message && input.ancestors(".govuk-character-count").first["data-maxwords"]]
     end
   end
 

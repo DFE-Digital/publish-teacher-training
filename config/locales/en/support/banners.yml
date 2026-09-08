@@ -29,10 +29,10 @@ en:
         display_on_support: Support
         displayed_on: Displayed on
         expired_at: Expiry date and time
-        expired_at_date: Expiry date
+        expired_at_date: Expiry date (optional)
         expired_at_date_description: The date the banner stops being shown. Leave blank for
           no expiry.
-        expired_at_time: Expiry time
+        expired_at_time: Expiry time (optional)
         expired_at_time_description: The time on that date the banner stops being shown. Leave
           blank to stop at the end of that day.
         heading: Heading (optional)
@@ -43,12 +43,13 @@ en:
         published_at: Publish date and time
         published_at_date: Publish date
         published_at_date_description: The date the banner starts being shown.
-        published_at_time: Publish time
+        published_at_time: Publish time (optional)
         published_at_time_description: The time on that date the banner starts being shown.
           Leave blank to start at the beginning of that day.
   support:
     banners:
       form:
+        word_count: You can enter up to %{count} words
         segments:
           hour: "Hour"
           minute: "Minute"
