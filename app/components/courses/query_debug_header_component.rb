@@ -33,10 +33,6 @@ module Courses
       ).call
     end
 
-    def unique_nearest_school_for_each_result
-      nearest_school_for_each_result.uniq { |site| [site.latitude, site.longitude] }
-    end
-
     GOOGLE_MAPS_BASE_URL = "https://www.google.com/maps/dir/"
 
     def google_maps_directions_path
@@ -49,12 +45,10 @@ module Courses
       "#{google_maps_directions_path}/#{result.latitude},#{result.longitude}"
     end
 
+    # Publish resolves this route against Provider::School#uuid, so that is the
+    # only uuid worth linking - a legacy site uuid 404s there.
     def school_uuid(result)
-      if result.provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
-        result.provider_school_uuid
-      else
-        result.site_uuid
-      end
+      result.provider_school_uuid
     end
   end
 end

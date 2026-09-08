@@ -286,7 +286,7 @@ module Courses
     def location_scope
       return @scope if params[:latitude].blank? || params[:longitude].blank?
 
-      radius_in_meters = radius_in_miles * 1609.34
+      radius_in_meters = radius_in_miles * Geolocation::METRES_PER_MILE
       latitude = Float(params[:latitude])
       longitude = Float(params[:longitude])
 
@@ -337,10 +337,11 @@ module Courses
                 MIN(ST_DistanceSphere(
                   ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
                   ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-                ) / 1609.344) AS minimum_distance_to_search_location
+                ) / ?) AS minimum_distance_to_search_location
               SQL
               longitude,
               latitude,
+              Geolocation::METRES_PER_MILE,
             ],
           ),
         )
@@ -386,7 +387,14 @@ module Courses
 
       @scope
         .joins(nearby_courses)
-        .select("course.*, provider.provider_name, (nearby_courses.distance_m / 1609.344) AS minimum_distance_to_search_location")
+        .select(
+          Course.sanitize_sql_array(
+            [
+              "course.*, provider.provider_name, (nearby_courses.distance_m / ?) AS minimum_distance_to_search_location",
+              Geolocation::METRES_PER_MILE,
+            ],
+          ),
+        )
         .group("course.id, provider.id, provider.provider_name, nearby_courses.distance_m")
     end
 

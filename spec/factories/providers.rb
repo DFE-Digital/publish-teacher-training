@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :provider do
-    provider_name { "ACME SCITT#{rand(1_000_000)}" }
+    # Padded so "ACME SCITT1" is not a Capybara substring of "ACME SCITT10".
+    sequence(:provider_name) { |n| sprintf("ACME SCITT%06d", n) }
 
     sequence(:provider_code) do |n|
       # Avoid generating "I30" code by chance This code has specific

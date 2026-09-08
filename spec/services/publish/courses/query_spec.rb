@@ -685,13 +685,6 @@ RSpec.describe Publish::Courses::Query do
   end
 
   describe "query efficiency" do
-    def count_queries(&)
-      count = 0
-      counter = ->(_name, _start, _finish, _id, payload) { count += 1 unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
-      ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &)
-      count
-    end
-
     def materialise(course_count, params = {})
       provider = create(:provider)
       accredited = create(:accredited_provider)

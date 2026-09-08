@@ -32,6 +32,10 @@ class FeatureFlag
       }.with_indifferent_access
     end
 
+    def candidate_authentication_active?
+      active?(:candidate_accounts) || active?(:require_authentication_for_find_results)
+    end
+
     def last_updated(feature_name)
       feature = RedisClient.current.get("feature_flags_#{feature_name}")
 

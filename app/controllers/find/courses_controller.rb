@@ -3,6 +3,7 @@
 module Find
   class CoursesController < ApplicationController
     include ApplyRedirect
+    include CourseSchoolPreloads
     include GetIntoTeachingRedirect
     include ProviderWebsiteRedirect
 
@@ -41,11 +42,14 @@ module Find
       @address = Geolocation::Address.query(location_params)
       return unless @address.coordinates?
 
+      # A course can have no school to measure from: none attached, or none of
+      # them geocoded. That is not an error - the page falls back to the funding
+      # hint instead of a distance.
       @distance_from_location ||= ::Courses::NearestSchoolQuery.new(
         courses: [@course],
         latitude: @address.latitude,
         longitude: @address.longitude,
-      ).call.first.distance_to_search_location.ceil
+      ).call.first&.distance_to_search_location&.ceil
     end
 
   private
@@ -88,7 +92,7 @@ module Find
       @course = provider.courses.includes(
         :enrichments,
         subjects: [:financial_incentive],
-        site_statuses: [:site],
+        **school_preloads,
       ).find_by!(course_code: params[:course_code]&.upcase).decorate
     end
 

@@ -2,6 +2,8 @@
 
 module ProviderSchoolHelper
   def given_i_am_authenticated_as_a_provider_user
+    # Apostrophe is deliberate: show/delete decorate via smart_quotes (' → ’),
+    # so those pages must assert the decorated name, not this raw string.
     gias_school = create(:gias_school, name: "St Mary's Academy")
     provider = create(:provider, sites: [build(:site, **gias_school.school_attributes)])
     site = provider.sites.first

@@ -101,7 +101,11 @@ RSpec.describe "Multiple schools" do
   end
 
   def and_some_gias_schools_exist
-    @gias_schools = create_list(:gias_school, 3)
+    @gias_schools = [
+      create(:gias_school, name: "Alpha School"),
+      create(:gias_school, name: "Beta School"),
+      create(:gias_school, name: "Gamma School"),
+    ]
   end
 
   def and_i_fill_in_the_urns_with_a_mixture_of_new_lines_and_comma
@@ -116,7 +120,7 @@ RSpec.describe "Multiple schools" do
 
   def and_i_see_that_all_schools_are_created
     @gias_schools.each do |school|
-      expect(page).to have_css(".school-row", text: /#{school.name}.*#{school.urn}/)
+      expect(page).to have_css(".school-row", text: /#{Regexp.escape(school.name)}.*#{Regexp.escape(school.urn)}/)
     end
   end
 

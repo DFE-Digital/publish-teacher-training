@@ -7,11 +7,13 @@ module Publish
     # the course-information column (funding / qualification / study type / start
     # date) and the status tag. Rows are read-model rows from Publish::Courses::Query.
     class TableComponent < ApplicationComponent
-      def initialize(courses:, provider:, course_information_fields: Publish::CourseList::FIELDS.keys, classes: [], html_attributes: {})
+      def initialize(courses:, provider:, course_information_fields: Publish::CourseList::FIELDS.keys, view_course_column: false, classes: [], html_attributes: {})
         super(classes:, html_attributes:)
         @courses = courses
         @provider = provider
         @course_information_fields = course_information_fields
+        @view_course_column = view_course_column
+        @live_on_find = {}
       end
 
       attr_reader :courses, :provider, :course_information_fields
@@ -22,6 +24,31 @@ module Publish
 
       def course_information_column?
         course_information_fields.any?
+      end
+
+      # Asked for by the training partner course list, where the course name is
+      # not a link and Find is the only way to see the course. Dropped when
+      # nothing in the list is live, rather than heading a column of empty cells.
+      def view_course_column?
+        @view_course_column && courses.any? { |course| live_on_find?(course) }
+      end
+
+      # Reads the content status from the row's computed column rather than
+      # Course#content_status, which would run the enrichment service per row.
+      def live_on_find?(course)
+        @live_on_find.fetch(course.id) do
+          @live_on_find[course.id] = ::Courses::PublishRules::LiveOnFind.applies?(
+            course,
+            content_status: course.read_attribute(:content_status),
+          )
+        end
+      end
+
+      def table_classes
+        table = %w[govuk-table app-table--courses]
+        table << "app-table--courses--no-information" unless course_information_column?
+        table << "app-table--courses--view-course" if view_course_column?
+        table.join(" ")
       end
 
       # Lines this row actually renders: a shown start-date field still produces

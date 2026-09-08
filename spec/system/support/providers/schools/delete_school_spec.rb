@@ -72,7 +72,7 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def and_i_am_told_it_is_the_only_school
-    expect(page).to have_content("#{@provider_school.location_name} is the only school for School of Cats.")
+    expect(page).to have_content("#{@provider_school.decorate.location_name} is the only school for School of Cats.")
     expect(page).to have_content("To remove it, you must first add another school.")
     expect(support_provider_school_delete_page).not_to have_remove_school_button
   end
@@ -178,7 +178,7 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def and_there_is_a_provider_site
-    gias_school = create(:gias_school)
+    gias_school = create(:gias_school, name: "Cats Academy")
     @provider = create(:provider, provider_name: "School of Cats")
     @site = create(:site, provider: @provider, **gias_school.school_attributes)
     @provider_school = create(:provider_school, provider: @provider, gias_school:, site_code: @site.code, uuid: @site.uuid)

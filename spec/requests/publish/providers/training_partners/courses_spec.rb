@@ -1,0 +1,31 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+describe "Publish::Providers::TrainingPartners::CoursesController#index" do
+  include DfESignInUserHelper
+
+  def render_list_of(course_count)
+    accredited_provider = create(:provider, :accredited_provider)
+    user = create(:user, providers: [accredited_provider])
+    training_partner = create(:provider)
+    create(:provider_partnership, training_provider: training_partner, accredited_provider: accredited_provider)
+    create_list(:course, course_count, :published_postgraduate, provider: training_partner, accrediting_provider: accredited_provider)
+
+    login_user(user)
+    count_queries do
+      get "/publish/organisations/#{accredited_provider.provider_code}/#{accredited_provider.recruitment_cycle_year}/training-partners/#{training_partner.provider_code}/courses"
+    end
+  end
+
+  # The View course column must stay answerable from the row's own columns.
+  # Bullet does not raise in test, so this is what catches a change that starts
+  # reaching for an association and turns the column into a query per course.
+  it "renders the list in a constant number of queries regardless of course count" do
+    many = render_list_of(9)
+    few = render_list_of(3)
+
+    expect(response.body).to include("View live course")
+    expect(many).to eq(few)
+  end
+end

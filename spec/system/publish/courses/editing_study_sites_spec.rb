@@ -70,7 +70,7 @@ RSpec.describe "updating study sites on a course" do
   end
 
   def when_i_am_authenticated_as_a_provider_user_with_study_sites
-    providers = [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site)], courses: [build(:course, :with_accrediting_provider)])]
+    providers = [build(:provider, sites: [build(:site, location_name: "School Alpha"), build(:site, location_name: "School Beta")], study_sites: [build(:site, :study_site, location_name: "York Study Site")], courses: [build(:course, :with_accrediting_provider)])]
     @user = create(:user, providers:)
     given_i_am_authenticated(user: @user)
   end

@@ -1,4 +1,4 @@
-<table class="govuk-table app-table--courses<%= " app-table--courses--no-information" unless course_information_column? %>">
+<table class="<%= table_classes %>">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header"><%= t("publish.courses.course_table.course") %></th>
@@ -6,6 +6,9 @@
         <th class="govuk-table__header"><%= t("publish.courses.course_table.course_information") %></th>
       <% end %>
       <th class="govuk-table__header"><%= t("publish.courses.course_table.status") %></th>
+      <% if view_course_column? %>
+        <th class="govuk-table__header"><%= t("publish.courses.course_table.view_course") %></th>
+      <% end %>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
@@ -42,6 +45,16 @@
         <td class="govuk-table__cell app-table--courses__status">
           <%= render Publish::Courses::StatusTagComponent.new(course:, recruitment_cycle_year: recruitment_cycle_year(course)) %>
         </td>
+        <% if view_course_column? %>
+          <td class="govuk-table__cell app-table--courses__view-course">
+            <% if live_on_find?(course) %>
+              <%= govuk_link_to course.find_url do %>
+                <%= t("publish.courses.course_table.view_live_course") %>
+                <span class="govuk-visually-hidden"><%= t("publish.courses.course_table.view_live_course_hidden", course: course.name_and_code) %></span>
+              <% end %>
+            <% end %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

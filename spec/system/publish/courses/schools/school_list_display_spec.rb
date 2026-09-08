@@ -61,6 +61,16 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
     @school = create(
       :provider_school,
       provider: @provider,
+      gias_school: create(
+        :gias_school,
+        name: "Belvidere School",
+        address1: "Belvidere Lane",
+        address2: "",
+        address3: "",
+        town: "Shrewsbury",
+        county: "Shropshire",
+        postcode: "SY2 5RJ",
+      ),
     )
   end
 
@@ -77,12 +87,13 @@ RSpec.describe "Publish - Placement schools list display", type: :system do
   end
 
   def then_the_school_label_shows_the_name
-    expect(page).to have_css(".govuk-checkboxes__label", text: @school.location_name)
+    expect(page).to have_css(".govuk-checkboxes__label", text: "Belvidere School")
   end
 
   def and_the_hint_shows_the_address_without_the_name
-    hint = page.find(".govuk-hint", text: @school.address1)
-    expect(hint.text).to eq(@school.full_address)
-    expect(hint.text).not_to include(@school.location_name)
+    hint = page.find(".govuk-hint", text: "Belvidere Lane")
+
+    expect(hint.text).to eq("Belvidere Lane, Shrewsbury, Shropshire, SY2 5RJ")
+    expect(hint.text).not_to include("Belvidere School")
   end
 end

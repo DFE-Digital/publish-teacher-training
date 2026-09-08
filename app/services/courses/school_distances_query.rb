@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Courses
-  # This query class fetches distances between given courses' sites and a specified location.
+  # This query class fetches distances between given courses' schools and a specified location.
   #
   # This is more an utility class that can help understand the school locations
   #
@@ -20,6 +20,8 @@ module Courses
   # Then you can access the distance through #distance_to_search_location
   #
   class SchoolDistancesQuery
+    include CanonicalSchoolDistance
+
     def initialize(courses:, latitude:, longitude:)
       @courses = courses
       @latitude = latitude
@@ -27,6 +29,37 @@ module Courses
     end
 
     def call
+      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
+        schools_query
+      else
+        sites_query
+      end
+    end
+
+  private
+
+    # Every school of every course over the canonical course_school -> gias_school
+    # model, used while the :course_publishing_uses_new_school_model flag is on.
+    #
+    # DISTINCT ON (course.id, gias_school.id) is the counterpart of the legacy
+    # GROUP BY (course.id, site.id): it lists a school once per course however many
+    # of the course's Provider::Schools point at it, without having to aggregate the
+    # provider_school columns the SELECT needs. The subquery is re-wrapped so the
+    # rows can be ordered by distance rather than by the DISTINCT ON key.
+    def schools_query
+      subquery = Course
+                 .joins(schools: %i[gias_school provider_school])
+                 .where(id: @courses.map(&:id))
+                 .where(GEOCODED_SCHOOL)
+                 .select(school_columns_sql(EACH_SCHOOL_PER_COURSE))
+                 .order("course.id, gias_school.id, provider_school.site_code ASC")
+
+      Course
+        .from(subquery, :course)
+        .order("course_id ASC, distance_to_search_location ASC")
+    end
+
+    def sites_query
       Course
         .joins(site_statuses: :site)
         .where(id: @courses.map(&:id))
@@ -35,8 +68,6 @@ module Courses
         .order("course.id, distance_to_search_location ASC")
         .group("course.id, site.id")
     end
-
-  private
 
     def select_sql
       <<~SQL.squish
@@ -49,7 +80,7 @@ module Courses
         ST_DistanceSphere(
           ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
           ST_SetSRID(ST_MakePoint(#{Float(@longitude)}, #{Float(@latitude)}), 4326)
-        ) / 1609.34 AS distance_to_search_location
+        ) / #{Geolocation::METRES_PER_MILE} AS distance_to_search_location
       SQL
     end
   end

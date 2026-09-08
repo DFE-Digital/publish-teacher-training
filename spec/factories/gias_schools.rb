@@ -3,7 +3,11 @@
 FactoryBot.define do
   factory :gias_school do
     urn { Faker::Number.unique.number(digits: 6).to_s }
-    name { Faker::University.name }
+    # Unique and punctuation-free. Faker::University.name can include apostrophes
+    # (e.g. West D'Amore) which smart_quotes turns into ’ on decorated pages, and
+    # Capybara's check/have_content match on a substring, so random names can
+    # collide or prefix each other.
+    sequence(:name) { |n| sprintf("Test School %06d", n) }
     address1 { Faker::Address.street_address }
     town { Faker::Address.city }
     postcode { Faker::Address.postcode }

@@ -27,6 +27,12 @@ RSpec.describe "Blazer SQL tool" do
     then_i_am_taken_to_the_blazer_page
   end
 
+  scenario "creating a dashboard records me as its creator" do
+    given_i_am_authenticated_as_an_admin_who_is_authorised_to_access_blazer
+    when_i_create_a_dashboard_named("Recruitment cycle overview")
+    then_the_dashboard_is_credited_to_me
+  end
+
   def given_i_am_authenticated_as_a_non_admin
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
@@ -58,6 +64,18 @@ RSpec.describe "Blazer SQL tool" do
 
   def then_i_should_be_redirected_to_the_courses_index_page
     expect(publish_provider_courses_index_page).to be_displayed
+  end
+
+  def when_i_create_a_dashboard_named(name)
+    visit blazer.new_dashboard_path
+    fill_in "Name", with: name
+    click_button "Save"
+  end
+
+  def then_the_dashboard_is_credited_to_me
+    dashboard = Blazer::Dashboard.find_by(name: "Recruitment cycle overview")
+
+    expect(dashboard.creator).to eq(current_user)
   end
 
   def then_i_am_redirected_to_sign_in

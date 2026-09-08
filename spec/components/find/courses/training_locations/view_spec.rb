@@ -140,6 +140,30 @@ describe Find::Courses::TrainingLocations::View, type: :component do
         expect(component.potential_placements_text).to eq('<span class="govuk-!-font-weight-bold">10 miles</span> from <span class="govuk-!-font-weight-bold">Some Address</span>')
       end
     end
+
+    # A located search can resolve an address but still find no school to measure
+    # from - a course with no schools attached, or none of them geocoded.
+    context "when there is no distance to report" do
+      let(:course) { create(:course, :with_full_time_sites, funding: "fee", study_sites: [build(:site, :study_site)]) }
+      let(:distance_from_location) { nil }
+
+      it "prompts the candidate to search instead of claiming a zero-mile distance" do
+        expect(component.potential_placements_text).to eq(
+          '<span class="govuk-hint govuk-!-font-size-16">Search by city, town or postcode to find the nearest potential placement school</span>',
+        )
+      end
+
+      it "does not render a distance" do
+        expect(subject).to have_no_text("from Some Address")
+      end
+
+      # Without a distance there is no school on show, so hedging about schools
+      # changing has nothing to attach to - the no-address case omits it too.
+      it "does not hedge about schools it is not showing" do
+        expect(component.guaranteed_text).to be_nil
+        expect(subject).to have_no_text("Schools can change and are not guaranteed")
+      end
+    end
   end
 
   describe "#potential_study_sites_text" do

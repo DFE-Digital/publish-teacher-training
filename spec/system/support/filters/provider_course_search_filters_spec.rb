@@ -77,9 +77,9 @@ private
   end
 
   def and_there_are_providers_with_different_types
-    @provider_scitt = create(:provider, :scitt)
-    @provider_hei = create(:provider, :university)
-    @provider_lead_school = create(:provider, :lead_school)
+    @provider_scitt = create(:provider, :scitt, provider_name: "Scitt Provider")
+    @provider_hei = create(:provider, :university, provider_name: "University Provider")
+    @provider_lead_school = create(:provider, :lead_school, provider_name: "Lead School Provider")
   end
 
   def when_i_visit_the_providers_index_page

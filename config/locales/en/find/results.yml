@@ -3,6 +3,12 @@ en:
     results:
       index:
         filter_results: Filter results
+      sign_in:
+        page_title: Sign in to view search results
+        heading: Sign in to view search results
+        body: You need a GOV.UK One Login to search for teacher training courses. You can create an account if you do not already have one.
+        return_to_search: After signing in, you’ll return to your search.
+        sign_in: Sign in
       courses_guidance:
         show:
           heading: "Not sure which course is right for you?"

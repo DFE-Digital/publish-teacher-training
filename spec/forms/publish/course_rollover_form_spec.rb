@@ -12,8 +12,12 @@ module Publish
 
     subject { described_class.new(course) }
 
+    before do
+      find_or_create(:recruitment_cycle, :next).update(available_in_publish_from: 1.day.ago)
+    end
+
     describe "draft course" do
-      let(:course) { build(:course, enrichments: [draft_enrichment]) }
+      let(:course) { create(:course, enrichments: [draft_enrichment]) }
 
       it "is valid" do
         expect(subject).to be_valid
@@ -39,25 +43,53 @@ module Publish
     describe "published course" do
       let(:course) { create(:course, enrichments: [published_enrichment]) }
 
-      it "is invalid" do
-        expect(subject).not_to be_valid
+      it "is valid" do
+        expect(subject).to be_valid
       end
     end
 
     describe "legacy subsequent draft course" do
       let(:course) { create(:course, enrichments: [unpublished_changes_enrichment]) }
 
-      it "is invalid" do
-        expect(subject).not_to be_valid
+      it "is valid" do
+        expect(subject).to be_valid
       end
     end
 
     describe "withdrawn course" do
       let(:course) { create(:course, enrichments: [withdrawn_enrichment]) }
 
+      it "is valid" do
+        expect(subject).to be_valid
+      end
+    end
+
+    describe "course that has already been rolled over" do
+      let(:course) { create(:course, enrichments: [published_enrichment]) }
+
+      before do
+        create(
+          :course,
+          course_code: course.course_code,
+          provider: create(:provider, recruitment_cycle: RecruitmentCycle.next, provider_code: course.provider.provider_code),
+        )
+      end
+
       it "is invalid" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:course_is_rollable]).to include "Course must have draft, empty or rolled over status."
+        expect(subject.errors[:course_is_rollable]).to include "This course cannot be rolled over into the next recruitment cycle."
+      end
+    end
+
+    describe "course in a cycle that is not open for rollover" do
+      let(:course) { create(:course, enrichments: [published_enrichment]) }
+
+      before do
+        RecruitmentCycle.next.update(available_in_publish_from: 1.day.from_now)
+      end
+
+      it "is invalid" do
+        expect(subject).not_to be_valid
       end
     end
   end

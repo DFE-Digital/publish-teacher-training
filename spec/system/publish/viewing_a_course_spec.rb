@@ -57,6 +57,28 @@ RSpec.describe "Course show" do
       when_i_visit_the_next_cycle_courses_page
       then_i_should_see_the_status_scheduled
     end
+
+    # Find serves the current cycle only, so a next-cycle course has nowhere
+    # live to link to however published and running it is.
+    scenario "a published, running course offers a preview rather than a link to Find" do
+      given_there_is_a_next_recruitment_cycle
+      given_i_am_authenticated_as_a_provider_user(course: build(:course))
+      and_there_is_a_published_running_course_in_the_next_cycle
+      when_i_visit_the_next_cycle_course_page
+      then_i_should_see_a_preview_link_rather_than_a_link_to_find
+    end
+  end
+
+  describe "in an earlier cycle" do
+    # Find resolves a course by code within the current cycle, so linking an
+    # earlier cycle's course would land on whichever course holds that code
+    # today rather than the one being looked at.
+    scenario "a published, running course offers a preview rather than a link to Find" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course))
+      and_there_is_a_published_running_course_in_the_previous_cycle
+      when_i_visit_the_previous_cycle_course_page
+      then_i_should_see_a_preview_link_rather_than_a_link_to_find
+    end
   end
 
   describe "with a published course that has a legacy subsequent draft" do
@@ -95,6 +117,36 @@ RSpec.describe "Course show" do
       then_i_should_see_the_course_show_page_with_success_message
       when_i_click_the_view_rollover_link
       then_i_should_see_the_rolled_over_course_show_page
+    end
+  end
+
+  # A provider that publishes a course after the rollover has already run needs
+  # to be able to roll that course over itself, so the button is offered on
+  # published and withdrawn courses too for as long as they have not been rolled
+  # over already.
+  describe "with a published course and an open next cycle" do
+    scenario "i can roll the course over" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, :salary, enrichments: [course_enrichment], application_status: "open", site_statuses: [build(:site_status, :findable)]))
+      given_there_is_a_next_recruitment_cycle
+      and_the_cycle_is_rollable
+      when_i_visit_the_course_page
+      and_i_click_the_roll_over_course_button
+      then_i_see_the_rollover_confirmation_page
+      when_i_confirm_the_rollover
+      then_i_should_see_the_course_show_page_with_success_message
+    end
+  end
+
+  describe "with a withdrawn course and an open next cycle" do
+    scenario "i can roll the course over" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_withdrawn]))
+      given_there_is_a_next_recruitment_cycle
+      and_the_cycle_is_rollable
+      when_i_visit_the_course_page
+      and_i_click_the_roll_over_course_button
+      then_i_see_the_rollover_confirmation_page
+      when_i_confirm_the_rollover
+      then_i_should_see_the_course_show_page_with_success_message
     end
   end
 
@@ -181,6 +233,18 @@ private
 
   def when_i_click_the_rollover_course_button
     rollover_form_page.rollover_course_button.click
+  end
+
+  def and_i_click_the_roll_over_course_button
+    click_link_or_button "Roll over course"
+  end
+
+  def then_i_see_the_rollover_confirmation_page
+    expect(page).to have_content "Are you sure you want to roll over the course into the next recruitment cycle?"
+  end
+
+  def when_i_confirm_the_rollover
+    click_link_or_button "Roll over course"
   end
 
   def then_i_should_see_the_rollover_form_page
@@ -296,6 +360,53 @@ private
       ],
     )
     given_i_am_authenticated(user: @user)
+  end
+
+  def and_there_is_a_published_running_course_in_the_next_cycle
+    @next_cycle_course = build(:course, :published, site_statuses: [build(:site_status, :findable)])
+    @next_cycle_provider = create(
+      :provider,
+      recruitment_cycle: RecruitmentCycle.next,
+      provider_code: @user.providers.first.provider_code,
+      courses: [@next_cycle_course],
+    )
+
+    @user.providers << @next_cycle_provider
+  end
+
+  def and_there_is_a_published_running_course_in_the_previous_cycle
+    @previous_cycle_course = build(:course, :published, site_statuses: [build(:site_status, :findable)])
+    @previous_cycle_provider = create(
+      :provider,
+      recruitment_cycle: find_or_create(:recruitment_cycle, year: RecruitmentCycle.current.year.to_i - 1),
+      provider_code: @user.providers.first.provider_code,
+      courses: [@previous_cycle_course],
+    )
+
+    @user.providers << @previous_cycle_provider
+  end
+
+  def when_i_visit_the_previous_cycle_course_page
+    publish_provider_courses_show_page.load(
+      provider_code: @previous_cycle_provider.provider_code,
+      recruitment_cycle_year: @previous_cycle_provider.recruitment_cycle_year,
+      course_code: @previous_cycle_course.course_code,
+    )
+  end
+
+  def when_i_visit_the_next_cycle_course_page
+    publish_provider_courses_show_page.load(
+      provider_code: next_cycle_provider.provider_code,
+      recruitment_cycle_year: next_recruitment_cycle_year,
+      course_code: @next_cycle_course.course_code,
+    )
+  end
+
+  def then_i_should_see_a_preview_link_rather_than_a_link_to_find
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_link("Preview course")
+      expect(course_button_panel).to have_no_link("View live course")
+    end
   end
 
   def and_there_is_the_provider_in_the_next_cycle

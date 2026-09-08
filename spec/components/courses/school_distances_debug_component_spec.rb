@@ -130,4 +130,44 @@ RSpec.describe Courses::SchoolDistancesDebugComponent do
       end
     end
   end
+
+  context "when the course only has canonical schools" do
+    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
+    after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
+
+    let(:environment_name) { "qa" }
+    let(:debug) { true }
+    let(:manchester) { build(:location, :manchester) }
+    let(:bristol) { build(:location, :bristol) }
+
+    it "lists every GIAS school with no Site or SiteStatus in play" do
+      schools = [manchester, bristol].map do |location|
+        create(
+          :course_school,
+          course:,
+          gias_school: create(:gias_school, latitude: location.latitude, longitude: location.longitude),
+        ).gias_school
+      end
+
+      expect(course.site_statuses).to be_empty
+      expect(school_distances_debug_component_content).to include("School distances for Test Provider (TP123) - Maths (M123)")
+
+      schools.each do |school|
+        expect(school_distances_debug_component_content).to have_text(school.name)
+        expect(school_distances_debug_component_content).to have_text(school.latitude.to_s)
+        expect(school_distances_debug_component_content).to have_text(school.longitude.to_s)
+        expect(rendered_component.css("a").map { |a| a[:href] }).to include(
+          "https://www.google.com/maps/dir/#{latitude},#{longitude}/#{school.latitude},#{school.longitude}",
+        )
+      end
+    end
+
+    it "runs the query once however many times the template asks for the schools" do
+      create(:course_school, course:, gias_school: create(:gias_school, latitude: manchester.latitude, longitude: manchester.longitude))
+
+      expect(Courses::SchoolDistancesQuery).to receive(:new).once.and_call_original
+
+      3.times { component.schools }
+    end
+  end
 end

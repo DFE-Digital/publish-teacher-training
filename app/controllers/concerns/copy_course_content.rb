@@ -52,12 +52,6 @@ private
       Array(@self_accredited_courses) +
       @courses_by_accrediting_provider.values.flatten
 
-    @visible_course_information_fields =
-      Publish::CourseList::FIELDS.keys.select do |key|
-        courses
-          .map(&Publish::CourseList::FIELDS.fetch(key))
-          .uniq
-          .size > 1
-      end
+    @visible_course_information_fields = Publish::CourseList.visible_course_information_fields(courses)
   end
 end

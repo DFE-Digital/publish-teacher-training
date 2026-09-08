@@ -25,8 +25,14 @@ RSpec.describe "Rolling over draft courses one at a time", travel: mid_cycle(202
     @courses = build_list(:course, 2, enrichments: [build(:course_enrichment)], funding_type: "salary")
     @provider = create(
       :provider,
-      sites: build_list(:site, 2, :with_gias_school, :with_provider_school),
-      study_sites: build_list(:site, 2, :study_site),
+      sites: [
+        build(:site, :with_gias_school, :with_provider_school, location_name: "School One"),
+        build(:site, :with_gias_school, :with_provider_school, location_name: "School Two"),
+      ],
+      study_sites: [
+        build(:site, :study_site, location_name: "Study Site One"),
+        build(:site, :study_site, location_name: "Study Site Two"),
+      ],
       courses: @courses,
     )
     given_i_am_authenticated(user: create(:user, providers: [@provider]))
