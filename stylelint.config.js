@@ -17,6 +17,10 @@ export default {
         camelCaseSvgKeywords: true
       }
     ],
-    'scss/at-extend-no-missing-placeholder': null
+    'scss/at-extend-no-missing-placeholder': null,
+    // `body:not(.js-enabled)` and BEM `&__element` nesting both trip this
+    // rule, which reads the resolved leading segment as a type selector.
+    // Type qualifying by id or attribute is still reported.
+    'selector-no-qualifying-type': [true, { ignore: ['class'] }]
   }
 }

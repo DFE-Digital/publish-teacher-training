@@ -15,6 +15,7 @@
   grid-template-columns: 1fr auto;
 
   column-gap: govuk-spacing(4);
+
   align-items: end;
 
   .govuk-label {
@@ -100,6 +101,7 @@
   display: flex;
 
   gap: govuk-spacing(4);
+
   justify-content: space-between;
 }
 
