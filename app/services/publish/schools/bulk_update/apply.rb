@@ -17,6 +17,11 @@ module Publish
       class Apply
         include ServicePattern
 
+        # Which courses were written and which were not. The caller decides what
+        # to do about the ones that were not - this only has to be honest about
+        # them, which the count it used to return could not be.
+        Result = Data.define(:updated_ids, :failed_ids)
+
         def initialize(courses:, added_uuids:, removed_uuids:)
           @courses = courses
           @added_uuids = Array(added_uuids)
@@ -24,7 +29,8 @@ module Publish
         end
 
         def call
-          updated = 0
+          updated_ids = []
+          failed_ids = []
 
           # Every school written would otherwise stamp its course and the
           # provider. changed_at is unique on both, so a bulk change would put
@@ -33,13 +39,13 @@ module Publish
           # own save.
           TouchSuppression.suppress do
             courses.includes(schools: :provider_school).find_each do |course|
-              updated += 1 if apply_to(course)
+              (apply_to(course) ? updated_ids : failed_ids) << course.id
             end
           end
 
-          ::ProviderSchools::TouchParents.call(provider:) if updated.positive? && provider
+          ::ProviderSchools::TouchParents.call(provider:) if updated_ids.any? && provider
 
-          updated
+          Result.new(updated_ids:, failed_ids:)
         end
 
       private
@@ -55,9 +61,9 @@ module Publish
           )
 
           true
-        rescue StandardError => e
-          Sentry.capture_exception(e)
-
+        rescue StandardError
+          # Reported by whoever called this, once, naming every course still
+          # outstanding - rather than once per course per attempt.
           false
         end
 
