@@ -29,17 +29,6 @@ describe Publish::Schools::BulkUpdate::MatchedCourses do
     )
   end
 
-  def count_queries(&)
-    statements(&).size
-  end
-
-  def statements(&block)
-    sql = []
-    counter = ->(_name, _start, _finish, _id, payload) { sql << payload[:sql] unless payload[:name].to_s =~ /SCHEMA|TRANSACTION/ }
-    ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &block)
-    sql
-  end
-
   describe "the courses that will be updated" do
     it "is every course the scope matched" do
       course = course_with("Ash")
@@ -130,7 +119,7 @@ describe Publish::Schools::BulkUpdate::MatchedCourses do
       course_with("Ash")
       result = matched(course.reload, removed: %w[Ash])
 
-      exclusion = statements { result.excluded }.grep(/NOT IN/).first
+      exclusion = queries { result.excluded }.grep(/NOT IN/).first
 
       expect(exclusion).to be_present
       exclusion.scan(/FROM "course_school"/).size.times do
