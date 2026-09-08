@@ -58,6 +58,24 @@ RSpec.describe "Viewing a previous-cycle course on Find", service: :find do
     and_i_can_apply
   end
 
+  scenario "the normal URL 404s when the course exists only in the previous cycle", travel: find_opens(2027) + 1.day do
+    given_there_is_a_previous_cycle_course(year: 2026, start_date: Time.zone.local(2026, 10, 1))
+    and_the_current_cycle_provider_exists_without_the_course
+
+    when_i_visit_the_normal_course_url_for_the_previous_cycle_course
+
+    then_i_see_page_not_found
+  end
+
+  scenario "the previous-cycle URL 404s when the course exists only in the current cycle", travel: find_opens(2027) + 1.day do
+    given_there_is_a_current_cycle_course
+    and_the_previous_cycle_provider_exists_without_the_course
+
+    when_i_visit_the_previous_cycle_url_for_the_current_cycle_course
+
+    then_i_see_page_not_found
+  end
+
   def given_there_is_a_previous_cycle_course(year:, start_date:, name: "History")
     previous_cycle = find_or_create(:recruitment_cycle, year:)
     provider = create(:provider, recruitment_cycle: previous_cycle, provider_code: "ABC")
@@ -77,6 +95,15 @@ RSpec.describe "Viewing a previous-cycle course on Find", service: :find do
     )
   end
 
+  def and_the_current_cycle_provider_exists_without_the_course
+    create(:provider, provider_code: "ABC")
+  end
+
+  def and_the_previous_cycle_provider_exists_without_the_course
+    previous_cycle = find_or_create(:recruitment_cycle, year: 2026)
+    create(:provider, recruitment_cycle: previous_cycle, provider_code: "ABC")
+  end
+
   def when_i_visit_the_previous_cycle_course_page
     visit find_course_cycle_path(
       @previous_cycle_course.provider.provider_code,
@@ -89,6 +116,21 @@ RSpec.describe "Viewing a previous-cycle course on Find", service: :find do
     visit find_course_path(
       @current_cycle_course.provider.provider_code,
       @current_cycle_course.course_code,
+    )
+  end
+
+  def when_i_visit_the_normal_course_url_for_the_previous_cycle_course
+    visit find_course_path(
+      @previous_cycle_course.provider.provider_code,
+      @previous_cycle_course.course_code,
+    )
+  end
+
+  def when_i_visit_the_previous_cycle_url_for_the_current_cycle_course
+    visit find_course_cycle_path(
+      @current_cycle_course.provider.provider_code,
+      @current_cycle_course.course_code,
+      2026,
     )
   end
 
