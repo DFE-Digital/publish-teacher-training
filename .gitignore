@@ -109,3 +109,7 @@ find-load-test-report.html
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# This project uses yarn (see the packageManager field in package.json).
+# Ignore the npm lockfile so that a stray `npm install` is not committed.
+/package-lock.json
