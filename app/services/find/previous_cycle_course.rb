@@ -12,8 +12,19 @@ module Find
       new(course).visible?
     end
 
+    def self.current_cycle_equivalent(course)
+      new(course).current_cycle_equivalent
+    end
+
     def initialize(course)
       @course = course
+    end
+
+    def current_cycle_equivalent
+      return if course.blank?
+
+      equivalent = course.in_next_cycle
+      equivalent if equivalent&.is_published?
     end
 
     def visible?

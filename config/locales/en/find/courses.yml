@@ -137,8 +137,8 @@ en:
         fallback: courses across England
       show:
         previous_cycle:
-          heading: This course is from a previous recruitment cycle
-          body: You cannot apply for this course on Find. It is shown for information only because it starts later than most courses from that recruitment cycle.
+          without_current_course: This is a course from a previous year. You can contact the provider for more information.
+          with_current_course_html: This is a course from a previous year. You can view this year's %{course_link} course, or contact the provider for more information.
         back_to_search: Back to search results
         back_to_saved_courses: Back to saved courses
         contents_header: Contents

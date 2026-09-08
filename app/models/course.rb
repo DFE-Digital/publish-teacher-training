@@ -472,6 +472,15 @@ class Course < ApplicationRecord
           .find_by(course_code:, provider: { provider_code: })
   end
 
+  # The same course (same provider and course code) in the next
+  # recruitment cycle, or nil if it does not exist.
+  def in_next_cycle
+    Course.kept
+          .with_recruitment_cycle((recruitment_cycle_year.to_i + 1).to_s)
+          .merge(Provider.kept)
+          .find_by(course_code:, provider: { provider_code: })
+  end
+
   def generate_name
     Courses::GenerateCourseNameService.call(course: self)
   end
