@@ -8,19 +8,21 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.course_length_label"),
-      value_provided?(course.length),
+      course.length,
       %w[course_length],
       action_path: course.cannot_change_course_length? ? nil : length_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+      prompt: t("publish.providers.courses.description_content.enter_course_length"),
     ) %>
   <% else %>
     <% enrichment_summary(
          summary_list,
          :course,
          t("publish.providers.courses.description_content.course_length_label"),
-         value_provided?(course.length),
+         course.length,
          %w[course_length],
          action_path: course.cannot_change_course_length? ? nil : length_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
          action_visually_hidden_text: t("publish.providers.courses.description_content.course_length_hidden_text"),
+         prompt: t("publish.providers.courses.description_content.enter_course_length"),
        ) %>
   <% end %>
 
@@ -32,16 +34,17 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.salary_fee_details_label"),
-      value_provided?(markdown(course.salary_fee_details)),
+      markdown(course.salary_fee_details),
       %w[salary_fee_details],
       action_path: salary_fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code),
+      prompt: t("publish.providers.courses.description_content.enter_salary_fee_details"),
     ) %>
     <% else %>
       <% enrichment_summary(
       summary_list,
       :course,
       t("publish.providers.courses.description_content.salary_details_label"),
-      value_provided?(course.salary_details),
+      course.salary_details,
       %w[salary_details],
       action_path: salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code),
     ) %>
@@ -57,19 +60,27 @@
 
   <% if course.recruitment_cycle_after?(2026) %>
     <% if course.salaried? %>
+      <% school_experience_path = publish_provider_recruitment_cycle_course_school_experience_required_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) %>
       <% summary_list.with_row do |row|
         row.with_key { t("publish.providers.courses.description_content.experience_required_key") }
+
         if course.school_experience_required.nil?
-          row.with_value(classes: %w[govuk-summary-list__value]) { tag.span(t("value_not_entered"), class: "govuk-hint").html_safe }
-        elsif course.school_experience_required
+          # Nothing answered yet, so the prompt takes the place of the change action.
           row.with_value(classes: %w[govuk-summary-list__value]) {
-            tag.div(t("publish.providers.courses.description_content.experience_required"), class:"govuk-body")
-            .concat(markdown(course.school_experience_required_content))
+            value_prompt(t("publish.providers.courses.description_content.enter_school_experience"), school_experience_path)
           }
+          row.with_action
         else
-          row.with_value(classes: %w[govuk-summary-list__value]) { t("publish.providers.courses.description_content.experience_not_required") }
-        end
-        row.with_action(text: t("change"), href: publish_provider_recruitment_cycle_course_school_experience_required_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+          row.with_value(classes: %w[govuk-summary-list__value]) {
+            if course.school_experience_required
+              tag.div(t("publish.providers.courses.description_content.experience_required"), class: "govuk-body")
+                .concat(markdown(course.school_experience_required_content))
+            else
+              t("publish.providers.courses.description_content.experience_not_required")
+            end
+          }
+          row.with_action(text: t("change"), href: school_experience_path)
+        end %>
       <% end %>
     <% end %>
   <% end %>
@@ -120,13 +131,14 @@
     summary_list,
     :course,
     t("publish.providers.courses.description_content.school_palcement_label"),
-    value_provided?(markdown([
+    markdown([
       course.placement_school_activities,
       course.support_and_mentorship,
-    ].compact_blank.join("\n\n"))),
+    ].compact_blank.join("\n\n")),
     %w[placement_school_activities],
     action_path: course.is_withdrawn? ? nil : fields_school_placement_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     action_visually_hidden_text: t("publish.providers.courses.description_content.school_palcement_hidden_text"),
+    prompt: t("publish.providers.courses.description_content.enter_school_placement"),
   ) %>
 <% end %>
 
