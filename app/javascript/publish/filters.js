@@ -1,25 +1,26 @@
-import { FilterToggleButton } from '@ministryofjustice/frontend/moj/all'
+import { FilterToggleButton } from '@ministryofjustice/frontend'
 
 export default class FilterToggle {
   static init () {
-    const filterContainer = $('.moj-filter-layout__filter')
+    const filterContainer = document.querySelector('.moj-filter-layout__filter')
 
-    if (filterContainer.length) {
-      return new FilterToggleButton({
+    if (filterContainer) {
+      return new FilterToggleButton(filterContainer, {
         bigModeMediaQuery: '(min-width: 48.063em)',
         startHidden: false,
         toggleButton: {
-          container: $('.moj-action-bar__filter'),
           showText: 'Show filters',
           hideText: 'Hide filters',
           classes: 'govuk-button--secondary'
         },
+        toggleButtonContainer: {
+          selector: '.moj-action-bar__filter'
+        },
         closeButton: {
-          container: $('.moj-filter__header-action'),
           text: 'Close'
         },
-        filter: {
-          container: filterContainer
+        closeButtonContainer: {
+          selector: '.moj-filter__header-action'
         }
       })
     }
