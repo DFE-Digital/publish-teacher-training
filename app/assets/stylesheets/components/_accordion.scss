@@ -26,7 +26,7 @@ body:not(.js-enabled) {
 }
 
 .course-accordion .govuk-accordion__section {
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
   border-left: govuk-spacing(1) solid transparent;
 }
 

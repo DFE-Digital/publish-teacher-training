@@ -61,7 +61,7 @@
 
   cursor: pointer;
 
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
   border: 1px solid $govuk-border-colour;
   border-radius: 0.3125em;
 
@@ -86,7 +86,7 @@
   &:hover {
     text-decoration: none;
 
-    background-color: govuk-colour("light-grey");
+    background-color: govuk-colour("black", $variant: "tint-95");
     border-color: $govuk-text-colour;
   }
 
@@ -99,7 +99,7 @@
   }
 
   &:active {
-    background-color: govuk-colour("light-grey");
+    background-color: govuk-colour("black", $variant: "tint-95");
   }
 
   @include govuk-media-query($until: tablet) {
