@@ -1,0 +1,28 @@
+<%= render PageTitle.new(title: @heading) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(school_delete_return_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+      <%= @heading %>
+    </h1>
+    <p class="govuk-body govuk-hint govuk-!-margin-bottom-6">
+      <%= school.full_address %><br>
+      <%= t(".urn", urn: school.urn) %>
+    </p>
+
+    <p class="govuk-body">
+      <%= t(".only_school_on_courses", school_name: @school_name) %>
+    </p>
+    <p class="govuk-body">
+      <%= t(".attach_another_school", school_name: @school_name) %>
+    </p>
+    <%= render Publish::Providers::Schools::RemovalCoursesComponent.new(
+      courses: school_removal.sole_school_courses,
+      provider: @provider,
+      link_to_course: true,
+    ) %>
+  </div>
+</div>

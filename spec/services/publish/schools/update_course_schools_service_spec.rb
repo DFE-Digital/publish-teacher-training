@@ -77,6 +77,16 @@ module Publish
 
         let(:school_uuids) { [provider_school_two.uuid] }
 
+        it "locks the course before rewriting course schools" do
+          relation = instance_double(ActiveRecord::Relation)
+          expect(Course).to receive(:where).with(id: course.id).ordered.and_return(relation)
+          expect(relation).to receive(:lock).ordered.and_return(relation)
+          expect(relation).to receive(:load).ordered
+          expect(UpdateCourseProviderSchoolsService).to receive(:call).ordered.and_call_original
+
+          service_call
+        end
+
         it "creates both Course::School and legacy SiteStatus relationships" do
           expect { service_call }
             .to change { course.schools.count }.by(1)

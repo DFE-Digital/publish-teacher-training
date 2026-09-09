@@ -30,7 +30,12 @@ module Publish
         end
       end
 
-      def delete; end
+      def delete
+        template = school_delete_template
+        @school_name = school.location_name
+        @heading = t("publish.providers.schools.#{template}.heading", school_name: @school_name)
+        render template
+      end
 
       def destroy
         if school_removal.call
@@ -43,6 +48,15 @@ module Publish
       end
 
     private
+
+      # Mirrors ProviderSchools::Removal: last school for the provider, sole
+      # placement school on a course, or removable.
+      def school_delete_template
+        return :only_school if school_removal.only_school?
+        return :sole_school_on_a_course if school_removal.sole_school_on_a_course?
+
+        :can_remove
+      end
 
       def cannot_remove_school_message
         return t(".cannot_remove_only_school") if school_removal.only_school?
