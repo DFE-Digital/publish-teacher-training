@@ -33,6 +33,11 @@ describe DegreeRowContent, type: :component do
                ),
              )).to be true
     end
+
+    it "renders the link on its own, with no heading above it" do
+      expect(page).to have_no_css(".app-inset-text__title")
+      expect(page).to have_no_text("Do you require a minimum degree classification?")
+    end
   end
 
   context "when the degree section is complete" do
