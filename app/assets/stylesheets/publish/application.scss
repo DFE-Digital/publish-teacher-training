@@ -1,7 +1,25 @@
 // Entry point for your Sass build
+//
+// MOJ Frontend must load before govuk-frontend. It configures govuk-frontend's
+// `base` module with `@forward ... with (...)`, and Sass only lets a module be
+// configured on its first load. If govuk-frontend loads first, MOJ Frontend
+// fails with "This module was already loaded, so it can't be configured using
+// with".
+//
+// $moj-images-path has to be configured at load time, before MOJ Frontend
+// emits its CSS. "/" makes MOJ reference its icons by bare filename, which is
+// what Propshaft resolves against config.assets.paths.
+@use "node_modules/@ministryofjustice/frontend/moj/all" as * with (
+  $moj-images-path: "/"
+);
+
+// MOJ Frontend sets $govuk-include-default-font-face to false because it
+// assumes govuk-frontend has already emitted the GDS Transport @font-face
+// rules. Here govuk-frontend loads second, so turn them back on. The asset
+// paths are reset in ../govuk_style_setup.
+$govuk-include-default-font-face: true;
+
 @import "../govuk_style_setup";
-@import "@ministryofjustice/frontend/moj/all";
-$moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
 @import "dfe-autocomplete/src/dfe-autocomplete";
 @import "../one-login";
 
