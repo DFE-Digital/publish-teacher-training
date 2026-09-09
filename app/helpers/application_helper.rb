@@ -39,7 +39,7 @@ module ApplicationHelper
   end
 
   # TODO: refactor enrichment_summary method to not use an instance variable
-  def enrichment_summary(summary_list, model, key, value, fields, action_path: nil, action_visually_hidden_text: nil, render_errors: true)
+  def enrichment_summary(summary_list, model, key, value, fields, action_path: nil, action_visually_hidden_text: nil, render_errors: true, prompt: nil)
     action = render_action(action_path, action_visually_hidden_text || key.downcase)
     if fields.any? { |field| @errors&.key? field.to_sym }
       errors = fields.map { |field|
@@ -47,6 +47,11 @@ module ApplicationHelper
       }.flatten
 
       value = safe_join(errors) if render_errors.present?
+      action = nil
+    elsif value.blank? && prompt.present? && action_path.present?
+      # Nothing entered yet, so the row is the prompt to enter it - the link
+      # takes the place of the change action rather than sitting next to it.
+      value = value_prompt(prompt, action_path)
       action = nil
     end
 
