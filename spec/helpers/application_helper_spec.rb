@@ -4,6 +4,7 @@ require "rails_helper"
 
 describe ApplicationHelper do
   include ViewHelper
+  include Publish::ValueHelper
   include GovukVisuallyHiddenHelper
   include GovukComponentsHelper
   include GovukLinkHelper
@@ -39,16 +40,44 @@ describe ApplicationHelper do
       end
     end
 
+    context "with a blank value and a prompt" do
+      before do
+        @provider = build_stubbed(:provider)
+        @course = build_stubbed(:course, provider: @provider)
+
+        enrichment_summary(summary_list, :course, "Course length", "", %w[course_length],
+                           action_path: "/publish/length", prompt: "Enter course length")
+      end
+
+      it "renders the prompt instead of the change action" do
+        expect(subject).to have_css(".govuk-summary-list__value > .app-inset-text--important > a", text: "Enter course length")
+        expect(subject).to have_link("Enter course length", href: "/publish/length")
+        expect(subject).to have_no_link("Change")
+      end
+    end
+
+    context "with a blank value, a prompt and nowhere to send the user" do
+      before do
+        enrichment_summary(summary_list, :course, "Course length", "", %w[course_length],
+                           action_path: nil, prompt: "Enter course length")
+      end
+
+      it "falls back to the plain empty value" do
+        expect(subject).to have_no_css(".app-inset-text--important")
+        expect(subject).to have_css(".govuk-summary-list__value", text: "Empty")
+      end
+    end
+
     context "with errors" do
       before do
         @provider = build_stubbed(:provider)
         @course = build_stubbed(:course, provider: @provider)
         @errors = { course_length: ["Enter course length"] }
 
-        enrichment_summary(summary_list, :course, "Course length", "", [:course_length])
+        enrichment_summary(summary_list, :course, "Course length", "", [:course_length], prompt: "Enter course length")
       end
 
-      it "renders a value containing an error link within inset text" do
+      it "renders the error rather than the prompt" do
         expect(subject).to have_css(".govuk-summary-list__key", text: "Course length")
         expect(subject).to have_css(".govuk-summary-list__value > .app-inset-text--error > a", text: "Enter course length")
 
