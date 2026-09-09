@@ -9,8 +9,8 @@
   "scripts": {
     "build": "yarn run build:css && yarn run build:js",
     "build:css": "yarn run build:css:publish && yarn run build:css:find",
-    "build:css:publish": "sass ./app/assets/stylesheets/publish/application.scss ./app/assets/builds/publish/application.css --no-source-map --load-path=node_modules --load-path=. --quiet-deps",
-    "build:css:find": "sass ./app/assets/stylesheets/find/application.scss ./app/assets/builds/find/application.css --no-source-map --load-path=node_modules --load-path=. --quiet-deps",
+    "build:css:publish": "sass  --silence-deprecation=import ./app/assets/stylesheets/publish/application.scss ./app/assets/builds/publish/application.css --no-source-map --load-path=node_modules --load-path=. --quiet-deps",
+    "build:css:find": "sass  --silence-deprecation=import ./app/assets/stylesheets/find/application.scss ./app/assets/builds/find/application.css --no-source-map --load-path=node_modules --load-path=. --quiet-deps",
     "build:js": "yarn run build:js:publish && yarn run build:js:find",
     "build:js:publish": "esbuild app/javascript/publish/*.* --bundle --sourcemap --outdir=app/assets/builds/publish",
     "build:js:find": "esbuild app/javascript/find/*.* --bundle --sourcemap --outdir=app/assets/builds/find",
@@ -39,9 +39,9 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@ministryofjustice/frontend": "2.0.0",
+    "@ministryofjustice/frontend": "11.0.1",
     "dfe-autocomplete": "DFE-Digital/dfe-autocomplete#v1.0.0",
-    "govuk-frontend": "^5.11.1",
+    "govuk-frontend": "^6.5.0",
     "govuk-one-login-service-header": "https://github.com/govuk-one-login/service-header#v4.0.0",
     "jquery": "^4.0.0",
     "lodash.throttle": "^4.1.1",
