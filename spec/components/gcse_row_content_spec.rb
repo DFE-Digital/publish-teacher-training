@@ -28,6 +28,9 @@ describe GcseRowContent, type: :component do
                  course.course_code,
                ),
              )).to be true
+
+      expect(page).to have_no_css(".app-inset-text__title")
+      expect(page).to have_no_text("GCSE and equivalency tests")
     end
   end
 
