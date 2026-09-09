@@ -1,8 +1,7 @@
 $govuk-fonts-path: "/";
 $govuk-images-path: "/";
-$govuk-new-typography-scale: true;
 
-@import "govuk-frontend/dist/govuk/all";
+@import "govuk-frontend/dist/govuk/index";
 
 $mobile-small-start: 400px;
 $mobile-small-end: 401px;

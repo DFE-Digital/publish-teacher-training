@@ -3,7 +3,7 @@
 
   padding: govuk-spacing(3);
 
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
   border-left-width: govuk-spacing(1);
 
   &.app-callout--light-purple {

@@ -8,7 +8,7 @@
 .app-school-search {
   padding: govuk-spacing(3);
 
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
 
   @include govuk-responsive-margin(6, "top");
   @include govuk-responsive-margin(6, "bottom");
