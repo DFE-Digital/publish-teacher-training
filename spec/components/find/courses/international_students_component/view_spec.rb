@@ -5,7 +5,12 @@ require "rails_helper"
 describe Find::Courses::InternationalStudentsComponent::View, type: :component do
   include Rails.application.routes.url_helpers
 
-  let(:visa_types_url) { I18n.t("find.get_into_teaching.url_visas_for_non_uk_trainees") }
+  def tracked_visa_types_url(utm_content)
+    find_track_click_path(
+      utm_content:,
+      url: I18n.t("find.get_into_teaching.url_visas_for_non_uk_trainees"),
+    )
+  end
 
   # Rendered in isolation the component has no `params[:action]`, so `preview?`
   # is true and `x_provider_url` resolves to the Publish preview path.
@@ -43,7 +48,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     it "links to the types of visa candidates can apply for" do
       expect(page).to have_link(
         "find out more about the types of visa you can apply for",
-        href: visa_types_url,
+        href: tracked_visa_types_url("student_visa_available_types_of_visa"),
         visible: :all,
       )
     end
@@ -77,7 +82,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     it "links to the types of visa candidates can apply for" do
       expect(page).to have_link(
         "find out more about the types of visa you can apply for",
-        href: visa_types_url,
+        href: tracked_visa_types_url("skilled_worker_visa_available_types_of_visa"),
         visible: :all,
       )
     end
@@ -113,7 +118,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     it "links to the types of visa candidates can apply for" do
       expect(page).to have_link(
         "find out more about the types of visa you can apply for",
-        href: visa_types_url,
+        href: tracked_visa_types_url("skilled_worker_visa_not_available_types_of_visa"),
         visible: :all,
       )
     end

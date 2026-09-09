@@ -44,7 +44,10 @@ module Find
         end
 
         def visa_types_url
-          t("find.get_into_teaching.url_visas_for_non_uk_trainees")
+          find_track_click_path(
+            utm_content: "#{visa_type}_#{sponsorship_availability}_types_of_visa",
+            url: t("find.get_into_teaching.url_visas_for_non_uk_trainees"),
+          )
         end
 
         def contact_the_training_provider_url
