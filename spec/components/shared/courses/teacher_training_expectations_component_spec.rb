@@ -22,7 +22,7 @@ describe Shared::Courses::TeacherTrainingExpectationsComponent, type: :component
         expect(result).to have_link(
           "Find out what to expect in teacher training.",
           href: find_track_click_path(
-            utm: "teacher_training_expectations",
+            utm_content: "teacher_training_expectations",
             url: I18n.t("find.get_into_teaching.url_initial_teacher_training"),
           ),
         )

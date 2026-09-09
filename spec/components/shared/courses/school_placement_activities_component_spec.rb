@@ -23,7 +23,7 @@ describe Shared::Courses::SchoolPlacementActivitiesComponent, type: :component d
         expect(result).to have_link(
           ".",
           href: find_track_click_path(
-            utm: "school_placement_activities",
+            utm_content: "school_placement_activities",
             url: I18n.t("find.get_into_teaching.url_school_placement_activities"),
           ),
         )
