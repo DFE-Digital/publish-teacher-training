@@ -54,7 +54,7 @@ $app-callout-light-blue-colour: #f3f8f6;
       top: 0;
       left: -16px;
 
-      color: govuk-colour("dark-grey");
+      color: govuk-colour("black", $variant: "tint-25");
 
       content: "\2013";
     }
