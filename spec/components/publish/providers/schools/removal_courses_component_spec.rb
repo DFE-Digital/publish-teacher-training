@@ -34,7 +34,7 @@ RSpec.describe Publish::Providers::Schools::RemovalCoursesComponent, type: :comp
       expect(rendered).to have_no_css("h2")
       expect(rendered).to have_link("Primary (X123)")
       link = rendered.css("a").find { |anchor| anchor.text.include?("Primary (X123)") }
-      expect(link[:href]).to include("/courses/#{course.course_code}")
+      expect(link[:href]).to include("/#{provider.recruitment_cycle.year}/courses/#{course.course_code}")
       expect(link[:target]).to eq("_blank")
       expect(link.text).to include("(opens in a new tab)")
     end

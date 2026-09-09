@@ -40,6 +40,14 @@ module Publish
         ActiveRecord::Base.transaction do
           provider_schools = resolve_provider_schools
 
+          # After the submitted schools, lock this course before rewriting
+          # placements. Same order as ProviderSchools::Removal (school then
+          # course), so a concurrent school delete waits instead of stripping
+          # the other school and leaving the course with none.
+          # Query-lock rather than course.lock!: callers may hold a dirty
+          # course (e.g. master_subject_id), and Rails refuses lock! then.
+          Course.where(id: course.id).lock.load
+
           # TODO: Schools validated is from a depricated feature, we'll have to remove this
           course.schools_validated = true
 

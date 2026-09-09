@@ -18,7 +18,7 @@ module Publish
         def course_path(course)
           helpers.publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
-            course.recruitment_cycle.year,
+            provider.recruitment_cycle.year,
             course.course_code,
           )
         end
