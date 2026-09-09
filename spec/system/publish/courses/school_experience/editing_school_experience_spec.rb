@@ -10,7 +10,7 @@ RSpec.describe "Editing school experience requirements", travel: mid_cycle, type
     when_i_visit_the_course_description_tab
     then_i_see_the_school_experience_row
 
-    when_i_click_to_change_school_experience
+    when_i_click_to_enter_school_experience
     then_i_am_on_the_experience_required_page
 
     when_i_choose_that_experience_is_required
@@ -29,7 +29,7 @@ RSpec.describe "Editing school experience requirements", travel: mid_cycle, type
     and_i_have_a_salaried_course
 
     when_i_visit_the_course_description_tab
-    when_i_click_to_change_school_experience
+    when_i_click_to_enter_school_experience
     then_i_am_on_the_experience_required_page
 
     when_i_choose_that_experience_is_not_required
@@ -44,7 +44,7 @@ RSpec.describe "Editing school experience requirements", travel: mid_cycle, type
     and_i_have_a_salaried_course
 
     when_i_visit_the_course_description_tab
-    when_i_click_to_change_school_experience
+    when_i_click_to_enter_school_experience
     when_i_choose_that_experience_is_required
     and_i_click_continue
     and_i_click_update
@@ -58,7 +58,7 @@ RSpec.describe "Editing school experience requirements", travel: mid_cycle, type
     and_i_have_a_salaried_course
 
     when_i_visit_the_course_description_tab
-    when_i_click_to_change_school_experience
+    when_i_click_to_enter_school_experience
     then_i_am_on_the_experience_required_page
 
     when_i_choose_that_experience_is_required
@@ -75,7 +75,7 @@ RSpec.describe "Editing school experience requirements", travel: mid_cycle, type
     and_i_have_a_salaried_course
 
     when_i_visit_the_course_description_tab
-    when_i_click_to_change_school_experience
+    when_i_click_to_enter_school_experience
     then_i_am_on_the_experience_required_page
 
     and_i_click_continue
@@ -108,8 +108,8 @@ private
     expect(page).to have_content("School experience (optional)")
   end
 
-  def when_i_click_to_change_school_experience
-    click_link "Change", href: experience_required_path
+  def when_i_click_to_enter_school_experience
+    click_link "Enter school experience (optional)", href: experience_required_path
   end
 
   def then_i_am_on_the_experience_required_page
