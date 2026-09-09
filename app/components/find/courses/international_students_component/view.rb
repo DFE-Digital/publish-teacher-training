@@ -51,7 +51,10 @@ module Find
         end
 
         def contact_the_training_provider_url
-          x_provider_url
+          find_track_click_path(
+            utm_content: "#{visa_type}_#{sponsorship_availability}_contact_the_training_provider",
+            url: x_provider_url,
+          )
         end
 
         def course_subject_codes
