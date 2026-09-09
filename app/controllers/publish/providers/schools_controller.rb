@@ -34,6 +34,7 @@ module Publish
         template = school_delete_template
         @school_name = school.location_name
         @heading = t("publish.providers.schools.#{template}.heading", school_name: @school_name)
+        @attached_courses = school_removal.attached_courses.load if template == :can_remove
         render template
       end
 

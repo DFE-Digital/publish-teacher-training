@@ -14,14 +14,13 @@
     </p>
 
     <h2 class="govuk-heading-m"><%= t(".are_you_sure") %></h2>
-    <% attached_courses = school_removal.attached_courses.load %>
-    <% if attached_courses.any? %>
-      <%= govuk_warning_text(text: t(".detach_from_courses", count: attached_courses.size)) %>
+    <% if @attached_courses.any? %>
+      <%= govuk_warning_text(text: t(".detach_from_courses", count: @attached_courses.size)) %>
       <%= render Publish::Providers::Schools::RemovalCoursesComponent.new(
-        courses: attached_courses,
+        courses: @attached_courses,
         provider: @provider,
       ) %>
-      <%= govuk_button_to t(".remove_and_detach", count: attached_courses.size),
+      <%= govuk_button_to t(".remove_and_detach", count: @attached_courses.size),
         school_delete_path_with_return,
         method: :delete,
         class: "govuk-button--warning govuk-!-margin-top-4" %>

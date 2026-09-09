@@ -65,23 +65,6 @@ RSpec.describe ProviderSchools::Removal do
         .and change { Audited.audit_class.where(auditable_type: "Course::School", action: "destroy").count }.by(1)
     end
 
-    it "enqueues DfE Analytics delete events for the provider school and course school" do
-      allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
-
-      course = create(:course, provider:)
-      create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)
-      create(
-        :course_school,
-        course:,
-        provider_school: other_provider_school,
-        gias_school: other_provider_school.gias_school,
-      )
-
-      removal.call
-
-      expect(:delete_entity).to have_been_enqueued_as_analytics_events
-    end
-
     it "does not remove the school if it becomes the only school on a course while locked" do
       course = create(:course, provider:)
       create(:course_school, course:, provider_school:, gias_school: provider_school.gias_school)

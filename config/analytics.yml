@@ -82,13 +82,6 @@ shared:
     - school_experience_required
     - school_experience_required_content
     - publish_without_schools_allowed
-  course_school:
-    - id
-    - course_id
-    - gias_school_id
-    - provider_school_id
-    - created_at
-    - updated_at
   course_site:
     - id
     - course_id
@@ -211,14 +204,6 @@ shared:
     - address3
     - about_us
     - value_proposition
-  provider_school:
-    - id
-    - provider_id
-    - gias_school_id
-    - site_code
-    - uuid
-    - created_at
-    - updated_at
   providers_onboarding_form_request:
     - id
     - status
