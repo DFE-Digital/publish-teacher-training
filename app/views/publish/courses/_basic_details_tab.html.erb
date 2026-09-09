@@ -120,32 +120,35 @@
        end
      end
 
-     # A study site is optional, so an empty row gets the neutral treatment any
-     # other optional field gets. app-inset-text--important is reserved on this
-     # page for what stops a course publishing, and the row keeps an ordinary
-     # action so it can still be filled in.
+     # Whichever page can supply a study site: the course page when the
+     # organisation already has some to choose from, the organisation page when
+     # it has none yet.
+     study_sites_path = if @provider.study_sites.any?
+                          study_sites_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code)
+                        else
+                          publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year)
+                        end
+
      summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row|
-       row.with_key { "Study site (optional)" }
+       row.with_key { t(".study_site") }
 
        row.with_value do
          if course.study_sites.any?
            content_tag(:ul, class: "govuk-list") do
              course.alphabetically_sorted_study_sites.map { |study_site| content_tag(:li, study_site.location_name) }.join.html_safe
            end
-         else
+         elsif course.is_withdrawn?
            value_provided?(nil)
+         else
+           value_prompt(t(".select_a_study_site"), study_sites_path)
          end
        end
 
-       if course.is_withdrawn?
+       if course.is_withdrawn? || course.study_sites.empty?
+         # Nothing chosen yet, so the prompt takes the place of the change action.
          row.with_action
-       elsif @provider.study_sites.any?
-         row.with_action(href: study_sites_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
-                         visually_hidden_text: "study sites")
        else
-         row.with_action(text: "Add",
-                         href: publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year),
-                         visually_hidden_text: "study sites")
+         row.with_action(href: study_sites_path, visually_hidden_text: "study sites")
        end
      end
 
