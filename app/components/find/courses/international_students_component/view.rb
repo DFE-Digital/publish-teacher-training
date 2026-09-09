@@ -35,6 +35,22 @@ module Find
           @sponsorship_availability ||= course.public_send("can_sponsor_#{visa_type}") ? :available : :not_available
         end
 
+        def sponsorship_available?
+          sponsorship_availability == :available
+        end
+
+        def show_visa_guidance?
+          !(visa_type == :student_visa && !sponsorship_available?)
+        end
+
+        def visa_types_url
+          t("find.get_into_teaching.url_visas_for_non_uk_trainees")
+        end
+
+        def contact_the_training_provider_url
+          x_provider_url
+        end
+
         def course_subject_codes
           @course_subject_codes ||= course.subjects.pluck(:subject_code).compact
         end
