@@ -22,6 +22,10 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     )
   end
 
+  def tracked_provider_url_for(course, utm_content)
+    find_track_click_path(utm_content:, url: provider_url_for(course))
+  end
+
   context "when the course is fee-paying and does not sponsor Student visas" do
     let(:course) { build(:course, funding_type: "fee", can_sponsor_student_visa: false) }
 
@@ -54,7 +58,11 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it "links to the training provider" do
-      expect(page).to have_link("contact the training provider", href: provider_url_for(course), visible: :all)
+      expect(page).to have_link(
+        "contact the training provider",
+        href: tracked_provider_url_for(course, "student_visa_available_contact_the_training_provider"),
+        visible: :all,
+      )
     end
 
     it "does not tell candidates the 3-year residency rule" do
@@ -88,7 +96,11 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it "links to the training provider" do
-      expect(page).to have_link("contact the training provider", href: provider_url_for(course), visible: :all)
+      expect(page).to have_link(
+        "contact the training provider",
+        href: tracked_provider_url_for(course, "skilled_worker_visa_available_contact_the_training_provider"),
+        visible: :all,
+      )
     end
   end
 
