@@ -73,7 +73,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     it "renders the scholarships and bursary section" do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
       enrichment = create(:course_enrichment)
-      course = create(:course, :secondary, funding: "fee", enrichments: [enrichment], name: "History", subjects: [build(:secondary_subject, bursary_amount: "2000", scholarship: "1000"), build(:secondary_subject)]).decorate
+      course = create(:course, :secondary, funding: "fee", enrichments: [enrichment], name: "History", subjects: [build(:secondary_subject, :history, bursary_amount: "2000", scholarship: "1000"), build(:secondary_subject, :drama)]).decorate
 
       result = render_inline(described_class.new(course, enrichment))
 
