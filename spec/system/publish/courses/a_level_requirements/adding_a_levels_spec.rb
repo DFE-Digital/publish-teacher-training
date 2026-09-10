@@ -66,7 +66,9 @@ private
   end
 
   def then_i_see_a_levels_row
-    expect(page).to have_content("A levels and equivalency tests")
+    row = page.find(".govuk-summary-list__row", text: "A levels")
+
+    expect(row).to have_link("Enter A levels and equivalency test requirements")
   end
 
   def when_i_click_to_add_a_level_requirements
