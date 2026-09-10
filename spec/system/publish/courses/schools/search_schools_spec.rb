@@ -464,8 +464,8 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
       })()
     JS
 
-    # rgb(243, 242, 241) is govuk-colour("black", $variant: "tint-95").
-    expect(JSON.parse(style)).to eq("border" => "0px", "background" => "rgb(243, 242, 241)")
+    # rgb(243, 243, 243) is govuk-colour("black", $variant: "tint-95").
+    expect(JSON.parse(style)).to eq("border" => "0px", "background" => "rgb(243, 243, 243)")
   end
 
   def then_the_search_box_fills_the_panel
