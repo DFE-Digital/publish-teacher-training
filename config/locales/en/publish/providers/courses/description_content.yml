@@ -3,7 +3,6 @@ en:
     providers:
       courses:
         description_content:
-          a_levels_heading: A levels and equivalency tests
           a_levels_label: A levels
           about_the_course_heading: About the course
           course_about_heading: About the course

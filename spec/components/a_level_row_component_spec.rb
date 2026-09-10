@@ -13,6 +13,14 @@ RSpec.describe ALevelRowComponent do
     expect(rendered_component.text).to include(I18n.t("publish.providers.courses.description_content.enter_a_levels"))
   end
 
+  it "renders the link on its own, with no heading above it" do
+    course = create(:course, a_level_subject_requirements: nil)
+    rendered_component = render_inline(described_class.new(course: course.decorate))
+
+    expect(rendered_component.css(".app-inset-text__title")).to be_empty
+    expect(rendered_component.text).not_to include("A levels and equivalency tests")
+  end
+
   it "renders the a_level_subject_row_content when a level requirements and subject requirements are present" do
     a_level_subject_requirement = { "subject" => "other_subject", "other_subject" => "Math", "minimum_grade_required" => "A" }
     course = create(:course, a_level_subject_requirements: [a_level_subject_requirement])
