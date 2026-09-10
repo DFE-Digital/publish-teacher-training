@@ -116,23 +116,23 @@ private
   end
 
   def when_i_select_a_primary_subject(subject_type)
-    publish_courses_new_subjects_page.choose(subject_type)
+    publish_courses_subjects_edit_page.choose(subject_type)
   end
 
   def when_i_select_a_master_subject(subject_type)
-    publish_courses_new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
+    publish_courses_subjects_edit_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def when_i_select_a_subordinate_subject(subject_type)
-    publish_courses_new_subjects_page.subordinate_subjects_fields.select(course_subject(subject_type).subject_name).click
+    publish_courses_subjects_edit_page.subordinate_subjects_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def when_i_select_a_blank_subject
-    publish_courses_new_subjects_page.master_subject_fields.select("").click
+    publish_courses_subjects_edit_page.master_subject_fields.select("").click
   end
 
   def and_i_click_continue
-    publish_courses_new_subjects_page.continue.click
+    publish_courses_subjects_edit_page.continue.click
   end
 
   def and_i_see_the_subjects_on_the_details_page

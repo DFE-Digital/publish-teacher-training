@@ -5,16 +5,6 @@ module Publish
     class StudyModeController < ApplicationController
       include CourseBasicDetailConcern
 
-      def continue
-        authorize(@provider, :can_create_course?)
-
-        if previous_tda_course_path?
-          redirect_to appropriate_visa_new_path
-        else
-          super
-        end
-      end
-
       def edit
         @course_study_mode_form = CourseStudyModeForm.new(@course)
       end
@@ -82,42 +72,6 @@ module Publish
                                                                                          recruitment_cycle_year: course.recruitment_cycle_year,
                                                                                          course_code: course.course_code,
                                                                                          previous_tda_course: true)
-        end
-      end
-
-      def appropriate_visa_new_path
-        if previous_tda_course_path?
-          sponsorship_path_with_previous_tda_course
-        else
-          sponsorship_path_without_previous_tda_course
-        end
-      end
-
-      def current_step
-        :full_or_part_time
-      end
-
-      def errors
-        params.dig(:course, :study_mode) ? {} : { study_mode: [I18n.t("activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank")] }
-      end
-
-      def previous_tda_course_path?
-        params[:previous_tda_course] == "true"
-      end
-
-      def sponsorship_path_with_previous_tda_course
-        if @course.student_visa?
-          new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params.merge(previous_tda_course: true))
-        else
-          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params.merge(previous_tda_course: true))
-        end
-      end
-
-      def sponsorship_path_without_previous_tda_course
-        if @course.student_visa?
-          new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
-        else
-          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
         end
       end
     end

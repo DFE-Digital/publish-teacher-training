@@ -5,17 +5,6 @@ module Publish
     class OutcomeController < ApplicationController
       include CourseBasicDetailConcern
 
-      def continue
-        authorize(@provider, :can_create_course?)
-        @errors = errors
-
-        if @errors.any?
-          render :new
-        else
-          handle_redirect
-        end
-      end
-
       def edit
         authorize course, :can_update_qualification?
 
@@ -55,10 +44,6 @@ module Publish
       end
 
     private
-
-      def current_step
-        :outcome
-      end
 
       def errors
         params.dig(:course, :qualification) ? {} : { qualification: ["Select a qualification"] }
@@ -119,18 +104,6 @@ module Publish
 
       def undergraduate_to_other_qualification?
         @current_qualification == "undergraduate_degree_with_qts" && @updated_qualification != "undergraduate_degree_with_qts"
-      end
-
-      def handle_redirect
-        if previously_chosen_tda?
-          redirect_to new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params.merge(previous_tda_course: true))
-        else
-          redirect_to next_step
-        end
-      end
-
-      def previously_chosen_tda?
-        params[:current_qualification] == "undergraduate_degree_with_qts" && params[:goto_confirmation] == "true"
       end
     end
   end

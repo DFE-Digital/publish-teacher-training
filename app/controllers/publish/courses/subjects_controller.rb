@@ -5,7 +5,6 @@ module Publish
     class SubjectsController < ApplicationController
       decorates_assigned :course
       before_action :build_course, only: %i[edit update]
-      before_action :build_course_params, :campaign_name_check, only: [:continue]
       include CourseBasicDetailConcern
 
       def edit; end
@@ -88,10 +87,6 @@ module Publish
         true
       end
 
-      def campaign_name_check
-        params[:course][:campaign_name] = "" unless @course.master_subject_id == SecondarySubject.physics.id
-      end
-
       def course_subjects_form
         @course_subjects_form ||= CourseSubjectsForm.new(@course, params: [selected_master, selected_subordinate])
       end
@@ -115,34 +110,12 @@ module Publish
         @selected_subject_ids ||= [selected_master, selected_subordinate].compact
       end
 
-      def current_step
-        :subjects
-      end
-
-      def error_keys
-        [:subjects]
-      end
-
       def selected_master
         params[:course][:master_subject_id].presence
       end
 
       def selected_subordinate
         params[:course][:subordinate_subject_id].presence
-      end
-
-      def build_course_params
-        previous_subject_selections = params[:course][:subjects_ids]
-
-        params[:course][:subjects_ids] = selected_subject_ids
-
-        build_new_course
-
-        params[:course][:subjects_ids] = SortSubjectParamsService.call(
-          course: @course,
-          subjects_ids: selected_subject_ids,
-          all_subjects_ids: previous_subject_selections,
-        )
       end
 
       def section_key
