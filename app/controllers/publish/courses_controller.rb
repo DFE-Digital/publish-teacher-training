@@ -31,40 +31,6 @@ module Publish
       authorize @course
     end
 
-    def new
-      authorize(provider, :can_create_course?)
-      return render_schools_messages unless provider.sites&.any?
-
-      redirect_to new_publish_provider_recruitment_cycle_courses_level_path(params[:provider_code], @recruitment_cycle.year)
-    end
-
-    def create
-      authorize(provider, :can_create_course?)
-      @course = ::Courses::CreationService.call(course_params:, provider:, next_available_course_code: true)
-
-      if @course.save
-        flash[:success_with_body] = { title: "Your course has been created", body: "Add the rest of your details and publish the course, so that candidates can find and apply to it." }
-        redirect_to(
-          publish_provider_recruitment_cycle_courses_path(
-            @course.provider_code,
-            @course.recruitment_cycle.year,
-          ),
-        )
-      else
-        @errors = @course.errors.messages
-        @course_creation_params = course_params
-
-        render :confirmation
-      end
-    end
-
-    def confirmation
-      authorize(provider, :can_create_course?)
-
-      @course_creation_params = course_params
-      @course = ::Courses::CreationService.call(course_params:, provider:)
-    end
-
     def preview
       fetch_course
       @provider = provider
@@ -117,27 +83,6 @@ module Publish
 
     def render_flash_message_content
       @course.scheduled? ? "Your course has been scheduled." : "Your course has been published."
-    end
-
-    def course_params
-      if params.key? :course
-        params
-          .expect(
-            course: [policy(Course.new).permitted_new_course_attributes,
-                     { study_mode: [],
-                       sites_ids: [],
-                       subjects_ids: [],
-                       study_sites_ids: [] }],
-          )
-      else
-        ActionController::Parameters.new({}).permit(:course)
-      end
-    end
-
-    def render_schools_messages
-      flash[:error] = { id: "schools-error", message: "You need to create at least one school before creating a course" }
-
-      redirect_to new_publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle_year)
     end
 
     def fetch_course_with_latest_draft_enrichment_eager_loaded

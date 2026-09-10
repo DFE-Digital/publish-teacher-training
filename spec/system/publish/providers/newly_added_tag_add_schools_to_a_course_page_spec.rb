@@ -41,19 +41,10 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
     and_i_see_checkbox_with_tag("Register Import School", "Newly added")
     and_i_see_checkbox_without_tag("UI Added School", "Newly added")
 
-    when_i_visit_new_course_schools_page
-
-    and_i_see_checkbox_with_tag("Register Import School", "Newly added")
-    and_i_see_checkbox_without_tag("UI Added School", "Newly added")
-
     travel_to recruitment_cycle.rollover_end
     sign_in_system_test(user:)
 
     when_i_visit_edit_course_schools_page
-    and_i_see_checkbox_without_tag("Register Import School", "Newly added")
-    and_i_see_checkbox_without_tag("UI Added School", "Newly added")
-
-    when_i_visit_new_course_schools_page
     and_i_see_checkbox_without_tag("Register Import School", "Newly added")
     and_i_see_checkbox_without_tag("UI Added School", "Newly added")
   end
@@ -63,13 +54,6 @@ RSpec.describe "Publish - Courses: 'Newly added' tag for register import sites w
       provider_code: provider.provider_code,
       recruitment_cycle_year: recruitment_cycle.year,
       code: course.course_code,
-    )
-  end
-
-  def when_i_visit_new_course_schools_page
-    visit new_publish_provider_recruitment_cycle_courses_schools_path(
-      provider_code: provider.provider_code,
-      recruitment_cycle_year: recruitment_cycle.year,
     )
   end
 
