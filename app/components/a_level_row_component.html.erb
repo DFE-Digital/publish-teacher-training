@@ -42,9 +42,6 @@
   <% end %>
 <% else %>
   <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do %>
-    <p class="govuk-heading-s app-inset-text__title">
-      <%= t("publish.providers.courses.description_content.a_levels_heading") %>
-    </p>
     <p class="govuk-body">
       <%= govuk_link_to t("publish.providers.courses.description_content.enter_a_levels"),
        publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
