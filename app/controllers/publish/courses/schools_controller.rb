@@ -58,8 +58,9 @@ module Publish
       # bulk update pages apply it once they have been told which courses it is
       # for - the same change may be for hundreds of them.
       def hand_over_to_bulk_update
-        draft = Publish::Schools::BulkUpdate::Draft.create(
+        draft = Course::SchoolBulkUpdateDraft.start(
           course: @course,
+          user: current_user,
           school_uuids: selected_school_uuids,
           baseline_uuids: @course_school_form.attached_school_uuids,
         )
@@ -102,7 +103,7 @@ module Publish
       # yet, and a list they have just worked through is not something to make
       # them tick again.
       def seeded_params
-        draft = Publish::Schools::BulkUpdate::Draft.find(course: @course, state_key: params[:state_key])
+        draft = Course::SchoolBulkUpdateDraft.resolve(course: @course, state_key: params[:state_key])
         return {} if draft.nil?
 
         { school_uuids: draft.school_uuids }
