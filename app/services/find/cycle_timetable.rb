@@ -212,10 +212,6 @@ module Find
       real_schedule_for(year.to_i).fetch(name)
     end
 
-    def self.last_recruitment_cycle_year?(year)
-      year == CYCLE_DATES.keys.last
-    end
-
     def self.cycle_year_range(year = current_year)
       "#{year} to #{year + 1}"
     end
@@ -234,7 +230,5 @@ module Find
     def self.real_schedule_for(year = current_year)
       CYCLE_DATES[year]
     end
-
-    private_class_method :last_recruitment_cycle_year?
   end
 end
