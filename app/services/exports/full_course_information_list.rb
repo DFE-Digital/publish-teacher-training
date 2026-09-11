@@ -14,9 +14,11 @@ module Exports
   # the copy their course page is showing them rather than an older published
   # version sitting beneath an unpublished edit.
   #
-  # Two sections changed shape for the 2027 cycle, and a cycle is fixed for the
-  # whole file, so their columns are chosen once rather than carried in every
-  # file and left blank in half of them.
+  # Some columns only ever apply to part of the estate: two sections changed
+  # shape for the 2027 cycle, and only teacher degree apprenticeships are asked
+  # about A levels. A cycle and a provider are both fixed for a whole file, so
+  # those columns are chosen once when the file is built rather than carried
+  # everywhere and left blank in most of it.
   #
   # Each text column is headed with the question Publish asks rather than a
   # short label, so a provider can match a column to the box they type into.
@@ -50,6 +52,36 @@ module Exports
       "Does your organisation offer any financial support? (optional)",
     ].freeze
 
+    DEGREE_HEADERS = [
+      "What is the minimum degree classification you require?",
+      "Degree subject requirements",
+    ].freeze
+
+    # Only teacher degree apprenticeship courses are asked about A levels. Both
+    # this and the GCSE section label their free text box "Details about
+    # equivalency tests you offer or accept", so each says which it means: a
+    # repeated header collapses the columns together when the CSV is parsed.
+    A_LEVEL_HEADERS = [
+      "What A level or equivalent qualification is required?",
+      "Will you consider candidates with pending A levels?",
+      "Will you consider candidates who need to take an equivalency test for their A levels?",
+      "Details about equivalency tests you offer or accept (A levels)",
+    ].freeze
+
+    GCSE_HEADERS = [
+      "GCSEs required",
+      "Will you consider candidates with pending GCSEs?",
+      "Will you consider candidates who need to take an equivalency test in English, maths or science?",
+      "Which subjects will you accept equivalency tests in?",
+      "Details about equivalency tests you offer or accept (GCSEs)",
+    ].freeze
+
+    GCSE_EQUIVALENCY_SUBJECTS = {
+      "English" => :accept_english_gcse_equivalency,
+      "Maths" => :accept_maths_gcse_equivalency,
+      "Science" => :accept_science_gcse_equivalency,
+    }.freeze
+
     HEADERS_AFTER_SCHOOL_EXPERIENCE = [
       "How do you decide which schools to place trainees in?",
       "How much time will they spend in each school?",
@@ -82,7 +114,13 @@ module Exports
     attr_reader :provider
 
     def headers
-      HEADERS_BEFORE_SALARY + [salary_header] + school_experience_headers + HEADERS_AFTER_SCHOOL_EXPERIENCE
+      HEADERS_BEFORE_SALARY +
+        [salary_header] +
+        school_experience_headers +
+        DEGREE_HEADERS +
+        a_level_headers +
+        GCSE_HEADERS +
+        HEADERS_AFTER_SCHOOL_EXPERIENCE
     end
 
     def row(course)
@@ -91,6 +129,9 @@ module Exports
       values_before_salary(course, enrichment) +
         [salary_value(enrichment)] +
         school_experience_values(course) +
+        degree_values(course) +
+        a_level_values(course) +
+        gcse_values(course) +
         values_after_school_experience(enrichment)
     end
 
@@ -127,6 +168,84 @@ module Exports
         enrichment&.interview_process,
         display_interview_location(enrichment&.interview_location),
       ]
+    end
+
+    # The grade is a choice rather than free text, so it reads back as the
+    # sentence the course page shows rather than the stored enum value.
+    def degree_values(course)
+      [
+        DegreeRowContent::DEGREE_GRADE_MAPPING[course.degree_grade],
+        course.degree_subject_requirements,
+      ]
+    end
+
+    def a_level_headers
+      any_teacher_degree_apprenticeship? ? A_LEVEL_HEADERS : []
+    end
+
+    def a_level_values(course)
+      return [] unless any_teacher_degree_apprenticeship?
+      return Array.new(A_LEVEL_HEADERS.length) unless course.teacher_degree_apprenticeship?
+
+      [
+        a_level_subject_requirements(course),
+        yes_or_no(course.accept_pending_a_level),
+        yes_or_no(course.accept_a_level_equivalency),
+        course.additional_a_level_equivalencies,
+      ]
+    end
+
+    # One requirement to a line, worded as the course page words them, so a
+    # subject and its minimum grade stay together in a single cell.
+    def a_level_subject_requirements(course)
+      requirements = course.a_level_subject_requirements.map do |requirement|
+        ALevelSubjectRequirementRowComponent.new(requirement).row_value
+      end
+
+      requirements.join("\n").presence
+    end
+
+    def gcse_values(course)
+      [
+        required_gcses(course),
+        yes_or_no(course.accept_pending_gcse),
+        yes_or_no(course.accept_gcse_equivalency),
+        gcse_equivalency_subjects(course),
+        course.additional_gcse_equivalencies,
+      ]
+    end
+
+    # Derived from the course level and the provider's required grade rather
+    # than written by anyone, but it is the first thing the GCSE row shows, so
+    # the file would not be a whole picture of the section without it.
+    def required_gcses(course)
+      subjects = case course.level
+                 when "primary" then "English, maths and science"
+                 when "secondary" then "English and maths"
+                 end
+      return if subjects.blank?
+
+      "Grade #{course.gcse_grade_required} (C) or above in #{subjects}, or equivalent qualification"
+    end
+
+    def gcse_equivalency_subjects(course)
+      GCSE_EQUIVALENCY_SUBJECTS
+        .select { |_subject, attribute| course.public_send(attribute).present? }
+        .keys
+        .to_sentence
+        .presence
+    end
+
+    def yes_or_no(answer)
+      return if answer.nil?
+
+      answer ? "Yes" : "No"
+    end
+
+    def any_teacher_degree_apprenticeship?
+      return @any_teacher_degree_apprenticeship if defined?(@any_teacher_degree_apprenticeship)
+
+      @any_teacher_degree_apprenticeship = provider.courses.teacher_degree_apprenticeship.exists?
     end
 
     def salary_header
