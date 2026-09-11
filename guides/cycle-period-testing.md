@@ -318,6 +318,11 @@ for it, but `Find::CycleTimetable` has no such method, so calling it raises
 **`preview_mode?` is defined but unused.** It is `apply_deadline` to
 `find_closes`. Do not assume it drives behaviour.
 
+**`travel: find_closes` puts you in the next cycle, not at the end of the
+current one**, and a bare `create(:course)` during the closed period builds data
+in the cycle that has not opened yet. Both are covered in
+[Testing the closed period](#testing-the-closed-period).
+
 ## Choosing an instant
 
 - Default to `mid_cycle` when the spec just needs the service open and ordinary.
@@ -326,6 +331,80 @@ for it, but `Find::CycleTimetable` has no such method, so calling it raises
   keeps working next year.
 - Add a year when the spec's data or assertions name one, for example a course
   in the 2026 cycle or a feature gated to a specific year.
+
+## Testing the closed period
+
+The closed period belongs to the **next** cycle, not the one that just ended.
+That has a consequence for data setup which is easy to miss.
+
+`current_year` rolls at midnight, but Find does not open until 09:00, so for
+those nine hours the new cycle is already current while Find is still down:
+
+| Instant | Wall clock | `current_year` | `previous_year` | `find_down?` |
+| --- | --- | --- | --- | --- |
+| `find_closes - 1.hour` | 2026-09-28 23:00 | 2026 | 2025 | false |
+| midnight | 2026-09-29 00:00 | 2027 | 2026 | true |
+| `find_reopens - 1.hour` | 2026-09-29 08:00 | 2027 | 2026 | true |
+| `find_reopens` | 2026-09-29 09:00 | 2027 | 2026 | false |
+
+The `:recruitment_cycle` factory defaults its year to
+`Find::CycleTimetable.current_year`, and the `:provider` factory associates a
+cycle with `find_or_create`. So inside the closed window a bare
+`create(:course)` builds a provider and a course in the cycle that **has not
+opened yet**.
+
+That is almost never what the spec means. A closed-period spec is about the
+courses candidates could see until yesterday, and those belong to the cycle that
+just ended.
+
+### Do not build the data first and then travel
+
+One instinct is to create the courses at the current time and then move the
+clock forward. That does not work with `travel:` metadata, because the around
+hook wraps the whole example including `before` blocks and `let!`, so the data
+is built under the travelled clock regardless.
+
+It also reintroduces the problem this guide exists to solve. "Create at the real
+time, then travel" only lands the data in the previous cycle if the real clock
+happens to sit in that cycle, which is exactly the calendar dependency you are
+removing.
+
+### Travel, then create in the previous cycle explicitly
+
+Pin the clock, then say which cycle the data belongs to. `previous_year`
+resolves against the travelled clock, so it names the cycle that just closed
+without hardcoding a year:
+
+```ruby
+RSpec.describe "Find during the closed period", travel: find_reopens - 1.hour do
+  let(:provider) { create(:provider, :previous_recruitment_cycle) }
+  let(:course) { create(:course, provider:) }
+  # ...
+end
+```
+
+The `:previous_recruitment_cycle` trait on the provider factory already does
+`find_or_create :recruitment_cycle, :previous`, which resolves to
+`Find::CycleTimetable.previous_year`. There is no need to build the cycle by
+hand, and no year is hardcoded.
+
+### `travel: find_closes` does not mean the end of the cycle
+
+`find_closes` is built with `end_of_day`, so it is one nanosecond before
+midnight, and the hooks use `Timecop.travel` rather than `Timecop.freeze`. Time
+starts flowing from that instant, so within microseconds the example is past
+midnight and into the next cycle:
+
+```
+find_closes raw:   2026-09-28 23:59:59.999999999
+Timecop.freeze     2026-09-28 23:59:59.999999999   current_year=2026  find_down?=false
+Timecop.travel     2026-09-29 00:00:00.010179423   current_year=2027  find_down?=true
+```
+
+So `travel: find_closes` is in practice `travel: find_down`. To test the last
+moments of a cycle, give yourself real headroom with an offset such as
+`travel: 1.hour.before(find_closes)`. The same applies to any `end_of_day`
+boundary.
 
 ## Auditing the suite with `CYCLE_PERIOD`
 
