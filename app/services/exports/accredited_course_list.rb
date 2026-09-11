@@ -47,8 +47,8 @@ module Exports
             course.study_mode_description.capitalize,
             start_date(course),
             course_length(enrichment&.course_length),
-            number_to_currency(enrichment&.fee_uk_eu),
-            number_to_currency(enrichment&.fee_international),
+            fee(course, enrichment&.fee_uk_eu),
+            fee(course, enrichment&.fee_international),
             decorated_course.find_url,
             campus_codes(course),
           ]

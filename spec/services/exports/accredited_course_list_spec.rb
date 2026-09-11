@@ -73,6 +73,20 @@ module Exports
         )
       end
 
+      it "leaves the fees empty for a course that charges none, whatever the enrichment holds" do
+        create_partner_course(:apprenticeship, name: "Apprenticeship course", enrichments: [
+          build(:course_enrichment, :published, fee_uk_eu: 9_790, fee_international: 15_000),
+        ])
+        create_partner_course(:salary, name: "Salaried course", enrichments: [
+          build(:course_enrichment, :published, fee_uk_eu: 9_790, fee_international: 15_000),
+        ])
+
+        expect(rows.map { |row| row.values_at("Course name", "UK fee", "Non-UK fee") }).to contain_exactly(
+          ["Apprenticeship course", nil, nil],
+          ["Salaried course", nil, nil],
+        )
+      end
+
       it "lists campus codes in a stable order, whatever order the sites load in" do
         create_partner_course(site_statuses: [
           create(:site_status, :findable, site: create(:site, code: "M")),
