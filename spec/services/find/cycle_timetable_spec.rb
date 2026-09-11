@@ -284,5 +284,42 @@ module Find
         expect(described_class.current_or_previous_year?(described_class.current_year.to_s)).to be(true)
       end
     end
+
+    describe "CYCLE_DATES" do
+      let(:cycles) { described_class::CYCLE_DATES }
+
+      it "opens Apply one week after Find in every cycle" do
+        offenders = cycles.reject { |_, dates| dates[:apply_opens].to_date == dates[:find_opens].to_date + 7 }
+
+        expect(offenders.keys).to be_empty
+      end
+
+      it "closes Find the day before the next cycle opens" do
+        offenders = cycles.reject do |year, dates|
+          next_cycle = cycles[year + 1]
+          next_cycle.nil? || dates[:find_closes].to_date + 1 == next_cycle[:find_opens].to_date
+        end
+
+        expect(offenders.keys).to be_empty
+      end
+
+      it "closes Find thirteen days after the Apply deadline" do
+        offenders = cycles.reject do |_, dates|
+          deadline = dates[:apply_deadline] || dates[:apply_1_deadline]
+          dates[:find_closes].to_date == deadline.to_date + 13
+        end
+
+        expect(offenders.keys).to be_empty
+      end
+
+      it "sets the first deadline banner between Find opening and the Apply deadline" do
+        offenders = cycles.reject do |_, dates|
+          deadline = dates[:apply_deadline] || dates[:apply_1_deadline]
+          dates[:first_deadline_banner].between?(dates[:find_opens], deadline)
+        end
+
+        expect(offenders.keys).to be_empty
+      end
+    end
   end
 end
