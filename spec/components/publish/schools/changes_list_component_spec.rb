@@ -33,6 +33,11 @@ RSpec.describe Publish::Schools::ChangesListComponent, type: :component do
     expect(rendered.text).to include("You are updating these schools")
   end
 
+  # 30px to whatever the page puts next - the question, or the courses.
+  it "leaves a gap below itself" do
+    expect(rendered.at_css(".app-school-changes")[:class]).to include("govuk-!-margin-bottom-6")
+  end
+
   context "when nothing changed" do
     let(:changes) { change(changed?: false) }
 
