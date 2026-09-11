@@ -35,6 +35,25 @@ module CycleTimetableHelpers
     base.extend self
   end
 
+  # The instant an example runs at when it sets no `travel:` and CYCLE_PERIOD is
+  # unset. Without it an unpinned example inherits whatever cycle period the
+  # machine happens to be in, so it asserts a different thing depending on the
+  # date. mid_cycle is the ordinary state: Find open, Apply open, no banners,
+  # deadline not passed.
+  #
+  # Relative to the current cycle rather than a fixed date, so it needs no
+  # annual maintenance and cannot fall off the end of CYCLE_DATES. The year it
+  # resolves to therefore changes on the day a cycle rolls over.
+  #
+  # Memoised, so every example in this process shares one instant. Parallel
+  # workers are separate processes and each compute their own, which can only
+  # disagree if a run straddles the midnight a cycle rolls over.
+  def self.default_travel
+    return @default_travel if defined?(@default_travel)
+
+    @default_travel = Find::CycleTimetable.mid_cycle
+  end
+
   # The instant named by CYCLE_PERIOD, or nil when it is unset. Memoised so the
   # whole run shares one instant rather than recomputing per example.
   def self.env_cycle_period

@@ -1,14 +1,16 @@
 # Cycle period testing
 
 Find and Publish behave differently at different points in the recruitment year.
-The application works out where it is in that year by reading the clock. A test
-that does not control the clock therefore inherits whatever period the machine
-was in when the suite ran, and asserts something different depending on the
-date.
+The application works out where it is in that year by reading the clock, so a
+test that does not control the clock asserts something different depending on
+the date it runs.
 
-This guide explains how the periods work, why an unpinned spec is a latent
-failure rather than a passing test, and every mechanism the suite gives you to
-control the period.
+The suite therefore pins the clock for every example. Specs that care about a
+period say so with `travel:`; everything else runs at a fixed default. Nothing
+is left to the calendar.
+
+This guide explains how the periods work, what the default is and when to
+override it, and how to audit the suite against a period deliberately.
 
 For the operational process of moving data into a new cycle, see
 [Rollover](rollover.md). This guide is only about time in tests.
@@ -169,25 +171,38 @@ banner, the cycle closed banner and nothing at all.
 `RecruitmentCycle#current_and_open?` and the `:recruitment_cycle` factory
 default all resolve to a different year.
 
-## Latent test failures
+## Latent test failures, and the default that prevents them
 
-A spec that does not pin the clock is not asserting "this behaviour". It is
+A spec running at an uncontrolled clock is not asserting "this behaviour". It is
 asserting "this behaviour, given whatever period the machine happened to be in".
 
 That is a latent failure, not a passing test. When it eventually fails, nothing
-has regressed. The spec was never testing what it claimed, and it happened to
-run in the period where the claim held.
+has regressed. The spec was never testing what it claimed, and it happened to be
+run in the period where the claim held. Green on main would tell you nothing
+about whether the suite passes on 29 September.
 
-Two things follow.
+**The default removes this.** Any example that sets no `travel:` runs at
+`CycleTimetableHelpers.default_travel`, which is `Find::CycleTimetable.mid_cycle`:
+the ordinary state, with Find open, Apply open, no banners and the deadline not
+passed. Holding an irrelevant variable constant is what a test should do, and
+most specs have no business caring which cycle period it is.
 
-**Green on main is not evidence.** The suite passing today tells you nothing
-about whether it passes on 29 September.
+What the default does not do is test the other periods. That coverage has to be
+asked for deliberately, either by pinning a spec with `travel:` or by sweeping
+the suite with `CYCLE_PERIOD`. Accidental coverage from the calendar was never
+coverage: it was unrepeatable and it arrived unannounced.
 
-**The table runs out.** `cycle_year_for_time` raises
+Two caveats worth knowing.
+
+**The default's year moves when a cycle rolls over.** `mid_cycle` resolves
+through `current_year`, so on the day Find opens for a new cycle the default
+jumps a year. Specs that hardcode a year in their assertions but set no
+`travel:` will notice. Pin those explicitly.
+
+**The table still runs out.** `cycle_year_for_time` raises
 `NoRecruitmentCycleExists` for any instant outside every entry in `CYCLE_DATES`.
-The last entry is 2027, whose `find_closes` is 2027-10-04. After that date,
-`current_year` raises and effectively the entire suite fails until a 2028 entry
-is added.
+After the last entry's `find_closes`, `current_year` raises and effectively the
+whole suite fails until the next year is added. See [Maintenance](#maintenance).
 
 ## Pinning the clock in specs
 
@@ -323,14 +338,33 @@ current one**, and a bare `create(:course)` during the closed period builds data
 in the cycle that has not opened yet. Both are covered in
 [Testing the closed period](#testing-the-closed-period).
 
+**`before(:all)` runs outside the travelled clock.** The travel is an
+`around(:each)` hook, so it wraps `before(:each)`, `let!` and the example body,
+but `before(:all)` has already run by then:
+
+```
+before(:all)                    sees the real date
+before(:each), let!, example    sees the pinned date
+```
+
+Records built in `before(:all)` are therefore stamped months away from
+everything else in the example. No spec file in this repo uses it, and the only
+`before(:all)` is the subjects hook in `spec/support/reference_data.rb`, which
+has no cycle dependency. Build cycle-dependent data in `before`, `let` or `let!`
+instead.
+
 ## Choosing an instant
 
-- Default to `mid_cycle` when the spec just needs the service open and ordinary.
+- Set nothing when the spec just needs the service open and ordinary. The
+  `mid_cycle` default already gives you that, so an explicit `travel: mid_cycle`
+  adds noise without changing behaviour.
 - Pin to a boundary only when the boundary is the behaviour under test.
 - Leave the year off unless the spec genuinely depends on that cycle, so it
   keeps working next year.
 - Add a year when the spec's data or assertions name one, for example a course
-  in the 2026 cycle or a feature gated to a specific year.
+  in the 2026 cycle or a feature gated to a specific year. A spec that hardcodes
+  a year in its assertions should pin, so the default's year moving at rollover
+  cannot reach it.
 
 ## Testing the closed period
 
@@ -433,11 +467,28 @@ The available periods are defined in `CycleTimetableHelpers::CYCLE_PERIODS`:
 
 They are relative to the current cycle rather than hardcoded dates, so they stay
 correct as cycles roll over. An unknown value raises and lists the valid ones.
-With `CYCLE_PERIOD` unset, the suite behaves exactly as it always has.
+With `CYCLE_PERIOD` unset, unpinned examples fall through to the `mid_cycle`
+default.
+
+The full precedence, as implemented in the `around` hook:
+
+```ruby
+time = example.metadata[:travel] ||        # an explicit pin always wins
+  CycleTimetableHelpers.env_cycle_period || # then a CYCLE_PERIOD sweep
+  CycleTimetableHelpers.default_travel      # then mid_cycle
+```
+
+Both `env_cycle_period` and `default_travel` are memoised, so every example in a
+process shares one instant. Under `parallel_rspec` each worker is a separate
+process and computes its own, which can only disagree if a run straddles the
+midnight a cycle rolls over.
 
 Note that the hook only moves the clock. It does not create a `RecruitmentCycle`
 for the period, deliberately, so that a failure is attributable to the clock
-alone rather than to the clock plus an injected record.
+alone rather than to the clock plus an injected record. One is created anyway:
+`spec/support/reference_data.rb` runs `find_or_create :recruitment_cycle` in a
+`before` for every example, inside the travelled clock, so it lands in the
+pinned year. Disable it with the `no_default_recycle: true` tag.
 
 Run this against the periods the suite does not otherwise exercise, rather than
 waiting for the calendar to find them for you.
