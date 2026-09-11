@@ -23,6 +23,52 @@ describe ViewHelper do
     end
   end
 
+  describe "#ordered_enrichment_errors" do
+    let(:degree_message) { I18n.t("activerecord.errors.models.course.attributes.base.degree_requirements_not_publishable") }
+    let(:gcse_message) { I18n.t("activerecord.errors.models.course.attributes.base.gcse_requirements_not_publishable") }
+
+    it "orders the errors the way the rows are ordered on the description tab" do
+      errors = {
+        theoretical_training_activities: ["Enter what trainees will study"],
+        placement_school_activities: ["Enter what trainees will do on school placements"],
+        course_length: ["Enter course length"],
+        base: [degree_message, gcse_message],
+        a_level_subject_requirements: ["Enter A levels and equivalency test requirements"],
+      }
+
+      expect(ordered_enrichment_errors(errors).map(&:last)).to eq(
+        [
+          "Enter course length",
+          degree_message,
+          "Enter A levels and equivalency test requirements",
+          gcse_message,
+          "Enter what trainees will do on school placements",
+          "Enter what trainees will study",
+        ],
+      )
+    end
+
+    it "keeps the field alongside each message so the summary can still link to it" do
+      errors = { course_length: ["Enter course length"], base: [gcse_message] }
+
+      expect(ordered_enrichment_errors(errors)).to eq(
+        [[:course_length, "Enter course length"], [:base, gcse_message]],
+      )
+    end
+
+    it "puts fields it does not know about last, in the order they arrived" do
+      errors = { sites: ["Enter schools for this course"], subjects: ["Select a subject"], course_length: ["Enter course length"] }
+
+      expect(ordered_enrichment_errors(errors).map(&:first)).to eq(%i[course_length sites subjects])
+    end
+
+    it "orders the base messages it does not know about after the ones it does" do
+      errors = { base: ["Select if visas can be sponsored", gcse_message] }
+
+      expect(ordered_enrichment_errors(errors).map(&:last)).to eq([gcse_message, "Select if visas can be sponsored"])
+    end
+  end
+
   describe "#provider_enrichment_error_url" do
     let(:provider) { build(:provider) }
 

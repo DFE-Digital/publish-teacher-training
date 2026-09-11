@@ -10,6 +10,7 @@ RSpec.describe "Publishing courses errors" do
     when_i_visit_the_course_page
     and_i_click_the_publish_link
     then_i_see_validation_errors
+    and_the_errors_are_in_the_same_order_as_the_rows
 
     when_i_click_the_publish_link
     and_i_click_the_theoretical_training_activities_error
@@ -95,6 +96,17 @@ RSpec.describe "Publishing courses errors" do
       expect(page).to have_content("Enter degree requirements")
       expect(page).to have_content("Enter GCSE requirements")
     end
+  end
+
+  # The summary follows the rows on the description tab, not the order the
+  # validations happen to be declared in.
+  def and_the_errors_are_in_the_same_order_as_the_rows
+    summary = page.all(".govuk-error-summary__list a").map(&:text)
+
+    expect(summary.index("Enter a course length")).to be < summary.index("Enter degree requirements")
+    expect(summary.index("Enter degree requirements")).to be < summary.index("Enter GCSE requirements")
+    expect(summary.index("Enter GCSE requirements")).to be < summary.index("Enter how you decide which schools to place trainees in")
+    expect(summary.index("Enter what will trainees do while in their placement schools")).to be < summary.index("Enter details about theoretical training activities")
   end
 
   def and_i_click_the_what_you_will_do_on_placements_error
