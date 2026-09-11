@@ -42,6 +42,17 @@ describe Publish::Schools::BulkUpdate::Scope do
       expect(labels_for(course)).to include("All biology courses")
     end
 
+    # A language is a proper noun mid-sentence; a subject is not.
+    it "keeps a language capitalised and lowers everything else" do
+      english = create(:course, :secondary, provider:, subjects: [find_or_create(:secondary_subject, :english)])
+      maths = create(:course, :secondary, provider:, subjects: [find_or_create(:secondary_subject, :mathematics)])
+      greek = create(:course, :secondary, provider:, subjects: [find_or_create(:secondary_subject, :ancient_greek)])
+
+      expect(labels_for(english)).to include("All English courses")
+      expect(labels_for(maths)).to include("All mathematics courses")
+      expect(labels_for(greek)).to include("All ancient Greek courses")
+    end
+
     it "treats primary and further education as the subject" do
       expect(labels_for(create(:course, :primary, provider:))).to include("All primary courses")
       expect(labels_for(create(:course, :further_education, provider:)))
