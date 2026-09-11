@@ -1,0 +1,9 @@
+en:
+  support:
+    courses:
+      index:
+        downloads:
+          heading: Download course information
+          course_information: Download basic course information (CSV)
+          schools: Download the schools attached to each course (CSV)
+          full_course_information: Download full course information (CSV)
