@@ -221,6 +221,41 @@ RSpec.describe Publish::Courses::Query do
     end
   end
 
+  describe "ids filter" do
+    subject(:rows) { described_class.call(provider: provider.reload, params:) }
+
+    let(:provider) { create(:provider, :accredited_provider) }
+    let!(:wanted) { create(:course, provider:, name: "Alpha") }
+
+    before { create(:course, provider:, name: "Bravo") }
+
+    context "when no ids are given" do
+      let(:params) { {} }
+
+      it "returns every course" do
+        expect(rows.size).to eq(2)
+      end
+    end
+
+    context "when ids are given" do
+      let(:params) { { ids: [wanted.id] } }
+
+      it "returns only those courses" do
+        expect(rows).to match_collection([wanted], attribute_names: %w[name])
+      end
+    end
+
+    # An empty set is a set, not the absence of a filter: a bulk update that
+    # matched nothing must show nothing.
+    context "when the ids are empty" do
+      let(:params) { { ids: [] } }
+
+      it "returns no courses" do
+        expect(rows).to be_empty
+      end
+    end
+  end
+
   describe "qualification filter" do
     subject(:rows) { described_class.call(provider: provider.reload, params:) }
 

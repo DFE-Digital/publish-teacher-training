@@ -14,6 +14,14 @@ module Courses
         course.publish_without_schools_allowed?
       end
 
+      # The same rule over many courses at once: narrows the relation it is
+      # given to the courses that must keep a school. It takes the relation
+      # rather than being one, so there is nothing here to run - or read - as
+      # a query over every course there is.
+      def self.requiring_a_school(courses)
+        courses.where(publish_without_schools_allowed: false)
+      end
+
       # Courses whose API locations fall back to the provider's schools
       # (LocationsController#remodelled_locations) — so a provider school
       # write changes their payload.
