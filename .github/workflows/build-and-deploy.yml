@@ -146,6 +146,10 @@ jobs:
     env:
       DATABASE_URL: postgres://postgres:developmentpassword@localhost:5432
       PLAYWRIGHT_CLI_EXECUTABLE_PATH: ./node_modules/.bin/playwright
+      # TEMPORARY, revert before merge: forces every spec that does not set its
+      # own `travel:` into the Find closed period, to audit which specs assume
+      # Find is open. See guides/cycle-period-testing.md
+      CYCLE_PERIOD: find_closed
 
     services:
       postgres:
