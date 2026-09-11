@@ -169,6 +169,25 @@ RSpec.describe "Publish - Reviewing the courses a placement school change will u
     end
   end
 
+  # Support can allow a course to publish without schools. Removing its only
+  # school is then a change like any other, not one to set aside.
+  scenario "a course allowed to have no schools is updated, not set aside" do
+    given_a_fee_paying_course_and_another_like_it
+    and_the_other_course_has_only_the_school_being_removed
+    and_the_other_course_is_allowed_to_have_no_schools
+    when_i_remove_a_school
+    and_i_choose("All fee-paying courses")
+    and_i_continue
+
+    then_i_am_not_warned_that_some_courses_will_not_be_updated
+    and_the_table_lists(course, other_course)
+    and_the_button_offers_to_update(2)
+    and_i_confirm
+
+    and_i_am_told_the_schools_were_updated_on(2)
+    and_the_other_course_has_no_schools
+  end
+
   scenario "nothing is set aside when schools are being added" do
     given_a_fee_paying_course_and_another_like_it
     and_the_other_course_has_only_the_school_being_removed
@@ -221,6 +240,14 @@ private
 
   def and_the_other_course_is_ratified_by_someone_else
     other_course.update!(accrediting_provider: create(:accredited_provider))
+  end
+
+  def and_the_other_course_is_allowed_to_have_no_schools
+    other_course.update!(publish_without_schools_allowed: true)
+  end
+
+  def and_the_other_course_has_no_schools
+    expect(attached_names(other_course)).to be_empty
   end
 
   def and_the_other_course_has_only_the_school_being_removed

@@ -3,13 +3,21 @@
 require "rails_helper"
 
 describe Courses::PublishRules::SchoolPresenceExemption do
-  describe ".not_exempt" do
-    it "is the courses the rule does not apply to" do
-      exempt = create(:course, :salary, publish_without_schools_allowed: true)
-      needs_a_school = create(:course, :salary, publish_without_schools_allowed: false)
+  describe ".requiring_a_school" do
+    let(:provider) { create(:provider) }
+    let!(:exempt) { create(:course, :salary, provider:, publish_without_schools_allowed: true) }
+    let!(:needs_a_school) { create(:course, :salary, provider:, publish_without_schools_allowed: false) }
 
-      expect(described_class.not_exempt).to include(needs_a_school)
-      expect(described_class.not_exempt).not_to include(exempt)
+    it "narrows the courses it is given to those the rule does not exempt" do
+      expect(described_class.requiring_a_school(provider.courses)).to contain_exactly(needs_a_school)
+    end
+
+    # It takes a relation rather than being one, so it cannot be run - or read
+    # - as a query over every course there is.
+    it "reaches no further than the relation it was handed" do
+      create(:course, :salary, publish_without_schools_allowed: false)
+
+      expect(described_class.requiring_a_school(provider.courses).count).to eq(1)
     end
   end
 

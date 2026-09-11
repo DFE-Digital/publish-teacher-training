@@ -61,9 +61,8 @@ module Publish
         def excluded_course_ids
           return [] if added_uuids.any? || removed_uuids.empty?
 
-          provider.courses
-            .where(id: matched_ids)
-            .merge(::Courses::PublishRules::SchoolPresenceExemption.not_exempt)
+          ::Courses::PublishRules::SchoolPresenceExemption
+            .requiring_a_school(provider.courses.where(id: matched_ids))
             # A course with no schools to begin with is not losing its last one,
             # so the explanation would not be true of it.
             .where(id: course_schools.select(:course_id))
