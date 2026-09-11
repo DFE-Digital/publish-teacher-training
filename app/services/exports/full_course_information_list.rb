@@ -129,14 +129,6 @@ module Exports
       ]
     end
 
-    # Salaried and apprenticeship courses charge no fees, so Publish never shows
-    # the fee rows for them. An amount can still be sitting on the enrichment
-    # from before the course changed funding, and printing it would tell a
-    # provider they charge a fee they do not.
-    def fee(course, amount)
-      number_to_currency(amount) if course.fee_based?
-    end
-
     def salary_header
       if current_sections?
         "Give details about any fees or other costs that the trainee might have to pay (optional)"
