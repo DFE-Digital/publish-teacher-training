@@ -9,10 +9,11 @@ describe "Publish::Courses::Schools::BulkUpdatesController" do
   let(:provider) { user.providers.first }
   let(:course) { create(:course, :secondary, :with_schools, provider:) }
   let(:draft) do
-    Publish::Schools::BulkUpdate::Draft.create(
+    Course::SchoolBulkUpdateDraft.start(
       course:,
-      school_uuids: %w[a b],
-      baseline_uuids: %w[b],
+      user:,
+      school_uuids: [SecureRandom.uuid, SecureRandom.uuid],
+      baseline_uuids: [SecureRandom.uuid],
     )
   end
 
@@ -46,7 +47,7 @@ describe "Publish::Courses::Schools::BulkUpdatesController" do
   it "sends an expired selection back to the placement schools page" do
     state_key = draft.state_key
 
-    travel(Publish::Schools::BulkUpdate::Draft::EXPIRES_IN + 1.minute) do
+    travel(Course::SchoolBulkUpdateDraft::EXPIRES_IN + 1.minute) do
       get_options(state_key)
 
       expect(response).to redirect_to(
@@ -58,9 +59,10 @@ describe "Publish::Courses::Schools::BulkUpdatesController" do
 
   it "does not resolve a selection made against another course" do
     other = create(:course, :secondary, :with_schools, provider:)
-    other_draft = Publish::Schools::BulkUpdate::Draft.create(
+    other_draft = Course::SchoolBulkUpdateDraft.start(
       course: other,
-      school_uuids: %w[a],
+      user:,
+      school_uuids: [SecureRandom.uuid],
       baseline_uuids: [],
     )
 
@@ -71,9 +73,10 @@ describe "Publish::Courses::Schools::BulkUpdatesController" do
 
   it "does not let a user reach another provider's course" do
     stranger = create(:course, :secondary, :with_schools)
-    stranger_draft = Publish::Schools::BulkUpdate::Draft.create(
+    stranger_draft = Course::SchoolBulkUpdateDraft.start(
       course: stranger,
-      school_uuids: %w[a],
+      user: create(:user),
+      school_uuids: [SecureRandom.uuid],
       baseline_uuids: [],
     )
 

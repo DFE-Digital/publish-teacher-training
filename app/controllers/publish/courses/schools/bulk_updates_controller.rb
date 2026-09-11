@@ -54,7 +54,7 @@ module Publish
             update_courses(scope)
           end
 
-          @draft.delete
+          @draft.destroy
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
@@ -108,7 +108,7 @@ module Publish
         end
 
         def load_draft
-          @draft = Publish::Schools::BulkUpdate::Draft.find(course: @course, state_key: params[:state_key])
+          @draft = Course::SchoolBulkUpdateDraft.resolve(course: @course, state_key: params[:state_key])
           return if @draft
 
           authorize(provider)
