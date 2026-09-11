@@ -30,6 +30,20 @@ RSpec.describe "Publish - Reviewing the courses a placement school change will u
     and_the_button_offers_to_update(2)
   end
 
+  # The table reads the course through its decorator - the age range under a
+  # primary course is the decorator's - so the rows have to arrive decorated.
+  # Every other scenario here uses secondary courses, which never reach it.
+  scenario "the table shows a primary course with its age range" do
+    given_a_fee_paying_course_and_another_like_it
+    and_a_primary_fee_paying_course_exists
+    when_i_add_a_school
+    and_i_choose("All fee-paying courses")
+    and_i_continue
+
+    and_the_table_lists(course, other_course, primary_course)
+    expect(page).to have_css(".govuk-hint", text: "Ages 3 to 7")
+  end
+
   scenario "the table shows each course's status" do
     given_a_fee_paying_course_and_another_like_it
     and_the_other_course_is_published_and_closed
@@ -168,7 +182,7 @@ RSpec.describe "Publish - Reviewing the courses a placement school change will u
 
 private
 
-  attr_reader :provider, :course, :other_course, :salaried_course
+  attr_reader :provider, :course, :other_course, :salaried_course, :primary_course
 
   def school_names
     ["Ash Academy", "Beech School", "Cedar School"]
@@ -188,6 +202,11 @@ private
 
     @other_course = create(:course, :secondary, provider:, funding: :fee, sites: [], name: "Second")
     attach("Ash Academy", to: @other_course)
+  end
+
+  def and_a_primary_fee_paying_course_exists
+    @primary_course = create(:course, :primary, provider:, funding: :fee, sites: [], name: "Primary")
+    attach("Ash Academy", to: @primary_course)
   end
 
   def and_a_salaried_course_exists
