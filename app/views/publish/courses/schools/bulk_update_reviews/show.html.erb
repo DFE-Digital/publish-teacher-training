@@ -12,6 +12,8 @@
       <%= page_title %>
     </h1>
 
+    <%= render Publish::Schools::ChangesListComponent.new(changes: school_changes) %>
+
     <h2 class="govuk-heading-m"><%= t("publish.courses.schools.bulk_update.courses_heading") %></h2>
 
     <ul class="govuk-list govuk-list--bullet">

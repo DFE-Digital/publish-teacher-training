@@ -14,7 +14,7 @@ module Publish
 
       included do
         decorates_assigned :course
-        helper_method :scope
+        helper_method :scope, :school_changes
 
         before_action :build_course
         before_action :load_draft
@@ -41,6 +41,16 @@ module Publish
 
       def scope
         @scope ||= Publish::Schools::BulkUpdate::Scope.find(course: @course, token: @draft.scope)
+      end
+
+      # What the provider is adding and taking off, measured against the same
+      # list they ticked and the schools the course held when they did.
+      def school_changes
+        @school_changes ||= Publish::Schools::SchoolChanges.new(
+          schools: SchoolsList.for(@course.provider),
+          submitted: @draft.school_uuids,
+          baseline: @draft.baseline_uuids,
+        )
       end
 
       def matched_courses

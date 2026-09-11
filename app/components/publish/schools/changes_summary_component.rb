@@ -10,8 +10,10 @@ module Publish
     # JavaScript sees - and submits - exactly what they did before.
     #
     # The wording travels as data attributes rather than being built here
-    # because the counts are only known in the browser. `{count}` is substituted
-    # by the controller, not by I18n.
+    # because the counts are only known in the browser. `%{count}` is
+    # substituted by the controller, not by I18n. The strings are shared with
+    # ChangesListComponent, which renders the same summary from the server on
+    # the bulk update pages.
     class ChangesSummaryComponent < ViewComponent::Base
       # The schools chosen when the page was served: the state the provider's
       # changes are measured against. Empty on the way in, and on the edit page
