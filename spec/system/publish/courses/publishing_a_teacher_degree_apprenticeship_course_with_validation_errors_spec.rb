@@ -184,7 +184,9 @@ RSpec.describe "Publishing courses errors" do
 
   def then_i_see_a_level_subject_is_required
     and_i_see_that_i_need_to_enter_a_level_requirements
-    expect(page).to have_content("What A level or equivalent qualification is required?")
+    # With no A levels at all the red row reads exactly as the blue prompt does,
+    # so there is no question above it.
+    expect(page).to have_no_content("What A level or equivalent qualification is required?")
   end
 
   def and_i_see_that_i_need_to_enter_a_level_requirements
