@@ -57,14 +57,24 @@ module Find
         expect(described_class.cycle_year_for_time(time)).to eq(2027)
       end
 
+      it "returns 2028 for the exact time find opens" do
+        time = Time.zone.local(2027, 10, 5, 9, 0, 0)
+        expect(described_class.cycle_year_for_time(time)).to eq(2028)
+      end
+
+      it "returns 2029 for the exact time find opens" do
+        time = Time.zone.local(2028, 10, 3, 9, 0, 0)
+        expect(described_class.cycle_year_for_time(time)).to eq(2029)
+      end
+
       it "returns nil for a time before any defined cycle" do
         time = Time.zone.local(2019, 1, 1, 12, 0, 0)
         expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2019-01-01 12:00:00")
       end
 
       it "returns nil for a time after the last defined cycle" do
-        time = Time.zone.local(2028, 1, 1, 12, 0, 0)
-        expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2028-01-01 12:00:00")
+        time = Time.zone.local(2030, 1, 1, 12, 0, 0)
+        expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2030-01-01 12:00:00")
       end
     end
 

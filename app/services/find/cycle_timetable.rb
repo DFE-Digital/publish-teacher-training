@@ -55,6 +55,20 @@ module Find
         apply_deadline: Time.zone.local(2027, 9, 21, 18), # CONFIRMED
         find_closes: Time.zone.local(2027, 10, 4).end_of_day, # CONFIRMED
       },
+      2028 => {
+        find_opens: Time.zone.local(2027, 10, 5, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2027, 10, 12, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2028, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2028, 9, 19, 18), # CONFIRMED
+        find_closes: Time.zone.local(2028, 10, 2).end_of_day, # CONFIRMED
+      },
+      2029 => {
+        find_opens: Time.zone.local(2028, 10, 3, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2028, 10, 10, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2029, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2029, 9, 18, 18), # CONFIRMED
+        find_closes: Time.zone.local(2029, 10, 1).end_of_day, # CONFIRMED
+      },
     }.freeze
 
     def self.current_year
