@@ -561,6 +561,65 @@
         ]
       },
       {
+        "name": "course_school",
+        "syncMode": "incremental_append",
+        "cursorField": [
+          "_ab_cdc_lsn"
+        ],
+        "primaryKey": [
+          [
+            "id"
+          ]
+        ],
+        "selectedFields": [
+          {
+            "fieldPath": [
+              "_ab_cdc_lsn"
+            ]
+          },
+          {
+            "fieldPath": [
+              "_ab_cdc_deleted_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "_ab_cdc_updated_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "course_id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "gias_school_id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "provider_school_id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "created_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "updated_at"
+            ]
+          }
+        ]
+      },
+      {
         "name": "course_site",
         "syncMode": "incremental_append",
         "cursorField": [
@@ -1406,6 +1465,70 @@
           {
             "fieldPath": [
               "value_proposition"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "provider_school",
+        "syncMode": "incremental_append",
+        "cursorField": [
+          "_ab_cdc_lsn"
+        ],
+        "primaryKey": [
+          [
+            "id"
+          ]
+        ],
+        "selectedFields": [
+          {
+            "fieldPath": [
+              "_ab_cdc_lsn"
+            ]
+          },
+          {
+            "fieldPath": [
+              "_ab_cdc_deleted_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "_ab_cdc_updated_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "provider_id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "gias_school_id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "site_code"
+            ]
+          },
+          {
+            "fieldPath": [
+              "uuid"
+            ]
+          },
+          {
+            "fieldPath": [
+              "created_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "updated_at"
             ]
           }
         ]
