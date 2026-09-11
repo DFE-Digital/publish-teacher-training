@@ -22,38 +22,45 @@ module Find
       2023 => {
         find_opens: Time.zone.local(2022, 10, 4, 9),
         apply_opens: Time.zone.local(2022, 10, 11, 9),
-        first_deadline_banner: Time.zone.local(2023, 8, 1, 9), # 5 weeks before Apply 1 deadline
-        apply_1_deadline: Time.zone.local(2023, 9, 5, 18), # First Tuesday of September
-        apply_deadline: Time.zone.local(2023, 9, 19, 18), # 2 weeks after Apply 1 deadline
-        find_closes: Time.zone.local(2023, 10, 2).end_of_day, # The evening before Find opens in the new cycle
+        first_deadline_banner: Time.zone.local(2023, 8, 1, 9),
+        apply_1_deadline: Time.zone.local(2023, 9, 5, 18),
+        apply_deadline: Time.zone.local(2023, 9, 19, 18),
+        find_closes: Time.zone.local(2023, 10, 2).end_of_day,
       },
       2024 => {
-        find_opens: Time.zone.local(2023, 10, 3, 9), # First Tuesday of October
-        apply_opens: Time.zone.local(2023, 10, 10, 9), # Second Tuesday of October
+        find_opens: Time.zone.local(2023, 10, 3, 9),
+        apply_opens: Time.zone.local(2023, 10, 10, 9),
         first_deadline_banner: Time.zone.local(2024, 7, 30, 9),
         apply_deadline: Time.zone.local(2024, 9, 17, 18),
-        find_closes: Time.zone.local(2024, 9, 30).end_of_day, # The evening before Find opens in the new cycle
+        find_closes: Time.zone.local(2024, 9, 30).end_of_day,
       },
       2025 => {
-        find_opens: Time.zone.local(2024, 10, 1, 9), # CONFIRMED
-        apply_opens: Time.zone.local(2024, 10, 8, 9), # CONFIRMED
-        first_deadline_banner: Time.zone.local(2025, 7, 12, 9), # TBC
-        apply_deadline: Time.zone.local(2025, 9, 16, 18), # CONFIRMED
-        find_closes: Time.zone.local(2025, 9, 29).end_of_day, # CONFIRMED
+        find_opens: Time.zone.local(2024, 10, 1, 9),
+        apply_opens: Time.zone.local(2024, 10, 8, 9),
+        first_deadline_banner: Time.zone.local(2025, 7, 12, 9),
+        apply_deadline: Time.zone.local(2025, 9, 16, 18),
+        find_closes: Time.zone.local(2025, 9, 29).end_of_day,
       },
       2026 => {
-        find_opens: Time.zone.local(2025, 9, 30, 9), # CONFIRMED
-        apply_opens: Time.zone.local(2025, 10, 7, 9), # CONFIRMED
-        first_deadline_banner: Time.zone.local(2026, 7, 12, 9), # TBC
-        apply_deadline: Time.zone.local(2026, 9, 15, 18), # CONFIRMED
-        find_closes: Time.zone.local(2026, 9, 28).end_of_day, # CONFIRMED
+        find_opens: Time.zone.local(2025, 9, 30, 9),
+        apply_opens: Time.zone.local(2025, 10, 7, 9),
+        first_deadline_banner: Time.zone.local(2026, 7, 12, 9),
+        apply_deadline: Time.zone.local(2026, 9, 15, 18),
+        find_closes: Time.zone.local(2026, 9, 28).end_of_day,
       },
       2027 => {
-        find_opens: Time.zone.local(2026, 9, 29, 9), # CONFIRMED
-        apply_opens: Time.zone.local(2026, 10, 6, 9), # CONFIRMED
-        first_deadline_banner: Time.zone.local(2027, 7, 12, 9), # TBC
-        apply_deadline: Time.zone.local(2027, 9, 21, 18), # CONFIRMED
-        find_closes: Time.zone.local(2027, 10, 4).end_of_day, # CONFIRMED
+        find_opens: Time.zone.local(2026, 9, 29, 9),
+        apply_opens: Time.zone.local(2026, 10, 6, 9),
+        first_deadline_banner: Time.zone.local(2027, 7, 12, 9),
+        apply_deadline: Time.zone.local(2027, 9, 21, 18),
+        find_closes: Time.zone.local(2027, 10, 4).end_of_day,
+      },
+      2028 => {
+        find_opens: Time.zone.local(2027, 10, 5, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2027, 10, 12, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2028, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2028, 9, 19, 18), # CONFIRMED
+        find_closes: Time.zone.local(2028, 10, 2).end_of_day, # CONFIRMED
       },
     }.freeze
 
