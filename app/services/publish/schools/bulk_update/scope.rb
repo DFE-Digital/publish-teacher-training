@@ -98,11 +98,14 @@ module Publish
           )
         end
 
+        # Lowered for the middle of a sentence - "All mathematics courses" -
+        # except that a language stays a proper noun: "All English courses".
+        # The same rule the email alerts use.
         def subject_name
           @subject_name ||= if course.secondary_course?
-                              subject&.name&.downcase
+                              subject && SubjectHelper.subject_name_in_sentence(subject.name)
                             else
-                              ::Course.levels[course.level].downcase
+                              SubjectHelper.subject_name_in_sentence(::Course.levels[course.level])
                             end
         end
 
