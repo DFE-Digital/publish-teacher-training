@@ -193,8 +193,9 @@ private
     expect(page).to have_no_css(".govuk-radios__input[checked]")
   end
 
+  # The smaller hint, as under each school on the page before it.
   def then_i_see_the_hint(text)
-    expect(page).to have_css(".govuk-hint", text:)
+    expect(page).to have_css(".govuk-hint.govuk-\\!-font-size-16", text:)
   end
 
   def then_i_see_the_error(message)
