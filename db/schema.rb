@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_09_161043) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_11_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -278,6 +278,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_161043) do
     t.index ["course_id", "provider_school_id"], name: "index_course_school_on_course_id_and_provider_school_id", unique: true
     t.index ["gias_school_id"], name: "index_course_school_fanout", include: ["course_id"]
     t.index ["provider_school_id"], name: "index_course_school_on_provider_school_id"
+  end
+
+  create_table "course_school_bulk_update_draft", force: :cascade do |t|
+    t.uuid "baseline_uuids", default: [], null: false, array: true
+    t.bigint "course_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "expires_at", null: false
+    t.uuid "school_uuids", default: [], null: false, array: true
+    t.string "scope"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.index ["course_id", "uuid"], name: "index_course_school_bulk_update_draft_on_course_id_and_uuid", unique: true
+    t.index ["course_id"], name: "index_course_school_bulk_update_draft_on_course_id"
+    t.index ["expires_at"], name: "index_course_school_bulk_update_draft_on_expires_at"
+    t.index ["user_id"], name: "index_course_school_bulk_update_draft_on_user_id"
   end
 
   create_table "course_site", id: :serial, force: :cascade do |t|
@@ -693,6 +709,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_161043) do
   add_foreign_key "course_school", "course", on_delete: :cascade
   add_foreign_key "course_school", "gias_school", on_delete: :cascade
   add_foreign_key "course_school", "provider_school", on_delete: :cascade
+  add_foreign_key "course_school_bulk_update_draft", "course", on_delete: :cascade
+  add_foreign_key "course_school_bulk_update_draft", "user", on_delete: :cascade
   add_foreign_key "course_site", "course", name: "FK_course_site_course_course_id", on_delete: :cascade
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
   add_foreign_key "course_subject", "course", name: "fk_course_subject__course"
