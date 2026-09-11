@@ -209,7 +209,7 @@ RSpec.describe CourseEnrichment do
       it "is not valid to publish v2" do
         record.update!(version: 2, placement_school_activities: nil)
         expect(record).not_to be_valid(:publish)
-        expect(record.errors[:placement_school_activities]).to include("^Enter what will trainees do while in their placement schools")
+        expect(record.errors[:placement_school_activities]).to include("^Enter what trainees will do on school placements")
         expect(record.reload).to be_draft
       end
     end

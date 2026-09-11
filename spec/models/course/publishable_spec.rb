@@ -18,11 +18,11 @@ describe "#publishable?" do
         accrediting_provider: ["Select an accredited provider"],
         placement_selection_criteria: ["^Enter how you decide which schools to place trainees in"],
         duration_per_school: ["^Enter how much time trainees will spend in each school"],
-        placement_school_activities: ["^Enter what will trainees do while in their placement schools"],
-        theoretical_training_activities: ["^Enter details about theoretical training activities"],
-        course_length: ["^Enter a course length"],
+        placement_school_activities: ["^Enter what trainees will do on school placements"],
+        theoretical_training_activities: ["^Enter what trainees will study"],
+        course_length: ["^Enter course length"],
         salary_details: ["^Enter details about the salary for this course"],
-        base: ["Enter GCSE requirements"] },
+        base: ["Enter GCSE and equivalency test requirements"] },
     )
   end
 
@@ -151,7 +151,7 @@ describe "#publishable?" do
         a_level_subject_requirements: [],
       )
       course.valid?(:publish)
-      expect(course.errors[:a_level_subject_requirements]).to include("Enter A level requirements")
+      expect(course.errors[:a_level_subject_requirements]).to include("Enter A levels and equivalency test requirements")
     end
   end
 

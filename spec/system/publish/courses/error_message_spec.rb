@@ -28,13 +28,13 @@ RSpec.describe "Publishing a course with validation errors", type: :system do
   end
 
   scenario "Placement school activities can't be blank error link navigates to the placement school activities field" do
-    click_link_in_error_summary("Enter what will trainees do while in their placement schools")
+    click_link_in_error_summary("Enter what trainees will do on school placements")
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{@course.course_code}/fields/school-placement", ignore_query: true)
     expect(page).to have_content("What you will do on school placements")
   end
 
-  scenario "Enter details about theoretical training activities error link navigates to the theoretical training activities field" do
-    click_link_in_error_summary("Enter details about theoretical training activities")
+  scenario "Enter what trainees will study error link navigates to the theoretical training activities field" do
+    click_link_in_error_summary("Enter what trainees will study")
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{@course.course_code}/fields/what-you-will-study", ignore_query: true)
     expect(page).to have_content("What you will study")
   end

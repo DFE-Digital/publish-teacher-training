@@ -203,7 +203,7 @@ describe GcseRowContent, type: :component do
 
     context "a relevant error exists" do
       it "returns an error css class" do
-        errors = double("errors", { values: ["Enter GCSE requirements"] })
+        errors = double("errors", { values: ["Enter GCSE and equivalency test requirements"] })
         expect(described_class.new(course: nil, errors:).inset_text_css_classes).to eq("app-inset-text--narrow-border app-inset-text--error")
       end
     end
