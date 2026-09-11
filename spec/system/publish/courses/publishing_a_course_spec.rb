@@ -252,7 +252,7 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
   end
 
   def then_i_should_see_an_error_message_for_the_gcses
-    expect(publish_provider_courses_show_page.error_messages).to include("Enter GCSE requirements")
+    expect(publish_provider_courses_show_page.error_messages).to include("Enter GCSE and equivalency test requirements")
   end
 
   def when_i_click_the_error_message_link

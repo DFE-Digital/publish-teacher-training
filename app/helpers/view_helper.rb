@@ -265,9 +265,9 @@ private
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
       "Enter a UK Provider Reference Number (UKPRN) and URN" =>
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      "Enter degree requirements" =>
+      I18n.t(DEGREE_ERROR) =>
         degrees_start_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true),
-      "Enter GCSE requirements" =>
+      I18n.t(GCSE_ERROR) =>
         gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true),
     }
   end
