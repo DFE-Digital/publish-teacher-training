@@ -25,6 +25,15 @@ module Exports
           age_range_in_years: "11_to_16",
           study_mode: :full_time_or_part_time,
           start_date: Time.zone.local(provider.recruitment_cycle_year.to_i, 9, 1),
+          degree_grade: :two_one,
+          additional_degree_subject_requirements: true,
+          degree_subject_requirements: "A chemistry or closely related degree.",
+          accept_pending_gcse: true,
+          accept_gcse_equivalency: true,
+          accept_english_gcse_equivalency: true,
+          accept_maths_gcse_equivalency: true,
+          accept_science_gcse_equivalency: false,
+          additional_gcse_equivalencies: "We accept Equivalency Testing tests.",
           enrichments: [build(
             :course_enrichment,
             :published,
@@ -65,6 +74,13 @@ module Exports
           "Are there any additional fees or costs? (optional)" => "A £50 DBS check.",
           "Does your organisation offer any financial support? (optional)" => "Bursaries are available.",
           "Salary" => "Paid as an unqualified teacher.",
+          "What is the minimum degree classification you require?" => "2:1 or above, or equivalent",
+          "Degree subject requirements" => "A chemistry or closely related degree.",
+          "GCSEs required" => "Grade 4 (C) or above in English and maths, or equivalent qualification",
+          "Will you consider candidates with pending GCSEs?" => "Yes",
+          "Will you consider candidates who need to take an equivalency test in English, maths or science?" => "Yes",
+          "Which subjects will you accept equivalency tests in?" => "English and Maths",
+          "Details about equivalency tests you offer or accept (GCSEs)" => "We accept Equivalency Testing tests.",
           "How do you decide which schools to place trainees in?" => "We match on travel time.",
           "How much time will they spend in each school?" => "Two terms in each school.",
           "Where will theoretical training take place? (optional)" => "At our Frenchay campus.",
@@ -121,6 +137,47 @@ module Exports
             ["Salaried course", nil, nil],
           ],
         )
+      end
+
+      it "omits the A level columns, which no course in the cycle is asked about" do
+        create(:course, :fee, provider:, name: "Chemistry")
+
+        expect(rows.headers).not_to include("What A level or equivalent qualification is required?")
+      end
+
+      context "when the provider runs a teacher degree apprenticeship" do
+        it "carries the A levels that course asks for" do
+          create(:course, :fee, :with_teacher_degree_apprenticeship, :with_a_level_requirements, provider:, name: "Chemistry",
+                                                                                                 additional_a_level_equivalencies: "We accept the Access to HE Diploma.")
+
+          expect(rows.first.to_h).to include(
+            "What A level or equivalent qualification is required?" => "Any subject - Grade A or above",
+            "Will you consider candidates with pending A levels?" => "Yes",
+            "Will you consider candidates who need to take an equivalency test for their A levels?" => "Yes",
+            "Details about equivalency tests you offer or accept (A levels)" => "We accept the Access to HE Diploma.",
+          )
+        end
+
+        it "leaves the A level columns empty for a course that is never asked about them" do
+          create(:course, :fee, :with_teacher_degree_apprenticeship, :with_a_level_requirements, provider:, name: "Apprenticeship")
+          create(:course, :fee, provider:, name: "Biology")
+
+          expect(rows.find { |row| row["Course name"] == "Biology" }.to_h).to include(
+            "What A level or equivalent qualification is required?" => nil,
+            "Will you consider candidates with pending A levels?" => nil,
+          )
+        end
+
+        it "lists every A level a course asks for, one to a line" do
+          create(:course, :fee, :with_teacher_degree_apprenticeship, provider:, name: "Chemistry", a_level_subject_requirements: [
+            { uuid: SecureRandom.uuid, subject: "any_science_subject", minimum_grade_required: "B" },
+            { uuid: SecureRandom.uuid, subject: "other_subject", other_subject: "Chemistry", minimum_grade_required: "A*" },
+          ])
+
+          expect(rows.first["What A level or equivalent qualification is required?"]).to eq(
+            "Any science subject - Grade B or above\nChemistry - Grade A*",
+          )
+        end
       end
 
       it "omits school experience, which no course in the cycle can be asked for" do
