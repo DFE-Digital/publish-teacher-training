@@ -147,8 +147,10 @@ RSpec.describe ALevelRowComponent do
     context "when a_level_subject_requirements is blank" do
       let(:attributes) { { a_level_subject_requirements: [] } }
 
-      it "renders the error message for a_level_subject_requirements" do
-        expect(rendered_component).to have_text(I18n.t("course.a_levels_wizard/steps/#{component.wizard_step(:a_level_subject_requirements)}.heading"))
+      it "renders the error message for a_level_subject_requirements, reading the same as the blue prompt" do
+        expect(rendered_component).to have_no_text(I18n.t("course.a_levels_wizard/steps/#{component.wizard_step(:a_level_subject_requirements)}.heading"))
+        expect(rendered_component).to have_no_css(".app-inset-text__title")
+        expect(rendered_component).to have_text(I18n.t("publish.providers.courses.description_content.enter_a_levels"))
         expect(rendered_component).to have_link(
           component.errors[:a_level_subject_requirements].first,
           href: publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
