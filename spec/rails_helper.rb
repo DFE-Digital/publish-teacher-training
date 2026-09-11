@@ -159,7 +159,7 @@ RSpec.configure do |config|
   end
 
   config.around do |example|
-    if (time = example.metadata[:travel])
+    if (time = example.metadata[:travel] || CycleTimetableHelpers.env_cycle_period)
       Timecop.travel(time) do
         example.run
       end
