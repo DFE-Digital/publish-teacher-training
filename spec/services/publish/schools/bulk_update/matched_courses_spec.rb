@@ -44,6 +44,15 @@ describe Publish::Schools::BulkUpdate::MatchedCourses do
       expect(matched(course).updatable.first.read_attribute(:content_status)).to eq("draft")
     end
 
+    # The table reads what the decorator adds - a primary course's age range -
+    # so the rows go out the way the course list sends its own: decorated.
+    it "is decorated, as the course list's rows are" do
+      course = course_with("Ash")
+
+      expect(matched(course).updatable.first).to respond_to(:age_range)
+      expect(matched(course, removed: %w[Ash]).excluded).to all(respond_to(:age_range))
+    end
+
     it "is only this course when that is the scope" do
       course = course_with("Ash")
       course_with("Beech")

@@ -43,8 +43,11 @@ module Publish
 
         attr_reader :scope, :added_uuids, :removed_uuids
 
+        # Decorated on the way out, as Publish::CourseList sends its own rows:
+        # the table reads what the decorator adds, an age range under a
+        # primary course among them.
         def rows
-          @rows ||= Publish::Courses::Query.call(provider:, params: { ids: matched_ids }).to_a
+          @rows ||= Publish::Courses::Query.call(provider:, params: { ids: matched_ids }).map(&:decorate)
         end
 
         def matched_ids
