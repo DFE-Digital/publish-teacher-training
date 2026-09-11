@@ -12,7 +12,7 @@ class GcseRequirements < ViewComponent::Base
   def inset_text_css_classes
     messages = errors&.values&.flatten
 
-    if messages&.include?("Enter GCSE requirements")
+    if messages&.include?(I18n.t("activerecord.errors.models.course.attributes.base.gcse_requirements_not_publishable"))
       "app-inset-text--narrow-border app-inset-text--error"
     else
       "app-inset-text--narrow-border app-inset-text--important"
