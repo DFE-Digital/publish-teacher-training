@@ -117,25 +117,22 @@ en:
         two_two_degree: 2:2 bachelor’s degree
         third_class_degree: Bachelor’s degree
         degree_not_required: Bachelor’s degree
-        above_or_equivalent_qualification_html:
-          <br>
+        above_or_equivalent_qualification_html: <br>
           <span class="govuk-hint govuk-!-font-size-16">
-            or above or equivalent qualification
+          or above or equivalent qualification
           </span>
-        equivalent_qualification_html:
-          <br>
+        equivalent_qualification_html: <br>
           <span class="govuk-hint govuk-!-font-size-16">
-            or equivalent qualification
+          or equivalent qualification
           </span>
-        third_or_above_html:
-          <br>
+        third_or_above_html: <br>
           <span class="govuk-hint govuk-!-font-size-16">
-            or equivalent qualification
+          or equivalent qualification
           </span>
           <br>
           <br>
           <span class="govuk-hint govuk-!-font-size-16">
-            This should be an honours degree (Third or above), or equivalent
+          This should be an honours degree (Third or above), or equivalent
           </span>
     courses:
       financial_support:
@@ -149,7 +146,7 @@ en:
         caption: "%{provider_name}"
         heading: School placements for %{course_name_and_code}
         schools_to_be_placed: You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.
-        schools_you_can_choose: 'The schools you can choose from are:'
+        schools_you_can_choose: "The schools you can choose from are:"
       school_placements_advice:
         view:
           heading: Where your school placements will take place
@@ -293,7 +290,7 @@ en:
   continue: "Continue"
   change_organisation: "Change organisation"
   flash:
-      updated: "%{resource} updated"
+    updated: "%{resource} updated"
   courses:
     generate_course_name_service:
       further_education_title: "Further education"
@@ -313,6 +310,7 @@ en:
           one: "1 potential %{school_term} school"
           other: "%{count} potential %{school_term} schools"
         distance: "%{distance} from %{location}"
+        distance_from_centre: "%{distance} from the centre of %{location}"
         placement_hint_html: Search by city, town or postcode to find the nearest potential %{school_term} school
       fee_key: Fee or salary
       fee_value:
@@ -332,12 +330,20 @@ en:
       experience_value: Required or strongly recommended
       qualification_key: Qualification awarded
       qualification_value:
-        qts_html: <abbr title='Qualified teacher status'>QTS</abbr> only
+        qts_html: <abbr title='Qualified teacher status'>QTS</abbr>
         pgce_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate certificate in education'>PGCE</abbr>
         pgde_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate diploma in education'>PGDE</abbr>
         pgce_html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         pgde_html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         undergraduate_degree_with_qts_html: Teacher degree apprenticeship with <abbr title='Qualified teacher status'>QTS</abbr>
+      study_mode_value:
+        full_time: Full time
+        part_time: Part time
+        full_time_or_part_time: Full time or part time
+      funding_value:
+        salary: Salary
+        apprenticeship: Apprenticeship
+        fee: Fee-paying
       degree_requirements_key: Degree required
       degree_requirements_value:
         postgraduate:
@@ -527,7 +533,7 @@ en:
           index: "Data exports"
     filter:
       subjects:
-        text_search: 'Subject name'
+        text_search: "Subject name"
       candidates:
         text_search: "Email address"
         has_email_alerts: "Has active email alerts"
@@ -879,8 +885,8 @@ en:
               blank: "Provider type can't be blank"
               format: Accredited provider cannot be a school
             accredited:
-              format: '%{message}'
-              invalid_provider_type: 'Accredited provider must not have Provider type school'
+              format: "%{message}"
+              invalid_provider_type: "Accredited provider must not have Provider type school"
             email:
               blank: "^Enter email address"
             website:
