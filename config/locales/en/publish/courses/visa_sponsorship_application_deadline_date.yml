@@ -2,9 +2,6 @@ en:
   publish:
     courses:
       visa_sponsorship_application_deadline_date:
-        new:
-          title: Date that applications close for visa sponsored candidates
-          legend: What date will applications that require visa sponsorship close?
         edit:
           title: Date that applications close for visa sponsored candidates
           legend: What date will applications that require visa sponsorship close?

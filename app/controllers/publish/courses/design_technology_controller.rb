@@ -5,17 +5,7 @@ module Publish
     class DesignTechnologyController < ApplicationController
       decorates_assigned :course
       before_action :build_course, only: %i[edit update]
-      # rubocop:disable Rails/LexicallyScopedActionFilter
-      before_action :build_course_params, only: [:continue]
-      # rubocop:enable Rails/LexicallyScopedActionFilter
       include CourseBasicDetailConcern
-
-      def new
-        authorize(@provider, :can_create_course?)
-        return if has_design_technology_subject?
-
-        redirect_to next_step
-      end
 
       def edit
         authorize(provider)
@@ -66,19 +56,6 @@ module Publish
         end
       end
 
-      def back
-        authorize(@provider, :edit?)
-        if has_design_technology_subject?
-          redirect_to new_publish_provider_recruitment_cycle_courses_design_technology_path(path_params)
-        else
-          redirect_to @back_link_path
-        end
-      end
-
-      def current_step
-        :design_technology
-      end
-
     private
 
       def sorted_subject_ids
@@ -100,30 +77,12 @@ module Publish
         )
       end
 
-      def error_keys
-        [:design_technology_subjects]
-      end
-
       def design_technology_subject_id
         @design_technology_subject_id ||= @course.edit_course_options[:design_technology_subjects].id
       end
 
-      def has_design_technology_subject?
-        @course.course_subjects.any? { |subject| subject.subject.id == design_technology_subject_id }
-      end
-
       def param_subject_ids
         params.dig(:course, :subjects_ids)&.map(&:to_i) || []
-      end
-
-      def build_course_params
-        build_new_course
-
-        params[:course][:subjects_ids] = SortSubjectParamsService.call(
-          course: @course,
-          subjects_ids: params[:course][:subjects_ids],
-          design_technology_ids: params[:course].delete(:design_technology_ids),
-        )
       end
     end
   end

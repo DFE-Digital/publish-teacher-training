@@ -26,8 +26,6 @@ en:
         training_with_disabilities: Training with disabilities
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
       ratifying_provider:
-        new:
-          title: Accredited provider – %{name_and_code}
         edit:
           title: Accredited provider
           add: Add accredited provider
@@ -54,8 +52,6 @@ en:
           one: "%{count} school attached"
           other: "%{count} schools attached"
         new:
-          schools_selection: The more schools you select, the more searches your course will appear in. You should only add schools that are relevent to this course.
-          searches_by_location: 60% of searches are by location.
           warning_text: "If you do not add all relevant %{school_type} schools, you may miss out on potential candidates."
           selection: Select all that apply
     providers:
@@ -67,10 +63,6 @@ en:
         visa_sponsorship: Visa sponsorship
         selectable_school_label: Show locations and allow candidates to select a preferred school
       courses:
-        accredited_provider:
-          show:
-            back: Back to %{course_name} (%{course_code})
-            heading: About %{provider_name}
         providers:
           show:
             back: Back to %{course_name} (%{course_code})

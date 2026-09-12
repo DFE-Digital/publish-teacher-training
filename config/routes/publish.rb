@@ -96,84 +96,11 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
       put "/about", on: :member, to: "providers#update"
       get "/details", on: :member, to: "providers#details"
 
-      resource :courses, only: %i[create] do
-        resource :outcome, on: :member, only: %i[new], controller: "courses/outcome" do
-          get "continue"
-        end
-        resource :entry_requirements, on: :member, only: %i[new], controller: "courses/entry_requirements", path: "entry-requirements" do
-          get "continue"
-        end
-        resource :study_mode, on: :member, only: %i[new], controller: "courses/study_mode", path: "full-part-time" do
-          get "continue"
-        end
-        resource :level, on: :member, only: %i[new], controller: "courses/level" do
-          get "continue"
-        end
-        resource :schools, on: :member, only: %i[new], controller: "courses/schools" do
-          get "back"
-          get "continue"
-        end
-        resource :study_sites, on: :member, only: %i[new], controller: "courses/study_sites", path: "study-sites" do
-          get "back"
-          get "continue"
-        end
-        resource :start_date, on: :member, only: %i[new], controller: "courses/start_date", path: "start-date" do
-          get "back"
-          get "continue"
-        end
-        resource :age_range, on: :member, only: %i[new], controller: "courses/age_range", path: "age-range" do
-          get "continue"
-        end
-        resource :subjects, on: :member, only: %i[new], controller: "courses/subjects", path: "subjects" do
-          get "continue"
-        end
-        resource :engineers_teach_physics, on: :member, only: %i[new], controller: "courses/engineers_teach_physics", path: "engineers-teach-physics" do
-          get "continue"
-          get "back"
-        end
-        resource :modern_languages, on: :member, only: %i[new], controller: "courses/modern_languages", path: "modern-languages" do
-          get "back"
-          get "continue"
-        end
-        resource :design_technology, on: :member, only: %i[new], controller: "courses/design_technology", path: "design-technology" do
-          get "back"
-          get "continue"
-        end
-        resource :apprenticeship, on: :member, only: %i[new], controller: "courses/apprenticeship" do
-          get "continue"
-        end
-
-        resource :ratifying_provider, on: :member, only: %i[new], controller: "courses/ratifying_provider", path: "ratifying-provider" do
-          get "continue"
-        end
-
-        resource :student_visa_sponsorship, on: :member, controller: "courses/student_visa_sponsorship", path: "student-visa-sponsorship" do
-          get "back"
-          get "continue"
-        end
-        resource :skilled_worker_visa_sponsorship, on: :member, controller: "courses/skilled_worker_visa_sponsorship", path: "skilled-worker-visa-sponsorship" do
-          get "continue"
-        end
-        resource :funding_type, on: :member, only: %i[new], controller: "courses/funding_type", path: "funding-type" do
-          get "continue"
-        end
-
-        resource :visa_sponsorship_application_deadline_required, on: :member, only: %i[new], controller: "courses/visa_sponsorship_application_deadline_required", path: "visa-sponsorship-application-deadline-required" do
-          get "continue"
-        end
-
-        resource :visa_sponsorship_application_deadline_date, on: :member, only: %i[new], controller: "courses/visa_sponsorship_application_deadline_date", path: "visa-sponsorship-application-deadline-date" do
-          get "continue"
-        end
-
-        get "confirmation"
-      end
-
       resource :course_wizard, only: %i[new], controller: "course_wizards"
       get "course_wizard/:state_key/:step", to: "course_wizards#show", as: :course_wizard
       patch "course_wizard/:state_key/:step", to: "course_wizards#update"
 
-      resources :courses, param: :code, only: %i[index new create show] do
+      resources :courses, param: :code, only: %i[index show] do
         get "/download-course-information", on: :collection, to: "courses/exports#course_information", as: :download_course_information
         get "/download-course-schools", on: :collection, to: "courses/exports#schools", as: :download_course_schools
 

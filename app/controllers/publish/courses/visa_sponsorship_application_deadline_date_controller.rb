@@ -5,14 +5,6 @@ module Publish
     class VisaSponsorshipApplicationDeadlineDateController < ApplicationController
       include CourseBasicDetailConcern
 
-      def new
-        authorize(@provider, :can_create_course?)
-        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build(
-          **date_params_for_form,
-          recruitment_cycle: @provider.recruitment_cycle,
-        )
-      end
-
       def edit
         authorize(provider)
         @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.new(
@@ -73,20 +65,6 @@ module Publish
 
       def course_nav_params
         [course.provider_code, course.recruitment_cycle_year, course.course_code]
-      end
-
-      def current_step
-        :visa_sponsorship_application_deadline_at
-      end
-
-      def errors
-        # This method is only used in the CourseBasicDetailConcern for the new / create methods.
-        @deadline_form = VisaSponsorshipApplicationDeadlineDateForm.build(
-          **date_params_for_form,
-          recruitment_cycle: @provider.recruitment_cycle,
-        )
-        @deadline_form.validate
-        @deadline_form.errors.messages
       end
 
       def deadline_params
