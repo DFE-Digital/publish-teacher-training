@@ -55,6 +55,20 @@ module Find
         apply_deadline: Time.zone.local(2027, 9, 21, 18), # CONFIRMED
         find_closes: Time.zone.local(2027, 10, 4).end_of_day, # CONFIRMED
       },
+      2028 => {
+        find_opens: Time.zone.local(2027, 10, 5, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2027, 10, 12, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2028, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2028, 9, 19, 18), # CONFIRMED
+        find_closes: Time.zone.local(2028, 10, 2).end_of_day, # CONFIRMED
+      },
+      2029 => {
+        find_opens: Time.zone.local(2028, 10, 3, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2028, 10, 10, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2029, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2029, 9, 18, 18), # CONFIRMED
+        find_closes: Time.zone.local(2029, 10, 1).end_of_day, # CONFIRMED
+      },
     }.freeze
 
     def self.current_year
@@ -198,10 +212,6 @@ module Find
       real_schedule_for(year.to_i).fetch(name)
     end
 
-    def self.last_recruitment_cycle_year?(year)
-      year == CYCLE_DATES.keys.last
-    end
-
     def self.cycle_year_range(year = current_year)
       "#{year} to #{year + 1}"
     end
@@ -220,7 +230,5 @@ module Find
     def self.real_schedule_for(year = current_year)
       CYCLE_DATES[year]
     end
-
-    private_class_method :last_recruitment_cycle_year?
   end
 end

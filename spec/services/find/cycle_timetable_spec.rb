@@ -57,14 +57,24 @@ module Find
         expect(described_class.cycle_year_for_time(time)).to eq(2027)
       end
 
+      it "returns 2028 for the exact time find opens" do
+        time = Time.zone.local(2027, 10, 5, 9, 0, 0)
+        expect(described_class.cycle_year_for_time(time)).to eq(2028)
+      end
+
+      it "returns 2029 for the exact time find opens" do
+        time = Time.zone.local(2028, 10, 3, 9, 0, 0)
+        expect(described_class.cycle_year_for_time(time)).to eq(2029)
+      end
+
       it "returns nil for a time before any defined cycle" do
         time = Time.zone.local(2019, 1, 1, 12, 0, 0)
         expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2019-01-01 12:00:00")
       end
 
       it "returns nil for a time after the last defined cycle" do
-        time = Time.zone.local(2028, 1, 1, 12, 0, 0)
-        expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2028-01-01 12:00:00")
+        time = Time.zone.local(2030, 1, 1, 12, 0, 0)
+        expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2030-01-01 12:00:00")
       end
     end
 
@@ -272,6 +282,43 @@ module Find
 
       it "accepts the year as a string" do
         expect(described_class.current_or_previous_year?(described_class.current_year.to_s)).to be(true)
+      end
+    end
+
+    describe "CYCLE_DATES" do
+      let(:cycles) { described_class::CYCLE_DATES }
+
+      it "opens Apply one week after Find in every cycle" do
+        offenders = cycles.reject { |_, dates| dates[:apply_opens].to_date == dates[:find_opens].to_date + 7 }
+
+        expect(offenders.keys).to be_empty
+      end
+
+      it "closes Find the day before the next cycle opens" do
+        offenders = cycles.reject do |year, dates|
+          next_cycle = cycles[year + 1]
+          next_cycle.nil? || dates[:find_closes].to_date + 1 == next_cycle[:find_opens].to_date
+        end
+
+        expect(offenders.keys).to be_empty
+      end
+
+      it "closes Find thirteen days after the Apply deadline" do
+        offenders = cycles.reject do |_, dates|
+          deadline = dates[:apply_deadline] || dates[:apply_1_deadline]
+          dates[:find_closes].to_date == deadline.to_date + 13
+        end
+
+        expect(offenders.keys).to be_empty
+      end
+
+      it "sets the first deadline banner between Find opening and the Apply deadline" do
+        offenders = cycles.reject do |_, dates|
+          deadline = dates[:apply_deadline] || dates[:apply_1_deadline]
+          dates[:first_deadline_banner].between?(dates[:find_opens], deadline)
+        end
+
+        expect(offenders.keys).to be_empty
       end
     end
   end
