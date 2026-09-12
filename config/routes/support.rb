@@ -46,6 +46,8 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       end
 
       resources :courses do
+        get "/download-full-course-information", on: :collection, to: "courses/exports#full_course_information", as: :download_full_course_information
+
         resource :revert_withdrawal, only: %i[edit update], path: "revert-withdrawal", controller: "revert_withdrawal"
       end
 

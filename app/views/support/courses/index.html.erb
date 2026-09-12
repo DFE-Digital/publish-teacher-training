@@ -45,3 +45,43 @@
 <% end %>
 
 <%= govuk_pagination(pagy: @pagy) %>
+
+<% if @courses.any? %>
+  <div class="govuk-grid-row govuk-!-margin-top-6">
+    <div class="govuk-grid-column-full">
+      <div class="app-status-box">
+        <h2 class="govuk-heading-m"><%= t(".downloads.heading") %></h2>
+        <p class="govuk-body">
+          <%= govuk_link_to(
+            t(".downloads.course_information"),
+            download_course_information_publish_provider_recruitment_cycle_courses_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              format: :csv,
+            ),
+          ) %>
+        </p>
+        <p class="govuk-body">
+          <%= govuk_link_to(
+            t(".downloads.schools"),
+            download_course_schools_publish_provider_recruitment_cycle_courses_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              format: :csv,
+            ),
+          ) %>
+        </p>
+        <p class="govuk-body">
+          <%= govuk_link_to(
+            t(".downloads.full_course_information"),
+            download_full_course_information_support_recruitment_cycle_provider_courses_path(
+              @provider.recruitment_cycle_year,
+              @provider,
+              format: :csv,
+            ),
+          ) %>
+        </p>
+      </div>
+    </div>
+  </div>
+<% end %>
