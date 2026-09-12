@@ -287,6 +287,8 @@ private
 
     has_apply_for_course_buttons
 
+    has_tracked_visa_sponsorship_links
+
     expect(find_course_show_page).to have_no_content("When you apply you’ll need these codes for the Choices section of your application form")
 
     expect(find_course_show_page).not_to have_end_of_cycle_notice
@@ -308,6 +310,34 @@ private
       expect(uri.path).to eq("/track_click")
       expect(params["url"]).to eq(expected_url)
       expect(params["utm_content"]).to eq(expected_utm_contents[i])
+    end
+  end
+
+  def has_tracked_visa_sponsorship_links
+    expected_links = [
+      {
+        text: "find out more about the types of visa you can apply for",
+        url: I18n.t("find.get_into_teaching.url_visas_for_non_uk_trainees"),
+        utm_content: "student_visa_available_types_of_visa",
+      },
+      {
+        text: "contact the training provider",
+        url: find_provider_path(provider.provider_code, @course.course_code),
+        utm_content: "student_visa_available_contact_the_training_provider",
+      },
+    ]
+
+    expected_links.each do |expected|
+      # The visa sponsorship section is inside a collapsed details element.
+      links = all("a", text: expected[:text], exact_text: true, visible: :all)
+      expect(links.size).to eq(1)
+
+      uri = URI(links.first[:href])
+      params = Rack::Utils.parse_query(uri.query)
+
+      expect(uri.path).to eq("/track_click")
+      expect(params["url"]).to eq(expected[:url])
+      expect(params["utm_content"]).to eq(expected[:utm_content])
     end
   end
 

@@ -31,7 +31,7 @@ module Courses
     def build_link(values)
       {
         text: translate("radius_in_miles", count: values[:radius], course_count: format_course_count(values[:count])),
-        url: find_results_path(values[:radius]),
+        url: tracked_results_path(values[:radius]),
       }
     end
 
@@ -49,10 +49,21 @@ module Courses
       translate(key, count:)
     end
 
+    def tracked_results_path(radius)
+      url_helpers.find_track_click_path(
+        utm_content: "no_results_radius_quick_link_#{radius}_miles",
+        url: find_results_path(radius),
+      )
+    end
+
     def find_results_path(radius)
       query = @request_query.dup
       query["radius"] = radius
-      Rails.application.routes.url_helpers.find_results_path(**query)
+      url_helpers.find_results_path(**query)
+    end
+
+    def url_helpers
+      Rails.application.routes.url_helpers
     end
 
     def translate(key, **options)

@@ -100,6 +100,13 @@ RSpec.describe "No search results", :js, service: :find do
   end
 
   def then_i_click_on_radius_quick_link
+    link = find_link("100 miles (1 course)")
+    uri = URI(link[:href])
+    query = Rack::Utils.parse_query(uri.query)
+
+    expect(uri.path).to eq("/track_click")
+    expect(query["utm_content"]).to eq("no_results_radius_quick_link_100_miles")
+
     click_link "100 miles (1 course)"
     expect(page).to have_title("1 mathematics course in London - Find teacher training courses - GOV.UK")
     expect(page).to have_content("Mathematics - Reading")

@@ -5,7 +5,7 @@
     <% if is_preview %>
       <%= govuk_link_to t(".content.find_out_about_school_placement_activities"), t("find.get_into_teaching.url_school_placement_activities") %>
     <% else %>
-      <%= govuk_link_to t(".content.find_out_about_school_placement_activities"), find_track_click_path(utm: "school_placement_activities", url: t("find.get_into_teaching.url_school_placement_activities")) %>
+      <%= govuk_link_to t(".content.find_out_about_school_placement_activities"), find_track_click_path(utm_content: "school_placement_activities", url: t("find.get_into_teaching.url_school_placement_activities")) %>
     <% end %>
   </p>
 <% end %>

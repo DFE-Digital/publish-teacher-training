@@ -23,7 +23,7 @@ describe Shared::Courses::InterviewPreparationComponent, type: :component do
         expect(result).to have_link(
           "Find out how to prepare for your interview.",
           href: find_track_click_path(
-            utm: "interview_preparation",
+            utm_content: "interview_preparation",
             url: I18n.t("find.get_into_teaching.url_interview_preparation"),
           ),
         )
