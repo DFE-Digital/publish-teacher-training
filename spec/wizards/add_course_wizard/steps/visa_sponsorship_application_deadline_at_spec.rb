@@ -17,6 +17,13 @@ RSpec.describe CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt do
       expect(wizard_step).to be_valid
     end
 
+    it "is valid when visa_sponsorship_application_deadline_at is the last day of the recruitment cycle" do
+      last_day = Find::CycleTimetable.date(:apply_deadline, recruitment_cycle_year).to_date
+      set_date_parts(last_day.year.to_s, last_day.month.to_s, last_day.day.to_s)
+
+      expect(wizard_step).to be_valid
+    end
+
     it "is invalid when all date fields are blank" do
       set_date_parts("", "", "")
 
