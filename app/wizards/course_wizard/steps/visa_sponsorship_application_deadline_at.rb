@@ -64,7 +64,7 @@ class CourseWizard
       def within_range
         set_date
 
-        unless @date.between?(first_valid_datetime, last_valid_datetime)
+        unless @date.to_date.between?(first_valid_datetime.to_date, last_valid_datetime.to_date)
           errors.add(
             :visa_sponsorship_application_deadline_at,
             :not_in_range,
