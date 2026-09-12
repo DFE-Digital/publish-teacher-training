@@ -32,6 +32,10 @@ bg_jobs:
     cron: "0 3 * * *" # daily at 03:00
     class: "CleanupRecentSearchesJob"
     queue: default
+  cleanup_school_bulk_update_drafts:
+    cron: "0 3 * * *" # daily at 03:00
+    class: "CleanupSchoolBulkUpdateDraftsJob"
+    queue: default
 skylight:
   enable: true
 

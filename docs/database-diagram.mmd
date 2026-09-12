@@ -164,6 +164,16 @@ erDiagram
 		integer id PK
 		integer provider_school_id FK
 	}
+	"Course::SchoolBulkUpdateDraft" {
+		uuid baseline_uuids
+		integer course_id FK
+		datetime expires_at
+		integer id PK
+		uuid school_uuids
+		string scope
+		integer user_id FK
+		uuid uuid
+	}
 	CourseEnrichment {
 		integer course_id FK
 		integer created_by_user_id FK
@@ -483,6 +493,8 @@ erDiagram
 	Provider ||--}o Course : ""
 	Course ||--}o CourseSubject : ""
 	Course ||--}o "Course::School" : ""
+	Course ||--}o "Course::SchoolBulkUpdateDraft" : ""
+	User ||--}o "Course::SchoolBulkUpdateDraft" : ""
 	Course o|..}o GiasSchool : ""
 	Course o|..}| Subject : ""
 	Course o|..}o FinancialIncentive : ""
