@@ -42,6 +42,17 @@
   - If a feature is not ready for usage, it should be hidden behind a `Settings.features.x` configuration.
   - If a feature needs to be turned on or off, it should be hidden behind a feature flag.
 
+### Review apps
+
+- Add the `deploy` label to a PR to deploy it as a review app. Without the label the deployment job is skipped.
+
+- The deployment runs after the lint, analytics, JavaScript and Rails test jobs pass, so a review app only
+  appears once CI is green. It redeploys on each new push to the branch.
+
+- Once deployment is successful, a comment is posted to the PR with the Publish, Find and API review app URLs.
+
+- Prototype branches use a different label and bypass the code quality checks — see [prototype branches](prototype-branches.md).
+
 ### Things to check before marking a PR as ready for review
 
 - Renaming and removing database columns requires multi-step PRs:
