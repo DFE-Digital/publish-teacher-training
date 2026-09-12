@@ -184,21 +184,23 @@ RSpec.describe "Publishing courses errors" do
 
   def then_i_see_a_level_subject_is_required
     and_i_see_that_i_need_to_enter_a_level_requirements
-    expect(page).to have_content("What A level or equivalent qualification is required?")
+    # With no A levels at all the red row reads exactly as the blue prompt does,
+    # so there is no question above it.
+    expect(page).to have_no_content("What A level or equivalent qualification is required?")
   end
 
   def and_i_see_that_i_need_to_enter_a_level_requirements
     within ".govuk-error-summary" do
-      expect(page).to have_content("Enter A level requirements")
+      expect(page).to have_content("Enter A levels and equivalency test requirements")
     end
   end
 
   def and_i_see_a_level_is_required_in_a_level_row
-    expect(page).to have_content("Enter A level requirements").twice
+    expect(page).to have_content("Enter A levels and equivalency test requirements").twice
   end
 
   def when_i_click_on_the_a_level_is_required_error
-    click_on "Enter A level requirements", match: :first
+    click_on "Enter A levels and equivalency test requirements", match: :first
   end
 
   def and_i_see_a_level_required_error

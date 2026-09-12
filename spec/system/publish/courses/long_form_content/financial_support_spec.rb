@@ -119,7 +119,7 @@ RSpec.describe "Updating fees and financial support", service: :publish do
     additional_fees: "Paragraph 2",
     financial_support: "Paragraph 3"
   )
-    find_link("Change Fees and financial support").click
+    find_link("Change fees and financial support").click
     expect(page).to have_content("Fees and financial support")
 
     expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fields/fees-and-financial-support")
@@ -154,7 +154,7 @@ RSpec.describe "Updating fees and financial support", service: :publish do
   end
 
   def then_change_links_use_new_routes
-    page.find_link("Change Fees and financial support").click
+    page.find_link("Change fees and financial support").click
     expect(page).to have_current_path("/publish/organisations/#{@course.provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/fields/fees-and-financial-support")
   end
 

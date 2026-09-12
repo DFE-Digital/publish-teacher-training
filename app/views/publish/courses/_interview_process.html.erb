@@ -2,18 +2,20 @@
   summary_list,
   :course,
   t("publish.providers.courses.description_content.interview_location_label"),
-  value_provided?(display_interview_location(course.interview_location)),
+  display_interview_location(course.interview_location),
   %w[interview_location],
   action_path: course.is_withdrawn? ? nil : fields_interview_process_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
   action_visually_hidden_text: t("publish.providers.courses.description_content.interview_process_hidden_text"),
+  prompt: t("publish.providers.courses.description_content.enter_interview_location"),
 ) %>
 
 <% enrichment_summary(
   summary_list,
   :course,
   t("publish.providers.courses.description_content.v2_interview_process_label"),
-  value_provided?(markdown(course.interview_process)),
+  markdown(course.interview_process),
   %w[interview_process],
   action_path: course.is_withdrawn? ? nil : fields_interview_process_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-  action_visually_hidden_text: t("publish.providers.courses.description_content.v2_interview_process_label"),
+  action_visually_hidden_text: t("publish.providers.courses.description_content.v2_interview_process_hidden_text"),
+  prompt: t("publish.providers.courses.description_content.enter_interview_process"),
 ) %>
