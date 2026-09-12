@@ -1228,10 +1228,10 @@ private
     return if visa_sponsorship_application_deadline_at.nil?
 
     if visa_sponsorship_application_deadline_at.respond_to?(:to_time)
-      start_date = provider.recruitment_cycle.application_start_date.end_of_day.change(hour: 9)
-      end_date = provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18)
+      start_date = provider.recruitment_cycle.application_start_date.to_date
+      end_date = provider.recruitment_cycle.application_end_date.to_date
 
-      return if visa_sponsorship_application_deadline_at.between?(start_date, end_date)
+      return if visa_sponsorship_application_deadline_at.to_date.between?(start_date, end_date)
 
       errors.add(:visa_sponsorship_application_deadline_at, :within_range)
     else

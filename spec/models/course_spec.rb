@@ -444,19 +444,25 @@ describe Course do
       let(:end_of_cycle) { provider.recruitment_cycle.application_end_date.end_of_day.change(hour: 18) }
 
       it "is invalid if date is before the recruitment cycle starts" do
-        course.visa_sponsorship_application_deadline_at = start_of_cycle - 1.hour
+        course.visa_sponsorship_application_deadline_at = start_of_cycle.to_date - 1.day
         course.validate
         expect(course.errors[:visa_sponsorship_application_deadline_at]).to eq ["Enter a date within the recruitment cycle"]
       end
 
       it "is invalid if date is after the recruitment cycle ends" do
-        course.visa_sponsorship_application_deadline_at = end_of_cycle + 1.hour
+        course.visa_sponsorship_application_deadline_at = end_of_cycle.to_date + 1.day
         course.validate
         expect(course.errors[:visa_sponsorship_application_deadline_at]).to eq ["Enter a date within the recruitment cycle"]
       end
 
       it "is valid if within cycle" do
         course.visa_sponsorship_application_deadline_at = end_of_cycle - 1.hour
+        course.validate
+        expect(course.errors[:visa_sponsorship_application_deadline_at].blank?).to be true
+      end
+
+      it "is valid on the last day of the recruitment cycle" do
+        course.visa_sponsorship_application_deadline_at = end_of_cycle.to_date.end_of_day
         course.validate
         expect(course.errors[:visa_sponsorship_application_deadline_at].blank?).to be true
       end
