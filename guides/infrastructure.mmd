@@ -1,0 +1,108 @@
+graph LR
+
+subgraph Users["Users"]
+  direction TB
+  Candidates["Candidates<br/>(Find)"]
+  Providers["Training Providers<br/>(Publish)"]
+  API_Consumers["API Consumers"]
+  DfE_Admins["DfE Support Staff"]
+end
+
+subgraph Azure_AKS["Azure AKS — Production Cluster<br/>s189p01-tsc-production-aks | Namespace: bat-production"]
+  direction TB
+  subgraph Web_Pods["Web Application Pods (x8, 4Gi each)"]
+    Find_App["Find Service<br/>Rails 8.1 / Ruby 3.4"]
+    Publish_App["Publish Service<br/>Rails 8.1 / Ruby 3.4"]
+    API_App["Public API<br/>REST / JSON:API"]
+  end
+  subgraph Worker_Pods["Sidekiq Worker Pods (x2, 1.5Gi each)"]
+    Sidekiq["Sidekiq Workers<br/>+ sidekiq-cron"]
+  end
+  Health["/ping + /healthcheck"]
+end
+
+subgraph Azure_Data["Azure Managed Data"]
+  direction TB
+  Postgres["PostgreSQL Flexible<br/>GP_Standard_D4ds_v5<br/>+ PostGIS | HA enabled"]
+  Redis_Worker["Redis (Worker)<br/>noeviction"]
+  Redis_Cache["Redis (Cache)"]
+  KeyVault["Key Vault<br/>s189p01-ptt-pd-kv"]
+  Blob["Blob Storage<br/>DB Backups (7-day)<br/>UK South, LRS"]
+end
+
+subgraph External["External Services"]
+  direction TB
+  subgraph Auth["Authentication"]
+    OneLogin["GOV.UK One Login<br/>OIDC"]
+    DfESignIn["DfE Sign-in<br/>OIDC"]
+  end
+  subgraph Comms["Notifications"]
+    Notify["GOV.UK Notify<br/>Email / SMS"]
+  end
+  subgraph Data["Data"]
+    Google_Geo["Google Geocoding"]
+    BigQuery["Google BigQuery"]
+    Airbyte["Airbyte<br/>Data Replication"]
+    GIAS["GIAS<br/>School Import"]
+  end
+end
+
+subgraph Monitoring["Monitoring"]
+  direction TB
+  Sentry["Sentry — Errors"]
+  Skylight["Skylight — APM"]
+  Logit["Logit.io — Logs"]
+  StatusCake["StatusCake — Uptime"]
+end
+
+subgraph CI_CD["CI/CD"]
+  direction TB
+  GitHub["GitHub Actions"]
+  Docker_Reg["Container Registry"]
+end
+
+%% User traffic
+Candidates -->|HTTPS| Find_App
+Providers -->|HTTPS| Publish_App
+API_Consumers -->|HTTPS| API_App
+DfE_Admins -->|HTTPS| Publish_App
+
+%% Application to data
+Find_App --> Postgres
+Publish_App --> Postgres
+API_App --> Postgres
+Sidekiq --> Postgres
+Sidekiq --> Redis_Worker
+Find_App --> Redis_Cache
+Publish_App --> Redis_Cache
+
+%% Authentication
+Find_App --> OneLogin
+Publish_App --> DfESignIn
+
+%% External services
+Publish_App --> Notify
+Sidekiq --> Notify
+Sidekiq --> GIAS
+Find_App --> Google_Geo
+Find_App --> BigQuery
+Publish_App --> BigQuery
+Postgres -->|Replication| Airbyte --> BigQuery
+
+%% Monitoring — single connections per app
+Find_App --> Sentry
+Publish_App --> Sentry
+Find_App --> Skylight
+Publish_App --> Skylight
+Find_App --> Logit
+Publish_App --> Logit
+StatusCake --> Health
+
+%% CI/CD
+GitHub --> Docker_Reg --> Web_Pods
+Docker_Reg --> Worker_Pods
+
+%% Infrastructure
+KeyVault -.->|Secrets| Web_Pods
+KeyVault -.->|Secrets| Worker_Pods
+Postgres -.->|Backups| Blob
