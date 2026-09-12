@@ -44,6 +44,7 @@ This repo is home to three services:
 - [Monitoring](guides/monitoring.md)
 - [Healthchecks](guides/healthchecks.md)
 - [Rollover](guides/rollover.md)
+- [Cycle period testing](guides/cycle-period-testing.md)
 - [Wizards](guides/wizards)
 
 ### Infrastructure
