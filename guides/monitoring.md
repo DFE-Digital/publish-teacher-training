@@ -40,7 +40,3 @@ It is recommended to use email and password rather than SSO.
 To learn more about how you can access the logs for our services watch this workshop recorded in 2024
 
 [Logging workshop](https://educationgovuk.sharepoint.com/:v:/r/sites/TeacherServices/Shared%20Documents/Learning/Logging%20workshop-20240918_160320-Meeting%20Recording.mp4?csf=1&web=1&e=wmf6XB&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
-
-## Investigations
-
-- [Pod memory spikes, September 2026](memory-investigation-2026-09.md)
