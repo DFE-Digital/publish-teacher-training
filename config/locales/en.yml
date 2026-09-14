@@ -317,8 +317,8 @@ en:
         salary: Salary
         apprenticeship: Salary (apprenticeship)
         fee:
-          uk_fees_html: "%{value} <b>fee</b> for UK citizens"
-          international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"
+          uk_fees_html: "%{value} fee for UK citizens"
+          international_fees_html: "%{value} fee for Non-UK citizens"
       length_key: Course length
       length_value:
         OneYear: 1 year

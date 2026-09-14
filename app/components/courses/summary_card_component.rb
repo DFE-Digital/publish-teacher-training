@@ -227,11 +227,21 @@ module Courses
     end
 
     def uk_fees(fee_uk = enrichment.fee_uk_eu)
-      t(".fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
+      if fee_uk.present?
+        t(
+          ".fee_value.fee.uk_fees_html",
+          value: number_to_currency(fee_uk.to_f),
+        )
+      end
     end
 
     def international_fees(fee_international = enrichment.fee_international)
-      t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
+      if fee_international.present?
+        t(
+          ".fee_value.fee.international_fees_html",
+          value: number_to_currency(fee_international.to_f),
+        )
+      end
     end
 
     def incentive_hint
