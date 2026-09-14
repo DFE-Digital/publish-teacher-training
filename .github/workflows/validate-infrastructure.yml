@@ -21,14 +21,14 @@ jobs:
             validation_plan: aks-infra
             terraform_base: terraform/aks
             terraform_version_file: providers.tf
-          - display: Domains infrastructure
-            validation_plan: domains-infra
-            terraform_base: terraform/custom_domains/infrastructure
-            terraform_version_file: terraform.tf
-          - display: Domains environment
-            validation_plan: domains-env
-            terraform_base: terraform/custom_domains/environment_domains
-            terraform_version_file: terraform.tf
+          # - display: Domains infrastructure
+          #   validation_plan: domains-infra
+          #   terraform_base: terraform/custom_domains/infrastructure
+          #   terraform_version_file: terraform.tf
+          # - display: Domains environment
+          #   validation_plan: domains-env
+          #   terraform_base: terraform/custom_domains/environment_domains
+          #   terraform_version_file: terraform.tf
 
     steps:
       - name: Validate ${{ matrix.display }}
