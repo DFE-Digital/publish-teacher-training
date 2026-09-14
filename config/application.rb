@@ -73,6 +73,8 @@ module ManageCoursesBackend
 
     config.exceptions_app = routes
     config.active_job.queue_adapter = :sidekiq
+    # Retention only — Solid Queue is not yet the live adapter or a running worker.
+    config.solid_queue.clear_finished_jobs_after = 1.hour
 
     config.log_tags = []
     config.log_level = Settings.log_level
