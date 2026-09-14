@@ -2,10 +2,11 @@
 
 module SavedCourses
   class SummaryCardComponent < Courses::SummaryCardComponent
-    attr_reader :saved_course, :order
+    attr_reader :saved_course, :order, :current_cycle_course
 
-    def initialize(saved_course:, location: nil, short_address: nil, order: nil)
+    def initialize(saved_course:, current_cycle_course: nil, location: nil, short_address: nil, order: nil)
       @saved_course = saved_course
+      @current_cycle_course = current_cycle_course
       @order = order
       super(course: saved_course.course, location: location, short_address: short_address)
     end

@@ -37,6 +37,37 @@ RSpec.describe "Viewing my saved courses", service: :find do
           course_code: @course.course_code,
         ),
       )
+      expect(page).not_to have_link("View this year's course")
+    end
+  end
+
+  scenario "A candidate can open the same course in the current cycle from a previous-year saved course" do
+    when_i_log_in_as_a_candidate
+    and_i_have_saved_courses
+    @course.provider.update!(
+      recruitment_cycle: find_or_create(:recruitment_cycle, :previous),
+    )
+    current_course = create(
+      :course,
+      :published,
+      course_code: @course.course_code,
+      provider: create(
+        :provider,
+        provider_code: @course.provider_code,
+        recruitment_cycle: find_or_create(:recruitment_cycle),
+      ),
+    )
+
+    then_i_visit_my_saved_courses
+
+    within_first_saved_course_row do
+      expect(page).to have_link(
+        "View this year's course",
+        href: find_course_path(
+          provider_code: current_course.provider_code,
+          course_code: current_course.course_code,
+        ),
+      )
     end
   end
 

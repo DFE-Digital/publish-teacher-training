@@ -109,6 +109,24 @@
   text-align: right;
 }
 
+.app-saved-course-summary-card {
+  .govuk-summary-card__actions {
+    white-space: nowrap;
+
+    form {
+      display: inline;
+    }
+  }
+
+  @include govuk-media-query($from: tablet) {
+    .govuk-summary-card__title-wrapper {
+      display: flex;
+
+      align-items: flex-end;
+    }
+  }
+}
+
 // On small screens, stack so Delete appears below the status tag.
 // Also reduce the font size of the status tag.
 @include govuk-media-query($until: tablet) {

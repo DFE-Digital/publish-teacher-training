@@ -9,7 +9,8 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
     rendered.text.squish
   end
 
-  let(:rendered) { render_inline(described_class.new(saved_course:)) }
+  let(:rendered) { render_inline(described_class.new(saved_course:, current_cycle_course:)) }
+  let(:current_cycle_course) { nil }
 
   let(:saved_course) do
     create(
@@ -68,6 +69,37 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
 
     it "renders a previous-year tag" do
       expect(rendered).to have_css(".govuk-tag", text: "Course from a previous year")
+    end
+
+    context "when the same published course exists in the current cycle" do
+      let(:current_cycle_course) do
+        create(
+          :course,
+          :published,
+          course_code: course.course_code,
+          provider: create(
+            :provider,
+            provider_code: course.provider_code,
+            recruitment_cycle: find_or_create(:recruitment_cycle),
+          ),
+        )
+      end
+
+      it "links to the current-cycle course" do
+        expect(rendered).to have_link(
+          "View this year's course",
+          href: find_course_path(
+            provider_code: current_cycle_course.provider_code,
+            course_code: current_cycle_course.course_code,
+          ),
+        )
+      end
+    end
+
+    context "when the same course does not exist in the current cycle" do
+      it "does not render a current-cycle course link" do
+        expect(rendered).not_to have_link("View this year's course")
+      end
     end
   end
 

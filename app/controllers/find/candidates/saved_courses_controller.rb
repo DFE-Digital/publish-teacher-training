@@ -110,8 +110,26 @@ module Find
         saved_courses_query = SavedCourses::Query.new(candidate: @candidate, params: query_params)
         saved_courses = saved_courses_query.call
         @pagy, @saved_courses = pagy(saved_courses, count: saved_courses_query.count)
+        @current_cycle_courses_by_key = current_cycle_courses_by_key(@saved_courses)
         @short_address = @address&.short_address
         @order = query_params[:order]
+      end
+
+      def current_cycle_courses_by_key(saved_courses)
+        previous_cycle_courses = saved_courses
+          .map(&:course)
+          .select { |course| course.recruitment_cycle_year.to_i == Find::CycleTimetable.previous_year }
+
+        return {} if previous_cycle_courses.empty?
+
+        Course
+          .kept
+          .published
+          .with_recruitment_cycle(Find::CycleTimetable.current_year.to_s)
+          .merge(Provider.kept.where(provider_code: previous_cycle_courses.map(&:provider_code)))
+          .where(course_code: previous_cycle_courses.map(&:course_code))
+          .includes(:provider)
+          .index_by { |course| [course.provider_code, course.course_code] }
       end
 
       def send_saved_course_analytics_event
