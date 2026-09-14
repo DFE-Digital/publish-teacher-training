@@ -19,7 +19,30 @@ module Courses
     end
 
     def self.labels_for(year)
-      self.for(year).map { |month| "#{Date::MONTHNAMES[month.month]} #{month.year}" }
+      self.for(year).map { |month| label_for(month) }
+    end
+
+    # The months a course could still start in, for a course that has not picked
+    # a start date yet. A month stays on offer until it ends, so a course can
+    # still be set to start later in the current month.
+    #
+    # Compares dates rather than slicing the list at a month name, so the rule
+    # holds wherever today sits relative to the cycle. A cycle runs from the
+    # September before its year to the July after it, so all three cases occur:
+    # before the cycle's months begin, during them, and after the cycle has been
+    # superseded but while its later months are still ahead.
+    #
+    # Falls back to every month once they have all passed, so a cycle that is
+    # entirely in the past offers its real months rather than nothing at all.
+    def self.remaining_labels_for(year, today = Time.zone.today)
+      months = self.for(year)
+      remaining = months.select { |month| month >= today.beginning_of_month }
+
+      (remaining.presence || months).map { |month| label_for(month) }
+    end
+
+    def self.label_for(month)
+      "#{Date::MONTHNAMES[month.month]} #{month.year}"
     end
   end
 end

@@ -14,41 +14,18 @@ class CourseWizard
         r.row label: :start_date, value: ->(draft) { draft.start_date }
       end
 
+      # Once a start date has been picked, every month stays on offer so that a
+      # date chosen earlier in the journey is still selectable on review.
       def start_date_options
         cycle_year = wizard.recruitment_cycle_year.to_i
-        options = Courses::CycleStartMonths.labels_for(cycle_year)
 
-        return options if start_date.present?
+        return Courses::CycleStartMonths.labels_for(cycle_year) if start_date.present?
 
-        index = options.index(sliced_label_for_today(cycle_year))
-
-        index.blank? ? options : options[index..]
+        Courses::CycleStartMonths.remaining_labels_for(cycle_year)
       end
 
       def self.permitted_params
         [:start_date]
-      end
-
-    private
-
-      def sliced_label_for_today(cycle_year)
-        today = Time.zone.today
-        january_label = january_label_for(cycle_year)
-
-        if today.year < cycle_year
-          # We're before January starts, so slice at "January <cycle_year>"
-          january_label
-        elsif today.year == cycle_year
-          # In cycle year, slice at the actual month
-          "#{Date::MONTHNAMES[today.month]} #{cycle_year}"
-        else
-          # Default to first month
-          january_label
-        end
-      end
-
-      def january_label_for(cycle_year)
-        "#{Date::MONTHNAMES[1]} #{cycle_year}"
       end
     end
   end

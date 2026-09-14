@@ -6,36 +6,19 @@ module Courses
       extend ActiveSupport::Concern
 
       included do
+        # A persisted course keeps every month on offer, because #validate_start_date
+        # checks the saved start date against this list and an existing course may
+        # legitimately have started already.
         def start_date_options
           cycle_year = provider.recruitment_cycle.year.to_i
-          options = Courses::CycleStartMonths.labels_for(cycle_year)
 
-          return options if persisted?
+          return Courses::CycleStartMonths.labels_for(cycle_year) if persisted?
 
-          index = options.index(sliced_label_for_today(cycle_year))
-
-          index.blank? ? options : options[index..]
+          Courses::CycleStartMonths.remaining_labels_for(cycle_year)
         end
 
         def show_start_date?
           !is_published?
-        end
-
-      private
-
-        def sliced_label_for_today(cycle_year)
-          today = Time.zone.today
-
-          if today.year < cycle_year
-            # We're before January starts, so slice at "January <cycle_year>"
-            "#{Date::MONTHNAMES[1]} #{cycle_year}"
-          elsif today.year == cycle_year
-            # In cycle year, slice at the actual month
-            "#{Date::MONTHNAMES[today.month]} #{cycle_year}"
-          else
-            # Default to first month
-            "#{Date::MONTHNAMES[1]} #{cycle_year}"
-          end
         end
       end
     end
