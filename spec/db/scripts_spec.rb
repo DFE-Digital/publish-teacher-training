@@ -27,6 +27,27 @@ RSpec.describe "db/scripts" do
     expect(SolidCache::Entry.count).to eq(0)
   end
 
+  it "wipes Solid Queue arguments and errors" do
+    job = SolidQueue::Job.create!(
+      queue_name: "default",
+      class_name: "ApplicationJob",
+      arguments: { "email" => "candidate@example.com", "token" => "secret" }.to_json,
+      priority: 0,
+    )
+    SolidQueue::FailedExecution.create!(
+      job_id: job.id,
+      error: "RuntimeError: email candidate@example.com leaked",
+    )
+
+    expect(SolidQueue::Job.count).to be_positive
+    expect(SolidQueue::FailedExecution.count).to be_positive
+
+    run_script("sanitise")
+
+    expect(SolidQueue::Job.count).to eq(0)
+    expect(SolidQueue::FailedExecution.count).to eq(0)
+  end
+
   it "integration_setup.sql runs cleanly against the current schema" do
     # The provider insert requires a recruitment cycle (recruitment_cycle_id is NOT NULL).
     create(:recruitment_cycle)
