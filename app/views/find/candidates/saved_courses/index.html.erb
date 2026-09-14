@@ -75,6 +75,9 @@
       <% @saved_courses.each do |saved_course| %>
         <%= render SavedCourses::SummaryCardComponent.new(
           saved_course: saved_course,
+          current_cycle_course: @current_cycle_courses_by_key[
+            [saved_course.course.provider_code, saved_course.course.course_code],
+          ],
           location: @location,
           short_address: @short_address,
           order: @order,
