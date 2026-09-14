@@ -3,14 +3,15 @@
 module Find
   class SitemapsController < ApplicationController
     def show
-      service = schools_remodelled ? ::CourseSearchServiceSchools : ::CourseSearchService
-      @courses = service.call(filter: nil, sort: nil, course_scope: RecruitmentCycle.current.courses.findable)
+      # Only the three columns the XML needs. Loading the courses as records
+      # (with enrichments, schools and providers) took ~25s and ~1.5GB per
+      # request, which is what crawlers fetching this twice a day looked like
+      # in the pod memory graphs.
+      @courses = Course.where(id: RecruitmentCycle.current.courses.findable.select(:id))
+                       .joins(:provider)
+                       .pluck("provider.provider_code", "course.course_code", "course.changed_at")
 
       expires_in(1.day, public: true)
-    end
-
-    def schools_remodelled
-      FeatureFlag.active?(:course_publishing_uses_new_school_model) && Find::CycleTimetable.current_year > 2026
     end
   end
 end
