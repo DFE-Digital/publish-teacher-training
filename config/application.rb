@@ -73,11 +73,28 @@ module ManageCoursesBackend
 
     config.exceptions_app = routes
     config.active_job.queue_adapter = :sidekiq
-    # Retention only — Solid Queue is not yet the live adapter or a running worker.
+    # Retention only — Solid Queue is not yet the live adapter. Sidekiq remains global.
     config.solid_queue.clear_finished_jobs_after = 1.hour
+
+    # Mission Control observes Solid Queue only; Sidekiq Web stays at /sidekiq.
+    config.mission_control.jobs.adapters = [:solid_queue]
+    config.mission_control.jobs.http_basic_auth_enabled = false
+    config.mission_control.jobs.filter_arguments = %w[
+      email_address email code token data body hidden_data headers
+    ]
 
     config.log_tags = []
     config.log_level = Settings.log_level
+
+    # QA/staging/sandbox/review use dedicated RAILS_ENV values (see app_config.yml).
+    config.before_configuration do
+      ENV["SOLID_QUEUE_CONFIG"] =
+        if Rails.env.production? || Rails.env.development?
+          "config/queue.yml"
+        else
+          "config/non_production_queue.yml"
+        end
+    end
 
     # Capture candidate "save course" intent during OmniAuth request phase (CSRF-protected POST).
     # Must run after the session middleware so `env["rack.session"]` is available.
