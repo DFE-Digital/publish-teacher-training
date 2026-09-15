@@ -43,6 +43,19 @@ RSpec.describe "Solid Queue configuration" do
     expect(consumed_queues("config/non_production_queue.yml")).to include(*REQUIRED_QUEUES)
   end
 
+  it "defines env-specific sections in non_production_queue.yml for PTT Rails.env values" do
+    config = YAML.safe_load(
+      ERB.new(Rails.root.join("config/non_production_queue.yml").read).result,
+      aliases: true,
+    )
+
+    %w[qa staging sandbox review test loadtest rollover].each do |env|
+      expect(config[env]).to be_present, "expected config/non_production_queue.yml to define #{env}:"
+      expect(config[env]["workers"]).to be_present
+      expect(config[env]["dispatchers"]).to be_present
+    end
+  end
+
   it "defines a dispatcher in both queue configs" do
     expect(dispatchers_configured?("config/queue.yml")).to be(true)
     expect(dispatchers_configured?("config/non_production_queue.yml")).to be(true)

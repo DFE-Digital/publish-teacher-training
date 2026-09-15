@@ -89,7 +89,8 @@ module "solid_queue_worker" {
     "/bin/sh",
     "-c",
     # Include solid-queue-worker in the command line so the probe can find this process.
-    "SOLID_QUEUE_PROCESS_NAME=solid-queue-worker DATABASE_CONNECTION_POOL_SIZE=${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start",
+    # $${...} so Terraform leaves the shell default for DATABASE_CONNECTION_POOL_SIZE alone.
+    "SOLID_QUEUE_PROCESS_NAME=solid-queue-worker DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start",
   ]
   max_memory      = var.solid_queue_worker_memory_max
   replicas        = var.solid_queue_worker_replicas
