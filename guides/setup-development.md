@@ -64,8 +64,12 @@ pins `node-version: '24.x'` in the workflow directly.
 ### Yarn 4 (Corepack) troubleshooting
 
 This repo uses Yarn 4 via Corepack (`packageManager: "yarn@4.18.0"`). `./bin/setup`
-activates it for you, but if `yarn -v` still shows Yarn 1 — usually a separately
-installed yarn shadowing the Corepack shim — run:
+activates it for you and checks it is there first — Corepack shipped with Node
+16.9 to 24 and was **removed in Node 25**, so on a newer runtime you need
+`npm install -g corepack` before setup will get past its first step.
+
+If `yarn -v` still shows Yarn 1 — usually a separately installed yarn shadowing
+the Corepack shim — run:
 
 ```bash
 corepack enable
