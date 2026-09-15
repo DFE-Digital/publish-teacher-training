@@ -35,18 +35,6 @@ module Courses
         ),
       ]
 
-      title_parts << content_tag(
-        :div,
-        "",
-        class: "govuk-body-s govuk-!-margin-bottom-0",
-      )
-
-      title_parts << content_tag(
-        :div,
-        search_by_location? ? nearest_placement_school_text : "",
-        class: "govuk-body-s govuk-!-margin-bottom-0",
-      )
-
       safe_join(title_parts)
     end
 
@@ -61,10 +49,7 @@ module Courses
           pluralize(course.minimum_distance_to_search_location.ceil, "mile"),
         ),
         from_text,
-        content_tag(
-          :strong,
-          @short_address.presence || @location,
-        ),
+        @short_address.presence || @location,
       ])
     end
 
