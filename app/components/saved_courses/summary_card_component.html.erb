@@ -1,5 +1,15 @@
-<%= govuk_summary_card(classes: %w[course-summary-card], title:) do |card| %>
+<%= govuk_summary_card(classes: %w[course-summary-card app-saved-course-summary-card], title:) do |card| %>
   <% card.with_action do %>
+    <% if course_from_previous_year? && current_cycle_course.present? %>
+      <%= govuk_link_to(
+            t(".view_current_cycle_course"),
+            find_course_path(
+              provider_code: current_cycle_course.provider_code,
+              course_code: current_cycle_course.course_code,
+            ),
+          ) %>
+      <span class="govuk-!-margin-left-1 govuk-!-margin-right-1">|</span>
+    <% end %>
     <%= button_to t(".delete"),
                   find_candidate_saved_course_path(saved_course),
                   method: :delete,

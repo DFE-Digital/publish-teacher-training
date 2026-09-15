@@ -21,23 +21,24 @@ RSpec.describe "Viewing my saved courses", service: :find do
   scenario "A candidate sees an unlinked course from a previous year" do
     when_i_log_in_as_a_candidate
     and_i_have_saved_courses
-    @course.provider.update!(
-      recruitment_cycle: find_or_create(:recruitment_cycle, :previous),
-    )
+    and_the_saved_course_is_from_the_previous_cycle
 
     then_i_visit_my_saved_courses
 
-    within_first_saved_course_row do
-      expect(page).to have_content("Course from a previous year")
-      expect(page).to have_content(@course.name_and_code)
-      expect(page).not_to have_link(
-        @course.provider_name,
-        href: find_course_path(
-          provider_code: @course.provider_code,
-          course_code: @course.course_code,
-        ),
-      )
-    end
+    then_i_see_the_unlinked_previous_cycle_course
+  end
+
+  scenario "A candidate can open the current-cycle course only from the previous-year saved course" do
+    when_i_log_in_as_a_candidate
+    and_i_have_saved_courses
+    and_the_saved_course_is_from_the_previous_cycle
+    and_the_same_course_is_published_in_the_current_cycle
+    and_i_save_the_current_cycle_course
+
+    then_i_visit_my_saved_courses
+
+    then_the_previous_cycle_card_links_to_the_current_cycle_course
+    and_the_current_cycle_card_does_not_link_to_itself
   end
 
   scenario "A candidate can view the saved courses page with no saved courses" do
@@ -209,6 +210,62 @@ RSpec.describe "Viewing my saved courses", service: :find do
   def and_i_have_saved_courses
     candidate = Candidate.first
     @saved_courses = create(:saved_course, course: @course, candidate: candidate)
+  end
+
+  def and_the_saved_course_is_from_the_previous_cycle
+    @course.provider.update!(
+      recruitment_cycle: find_or_create(:recruitment_cycle, :previous),
+    )
+  end
+
+  def and_the_same_course_is_published_in_the_current_cycle
+    @current_course = create(
+      :course,
+      :published,
+      course_code: @course.course_code,
+      provider: create(
+        :provider,
+        provider_code: @course.provider_code,
+        recruitment_cycle: find_or_create(:recruitment_cycle),
+      ),
+    )
+  end
+
+  def and_i_save_the_current_cycle_course
+    create(:saved_course, candidate: Candidate.first, course: @current_course)
+  end
+
+  def then_i_see_the_unlinked_previous_cycle_course
+    within_first_saved_course_row do
+      expect(page).to have_content("Course from a previous year")
+      expect(page).to have_content(@course.name_and_code)
+      expect(page).not_to have_link(
+        @course.provider_name,
+        href: find_course_path(
+          provider_code: @course.provider_code,
+          course_code: @course.course_code,
+        ),
+      )
+      expect(page).not_to have_link("View this year's course")
+    end
+  end
+
+  def then_the_previous_cycle_card_links_to_the_current_cycle_course
+    within(previous_cycle_card) do
+      expect(page).to have_link(
+        "View this year's course",
+        href: find_course_path(
+          provider_code: @current_course.provider_code,
+          course_code: @current_course.course_code,
+        ),
+      )
+    end
+  end
+
+  def and_the_current_cycle_card_does_not_link_to_itself
+    within(current_cycle_card) do
+      expect(page).not_to have_link("View this year's course")
+    end
   end
 
   def given_a_published_course_exists
@@ -513,6 +570,18 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
   def within_first_saved_course_row(&block)
     within(all(".govuk-summary-card").first, &block)
+  end
+
+  def previous_cycle_card
+    all(".govuk-summary-card").find do |card|
+      card.has_css?(".govuk-tag", text: "Course from a previous year")
+    end
+  end
+
+  def current_cycle_card
+    all(".govuk-summary-card").find do |card|
+      card != previous_cycle_card && card.has_text?(@current_course.name_and_code)
+    end
   end
 
   def saved_course_names
