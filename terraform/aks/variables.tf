@@ -103,6 +103,16 @@ variable "worker_apps" {
   default = {}
 }
 
+variable "solid_queue_worker_replicas" {
+  type    = number
+  default = 1
+}
+
+variable "solid_queue_worker_memory_max" {
+  type    = string
+  default = "2Gi"
+}
+
 variable "main_app" {
   type = map(
     object({
