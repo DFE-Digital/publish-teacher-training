@@ -239,30 +239,36 @@ private
   end
 
   def when_i_fill_in_all_banner_fields
+    # Both dates sit in the past, so the banner is expired as soon as it is
+    # created and the support user lands on the expired tab. They are measured
+    # from the current time, which keeps that true in every cycle.
+    @published_at = 2.months.ago.change(hour: 9, min: 30)
+    @expired_at = 1.month.ago.change(hour: 17, min: 0)
+
     fill_in "Name", with: "Full banner"
     fill_in "Heading (optional)", with: "Service update"
     fill_in "Body", with: "Please be aware of upcoming changes."
 
     within_fieldset("Publish date") do
-      fill_in "Day", with: "1"
-      fill_in "Month", with: "6"
-      fill_in "Year", with: "2026"
+      fill_in "Day", with: @published_at.day
+      fill_in "Month", with: @published_at.month
+      fill_in "Year", with: @published_at.year
     end
 
     within_fieldset("Publish time") do
-      fill_in "Hour", with: "9"
-      fill_in "Minute", with: "30"
+      fill_in "Hour", with: @published_at.hour
+      fill_in "Minute", with: @published_at.min
     end
 
     within_fieldset("Expiry date") do
-      fill_in "Day", with: "30"
-      fill_in "Month", with: "6"
-      fill_in "Year", with: "2026"
+      fill_in "Day", with: @expired_at.day
+      fill_in "Month", with: @expired_at.month
+      fill_in "Year", with: @expired_at.year
     end
 
     within_fieldset("Expiry time") do
-      fill_in "Hour", with: "17"
-      fill_in "Minute", with: "0"
+      fill_in "Hour", with: @expired_at.hour
+      fill_in "Minute", with: @expired_at.min
     end
 
     within_fieldset("Displayed on") do
@@ -279,8 +285,8 @@ private
     expect(banner.name).to eq("Full banner")
     expect(banner.heading).to eq("Service update")
     expect(banner.body).to eq("Please be aware of upcoming changes.")
-    expect(banner.published_at).to eq(Time.zone.local(2026, 6, 1, 9, 30))
-    expect(banner.expired_at).to eq(Time.zone.local(2026, 6, 30, 17, 0))
+    expect(banner.published_at).to eq(@published_at)
+    expect(banner.expired_at).to eq(@expired_at)
     expect(banner.display_on_find).to be(true)
     expect(banner.display_on_publish).to be(true)
     expect(banner.display_on_support).to be(true)
