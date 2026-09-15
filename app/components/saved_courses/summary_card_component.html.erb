@@ -1,6 +1,6 @@
 <%= govuk_summary_card(classes: %w[course-summary-card app-saved-course-summary-card], title:) do |card| %>
   <% card.with_action do %>
-    <% if current_cycle_course.present? %>
+    <% if course_from_previous_year? && current_cycle_course.present? %>
       <%= govuk_link_to(
             t(".view_current_cycle_course"),
             find_course_path(
