@@ -17,6 +17,9 @@ gem "solid_cache", "~> 1.0"
 # Database-backed Active Job backend (schema first; Sidekiq remains the live adapter)
 gem "solid_queue", "~> 1.7"
 
+# Operational UI for Solid Queue (system-admin auth; Sidekiq Web remains)
+gem "mission_control-jobs", "~> 1.3"
+
 # Authorisation
 gem "pundit"
 

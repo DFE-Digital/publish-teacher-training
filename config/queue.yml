@@ -1,0 +1,31 @@
+default: &default
+  dispatchers:
+    - polling_interval: 1
+      batch_size: 500
+      concurrency_maintenance_interval: 300
+  workers:
+    # Latency-sensitive / interactive work
+    - queues: [default, geocoding]
+      threads: <%= ENV.fetch("DEFAULT_QUEUE_THREADS", 1) %>
+      processes: <%= ENV.fetch("DEFAULT_QUEUE_PROCESSES", 1) %>
+      polling_interval: 1
+
+    - queues: [mailers]
+      threads: <%= ENV.fetch("MAILER_QUEUE_THREADS", 1) %>
+      processes: <%= ENV.fetch("MAILER_QUEUE_PROCESSES", 1) %>
+      polling_interval: 1
+
+    # Bulk / low-priority — kept separate so backlogs cannot starve mailers
+    - queues: [save_statistic, low_priority]
+      threads: <%= ENV.fetch("LOW_PRIORITY_QUEUE_THREADS", 1) %>
+      processes: <%= ENV.fetch("LOW_PRIORITY_QUEUE_PROCESSES", 1) %>
+      polling_interval: 1
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

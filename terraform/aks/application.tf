@@ -65,3 +65,37 @@ module "worker_application" {
 
   enable_gcp_wif = true
 }
+
+module "solid_queue_worker" {
+  source     = "./vendor/modules/aks//aks/application"
+  depends_on = [module.web_application]
+
+  name   = "solid-queue-worker"
+  is_web = false
+
+  namespace    = var.namespace
+  environment  = local.app_name_suffix
+  service_name = var.service_name
+
+  cluster_configuration_map = module.cluster_data.configuration_map
+
+  kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
+  kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
+
+  docker_image = var.docker_image
+  # Shared ConfigMap sets RAILS_MAX_THREADS=50 for web. Override the DB pool only
+  # for this process so each Solid Queue fork does not open a 50-connection pool.
+  command = [
+    "/bin/sh",
+    "-c",
+    # Include solid-queue-worker in the command line so the probe can find this process.
+    "SOLID_QUEUE_PROCESS_NAME=solid-queue-worker DATABASE_CONNECTION_POOL_SIZE=${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start",
+  ]
+  max_memory      = var.solid_queue_worker_memory_max
+  replicas        = var.solid_queue_worker_replicas
+  enable_logit    = var.enable_logit
+  run_as_non_root = var.run_as_non_root
+  probe_command   = ["pgrep", "-f", "solid-queue-worker"]
+
+  enable_gcp_wif = true
+}
