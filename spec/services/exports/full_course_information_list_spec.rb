@@ -94,13 +94,27 @@ module Exports
         )
       end
 
-      it "reports an unpublished edit rather than the text published beneath it" do
+      it "reports the published text, not an unpublished edit sitting over it" do
         create(:course, :fee, provider:, name: "Chemistry", enrichments: [
-          build(:course_enrichment, :published, interview_process: "The published interview process."),
-          build(:course_enrichment, :subsequent_draft, interview_process: "The edited interview process."),
+          build(:course_enrichment, :published, interview_process: "The published interview process.", fee_uk_eu: 9_535),
+          build(:course_enrichment, :subsequent_draft, interview_process: "The edited interview process.", fee_uk_eu: 9_790),
         ])
 
-        expect(rows.first.to_h).to include("What is the interview process? (optional)" => "The edited interview process.")
+        expect(rows.first.to_h).to include(
+          "What is the interview process? (optional)" => "The published interview process.",
+          "UK fee" => "£9,535",
+        )
+      end
+
+      it "falls back to the draft when a course has never been published" do
+        create(:course, :fee, provider:, name: "Biology", enrichments: [
+          build(:course_enrichment, :initial_draft, interview_process: "The drafted interview process.", fee_uk_eu: 9_790),
+        ])
+
+        expect(rows.first.to_h).to include(
+          "What is the interview process? (optional)" => "The drafted interview process.",
+          "UK fee" => "£9,790",
+        )
       end
 
       it "leaves the text columns empty when a course has no enrichment" do
