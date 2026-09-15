@@ -2,7 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt do
+# The valid range runs from today to the apply deadline, so it is empty once
+# today is past the deadline. The shared context pins the wizard to the 2026
+# cycle, so the clock has to be pinned inside that same cycle.
+RSpec.describe CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt, travel: mid_cycle(2026) do
   include_context "add_course_wizard"
 
   let(:current_step) { :visa_sponsorship_application_deadline_at }
