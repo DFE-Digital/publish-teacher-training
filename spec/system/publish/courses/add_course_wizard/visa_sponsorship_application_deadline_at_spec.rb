@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Add course wizard visa sponsorship application deadline at step", type: :system do
+RSpec.describe "Add course wizard visa sponsorship application deadline at step", travel: mid_cycle(2026), type: :system do
   before do
     FeatureFlag.activate(:wizard_add_course_flow)
     given_i_am_authenticated_as_a_provider_user_with_a_school

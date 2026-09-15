@@ -52,30 +52,51 @@ describe "/sitemap.xml" do
     end
   end
 
-  describe "when the new school model feature flag is active" do
+  context "when a course runs at more than one school" do
+    let(:provider) { build(:provider, provider_code: "T92") }
+    let(:course) do
+      create(
+        :course,
+        :published,
+        course_code: "X102",
+        provider:,
+        site_statuses: build_list(:site_status, 2, :findable),
+      )
+    end
+
     before do
-      FeatureFlag.activate(:course_publishing_uses_new_school_model)
+      Timecop.travel(Find::CycleTimetable.mid_cycle)
+      course
 
-      allow(CourseSearchService).to receive(:call).and_return(Course.none)
-      allow(CourseSearchServiceSchools).to receive(:call).and_return(Course.none)
+      get "/sitemap.xml"
     end
 
-    context "when the current recruitment cycle is 2026 or earlier", travel: mid_cycle(2026) do
-      it "uses the sites course search service" do
-        get "/sitemap.xml"
+    it "lists the course once" do
+      expect(response.body.scan("<loc>http://find.localhost/course/T92/X102</loc>").size).to eq(1)
+    end
+  end
 
-        expect(CourseSearchService).to have_received(:call)
-        expect(CourseSearchServiceSchools).not_to have_received(:call)
-      end
+  context "when a course is an undergraduate teacher degree apprenticeship" do
+    let(:provider) { build(:provider, provider_code: "T92") }
+    let(:course) do
+      create(
+        :course,
+        :published_teacher_degree_apprenticeship,
+        course_code: "X102",
+        provider:,
+        site_statuses: [build(:site_status, :findable)],
+      )
     end
 
-    context "when the current recruitment cycle is 2027 or later", travel: mid_cycle(2027) do
-      it "uses the schools course search service" do
-        get "/sitemap.xml"
+    before do
+      Timecop.travel(Find::CycleTimetable.mid_cycle)
+      course
 
-        expect(CourseSearchServiceSchools).to have_received(:call)
-        expect(CourseSearchService).not_to have_received(:call)
-      end
+      get "/sitemap.xml"
+    end
+
+    it "lists the course" do
+      expect(response.body).to include("<loc>http://find.localhost/course/T92/X102</loc>")
     end
   end
 end
