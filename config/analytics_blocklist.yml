@@ -81,6 +81,17 @@
   - provider_school_id
   - created_at
   - updated_at
+  :course_school_bulk_update_draft:
+  - id
+  - course_id
+  - user_id
+  - uuid
+  - school_uuids
+  - baseline_uuids
+  - scope
+  - expires_at
+  - created_at
+  - updated_at
   :candidate_recent_search:
   - filter_key_digest
   :candidate_email_alerts:

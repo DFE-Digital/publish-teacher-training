@@ -13,6 +13,7 @@ RSpec.describe "Publishing a course that is allowed to have no schools", travel:
     when_i_visit_the_schools_page
     and_i_untick_the_only_school
     and_i_submit
+    and_i_apply_the_change_to_this_course_only
     then_i_see_the_schools_were_saved
     and_the_course_has_no_schools
 
