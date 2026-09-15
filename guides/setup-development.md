@@ -6,31 +6,66 @@ Clone the repo:
 
 ## Prerequisites
 
-`./bin/setup` installs the application's own dependencies, but it assumes three
-things are already on your machine. Each stops the setup at a different point.
+`./bin/setup` installs the application's own dependencies, but it assumes a
+working Ruby, Node, Caddy and PostGIS are already on your machine.
 
-If you would rather not install any of them, skip to [Using Docker](#using-docker)
-— the compose file brings its own Postgres, Ruby and Node.
+`.tool-versions` pins the first three, so a version manager that reads it gets
+them in one step. [asdf](https://asdf-vm.com) is what the team recommends:
 
-### Ruby 3.4.10 and Node 24.13.0
+```bash
+asdf install
+```
 
-- **Ruby** is pinned in `.ruby-version`, which the `Gemfile` reads. `bundle check`
-  fails on any other version.
+That covers Ruby 3.4.10, Node 24.13.0 and Caddy 2.9.1 — add the plugins first if
+you have not already (`asdf plugin add ruby`, and the same for `nodejs` and
+`caddy`). The file also pins deployment tooling (kubectl, terraform, azure-cli
+and others) that local development does not need.
+
+PostGIS is the one prerequisite `asdf` cannot install — see below.
+
+### Ruby and Node
+
+Where each version is pinned, and what breaks on the wrong one:
+
+- **Ruby** is pinned in `.ruby-version`, which the `Gemfile` reads. `bundle
+  check` fails on any other version.
 - **Node** is pinned by `package.json` (`engines: { node: "24.x" }`), so `yarn
-  install` refuses to run on anything else. That is the first thing `./bin/setup`
-  does, so the wrong Node stops it immediately, and it stops all four asset
-  watchers in `./bin/dev` as well.
+  install` refuses to run on anything else, and the four asset watchers in
+  `./bin/dev` will not start either.
 
-Install them however you normally manage versions. `.tool-versions` records both,
-so a version manager that reads it will pick them up; otherwise take the two
-numbers above. Note there is no `.node-version` or `.nvmrc`, so `.tool-versions`
-is the only place the Node version is written down for a person to read — CI does
-not use it either, it pins `node-version: '24.x'` in the workflow directly.
+Note that Node is the one prerequisite that does **not** stop `./bin/setup`:
+`yarn install` is the single step there whose exit status is not checked
+(`bin/setup:25`), so setup carries on to bundler and `db:prepare` and reports no
+error. You get a run that looks clean with `node_modules` missing or
+half-written, which surfaces later as asset and spec failures that look like
+something else. If setup was not run on Node 24, check `node -v` and re-run
+`yarn install` on its own.
+
+There is no `.node-version` or `.nvmrc`, so `.tool-versions` is the only place
+the Node version is written down for a person to read — CI does not use it
+either, it pins `node-version: '24.x'` in the workflow directly.
+
+### Yarn 4 (Corepack) troubleshooting
+
+This repo uses Yarn 4 via Corepack (`packageManager: "yarn@4.18.0"`). `./bin/setup`
+activates it for you, but if `yarn -v` still shows Yarn 1 — usually a separately
+installed yarn shadowing the Corepack shim — run:
+
+```bash
+corepack enable
+corepack prepare yarn@4.18.0 --activate
+yarn -v
+yarn install --immutable
+```
+
+You generally do not need to delete `node_modules`; only do that if you're trying
+to recover from a broken install.
 
 ### PostGIS
 
-`config/database.yml` uses `adapter: postgis`, so `./bin/setup` fails at
-`db:prepare` unless the PostGIS extension is installed into your local Postgres:
+The one prerequisite `asdf` cannot install, because it is a Postgres extension
+rather than a language runtime. `config/database.yml` uses `adapter: postgis`, so
+`./bin/setup` fails at `db:prepare` without it:
 
 ```bash
 brew install postgis
@@ -38,20 +73,22 @@ brew install postgis
 
 ### Caddy
 
-Only needed if you run `./bin/dev`, which starts Caddy from the `Procfile.dev` —
-foreman takes the whole stack down if the binary is missing.
+Covered by `asdf install` above, or `brew install caddy`. Needed only if you run
+`./bin/dev`, which starts Caddy from the `Procfile.dev` — foreman takes the whole
+stack down if the binary is missing. The config is tracked as `Caddyfile.dev` and
+used directly, so there is nothing to copy.
+
+One thing `asdf` will not do for you:
 
 ```bash
-brew install caddy
-cp Caddyfile.example Caddyfile
 caddy trust
 ```
 
-`caddy trust` installs Caddy's local certificate authority into your OS keychain.
-It is worth doing rather than skipping: `Settings.publish_url` and its siblings
-are port-less HTTPS URLs, so anything that follows a redirect — persona sign-in,
-for one — lands on `publish.localhost` at 443, and without the certificate the
-app looks broken rather than misconfigured.
+That installs Caddy's local certificate authority into your OS keychain. It is
+worth doing rather than skipping: `Settings.publish_url` and its siblings are
+port-less HTTPS URLs, so anything that follows a redirect — persona sign-in, for
+one — lands on `publish.localhost` at 443, and without the certificate the app
+looks broken rather than misconfigured.
 
 See [Configuring local domains](#configuring-local-domains) for running without
 Caddy.
@@ -63,6 +100,10 @@ Run setup:
 ```bash
 ./bin/setup
 ```
+
+It activates Corepack, installs the Yarn and Bundler dependencies, prepares the
+database, and then hands straight over to `./bin/dev` — so a successful run leaves
+the server up. Pass `--skip-server` if you just want the dependencies.
 
 ## Install Playwright (for system tests)
 
@@ -98,7 +139,11 @@ The first time you run the app, you need to set up the databases. With the above
 docker compose exec web /bin/sh -c "bundle exec rails db:setup"
 ```
 
-Then open http://localhost:3001 to see the app.
+The compose file maps the app to port 3001, but the router matches on host, so
+bare `http://localhost:3001` matches no service and 404s — use
+<http://publish.localhost:3001> (or `find.`/`api.`). Note also that the `web`
+service runs with `RAILS_ENV=test`, so this is the container setup CI uses rather
+than a full local development environment.
 
 ## Run The Server in SSL Mode
 
@@ -128,9 +173,13 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 The commands from the previous section will seed the database with some test data, but you must seed the database with a sanitised production dump to run the application locally using the personas.
 
 The personas page at `/personas` renders whether or not you have the dump, but
-the users it signs you in as (Anne, Susy, Mary) only exist in it. Until you have
+three of its four users — Anne, Susy and Mary — only exist in it. Until you have
 loaded a dump those buttons fail, which reads as broken authentication rather
-than as missing data. The seeds create `super.admin@education.gov.uk` instead.
+than as missing data.
+
+The fourth, Colin, is the DfE support agent, and `bin/rails db:seed:integration`
+creates him locally. Plain `./bin/setup` seeds neither — it creates a single super
+admin user instead, whose sign-in address is in `db/seeds.rb`.
 
 To seed the database with a sanitised production dump:
 
@@ -173,7 +222,12 @@ own settings use:
 - <https://find.localhost>
 - <https://api.localhost>
 
-`caddy start` in the root of the project serves them without `./bin/dev`.
+To serve them without `./bin/dev`, run Caddy on its own from the root of the
+project:
+
+```bash
+caddy start --config Caddyfile.dev --adapter caddyfile
+```
 
 **Without Caddy**, run the server directly and add the port. The host constraint
 does not care about the port, so this works fine:
@@ -191,4 +245,4 @@ anything that follows one — persona sign-in, for one — sends you to port 443
 you land nowhere unless Caddy is running. Fine for browsing, awkward for
 sign-in.
 
-If you're getting an error message, try `caddy stop` then try stopping the rails server `control C`. Then run `yarn build` followed by `yarn build:css`. Now restart the rails server `rails s` and then try `caddy start`.
+If you're getting an error message, try `caddy stop` then try stopping the rails server `control C`. Then run `yarn build` followed by `yarn build:css`. Now restart the rails server `rails s` and then start Caddy again with the command above.
