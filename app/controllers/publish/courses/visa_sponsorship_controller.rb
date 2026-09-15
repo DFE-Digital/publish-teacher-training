@@ -5,10 +5,6 @@ module Publish
     class VisaSponsorshipController < ApplicationController
       include CourseBasicDetailConcern
 
-      def new
-        raise NotImplementedError
-      end
-
       def edit
         visa_sponsorship_form
       end
@@ -56,14 +52,6 @@ module Publish
 
       def visa_sponsorship_form
         @visa_sponsorship_form ||= CourseFundingForm.new(@course, params: visa_sponsorship_params)
-      end
-
-      def current_step
-        raise NotImplementedError
-      end
-
-      def error_keys
-        raise NotImplementedError
       end
 
       def visa_sponsorship_params
