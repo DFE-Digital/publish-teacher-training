@@ -448,7 +448,6 @@ erDiagram
 		integer provider_id FK
 		integer user_id FK
 	}
-	Auditable o|--}o "Audited::Audit" : ""
 	Candidate o|--}o "Audited::Audit" : ""
 	Contact o|--}o "Audited::Audit" : ""
 	Course o|--}o "Audited::Audit" : ""
@@ -459,8 +458,6 @@ erDiagram
 	Site o|--}o "Audited::Audit" : ""
 	SiteStatus o|--}o "Audited::Audit" : ""
 	User o|--}o "Audited::Audit" : ""
-	Associated o|--}o "Audited::Audit" : ""
-	Authenticable ||--}o Authentication : ""
 	User ||--}o Authentication : ""
 	User o|--}o "Blazer::Audit" : ""
 	"Blazer::Query" o|--}o "Blazer::Audit" : ""
@@ -471,7 +468,6 @@ erDiagram
 	"Blazer::Dashboard" o|..}o "Blazer::Query" : ""
 	"Blazer::Query" ||--}o "Blazer::DashboardQuery" : ""
 	User o|--}o "Blazer::Query" : ""
-	Sessionable ||--}o Session : ""
 	Candidate ||--}o Session : ""
 	User ||--}o Session : ""
 	Candidate o|--}o Authentication : ""
