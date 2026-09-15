@@ -19,11 +19,24 @@
       <li>have indefinite leave to remain in the UK</li>
     </ul>
 
-    <% unless visa_type == :student_visa && sponsorship_availability != :available %>
-      <%= t(
-        "find.international_candidates.#{visa_type}.#{sponsorship_availability}.html",
-        provider_url: x_provider_url,
-      ) %>
+    <% if show_visa_guidance? %>
+      <p class="govuk-body">
+        <%= t(
+          "find.international_candidates.find_out_about_visa_types_html",
+          link: govuk_link_to(t("find.international_candidates.find_out_about_visa_types_link"), visa_types_url),
+        ) %>
+      </p>
+
+      <% if sponsorship_available? %>
+        <p class="govuk-body"><%= t("find.international_candidates.#{visa_type}.sponsorship") %></p>
+
+        <p class="govuk-body">
+          <%= t(
+            "find.international_candidates.#{visa_type}.contact_provider_html",
+            link: govuk_link_to(t("find.international_candidates.contact_the_training_provider"), contact_the_training_provider_url),
+          ) %>
+        </p>
+      <% end %>
     <% end %>
 
     <p class="govuk-body">Learn more about <%= govuk_link_to("training to teach in England as a non-UK citizen", find_track_click_path(url: t("find.get_into_teaching.url_train_to_teach_as_international_candidate"))) %>.</p>

@@ -23,7 +23,7 @@ describe Shared::Courses::HowToChooseATrainingProviderComponent, type: :componen
         expect(result).to have_link(
           "Find out how to choose a training provider.",
           href: find_track_click_path(
-            utm: "how_to_choose_a_training_provider",
+            utm_content: "how_to_choose_a_training_provider",
             url: I18n.t("find.get_into_teaching.url_type_of_course_provider"),
           ),
         )

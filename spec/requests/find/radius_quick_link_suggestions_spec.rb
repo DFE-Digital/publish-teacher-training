@@ -47,6 +47,47 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
       end
     end
 
+    context "with 3 courses in separate radius buckets, checking the links" do
+      before do
+        subject_record = find_or_create(:secondary_subject, :mathematics)
+
+        create(:course, :secondary, :published, subjects: [subject_record], site_statuses: [
+          build(:site_status, :findable, site: build(:site, latitude: 51.4550, longitude: -0.9711)),
+        ])
+      end
+
+      it "routes each suggestion through track_click, naming the radius" do
+        get "/api/radius_quick_link_suggestions", params: search_params
+
+        JSON.parse(response.body).each do |link|
+          uri = URI(link["url"])
+          query = Rack::Utils.parse_query(uri.query)
+
+          expect(uri.path).to eq("/track_click")
+          expect(query["utm_content"]).to match(/\Ano_results_radius_quick_link_\d+_miles\z/)
+          expect(query["url"]).to start_with("/results?")
+        end
+      end
+
+      # The destination is built from the visitor's own query string, and it is
+      # now the url a redirect acts on, so it must not be able to leave the site.
+      it "cannot be pushed off site by url_for options in the query string" do
+        get "/api/radius_quick_link_suggestions", params: search_params.merge(
+          host: "evil.com",
+          protocol: "https",
+          script_name: "//evil.com",
+        )
+
+        links = JSON.parse(response.body)
+        expect(links).not_to be_empty
+
+        links.each do |link|
+          expect(link["url"]).to start_with("/track_click?")
+          expect(Rack::Utils.parse_query(URI(link["url"]).query)["url"]).to start_with("/results?")
+        end
+      end
+    end
+
     context "when a bucket has over 100 results" do
       before do
         101.times do
