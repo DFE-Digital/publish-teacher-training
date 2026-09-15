@@ -159,11 +159,11 @@ RSpec.configure do |config|
   end
 
   config.around do |example|
-    if (time = self.class.metadata[:travel] || example.metadata[:travel])
-      Timecop.travel(time) do
-        example.run
-      end
-    else
+    # An explicit `travel:` wins, otherwise the example runs mid-cycle so that
+    # it does not silently depend on the period the machine is in today.
+    time = example.metadata[:travel] || CycleTimetableHelpers.default_travel
+
+    Timecop.travel(time) do
       example.run
     end
   ensure
