@@ -6,44 +6,60 @@ Clone the repo:
 
 ## Prerequisites
 
-`./bin/setup` installs the application's own dependencies, but it assumes a
-working Ruby, Node, Caddy and PostGIS are already on your machine.
-
-`.tool-versions` pins the first three, so a version manager that reads it gets
-them in one step. [asdf](https://asdf-vm.com) is what the team recommends:
+Two commands from a fresh clone:
 
 ```bash
 asdf install
+./bin/setup
 ```
 
-That covers Ruby 3.4.10, Node 24.13.0 and Caddy 2.9.1 — add the plugins first if
-you have not already (`asdf plugin add ruby`, and the same for `nodejs` and
-`caddy`). The file also pins deployment tooling (kubectl, terraform, azure-cli
-and others) that local development does not need.
+`asdf install` reads `.tool-versions` and gets you Ruby 3.4.10, Node 24.13.0 and
+Caddy 2.9.1. Add the plugins first if you have not already (`asdf plugin add
+ruby`, and the same for `nodejs` and `caddy`). The file also pins deployment
+tooling — kubectl, terraform, azure-cli and others — that local development does
+not need.
 
-PostGIS is the one prerequisite `asdf` cannot install — see below.
+`./bin/setup` checks everything else before it starts, and offers to install what
+is missing: a running Postgres server, the PostGIS extension, and Caddy's local
+certificate authority. It stops with the exact command to run if it cannot fix
+something itself.
+
+### Postgres and PostGIS
+
+`asdf` does not provide a database server, so this is the one prerequisite that
+needs a package manager. `config/database.yml` uses `adapter: postgis` and
+`db/schema.rb` enables the `postgis` extension, so both the server and the
+extension have to be there or `db:prepare` fails:
+
+```bash
+brew install postgresql@17 postgis
+brew services start postgresql@17
+```
+
+`./bin/setup` detects both and offers to run this for you. Connection settings
+come from `DB_USERNAME`, `DB_PASSWORD`, `DB_HOSTNAME` and `DB_PORT`, all of which
+fall back to the libpq defaults — a local socket as your own user — so a stock
+Homebrew install needs no configuration.
+
+Versions drift across environments and nothing pins them: CI runs Postgres 14,
+`docker-compose.yml` uses 17, and local machines vary.
 
 ### Ruby and Node
 
-Where each version is pinned, and what breaks on the wrong one:
+Only one of these two pins is actually enforced, which is worth knowing before
+you spend an afternoon on it:
 
-- **Ruby** is pinned in `.ruby-version`, which the `Gemfile` reads. `bundle
-  check` fails on any other version.
-- **Node** is pinned by `package.json` (`engines: { node: "24.x" }`), so `yarn
-  install` refuses to run on anything else, and the four asset watchers in
-  `./bin/dev` will not start either.
+- **Ruby** is pinned in `.ruby-version`, which the `Gemfile` reads, and Bundler
+  enforces it — every `bundle` command fails on a different version.
+- **Node** is pinned in `.tool-versions`, and `package.json` carries
+  `engines: { node: "24.x" }`. **Nothing enforces it.** Yarn 4 ignores `engines`
+  for the project it is installing, so `yarn install` succeeds on any version and
+  the assets simply build against whatever runtime you have. `./bin/setup` warns
+  on a mismatch because nothing else will.
 
-Note that Node is the one prerequisite that does **not** stop `./bin/setup`:
-`yarn install` is the single step there whose exit status is not checked
-(`bin/setup:25`), so setup carries on to bundler and `db:prepare` and reports no
-error. You get a run that looks clean with `node_modules` missing or
-half-written, which surfaces later as asset and spec failures that look like
-something else. If setup was not run on Node 24, check `node -v` and re-run
-`yarn install` on its own.
-
-There is no `.node-version` or `.nvmrc`, so `.tool-versions` is the only place
-the Node version is written down for a person to read — CI does not use it
-either, it pins `node-version: '24.x'` in the workflow directly.
+There is no `.node-version` or `.nvmrc`, so `.tool-versions` is the only place the
+Node version is written down for a person to read — CI does not use it either, it
+pins `node-version: '24.x'` in the workflow directly.
 
 ### Yarn 4 (Corepack) troubleshooting
 
@@ -61,33 +77,17 @@ yarn install --immutable
 You generally do not need to delete `node_modules`; only do that if you're trying
 to recover from a broken install.
 
-### PostGIS
-
-The one prerequisite `asdf` cannot install, because it is a Postgres extension
-rather than a language runtime. `config/database.yml` uses `adapter: postgis`, so
-`./bin/setup` fails at `db:prepare` without it:
-
-```bash
-brew install postgis
-```
-
 ### Caddy
 
-Covered by `asdf install` above, or `brew install caddy`. Needed only if you run
-`./bin/dev`, which starts Caddy from the `Procfile.dev` — foreman takes the whole
-stack down if the binary is missing. The config is tracked as `Caddyfile.dev` and
-used directly, so there is nothing to copy.
+`asdf install` provides the binary. `./bin/dev` starts it from `Procfile.dev`, and
+foreman takes the whole stack down if it is missing. The config is tracked as
+`Caddyfile.dev` and used directly, so there is nothing to copy.
 
-One thing `asdf` will not do for you:
-
-```bash
-caddy trust
-```
-
-That installs Caddy's local certificate authority into your OS keychain. It is
-worth doing rather than skipping: `Settings.publish_url` and its siblings are
-port-less HTTPS URLs, so anything that follows a redirect — persona sign-in, for
-one — lands on `publish.localhost` at 443, and without the certificate the app
+Caddy also needs its local certificate authority in your OS keychain, which
+`./bin/setup` runs for you the first time (`caddy trust`, which will ask for your
+password). It matters more than it sounds: `Settings.publish_url` and its siblings
+are port-less HTTPS URLs, so anything that follows a redirect — persona sign-in,
+for one — lands on `publish.localhost` at 443, and without the certificate the app
 looks broken rather than misconfigured.
 
 See [Configuring local domains](#configuring-local-domains) for running without
@@ -101,9 +101,10 @@ Run setup:
 ./bin/setup
 ```
 
-It activates Corepack, installs the Yarn and Bundler dependencies, prepares the
-database, and then hands straight over to `./bin/dev` — so a successful run leaves
-the server up. Pass `--skip-server` if you just want the dependencies.
+It checks the prerequisites above, activates Corepack, installs the Yarn and
+Bundler dependencies, prepares the database, and then hands straight over to
+`./bin/dev` — so a successful run leaves the server up. Pass `--skip-server` if
+you only want the dependencies, or `--skip-checks` to bypass the preflight.
 
 ## Install Playwright (for system tests)
 

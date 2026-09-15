@@ -8,10 +8,115 @@ def system!(*args)
   system(*args, exception: true)
 end
 
+def macos?
+  RUBY_PLATFORM.include?("darwin")
+end
+
+def brew?
+  macos? && system("command -v brew > /dev/null 2>&1")
+end
+
+def interactive?
+  $stdin.tty?
+end
+
+def node_major
+  `node -v 2>/dev/null`[/\Av(\d+)/, 1]&.to_i
+end
+
+def required_node_major
+  JSON.parse(File.read("package.json")).dig("engines", "node").to_s[/\d+/]&.to_i
+end
+
+def postgres_running?
+  system("pg_isready > /dev/null 2>&1")
+end
+
+def postgis_available?
+  `psql -tAc "SELECT 1 FROM pg_available_extensions WHERE name='postgis'" postgres 2>/dev/null`.strip == "1"
+end
+
+def caddy?
+  system("command -v caddy > /dev/null 2>&1")
+end
+
+def caddy_ca_trusted?
+  return true unless macos?
+
+  system('security find-certificate -c "Caddy Local Authority" > /dev/null 2>&1')
+end
+
+def offer(what, remedy)
+  puts "   missing: #{what}"
+
+  unless brew? && interactive?
+    puts "   fix it with: #{remedy}"
+    return false
+  end
+
+  print "   run `#{remedy}` now? [Y/n] "
+  answer = $stdin.gets.to_s.strip.downcase
+  return false unless answer.empty? || answer.start_with?("y")
+
+  system(remedy)
+end
+
+def preflight
+  unmet = []
+
+  required = required_node_major
+  found = node_major
+
+  if found.nil?
+    puts "   missing: node (nothing on PATH)"
+    puts "   fix it with: asdf install nodejs"
+    unmet << "node"
+  elsif required && found != required
+    puts "   warning: node #{found}.x, but package.json engines wants #{required}.x."
+    puts "   nothing enforces this. yarn 4 ignores engines, so assets may build"
+    puts "   against the wrong runtime rather than failing. `asdf install nodejs` to match."
+  end
+
+  unless postgres_running?
+    remedy = "brew install postgresql@17 && brew services start postgresql@17"
+    remedy = "sudo apt install postgresql postgresql-contrib && sudo service postgresql start" unless macos?
+    unmet << "postgres" unless offer("a running postgres server", remedy) && postgres_running?
+  end
+
+  if postgres_running? && !postgis_available?
+    remedy = macos? ? "brew install postgis" : "sudo apt install postgis"
+    unmet << "postgis" unless offer("the postgis extension, which db/schema.rb enables", remedy) && postgis_available?
+  end
+
+  if caddy? && !caddy_ca_trusted?
+    puts "   missing: caddy's local certificate authority, so https://publish.localhost will not load"
+    system("caddy trust")
+  elsif !caddy?
+    puts "   note: caddy is not installed, so bin/dev will not start. `asdf install caddy` or `brew install caddy`."
+  end
+
+  return if unmet.empty?
+
+  abort <<~MESSAGE
+
+    == Setup stopped ==
+
+    Unmet prerequisites: #{unmet.join(', ')}
+
+    Run the commands above, then run bin/setup again. Pass --skip-checks to
+    bypass this, but db:prepare will fail without postgres and postgis.
+  MESSAGE
+end
+
 FileUtils.chdir APP_ROOT do
   # This script is a way to set up or update your development environment automatically.
   # This script is idempotent, so that you can run it at any time and get an expectable outcome.
   # Add necessary setup steps to this file.
+
+  unless ARGV.include?("--skip-checks")
+    puts "== Checking prerequisites =="
+    preflight
+  end
 
   puts "== Activating Corepack / Yarn =="
   package_manager = JSON.parse(File.read("package.json"))["packageManager"]
@@ -22,7 +127,7 @@ FileUtils.chdir APP_ROOT do
   end
 
   puts "== Installing dependencies =="
-  system("yarn install")
+  system! "yarn install"
   system("bundle check") || system!("bundle install")
 
   # puts "\n== Copying sample files =="
