@@ -28,6 +28,10 @@ def required_node_major
   JSON.parse(File.read("package.json")).dig("engines", "node").to_s[/\d+/]&.to_i
 end
 
+def corepack?
+  system("command -v corepack > /dev/null 2>&1")
+end
+
 def postgres_running?
   system("pg_isready > /dev/null 2>&1")
 end
@@ -75,6 +79,13 @@ def preflight
     puts "   warning: node #{found}.x, but package.json engines wants #{required}.x."
     puts "   nothing enforces this. yarn 4 ignores engines, so assets may build"
     puts "   against the wrong runtime rather than failing. `asdf install nodejs` to match."
+  end
+
+  if found && !corepack?
+    puts "   missing: corepack, which activates the yarn version package.json pins"
+    puts "   it ships with node 16.9 to 24 and was removed in 25, so on a newer node:"
+    puts "   fix it with: npm install -g corepack"
+    unmet << "corepack"
   end
 
   unless postgres_running?
