@@ -805,7 +805,7 @@ en:
             is_send:
               inclusion: Select if this course has a special educational needs and disability (SEND) specialism
             a_level_subject_requirements:
-              blank: Enter A level requirements
+              blank: Enter A levels and equivalency test requirements
             accept_pending_a_level:
               blank: Enter information on pending A levels
             accept_a_level_equivalency:
@@ -820,27 +820,27 @@ en:
               provider_ukprn_not_publishable: "Enter a UK Provider Reference Number (UKPRN)"
               provider_ukprn_and_urn_not_publishable: "Enter a UK Provider Reference Number (UKPRN) and URN"
               degree_requirements_not_publishable: "Enter degree requirements"
-              gcse_requirements_not_publishable: "Enter GCSE requirements"
+              gcse_requirements_not_publishable: "Enter GCSE and equivalency test requirements"
         course_enrichment:
           attributes:
             salary_details:
               blank: "^Enter details about the salary for this course"
             fee_uk_eu:
-              blank: "^Enter fee for UK students"
+              blank: "^Enter fee for UK citizens"
               greater_than_or_equal_to: "must be greater than or equal to £0"
               less_than_or_equal_to: "must be less than or equal to £100,000"
               not_an_integer: "must not include pence, like 1000 or 1500"
             fee_international:
-              blank: ^Enter fee for international students
+              blank: "^Enter fee for non-UK citizens"
               greater_than_or_equal_to: "must be greater than or equal to £0"
               less_than_or_equal_to: "must be less than or equal to £100,000"
               not_an_integer: "must not include pence, like 1000 or 1500"
             theoretical_training_activities:
-              blank: "^Enter details about theoretical training activities"
+              blank: "^Enter what trainees will study"
             required_qualifications:
               blank: "^Enter details about the qualifications needed"
             course_length:
-              blank: "^Enter a course length"
+              blank: "^Enter course length"
             placement_selection_criteria:
               blank: "^Enter how you decide which schools to place trainees in"
             interview_process:
@@ -848,7 +848,7 @@ en:
             duration_per_school:
               blank: "^Enter how much time trainees will spend in each school"
             placement_school_activities:
-              blank: "^Enter what will trainees do while in their placement schools"
+              blank: "^Enter what trainees will do on school placements"
             provider_about_us:
               blank: "^Tell candidates about your organisation"
               too_long: "Details about your organisation must be 100 words or fewer"

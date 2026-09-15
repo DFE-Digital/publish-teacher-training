@@ -197,7 +197,55 @@ module ViewHelper
     support_recruitment_cycle_provider_accredited_partnerships_path(provider.recruitment_cycle_year, provider)
   end
 
+  # The publish errors in the order the rows appear on the description tab.
+  # Their natural order is the order the validations happen to be declared in
+  # Course, which puts degrees, GCSEs and A levels below fields that sit well
+  # above them on the page.
+  #
+  # Returns [field, message] pairs rather than a hash, because degrees and GCSEs
+  # both file their error under :base and need separate positions.
+  def ordered_enrichment_errors(errors)
+    errors
+      .flat_map { |field, messages| Array(messages).map { |message| [field.to_sym, message] } }
+      .sort_by
+      .with_index { |(field, message), index| [publish_error_position(field, message), index] }
+  end
+
 private
+
+  DEGREE_ERROR = "activerecord.errors.models.course.attributes.base.degree_requirements_not_publishable"
+  GCSE_ERROR = "activerecord.errors.models.course.attributes.base.gcse_requirements_not_publishable"
+
+  def publish_error_order
+    [
+      :course_length,
+      :fee_uk_eu,
+      :fee_international,
+      :financial_support,
+      :salary_details,
+      :salary_fee_details,
+      [:base, I18n.t(DEGREE_ERROR)],
+      :a_level_subject_requirements,
+      :accept_pending_a_level,
+      :accept_a_level_equivalency,
+      [:base, I18n.t(GCSE_ERROR)],
+      :placement_selection_criteria,
+      :duration_per_school,
+      :theoretical_training_location,
+      :theoretical_training_duration,
+      :placement_school_activities,
+      :support_and_mentorship,
+      :theoretical_training_activities,
+      :interview_location,
+      :interview_process,
+    ]
+  end
+
+  # Anything unlisted sorts last. sort_by.with_index keeps those in the order
+  # they arrived, so the basic details errors stay as they are today.
+  def publish_error_position(field, message)
+    publish_error_order.index { |slot| slot == (slot.is_a?(Array) ? [field, message] : field) } || publish_error_order.size
+  end
 
   def base_errors_hash(provider_code, course)
     {
@@ -217,9 +265,9 @@ private
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
       "Enter a UK Provider Reference Number (UKPRN) and URN" =>
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      "Enter degree requirements" =>
+      I18n.t(DEGREE_ERROR) =>
         degrees_start_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true),
-      "Enter GCSE requirements" =>
+      I18n.t(GCSE_ERROR) =>
         gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true),
     }
   end

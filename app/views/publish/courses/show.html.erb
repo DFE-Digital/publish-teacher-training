@@ -9,17 +9,15 @@
 
     <div class="govuk-error-summary__body">
       <ul class="govuk-list govuk-error-summary__list">
-        <% @errors.each do |id, messages| %>
-          <% messages.each do |message| %>
-            <li data-error-message="<%= message %>">
-              <a href="<%= enrichment_error_url(
-                provider_code: @provider.provider_code,
-                course: @course,
-                field: id,
-                message:,
-              ) %>"><%= message %></a>
-            </li>
-          <% end %>
+        <% ordered_enrichment_errors(@errors).each do |id, message| %>
+          <li data-error-message="<%= message %>">
+            <a href="<%= enrichment_error_url(
+              provider_code: @provider.provider_code,
+              course: @course,
+              field: id,
+              message:,
+            ) %>"><%= message %></a>
+          </li>
         <% end %>
       </ul>
     </div>

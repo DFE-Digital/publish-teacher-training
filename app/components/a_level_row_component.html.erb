@@ -1,9 +1,14 @@
 <% if has_errors? %>
   <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--error") do %>
     <% a_level_errors.each do |a_level_error| %>
-      <p class="govuk-heading-s app-inset-text__title">
-        <%= t("course.a_levels_wizard/steps/#{wizard_step(a_level_error)}.heading") %>
-      </p>
+      <%# No A levels at all reads the same in red as it does in blue. The other
+          two only come up once A levels are part answered, where the heading is
+          what says which question is unanswered. %>
+      <% unless a_level_error.to_sym == :a_level_subject_requirements %>
+        <p class="govuk-heading-s app-inset-text__title">
+          <%= t("course.a_levels_wizard/steps/#{wizard_step(a_level_error)}.heading") %>
+        </p>
+      <% end %>
       <p class="govuk-body">
       <%= govuk_link_to(
             @errors[a_level_error],
@@ -42,9 +47,6 @@
   <% end %>
 <% else %>
   <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do %>
-    <p class="govuk-heading-s app-inset-text__title">
-      <%= t("publish.providers.courses.description_content.a_levels_heading") %>
-    </p>
     <p class="govuk-body">
       <%= govuk_link_to t("publish.providers.courses.description_content.enter_a_levels"),
        publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(

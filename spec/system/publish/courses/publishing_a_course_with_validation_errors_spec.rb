@@ -10,6 +10,7 @@ RSpec.describe "Publishing courses errors" do
     when_i_visit_the_course_page
     and_i_click_the_publish_link
     then_i_see_validation_errors
+    and_the_errors_are_in_the_same_order_as_the_rows
 
     when_i_click_the_publish_link
     and_i_click_the_theoretical_training_activities_error
@@ -90,16 +91,27 @@ RSpec.describe "Publishing courses errors" do
 
   def then_i_see_validation_errors
     within ".govuk-error-summary" do
-      expect(page).to have_content("Enter a course length")
+      expect(page).to have_content("Enter course length")
       expect(page).to have_content("Enter details about the salary for this course")
       expect(page).to have_content("Enter degree requirements")
-      expect(page).to have_content("Enter GCSE requirements")
+      expect(page).to have_content("Enter GCSE and equivalency test requirements")
     end
+  end
+
+  # The summary follows the rows on the description tab, not the order the
+  # validations happen to be declared in.
+  def and_the_errors_are_in_the_same_order_as_the_rows
+    summary = page.all(".govuk-error-summary__list a").map(&:text)
+
+    expect(summary.index("Enter course length")).to be < summary.index("Enter degree requirements")
+    expect(summary.index("Enter degree requirements")).to be < summary.index("Enter GCSE and equivalency test requirements")
+    expect(summary.index("Enter GCSE and equivalency test requirements")).to be < summary.index("Enter how you decide which schools to place trainees in")
+    expect(summary.index("Enter what trainees will do on school placements")).to be < summary.index("Enter what trainees will study")
   end
 
   def and_i_click_the_what_you_will_do_on_placements_error
     within ".govuk-error-summary" do
-      page.find_link("Enter what will trainees do while in their placement schools").click
+      page.find_link("Enter what trainees will do on school placements").click
     end
   end
 
@@ -133,7 +145,7 @@ RSpec.describe "Publishing courses errors" do
 
   def and_i_click_the_theoretical_training_activities_error
     within ".govuk-error-summary" do
-      page.find_link("Enter details about theoretical training activities").click
+      page.find_link("Enter what trainees will study").click
     end
   end
 
@@ -149,7 +161,7 @@ RSpec.describe "Publishing courses errors" do
 
   def and_i_click_the_course_length_error
     within ".govuk-error-summary" do
-      page.find_link("Enter a course length").click
+      page.find_link("Enter course length").click
     end
   end
 
@@ -167,7 +179,7 @@ RSpec.describe "Publishing courses errors" do
 
   def and_i_click_the_gcse_error
     within ".govuk-error-summary" do
-      page.find_link("Enter GCSE requirements").click
+      page.find_link("Enter GCSE and equivalency test requirements").click
     end
   end
 
