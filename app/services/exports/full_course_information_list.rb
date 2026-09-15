@@ -10,9 +10,9 @@ module Exports
   #
   # The text goes out as the markdown held on the enrichment rather than
   # rendered HTML, so an amended cell pastes straight back into Publish. The
-  # enrichment read is the most recent one, draft included, so a provider sees
-  # the copy their course page is showing them rather than an older published
-  # version sitting beneath an unpublished edit.
+  # enrichment read is the published one, as in CourseInformationList, so both
+  # files describe the same courses and the file matches what Find shows the
+  # public. A course that has never been published falls back to its draft.
   #
   # Some columns only ever apply to part of the estate: two sections changed
   # shape for the 2027 cycle, and only teacher degree apprenticeships are asked
@@ -124,7 +124,7 @@ module Exports
     end
 
     def row(course)
-      enrichment = latest_enrichment(course)
+      enrichment = reported_enrichment(course)
 
       values_before_salary(course, enrichment) +
         [salary_value(enrichment)] +
@@ -281,12 +281,6 @@ module Exports
 
     def current_sections?
       provider.recruitment_cycle.after?(FINAL_LEGACY_SECTIONS_CYCLE)
-    end
-
-    # Matches CourseEnrichment.most_recent, which backs Course#latest_enrichment,
-    # but reads the preloaded rows rather than querying once per course.
-    def latest_enrichment(course)
-      course.enrichments.max_by { |enrichment| [enrichment.created_at, enrichment.id] }
     end
 
     def courses
