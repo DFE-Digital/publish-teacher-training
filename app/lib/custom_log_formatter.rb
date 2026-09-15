@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CustomLogFormatter < SemanticLogger::Formatters::Json
+  REDACTED = "[REDACTED]"
+
   def call(log, logger)
     super
 
@@ -9,6 +11,7 @@ class CustomLogFormatter < SemanticLogger::Formatters::Json
     format_json_message_context
     format_backtrace
     remove_post_params
+    redact_solid_queue_arguments
 
     format_payload_with_named_tags
 
@@ -59,6 +62,13 @@ private
     return unless method_is_post_or_put_or_patch? && hash.dig(:payload, :params).present?
 
     hash[:payload][:params].clear
+  end
+
+  def redact_solid_queue_arguments
+    return if hash.dig(:payload, :adapter).blank? || hash.dig(:payload, :arguments).blank?
+    return unless hash.dig(:payload, :adapter).include?("SolidQueue")
+
+    hash[:payload][:arguments] = REDACTED
   end
 
   def method_is_post_or_put_or_patch?

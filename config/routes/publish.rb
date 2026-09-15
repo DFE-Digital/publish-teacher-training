@@ -6,6 +6,9 @@ require "sidekiq/cron/web"
 mount Sidekiq::Web, at: "/sidekiq", constraints: SystemAdminConstraint.new
 get "/sidekiq(/*path)", to: redirect("/sign-in")
 
+mount MissionControl::Jobs::Engine, at: "/jobs", constraints: SystemAdminConstraint.new
+get "/jobs(/*path)", to: redirect("/sign-in")
+
 mount Blazer::Engine, at: "/blazer", constraints: BlazerAdminConstraint.new
 get "/blazer(/*path)", to: redirect("/sign-in")
 
