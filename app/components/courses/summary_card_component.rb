@@ -30,10 +30,10 @@ module Courses
         ])
       end
 
-      status_tag = application_status_tag
-      status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
+      # status_tag = application_status_tag
+      # status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
 
-      title_content = safe_join([course_link, status_block].compact)
+      title_content = safe_join([course_link].compact)
 
       classes = [
         ("govuk-grid-column-one-half" if save_toggle_button),
