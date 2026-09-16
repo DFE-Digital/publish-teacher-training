@@ -14,6 +14,9 @@ gem "pg"
 # Database-backed Rails cache (schema prepared on deploy; Redis remains the live store)
 gem "solid_cache", "~> 1.0"
 
+# Database-backed Active Job backend (schema first; Sidekiq remains the live adapter)
+gem "solid_queue", "~> 1.7"
+
 # Authorisation
 gem "pundit"
 

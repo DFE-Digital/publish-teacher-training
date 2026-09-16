@@ -9,8 +9,8 @@ require "rails_helper"
 #
 # Nothing here turns on which moment of the cycle it is, only on there being a
 # cycle to roll over into. The year is pinned rather than left to the real date
-# because Find::CycleTimetable::CYCLE_DATES is a hardcoded hash that ends at
-# 2027, so an unpinned cycle eventually asks it for a year it does not hold.
+# because Find::CycleTimetable::CYCLE_DATES is a hardcoded hash with a finite
+# last year, so an unpinned cycle eventually asks it for a year it does not hold.
 RSpec.describe "Rolling over draft courses one at a time", travel: mid_cycle(2025) do
   scenario "the provider's sites are not duplicated" do
     given_i_am_authenticated_as_a_provider_user

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt do
+RSpec.describe CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt, travel: mid_cycle(2026) do
   include_context "add_course_wizard"
 
   let(:current_step) { :visa_sponsorship_application_deadline_at }

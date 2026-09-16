@@ -57,14 +57,18 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
     then_i_have_errors_on_the_start_date_step
   end
 
-  scenario "shows options from the current month when in the recruitment cycle year" do
+  # Pinned to an instant inside the cycle's own calendar year, which is the
+  # branch under test. Most of the cycle runs in the previous calendar year, so
+  # unpinned this scenario exercises the "cycle is in the future" branch by
+  # accident and the list is never sliced.
+  scenario "shows options from the current month when in the recruitment cycle year", travel: first_deadline_banner do
     and_i_have_wizard_state_for_start_date
     when_i_visit_the_wizard_start_date_page
 
     expect(page).to have_content("Course start date")
     expect(page).to have_field(current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year))
     expect(page).to have_field("July #{Find::CycleTimetable.next_year}")
-    expect(page).not_to have_field(previous_month_label(cycle_year: Find::CycleTimetable.current_year)) if Date.current.month > 1
+    expect(page).not_to have_field(previous_month_label(cycle_year: Find::CycleTimetable.current_year))
   end
 
   scenario "shows options starting from January when provider recruitment cycle is in the future" do

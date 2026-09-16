@@ -393,6 +393,107 @@ erDiagram
 		integer key_hash
 		binary value
 	}
+	"SolidQueue::Batch" {
+		string active_job_batch_id
+		integer completed_jobs
+		string description
+		datetime enqueued_at
+		datetime failed_at
+		integer failed_jobs
+		datetime finished_at
+		integer id PK
+		text metadata
+		text on_failure
+		text on_finish
+		text on_success
+		integer total_jobs
+	}
+	"SolidQueue::BatchExecution" {
+		integer batch_id FK
+		integer id PK
+		integer job_id FK
+	}
+	"SolidQueue::BlockedExecution" {
+		string concurrency_key
+		datetime expires_at
+		integer id PK
+		integer job_id FK
+		integer priority
+		string queue_name
+	}
+	"SolidQueue::ClaimedExecution" {
+		integer id PK
+		integer job_id FK
+		integer process_id FK
+	}
+	"SolidQueue::FailedExecution" {
+		text error
+		integer id PK
+		integer job_id FK
+	}
+	"SolidQueue::Job" {
+		string active_job_id
+		text arguments
+		integer batch_id FK
+		string class_name
+		string concurrency_key
+		datetime finished_at
+		integer id PK
+		integer priority
+		string queue_name
+		datetime scheduled_at
+	}
+	"SolidQueue::Pause" {
+		integer id PK
+		string queue_name
+	}
+	"SolidQueue::Process" {
+		string hostname
+		integer id PK
+		string kind
+		datetime last_heartbeat_at
+		text metadata
+		string name
+		integer pid
+		integer supervisor_id FK
+	}
+	"SolidQueue::ReadyExecution" {
+		integer id PK
+		integer job_id FK
+		integer priority
+		string queue_name
+	}
+	"SolidQueue::RecurringExecution" {
+		integer id PK
+		integer job_id FK
+		datetime run_at
+		string task_key FK
+	}
+	"SolidQueue::RecurringTask" {
+		text arguments
+		string class_name
+		string command
+		text description
+		integer id PK
+		string key
+		integer priority
+		string queue_name
+		string schedule
+		boolean static
+	}
+	"SolidQueue::ScheduledExecution" {
+		integer id PK
+		integer job_id FK
+		integer priority
+		string queue_name
+		datetime scheduled_at
+	}
+	"SolidQueue::Semaphore" {
+		datetime expires_at
+		integer id PK
+		string key FK
+		integer value
+	}
 	Statistic {
 		integer id PK
 		jsonb json_data
@@ -448,19 +549,18 @@ erDiagram
 		integer provider_id FK
 		integer user_id FK
 	}
-	Auditable o|--}o "Audited::Audit" : ""
 	Candidate o|--}o "Audited::Audit" : ""
 	Contact o|--}o "Audited::Audit" : ""
 	Course o|--}o "Audited::Audit" : ""
+	"Course::School" o|--}o "Audited::Audit" : ""
 	CourseSubject o|--}o "Audited::Audit" : ""
 	Organisation o|--}o "Audited::Audit" : ""
 	OrganisationUser o|--}o "Audited::Audit" : ""
 	Provider o|--}o "Audited::Audit" : ""
+	"Provider::School" o|--}o "Audited::Audit" : ""
 	Site o|--}o "Audited::Audit" : ""
 	SiteStatus o|--}o "Audited::Audit" : ""
 	User o|--}o "Audited::Audit" : ""
-	Associated o|--}o "Audited::Audit" : ""
-	Authenticable ||--}o Authentication : ""
 	User ||--}o Authentication : ""
 	User o|--}o "Blazer::Audit" : ""
 	"Blazer::Query" o|--}o "Blazer::Audit" : ""
@@ -471,7 +571,6 @@ erDiagram
 	"Blazer::Dashboard" o|..}o "Blazer::Query" : ""
 	"Blazer::Query" ||--}o "Blazer::DashboardQuery" : ""
 	User o|--}o "Blazer::Query" : ""
-	Sessionable ||--}o Session : ""
 	Candidate ||--}o Session : ""
 	User ||--}o Session : ""
 	Candidate o|--}o Authentication : ""
@@ -520,6 +619,19 @@ erDiagram
 	RecruitmentCycle o|..}o GiasSchool : ""
 	Site ||--}o SiteStatus : ""
 	Site ||--}o StudySitePlacement : ""
+	"SolidQueue::Batch" o|--}o "SolidQueue::Job" : ""
+	"SolidQueue::Batch" ||--}o "SolidQueue::BatchExecution" : ""
+	"SolidQueue::BlockedExecution" o|--|o "SolidQueue::Semaphore" : ""
+	"SolidQueue::Process" ||--}o "SolidQueue::ClaimedExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::BatchExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::RecurringExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::FailedExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::ScheduledExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::BlockedExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::ReadyExecution" : ""
+	"SolidQueue::Job" o|--|o "SolidQueue::ClaimedExecution" : ""
+	"SolidQueue::Process" o|--}o "SolidQueue::Process" : ""
+	"SolidQueue::RecurringTask" o|--}o "SolidQueue::RecurringExecution" : ""
 	SubjectGroup o|--}o Subject : ""
 	SubjectArea ||--}o Subject : ""
 	User ||--}o UserNotification : ""

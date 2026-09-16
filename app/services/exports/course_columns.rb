@@ -2,10 +2,24 @@
 
 module Exports
   module CourseColumns
+    extend ActiveSupport::Concern
+
+    included do
+      include ActionView::Helpers::NumberHelper
+    end
+
     # A CSV carries no encoding declaration, so Excel falls back to the legacy
     # Windows code page and renders the UTF-8 "£" (C2 A3) as "Â£". This byte
     # order mark, written first, tells it the file is UTF-8.
     BYTE_ORDER_MARK = "\uFEFF"
+
+    # Salaried and apprenticeship courses charge no fees, so Publish never shows
+    # the fee rows for them. An amount can still be sitting on the enrichment
+    # from before the course changed funding, and printing it would tell a
+    # provider they charge a fee they do not.
+    def fee(course, amount)
+      number_to_currency(amount) if course.fee_based?
+    end
 
     def status(course)
       Publish::Courses::StatusTag.token(course).to_s.humanize

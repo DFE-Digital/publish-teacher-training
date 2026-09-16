@@ -4,18 +4,72 @@ Clone the repo:
 
     git clone git@github.com:DFE-Digital/publish-teacher-training.git
 
-## Setup the application libraries and dependencies
+## Prerequisites
 
-Run setup:
+Two commands from a fresh clone:
 
 ```bash
+asdf install
 ./bin/setup
 ```
 
-### Yarn 4 (Corepack) troubleshooting
-This repo uses Yarn 4 via Corepack (`packageManager: "yarn@4.18.0"`).
+`asdf install` reads `.tool-versions` and gets you Ruby 3.4.10, Node 24.13.0 and
+Caddy 2.9.1. Add the plugins first if you have not already (`asdf plugin add
+ruby`, and the same for `nodejs` and `caddy`). The file also pins deployment
+tooling — kubectl, terraform, azure-cli and others — that local development does
+not need.
 
-If `yarn -v` still shows Yarn 1, run:
+`./bin/setup` checks everything else before it starts, and offers to install what
+is missing: a running Postgres server, the PostGIS extension, and Caddy's local
+certificate authority. It stops with the exact command to run if it cannot fix
+something itself.
+
+### Postgres and PostGIS
+
+`asdf` does not provide a database server, so this is the one prerequisite that
+needs a package manager. `config/database.yml` uses `adapter: postgis` and
+`db/schema.rb` enables the `postgis` extension, so both the server and the
+extension have to be there or `db:prepare` fails:
+
+```bash
+brew install postgresql@17 postgis
+brew services start postgresql@17
+```
+
+`./bin/setup` detects both and offers to run this for you. Connection settings
+come from `DB_USERNAME`, `DB_PASSWORD`, `DB_HOSTNAME` and `DB_PORT`, all of which
+fall back to the libpq defaults — a local socket as your own user — so a stock
+Homebrew install needs no configuration.
+
+Versions drift across environments and nothing pins them: CI runs Postgres 14,
+`docker-compose.yml` uses 17, and local machines vary.
+
+### Ruby and Node
+
+Only one of these two pins is actually enforced, which is worth knowing before
+you spend an afternoon on it:
+
+- **Ruby** is pinned in `.ruby-version`, which the `Gemfile` reads, and Bundler
+  enforces it — every `bundle` command fails on a different version.
+- **Node** is pinned in `.tool-versions`, and `package.json` carries
+  `engines: { node: "24.x" }`. **Nothing enforces it.** Yarn 4 ignores `engines`
+  for the project it is installing, so `yarn install` succeeds on any version and
+  the assets simply build against whatever runtime you have. `./bin/setup` warns
+  on a mismatch because nothing else will.
+
+There is no `.node-version` or `.nvmrc`, so `.tool-versions` is the only place the
+Node version is written down for a person to read — CI does not use it either, it
+pins `node-version: '24.x'` in the workflow directly.
+
+### Yarn 4 (Corepack) troubleshooting
+
+This repo uses Yarn 4 via Corepack (`packageManager: "yarn@4.18.0"`). `./bin/setup`
+activates it for you and checks it is there first — Corepack shipped with Node
+16.9 to 24 and was **removed in Node 25**, so on a newer runtime you need
+`npm install -g corepack` before setup will get past its first step.
+
+If `yarn -v` still shows Yarn 1 — usually a separately installed yarn shadowing
+the Corepack shim — run:
 
 ```bash
 corepack enable
@@ -24,7 +78,37 @@ yarn -v
 yarn install --immutable
 ```
 
-You generally do not need to delete `node_modules`; only do that if you’re trying to recover from a broken install.
+You generally do not need to delete `node_modules`; only do that if you're trying
+to recover from a broken install.
+
+### Caddy
+
+`asdf install` provides the binary. `./bin/dev` starts it from `Procfile.dev`, and
+foreman takes the whole stack down if it is missing. The config is tracked as
+`Caddyfile.dev` and used directly, so there is nothing to copy.
+
+Caddy also needs its local certificate authority in your OS keychain, which
+`./bin/setup` runs for you the first time (`caddy trust`, which will ask for your
+password). It matters more than it sounds: `Settings.publish_url` and its siblings
+are port-less HTTPS URLs, so anything that follows a redirect — persona sign-in,
+for one — lands on `publish.localhost` at 443, and without the certificate the app
+looks broken rather than misconfigured.
+
+See [Configuring local domains](#configuring-local-domains) for running without
+Caddy.
+
+## Setup the application libraries and dependencies
+
+Run setup:
+
+```bash
+./bin/setup
+```
+
+It checks the prerequisites above, activates Corepack, installs the Yarn and
+Bundler dependencies, prepares the database, and then hands straight over to
+`./bin/dev` — so a successful run leaves the server up. Pass `--skip-server` if
+you only want the dependencies, or `--skip-checks` to bypass the preflight.
 
 ## Install Playwright (for system tests)
 
@@ -60,7 +144,11 @@ The first time you run the app, you need to set up the databases. With the above
 docker compose exec web /bin/sh -c "bundle exec rails db:setup"
 ```
 
-Then open http://localhost:3001 to see the app.
+The compose file maps the app to port 3001, but the router matches on host, so
+bare `http://localhost:3001` matches no service and 404s — use
+<http://publish.localhost:3001> (or `find.`/`api.`). Note also that the `web`
+service runs with `RAILS_ENV=test`, so this is the container setup CI uses rather
+than a full local development environment.
 
 ## Run The Server in SSL Mode
 
@@ -89,6 +177,15 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 
 The commands from the previous section will seed the database with some test data, but you must seed the database with a sanitised production dump to run the application locally using the personas.
 
+The personas page at `/personas` renders whether or not you have the dump, but
+three of its four users — Anne, Susy and Mary — only exist in it. Until you have
+loaded a dump those buttons fail, which reads as broken authentication rather
+than as missing data.
+
+The fourth, Colin, is the DfE support agent, and `bin/rails db:seed:integration`
+creates him locally. Plain `./bin/setup` seeds neither — it creates a single super
+admin user instead, whose sign-in address is in `db/seeds.rb`.
+
 To seed the database with a sanitised production dump:
 
 - Request a PIM approval for the production environment.
@@ -115,22 +212,42 @@ psql manage_courses_backend_development < ~/Downloads/publish_sanitised_YYYY-MM-
 
 ## Configuring local domains
 
-This app is setup to serve two domains for two live services. In order to develop locally you will need to configure your local machine to resolve these domains to `localhost`. You can use [Caddy](https://caddyserver.com/) to do this.
+The app serves three hosts from one Rails process — `publish.localhost`,
+`find.localhost` and `api.localhost` — and routes by host rather than by path
+(`config/routes.rb`). Bare `localhost` matches no service and 404s.
 
-[Caddy](https://caddyserver.com/) is a web server that can be used to proxy requests to the local server. It can be configured to resolve the domains to `localhost`. You can install it with homebrew and setup a Caddyfile in the root of the project with the following content:
+macOS resolves `*.localhost` to 127.0.0.1 on its own, so nothing needs to be
+added to `/etc/hosts`. On Linux, most resolvers do the same; add entries if yours
+does not.
 
+**With Caddy** (what `./bin/dev` runs) you get the port-less HTTPS URLs the app's
+own settings use:
+
+- <https://publish.localhost>
+- <https://find.localhost>
+- <https://api.localhost>
+
+To serve them without `./bin/dev`, run Caddy on its own from the root of the
+project:
+
+```bash
+caddy start --config Caddyfile.dev --adapter caddyfile
 ```
-publish.localhost {
-  reverse_proxy localhost:3001
-}
 
-find.localhost {
-  reverse_proxy localhost:3001
-}
+**Without Caddy**, run the server directly and add the port. The host constraint
+does not care about the port, so this works fine:
+
+```bash
+bin/rails server -p 3001
 ```
 
-Then make sure to run `caddy start` in the root of the project. You should now be able to access the app at `http://publish.localhost` and `http://find.localhost`.
+- <http://publish.localhost:3001>
+- <http://find.localhost:3001>
+- <http://api.localhost:3001>
 
-> If using `bin/dev` then the URL is `http://find.localhost:3001` and `http://publish.localhost:3001`
+The catch is redirects. `Settings.publish_url` and its siblings have no port, so
+anything that follows one — persona sign-in, for one — sends you to port 443 and
+you land nowhere unless Caddy is running. Fine for browsing, awkward for
+sign-in.
 
-If you're getting an error message, try `caddy stop` then try stopping the rails server `control C`. Then run `yarn build` followed by `yarn build:css`. Now restart the rails server `rails s` and then try `caddy start`.
+If you're getting an error message, try `caddy stop` then try stopping the rails server `control C`. Then run `yarn build` followed by `yarn build:css`. Now restart the rails server `rails s` and then start Caddy again with the command above.

@@ -61,6 +61,22 @@ module Exports
         expect(rows.first.to_h).to include("UK fee" => "£9,535", "Non-UK fee" => "£14,000")
       end
 
+      it "leaves the fees empty for a course that charges none, whatever the enrichment holds" do
+        create(:course, :apprenticeship, provider:, name: "Apprenticeship course", enrichments: [
+          build(:course_enrichment, :published, fee_uk_eu: 9_790, fee_international: 15_000),
+        ])
+        create(:course, :salary, provider:, name: "Salaried course", enrichments: [
+          build(:course_enrichment, :published, fee_uk_eu: 9_790, fee_international: 15_000),
+        ])
+
+        expect(rows.map { |row| row.values_at("Course name", "UK fee", "Non-UK fee") }).to eq(
+          [
+            ["Apprenticeship course", nil, nil],
+            ["Salaried course", nil, nil],
+          ],
+        )
+      end
+
       it "reports a rolled-over course's values, which the model counts as draft" do
         create(:course, :fee, provider:, name: "Geography", enrichments: [
           build(:course_enrichment, :rolled_over, fee_uk_eu: 9_000, course_length: "OneYear"),

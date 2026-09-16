@@ -14,13 +14,13 @@ RSpec.describe CourseWizard::Steps::StartDate do
   let(:start_date) { nil }
 
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: cycle_year) }
-  let(:cycle_year) { 2026 }
+  let(:cycle_year) { Find::CycleTimetable.current_year }
   let(:provider) { create(:provider, :accredited_provider, recruitment_cycle:) }
 
   describe "#valid?" do
     context "when start_date is present" do
       it "is valid" do
-        wizard_step.start_date = "January 2026"
+        wizard_step.start_date = "January #{cycle_year}"
         expect(wizard_step).to be_valid
       end
     end
@@ -34,40 +34,74 @@ RSpec.describe CourseWizard::Steps::StartDate do
     end
   end
 
+  # A cycle offers January of its year to July of the next, so where today sits
+  # in that window decides what is still available. Routes admit the previous,
+  # current and next cycles, which gives the cases below.
   describe "#start_date_options" do
-    it "starts from the current month when in the recruitment cycle year" do
-      allow(Time.zone).to receive(:today).and_return(Date.new(2026, 6, 15))
-
-      options = wizard_step.start_date_options
-
-      expect(options.first).to eq("June 2026")
-      expect(options).to include("July 2027")
-      expect(options).not_to include("May 2026")
-    end
-
-    context "when today is after the recruitment cycle year" do
-      it "falls back to January of the cycle year" do
-        allow(Time.zone).to receive(:today).and_return(Date.new(2027, 2, 1))
-
+    context "when the cycle has opened but its first month has not arrived" do
+      # mid_cycle is two months after Find opens, which always falls in the
+      # calendar year before the cycle year, so the whole window is still ahead.
+      it "offers every month of the cycle", travel: mid_cycle do
         options = wizard_step.start_date_options
 
-        expect(options.first).to eq("January 2026")
-        expect(options).to include("July 2027")
-        expect(options).to include("February 2026")
+        expect(options.first).to eq("January #{cycle_year}")
+        expect(options.last).to eq("July #{cycle_year + 1}")
       end
     end
 
-    context "when the recruitment cycle year is in the future" do
-      let(:cycle_year) { 2027 }
-
-      it "starts from January of the cycle year" do
-        allow(Time.zone).to receive(:today).and_return(Date.new(2026, 6, 15))
-
+    context "when today is inside the cycle's own year" do
+      it "starts from the current month", travel: first_deadline_banner do
         options = wizard_step.start_date_options
 
-        expect(options.first).to eq("January 2027")
-        expect(options).to include("July 2028")
-        expect(options).not_to include("December 2026")
+        expect(options.first).to eq("July #{cycle_year}")
+        expect(options.last).to eq("July #{cycle_year + 1}")
+        expect(options).not_to include("June #{cycle_year}")
+      end
+    end
+
+    context "when the cycle is the next one" do
+      let(:cycle_year) { Find::CycleTimetable.next_year }
+
+      it "offers every month of that cycle", travel: mid_cycle do
+        options = wizard_step.start_date_options
+
+        expect(options.first).to eq("January #{cycle_year}")
+        expect(options.last).to eq("July #{cycle_year + 1}")
+        expect(options).not_to include("December #{cycle_year - 1}")
+      end
+    end
+
+    context "when the cycle has been superseded but its later months remain" do
+      let(:cycle_year) { Find::CycleTimetable.previous_year }
+
+      it "offers only the months that have not ended", travel: Time.zone.local(Find::CycleTimetable.current_year, 3, 1) do
+        options = wizard_step.start_date_options
+
+        expect(options.first).to eq("March #{cycle_year + 1}")
+        expect(options.last).to eq("July #{cycle_year + 1}")
+        expect(options).not_to include("January #{cycle_year}")
+        expect(options).not_to include("February #{cycle_year + 1}")
+      end
+    end
+
+    context "when every month of the cycle has passed" do
+      let(:cycle_year) { Find::CycleTimetable.previous_year }
+
+      it "offers the whole cycle rather than nothing", travel: Time.zone.local(Find::CycleTimetable.current_year, 8, 1) do
+        options = wizard_step.start_date_options
+
+        expect(options.first).to eq("January #{cycle_year}")
+        expect(options.last).to eq("July #{cycle_year + 1}")
+      end
+    end
+
+    context "when a start date has already been chosen" do
+      let(:start_date) { "January #{cycle_year}" }
+
+      it "keeps every month on offer so the chosen date stays selectable", travel: first_deadline_banner do
+        options = wizard_step.start_date_options
+
+        expect(options).to eq(Courses::CycleStartMonths.labels_for(cycle_year))
       end
     end
   end
