@@ -135,7 +135,7 @@ private
   end
 
   def then_i_an_error_message
-    expect(page).to have_content("Enter a course length").twice
+    expect(page).to have_content("Enter course length").twice
   end
 
   def then_i_see_a_success_message
