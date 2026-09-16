@@ -1,6 +1,6 @@
 class RolloverProvidersBatchJob < ApplicationJob
   queue_as :default
-  retry_on StandardError, attempts: 0
+  without_auto_retry
 
   def perform(provider_codes, recruitment_cycle_id, summary_id)
     summary = DataHub::RolloverProcessSummary.find(summary_id)

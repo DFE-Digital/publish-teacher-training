@@ -1,7 +1,7 @@
 module BlankCoordinatesBackfill
   class BatchJob < ApplicationJob
     queue_as :geocoding
-    retry_on StandardError, attempts: 0
+    without_auto_retry
 
     def perform(records_batch, process_summary_id, dry_run)
       DataHub::BlankCoordinatesBackfill::Log.info("BatchJob starting: process_summary=#{process_summary_id}, records=#{records_batch.size}, dry_run=#{dry_run}")

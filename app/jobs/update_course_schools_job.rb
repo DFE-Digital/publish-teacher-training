@@ -2,7 +2,7 @@
 
 class UpdateCourseSchoolsJob < ApplicationJob
   queue_as :default
-  retry_on StandardError, attempts: 0
+  without_auto_retry
 
   def perform(course_id, school_uuids)
     course = Course.find(course_id)
