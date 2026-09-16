@@ -7,12 +7,13 @@ module Publish
     # the course-information column (funding / qualification / study type / start
     # date) and the status tag. Rows are read-model rows from Publish::Courses::Query.
     class TableComponent < ApplicationComponent
-      def initialize(courses:, provider:, course_information_fields: Publish::CourseList::FIELDS.keys, view_course_column: false, classes: [], html_attributes: {})
+      def initialize(courses:, provider:, course_information_fields: Publish::CourseList::FIELDS.keys, view_course_column: false, link_to_courses: true, classes: [], html_attributes: {})
         super(classes:, html_attributes:)
         @courses = courses
         @provider = provider
         @course_information_fields = course_information_fields
         @view_course_column = view_course_column
+        @link_to_courses = link_to_courses
         @live_on_find = {}
       end
 
@@ -85,8 +86,11 @@ module Publish
       # provider does not own the course 404s, or opens a different course
       # that happens to share the code — as on the training-partners list,
       # where @provider is the accredited provider.
+      #
+      # A caller can also ask for no links at all: a page confirming a change
+      # to these courses offers nowhere to go.
       def link_to_course?(course)
-        course.provider_id == provider.id
+        @link_to_courses && course.provider_id == provider.id
       end
 
       def age_range(course)

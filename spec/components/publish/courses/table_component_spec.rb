@@ -47,6 +47,21 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
       end
     end
 
+    # A page confirming a change offers nowhere to go.
+    context "when asked not to link" do
+      subject(:render_component) { render_inline(described_class.new(courses:, provider:, link_to_courses: false)) }
+
+      it "renders the course name as text, still headed and still with its age range" do
+        render_component
+
+        within(".app-table--courses__course-name") do
+          expect(page).to have_css(".govuk-heading-s", text: "Biology (B123)")
+          expect(page).to have_no_link("Biology (B123)")
+          expect(page).to have_css(".govuk-hint", text: "Ages 3 to 7")
+        end
+      end
+    end
+
     context "when the course is secondary" do
       before do
         create(:course, :secondary, :published_postgraduate, provider:, name: "Physics", course_code: "P456")
