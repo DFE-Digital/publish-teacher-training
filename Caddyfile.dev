@@ -1,0 +1,17 @@
+# Used directly by `bin/dev` (see Procfile.dev) -- no copying needed. Routing is
+# by host, so all three services share one Rails process on port 3001.
+#
+# For a local override, copy this to `Caddyfile` (gitignored) and point your own
+# Procfile.local at it.
+
+publish.localhost {
+	reverse_proxy localhost:3001
+}
+
+find.localhost {
+	reverse_proxy localhost:3001
+}
+
+api.localhost {
+	reverse_proxy localhost:3001
+}

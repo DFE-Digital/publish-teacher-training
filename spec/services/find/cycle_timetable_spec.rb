@@ -72,9 +72,12 @@ module Find
         expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2019-01-01 12:00:00")
       end
 
+      # Taken from the last cycle rather than written out, so that adding the
+      # next cycle moves the boundary instead of breaking this example.
       it "returns nil for a time after the last defined cycle" do
-        time = Time.zone.local(2030, 1, 1, 12, 0, 0)
-        expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time 2030-01-01 12:00:00")
+        time = described_class::CYCLE_DATES.values.last[:find_closes].end_of_day + 1.second
+
+        expect { described_class.cycle_year_for_time(time) }.to raise_error("NoRecruitmentCycleExists: time #{time.utc.strftime('%Y-%m-%d %H:%M:%S')}")
       end
     end
 
