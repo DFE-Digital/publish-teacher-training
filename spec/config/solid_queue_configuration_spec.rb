@@ -5,13 +5,15 @@ require "erb"
 require "yaml"
 
 RSpec.describe "Solid Queue configuration" do
-  REQUIRED_QUEUES = %w[
-    default
-    mailers
-    geocoding
-    save_statistic
-    low_priority
-  ].freeze
+  def required_queues
+    %w[
+      default
+      mailers
+      geocoding
+      save_statistic
+      low_priority
+    ]
+  end
 
   def consumed_queues(relative_path)
     yaml = ERB.new(Rails.root.join(relative_path).read).result
@@ -36,11 +38,11 @@ RSpec.describe "Solid Queue configuration" do
   end
 
   it "consumes every application queue in config/queue.yml" do
-    expect(consumed_queues("config/queue.yml")).to include(*REQUIRED_QUEUES)
+    expect(consumed_queues("config/queue.yml")).to include(*required_queues)
   end
 
   it "consumes every application queue in config/non_production_queue.yml" do
-    expect(consumed_queues("config/non_production_queue.yml")).to include(*REQUIRED_QUEUES)
+    expect(consumed_queues("config/non_production_queue.yml")).to include(*required_queues)
   end
 
   it "defines env-specific sections in non_production_queue.yml for PTT Rails.env values" do
