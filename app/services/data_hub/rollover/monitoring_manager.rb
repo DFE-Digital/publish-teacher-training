@@ -70,7 +70,7 @@ module DataHub
 
       def schedule_next_check
         next_attempt = attempt_number + 1
-        RolloverMonitoringJob.perform_in(CHECK_INTERVAL, process_summary_id, next_attempt)
+        RolloverMonitoringJob.set(wait: CHECK_INTERVAL).perform_later(process_summary_id, next_attempt)
 
         RolloverLog.info "Scheduled next monitoring check (attempt #{next_attempt}) in #{CHECK_INTERVAL.to_i / 60} minutes"
       end

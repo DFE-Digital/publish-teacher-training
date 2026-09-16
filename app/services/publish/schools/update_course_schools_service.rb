@@ -16,7 +16,7 @@ module Publish
         school_uuids = Array(school_uuids).compact_blank.uniq
 
         if school_uuids.size > ENQUEUE_THRESHOLD
-          UpdateCourseSchoolsJob.perform_async(course.id, school_uuids)
+          UpdateCourseSchoolsJob.perform_later(course.id, school_uuids)
         else
           call(course:, school_uuids:)
         end

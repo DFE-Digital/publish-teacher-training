@@ -9,7 +9,7 @@ RSpec.describe RolloverMonitoringJob, type: :job do
     it "delegates to MonitoringManager" do
       expect(DataHub::Rollover::MonitoringManager).to receive(:check_completion).with(process_summary.id, 1)
 
-      described_class.new.perform(process_summary.id, 1)
+      described_class.perform_now(process_summary.id, 1)
     end
   end
 end
