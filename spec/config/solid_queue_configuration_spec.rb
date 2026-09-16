@@ -15,52 +15,47 @@ RSpec.describe "Solid Queue configuration" do
     ]
   end
 
-  def consumed_queues(relative_path)
-    yaml = ERB.new(Rails.root.join(relative_path).read).result
-    config = YAML.safe_load(yaml, aliases: true)
-    section = config[Rails.env] || config["default"] || config.values.first
-
-    Array(section.fetch("workers")).flat_map { |worker| Array(worker.fetch("queues")) }.uniq
-  end
-
-  def dispatchers_configured?(relative_path)
-    yaml = ERB.new(Rails.root.join(relative_path).read).result
-    config = YAML.safe_load(yaml, aliases: true)
-    section = config[Rails.env] || config["default"] || config.values.first
-
-    Array(section["dispatchers"]).any?
-  end
-
-  it "points SOLID_QUEUE_CONFIG at a queue file" do
-    expect(ENV.fetch("SOLID_QUEUE_CONFIG")).to be_in(
-      %w[config/queue.yml config/non_production_queue.yml],
-    )
-  end
-
-  it "consumes every application queue in config/queue.yml" do
-    expect(consumed_queues("config/queue.yml")).to include(*required_queues)
-  end
-
-  it "consumes every application queue in config/non_production_queue.yml" do
-    expect(consumed_queues("config/non_production_queue.yml")).to include(*required_queues)
-  end
-
-  it "defines env-specific sections in non_production_queue.yml for PTT Rails.env values" do
-    config = YAML.safe_load(
-      ERB.new(Rails.root.join("config/non_production_queue.yml").read).result,
+  def queue_config
+    YAML.safe_load(
+      ERB.new(Rails.root.join("config/queue.yml").read).result,
       aliases: true,
     )
+  end
 
-    %w[qa staging sandbox review test loadtest rollover].each do |env|
-      expect(config[env]).to be_present, "expected config/non_production_queue.yml to define #{env}:"
-      expect(config[env]["workers"]).to be_present
-      expect(config[env]["dispatchers"]).to be_present
+  def section_for(env)
+    queue_config.fetch(env)
+  end
+
+  def consumed_queues(env)
+    Array(section_for(env).fetch("workers")).flat_map { |worker| Array(worker.fetch("queues")) }.uniq
+  end
+
+  it "uses the default Solid Queue config file (no SOLID_QUEUE_CONFIG override)" do
+    expect(ENV["SOLID_QUEUE_CONFIG"]).to be_nil.or(eq("config/queue.yml"))
+  end
+
+  it "consumes every application queue in production and non-production sections" do
+    expect(consumed_queues("production")).to include(*required_queues)
+    expect(consumed_queues("review")).to include(*required_queues)
+  end
+
+  it "defines env-specific sections for PTT Rails.env values" do
+    %w[production development test qa staging sandbox review loadtest rollover].each do |env|
+      expect(section_for(env)["workers"]).to be_present
+      expect(section_for(env)["dispatchers"]).to be_present
     end
   end
 
-  it "defines a dispatcher in both queue configs" do
-    expect(dispatchers_configured?("config/queue.yml")).to be(true)
-    expect(dispatchers_configured?("config/non_production_queue.yml")).to be(true)
+  it "uses slower polling outside production/development" do
+    expect(section_for("production").dig("dispatchers", 0, "polling_interval")).to eq(1)
+    expect(section_for("review").dig("dispatchers", 0, "polling_interval")).to eq(3)
+  end
+
+  it "keeps mailers off the bulk worker in production" do
+    production_workers = section_for("production").fetch("workers")
+    bulk = production_workers.find { |worker| Array(worker["queues"]).include?("low_priority") }
+
+    expect(bulk["queues"]).not_to include("mailers")
   end
 
   it "keeps Sidekiq as the application-default Active Job adapter" do
@@ -68,5 +63,13 @@ RSpec.describe "Solid Queue configuration" do
 
     expect(application_config).to match(/config\.active_job\.queue_adapter\s*=\s*:sidekiq/)
     expect(application_config).not_to match(/config\.active_job\.queue_adapter\s*=\s*:solid_queue/)
+  end
+
+  it "derives Mission Control filter_arguments from filter_parameters" do
+    expect(MissionControl::Jobs.filter_arguments).to include("email", "token", "email_address", "headers")
+  end
+
+  it "does not draw Turbo Drive routes" do
+    expect(Turbo.draw_routes).to be(false)
   end
 end

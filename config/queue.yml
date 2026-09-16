@@ -1,3 +1,9 @@
+# Production / development: 1s polling.
+# Non-production PTT envs (qa, staging, …): 3s polling for burstable DBs.
+#
+# Keep worker `threads` × `processes` within DATABASE_CONNECTION_POOL_SIZE on the
+# solid-queue-worker (default 5 in terraform/aks/application.tf). Bumping threads
+# here without raising that pool causes Solid Queue to warn and queue on the pool.
 default: &default
   dispatchers:
     - polling_interval: 1
@@ -21,6 +27,22 @@ default: &default
       processes: <%= ENV.fetch("LOW_PRIORITY_QUEUE_PROCESSES", 1) %>
       polling_interval: 1
 
+non_production: &non_production
+  dispatchers:
+    - polling_interval: 3
+      batch_size: 500
+      concurrency_maintenance_interval: 300
+  workers:
+    - queues: [default, geocoding, mailers]
+      threads: 1
+      processes: 1
+      polling_interval: 3
+
+    - queues: [save_statistic, low_priority]
+      threads: 1
+      processes: 1
+      polling_interval: 3
+
 development:
   <<: *default
 
@@ -29,3 +51,21 @@ test:
 
 production:
   <<: *default
+
+qa:
+  <<: *non_production
+
+staging:
+  <<: *non_production
+
+sandbox:
+  <<: *non_production
+
+review:
+  <<: *non_production
+
+loadtest:
+  <<: *non_production
+
+rollover:
+  <<: *non_production
