@@ -73,8 +73,7 @@ module DataHub
       def schedule_monitoring
         attempt_number = 1
 
-        RolloverMonitoringJob.perform_in(
-          MONITORING_START_TIME,
+        RolloverMonitoringJob.set(wait: MONITORING_START_TIME).perform_later(
           @process_summary.id,
           attempt_number,
         )

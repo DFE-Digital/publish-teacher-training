@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe UpdateCourseSchoolsJob, type: :job do
@@ -8,7 +10,7 @@ RSpec.describe UpdateCourseSchoolsJob, type: :job do
     allow(Course).to receive(:find).and_return(course)
     allow(Publish::Schools::UpdateCourseSchoolsService).to receive(:call)
 
-    described_class.new.perform(course.id, school_uuids)
+    described_class.perform_now(course.id, school_uuids)
 
     expect(Course).to have_received(:find).with(course.id)
     expect(Publish::Schools::UpdateCourseSchoolsService)
