@@ -19,8 +19,8 @@ en:
             <li>edit courses</li>
             <li>remove courses</li>
           </ul>
-          <p class="govuk-body"> 
-            When your course is ready, you can publish it. It will not go live on %{find_service} straight away. Instead, the course will be ‘Scheduled’ until Find opens at the beginning of October. Candidates will then be able to search for your course.
+          <p class="govuk-body">
+            When your course is ready, you can publish it. It will not go live on %{find_service} straight away. Instead, the course will be ‘Scheduled’ until Find opens. Candidates will then be able to search for your course.
           </p>
         roll_over_recruitment_content_email: We’ll email you at the beginning of September to let you know when we’ve rolled over your courses.
         recruitment_cycle_heading: Recruitment cycle
