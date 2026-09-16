@@ -35,7 +35,7 @@ RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
 
       subject
 
-      expect(RolloverMonitoringJob).to have_received(:set).with(wait: kind_of(Numeric))
+      expect(RolloverMonitoringJob).to have_received(:set).with(wait: DataHub::Rollover::JobOrchestrator::MONITORING_START_TIME)
       expect(RolloverMonitoringJob).to have_received(:perform_later).with(anything, 1)
     end
 

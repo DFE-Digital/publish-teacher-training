@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "sidekiq/testing"
 
 RSpec.describe "Publish - Select all schools", :js, type: :system do
+  include ActiveJob::TestHelper
+
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
@@ -27,9 +28,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
 
   context "when many schools" do
     around do |example|
-      Sidekiq::Testing.inline! do
-        example.run
-      end
+      perform_enqueued_jobs { example.run }
     end
 
     scenario "enqueue when many schools to update" do

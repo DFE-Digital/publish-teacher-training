@@ -14,8 +14,10 @@ RSpec.describe RolloverProviderJob, type: :job do
   end
 
   it "does not automatically retry StandardError" do
-    retry_handlers = described_class.rescue_handlers.select { |handler| handler.first == "StandardError" }
+    expect(DataHub::Rollover::ProviderProcessor).to receive(:process).once.and_raise(StandardError, "boom")
 
-    expect(retry_handlers).not_to be_empty
+    expect {
+      described_class.perform_now("ABC", 123, process_summary.id)
+    }.not_to raise_error
   end
 end
