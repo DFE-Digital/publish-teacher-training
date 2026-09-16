@@ -34,7 +34,15 @@ A provider user can:
 - Manage schools and training sites for each of their associated providers
 - Add and remove other users for each of their associated providers
 
-A provider user cannot access providers they are not associated with, or the Support Console.
+A provider user cannot access the Support Console, and cannot manage providers they are not associated with.
+
+An **accredited provider** awards QTS for courses run by **training partners**.
+
+Accredited provider users can see the courses it ratifies on behalf of those partners.
+
+This is view and export only (no editing) for course lists, CSV download etc.
+
+Also it filters to courses the accredited provider ratifies, so it never exposes training partners other courses.
 
 ### Support users (DfE staff)
 
@@ -63,6 +71,7 @@ A support user can:
 | Browse and search courses (Find)         | Yes       | —                    | —                          |
 | Save courses and email alerts            | Yes       | —                    | —                          |
 | View courses for associated providers    | —         | Yes                  | Yes (all)                  |
+| View training partners' ratified courses | —         | Accredited only (read-only) | Yes (all)            |
 | Create, edit, publish, withdraw courses  | —         | Associated providers | All providers              |
 | Manage schools and training sites        | —         | Associated providers | All providers              |
 | Add and remove users for a provider      | —         | Associated providers | All providers              |
@@ -129,5 +138,6 @@ the [AKS cheatsheet](aks-cheatsheet.md) for cluster details and commands.
 - `app/models/candidate.rb` — Candidate model
 - `app/models/user_permission.rb` — Provider-user join table
 - `app/policies/` — Pundit authorisation policies
+- `app/policies/provider_policy.rb` — provider-level authorisation, including training partner access
 - `app/controllers/support/application_controller.rb` — Admin gate for the Support Console
 - `config/settings.yml` — Authentication mode configuration
