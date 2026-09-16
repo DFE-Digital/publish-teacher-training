@@ -85,18 +85,20 @@ module "solid_queue_worker" {
   docker_image = var.docker_image
   # Shared ConfigMap sets RAILS_MAX_THREADS=50 for web. Override the DB pool only
   # for this process so each Solid Queue fork does not open a 50-connection pool.
+  # Keep this >= sum of (threads × processes) across workers in config/queue.yml
+  # (DEFAULT_QUEUE_THREADS etc.) or Solid Queue will warn and contend on the pool.
   command = [
     "/bin/sh",
     "-c",
-    # Include solid-queue-worker in the command line so the probe can find this process.
     # $${...} so Terraform leaves the shell default for DATABASE_CONNECTION_POOL_SIZE alone.
-    "SOLID_QUEUE_PROCESS_NAME=solid-queue-worker DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start",
+    "DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start",
   ]
   max_memory      = var.solid_queue_worker_memory_max
   replicas        = var.solid_queue_worker_replicas
   enable_logit    = var.enable_logit
   run_as_non_root = var.run_as_non_root
-  probe_command   = ["pgrep", "-f", "solid-queue-worker"]
+  # Match rake solid_queue:start during boot and forked processes (`.` matches `_`).
+  probe_command = ["pgrep", "-f", "solid.queue"]
 
   enable_gcp_wif = true
 }

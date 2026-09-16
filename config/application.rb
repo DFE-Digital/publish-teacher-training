@@ -77,24 +77,15 @@ module ManageCoursesBackend
     config.solid_queue.clear_finished_jobs_after = 1.hour
 
     # Mission Control observes Solid Queue only; Sidekiq Web stays at /sidekiq.
+    # filter_arguments is set in config/initializers/mission_control.rb from filter_parameters.
     config.mission_control.jobs.adapters = [:solid_queue]
     config.mission_control.jobs.http_basic_auth_enabled = false
-    config.mission_control.jobs.filter_arguments = %w[
-      email_address email code token data body hidden_data headers
-    ]
+
+    # mission_control-jobs depends on turbo-rails; we don't use Turbo Drive routes.
+    config.turbo.draw_routes = false
 
     config.log_tags = []
     config.log_level = Settings.log_level
-
-    # QA/staging/sandbox/review use dedicated RAILS_ENV values (see app_config.yml).
-    config.before_configuration do
-      ENV["SOLID_QUEUE_CONFIG"] =
-        if Rails.env.production? || Rails.env.development?
-          "config/queue.yml"
-        else
-          "config/non_production_queue.yml"
-        end
-    end
 
     # Capture candidate "save course" intent during OmniAuth request phase (CSRF-protected POST).
     # Must run after the session middleware so `env["rack.session"]` is available.
