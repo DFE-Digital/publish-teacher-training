@@ -56,6 +56,24 @@ describe ApplicationHelper do
       end
     end
 
+    context "with a blank value and several prompts" do
+      before do
+        enrichment_summary(summary_list, :course, "Where you will train", "", %w[placement_selection_criteria duration_per_school],
+                           action_path: "/publish/where-you-will-train",
+                           prompts: [
+                             ["Enter how you decide which schools to place trainees in", "/publish/where-you-will-train#criteria"],
+                             ["Enter how much time trainees will spend in each school", "/publish/where-you-will-train#duration"],
+                           ])
+      end
+
+      it "renders one prompt per missing field, each with its own link, and no change action" do
+        expect(subject).to have_css(".govuk-summary-list__value > .app-inset-text--important", count: 2)
+        expect(subject).to have_link("Enter how you decide which schools to place trainees in", href: "/publish/where-you-will-train#criteria")
+        expect(subject).to have_link("Enter how much time trainees will spend in each school", href: "/publish/where-you-will-train#duration")
+        expect(subject).to have_no_link("Change")
+      end
+    end
+
     context "with a blank value, a prompt and nowhere to send the user" do
       before do
         enrichment_summary(summary_list, :course, "Course length", "", %w[course_length],

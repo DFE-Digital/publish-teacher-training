@@ -1,10 +1,19 @@
+<% where_you_will_train_path = fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) %>
+
+<%# One prompt per required field still missing, each anchored to its own
+    textarea - the same shape the row takes once it has errors. The anchor is
+    the plain field id; the builder only adds -error once the field has one. %>
+<% where_you_will_train_prompts = %i[placement_selection_criteria duration_per_school]
+     .select { |field| course.public_send(field).blank? }
+     .map { |field| [t(".enter_#{field}"), "#{where_you_will_train_path}#publish-fields-where-you-will-train-form-#{field.to_s.dasherize}-field"] } %>
+
 <% enrichment_summary(
   summary_list,
   :course,
   t(".label"),
   markdown(course.where_you_will_train.compact_blank.join("\n\n")),
   %w[placement_selection_criteria duration_per_school theoretical_training_location theoretical_training_duration],
-  action_path: course.is_withdrawn? ? nil : fields_where_you_will_train_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+  action_path: course.is_withdrawn? ? nil : where_you_will_train_path,
   action_visually_hidden_text: t(".hidden_text"),
-  prompt: t(".prompt"),
+  prompts: where_you_will_train_prompts,
 ) %>

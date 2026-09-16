@@ -3,5 +3,6 @@ en:
     courses:
       where_you_will_train:
         label: Where you will train
-        prompt: Enter where trainees will train
+        enter_placement_selection_criteria: Enter how you decide which schools to place trainees in
+        enter_duration_per_school: Enter how much time trainees will spend in each school
         hidden_text: where you will train
