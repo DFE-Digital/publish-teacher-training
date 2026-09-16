@@ -26,6 +26,7 @@ RSpec.describe "Publish - Reviewing the courses a placement school change will u
 
     then_i_see_the_scope("All fee-paying courses")
     and_the_table_lists(course, other_course)
+    and_the_course_names_are_not_links
     and_the_table_does_not_list(salaried_course)
     and_the_button_offers_to_update(2)
   end
@@ -326,6 +327,12 @@ private
 
   def and_the_table_lists(*courses)
     courses.each { |a_course| expect(page).to have_css("td", text: a_course.name_and_code) }
+  end
+
+  # The provider is confirming a change, not navigating.
+  def and_the_course_names_are_not_links
+    expect(page).to have_no_link(course.name_and_code)
+    expect(page).to have_no_link(other_course.name_and_code)
   end
 
   def and_the_table_does_not_list(a_course)
