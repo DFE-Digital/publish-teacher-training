@@ -17,12 +17,12 @@
         <% row.with_value do %>
           <div class="govuk-body">
             <!-- location -->
-            <div class="govuk-!-margin-bottom-3">
-              <% if search_by_location? %>
+            <% if search_by_location? %>
+              <div class="govuk-!-margin-bottom-3">
                 <%= nearest_placement_school_text %>
                 <br>
-              <% end %>
-            </div>
+              </div>
+            <% end %>
             <!-- end location -->
             <div>
               <%= uk_fees %>
