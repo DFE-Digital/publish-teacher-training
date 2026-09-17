@@ -2,6 +2,85 @@
   "configurations": {
     "streams": [
       {
+        "name": "audit",
+        "syncMode": "incremental_append",
+        "cursorField": [
+          "_ab_cdc_lsn"
+        ],
+        "primaryKey": [
+          [
+            "id"
+          ]
+        ],
+        "selectedFields": [
+          {
+            "fieldPath": [
+              "_ab_cdc_lsn"
+            ]
+          },
+          {
+            "fieldPath": [
+              "_ab_cdc_deleted_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "_ab_cdc_updated_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "auditable_id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "auditable_type"
+            ]
+          },
+          {
+            "fieldPath": [
+              "associated_id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "associated_type"
+            ]
+          },
+          {
+            "fieldPath": [
+              "user_id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "user_type"
+            ]
+          },
+          {
+            "fieldPath": [
+              "request_uuid"
+            ]
+          },
+          {
+            "fieldPath": [
+              "created_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "action"
+            ]
+          }
+        ]
+      },
+      {
         "name": "authentication",
         "syncMode": "incremental_append",
         "cursorField": [
