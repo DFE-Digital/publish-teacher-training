@@ -17,21 +17,11 @@
   - provider_id
   - organisation_id
   :audit:
-  - id
-  - auditable_id
-  - auditable_type
-  - associated_id
-  - associated_type
-  - user_id
-  - user_type
   - username
-  - action
   - audited_changes
   - version
   - comment
   - remote_address
-  - request_uuid
-  - created_at
   :data_hub_process_summary:
   - full_summary
   - updated_total_count
