@@ -8,7 +8,10 @@ module Support
       PER_PAGE = 20
 
       def index
-        @pagy, @schools = pagy(provider.schools.ordered_by_name, limit: PER_PAGE)
+        @pagy, @schools = pagy(
+          provider.schools.ordered_by_name.preload(:kept_courses),
+          limit: PER_PAGE,
+        )
       end
 
       def show
@@ -23,7 +26,7 @@ module Support
         if school_removal.call
           redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
         else
-          redirect_to delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school.uuid),
+          redirect_to school_delete_path_with_return,
                       flash: { warning: cannot_remove_school_message }
         end
       end
@@ -54,6 +57,41 @@ module Support
 
       def school_removal
         @school_removal ||= ProviderSchools::Removal.new(provider:, uuid: params[:uuid])
+      end
+
+      def school_delete_return_path
+        if returning_to_schools_index?
+          support_recruitment_cycle_provider_schools_path(
+            @provider.recruitment_cycle_year,
+            @provider,
+            page: params[:page],
+          )
+        else
+          support_recruitment_cycle_provider_school_path(
+            @provider.recruitment_cycle_year,
+            @provider,
+            school.uuid,
+          )
+        end
+      end
+      helper_method :school_delete_return_path
+
+      def school_delete_path_with_return
+        delete_support_recruitment_cycle_provider_school_path(
+          @provider.recruitment_cycle_year,
+          @provider,
+          school.uuid,
+          **school_delete_return_params,
+        )
+      end
+      helper_method :school_delete_path_with_return
+
+      def returning_to_schools_index?
+        params[:from] == "index"
+      end
+
+      def school_delete_return_params
+        params.permit(:from, :page).to_h.compact_blank.symbolize_keys
       end
     end
   end

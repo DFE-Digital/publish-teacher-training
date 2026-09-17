@@ -30,6 +30,10 @@ RSpec.describe "Support provider schools" do
     let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "A") }
 
     it "lists the provider's schools" do
+      create_list(:course, 2, provider:).each do |course|
+        create(:course_school, course:, provider_school:, gias_school:)
+      end
+
       get support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, provider)
 
       expect(response).to have_http_status(:ok)
@@ -37,6 +41,22 @@ RSpec.describe "Support provider schools" do
       expect(response.body).to include("Catholic Primary School")
       expect(response.body).to include("112992")
       expect(response.body).to include(support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid))
+
+      school_row = response.parsed_body.at_css(".school-row")
+      expect(school_row.at_css(".address").text.squish).to eq("1 School Lane, Leeds, LS1 1AA")
+      expect(school_row.at_css(".courses-count").text.squish).to eq("2 courses")
+
+      remove_link = school_row.at_css(".remove a")
+      expect(remove_link.text.squish).to eq("Remove school St Joseph's Catholic Primary School")
+      expect(remove_link["href"]).to eq(
+        delete_support_recruitment_cycle_provider_school_path(
+          recruitment_cycle.year,
+          provider,
+          provider_school.uuid,
+          from: :index,
+        ),
+      )
+      expect(remove_link["class"]).to include("app-link--destructive")
     end
   end
 
@@ -74,6 +94,44 @@ RSpec.describe "Support provider schools" do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("St Joseph")
       expect(response.body).to include("Remove school")
+    end
+
+    it "returns Back and Cancel to the schools index when removal starts there" do
+      get delete_support_recruitment_cycle_provider_school_path(
+        recruitment_cycle.year,
+        provider,
+        provider_school.uuid,
+        from: :index,
+        page: 2,
+      )
+
+      expected_path = support_recruitment_cycle_provider_schools_path(
+        recruitment_cycle.year,
+        provider,
+        page: 2,
+      )
+      page = response.parsed_body
+
+      expect(page.at_css(".govuk-back-link")["href"]).to eq(expected_path)
+      expect(page.css("a").find { |link| link.text.squish == "Cancel" }["href"]).to eq(expected_path)
+    end
+
+    it "returns Back and Cancel to the school details when removal starts there" do
+      get delete_support_recruitment_cycle_provider_school_path(
+        recruitment_cycle.year,
+        provider,
+        provider_school.uuid,
+      )
+
+      expected_path = support_recruitment_cycle_provider_school_path(
+        recruitment_cycle.year,
+        provider,
+        provider_school.uuid,
+      )
+      page = response.parsed_body
+
+      expect(page.at_css(".govuk-back-link")["href"]).to eq(expected_path)
+      expect(page.css("a").find { |link| link.text.squish == "Cancel" }["href"]).to eq(expected_path)
     end
 
     it "explains why a school that is the only placement school on a course cannot be removed" do
