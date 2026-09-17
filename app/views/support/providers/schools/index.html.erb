@@ -30,6 +30,8 @@
           URN
         </abbr>
       </th>
+      <th scope="col" class="govuk-table__header"><%= t(".courses_attached") %></th>
+      <th scope="col" class="govuk-table__header"><%= t(".remove") %></th>
     </tr>
   </thead>
 
@@ -41,6 +43,7 @@
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
               <%= govuk_link_to school.location_name, support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school.uuid) %>
             </span>
+            <p class="govuk-body govuk-hint address"><%= school.full_address %></p>
           </td>
           <td class="govuk-table__cell code">
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
@@ -51,6 +54,24 @@
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
               <%= value_provided?(school.urn) %>
             </span>
+          </td>
+          <td class="govuk-table__cell courses-count">
+            <%= t(".courses_count", count: school.courses_count) %>
+          </td>
+          <td class="govuk-table__cell remove">
+            <%= govuk_link_to(
+              safe_join([
+                t(".remove"),
+                content_tag(:span, school.location_name, class: "govuk-visually-hidden"),
+              ], " "),
+              delete_support_recruitment_cycle_provider_school_path(
+                @provider.recruitment_cycle_year,
+                @provider,
+                school.uuid,
+                { from: :index, page: params[:page] }.compact_blank,
+              ),
+              class: "app-link--destructive",
+            ) %>
           </td>
         </tr>
       <% end %>

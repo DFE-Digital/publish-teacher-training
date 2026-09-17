@@ -20,6 +20,18 @@ RSpec.describe "Delete school under provider as an admin" do
       and_the_school_is_deleted
     end
 
+    scenario "from the schools index page" do
+      given_i_am_authenticated_as_an_admin_user
+      and_there_is_a_provider_site
+      and_the_provider_has_a_second_school
+      and_i_visit_the_support_provider_schools_index_page
+
+      when_i_click_remove_school_from_the_index
+      then_i_am_on_the_school_delete_page
+      when_i_click_back
+      then_i_am_back_on_the_schools_index_page
+    end
+
     scenario "when the school becomes associated with a course before removal" do
       given_i_am_authenticated_as_an_admin_user
       and_there_is_a_provider_site
@@ -153,8 +165,23 @@ RSpec.describe "Delete school under provider as an admin" do
     expect(page).to have_text "School deleted"
   end
 
+  def then_i_am_back_on_the_schools_index_page
+    expect(support_provider_schools_index_page).to be_displayed
+  end
+
   def and_i_click_remove_school_button
     click_link_or_button "Remove school"
+  end
+
+  def when_i_click_back
+    click_link_or_button "Back"
+  end
+
+  def when_i_click_remove_school_from_the_index
+    school_row = support_provider_schools_index_page.schools.find do |row|
+      row.name.has_text?(@provider_school.location_name)
+    end
+    school_row.remove_link.click
   end
 
   def then_i_am_on_the_school_show_page
@@ -175,6 +202,13 @@ RSpec.describe "Delete school under provider as an admin" do
 
   def and_i_visit_the_support_provider_school_show_page
     support_provider_school_show_page.load(recruitment_cycle_year: @provider.recruitment_cycle.year, provider_id: @provider.id, id: @provider_school.uuid)
+  end
+
+  def and_i_visit_the_support_provider_schools_index_page
+    support_provider_schools_index_page.load(
+      recruitment_cycle_year: @provider.recruitment_cycle.year,
+      provider_id: @provider.id,
+    )
   end
 
   def and_there_is_a_provider_site

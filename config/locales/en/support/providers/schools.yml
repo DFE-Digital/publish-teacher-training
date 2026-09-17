@@ -2,6 +2,12 @@ en:
   support:
     providers:
       schools:
+        index:
+          courses_attached: Number of courses attached
+          courses_count:
+            one: "%{count} course"
+            other: "%{count} courses"
+          remove: Remove school
         show:
           new: Add school
           update: Update school
