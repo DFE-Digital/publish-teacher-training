@@ -54,7 +54,16 @@ jobs:
         with:
           path: node_modules
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-      - run: yarn install --immutable
+      - name: Install Node dependencies
+        run: |
+          for attempt in 1 2 3; do
+            if yarn install --immutable; then
+              exit 0
+            fi
+            echo "yarn install failed on attempt $attempt"
+            sleep 5
+          done
+          exit 1
 
       - name: ${{ matrix.tests.name }}
         run: ${{ env.COMMAND }}
@@ -91,7 +100,16 @@ jobs:
         with:
           path: node_modules
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-      - run: yarn install --immutable
+      - name: Install Node dependencies
+        run: |
+          for attempt in 1 2 3; do
+            if yarn install --immutable; then
+              exit 0
+            fi
+            echo "yarn install failed on attempt $attempt"
+            sleep 5
+          done
+          exit 1
 
       - name: yarn test
         run: yarn run test --run
@@ -211,7 +229,16 @@ jobs:
         with:
           path: node_modules
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-      - run: yarn install --immutable
+      - name: Install Node dependencies
+        run: |
+          for attempt in 1 2 3; do
+            if yarn install --immutable; then
+              exit 0
+            fi
+            echo "yarn install failed on attempt $attempt"
+            sleep 5
+          done
+          exit 1
 
       - name: Install Playwright
         if: ${{ startsWith(matrix.tests.name, 'System') }}
