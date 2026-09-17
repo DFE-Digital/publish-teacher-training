@@ -124,8 +124,8 @@ module Courses
     def fee_value
       if course.salary? || course.apprenticeship?
         t(".fee_value.#{course.funding}")
-      else
-        safe_join([uk_fees, international_fees].compact_blank, tag.br)
+        # else
+        #   safe_join([uk_fees, international_fees].compact_blank, tag.br)
       end
     end
 

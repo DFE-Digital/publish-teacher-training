@@ -25,17 +25,21 @@
             <% end %>
             <!-- end location -->
             <div>
-              <%= uk_fees %>
-              <% if incentive_hint.present? %>
-                <span class="govuk-hint govuk-!-font-size-16">
-                  <%= incentive_hint %>
-                </span>
-              <% end %>
-              <% if international_fees %>
-                <br>
-                <%= international_fees %>
-              <% end %>
-            </div>
+              <% if fee_value %>
+                <%= fee_value %>
+              <% else %>
+                <%= uk_fees %>
+                <% if incentive_hint.present? %>
+                  <span class="govuk-hint govuk-!-font-size-16">
+                    <%= incentive_hint %>
+                  </span>
+                <% end %>
+                <% if international_fees %>
+                  <br>
+                  <%= international_fees %>
+                <% end %>
+              </div>
+            <% end %>
             <p class="govuk-!-margin-bottom-5">
               <%= qualification_value.html_safe %>,
               <%= study_mode_value %>
