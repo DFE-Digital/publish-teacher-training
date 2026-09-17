@@ -121,12 +121,16 @@ module Courses
       t(".fee_key")
     end
 
-    def fee_value
-      if course.salary? || course.apprenticeship?
-        t(".fee_value.#{course.funding}")
-        # else
-        #   safe_join([uk_fees, international_fees].compact_blank, tag.br)
-      end
+    def fees_display
+      return t(".fee_value.#{course.funding}") if course.salary? || course.apprenticeship?
+
+      safe_join(
+        [
+          uk_fees,
+          incentive_hint.present? ? tag.span(incentive_hint, class: "govuk-hint govuk-!-font-size-16") : nil,
+          international_fees.present? ? safe_join([tag.br, international_fees]) : nil,
+        ].compact,
+      )
     end
 
     def length_key

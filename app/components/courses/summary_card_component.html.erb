@@ -25,35 +25,21 @@
             <% end %>
             <!-- end location -->
             <div>
-              <% if fee_value %>
-                <%= fee_value %>
-              <% else %>
-                <%= uk_fees %>
-                <% if incentive_hint.present? %>
-                  <span class="govuk-hint govuk-!-font-size-16">
-                    <%= incentive_hint %>
-                  </span>
-                <% end %>
-                <% if international_fees %>
+              <%= fees_display %>
+              <p class="govuk-!-margin-bottom-5">
+                <%= qualification_value.html_safe %>,
+                <%= study_mode_value %>
+                <% if show_start_date? %>
                   <br>
-                  <%= international_fees %>
+                  <%= course.start_date.to_fs(:month_and_year) %>
                 <% end %>
-              </div>
-            <% end %>
-            <p class="govuk-!-margin-bottom-5">
-              <%= qualification_value.html_safe %>,
-              <%= study_mode_value %>
-              <% if show_start_date? %>
-                <br>
-                <%= course.start_date.to_fs(:month_and_year) %>
+              </p>
+              <% if save_toggle_button.present? %>
+                <%= save_toggle_button %>
               <% end %>
-            </p>
-            <% if save_toggle_button.present? %>
-              <%= save_toggle_button %>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
-  <% end %>
-</li>
+  </li>

@@ -2,6 +2,5 @@ en:
   financial_incentive:
     hint:
       bursaries_and_scholarship: "Scholarships and bursaries are available"
-      bursaries_only: "- Bursaries available"
+      bursaries_only: " - Bursaries available"
       scholarship_only: "Scholarships are available"
-
