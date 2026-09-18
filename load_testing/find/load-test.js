@@ -29,14 +29,12 @@ function getSelectedScenario () {
   }
 }
 
+const findConfig = getFindConfig()
+
 export const options = {
   scenarios: getSelectedScenario(),
-  thresholds: getFindConfig().thresholds,
-  cloud: {
-    distribution: {
-      distributionLabel1: { loadZone: 'amazon:gb:london', percent: 100 }
-    }
-  },
+  thresholds: findConfig.thresholds,
+  cloud: findConfig.cloudOptions,
   tags: {
     service: 'find',
     testType: 'load'
