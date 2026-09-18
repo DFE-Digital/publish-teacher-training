@@ -3,7 +3,7 @@
 module Support
   class CoursesController < ApplicationController
     def index
-      @pagy, @courses = pagy(provider.courses.includes(provider: :recruitment_cycle).order(:name))
+      @pagy, @courses = pagy(provider.courses.includes(:latest_enrichment, provider: :recruitment_cycle).order(:name))
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = "Provider not found"
       redirect_to support_recruitment_cycle_providers_path
