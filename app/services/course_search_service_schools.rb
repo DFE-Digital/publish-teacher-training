@@ -45,6 +45,16 @@ class CourseSearchServiceSchools
       :financial_incentives,
       course_subjects: [:subject],
       provider: %i[recruitment_cycle ucas_preferences],
+    ).preload(
+      # The API serialises the status, enrichment fields, subject codes and
+      # ratifying provider of every course. preload runs before includes, and
+      # the accrediting_provider scope depends on the course's recruitment
+      # cycle, so the provider and cycle are named again here ahead of it.
+      :latest_enrichment,
+      :latest_published_enrichment,
+      :subjects,
+      { provider: :recruitment_cycle },
+      :accrediting_provider,
     ).where(id: scope.select(:id))
 
     if provider_name.present?
