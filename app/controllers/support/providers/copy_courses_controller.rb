@@ -23,7 +23,7 @@ module Support
           )
 
           Provider.transaction do
-            @copy_courses_form.provider.courses.includes(:latest_enrichment, provider: :recruitment_cycle).map do |course|
+            @copy_courses_form.provider.courses.includes(:latest_enrichment, :course_subjects, provider: :recruitment_cycle).map do |course|
               copier.execute(course:, new_provider: @copy_courses_form.target_provider)
             end
           end
