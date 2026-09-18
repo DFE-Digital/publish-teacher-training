@@ -30,13 +30,9 @@ RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
     end
 
     it "schedules the monitoring job" do
-      allow(RolloverMonitoringJob).to receive(:set).and_return(RolloverMonitoringJob)
-      allow(RolloverMonitoringJob).to receive(:perform_later)
-
-      subject
-
-      expect(RolloverMonitoringJob).to have_received(:set).with(wait: DataHub::Rollover::JobOrchestrator::MONITORING_START_TIME)
-      expect(RolloverMonitoringJob).to have_received(:perform_later).with(anything, 1)
+      expect { subject }.to have_enqueued_job(RolloverMonitoringJob)
+        .with(a_kind_of(Integer), 1)
+        .at(be_within(1.second).of(DataHub::Rollover::JobOrchestrator::MONITORING_START_TIME.from_now))
     end
 
     it "logs completion and returns the summary" do
