@@ -34,7 +34,7 @@ Set with `--env ENVIRONMENT=`:
 
 | Name | Target |
 | --- | --- |
-| `local` | `https://find.localhost` |
+| `local` | `http://find.localhost` |
 | `qa` | `https://qa.find-teacher-training-courses.service.gov.uk` |
 | `staging` | `https://staging.find-teacher-training-courses.service.gov.uk` |
 
@@ -48,6 +48,10 @@ Every npm script runs `k6 run`, which generates the load from the machine you
 run it on. Only the GitHub Actions workflow runs `k6 cloud`.
 
 #### Local runs against a development machine
+
+Start the application with `./bin/dev` first. You do not need Caddy. Find only
+answers on the host `find.localhost`, so k6 resolves that name to
+`127.0.0.1:3001` for you.
 
 ```
 npm run find:dev:quick     # 10 users, 25 seconds

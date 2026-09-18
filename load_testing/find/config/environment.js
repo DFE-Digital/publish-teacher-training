@@ -10,9 +10,14 @@ const findEnvironments = {
     service: 'find'
   },
   local: {
-    baseUrl: 'https://find.localhost',
+    baseUrl: 'http://find.localhost',
     name: 'local-find',
-    service: 'find'
+    service: 'find',
+    // Find only answers on find.localhost, so k6 resolves that name to the
+    // development server. This avoids a proxy and its TLS certificate.
+    hosts: {
+      'find.localhost': '127.0.0.1:3001'
+    }
   }
 }
 

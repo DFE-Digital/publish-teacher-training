@@ -29,12 +29,14 @@ function getSelectedScenario () {
   }
 }
 
+const findEnvironment = getFindEnvironment()
 const findConfig = getFindConfig()
 
 export const options = {
   scenarios: getSelectedScenario(),
   thresholds: findConfig.thresholds,
   cloud: findConfig.cloudOptions,
+  hosts: findEnvironment.hosts,
   tags: {
     service: 'find',
     testType: 'load'
@@ -42,8 +44,8 @@ export const options = {
 }
 
 export function setup () {
-  const environment = getFindEnvironment()
-  const config = getFindConfig()
+  const environment = findEnvironment
+  const config = findConfig
   console.log(`Testing ${config.service} - ${environment.name}: ${environment.baseUrl}`)
   return { environment, config }
 }
