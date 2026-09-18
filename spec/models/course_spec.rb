@@ -373,6 +373,43 @@ describe Course do
   end
 
   describe "validations" do
+    describe "modern languages" do
+      let(:course) { build(:course, level: "secondary", subjects: []) }
+
+      it "requires the modern languages subject when a language is chosen" do
+        course.course_subjects.build(subject: french)
+
+        course.valid?
+
+        expect(course.errors[:subjects]).to include("Modern languages subjects must also have the modern_languages subject")
+      end
+
+      it "accepts a language alongside the modern languages subject" do
+        course.course_subjects.build(subject: modern_languages)
+        course.course_subjects.build(subject: french)
+
+        course.valid?
+
+        expect(course.errors[:subjects]).to be_empty
+      end
+
+      it "checks the subjects in a constant number of queries regardless of how many languages there are" do
+        queries_for = lambda do |languages|
+          course = create(:course, level: "secondary", subjects: [modern_languages, *languages])
+          course = described_class.find(course.id)
+          count_queries { course.valid? }
+        end
+
+        german = find_or_create(:modern_languages_subject, :german)
+        spanish = find_or_create(:modern_languages_subject, :spanish)
+
+        many = queries_for.call([french, german, spanish])
+        few = queries_for.call([french, german])
+
+        expect(many).to eq(few)
+      end
+    end
+
     it { is_expected.to validate_presence_of(:course_code) }
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:profpost_flag) }
@@ -763,6 +800,14 @@ describe Course do
 
       context "if subjects are empty" do
         let(:course) { create(:course) }
+
+        it "passes validation" do
+          expect(course.valid?).to be_truthy
+        end
+      end
+
+      context "if the only subject is discontinued" do
+        let(:course) { create(:course, level: "secondary", subjects: [create(:discontinued_subject)]) }
 
         it "passes validation" do
           expect(course.valid?).to be_truthy
