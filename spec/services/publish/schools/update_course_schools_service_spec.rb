@@ -23,7 +23,7 @@ module Publish
           let(:school_uuids) { Array.new(31) { SecureRandom.uuid } }
 
           it "enqueues the update" do
-            expect(UpdateCourseSchoolsJob).to receive(:perform_async).with(course.id, school_uuids)
+            expect(UpdateCourseSchoolsJob).to receive(:perform_later).with(course.id, school_uuids)
 
             described_class.call_or_enqueue(course:, school_uuids:)
           end

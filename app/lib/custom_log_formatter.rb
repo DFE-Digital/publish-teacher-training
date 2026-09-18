@@ -68,7 +68,25 @@ private
     return if hash.dig(:payload, :adapter).blank? || hash.dig(:payload, :arguments).blank?
     return unless hash.dig(:payload, :adapter).include?("SolidQueue")
 
-    hash[:payload][:arguments] = REDACTED
+    hash[:payload][:arguments] = filter_job_arguments(hash[:payload][:arguments])
+  end
+
+  def filter_job_arguments(value)
+    case value
+    when Array
+      value.map { |item| filter_job_arguments(item) }
+    when Hash
+      job_argument_filter.filter(value)
+    else
+      value
+    end
+  end
+
+  def job_argument_filter
+    @job_argument_filter ||= ActiveSupport::ParameterFilter.new(
+      Rails.application.config.filter_parameters + %i[email_address code data body hidden_data headers],
+      mask: REDACTED,
+    )
   end
 
   def method_is_post_or_put_or_patch?

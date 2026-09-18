@@ -1,5 +1,8 @@
-class UpdateCourseSchoolsJob
-  include Sidekiq::Job
+# frozen_string_literal: true
+
+class UpdateCourseSchoolsJob < ApplicationJob
+  queue_as :default
+  without_auto_retry
 
   def perform(course_id, school_uuids)
     course = Course.find(course_id)

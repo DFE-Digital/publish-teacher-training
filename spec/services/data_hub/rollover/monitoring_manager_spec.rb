@@ -33,18 +33,20 @@ RSpec.describe DataHub::Rollover::MonitoringManager, type: :service do
       end
 
       it "schedules next check when under attempt limit" do
-        expect(RolloverMonitoringJob).to receive(:perform_in).with(5.minutes, process_summary.id, 2)
-
-        described_class.check_completion(process_summary.id, 1)
+        expect {
+          described_class.check_completion(process_summary.id, 1)
+        }.to have_enqueued_job(RolloverMonitoringJob)
+          .with(process_summary.id, 2)
+          .at(be_within(1.second).of(5.minutes.from_now))
 
         process_summary.reload
         expect(process_summary.status).to eq("started")
       end
 
       it "handles timeout when attempt limit reached" do
-        expect(RolloverMonitoringJob).not_to receive(:perform_in)
-
-        described_class.check_completion(process_summary.id, 5)
+        expect {
+          described_class.check_completion(process_summary.id, 5)
+        }.not_to have_enqueued_job(RolloverMonitoringJob)
 
         process_summary.reload
         expect(process_summary.status).to eq("finished")
@@ -58,9 +60,9 @@ RSpec.describe DataHub::Rollover::MonitoringManager, type: :service do
       end
 
       it "does not process further" do
-        expect(RolloverMonitoringJob).not_to receive(:perform_in)
-
-        described_class.check_completion(process_summary.id, 1)
+        expect {
+          described_class.check_completion(process_summary.id, 1)
+        }.not_to have_enqueued_job(RolloverMonitoringJob)
       end
     end
   end

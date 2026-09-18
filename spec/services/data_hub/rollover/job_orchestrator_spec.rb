@@ -1,5 +1,4 @@
 require "rails_helper"
-require "sidekiq/testing"
 
 RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
   let!(:current_cycle) { RecruitmentCycle.current }
@@ -8,12 +7,6 @@ RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
 
   describe "#execute" do
     subject { described_class.new(next_cycle.id).execute }
-
-    around do |example|
-      Sidekiq::Testing.inline! do
-        example.run
-      end
-    end
 
     it "initializes the summary with total_providers" do
       summary = subject
@@ -37,12 +30,9 @@ RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
     end
 
     it "schedules the monitoring job" do
-      expect(RolloverMonitoringJob).to receive(:perform_in).with(
-        kind_of(Numeric),
-        anything,
-        1,
-      )
-      subject
+      expect { subject }.to have_enqueued_job(RolloverMonitoringJob)
+        .with(a_kind_of(Integer), 1)
+        .at(be_within(1.second).of(DataHub::Rollover::JobOrchestrator::MONITORING_START_TIME.from_now))
     end
 
     it "logs completion and returns the summary" do
