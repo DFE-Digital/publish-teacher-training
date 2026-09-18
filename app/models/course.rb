@@ -1011,6 +1011,9 @@ private
     site_status = site_statuses.find_or_initialize_by(site:)
     site_status.start! unless is_course_new
     site_status.save!
+    # A found row is a separate instance from the one in the loaded
+    # collection, so the next read of site_statuses must not trust the cache.
+    site_statuses.reset
   end
 
   def remove_site!(site:)
