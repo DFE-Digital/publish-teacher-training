@@ -110,9 +110,11 @@ RSpec.describe "Delete school under provider as an admin" do
   def then_i_see_the_provider_school_details
     expect(support_provider_school_show_page).to be_displayed
     expect(page).to have_content("Future School (Main Site)")
-    expect(page).to have_content("School code-", normalize_ws: true)
-    expect(page).to have_content("URN654321", normalize_ws: true)
-    expect(page).to have_content("Address 1 Future Road Future Building Future Quarter Future Town Future County FT1 1AA", normalize_ws: true)
+    expect(page).to have_content("1 Future Road, Future Building, Future Quarter, Future Town, Future County, FT1 1AA")
+    expect(page).to have_content("School code: -")
+    expect(page).to have_content("URN: 654321")
+    expect(page).to have_content("This school is not attached to any courses.")
+    expect(page).to have_link("Remove Future School (Main Site) from their account")
   end
 
   def when_i_remove_the_provider_school
@@ -197,7 +199,7 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def when_i_click_remove_school_link
-    click_link_or_button "Remove school"
+    support_provider_school_show_page.remove_school_link.click
   end
 
   def and_i_visit_the_support_provider_school_show_page

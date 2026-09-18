@@ -11,7 +11,8 @@ en:
         show:
           new: Add school
           update: Update school
-          code: School code
-          urn: URN
-          address: Address
+          code: "School code: %{code}"
+          urn: "URN: %{urn}"
+          no_courses: This school is not attached to any courses.
+          remove: "Remove %{school_name} from their account"
 

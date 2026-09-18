@@ -8,7 +8,7 @@ module PageObjects
 
         element :change_name, "a.govuk-link.location_name", text: "Change"
 
-        element :remove_school_link, ".govuk-link", text: "Remove school"
+        element :remove_school_link, ".app-link--destructive"
       end
     end
   end
