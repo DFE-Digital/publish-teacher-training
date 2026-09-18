@@ -114,7 +114,7 @@ RSpec.describe "Delete school under provider as an admin" do
     expect(page).to have_content("School code: -")
     expect(page).to have_content("URN: 654321")
     expect(page).to have_content("This school is not attached to any courses.")
-    expect(page).to have_link("Remove Future School (Main Site) from your account")
+    expect(page).to have_link("Remove Future School (Main Site) from their account")
   end
 
   def when_i_remove_the_provider_school
