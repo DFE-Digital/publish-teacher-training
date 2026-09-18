@@ -83,8 +83,10 @@ class RecruitmentCycle < ApplicationRecord
     RecruitmentCycle.next_recruitment_cycle == self
   end
 
+  # Compares years rather than loading the current cycle: course lists ask
+  # this per row, and the cycle they were loaded with already carries the year.
   def current?
-    RecruitmentCycle.current_recruitment_cycle == self
+    year == Find::CycleTimetable.current_year.to_s
   end
 
   def current_and_open?
