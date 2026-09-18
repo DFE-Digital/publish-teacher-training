@@ -34,6 +34,17 @@ module Find
           end
         end
       end
+
+      it "moves to the next cycle for every phase that advances the cycle" do
+        described_class::PHASES.each do |phase, definition|
+          allow(SiteSetting).to receive(:cycle_schedule).and_return(phase)
+
+          real_year = described_class.cycle_year_for_time(Time.zone.now)
+          expected = definition[:advances_cycle] ? real_year + 1 : real_year
+
+          expect(described_class.current_year).to eq(expected), "wrong year for #{phase}"
+        end
+      end
     end
 
     describe ".cycle_year_for_time" do
@@ -186,9 +197,37 @@ module Find
           expect(described_class.mid_cycle?).to be true
         end
       end
+
+      context "when current_cycle_schedule returns `:today_is_mid_cycle`" do
+        it "returns true so that candidates can apply to courses in the current cycle" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:today_is_mid_cycle)
+          expect(described_class.mid_cycle?).to be true
+        end
+      end
+
+      context "when current_cycle_schedule returns `:today_is_between_find_opening_and_apply_opening`" do
+        it "returns true, because that phase sits inside today_is_after_find_opens" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:today_is_between_find_opening_and_apply_opening)
+          expect(described_class.mid_cycle?).to be true
+        end
+      end
+
+      context "when current_cycle_schedule returns `:today_is_after_apply_deadline_passed`" do
+        it "returns false" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:today_is_after_apply_deadline_passed)
+          expect(described_class.mid_cycle?).to be false
+        end
+      end
     end
 
     describe ".show_apply_deadline_banner?" do
+      context "when current_cycle_schedule returns `:today_is_mid_cycle`" do
+        it "still returns true" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:today_is_mid_cycle)
+          expect(described_class.show_apply_deadline_banner?).to be true
+        end
+      end
+
       it "returns true when it is after the first_deadline_banner and before the apply_deadline" do
         Timecop.travel(Time.zone.local(2024, 7, 30, 19, 0, 0)) do
           expect(described_class.show_apply_deadline_banner?).to be true
@@ -322,6 +361,78 @@ module Find
         end
 
         expect(offenders.keys).to be_empty
+      end
+    end
+
+    describe "PHASES" do
+      it "holds every phase that phases_in_time answers for" do
+        expect(described_class::PHASES.keys).to match_array(described_class.phases_in_time.keys)
+      end
+
+      it "gives today_is_mid_cycle the first deadline banner as its start" do
+        from, to = described_class.phase_range(:today_is_mid_cycle, 2026)
+
+        expect(from).to eq(described_class.date(:first_deadline_banner, 2026))
+        expect(to).to eq(described_class.date(:apply_deadline, 2026))
+      end
+    end
+
+    describe ".display_range" do
+      it "overrides the containment range for now_is_before_find_opens with the real closed window" do
+        from, to = described_class.display_range(:now_is_before_find_opens, 2027)
+
+        expect(from).to eq(described_class.date(:find_closes, 2026))
+        expect(to).to eq(described_class.date(:find_opens, 2027))
+      end
+
+      it "falls back to phase_range for a phase with no display override" do
+        expect(described_class.display_range(:today_is_mid_cycle, 2026))
+          .to eq(described_class.phase_range(:today_is_mid_cycle, 2026))
+      end
+    end
+
+    describe ".year_for_phase" do
+      it "advances the year for a phase that advances the cycle" do
+        expect(described_class.year_for_phase(:now_is_before_find_opens, 2026)).to eq(2027)
+      end
+
+      it "keeps the year for a phase that does not advance the cycle" do
+        expect(described_class.year_for_phase(:today_is_mid_cycle, 2026)).to eq(2026)
+      end
+
+      it "defaults to the real cycle year for the current time when no year is given" do
+        allow(described_class).to receive(:cycle_year_for_time).and_return(2026)
+
+        expect(described_class.year_for_phase(:today_is_mid_cycle)).to eq(2026)
+      end
+
+      it "does not move when a different phase is selected in the switcher" do
+        years_by_selection = described_class::PHASES.keys.index_with do |selected|
+          allow(SiteSetting).to receive(:cycle_schedule).and_return(selected)
+
+          described_class::PHASES.keys.index_with { |phase| described_class.year_for_phase(phase) }
+        end
+
+        expect(years_by_selection.values.uniq.length).to eq(1)
+      end
+    end
+
+    describe ".implied_phases" do
+      it "pins which phases each phase turns on" do
+        result = described_class::PHASES.keys.index_with { |phase| described_class.implied_phases(phase).sort }
+
+        expect(result).to eq(
+          {
+            now_is_before_find_opens: %i[now_is_before_find_opens],
+            today_is_after_find_opens: %i[today_is_after_find_opens],
+            today_is_between_find_opening_and_apply_opening: %i[
+              today_is_after_find_opens
+              today_is_between_find_opening_and_apply_opening
+            ].sort,
+            today_is_mid_cycle: %i[today_is_after_find_opens today_is_mid_cycle].sort,
+            today_is_after_apply_deadline_passed: %i[today_is_after_apply_deadline_passed],
+          },
+        )
       end
     end
   end

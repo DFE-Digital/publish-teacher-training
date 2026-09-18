@@ -71,14 +71,53 @@ module Find
       },
     }.freeze
 
+    # Every recruitment cycle phase, with the boundaries it runs between and
+    # whether the cycle switcher moves the user to the next recruitment cycle.
+    # Everything else about a phase is derived from this table. Declared in
+    # the order a person actually walks through time — the switcher renders
+    # its options in this order too, and emits a divider wherever the cycle
+    # year changes between neighbours, so reordering this table reorders the
+    # page.
+    PHASES = {
+      today_is_mid_cycle: {
+        from: ->(year) { first_deadline_banner(year) },
+        to: ->(year) { apply_deadline(year) },
+        advances_cycle: false,
+      },
+      today_is_after_apply_deadline_passed: {
+        from: ->(year) { apply_deadline(year) },
+        to: ->(year) { find_closes(year) },
+        advances_cycle: false,
+      },
+      now_is_before_find_opens: {
+        from: ->(year) { find_opens(year).beginning_of_day },
+        to: ->(year) { find_opens(year) },
+        # The phase itself is the sliver between midnight and Find opening, but the
+        # period a person means by "Find has closed" runs from Find closing in the
+        # previous cycle to Find reopening in this one. Hints show that instead.
+        display_from: ->(year) { find_closes(year - 1) },
+        display_to: ->(year) { find_opens(year) },
+        advances_cycle: true,
+      },
+      today_is_between_find_opening_and_apply_opening: {
+        from: ->(year) { find_opens(year) },
+        to: ->(year) { apply_opens(year) },
+        advances_cycle: true,
+      },
+      today_is_after_find_opens: {
+        from: ->(year) { find_opens(year) },
+        to: ->(year) { apply_deadline(year) },
+        advances_cycle: true,
+      },
+    }.freeze
+
     def self.current_year
       now = Time.zone.now
-
       current_year = cycle_year_for_time(now)
 
       # If the cycle switcher has been set to 'find has reopened' then
       # we want to request next year's courses from the TTAPI
-      if SiteSetting.cycle_schedule.in?(%i[now_is_before_find_opens today_is_after_find_opens today_is_between_find_opening_and_apply_opening])
+      if PHASES.dig(current_cycle_schedule, :advances_cycle)
         current_year + 1
       else
         current_year
@@ -128,9 +167,7 @@ module Find
       date(:find_closes, year)
     end
 
-    def self.first_deadline_banner
-      date(:first_deadline_banner)
-    end
+    def self.first_deadline_banner(year = current_year) = date(:first_deadline_banner, year)
 
     def self.apply_deadline(year = current_year)
       date(:apply_deadline, year)
@@ -190,21 +227,60 @@ module Find
       phase_in_time?(:today_is_between_find_opening_and_apply_opening)
     end
 
+    def self.phase_range(phase, year)
+      definition = PHASES.fetch(phase)
+      [definition[:from].call(year), definition[:to].call(year)]
+    end
+
+    def self.display_range(phase, year)
+      definition = PHASES.fetch(phase)
+
+      return phase_range(phase, year) unless definition[:display_from] && definition[:display_to]
+
+      [definition[:display_from].call(year), definition[:display_to].call(year)]
+    end
+
+    # The hints describe a fixed set of choices, so they read the real cycle year
+    # rather than `current_year`, which advances for whichever phase is currently
+    # selected and would make the page describe itself.
+    #
+    # Returns the cycle the option *leads to* if the switcher is set to this
+    # phase, not the cycle year the phase itself occurs in.
+    def self.year_for_phase(phase, year = cycle_year_for_time(Time.zone.now))
+      PHASES.dig(phase, :advances_cycle) ? year + 1 : year
+    end
+
     def self.phases_in_time
-      {
-        now_is_before_find_opens: Time.zone.now.between?(find_opens.beginning_of_day, find_opens),
-        today_is_after_find_opens: Time.zone.now.between?(find_opens, apply_deadline),
-        today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_deadline),
-        today_is_after_apply_deadline_passed: Time.zone.now.between?(apply_deadline, find_closes),
-        today_is_between_find_opening_and_apply_opening: Time.zone.now.between?(find_opens, apply_opens),
-      }
+      year = current_year
+
+      PHASES.keys.index_with do |phase|
+        from, to = phase_range(phase, year)
+        Time.zone.now.between?(from, to)
+      end
+    end
+
+    # A phase turns on every phase whose range contains its own. In real time
+    # the ranges overlap, so mid cycle also means Find has opened. The switcher
+    # picks one phase, so it has to work the containment out for itself.
+    def self.implied_phases(phase)
+      # Catches :real, and any stale value left in Redis from before the
+      # allowlist of phases existed.
+      return [phase] unless PHASES.key?(phase)
+
+      year = cycle_year_for_time(Time.zone.now)
+      from, to = phase_range(phase, year)
+
+      PHASES.keys.select do |candidate|
+        candidate_from, candidate_to = phase_range(candidate, year)
+        candidate_from <= from && to <= candidate_to
+      end
     end
 
     def self.phase_in_time?(time_period)
       if current_cycle_schedule == :real
         phases_in_time[time_period]
       else
-        current_cycle_schedule == time_period
+        implied_phases(current_cycle_schedule).include?(time_period)
       end
     end
 
