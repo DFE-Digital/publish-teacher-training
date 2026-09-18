@@ -10,6 +10,6 @@ export const baselineScenario = {
   tags: {
     service: 'find',
     scenario: 'baseline',
-    description: 'Normal operations - 250 concurrent users'
+    description: 'Normal operations - 80 concurrent users'
   }
 }

@@ -12,6 +12,6 @@ export const peakSurgeScenario = {
   tags: {
     service: 'find',
     scenario: 'peak-surge',
-    description: 'Find opens surge - 3000 concurrent users, 150 RPS'
+    description: 'Find opens surge - 200 concurrent users'
   }
 }

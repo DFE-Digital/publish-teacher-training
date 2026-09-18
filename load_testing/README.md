@@ -17,7 +17,7 @@ Comprehensive and scalable load testing suite for **Find** & (future) Publish Te
   sudo apt install k6
 ```
 
-2. **Prepare environment variables (only for running on Grafana cloud):**
+2. **Prepare environment variables (only for running on Grafana Cloud):**
 
 ```
    cd load_testing
@@ -28,58 +28,89 @@ Comprehensive and scalable load testing suite for **Find** & (future) Publish Te
    set -o allexport; source .env; set +o allexport
 ```
 
+## Environments
+
+Set with `--env ENVIRONMENT=`:
+
+| Name | Target |
+| --- | --- |
+| `local` | `http://find.localhost` |
+| `qa` | `https://qa.find-teacher-training-courses.service.gov.uk` |
+| `staging` | `https://staging.find-teacher-training-courses.service.gov.uk` |
+
+`staging` is the default.
+
 ## Services
 
 ### Find Service
 
-#### Local/Development Runs
+Every npm script runs `k6 run`, which generates the load from the machine you
+run it on. Only the GitHub Actions workflow runs `k6 cloud`.
 
-**Super quick local test (5 users, 10s):**
+#### Local runs against a development machine
+
+Start the application with `./bin/dev` first. You do not need Caddy. Find only
+answers on the host `find.localhost`, so k6 resolves that name to
+`127.0.0.1:3001` for you.
+
 ```
-npm run find:dev
+npm run find:dev:quick     # 10 users, 25 seconds
+npm run find:dev:baseline
+npm run find:dev:peak
+npm run find:dev:stress
 ```
 
-**Baseline, peak, and stress local:**
-```
- npm run find:dev
- npm run find:dev:baseline
- npm run find:dev:peak
- npm run find:dev:stress
-```
+#### Runs against staging
 
-#### Running on Grafana
+The target is staging, but the load still comes from your own machine.
 
-**Run baseline scenario in Grafana Cloud (250 concurrent users):**
 ```
+npm run find:quick
 npm run find:baseline
-```
-**Run peak surge scenario in Grafana Cloud (3000 concurrent users, 150 RPS):**
-```
 npm run find:peak
-```
-**Run stress scenario in Grafana Cloud (4000+ concurrent users):**
-```
 npm run find:stress
+npm run find:all           # baseline, then peak, then stress
 ```
+
+#### Runs on Grafana Cloud
+
+Start the **Find & Publish Load Tests** workflow in GitHub Actions and select a
+scenario. The workflow runs `k6 cloud` against staging from the
+`amazon:gb:london` load zone. It needs the `K6_CLOUD_API_TOKEN` secret.
+
+To run a cloud test from your own machine, authenticate first and then call
+`k6 cloud` directly:
+
+```
+npm run grafana:login
+k6 cloud --env SCENARIO=baseline --env ENVIRONMENT=staging find/load-test.js
+```
+
+Set `GRAFANA_PROJECT_ID` to put the results in a specific Grafana Cloud project.
 
 ***
 
 ## Test Scenarios
 
+### Quick Test
+- **Users**: 10 concurrent
+- **Duration**: 25 seconds
+- **Purpose**: Confirm the suite and its content checks still work
+
 ### Baseline Test
-- **Users**: 250 concurrent
+- **Users**: 80 concurrent
 - **Duration**: 14 minutes
 - **Purpose**: Normal operations validation
 - **Target RPS**: 5-10 sustained
 
 ### Peak Surge Test
-- **Users**: 3000 concurrent at peak
+- **Users**: 200 concurrent at peak
 - **Duration**: 15 minutes
 - **Purpose**: "Find opens" event (45k requests in 5 minutes)
 - **Target RPS**: 150 sustained
 
 ### Stress Test
-- **Users**: 4000+ concurrent
+- **Users**: 400 concurrent
 - **Duration**: 25 minutes
 - **Purpose**: Breaking point identification
 - **Target RPS**: 200+ sustained
@@ -108,6 +139,8 @@ Based on production analytics:
 ## Output & Monitoring
 
 - **Local:**
-  Results printed in terminal; JSON (`*-summary.json`) can be exported for deeper analysis.
+  Results are printed in the terminal. Each run also writes
+  `find-load-test-summary.json` and `find-load-test-report.html` to the
+  directory you started it from.
 - **Cloud (Grafana):**
   Real-time dashboards, historic tracking, and alerting available in Grafana Cloud (requires authentication).
