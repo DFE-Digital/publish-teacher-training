@@ -63,4 +63,5 @@ data_sources:
     # would run during assets:precompile, which has no database. Update it at
     # rollover; spec/config/blazer_spec.rb fails until you do.
     variable_defaults:
-      recruitment_cycle_year: "2026"
+      recruitment_cycle_year: "2027" # probably want to update this after rollover
+      date: "2026-08-28" # rollover date probably a sensible default
