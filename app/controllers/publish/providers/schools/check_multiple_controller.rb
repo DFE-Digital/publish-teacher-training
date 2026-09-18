@@ -11,6 +11,7 @@ module Publish
 
         def update
           saved_schools = []
+          unsaved_schools = []
 
           # Each school would otherwise touch the provider and sweep its
           # no-school courses on save. Suppress that and stamp them once.
@@ -19,12 +20,14 @@ module Publish
               ActiveRecord::Base.transaction do
                 saved_schools << create_provider_school_and_legacy_site(gias_school:)
               end
+            rescue ActiveRecord::RecordInvalid
+              unsaved_schools << gias_school
             end
           end
 
           ::ProviderSchools::TouchParents.call(provider:) if saved_schools.any?
 
-          schools_added_message(saved_schools)
+          schools_added_message(saved_schools, unsaved_schools)
 
           redirect_to publish_provider_recruitment_cycle_schools_path
         end
