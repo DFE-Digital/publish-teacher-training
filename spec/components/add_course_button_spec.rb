@@ -12,12 +12,12 @@ describe AddCourseButton do
     render_inline(described_class.new(provider:))
   end
 
-  context "when the wizard add course flow is active" do
+  context "when the provider has filled out all required sections" do
     let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
 
     it "renders a course wizard link" do
       component = described_class.new(provider:)
-      allow(component).to receive_messages(wizard_add_course_flow?: true, wizard_state_key: "test-state-key")
+      allow(component).to receive(:wizard_state_key).and_return("test-state-key")
 
       render_inline(component)
 
@@ -28,22 +28,6 @@ describe AddCourseButton do
           recruitment_cycle_year: provider.recruitment_cycle.year,
           state_key: "test-state-key",
         ),
-      )
-    end
-  end
-
-  context "when the wizard add course flow is not active" do
-    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
-
-    it "renders a course link" do
-      component = described_class.new(provider:)
-      allow(component).to receive(:wizard_add_course_flow?).and_return(false)
-
-      render_inline(component)
-
-      expect(rendered_content).to have_link(
-        "Add course",
-        href: new_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle.year),
       )
     end
   end
