@@ -54,6 +54,35 @@ describe GiasSchool do
         postcode: school.postcode,
       )
     end
+
+    it "promotes the first line GIAS holds when it holds no street" do
+      school = build(
+        :gias_school,
+        address1: "",
+        address2: "Holbury",
+        address3: "",
+        town: "Southampton",
+        county: "Hampshire",
+        postcode: "SO45 2PA",
+      )
+
+      expect(school.school_attributes).to eq(
+        location_name: school.name,
+        urn: school.urn,
+        address1: "Holbury",
+        address2: nil,
+        address3: "",
+        town: "Southampton",
+        address4: "Hampshire",
+        postcode: "SO45 2PA",
+      )
+    end
+
+    it "promotes the town when it is the only line GIAS holds" do
+      school = build(:gias_school, address1: "", address2: "", address3: "", town: "Southampton")
+
+      expect(school.school_attributes).to include(address1: "Southampton", town: nil)
+    end
   end
 
   describe "#address" do

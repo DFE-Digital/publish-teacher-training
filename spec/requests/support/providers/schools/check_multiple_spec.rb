@@ -115,5 +115,19 @@ RSpec.describe "Support provider multiple school checks" do
 
       expect(provider.schools.count).to be_zero
     end
+
+    it "adds the schools it can and names the ones it cannot" do
+      no_address = create(:gias_school, urn: "112994", address1: "", address2: "", address3: "", town: "", postcode: "")
+
+      expect { add_schools(gias_schools.map(&:urn) + [no_address.urn]) }
+        .to change { provider.schools.count }.by(2)
+        .and(change { exempt_course.reload.changed_at })
+
+      expect(flash[:warning]).to eq(
+        "title" => "1 school could not be added",
+        "body" => "2 schools added. The address we hold for 112994 is incomplete. " \
+                  "Ask the school to update its details on Get Information About Schools (GIAS).",
+      )
+    end
   end
 end

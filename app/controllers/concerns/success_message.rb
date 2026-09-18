@@ -18,12 +18,28 @@ module SuccessMessage
     end
   end
 
-  def schools_added_message(schools)
-    items_added = schools.size > 1 ? "#{schools.size} schools" : "1 school"
-    flash[:success] = I18n.t("success.added", items_added:)
+  def schools_added_message(schools, unsaved_schools = [])
+    added = I18n.t("success.added", items_added: school_count(schools))
+
+    if unsaved_schools.empty?
+      flash[:success] = added
+      return
+    end
+
+    body = [(added if schools.any?),
+            I18n.t("schools.not_added.body", urns: unsaved_schools.map(&:urn).to_sentence)].compact.join(". ")
+
+    flash[:warning] = {
+      "title" => I18n.t("schools.not_added.title", items_not_added: school_count(unsaved_schools)),
+      "body" => body,
+    }
   end
 
 private
+
+  def school_count(schools)
+    "#{schools.size} #{'school'.pluralize(schools.size)}"
+  end
 
   def published_course_for_live_message?
     current_course = if respond_to?(:course, true)

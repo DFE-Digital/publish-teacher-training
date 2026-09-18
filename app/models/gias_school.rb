@@ -113,13 +113,18 @@ class GiasSchool < ApplicationRecord
   }, prefix: true
 
   def school_attributes
+    lines = { address1:, address2:, address3:, town: }
+    promoted = lines.keys.find { |line| lines[line].present? } if lines[:address1].blank?
+
+    if promoted
+      lines[:address1] = lines[promoted]
+      lines[promoted] = nil
+    end
+
     {
       location_name: name,
       urn:,
-      address1:,
-      address2:,
-      address3:,
-      town:,
+      **lines,
       address4: county,
       postcode:,
     }
