@@ -38,7 +38,7 @@ module Publish
           # provider once. Each course still gets its own timestamp, from its
           # own save.
           TouchSuppression.suppress do
-            courses.includes(schools: :provider_school).find_each do |course|
+            courses.includes(:provider, :sites, :site_statuses, schools: :provider_school).find_each do |course|
               (apply_to(course) ? updated_ids : failed_ids) << course.id
             end
           end
