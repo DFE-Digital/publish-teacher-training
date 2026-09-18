@@ -905,8 +905,11 @@ class Course < ApplicationRecord
     master_subject_id.nil?
   end
 
+  # Checked on every save with subjects. The course subjects may only just
+  # have been built, so this goes by subject_id rather than loading each
+  # subject in turn.
   def has_any_modern_language_subject_type?
-    course_subjects.any? { |cs| cs.subject.type == "ModernLanguagesSubject" }
+    ModernLanguagesSubject.exists?(id: course_subjects.map(&:subject_id))
   end
 
   def has_any_design_technology_subject_type?
@@ -1008,6 +1011,9 @@ private
     site_status = site_statuses.find_or_initialize_by(site:)
     site_status.start! unless is_course_new
     site_status.save!
+    # A found row is a separate instance from the one in the loaded
+    # collection, so the next read of site_statuses must not trust the cache.
+    site_statuses.reset
   end
 
   def remove_site!(site:)
@@ -1169,7 +1175,8 @@ private
     raise "SecondarySubject not found" if SecondarySubject.nil?
     raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages.nil?
 
-    course_subjects.any? { |cs| cs.subject&.id == SecondarySubject.modern_languages.id }
+    modern_languages_id = SecondarySubject.modern_languages.id
+    course_subjects.any? { |cs| cs.subject_id == modern_languages_id }
   end
 
   def validate_has_languages
@@ -1197,20 +1204,20 @@ private
     end
   end
 
+  # Goes by the course subjects' subject_ids: they may only just have been
+  # built, and reading subjects then loads each one's subject in turn.
   def validate_subject_consistency
-    subjects_excluding_discontinued = subjects.reject do |subject|
-      DiscontinuedSubject.exists?(id: subject.id)
-    end
+    subject_ids = Subject.where(id: course_subjects.map(&:subject_id)).where.not(type: "DiscontinuedSubject").ids
 
-    return if subjects_excluding_discontinued.empty?
+    return if subject_ids.empty?
 
     case level
     when "primary"
-      errors.add(:subjects, "Subject must be primary") unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, "Subject must be primary") unless PrimarySubject.exists?(id: subject_ids)
     when "secondary"
-      errors.add(:subjects, "Subject must be secondary") unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, "Subject must be secondary") unless SecondarySubject.exists?(id: subject_ids)
     when "further_education"
-      errors.add(:subjects, "Subject must be further education") unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, "Subject must be further education") unless FurtherEducationSubject.exists?(id: subject_ids)
     end
   end
 

@@ -32,10 +32,13 @@ class Subject < ApplicationRecord
     secondary.joins(:financial_incentive).pluck(:subject_code)
   end
 
+  # The order references subject_group, so that include becomes a join; the
+  # financial incentive is preloaded separately to keep it out of the join.
   def self.secondary_subjects_with_subject_groups
     secondary
       .where.not(subject_group: nil)
       .includes(:subject_group)
+      .preload(:financial_incentive)
       .reorder("subject_group.created_at ASC, subject.subject_name ASC")
   end
 
